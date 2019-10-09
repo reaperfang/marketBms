@@ -70,7 +70,7 @@ export default {
       rules:{
         userName: [
           { required: true, message: '请输入人员名称', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '要求1~10个字符', trigger: 'blur' }
         ],
         mobile:[
           { required: true, message: '请输入登录手机号', trigger: 'blur' },

@@ -48,7 +48,12 @@
         </div>
 
         <div class="block form">
-          <el-form-item :label="item.title" prop=""  v-for="(item, key) in ruleForm.moduleList" :key="key" >
+          <el-form-item 
+            :key="key"
+            :label="item.title"
+            :prop="'moduleList.'+ key +'.titleValue'"
+            :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]"
+            v-for="(item, key) in ruleForm.moduleList">
             <div class="module_block">
                 <el-input v-model="item.titleValue"></el-input>
                 <div class="img_preview">
@@ -65,8 +70,8 @@
           <div class="help_blank"></div>
           <div class="buttons">
             <el-button @click="resetLoading = true; resetData()" :loading="resetLoading">重    置</el-button>
-            <el-button @click="saveDataLoading = true; save()" :loading="saveDataLoading">保    存</el-button>
-            <el-button type="primary" @click="saveAndApplyDataLoading = true; saveAndApply()" :loading="saveAndApplyDataLoading">保存并生效</el-button>
+            <el-button @click="userCenterSave()" :loading="saveDataLoading">保    存</el-button>
+            <el-button type="primary" @click="userCenterSaveAndApply()" :loading="saveAndApplyDataLoading">保存并生效</el-button>
             <el-popover
               ref="popover2"
               placement="bottom"
@@ -235,6 +240,32 @@ export default {
       if(this.currentModule.backgroundImage) {
         this.currentModule.backgroundImage = dialogData.filePath;
       }
+    },
+
+    // 保存
+    userCenterSave() {
+      let self = this;
+      self.$refs['ruleForm'].validate( valid => {
+        if(valid) {
+          self.saveDataLoading = true;
+          self.save();
+        } else {
+          this.$message({ message: '请填写正确信息', type: 'warning' });
+        }
+      })
+    },
+
+    // 保存并生效
+    userCenterSaveAndApply() {
+      let self = this;
+      self.$refs['ruleForm'].validate( valid => {
+        if(valid) {
+          self.saveAndApplyDataLoading = true;
+          self.saveAndApply();
+        } else {
+          this.$message({ message: '请填写正确信息', type: 'warning' });
+        }
+      })
     },
 
       /* 获取二维码 */

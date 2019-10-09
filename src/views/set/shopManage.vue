@@ -49,7 +49,7 @@ export default {
       rules:{
         name: [
           { required: true, message: '请输入管理员名称', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '要求1~10个字符', trigger: 'blur' }
         ],
         phone:[
           { required: true, message: '请输入管理员手机号', trigger: 'blur' },

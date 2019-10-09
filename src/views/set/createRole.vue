@@ -58,7 +58,7 @@ export default {
       rules:{
         roleName: [
           { required: true, message: '请输入角色名称', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '要求1~10个字符', trigger: 'blur' }
         ],
         roleDesc:[
             { min: 0, max: 50, message: '长度不超过50个字符', trigger: 'blur' }

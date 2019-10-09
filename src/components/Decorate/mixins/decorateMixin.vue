@@ -58,8 +58,8 @@ export default {
 
     /* 保存前收集装修数据 */
     collectData() {
-      let result = this.baseInfo;
-      result['id'] = this.id;
+      let result     = this.baseInfo;
+      result['id']   = this.id;
       let pageData = [];
       for(let item of this.componentDataIds) {
         const componentData = this.componentDataMap[item];

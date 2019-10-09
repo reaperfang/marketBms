@@ -35,7 +35,7 @@
           </div>
           <div class="block form">
             <el-form-item label="导航名称" prop="navName">
-              <el-input v-model="currentNav.navName" placeholder="请输入导航名称(请勿超过4个汉字或8个字母)"></el-input>
+              <el-input @input="setNavName" :value="currentNav.navName" placeholder="请输入导航名称(请勿超过4个汉字或8个字母)"></el-input>
             </el-form-item>
             <el-form-item label="导航图标" prop="">
               <div class="upload_img_list">
@@ -288,6 +288,32 @@ export default {
         this.resetDataLoading = false;
       })
     },
+
+    // 设置名称
+    setNavName(name) {
+      let isName = this.isRepeatName(name);
+      if (isName) {
+        this.$message({ message: '导航名称请勿重复', type: 'warning' });
+      } else {
+        this.currentNav.navName = name;
+      }
+    },
+
+    // 是否重复
+    isRepeatName(name) {
+      let result  = false;
+      let navMaps = this.ruleForm.navMap;
+      if (name) {
+        for (let key in navMaps) {
+          const item = navMaps[key];
+          if (item.navName == name) {
+            result = true;
+            break;
+          }
+        }
+      }
+      return result;
+    }
   },
 
   beforeDestroy() {

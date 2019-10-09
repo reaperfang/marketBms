@@ -2,7 +2,7 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" :style="bodyHeight">
     <div class="block form">
       <el-form-item label="分类名称" prop="name">
-        <el-input placeholder="请勿超过10个字" v-model="ruleForm.name"></el-input>
+        <el-input placeholder="请勿超过10个字" v-model="ruleForm.name" @input="changeValidate"></el-input>
       </el-form-item>
       <el-form-item label="排序优先级" prop="sortType">
         <el-radio-group v-model="ruleForm.sortType">
@@ -54,6 +54,7 @@ export default {
         showType: 1,
         colorStyle: '#fff',
         explain: '',
+        vError: false,
         pageInfos: []
       },
       rules: {
@@ -62,7 +63,7 @@ export default {
           {
             min: 1,
             max: 10,
-            message: "长度在 1 到 10 个字符",
+            message: "要求1~10个字符",
             trigger: "blur"
           }
         ],
@@ -71,6 +72,9 @@ export default {
         ],
       }
     }
+  },
+  mounted() {
+    this.changeValidate('');
   },
   methods: {
 
@@ -111,6 +115,14 @@ export default {
           });
         })
     },
+
+    // 值改变
+    changeValidate(value) {
+      let self = this;
+      this.$refs.ruleForm.validate( valid => {
+        self.ruleForm.vError = !valid;
+      })
+    }
   }
 }
 </script>

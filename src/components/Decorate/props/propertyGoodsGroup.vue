@@ -85,7 +85,7 @@
       <el-form-item label="图片比例" prop="goodsRatio">
         <el-radio-group v-model="ruleForm.goodsRatio">
           <el-radio :label="1">3:2</el-radio>
-          <el-radio :label="2">3:2</el-radio>
+          <el-radio :label="2">1:1</el-radio>
           <el-radio :label="3">3:4</el-radio>
           <el-radio :label="4">16:9</el-radio>
         </el-radio-group>

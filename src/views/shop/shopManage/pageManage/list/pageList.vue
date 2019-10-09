@@ -43,7 +43,8 @@
       <p>微页面（共{{total || 0}}个）</p>
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
-          type="selection"  
+          type="selection"
+          :selectable='selectInit'
           width="30">
         </el-table-column>
         <el-table-column prop="name" label="页面名称">
@@ -61,7 +62,7 @@
         </el-table-column>
         <el-table-column prop="vv" label="访客数"></el-table-column>
         <el-table-column prop="pv" label="浏览数"></el-table-column>
-        <el-table-column prop="updateTime" label="创建时间"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="创建时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
         <el-table-column prop="" label="操作" :width="'250px'">
           <template slot-scope="scope">
@@ -279,6 +280,11 @@ export default {
           message: error
         });
       });
+    },
+
+    // 修改禁用
+    selectInit(row, index){
+      return (row.isHomePage != 1)
     }
   }
 }

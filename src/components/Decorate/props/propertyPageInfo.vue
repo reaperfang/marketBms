@@ -49,7 +49,7 @@ export default {
           {
             min: 1,
             max: 10,
-            message: "长度在 1 到 10 个字符",
+            message: "要求1~10个字符",
             trigger: "blur"
           }
         ],
@@ -58,7 +58,7 @@ export default {
           {
             min: 1,
             max: 10,
-            message: "长度在 1 到 10 个字符",
+            message: "要求1~10个字符",
             trigger: "blur"
           }
         ],
