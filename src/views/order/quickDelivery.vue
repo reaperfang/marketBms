@@ -11,9 +11,16 @@
       <div class="radio-box">
         <el-radio v-model="mode" :label="0">组合运费（推荐）</el-radio>
         <el-radio v-model="mode" :label="1">按商品累加运费</el-radio>
-        <span @click="currentDialog = 'FreightRulesDialog'; dialogVisible = true" class="blue pointer">计费规则说明</span>
+        <span
+          @click="currentDialog = 'FreightRulesDialog'; dialogVisible = true"
+          class="blue pointer"
+        >计费规则说明</span>
       </div>
-      <el-button v-permission="['订单', '快递发货', '默认页面', '新建模板']" @click="$router.push('/order/newTemplate?mode=new')" class="border-button new-template">新建模板</el-button>
+      <el-button
+        v-permission="['订单', '快递发货', '默认页面', '新建模板']"
+        @click="$router.push('/order/newTemplate?mode=new')"
+        class="border-button new-template"
+      >新建模板</el-button>
     </section>
     <section class="search">
       <el-form ref="inline" :inline="true" :model="listQuery" class="form-inline">
@@ -65,10 +72,22 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <div class="operate-box">
-                <span v-permission="['订单', '快递发货', '默认页面', '查看']" @click="$router.push('/order/newTemplate?mode=look&id=' + scope.row.id)">查看</span>
-                <span v-permission="['订单', '快递发货', '默认页面', '复制']" @click="$router.push('/order/newTemplate?mode=copy&id=' + scope.row.id)">复制</span>
-                <span v-permission="['订单', '快递发货', '默认页面', '修改']" @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)">修改</span>
-                <span v-permission="['订单', '快递发货', '默认页面', '删除']" @click="deletequickDelivery(scope.row.id)">删除</span>
+                <span
+                  v-permission="['订单', '快递发货', '默认页面', '查看']"
+                  @click="$router.push('/order/newTemplate?mode=look&id=' + scope.row.id)"
+                >查看</span>
+                <span
+                  v-permission="['订单', '快递发货', '默认页面', '复制']"
+                  @click="$router.push('/order/newTemplate?mode=copy&id=' + scope.row.id)"
+                >复制</span>
+                <span
+                  v-permission="['订单', '快递发货', '默认页面', '修改']"
+                  @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)"
+                >修改</span>
+                <span
+                  v-permission="['订单', '快递发货', '默认页面', '删除']"
+                  @click="deletequickDelivery(scope.row.id)"
+                >删除</span>
               </div>
             </template>
           </el-table-column>
@@ -87,7 +106,7 @@
 </template>
 <script>
 import Pagination from "@/components/Pagination";
-import FreightRulesDialog from '@/views/order/dialogs/freightRulesDialog'
+import FreightRulesDialog from "@/views/order/dialogs/freightRulesDialog";
 
 export default {
   data() {
@@ -102,10 +121,10 @@ export default {
       listQuery: {
         startIndex: 1,
         pageSize: 20,
-        name: '',
-        time: '',
-        startTime: '',
-        endTime: ''
+        name: "",
+        time: "",
+        startTime: "",
+        endTime: ""
       },
       currentDialog: "",
       dialogVisible: false,
@@ -113,79 +132,91 @@ export default {
     };
   },
   created() {
-    this.getList()
-    this.getShopInfo()
+    this.getList();
+    this.getShopInfo();
   },
   filters: {
     calculationWayFilter(code) {
-      switch(code) {
+      switch (code) {
         case 1:
-          return '按件计费'
+          return "按件计费";
         case 2:
-          return '按重量计费'
+          return "按重量计费";
         case 3:
-          return '按体积计费'
+          return "按体积计费";
       }
     }
   },
   methods: {
     deletequickDelivery(id) {
-      this._apis.order
-        .editorFreightTemplate({
-          id,
-          deleteFlag: 0
-        })
-        .then(res => {
-          this.$notify({
-            title: "成功",
-            message: "删除成功！",
-            type: "success"
+      this.confirm({
+        title: "提示",
+        icon: true,
+        text: '删除模板后无法撤销，确定删除吗？'
+      }).then(() => {
+        this._apis.order
+          .editorFreightTemplate({
+            id,
+            deleteFlag: 0
+          })
+          .then(res => {
+            this.$notify({
+              title: "成功",
+              message: "删除成功！",
+              type: "success"
+            });
+            this.getList();
+          })
+          .catch(error => {
+            this.$notify.error({
+              title: "错误",
+              message: error
+            });
           });
-          this.getList()
-        })
-        .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
-        });
+      });
     },
     getShopInfo() {
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
 
-      this._apis.set.getShopInfo({
-        id: shopInfo.id,
-      }).then((res) => {
-          this.mode = res.transportationExpenseType
-      }).catch(error => {
-          
-      })
+      this._apis.set
+        .getShopInfo({
+          id: shopInfo.id
+        })
+        .then(res => {
+          this.mode = res.transportationExpenseType;
+        })
+        .catch(error => {});
     },
     resetForm(formName) {
-        this.listQuery = Object.assign({}, this.listQuery, {
-          name: '',
-          time: '',
-          startTime: '',
-          endTime: ''
-        })
+      this.listQuery = Object.assign({}, this.listQuery, {
+        name: "",
+        time: "",
+        startTime: "",
+        endTime: ""
+      });
     },
     getList() {
-      this.loading = true
-      this._apis.order.fetchTemplatePageList(Object.assign({}, this.listQuery, {
-        startTime: this.listQuery.time ? this.listQuery.time[0] : '',
-        endTime: this.listQuery.time ? this.listQuery.time[1] : '',
-      })).then((res) => {
-          this.total = +res.total
-          this.tableData = res.list
-          this.loading = false
-      }).catch(error => {
-          this.visible = false
+      this.loading = true;
+      this._apis.order
+        .fetchTemplatePageList(
+          Object.assign({}, this.listQuery, {
+            startTime: this.listQuery.time ? this.listQuery.time[0] : "",
+            endTime: this.listQuery.time ? this.listQuery.time[1] : ""
+          })
+        )
+        .then(res => {
+          this.total = +res.total;
+          this.tableData = res.list;
+          this.loading = false;
+        })
+        .catch(error => {
+          this.visible = false;
           // this.$notify.error({
           //     title: '错误',
           //     message: error
           // });
-          this.loading = false
-      })
+          this.loading = false;
+        });
     }
   },
   components: {

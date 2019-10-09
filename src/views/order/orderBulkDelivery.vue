@@ -8,6 +8,7 @@
           <div class="item-title">
             <span>商品清单</span>
             <span>订单编号 {{item.orderCode}}</span>
+            <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
@@ -171,6 +172,9 @@ export default {
     }
   },
   methods: {
+    deleteOrder(index) {
+      this.list.splice(index, 1)
+    },
     changeAll(item) {
       item.checked = !item.checked;
 
@@ -517,5 +521,9 @@ export default {
       }
     }
   }
+}
+.el-icon-delete {
+  float: right;
+  cursor: pointer;
 }
 </style>

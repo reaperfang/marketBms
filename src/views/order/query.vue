@@ -176,7 +176,12 @@ export default {
         .then(res => {
           window.location.href = res
         })
-        .catch(error => {});
+        .catch(error => {
+          this.$notify.error({
+            title: "错误",
+            message: error
+          });
+        });
     },
     onSubmit() {
       this.$refs["shop"].getList();
