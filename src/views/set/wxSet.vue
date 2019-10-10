@@ -70,7 +70,7 @@
             </el-form-item>
              -->
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">保存</el-button>
+                <el-button type="primary" @click="onSubmit('form')">保存</el-button>
                 <el-button  @click="_routeTo('payType')">返回</el-button>
             </el-form-item>
         </el-form>
@@ -195,12 +195,12 @@ export default {
       })
     },
 
-    onSubmit(){
-      if(this.id){
-        this.updateShopPayInfo()
-      }else{
-        this.addShopPayInfo()
-      }      
+    onSubmit(formName){
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.id ? this.updateShopPayInfo() : this.addShopPayInfo()
+        }
+      })   
     },
     //修改商户支付信息
     updateShopPayInfo(){

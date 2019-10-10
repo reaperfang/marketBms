@@ -9,9 +9,9 @@
         <!-- 预览区 -->
         <div class="preview poster" v-if="shareStyle == 1">
           <div class="one">
-            <img :src="ruleForm.picture" alt="分享店铺LOGO">
-            <h3>{{ruleForm.title || '页面名称'}}</h3>
-            <p>{{ruleForm.describe || '页面描述'}}</p>
+            <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
+            <h3>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</h3>
+            <p>{{currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe || '页面描述'}}</p>
           </div>
           <div class="two">
             <div class="left">
@@ -27,35 +27,35 @@
         <div class="preview wechat_friends" v-if="shareStyle == 2">
           <div class="bubble">
               <div class="left">
-                <h3>{{ruleForm.title || '页面名称'}}</h3>
-                <p>{{ruleForm.describe || '页面描述'}}</p>
+                <h3>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</h3>
+                <p>{{currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe || '页面描述'}}</p>
               </div>
               <div class="right">
-                <img :src="ruleForm.picture" alt="分享店铺LOGO">
+                <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
               </div>
           </div>
         </div>
 
         <div class="preview wechat_ommunity" v-if="shareStyle == 3">
            <div class="bubble">
-              <img :src="ruleForm.picture" alt="分享店铺LOGO">
-              <span>{{ruleForm.title || '页面名称'}}</span>
+              <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
+              <span>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</span>
           </div>
         </div>
 
         <!-- 设置区 -->
         <div class="setting" v-loading="loading">
-          <div style="display:flex;" v-if="currentType === 'h5'">
-            <el-input v-model="pageLink" placeholder="右击右侧按钮复制链接" style="margin-right:20px;"></el-input>
-            <el-button type="primary"  v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
-          </div>
-          <div>
-            <el-button type="text" @click="openSetting = true">更多设置</el-button>
-            <el-button type="text" @click="getPoster" :disabled="currentType=='h5'?!h5DownloadPosterAble:!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
-            <el-button type="text" @click="openQrcode('h5')" v-if="currentType === 'h5'" :loading="openQrcodeLoading">下载二维码</el-button>
-            <el-button type="text" @click="openQrcode('mini')" v-if="currentType === 'mini'" :loading="openQrcodeLoading">下载小程序码</el-button>
-          </div>
-           <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="70px" v-if="openSetting">
+          <template v-if="currentType === 'h5'">
+            <div style="display:flex;">
+              <el-input v-model="pageLink" placeholder="右击右侧按钮复制链接" style="margin-right:20px;"></el-input>
+              <el-button type="primary"  v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
+            </div>
+            <div>
+              <el-button type="text" @click="openSetting = true">更多设置</el-button>
+              <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
+              <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading">下载二维码</el-button>
+            </div>
+            <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="70px" v-if="openSetting">
               <el-form-item label="分享样式" prop="shareStyle">
                 <el-radio-group v-model="shareStyle">
                   <el-radio :label="1">海报</el-radio>
@@ -68,7 +68,7 @@
                   :rows="5"
                   :max="10"
                   placeholder="请输入分享标题，最多10字"
-                  v-model="ruleForm.title">
+                  v-model="ruleFormH5.title">
                 </el-input>
               </el-form-item>
               <el-form-item label="分享描述" prop="describe">
@@ -76,24 +76,71 @@
                   :rows="5"
                   :max="18"
                   placeholder="请输入分享标题，最多10字"
-                  v-model="ruleForm.describe">
+                  v-model="ruleFormH5.describe">
                 </el-input>
               </el-form-item>
               <el-form-item label="分享图片" prop="picture">
-                <div class="img_preview" v-if="ruleForm.picture">
-                  <img :src="ruleForm.picture" alt="">
+                <div class="img_preview" v-if="ruleFormH5.picture">
+                  <img :src="ruleFormH5.picture" alt="">
                   <span @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
                 </div>
-                <div class="add_button" v-if="!ruleForm.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
+                <div class="add_button" v-if="!ruleFormH5.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
                   <i class="inner"></i>
                 </div>
                 建议尺寸：750*370，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit" :loading="submitLoading">确定</el-button>
+                <el-button type="primary" @click="onSubmitH5" :loading="submitLoading">确定</el-button>
                 <el-button @click="openSetting = false">取消</el-button>
               </el-form-item>
-          </el-form>
+            </el-form>
+          </template>
+          <template v-else>
+            <div>
+              <el-button type="text" @click="openSetting = true">更多设置</el-button>
+              <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
+              <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">下载小程序码</el-button>
+            </div>
+            <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="70px" v-if="openSetting">
+              <el-form-item label="分享样式" prop="shareStyle">
+                <el-radio-group v-model="shareStyle">
+                  <el-radio :label="1">海报</el-radio>
+                  <el-radio :label="2">微信好友</el-radio>
+                  <el-radio :label="3">微信朋友圈</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="分享标题" prop="title">
+                <el-input
+                  :rows="5"
+                  :max="10"
+                  placeholder="请输入分享标题，最多10字"
+                  v-model="ruleFormMini.title">
+                </el-input>
+              </el-form-item>
+              <el-form-item label="分享描述" prop="describe">
+                <el-input
+                  :rows="5"
+                  :max="18"
+                  placeholder="请输入分享标题，最多10字"
+                  v-model="ruleFormMini.describe">
+                </el-input>
+              </el-form-item>
+              <el-form-item label="分享图片" prop="picture">
+                <div class="img_preview" v-if="ruleFormMini.picture">
+                  <img :src="ruleFormMini.picture" alt="">
+                  <span @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+                </div>
+                <div class="add_button" v-if="!ruleFormMini.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
+                  <i class="inner"></i>
+                </div>
+                建议尺寸：750*370，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onSubmitMini" :loading="submitLoading">确定</el-button>
+                <el-button @click="openSetting = false">取消</el-button>
+              </el-form-item>
+            </el-form>
+          </template>
         </div>
       </div>
     </el-tabs>
@@ -134,14 +181,21 @@ export default {
       downloadPosterLoading: false,  //下载海报loading
       submitLoading: false,  //提交loading
       openQrcodeLoading: false,  //打开二维码loading
-      ruleForm: {
+      ruleFormH5: {
         pageInfoId: this.pageId,
         type: '0',
         title: '',
         describe: '',
         picture: ''
       },
-      rules: {
+      ruleFormMini: {
+        pageInfoId: this.pageId,
+        type: '0',
+        title: '',
+        describe: '',
+        picture: ''
+      },
+      rulesH5: {
         title: [
           {
             min: 0,
@@ -157,7 +211,25 @@ export default {
             message: "长度在 0 到 12 个字符",
             trigger: "blur"
           }
+        ]
+      },
+      rulesMini: {
+        title: [
+          {
+            min: 0,
+            max: 10,
+            message: "长度在 0 到 10 个字符",
+            trigger: "blur"
+          }
         ],
+        describe: [
+          {
+            min: 0,
+            max: 12,
+            message: "长度在 0 到 12 个字符",
+            trigger: "blur"
+          }
+        ]
       },
       qrCode: '',
       openSetting: false,  //是否开启设置
@@ -186,32 +258,35 @@ export default {
   created() {
     this.fetch();
     this.$store.dispatch('getShopInfo');
-    this.getQrcode();
+    // this.getQrcode();
   },
   methods: {
 
     fetch() {
       this.loading = true;
+      let pageId   = this.currentType === 'h5' ?this.ruleFormH5.pageInfoId:this.ruleFormMini.pageInfoId;
       this._apis.shop.getPageShare({
         type: this.currentType === 'h5' ? '0' : '1',
-        pageInfoId: this.ruleForm.pageInfoId
-      }).then((response)=>{
+        pageInfoId: pageId
+      })
+      .then((response)=>{
         if(response && response.pageInfoId) {
-          if(response.title && response.describe) {
-            if (this.currentType === 'h5') {
+          if (this.currentType === 'h5') {
+            this.ruleFormH5 = response;
+            if(response.title && response.describe) {
               this.h5DownloadPosterAble = true;
-            } else {
+            }
+          } else {
+            this.ruleFormMini = response;
+            if(response.title && response.describe) {
               this.miniDownloadPosterAble = true;
             }
           }
-          this.ruleForm = response;
-        }else{
-          this.ruleForm = {
-            pageInfoId: this.pageId,
-            type: '0',
-            title: '',
-            describe: '',
-            picture: ''
+        } else {
+          if (this.currentType === 'h5') {
+            this.ruleFormH5['pageInfoId'] = this.pageId;
+          } else {
+            this.ruleFormMini['pageInfoId'] = this.pageId;
           }
         }
         this.loading = false;
@@ -225,34 +300,67 @@ export default {
       });
     },
 
-    onSubmit() {
-      this.submitLoading = true;
-       this._apis.shop.updatePageShare({
-        type: this.currentType === 'h5' ? '0' : '1',
-        pageInfoId: this.ruleForm.pageInfoId,
-        title: this.ruleForm.title,
-        describe: this.ruleForm.describe,
-        picture: this.ruleForm.picture
-      }).then((response)=>{
-         this.fetch();
-         this.submitLoading = false;
-         this.openSetting = false;
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-        this.submitLoading = false;
-        this.openSetting = false;
-      });
+    // 提交h5 校验
+    onSubmitH5() {
+      this.$refs.ruleFormH5.validate(valid => {
+        if (valid) {
+          this.submitLoading = true;
+          this._apis.shop.updatePageShare({
+            type: '0',
+            pageInfoId: this.ruleFormH5.pageInfoId,
+            title: this.ruleFormH5.title,
+            describe: this.ruleFormH5.describe,
+            picture: this.ruleFormH5.picture
+          })
+          .then((response)=>{
+            this.fetch();
+            this.submitLoading = false;
+            this.openSetting = false;
+          }).catch((error)=>{
+            this.$notify.error({ title: '错误', message: error });
+            this.submitLoading = false;
+            this.openSetting = false;
+          });
+        } else {
+          this.$message({ message: '填写正确的信息', type: 'warning' });
+        }
+      })
+    },
+
+    // 提交小程序 校验
+    onSubmitMini() {
+      this.$refs.ruleFormMini.validate(valid => {
+        if (valid) {
+          this.submitLoading = true;
+          this._apis.shop.updatePageShare({
+            type: '1',
+            pageInfoId: this.ruleFormMini.pageInfoId,
+            title: this.ruleFormMini.title,
+            describe: this.ruleFormMini.describe,
+            picture: this.ruleFormMini.picture
+          })
+          .then((response)=>{
+            this.fetch();
+            this.submitLoading = false;
+            this.openSetting = false;
+          }).catch((error)=>{
+            this.$notify.error({ title: '错误', message: error });
+            this.submitLoading = false;
+            this.openSetting = false;
+          });
+        } else {
+          this.$message({ message: '填写正确的信息', type: 'warning' });
+        }
+      })
     },
 
     /* 获取海报 */
     getPoster() {
       this.downloadPosterLoading = true;
+      let pageId = this.currentType === 'h5' ?this.ruleFormH5.pageInfoId:this.ruleFormMini.pageInfoId;
       this._apis.shop.getPoster({
         type: this.currentType === 'h5' ? '0' : '1',
-        pageInfoId: this.ruleForm.pageInfoId
+        pageInfoId: pageId
       }).then((response)=>{
        this.download(response, '分享');
       }).catch((error)=>{
@@ -310,7 +418,11 @@ export default {
 
      /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.ruleForm.picture = dialogData.filePath;
+      if (this.currentType === 'h5') {
+        this.ruleFormH5.picture = dialogData.filePath;
+      } else {
+        this.ruleFormMini.picture = dialogData.filePath;
+      }      
     },
 
      onCopy () {
