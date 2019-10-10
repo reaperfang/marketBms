@@ -76,9 +76,9 @@ export default {
       this.getCreditList(this.startIndex, this.pageSize);
     },
     editCredit(row) {
-      if(!!row.redirectUrl) {
-        window.location.href=row.redirectUrl;
-      }else{
+      // if(!!row.redirectUrl) {
+      //   window.location.href=row.redirectUrl;
+      // }else{
         switch(row.sceneEn) {
           case 'Login': 
             this.dialogVisible = true;
@@ -100,9 +100,12 @@ export default {
             this.currentDialog = "praiseRegularDialog";
             this.currentData.row = row;
             break;
+          case 'Sign':
+            this.$router.push({name:'apply',params:{paths:'/application/customarket/checkin'}})
+            break;
           default:
             break;
-        }
+        // }
       }
       
     },

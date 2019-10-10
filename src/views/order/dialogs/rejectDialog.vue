@@ -12,7 +12,7 @@
             v-model="refuseReason">
             </el-input>
             <div class="footer">
-                <el-button>取消</el-button>
+                <el-button @click="visible = false">取消</el-button>
                 <el-button @click="submit" type="primary">确定</el-button>
             </div>
         </div>

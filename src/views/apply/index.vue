@@ -21,7 +21,13 @@ export default {
         }
     },
     created() {
-        this.path = window.localStorage.getItem('marketing_router_path') || this.defultPath;
+        // console.log('paths',this.$route.params.paths)
+        console.log('222222')
+        if(this.$route.params.paths){
+            this.path = this.$route.params.paths
+        }else{
+            this.path = window.localStorage.getItem('marketing_router_path') || this.defultPath;
+        }
         this.init();
     },
     mounted () {

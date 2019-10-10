@@ -58,6 +58,13 @@ export default {
                     });
                     return
                 }
+                if(/^\s+$/.test(this.operationRemark)) {
+                    this.$message({
+                    message: '关闭原因不能为空',
+                    type: 'warning'
+                    });
+                    return
+                }
             }
             this.$emit('submit', {
                 operationType: 6,

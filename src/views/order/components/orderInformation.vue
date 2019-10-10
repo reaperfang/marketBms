@@ -233,11 +233,11 @@ export default {
             },
             reducePriceTypeList: [
                 {
-                    label: '协商加减',
+                    label: '协商加价',
                     value: 1
                 },
                 {
-                    label: '协商减减',
+                    label: '协商减价',
                     value: 2
                 }
             ],
