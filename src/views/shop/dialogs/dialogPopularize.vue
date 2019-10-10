@@ -186,14 +186,14 @@ export default {
         type: '0',
         title: '',
         describe: '',
-        picture: ''
+        picture: require("../../../assets/images/logo.png")
       },
       ruleFormMini: {
         pageInfoId: this.pageId,
         type: '0',
         title: '',
         describe: '',
-        picture: ''
+        picture: require("../../../assets/images/logo.png")
       },
       rulesH5: {
         title: [
@@ -445,7 +445,7 @@ export default {
   flex-direction: row;
   justify-content: flex-start;
   .preview{
-    width:260px;
+    width:245px;
     margin-right:15px;
     &.poster{
       .one{
@@ -456,10 +456,11 @@ export default {
         box-sizing: border-box;
         text-align: center;
         img{
-          width: 220px;
+          width: 200px;
           display: block;
           height: 200px;
           border: 1px solid #ddd;
+          border-radius: 100px;
           // object-fit: contain;
         }
         h3{

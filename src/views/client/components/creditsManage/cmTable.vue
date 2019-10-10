@@ -102,6 +102,7 @@ export default {
             break;
           case 'Sign':
             this.$router.push({name:'apply',params:{paths:'/application/customarket/checkin'}})
+            // this.$router.push({path:'apply',query:{paths:'/application/customarket/checkin'}})
             break;
           default:
             break;
