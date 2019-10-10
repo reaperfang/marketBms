@@ -28,7 +28,7 @@
       <p class="list_top">图文素材<span>{{total*1}}</span>条</p>
       <div class="list_main">
         <div class="list_img">
-            <div class="item_img" v-for="(item,index) in list" :key="item.id" @mouseenter="onMouseOver(index)" @mouseleave="onMouseOut(index)">
+            <div class="item_img" v-for="(item,index) in list" :key="item.id" @mouseenter="onMouseOver(index,item.isSyncWechat)" @mouseleave="onMouseOut(index)">
               <p class="img_head">
                 <span>{{item.updateTime}}</span>
                 <i class="wx_icon" v-if="item.isSyncWechat"></i>
@@ -45,7 +45,7 @@
                 <span><i class="el-icon-delete" @click="handleDeleteArticle(item.id,'articleId')"></i></span>
               </p>
               <div ref="operate" class="operate">
-                <i class="el-icon-view" @click="_routeTo('generalArticle',{id:item.id})"> 预览文章</i>
+                <i class="el-icon-view" @click="lookArticle(item.linksOriginal)"> 预览文章</i>
               </div>
             </div>
         </div>
@@ -72,9 +72,10 @@
 import utils from "@/utils";
 import dialogSyncArticle from '../../../dialogs/dialogSyncArticle';
 import dialogDelete from '../../../dialogs/dialogDelete';
+import dialogQRcode from '../../../dialogs/dialogQRcode';
 export default {
   name: 'articleMaterial',
-  components: {dialogSyncArticle,dialogDelete},
+  components: {dialogSyncArticle,dialogDelete,dialogQRcode},
   data () {
     return {
       pickerNowDateBefore: {
@@ -198,8 +199,12 @@ export default {
         });
       })
     },
-    onMouseOver(index){
-      this.$refs.operate[index].style.display="block"
+    onMouseOver(index,isSyncWechat){
+      if(isSyncWechat){
+        this.$refs.operate[index].style.display="block"
+      }else{
+        this.$refs.operate[index].style.display="none"
+      }
     },
     onMouseOut(index){
       this.$refs.operate[index].style.display="none"
@@ -212,6 +217,14 @@ export default {
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage
       this.getList()
+    },
+    //预览文章
+    lookArticle(url){
+      this.dialogVisible = true;
+      this.currentDialog = 'dialogQRcode'
+      this.data = {
+        url:url
+      }
     },
   }
 }

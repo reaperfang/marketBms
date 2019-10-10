@@ -51,7 +51,7 @@
           </div>
           <div>
             <el-button type="text" @click="openSetting = true">更多设置</el-button>
-            <el-button type="text" @click="getPoster" :disabled="!downloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
+            <el-button type="text" @click="getPoster" :disabled="currentType=='h5'?!h5DownloadPosterAble:!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
             <el-button type="text" @click="openQrcode('h5')" v-if="currentType === 'h5'" :loading="openQrcodeLoading">下载二维码</el-button>
             <el-button type="text" @click="openQrcode('mini')" v-if="currentType === 'mini'" :loading="openQrcodeLoading">下载小程序码</el-button>
           </div>
@@ -161,7 +161,8 @@ export default {
       },
       qrCode: '',
       openSetting: false,  //是否开启设置
-      downloadPosterAble: false  //是否可下载海报
+      h5DownloadPosterAble: false,  //h5是否可下载海报
+      miniDownloadPosterAble: false //小程序是否可下载海报
     };
   },
   watch: {
@@ -197,7 +198,11 @@ export default {
       }).then((response)=>{
         if(response && response.pageInfoId) {
           if(response.title && response.describe) {
-            this.downloadPosterAble = true;
+            if (this.currentType === 'h5') {
+              this.h5DownloadPosterAble = true;
+            } else {
+              this.miniDownloadPosterAble = true;
+            }
           }
           this.ruleForm = response;
         }else{
@@ -264,13 +269,13 @@ export default {
     openQrcode(codeType) {
       const _self = this;
       this.getQrcode(codeType, (url) =>{
-        // _self.download(`data:image/png;base64,${url}`, '分享');
+        // _self.download(`data:image/png;base64,${url}`, '二维码');
         const img = new Image();
         img.style.cssText = 'margin:200px auto 0;display: block;';
         img.src = `data:image/png;base64,${url}`;
         const newWin = window.open("", "_blank");
         newWin.document.write(img.outerHTML);
-        newWin.document.title = "分享"
+        newWin.document.title = "二维码"
         newWin.document.close();
       });
     },
@@ -286,14 +291,11 @@ export default {
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         this.openQrcodeLoading = false;
-        callback && callback(response);
+        this.download(response, '二维码'); // 下载二维码
+        // callback && callback(response); // 打开二维码
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         this.openQrcodeLoading = false;
-        console.error(error);
+        this.$message({ message: error, type: 'error' });
       });
     },
 

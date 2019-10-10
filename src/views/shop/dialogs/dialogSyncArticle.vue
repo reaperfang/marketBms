@@ -101,10 +101,13 @@ export default {
             cid:this.cid,
             mediaId:item.media_id,
             sourceMaterialType:'1',
+            linksOriginal:escape(item.url),
+            isCover:'',
+            summary:item.digest,
+            author:item.author,
             title:item.title,
-            sourceMaterial:item.content_source_url,
-            isCover:item.url ? '1' : '0',
-            fileCover:escape(item.url)
+            sourceMaterial:item.content,
+            isSyncWechat:'1',
           }
           datas.push(obj)
         }        

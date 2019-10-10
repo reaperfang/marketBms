@@ -21,13 +21,6 @@ export default {
         }
     },
     created() {
-        // console.log('paths',this.$route.params.paths)
-        console.log('222222')
-        if(this.$route.params.paths){
-            this.path = this.$route.params.paths
-        }else{
-            this.path = window.localStorage.getItem('marketing_router_path') || this.defultPath;
-        }
         this.init();
     },
     mounted () {
@@ -40,6 +33,11 @@ export default {
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             this.cid = shopInfo && shopInfo.id || ''
+            if(this.$route.params.paths){
+                this.path = this.$route.params.paths
+            }else{
+                this.path = window.localStorage.getItem('marketing_router_path') || this.defultPath;
+            }
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
             this.src = `${process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
         },

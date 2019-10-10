@@ -14,10 +14,11 @@
                 <el-form-item label="申请时间">
                     <el-date-picker
                         v-model="listQuery.applicationDate"
-                        type="daterange"
+                        type="datetimerange"
                         range-separator="-"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        :default-time="['12:00:00', '23:59:59']">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="售后类型">
@@ -121,6 +122,7 @@ import AuditDialog from '@/views/order/dialogs/auditDialog'
 import BatchUpdateStatusDialog from '@/views/order/dialogs/batchUpdateStatusDialog'
 import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 import LogisticsDialog from '@/views/order/dialogs/logisticsDialog'
+import utils from "@/utils";
 
 export default {
     data() {
@@ -417,8 +419,8 @@ export default {
             
             _param = Object.assign({}, this.listQuery, param, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
-                createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? this.listQuery.applicationDate[0] : '',
-                createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? this.listQuery.applicationDate[1] : ''
+                createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[0], "yyyy-MM-dd hh:mm:ss") : '',
+                createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[1], "yyyy-MM-dd hh:mm:ss") : ''
             })
 
             this._apis.order.getOrderAfterSalePageList(_param).then((res) => {

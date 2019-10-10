@@ -22,7 +22,7 @@
                   <div class="col">
                     <div class="goods-name">
                       <p>{{orderProductComment.goodsName}}</p>
-                      <p>{{orderProductComment.goodsSpecs}}</p>
+                      <p>{{orderProductComment.goodsSpecs | goodsSpecsFilter}}</p>
                     </div>
                   </div>
                 </div>
@@ -41,6 +41,7 @@
                 <div class="row">
                   <div class="col">
                     <img
+                      width="66"
                       :src="item"
                       alt
                       v-for="(item, index) in orderProductComment.images"
@@ -76,7 +77,7 @@
       <div class="title">
         <div class="row">
           <div class="col replay-label">商户回复</div>
-          <div v-if="orderProductComment.isReply != 1" @click="showReplayBox = true" class="col blue">我要回复评论</div>
+          <div style="cursor: pointer;" v-if="orderProductComment.isReply != 1" @click="showReplayBox = true" class="col blue">我要回复评论</div>
           <div class="col" v-html="orderProductComment.replyContent"></div>
         </div>
       </div>
@@ -164,14 +165,40 @@ export default {
         case 3:
           return "取消精选";
       }
+    },
+    goodsSpecsFilter(value) {
+      let str = ''
+      let _value
+
+      if(typeof value == 'string') {
+        _value = JSON.parse(value)
+      } else {
+        _value = value
+      }
+
+      for(let i in _value) {
+        str += i + ':' + _value[i] + ','
+      }
+      str = str.replace(/(^.*)\,$/, '$1')
+
+      return str
     }
   },
   methods: {
     replyComment() {
         this._apis.order.replyComment({id: this.$route.query.id, replyContent: this.textarea}).then((res) => {
-            console.log(res)
+            this.$notify({
+              title: "成功",
+              message: "删除成功！",
+              type: "success"
+            });
+            this.showReplayBox = false
         }).catch(error => {
-            
+            this.$notify.error({
+            title: "错误",
+            message: error
+          });
+          this.showReplayBox = false
         })
     },
     editorValueUpdate(value) {
@@ -218,6 +245,7 @@ export default {
         margin-top: 20px;
         .reviews-label {
           margin-right: 20px;
+          flex-shrink: 0;
         }
         .reviews-lefter {
           > .row {
@@ -258,6 +286,7 @@ export default {
         margin-bottom: 30px;
         .replay-label {
           margin-right: 20px;
+          flex-shrink: 0;
         }
       }
       .footer {

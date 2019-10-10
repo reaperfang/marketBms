@@ -121,6 +121,7 @@ export default {
             imgPixelWidth:'',
             imgPixelHeight:'',
             fileSize:'',
+            isSyncWechat:'1'
           }
           datas.push(obj)
         }        

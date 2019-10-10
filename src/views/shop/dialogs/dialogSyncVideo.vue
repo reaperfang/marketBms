@@ -107,11 +107,11 @@ export default {
             cid:this.cid,
             mediaId:item.media_id,
             sourceMaterialType:'2',
-            fileName:'',
             filePath:escape(item.down_url),
             fileSize:'',
             name:item.name,
             fileover:'',
+            isSyncWechat:'1'
           }
           datas.push(obj)
         }        

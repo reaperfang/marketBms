@@ -118,11 +118,13 @@ export default {
       }
       this._apis.file.getMaterialList(query).then((response)=>{
         this.list = []
-        response.list.map(item => {
-          item.isSyncWechat && (item.filePath = 'http://img01.store.sogou.com/net/a/04/link?appid=100520029&url='+ item.filePath)
-          let data = Object.assign({checked:false}, item)
-          this.list.push(data)
-        })
+        if(response && response.list.length != 0){
+          response.list.map(item => {
+            item.isSyncWechat && (item.filePath = 'http://img01.store.sogou.com/net/a/04/link?appid=100520029&url='+ item.filePath)
+            let data = Object.assign({checked:false}, item)
+            this.list.push(data)
+          })
+        }
         this.total = response.total
       }).catch((error)=>{
         this.$notify.error({

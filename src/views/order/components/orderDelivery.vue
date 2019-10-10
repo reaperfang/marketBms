@@ -46,11 +46,11 @@
                     <el-date-picker
                         v-model="listQuery.orderTimeValue"
                         :picker-options="pickerBeginDateBefore"
-                        type="daterange"
+                        type="datetimerange"
                         range-separator="-"
-                        value-format="yyyy-MM-dd hh:mm:ss"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
+                        :default-time="['12:00:00', '23:59:59']"
                     ></el-date-picker>
                 </el-form-item>
                 <div class="buttons">
@@ -142,6 +142,7 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
+import utils from "@/utils";
 
 export default {
     data() {
@@ -277,8 +278,8 @@ export default {
                 cid:this.cid,
                 [this.listQuery.searchType]: this.listQuery.searchValue,
                 [this.listQuery.searchType2]: this.listQuery.searchValue2,
-                [`${this.listQuery.searchTimeType}TimeStart`]: this.listQuery.orderTimeValue ? this.listQuery.orderTimeValue[0] : '',
-                [`${this.listQuery.searchTimeType}TimeEnd`]: this.listQuery.orderTimeValue ? this.listQuery.orderTimeValue[1] : ''
+                [`${this.listQuery.searchTimeType}TimeStart`]: this.listQuery.orderTimeValue ? utils.formatDate(this.listQuery.orderTimeValue[0], "yyyy-MM-dd hh:mm:ss") : '',
+                [`${this.listQuery.searchTimeType}TimeEnd`]: this.listQuery.orderTimeValue ? utils.formatDate(this.listQuery.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss") : ''
             })
             this._apis.order.orderSendPageList(params).then((res) => {
                 this.tableData = res.list

@@ -32,11 +32,11 @@
             <el-form-item label="创建时间">
               <el-date-picker
                 v-model="listQuery.time"
-                type="daterange"
+                type="datetimerange"
                 range-separator="-"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                value-format="yyyy-MM-dd hh:mm:ss"
+                :default-time="['12:00:00', '23:59:59']"
               ></el-date-picker>
             </el-form-item>
           </div>
@@ -107,6 +107,7 @@
 <script>
 import Pagination from "@/components/Pagination";
 import FreightRulesDialog from "@/views/order/dialogs/freightRulesDialog";
+import utils from "@/utils";
 
 export default {
   data() {
@@ -200,8 +201,8 @@ export default {
       this._apis.order
         .fetchTemplatePageList(
           Object.assign({}, this.listQuery, {
-            startTime: this.listQuery.time ? this.listQuery.time[0] : "",
-            endTime: this.listQuery.time ? this.listQuery.time[1] : ""
+            startTime: this.listQuery.time ? utils.formatDate(this.listQuery.time[0], "yyyy-MM-dd hh:mm:ss") : "",
+            endTime: this.listQuery.time ? utils.formatDate(this.listQuery.time[1], "yyyy-MM-dd hh:mm:ss") : ""
           })
         )
         .then(res => {

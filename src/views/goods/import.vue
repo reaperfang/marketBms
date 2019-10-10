@@ -118,7 +118,7 @@ export default {
         downloadTemplate() {
             let a = document.createElement("a");
 
-            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模版')}.xlsx`);
+            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模版')}.xls`);
             a.setAttribute("target", "_blank");
             a.click();
         },
@@ -156,10 +156,17 @@ export default {
             })
         },
         importGoods() {
+            let message = this.$message({
+            showClose: true,
+            message: '不能重复操作，上传文件批量导入文件。',
+            duration: 0
+            });
+
             this._apis.goods.importGoods({cid: this.cid, importUrl: this.url}).then((res) => {
                 this.url = res.url
                 let _text = ''
 
+                message.close()
                 this.getList()
 
                 if(res.importFailCount == 0) {
@@ -173,11 +180,13 @@ export default {
                     this.confirm({title: '数据导入失败', text: _text})
                 }
             }).catch(error => {
+                message.close()
                 this.visible = false
                 this.$notify.error({
                     title: '错误',
                     message: error
                 });
+                this.active = 1
             })
         },
         next() {

@@ -5,7 +5,8 @@
                 type="textarea"
                 :rows="2"
                 placeholder="请输入回复内容，不超过200个字符"
-                v-model="replyContent">
+                v-model="replyContent"
+                maxlength="200">
             </el-input>
             <div class="footer">
                 <el-button @click="visible = false">取消</el-button>
