@@ -237,7 +237,7 @@ export default {
           let list = response.list;
           list.map((v) => {
             if(v) {
-              v.memberType = v.memberType == 1 ? '会员':'客户'
+              v.memberType = v.memberType == 0 ? '客户':'会员'
             }
           })
           this.memberList = [].concat(list);

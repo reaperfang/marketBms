@@ -62,7 +62,7 @@
                                 prop="sendCount"
                                 label="本次发货数量">
                                 <template slot-scope="scope">
-                                    <el-input type="number" :max="scope.row.goodsCount" v-model="scope.row.sendCount"></el-input>
+                                    <el-input type="number" :max="scope.row.goodsCount" min="1" v-model="scope.row.sendCount"></el-input>
                                 </template>
                             </el-table-column>
                         </el-table>

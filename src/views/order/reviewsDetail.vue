@@ -189,7 +189,7 @@ export default {
         this._apis.order.replyComment({id: this.$route.query.id, replyContent: this.textarea}).then((res) => {
             this.$notify({
               title: "成功",
-              message: "删除成功！",
+              message: "回复成功！",
               type: "success"
             });
             this.showReplayBox = false

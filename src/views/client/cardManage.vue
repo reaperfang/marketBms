@@ -64,6 +64,7 @@
     </div>
 </template>
 <script type="es6">
+import utils from "@/utils";
 import cdTable from './components/cardManage/cdTable';
 import lkTable from './components/cardManage/lkTable';
 export default {
@@ -106,8 +107,8 @@ export default {
         handleFind() {
             let obj = {
                 name: this.selected == "" ? null : this.selected,
-                startTime: this.getTime[0],
-                endTime: this.getTime[1] 
+                startTime: utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
+                endTime: utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
             }
             this.lkParams = Object.assign({},obj);
         },

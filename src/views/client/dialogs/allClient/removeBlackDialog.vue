@@ -6,7 +6,7 @@
             <div class="clearfix" v-for="item in disableItemValue" :key="item.id">
                 <p class="fl">{{item.blackInfoName}}</p>
                 <div class="fl">
-                    <span class="d_span" v-for="(i, index) in item.disableItemText" :key="index">{{ i }}</span>
+                    <span class="d_span">{{item.disableItemText}}</span>
                 </div>
             </div>
             <p class="red">确定将该客户冻结权限全部解冻吗？</p>
@@ -45,21 +45,20 @@ export default {
         getFreezeList() {
             this._apis.client.getFreezeList({memberInfoId: this.data.id}).then((response) => {
                 response.map((v) => {
-                    v.disableItemValue = v.disableItemValue.split(',');
+                    v.disableItemValue = JSON.parse(v.disableItemValue);
                     v.disableItemText = [];
-                    v.disableItemValue.map((item) => {
-                        if(item.split(':')[1]) {
-                            v.disableItemText.push(item.split(':')[1])
-                        }
-                    });
+                    if(typeof(v.disableItemValue) == 'object') {
+                        v.disableItemValue.map((item) => {
+                            v.disableItemText.push(item.name);
+                        })
+                        v.disableItemText = v.disableItemText.join(',');
+                    }else{
+                        v.disableItemText = "";
+                    }
                 });
                 this.disableItemValue = [].concat(response);
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         }
     },

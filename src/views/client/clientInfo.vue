@@ -124,7 +124,7 @@
             <div class="assets">
                 <div class="assets_item">
                     <p>最近下单时间</p>
-                    <p>{{clientInfoById.lastPayTime}}</p>
+                    <p>{{clientInfoById.lastPayTime || "还未下单"}}</p>
                 </div>
                 <div class="assets_item">
                     <p>客单价</p>
@@ -345,7 +345,9 @@ export default {
             this.dialogVisible = true;
             this.currentDialog = "changeCardDialog";
             this.currentData.id = this.userId;
+            this.currentData.memberSn = this.clientInfoById.memberSn;
             this.currentData.level = this.clientInfoById.cardLevelName;
+            this.currentData.oldLevel = this.clientInfoById.cardLevel;
         },
         showScoreList() {
             this.hackReset = false;

@@ -57,6 +57,7 @@
                     <el-switch
                         v-model="isSwitch"
                         active-color="#66CCAC"
+                        @change="handleSwitch"
                     ></el-switch>
                     <span class="marR20">积分获取上限</span>
                     <span>每日最高获得：</span>
@@ -145,6 +146,16 @@ export default {
                         message: '每日最高获得积分数保存成功',
                         type: 'success'
                     });
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
+        },
+        handleSwitch(val) {
+            if(!val) {
+                this.ruleForm.scoreUpperCount = "";
+                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
+                    console.log('关闭成功');
                 }).catch((error) => {
                     console.log(error);
                 })

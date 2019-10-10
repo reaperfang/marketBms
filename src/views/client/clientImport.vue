@@ -147,7 +147,7 @@ export default {
         handleCheck() {
             let params = {
                 importTimeStart: utils.formatDate(new Date(this.importTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"),
-                importTimeEnd: utils.formatDate(new Date(this.importTime[1].getTime()),"yyyy-MM-dd hh:mm:ss"),
+                importTimeEnd: utils.formatDate(new Date(this.importTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"),
                 channelId: this.channelId2
             }
             this.params = Object.assign({}, params);

@@ -72,19 +72,16 @@ export default {
                         this.allCoupons.map((i) => {
                             let obj = {};
                             if(item.id == i.id) {
-                                obj[item.id] = i.name;
+                                obj.id = item.id;
+                                obj.name = i.name
                                 arr.push(obj);
                             }
                         })
                     })
-                    let str = "";
-                    arr.map((v) => {str += "" + JSON.stringify(v) + ','});
-                    str = str.replace(/{|}/g, "");
-                    str = str.substring(0, str.length - 1);
                     let obj = {
                         blackInfoId: this.couponId,
                         blackInfoName: "优惠券",
-                        disableItemValue: str
+                        disableItemValue: arr
                     }
                     blackListMapDtos.push(obj);
                 }
@@ -102,19 +99,16 @@ export default {
                         this.allCodes.map((i) => {
                             let obj = {};
                             if(item.id == i.id) {
-                                obj[item.id] = i.name;
+                                obj.name = i.name;
+                                obj.id = i.id;
                                 arr.push(obj);
                             }
                         })
-                    })
-                    let str = "";
-                    arr.map((v) => {str += "" + JSON.stringify(v) + ','});
-                    str = str.replace(/{|}/g, "");
-                    str = str.substring(0, str.length - 1);
+                    });
                     let obj = {
                         blackInfoId: this.codeId,
                         blackInfoName: "优惠码",
-                        disableItemValue: str
+                        disableItemValue: arr
                     }
                     blackListMapDtos.push(obj);
                 }
@@ -171,10 +165,6 @@ export default {
                 this.allCoupons = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         },
         getAllCodes() {
@@ -182,10 +172,6 @@ export default {
                 this.allCodes = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         },
     },

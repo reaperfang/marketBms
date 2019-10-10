@@ -171,6 +171,7 @@
   </div>
 </template>
 <script>
+import utils from "@/utils";
 import clientCont from '@/system/constant/client';
 import acTable from './components/allClient/acTable';
 export default {
@@ -254,10 +255,6 @@ export default {
             })
         }).catch((error) => {
             console.log(error);
-            // this.$notify.error({
-            //     title: '错误',
-            //     message: error
-            // });
         })
     },
     getChannels() {
@@ -266,14 +263,14 @@ export default {
             response.map((v) => {this.channels.push(v.channerlName)});
         }).catch((error) => {
             console.log(error);
-            // this.$notify.error({
-            //     title: '错误',
-            //     message: error
-            // });
         })
     },
     getClientList() {
         this.btnloading = true;
+        this.form.becameCustomerTimeStart = utils.formatDate(new Date(this.form.becameCustomerTimeStart.getTime()),"yyyy-MM-dd hh:mm:ss");
+        this.form.becameCustomerTimeEnd = utils.formatDate(new Date(this.form.becameCustomerTimeEnd.getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss");
+        this.form.lastPayTimeStart = utils.formatDate(new Date(this.form.lastPayTimeStart.getTime()),"yyyy-MM-dd hh:mm:ss");
+        this.form.lastPayTimeEnd = utils.formatDate(new Date(this.form.lastPayTimeEnd.getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss");
         let oForm = Object.assign({},this.form);
         let labelNames = oForm.memberLabels;
         let channelNames = oForm.channelId;

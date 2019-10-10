@@ -114,14 +114,16 @@ export default {
       })
     },
     addTag(row) {
-      this.hackReset = false;
-      this.$nextTick(() => {
-        this.hackReset = true;
-      })
-      this.dialogVisible = true;
-      this.currentDialog = "batchAddTagDialog";
-      this.currentData.successNum = row.successNum;
-      this.currentData.id = row.id;
+      if(row.successNum !== 0) {
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        })
+        this.dialogVisible = true;
+        this.currentDialog = "batchAddTagDialog";
+        this.currentData.successNum = row.successNum;
+        this.currentData.id = row.id;
+      }
     },
     modify(row) {
       this.hackReset = false;

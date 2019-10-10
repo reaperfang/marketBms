@@ -520,7 +520,6 @@ export default {
           type: "warning"
         });
       } else {
-        console.log(this.ruleForm);
         if (this.ruleForm.id) {
           let formObj = {};
           formObj.id = this.ruleForm.id;
@@ -707,6 +706,7 @@ export default {
           this._apis.client
             .editCard(formObj)
             .then(response => {
+              this._routeTo('cardManage');
               this.$notify({
                 title: "成功",
                 message: "编辑成功",
