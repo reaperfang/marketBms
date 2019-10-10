@@ -284,6 +284,8 @@ export default {
       query.businessType = this.ruleForm.businessType == 0 ? null : this.ruleForm.businessType
       query.tradeType = this.ruleForm.tradeType == -1 ? null : this.ruleForm.tradeType
       query.payWay = this.ruleForm.payWay == -1 ? null : this.ruleForm.payWay
+      query.amountMin = this.ruleForm.amountMin == 0 ? '' : this.ruleForm.amountMin
+      query.amountMax = this.ruleForm.amountMax == 0 ? '' : this.ruleForm.amountMax
       query.sort = orde
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
