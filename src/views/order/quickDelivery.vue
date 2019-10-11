@@ -59,6 +59,7 @@
           v-loading="loading"
           :data="tableData"
           style="width: 100%"
+          empty-text="暂未设置运费模板"
           :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         >
           <el-table-column prop="name" label="模板名称" width="180"></el-table-column>

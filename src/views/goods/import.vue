@@ -118,7 +118,7 @@ export default {
         downloadTemplate() {
             let a = document.createElement("a");
 
-            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模版')}.xls`);
+            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/商品导入模版.xls`);
             a.setAttribute("target", "_blank");
             a.click();
         },

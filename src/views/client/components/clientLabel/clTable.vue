@@ -11,6 +11,7 @@
       >
       <el-table-column
         type="selection"
+        :selectable="checkSelectable"
       >
       </el-table-column>
       <el-table-column
@@ -84,6 +85,13 @@ export default {
 
   },
   methods: {
+    checkSelectable(row,index) {
+      if(row.labelContains==0) {
+        return 1;
+      }else{
+        return 0;
+      }
+    },
     handleSizeChange(val) {
       this.getLabelList(1, val);
       this.pageSize = val;

@@ -66,7 +66,7 @@
             <div class="input_wrap2">
               <el-input placeholder="请输入数字" v-model="xfcsm"></el-input>
             </div>
-            <span>元</span>
+            <span>次</span>
             <span>即可升级</span>
           </div>
           <div class="radio_line" v-if="getIndex(this.conditionList,'积分获得满') !== -1">
@@ -74,7 +74,7 @@
             <div class="input_wrap2">
               <el-input placeholder="请输入数字" v-model="jfhdm"></el-input>
             </div>
-            <span>元</span>
+            <span>分</span>
             <span>即可升级</span>
           </div>
         </el-form-item>
@@ -337,10 +337,6 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          // this.$notify.error({
-          //     title: '错误',
-          //     message: error
-          // });
         });
     },
     changeSwitch(obj) {
@@ -444,10 +440,6 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          // this.$notify.error({
-          //     title: '错误',
-          //     message: error
-          // });
         });
     },
     //获取等级权益
@@ -467,10 +459,6 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          // this.$notify.error({
-          //     title: '错误',
-          //     message: error
-          // });
         });
     },
     //获取升级奖励
@@ -489,10 +477,6 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          // this.$notify.error({
-          //     title: '错误',
-          //     message: error
-          // });
         });
     },
     showGiftDialog(val) {

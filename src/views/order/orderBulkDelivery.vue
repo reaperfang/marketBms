@@ -50,9 +50,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col" style="width: 60px;">{{goods.goodsCount}}</div>
+                  <div class="col" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
-                    <el-input v-model="goods.sendCount" placeholder="请输入"></el-input>
+                    <el-input type="number" min="1" :max="goods.goodsCount -goods.cacheSendCount" v-model="goods.sendCount" placeholder="请输入"></el-input>
                   </div>
                 </div>
               </div>
@@ -347,6 +347,11 @@ export default {
               goods.checked = false;
             });
           });
+          res.forEach(val => {
+            val.orderItemList.forEach(item => {
+              item.cacheSendCount = item.sendCount
+            })
+          })
           this.list = res;
           this._apis.order
             .fetchOrderAddress({ id: this.cid, cid: this.cid })

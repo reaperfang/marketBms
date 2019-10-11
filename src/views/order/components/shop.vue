@@ -63,6 +63,7 @@ export default {
             //     target: '.order-container'
             // });
             this.$refs['order'].loading = true
+            this.checkedAll = false
             if(this.params.orderTimeValue && this.params.orderTimeValue.length) {
                 if(this.params.orderTimeValue[0]) {
                     var searchTimeTypeStart = utils.formatDate(this.params.orderTimeValue[0], "yyyy-MM-dd hh:mm:ss")

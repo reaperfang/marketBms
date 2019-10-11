@@ -186,6 +186,13 @@ export default {
   },
   methods: {
     replyComment() {
+        if(this.textarea.length > 200) {
+          this.$message({
+          message: '回复字符不能超过200',
+          type: 'warning'
+        });
+        return
+        }
         this._apis.order.replyComment({id: this.$route.query.id, replyContent: this.textarea}).then((res) => {
             this.$notify({
               title: "成功",
