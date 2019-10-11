@@ -20,7 +20,7 @@
             <el-col :span="8"><div class="grid-content center">
                 <div class="item">
                     <div class="label">付款人</div>
-                    <div class="value">{{orderDetail.orderSendInfo && orderDetail.orderSendInfo.memberSn}}</div> <!-- <span class="blue">详情</span> -->
+                    <div class="value">{{orderDetail.orderPayRecordList | orderPayRecordListFilter}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
                 </div>
                 <div class="item">
                     <div class="label">付款方式</div>
@@ -392,6 +392,17 @@ export default {
             } else if(code === 2) {
                 return '公司'
             }
+        },
+        orderPayRecordListFilter(arr) {
+            let str = ''
+            let _arr
+
+            if(arr) {
+                _arr = arr.slice(0, 3)
+                str = _arr.map(val => val.memberName).join(',')
+            }
+
+            return str
         }
     },
     props: {
@@ -507,6 +518,9 @@ export default {
         }
         .reduce-price-input {
         width: auto;
+    }
+    .orderPayRecordList {
+        margin-left: 5px;
     }
 </style>
 

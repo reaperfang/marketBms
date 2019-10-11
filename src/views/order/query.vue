@@ -86,6 +86,7 @@
         >批量导入发货</el-button>
         <el-button v-permission="['订单', '订单查询', '商城订单', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
         <el-button v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="batchSupplementaryLogistics">批量补填物流</el-button>
+        <p class="explain">当前最多只支持导出1000条数据</p>
       </div>
     </section>
     <section>
@@ -172,16 +173,23 @@ export default {
       this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))
     },
     exportOrders() {
+      let message = this.$message({
+          showClose: true,
+          message: '导出中...'
+        });
+
       this._apis.order
         .exportOrders()
         .then(res => {
           window.location.href = res
+          message.close()
         })
         .catch(error => {
           this.$notify.error({
             title: "错误",
             message: error
           });
+          message.close()
         });
     },
     onSubmit() {
@@ -257,6 +265,11 @@ export default {
 }
 /deep/ .searchTimeType .el-form-item__content {
         display: flex;
+    }
+    .explain {
+      margin-top: 5px;
+      color: #F55858;
+      font-size: 12px;
     }
 </style>
 

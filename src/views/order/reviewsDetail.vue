@@ -136,7 +136,7 @@ export default {
         integral: "2019"
       },
       textarea: "",
-      tableData: [{}],
+      tableData: [],
       showReplayBox: false,
       myConfig: {
         // 编辑器不自动被内容撑高

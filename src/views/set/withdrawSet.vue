@@ -1,7 +1,7 @@
 /*提现设置 */
 <template>
     <div class="main">
-      <el-form ref="form" :model="form" label-width="140px">
+      <el-form ref="form" :model="form">
         <el-form-item label="是否允许提现:" prop="cashOut">
           <el-radio-group v-model="form.cashOut">
             <el-radio :label="0">不允许</el-radio>
@@ -16,20 +16,28 @@
               https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1
             </a>            
           </p>
-          <el-form-item label="单笔提现金额上限" prop="cashOutUpper">
-            <el-input-number v-model="form.cashOutUpper" :min="0" label="请输入整数">
+          <el-form-item prop="cashOutUpper">
+            <el-checkbox v-model="cashOutUpperChecked"></el-checkbox>
+            单笔提现金额上限
+            <el-input-number v-model="form.cashOutUpper" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
-          <el-form-item label="单笔最低提现金额" prop="cashOutLower">
-            <el-input-number v-model="form.cashOutLower" :min="0" label="请输入整数">
+          <el-form-item prop="cashOutLower">
+            <el-checkbox v-model="cashOutLowerChecked"></el-checkbox>
+            单笔最低提现金额
+            <el-input-number v-model="form.cashOutLower" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
-          <el-form-item label="每日提现次数上限" prop="cashOutTimes">
-            <el-input-number v-model="form.cashOutTimes" :min="0" label="请输入整数">
+          <el-form-item prop="cashOutTimes">
+            <el-checkbox v-model="cashOutTimesChecked"></el-checkbox>
+            每日提现次数上限
+            <el-input-number v-model="form.cashOutTimes" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 次
           </el-form-item>
-          <el-form-item label="余额满" prop="cashOutMoney">
-            <el-input-number v-model="form.cashOutMoney" :min="0" label="请输入整数">
+          <el-form-item prop="cashOutMoney">
+            <el-checkbox v-model="cashOutMoneyChecked"></el-checkbox>
+            余额满
+            <el-input-number v-model="form.cashOutMoney" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 元,可提现
           </el-form-item>
         </div>
@@ -50,8 +58,12 @@ export default {
         cashOutUpper:0,
         cashOutLower:0,
         cashOutTimes:0,
-        cashOutMoney:0
+        cashOutMoney:0,        
       },
+      cashOutUpperChecked:false,
+      cashOutLowerChecked:false,
+      cashOutTimesChecked:false,
+      cashOutMoneyChecked:false,
     }
   },
   components: {},
@@ -75,6 +87,10 @@ export default {
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
         this.form = response
+        this.form.cashOutUpper != null  && (this.cashOutUpperChecked = true)
+        this.form.cashOutLower != null  && (this.cashOutLowerChecked = true)
+        this.form.cashOutTimes != null  && (this.cashOutTimesChecked = true)
+        this.form.cashOutMoney != null  && (this.cashOutMoneyChecked = true)
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
@@ -99,6 +115,10 @@ export default {
       this.$refs[formName].validate((valid) => {
           if (valid) {
             let id = this.cid
+            this.form.cashOutUpperChecked == false && (this.form.cashOutUpper = null)
+            this.form.cashOutLowerChecked == false && (this.form.cashOutLower = null)
+            this.form.cashOutTimesChecked == false && (this.form.cashOutTimes = null)
+            this.form.cashOutMoneyChecked == false && (this.form.cashOutMoney = null)
             let data = Object.assign({id:id},this.form)
             this._apis.set.updateShopInfo(data).then(response =>{
               this.$notify.success({
@@ -143,7 +163,7 @@ export default {
     }
   }
   .save{
-    margin: 200px 0 200px;
+    margin: 200px 0 200px 140px;
   }
   .pdl100{
     padding-left: 100px;

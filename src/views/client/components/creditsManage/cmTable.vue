@@ -100,9 +100,18 @@ export default {
             this.currentDialog = "praiseRegularDialog";
             this.currentData.row = row;
             break;
-          case 'Sign':
+          case 'Sign'://签到有礼            
             this.$router.push({name:'apply',params:{paths:'/application/customarket/checkin'}})
             // this.$router.push({path:'apply',query:{paths:'/application/customarket/checkin'}})
+            break;
+          case 'SuperPoster'://超级海报
+            this.$router.push({name:'apply',params:{paths:'/application/feature/posterList'}})
+            break;
+          case 'FullReduction'://满减/满折
+            this.$router.push({name:'apply',params:{paths:'/application/promotion/fullreduce'}})
+            break;
+          case 'Holiday'://节日有礼
+            this.$router.push({name:'apply',params:{paths:'/application/customarket/festival'}})
             break;
           default:
             break;

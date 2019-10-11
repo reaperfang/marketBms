@@ -21,18 +21,15 @@ export default {
         }
     },
     created() {
-        console.log('created')
         this.init();
     },
     mounted () {
-        console.log('mounted')
         window.addEventListener('message', this.onMessage)
         this.iframeWin = this.$refs.refreshFrame.contentWindow;
         this.isLoaded  = true;
     },
     methods:{
         init(){
-            console.log('init')
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             this.cid = shopInfo && shopInfo.id || ''

@@ -85,6 +85,7 @@
                   @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)"
                 >修改</span>
                 <span
+                  v-if="!scope.row.productCount"
                   v-permission="['订单', '快递发货', '默认页面', '删除']"
                   @click="deletequickDelivery(scope.row.id)"
                 >删除</span>
