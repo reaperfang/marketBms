@@ -39,10 +39,13 @@
             </li>
           </ul>
           <ul class="navs type4" v-if="ruleForm.navStyle.id == 4">
-            <li >隐藏展开样式 TODU</li>
+            <li @click="addNav"><i class="el-icon-plus"></i></li>
+            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+              <img :src="ruleForm.navMap[item].navIconActive" alt="">
+            </li>
           </ul>
 
-          <div class="add_btn" @click="addNav">
+          <div class="add_btn" @click="addNav" v-if="ruleForm.navStyle.id != 4">
             <i class="el-icon-plus"></i>
           </div>
         </div>
@@ -667,7 +670,45 @@ export default {
           }
         }
         &.type4{
-
+          justify-content: space-around;
+          position: relative;
+          height: 80px;
+          li{
+            width: 20px;
+            height: 20px;
+            padding: 1px;
+            position: absolute;
+            border-radius: 10px;
+            background: #ddd;
+            img{
+              width: 100%;
+              height: 100%;
+            }
+            &:nth-child(1){
+              top:  30px;
+              left: 10px;
+            }
+            &:nth-child(2){
+              top:  0px;
+              left: 10px;
+            }
+            &:nth-child(3){
+              top: 8px;
+              left: 30px;
+            }
+            &:nth-child(4){
+              top: 28px;
+              left: 40px;
+            }
+            &:nth-child(5){
+              top: 50px;
+              left: 30px;
+            }
+            &:nth-child(6){
+              bottom:  0;
+              left: 10px;
+            }
+          }
         }
       }
       .add_btn{

@@ -51,12 +51,12 @@ export default {
           id: 3,
           name: '公众号样式',
           img: require('../../../assets/images/shop/shopNav3.png')
-        }
-        // {
-        //   id: 4,
-        //   name: '隐藏展开样式',
-        //   img: require('../../../assets/images/shop/shopNav4.png')
-        // },
+        },
+        {
+          id: 4,
+          name: '隐藏展开样式',
+          img: require('../../../assets/images/shop/shopNav4.png')
+        },
       ]
     };
   },
