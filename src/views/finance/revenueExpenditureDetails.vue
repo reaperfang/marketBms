@@ -102,7 +102,7 @@
           label="业务类型"
           :render-header="renderBusinessType">
           <template slot-scope="scope">
-            {{rebusinessTypes[scope.row.businessType-1].label}}
+            {{rebusinessTypes[scope.row.businessType].label}}
           </template>
         </el-table-column>
         <el-table-column
@@ -114,7 +114,7 @@
           prop="payWay"
           label="支付方式">
           <template slot-scope="scope">
-            {{payTypes[scope.row.payWay].label}}
+            {{payTypes[scope.row.payWay+1].label}}
           </template>
         </el-table-column>
         <el-table-column

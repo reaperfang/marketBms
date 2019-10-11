@@ -58,7 +58,7 @@
           prop="businessTypeId"
           label="业务类型">
           <template slot-scope="scope">
-            {{idbusinessTypes[scope.row.businessTypeId-1] && idbusinessTypes[scope.row.businessTypeId-1].label}}
+            {{idbusinessTypes[scope.row.businessTypeId] && idbusinessTypes[scope.row.businessTypeId].label}}
           </template>
         </el-table-column>
         <el-table-column

@@ -1,10 +1,10 @@
 <template>
     <div class="aftermarketDeliveryInformation">
-        <div class="delivery-information-header">
+        <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             客户发货
         </div>
         <div class="container">
-            <div class="item" :class="{close: !showCustomerContent}">
+            <div v-if="orderAfterSale.returnExpressNo" class="item" :class="{close: !showCustomerContent}">
                 <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
@@ -63,11 +63,11 @@
             </div>
         </div>
 
-        <div class="delivery-information-header">
+        <div v-if="orderAfterSale.expressNo" class="delivery-information-header">
             商家发货
         </div>
         <div class="container">
-            <div class="item" :class="{close: !showContent}">
+            <div v-if="orderAfterSale.expressNo" class="item" :class="{close: !showContent}">
                 <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
@@ -177,16 +177,16 @@ export default {
         customerFilter(value) {
             if(value.receiveGoodsTime) {
                 return '【商户签收】'
-            } else if(value.memberTeturnGoodsTime) {
+            } else if(value.returnExpressNo) {
                 return '【客户发货】'
             } else {
                 return ''
             }
         },
         businessFilter(value) {
-            if(value.memberTeceiveGoodsTime) {
+            if(value.memberReceiveGoodsTime) {
                 return '【客户签收】'
-            } else if(value.sendTime) {
+            } else if(this.orderAfterSaleSendInfo.expressNo) {
                 return '【商户发货】'
             } else {
                 return ''
@@ -217,6 +217,10 @@ export default {
             default: []
         },
         orderAfterSale: {
+            type: Object,
+            default: {}
+        },
+        orderAfterSaleSendInfo: {
             type: Object,
             default: {}
         }

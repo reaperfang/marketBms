@@ -63,7 +63,7 @@
           prop="businessType"
           label="交易类型">
           <template slot-scope="scope">
-            {{transactionTypes[scope.row.businessType-1].label}}
+            {{transactionTypes[scope.row.businessType].label}}
           </template>
         </el-table-column>
         <el-table-column

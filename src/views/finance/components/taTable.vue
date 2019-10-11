@@ -115,8 +115,10 @@ export default {
   },
   watch: {
     times(){
-      this.ruleForm.startTime = utils.formatDate(this.times[0], "yyyy-MM-dd hh:mm:ss")
-      this.ruleForm.stopTime = utils.formatDate(this.times[1], "yyyy-MM-dd hh:mm:ss")
+      if(this.times.length != 0){
+        this.ruleForm.startTime = utils.formatDate(this.times[0], "yyyy-MM-dd hh:mm:ss")
+        this.ruleForm.stopTime = utils.formatDate(this.times[1], "yyyy-MM-dd hh:mm:ss")
+      }
     }
   },
   computed:{

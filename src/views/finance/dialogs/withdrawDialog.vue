@@ -13,6 +13,7 @@
                 placeholder="请输入拒绝原因，不超过20个字"
                 v-model="remarks">
             </el-input>
+            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="radio == 1 && !remarks">请输入拒绝原因</p>
         </div>
     </DialogBase>
     <el-dialog
@@ -75,21 +76,25 @@ export default {
     },
     methods: {
         submit() {
-            let datas = {
-                ids:this.data,
-                auditStatus:this.radio,
-                remarks:this.remarks
+            if(!remarks){
+                let datas = {
+                    ids:this.data,
+                    auditStatus:this.radio,
+                    remarks:this.remarks
+                }
+                this._apis.finance.examineWd(datas).then((response)=>{
+                    this.dialogVisible = false
+                    this.otherVisible = true;
+                    this.$emit("handleSubmit");
+                }).catch((error)=>{
+                    this.$notify.error({
+                    title: '错误',
+                    message: error
+                    });
+                })                
+            }else{
+                return false
             }
-            this._apis.finance.examineWd(datas).then((response)=>{
-                this.dialogVisible = false
-                this.otherVisible = true;
-                this.$emit("handleSubmit");
-            }).catch((error)=>{
-                this.$notify.error({
-                title: '错误',
-                message: error
-                });
-            })
         },
     },    
 }

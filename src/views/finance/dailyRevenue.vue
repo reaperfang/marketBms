@@ -40,10 +40,16 @@
         <el-table-column
           prop="income"
           label="总收入（元）">
+          <template slot-scope="scope">
+            {{'+' + scope.row.income}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="expend"
           label="总支出（元）">
+          <template slot-scope="scope">
+            {{'-' + scope.row.expend}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="realIncome"

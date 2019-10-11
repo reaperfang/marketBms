@@ -17,10 +17,10 @@
         <section class="container">
             <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane v-permission="['订单', '售后详情', '售后信息']" label="售后信息" name="afterSalesInformation"></el-tab-pane>
-                <el-tab-pane v-if="orderAfterSale.type != 3" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
+                <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSale.expressNo)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType"></component>
+        <component :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType"></component>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
@@ -37,6 +37,7 @@ export default {
             currentView: 'afterSalesInformation',
             itemList: [],
             orderAfterSale: {},
+            orderAfterSaleSendInfo: {},
             recordList: [],
             sendItemList: [],
             currentDialog: '',
@@ -140,6 +141,7 @@ export default {
                     res.orderAfterSale.descriptionimages = res.orderAfterSale.descriptionimages ? res.orderAfterSale.descriptionimages.split(',') : []
                 }
                 this.orderAfterSale = res.orderAfterSale || {}
+                this.orderAfterSaleSendInfo = res.orderAfterSaleSendInfo || {}
                 this.recordList = res.recordList
                 this.sendItemList = res.sendItemList
                 this.orderType = res.orderType

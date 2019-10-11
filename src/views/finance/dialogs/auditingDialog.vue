@@ -40,6 +40,7 @@
                 v-model="remarks"
                 v-if="radio == 1">
             </el-input>
+            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;" v-if="radio == 1 && !remarks">请输入拒绝原因</p>
         </div>
       </div>
     </div>
@@ -102,22 +103,18 @@ export default {
     this.getInfo()
   },
   methods: {
-    submit() {   
-      let datas = {
-        ids:[this.data.id],
-        auditStatus:this.radio,
-        remarks:this.remarks
+    submit() { 
+      if(!remarks){
+        let datas = {
+          ids:[this.data.id],
+          auditStatus:this.radio,
+          remarks:this.remarks
+        }
+        this.$emit("handleSubmit",datas);
+      }else{
+        return false
       }
-      this._apis.finance.examineWd(datas).then((response)=>{
-          this.dialogVisible = false
-          this.otherVisible = true
-          this.$emit("handleSubmit");
-      }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: error
-          });
-      })
+      
     },
     getInfo(){
       this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{

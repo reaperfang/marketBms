@@ -114,23 +114,27 @@ export default {
     save(formName){
       this.$refs[formName].validate((valid) => {
           if (valid) {
-            let id = this.cid
-            this.form.cashOutUpperChecked == false && (this.form.cashOutUpper = null)
-            this.form.cashOutLowerChecked == false && (this.form.cashOutLower = null)
-            this.form.cashOutTimesChecked == false && (this.form.cashOutTimes = null)
-            this.form.cashOutMoneyChecked == false && (this.form.cashOutMoney = null)
-            let data = Object.assign({id:id},this.form)
-            this._apis.set.updateShopInfo(data).then(response =>{
-              this.$notify.success({
-                title: '成功',
-                message: '保存成功！'
-              });
-            }).catch(error =>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
-            })
+            if(this.form.cashOutUpper <= this.form.cashOutLower){
+              this.$message.error('单笔提现金额上限应大于单笔最低提现金额');
+            }else{
+              let id = this.cid
+              this.form.cashOutUpperChecked == false && (this.form.cashOutUpper = null)
+              this.form.cashOutLowerChecked == false && (this.form.cashOutLower = null)
+              this.form.cashOutTimesChecked == false && (this.form.cashOutTimes = null)
+              this.form.cashOutMoneyChecked == false && (this.form.cashOutMoney = null)
+              let data = Object.assign({id:id},this.form)
+              this._apis.set.updateShopInfo(data).then(response =>{
+                this.$notify.success({
+                  title: '成功',
+                  message: '保存成功！'
+                });
+              }).catch(error =>{
+                this.$notify.error({
+                  title: '错误',
+                  message: error
+                });
+              })
+            }
           }
       })
     },

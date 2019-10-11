@@ -774,6 +774,7 @@ export default {
         },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
+            var that = this
 
             this._apis.goods.getGoodsDetail({id, goodsInfoId}).then(res => {
                 console.log(res)
@@ -782,6 +783,12 @@ export default {
 
                 this.getCategoryIds(arr, res.productCatalogInfoId)
                 this.getCategoryInfoIds(itemCatAr, res.productCategoryInfoId)
+
+                let _arr = itemCatAr.map(id => {
+                    return this.operateCategoryList.find(val => val.id == id)
+                })
+
+                this.itemCatText = _arr.map(val => val.name).join(' > ')
 
                 let specs = JSON.parse(res.goodsInfo.specs)
 
@@ -841,6 +848,7 @@ export default {
                 }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
+
                 // if(this.ruleForm.productDetail) {
                 //     let _productDetail = ''
 
@@ -1002,7 +1010,7 @@ export default {
                         });
                         return
                     }
-                    if(this.ruleForm.goodsInfos.some(val => val.warningStock == '')) {
+                    if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
                         this.$message({
                             message: '规格信息中库存预警不能为空',
                             type: 'warning'

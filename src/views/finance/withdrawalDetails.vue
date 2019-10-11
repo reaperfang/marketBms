@@ -252,7 +252,7 @@ export default {
       let isCheck = true
       let ids = []
       if(this.multipleSelection.length == 0){
-        this.currentData.text = "请选择需要审核的数据";
+        this.currentData.text = "请选择需要审核的数据 !";
         this.dialogVisible = true;
         this.currentDialog = "warnDialog";
       }else{
@@ -305,8 +305,17 @@ export default {
       this.dialogVisible = true
       this.currentDialog = auditingDialog
     },
-    handleSubmit(){
-      this.fetch()
+    handleSubmit(datas){
+      this._apis.finance.examineWd(datas).then((response)=>{
+          // this.dialogVisible = false
+          // this.otherVisible = true
+          this.fetch()
+      }).catch((error)=>{
+          this.$notify.error({
+          title: '错误',
+          message: error
+          });
+      })
     }
   }
 }
