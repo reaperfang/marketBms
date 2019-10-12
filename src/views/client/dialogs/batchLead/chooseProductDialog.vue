@@ -158,7 +158,7 @@ export default {
         });
     },
     handleSearch() {
-        this.getSkuList(1,10);
+        this.getSkuList(this.startIndex, this.pageSize);
     },
     reset() {
         this.categoryValue = [];

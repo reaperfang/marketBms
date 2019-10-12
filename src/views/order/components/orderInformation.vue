@@ -213,7 +213,7 @@
 <script>
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
-import ChangePriceDialog from '@/views/order/dialogs/ChangePriceDialog'
+import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
 
 export default {
     data() {
