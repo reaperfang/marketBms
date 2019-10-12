@@ -51,7 +51,7 @@
                                 prop="goodsCount"
                                 label="应发数量">
                                 <template slot-scope="scope">
-                                    {{scope.row.goodsCount}}
+                                    {{scope.row.goodsCount - scope.row.cacheSendCount}}
                                 </template>
                             </el-table-column>
                             <!-- <el-table-column
@@ -62,7 +62,7 @@
                                 prop="sendCount"
                                 label="本次发货数量">
                                 <template slot-scope="scope">
-                                    <el-input type="number" :max="scope.row.goodsCount" min="1" v-model="scope.row.sendCount"></el-input>
+                                    <el-input type="number" :max="scope.row.goodsCount - scope.row.cacheSendCount" min="1" v-model="scope.row.sendCount"></el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -348,6 +348,10 @@ export default {
             let id = this.$route.query.id
 
             this._apis.order.orderSendDetail({ids: [this.$route.query.id]}).then((res) => {
+                res[0].orderItemList.forEach(val => {
+                    val.cacheSendCount = val.sendCount
+                    val.sendCount =  ''
+                })
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
 

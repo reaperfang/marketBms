@@ -126,7 +126,7 @@
                 </div>
                 <div class="row">
                     <div class="col">应收金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.freight + orderDetail.orderInfo.goodsAmount}}</div>
+                    <div class="col">¥{{orderDetail.orderInfo.receivableMoney || 0}}</div>
                 </div>
                 <div class="row">
                     <div class="col">优惠券金额:</div>
@@ -152,7 +152,7 @@
                     <div class="col">- ¥{{orderDetail.orderInfo.discountFreight}}</div>
                 </div>
                 <div class="row align-center">
-                    <div v-if="this.orderDetail.orderInfo.orderStatus != 4" class="col">
+                    <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
                         <el-select style="margin-right: 5px;" v-model="goodsListMessage.consultType" placeholder="请选择">
                             <el-option
                             v-for="item in reducePriceTypeList"
@@ -162,7 +162,7 @@
                             </el-option>
                         </el-select>
                     </div>
-                    <div v-if="this.orderDetail.orderInfo.orderStatus != 4" class="col">
+                    <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
                         <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
                         <span v-if="!changePriceVisible">{{goodsListMessage.consultMoney}}</span>
                         <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
@@ -171,15 +171,15 @@
                 </div>
                 <div class="row">
                     <div class="col">余额使用:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.consumeBalanceMoney}}</div>
+                    <div class="col">¥{{orderDetail.orderInfo.consumeBalanceMoney || 0}}</div>
                 </div>
                 <div class="row">
                     <div class="col">积分抵现:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.consumeScoreConvertMoney}}</div>
+                    <div class="col">¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
                 </div>
                 <div class="row">
                     <div class="col">实收金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.actualMoney}}</div>
+                    <div class="col">¥{{orderDetail.orderInfo.actualMoney || 0}}</div>
                 </div>
             </div>
             <div class="operate-record">
@@ -323,6 +323,15 @@ export default {
             this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
         reducePriceHandler() {
+            if(this.goodsListMessage.consultType == 2) {
+                if(this.orderDetail.orderInfo.receivableMoney < this.goodsListMessage.consultMoney) {
+                    this.$message({
+                        message: '不能大于应收金额',
+                        type: 'warning'
+                    });
+                    return
+                }
+            }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
@@ -343,6 +352,15 @@ export default {
             }) 
         },
         reducePriceHandler() {
+            if(this.goodsListMessage.consultType == 2) {
+                if(this.orderDetail.orderInfo.receivableMoney < this.goodsListMessage.consultMoney) {
+                    this.$message({
+                        message: '不能大于应收金额',
+                        type: 'warning'
+                    });
+                    return
+                }
+            }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false

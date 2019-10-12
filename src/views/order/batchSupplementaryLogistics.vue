@@ -138,6 +138,12 @@ export default {
     this.getDetail();
     this.getExpressCompanyList()
   },
+  computed: {
+        cid(){
+            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            return shopInfo.id
+        }
+    },
   methods: {
     printingElectronicForm() {
       this.$router.push('/order/printingElectronicForm?ids=' + this.list.map(val => val.id).join(',') + '&type=batchSupplementaryLogistics')
@@ -158,24 +164,12 @@ export default {
                     }
 
                     return {
-                        createTime: item.createTime,
-                        createUserId: item.createUserId,
-                        createUserName: item.createUserName,
-                        updateTime: item.updateTime,
-                        updateUserId: item.updateUserId,
-                        updateUserName: item.updateUserName,
-                        deleteFlag: item.deleteFlag,
-                        userCache: item.userCache,
-                        commodityCode: item.commodityCode,
-                        id: item.id,
+                        orderId: item.orderId,
+                        memberInfoId: item.memberInfoId,
                         orderCode: item.orderCode,
+                        orderItems: item.orderItemList.filter(val => val.checked),
+                        id: item.id,
                         memberSn: item.memberSn,
-                        isAutoSend: item.isAutoSend,
-                        status: item.status,
-                        expressCompanys: expressCompanys,
-                        expressCompanyCodes: item.expressCompanyCode,
-                        expressNos: item.expressNos,
-                        remark: item.remark,
                         receivedName: item.receivedName,
                         receivedPhone: item.receivedPhone,
                         receivedProvinceCode: item.receivedProvinceCode,
@@ -194,11 +188,14 @@ export default {
                         sendAreaCode: item.sendAreaCode,
                         sendAreaName: item.sendAreaName,
                         sendDetail: item.sendDetail,
-                        sendRemark: item.sendRemark,
+                        expressCompanys: expressCompanys,
+                        expressNos: item.expressNos,
+                        expressCompanyCodes: item.expressCompanyCodes,
+                        remark: item.remark
                     }
                 })
             }
-            this._apis.order.orderSendInfoFillUpExpress(params).then((res) => {
+            this._apis.order.orderSendGoods(params).then((res) => {
                 this.$notify({
                     title: '成功',
                     message: '批量补填物流成功',
@@ -279,17 +276,49 @@ export default {
         },
     getDetail() {
       this._apis.order
-        .orderSendInfoFillUpExpressPage({
+        .orderSendDetail({
           ids: this.$route.query.ids.split(",").map(val => +val)
         })
         .then(res => {
           console.log(res)
           res.forEach(val => {
-              val.orderItemList.forEach(goods => {
-                  goods.checked = false
-              })
+            val.checked = false;
+            val.expressNos = "";
+            val.expressCompanyCodes = ''
+            val.orderItemList.forEach(goods => {
+              goods.checked = false;
+              goods.sendCount = ''
+            });
+          });
+          res.forEach(val => {
+            val.orderItemList.forEach(item => {
+              item.cacheSendCount = item.sendCount
+            })
           })
           this.list = res;
+
+          this._apis.order
+            .fetchOrderAddress({ id: this.cid, cid: this.cid })
+            .then(response => {
+              this.list.forEach(res => {
+                res.sendName = response.senderName
+                res.sendPhone = response.senderPhone
+                res.sendProvinceCode = response.provinceCode
+                res.sendProvinceName = response.province
+                res.sendCityCode = response.cityCode
+                res.sendCityName = response.city
+                res.sendAreaCode = response.areaCode
+                res.sendAreaName = response.area
+                res.sendDetail = response.address
+              })
+            })
+            .catch(error => {
+              this.visible = false;
+              this.$notify.error({
+                title: "错误",
+                message: error
+              });
+            });
         })
         .catch(error => {
           this.visible = false;

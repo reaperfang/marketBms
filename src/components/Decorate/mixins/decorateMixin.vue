@@ -40,7 +40,7 @@ export default {
       if(!Array.isArray(pageData)) {
         return;
       }
-      console.log('pageData', JSON.stringify(pageData));
+      // console.log('pageData', JSON.stringify(pageData));
       for (let item of pageData) {
         componentDataIds.push(item.id);
         componentDataMap[item.id] = item;

@@ -191,9 +191,32 @@ export default {
             } else {
                 return false
             }
+        },
+        cid(){
+            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            return shopInfo.id
         }
     },
     methods: {
+        fetchOrderAddress() {
+            this._apis.order.fetchOrderAddress({id: this.cid, cid: this.cid}).then((res) => {
+                this.orderInfo.sendName = res.senderName
+                this.orderInfo.sendPhone = res.senderPhone
+                this.orderInfo.sendProvinceCode = res.provinceCode
+                this.orderInfo.sendProvinceName = res.province
+                this.orderInfo.sendCityCode = res.cityCode
+                this.orderInfo.sendCityName = res.city
+                this.orderInfo.sendAreaCode = res.areaCode
+                this.orderInfo.sendAreaName = res.area
+                this.orderInfo.sendDetail = res.address
+            }).catch(error => {
+                this.visible = false
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
+            })
+        },
         printDistributionSheet() {
             this.$router.push('/order/printDistributionSheet?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
         },
@@ -219,24 +242,15 @@ export default {
             params = {
                 sendInfoDtoList: [
                     {
-                        createTime: this.orderInfo.createTime,
-                        createUserId: this.orderInfo.createUserId,
-                        createUserName: this.orderInfo.createUserName,
-                        updateTime: this.orderInfo.updateTime,
-                        updateUserId: this.orderInfo.updateUserId,
-                        updateUserName: this.orderInfo.updateUserName,
-                        deleteFlag: this.orderInfo.deleteFlag,
-                        userCache: this.orderInfo.userCache,
-                        commodityCode: this.orderInfo.commodityCode,
-                        id: this.orderInfo.id,
+                        orderId: this.$route.query.orderId || this.$route.query.id, // 订单id
+                        memberInfoId: this.orderInfo.memberInfoId,
                         orderCode: this.orderInfo.orderCode,
-                        memberSn: this.orderInfo.memberSn,
-                        isAutoSend: this.orderInfo.isAutoSend,
-                        status: this.orderInfo.status,
-                        expressCompanys: this.ruleForm.expressCompany,
-                        expressCompanyCodes: this.ruleForm.expressCompanyCode,
-                        expressNos: this.ruleForm.expressNos,
-                        remark: this.orderInfo.remark,
+                        orderItems: this.multipleSelection.map(val => ({
+                            id: val.id,
+                            sendCount: val.sendCount
+                        })), // 发货的商品列表
+                        id: this.orderInfo.id, 
+                        memberSn: this.orderInfo.memberSn, 
                         receivedName: this.orderInfo.receivedName,
                         receivedPhone: this.orderInfo.receivedPhone,
                         receivedProvinceCode: this.orderInfo.receivedProvinceCode,
@@ -246,20 +260,23 @@ export default {
                         receivedAreaCode: this.orderInfo.receivedAreaCode,
                         receivedAreaName: this.orderInfo.receivedAreaName,
                         receivedDetail: this.orderInfo.receivedDetail,
-                        sendName: this.orderInfo.sendName,
-                        sendPhone: this.orderInfo.sendPhone,
-                        sendProvinceCode: this.orderInfo.sendProvinceCode,
-                        sendProvinceName: this.orderInfo.sendProvinceName,
-                        sendCityCode: this.orderInfo.sendCityCode,
-                        sendCityName: this.orderInfo.sendCityName,
-                        sendAreaCode: this.orderInfo.sendAreaCode,
-                        sendAreaName: this.orderInfo.sendAreaName,
-                        sendDetail: this.orderInfo.sendDetail,
-                        sendRemark: this.orderInfo.sendRemark,
+                        sendName: this.orderInfo.sendName, // 发货人名称
+                        sendPhone: this.orderInfo.sendPhone, // 发货人手机号
+                        sendProvinceCode: this.orderInfo.sendProvinceCode, // 发货省cdoe
+                        sendProvinceName: this.orderInfo.sendProvinceName, // 发货省名称
+                        sendCityCode: this.orderInfo.sendCityCode, // 发货城市code
+                        sendCityName: this.orderInfo.sendCityName, // 发货城市名称
+                        sendAreaCode: this.orderInfo.sendAreaCode, // 发货区县code
+                        sendAreaName: this.orderInfo.sendAreaName, // 发货区县名称
+                        sendDetail: this.orderInfo.sendDetail, // 发货人详细地址
+                        expressCompanys: this.ruleForm.expressCompany, // 快递公司名称
+                        expressNos: this.ruleForm.expressNos, // 快递单号
+                        expressCompanyCodes: this.ruleForm.expressCompanyCode, // 快递公司编码
+                        remark: this.ruleForm.remark // 发货备注
                     }
                 ],
             }
-            this._apis.order.orderSendInfoFillUpExpress(params).then((res) => {
+            this._apis.order.orderSendGoods(params).then((res) => {
                 this.$notify({
                     title: '成功',
                     message: '补填物流成功',
@@ -293,11 +310,16 @@ export default {
         _orderDetail() {
             let id = this.$route.query.id
 
-            this._apis.order.orderSendInfoFillUpExpressPage({ids: [this.$route.query.id]}).then((res) => {
+            this._apis.order.orderSendDetail({ids: [this.$route.query.id]}).then((res) => {
+                res[0].orderItemList.forEach(val => {
+                    val.sendCount =  ''
+                })
                 this.orderDetail = res[0]
-                this.tableData = this.orderDetail.orderItemList
-                this.orderInfo = res[0]
                 this.orderSendInfo = res[0]
+                this.tableData = res[0].orderItemList
+                this.orderInfo = res[0]
+
+                this.fetchOrderAddress()
             }).catch(error => {
 
             })

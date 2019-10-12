@@ -186,7 +186,7 @@ export default {
             }else if(this.preType == 3){
                 xyData.yAxisData = this.threeData
             }
-            this.$refs.pp2.con(xyData)
+            this.$refs.pp2.con(xyData,this.preType)
         },
         changePre(){
             this.chart()

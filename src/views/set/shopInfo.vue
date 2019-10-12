@@ -61,8 +61,10 @@ export default {
   name: 'shopInfo',
   data() {
     var validatePass = (rule, value, callback) => {
-      if (value && (!(/^[1][34578]\d{9}$/).test(value) || !(/^[1-9]\d*$/).test(value) || value.length !== 11) || (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))){
-        callback(new Error('手机或电话号码不符合规范'))
+      let mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+      let tel = /^\d{3,4}-?\d{7,9}$/;
+      if (!tel.test(value)||!mobile.test(value)){
+          return callback(new Error('请填写联系电话(座机格式\'区号-座机号码\')'));
       } else {
         callback();
       }
@@ -83,7 +85,7 @@ export default {
           { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
         ],
         phone:[
-          { required: true, message: '请输入电话号码', trigger: 'blur' },
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ],
         addressCode:[
