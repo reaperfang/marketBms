@@ -239,6 +239,10 @@ export default {
                 this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量打印配送单的单据。'})
                 return
             }
+            if(this.multipleSelection.some(val => val.status == 3)) {
+                this.confirm({title: '提示', icon: true, text: '勾选订单包含未发货或未付款订单，无法批量打印；请重新勾选已发货订单批量打印配送单。'})
+                return
+            }
             let ids = this.multipleSelection.map(val => val.id).join(',')
 
             this.$router.push('/order/printDistributionSheet?ids=' + ids)

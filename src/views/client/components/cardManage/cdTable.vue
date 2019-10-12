@@ -67,16 +67,45 @@ export default {
   name: "cdTable",
   extends: TableBase,
   components: { sendCardDialog },
-  props: ['cardList','loading'],
   data() {
     return {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      hackReset: false
+      hackReset: false,
+      cardList: [],
+      loading: false
     };
   },
   methods: {
+    getCardList() {
+      this.loading = true;
+      let obj = {
+          "startIndex": 1,
+          "pageSize": 10
+      }
+      this._apis.client.getCardList(obj).then((response) => {
+          this.loading = false;
+          response.list.map((v) => {
+              v.validity = "永久有效";
+              v.isGray = true;
+              v.enable = v.enable == 0?true:false;
+          });
+          let i = response.list.findIndex((value,index,arr) => {
+              return value.name == null || value.name == "";
+          });
+          if(i !== -1) {
+              this.$set(response.list[i], 'isGray', false);
+          }else{
+              this.$set(response.list[0], 'isGray', false);
+          }
+          this.cardList = [].concat(response.list);
+          console.log(this.cardList);
+      }).catch((error) => {
+          this.loading = false;
+          console.log(error);
+      })
+    },
     changeSwitch(row) {
       this._apis.client.toggleStatus({id:row.id, enable: row.enable?1:0}).then((response) => {
         this.$notify({
@@ -104,12 +133,6 @@ export default {
       this.currentData.id = row.id;
       this.currentData.level = row.level;
     },
-    getFirstConfig() {
-      let i = this.cardList.findIndex((value,index,arr) => {
-        return value.name == "";
-      });
-      this.$set(this.cardList[i], 'isGray', false);
-    },
     handleConfig(row) {
       if(!row.isGray) {
         this._routeTo('createCard',{cardData:row});
@@ -126,7 +149,7 @@ export default {
     
   },
   mounted() {
-    
+    this.getCardList();
   }
 };
 </script>

@@ -46,7 +46,7 @@
                     <el-radio v-model="ruleForm.consumeTimeType" label="1">自定义</el-radio>
                     <div class="input_wrap">
                         <el-date-picker
-                            v-model="ruleForm.consumeTime"
+                            v-model="consumeTime"
                             type="daterange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -121,6 +121,7 @@ export default {
     components: { chooseProductDialog },
     data() {
         return {
+            consumeTime:"",
             ruleForm: {
                 tagName: "",
                 tagType: "0",
@@ -129,7 +130,6 @@ export default {
                 consumeTimeType: "",
                 consumeTimeValue:"",
                 consumeTimeUnit: "",
-                consumeTime:"",
                 isTotalConsumeTimes: false,
                 consumeTimesMin:"",
                 consumeTimesMax:"",
@@ -187,9 +187,8 @@ export default {
         },
         saveLabel() {
             let formObj = Object.assign({}, this.ruleForm);
-            formObj.consumeTimeStart = formObj.consumeTime ? utils.formatDate(new Date(formObj.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
-            formObj.consumeTimeEnd = formObj.consumeTime ? utils.formatDate(new Date(formObj.consumeTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"):"";
-            delete formObj.consumeTime;
+            formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
+            formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"):"";
             formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || '';
             formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || '';
             formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || '';
@@ -252,17 +251,25 @@ export default {
     mounted() {
         if(this.$route.query.id) {
             this._apis.client.getLabelInfo({id:this.$route.query.id}).then((response) => {
-                this.ruleForm = Object.assign({}, response);
-                this.ruleForm.tagType = this.ruleForm.tagType.toString();
-                this.ruleForm.anyOrAllCondition = this.ruleForm.anyOrAllCondition.toString();
-                this.ruleForm.consumeTimeType = this.ruleForm.consumeTimeType.toString();
-                this.ruleForm.isLastConsumeTime = Boolean(this.ruleForm.isLastConsumeTime);
-                this.ruleForm.isTotalConsumeTimes = Boolean(this.ruleForm.isTotalConsumeTimes);
-                this.ruleForm.isTotalConsumeMoney = Boolean(this.ruleForm.isTotalConsumeMoney);
-                this.ruleForm.isPreUnitPrice = Boolean(this.ruleForm.isPreUnitPrice);
-                this.ruleForm.isTotalScore = Boolean(this.ruleForm.isTotalScore);
-                this.ruleForm.isProduct = Boolean(this.ruleForm.isProduct);
-                this.ruleForm.consumeTime = [this.ruleForm.consumeTimeStart, this.ruleForm.consumeTimeEnd];
+                if(response.tagType == 0) {
+                    this.ruleForm.tagType = response.tagType.toString();
+                    this.ruleForm.tagName = response.tagName;
+                    this.ruleForm.id = response.id;
+                }else{
+                    this.ruleForm = Object.assign({}, response);
+                    this.ruleForm.tagType = this.ruleForm.tagType.toString();
+                    this.ruleForm.anyOrAllCondition = this.ruleForm.anyOrAllCondition ? this.ruleForm.anyOrAllCondition.toString():"";
+                    this.ruleForm.consumeTimeType = this.ruleForm.consumeTimeType ? this.ruleForm.consumeTimeType.toString():'';
+                    this.ruleForm.isLastConsumeTime = Boolean(this.ruleForm.isLastConsumeTime);
+                    this.ruleForm.isTotalConsumeTimes = Boolean(this.ruleForm.isTotalConsumeTimes);
+                    this.ruleForm.isTotalConsumeMoney = Boolean(this.ruleForm.isTotalConsumeMoney);
+                    this.ruleForm.isPreUnitPrice = Boolean(this.ruleForm.isPreUnitPrice);
+                    this.ruleForm.isTotalScore = Boolean(this.ruleForm.isTotalScore);
+                    this.ruleForm.isProduct = Boolean(this.ruleForm.isProduct);
+                    if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
+                        this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
+                    }
+                }
             }).catch((error) => {
                 console.log(error);
             })

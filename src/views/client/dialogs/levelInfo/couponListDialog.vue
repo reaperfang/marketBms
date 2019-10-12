@@ -16,7 +16,7 @@
           :default-sort="{prop: 'date', order: 'descending'}"
         >
           <el-table-column type="selection"></el-table-column>
-          <el-table-column prop="businessId" label="优惠券编号"></el-table-column>
+          <el-table-column prop="id" label="优惠券编号" width="200"></el-table-column>
           <el-table-column prop="name" label="优惠券名称"></el-table-column>
           <el-table-column prop="receiveLimitCount" label="限领次数"></el-table-column>
           <el-table-column prop="remainStock" label="当前剩余数量"></el-table-column>
@@ -69,6 +69,7 @@ export default {
             if(this.couponList) {
               this.couponList.map((v) => {
                 v.status = this.statusMap[v.status]
+                v.receiveLimitCount = v.receiveLimitCount == "-1" ? '不限次数': v.receiveLimitCount
               })
             }
         }).catch((error) => {

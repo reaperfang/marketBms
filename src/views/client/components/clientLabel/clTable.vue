@@ -11,7 +11,6 @@
       >
       <el-table-column
         type="selection"
-        :selectable="checkSelectable"
       >
       </el-table-column>
       <el-table-column
@@ -75,7 +74,8 @@ export default {
     return {
       checkAll: false,
       tagList: [],
-      loading: false
+      loading: false,
+      canDelete: true
     };
   },
   computed: {
@@ -117,18 +117,26 @@ export default {
       }).catch((error) => {
         this.loading = false;
         console.log(error);
-        // this.$notify.error({
-        //     title: '错误',
-        //     message: error
-        // });
       })
     },
     edit(row) {
       this._routeTo('batchImport',{id: row.id});
     },
     batchDelete() {
+      this.canDelete = true;
       let rows = this.$refs.clientLabelTable.selection;
-      if(rows.length == 0) {
+      rows.map((v) => {
+        if(v.labelContains !== 0) {
+          this.canDelete = false;
+        }
+      })
+      if(!this.canDelete) {
+        this.$notify({
+            title: '警告',
+            message: '包含人员不为0不能删除',
+            type: 'warning'
+          });
+      }else if(rows.length == 0) {
         this.$notify({
           title: '警告',
           message: '请选择要删除的标签',
@@ -145,14 +153,10 @@ export default {
             message: "批量删除标签成功",
             type: 'success'
           });
-          this.getLabelList(1, this.pageSize);
+          this.getLabelList(this.startIndex, this.pageSize);
           this.checkAll = false;
         }).catch((error) => {
           console.log(error);
-          // this.$notify.error({
-          //   title: '错误',
-          //   message: error
-          // });
         })
       }
     }

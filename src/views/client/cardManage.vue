@@ -32,7 +32,7 @@
                     </div>
                     <p class="c_warn">建议上传图片尺寸1000*630像素，不超过2M，格式支持JPG、PNG、JPEG</p>
                 </div>
-                <cdTable :cardList="cardList" @refreshTable="refreshTable" :loading="loading"></cdTable>
+                <cdTable></cdTable>
             </el-tab-pane>
             <el-tab-pane label="领卡记录" name="second" v-permission="['客户', '会员卡', '领卡记录']">
                 <div class="c_line">
@@ -79,7 +79,6 @@ export default {
             popVisible: false,
             selected:"",
             getTime: "",
-            cardList: [],
             cardNames: [],
             lkParams: {},
             isLoading: true,
@@ -115,37 +114,6 @@ export default {
         reset() {
             this.selected = "";
             this.getTime = "";
-        },
-        getCardList() {
-            this.loading = true;
-            let obj = {
-                "startIndex": 1,
-                "pageSize": 10
-            }
-            this._apis.client.getCardList(obj).then((response) => {
-                this.loading = false;
-                response.list.map((v) => {
-                    v.validity = "永久有效";
-                    v.isGray = true;
-                    v.enable = v.enable == 0?true:false;
-                });
-                let i = response.list.findIndex((value,index,arr) => {
-                    return value.name == "";
-                });
-                if(i !== -1) {
-                    this.$set(response.list[i], 'isGray', false);
-                }else{
-                    this.$set(response.list[0], 'isGray', false);
-                }
-                this.cardList = [].concat(response.list);
-            }).catch((error) => {
-                this.loading = false;
-                console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
-            })
         },
         refreshTable() {
             this.getCardList();
@@ -198,7 +166,6 @@ export default {
         }
     },
     mounted() {
-        this.getCardList();
         this.getCardNames();
         this.checkCardBg();
     }

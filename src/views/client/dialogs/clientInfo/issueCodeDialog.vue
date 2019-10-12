@@ -38,12 +38,22 @@ export default {
   methods: {
     submit() {
       this._apis.client.distributeCoupon(this.selectList).then((response) => {
-        this.$notify({
-          title: '成功',
-          message: "发放成功",
-          type: 'success'
-        });
-        this.$emit('refreshPage');
+        response.map((v) => {
+          if(!!v.receiveDesc) {
+            let errMsg = v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
+            this.$notify.error({
+              title: '错误',
+              message: errMsg
+            });
+          }else{
+            this.$notify({
+              title: '成功',
+              message: "发放成功",
+              type: 'success'
+            });
+            this.$emit('refreshPage');
+          }
+        })
       }).catch((error) => {
         console.log(error);
       })
