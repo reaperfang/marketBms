@@ -63,7 +63,15 @@ export default {
                     default:
                         break;
                 }
-                this.$emit('getCondition', params);
+                if(params.conditionValue == "") {
+                    this.$notify({
+                        title: '警告',
+                        message: '请输入所选条件的值',
+                        type: 'warning'
+                    });
+                }else{
+                    this.$emit('getCondition', params);
+                }
             }else{
                 this.$notify({
                     title: '警告',

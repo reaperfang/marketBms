@@ -220,8 +220,10 @@ export default {
 
     //最近7天 or  最近15天  or 最近30天 or 自定义时间
     changeDay() {
-      this.changeType(this.analysisType)
-      this.changeDp(this.duration)
+      if(this.nearDay != 4){
+        this.changeType(this.analysisType)
+        this.changeDp(this.duration)
+      }
     },
 
     //自定义时间选择

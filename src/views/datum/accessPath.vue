@@ -66,11 +66,11 @@
           </div>
           <div class="p_r p_2">
             <div class="p_top">
-              <p>{{toPersent(dataObj.orderUvPathTransformation[1])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[2])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[3])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[4])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[5])}}</p>
+              <p>{{(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'}}</p>
+              <p>{{(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'}}</p>
+              <p>{{(dataObj.orderUvPathTransformation[3]*100).toFixed(2)+ '%'}}</p>
+              <p>{{(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'}}</p>
+              <p>{{(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'}}</p>
             </div>
             <div class="p_bottom">
               <p>确认订单</p>
@@ -85,9 +85,9 @@
           </div>
           <div class="p_r p_3">
             <div class="p_top">
-              <p>{{toPersent(dataObj.payOrderPathTransformation[1])}}</p>
-              <p>{{toPersent(dataObj.payOrderPathTransformation[2])}}</p>
-              <p>{{toPersent(dataObj.payOrderPathTransformation[3])}}</p>
+              <p>{{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}</p>
+              <p>{{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}</p>
+              <p>{{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}</p>
             </div>
             <div class="p_bottom">
               <div>
@@ -122,17 +122,12 @@ export default {
       nearDay: "7",
       startTime: "",
       endTime: "",
-      dateType: 1,
+      dateType: 7,
       dataObj: {},
       channel: "0"
     };
   },
   methods: {
-    toPersent(num) {
-      let str = Number(num*100);
-      str+='%';
-      return str;
-    },
     getDate(date) {
       return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
     },

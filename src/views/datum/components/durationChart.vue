@@ -54,11 +54,11 @@ export default {
           bottom: "3%",
           containLabel: true
         },
-        toolbox: {
-          feature: {
-            saveAsImage:{}
-          }
-        },
+        // toolbox: {
+        //   feature: {
+        //     saveAsImage:{}
+        //   }
+        // },
         //X轴
         xAxis: {
           type: "category",

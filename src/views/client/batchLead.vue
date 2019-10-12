@@ -258,7 +258,7 @@ export default {
                 }else{
                     this.ruleForm = Object.assign({}, response);
                     this.ruleForm.tagType = this.ruleForm.tagType.toString();
-                    this.ruleForm.anyOrAllCondition = this.ruleForm.anyOrAllCondition ? this.ruleForm.anyOrAllCondition.toString():"";
+                    this.ruleForm.anyOrAllCondition = typeof(this.ruleForm.anyOrAllCondition) == 'number' ? this.ruleForm.anyOrAllCondition.toString():"";
                     this.ruleForm.consumeTimeType = this.ruleForm.consumeTimeType ? this.ruleForm.consumeTimeType.toString():'';
                     this.ruleForm.isLastConsumeTime = Boolean(this.ruleForm.isLastConsumeTime);
                     this.ruleForm.isTotalConsumeTimes = Boolean(this.ruleForm.isTotalConsumeTimes);

@@ -40,7 +40,7 @@ export default {
       this._apis.client.distributeCoupon(this.selectList).then((response) => {
         response.map((v) => {
           if(!!v.receiveDesc) {
-            let errMsg = v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
+            let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
             this.$notify.error({
               title: '错误',
               message: errMsg
