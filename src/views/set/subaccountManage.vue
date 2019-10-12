@@ -201,6 +201,15 @@ export default {
     handleClick(row){
       this.$router.push({name:'createAccount',params:{data:row}})
     },
+    //分页
+    handleSizeChange(val){
+      this.form.pageSize = val
+      this.getSubAccount()
+    },
+    handleCurrentChange(val){
+      this.form.startIndex = val
+      this.getSubAccount()
+    },
   }
 }
 </script>

@@ -265,7 +265,15 @@ export default {
             // })
         },
         exportOrder() {
-           this._apis.order.orderAfterSaleExport(Object.assign({}, this.listQuery, {ids: this.multipleSelection.map(val => val.id)})).then((res) => {
+            let _param
+            
+            _param = Object.assign({}, this.listQuery, {
+                [this.listQuery.searchType]: this.listQuery.searchValue,
+                createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[0], "yyyy-MM-dd hh:mm:ss") : '',
+                createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[1], "yyyy-MM-dd hh:mm:ss") : '',
+                ids: this.multipleSelection.map(val => val.id)
+            })
+           this._apis.order.orderAfterSaleExport(_param).then((res) => {
                 console.log(res)
                 window.location.href = res
                 this.$notify({

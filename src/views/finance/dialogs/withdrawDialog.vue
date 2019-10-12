@@ -76,22 +76,13 @@ export default {
     },
     methods: {
         submit() {
-            if(!remarks){
+            if(!this.remarks){
                 let datas = {
                     ids:this.data,
                     auditStatus:this.radio,
                     remarks:this.remarks
                 }
-                this._apis.finance.examineWd(datas).then((response)=>{
-                    this.dialogVisible = false
-                    this.otherVisible = true;
-                    this.$emit("handleSubmit");
-                }).catch((error)=>{
-                    this.$notify.error({
-                    title: '错误',
-                    message: error
-                    });
-                })                
+                this.$emit("handleSubmit",datas);          
             }else{
                 return false
             }

@@ -31,8 +31,8 @@ export default {
     ],
     //提现明细---提现方式--------------------
     presentations:[
-        { value: 'tradeDetailSn', label: '提现编号' },
-        { value: 'cashoutSn', label: '交易流水号' },
+        { value: 'cashoutSn', label: '提现编号' },
+        { value: 'tradeDetailSn', label: '交易流水号' },
     ],
     //提现明细---提现状态
     presentationStatus:[

@@ -112,6 +112,7 @@ import IntegralShop from "./components/integralShop";
 import { fetchOrderList } from "@/api/order";
 import appConfig from '@/system/appConfig';
 import { search } from '@/mixins/orderMixin'
+import utils from "@/utils";
 
 export default {
   data() {
@@ -177,9 +178,24 @@ export default {
           showClose: true,
           message: '导出中...'
         });
+        let _params
+
+        if(this.listQuery.orderTimeValue && this.listQuery.orderTimeValue.length) {
+                if(this.listQuery.orderTimeValue[0]) {
+                    var searchTimeTypeStart = utils.formatDate(this.listQuery.orderTimeValue[0], "yyyy-MM-dd hh:mm:ss")
+                }
+                if(this.listQuery.orderTimeValue[1]) {
+                    var searchTimeTypeEnd = utils.formatDate(this.listQuery.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss")
+                }
+            }
+            _params = Object.assign({}, this.listQuery, {
+                [this.listQuery.searchType]: this.listQuery.searchValue,
+                [`${this.listQuery.searchTimeType}Start`]: this.listQuery.orderTimeValue ? searchTimeTypeStart : '',
+                [`${this.listQuery.searchTimeType}End`]: this.listQuery.orderTimeValue ? searchTimeTypeEnd : '',
+            })
 
       this._apis.order
-        .exportOrders(this.listQuery)
+        .exportOrders(_params)
         .then(res => {
           window.location.href = res
           message.close()

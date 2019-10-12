@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     submit() { 
-      if(!remarks){
+      if(!this.remarks){
         let datas = {
           ids:[this.data.id],
           auditStatus:this.radio,
