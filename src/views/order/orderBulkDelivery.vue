@@ -140,12 +140,14 @@ export default {
       currentData: "",
       sendGoods: "",
       title: "",
-      expressCompanyList: []
+      expressCompanyList: [],
+      express: false
     };
   },
   created() {
     this.getDetail();
     this.getExpressCompanyList();
+    this.checkExpress()
   },
   computed: {
         cid(){
@@ -172,6 +174,20 @@ export default {
     }
   },
   methods: {
+    checkExpress() {
+      this._apis.order
+        .checkExpress()
+        .then(res => {
+          this.express = res
+        })
+        .catch(error => {
+          this.visible = false;
+          this.$notify.error({
+            title: "错误",
+            message: error
+          });
+        });
+    },
     deleteOrder(index) {
       this.list.splice(index, 1)
     },
@@ -204,6 +220,11 @@ export default {
 
         if(this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).some(val => +val.sendCount > val.goodsCount)) {
           this.confirm({title: '提示', icon: true, text: '本次发货数量不能大于应发数量'})
+                return
+        }
+
+        if(express && this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).some(val => !expressNos)) {
+          this.confirm({title: '提示', icon: true, text: '快递单号不能为空'})
                 return
         }
 

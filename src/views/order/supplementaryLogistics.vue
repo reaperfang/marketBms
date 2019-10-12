@@ -21,10 +21,6 @@
                             style="width: 100%"
                             @selection-change="handleSelectionChange">
                             <el-table-column
-                                type="selection"
-                                width="55">
-                            </el-table-column>
-                            <el-table-column
                                 label="序号"
                                 width="180">
                                 <template slot-scope="scope">
@@ -58,7 +54,7 @@
                                 prop="sendCount"
                                 label="本次发货数量">
                                 <template slot-scope="scope">
-                                    <el-input :disabled="true" v-model="scope.row.goodsCount"></el-input>
+                                    <el-input :disabled="true" v-model="scope.row.sendCount"></el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -109,7 +105,7 @@
                         </div>
                         <div class="item">
                             <div class="label">发货信息</div>
-                            <div class="value">{{orderInfo.sendRemark}}</div>
+                            <div class="value">{{orderInfo.sendDetail}}</div>
                         </div>
                     </div>
                 </div>
@@ -245,9 +241,9 @@ export default {
                         orderId: this.$route.query.orderId || this.$route.query.id, // 订单id
                         memberInfoId: this.orderInfo.memberInfoId,
                         orderCode: this.orderInfo.orderCode,
-                        orderItems: this.multipleSelection.map(val => ({
+                        orderItems: this.tableData.map(val => ({
                             id: val.id,
-                            sendCount: val.sendCount
+                            sendCount: val.goodsCount
                         })), // 发货的商品列表
                         id: this.orderInfo.id, 
                         memberSn: this.orderInfo.memberSn, 
@@ -312,7 +308,7 @@ export default {
 
             this._apis.order.orderSendDetail({ids: [this.$route.query.id]}).then((res) => {
                 res[0].orderItemList.forEach(val => {
-                    val.sendCount =  ''
+                    val.sendCount =  val.goodsCount
                 })
                 this.orderDetail = res[0]
                 this.orderSendInfo = res[0]

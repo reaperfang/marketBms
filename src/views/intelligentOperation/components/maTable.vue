@@ -13,22 +13,27 @@
       </el-table-column>
       <el-table-column
         prop="id"
-        label="ID">
+        label="客户ID">
       </el-table-column>
       <el-table-column
-        label="会员类型">
+        label="客户类型">
         <template slot-scope="scope">
-             <span style="line-height:60px;display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
+            <span v-if="!scope.row.memberType" class="txtCenter"> - </span>
+             <span v-else style="line-height:60px; display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="phone"
         label="手机号码"
       >
+        <template slot-scope="scope">
+            <span v-if="!scope.row.phone" class="txtCenter"> - </span>
+            <span v-else>{{scope.row.phone}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="name"
-        label="会员昵称"
+        label="昵称"
       >
       </el-table-column>
       <el-table-column
@@ -37,7 +42,8 @@
       >
       </el-table-column>
       <el-table-column
-        label="入会时间"
+        label="（会员）入会时间"
+        width="150"
       >
         <template slot-scope="scope">
           <span v-if="scope.row.joinTime">
@@ -131,5 +137,9 @@ export default {
                 }
             }
         }
-
+.txtCenter{
+  text-align:center; 
+  width:80%;
+  display:inline-block
+}
 </style>

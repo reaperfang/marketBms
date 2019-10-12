@@ -51,15 +51,22 @@ export default {
   methods: {
     //进入店铺
     toShop(shop){
-      this.$store.dispatch('getShopInfos',shop).then(() => {
-        this.handleClose()
-        this.$router.push({ path: '/profile/profile' })
-      }).catch(error => {
-        this.$notify.error({
-          title: '失败',
-          message: error
+      if(shop.enable == 1){
+        this.$store.dispatch('getShopInfos',shop).then(() => {
+          this.handleClose()
+          this.$router.push({ path: '/profile/profile' })
+        }).catch(error => {
+          this.$notify.error({
+            title: '失败',
+            message: error
+          })
         })
-      })
+      }else{
+        this.$notify.warning({
+          title: '提示',
+          message: '该店铺已停用！'
+        })
+      }
     },
 
     handleClose(){

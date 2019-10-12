@@ -583,6 +583,16 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
   })
 }
 
+ //订单发货-校验快递单号是否必填
+ export function checkExpress(data) {
+  return request({
+    target: 'CHECK-EXPRESSNO-REQUIRED-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+
 
 
 

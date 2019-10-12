@@ -152,6 +152,8 @@ export default {
         });
         },
         changeDayM(){
+            this.startTime = '';
+            this.endTime = '';
             this.getProductDetails()
         },
         changeTime(val){

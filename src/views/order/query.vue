@@ -167,7 +167,7 @@ export default {
           this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
           return
       }
-      if(this.$refs['shop'].list.filter(val => val.isFillUp != 1).length) {
+      if(this.$refs['shop'].list.filter(val => val.checked).filter(val => val.isFillUp != 1).length) {
         this.confirm({title: '提示', icon: true, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
         return
       }

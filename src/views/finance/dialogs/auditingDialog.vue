@@ -104,17 +104,18 @@ export default {
   },
   methods: {
     submit() { 
-      if(!this.remarks){
-        let datas = {
-          ids:[this.data.id],
-          auditStatus:this.radio,
-          remarks:this.remarks
-        }
+      let datas = {
+        ids:[this.data.id],
+        auditStatus:this.radio,
+        remarks:this.remarks
+      }
+      if(this.radio == 0){
         this.$emit("handleSubmit",datas);
+      }else if(this.radio == 1 && this.remarks){
+         this.$emit("handleSubmit",datas);
       }else{
         return false
-      }
-      
+      }      
     },
     getInfo(){
       this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{

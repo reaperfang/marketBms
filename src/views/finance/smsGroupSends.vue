@@ -64,8 +64,8 @@
           </span>
         </div>
         <div>
-          <span class="details" v-permission="['财务', '短信成本', '默认页面', '充值记录']" @click="_routeTo('apply')">充值记录</span>
-          <span class="details" v-permission="['财务', '短信成本', '默认页面', '申请开票']" @click="_routeTo('apply')">申请开票</span>
+          <span class="details" v-permission="['财务', '短信成本', '默认页面', '充值记录']" @click="toRecord">充值记录</span>
+          <span class="details" v-permission="['财务', '短信成本', '默认页面', '申请开票']" @click="applyTicket">申请开票</span>
         </div>
       </div>
     </div>
@@ -79,6 +79,7 @@ import Blob from '@/excel/Blob'
 import Export2Excel from '@/excel/Export2Excel.js'
 import sgsTable from './components/sgsTable'
 import financeCons from '@/system/constant/finance'
+import { mapMutations } from 'vuex'
 export default {
   name: 'smsGroupSends',
   components:{ sgsTable },
@@ -111,6 +112,7 @@ export default {
     this.getSurvey();
   },
   methods: {
+    ...mapMutations(['SETCURRENT']),
     //概况
     getSurvey(){
       this._apis.finance.smsStatistics({flag:this.flag}).then((response)=>{
@@ -119,6 +121,16 @@ export default {
         this.$message.error(error);
       })
     },
+    //充值记录
+    toRecord(){
+      this.$router.push({path:'/apply',params:{paths:'/application/toolapp/paySms'}})
+      this.SETCURRENT(8)
+    },
+    //申请开票
+    applyTicket(){
+      this.$router.push({path:'/apply',params:{paths:'/application/toolapp/rechargeHistory'}})
+      this.SETCURRENT(8)
+    }
   }
 }
 </script>

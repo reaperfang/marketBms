@@ -38,7 +38,7 @@
                             <el-option v-for="item in tradeCount" :label="item.name" :value="item.value" :key="item.id"></el-option>
                         </el-select>
                     </div>
-                    <el-checkbox-group v-model="form.queryRepeatPaymentRatio">
+                    <el-checkbox-group v-model="form.queryRepeatPaymentRatio" style="display:inline-block">
                         <el-checkbox label="是否查询复购率" name="type"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
@@ -80,9 +80,9 @@
                     </i>
                     <i v-if="form.memberType==2" style="font-style:normal">
                         老会员共计<span>{{oldMemberCount || 0}}</span>人；
-                        占会员总数的<span>{{(oldMemberRatio*100).toFixed(1) || 0}}%</span>;    
+                        占会员总数的<span>{{(oldMemberRatio*100).toFixed(2) || 0}}%</span>;    
                     </i>
-                    <i v-if="repeatPaymentRatio != undefined">复购率为<span>{{repeatPaymentRatio*100}}%</span></i>。
+                    <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio*100}}%</span></i>。
                 </p>
                 <div class="fr marT20">
                     <el-button class="minor_btn" @click="reScreening">重新筛选</el-button>

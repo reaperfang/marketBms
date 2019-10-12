@@ -13,9 +13,9 @@
             <div class="row align-center table-title">
               <div class="col" style="width: 660px;">
                 <div class="row align-center row-margin">
-                  <div class="col">
+                  <!-- <div class="col">
                     <i class="checkbox"></i>
-                  </div>
+                  </div> -->
                   <div class="col" style="width: 380px;">商品</div>
                   <div class="col" style="width: 60px;">应发数量</div>
                   <div class="col">本次发货数量</div>
@@ -35,9 +35,9 @@
                   v-for="(goods, i) in item.orderItemList"
                   :key="i"
                 >
-                  <div class="col">
+                  <!-- <div class="col">
                     <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked}"></i>
-                  </div>
+                  </div> -->
                   <div class="col" style="width: 380px;">
                     <div class="row align-center">
                       <div class="col">
@@ -51,7 +51,7 @@
                   </div>
                   <div class="col" style="width: 60px;">{{goods.goodsCount}}</div>
                   <div class="col" style="width: 100px;">
-                    <el-input :disabled="true" v-model="goods.goodsCount" placeholder="请输入"></el-input>
+                    <el-input :disabled="true" v-model="goods.sendCount" placeholder="请输入"></el-input>
                   </div>
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default {
                         orderId: item.orderId,
                         memberInfoId: item.memberInfoId,
                         orderCode: item.orderCode,
-                        orderItems: item.orderItemList.filter(val => val.checked),
+                        orderItems: item.orderItemList,
                         id: item.id,
                         memberSn: item.memberSn,
                         receivedName: item.receivedName,
@@ -287,7 +287,7 @@ export default {
             val.expressCompanyCodes = ''
             val.orderItemList.forEach(goods => {
               goods.checked = false;
-              goods.sendCount = ''
+              goods.sendCount = goods.goodsCount
             });
           });
           res.forEach(val => {

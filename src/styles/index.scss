@@ -687,4 +687,68 @@ table.yuan-table{
   margin-left: 5px;
 }
 
+.deliver-goods {
+  color: #44434B;
+  .deliver-goods-header {
+    color: #161617;
+  }
+  .deliver-goods-number {
+    color: #161617;
+  }
+  .deliver-goods-list {
+    .title {
+      span:first-child {
+        margin-right: 20px;
+        color: #161617;
+      }
+      span:last-child {
+        color: #44434B;
+      }
+    }
+    .content {
+      .goods-detail {
+        display: flex;
+        align-items: center;
+        .goods-detail-item {
+          &:first-child {
+            margin-right: 10px;
+          }
+          &:last-child {
+            p {
+              margin-bottom: 10px;
+              &:first-child {
+                max-width: 300px;
+              }
+              &:last-child {
+                color: #CACFCB;
+              }
+            }
+          }
+        }
+      }
+      input {
+        width: 100px;
+      }
+    }
+  }
+  .deliver-goods-address {
+    .content {
+      .item {
+        margin-bottom: 10px;
+        .label {
+          width: 60px;
+        }
+      }
+    }
+  }
+  .deliver-goods-logistics {
+    input {
+      width: 250px;
+    }
+    textarea {
+      height: 100px;
+    }
+  }
+}
+
 

@@ -146,7 +146,7 @@ export default {
             this._apis.data.historyRecord(data).then(response => {
                 this.listObj = response;
                 let arrList = response.list;
-                this.tableData = response.list;
+                this.tableData = response.list.reverse();
                 this.tableCopyTableList = JSON.parse(JSON.stringify(this.tableData));
                 this.tableData = this.paging(this.size, this.index);
                 this.xdata=[];
