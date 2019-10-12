@@ -6,7 +6,7 @@
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
                             <el-option label="售后单编号" value="code"></el-option>
-                            <el-option label="订单编号" value="orderInfoCode"></el-option>
+                            <el-option label="订单编号" value="orderCode"></el-option>
                             <el-option label="客户ID" value="memberSn"></el-option>
                         </el-select>
                     </el-input>
