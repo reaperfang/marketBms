@@ -85,7 +85,7 @@ export default {
                
             },
             satisfaction:[],  //满意率
-            badreviews:[],  //差评率
+            badreviews:[],  //差评率       
             pickerMinDate: '',
             dateRange: [],
             pickerOptions: {
@@ -122,7 +122,7 @@ export default {
                 this.listObj = response;
             })
         },
-        //获取评价满意率
+        //获取口碑满意率
          memberInforNum(){
             this._apis.data.memberInforNum({type:5}).then(res => { 
                 let pleased = [];
@@ -133,14 +133,14 @@ export default {
                         name: item.name
                     })
                 }
-                console.log('res',res)
-                console.log(pleased)
+                // console.log('res',res)
+                // console.log(pleased)
                 this.satisfaction = pleased
             }).catch(error =>{
                 console.log('error',error)
             })
         },
-        //获取评价差评率
+        //获取口碑差评率
           membercha(){
             this._apis.data.memberInforNum({type:7}).then(res => { 
                 let differences = [];

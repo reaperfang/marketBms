@@ -52,7 +52,9 @@
         <span>
          <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button>
           <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
-          <el-button icon="document" @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
+          <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+            <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
+          </el-tooltip>
         </span>
       </div>
       <el-table

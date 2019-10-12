@@ -214,7 +214,7 @@ export default {
         //获取交易次数
         memberInforNum(){
             this._apis.data.memberInforNum({type:1}).then(res => {   
-                   let reviseitem =[];             
+                let reviseitem =[];             
                 for(let item of res){                   
                     reviseitem.push({
                         id:item.id,

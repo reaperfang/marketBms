@@ -477,7 +477,7 @@ export function orderSendInfoFillUpExpress(data) {
   return request({
     apiType: 'order',
     method: 'post',
-    target: 'ORDER-SENDINFO-FILLUP-EXPRESS-PROCESS',
+    target: 'ORDERSENDINFOBATCHPROCESS',
     data
   })
 }

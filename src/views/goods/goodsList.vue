@@ -167,6 +167,9 @@
         padding-bottom: 18px;
         .item {
             margin-right: 40px;
+            &:hover {
+                color: #7f79ff;
+            }
         }
     }
     .search {

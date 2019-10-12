@@ -179,7 +179,7 @@ export default {
         });
 
       this._apis.order
-        .exportOrders()
+        .exportOrders(this.listQuery)
         .then(res => {
           window.location.href = res
           message.close()

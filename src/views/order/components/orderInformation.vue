@@ -126,7 +126,7 @@
                 </div>
                 <div class="row">
                     <div class="col">应收金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.receivableMoney}}</div>
+                    <div class="col">¥{{orderDetail.orderInfo.freight + orderDetail.orderInfo.goodsAmount}}</div>
                 </div>
                 <div class="row">
                     <div class="col">优惠券金额:</div>
@@ -163,7 +163,7 @@
                         </el-select>
                     </div>
                     <div v-if="this.orderDetail.orderInfo.orderStatus != 4" class="col">
-                        <el-input v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
+                        <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
                         <span v-if="!changePriceVisible">{{goodsListMessage.consultMoney}}</span>
                         <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
                         <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
@@ -213,6 +213,7 @@
 <script>
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
+import ChangePriceDialog from '@/views/order/dialogs/ChangePriceDialog'
 
 export default {
     data() {
@@ -318,15 +319,20 @@ export default {
         //         });
         //     }) 
         // },
+        handleInput2(e) {
+            this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+        },
         reducePriceHandler() {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                // this.$notify({
+                //     title: '成功',
+                //     message: '添加成功！',
+                //     type: 'success'
+                // });
+                this.currentDialog = 'ChangePriceDialog'
+                this.dialogVisible = true
                 this.getDetail()
             }).catch(error => {
                 this.changePriceVisible = false
@@ -340,12 +346,14 @@ export default {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                // this.$notify({
+                //     title: '成功',
+                //     message: '添加成功！',
+                //     type: 'success'
+                // });
                 this.$emit('getDetail')
+                this.currentDialog = 'ChangePriceDialog'
+                this.dialogVisible = true
             }).catch(error => {
                 this.changePriceVisible = false
                 this.$notify.error({
@@ -443,7 +451,8 @@ export default {
     },
     components: {
         ReceiveInformationDialog,
-        CouponDialog
+        CouponDialog,
+        ChangePriceDialog
     }
 }
 </script>

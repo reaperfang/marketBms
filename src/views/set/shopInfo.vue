@@ -60,6 +60,13 @@ import axios from "axios";
 export default {
   name: 'shopInfo',
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value && (!(/^[1][34578]\d{9}$/).test(value) || !(/^[1-9]\d*$/).test(value) || value.length !== 11) || (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))){
+        callback(new Error('手机或电话号码不符合规范'))
+      } else {
+        callback();
+      }
+    };
     return {
       form: {
           shopName: '',
@@ -77,6 +84,7 @@ export default {
         ],
         phone:[
           { required: true, message: '请输入电话号码', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
         ],
         addressCode:[
           { required: true, message: '请输入联系地址', trigger: 'blur' },

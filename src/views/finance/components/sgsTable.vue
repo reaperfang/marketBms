@@ -33,7 +33,9 @@
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total*1}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()' v-permission="['财务', '短信成本', '默认页面', '导出']">导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()'  v-permission="['财务', '短信成本', '默认页面', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <el-table
       v-loading="loading"
@@ -164,7 +166,11 @@ export default {
     //导出
     exportToExcel(){
       let query = {
-        filename:'短信成本列表'
+        filename:'短信成本列表',
+        acceptStatus:this.ruleForm.acceptStatus,
+        startTime:this.ruleForm.startTime,
+        endTime:this.ruleForm.endTime,
+        orderBy:'send_time desc'
       }
       this._apis.finance.smsExport(query).then((response)=>{
         window.location.href = response.url

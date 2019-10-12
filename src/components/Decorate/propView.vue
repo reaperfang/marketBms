@@ -126,7 +126,7 @@ export default {
       if (this.baseInfo.vError) {
         this.$message({ message: '请填写正确信息', type: 'warning' });
       } else {
-        saveDataLoading = true;
+        this.saveDataLoading = true;
         this.saveData.call(parentScope);
       }
     }

@@ -579,7 +579,8 @@ table.yuan-table{
       order: 0;
   }
   .el-button:first-child {
-      display: none;
+      //display: none;
+      margin-left: 10px;
   }
 }
 

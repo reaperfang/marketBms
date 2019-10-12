@@ -212,7 +212,7 @@ export default {
                                 type: 'success'
                             });
                     this.getTreeList()
-                    if(res.msg == 'existProduct') {
+                    if(res && res.msg == 'existProduct') {
                         this.confirm({title: '转移商品', icon: false, text: '是否将此分类其下的全部商品转移到其他分类中？'}).then(() => {
                             this.currentData = node.data.id
                             this.currentDialog = 'TransferGoodsDialog'

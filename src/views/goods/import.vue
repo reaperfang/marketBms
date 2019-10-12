@@ -118,7 +118,7 @@ export default {
         downloadTemplate() {
             let a = document.createElement("a");
 
-            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/商品导入模版.xls`);
+            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`);
             a.setAttribute("target", "_blank");
             a.click();
         },
@@ -158,7 +158,7 @@ export default {
         importGoods() {
             let message = this.$message({
             showClose: true,
-            message: '不能重复操作，上传文件批量导入文件。',
+            message: '导入中...',
             duration: 0
             });
 

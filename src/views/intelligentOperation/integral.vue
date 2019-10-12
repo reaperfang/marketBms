@@ -172,7 +172,7 @@ export default {
                 this.ratio = res.ratio;
                 this.listObj = res; //信息列表数据
                 this.totalCount = res.totalPage * this.form.pageSize;
-                // if(memberType == 1){ //新会员
+                // if(memberType == 1){ //新会员 
                 //     this.textTips = true;
                 //     this.memberNum = res.newMemberCount;
                 //     this.memberCount = res.newMemberRatio;
