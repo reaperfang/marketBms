@@ -66,12 +66,18 @@
           <el-radio :label="2">居中</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="购物车按钮" prop="shoppingCartBtn">
-        <el-radio-group v-model="ruleForm.shoppingCartBtn">
+      <el-form-item label="消息按钮" prop="noticeCartBtn">
+        <el-radio-group v-model="ruleForm.noticeCartBtn">
           <el-radio :label="1">显示</el-radio>
           <el-radio :label="2">不显示</el-radio>
         </el-radio-group>
       </el-form-item>
+      <!-- <el-form-item label="购物车按钮" prop="shoppingCartBtn">
+        <el-radio-group v-model="ruleForm.shoppingCartBtn">
+          <el-radio :label="1">显示</el-radio>
+          <el-radio :label="2">不显示</el-radio>
+        </el-radio-group>
+      </el-form-item> -->
     </div>
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible"></component>
   </el-form>
@@ -96,7 +102,8 @@ export default {
         borderColor: '#ffffff',//框体颜色
         fontColor: 'rgb(153,153,153)',//文字颜色
         textPosition: 1,//文本位置
-        shoppingCartBtn: 1//购物车按钮显示	
+        shoppingCartBtn: 1,//购物车按钮显示	
+        noticeCartBtn: 1 //通知消息按钮显示	
       },
       rules: {},
       inputVisible: false,

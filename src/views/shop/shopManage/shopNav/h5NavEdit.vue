@@ -39,7 +39,11 @@
             </li>
           </ul>
           <ul class="navs type4" v-if="ruleForm.navStyle.id == 4">
-            <li @click="addNav"><i class="el-icon-plus"></i></li>
+            <li @click="addNav">
+              <span>
+                <i class="el-icon-plus"></i>
+              </span>
+            </li>
             <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <img :src="ruleForm.navMap[item].navIconActive" alt="">
             </li>
@@ -685,28 +689,45 @@ export default {
               height: 100%;
             }
             &:nth-child(1){
-              top:  30px;
+              top:  27px;
               left: 10px;
+              width:26px;
+              height:26px;
+              padding: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background:rgba(0,0,0,0.1);
+              span{
+                width:20px;
+                height:20px;
+                border-radius: 10px;
+                padding: 1px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background:rgba(0,0,0,0.3);
+              }
             }
             &:nth-child(2){
               top:  0px;
-              left: 10px;
+              left: 20px;
             }
             &:nth-child(3){
               top: 8px;
-              left: 30px;
+              left: 45px;
             }
             &:nth-child(4){
               top: 28px;
-              left: 40px;
+              left: 60px;
             }
             &:nth-child(5){
               top: 50px;
-              left: 30px;
+              left: 45px;
             }
             &:nth-child(6){
               bottom:  0;
-              left: 10px;
+              left: 20px;
             }
           }
         }

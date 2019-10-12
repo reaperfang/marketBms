@@ -5,10 +5,15 @@
             <img src="@/assets/images/shop/fdj.png" class="fdj" />
             <p :style="{color:fontColor}">{{hotWords[0]}}</p>
         </div>
-        <p class="searchButton">搜索</p>
+        <div class="gwcNotice" v-if="noticeCartBtn==1">
+            <img src="@/assets/images/shop/notice.png" alt="消息">
+            <span></span>
+        </div>
+        <!-- 解决BUG： CYDSZT-900 -->
+        <!-- <p class="searchButton">搜索</p>
         <div class="gwcIcon" v-if="shoppingCartBtn==1">
             <img src="@/assets/images/shop/gwcIcon2.png" alt="">
-        </div>
+        </div> -->
     </div>
 </template>
 <script> 
@@ -28,6 +33,7 @@ export default {
             "fontColor":'',
             "textPosition": '',
             "shoppingCartBtn": '',
+            "noticeCartBtn": '',
             "searchStyle": ''
         }
     },
@@ -55,6 +61,7 @@ export default {
             this.fontColor = this.currentComponentData.data.fontColor;
             this.textPosition = this.currentComponentData.data.textPosition;
             this.shoppingCartBtn = this.currentComponentData.data.shoppingCartBtn;
+            this.noticeCartBtn   = this.currentComponentData.data.noticeCartBtn;
             this.searchStyle = this.currentComponentData.data.searchStyle;
         }
     },
@@ -80,6 +87,24 @@ export default {
         font-size:16px;
         margin-left:5px;
         @extend .flexCenterMiddle;
+    }
+    .gwcNotice{
+        position: relative;
+        padding: 0 10px;
+        cursor: pointer;
+        img{
+            width: 19px;
+            height: 23px;
+        }
+        span{
+            position: absolute;
+            right: 7px;
+            top: -1px;
+            width: 6px;
+            height: 6px;
+            background: #FC3D42;
+            border-radius: 50%;
+        }
     }
     .gwcIcon{
         width:50px;
