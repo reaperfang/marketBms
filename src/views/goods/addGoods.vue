@@ -280,13 +280,13 @@
                 </div>
                 <!-- <el-button v-if="!editor" class="border-button" @click="currentDialog = 'AddSpecifications'; selectSpecificationsCurrentDialog = ''; dialogVisible = true">新增规格</el-button> -->
             </el-form-item>
-            <el-form-item label="起售数量" prop="number">
+            <!-- <el-form-item label="起售数量" prop="number">
                 <div class="input-number">
                     <span style="user-select: none;" class="pointer" @click="reduce">-</span>
                     <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.startSaleNum"></el-input>
                     <span style="user-select: none;" class="pointer" @click="increase">+</span>
                 </div>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="已售出数量" prop="selfSaleCount">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" type="number" v-model="ruleForm.selfSaleCount"></el-input>
                 <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情显示已售出数量</el-checkbox>
@@ -734,7 +734,7 @@ export default {
                         image: response.data.url
                     }))
                 } else {
-                    this.ruleForm.goodsInfo.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
+                    this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
                         image: response.data.url
                     }))
                 }

@@ -56,6 +56,13 @@ export default {
                     });
                     return
                 }
+                if(/^\s+$/.test(this.refuseReason)) {
+                    this.$message({
+                    message: '拒绝原因不能为空',
+                    type: 'warning'
+                    });
+                    return
+                }
             }
             this.$emit('submit', {status: 2, refuseReason: this.refuseReasonLabel == 1 ? '人为破坏拒绝售后' : this.refuseReason})
             this.showReject = false

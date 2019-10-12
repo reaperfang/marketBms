@@ -155,10 +155,10 @@
             <ul>
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.integralMarket.icon || require('../../../assets/images/shop/userCenter/userCenter11.png')" alt />
+                  <img :src="(data.moduleList.integralMarket&&data.moduleList.integralMarket.icon) || require('../../../assets/images/shop/userCenter/userCenter11.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
-                  <p class="fl" :style="{color: data.moduleList.integralMarket.color}">{{data.moduleList.integralMarket.titleValue}}</p>
+                  <p class="fl" :style="{color: data.moduleList.integralMarket&&data.moduleList.integralMarket.color}">{{data.moduleList.integralMarket&&data.moduleList.integralMarket.titleValue}}</p>
                   <div class="fr userCenter_three1Cont_r">
                     <div class="userCenter_three1Cont_r1">
                       <span>NEW</span>
@@ -170,10 +170,10 @@
               </li>
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.messageCenter.icon || require('../../../assets/images/shop/userCenter/userCenter12.png')" alt />
+                  <img :src="data.moduleList.integralMarket&&data.moduleList.messageCenter.icon || require('../../../assets/images/shop/userCenter/userCenter12.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
-                  <p class="fl" :style="{color: data.moduleList.messageCenter.color}">{{data.moduleList.messageCenter.titleValue}}</p>
+                  <p class="fl" :style="{color: data.moduleList.integralMarket&&data.moduleList.messageCenter.color}">{{data.moduleList.integralMarket&&data.moduleList.messageCenter.titleValue}}</p>
                   <div class="userCenter_three1Cont_r">
                     <div class="userCenter_three1Cont_r1">99+</div>
                     <img src="../../../assets/images/shop/userCenter/triangle.png" alt />
