@@ -104,10 +104,11 @@ export default {
             return isLt2M;
         },
         handleFind() {
+
             let obj = {
                 name: this.selected == "" ? null : this.selected,
-                startTime: utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
-                endTime: utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
+                startTime: this.getTime == "" ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
+                endTime: this.getTime == "" ? "":utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
             }
             this.lkParams = Object.assign({},obj);
         },

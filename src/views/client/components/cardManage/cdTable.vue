@@ -102,7 +102,6 @@ export default {
               this.$set(response.list[0], 'isGray', false);
           }
           this.cardList = [].concat(response.list);
-          console.log(this.cardList);
       }).catch((error) => {
           this.loading = false;
           console.log(error);

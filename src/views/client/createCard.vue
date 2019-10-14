@@ -567,11 +567,21 @@ export default {
             }
           }
           if (this.ruleForm.backgroundType == "0") {
+            let colorArr = [];
             this.colors.map(v => {
               if (v.active == "1") {
                 formObj.background = v.imgUrl;
+                colorArr.push(v);
               }
             });
+            if(colorArr.length == 0) {
+              this.$notify({
+                title: "警告",
+                message: "请选择背景色",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            }
           } else if (this.ruleForm.backgroundType == "1") {
             if (this.imageUrl) {
               formObj.background = this.imageUrl;
