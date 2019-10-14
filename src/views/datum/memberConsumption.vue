@@ -10,7 +10,7 @@
           </div>
       </div> -->
         <div class="pane_container">
-            <!-- <div class="i_line"> -->
+            <div class="i_line">
                 <div class="input_wrap">
                     <el-select placeholder="排序" v-model="order" @change="changeSelet">
                         <el-option label="全部" value="0"></el-option>
@@ -18,12 +18,12 @@
                         <el-option label="消费金额" value="total_deal_money"></el-option>
                     </el-select>
                 </div>
-                <!-- <div class="input_wrap">
+                <div class="input_wrap">
                     <el-input placeholder="手机号" v-model="memberPhone">
                         <el-button slot="append" icon="el-icon-search" @click="changKeyWord(memberPhone)"></el-button>
                     </el-input>
-                </div> -->
-            <!-- </div> -->
+                </div>
+            </div>
             <!-- <mcTable style="margin-top: 50px" :list="list" @getMember="getMemberConsumption"></mcTable> -->
                 <el-table
                 :data="list"
@@ -83,6 +83,7 @@ export default {
     data() {
         return {
             order:'0',
+            memberPhone:'',
             list:[],
             total:0,
             startIndex:1,
@@ -99,6 +100,7 @@ export default {
                 startIndex:this.startIndex,
                 pageSize:this.pageSize,
                 orderBy:this.order == '0' ? null : this.order,
+                memberPhone:this.memberPhone
             };
             this._apis.data.memberConsumption(data).then(response => {
                 this.list = response.list;
@@ -120,6 +122,9 @@ export default {
         handleCurrentChange(val){
             this.startIndex = val
             this.getMemberConsumption()
+        },
+        changKeyWord(val){
+            this.getMemberConsumption(1,10)
         }
 
         // all(){
@@ -128,9 +133,6 @@ export default {
         //     this.orderSortType = 0;
         //     this.getMemberConsumption(1,10)
         // },
-        // changKeyWord(val){
-        //     this.getMemberConsumption(1,10)
-        // }
     },
 }
 </script>

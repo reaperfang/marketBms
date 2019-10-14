@@ -18,6 +18,9 @@
       <el-table-column
         prop="phone"
         label="手机号码">
+        <template slot-scope="scope">
+          {{scope.row.phone ? scope.row.phone : '-'}}
+        </template>
       </el-table-column>
       <el-table-column
         label="客户类型"
