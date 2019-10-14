@@ -20,7 +20,7 @@
             <el-col :span="8"><div class="grid-content center">
                 <div class="item">
                     <div class="label">付款人</div>
-                    <div class="value">{{orderDetail.orderPayRecordList | orderPayRecordListFilter}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
+                    <div class="value">{{payMan}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
                 </div>
                 <div class="item">
                     <div class="label">付款方式</div>
@@ -314,6 +314,23 @@ export default {
         },
         usedPromotionList() {
             return this.orderDetail.orderPromotionCodeList && this.orderDetail.orderPromotionCodeList.filter(val => val.promotionCodeType == 1) || []
+        },
+        payMan() {
+            let str = ''
+            let _arr
+
+            if(this.orderInfo.payWay == 2) {
+                return this.orderInfo.receivedName
+            } else if(this.orderInfo.isConsumeBalance == 1 && !this.orderInfo.actualMoney) {
+                return this.orderInfo.memberName
+            } else {
+                if(this.orderDetail.orderPayRecordList) {
+                    _arr = arr.slice(0, 3)
+                    str = _arr.map(val => val.memberName).join(',')
+                }
+            }
+
+            return str
         }
     },
     methods: {
@@ -448,9 +465,15 @@ export default {
             let str = ''
             let _arr
 
-            if(arr) {
-                _arr = arr.slice(0, 3)
-                str = _arr.map(val => val.memberName).join(',')
+            if(this.orderInfo.payWay == 2) {
+                return this.orderInfo.receivedName
+            } else if(this.orderInfo.isConsumeBalance == 1 && !this.orderInfo.actualMoney) {
+                return this.orderInfo.memberName
+            } else {
+                if(arr) {
+                    _arr = arr.slice(0, 3)
+                    str = _arr.map(val => val.memberName).join(',')
+                }
             }
 
             return str

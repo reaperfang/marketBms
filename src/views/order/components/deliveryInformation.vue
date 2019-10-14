@@ -20,7 +20,7 @@
             <div @click="showLogistics(item.expressNo)" class="header-lefter-item blue pointer">查看物流</div>
           </div>
           <div class="header-righter">
-            <!-- <div class="header-righter-item">【客户发货】</div> -->
+            <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
             <div class="header-righter-item">发货人：{{orderDetail.orderSendInfo.sendName}}</div>
             <div class="header-righter-item">{{item.time}}</div>
             <div @click="showContent(index)">
@@ -88,6 +88,19 @@ export default {
     //this.orderSendItems = this.orderDetail.orderSendItems && this.orderDetail.orderSendItems.map(val => ({...val, showContent: true})) || []
     this.getOrderSendItems();
     this.getIsTrace();
+  },
+  filters: {
+    goodsStatus(value, orderDetail) {
+      let status = orderDetail.expressNoStatusMap[value]
+
+      if(status == 3) {
+        return '【客户签收】'
+      } else if(status == 0 || status == 1 || status == 2 || status == 4) {
+        return '【商户发货】'
+      } else {
+        return ''
+      }
+    }
   },
   watch: {
     orderDetail: {
