@@ -12,13 +12,14 @@
       </div>
     </el-form>
     <el-table
-      :data="tableList"
       stripe
+      :data="tableList"
+      :row-key="getRowKey"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
       v-loading="loading"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
       <el-table-column prop="title" label="商品标题" :width="500">
         <template slot-scope="scope">
           <div class="name_wrapper">
@@ -63,6 +64,10 @@ export default {
     },
     categoryId: {
       type: String
+    },
+    goodsEcho: {
+      type: Array,
+      required: true
     }
   },
   data() {
@@ -86,9 +91,23 @@ export default {
       set(val) {
         this.$emit("update:dialogVisible", val);
       }
+    },
+    goodsList: {
+      get() {
+          return this.goodsEcho
+      },
+      set(val) {
+          this.$emit('update:goodsEcho', val)
+      }
     }
   },
-  created() {},
+  created() {
+    this.goodsList.forEach((row, index) => {
+      this.$nextTick(() => {
+        this.$refs.multipleTable.toggleRowSelection(row, true);
+      })
+    })
+  },
   mounted() {
     this.$nextTick(() => {
       if(this.$parent.$refs.dialog) {
@@ -119,6 +138,12 @@ export default {
     /* 向父组件提交选中的数据 */
     submit() {
       this.$emit("dialogDataSelected", this.multipleSelection);
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    getRowKey(row) {
+      return row.id
     }
   }
 };

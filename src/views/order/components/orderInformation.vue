@@ -125,8 +125,8 @@
                     <div class="col">+ ¥{{orderDetail.orderInfo.freight}}</div>
                 </div>
                 <div class="row">
-                    <div class="col">应收金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.receivableMoney || 0}}</div>
+                    <div class="col">订单金额:</div>
+                    <div class="col">¥{{orderDetail.orderInfo.goodsAmount + orderDetail.orderInfo.freight}}</div>
                 </div>
                 <div class="row">
                     <div class="col">优惠券金额:</div>
@@ -162,12 +162,29 @@
                             </el-option>
                         </el-select>
                     </div>
+                    <div v-else-if="orderDetail.orderInfo.consultMoney">
+                        <el-select disabled style="margin-right: 5px;" v-model="goodsListMessage.consultType" placeholder="请选择">
+                            <el-option
+                            v-for="item in reducePriceTypeList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
                     <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
                         <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
                         <span v-if="!changePriceVisible">{{goodsListMessage.consultMoney}}</span>
                         <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
                         <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
                     </div>
+                    <div v-else-if="orderDetail.orderInfo.consultMoney">
+                        <span>{{orderDetail.orderInfo.consultMoney}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">应收金额:</div>
+                    <div class="col">¥{{orderDetail.orderInfo | yingshouFilter}}</div>
                 </div>
                 <div class="row">
                     <div class="col">余额使用:</div>
@@ -178,7 +195,7 @@
                     <div class="col">¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
                 </div>
                 <div class="row">
-                    <div class="col">实收金额:</div>
+                    <div class="col">第三方支付:</div>
                     <div class="col">¥{{orderDetail.orderInfo.actualMoney || 0}}</div>
                 </div>
             </div>
@@ -456,6 +473,13 @@ export default {
                     return '提前关闭订单'
             }
         },
+        yingshouFilter(val) {
+            if(val.orderStatus == 3) {
+                return val.consumeBalanceMoney + val.consumeScoreConvertMoney + val.actualMoney
+            } else {
+                return val.consumeBalanceMoney + val.consumeScoreConvertMoney + val.receivableMoney
+            }
+        }
     },
     props: {
         orderInfo: {

@@ -11,10 +11,17 @@
         </el-form-item>
       </div>
     </el-form>
-    <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange"  v-loading="loading">
+    <el-table
+      stripe
+      :data="tableList"
+      :row-key="getRowKey"
+      ref="multipleTable"
+      @selection-change="handleSelectionChange"
+      v-loading="loading">
         <el-table-column
           type="selection"  
           :selectable="itemSelectable"
+          :reserve-selection="true"
           width="30">
         </el-table-column>
         <el-table-column prop="goodsName" label="标题" :width="300">
@@ -71,6 +78,10 @@ export default {
           type: Boolean,
           required: true
       },
+      goodsEcho: {
+        type: Array,
+        required: true
+      }
   },
   data() {
     return {
@@ -93,9 +104,22 @@ export default {
       set(val) {
           this.$emit('update:dialogVisible', val)
       }
+    },
+    goodsList: {
+      get() {
+          return this.goodsEcho
+      },
+      set(val) {
+          this.$emit('update:goodsEcho', val)
+      }
     }
   },
   created() {
+    this.goodsList.forEach((row, index) => {
+      this.$nextTick(() => {
+        this.$refs.multipleTable.toggleRowSelection(row, true);
+      })
+    })
   },
   methods: {
     fetch() {
@@ -126,11 +150,16 @@ export default {
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
-
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
     itemSelectable(row, index) {
       if(row.status !== 2) {
         return true;
       }
+    },
+    getRowKey(row) {
+      return row.activityId
     }
   }
 };

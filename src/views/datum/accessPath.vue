@@ -41,63 +41,70 @@
               <p>首页</p>
               <p>{{dataObj.uv[1]}}</p>
             </div>
+            <p class="space"></p>
             <div>
               <p>商品列表页</p>
               <p>{{dataObj.uv[2]}}</p>
             </div>
+            <p class="space"></p>
             <div>
-              <p>购物车</p>
-              <p>{{dataObj.uv[3]}}</p>
+              <p style="margin-right:11px">购物车</p>
+              <p style="margin-right:11px">{{dataObj.uv[3]}}</p>
             </div>
+            <p class="space"></p>
             <div>
               <p>商品页</p>
               <p>{{dataObj.uv[4]}}</p>
             </div>
+            <p class="space"></p>
             <div>
               <p>其他页</p>
               <p>{{dataObj.uv[5]}}</p>
             </div>
           </div>
         </div>
+         <div class="p_top">
+              <p>{{toPersent(dataObj.orderUvPathTransformation[1])}}</p>
+              <p>{{toPersent(dataObj.orderUvPathTransformation[2])}}</p>
+              <p>{{toPersent(dataObj.orderUvPathTransformation[3])}}</p>
+              <p>{{toPersent(dataObj.orderUvPathTransformation[4])}}</p>
+              <p>{{toPersent(dataObj.orderUvPathTransformation[5])}}</p>
+          </div>
         <div class="path_line clearfix">
           <div class="p_l">
             <p>第二步</p>
             <p>下单（人）</p>
           </div>
           <div class="p_r p_2">
-            <div class="p_top">
-              <p>{{(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'}}</p>
-              <p>{{(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'}}</p>
-              <p>{{(dataObj.orderUvPathTransformation[3]*100).toFixed(2)+ '%'}}</p>
-              <p>{{(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'}}</p>
-              <p>{{(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'}}</p>
-            </div>
+           
             <div class="p_bottom">
               <p>确认订单</p>
               <p>{{dataObj.totalOrderCount}}</p>
             </div>
           </div>
         </div>
+         <div class="p_top1">
+            <p>{{toPersent(dataObj.payOrderPathTransformation[1])}}</p>
+            <p>{{toPersent(dataObj.payOrderPathTransformation[2])}}</p>
+            <p>{{toPersent(dataObj.payOrderPathTransformation[3])}}</p>
+          </div>
         <div class="path_line clearfix">
           <div class="p_l">
             <p>第三步</p>
             <p>支付（人）</p>
           </div>
-          <div class="p_r p_3">
-            <div class="p_top">
-              <p>{{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}</p>
-              <p>{{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}</p>
-              <p>{{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}</p>
-            </div>
+          <div class="p_r p_3">           
             <div class="p_bottom">
               <div>
                 <p>支付成功</p>
                 <p>{{dataObj.pay[1]}}</p>
               </div>
+               <p class="spaces"></p>
               <div>
                 <p>直接退出</p>
                 <p>{{dataObj.pay[2]}}</p>
               </div>
+               <p class="spaces"></p>
               <div>
                 <p>其他</p>
                 <p>{{dataObj.pay[3]}}</p>
@@ -122,12 +129,17 @@ export default {
       nearDay: "7",
       startTime: "",
       endTime: "",
-      dateType: 7,
+      dateType: 1,
       dataObj: {},
       channel: "0"
     };
   },
   methods: {
+    toPersent(num) {
+      let str = Number(num*100);
+      str+='%';
+      return str;
+    },
     getDate(date) {
       return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
     },
@@ -177,6 +189,7 @@ export default {
   padding: 20px;
   background-color: #fff;
   .pane_container {
+        height: 600px;
     .p_line {
       .input_wrap {
         width: 350px;
@@ -199,6 +212,7 @@ export default {
       padding: 100px 0 50px 20px;
       height: 400px;
       .path_line {
+        padding: 20px 0px;
         .p_l {
           color: #333;
           font-size: 19px;
@@ -214,7 +228,7 @@ export default {
           color: #fff;
           &.p_1 {
             height: 87px;
-            background: url("../../assets/images/datum/path_01.png") 0 0
+             background: url("../../assets/images/datum/path_01.png") 0 0
               no-repeat;
             padding: 0 90px 0 82px;
             display: flex;
@@ -231,22 +245,19 @@ export default {
                 font-size: 24px;
                 margin-top: 5px;
               }
+            };
+            .space{
+              width: 5px;
+              height: 88px;
+              margin-left: 3px;
+              background: #fff;
             }
           }
           &.p_2 {
             height: 82px;
-            background: url("../../assets/images/datum/path_02.png") 99px 0
-              no-repeat;
-            .p_top {
-              height: 36px;
-              line-height: 36px;
-              padding: 0 180px 0 190px;
-              display: flex;
-              flex-wrap: nowrap;
-              justify-content: space-evenly;
-            }
+            background: url("../../assets/images/datum/path_02.png") 100px 0 no-repeat; 
             .p_bottom {
-              padding: 0 180px 0 190px;
+              padding: 22px 180px 0 190px;             
               p:first-child{
                 text-align: center;
                   font-size: 16px;
@@ -255,26 +266,20 @@ export default {
                  text-align: center;
                   font-size: 24px;
               }
-            }
+            }          
           }
           &.p_3 {
             height: 82px;
             background: url("../../assets/images/datum/path_03.png") 199px 0
               no-repeat;
-            .p_top {
-              height: 36px;
-              line-height: 36px;
-              padding: 0 238px 0 250px;
-              display: flex;
-              flex-wrap: nowrap;
-              justify-content: space-between;
-            }
             .p_bottom {
-              padding: 0 240px 0 264px;
+              padding: 0px 240px 0 264px;
               display: flex;
               justify-content: space-between;
               div {
-                width: 70px;
+                width: 60px;
+                height: 60px;
+                margin-top: 25px;
                 text-align: center;
                 // p:first-child{
                 //     font-size: 16px;
@@ -283,9 +288,37 @@ export default {
                 //     font-size: 24px;
                 // }
               }
+            };
+             .spaces{
+              width: 5px;
+              height: 85px;
+              background: #fff;
+              margin-bottom: -20px;
             }
           }
         }
+      }
+    .p_top {
+          height: 20px;
+          width: 900px;
+          line-height: 20px;
+          padding: 0 100px 0 160px; 
+          font-size: 16px;
+          color: #000;
+          display: flex;
+          flex-wrap: nowrap;
+          justify-content: space-evenly;
+        }
+    .p_top1 {
+          height: 20px;
+          width: 750px;
+          line-height: 20px;
+          padding: 0 70px 0 290px;
+          font-size: 16px; 
+          color: #000;
+          display: flex;
+          flex-wrap: nowrap;
+          justify-content: space-between;
       }
     }
   }

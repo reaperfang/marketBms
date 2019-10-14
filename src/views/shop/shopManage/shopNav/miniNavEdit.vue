@@ -19,7 +19,11 @@
         <!-- 手机底部 小程序-->
         <div class="phone-footer">
           <ul class="navs type1">
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li
+              v-for="(item, key) of ruleForm.navIds"
+              :class="{'active': ruleForm.navMap[item].active}"
+              :key="key"
+              @click="selectNav(item)">
               <img :src="ruleForm.navMap[item].navIconActive" alt="">
               <span>{{ruleForm.navMap[item].navName}}</span>
             </li>
@@ -173,7 +177,6 @@ export default {
     this.propsHeight = {
       height: document.body.clientHeight - 364 + 'px'
     }
-
   },
   methods: {
 

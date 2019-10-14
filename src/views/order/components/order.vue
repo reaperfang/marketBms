@@ -61,7 +61,7 @@
                     <div class="item" style="width: 120px;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
-                        <p>实收：¥{{order.actualMoney}}</p>
+                        <p>实收：¥{{order.goodsAmount + order.freight}}</p>
                         <p>{{order.channelName}}支付</p>
                     </div>
                     <div class="item" style="width: 120px;">

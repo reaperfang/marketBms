@@ -5,15 +5,14 @@
             <img src="@/assets/images/shop/fdj.png" class="fdj" />
             <p :style="{color:fontColor}">{{hotWords[0]}}</p>
         </div>
-        <div class="gwcNotice" v-if="noticeCartBtn==1">
+        <!-- <div class="gwcNotice" v-if="noticeCartBtn==1">
             <img src="@/assets/images/shop/notice.png" alt="消息">
             <span></span>
-        </div>
-        <!-- 解决BUG： CYDSZT-900 -->
-        <!-- <p class="searchButton">搜索</p>
+        </div> -->
+        <p class="searchButton">搜索</p>
         <div class="gwcIcon" v-if="shoppingCartBtn==1">
             <img src="@/assets/images/shop/gwcIcon2.png" alt="">
-        </div> -->
+        </div>
     </div>
 </template>
 <script> 

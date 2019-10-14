@@ -122,7 +122,7 @@
     </div>
     
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected"></component>
 
     <!-- 商品分类选择弹框 -->
     <DialogBase :visible.sync="pageDialogVisible" width="816px" title="选择商品分类" @submit="seletePage">
