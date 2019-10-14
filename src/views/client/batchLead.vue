@@ -5,7 +5,7 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
                 <el-form-item label="标签名称：" prop="tagName">
                     <div class="input_wrap">
-                        <el-input v-model="ruleForm.tagName" placeholder="请输入标签名称" :maxLength="6"></el-input>
+                        <el-input v-model="ruleForm.tagName" placeholder="请输入标签名称" :maxLength="6" @blur="doubleCheck"></el-input>
                     </div>
                 </el-form-item>
                 <el-form-item label="标签类型：" prop="tagType">
@@ -125,7 +125,7 @@ export default {
             ruleForm: {
                 tagName: "",
                 tagType: "0",
-                anyOrAllCondition:"",
+                anyOrAllCondition:"0",
                 isLastConsumeTime: null,
                 consumeTimeType: "",
                 consumeTimeValue:"",
@@ -145,8 +145,7 @@ export default {
                 productInfoIds:"",
                 isProduct: false,
                 labelConditon:"",
-                enable: "1",
-                selectedIds: ""
+                enable: "1"
             },
             rules: {
                 tagName: [
@@ -160,16 +159,32 @@ export default {
                 ],
             },
             unitOptions: [
-                { label: '天',value: 0 },
-                { label: '月',value: 1 },
-                { label: '年',value: 2 },
+                { label: '天',value: '0' },
+                { label: '月',value: '1' },
+                { label: '年',value: '2' },
             ],
             currentDialog: "",
             dialogVisible: false,
-            currentData:{}
+            currentData:{},
+            selectedIds: "",
+            canSubmit: true
         }
     },
     methods: {
+        doubleCheck() {
+            this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
+                if(!response) {
+                    this.ruleForm.tagName = ""
+                    this.$notify({
+                        title: '警告',
+                        message: '此标签名已存在',
+                        type: 'warning'
+                    });
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        },
         chooseProduct() {
             this.dialogVisible = true;
             this.currentDialog = "chooseProductDialog";
@@ -185,65 +200,156 @@ export default {
         getSelected(val) {
             this.selectedIds = val;
         },
+        isInteger(val) {
+            return Math.floor(val) === val
+        },
         saveLabel() {
-            let formObj = Object.assign({}, this.ruleForm);
-            formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
-            formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"):"";
-            formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || '';
-            formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || '';
-            formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || '';
-            formObj.isPreUnitPrice = this.convertUnit(formObj.isPreUnitPrice) || '';
-            formObj.isTotalScore = this.convertUnit(formObj.isTotalScore) || '';
-            formObj.isProduct = this.convertUnit(formObj.isProduct) || '';
-            formObj.productInfoIds = this.selectedIds || "";
-            if(this.$route.query.id) {
-                if(formObj.tagType == '0') {
-                    this._apis.client.updateTag({tagType: formObj.tagType, tagName: formObj.tagName, id: this.$route.query.id}).then((response) => {
-                        this._routeTo('clientLabel');
-                        this.$notify({
-                            title: '成功',
-                            message: "标签编辑成功",
-                            type: 'success'
-                        });                      
-                    }).catch((error) => {
-                        console.log(error);
-                    })
-                }else{
-                    this._apis.client.updateTag(formObj).then((response) => {
-                        this._routeTo('clientLabel');
-                        this.$notify({
-                            title: '成功',
-                            message: "标签编辑成功",
-                            type: 'success'
-                        });
-                    }).catch((error) => {
-                        console.log(error);
-                    })
-                }
+            if(this.ruleForm.tagName == "") {
+                this.$notify({
+                    title: '警告',
+                    message: '标签名称不能为空',
+                    type: 'warning'
+                });
             }else{
-                if(formObj.tagType == '0') {
-                    this._apis.client.addTag({tagType: formObj.tagType, tagName: formObj.tagName}).then((response) => {
-                        this._routeTo('clientLabel');
+                this.canSubmit = true;
+                if(this.ruleForm.consumeTimeType == "0") {
+                    if(!this.isInteger(this.ruleForm.consumeTimeValue)) {
                         this.$notify({
-                            title: '成功',
-                            message: "添加标签成功",
-                            type: 'success'
+                            title: '警告',
+                            message: '请输入日期数',
+                            type: 'warning'
                         });
-                    }).catch((error) => {
-                        console.log(error);
-                    })
-                }else{
-                    this._apis.client.addTag(formObj).then((response) => {
-                        this._routeTo('clientLabel');
+                        this.canSubmit = false;
+                    }else if(this.ruleForm.consumeTimeUnit == "") {
                         this.$notify({
-                            title: '成功',
-                            message: "添加标签成功",
-                            type: 'success'
+                            title: '警告',
+                            message: '请输入日期单位',
+                            type: 'warning'
                         });
-                        
-                    }).catch((error) => {
-                        console.log(error);
-                    })
+                        this.canSubmit = false;
+                    }
+                }
+                if(this.ruleForm.consumeTimeType == "1") {
+                    if(this.consumeTime == "") {
+                        this.$notify({
+                            title: '警告',
+                            message: '请选择自定义日期',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
+                if(this.ruleForm.isTotalConsumeTimes == true) {
+                    if(!this.isInteger(this.ruleForm.consumeTimesMin)|| !this.isInteger(this.ruleForm.consumeTimesMax)) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请正确输入累计消费次数区间',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
+                if(this.ruleForm.isTotalConsumeMoney == true) {
+                    if(!this.isInteger(this.ruleForm.consumeMoneyMin) || !this.isInteger(this.ruleForm.consumeMoneyMax)) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请正确输入累计消费金额区间',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
+                if(this.ruleForm.isPreUnitPrice == true) {
+                    if(!this.isInteger(this.ruleForm.preUnitPriceMin)|| !this.isInteger(this.ruleForm.preUnitPriceMax)) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请正确输入客单价区间',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
+                if(this.ruleForm.isTotalScore == true) {
+                    if(!this.isInteger(this.ruleForm.totalScoreMin)|| !this.isInteger(this.ruleForm.totalScoreMax)) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请正确输入累计获得积分区间',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
+                if(this.ruleForm.isProduct == true) {
+                    if(this.selectedIds.length == 0) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请选择商品',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
+                if(!!this.canSubmit) {
+                    let formObj = Object.assign({}, this.ruleForm);
+                    formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
+                    formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"):"";
+                    formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || '';
+                    formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || '';
+                    formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || '';
+                    formObj.isPreUnitPrice = this.convertUnit(formObj.isPreUnitPrice) || '';
+                    formObj.isTotalScore = this.convertUnit(formObj.isTotalScore) || '';
+                    formObj.isProduct = this.convertUnit(formObj.isProduct) || '';
+                    formObj.productInfoIds = this.selectedIds || "";
+                    if(this.$route.query.id) {
+                        if(formObj.tagType == '0') {
+                            this._apis.client.updateTag({tagType: formObj.tagType, tagName: formObj.tagName, id: this.$route.query.id}).then((response) => {
+                                this._routeTo('clientLabel');
+                                this.$notify({
+                                    title: '成功',
+                                    message: "标签编辑成功",
+                                    type: 'success'
+                                });                      
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                        }else{
+                            this._apis.client.updateTag(formObj).then((response) => {
+                                this._routeTo('clientLabel');
+                                this.$notify({
+                                    title: '成功',
+                                    message: "标签编辑成功",
+                                    type: 'success'
+                                });
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                        }
+                    }else{
+                        if(formObj.tagType == '0') {
+                            this._apis.client.addTag({tagType: formObj.tagType, tagName: formObj.tagName}).then((response) => {
+                                this._routeTo('clientLabel');
+                                this.$notify({
+                                    title: '成功',
+                                    message: "添加标签成功",
+                                    type: 'success'
+                                });
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                        }else{
+                            this._apis.client.addTag(formObj).then((response) => {
+                                this._routeTo('clientLabel');
+                                this.$notify({
+                                    title: '成功',
+                                    message: "添加标签成功",
+                                    type: 'success'
+                                });
+                                
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                        }
+                    }
                 }
             }
         }

@@ -188,9 +188,9 @@ export default {
       imageUrl: "",
       ruleForm: {
         name: "",
-        backgroundType: "",
+        backgroundType: "0",
         receiveSetting: "0",
-        isSyncWechat: "",
+        isSyncWechat: "1",
         explain: "",
         notice: "",
         phone: ""
@@ -239,7 +239,8 @@ export default {
       selectedGifts: [],
       selectedReds: [],
       levelConditionValueDto: {},
-      colors: []
+      colors: [],
+      canSubmit: true
     };
   },
   computed: {
@@ -333,7 +334,6 @@ export default {
               }
             });
           }
-
           this.currentData.redArr = [].concat(redArr);
           //用于回显背景
           let imgType = "0"; //设置图片类型初始为背景图
@@ -434,10 +434,6 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          // this.$notify.error({
-          //   title: "错误",
-          //   message: error
-          // });
         });
     },
     showSpacialDialog(val) {
@@ -513,13 +509,31 @@ export default {
       }
     },
     save() {
-      if (!this.right1 && !this.right2) {
+      if(this.ruleForm.name == "") {
+        this.$notify({
+          title: "警告",
+          message: "请输入会员卡名称",
+          type: "warning"
+        });
+      }else if (!this.right1 && !this.right2) {
         this.$notify({
           title: "警告",
           message: "请选择一项等级权益",
           type: "warning"
         });
-      } else {
+      }else if(this.ruleForm.explain == "") {
+        this.$notify({
+          title: "警告",
+          message: "请输入特权说明",
+          type: "warning"
+        });
+      }else if(this.ruleForm.notice == "") {
+        this.$notify({
+          title: "警告",
+          message: "请输入使用须知",
+          type: "warning"
+        });
+      }else {
         if (this.ruleForm.id) {
           let formObj = {};
           formObj.id = this.ruleForm.id;
@@ -536,12 +550,21 @@ export default {
           if(formObj.receiveSetting == '0') {
             formObj.receiveConditionsRemarks = '可直接领取';
           }else{
-            formObj.receiveConditionsRemarks =
-            "" +
-            this.levelConditionValueDto.label +
-            this.levelConditionValueDto.conditionValue;
-            formObj.levelConditionValueDto = this.levelConditionValueDto;
-            delete formObj.levelConditionValueDto.label;
+            if(JSON.stringify(this.levelConditionValueDto) == '{}') {
+              this.$notify({
+                title: "警告",
+                message: "请选择特定条件",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            }else{
+              formObj.receiveConditionsRemarks =
+              "" +
+              this.levelConditionValueDto.label +
+              this.levelConditionValueDto.conditionValue;
+              formObj.levelConditionValueDto = this.levelConditionValueDto;
+              delete formObj.levelConditionValueDto.label;
+            }
           }
           if (this.ruleForm.backgroundType == "0") {
             this.colors.map(v => {
@@ -558,9 +581,9 @@ export default {
                 message: "请上传背景图片",
                 type: "warning"
               });
+              this.canSubmit = false;
             }
           }
-          
           let rightsDtoList = [];
           if (this.right1) {
             let rightParam1 = {};
@@ -576,6 +599,7 @@ export default {
                 message: "请输入积分回馈倍率数",
                 type: "warning"
               });
+              this.canSubmit = false;
             } else {
               let rightParam2 = {};
               rightParam2.rightsInfoId = this.getId(
@@ -604,6 +628,7 @@ export default {
                 message: "请输入赠送积分数",
                 type: "warning"
               });
+              this.canSubmit = false;
             } else {
               let upgradeParams1 = {};
               upgradeParams1.upgradeRewardInfoId = this.getId(
@@ -623,6 +648,7 @@ export default {
                 message: "请选择红包",
                 type: "warning"
               });
+              this.canSubmit = false;
             } else {
               this.selectedReds.map(v => {
                 let obj = {};
@@ -646,6 +672,7 @@ export default {
                 message: "请选择赠品",
                 type: "warning"
               });
+              this.canSubmit = false;
             } else {
               this.selectedGifts.map(v => {
                 let obj = {};
@@ -669,6 +696,7 @@ export default {
                 message: "请选择优惠券",
                 type: "warning"
               });
+              this.canSubmit = false;
             } else {
               this.selectedCoupons.map(v => {
                 let obj = {};
@@ -703,21 +731,22 @@ export default {
           formObj.rights = rights;
           formObj.levelRightsInfoDtoList = [].concat(rightsDtoList);
           formObj.upgradeRewardDtoList = [].concat(upgradeRewardDtoList);
-          //console.log('formObj',formObj);
-          this._apis.client
-            .editCard(formObj)
-            .then(response => {
-              this._routeTo('cardManage');
-              this.$notify({
-                title: "成功",
-                message: "编辑成功",
-                type: "success"
+          if(!!this.canSubmit) {
+            this._apis.client
+              .editCard(formObj)
+              .then(response => {
+                this._routeTo('cardManage');
+                this.$notify({
+                  title: "成功",
+                  message: "编辑成功",
+                  type: "success"
+                });
+                
+              })
+              .catch(error => {
+                console.log(error);
               });
-              
-            })
-            .catch(error => {
-              console.log(error);
-            });
+          }
         }
       }
     },

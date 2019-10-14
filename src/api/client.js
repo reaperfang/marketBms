@@ -594,3 +594,12 @@ export function getColorUrl(data) {
         data
     })
 }
+//校验标签名是否重复
+export function labelDoubleCheck(data) {
+    return request({
+        target:'MEMBER-LABLE-DUPLICATION-CHECK-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}

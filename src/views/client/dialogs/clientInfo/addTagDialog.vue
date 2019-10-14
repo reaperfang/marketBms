@@ -39,20 +39,25 @@ export default {
                 memberInfoId:this.data.id, 
                 memberLabelInfoIds: memberLabelInfoIds
             }
-            this._apis.client.markLabel(params).then((response) => {
+            if(params.memberLabelInfoIds.length > 0) {
+                this._apis.client.markLabel(params).then((response) => {
+                    this.$notify({
+                        title: '成功',
+                        message: '打标签成功',
+                        type: 'success'
+                    });
+                    this.$emit('refreshPage');
+                }).catch((error) => {
+                    console.log(error);
+                }) 
+            }else{
                 this.$notify({
-                    title: '成功',
-                    message: '打标签成功',
-                    type: 'success'
+                    title: '警告',
+                    message: '请选择要添加的标签',
+                    type: 'warning'
                 });
-                this.$emit('refreshPage');
-            }).catch((error) => {
-                console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
-            }) 
+            }
+            
         },
         getLabels() {
             this._apis.client.getLabels({tagType:0}).then((response) => {

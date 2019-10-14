@@ -34,10 +34,10 @@ export default {
   },
   methods: {
     submit() {
-      if(this.adjustmentBalance == "" || Number(this.adjustmentBalance) < 0) {
+      if(Number(this.adjustmentBalance) <= 0 || this.adjustmentBalance == "") {
         this.$notify({
           title: '警告',
-          message: '请输入增加余额, 且不能为负数',
+          message: '请输入增加余额, 且不能为0或负数',
           type: 'warning'
         });
       }else if(this.remark == "") {

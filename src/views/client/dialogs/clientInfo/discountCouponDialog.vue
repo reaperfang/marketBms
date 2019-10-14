@@ -8,9 +8,9 @@
             <p class="fl">共{{couponList.length || 0}}张</p>
             <div class="fr">
               <el-select v-model="couponType" style="margin-bottom: 10px" @change="getStatus">
-                <el-option label="全部状态" value="2"></el-option>
-                <el-option label="可使用" value="0"></el-option>
-                <el-option label="已失效" value="1"></el-option>
+                <el-option label="全部状态" value="0"></el-option>
+                <el-option label="可使用" value="1"></el-option>
+                <el-option label="已失效" value="2"></el-option>
               </el-select>
             </div>
           </div>
@@ -33,9 +33,9 @@
             <p class="fl">共{{codeList.length || 0}}张</p>
             <div class="fr">
               <el-select v-model="codeType" style="margin-bottom: 10px" @change="getCodeStatus">
-                <el-option label="全部状态" value="2"></el-option>
-                <el-option label="可使用" value="0"></el-option>
-                <el-option label="已失效" value="1"></el-option>
+                <el-option label="全部状态" value="0"></el-option>
+                <el-option label="可使用" value="1"></el-option>
+                <el-option label="已失效" value="2"></el-option>
               </el-select>
             </div>
           </div>
@@ -65,8 +65,8 @@ export default {
     return {
       hasCancel: true,
       activeName: "first",
-      couponType: '2',
-      codeType: "2",
+      couponType: '0',
+      codeType: "0",
       couponList: [],
       codeList:[],
       reciveMap: 
@@ -103,10 +103,12 @@ export default {
     sendDiscount() {
       this.$emit("sendDiscount");
     },
-    getUsedCoupon(status) {
-      let params = {usedType:"1", couponType: "0", memberId: this.data.id, usedStatus: status || this.couponType};
-      if(status !== '2') {
-        params.usedStatus = status;
+    getUsedCoupon(type) {
+      let params;
+      if(type == "0") {
+        params = {couponType: "0", memberId: this.data.id};
+      }else{
+        params = {usedType:type, couponType: "0", memberId: this.data.id};
       }
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.couponList = [];
@@ -120,8 +122,13 @@ export default {
         console.log(error);
       })
     },
-    getUsedCode(status) {
-      let params = {usedType:"1", couponType: "1", memberId: this.data.id, usedStatus:status || this.codeType};
+    getUsedCode(type) {
+      let params;
+      if(type == "0") {
+        params = {couponType: "1", memberId: this.data.id};
+      }else{
+        params = {usedType: type, couponType: "1", memberId: this.data.id};
+      }
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.codeList = [];
           response.map((v) => {
@@ -137,8 +144,8 @@ export default {
     getStatus(status) {
       this.getUsedCoupon(status);
     },
-    getCodeStatus() {
-      this.getUsedCode();
+    getCodeStatus(status) {
+      this.getUsedCode(status);
     }
   },
   computed: {

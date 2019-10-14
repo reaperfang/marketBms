@@ -33,7 +33,7 @@
                     >
                         <p class="p_title">客户身份说明</p>
                         <p class="p_over1">客户身份包括：非会员、会员，其中会员包括新会员和老会员。成为老会员条件可进行配置。</p>
-                        <p class="p_over2">【查看/配置会员身份规则】</p>
+                        <p class="p_over2" @click="goToSet">【查看/配置会员身份规则】</p>
                     </el-popover>
                     <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                 </el-form-item>
@@ -114,39 +114,27 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="注册时间：" prop="becameCustomerTimeStart">
-                                <div class="input_wrap2">
+                            <el-form-item label="注册时间：">
+                                <div class="input_wrap3">
                                     <el-date-picker
-                                        v-model="form.becameCustomerTimeStart"
-                                        type="date"
-                                        placeholder="选择日期">
-                                    </el-date-picker>
-                                </div>
-                                <span>至</span>
-                                <div class="input_wrap2">
-                                    <el-date-picker
-                                        v-model="form.becameCustomerTimeEnd"
-                                        type="date"
-                                        placeholder="选择日期">
+                                        v-model="becameCustomerTime"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期"
+                                        end-placeholder="结束日期">
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="上次消费：" prop="lastPayTimeStart">
-                                <div class="input_wrap2">
+                                <div class="input_wrap3">
                                     <el-date-picker
-                                        v-model="form.lastPayTimeStart"
-                                        type="date"
-                                        placeholder="选择日期">
-                                    </el-date-picker>
-                                </div>
-                                <span>至</span>
-                                <div class="input_wrap2">
-                                    <el-date-picker
-                                        v-model="form.lastPayTimeEnd"
-                                        type="date"
-                                        placeholder="选择日期">
+                                        v-model="lastPayTime"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期"
+                                        end-placeholder="结束日期">
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -193,11 +181,7 @@ export default {
         dealTimesMin:"",
         dealTimesMax:"",
         perUnitPriceMin:"",
-        perUnitPriceMax:"",
-        becameCustomerTimeStart:"",
-        becameCustomerTimeEnd:"",
-        lastPayTimeStart:"",
-        lastPayTimeEnd:""
+        perUnitPriceMax:""
       },
         newForm: {},
         showFold: false,
@@ -208,7 +192,9 @@ export default {
         channels: [],
         channelsList: [],
         memberList: [],
-        btnloading: false
+        btnloading: false,
+        becameCustomerTime:"",
+        lastPayTime:""
     }
   },
   watch: {
@@ -238,6 +224,9 @@ export default {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
+    goToSet() {
+        window.location.href="/set/memberSet";
+    },
     stopLoading() {
         this.btnloading = false;
     },
@@ -267,10 +256,10 @@ export default {
     },
     getClientList() {
         this.btnloading = true;
-        this.form.becameCustomerTimeStart = this.form.becameCustomerTimeStart ? utils.formatDate(new Date(this.form.becameCustomerTimeStart.getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-        this.form.becameCustomerTimeEnd = this.form.becameCustomerTimeEnd?utils.formatDate(new Date(this.form.becameCustomerTimeEnd.getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
-        this.form.lastPayTimeStart = this.form.lastPayTimeStart ? utils.formatDate(new Date(this.form.lastPayTimeStart.getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-        this.form.lastPayTimeEnd = this.form.lastPayTimeEnd ? utils.formatDate(new Date(this.form.lastPayTimeEnd.getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+        this.form.becameCustomerTimeStart = this.becameCustomerTime ? utils.formatDate(new Date(this.becameCustomerTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
+        this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(new Date(this.becameCustomerTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+        this.form.lastPayTimeStart = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
+        this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
         let oForm = Object.assign({},this.form);
         let labelNames = oForm.memberLabels;
         let channelNames = oForm.channelId;
@@ -316,7 +305,7 @@ export default {
         delete newForm.labelName;
         delete newForm.labelValue;
         delete newForm.channelId;
-        this.newForm = Object.assign({},newForm);
+        //this.newForm = Object.assign({},newForm);
     },
     resetForm(formName) {
         this.$refs[formName].resetFields();
@@ -362,9 +351,6 @@ export default {
 }
 /deep/.el-form-item__label{
     color: #3D434A;
-}
-/deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{
-    width: 148px;
 }
 /deep/.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
     margin-bottom: 10px;
@@ -413,6 +399,10 @@ export default {
             .input_wrap2{
                 display: inline-block;
                 width: 150px;
+            }
+            .input_wrap3{
+                display: inline-block;
+                width: 270px;
             }
         }
         .shou{

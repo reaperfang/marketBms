@@ -68,7 +68,7 @@
                 <p class="fl">该筛选条件下：
                     <i v-if="form.memberType== null" style="font-style:normal">
                         全部会员共计<span>{{customerCount + newMemberCount + oldMemberCount || 0}}</span>人；
-                        占会员总数的<span>{{(customerRatio*100 + newMemberRatio*100 + oldMemberRatio*100).toFixed(2) || 0}}%</span>;    
+                        占客户总数的<span>{{(customerRatio*100 + newMemberRatio*100 + oldMemberRatio*100).toFixed(2) || 0}}%</span>;    
                     </i>
                     <i v-if="form.memberType==0" style="font-style:normal">
                         非会员共计<span>{{customerCount || 0}}</span>人；
@@ -286,6 +286,8 @@ export default {
                 startIndex:1,
                 pageSize:10
             }
+            this.lowprice = ''
+            this.highprice = ''
             this.goSearch();
         },
         //重新筛选

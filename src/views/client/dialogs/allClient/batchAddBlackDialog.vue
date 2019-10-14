@@ -52,35 +52,55 @@ export default {
             couponId:"",
             codeId:"",
             allCodes: [],
-            allCoupons: []
+            allCoupons: [],
+            canSubmit: true
         }
     },
     methods: {
         submit() {
+            this.canSubmit = true;
             let params = {};
             let blackListMapDtos = [];
             let memberInfoIds = [];
-            if(this.checkCoupon && this.couponIds.length !== 0) {
-                let arr = [];
-                this.couponIds.map((item) => {
-                    arr.push(item.id);
-                })
-                let obj = {
-                    blackInfold: this.couponId,
-                    disableItemValue: arr.join(',')
+            if(!!this.checkCoupon) {
+                if(this.couponIds[0].id == "") {
+                    this.$notify({
+                        title: '警告',
+                        message: '请选择优惠券',
+                        type: 'warning'
+                    });
+                    this.canSubmit = false;
+                }else{
+                    let arr = [];
+                    this.couponIds.map((item) => {
+                        arr.push(item.id);
+                    })
+                    let obj = {
+                        blackInfold: this.couponId,
+                        disableItemValue: arr.join(',')
+                    }
+                    blackListMapDtos.push(obj);
                 }
-                blackListMapDtos.push(obj);
             }
-            if(this.checkCode && this.codeIds.length !== 0) {
-                let arr = [];
-                this.codeIds.map((item) => {
-                    arr.push(item.id);
-                })
-                let obj = {
-                    blackInfold: this.codeId,
-                    disableItemValue: arr.join(',')
+            if(!!this.checkCode) {
+                if(this.codeIds[0].id == "") {
+                    this.$notify({
+                        title: '警告',
+                        message: '请选择优惠码',
+                        type: 'warning'
+                    });
+                    this.canSubmit = false;
+                }else{
+                    let arr = [];
+                    this.codeIds.map((item) => {
+                        arr.push(item.id);
+                    })
+                    let obj = {
+                        blackInfold: this.codeId,
+                        disableItemValue: arr.join(',')
+                    }
+                    blackListMapDtos.push(obj);
                 }
-                blackListMapDtos.push(obj);
             }
             this.checks.map((v) => {
                 if(v.checked) {
@@ -96,20 +116,24 @@ export default {
             });
             params.memberInfoIds = memberInfoIds.join(',');
             params.blackListMapDtos = [].concat(blackListMapDtos);
-            this._apis.client.batchToBlack(params).then((response) => {
+            if(!!this.canSubmit && params.blackListMapDtos.length > 0) {
+                this._apis.client.batchToBlack(params).then((response) => {
+                    this.$notify({
+                        title: '成功',
+                        message: "批量加入黑名单成功",
+                        type: 'success'
+                    });
+                    this.$emit('freshTable');
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }else{
                 this.$notify({
-                    title: '成功',
-                    message: "批量加入黑名单成功",
-                    type: 'success'
+                    title: '警告',
+                    message: '请选择禁用选项',
+                    type: 'warning'
                 });
-                this.$emit('freshTable');
-            }).catch((error) => {
-                console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
-            })
+            }
         },
         getBlackChecks() {
             this._apis.client.blackChecks({}).then((response) => {

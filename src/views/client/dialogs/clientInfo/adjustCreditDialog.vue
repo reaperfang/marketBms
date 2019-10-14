@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     submit() {
-      if(this.adjustmentScore == "") {
+      if(this.adjustmentScore == null) {
         this.$notify({
           title: '警告',
           message: '请输入调整数值',

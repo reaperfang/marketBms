@@ -182,7 +182,7 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入等级称谓", trigger: "blur" }]
       },
-      condition1: "",
+      condition1: true,
       condition2: "",
       xfjem: "",
       xfcsm: "",
@@ -206,9 +206,18 @@ export default {
       selectedGifts: [],
       selectedCoupons: [],
       selectedReds: [],
-      selectedInfos: {},
+      selectedInfos: {
+        phone: true,
+        name: true,
+        gender: false,
+        birthday: false,
+        email: false,
+        area: false,
+        hobby: false
+      },
       disabled1: false,
-      conInfos: ["绑定手机号", "姓名"]
+      conInfos: ["绑定手机号", "姓名"],
+      canSubmit: true
     };
   },
   computed: {
@@ -346,14 +355,6 @@ export default {
             this.conInfos.push("姓名");
           } else {
             let index = this.conInfos.indexOf("姓名");
-            this.conInfos.splice(index, 1);
-          }
-          break;
-        case "wechart_sn":
-          if (obj.val) {
-            this.conInfos.push("微信");
-          } else {
-            let index = this.conInfos.indexOf("微信");
             this.conInfos.splice(index, 1);
           }
           break;
@@ -532,234 +533,272 @@ export default {
       this.selectedInfos = Object.assign({}, obj);
     },
     save() {
-      let formObj = {};
-      let levelConditionList = [];
-      if (!this.right1 && !this.right2) {
+      if (this.ruleForm.name == "") {
         this.$notify({
           title: "警告",
-          message: "请选择一项等级权益",
+          message: "等级称谓不能为空",
           type: "warning"
         });
       } else {
-        if (this.condition1) {
-          if (Object.keys(this.selectedInfos).length == 0) {
-            this.$notify({
-              title: "警告",
-              message: "请选择变更",
-              type: "warning"
-            });
-          } else {
-            let params1 = {};
-            params1.levelConditionId = this.getId(
-              this.conditionList,
-              "完善信息"
-            );
-            params1.conditionValue = this.selectedInfos;
-            params1.label = "完善信息";
-            levelConditionList.push(params1);
-          }
-        }
-        if (this.condition2) {
-          let params2 = {};
-          switch (this.condition2) {
-            case "消费金额满":
-              params2.levelConditionId = this.getId(
-                this.conditionList,
-                "消费金额满"
-              );
-              params2.conditionValue = this.xfjem;
-              params2.label = "消费金额满";
-              break;
-            case "消费次数满":
-              params2.levelConditionId = this.getId(
-                this.conditionList,
-                "消费次数满"
-              );
-              params2.conditionValue = this.xfcsm;
-              params2.label = "消费次数满";
-              break;
-            case "积分获得满":
-              params2.levelConditionId = this.getId(
-                this.conditionList,
-                "积分获得满"
-              );
-              params2.conditionValue = this.jfhdm;
-              params2.label = "积分获得满";
-              break;
-            default:
-              break;
-          }
-          levelConditionList.push(params2);
-        }
-        let receiveConditionsRemarks = "";
-        levelConditionList.map(v => {
-          receiveConditionsRemarks += "" + v.label + v.conditionValue + ",";
-        });
-        receiveConditionsRemarks = receiveConditionsRemarks.replace(
-          "[object Object]",
-          ""
-        );
-        levelConditionList.map(v => {
-          delete v.label;
-        });
-        let rightsList = [];
-        if (this.right1) {
-          if (this.mby == "") {
-            this.$notify({
-              title: "警告",
-              message: "请输入满包邮数",
-              type: "warning"
-            });
-          } else {
-            let params3 = {};
-            params3.rightsInfoId = this.getId(this.rightsList, "满包邮");
-            params3.rightsValue = this.mby;
-            params3.label = "满包邮";
-            rightsList.push(params3);
-          }
-        }
-        if (this.right2) {
-          if (this.hyzk == "") {
-            this.$notify({
-              title: "警告",
-              message: "请输入会员折扣数",
-              type: "warning"
-            });
-          } else {
-            let params4 = {};
-            params4.rightsInfoId = this.getId(this.rightsList, "会员折扣");
-            params4.rightsValue = this.hyzk;
-            params4.label = "会员折扣";
-            rightsList.push(params4);
-          }
-        }
-        let rights = "";
-        rightsList.map(v => {
-          rights += "" + v.label + v.rightsValue + ",";
-        });
-        rightsList.map(v => {
-          delete v.label;
-        });
-        let upgradeRewardList = [];
-        if (this.upgrade1) {
-          if (this.zsjf == "") {
-            this.$notify({
-              title: "警告",
-              message: "请输入赠送积分数",
-              type: "warning"
-            });
-          } else {
-            let params5 = {};
-            params5.upgradeRewardInfoId = this.getId(
-              this.rewardList,
-              "赠送积分"
-            );
-            params5.giftNumber = this.zsjf;
-            params5.label = "赠送积分";
-            upgradeRewardList.push(params5);
-          }
-        }
-        if (this.upgrade2) {
-          if (this.selectedReds.length == 0) {
-            this.$notify({
-              title: "警告",
-              message: "请选择红包",
-              type: "warning"
-            });
-          } else {
-            this.selectedReds.map(v => {
-              let obj = {};
-              obj.upgradeRewardInfoId = this.getId(this.rewardList, "赠送红包");
-              obj.giftProduct = v.id;
-              obj.giftName = v.name;
-              obj.label = "赠送红包";
-              upgradeRewardList.push(obj);
-            });
-          }
-        }
-        if (this.upgrade3) {
-          if (this.selectedGifts.length == 0) {
-            this.$notify({
-              title: "警告",
-              message: "请选择赠品",
-              type: "warning"
-            });
-          } else {
-            this.selectedGifts.map(v => {
-              let obj = {};
-              obj.upgradeRewardInfoId = this.getId(this.rewardList, "赠送赠品");
-              obj.giftProduct = v.id;
-              obj.giftName = v.goodsName;
-              obj.label = "赠送赠品";
-              obj.giftNumber = v.number;
-              upgradeRewardList.push(obj);
-            });
-          }
-        }
-        if (this.upgrade4) {
-          if (this.selectedCoupons.length == 0) {
-            this.$notify({
-              title: "警告",
-              message: "请选择优惠券",
-              type: "warning"
-            });
-          } else {
-            this.selectedCoupons.map(v => {
-              let obj = {};
-              obj.upgradeRewardInfoId = this.getId(
-                this.rewardList,
-                "赠送优惠券"
-              );
-              obj.giftProduct = v.id;
-              obj.giftName = v.name;
-              obj.giftNumber = v.number;
-              obj.label = "赠送优惠券";
-              upgradeRewardList.push(obj);
-            });
-          }
-        }
-        let upgradePackage = "";
-        let upgradeArr = [];
-        upgradeRewardList.map(v => {
-          if (upgradeArr.indexOf(v.label) == -1) {
-            upgradeArr.push(v.label);
-            upgradePackage += "" + v.label + ",";
-          }
-        });
-        upgradePackage = upgradePackage.replace(/undefined/g, "");
-        upgradeRewardList.map(v => {
-          if (v.label) {
-            delete v.label;
-          }
-        });
-        formObj.levelConditionList = [].concat(levelConditionList);
-        formObj.rightsList = [].concat(rightsList);
-        formObj.upgradeRewardList = [].concat(upgradeRewardList);
-        formObj.upgradePackage = upgradePackage;
-        formObj.receiveConditionsRemarks = receiveConditionsRemarks;
-        formObj.rights = rights;
-        formObj.id = this.ruleForm.id;
-        formObj.cid = this.ruleForm.cid;
-        formObj.name = this.ruleForm.name;
-        formObj.levelImageUrl = this.ruleForm.levelImageUrl;
-        formObj.explain = this.ruleForm.explain;
-        this._apis.client
-          .editLevel(formObj)
-          .then(response => {
-            this.$notify({
-              title: "成功",
-              message: "等级编辑成功",
-              type: "success"
-            });
-            this._routeTo("clientLevel");
-          })
-          .catch(error => {
-            console.log(error);
-            // this.$notify.error({
-            //     title: '错误',
-            //     message: error
-            // });
+        this.canSubmit = true;
+        let formObj = {};
+        let levelConditionList = [];
+        if (!this.right1 && !this.right2) {
+          this.$notify({
+            title: "警告",
+            message: "请选择一项等级权益",
+            type: "warning"
           });
+        } else {
+          if (this.condition1) {
+            let params1 = {};
+              params1.levelConditionId = this.getId(
+                this.conditionList,
+                "完善信息"
+              );
+              params1.conditionValue = this.selectedInfos;
+              params1.label = "完善信息";
+              levelConditionList.push(params1);
+          }
+          if (this.condition2) {
+            let params2 = {};
+            switch (this.condition2) {
+              case "消费金额满":
+                params2.levelConditionId = this.getId(
+                  this.conditionList,
+                  "消费金额满"
+                );
+                if(this.xfjem == "") {
+                  this.$notify({
+                    title: '警告',
+                    message: '请输入消费金额',
+                    type: 'warning'
+                  });
+                  this.canSubmit = false;
+                }else{
+                  params2.conditionValue = this.xfjem;
+                  params2.label = "消费金额满";
+                }
+                break;
+              case "消费次数满":
+                params2.levelConditionId = this.getId(
+                  this.conditionList,
+                  "消费次数满"
+                );
+                if(this.xfcsm == "") {
+                  this.$notify({
+                    title: '警告',
+                    message: '请输入消费次数',
+                    type: 'warning'
+                  });
+                  this.canSubmit = false;
+                }else{
+                  params2.conditionValue = this.xfcsm;
+                  params2.label = "消费次数满";
+                }
+                break;
+              case "积分获得满":
+                params2.levelConditionId = this.getId(
+                  this.conditionList,
+                  "积分获得满"
+                );
+                if(this.jfhdm == "") {
+                  this.$notify({
+                    title: '警告',
+                    message: '请输入积分获得',
+                    type: 'warning'
+                  });
+                  this.canSubmit = false;
+                }else{
+                  params2.conditionValue = this.jfhdm;
+                  params2.label = "积分获得满";
+                } 
+                break;
+              default:
+                break;
+            }
+            levelConditionList.push(params2);
+          }
+          let receiveConditionsRemarks = "";
+          levelConditionList.map(v => {
+            receiveConditionsRemarks += "" + v.label + v.conditionValue + ",";
+          });
+          receiveConditionsRemarks = receiveConditionsRemarks.replace(
+            "[object Object]",
+            ""
+          );
+          levelConditionList.map(v => {
+            delete v.label;
+          });
+          let rightsList = [];
+          if (this.right1) {
+            if (this.mby == "") {
+              this.$notify({
+                title: "警告",
+                message: "请输入满包邮数",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            } else {
+              let params3 = {};
+              params3.rightsInfoId = this.getId(this.rightsList, "满包邮");
+              params3.rightsValue = this.mby;
+              params3.label = "满包邮";
+              rightsList.push(params3);
+            }
+          }
+          if (this.right2) {
+            if (this.hyzk == "") {
+              this.$notify({
+                title: "警告",
+                message: "请输入会员折扣数",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            } else {
+              let params4 = {};
+              params4.rightsInfoId = this.getId(this.rightsList, "会员折扣");
+              params4.rightsValue = this.hyzk;
+              params4.label = "会员折扣";
+              rightsList.push(params4);
+            }
+          }
+          let rights = "";
+          rightsList.map(v => {
+            rights += "" + v.label + v.rightsValue + ",";
+          });
+          rightsList.map(v => {
+            delete v.label;
+          });
+          let upgradeRewardList = [];
+          if (this.upgrade1) {
+            if (this.zsjf == "") {
+              this.$notify({
+                title: "警告",
+                message: "请输入赠送积分数",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            } else {
+              let params5 = {};
+              params5.upgradeRewardInfoId = this.getId(
+                this.rewardList,
+                "赠送积分"
+              );
+              params5.giftNumber = this.zsjf;
+              params5.label = "赠送积分";
+              upgradeRewardList.push(params5);
+            }
+          }
+          if (this.upgrade2) {
+            if (this.selectedReds.length == 0) {
+              this.$notify({
+                title: "警告",
+                message: "请选择红包",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            } else {
+              this.selectedReds.map(v => {
+                let obj = {};
+                obj.upgradeRewardInfoId = this.getId(
+                  this.rewardList,
+                  "赠送红包"
+                );
+                obj.giftProduct = v.id;
+                obj.giftName = v.name;
+                obj.label = "赠送红包";
+                upgradeRewardList.push(obj);
+              });
+            }
+          }
+          if (this.upgrade3) {
+            if (this.selectedGifts.length == 0) {
+              this.$notify({
+                title: "警告",
+                message: "请选择赠品",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            } else {
+              this.selectedGifts.map(v => {
+                let obj = {};
+                obj.upgradeRewardInfoId = this.getId(
+                  this.rewardList,
+                  "赠送赠品"
+                );
+                obj.giftProduct = v.id;
+                obj.giftName = v.goodsName;
+                obj.label = "赠送赠品";
+                obj.giftNumber = v.number;
+                upgradeRewardList.push(obj);
+              });
+            }
+          }
+          if (this.upgrade4) {
+            if (this.selectedCoupons.length == 0) {
+              this.$notify({
+                title: "警告",
+                message: "请选择优惠券",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            } else {
+              this.selectedCoupons.map(v => {
+                let obj = {};
+                obj.upgradeRewardInfoId = this.getId(
+                  this.rewardList,
+                  "赠送优惠券"
+                );
+                obj.giftProduct = v.id;
+                obj.giftName = v.name;
+                obj.giftNumber = v.number;
+                obj.label = "赠送优惠券";
+                upgradeRewardList.push(obj);
+              });
+            }
+          }
+          let upgradePackage = "";
+          let upgradeArr = [];
+          upgradeRewardList.map(v => {
+            if (upgradeArr.indexOf(v.label) == -1) {
+              upgradeArr.push(v.label);
+              upgradePackage += "" + v.label + ",";
+            }
+          });
+          upgradePackage = upgradePackage.replace(/undefined/g, "");
+          upgradeRewardList.map(v => {
+            if (v.label) {
+              delete v.label;
+            }
+          });
+        }
+        if(!!this.canSubmit) {
+          formObj.levelConditionList = [].concat(levelConditionList);
+          formObj.rightsList = [].concat(rightsList);
+          formObj.upgradeRewardList = [].concat(upgradeRewardList);
+          formObj.upgradePackage = upgradePackage;
+          formObj.receiveConditionsRemarks = receiveConditionsRemarks;
+          formObj.rights = rights;
+          formObj.id = this.ruleForm.id;
+          formObj.cid = this.ruleForm.cid;
+          formObj.name = this.ruleForm.name;
+          formObj.levelImageUrl = this.ruleForm.levelImageUrl;
+          formObj.explain = this.ruleForm.explain;
+          this._apis.client
+            .editLevel(formObj)
+            .then(response => {
+              this.$notify({
+                title: "成功",
+                message: "等级编辑成功",
+                type: "success"
+              });
+              this._routeTo("clientLevel");
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
       }
     }
   },

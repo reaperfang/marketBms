@@ -37,13 +37,15 @@ export default {
   },
   methods: {
     submit() {
-      this._apis.client.distributeCoupon(this.selectList).then((response) => {
+      if(this.selectList[0].appCouponId.length > 0) {
+        this._apis.client.distributeCoupon(this.selectList).then((response) => {
         response.map((v) => {
           if(!!v.receiveDesc) {
             let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
-            this.$notify.error({
-              title: '错误',
-              message: errMsg
+            this.$notify({
+              title: '提示',
+              message: errMsg,
+              type: 'warning'
             });
           }else{
             this.$notify({
@@ -54,9 +56,16 @@ export default {
             this.$emit('refreshPage');
           }
         })
-      }).catch((error) => {
-        console.log(error);
-      })
+        }).catch((error) => {
+          console.log(error);
+        })
+      }else{
+        this.$notify({
+            title: '警告',
+            message: '请选择优惠券',
+            type: 'warning'
+          });
+      }
     },
     handleAdd() {
       if(this.selectList.length > 9) {

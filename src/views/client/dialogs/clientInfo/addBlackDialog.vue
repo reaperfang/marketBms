@@ -52,11 +52,13 @@ export default {
             couponId: "",
             codeId: "",
             allCoupons: [],
-            allCodes: []
+            allCodes: [],
+            canSubmit: true
         }
     },
     methods: {
         submit() {
+            this.canSubmit = true;
             let params = {};
             let blackListMapDtos = [];
             if(this.checkCoupon) {
@@ -66,6 +68,7 @@ export default {
                         message: '请选择优惠券',
                         type: 'warning'
                     });
+                    this.canSubmit = false;
                 }else{
                     let arr = [];
                     this.couponIds.map((item) => {
@@ -93,6 +96,7 @@ export default {
                         message: '请选择优惠码',
                         type: 'warning'
                     });
+                    this.canSubmit = false;
                 }else{
                     let arr = [];
                     this.codeIds.map((item) => {
@@ -125,16 +129,24 @@ export default {
             });
             params.memberInfoId = this.data.id;
             params.blackListMapDtos = [].concat(blackListMapDtos);
-            this._apis.client.addToBlack(params).then((response) => {
+            if(!this.canSubmit || params.blackListMapDtos.length == 0) {
                 this.$notify({
-                    title: '成功',
-                    message: "加入黑名单成功",
-                    type: 'success'
+                    title: '警告',
+                    message: '请选择禁用选项',
+                    type: 'warning'
                 });
-                this.$emit('refreshPage');
-            }).catch((error) => {
-                console.log(error);
-            })
+            }else{
+                this._apis.client.addToBlack(params).then((response) => {
+                    this.$notify({
+                        title: '成功',
+                        message: "加入黑名单成功",
+                        type: 'success'
+                    });
+                    this.$emit('refreshPage');
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
         },
         getBlackChecks() {
             this._apis.client.blackChecks({}).then((response) => {

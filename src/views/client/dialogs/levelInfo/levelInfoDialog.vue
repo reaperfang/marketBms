@@ -15,12 +15,12 @@
                     <el-switch v-model="info.name" active-color="#66CCAC" @change="handleSwitch('name',info.name)"></el-switch>
                 </span>
             </p>
-            <p>
+            <!-- <p>
                 <span>微信</span>
                 <span>
                     <el-switch v-model="info.wechart_sn" active-color="#66CCAC" @change="handleSwitch('wechart_sn',info.wechart_sn)"></el-switch>
                 </span>
-            </p>
+            </p> -->
             <p>
                 <span>性别</span>
                 <span>
@@ -65,7 +65,7 @@ export default {
             info: {
                 phone: true,
                 name: true,
-                wechart_sn: false,
+                // wechart_sn: false,
                 gender: false,
                 birthday: false,
                 email: false,

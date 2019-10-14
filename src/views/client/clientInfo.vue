@@ -45,11 +45,11 @@
                                 </el-date-picker>
                             </div>
                         </el-form-item>
-                        <el-form-item label="微信号：">
+                        <!-- <el-form-item label="微信号：">
                             <div class="input_wrap">
                                 <el-input v-model="clientInfoById.wechatSn" placeholder="请输入微信号"></el-input>
                             </div>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="邮箱：">
                             <div class="input_wrap">
                                 <el-input v-model="clientInfoById.email" placeholder="请输入邮箱"></el-input>
@@ -394,7 +394,7 @@ export default {
                 memberName: this.clientInfoById.memberName, 
                 sex: this.clientInfoById.sex, 
                 birthday: this.clientInfoById.birthday, 
-                wechatSn: this.clientInfoById.wechatSn, 
+                //wechatSn: this.clientInfoById.wechatSn, 
                 email: this.clientInfoById.email, 
                 address: this.clientInfoById.address,
                 selected: this.clientInfoById.selected

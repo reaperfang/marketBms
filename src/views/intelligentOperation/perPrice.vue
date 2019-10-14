@@ -155,9 +155,9 @@ export default {
                 this.threeData=[];
                 for(let i = 0; i<arrList.length; i++){
                     this.xdata.push(arrList[i].date)
-                    this.oneData.push(arrList[i].averagePayment)
+                    this.oneData.push(arrList[i].averageOrderPayment)
                     this.twoData.push(arrList[i].orderCount)
-                    this.threeData.push(arrList[i].averageOrderPayment)
+                    this.threeData.push(arrList[i].averagePayment)
             }
                 this.chart()
         }).catch(error => {

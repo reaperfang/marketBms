@@ -10,10 +10,6 @@
       v-loading="loading"
       >
       <el-table-column
-        type="selection"
-      >
-      </el-table-column>
-      <el-table-column
         prop="alias"
         label="等级排序">
       </el-table-column>
@@ -39,7 +35,9 @@
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" @change="handleSwitch(scope.row)" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']"></el-switch>
+            <!-- <el-switch v-model="scope.row.status" @change="handleSwitch(scope.row)" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']"></el-switch> -->
+            <span class="edit_span" v-if="scope.row.status == 1" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">启用</span>
+            <span class="edit_span" v-if="scope.row.status == 0" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">禁用</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -49,10 +47,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="single_check">
+    <!-- <div class="single_check">
         <el-checkbox v-model="checked" @change="handleAll"></el-checkbox>
         <el-button class="other_btn" @click="batchDisable">批量禁用</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -81,7 +79,6 @@ export default {
       this._apis.client.getLevelsList(this.params).then((response) => {
         this.loading = false;
         response.list.map((v) => {
-          v.status = Boolean(v.status);
           v.isGray = true;
         });
         this.levelList = [].concat(response.list);
