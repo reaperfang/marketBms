@@ -772,32 +772,32 @@ export default {
               delete v.label;
             }
           });
-        }
-        if(!!this.canSubmit) {
-          formObj.levelConditionList = [].concat(levelConditionList);
-          formObj.rightsList = [].concat(rightsList);
-          formObj.upgradeRewardList = [].concat(upgradeRewardList);
-          formObj.upgradePackage = upgradePackage;
-          formObj.receiveConditionsRemarks = receiveConditionsRemarks;
-          formObj.rights = rights;
-          formObj.id = this.ruleForm.id;
-          formObj.cid = this.ruleForm.cid;
-          formObj.name = this.ruleForm.name;
-          formObj.levelImageUrl = this.ruleForm.levelImageUrl;
-          formObj.explain = this.ruleForm.explain;
-          this._apis.client
-            .editLevel(formObj)
-            .then(response => {
-              this.$notify({
-                title: "成功",
-                message: "等级编辑成功",
-                type: "success"
+          if(!!this.canSubmit) {
+            formObj.levelConditionList = [].concat(levelConditionList);
+            formObj.rightsList = [].concat(rightsList);
+            formObj.upgradeRewardList = [].concat(upgradeRewardList);
+            formObj.upgradePackage = upgradePackage;
+            formObj.receiveConditionsRemarks = receiveConditionsRemarks;
+            formObj.rights = rights;
+            formObj.id = this.ruleForm.id;
+            formObj.cid = this.ruleForm.cid;
+            formObj.name = this.ruleForm.name;
+            formObj.levelImageUrl = this.ruleForm.levelImageUrl;
+            formObj.explain = this.ruleForm.explain;
+            this._apis.client
+              .editLevel(formObj)
+              .then(response => {
+                this.$notify({
+                  title: "成功",
+                  message: "等级编辑成功",
+                  type: "success"
+                });
+                this._routeTo("clientLevel");
+              })
+              .catch(error => {
+                console.log(error);
               });
-              this._routeTo("clientLevel");
-            })
-            .catch(error => {
-              console.log(error);
-            });
+          }
         }
       }
     }

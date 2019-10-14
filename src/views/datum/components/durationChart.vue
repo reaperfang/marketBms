@@ -26,12 +26,12 @@ export default {
     // 数据显示控制
     nearDay(val){
       if(val == 1){
-        this.option.title.text = "平均停留时间",
+        this.option.title.text = "平均停留时间（秒）",
         this.option.legend.data = ["平均停留时间"],
         this.option.series = [{name:"平均停留时间",type: "line",stack: "总量",data: this.flow['yAxis']},
         ]
       }else if(val == 2){
-         this.option.title.text = "跳出率",
+         this.option.title.text = "跳出率（%）",
          this.option.legend.data = ["跳出率"],
          this.option.series =[{name:"跳出率",type: "line",stack: "总量",data: this.flow['yAxis']},
          ]

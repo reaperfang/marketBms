@@ -6,6 +6,7 @@ export default {
   extends: chartBase,
   data() {
     return {
+      datas:[],
       dates:[],
       incomes:[],
       expends:[],
@@ -32,7 +33,7 @@ export default {
       this.dataList.map((item)=>{
         item.accountDate = item.accountDate.substring(0,10)
         this.dates.push(item.accountDate)
-        this.dates.reverse();
+        // this.dates = this.datas.reverse();
         this.incomes.push(item.income)
         this.expends.push(item.expend)
         this.realIncomes.push(item.realIncome)
@@ -62,7 +63,7 @@ export default {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: this.dates
+            data: this.dates.reverse()
         },
         yAxis: {
             type: 'value'

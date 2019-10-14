@@ -21,7 +21,7 @@ export default {
     makeOption(data) {
       this.option = {
         title: {
-          //text: "未来一周气温变化",
+          text: "趋势图（人）",
           //subtext: "纯属虚构"
         },
         tooltip: {
@@ -41,6 +41,7 @@ export default {
         yAxis: [
           {
             type: "value",
+            minInterval: 1,
           }
         ],
         series: [

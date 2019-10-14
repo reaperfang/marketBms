@@ -91,7 +91,7 @@ export default {
           response.list.map((v) => {
               v.validity = "永久有效";
               v.isGray = true;
-              v.enable = v.enable == 0?true:false;
+              //v.enable = v.enable == 0?true:false;
           });
           let i = response.list.findIndex((value,index,arr) => {
               return value.name == null || value.name == "";

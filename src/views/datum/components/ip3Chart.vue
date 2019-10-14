@@ -21,10 +21,9 @@ export default {
       this.option = {
         color: ["#c23531", "#2f4554", "#61a0a8", "#eee"],
         title: {
-          x: "center",
-          text: "支付趋势",
+          text: "支付趋势（人）",
           //subtext: "Rainbow bar example",
-          link: "http://echarts.baidu.com/doc/example.html"
+          // link: "http://echarts.baidu.com/doc/example.html"
         },
         grid: {
           borderWidth: 0,

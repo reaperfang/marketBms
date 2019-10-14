@@ -124,10 +124,6 @@ export default {
                 this.cardNames = [].concat(response);
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // })
             })
         },
         addCardBg() {
@@ -145,10 +141,6 @@ export default {
                 });
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // })
             })
         },
         checkCardBg() {
@@ -159,10 +151,6 @@ export default {
                 }
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // })
             })
         }
     },

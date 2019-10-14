@@ -291,6 +291,7 @@ export default {
           this.skuList = [].concat(response.list);
           this.total = response.total;
           let selectProducts = JSON.parse(this.data.row.sceneRule).selectProducts;
+          console.log(selectProducts);
           selectProducts.map(v => {
               this.skuList.forEach(row => {
                 if (row.goodsInfo.id == v.id) {
@@ -323,6 +324,7 @@ export default {
           obj.name = v.goodsInfo.name;
           this.selectProducts.push(obj);
         });
+        console.log(selections);
       }
     },
     getInfo() {
