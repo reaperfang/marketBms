@@ -6,9 +6,9 @@
                         <el-form-item label="交易时间">
                             <div class="p_line">
                     <el-radio-group v-model="form.timeType">
-                        <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="1">7天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="2">15天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="3">30天</el-radio-button>
                         <el-radio-button class="btn_bor" label="5">最近一季度</el-radio-button>
                         <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
                         </el-radio-group>

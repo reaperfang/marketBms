@@ -68,21 +68,21 @@
                 <p class="fl">该筛选条件下：
                     <i v-if="form.memberType== null" style="font-style:normal">
                         全部会员共计<span>{{customerCount + newMemberCount + oldMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{(customerRatio*100 + newMemberRatio*100 + oldMemberRatio*100).toFixed(2) || 0}}%</span>;    
+                        占客户总数的<span>{{(customerRatio*100 + newMemberRatio*100 + oldMemberRatio*100) != 0 ? (customerRatio*100 + newMemberRatio*100 + oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
                     <i v-if="form.memberType==0" style="font-style:normal">
                         非会员共计<span>{{customerCount || 0}}</span>人；
-                        占会员总数的<span>{{customerRatio*100 || 0}}%</span>;    
+                        占会员总数的<span>{{customerRatio != 0 ? (customerRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
                     <i v-if="form.memberType==1" style="font-style:normal">
                         新会员共计<span>{{newMemberCount || 0}}</span>人；
-                        占会员总数的<span>{{newMemberRatio*100 || 0}}%</span>;
+                        占会员总数的<span>{{newMemberRatio != 0 ? (newMemberRatio*100).toFixed(2) : 0}}%</span>;
                     </i>
                     <i v-if="form.memberType==2" style="font-style:normal">
                         老会员共计<span>{{oldMemberCount || 0}}</span>人；
-                        占会员总数的<span>{{(oldMemberRatio*100).toFixed(2) || 0}}%</span>;    
+                        占会员总数的<span>{{oldMemberRatio != 0 ? (oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
-                    <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio*100}}%</span></i>。
+                    <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span></i>。
                 </p>
                 <div class="fr marT20">
                     <el-button class="minor_btn" @click="reScreening">重新筛选</el-button>

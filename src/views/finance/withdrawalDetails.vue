@@ -146,7 +146,7 @@ export default {
       },
       inline:true,
       ruleForm:{
-        searchType:'tradeDetailSn',
+        searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
         status:-1,
