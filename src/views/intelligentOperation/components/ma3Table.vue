@@ -46,7 +46,8 @@
         label="入会时间"
       >
         <template slot-scope="scope">
-          <span>{{Number(scope.row.joinTime) | time}}</span>
+          <span v-if="scope.row.joinTime">{{Number(scope.row.joinTime) | time}}</span>
+          <span v-else> - </span>
         </template>
       </el-table-column>
       <el-table-column

@@ -204,6 +204,9 @@ export default {
         });
       }
     },
+    // 订单详情 orderId
+    // 电子面单 orderId
+    // 配送单 id
     sendGoodsHandler() {
       try {
         let params;
@@ -223,7 +226,7 @@ export default {
                 return
         }
 
-        if(express && this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).some(val => !expressNos)) {
+        if(this.express && this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).some(val => !expressNos)) {
           this.confirm({title: '提示', icon: true, text: '快递单号不能为空'})
                 return
         }
@@ -288,11 +291,19 @@ export default {
             //     "&type=orderBulkDelivery"
             // );
             
-            this.$router.push(
-              "/order/deliverGoodsSuccess?ids=" +
-                res.success.map(val => val.orderInfoId).join(",") +
-                "&type=orderBulkDelivery"
-            );
+            // this.$router.push(
+            //   "/order/deliverGoodsSuccess?ids=" +
+            //     res.success.map(val => val.orderInfoId).join(",") +
+            //     "&type=orderBulkDelivery"
+            // );
+            this.$router.push({
+              path: '/order/deliverGoodsSuccess',
+              query: {
+                ids: res.success.map(val => val.expressParameter.orderSendInfo.id).join(","),
+                orderId: res.success.map(val => val.expressParameter.orderSendInfo.orderId).join(","),
+                type: 'orderBulkDelivery'
+              }
+            })
           })
           .catch(error => {
             this.$notify.error({

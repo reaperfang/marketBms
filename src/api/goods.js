@@ -247,6 +247,7 @@ export function importGoods(data) {
   return request({
     apiType: 'goods',
     method: 'post',
+    timeout: 100000,
     target: 'PRODUCT-IMPORT-PROCESSOR',
     data
   })

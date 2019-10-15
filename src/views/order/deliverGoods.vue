@@ -288,6 +288,9 @@ export default {
           });
         });
     },
+    // 订单详情 orderId
+    // 电子面单 orderId
+    // 配送单 id
     sendGoodsHandler(formName) {
       if (!this.multipleSelection.length) {
         this.confirm({
@@ -374,11 +377,19 @@ export default {
                 message: "发货成功",
                 type: "success"
               });
-              this.$router.push(
-                "/order/deliverGoodsSuccess?id=" +
-                  res.success[0].expressParameter.orderSendInfo.id +
-                  "&type=deliverGoods"
-              );
+              // this.$router.push(
+              //   "/order/deliverGoodsSuccess?id=" +
+              //     res.success[0].expressParameter.orderSendInfo.id +
+              //     "&type=deliverGoods"
+              // );
+              this.$router.push({
+                path: '/order/deliverGoodsSuccess',
+                query: {
+                  id: res.success[0].expressParameter.orderSendInfo.id,
+                  orderId: res.success[0].expressParameter.orderSendInfo.orderId,
+                  type: 'deliverGoods'
+                }
+              })
             })
             .catch(error => {
               this.$notify.error({
