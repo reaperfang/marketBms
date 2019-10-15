@@ -27,7 +27,7 @@
                     <el-checkbox v-model="ruleForm.isLastConsumeTime">最后消费时间</el-checkbox>
                 </el-form-item>
                 <el-form-item>
-                    <el-radio v-model="ruleForm.consumeTimeType" label="0">最近</el-radio>
+                    <el-radio v-model="ruleForm.consumeTimeType" label="0" @change="handleCheck5">最近</el-radio>
                     <div class="input_wrap3">
                         <el-input v-model="ruleForm.consumeTimeValue"></el-input>
                     </div>
@@ -43,7 +43,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item>
-                    <el-radio v-model="ruleForm.consumeTimeType" label="1">自定义</el-radio>
+                    <el-radio v-model="ruleForm.consumeTimeType" label="1" @change="handleCheck6">自定义</el-radio>
                     <div class="input_wrap">
                         <el-date-picker
                             v-model="consumeTime"
@@ -55,7 +55,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox v-model="ruleForm.isTotalConsumeTimes">累计消费次数</el-checkbox>
+                    <el-checkbox v-model="ruleForm.isTotalConsumeTimes" @change="handleCheck1">累计消费次数</el-checkbox>
                     <div class="input_wrap2">
                         <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMin"></el-input>
                     </div>
@@ -66,7 +66,7 @@
                     <span>次</span>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox v-model="ruleForm.isTotalConsumeMoney">累计消费金额</el-checkbox>
+                    <el-checkbox v-model="ruleForm.isTotalConsumeMoney" @change="handleCheck2">累计消费金额</el-checkbox>
                     <div class="input_wrap2">
                         <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMin"></el-input>
                     </div>
@@ -77,7 +77,7 @@
                     <span>元</span>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox v-model="ruleForm.isPreUnitPrice">客单价</el-checkbox>
+                    <el-checkbox v-model="ruleForm.isPreUnitPrice" @change="handleCheck3">客单价</el-checkbox>
                     <div class="input_wrap2">
                         <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMin"></el-input>
                     </div>
@@ -88,7 +88,7 @@
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="资产条件：">
-                    <el-checkbox v-model="ruleForm.isTotalScore">累计获得积分</el-checkbox>
+                    <el-checkbox v-model="ruleForm.isTotalScore" @change="handleCheck4">累计获得积分</el-checkbox>
                     <div class="input_wrap2">
                         <el-input placeholder="请输入" v-model="ruleForm.totalScoreMin"></el-input>
                     </div>
@@ -99,7 +99,7 @@
                     <span>分</span>
                 </el-form-item>
                 <el-form-item label="资产条件：">
-                    <el-checkbox v-model="ruleForm.isProduct">商品条件</el-checkbox>
+                    <el-checkbox v-model="ruleForm.isProduct" @change="handleCheck7">商品条件</el-checkbox>
                     <span>购买以下任意商品</span>
                     <span class="addMainColor marL20 pointer" @click="chooseProduct">选择商品</span>
                 </el-form-item>
@@ -171,6 +171,46 @@ export default {
         }
     },
     methods: {
+        handleCheck1(val) {
+            if(!val) {
+                this.ruleForm.consumeTimesMin = "";
+                this.ruleForm.consumeTimesMax = "";
+            }
+        },
+        handleCheck2(val) {
+            if(!val) {
+                this.ruleForm.consumeMoneyMin = "";
+                this.ruleForm.consumeMoneyMax = "";
+            }
+        },
+        handleCheck3(val) {
+            if(!val) {
+                this.ruleForm.preUnitPriceMin = "";
+                this.ruleForm.preUnitPriceMax = "";
+            }
+        },
+        handleCheck4(val) {
+            if(!val) {
+                this.ruleForm.totalScoreMin = "";
+                this.ruleForm.totalScoreMax = "";
+            }
+        },
+        handleCheck5() {
+            if(this.ruleForm.consumeTimeType == "0") {
+                this.consumeTime = "";
+            }
+        },
+        handleCheck6() {
+            if(this.ruleForm.consumeTimeType == "1") {
+                this.ruleForm.consumeTimeValue = "";
+                this.ruleForm.consumeTimeUnit = "";
+            }
+        },
+        handleCheck7(val) {
+            if(!val) {
+                this.selectedIds = "";
+            }
+        },
         doubleCheck() {
             this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
                 if(!response) {
@@ -201,7 +241,8 @@ export default {
             this.selectedIds = val;
         },
         isInteger(val) {
-            return Math.floor(val) === val
+            let v = Number(val);
+            return Math.floor(v) === v;
         },
         saveLabel() {
             if(this.ruleForm.tagName == "") {
@@ -240,7 +281,7 @@ export default {
                     }
                 }
                 if(this.ruleForm.isTotalConsumeTimes == true) {
-                    if(!this.isInteger(this.ruleForm.consumeTimesMin)|| !this.isInteger(this.ruleForm.consumeTimesMax)) {
+                    if(!this.isInteger(this.ruleForm.consumeTimesMin) || !this.isInteger(this.ruleForm.consumeTimesMax)) {
                         this.$notify({
                             title: '警告',
                             message: '请正确输入累计消费次数区间',
@@ -372,6 +413,7 @@ export default {
                     this.ruleForm.isPreUnitPrice = Boolean(this.ruleForm.isPreUnitPrice);
                     this.ruleForm.isTotalScore = Boolean(this.ruleForm.isTotalScore);
                     this.ruleForm.isProduct = Boolean(this.ruleForm.isProduct);
+                    this.selectedIds = this.ruleForm.productInfoIds;
                     if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
                         this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
                     }

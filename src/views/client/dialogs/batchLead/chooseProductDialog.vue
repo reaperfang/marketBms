@@ -211,6 +211,7 @@ export default {
   }
   .page_styles{
     text-align: center;
+    overflow-x: auto;
   }
 }
 </style>

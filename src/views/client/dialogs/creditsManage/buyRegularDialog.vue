@@ -215,6 +215,7 @@ export default {
           type: "warning"
         });
       } else {
+        console.log('params' + JSON.stringify(params));
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
@@ -413,6 +414,7 @@ export default {
     margin-bottom: 20px;
   }
   .page_styles {
+    overflow-x: auto;
     text-align: center;
   }
 }

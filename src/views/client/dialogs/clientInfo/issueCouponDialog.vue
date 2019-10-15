@@ -37,7 +37,13 @@ export default {
   },
   methods: {
     submit() {
-      if(this.selectList[0].appCouponId.length > 0) {
+      let canSubmit = true;
+      this.selectList.map((v) => {
+        if(v.appCouponId == "") {
+          canSubmit = false;
+        }
+      })
+      if(this.selectList[0].appCouponId.length > 0 && !!canSubmit) {
         this._apis.client.distributeCoupon(this.selectList).then((response) => {
         response.map((v) => {
           if(!!v.receiveDesc) {
@@ -62,7 +68,7 @@ export default {
       }else{
         this.$notify({
             title: '警告',
-            message: '请选择优惠券',
+            message: '请正确选择优惠券',
             type: 'warning'
           });
       }

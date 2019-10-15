@@ -93,7 +93,7 @@
           <el-checkbox v-model="right2">会员折扣</el-checkbox>
           <span>享受后买商品售价</span>
           <div class="input_wrap">
-            <el-input placeholder="填写数字（如：八折输入8,八五折输入8.5）" v-model="hyzk"></el-input>
+            <el-input placeholder="填写数字（如：八折输入8,八五折输入8.5）" v-model="hyzk" @blur="handleBlur"></el-input>
           </div>
           <span>折</span>
           <span class="l_warn">（仅对支仅持参加会员折扣的商品生效）</span>
@@ -227,6 +227,23 @@ export default {
     }
   },
   methods: {
+    handleBlur() {
+      if(this.hyzk >= 10) {
+        this.$notify({
+          title: "警告",
+          message: "只能输入10以内数字",
+          type: "warning"
+        });
+        this.hyzk = "";
+      }else if(this.hyzk <= 0) {
+        this.$notify({
+          title: "警告",
+          message: "不能输入小于0数字",
+          type: "warning"
+        });
+        this.hyzk = "";
+      }
+    },
     handleAvatarSuccess(res, file) {
       // this.fileData = res.data
       this.ruleForm.levelImageUrl = res.data.url;

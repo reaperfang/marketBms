@@ -125,18 +125,22 @@ export default {
     batchDelete() {
       this.canDelete = true;
       let rows = this.$refs.clientLabelTable.selection;
+      let removeArrs = [];
       rows.map((v) => {
         if(v.labelContains !== 0) {
           this.canDelete = false;
+        }else{
+          removeArrs.push(v);
         }
       })
       if(!this.canDelete) {
         this.$notify({
             title: '警告',
-            message: '包含人员不为0不能删除',
+            message: '有包含人数的标签不能删除',
             type: 'warning'
           });
-      }else if(rows.length == 0) {
+      }
+      if(rows.length == 0) {
         this.$notify({
           title: '警告',
           message: '请选择要删除的标签',
@@ -144,20 +148,22 @@ export default {
         });
       }else{
         let arr = [];
-        rows.map((v) => {
+        removeArrs.map((v) => {
           arr.push(v.id);
-        })
-        this._apis.client.batchDeleteTag({ labelIds: arr }).then((response) => {
-          this.$notify({
-            title: '成功',
-            message: "批量删除标签成功",
-            type: 'success'
-          });
-          this.getLabelList(this.startIndex, this.pageSize);
-          this.checkAll = false;
-        }).catch((error) => {
-          console.log(error);
-        })
+        });
+        if(arr.length > 0) {
+          this._apis.client.batchDeleteTag({ labelIds: arr }).then((response) => {
+            this.$notify({
+              title: '成功',
+              message: "批量删除标签成功",
+              type: 'success'
+            });
+            this.getLabelList(this.startIndex, this.pageSize);
+            this.checkAll = false;
+          }).catch((error) => {
+            console.log(error);
+          })
+        }
       }
     }
   },

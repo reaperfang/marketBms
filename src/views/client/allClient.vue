@@ -225,7 +225,7 @@ export default {
   },
   methods: {
     goToSet() {
-        window.location.href="/set/memberSet";
+        window.location.href="bp/set/memberSet";
     },
     stopLoading() {
         this.btnloading = false;
@@ -254,58 +254,152 @@ export default {
             console.log(error);
         })
     },
+    isNumber(val) {
+        if(!!val) {
+            return Number(val) !== NaN;
+        }
+    },
+    isInteger(val) {
+        let v = Number(val);
+        return Math.floor(v) === v;
+    },
     getClientList() {
-        this.btnloading = true;
-        this.form.becameCustomerTimeStart = this.becameCustomerTime ? utils.formatDate(new Date(this.becameCustomerTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-        this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(new Date(this.becameCustomerTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
-        this.form.lastPayTimeStart = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-        this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
-        let oForm = Object.assign({},this.form);
-        let labelNames = oForm.memberLabels;
-        let channelNames = oForm.channelId;
-        let labelIds = [];
-        let channelIds = [];
-        let newForm = {};
-        if(labelNames.length > 0) {
-            this.labelsList.map((item) => {
-                labelNames.map((v) => {
-                    if(v == item.tagName) {
-                        labelIds.push(item.id);
-                    }
-                })
-            });
-        }
-        labelIds = labelIds.join(',');
-        if(channelNames.length > 0) {
-            this.channelsList.map((item) => {
-                channelNames.map((v) => {
-                    if(v == item.channerlName) {
-                        channelIds.push(item.id);
-                    }
-                })
-            });
-        }
-        channelIds = channelIds.join(',');
-        oForm.memberLabels = labelIds;
-        oForm.channelIds = channelIds;
-        if(oForm.memberType.length > 0) {
-            oForm.memberType = oForm.memberType[0] == "会员" ? '1':'0';
-        }
-        if(oForm.status.length > 0) {
-            oForm.status = oForm.status[0] == "正常" ? '0':'1';
-        }
-        if(oForm.labelValue && oForm.labelName) {
-            newForm[oForm.labelName] = oForm.labelValue;
-        }
-        Object.keys(oForm).forEach((key) => {
-            if(oForm[key].length !== 0) {
-                newForm[key] = oForm[key];
+        let canSubmit = true;
+        if(!!this.isNumber(this.form.scoreMin)) {
+            if(!this.isNumber(this.form.scoreMax) || this.form.scoreMax <= this.form.scoreMin) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入最大积分',
+                    type: 'warning'
+                });
+                canSubmit = false;
             }
-        });
-        delete newForm.labelName;
-        delete newForm.labelValue;
-        delete newForm.channelId;
-        this.newForm = Object.assign({},newForm);
+        }
+        if(!!this.isNumber(this.form.scoreMax)) {
+            if(!this.isNumber(this.form.scoreMin) || this.form.scoreMin >= this.form.scoreMax) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入最小积分',
+                    type: 'warning'
+                });
+                canSubmit = false;
+            }
+        }
+        if(!!this.isNumber(this.form.totalDealMoneyMin)) {
+            if(!this.isNumber(this.form.totalDealMoneyMax) || this.form.totalDealMoneyMax <= this.form.totalDealMoneyMin) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入累计最大金额',
+                    type: 'warning'
+                });
+                canSubmit = false;
+            }
+        }
+        if(!!this.isNumber(this.form.totalDealMoneyMax)) {
+            if(!this.isNumber(this.form.totalDealMoneyMin) || this.form.totalDealMoneyMin >= this.form.totalDealMoneyMax) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入累计最小金额',
+                    type: 'warning'
+                });
+                canSubmit = false;
+            }
+        }
+        if(!!this.isNumber(this.form.dealTimesMin)) {
+            if(!this.isNumber(this.form.dealTimesMax) || this.form.dealTimesMax <= this.form.dealTimesMin) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入最大购买次数',
+                    type: 'warning'
+                });
+                canSubmit = false;
+            }
+        }
+        if(!!this.isNumber(this.form.dealTimesMax)) {
+            if(!this.isNumber(this.form.dealTimesMin) || this.form.dealTimesMin >= this.form.dealTimesMax) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入最小购买次数',
+                    type: 'warning'
+                });
+                canSubmit = false;
+            }
+        }
+        if(!!this.isNumber(this.form.perUnitPriceMin)) {
+            if(!this.isNumber(this.form.perUnitPriceMax) || this.form.perUnitPriceMax <= this.form.perUnitPriceMin) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入最大客单价',
+                    type: 'warning'
+                });
+                canSubmit = false;
+            }
+        }
+        if(!!this.isNumber(this.form.perUnitPriceMax)) {
+            if(!this.isNumber(this.form.perUnitPriceMin) || this.form.perUnitPriceMin >= this.form.perUnitPriceMax) {
+                this.$notify({
+                    title: '警告',
+                    message: '请正确输入最小客单价',
+                    type: 'warning'
+                });
+                canSubmit = false;
+            }
+        }
+        if(!!canSubmit) {
+            this.btnloading = true;
+            this.form.becameCustomerTimeStart = this.becameCustomerTime ? utils.formatDate(new Date(this.becameCustomerTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(new Date(this.becameCustomerTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.lastPayTimeStart = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+            let oForm = Object.assign({},this.form);
+            let labelNames = oForm.memberLabels;
+            let channelNames = oForm.channelId;
+            let labelIds = [];
+            let channelIds = [];
+            let newForm = {};
+            if(labelNames.length > 0) {
+                this.labelsList.map((item) => {
+                    labelNames.map((v) => {
+                        if(v == item.tagName) {
+                            labelIds.push(item.id);
+                        }
+                    })
+                });
+            }
+            labelIds = labelIds.join(',');
+            if(channelNames.length > 0) {
+                this.channelsList.map((item) => {
+                    channelNames.map((v) => {
+                        if(v == item.channerlName) {
+                            channelIds.push(item.id);
+                        }
+                    })
+                });
+            }
+            channelIds = channelIds.join(',');
+            oForm.memberLabels = labelIds;
+            oForm.channelIds = channelIds;
+            if(oForm.memberType.length > 0) {
+                oForm.memberTypes = oForm.memberType[0] == "会员" ? [1,2]:[0];
+            }
+            if(oForm.status.length > 0) {
+                oForm.status = oForm.status[0] == "正常" ? '0':'1';
+            }
+            if(oForm.labelValue && oForm.labelName) {
+                newForm[oForm.labelName] = oForm.labelValue;
+            }
+            Object.keys(oForm).forEach((key) => {
+                if(oForm[key].length !== 0) {
+                    newForm[key] = oForm[key];
+                }
+            });
+            delete newForm.labelName;
+            delete newForm.labelValue;
+            delete newForm.channelId;
+            delete newForm.memberType;
+            this.newForm = Object.assign({},newForm);
+        }
+        
     },
     resetForm(formName) {
         this.$refs[formName].resetFields();
