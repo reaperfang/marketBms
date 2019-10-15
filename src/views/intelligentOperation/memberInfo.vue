@@ -96,6 +96,7 @@
                 :totalCount="totalCount">
             </maTable>
         </div>
+        <p>建议:</p>
         </div>
 </template>
 <script>

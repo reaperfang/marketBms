@@ -136,7 +136,7 @@ export default {
                 this.shopList.push(shopObj)
               }
               if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
-                this.$store.dispatch('getShopInfos',this.shopList[0]).then(() => {
+                this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
                   this.$router.push({ path: '/profile/profile' })
                 }).catch(error => {
                   this.$notify.error({

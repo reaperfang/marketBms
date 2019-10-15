@@ -60,6 +60,7 @@
                 :totalCount="listObj.totalSize">
             </ma3Table>
         </div>
+        <p>建议:</p>
     </div>
 </template>
 <script>

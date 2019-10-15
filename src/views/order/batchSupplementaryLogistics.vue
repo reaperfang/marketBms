@@ -268,7 +268,7 @@ export default {
       },
       changeSendInfo() {
             this.currentDialog = 'ReceiveInformationDialog'
-            this.currentData = this.list[0].orderAfterSaleSendInfo
+            this.currentData = this.list[0];
             this.isReceived = false
             this.title = '修改发货信息'
             this.sendGoods = 'send'

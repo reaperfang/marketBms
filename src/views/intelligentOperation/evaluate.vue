@@ -61,6 +61,7 @@
                     </div>
                     <ma4Table class="marT20" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
                 </div>
+                <p>建议:</p>
     </div>
 </template>
 <script>

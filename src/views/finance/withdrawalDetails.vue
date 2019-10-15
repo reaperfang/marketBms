@@ -221,7 +221,7 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        searchType:'tradeDetailSn',
+        searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
         status:-1,

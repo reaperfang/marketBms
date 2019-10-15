@@ -64,12 +64,22 @@
           </div>
         </div>
          <div class="p_top">
-              <p>{{toPersent(dataObj.orderUvPathTransformation[1])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[2])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[3])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[4])}}</p>
-              <p>{{toPersent(dataObj.orderUvPathTransformation[5])}}</p>
-          </div>
+            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'">
+              {{(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'}}
+            </p>
+            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'">
+              {{(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'}}
+            </p>
+            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[3]*100).toFixed(2)+ '%'">
+              {{(dataObj.orderUvPathTransformation[3]*100).toFixed(2)+ '%'}}
+            </p>
+            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'">
+              {{(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'}}
+            </p>
+            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
+              {{(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'}}
+            </p>      
+         </div>
         <div class="path_line clearfix">
           <div class="p_l">
             <p>第二步</p>
@@ -84,10 +94,16 @@
           </div>
         </div>
          <div class="p_top1">
-            <p>{{toPersent(dataObj.payOrderPathTransformation[1])}}</p>
-            <p>{{toPersent(dataObj.payOrderPathTransformation[2])}}</p>
-            <p>{{toPersent(dataObj.payOrderPathTransformation[3])}}</p>
-          </div>
+              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
+                {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
+              </p>
+              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
+                {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
+              </p>            
+              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
+                {{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}
+              </p>
+         </div>
         <div class="path_line clearfix">
           <div class="p_l">
             <p>第三步</p>
@@ -131,7 +147,8 @@ export default {
       endTime: "",
       dateType: 1,
       dataObj: {},
-      channel: "0"
+      channel: "0",
+      aaa1:'yel'
     };
   },
   methods: {

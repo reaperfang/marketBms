@@ -64,8 +64,9 @@
                     @sizeChange="sizeChange"
                     @currentChange="currentChange"
                 >
-                </channel-table>
+                </channel-table>               
             </div>
+            <p>建议:</p>
     </div>
 </template>
 <script>

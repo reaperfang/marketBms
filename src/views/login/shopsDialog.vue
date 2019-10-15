@@ -19,7 +19,7 @@
             <!-- <el-button>创建店铺</el-button> -->
             </div>
             <div class="content_main">
-              <div v-for="item in shopList" :key="item.id" @click="toShop(item)">
+              <div v-for="item in shopList" :key="item.id" @click="toShop(item)" class="shopItem">
                   <span>{{item.shopName}}</span>
                   <span>移动商城</span>
               </div>
@@ -51,22 +51,26 @@ export default {
   methods: {
     //进入店铺
     toShop(shop){
-      if(shop.enable == 1){
-        this.$store.dispatch('getShopInfos',shop).then(() => {
-          this.handleClose()
-          this.$router.push({ path: '/profile/profile' })
-        }).catch(error => {
-          this.$notify.error({
-            title: '失败',
-            message: error
+      this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
+        if(response.enable == 1){
+          this.$store.dispatch('setShopInfos',shop).then(() => {
+            this.handleClose()
+            this.$router.push({ path: '/profile/profile' })
+          }).catch(error => {
+            this.$notify.error({
+              title: '失败',
+              message: error
+            })
           })
-        })
-      }else{
-        this.$notify.warning({
-          title: '提示',
-          message: '该店铺已停用！'
-        })
-      }
+        }else{
+          this.$notify.warning({
+            title: '提示',
+            message: '该店铺已停用！'
+          })
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
 
     handleClose(){
@@ -116,5 +120,8 @@ export default {
 }
 .dialog_title a:hover{
   text-decoration: underline;
+}
+.shopItem{
+  cursor: pointer;
 }
 </style>

@@ -56,8 +56,8 @@ const user = {
       })
     },
      
-    //获取店铺id
-    getShopInfos({commit},shop){
+    //设置本地店铺信息缓存
+    setShopInfos({commit},shop){
       return new Promise((resolve, reject) => {
         commit('SET_SHOP_INFO',shop)
         window.eventHub.$emit('onShopInfos')
@@ -67,21 +67,13 @@ const user = {
       })
     },
 
-
-    // 获取用户信息
-    // GetUserInfo({ commit, state }) {
+    //根据店铺cid，查询店铺信息，并更新缓存
+    // getShopInfos({commit},cid){
     //   return new Promise((resolve, reject) => {
-    //     this.$api.getUserInfo(state.token).then(response => {
-    //       const data = response.data.data
-
-    //       if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-    //         commit('SET_ROLES', data.roles)
-    //       } else {
-    //         reject('getInfo: roles must be a non-null array !')
-    //       }
-
-    //       commit('SET_USER_INFO', data)
-    //       resolve(response)
+    //     this._apis.set.getShopInfo({id:cid}).then(response =>{
+    //       commit('SET_SHOP_INFO',response)
+    //       window.eventHub.$emit('onShopInfos')        
+    //       resolve()
     //     }).catch(error => {
     //       reject(error)
     //     })

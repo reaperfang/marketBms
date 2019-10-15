@@ -68,6 +68,7 @@
                     </div>
                     <ma2Table class="marT20" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
                 </div>
+                <p>建议:</p>
     </div>
 </template>
 <script>
