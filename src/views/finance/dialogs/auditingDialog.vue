@@ -107,7 +107,7 @@ export default {
       let datas = {
         ids:[this.data.id],
         auditStatus:this.radio,
-        remarks:this.remarks
+        remarks:this.remarks.trim()
       }
       if(this.radio == 0){
         this.$emit("handleSubmit",datas);

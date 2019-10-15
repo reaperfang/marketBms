@@ -223,6 +223,7 @@ export default {
       if(this.nearDay != 4){
         this.startTime = ''
         this.endTime = ''
+        this.range = ''
         this.changeType(this.analysisType)
         this.changeDp(this.duration)
       }
