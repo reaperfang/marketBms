@@ -111,6 +111,7 @@ export default {
     },
     //微信支付开关
     handleWechatPay(val){
+      this.getShopInfo()
       if(val == true && this.wechatBinding == 0){
         this.wechatPay = false
         this.dialogVisible = true
@@ -144,6 +145,7 @@ export default {
           title: '成功',
           message: '保存成功！'
         });
+        this.getShopInfo()
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
