@@ -106,7 +106,12 @@ export default {
         },
         //切换天数
         changeDayM(){
-            this.getTradingTrend()
+            if(this.nearDay !== 4){
+                this.startTime = ""
+                this.endTime = ""
+                this.range = ''
+                this.getTradingTrend()
+            }
         },
        //自定义时间改变     
         changeTime(val){

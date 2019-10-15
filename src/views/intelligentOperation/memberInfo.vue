@@ -35,7 +35,10 @@
                     <span class="span_label">交易次数</span>
                     <div class="input_wrap2 marR20">
                         <el-select v-model="form.tradeCountRange"  @change="getData">
-                            <el-option v-for="item in tradeCount" :label="item.name" :value="item.value" :key="item.id"></el-option>
+                            <el-option label="1次" value="1"></el-option>
+                            <el-option label="2-5次" value="2"></el-option>
+                            <el-option label="6-8次" value="3"></el-option>
+                            <el-option label="8次以上" value="4"></el-option>
                         </el-select>
                     </div>
                     <el-checkbox-group v-model="form.queryRepeatPaymentRatio" style="display:inline-block">
@@ -96,7 +99,11 @@
                 :totalCount="totalCount">
             </maTable>
         </div>
-        <p>建议:</p>
+        <p>运营建议:</p>
+             <p v-if="form.tradeCountRange==1" class="proposal"><b>"交易次数1次："</b>此用户群体为低频用户，建议提升产品认可度，提升服务质量，有助于提升低频用户交易次数。</p> 
+             <p v-if="form.tradeCountRange==2" class="proposal"><b>"交易次数2-5次："</b>此用户群体为中频用户，建议提升产品认可度，提升服务质量，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受95折，有助于提升低频用户交易次数。</p> 
+             <p v-if="form.tradeCountRange==3" class="proposal"><b>"交易次数6-8次："</b>此用户群体为高频用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受9折，有助于提升低频用户交易次数。</p> 
+             <p v-if="form.tradeCountRange==4" class="proposal"><b>"交易次数8次以上："</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p> 
         </div>
 </template>
 <script>
@@ -122,7 +129,7 @@ export default {
                     }
                     return time.getTime() > maxTime
                     }
-                    return time.getTime() > Date.now()
+                    return time.getTime() > Date.now() - 8.64e7
                 }
             },
             form: {
@@ -136,7 +143,8 @@ export default {
                 MoneyRange:null,
                 timeType:1,
                 startIndex:1,
-                pageSize:10
+                pageSize:10,
+                sur:''
             },
             lowprice:'',
             highprice:'',
@@ -223,7 +231,7 @@ export default {
                         name:item.name
                     })                  
                 }
-                //   console.log(reviseitem)
+                  console.log(reviseitem)
                   this.tradeCount=reviseitem;
             }).catch(error =>{
                 console.log('error',error)
@@ -348,6 +356,9 @@ export default {
 }
 /deep/.el-checkbox.is-bordered.is-checked{
     background:rgba(101,94,255,0.1);
+}
+.proposal{
+    margin-left: 65px;
 }
 .m_container{
     background-color: #fff;

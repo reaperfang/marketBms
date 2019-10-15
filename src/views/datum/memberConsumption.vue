@@ -59,7 +59,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="orderCount"
-                    label="计单数（累计）"
+                    label="订单数（累计）"
                 >
                 </el-table-column>
                 </el-table>

@@ -68,7 +68,10 @@
                     </div>
                     <ma2Table class="marT20" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
                 </div>
-                <p>建议:</p>
+                <h3>运营建议:</h3>
+                <p v-if="form.ProtectionReason==1" class="proposal"><b>"不想要了："</b>补偿商品优惠券，发放现金红包，更换升级版商品.</p>                
+                <p v-if="form.ProtectionReason==2" class="proposal"><b>"卖家缺货："</b>免费调换商品.</p>
+                <p v-if="form.ProtectionReason==3" class="proposal"><b>"拍错了/订单信息错误："</b>补偿商品优惠券，发放现金红包，更换升级版商品.</p>
     </div>
 </template>
 <script>
@@ -109,7 +112,7 @@ export default {
                     }
                     return time.getTime() > maxTime
                     }
-                    return time.getTime() > Date.now()
+                    return time.getTime() > Date.now() - 8.64e7
                 }
             },
         }
@@ -206,6 +209,9 @@ export default {
 }
 /deep/.el-checkbox.is-bordered.is-checked{
     background:rgba(101,94,255,0.1);
+}
+.proposal{
+    margin-left: 65px;
 }
 .m_container{
     background-color: #fff;

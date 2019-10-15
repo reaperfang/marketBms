@@ -64,7 +64,6 @@
                 :total="totalCount">
             </el-pagination>
         </div>
-        <p>建议:</p>
     </div>
 </template>
 
