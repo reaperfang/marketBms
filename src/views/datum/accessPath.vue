@@ -145,7 +145,7 @@ export default {
       nearDay: "7",
       startTime: "",
       endTime: "",
-      dateType: 1,
+      dateType: 7,
       dataObj: {},
       channel: "0",
       aaa1:'yel'
@@ -189,9 +189,10 @@ export default {
     },
     changeDay(val) {
       if (val != 4) {
-        this.nearDay = val;
-        this.startTime = "";
-        this.endTime = "";
+        this.nearDay = val
+        this.startTime = ""
+        this.endTime = ""
+        this.range = ''
         this.getPathConversion();
       }
     }

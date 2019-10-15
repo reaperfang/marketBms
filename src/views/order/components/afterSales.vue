@@ -184,7 +184,7 @@ export default {
         },
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
+                this.confirm({title: '提示', icon: true, text: '请选择需要打印配送单的售后单'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')

@@ -173,7 +173,8 @@ export default {
                 receivedName: '',
             },
             tableData: [],
-            loading: false
+            loading: false,
+            express: false
         }
     },
     filters: {
@@ -199,6 +200,7 @@ export default {
         }
       };
     })
+    this.checkExpress()
     },
     computed:{
         cid(){
@@ -207,6 +209,20 @@ export default {
         }
     },
     methods: {
+        checkExpress() {
+        this._apis.order
+            .checkExpress()
+            .then(res => {
+            this.express = res;
+            })
+            .catch(error => {
+            this.visible = false;
+            this.$notify.error({
+                title: "错误",
+                message: error
+            });
+            });
+        },
         pickerBeginDateBefore (time) {
             
         },
@@ -226,10 +242,23 @@ export default {
             this.$router.push('/order/orderBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderId).join(','))
         },
         batchPrintElectronicForm() {
+            if(this.express) {
+                this.confirm({title: '提示', icon: true, text: '不支持打印电子面单。'})
+                return
+            }
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量打印电子面单的单据。'})
                 return
             }
+            if(this.multipleSelection.filter(val => val.isAutoSend).some(val => val.isFillUp == 1)) {
+                this.confirm({title: '提示', icon: true, text: '自动发货订单，未填报物流信息，不能批量打印电子面单。'})
+                return
+            }
+            if(this.multipleSelection.filter(val => !val.isAutoSend).some(val => (val.status != 4 && val.status != 5 && val.status != 6))) {
+                this.confirm({title: '提示', icon: true, text: '没有完成发货，不能批量打印电子面单。'})
+                return
+            }
+
             let ids = this.multipleSelection.map(val => val.orderId).join(',')
 
             this.$router.push('/order/printingElectronicForm?ids=' + ids)
