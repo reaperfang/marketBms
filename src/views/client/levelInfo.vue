@@ -41,8 +41,8 @@
         <br />
         <el-form-item v-if="getIndex(this.conditionList,'完善信息') !== -1">
           <el-checkbox v-model="condition1" :disabled="disabled1" class="fl">完善信息</el-checkbox>
-          <span class="fl marl20">已选：</span>
-          <div class="fl">
+          <span class="fl marl20" v-if="condition1">已选：</span>
+          <div class="fl" v-if="condition1">
             <p v-for="item in conInfos" :key="item">{{item}}</p>
           </div>
           <p
@@ -54,7 +54,7 @@
         </el-form-item>
         <el-form-item>
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费金额满') !== -1">
-            <el-radio v-model="condition2" label="消费金额满">消费金额满：</el-radio>
+            <el-radio v-model="condition2" label="消费金额满" @change="handleCheck1">消费金额满：</el-radio>
             <div class="input_wrap2">
               <el-input placeholder="请输入数字" v-model="xfjem"></el-input>
             </div>
@@ -62,7 +62,7 @@
             <span>即可升级</span>
           </div>
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费次数满') !== -1">
-            <el-radio v-model="condition2" label="消费次数满">消费次数满：</el-radio>
+            <el-radio v-model="condition2" label="消费次数满" @change="handleCheck2">消费次数满：</el-radio>
             <div class="input_wrap2">
               <el-input placeholder="请输入数字" v-model="xfcsm"></el-input>
             </div>
@@ -82,7 +82,7 @@
         <p class="l_title" style="margin-left: -19px;">等级权益（最少选1个）：</p>
         <br />
         <el-form-item v-if="getIndex(this.rightsList,'满包邮') !== -1">
-          <el-checkbox v-model="right1">满包邮</el-checkbox>
+          <el-checkbox v-model="right1" @change="handleCheck3">满包邮</el-checkbox>
           <span>订单金额满</span>
           <div class="input_wrap3">
             <el-input placeholder="请输入数字" v-model="mby"></el-input>
@@ -90,7 +90,7 @@
           <span>包邮</span>
         </el-form-item>
         <el-form-item v-if="getIndex(this.rightsList,'会员折扣') !== -1">
-          <el-checkbox v-model="right2">会员折扣</el-checkbox>
+          <el-checkbox v-model="right2" @change="handleCheck4">会员折扣</el-checkbox>
           <span>享受后买商品售价</span>
           <div class="input_wrap">
             <el-input placeholder="填写数字（如：八折输入8,八五折输入8.5）" v-model="hyzk" @blur="handleBlur"></el-input>
@@ -102,7 +102,7 @@
         <p class="l_title" style="margin-left: -19px;">升级奖励（非必选，可多选）：</p>
         <br />
         <el-form-item v-if="getIndex(this.rewardList,'赠送积分') !== -1">
-          <el-checkbox v-model="upgrade1">赠送积分</el-checkbox>
+          <el-checkbox v-model="upgrade1" @change="handleCheck5">赠送积分</el-checkbox>
           <span>送</span>
           <div class="input_wrap3">
             <el-input placeholder="填写数字" v-model="zsjf"></el-input>
@@ -227,6 +227,31 @@ export default {
     }
   },
   methods: {
+    handleCheck1() {
+      if(this.condition2 == "消费金额满") {
+        this.xfcsm = "";
+      }
+    },
+    handleCheck2() {
+      if(this.condition2 == "消费次数满") {
+        this.xfjem = "";
+      }
+    },
+    handleCheck3(val) {
+      if(!val) {
+        this.mby = "";
+      }
+    },
+    handleCheck4(val) {
+      if(!val) {
+        this.hyzk = "";
+      }
+    },
+    handleCheck5(val) {
+      if(!val) {
+        this.zsjf = "";
+      }
+    },
     handleBlur() {
       if(this.hyzk >= 10) {
         this.$notify({

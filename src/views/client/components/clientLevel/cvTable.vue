@@ -98,7 +98,7 @@ export default {
       })
     },
     edit(row) {
-      this._routeTo('levelInfo',{id: row.id});
+      this._routeTo('levelInfo',{id: row.id, level: row.level});
     },
     handleConfig(row) {
       if(!row.isGray) {

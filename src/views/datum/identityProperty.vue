@@ -88,6 +88,7 @@
   </div>
 </template>
 <script>
+import utils from '@/utils';
 import ip1Chart from "./components/ip1Chart";
 import ip2Chart from "./components/ip2Chart";
 import ip3Chart from "./components/ip3Chart";
@@ -157,14 +158,25 @@ export default {
       let curDate = new Date(val);
       let curDate2 = new Date(val);
       let curMonth = curDate.getMonth();
-      curDate.setMonth(curMonth + 1);
+      curDate.setMonth(curMonth + 1)      
       curDate.setDate(0);
       curDate = curDate.toLocaleString("chinese", { hour12: false });
       curDate = curDate.replace(/\//g, "-");
+      curDate = this.editDate(curDate)
       curDate2.setDate(1);
       curDate2 = curDate2.toLocaleString("chinese", { hour12: false });
       curDate2 = curDate2.replace(/\//g, "-");
+      curDate2 = this.editDate(curDate2)
       return [curDate2, curDate];
+    },
+    //修改日期格式
+    editDate(date){
+      let arr1 = date.split(' ')
+      let arr2 = arr1[0].split('-')
+      arr2[1].length < 2 && (arr2[1] = '0' + arr2[1])
+      arr2[2].length < 2 && (arr2[2] = '0' + arr2[2])
+      arr1[0] = arr2.join('-')
+      return arr1.join(' ')
     },
     changeDate1(val) {
       let arr = this.getTimeArr(val);

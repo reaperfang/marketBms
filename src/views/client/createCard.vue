@@ -71,7 +71,7 @@
             <el-checkbox v-model="right1">优先发货</el-checkbox>
           </el-form-item>
           <el-form-item style="margin-left: 87px" v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1">
-            <el-checkbox v-model="right2">积分回馈倍率</el-checkbox>
+            <el-checkbox v-model="right2" @change="handleCheck1">积分回馈倍率</el-checkbox>
             <div class="input_wrap3">
               <el-input placeholder="请输入数字" v-model="jfhkbl"></el-input>
             </div>
@@ -93,7 +93,7 @@
         <p class="l_title" style="margin-left: -19px;">领取礼包:</p>
         <br />
         <el-form-item v-if="getIndex(this.rewardList,'赠送积分') !== -1">
-          <el-checkbox v-model="upgrade1">赠送积分</el-checkbox>
+          <el-checkbox v-model="upgrade1" @change="handleCheck2">赠送积分</el-checkbox>
           <span>送</span>
           <div class="input_wrap3">
             <el-input placeholder="填写数字" v-model="zsjf"></el-input>
@@ -250,6 +250,16 @@ export default {
     }
   },
   methods: {
+    handleCheck1(val) {
+      if(!val) {
+        this.jfhkbl = "";
+      }
+    },
+    handleCheck2(val) {
+      if(!val) {
+        this.zsjf = "";
+      }
+    },
     getCardInfo() {
       let id = this.$route.query.cardData.id;
       this._apis.client
