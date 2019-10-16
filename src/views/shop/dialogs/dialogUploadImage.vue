@@ -101,7 +101,7 @@ export default {
       form:{
         imageUrl:'',
         name:'',
-        groupValue:'',
+        groupValue:'-1',
         imageUrls:''
       },
       fileData:{},

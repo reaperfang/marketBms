@@ -158,7 +158,6 @@ export default {
   created() {
     this.getDetail();
     this.getExpressCompanyList();
-    this.checkExpress();
   },
   computed: {
     cid() {
