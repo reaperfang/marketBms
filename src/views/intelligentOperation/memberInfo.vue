@@ -71,7 +71,7 @@
                 <p class="fl">该筛选条件下：
                     <i v-if="form.memberType== null" style="font-style:normal">
                         全部会员共计<span>{{customerCount + newMemberCount + oldMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{(customerRatio*100 + newMemberRatio*100 + oldMemberRatio*100) != 0 ? (customerRatio*100 + newMemberRatio*100 + oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
+                        占客户总数的<span>{{allRatio}}%</span>;    
                     </i>
                     <i v-if="form.memberType==0" style="font-style:normal">
                         非会员共计<span>{{customerCount || 0}}</span>人；
@@ -197,6 +197,17 @@ export default {
             oldMemberRatio:'',
         }
     },
+    computed:{
+        allRatio(){
+            if(this.customerRatio && this.newMemberRatio && this.oldMemberRatio){
+                if((this.customerRatio*100 + this.newMemberRatio*100 + this.oldMemberRatio*100) != 0){
+                    return (this.customerRatio*100 + this.newMemberRatio*100 + this.oldMemberRatio*100).toFixed(2)
+                }
+            }else{
+                return 0
+            }
+        },
+    },
     created(){
         this.goSearch()
         this.memberInforNum()
@@ -256,11 +267,11 @@ export default {
                 this.totalCount = res.totalPage * this.form.pageSize;
                 this.textTips = true;
                 this.newMemberCount = res.newMemberCount;
-                this.newMemberRatio = res.newMemberRatio;
+                this.newMemberRatio = res.newMemberRatio || 0;
                 this.oldMemberCount = res.oldMemberCount;
-                this.oldMemberRatio = res.oldMemberRatio;
+                this.oldMemberRatio = res.oldMemberRatio || 0;
                 this.customerCount = res.customerCount;
-                this.customerRatio = res.customerRatio;
+                this.customerRatio = res.customerRatio || 0;
                 // if(memberType == 1){ //新会员
                 //     this.textTips = true;
                 //     this.newMemberCount = res.newMemberCount;
