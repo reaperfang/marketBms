@@ -46,7 +46,7 @@
                     trigger="hover"
                 >
                     <p class="p_title">账号说明：</p>
-                    <p>快递公司账号即在已选择的快递公司申请的客户ID和密码，若尚未在该快递公司申请账号。</p>
+                    <p>快递公司账号即在已选择的快递公司申请的客户ID和密码。</p>
                 </el-popover>
             </el-form-item>
             <el-form-item label="密码" prop="expressCompanyPassword">
@@ -146,7 +146,7 @@ export default {
     methods: {
       getExpressCompanyList() {
         this._apis.order
-        .getElectronicFaceSheetExpressCompanyList()
+        .getElectronicFaceSheetExpressCompanyList({isElectronicSingle: 1})
         .then(res => {
           this.expressCompanyList = res
         })

@@ -126,26 +126,26 @@
                 </div>
                 <div class="row">
                     <div class="col">订单金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.goodsAmount + orderDetail.orderInfo.freight}}</div>
+                    <div class="col">¥{{orderAmount}}</div>
                 </div>
                 <div class="row">
                     <div class="col">优惠券金额:</div>
                     <div class="col">
-                        ¥{{orderDetail.orderInfo.consumeCouponMoney || 0}}
+                        ¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
                         <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList}; dialogVisible = true" class="coupon-img"></i>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">满减/满折:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountMoney || 0}}</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.discountMoney || '0.00'}}</div>
                 </div>
                 <div class="row">
                     <div class="col">会员折扣:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney || 0}}</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney || '0.00'}}</div>
                 </div>
                 <div class="row">
                     <div class="col">优惠套装:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountPackageMoney || 0}}</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.discountPackageMoney || '0.00'}}</div>
                 </div>
                 <div class="row" v-if="orderDetail.orderInfo && orderDetail.orderInfo.discountFreight">
                     <div class="col">满包邮:</div>
@@ -184,7 +184,7 @@
                 </div>
                 <div class="row">
                     <div class="col">应收金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo | yingshouFilter}}</div>
+                    <div class="col">¥{{yingshow}}</div>
                 </div>
                 <div class="row">
                     <div class="col">余额使用:</div>
@@ -267,12 +267,23 @@ export default {
                     value: 2
                 }
             ],
-            changePriceVisible: false
+            changePriceVisible: false,
+            orderAmount: '0.00',
+            yingshow: '0.00'
             //replacePayWechatNames: ''
         }
     },
     created() {
         //this.getOrderPayRecordList()
+    },
+    watch: {
+        orderInfo: {
+            deep: true,
+            handler() {
+                this.getOrderAmount()
+                this.getYingshou()
+            }
+        }
     },
     computed: {
         gainCoupon() {
@@ -331,7 +342,7 @@ export default {
             }
 
             return str
-        }
+        },
     },
     methods: {
         // getOrderPayRecordList() {
@@ -353,6 +364,40 @@ export default {
         //         });
         //     }) 
         // },
+        getOrderAmount() {
+            let goodsAmount
+            let freight
+            let total
+
+            goodsAmount = (typeof this.orderInfo.goodsAmount == 'string') ? parseFloat(this.orderInfo.goodsAmount) : this.orderInfo.goodsAmount
+            freight = (typeof this.orderInfo.freight == 'string') ? parseFloat(this.orderInfo.freight) : this.orderInfo.freight
+            total = goodsAmount + freight
+            total = total.toFixed(2)
+
+            this.orderAmount = total
+        },
+        getYingshou() {
+            let consumeBalanceMoney
+            let consumeScoreConvertMoney
+            let actualMoney
+            let receivableMoney
+            let total
+
+            consumeBalanceMoney = typeof this.orderInfo.consumeBalanceMoney == 'string' ? parseFloat(this.orderInfo.consumeBalanceMoney) : this.orderInfo.consumeBalanceMoney
+            consumeScoreConvertMoney = typeof this.orderInfo.consumeScoreConvertMoney == 'string' ? parseFloat(this.orderInfo.consumeScoreConvertMoney) : this.orderInfo.consumeScoreConvertMoney
+            actualMoney = typeof this.orderInfo.actualMoney == 'string' ? parseFloat(this.orderInfo.actualMoney) : this.orderInfo.actualMoney
+            receivableMoney = typeof this.orderInfo.receivableMoney == 'string' ? parseFloat(this.orderInfo.receivableMoney) : this.orderInfo.receivableMoney
+
+            if(this.orderInfo.orderStatus == 3) {
+                total = consumeBalanceMoney + consumeScoreConvertMoney + actualMoney
+                total = total.toFixed(2)
+                this.yingshow = total
+            } else {
+                total = consumeBalanceMoney + consumeScoreConvertMoney + receivableMoney
+                total = total.toFixed(2)
+                this.yingshow = total
+            }
+        },
         handleInput2(e) {
             this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
@@ -502,7 +547,7 @@ export default {
             } else {
                 return val.consumeBalanceMoney + val.consumeScoreConvertMoney + val.receivableMoney
             }
-        }
+        },
     },
     props: {
         orderInfo: {

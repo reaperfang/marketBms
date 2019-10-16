@@ -35,7 +35,7 @@
           <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
         </el-radio-group>
         <div class="input_wrap" v-if="nearDay1 == 4">
-          <el-date-picker v-model="date1" type="month" @change="changeDate1" placeholder="选择日期"></el-date-picker>
+          <el-date-picker v-model="date1" type="month" @change="changeDate1" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker>
         </div>
       </div>
       <div class="chart2_container">
@@ -50,7 +50,7 @@
           <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
         </el-radio-group>
         <div class="input_wrap" v-if="nearDay2 == 4">
-          <el-date-picker v-model="date2" type="month" @change="changeDate2" placeholder="选择日期"></el-date-picker>
+          <el-date-picker v-model="date2" type="month" @change="changeDate2" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker>
         </div>
         <span class="fr" @click="toLink()">会员消费</span>
       </div>
@@ -97,6 +97,25 @@ export default {
   components: { ip1Chart, ip2Chart, ip3Chart },
   data() {
     return {
+      pickerOptions: {
+          onPick: ({ maxDate, minDate }) => {
+              this.pickerMinDate = minDate.getTime()
+              if (maxDate) {
+              this.pickerMinDate = ''
+              }
+          },
+          disabledDate: (time) => {
+              if (this.pickerMinDate !== '') {
+              const day90 = (90 - 1) * 24 * 3600 * 1000
+              let maxTime = this.pickerMinDate + day90
+              if (maxTime > new Date()) {
+                  maxTime = new Date()- 8.64e7
+              }
+              return time.getTime() > maxTime
+              }
+              return time.getTime() > Date.now() - 8.64e7
+          }
+      },
       visitSourceType: "0",
       nearDay1: "7",
       nearDay2: "7",

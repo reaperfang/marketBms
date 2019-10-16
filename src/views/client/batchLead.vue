@@ -24,7 +24,7 @@
                     <el-radio v-model="ruleForm.anyOrAllCondition" label="1">必须满足所有条件</el-radio>
                 </el-form-item>
                 <el-form-item label="交易条件：">
-                    <el-checkbox v-model="ruleForm.isLastConsumeTime">最后消费时间</el-checkbox>
+                    <el-checkbox v-model="ruleForm.isLastConsumeTime" @change="handleCheck8">最后消费时间</el-checkbox>
                 </el-form-item>
                 <el-form-item>
                     <el-radio v-model="ruleForm.consumeTimeType" label="0" @change="handleCheck5">最近</el-radio>
@@ -211,6 +211,15 @@ export default {
                 this.selectedIds = "";
             }
         },
+        handleCheck8(val) {
+            if(val) {
+                this.ruleForm.consumeTimeType = "0";
+            }else{
+                this.ruleForm.consumeTimeValue = "";
+                this.ruleForm.consumeTimeUnit = "";
+                this.consumeTime = "";
+            }
+        },
         doubleCheck() {
             this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
                 if(!response) {
@@ -334,13 +343,13 @@ export default {
                     let formObj = Object.assign({}, this.ruleForm);
                     formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
                     formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"):"";
-                    formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || '';
-                    formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || '';
-                    formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || '';
-                    formObj.isPreUnitPrice = this.convertUnit(formObj.isPreUnitPrice) || '';
-                    formObj.isTotalScore = this.convertUnit(formObj.isTotalScore) || '';
-                    formObj.isProduct = this.convertUnit(formObj.isProduct) || '';
-                    formObj.productInfoIds = this.selectedIds || "";
+                    formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || 0;
+                    formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || 0;
+                    formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || 0;
+                    formObj.isPreUnitPrice = this.convertUnit(formObj.isPreUnitPrice) || 0;
+                    formObj.isTotalScore = this.convertUnit(formObj.isTotalScore) || 0;
+                    formObj.isProduct = this.convertUnit(formObj.isProduct) || 0;
+                    formObj.productInfoIds = this.selectedIds || 0;
                     if(this.$route.query.id) {
                         if(formObj.tagType == '0') {
                             this._apis.client.updateTag({tagType: formObj.tagType, tagName: formObj.tagName, id: this.$route.query.id}).then((response) => {

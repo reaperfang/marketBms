@@ -9,7 +9,7 @@ class Ajax {
   constructor() {
     this.systemRequest = 'head';
     this.service = axios.create({
-      timeout: 10000, // request timeout
+      timeout: 100000, // request timeout
     });
 
     this.initGlobal();

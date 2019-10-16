@@ -112,7 +112,7 @@ export default {
                     const day30 = (90 - 1) * 24 * 3600 * 1000
                     let maxTime = this.pickerMinDate + day30
                     if (maxTime > new Date()) {
-                        maxTime = new Date()
+                        maxTime = new Date() - 8.64e7
                     }
                     return time.getTime() > maxTime
                     }

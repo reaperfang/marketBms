@@ -320,32 +320,36 @@ export default {
   text-align: center;
 }
 .icon_cont{
-  width: 115px;
+  width: 130px;
   span{
     display: block;
-    width: 80px;
+    float: left;
+    width: 84px;
     white-space: nowrap;
     overflow: hidden;
     line-height: 36px;
   }
   .headIcon{
+    float: right;
     display: block;
     width: 32px;
     height: 32px;
   }
 }
 .iden_cont{
-  width: 87px;
+  width: 120px;
   > span{
     line-height: 46px;
   }
   div{
-    width: 50px;
+    width: 80px;
     span{
       display: block;
       font-size: 12px;
       height: 20px;
       overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
       &:first-child{
         color: #F55858;
       }

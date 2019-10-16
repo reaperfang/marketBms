@@ -25,6 +25,7 @@
             value-format="yyyy-MM-dd"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            :picker-options="pickerOptions"
             @change="changeTime"
           ></el-date-picker>
         </div>
@@ -140,6 +141,25 @@ export default {
   components: { apChart },
   data() {
     return {
+      pickerOptions: {
+          onPick: ({ maxDate, minDate }) => {
+              this.pickerMinDate = minDate.getTime()
+              if (maxDate) {
+              this.pickerMinDate = ''
+              }
+          },
+          disabledDate: (time) => {
+              if (this.pickerMinDate !== '') {
+              const day90 = (90 - 1) * 24 * 3600 * 1000
+              let maxTime = this.pickerMinDate + day90
+              if (maxTime > new Date()) {
+                  maxTime = new Date()- 8.64e7
+              }
+              return time.getTime() > maxTime
+              }
+              return time.getTime() > Date.now() - 8.64e7
+          }
+      },
       range: "",
       visitSourceType: 0,
       nearDay: "7",

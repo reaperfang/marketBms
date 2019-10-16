@@ -53,22 +53,25 @@
                 </div>
             </div>
             <div class="c_line">
-                <span class="c_title">交易趋势</span>
-                <span class="c_label">筛选日期：</span>
-                <el-radio-group v-model="nearDay" @change="changeDayM">
-                    <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
-                    <el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
-                    <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
-                    <el-radio-button class="btn_bor" label="4">自定义</el-radio-button>
-                </el-radio-group>
-                <div class="input_wrap" v-if="nearDay == 4">
-                    <el-date-picker
-                        v-model="range"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="选择日期"
-                        @change="changeTime">
-                    </el-date-picker>
+                <span class="c_title">交易趋势（单）</span>
+                <div>
+                    <span class="c_label">筛选日期：</span>
+                    <el-radio-group v-model="nearDay" @change="changeDayM">
+                        <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="4">自定义</el-radio-button>
+                    </el-radio-group>
+                    <div class="input_wrap" v-if="nearDay == 4">
+                        <el-date-picker
+                            v-model="range"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions"
+                            @change="changeTime">
+                        </el-date-picker>
+                    </div>
                 </div>
             </div>
             <ip4Chart :title="'测试图表'" ref="ip4"></ip4Chart>
@@ -83,6 +86,13 @@ export default {
     name: 'purchaseOrder',
     data() {
         return {
+            pickerOptions: {
+                disabledDate: (time) => {
+                    if (time !== '') {
+                        return time.getTime() > Date.now() - 8.64e7
+                    }
+                }
+            },
             range: "",
             nearDay:7,
             visitSourceType:0,
@@ -228,20 +238,22 @@ export default {
         .c_line{
             padding-top: 30px;
             border-top: 1px dashed #D3D3D3;
-            .input_wrap{
-                width: 220px;
-                display: inline-block;
-            }
-            span{
-                color: #655EFF;
-                margin-left: 20px;
+            display: flex;
+            justify-content:space-between;
+            div{
                 &.c_title{
                     font-weight: bold;
                     color: #474C53;
                 }
                 &.c_label{
-                    margin-left: 300px;
+                    margin-right: 30px;
                     color: #474C53;
+                }
+                .input_wrap{
+                    width: 220px;
+                    display: block;
+                    margin-left:160px;
+                    margin-top:10px;
                 }
             }
         }

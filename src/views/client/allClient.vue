@@ -225,7 +225,7 @@ export default {
   },
   methods: {
     goToSet() {
-        window.location.href="bp/set/memberSet";
+        this.$router.push({path:'/set/memberSet'});
     },
     stopLoading() {
         this.btnloading = false;
