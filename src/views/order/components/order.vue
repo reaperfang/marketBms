@@ -7,7 +7,7 @@
                     <div class="col">数量</div>
                 </div>
             </div>
-            <div class="item" style="width: 120px;">实付金额/支付方式</div>
+            <div class="item" style="width: 120px;">订单金额/支付方式</div>
             <div class="item" style="width: 120px;">收货人及联系方式</div>
             <div class="item">配送方式</div>
             <div class="item">状态</div>
@@ -61,7 +61,7 @@
                     <div class="item" style="width: 120px;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
-                        <p>实收：¥{{order | netReceiptsFilter}}</p>
+                        <p>¥{{order | netReceiptsFilter}}</p>
                         <p>{{order.channelName}}支付</p>
                     </div>
                     <div class="item" style="width: 120px;">

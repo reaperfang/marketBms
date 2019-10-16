@@ -20,44 +20,37 @@
       <el-table-column
         prop="pv"
         label="浏览量"
-        sortable
        >
       </el-table-column>
       <el-table-column
         prop="pv"
         label="访客量"
-        sortable
         >
       </el-table-column>
       <el-table-column
         prop="shoppingCart"
         label="加购人数"
-        sortable
         >
       </el-table-column>
       <el-table-column
         prop="orders"
         label="下单人数"
-        sortable
         >
       </el-table-column>
       <el-table-column
         prop="pays"
         label="支付人数"
-        sortable
         >
       </el-table-column>
       <el-table-column
         prop="rateOrderPay"
         label="下单支付转化率"
         width="150"
-        sortable
         >
       </el-table-column>
       <el-table-column
         prop="rateRepurchase"
         label="复购率"
-        sortable
         >
       </el-table-column>
     </el-table>

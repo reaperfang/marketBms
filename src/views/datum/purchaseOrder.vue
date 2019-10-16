@@ -116,7 +116,7 @@ export default {
         },
         //切换天数
         changeDayM(){
-            if(this.nearDay !== 4){
+            if(this.nearDay != 4){
                 this.startTime = ""
                 this.endTime = ""
                 this.range = ''
@@ -125,9 +125,36 @@ export default {
         },
        //自定义时间改变     
         changeTime(val){
-            this.startTime = val[0];
-            this.endTime = val[1];
+            let arr = this.getTimeArr(val);
+            this.startTime = arr[0];
+            this.endTime = arr[1];
+            this.nearDay = ''
             this.getTradingTrend()
+        },
+        //获取开始日期及结束日期
+        getTimeArr(val) {
+        let curDate = new Date(val);
+        let curDate2 = new Date(val);
+        let curMonth = curDate.getMonth();
+        curDate.setMonth(curMonth + 1)      
+        curDate.setDate(0);
+        curDate = curDate.toLocaleString("chinese", { hour12: false });
+        curDate = curDate.replace(/\//g, "-");
+        curDate = this.editDate(curDate)
+        curDate2.setDate(1);
+        curDate2 = curDate2.toLocaleString("chinese", { hour12: false });
+        curDate2 = curDate2.replace(/\//g, "-");
+        curDate2 = this.editDate(curDate2)
+        return [curDate2, curDate];
+        },
+        //修改日期格式
+        editDate(date){
+        let arr1 = date.split(' ')
+        let arr2 = arr1[0].split('-')
+        arr2[1].length < 2 && (arr2[1] = '0' + arr2[1])
+        arr2[2].length < 2 && (arr2[2] = '0' + arr2[2])
+        arr1[0] = arr2.join('-')
+        return arr1.join(' ')
         },
         //获取交易数据
         getTradingTrend(){

@@ -231,7 +231,7 @@ export default {
         });
     },
     changeDayM(val) {
-      if (val !== 4) {
+      if (val != 4) {
         this.nearDay1 = val;
         this.startTime1 = "";
         this.endTime1 = "";
@@ -260,7 +260,7 @@ export default {
         });
     },
     changeDayPay(val) {
-      if (val !== 4) {
+      if (val != 4) {
         this.nearDay2 = val;
         this.startTime2 = "";
         this.endTime2 = "";
