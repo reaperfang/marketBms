@@ -186,8 +186,11 @@ export default {
   },
   methods: {
     checkExpress(index) {
+      let expressCompanyCodes = this.list[index].expressCompanyCodes
+      let expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == expressCompanyCodes).expressCompany
+
       this._apis.order
-        .checkExpress()
+        .checkExpress({expressName})
         .then(res => {
           this.list.splice(index, 1, Object.assign({}, this.list[index], {
             express: res

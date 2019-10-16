@@ -79,6 +79,7 @@ export default {
       multipleSelection: [],
       pageNum: 1,
       ruleForm: {
+        status: 1,
         pageNum: 1,
         name: '',
       },

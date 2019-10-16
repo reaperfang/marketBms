@@ -14,7 +14,7 @@
               <div class="col" style="width: 660px;">
                 <div class="row align-center row-margin">
                   <div class="col">
-                    <i class="checkbox"></i>
+                    <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked}"></i>
                   </div>
                   <div class="col" style="width: 380px;">商品</div>
                   <div class="col" style="width: 60px;">应发数量</div>
@@ -63,12 +63,18 @@
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="快递公司" prop="expressCompanys">
-                            <el-select v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
+                            <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
+                            <el-input
+                          style="margin-top: 5px;"
+                          v-if="item.expressCompanyCodes == 'other'"
+                          v-model="item.other"
+                          placeholder="请输入快递公司名称"
+                        ></el-input>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input v-model="item.orderAfterSaleSendInfo.expressNos"></el-input>
+                            <el-input :disabled="!item.express" v-model="item.orderAfterSaleSendInfo.expressNos"></el-input>
                         </el-form-item>
                     </el-form>
                   </div>
@@ -135,6 +141,38 @@ export default {
     this.getExpressCompanyList()
   },
   methods: {
+    checkExpress(index) {
+      let expressCompanyCodes = this.list[index].expressCompanyCodes
+      let expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == expressCompanyCodes).expressCompany
+
+      this._apis.order
+        .checkExpress({expressCompany})
+        .then(res => {
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+            express: res
+          }))
+        })
+        .catch(error => {
+          this.visible = false;
+          this.$notify.error({
+            title: "错误",
+            message: error
+          });
+        });
+    },
+    changeAll(item) {
+      item.checked = !item.checked;
+
+      if (item.checked) {
+        item.itemList.forEach(val => {
+          val.checked = true;
+        });
+      } else {
+        item.itemList.forEach(val => {
+          val.checked = false;
+        });
+      }
+    },
       sendGoodsHandler() {
           try {
               let params
@@ -194,17 +232,31 @@ export default {
         },
       select(index, i) {
           try {
-              let _list = JSON.parse(JSON.stringify(this.list))
+              let _list = JSON.parse(JSON.stringify(this.list));
 
-              _list[index].itemList[i].checked = !_list[index].itemList[i].checked
+              _list[index].itemList[i].checked = !_list[index].itemList[i]
+                .checked;
 
-              this.list = _list
+              this.list = _list;
+
+              if (
+                this.list[index].itemList.filter(val => val.checked).length ==
+                this.list[index].itemList.length
+              ) {
+                this.list[index].checked = true;
+              } else {
+                this.list[index].checked = false;
+              }
           }catch(e) {
 
           }
       },
       getExpressCompanyList() {
         this._apis.order.fetchExpressCompanyList().then((res) => {
+          res.push({
+            expressCompanyCode: "other",
+            expressCompany: "其他"
+          });
             this.expressCompanyList = res
         }).catch(error => {
             this.visible = false
@@ -261,8 +313,16 @@ export default {
         })
         .then(res => {
           res.forEach(val => {
+            val.express = true
+            val.other = "";
+            val.checked = false;
+            val.expressNos = "";
+            val.orderAfterSaleSendInfo.expressCompanyCodes = ''
+            val.orderAfterSaleSendInfo.expressNos = ''
+            val.expressCompanyCodes = "";
               val.itemList.forEach(goods => {
                   goods.checked = false
+                  goods.sendCount = "";
               })
           })
           this.list = res;

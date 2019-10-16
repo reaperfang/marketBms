@@ -200,7 +200,7 @@ export default {
         }
       };
     })
-    this.checkExpress()
+    //this.checkExpress()
     },
     computed:{
         cid(){

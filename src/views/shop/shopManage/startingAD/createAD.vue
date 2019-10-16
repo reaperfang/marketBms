@@ -50,7 +50,7 @@
               <el-date-picker
                 v-model="ruleForm.startTime"
                 type="datetime"
-                value-format="yyyy-MM-dd HH:mm"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期">
               </el-date-picker>
             </div>
@@ -59,7 +59,7 @@
               <el-date-picker
                 v-model="ruleForm.endTime"
                 type="datetime"
-                value-format="yyyy-MM-dd HH:mm"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期">
               </el-date-picker>
             </div>

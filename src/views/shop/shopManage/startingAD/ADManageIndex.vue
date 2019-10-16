@@ -136,7 +136,7 @@ export default {
 
     /* 启用广告 */
     startAD(item) {
-      this.$confirm('确定停用此广告吗？', '提示', {
+      this.$confirm('确定启用此广告吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

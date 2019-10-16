@@ -275,21 +275,21 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-        if(datas.length > this.showNumber){
-            datas = datas.slice(0,this.showNumber);
+      if(datas.length > this.showNumber){
+        datas = datas.slice(0,this.showNumber);
+      }
+      this.list = [];
+      if(this.hideSaledGoods==true){
+        var goods = datas;
+        for(var i in datas){
+          if(goods[i].soldOut!=1){
+            this.list.push(datas[i]);
+          }
         }
-        this.list = [];
-        if(this.hideSaledGoods==true){
-            var goods = datas;
-            for(var i in datas){
-                if(goods[i].soldOut!=1){
-                    this.list.push(datas[i]);
-                }
-            }
-        }
-        else{
-            this.list = datas;
-        }
+      }
+      else{
+        this.list = datas;
+      }
     },
   }
 }
