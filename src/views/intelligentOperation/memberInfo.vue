@@ -231,7 +231,7 @@ export default {
                         name:item.name
                     })                  
                 }
-                  console.log(reviseitem)
+                //   console.log(reviseitem)
                   this.tradeCount=reviseitem;
             }).catch(error =>{
                 console.log('error',error)

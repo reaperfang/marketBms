@@ -12,13 +12,14 @@
       </div>
     </el-form>
     <el-table
-      :data="tableList"
       stripe
+      :data="tableList"
       ref="multipleTable"
+      :row-key="getRowKey"
       @selection-change="handleSelectionChange"
       v-loading="loading"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
       <el-table-column prop="goodName" label="商品标题">
         <template slot-scope="scope">
           <div class="name_wrapper">
@@ -66,6 +67,10 @@ export default {
           type: Boolean,
           required: true
       },
+      goodsEcho: {
+        type: Array,
+        required: true
+      }
   },
   data() {
     return {
@@ -88,9 +93,22 @@ export default {
       set(val) {
           this.$emit('update:dialogVisible', val)
       }
+    },
+    goodsList: {
+      get() {
+          return this.goodsEcho
+      },
+      set(val) {
+          this.$emit('update:goodsEcho', val)
+      }
     }
   },
   created() {
+    this.goodsList.forEach((row, index) => {
+      this.$nextTick(() => {
+        this.$refs.multipleTable.toggleRowSelection(row, true);
+      })
+    })
   },
   methods: {
     fetch() {
@@ -121,6 +139,12 @@ export default {
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    getRowKey(row) {
+      return row.activeId
+    }
   }
 };
 </script>

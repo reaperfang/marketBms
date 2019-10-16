@@ -52,7 +52,13 @@
                   </div>
                   <div class="col" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
-                    <el-input type="number" min="1" :max="goods.goodsCount -goods.cacheSendCount" v-model="goods.sendCount" placeholder="请输入"></el-input>
+                    <el-input
+                      type="number"
+                      min="1"
+                      :max="goods.goodsCount -goods.cacheSendCount"
+                      v-model="goods.sendCount"
+                      placeholder="请输入"
+                    ></el-input>
                   </div>
                 </div>
               </div>
@@ -74,6 +80,12 @@
                             :key="index"
                           ></el-option>
                         </el-select>
+                        <el-input
+                          style="margin-top: 5px;"
+                          v-if="item.expressCompanyCodes == 'other'"
+                          v-model="item.other"
+                          placeholder="请输入快递公司名称"
+                        ></el-input>
                       </el-form-item>
                       <el-form-item label="快递单号" prop="expressNos">
                         <el-input v-model="item.expressNos"></el-input>
@@ -147,14 +159,14 @@ export default {
   created() {
     this.getDetail();
     this.getExpressCompanyList();
-    this.checkExpress()
+    this.checkExpress();
   },
   computed: {
-        cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-            return shopInfo.id
-        }
-    },
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    }
+  },
   filters: {
     goodsSpecsFilter(value) {
       let _value;
@@ -178,7 +190,7 @@ export default {
       this._apis.order
         .checkExpress()
         .then(res => {
-          this.express = res
+          this.express = res;
         })
         .catch(error => {
           this.visible = false;
@@ -189,7 +201,7 @@ export default {
         });
     },
     deleteOrder(index) {
-      this.list.splice(index, 1)
+      this.list.splice(index, 1);
     },
     changeAll(item) {
       item.checked = !item.checked;
@@ -211,38 +223,95 @@ export default {
       try {
         let params;
 
-        if(!this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).length) {
-          this.confirm({title: '提示', icon: true, text: '请选择您要进行发货的商品'})
-                return
+        if (
+          !this.list
+            .reduce((total, val) => {
+              return total.concat(val.orderItemList);
+            }, [])
+            .filter(val => val.checked).length
+        ) {
+          this.confirm({
+            title: "提示",
+            icon: true,
+            text: "请选择您要进行发货的商品"
+          });
+          return;
         }
 
-        if(this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).some(val => !val.sendCount)) {
-          this.confirm({title: '提示', icon: true, text: '本次发货数量不能为空'})
-                return
+        if (
+          this.list
+            .reduce((total, val) => {
+              return total.concat(val.orderItemList);
+            }, [])
+            .filter(val => val.checked)
+            .some(val => !val.sendCount)
+        ) {
+          this.confirm({
+            title: "提示",
+            icon: true,
+            text: "本次发货数量不能为空"
+          });
+          return;
         }
 
-        if(this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).some(val => +val.sendCount > val.goodsCount)) {
-          this.confirm({title: '提示', icon: true, text: '本次发货数量不能大于应发数量'})
-                return
+        if (
+          this.list
+            .reduce((total, val) => {
+              return total.concat(val.orderItemList);
+            }, [])
+            .filter(val => val.checked)
+            .some(val => +val.sendCount > val.goodsCount)
+        ) {
+          this.confirm({
+            title: "提示",
+            icon: true,
+            text: "本次发货数量不能大于应发数量"
+          });
+          return;
         }
 
-        if(this.express && this.list.reduce((total, val) => {return total.concat(val.orderItemList)}, []).filter(val => val.checked).some(val => !expressNos)) {
-          this.confirm({title: '提示', icon: true, text: '快递单号不能为空'})
-                return
+        if (
+          this.list
+            .filter(val => val.expressCompanyCodes == "other")
+            .some(val => !val.other || /^\s+$/.test(val.other))
+        ) {
+          this.confirm({
+            title: "提示",
+            icon: true,
+            text: "请输入快递公司名称"
+          });
+          return;
+        }
+
+        if (
+          this.express &&
+          this.list
+            .reduce((total, val) => {
+              return total.concat(val.orderItemList);
+            }, [])
+            .filter(val => val.checked)
+            .some(val => !expressNos)
+        ) {
+          this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
+          return;
         }
 
         params = {
           sendInfoDtoList: this.list.map(item => {
             let expressCompanys = "";
             console.log(this.expressCompanyList);
-            if (
-              this.expressCompanyList.find(
-                val => val.expressCompanyCode == item.expressCompanyCodes
-              )
-            ) {
-              expressCompanys = this.expressCompanyList.find(
-                val => val.expressCompanyCode == item.expressCompanyCodes
-              ).expressCompany;
+            if (item.expressCompanyCodes == "other") {
+              expressCompanys = item.other;
+            } else {
+              if (
+                this.expressCompanyList.find(
+                  val => val.expressCompanyCode == item.expressCompanyCodes
+                )
+              ) {
+                expressCompanys = this.expressCompanyList.find(
+                  val => val.expressCompanyCode == item.expressCompanyCodes
+                ).expressCompany;
+              }
             }
 
             return {
@@ -290,20 +359,24 @@ export default {
             //     this.list.map(val => val.id).join(",") +
             //     "&type=orderBulkDelivery"
             // );
-            
+
             // this.$router.push(
             //   "/order/deliverGoodsSuccess?ids=" +
             //     res.success.map(val => val.orderInfoId).join(",") +
             //     "&type=orderBulkDelivery"
             // );
             this.$router.push({
-              path: '/order/deliverGoodsSuccess',
+              path: "/order/deliverGoodsSuccess",
               query: {
-                ids: res.success.map(val => val.expressParameter.orderSendInfo.id).join(","),
-                orderId: res.success.map(val => val.expressParameter.orderSendInfo.orderId).join(","),
-                type: 'orderBulkDelivery'
+                ids: res.success
+                  .map(val => val.expressParameter.orderSendInfo.id)
+                  .join(","),
+                orderId: res.success
+                  .map(val => val.expressParameter.orderSendInfo.orderId)
+                  .join(","),
+                type: "orderBulkDelivery"
               }
-            })
+            });
           })
           .catch(error => {
             this.$notify.error({
@@ -338,6 +411,10 @@ export default {
       this._apis.order
         .fetchExpressCompanyList()
         .then(res => {
+          // res.push({
+          //   expressCompanyCode: "other",
+          //   expressCompany: "其他"
+          // });
           this.expressCompanyList = res;
         })
         .catch(error => {
@@ -373,34 +450,35 @@ export default {
         .then(res => {
           console.log(res);
           res.forEach(val => {
+            val.other = "";
             val.checked = false;
             val.expressNos = "";
-            val.expressCompanyCodes = ''
+            val.expressCompanyCodes = "";
             val.orderItemList.forEach(goods => {
               goods.checked = false;
-              goods.sendCount = ''
+              goods.sendCount = "";
             });
           });
           res.forEach(val => {
             val.orderItemList.forEach(item => {
-              item.cacheSendCount = item.sendCount
-            })
-          })
+              item.cacheSendCount = item.sendCount;
+            });
+          });
           this.list = res;
           this._apis.order
             .fetchOrderAddress({ id: this.cid, cid: this.cid })
             .then(response => {
               this.list.forEach(res => {
-                res.sendName = response.senderName
-                res.sendPhone = response.senderPhone
-                res.sendProvinceCode = response.provinceCode
-                res.sendProvinceName = response.province
-                res.sendCityCode = response.cityCode
-                res.sendCityName = response.city
-                res.sendAreaCode = response.areaCode
-                res.sendAreaName = response.area
-                res.sendDetail = response.address
-              })
+                res.sendName = response.senderName;
+                res.sendPhone = response.senderPhone;
+                res.sendProvinceCode = response.provinceCode;
+                res.sendProvinceName = response.province;
+                res.sendCityCode = response.cityCode;
+                res.sendCityName = response.city;
+                res.sendAreaCode = response.areaCode;
+                res.sendAreaName = response.area;
+                res.sendDetail = response.address;
+              });
             })
             .catch(error => {
               this.visible = false;
