@@ -62,12 +62,12 @@
                         <el-col :span="8">
                             <el-form-item label="积分：" prop="scoreMin">
                                 <div class="input_wrap">
-                                    <el-input v-model="form.scoreMin" placeholder="最小值"></el-input>
+                                    <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number($event,form.scoreMin,'scoreMin')"></el-input>
                                 </div>
                                 <span>分</span>
                                 <span>-</span>
                                 <div class="input_wrap">
-                                    <el-input v-model="form.scoreMax" placeholder="最大值"></el-input>
+                                    <el-input v-model="form.scoreMax" placeholder="最大值" @keyup.native="number($event,form.scoreMax,'scoreMax')"></el-input>
                                 </div>
                                 <span>分</span>
                             </el-form-item>
@@ -88,12 +88,12 @@
                         <el-col :span="8">
                             <el-form-item label="购买次数：" prop="dealTimesMin">
                                 <div class="input_wrap">
-                                    <el-input v-model="form.dealTimesMin" placeholder="最小值"></el-input>
+                                    <el-input v-model="form.dealTimesMin" placeholder="最小值" @keyup.native="number($event,form.dealTimesMin,'dealTimesMin')"></el-input>
                                 </div>
                                 <span>次</span>
                                 <span>-</span>
                                 <div class="input_wrap">
-                                    <el-input v-model="form.dealTimesMax" placeholder="最大值"></el-input>
+                                    <el-input v-model="form.dealTimesMax" placeholder="最大值" @keyup.native="number($event,form.dealTimesMax,'dealTimesMax')"></el-input>
                                 </div>
                                 <span>次</span>
                             </el-form-item>
@@ -224,6 +224,12 @@ export default {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
+    number(event,val,ele) {
+        val = val.replace(/[^\.\d]/g,'');
+        val = val.replace('.','');
+        val = val.replace('0','');
+        this.form[ele] = val;
+    },
     goToSet() {
         this.$router.push({path:'/set/memberSet'});
     },

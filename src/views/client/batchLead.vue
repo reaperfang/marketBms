@@ -350,6 +350,14 @@ export default {
                     formObj.isTotalScore = this.convertUnit(formObj.isTotalScore) || 0;
                     formObj.isProduct = this.convertUnit(formObj.isProduct) || 0;
                     formObj.productInfoIds = this.selectedIds || 0;
+                    formObj.consumeTimesMin = formObj.consumeTimesMin == "" ? 0:formObj.consumeTimesMin;
+                    formObj.consumeTimesMax = formObj.consumeTimesMax == "" ? 0:formObj.consumeTimesMax;
+                    formObj.consumeMoneyMin = formObj.consumeMoneyMin == "" ? 0:formObj.consumeMoneyMin;
+                    formObj.consumeMoneyMax = formObj.consumeMoneyMax == "" ? 0:formObj.consumeMoneyMax;
+                    formObj.preUnitPriceMin = formObj.preUnitPriceMin == "" ? 0:formObj.preUnitPriceMin;
+                    formObj.preUnitPriceMax = formObj.preUnitPriceMax == "" ? 0:formObj.preUnitPriceMax;
+                    formObj.totalScoreMin = formObj.totalScoreMin == "" ? 0:formObj.totalScoreMin;
+                    formObj.totalScoreMax = formObj.totalScoreMax == "" ? 0:formObj.totalScoreMax;
                     if(this.$route.query.id) {
                         if(formObj.tagType == '0') {
                             this._apis.client.updateTag({tagType: formObj.tagType, tagName: formObj.tagName, id: this.$route.query.id}).then((response) => {
@@ -422,6 +430,7 @@ export default {
                     this.ruleForm.isPreUnitPrice = Boolean(this.ruleForm.isPreUnitPrice);
                     this.ruleForm.isTotalScore = Boolean(this.ruleForm.isTotalScore);
                     this.ruleForm.isProduct = Boolean(this.ruleForm.isProduct);
+                    this.ruleForm.consumeTimeUnit = this.ruleForm.consumeTimeUnit.toString();
                     this.selectedIds = this.ruleForm.productInfoIds;
                     if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
                         this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
