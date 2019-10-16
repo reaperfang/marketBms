@@ -259,6 +259,11 @@ export default {
                 return
             }
 
+            if(this.multipleSelection.some(val => val.isKDBird === null)) {
+                this.confirm({title: '提示', icon: true, text: '不支持打印电子面单。'})
+                return
+            }
+
             let ids = this.multipleSelection.map(val => val.orderId).join(',')
 
             this.$router.push('/order/printingElectronicForm?ids=' + ids)

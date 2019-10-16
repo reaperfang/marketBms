@@ -114,6 +114,10 @@ export default {
       }else if(this.radio == 1 && this.remarks){
          this.$emit("handleSubmit",datas);
       }else{
+        this.$notify.error({
+          title: '错误',
+          message: '审核未完成，未填写拒绝原因！'
+        });
         return false
       }      
     },

@@ -227,6 +227,7 @@ export default {
         param:JSON.stringify(param)
       }
       this._apis.set.updateShopPayInfo(query).then(response =>{
+        this.updateWechatBinding()
         this.$notify.success({
           title: '成功',
           message: '保存成功！'
@@ -281,10 +282,7 @@ export default {
         wechatBinding:1
       }
       this._apis.set.updateShopInfo(query).then(response =>{
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
