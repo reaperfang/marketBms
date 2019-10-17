@@ -177,7 +177,7 @@
                 <div class="col" style="margin-right: 50px;">
                     <div class="row">
                         <div class="col">
-                            应退积分：
+                            应退还积分：
                         </div>
                         <div class="col">
                             {{orderAfterSale.shouldReturnScore}}
@@ -193,7 +193,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            应退余额：
+                            应退还余额：
                         </div>
                         <div class="col">
                             {{orderAfterSale.shouldReturnBalance}}
@@ -201,7 +201,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            剩余退还余额：
+                            应退还第三方支付：
                         </div>
                         <div class="col">
                             {{orderAfterSale.shouldReturnWalletMoney}}
@@ -252,7 +252,7 @@
                 <div class="col">
                     <div class="row align-center">
                         <div class="col">
-                            退还积分：
+                            实退积分：
                         </div>
                         <div class="col">
                             <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
@@ -270,7 +270,7 @@
                     </div>
                     <div class="row align-center">
                         <div class="col">
-                            退还余额：
+                            实退余额：
                         </div>
                         <div class="col">
                             {{orderAfterSale.realReturnBalance || 0}}
@@ -278,7 +278,7 @@
                     </div>
                     <div class="row align-center">
                         <div class="col">
-                            剩余退还余额：
+                            实退第三方支付：
                         </div>
                         <div class="col">
                             {{orderAfterSale.realReturnWalletMoney}}

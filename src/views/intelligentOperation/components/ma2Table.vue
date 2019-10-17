@@ -14,26 +14,36 @@
       <el-table-column
         prop="id"
         label="ID">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id ? scope.row.id : '-'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
-        label="会员类型">
+        label="客户类型">
         <template slot-scope="scope">
-             <span style="line-height:60px;display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
+            <span  v-if="scope.row.memberType" style="line-height:60px;display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
+            <span v-else> - </span>
         </template>
       </el-table-column>
       <el-table-column
         prop="name"
         label="会员昵称">
+        <template slot-scope="scope">
+          <span>{{ scope.row.name ? scope.row.name : '-'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="phone"
         label="手机号">
+        <template slot-scope="scope">
+          <span>{{ scope.row.phone ? scope.row.phone : '-'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         label="维权时间"
         width="150">
         <template slot-scope="scope">
-          <span>{{Number(scope.row.tradeTime) | time}}</span>
+          <span>{{scope.row.tradeTime && Number(scope.row.tradeTime) | time}}</span>
         </template>
       </el-table-column>
       <el-table-column

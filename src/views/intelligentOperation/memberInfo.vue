@@ -71,7 +71,7 @@
             <div class="m_line clearfix">
                 <p class="fl">该筛选条件下：
                     <i v-if="form.memberType== null" style="font-style:normal">
-                        全部会员共计<span>{{customerCount + newMemberCount + oldMemberCount || 0}}</span>人；
+                        全部会员共计<span>{{newMemberCount + oldMemberCount || 0}}</span>人；
                         占客户总数的<span>{{allRatio}}%</span>;    
                     </i>
                     <i v-if="form.memberType==0" style="font-style:normal">

@@ -42,13 +42,13 @@
                                    <el-option label="5%以上" value="3"></el-option>
                                 </el-select>
                             </div>
-                            <span class="span_label">会员类型</span>
+                            <span class="span_label">客户类型</span>
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.memberType">
                                     <el-option label="全部" value="null"></el-option>
-                                    <el-option label="非会员" value="1"></el-option>
-                                    <el-option label="新会员" value="2"></el-option>
-                                    <el-option label="老会员" value="3"></el-option>
+                                    <el-option label="非会员" value="0"></el-option>
+                                    <el-option label="新会员" value="1"></el-option>
+                                    <el-option label="老会员" value="2"></el-option>
                                 </el-select>
                             </div>
                             <el-button class="minor_btn" icon="el-icon-search" @click="getEvaluation()">查询</el-button>
