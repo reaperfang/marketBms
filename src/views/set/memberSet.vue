@@ -60,7 +60,7 @@ export default {
               oldMemberSet:this.form.oldMemberSet
             }
             this._apis.set.updateShopInfo(data).then(response =>{
-              this.$notify.error({
+              this.$notify.success({
                 title: '成功',
                 message: '保存成功！'
               });

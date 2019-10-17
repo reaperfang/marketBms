@@ -312,6 +312,8 @@ export default {
                   }
                 }
                 this.selectedInfos = this.currentData.info;
+              }else{
+                this.conInfos = ["完善手机号","姓名"];
               }
               if (
                 v.levelConditionId ==

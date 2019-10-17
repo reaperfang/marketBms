@@ -227,6 +227,10 @@ export default {
                 this.$set(this.rules, "expressNos", [
                     { required: true, message: "请输入快递单号", trigger: "blur" }
                 ]);
+            } else {
+                this.$set(this.rules, "expressNos", [
+                { required: false, message: "请输入快递单号", trigger: "blur" }
+              ]);
             }
             })
             .catch(error => {
@@ -310,7 +314,14 @@ export default {
                             message: '发货成功',
                             type: 'success'
                         });
-                        this.$router.push('/order/deliverGoodsSuccess?id=' + this.$route.query.id + '&type=orderAfterDeliverGoods')
+                        this.$router.push({
+                            path: '/order/deliverGoodsSuccess',
+                            query: {
+                                id: this.$route.query.id,
+                                type: 'orderAfterDeliverGoods',
+                                print: this.express
+                            }
+                        })
                     }).catch(error => {
                         this.$notify.error({
                             title: '错误',
