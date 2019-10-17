@@ -28,12 +28,12 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right">
         <el-form-item label="等级称谓：" prop="name">
           <div class="input_wrap">
-            <el-input v-model="ruleForm.name" placeholder="请输入等级名称，比如普通会员"></el-input>
+            <el-input v-model="ruleForm.name" placeholder="请输入等级名称，比如普通会员" :maxLength="15"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="等级说明：">
           <div class="input_wrap">
-            <el-input v-model="ruleForm.explain" placeholder="请输入等级描述"></el-input>
+            <el-input v-model="ruleForm.explain" placeholder="请输入等级描述" :maxLength="25"></el-input>
           </div>
         </el-form-item>
         <div class="line"></div>
@@ -216,8 +216,11 @@ export default {
         hobby: false
       },
       disabled1: false,
-      conInfos: ["绑定手机号", "姓名"],
-      canSubmit: true
+      conInfos: [],
+      canSubmit: true,
+      mapCondition: {
+        "birthday": "生日", "area": "地区", "gender": "性别", "name": "姓名", "email": "邮箱", "hobby": "爱好", "phone":"绑定手机号"
+      }
     };
   },
   computed: {
@@ -303,6 +306,11 @@ export default {
               ) {
                 this.condition1 = true;
                 this.currentData.info = JSON.parse(v.conditionValue);
+                for(let i in this.currentData.info) {
+                  if(this.currentData.info[i] == true) {
+                    this.conInfos.push(this.mapCondition[i]);
+                  }
+                }
                 this.selectedInfos = this.currentData.info;
               }
               if (
