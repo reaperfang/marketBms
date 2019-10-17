@@ -194,7 +194,7 @@ export default {
         },
         // 导出
         exportExl(){
-            this._apis.data.exportOfrights(this.form).then(response => {
+            this._apis.data.evaluationExport(this.form).then(response => {
                 window.open(response);
             })
         },
