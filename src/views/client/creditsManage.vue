@@ -12,11 +12,11 @@
                                 <el-radio v-model="ruleForm.scoreToCash" label="1" @change="openScoreToCash">开启</el-radio><br>
                                 <span>抵现比例：</span>
                                 <div style="width: 140px; display: inline-block">
-                                    <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage"></el-input>
+                                    <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
                                 </div>
                                 <span>积分</span>
                                 <div style="width: 54px; display: inline-block">
-                                    <el-input v-model="ruleForm.scorePercentageMoney"></el-input>
+                                    <el-input v-model="ruleForm.scorePercentageMoney" :disabled="true"></el-input>
                                 </div>
                                 <span>元</span>
                             </div>
@@ -33,7 +33,7 @@
                             <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px"></el-checkbox>
                             <span class="marL105">最高可抵现订单金额的</span>
                             <div style="width: 222px; display: inline-block; margin-left: 20px">
-                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderRate"></el-input>
+                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderRate" @blur="checkPersent($event,ruleForm.scoreToCashOrderRate,'scoreToCashOrderRate')"></el-input>
                             </div>
                             <span>%</span>
                         </el-form-item>
@@ -87,7 +87,7 @@ export default {
                 //抵现比例 积分
                 scorePercentage:"",
                 //抵现比例 元
-                scorePercentageMoney:"",
+                scorePercentageMoney:"1",
                 //积分抵现条件：是否选择积分满
                 scoreEnableOrderAchieveCash:"",
                 //积分抵现条件：是否选择最高可抵现
@@ -104,6 +104,19 @@ export default {
         }
     },
     methods: {
+        checkZero(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace('0','');
+            this.ruleForm[ele] = val;
+        },
+        checkPersent(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace('0','');
+            if(val == "100") {
+                val == "";
+            }
+            this.ruleForm[ele] = val;
+        },
         openScoreToCash(val) {
             if(val == '1') {
                 this.ruleForm.scorePercentageMoney = 1

@@ -65,9 +65,8 @@
                     <div class="input_wrap" v-if="nearDay == 4">
                         <el-date-picker
                             v-model="range"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="选择日期"
+                            type="month"
+                            placeholder="选择月份"
                             :picker-options="pickerOptions"
                             @change="changeTime">
                         </el-date-picker>

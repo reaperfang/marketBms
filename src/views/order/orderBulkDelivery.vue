@@ -312,7 +312,7 @@ export default {
         }
 
         params = {
-          sendInfoDtoList: this.list.map(item => {
+          sendInfoDtoList: this.list.filter(val => val.checked).map(item => {
             let expressCompanys = "";
             console.log(this.expressCompanyList);
             if (item.expressCompanyCodes == "other") {
@@ -380,6 +380,8 @@ export default {
             //     res.success.map(val => val.orderInfoId).join(",") +
             //     "&type=orderBulkDelivery"
             // );
+            let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
+
             this.$router.push({
               path: "/order/deliverGoodsSuccess",
               query: {
@@ -389,7 +391,8 @@ export default {
                 orderId: res.success
                   .map(val => val.expressParameter.orderSendInfo.orderId)
                   .join(","),
-                type: "orderBulkDelivery"
+                type: "orderBulkDelivery",
+                printIds
               }
             });
           })

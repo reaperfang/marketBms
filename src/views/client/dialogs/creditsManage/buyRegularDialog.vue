@@ -21,11 +21,11 @@
           <div v-if="distinguish == '0'">
             <span>每消费</span>
             <div class="input_wrap">
-              <el-input v-model="payAmount1"></el-input>
+              <el-input v-model="payAmount1" :disabled="true"></el-input>
             </div>
             <span>元 获得</span>
             <div class="input_wrap">
-              <el-input v-model="allMember"></el-input>
+              <el-input v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')" :maxLength="10"></el-input>
             </div>
             <span>积分</span>
           </div>
@@ -130,7 +130,7 @@ export default {
       productLabelName: "",
       name: "",
       skuList: [],
-      payAmount1: "",
+      payAmount1: "1",
       payAmount: "",
       allMember: "",
       noMember: "",
@@ -145,6 +145,11 @@ export default {
     };
   },
   methods: {
+    checkZero(event,val,ele) {
+      val = val.replace(/[^\d]/g,'');
+      val = val.replace('0','');
+      this[ele] = val;
+    },
     getRowKeys(row) {
       return row.id
     },

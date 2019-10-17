@@ -11,7 +11,8 @@
                 </template>
                 <template v-else-if="$route.query.type == 'orderBulkDelivery'">
                     批量发货成功，您可以到订单详情页 
-                    <router-link :to="{ path: '/order/printingElectronicForm', query: {ids: this.$route.query.orderId} }">打印电子面单</router-link> 或 
+                    <router-link v-if="orderBulkDeliveryPrintIds && orderBulkDeliveryPrintIds.split(',') && orderBulkDeliveryPrintIds.split(',').length" :to="{ path: '/order/printingElectronicForm', query: {ids: orderBulkDeliveryPrintIds} }">打印电子面单</router-link> 
+                    <span v-if="orderBulkDeliveryPrintIds && orderBulkDeliveryPrintIds.split(',') && orderBulkDeliveryPrintIds.split(',').length">或</span> 
                     <router-link :to="{ path: '/order/printDistributionSheet', query: {ids: this.$route.query.ids} }">打印配送单</router-link>
                 </template>
                 <template v-else-if="$route.query.type == 'orderAfterDeliverGoods'">
@@ -48,6 +49,27 @@ export default {
 
         }
     },
+    computed: {
+        orderBulkDeliveryPrintIds() {
+            let returnIds = this.$route.query.orderId
+            let printIds = this.$route.query.printIds
+            let returnIdsArr = returnIds.split(',')
+            let printIdsArr = printIds.split(',')
+
+            let _printIds = ''
+
+            for(let i=0; i<returnIdsArr.length; i++) {
+                let returnId = returnIdsArr[i]
+
+                if(!printIdsArr.find(printId => printId == returnId)) {
+                    returnIdsArr.splice(i, 1)
+                    i--
+                }
+            }
+
+            return returnIdsArr.join(',')
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
