@@ -61,7 +61,7 @@
                     <p>待处理</p>
                     <p class="des">客户发货，商户未确认收货，未退款</p>
                     <div class="button-box">
-                        <el-button @click="confirmTakeOver">确认收货</el-button>
+                        <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                         <el-button type="primary" @click="drawback(orderAfterSale.id)">退款</el-button>
                     </div>
                 </div>

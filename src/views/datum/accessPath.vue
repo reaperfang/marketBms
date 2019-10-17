@@ -71,11 +71,11 @@
             <p :title="'访问率为'+(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'}}
             </p>
-            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[3]*100).toFixed(2)+ '%'">
-              {{(dataObj.orderUvPathTransformation[3]*100).toFixed(2)+ '%'}}
+            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[3]*10).toFixed(2)+ '%'">
+              {{(dataObj.orderUvPathTransformation[3]*10).toFixed(2)+ '%'}}
             </p>
-            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'">
-              {{(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'}}
+            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[4]*10).toFixed(2)+ '%'">
+              {{(dataObj.orderUvPathTransformation[4]*10).toFixed(2)+ '%'}}
             </p>
             <p :title="'访问率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'}}
@@ -95,8 +95,8 @@
           </div>
         </div>
          <div class="p_top1">
-              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
-                {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
+              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[1]*10).toFixed(2)+ '%'">
+                {{(dataObj.payOrderPathTransformation[1]*10).toFixed(2)+ '%'}}
               </p>
               <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}

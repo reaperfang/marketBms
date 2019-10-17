@@ -35,11 +35,7 @@
                     <span class="span_label">交易次数</span>
                     <div class="input_wrap2 marR20">
                         <el-select v-model="form.tradeCountRange"  @change="getData">
-                            <!-- <el-option v-for="item in tradeCount" :label="item.name" :value="item.value" :key="item.id">/> -->
-                            <el-option label="1次" value="1"></el-option>
-                            <el-option label="2-5次" value="2"></el-option>
-                            <el-option label="6-8次" value="3"></el-option>
-                            <el-option label="8次以上" value="4"></el-option>
+                            <el-option v-for="item in tradeCount" :label="item.name" :value="item.value" :key="item.id">/></el-option>
                         </el-select>
                     </div>
                     <el-checkbox-group v-model="form.queryRepeatPaymentRatio" style="display:inline-block">

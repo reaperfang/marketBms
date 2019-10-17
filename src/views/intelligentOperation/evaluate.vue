@@ -56,6 +56,9 @@
                         </el-form-item>
                     </el-form>
                     <div class="m_line clearfix">
+                        <p class="fl">该筛选条件下：其中订单总计<span>{{listObj.orderCount}}</span>比，商品总计<span>{{listObj.goodsCount}}</span>个，满意商品数共计<span>{{listObj.niceGoodsCount}}</span>个、满意率<span>{{(listObj.niceGoodsRatio*100).toFixed(2)}}%</span>；差评商品数共计<span>{{listObj.badGoodsCount}}</span>个，差评率<span>{{(listObj.badGoodsRatio*100).toFixed(2)}}</span>%</p>
+                    </div>
+                    <div class="m_line clearfix">
                         <div class="fr marT20">
                             <el-button class="minor_btn" @click="rescreen()">重新筛选</el-button>
                             <el-tooltip content="当前最多支持导出1000条数据" placement="top">

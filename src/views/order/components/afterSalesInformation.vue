@@ -204,7 +204,7 @@
                             应退还第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnWalletMoney}}
+                            {{orderAfterSale.shouldReturnWalletMoney || 0}}
                         </div>
                     </div>
                     <!-- <div class="row">
@@ -281,7 +281,7 @@
                             实退第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnWalletMoney}}
+                            {{orderAfterSale.realReturnWalletMoney || 0}}
                         </div>
                     </div>
                 </div>
