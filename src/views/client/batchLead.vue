@@ -29,7 +29,7 @@
                 <el-form-item>
                     <el-radio v-model="ruleForm.consumeTimeType" label="0" @change="handleCheck5">最近</el-radio>
                     <div class="input_wrap3">
-                        <el-input v-model="ruleForm.consumeTimeValue"></el-input>
+                        <el-input v-model="ruleForm.consumeTimeValue" @keyup.native="checkZero($event,ruleForm.consumeTimeValue,'consumeTimeValue')"></el-input>
                     </div>
                     <div class="input_wrap2">
                         <el-select v-model="ruleForm.consumeTimeUnit" placeholder="请选择">
@@ -57,44 +57,44 @@
                 <el-form-item>
                     <el-checkbox v-model="ruleForm.isTotalConsumeTimes" @change="handleCheck1">累计消费次数</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMin" @keyup.native="checkZero($event,ruleForm.consumeTimesMin,'consumeTimesMin')"></el-input>
                     </div>
                     <span>次 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMax" @keyup.native="checkZero($event,ruleForm.consumeTimesMax,'consumeTimesMax')"></el-input>
                     </div>
                     <span>次</span>
                 </el-form-item>
                 <el-form-item>
                     <el-checkbox v-model="ruleForm.isTotalConsumeMoney" @change="handleCheck2">累计消费金额</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMin" @keyup.native="checkZero($event,ruleForm.consumeMoneyMin,'consumeMoneyMin')"></el-input>
                     </div>
                     <span>元 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMax" @keyup.native="checkZero($event,ruleForm.consumeMoneyMax,'consumeMoneyMax')"></el-input>
                     </div>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item>
                     <el-checkbox v-model="ruleForm.isPreUnitPrice" @change="handleCheck3">客单价</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMin" @keyup.native="checkZero($event,ruleForm.preUnitPriceMin,'preUnitPriceMin')"></el-input>
                     </div>
                     <span>元 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMax" @keyup.native="checkZero($event,ruleForm.preUnitPriceMax,'preUnitPriceMax')"></el-input>
                     </div>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="资产条件：">
                     <el-checkbox v-model="ruleForm.isTotalScore" @change="handleCheck4">累计获得积分</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMin" @keyup.native="checkZero($event,ruleForm.totalScoreMin,'totalScoreMin')"></el-input>
                     </div>
                     <span>分 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMax" @keyup.native="checkZero($event,ruleForm.totalScoreMax,'totalScoreMax')"></el-input>
                     </div>
                     <span>分</span>
                 </el-form-item>
@@ -171,6 +171,11 @@ export default {
         }
     },
     methods: {
+        checkZero(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/^0/g,'');
+            this.ruleForm[ele] = val;
+        },
         handleCheck1(val) {
             if(!val) {
                 this.ruleForm.consumeTimesMin = "";

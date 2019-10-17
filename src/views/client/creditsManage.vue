@@ -106,12 +106,12 @@ export default {
     methods: {
         checkZero(event,val,ele) {
             val = val.replace(/[^\d]/g,'');
-            val = val.replace('0','');
+            val = val.replace(/^0/g,'');
             this.ruleForm[ele] = val;
         },
         checkPersent(event,val,ele) {
             val = val.replace(/[^\d]/g,'');
-            val = val.replace('0','');
+            val = val.replace(/^0/g,'');
             if(val == "100") {
                 val == "";
             }

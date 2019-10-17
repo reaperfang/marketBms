@@ -103,28 +103,18 @@ export default {
       margin:0px 10px 10px 0px;
       cursor: pointer;
       display:inline-block;
-        span{
-          width: 123px;
-          height:35px;
-          line-height: 25px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          padding:10px;
-          display: block;
-          font-size: 14px;
-          color: #FFFFFF;
-        }
-
-      // span{
-      //   padding:10px;
-      //   height: 30px;
-      //   line-height: 30px;
-      //   display: block;
-      //   font-size: 14px;
-      //   color: #FFFFFF;
-      //   text-align: left;
-      // }
+      span{
+        width: 123px;
+        height:35px;
+        line-height: 25px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding:10px;
+        display: block;
+        font-size: 14px;
+        color: #FFFFFF;
+      }
     }
   }
 }
@@ -137,20 +127,4 @@ export default {
 .dialog_title a:hover{
   text-decoration: underline;
 }
-// .shopItem{
-//   cursor: pointer;
-//   width:200px;
-//   span{
-//      width: 100%;
-//      height:35px;
-//      line-height: 35px;
-//      overflow: hidden;
-//      white-space: nowrap;
-//      text-overflow: ellipsis;
-//      padding:10px;
-//      display: block;
-//      font-size: 14px;
-//      color: #FFFFFF;
-//   }
-// }
 </style>
