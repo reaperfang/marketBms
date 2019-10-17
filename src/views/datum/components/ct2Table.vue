@@ -80,6 +80,11 @@ export default {
     };
   },
   created() { },
+  watch:{
+    listObj(newValue,oldValue){
+      return newValue
+    }
+  },
   methods: {
     handleCurrentChange(val){
       this.$emit('getProductDetails',val,this.pageSize)

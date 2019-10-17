@@ -264,6 +264,7 @@ export default {
         this.nearDay2 = val;
         this.startTime2 = "";
         this.endTime2 = "";
+        this.date2 = ''
         this.getPaymentTrend();
       }
     },
