@@ -17,7 +17,7 @@
               <div class="col">
                 <div class="row align-center">
                   <div class="col reviews-image">
-                    <img :src="customerReviews.url" alt />
+                    <img width="66" :src="orderProductComment.goodsImage" alt />
                   </div>
                   <div class="col">
                     <div class="goods-name">
@@ -40,13 +40,24 @@
                 <p>{{orderProductComment.content}}</p>
                 <div class="row">
                   <div class="col">
-                    <img
-                      width="66"
-                      :src="item"
-                      alt
-                      v-for="(item, index) in orderProductComment.images"
-                      :key="index"
-                    />
+                    <template v-for="(item, index) in orderProductComment.images">
+                      <template v-if="/\.mp4|\.ogg$/.test(item)">
+                        <video width="66" controls="controls">
+                          <source :src="item" type="video/ogg">
+                          <source :src="item" type="video/mp4">
+                        Your browser does not support the video tag.
+                        </video>
+                      </template>
+                      <template v-else>
+                        <img
+                        width="66"
+                        :src="item"
+                        alt
+                        v-for="(item, index) in orderProductComment.images"
+                        :key="index"
+                      />
+                      </template>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -198,6 +209,13 @@ export default {
         })
     },
     replyComment() {
+      if(!this.textarea) {
+          this.$message({
+          message: '回复不能为空',
+          type: 'warning'
+        });
+        return
+        }
         if(this.textarea.length > 200) {
           this.$message({
           message: '回复字符不能超过200',
