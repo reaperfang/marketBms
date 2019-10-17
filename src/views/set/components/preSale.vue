@@ -11,7 +11,17 @@
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
                 :min="0" 
-                :max="24">
+                :max="24"
+                v-if="form.acuoType == 1">
+                </el-input-number>
+                <el-input-number 
+                v-model="form.autoCancelUnpayOrder" 
+                controls-position="right" 
+                style="width:260px;" 
+                placeholder="当前未启动该功能，输入数值即生效"
+                :min="0" 
+                :max="60"
+                v-else>
                 </el-input-number>
                 <el-select 
                 v-model="form.acuoType" 
@@ -86,7 +96,17 @@
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
                 :min="0" 
-                :max="60">
+                :max="24"
+                v-if="form.oasType == 1">
+                </el-input-number>
+                <el-input-number 
+                v-model="form.orderAutoSend" 
+                controls-position="right" 
+                style="width:260px;" 
+                placeholder="当前未启动该功能，输入数值即生效"
+                :min="0" 
+                :max="60"
+                v-else>
                 </el-input-number>
                 <el-select 
                 v-model="form.oasType" 
@@ -193,7 +213,7 @@ export default {
               oasType:this.form.oasType
             }
             this._apis.set.updateShopInfo(data).then(response =>{
-              this.$notify.error({
+              this.$notify.success({
                 title: '成功',
                 message: '保存成功！'
               });
