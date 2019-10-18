@@ -37,11 +37,12 @@
                         <span class="span_label">（成功）支付转化率</span>
                         <div class="input_wrap2 marR20">
                             <el-select v-model="form.changeRatioRange" @change="changeTime">
-                                <el-option label="0-1%" value="1"></el-option>
+                                <el-option v-for="item in productiveness" :label="item.name" :value="item.value" :key="item.id"></el-option>
+                                <!-- <el-option label="0-1%" value="1"></el-option>
                                 <el-option label="1-3%" value="2"></el-option>
                                 <el-option label="3-5%" value="3"></el-option>
                                 <el-option label="5-10%" value="4"></el-option>
-                                <el-option label="10%以上" value="5"></el-option>
+                                <el-option label="10%以上" value="5"></el-option> -->
                             </el-select>
                         </div>
                     </el-form-item>
@@ -199,6 +200,7 @@ export default {
             }).catch(error =>{
                 console.log('error',error)
             })
+              this.goSearch();
         },
         //查看详情
         showDetails(){

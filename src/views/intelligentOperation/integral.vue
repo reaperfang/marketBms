@@ -28,10 +28,7 @@
                 <el-form-item label="消耗次数">
                     <div class="input_wrap2">
                         <el-select v-model="form.scorePaymentCountRange" @change="getData">
-                           <el-option label="1-5次" value="1"></el-option>
-                           <el-option label="5-10次" value="2"></el-option>
-                           <el-option label="10-15次" value="3"></el-option>
-                           <el-option label="15次以上" value="4"></el-option>
+                            <el-option v-for="item in consumTimes" :label="item.name" :value="item.value" :key="item.id"></el-option>
                         </el-select>
                     </div>
                 </el-form-item>
@@ -158,6 +155,7 @@ export default {
         //查询
         goSearch(){
             let memberType = this.form.memberType;
+            let scorePaymentCountRange = this.form.scorePaymentCountRange;
             this.form.scorePaymentCountRange == 'null' && (this.form.scorePaymentCountRange = null)
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
@@ -193,6 +191,7 @@ export default {
                       })
                   }
                   this.consumTimes = pages;
+                  this.form.scorePaymentCountRange = value
                 // console.log('res',res)
             }).catch(error =>{
                 console.log('error',error)
@@ -222,7 +221,6 @@ export default {
             data.startTime = this.form.startTime
             data.endTime = this.form.endTime
             data.scorePaymentCountRange = this.form.scorePaymentCountRange
-            data.queryRepeatPaymentRatio = this.form.queryRepeatPaymentRatio
             data.memberType = this.form.memberType            
             data.timeType = this.form.timeType
             this._apis.data.integralConsumptionExport(data)
