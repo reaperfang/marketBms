@@ -72,7 +72,8 @@
                                 v-for="item in productLabelList"
                                 :key="item.id"
                                 :label="item.name"
-                                :value="item.id">
+                                :value="item.id"
+                                :disabled="item.enable == 0">
                             </el-option>
                         </el-select>
                     </div>

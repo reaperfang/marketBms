@@ -73,7 +73,7 @@
           <el-form-item style="margin-left: 87px" v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1">
             <el-checkbox v-model="right2" @change="handleCheck1">积分回馈倍率</el-checkbox>
             <div class="input_wrap3">
-              <el-input placeholder="请输入数字" v-model="jfhkbl"></el-input>
+              <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')"></el-input>
             </div>
             <span>倍</span>
             <span class="gray">(当前积分兑换率：1元1积分)</span>
@@ -96,7 +96,7 @@
           <el-checkbox v-model="upgrade1" @change="handleCheck2">赠送积分</el-checkbox>
           <span>送</span>
           <div class="input_wrap3">
-            <el-input placeholder="填写数字" v-model="zsjf"></el-input>
+            <el-input placeholder="填写数字" v-model="zsjf" @keyup.native="checkZero($event, zsjf,'zsjf')"></el-input>
           </div>
           <span>积分</span>
         </el-form-item>
@@ -250,6 +250,11 @@ export default {
     }
   },
   methods: {
+    checkZero(event,val,ele) {
+      val = val.replace(/[^\d.]/g,'');
+      val = val.replace(/^0/g,'');
+      this[ele] = val;
+    },
     handleCheck1(val) {
       if(!val) {
         this.jfhkbl = "";

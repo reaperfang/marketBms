@@ -4,21 +4,21 @@
             <div class="c_line" v-if="getIndex(data.conditionList,'消费金额满') !== -1">
                 <el-radio v-model="condition1" label="消费金额满">消费金额满：</el-radio>
                 <div class="input_wrap">
-                    <el-input placeholder="请输入数字" v-model="xfjem"></el-input>
+                    <el-input placeholder="请输入数字" v-model="xfjem" @keyup.native="checkZero($event,xfjem,'xfjem')"></el-input>
                 </div>
                 <span>元</span>
             </div>
             <div class="c_line" v-if="getIndex(data.conditionList,'消费次数满') !== -1">
                 <el-radio v-model="condition1" label="消费次数满">消费次数满：</el-radio>
                 <div class="input_wrap">
-                    <el-input placeholder="请输入数字" v-model="xfcsm"></el-input>
+                    <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZero($event,xfcsm,'xfcsm')"></el-input>
                 </div>
                 <span>次</span>
             </div>
             <div class="c_line" v-if="getIndex(data.conditionList,'积分获得满') !== -1">
                 <el-radio v-model="condition1" label="积分获得满">积分获得满：</el-radio>
                 <div class="input_wrap">
-                    <el-input placeholder="请输入数字" v-model="jfhdm"></el-input>
+                    <el-input placeholder="请输入数字" v-model="jfhdm" @keyup.native="checkZero($event,jfhdm,'jfhdm')"></el-input>
                 </div>
                 <span>分</span>
             </div>
@@ -41,6 +41,11 @@ export default {
         }
     },
     methods: {
+        checkZero(event,val,ele) {
+            val = val.replace(/[^\d.]/g,'');
+            val = val.replace(/^0/g,'');
+            this[ele] = val;
+        },
         submit() {
             if(this.condition1) {
                 let params = {};

@@ -5,7 +5,7 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
                 <el-form-item label="标签名称：" prop="tagName">
                     <div class="input_wrap">
-                        <el-input v-model="ruleForm.tagName" placeholder="请输入标签名称" :maxLength="6" @blur="doubleCheck"></el-input>
+                        <el-input v-model="ruleForm.tagName" placeholder="请输入标签名称" :maxLength="6"></el-input>
                     </div>
                 </el-form-item>
                 <el-form-item label="标签类型：" prop="tagType">
@@ -107,7 +107,7 @@
             </el-form>
         </div>
         <div class="btn_cont">
-            <el-button type="primary" @click="saveLabel" v-permission="['客户', '客户标签', '默认页面', '保存']">保 存</el-button>
+            <el-button type="primary" @click="doubleCheck" v-permission="['客户', '客户标签', '默认页面', '保存']">保 存</el-button>
             <el-button @click="_routeTo('clientLabel')">取 消</el-button>
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @getSelected="getSelected"></component>
@@ -167,12 +167,13 @@ export default {
             dialogVisible: false,
             currentData:{},
             selectedIds: "",
-            canSubmit: true
+            canSubmit: true,
+            isRepeat: ""
         }
     },
     methods: {
         checkZero(event,val,ele) {
-            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/[^\d.]/g,'');
             val = val.replace(/^0/g,'');
             this.ruleForm[ele] = val;
         },
@@ -226,18 +227,19 @@ export default {
             }
         },
         doubleCheck() {
-            this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
-                if(!response) {
-                    this.ruleForm.tagName = ""
-                    this.$notify({
-                        title: '警告',
-                        message: '此标签名已存在',
-                        type: 'warning'
-                    });
-                }
-            }).catch((error) => {
-                console.log(error);
-            })
+            if(this.ruleForm.tagName !== "") {
+                this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
+                    this.saveLabel(response);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }else{
+                this.$notify({
+                    title: '警告',
+                    message: '标签名称不能为空',
+                    type: 'warning'
+                });
+            }
         },
         chooseProduct() {
             this.dialogVisible = true;
@@ -258,11 +260,11 @@ export default {
             let v = Number(val);
             return Math.floor(v) === v;
         },
-        saveLabel() {
-            if(this.ruleForm.tagName == "") {
+        saveLabel(isRepeat) {
+            if(!isRepeat) {
                 this.$notify({
                     title: '警告',
-                    message: '标签名称不能为空',
+                    message: '标签名不能重复',
                     type: 'warning'
                 });
             }else{

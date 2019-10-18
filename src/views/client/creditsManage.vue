@@ -25,7 +25,7 @@
                             <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash"></el-checkbox>
                             <span class="marR50">订单满</span>
                             <div style="width: 222px; display: inline-block">
-                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderMoney"></el-input>
+                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderMoney" @keyup.native="checkZero($event,ruleForm.scoreToCashOrderMoney,'scoreToCashOrderMoney')"></el-input>
                             </div>
                             <span>元</span>
                         </el-form-item>
@@ -33,7 +33,7 @@
                             <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px"></el-checkbox>
                             <span class="marL105">最高可抵现订单金额的</span>
                             <div style="width: 222px; display: inline-block; margin-left: 20px">
-                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderRate" @blur="checkPersent($event,ruleForm.scoreToCashOrderRate,'scoreToCashOrderRate')"></el-input>
+                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderRate" @keyup.native="checkPersent($event,ruleForm.scoreToCashOrderRate,'scoreToCashOrderRate')"></el-input>
                             </div>
                             <span>%</span>
                         </el-form-item>
@@ -105,16 +105,14 @@ export default {
     },
     methods: {
         checkZero(event,val,ele) {
-            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/[^\d.]/g,'');
             val = val.replace(/^0/g,'');
             this.ruleForm[ele] = val;
         },
         checkPersent(event,val,ele) {
-            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/[^\d.]/g,'');
             val = val.replace(/^0/g,'');
-            if(val == "100") {
-                val == "";
-            }
+            val = val.replace(/^100/g,'');
             this.ruleForm[ele] = val;
         },
         openScoreToCash(val) {
@@ -140,6 +138,7 @@ export default {
                         message: '保存积分规则成功',
                         type: 'success'
                     });
+                    this.checkCreditRule();
                 }).catch((error) => {
                     console.log(error);
                 })

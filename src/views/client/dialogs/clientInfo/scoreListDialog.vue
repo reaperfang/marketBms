@@ -56,6 +56,7 @@ export default {
               new Date(Number(v.createTime)),
               "yyyy-MM-dd hh:mm:ss"
             );
+            v.changeScore = v.changeScore > 0?"+" + v.changeScore:v.changeScore;
           });
             this.scoreList = [].concat(list);
             this.total = response.total;
