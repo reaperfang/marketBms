@@ -29,7 +29,7 @@
         <div class="goods_list">
           <ul>
             <li v-for="(item, key) of list" :key="key">
-              <img :src="item.member" alt="">
+              <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
@@ -41,7 +41,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="list"></component>
   </el-form>
 </template>
 
@@ -92,9 +92,10 @@ export default {
         if(componentData) {
           if(Array.isArray(componentData.ids) && componentData.ids.length){
             this.loading = true;
-            this._apis.order.getBuyNotice({
-                    productIds: componentData.ids,
-                }).then((response)=>{
+            this._apis.goods.fetchAllSpuGoodsList({
+                status: '1',
+                ids: componentData.ids,
+            }).then((response)=>{
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
@@ -106,6 +107,20 @@ export default {
                 this.list = [];
                 this.loading = false;
             });
+            // this._apis.order.getBuyNotice({
+            //         productIds: componentData.ids,
+            //     }).then((response)=>{
+            //     this.createList(response);
+            //     this.loading = false;
+            // }).catch((error)=>{
+            //     // this.$notify.error({
+            //     //     title: '错误',
+            //     //     message: error
+            //     // });
+            //     console.error(error);
+            //     this.list = [];
+            //     this.loading = false;
+            // });
           }else{
             this.list = [];
           }

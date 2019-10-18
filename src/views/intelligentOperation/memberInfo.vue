@@ -225,7 +225,6 @@ export default {
                     endTime:null
                 });
             }
-            console.log(this.form)
         },
 
         //获取交易次数
@@ -239,7 +238,6 @@ export default {
                         name:item.name
                     })                  
                 }
-                //   console.log(reviseitem)
                   this.tradeCount=reviseitem;
             }).catch(error =>{
                 console.log('error',error)

@@ -41,6 +41,7 @@
       @dialogDataSelected="dialogDataSelected"
       :categoryId="currentCategory.id"
       :categoryName="currentCategory.categoryName"
+      :goodsEcho.sync="list"
     ></component>
   </DialogBase>
 </template>
@@ -58,7 +59,8 @@ export default {
     dialogVisible: {
       type: Boolean,
       required: true
-    }
+    },
+    seletedGroupInfo: []
   },
   data() {
     return {
@@ -79,7 +81,8 @@ export default {
       dialogVisible2: false, //子弹窗是否显示
       currentDialog: "", //当前弹窗
       currentCategory: {}, //当前选中的分类
-      resultData: {} //生成的结果数据
+      resultData: {}, //生成的结果数据
+      seletedGroupGoodsLengths: {}  //已选中的商品分类里的商品个数
     };
   },
   computed: {
@@ -93,6 +96,7 @@ export default {
     }
   },
   created() {
+    this.convertGoodsLengths();
     this.fetch();
   },
   methods: {
@@ -115,6 +119,15 @@ export default {
           console.error(error);
           this.loading = false;
         });
+    },
+
+    //转换商品个数
+    convertGoodsLengths() {
+      if(this.seletedGroupInfo) {
+        for(let k in this.seletedGroupInfo) {
+          this.seletedGroupGoodsLengths[k] = this.seletedGroupInfo[k].length;
+        }
+      }
     },
 
     transTreeData(data, pid) {
@@ -175,7 +188,7 @@ export default {
            <img class="td img" src={data.image}/>
            {data.categoryName}
            </span>
-          <span class="td state">{data.goods ? data.goods.length : 0}</span>
+          <span class="td state">{(this.seletedGroupGoodsLengths ? this.seletedGroupGoodsLengths[data.id] : data.goods.length) || 0}</span>
           <span class="td operate">
             {
               <span class="blue" on-click={() => this.change(node, data)}>
@@ -189,8 +202,11 @@ export default {
 
     change(node, data) {
       this.currentCategory = data;
-      this.currentDialog = "dialogSelectGoods";
-      this.dialogVisible2 = true;
+      this.fetchSelectedGoods((list) => {
+        this.list = list;
+        this.currentDialog = "dialogSelectGoods";
+        this.dialogVisible2 = true;
+      });
     },
 
     /* 向父组件提交选中的数据 */
@@ -207,6 +223,7 @@ export default {
       for (let item of this.responseData) {
         if (this.currentCategory.id === item.id) {
           item["goods"] = items;
+          this.seletedGroupGoodsLengths[item.id] = items.length;
         }
       }
       this.categoryData = this.transTreeData(this.responseData, 0);
@@ -217,7 +234,28 @@ export default {
         goods: items
       };
       this.currentDialog = "";
-    }
+    },
+
+    //拉取点击选中的分类下的商品
+    fetchSelectedGoods(callback) {
+      this.loading = true;
+      if(this.seletedGroupInfo[this.currentCategory.id] && this.seletedGroupInfo[this.currentCategory.id].length) {
+        this._apis.goods.fetchAllSpuGoodsList({
+            status: '1',
+            ids: this.seletedGroupInfo[this.currentCategory.id],
+            productCatalogInfoId: this.currentCategory.id
+        }).then((response)=>{
+            callback && callback(response);
+            this.loading = false;
+        }).catch((error)=>{
+            callback && callback(false);
+            this.loading = false;
+        });
+      }else{
+        callback([]);
+        this.loading = false;
+      }
+    },
   }
 };
 </script>

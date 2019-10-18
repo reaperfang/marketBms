@@ -11,7 +11,7 @@
         </el-form-item>
       </div>
     </el-form>
-    <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+    <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :row-key="getRowKey">
         <el-table-column
           type="selection"
           :selectable="itemSelectable"
@@ -74,6 +74,10 @@ export default {
           type: Boolean,
           required: true
       },
+      goodsEcho: {
+        type: Array,
+        required: true
+      }
   },
   data() {
     return {
@@ -97,9 +101,22 @@ export default {
       set(val) {
           this.$emit('update:dialogVisible', val)
       }
+    },
+    goodsList: {
+      get() {
+          return this.goodsEcho
+      },
+      set(val) {
+          this.$emit('update:goodsEcho', val)
+      }
     }
   },
   created() {
+    this.goodsList.forEach((row, index) => {
+      this.$nextTick(() => {
+        this.$refs.multipleTable.toggleRowSelection(row, true);
+      })
+    })
   },
   methods: {
     fetch() {
@@ -135,6 +152,10 @@ export default {
       if(row.status !== 2) {
         return true;
       }
+    },
+
+    getRowKey(row) {
+      return row.id
     }
   }
 };
