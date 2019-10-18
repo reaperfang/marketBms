@@ -82,7 +82,7 @@ export default {
       rules: {
         shopName: [
           { required: true, message: '请输入商户名称', trigger: 'blur' },
-          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
         ],
         phone:[
           { required: true, message: '请输入联系电话', trigger: 'blur' },
