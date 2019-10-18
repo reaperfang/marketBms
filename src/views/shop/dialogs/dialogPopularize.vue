@@ -10,8 +10,8 @@
         <div class="preview poster" v-if="shareStyle == 1">
           <div class="one">
             <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
-            <h3>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</h3>
-            <p>{{currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe || '页面描述'}}</p>
+            <h3>{{(currentType === 'h5'?ruleFormH5.title:ruleFormMini.title) || '分享标题'}}</h3>
+            <p>{{(currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe) || '分享描述'}}</p>
           </div>
           <div class="two">
             <div class="left">
@@ -55,7 +55,7 @@
               <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
               <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading">下载二维码</el-button>
             </div>
-            <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="70px" v-if="openSetting">
+            <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="80px" v-if="openSetting">
               <el-form-item label="分享样式" prop="shareStyle">
                 <el-radio-group v-model="shareStyle">
                   <el-radio :label="1">海报</el-radio>
@@ -75,7 +75,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
-                  placeholder="请输入分享标题，最多10字"
+                  placeholder="请输入分享描述，最多10字"
                   v-model="ruleFormH5.describe">
                 </el-input>
               </el-form-item>
@@ -101,7 +101,7 @@
               <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
               <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">下载小程序码</el-button>
             </div>
-            <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="70px" v-if="openSetting">
+            <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="80px" v-if="openSetting">
               <el-form-item label="分享样式" prop="shareStyle">
                 <el-radio-group v-model="shareStyle">
                   <el-radio :label="1">海报</el-radio>
@@ -186,49 +186,59 @@ export default {
         type: '0',
         title: '',
         describe: '',
-        picture: require("../../../assets/images/logo.png")
+        picture: ''
       },
       ruleFormMini: {
         pageInfoId: this.pageId,
         type: '0',
         title: '',
         describe: '',
-        picture: require("../../../assets/images/logo.png")
+        picture: ''
       },
       rulesH5: {
         title: [
+          { required: true, message: "请输入内容", trigger: "blur" },
           {
-            min: 0,
+            min: 1,
             max: 10,
-            message: "长度在 0 到 10 个字符",
+            message: "长度在 1 到 10 个字符",
             trigger: "blur"
           }
         ],
         describe: [
+          { required: true, message: "请输入内容", trigger: "blur" },
           {
-            min: 0,
+            min: 1,
             max: 12,
-            message: "长度在 0 到 12 个字符",
+            message: "长度在 1 到 12 个字符",
             trigger: "blur"
           }
+        ],
+        picture: [
+          { required: true, message: "请选择logo", trigger: "change" }
         ]
       },
       rulesMini: {
         title: [
+          { required: true, message: "请输入内容", trigger: "blur" },
           {
-            min: 0,
+            min: 1,
             max: 10,
-            message: "长度在 0 到 10 个字符",
+            message: "长度在 1 到 10 个字符",
             trigger: "blur"
           }
         ],
         describe: [
+          { required: true, message: "请输入内容", trigger: "blur" },
           {
-            min: 0,
+            min: 1,
             max: 12,
-            message: "长度在 0 到 12 个字符",
+            message: "长度在 1 到 12 个字符",
             trigger: "blur"
           }
+        ],
+        picture: [
+          { required: true, message: "请选择logo", trigger: "change" }
         ]
       },
       qrCode: '',
@@ -240,6 +250,14 @@ export default {
   watch: {
     currentType(newValue) {
       this.fetch();
+    },
+    shopInfo:{
+      handler(newValue) {
+        this.ruleFormH5.picture = this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo;
+        this.ruleFormMini.picture = this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo;
+        this.getQrcode();
+      },
+      deep: true
     }
   },
   computed: {
@@ -258,7 +276,7 @@ export default {
   created() {
     this.fetch();
     this.$store.dispatch('getShopInfo');
-    // this.getQrcode();
+    this.getQrcode();
   },
   methods: {
 
@@ -373,19 +391,24 @@ export default {
       });
     },
 
-    /* 新页签打开二维码 */
+    /* 打开二维码 */
     openQrcode(codeType) {
       const _self = this;
       this.getQrcode(codeType, (url) =>{
-        // _self.download(`data:image/png;base64,${url}`, '二维码');
-        const img = new Image();
-        img.style.cssText = 'margin:200px auto 0;display: block;';
-        img.src = `data:image/png;base64,${url}`;
-        const newWin = window.open("", "_blank");
-        newWin.document.write(img.outerHTML);
-        newWin.document.title = "二维码"
-        newWin.document.close();
+        _self.download(url, '二维码'); // 下载二维码
+        // _self.openQrCodeInNewWindow(url);
       });
+    },
+
+    //新窗口打开二维码
+    openQrCodeInNewWindow(url) {
+      const img = new Image();
+      img.style.cssText = 'margin:200px auto 0;display: block;';
+      img.src = `data:image/png;base64,${url}`;
+      const newWin = window.open("", "_blank");
+      newWin.document.write(img.outerHTML);
+      newWin.document.title = "二维码"
+      newWin.document.close();
     },
 
     /* 获取二维码 */
@@ -399,8 +422,7 @@ export default {
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         this.openQrcodeLoading = false;
-        this.download(response, '二维码'); // 下载二维码
-        // callback && callback(response); // 打开二维码
+        callback && callback(response); // 打开二维码
       }).catch((error)=>{
         this.openQrcodeLoading = false;
         this.$message({ message: error, type: 'error' });
@@ -460,7 +482,7 @@ export default {
           display: block;
           height: 200px;
           border: 1px solid #ddd;
-          border-radius: 100px;
+          // border-radius: 100px;
           // object-fit: contain;
         }
         h3{

@@ -119,12 +119,12 @@ export default {
                 },
                 disabledDate: (time) => {
                     if (this.pickerMinDate !== '') {
-                    const day90 = (90 - 1) * 24 * 3600 * 1000
-                    let maxTime = this.pickerMinDate + day90
-                    if (maxTime > new Date()) {
-                        maxTime = new Date()- 8.64e7
-                    }
-                    return time.getTime() > maxTime
+                        const day90 = (90 - 1) * 24 * 3600 * 1000
+                        let maxTime = this.pickerMinDate + day90
+                        if (maxTime > new Date()) {
+                            maxTime = new Date()- 8.64e7
+                        }
+                        return time.getTime() > maxTime
                     }
                     return time.getTime() > Date.now() - 8.64e7
                 }

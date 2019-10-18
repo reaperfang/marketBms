@@ -7,6 +7,7 @@
       <div class="shop_code">
         <h3>店铺手机预览</h3>
         <h4>使用微信扫描二维码，预览店铺效果</h4>
+        <!-- {{this.homePageData.shareUrl.replace("&","[^]")}} -->
         <div class="qrcode_wrapper">
           <img :src="qrCode" alt="">
         </div>
