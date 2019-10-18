@@ -196,9 +196,9 @@ export default {
     },
     computed:{
         allRatio(){
-            if(this.customerRatio && this.newMemberRatio && this.oldMemberRatio){
-                if((this.customerRatio*100 + this.newMemberRatio*100 + this.oldMemberRatio*100) != 0){
-                    return (this.customerRatio*100 + this.newMemberRatio*100 + this.oldMemberRatio*100).toFixed(2)
+            if(this.newMemberRatio && this.oldMemberRatio){
+                if((this.newMemberRatio*100 + this.oldMemberRatio*100) != 0){
+                    return (this.newMemberRatio*100 + this.oldMemberRatio*100).toFixed(2)
                 }
             }else{
                 return 0
