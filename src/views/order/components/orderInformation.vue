@@ -131,8 +131,15 @@
                 <div class="row">
                     <div class="col">优惠券金额:</div>
                     <div class="col">
-                        ¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
-                        <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList}; dialogVisible = true" class="coupon-img"></i>
+                        -¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
+                        <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true}; dialogVisible = true" class="coupon-img"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">优惠码金额:</div>
+                    <div class="col">
+                        -¥{{orderDetail.orderInfo.consumeCouponCodeMoney || '0.00'}}
+                        <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false}; dialogVisible = true" class="coupon-img"></i>
                     </div>
                 </div>
                 <template v-if="orderDetail.orderInfo.activityListJson">

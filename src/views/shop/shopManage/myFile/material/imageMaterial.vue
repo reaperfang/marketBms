@@ -264,7 +264,9 @@ export default {
             this.uploadImage(data.uploadImage.query)
           break;
           case 'imageTailor':
-            this.getList()
+            setTimeout(() =>{
+              this.getList()
+            },1000)
           break;
         }
       }

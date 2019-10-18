@@ -1,32 +1,36 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="使用的优惠券/优惠码" width="346px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="346px" :showFooter="showFooter">
         <div class="coupon-box" v-show="data.usedCouponList.concat(data.usedPromotionList).length">
-            <div class="coupon" v-for="(item, index) in data.usedCouponList" :key="index">
-                <div class="item lefter">
-                    <p>{{item.couponMoney}}</p>
-                    <p>元</p>
-                </div>
-                <div class="item righter">
-                    <p>{{item.couponName}}</p>
-                    <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
-                </div>
-            </div>
-            
-            <div class="coupon-code" v-for="(item, index) in data.usedPromotionList" :key="index">
-                <div class="coupon-code-header">优惠码 {{item.promotionCodeId}}</div>
-                <div class="coupon">
+            <template v-if="data.coupon">
+                <div class="coupon" v-for="(item, index) in data.usedCouponList" :key="index">
                     <div class="item lefter">
-                        <p>{{item.promotionCodeMoney}}</p>
+                        <p>{{item.couponMoney}}</p>
                         <p>元</p>
                     </div>
                     <div class="item righter">
-                        <p>{{item.promotionCodeName}}</p>
+                        <p>{{item.couponName}}</p>
                         <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
                     </div>
                 </div>
-            </div>
+                <Empty v-show="!data.usedCouponList.length"></Empty>
+            </template>
+            <template v-else>
+                <div class="coupon-code" v-for="(item, index) in data.usedPromotionList" :key="index">
+                    <div class="coupon-code-header">优惠码 {{item.promotionCodeId}}</div>
+                    <div class="coupon">
+                        <div class="item lefter">
+                            <p>{{item.promotionCodeMoney}}</p>
+                            <p>元</p>
+                        </div>
+                        <div class="item righter">
+                            <p>{{item.promotionCodeName}}</p>
+                            <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
+                        </div>
+                    </div>
+                </div>
+                <Empty v-show="!data.usedPromotionList.length"></Empty>
+            </template>
         </div>
-        <Empty v-show="!data.usedCouponList.concat(data.usedPromotionList).length"></Empty>
     </DialogBase>
 </template>
 <script>
@@ -65,6 +69,13 @@ export default {
         },
         contentText() {
             return '是否确认删除？'
+        },
+        title() {
+            if(this.coupon) {
+                return '使用的优惠券'
+            } else {
+                return '使用的优惠码'
+            }
         }
     },
     props: {
