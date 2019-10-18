@@ -33,8 +33,8 @@ export default {
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             this.cid = shopInfo && shopInfo.id || ''
-            if(this.$route.params.paths){
-                this.path = this.$route.params.paths
+            if(this.$route.query.paths){
+                this.path = this.$route.query.paths
             }else{
                 this.path = window.localStorage.getItem('marketing_router_path') || this.defultPath;
             }
