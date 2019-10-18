@@ -33,7 +33,7 @@
             <div class="marB10">
               <span>每消费&nbsp;&nbsp;&nbsp;</span>
               <div class="input_wrap2" style="margin-left:14px">
-                <el-input placeholder="请输入整数" v-model="payAmount"></el-input>
+                <el-input placeholder="请输入整数" v-model="payAmount" :disabled="true"></el-input>
               </div>
               <span>元 获得</span>
             </div>
@@ -131,7 +131,7 @@ export default {
       name: "",
       skuList: [],
       payAmount1: "1",
-      payAmount: "",
+      payAmount: "1",
       allMember: "",
       noMember: "",
       newMember: "",
@@ -166,8 +166,7 @@ export default {
     submit() {
       let params;
       if (this.enable) {
-        if(this.distinguish == '0') {
-          params = { 
+        params = { 
             id: this.data.row.id,
             enable: this.enable,
             sceneRule: {
@@ -179,26 +178,6 @@ export default {
                 allMember: this.allMember
               },
               yesDistinguish: {
-                payAmount: "",
-                noMember: "",
-                newMember: "",
-                oldMember: ""
-              }
-            }
-          };
-        }else{
-          params = { 
-            id: this.data.row.id,
-            enable: this.enable,
-            sceneRule: {
-              isAllProduct: this.isAllProduct == "0" ? true : false,
-              selectProducts: this.selectProducts,
-              distinguish: this.distinguish == "0" ? false : true,
-              noDistinguish: {
-                payAmount: "",
-                allMember: ""
-              },
-              yesDistinguish: {
                 payAmount: this.payAmount,
                 noMember: this.noMember,
                 newMember: this.newMember,
@@ -206,7 +185,6 @@ export default {
               }
             }
           };
-        }
       }else{
         params = {
           id: this.data.row.id,
@@ -220,7 +198,6 @@ export default {
           type: "warning"
         });
       } else {
-        console.log('params' + JSON.stringify(params));
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
@@ -340,12 +317,12 @@ export default {
         this.enable = row.enable == '启用' ? true:false;
         this.isAllProduct = sceneRule.isAllProduct ? "0" : "1";
         this.distinguish = sceneRule.distinguish ? "1" : "0";
-        this.payAmount1 = sceneRule.noDistinguish.payAmount;
+        //this.payAmount1 = sceneRule.noDistinguish.payAmount;
         this.allMember = sceneRule.noDistinguish.allMember;
         this.oldMember = sceneRule.yesDistinguish.oldMember;
         this.newMember = sceneRule.yesDistinguish.newMember;
         this.noMember = sceneRule.yesDistinguish.noMember;
-        this.payAmount = sceneRule.yesDistinguish.payAmount;
+        //this.payAmount = sceneRule.yesDistinguish.payAmount;
       }
     }
   },

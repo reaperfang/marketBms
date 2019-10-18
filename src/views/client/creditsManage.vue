@@ -62,7 +62,7 @@
                     <span class="marR20">积分获取上限</span>
                     <span>每日最高获得：</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch"></el-input>
+                        <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch" @keyup.native="checkZero($event,ruleForm.scoreUpperCount,'scoreUpperCount')"></el-input>
                     </div>
                     <span>积分</span>
                     <el-button type="primary" class="marL20" v-if="isSwitch" @click="save2">保存</el-button>
@@ -104,6 +104,11 @@ export default {
         }
     },
     methods: {
+        checkZero(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/^0/g,'');
+            this.ruleForm[ele] = val;
+        },
         checkZero(event,val,ele) {
             val = val.replace(/[^\d.]/g,'');
             val = val.replace(/^0/g,'');

@@ -268,6 +268,7 @@ export default {
                     type: 'warning'
                 });
             }else{
+                console.log(1);
                 this.canSubmit = true;
                 if(this.ruleForm.consumeTimeType == "0") {
                     if(!this.isInteger(this.ruleForm.consumeTimeValue)) {

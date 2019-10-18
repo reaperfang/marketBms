@@ -360,6 +360,7 @@ export default {
             couponArr = [];
           if (this.ruleForm.upgradeRewardList) {
             this.ruleForm.upgradeRewardList.map(v => {
+              console.log(v);
               if (
                 v.upgradeRewardInfoId == this.getId(this.rewardList, "赠送积分")
               ) {
@@ -370,7 +371,7 @@ export default {
                 v.upgradeRewardInfoId == this.getId(this.rewardList, "赠送红包")
               ) {
                 this.upgrade2 = true;
-                this.selectedReds.push({ name: v.giftName, id: v.giftProduct });
+                this.selectedReds.push({ name: v.giftName, id: v.giftProduct,  });
                 redArr.push(v.giftProduct);
               }
               if (
@@ -726,6 +727,7 @@ export default {
             delete v.label;
           });
           let upgradeRewardList = [];
+          let upgradePackage = "";
           if (this.upgrade1) {
             if (this.zsjf == "") {
               this.$notify({
@@ -743,6 +745,7 @@ export default {
               params5.giftNumber = this.zsjf;
               params5.label = "赠送积分";
               upgradeRewardList.push(params5);
+              upgradePackage = upgradePackage + "赠送" + this.zsjf + "个积分,";
             }
           }
           if (this.upgrade2) {
@@ -764,10 +767,12 @@ export default {
                 obj.giftName = v.name;
                 obj.label = "赠送红包";
                 upgradeRewardList.push(obj);
+                upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
               });
             }
           }
           if (this.upgrade3) {
+            let zpNum = 0;
             if (this.selectedGifts.length == 0) {
               this.$notify({
                 title: "警告",
@@ -787,10 +792,13 @@ export default {
                 obj.label = "赠送赠品";
                 obj.giftNumber = v.number;
                 upgradeRewardList.push(obj);
+                zpNum = zpNum + v.number;
               });
+              upgradePackage = upgradePackage + "赠送" + zpNum + "个赠品,";
             }
           }
           if (this.upgrade4) {
+            var yhzNum = 0;
             if (this.selectedCoupons.length == 0) {
               this.$notify({
                 title: "警告",
@@ -810,18 +818,20 @@ export default {
                 obj.giftNumber = v.number;
                 obj.label = "赠送优惠券";
                 upgradeRewardList.push(obj);
+                yhzNum = yhzNum + v.number;
               });
+              upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
             }
           }
-          let upgradePackage = "";
-          let upgradeArr = [];
-          upgradeRewardList.map(v => {
-            if (upgradeArr.indexOf(v.label) == -1) {
-              upgradeArr.push(v.label);
-              upgradePackage += "" + v.label + ",";
-            }
-          });
-          upgradePackage = upgradePackage.replace(/undefined/g, "");
+          // let upgradePackage = "";
+          // let upgradeArr = [];
+          // upgradeRewardList.map(v => {
+          //   if (upgradeArr.indexOf(v.label) == -1) {
+          //     upgradeArr.push(v.label);
+          //     upgradePackage += "" + v.label + ",";
+          //   }
+          // });
+          // upgradePackage = upgradePackage.replace(/undefined/g, "");
           upgradeRewardList.map(v => {
             if (v.label) {
               delete v.label;

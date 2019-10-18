@@ -73,7 +73,7 @@
           <el-form-item style="margin-left: 87px" v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1">
             <el-checkbox v-model="right2" @change="handleCheck1">积分回馈倍率</el-checkbox>
             <div class="input_wrap3">
-              <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')"></el-input>
+              <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
             </div>
             <span>倍</span>
             <span class="gray">(当前积分兑换率：1元1积分)</span>
@@ -555,7 +555,7 @@ export default {
           formObj.alias = this.ruleForm.alias;
           formObj.level = this.ruleForm.level;
           formObj.name = this.ruleForm.name;
-          formObj.enable = this.ruleForm.enable;
+          formObj.enable = 0;
           formObj.backgroundType = this.ruleForm.backgroundType;
           formObj.receiveSetting = this.ruleForm.receiveSetting;
           formObj.isSyncWechat = this.ruleForm.isSyncWechat;
