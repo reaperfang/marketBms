@@ -180,7 +180,7 @@ export default {
                 this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
                 return
             }
-            if(this.multipleSelection.some(val => val.status != 3)) {
+            if(this.multipleSelection.some(val => val.status != 2)) {
             this.confirm({title: '提示', icon: true, text: '请选择待发货的售后单'})
                 return
             }

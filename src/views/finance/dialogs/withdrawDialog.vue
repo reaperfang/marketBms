@@ -1,7 +1,7 @@
 /*批量审核 */
 <template>
 <div>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提现审核" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" :showFooter="false" title="提现审核" :hasCancel="hasCancel">
         <div class="c_container">
             <div class="marB20">
                 <el-radio v-model="radio" label="0">同意申请</el-radio>
@@ -11,9 +11,14 @@
                 type="textarea"
                 :rows="4"
                 placeholder="请输入拒绝原因，不超过20个字"
-                v-model="remarks">
+                v-model="remarks"
+                @blur="checkNull">
             </el-input>
-            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="radio == 1 && !remarks">请输入拒绝原因</p>
+            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="note">请输入拒绝原因</p>
+            <p style="text-align:center; margin-top:10px;">
+               <el-button type="primary"  @click="submit">确定</el-button>
+                <el-button @click="cancel">取消</el-button> 
+            </p>
         </div>
     </DialogBase>
     <el-dialog
@@ -46,7 +51,8 @@ export default {
             remarks:"",
             otherVisible: false,
             currentDialog: "",
-            currentData:{}
+            currentData:{},
+            note:false
         }
     },
     props: {
@@ -71,6 +77,11 @@ export default {
             }
         }
     },
+    watch:{
+        radio(){
+            this.radio == 0 && (this.note = false)
+        }
+    },
     created() {
         
     },
@@ -89,6 +100,15 @@ export default {
                 return false
             }
         },
+        cancel(){
+            this.$emit("fetch");
+            this.visible = false
+        },
+        checkNull(){
+            if(this.radio == 1 && this.remarks == ''){
+                this.note = true
+            }
+        }
     },    
 }
 </script>

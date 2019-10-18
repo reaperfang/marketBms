@@ -209,14 +209,23 @@ export default {
         })
     },
     replyComment() {
-      if(!this.textarea) {
+      let replaced = this.textarea.replace(/<[^>]*>|<\/[^>]*>/gm, "")
+
+      if(!replaced) {
           this.$message({
           message: '回复不能为空',
           type: 'warning'
         });
         return
         }
-        if(this.textarea.length > 200) {
+        if(/^\s+$/.test(replaced)) {
+          this.$message({
+          message: '回复不能为空字符',
+          type: 'warning'
+        });
+        return
+        }
+        if(replaced.length > 200) {
           this.$message({
           message: '回复字符不能超过200',
           type: 'warning'

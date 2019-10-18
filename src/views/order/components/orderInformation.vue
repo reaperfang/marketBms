@@ -135,10 +135,12 @@
                         <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList}; dialogVisible = true" class="coupon-img"></i>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">满减/满折:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountMoney || '0.00'}}</div>
-                </div>
+                <template v-if="orderDetail.orderInfo.activityListJson">
+                    <div class="row" v-for="(item, index) in JSON.parse(orderDetail.orderInfo.activityListJson)" :key="index">
+                        <div class="col">{{item.name}}:</div>
+                        <div class="col">- ¥{{item.reduceMoney || '0.00'}}</div>
+                    </div>
+                </template>
                 <div class="row">
                     <div class="col">会员折扣:</div>
                     <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney || '0.00'}}</div>

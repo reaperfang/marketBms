@@ -206,9 +206,35 @@ export default {
             } else {
                 return false
             }
-        }
+        },
+        cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    }
     },
     methods: {
+        fetchOrderAddress() {
+      this._apis.order
+        .fetchOrderAddress({ id: this.cid, cid: this.cid })
+        .then(res => {
+          this.orderAfterSaleSendInfo.sendName = res.senderName;
+          this.orderAfterSaleSendInfo.sendPhone = res.senderPhone;
+          this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
+          this.orderAfterSaleSendInfo.sendProvinceName = res.province;
+          this.orderAfterSaleSendInfo.sendCityCode = res.cityCode;
+          this.orderAfterSaleSendInfo.sendCityName = res.city;
+          this.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
+          this.orderAfterSaleSendInfo.sendAreaName = res.area;
+          this.orderAfterSaleSendInfo.sendDetail = res.address;
+        })
+        .catch(error => {
+          this.visible = false;
+          this.$notify.error({
+            title: "错误",
+            message: error
+          });
+        });
+    },
         checkExpress() {
         let expressName
 
@@ -357,6 +383,7 @@ export default {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.id]}).then((res) => {
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
+                this.fetchOrderAddress();
             }).catch(error => {
                 this.$notify.error({
                     title: '错误',
