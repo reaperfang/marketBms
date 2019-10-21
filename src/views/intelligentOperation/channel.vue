@@ -101,7 +101,7 @@ export default {
                     if (maxTime > new Date()) {
                         maxTime = new Date() - 8.64e7
                     }
-                    return time.getTime() > maxTime
+                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
                     }
                     return time.getTime() > Date.now()
                 }
@@ -134,7 +134,6 @@ export default {
         changeTime(val){
             this.form.startTime = val[0]
             this.form.endTime = val[1]
-            console.log(this.form)
         },
         //查询
         goSearch(){
@@ -142,7 +141,7 @@ export default {
             this.form.changeRatioRange == 'null' && (this.form.changeRatioRange = null)
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
-                console.log(response)
+                // console.log(response)
             })
         },
         // 重置
@@ -194,8 +193,6 @@ export default {
                         name:item.name
                     })                   
                 }
-                // console.log('res',res);
-                // console.log(vipcake);
                 this.productiveness = vipcake
             }).catch(error =>{
                 console.log('error',error)
