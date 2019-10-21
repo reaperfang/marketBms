@@ -360,7 +360,6 @@ export default {
             couponArr = [];
           if (this.ruleForm.upgradeRewardList) {
             this.ruleForm.upgradeRewardList.map(v => {
-              console.log(v);
               if (
                 v.upgradeRewardInfoId == this.getId(this.rewardList, "赠送积分")
               ) {
@@ -683,6 +682,7 @@ export default {
             "[object Object]",
             ""
           );
+          receiveConditionsRemarks = receiveConditionsRemarks.substring(0,receiveConditionsRemarks.length - 1);
           levelConditionList.map(v => {
             delete v.label;
           });
@@ -723,6 +723,7 @@ export default {
           rightsList.map(v => {
             rights += "" + v.label + v.rightsValue + ",";
           });
+          rights = rights.substring(0, rights.length - 1);
           rightsList.map(v => {
             delete v.label;
           });

@@ -114,7 +114,7 @@ export default {
                 onPick: ({ maxDate, minDate }) => {
                     this.pickerMinDate = minDate.getTime()
                     if (maxDate) {
-                    this.pickerMinDate = ''
+                        this.pickerMinDate = ''
                     }
                 },
                 disabledDate: (time) => {
@@ -124,7 +124,7 @@ export default {
                         if (maxTime > new Date()) {
                             maxTime = new Date()- 8.64e7
                         }
-                        return time.getTime() > maxTime
+                        return time.getTime() > maxTime && time.getTime() == this.pickerMinDate
                     }
                     return time.getTime() > Date.now() - 8.64e7
                 }

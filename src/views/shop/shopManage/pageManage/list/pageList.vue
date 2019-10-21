@@ -49,7 +49,7 @@
         </el-table-column>
         <el-table-column prop="name" label="页面名称">
           <template slot-scope="scope">
-            {{scope.row.name}} 
+            <span class="page_name" @click="_routeTo('decoratePreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
             <span class="index_page_flag" v-if="scope.row.isHomePage == 1">首页</span>
           </template>
         </el-table-column>
@@ -313,5 +313,11 @@ export default {
   padding:0px 5px;
   border:1px solid rgba(182,130,255,1);
   font-size:12px;
+}
+.page_name{
+  cursor: pointer;
+  &:hover{
+    color: $globalMainColor;
+  }
 }
 </style>

@@ -45,7 +45,11 @@
           type="selection"  
           width="30">
         </el-table-column>
-        <el-table-column prop="name" label="页面名称"></el-table-column>
+        <el-table-column prop="name" label="页面名称">
+           <template slot-scope="scope">
+            <span class="page_name" @click="_routeTo('decoratePreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="title" label="页面标题"></el-table-column>
         <el-table-column prop="pageCategoryName" label="所属分类">
           <template slot-scope="scope">
@@ -318,5 +322,11 @@ export default {
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
   color:#837DFF!important;
+}
+.page_name{
+  cursor: pointer;
+  &:hover{
+    color: $globalMainColor;
+  }
 }
 </style>

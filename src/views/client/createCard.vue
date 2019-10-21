@@ -642,10 +642,12 @@ export default {
             rights += "" + v.label + v.rightsValue + ",";
           });
           rights = rights.replace(/undefined/g, "");
+          rights = rights.substring(0, rights.length - 1);
           rightsDtoList.map(v => {
             delete v.label;
           });
           let upgradeRewardDtoList = [];
+          let upgradePackage = "";
           if (this.upgrade1) {
             if (this.zsjf == "") {
               this.$notify({
@@ -664,6 +666,7 @@ export default {
               upgradeParams1.giftNumber = this.zsjf;
               upgradeParams1.label = "赠送积分";
               upgradeRewardDtoList.push(upgradeParams1);
+              upgradePackage = upgradePackage + "赠送" + this.zsjf + "个积分,";
             }
           }
           if (this.upgrade2) {
@@ -687,10 +690,12 @@ export default {
                 obj.giftNumber = 1;
                 obj.label = "赠送红包";
                 upgradeRewardDtoList.push(obj);
+                upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
               });
             }
           }
           if (this.upgrade3) {
+            let zpNum = 0;
             if (this.selectedGifts.length == 0) {
               this.$notify({
                 title: "警告",
@@ -710,11 +715,14 @@ export default {
                 obj.giftName = v.goodsName;
                 obj.label = "赠送赠品";
                 obj.giftNumber = v.number;
+                zpNum = zpNum + v.number;
                 upgradeRewardDtoList.push(obj);
               });
+              upgradePackage = upgradePackage + "赠送" + zpNum + "个赠品,";
             }
           }
           if (this.upgrade4) {
+            var yhzNum = 0;
             if (this.selectedCoupons.length == 0) {
               this.$notify({
                 title: "警告",
@@ -732,21 +740,23 @@ export default {
                 obj.giftProduct = v.id;
                 obj.levelType = 1;
                 obj.giftNumber = v.number;
+                yhzNum = yhzNum + v.number;
                 obj.giftName = v.name;
                 obj.label = "赠送优惠券";
                 upgradeRewardDtoList.push(obj);
               });
+              upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
             }
           }
-          let upgradePackage = "";
-          let upgradeArr = [];
-          upgradeRewardDtoList.map(v => {
-            if (upgradeArr.indexOf(v.label) == -1) {
-              upgradeArr.push(v.label);
-              upgradePackage += "" + v.label + ",";
-            }
-          });
-          upgradePackage = upgradePackage.replace(/undefined/g, "");
+          // let upgradePackage = "";
+          // let upgradeArr = [];
+          // upgradeRewardDtoList.map(v => {
+          //   if (upgradeArr.indexOf(v.label) == -1) {
+          //     upgradeArr.push(v.label);
+          //     upgradePackage += "" + v.label + ",";
+          //   }
+          // });
+          // upgradePackage = upgradePackage.replace(/undefined/g, "");
           upgradeRewardDtoList.map(v => {
             if (v.label) {
               delete v.label;

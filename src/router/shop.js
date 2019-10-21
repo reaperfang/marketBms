@@ -92,6 +92,20 @@ export default [
 				meta: { title: "创建图文素材", noCache: true },
 				hidden: true
 			},
+			{
+				path: "decoratePreview",
+				component: () => import("@/views/shop/shopManage/decoratePreview"),
+				name: "decoratePreview",
+				meta: { title: "页面装修预览", noCache: true },
+				hidden: true
+			},
+			{
+				path: "decorateClassifyPreview",
+				component: () => import("@/views/shop/shopManage/decorateClassifyPreview"),
+				name: "decorateClassifyPreview",
+				meta: { title: "分类装修预览", noCache: true },
+				hidden: true
+			},
 		]
 	}
 ];

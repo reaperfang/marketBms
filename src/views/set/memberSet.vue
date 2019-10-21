@@ -7,6 +7,7 @@
                 <el-input-number 
                 v-model="form.oldMemberSet" 
                 :min="1" 
+                :precision="0"
                 style="width:200px;" 
                 label="请输入阿拉伯数字进行设置">
                 </el-input-number>

@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="table">
-      <p>广告（28个）</p>
+      <p>广告（{{total || 0}}个）</p>
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"  

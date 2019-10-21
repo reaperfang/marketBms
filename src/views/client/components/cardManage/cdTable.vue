@@ -32,9 +32,14 @@
       >
       </el-table-column>
       <el-table-column
-        prop="upgradePackage"
         label="升级礼包"
       >
+        <template slot-scope="scope">
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[0]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[1]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[2]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[3]:''}}</p>
+        </template>
       </el-table-column>
       <el-table-column
         prop="validity"

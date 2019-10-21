@@ -1,54 +1,38 @@
-/* 预览装修弹框 */
+/* 预览装修页面 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="(baseInfo.name || '页面名称') + '预览'">
-    <div class="preview_wrapper">
-      <editView :dragable="false" v-if="height > 0" :height="height"></editView>
-      <div class="shop_info">
-        <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
-        <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
-        <div class="shop_code">
-          <h3>手机扫码访问</h3>
-          <h4>微信扫一扫分享至朋友圈</h4>
-          <img :src="qrCode" alt="">
-        </div>
+  <div class="preview_wrapper">
+    <editView :dragable="false" v-if="height > 0" :height="height"></editView>
+    <div class="shop_info">
+      <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
+      <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
+      <div class="shop_code">
+        <h3>手机扫码访问</h3>
+        <h4>微信扫一扫分享至朋友圈</h4>
+        <img :src="qrCode" alt="">
       </div>
     </div>
-  </DialogBase>
+  </div>
 </template>
 
 <script>
-import DialogBase from "@/components/DialogBase";
 import editView from "@/components/Decorate/editView";
+import decorateMixin from '@/components/Decorate/mixins/decorateMixin';
 import utils from "@/utils";
 export default {
-  name: "dialogDecoratePreview",
-  components: {DialogBase, editView},
-  props: {
-      data: {},
-      dialogVisible: {
-          type: Boolean,
-          required: true
-      },
-      homePageData: {
-        type: Object
-      }
-  },
+  name: "decoratePreview",
+  mixins: [decorateMixin],
+  components: {editView},
   data() {
     return {
       utils,
       qrCode: '',
-      height: 0
+      height: 0,
+      loading: true,
+      homePageData: null,
+      id: this.pageId || this.$route.query.pageId
     };
   },
   computed: {
-    visible: {
-      get() {
-          return this.dialogVisible
-      },
-      set(val) {
-          this.$emit('update:dialogVisible', val)
-      }
-    },
     baseInfo() {
       return this.$store.getters.baseInfo;
     },
@@ -58,7 +42,6 @@ export default {
   },
   created() {
     this.$store.dispatch('getShopInfo');
-    this.getQrcode();
   },
   mounted() {
     this.height = document.body.clientHeight - 290;
@@ -72,6 +55,40 @@ export default {
     }
   },
   methods: {
+
+     /* 获取店铺装修数据 */
+    fetch() {
+      if(!this.id) {
+        return;
+      }
+      this.loading = true;
+      this._apis.shop.getPageInfo({id: this.id}).then((response)=>{
+        this.loading = false;
+        this.homePageData = response;
+        this.convertDecorateData(response);
+        this.getQrcode();
+      }).catch((error)=>{
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
+        this.loading = false;
+      });
+    },
+
+     /* 拼装基础数据 */
+    setBaseInfo(data) {
+       //还原页面基础信息
+      this.$store.commit("setBaseInfo", {
+        name: data.name,
+        title: data.title,
+        explain: data.explain,
+        pageCategoryInfoId: data.pageCategoryInfoId,
+        colorStyle: data.colorStyle,
+        pageKey: data.pageKey
+      });
+    },
 
     /* 获取二维码 */
     getQrcode(codeType, callback) {
