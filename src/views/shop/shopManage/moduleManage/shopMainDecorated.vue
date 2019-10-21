@@ -35,6 +35,13 @@
           <li>
             <el-button type="primary" plain  @click="_routeTo('templateManageIndex')">店铺模板</el-button>
           </li>
+          <!-- <li>
+            <el-button type="primary" plain>小程序</el-button>
+            <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
+              <span>？</span>
+            </el-tooltip>
+            <p>{{miniProgramStatus === 1 ? '已生效' : '审核中'}}</p>  
+          </li> -->
         </ul>
       </div>
     </div>
@@ -52,7 +59,8 @@ export default {
     return {
       utils,
       qrCode: '',
-      height: 0
+      height: 0,
+      miniProgramStatus: 1
     };
   },
   computed: {
@@ -70,6 +78,7 @@ export default {
     this.$store.dispatch('getShopInfo');
     this.$store.dispatch('getShopStyle');
     this.getQrcode();
+    this.getMiniProgramStatus();
   },
   mounted() {
     this.height = document.body.clientHeight - 238 - 20;
@@ -94,6 +103,19 @@ export default {
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
+      }).catch((error)=>{
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
+      });
+    },
+
+    /* 获取小程序状态 */
+    getMiniProgramStatus() {
+      this._apis.shop.getMiniProgramStatus().then((response)=>{
+        this.miniProgramStatus = response;
       }).catch((error)=>{
         // this.$notify.error({
         //   title: '错误',

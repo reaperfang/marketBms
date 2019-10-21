@@ -577,3 +577,13 @@ export function changeSwitchStatus(data) {
       })
   }
 
+  //获取小程序状态
+  export function getMiniProgramStatus(data) {
+      return request({
+        target: '',
+        method: 'post',
+        params: data,
+        apiType: 'decorate'
+      })
+  }
+
