@@ -6,9 +6,11 @@
           <el-date-picker
             v-model="form.timeValue"
             type="daterange"
+            value-format="yyyy-MM-dd hh:mm:ss"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -79,8 +81,17 @@ export default {
   data () {
     return {
       pickerNowDateBefore: {
+        onPick: ({ maxDate, minDate }) => {
+              this.pickerMinDate = minDate.getTime()
+              if (maxDate) {
+                  this.pickerMinDate = ''
+              }
+          },
         disabledDate: (time) => {
-          return time.getTime() > new Date();
+          if (this.pickerMinDate !== '') {
+            return time.getTime() == this.pickerMinDate
+          }
+          return time.getTime() > Date.now() - 8.64e7
         }
       },
       form:{
@@ -114,8 +125,8 @@ export default {
           timeValue = this.form.timeValue
 
       if(timeValue){
-        startDate = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        endDate = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        startDate = timeValue[0]
+        endDate = timeValue[1]
       }
 
       let query ={

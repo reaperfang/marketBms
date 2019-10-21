@@ -66,8 +66,8 @@
             :show-file-list="false"
             :data="{json: JSON.stringify({cid: cid})}"
             @on-error="loading = false"
+            :on-success="handleCoverSuccess"
             :before-upload="beforeAvatarUpload1">
-            <!-- :on-success="handleCoverSuccess" -->
             <img v-if="form.imageUrls" :src="form.imageUrls" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
