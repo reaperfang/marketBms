@@ -630,12 +630,12 @@ export default {
         }
     },
     created() {
-        this.getCategoryList()
-        this.getProductLabelList()
-        this.getUnitList()
-        this.getBrandList()
-        this.getTemplateList()
         this.getOperateCategoryList().then(res => {
+            this.getCategoryList()
+            this.getProductLabelList()
+            this.getUnitList()
+            this.getBrandList()
+            this.getTemplateList()
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }

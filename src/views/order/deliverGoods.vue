@@ -24,7 +24,11 @@
               @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             >
-              <el-table-column type="selection" width="55"></el-table-column>
+              <el-table-column 
+                type="selection" 
+                width="55"
+                :selectable="selectable"
+              ></el-table-column>
               <el-table-column label="序号" width="180">
                 <template slot-scope="scope">
                   <span>{{scope.$index + 1}}</span>
@@ -53,6 +57,7 @@
               <el-table-column prop="sendCount" label="本次发货数量">
                 <template slot-scope="scope">
                   <el-input
+                    :disabled="scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
                     :max="scope.row.goodsCount - scope.row.cacheSendCount"
                     min="1"
@@ -250,6 +255,12 @@ export default {
     }
   },
   methods: {
+    selectable(row, index) {
+      if(row.goodsCount - row.cacheSendCount == 0) {
+        return false
+      }
+      return true
+    },
     checkExpress() {
       let expressName
 
