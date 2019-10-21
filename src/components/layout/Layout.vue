@@ -8,7 +8,7 @@
       </div>
       <ul>
         <li :class="{active: index == current}" @click="menuHandler(index)" v-if="!item.hidden && item.children" 
-          v-for="(item, index) in permission_routers_tree">
+          v-for="(item, index) in permission_routers_tree" :key="index">
           <i v-if="index != current" class="icons" :class="{[item.meta.icon]: true}"></i>
           <i v-else class="icons" :class="{[item.meta.activeIcon]: true}"></i>
           <template v-if="!item.iframe">
@@ -61,6 +61,17 @@ export default {
   mixins: [ResizeMixin],
   created() {
     this.current = localStorage.getItem('siderBarCurrent') || '0'
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      console.log(to, vm.current)
+      let name = to.path.replace(/^\/([^\/]+)\/.*$/, '$1')
+      let realCurrent = vm.permission_routers_tree.findIndex(router => router.name == name)
+
+      if(realCurrent != vm.current) {
+        vm.SETCURRENT(realCurrent)
+      }
+    })
   },
   computed: {
     // ...mapState({

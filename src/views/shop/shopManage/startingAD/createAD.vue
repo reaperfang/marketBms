@@ -51,7 +51,8 @@
                 v-model="ruleForm.startTime"
                 type="datetime"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                placeholder="选择日期">
+                placeholder="选择日期"
+                :picker-options="pickerOptions">
               </el-date-picker>
             </div>
             至
@@ -60,7 +61,8 @@
                 v-model="ruleForm.endTime"
                 type="datetime"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                placeholder="选择日期">
+                placeholder="选择日期"
+                :picker-options="pickerOptions">
               </el-date-picker>
             </div>
           </el-form-item>
@@ -102,8 +104,23 @@ export default {
         startTime: '',
         endTime: '',
       },
-      rules: {},
-      bodyHeight: {}
+      rules: {
+        name: [
+          { required: true, message: "请输入广告名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 30,
+            message: "请勿超过30个字符",
+            trigger: "blur"
+          },
+        ]
+      },
+      bodyHeight: {},
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      }
     }
   },
   created() {
@@ -158,40 +175,44 @@ export default {
 
     /* 保存图片广告数据 */
     saveData() {
-      this.saveDataLoading = true;
-      if(this.currentADId) {
-        this._apis.shop.editADInfo(this.ruleForm).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: '编辑成功！',
-            type: 'success'
-          });
-          this._routeTo('ADManageIndex');
-          this.saveDataLoading = false;
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-          this.saveDataLoading = false;
-        });
-      }else{
-        this._apis.shop.createAD(this.ruleForm).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: '创建成功！',
-            type: 'success'
-          });
-          this._routeTo('ADManageIndex');
-          this.saveDataLoading = false;
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-          this.saveDataLoading = false;
-        });
-      }
+       this.$refs.ruleForm.validate( valid => {
+        if(valid) {
+          this.saveDataLoading = true;
+          if(this.currentADId) {
+            this._apis.shop.editADInfo(this.ruleForm).then((response)=>{
+              this.$notify({
+                title: '成功',
+                message: '编辑成功！',
+                type: 'success'
+              });
+              this._routeTo('ADManageIndex');
+              this.saveDataLoading = false;
+            }).catch((error)=>{
+              this.$notify.error({
+                title: '错误',
+                message: error
+              });
+              this.saveDataLoading = false;
+            });
+          }else{
+            this._apis.shop.createAD(this.ruleForm).then((response)=>{
+              this.$notify({
+                title: '成功',
+                message: '创建成功！',
+                type: 'success'
+              });
+              this._routeTo('ADManageIndex');
+              this.saveDataLoading = false;
+            }).catch((error)=>{
+              this.$notify.error({
+                title: '错误',
+                message: error
+              });
+              this.saveDataLoading = false;
+            });
+          }
+        }
+      })
     }
   }
 }
