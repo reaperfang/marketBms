@@ -139,13 +139,13 @@ export default {
     getSubAccount(){
       let query = Object.assign({cid:this.cid},this.form)
       this._apis.set.getSubAccount(query).then(response =>{
+        this.loading = false
         this.dataList = []        
         response && response.list.map(item =>{
           item.roleNames = item.roleNames.split(',')[0]
           this.dataList.push(item)
         })
         this.total = response.total
-        this.loading = false
       }).catch(error =>{
         this.loading = false
       })

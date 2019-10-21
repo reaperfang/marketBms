@@ -18,7 +18,7 @@
       <el-table :data="tableList" stripe v-loading="loading">
         <el-table-column prop="name" label="分类名称"></el-table-column>
         <el-table-column prop="pageNum" label="页面数量"></el-table-column>
-        <el-table-column prop="updateTime" label="创建/编辑时间"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="创建/编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
         <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
