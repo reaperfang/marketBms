@@ -174,6 +174,7 @@ export default {
     methods: {
         checkZero(event,val,ele) {
             val = val.replace(/[^\d.]/g,'');
+            val = val.replace(/\.{2,}/g,'.');
             val = val.replace(/^0/g,'');
             this.ruleForm[ele] = val;
         },

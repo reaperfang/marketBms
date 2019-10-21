@@ -5,8 +5,7 @@
         <el-form-item label="创建时间">
           <el-date-picker
             v-model="form.timeValue"
-            type="daterange"
-            value-format="yyyy-MM-dd hh:mm:ss"
+            type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -125,8 +124,8 @@ export default {
           timeValue = this.form.timeValue
 
       if(timeValue){
-        startDate = timeValue[0]
-        endDate = timeValue[1]
+        startDate = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
+        endDate = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
       }
 
       let query ={

@@ -93,6 +93,7 @@ export default {
   computed: {
     visible: {
       get() {
+        this.remarks = ''
         return this.dialogVisible;
       },
       set(val) {
@@ -120,8 +121,10 @@ export default {
       }
       if(this.radio == 0){
         this.$emit("handleSubmit",datas);
+        this.visible = false
       }else if(this.radio == 1 && this.remarks){
          this.$emit("handleSubmit",datas);
+         this.visible = false
       }else{
         return false
       }      
