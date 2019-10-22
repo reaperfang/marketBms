@@ -99,7 +99,7 @@
             <div>
               <el-button type="text" @click="openSetting = true">更多设置</el-button>
               <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
-              <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">下载小程序码</el-button>
+              <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">打开小程序码</el-button>
             </div>
             <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="80px" v-if="openSetting">
               <el-form-item label="分享样式" prop="shareStyle">
@@ -242,6 +242,7 @@ export default {
         ]
       },
       qrCode: '',
+      miniAppQrcode: '',
       openSetting: false,  //是否开启设置
       h5DownloadPosterAble: false,  //h5是否可下载海报
       miniDownloadPosterAble: false //小程序是否可下载海报
@@ -249,13 +250,22 @@ export default {
   },
   watch: {
     currentType(newValue) {
+      if(this.currentType === 'h5') {
+        this.getQrcode();
+      }else if(this.currentType === 'mini') {
+        this.getMiniAppQrcode();
+      }
       this.fetch();
     },
     shopInfo:{
       handler(newValue) {
         this.ruleFormH5.picture = this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo;
         this.ruleFormMini.picture = this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo;
-        this.getQrcode();
+        if(this.currentType === 'h5') {
+          this.getQrcode();
+        }else if(this.currentType === 'mini') {
+          this.getMiniAppQrcode();
+        }
       },
       deep: true
     }
@@ -276,7 +286,11 @@ export default {
   created() {
     this.fetch();
     this.$store.dispatch('getShopInfo');
-    this.getQrcode();
+    if(this.currentType === 'h5') {
+      this.getQrcode();
+    }else if(this.currentType === 'mini') {
+      this.getMiniAppQrcode();
+    }
   },
   methods: {
 
@@ -394,17 +408,36 @@ export default {
     /* 打开二维码 */
     openQrcode(codeType) {
       const _self = this;
-      this.getQrcode(codeType, (url) =>{
-        _self.download(url, '二维码'); // 下载二维码
-        // _self.openQrCodeInNewWindow(url);
-      });
+      if(this.currentType === 'h5') {
+        this.getQrcode(codeType, (url) =>{
+          _self.download(url, '二维码'); // 下载二维码
+          // _self.openQrCodeInNewWindow(url);
+        });
+      }else if(this.currentType === 'mini') {
+        this.getMiniAppQrcode(codeType, (url) =>{
+
+          // let image = new Image();
+          // // image.crossOrigin = "anonymous";  // 支持跨域图片
+          // image.setAttribute('crossOrigin','anonymous');
+          // image.src = url; // 处理缓存
+          // image.onload = function(){
+          //   var base64 = _self.getBase64Image(image);
+          //   _self.download(base64, '小程序码'); // 下载二维码
+          // }
+          _self.openQrCodeInNewWindow(url);
+        });
+      }
     },
 
     //新窗口打开二维码
     openQrCodeInNewWindow(url) {
       const img = new Image();
       img.style.cssText = 'margin:200px auto 0;display: block;';
-      img.src = `data:image/png;base64,${url}`;
+      if(url.includes('http://')) {
+         img.src = url;
+      }else{
+         img.src = `data:image/png;base64,${url}`;
+      };
       const newWin = window.open("", "_blank");
       newWin.document.write(img.outerHTML);
       newWin.document.title = "二维码"
@@ -429,13 +462,30 @@ export default {
       });
     },
 
+    /* 获取小程序码 */
+    getMiniAppQrcode(codeType, callback) {
+      this.openQrcodeLoading = true;
+      this._apis.shop.getMiniAppQrcode({id: '1'}).then((response)=>{
+        this.qrCode = response;
+        this.openQrcodeLoading = false;
+        callback && callback(response); // 打开二维码
+      }).catch((error)=>{
+        this.openQrcodeLoading = false;
+        this.$message({ message: error, type: 'error' });
+      });
+    },
+
     /* 下载图片实现 */
     download(url, name) {
         this.downloadPosterLoading = false;
-        const aLink = document.createElement('a')
-        aLink.download = name 
-        aLink.href = `data:image/png;base64,${url}`; 
-        aLink.dispatchEvent(new MouseEvent('click', {}))
+        const aLink = document.createElement('a');
+        aLink.download = name ;
+        if(url.includes('http://')) {
+          aLink.href = url; 
+        }else{
+          aLink.href = `data:image/png;base64,${url}`; 
+        };
+        aLink.dispatchEvent(new MouseEvent('click', {}));
     },
 
      /* 弹框选中图片 */
@@ -456,6 +506,17 @@ export default {
     },
     onError () {
       this.$message.error(this.$t('prompt.copyFail'))
+    },
+
+    //从canvas获取在线图片base64码
+    getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var dataURL = canvas.toDataURL("image/png");  // 可选其他值 image/jpeg
+        return dataURL;
     }
   }
 };

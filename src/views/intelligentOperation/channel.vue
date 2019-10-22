@@ -38,11 +38,6 @@
                         <div class="input_wrap2 marR20">
                             <el-select v-model="form.changeRatioRange" @change="changeTime">
                                 <el-option v-for="item in productiveness" :label="item.name" :value="item.value" :key="item.id"></el-option>
-                                <!-- <el-option label="0-1%" value="1"></el-option>
-                                <el-option label="1-3%" value="2"></el-option>
-                                <el-option label="3-5%" value="3"></el-option>
-                                <el-option label="5-10%" value="4"></el-option>
-                                <el-option label="10%以上" value="5"></el-option> -->
                             </el-select>
                         </div>
                     </el-form-item>
@@ -72,12 +67,13 @@
                 </channel-table>               
             </div>
             <p>运营建议:</p>
-                <p v-if="form.changeRatioRange==1" class="proposal"><b>"转化率0-1%"：</b>建议针对此类用户推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
-                <p v-if="form.changeRatioRange==2" class="proposal"><b>"转化率1-3%"：</b>建议针对此类用户推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
-                <p v-if="form.changeRatioRange==3" class="proposal"><b>"转化率3-5%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
-                <p v-if="form.changeRatioRange==4" class="proposal"><b>"转化率5-10%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
-                <p v-if="form.changeRatioRange==5" class="proposal"><b>"转化率10%以上"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
-
+                <p v-if="form.changeRatioRange == '0.00-1.00'" class="proposal"><b>"转化率0-1%"：</b>建议针对此类用户推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '1.00-3.00'" class="proposal"><b>"转化率1-3%"：</b>建议针对此类用户推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '3.00-5.00'" class="proposal"><b>"转化率3-5%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '5.00-10.00'" class="proposal"><b>"转化率5-10%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '10.00-100.00'" class="proposal"><b>"转化率10%以上"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '20.00-50.00'" class="proposal"><b>"转化率20-60"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+            <div class="contents"></div>
     </div>
 </template>
 <script>
@@ -272,5 +268,10 @@ export default {
 .buttonfl{
     -webkit-box-pack: end;
     display: -webkit-box;
+}
+.contents{
+    width: 100%;
+    height: 45px;
+    background: #fff;
 }
 </style>

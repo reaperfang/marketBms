@@ -312,6 +312,16 @@ export function getQrcode(data) {
   })
 }
 
+// 获取小程序码
+export function getMiniAppQrcode(data) {
+  return request({
+    target: 'DECORATION-MINI-PROGRAMS-PROCESSOR',
+    method: 'post',
+    apiType: 'decorate',
+    data
+  })
+}
+
 //重置商品分类
 export function resetGoodsGroup(data) {
   return request({

@@ -75,6 +75,7 @@
                 <p v-if="form.ProtectionReason==1" class="proposal"><b>"不想要了":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>                
                 <p v-if="form.ProtectionReason==2" class="proposal"><b>"卖家缺货":</b>建议针对此类用户免费调换商品。</p>
                 <p v-if="form.ProtectionReason==3" class="proposal"><b>"拍错了/订单信息错误":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>
+                <div class="contents"></div>
     </div>
 </template>
 <script>
@@ -247,5 +248,10 @@ export default {
             }
         }
     }
+}
+.contents{
+    width: 100%;
+    height: 45px;
+    background: #fff;    
 }
 </style>

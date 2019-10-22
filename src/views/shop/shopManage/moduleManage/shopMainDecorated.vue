@@ -35,13 +35,29 @@
           <li>
             <el-button type="primary" plain  @click="_routeTo('templateManageIndex')">店铺模板</el-button>
           </li>
-          <li>
-            <el-button type="primary" plain>
+          <li v-if="miniProgramStatus && miniProgramStatus.status === 1">
+            <el-popover
+              ref="popover2"
+              placement="top-start"
+              title=""
+              style="margin-left:10px;"
+              width="170"
+              trigger="click"
+              content="">
+              <img v-if="showCode" :src="miniAppcode" alt="" style="width:150px;height:170px;">
+              <span v-else>无分享地址</span>
+              <el-button slot="reference" @click="showCode=true" type="primary" plain>
+                <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
+                  <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
+                </el-tooltip>
+              </el-button>
+            </el-popover>
+            <!-- <el-button type="primary" plain>
               <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
                 <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
               </el-tooltip>
-            </el-button>
-            <p v-if="miniProgramStatus" :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.status === 1 ? (miniProgramStatus.data.current_name || '') : ''}}</p>  
+            </el-button> -->
+            <p :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.data.current_name || ''}}</p>  
           </li>
         </ul>
       </div>
@@ -60,8 +76,11 @@ export default {
     return {
       utils,
       qrCode: '',
+      miniAppcode: '',   //小程序码
       height: 0,
-      miniProgramStatus: null
+      miniProgramStatus: null,
+      openMiniAppcodeLoading: false,  //获取小程序码loading
+      showCode: false  //显示小程序码
     };
   },
   computed: {
@@ -79,6 +98,7 @@ export default {
     this.$store.dispatch('getShopInfo');
     this.$store.dispatch('getShopStyle');
     this.getQrcode();
+    this.getMiniAppQrcode();
     this.getMiniProgramStatus();
   },
   mounted() {
@@ -148,7 +168,19 @@ export default {
           return '#FD4C2B';
           break;
       }
-    }
+    },
+
+      /* 获取小程序码 */
+    getMiniAppQrcode() {
+      this.openMiniAppcodeLoading = true;
+      this._apis.shop.getMiniAppQrcode({id: '1'}).then((response)=>{
+        this.miniAppcode = response;
+        this.openMiniAppcodeLoading = false;
+      }).catch((error)=>{
+        this.openMiniAppcodeLoading = false;
+        this.$message({ message: error, type: 'error' });
+      });
+    },
 
   }
 };

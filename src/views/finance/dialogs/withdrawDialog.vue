@@ -94,7 +94,7 @@ export default {
             if(this.radio == 0){
                 this.$emit("handleSubmit",datas);
                 this.visible = false
-            }else if(this.radio == 1 && this.remarks){
+            }else if(this.radio == 1 && this.remarks.trim()){
                 this.$emit("handleSubmit",datas);
                 this.visible = false
             }else{
@@ -106,7 +106,7 @@ export default {
             this.visible = false
         },
         checkNull(){
-            if(this.radio == 1 && this.remarks == ''){
+            if(this.radio == 1 && this.remarks.trim() == ''){
                 this.note = true
             }
         }

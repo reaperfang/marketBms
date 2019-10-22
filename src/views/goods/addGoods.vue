@@ -67,7 +67,7 @@
             <el-form-item label="商品标签" prop="productLabelId">
                 <div class="add-tag">
                     <div class="item">
-                        <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.productLabelId" placeholder="请选择">
+                        <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.productLabelId" placeholder="请选择" no-data-text="请选择">
                             <el-option
                                 v-for="item in productLabelList"
                                 :key="item.id"
@@ -857,6 +857,9 @@ export default {
                         this.ruleForm.otherUnit = this.ruleForm.productUnit
                     }
                 }
+                if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
+                    this.ruleForm.productLabelId = ''
+                }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
 
@@ -1129,6 +1132,10 @@ export default {
         getProductLabelList() {
             return new Promise((resolve, reject) => {
                 this._apis.goods.fetchAllTagsList().then(res => {
+                    res.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
                     this.productLabelList = res
 
                     resolve()

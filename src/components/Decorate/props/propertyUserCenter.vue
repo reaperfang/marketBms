@@ -199,7 +199,14 @@ export default {
         this.$emit('userCenterDataChanged', newValue);
       },
       deep: true
+    },
+    shopInfo: {
+      handler(newValue) {
+        this.getQrcode();
+      },
+      deep: true
     }
+    
   },
   created() {
     const _self = this;
@@ -220,6 +227,7 @@ export default {
     });
 
     this.ruleForm.backgroundImage= '';
+    this.$store.dispatch('getShopInfo');
     this.$emit('userCenterDataChanged', this.ruleForm);
   },
   mounted() {
@@ -228,7 +236,9 @@ export default {
     }
   },
   computed: {
-    
+      shopInfo() {
+        return this.$store.getters.shopInfo || {};
+      }
   },
   methods: {
 
@@ -276,7 +286,8 @@ export default {
       this._apis.shop.getQrcode({
         url: this.ruleForm.shareUrl.replace("&","[^]"),
         width: '150',
-        height: '150'
+        height: '150',
+        logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
