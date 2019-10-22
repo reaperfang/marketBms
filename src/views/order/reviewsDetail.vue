@@ -84,7 +84,7 @@
         </div>
       </div>
     </section>
-    <section class="replay">
+    <!-- <section class="replay">
       <div class="title">
         <div class="row">
           <div class="col replay-label">商户回复</div>
@@ -99,7 +99,7 @@
           <el-button @click="replyComment" type="primary">确 定</el-button>
         </div>
       </div>
-    </section>
+    </section> -->
     <section class="record">
       <div class="title">操作记录</div>
       <div class="table-box">

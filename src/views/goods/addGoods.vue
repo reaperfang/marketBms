@@ -701,7 +701,7 @@ export default {
         },
         getTemplateList() {
             return new Promise((resolve, reject) => {
-                this._apis.order.fetchTemplatePageList().then((res) => {
+                this._apis.order.fetchTemplatePageList({pageSize: 1000}).then((res) => {
                     this.shippingTemplates = res.list
 
                     resolve()

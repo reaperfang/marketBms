@@ -17,8 +17,9 @@
       ref="multipleTable"
       @selection-change="handleSelectionChange"
       v-loading="loading"
+      :row-key="getRowKey"
     >
-      <el-table-column type="selection" width="30"></el-table-column>
+      <el-table-column type="selection" width="30" :selectable="itemSelectable" :reserve-selection="true"></el-table-column>
       <el-table-column prop="name" label="活动标题" :width="250"></el-table-column>
       <el-table-column prop="status" label="状态">  <!-- 0是未生效  1是生效中 2是已失效-->
            <template slot-scope="scope">
@@ -82,7 +83,11 @@ export default {
     dialogVisible: {
       type: Boolean,
       required: true
-    }
+    },
+    goodsEcho: {
+        type: Array,
+        required: true
+      }
   },
   data() {
     return {
@@ -93,7 +98,7 @@ export default {
       ruleForm: {
         pageNum: 1,
         name: '',
-        status: 1
+        selectStatus: 1
       },
       rules: {}
     };
@@ -106,9 +111,25 @@ export default {
       set(val) {
         this.$emit("update:dialogVisible", val);
       }
+    },
+    goodsList: {
+      get() {
+          return this.goodsEcho
+      },
+      set(val) {
+          this.$emit('update:goodsEcho', val)
+      }
     }
   },
-  created() {},
+  created() {
+     this.goodsList.forEach((row, index) => {
+      this.$nextTick(() => {
+        if(!row.fakeData) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, true);
+        }
+      })
+    })
+  },
   mounted() {},
   methods: {
     fetch() {
@@ -133,6 +154,16 @@ export default {
       this.pageNum = pIndex
       this.ruleForm.pageNum = pIndex
       this.fetch()
+    },
+
+    itemSelectable(row, index) {
+      if(row.status !== 2) {
+        return true;
+      }
+    },
+
+    getRowKey(row) {
+      return row.id
     },
 
     /* 向父组件提交选中的数据 */

@@ -2,12 +2,12 @@
   <div>
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
-        <el-form-item label="" prop="name">
+        <!-- <el-form-item label="" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入分类名称"></el-input>
         </el-form-item>
         <el-form-item label="" prop="">
           <el-button type="primary" @click="fetch">搜  索</el-button>
-        </el-form-item>
+        </el-form-item> -->
       </div>
     </el-form>
     <el-tree :data="categoryData" :props="defaultProps" @node-click="handleNodeClick" :default-expand-all="true" :highlight-current="true" :expand-on-click-node="false"></el-tree>

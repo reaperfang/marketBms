@@ -15,6 +15,7 @@
         <el-table-column
           type="selection"
           :selectable="itemSelectable"
+          :reserve-selection="true"
           width="55">
         </el-table-column>
         <el-table-column prop="name" label="优惠券名称"></el-table-column>

@@ -3,12 +3,12 @@
   <DialogBase :visible.sync="visible" width="816px" :title="'选择商品分类'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
-        <el-form-item label prop="name">
+        <!-- <el-form-item label prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
         <el-form-item label prop="name">
           <el-button type="primary" @click="fetch">搜 索</el-button>
-        </el-form-item>
+        </el-form-item> -->
       </div>
     </el-form>
 

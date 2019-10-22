@@ -49,7 +49,11 @@ class Ajax {
           return res.data;
         } else if (res.errno === 0) {
           return res.data;
-        } else {
+        }else if(res.status === 'error' && res.code === "10088"){
+            this.$message.warning('该店铺已停用！')
+        }else if(res.status === 'error' && res.code === "10089"){
+            this.$message.warning('该店铺已过期！')
+        }else {
           return Promise.reject(res.msg)
         }
       },
