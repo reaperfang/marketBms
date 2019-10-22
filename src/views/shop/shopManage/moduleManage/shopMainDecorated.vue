@@ -35,13 +35,14 @@
           <li>
             <el-button type="primary" plain  @click="_routeTo('templateManageIndex')">店铺模板</el-button>
           </li>
-          <!-- <li>
-            <el-button type="primary" plain>小程序</el-button>
-            <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
-              <span>？</span>
-            </el-tooltip>
-            <p>{{miniProgramStatus === 1 ? '已生效' : '审核中'}}</p>  
-          </li> -->
+          <li>
+            <el-button type="primary" plain>
+              <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
+                <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
+              </el-tooltip>
+            </el-button>
+            <p v-if="miniProgramStatus" :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.status === 1 ? (miniProgramStatus.data.current_name || '') : ''}}</p>  
+          </li>
         </ul>
       </div>
     </div>
@@ -60,7 +61,7 @@ export default {
       utils,
       qrCode: '',
       height: 0,
-      miniProgramStatus: 1
+      miniProgramStatus: null
     };
   },
   computed: {
@@ -72,7 +73,7 @@ export default {
     },
     colorStyle() {
       return this.$store.getters.colorStyle || {};
-    },
+    }
   },
   created() {
     this.$store.dispatch('getShopInfo');
@@ -123,6 +124,30 @@ export default {
         // });
         console.error(error);
       });
+    },
+
+    /* 获取小程序状态文字颜色值 */
+    getMiniAppColor(status) {
+      switch(status) {
+        case 'none':
+          return '#FD4C2B';
+          break;
+        case 'uncheck':
+          return '#655EFF';
+          break;
+        case 'checking':
+          return '#655EFF';
+          break;
+        case 'checkerr':
+          return '#FD4C2B';
+          break;
+        case 'published':
+          return '#008000';
+          break;
+        case 'unauthorize':
+          return '#FD4C2B';
+          break;
+      }
     }
 
   }
