@@ -7,14 +7,14 @@
           <el-radio :label="2">自动获取</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="" prop="addType" v-if="ruleForm.addType === 1">
-        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectCoupon'">添加优惠券(最多添加10张优惠券)</el-button>
+      <el-form-item label="" prop="addType">
+        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectCoupon'" v-if="ruleForm.addType === 1">添加优惠券(最多添加10张优惠券)</el-button>
         <el-tag
           v-for="tag in list"
           :key="tag.title"
-          closable
+          :closable="ruleForm.addType === 1"
           style="margin-right:5px;"
-          type="success" @close="deleteItem(tag)">
+          type="success" @close="deleteItem(tag)" :title="getTitleTips(tag)">
           {{tag.title}}
         </el-tag>
       </el-form-item>
@@ -108,7 +108,6 @@ export default {
       if(newValue == 2) {
         this.fetch();
       }else{
-        this.items = [];
         this.list = [];
         this.fetch();
       }
@@ -176,6 +175,14 @@ export default {
 
     yuan(value) {
       this.ruleForm.couponColor = value.wxhex || '';
+    },
+
+    getTitleTips(item) {
+      if(item.useCondition > -1) {
+        return `满${item.useCondition},减${item.useTypeFullcut}`;
+      }else{
+        return `减${item.useTypeFullcut}`;
+      }
     }
   }
 }

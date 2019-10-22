@@ -630,12 +630,17 @@ export default {
         }
     },
     created() {
-        this.getOperateCategoryList().then(res => {
-            this.getCategoryList()
-            this.getProductLabelList()
-            this.getUnitList()
-            this.getBrandList()
-            this.getTemplateList()
+        // this.getOperateCategoryList().then(res => {
+        //     this.getCategoryList()
+        //     this.getProductLabelList()
+        //     this.getUnitList()
+        //     this.getBrandList()
+        //     this.getTemplateList()
+        //     if(this.$route.query.id && this.$route.query.goodsInfoId) {
+        //         this.getGoodsDetail()
+        //     }
+        // })
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
@@ -695,14 +700,19 @@ export default {
             this.dialogVisible = true
         },
         getTemplateList() {
-            this._apis.order.fetchTemplatePageList().then((res) => {
-                this.shippingTemplates = res.list
-            }).catch(error => {
-                this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+            return new Promise((resolve, reject) => {
+                this._apis.order.fetchTemplatePageList().then((res) => {
+                    this.shippingTemplates = res.list
+
+                    resolve()
+                }).catch(error => {
+                    this.visible = false
+                    this.$notify.error({
+                        title: '错误',
+                        message: error
+                    });
+                    reject(error)
+                })
             })
         },
         deleteSpec(index) {
@@ -1066,19 +1076,27 @@ export default {
         },
         // 获取单品牌管理列表
         getBrandList() {
-           this._apis.goodsOperate.fetchBrandList().then(res => {
-                this.brandList = res
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goodsOperate.fetchBrandList().then(res => {
+                    this.brandList = res
 
-            })   
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
+            })
         },
         // 获取单位计量列表
         getUnitList() {
-           this._apis.goodsOperate.fetchUnitList().then(res => {
-                this.unitList = res
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goodsOperate.fetchUnitList().then(res => {
+                    this.unitList = res
 
-            })   
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
+            })
         },
         itemCatHandleChange(value) {
             let _value = [...value]
@@ -1109,11 +1127,14 @@ export default {
             })
         },
         getProductLabelList() {
-            this._apis.goods.fetchAllTagsList().then(res => {
-                console.log(res)
-                this.productLabelList = res
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goods.fetchAllTagsList().then(res => {
+                    this.productLabelList = res
 
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
             })
         },
         transTreeData(data, pid) {
@@ -1133,13 +1154,17 @@ export default {
             return result;
         },
         getCategoryList() {
-            this._apis.goods.fetchCategoryList().then((res) => {
-                this.flatCategoryList = res
-                let arr = this.transTreeData(res, 0)
-                
-                this.categoryOptions = arr
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goods.fetchCategoryList().then((res) => {
+                    this.flatCategoryList = res
+                    let arr = this.transTreeData(res, 0)
+                    
+                    this.categoryOptions = arr
 
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
             })
         },
         handleChange(value) {

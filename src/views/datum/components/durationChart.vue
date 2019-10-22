@@ -68,6 +68,7 @@ export default {
         //Y轴
         yAxis: {
           type: "value",
+          minInterval: 1
         },
         series: [
           {

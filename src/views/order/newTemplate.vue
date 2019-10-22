@@ -105,7 +105,7 @@
         <el-button @click="submit('ruleForm')" type="primary">确 定</el-button>
       </div>
     </section>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
   </div>
 </template>
 <script>

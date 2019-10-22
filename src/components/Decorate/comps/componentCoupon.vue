@@ -128,7 +128,6 @@ export default {
       if(newValue == 2) {
         this.fetch();
       }else{
-        this.items = [];
         this.list = [];
         this.fetch();
       }

@@ -94,6 +94,9 @@ export default {
         'currentComponentData.data.addType'(newValue) {
             if(newValue == 2) {
                 this.fetch();
+            }else{
+                this.list = [];
+                this.fetch();
             }
         },
         'currentComponentData.data.showNumber'(newValue) {
