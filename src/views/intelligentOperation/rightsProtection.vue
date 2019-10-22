@@ -266,7 +266,7 @@ export default {
     height: 500px;
     position: absolute;
     left: 60%;
-    top: 65%;
+    top: 43%;
     transform: translate(-50%,-50%);
 }
 .loadings>img{

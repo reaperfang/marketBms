@@ -302,7 +302,7 @@ export default {
     height: 220px;
     position: absolute;
     left: 53%;
-    top: 50%;
+    top: 34%;
     transform: translate(-50%,-50%);
 }
 .loadings>img{

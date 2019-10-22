@@ -65,19 +65,19 @@
           </div>
         </div>
          <div class="p_top">
-            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'">
+            <p :title="'首页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'}}
             </p>
-            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'">
+            <p :title="'商品列表页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[2]*100).toFixed(2)+ '%'}}
             </p>
-            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[3]*10).toFixed(2)+ '%'">
+            <p :title="'购物车页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[3]*10).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[3]*10).toFixed(2)+ '%'}}
             </p>
-            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[4]*10).toFixed(2)+ '%'">
+            <p :title="'商品详情页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[4]*10).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[4]*10).toFixed(2)+ '%'}}
             </p>
-            <p :title="'访问率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
+            <p :title="'其他页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'}}
             </p>      
          </div>
@@ -95,13 +95,13 @@
           </div>
         </div>
          <div class="p_top1">
-              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[1]*10).toFixed(2)+ '%'">
+              <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*10).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[1]*10).toFixed(2)+ '%'}}
               </p>
-              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
+              <p :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
               </p>            
-              <p :title="'下单转化率'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
+              <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}
               </p>
          </div>
