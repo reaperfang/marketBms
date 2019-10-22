@@ -63,7 +63,7 @@
                             </el-tooltip>
                         </div>
                     </div>
-                    <ma4Table class="marT20" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
+                    <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
                 </div>
                 <p>运营建议:</p>
                 <p v-if="form.niceRatioRange == '0.00-1.00'" class="proposal"><b>"满意率0-1%/满意个数1个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，从而来提升满意率。</p>                
@@ -79,6 +79,7 @@
                 <p v-if="form.badRatioRange == '10.00-15.00'"  class="proposal"><b>"差评率10%-15%/差评个数10-15个"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
                 <p v-if="form.badRatioRange == '70.00-90.00'"  class="proposal"><b>"差评率70%-90%/差评个数70-90个"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
                 <div class="contents"></div>
+                <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
     </div>
 </template>
 <script>
@@ -96,6 +97,7 @@ export default {
                 timeType:1,
                 memberType:null,
                 pageSize:10,
+                loads:false,
                 startIndex:1,
             },
             range:'',
@@ -129,8 +131,9 @@ export default {
         }
     },
     methods: {
-        // 获取评价全部数据
+        // 查询
         getEvaluation(idx,pageS){
+            this.form.loads = true
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
             this.form.memberType == 'null' && (this.form.memberType = null)
@@ -138,6 +141,7 @@ export default {
             this.form.badRatioRange == 'null' && (this.form.badRatioRange = null)
             this._apis.data.evaluation(this.form).then(response => {
                 this.listObj = response;
+                this.form.loads = false
             })
         },
         //获取口碑满意率
@@ -285,9 +289,24 @@ export default {
         }
     }
 }
+.marT20s{
+    position: relative;
+}
 .contents{
     width: 100%;
     height: 45px;
     background: #fff;
+}
+.loadings{
+    width: 220px;
+    height: 220px;
+    position: absolute;
+    left: 53%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.loadings>img{
+     width: 220px;
+     height: 220px;
 }
 </style>

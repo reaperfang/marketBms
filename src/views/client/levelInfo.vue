@@ -541,6 +541,7 @@ export default {
         this.currentDialog = "giftListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedGifts = [];
       }
     },
     showCouponDialog(val) {
@@ -549,6 +550,7 @@ export default {
         this.currentDialog = "couponListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedCoupons = [];
       }
     },
     showRedDialog(val) {
@@ -557,6 +559,7 @@ export default {
         this.currentDialog = "redListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedReds = [];
       }
     },
     getSelection(obj) {

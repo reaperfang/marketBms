@@ -30,7 +30,7 @@
                             <span>元</span>
                         </el-form-item>
                         <el-form-item>
-                            <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px"></el-checkbox>
+                            <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px" @change="handleCheck"></el-checkbox>
                             <span class="marL105">最高可抵现订单金额的</span>
                             <div style="width: 222px; display: inline-block; margin-left: 20px">
                                 <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderRate" @keyup.native="checkPersent($event,ruleForm.scoreToCashOrderRate,'scoreToCashOrderRate')"></el-input>
@@ -104,10 +104,10 @@ export default {
         }
     },
     methods: {
-        checkZero(event,val,ele) {
-            val = val.replace(/[^\d]/g,'');
-            val = val.replace(/^0/g,'');
-            this.ruleForm[ele] = val;
+        handleCheck() {
+            if(!this.ruleForm.scoreEnableOrderHighCash) {
+                this.ruleForm.scoreToCashOrderRate = "";
+            }
         },
         checkZero(event,val,ele) {
             val = val.replace(/[^\d.]/g,'');

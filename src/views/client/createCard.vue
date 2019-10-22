@@ -457,14 +457,13 @@ export default {
       this.currentData.conditionList = this.conditionList;
     },
     showRedDialog(val) {
-      // if (val) {
-      //   this.dialogVisible = true;
-      //   this.currentDialog = "redListDialog";
-      // } else {
-      //   this.dialogVisible = false;
-      // }
-      this.dialogVisible = true;
-      this.currentDialog = "redListDialog";
+      if (val) {
+        this.dialogVisible = true;
+        this.currentDialog = "redListDialog";
+      } else {
+        this.dialogVisible = false;
+        this.selectedReds = [];
+      }
     },
     showGiftDialog(val) {
       if (val) {
@@ -472,6 +471,7 @@ export default {
         this.currentDialog = "giftListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedGifts = [];
       }
     },
     showCouponDialog(val) {
@@ -480,6 +480,7 @@ export default {
         this.currentDialog = "couponListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedCoupons = [];
       }
     },
     getCondition(val) {

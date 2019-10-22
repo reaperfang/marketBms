@@ -116,6 +116,7 @@ export default {
         ]
       },
       bodyHeight: {},
+      propsHeight: {},
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7

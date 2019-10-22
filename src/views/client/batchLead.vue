@@ -269,7 +269,6 @@ export default {
                     type: 'warning'
                 });
             }else{
-                console.log(1);
                 this.canSubmit = true;
                 if(this.ruleForm.consumeTimeType == "0") {
                     if(!this.isInteger(this.ruleForm.consumeTimeValue)) {
@@ -440,7 +439,7 @@ export default {
                     this.ruleForm.isTotalScore = Boolean(this.ruleForm.isTotalScore);
                     this.ruleForm.isProduct = Boolean(this.ruleForm.isProduct);
                     this.ruleForm.consumeTimeUnit = this.ruleForm.consumeTimeUnit.toString();
-                    this.selectedIds = this.ruleForm.productInfoIds;
+                    this.selectedIds = this.ruleForm.productInfoIds;   
                     if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
                         this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
                     }

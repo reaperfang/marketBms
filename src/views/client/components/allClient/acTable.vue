@@ -359,5 +359,9 @@ export default {
     }
   }
 }
-
+@media screen and (max-width: 1600px) {
+  .icon_cont{
+    width: 117px;
+  }
+}
 </style>

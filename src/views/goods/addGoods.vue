@@ -67,7 +67,7 @@
             <el-form-item label="商品标签" prop="productLabelId">
                 <div class="add-tag">
                     <div class="item">
-                        <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.productLabelId" placeholder="请选择" no-data-text="请选择">
+                        <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.productLabelId" placeholder="请选择">
                             <el-option
                                 v-for="item in productLabelList"
                                 :key="item.id"
@@ -702,6 +702,10 @@ export default {
         getTemplateList() {
             return new Promise((resolve, reject) => {
                 this._apis.order.fetchTemplatePageList({pageSize: 1000}).then((res) => {
+                    res.list.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
                     this.shippingTemplates = res.list
 
                     resolve()
@@ -1081,6 +1085,10 @@ export default {
         getBrandList() {
             return new Promise((resolve, reject) => {
                 this._apis.goodsOperate.fetchBrandList().then(res => {
+                    res.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
                     this.brandList = res
 
                     resolve()
@@ -1093,6 +1101,10 @@ export default {
         getUnitList() {
             return new Promise((resolve, reject) => {
                 this._apis.goodsOperate.fetchUnitList().then(res => {
+                    res.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
                     this.unitList = res
 
                     resolve()

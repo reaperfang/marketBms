@@ -89,7 +89,7 @@
                     <el-button class="yellow_btn" icon="el-icon-share" @click="mIexport">导出</el-button>
                 </div>
             </div>
-            <maTable class="marT20" 
+            <maTable class="marT20s" 
                 @sizeChange = "sizeChange"
                 @currentChange = "currentChange"                   
                 :listObj="listObj" 
@@ -103,6 +103,7 @@
              <p v-if="form.tradeCountRange == '8-8'" class="proposal"><b>"交易次数8次以上"：</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p>
              <p v-if="form.tradeCountRange == '10-50'" class="proposal"><b>"交易次数10-50次"：</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p>  
             <div class="contents"></div>
+            <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
         </div>
 </template>
 <script>
@@ -143,8 +144,8 @@ export default {
                 timeType:1,
                 startIndex:1,
                 pageSize:10,
-                sur:''
-            },
+                loads:false,
+            },            
             lowprice:'',
             highprice:'',
             textTips:false, 
@@ -245,9 +246,9 @@ export default {
                 console.log('error',error)
             })
         },
-
         //查询
-        goSearch(){
+        goSearch(){ 
+            this.form.loads = true
             if((this.lowprice != '' && this.highprice == '' ) || (this.lowprice == '' && this.highprice != '' )){
                 this.$message.warning('最低金额于最高金额需要同时输入')
                 return
@@ -269,6 +270,7 @@ export default {
                 this.oldMemberRatio = res.oldMemberRatio || 0;
                 this.customerCount = res.customerCount;
                 this.customerRatio = res.customerRatio || 0;
+                this.form.loads = false
                 // if(memberType == 1){ //新会员
                 //     this.textTips = true;
                 //     this.newMemberCount = res.newMemberCount;
@@ -284,6 +286,7 @@ export default {
                 // }else{ //其他
                 //     this.textTips = false;
                 // }
+
             }).catch(error => {
                 this.$message.error(error);
             });
@@ -400,6 +403,9 @@ export default {
         }
     }
 }
+.marT20s{
+    position: relative;
+}
 .mr10{
     margin-right:10px;
 }
@@ -407,6 +413,18 @@ export default {
     width: 100%;
     height:45px;
     background: #fff;
+}
+.loadings{
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 60%;
+    top: 80%;
+    transform: translate(-50%,-50%);
+}
+.loadings>img{
+    width: 220px;
+    height: 220px;
 }
 </style>
 
