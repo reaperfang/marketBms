@@ -234,7 +234,9 @@ export default {
 
     //全部 or  小程序  or  公众号
     all() {
-      this.changeType(this.analysisType)
+      if(this.nearDay != 4 || this.range != ''){
+        this.changeType(this.analysisType)
+      }
     },
 
 

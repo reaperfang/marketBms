@@ -64,12 +64,13 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      console.log(to, vm.current)
-      let name = to.path.replace(/^\/([^\/]+)\/.*$/, '$1')
-      let realCurrent = vm.permission_routers_tree.findIndex(router => router.name == name)
+      if(to.path) {
+        let name = to.path.replace(/^\/([^\/]+)\/.*$/, '$1')
+        let realCurrent = vm.permission_routers_tree.findIndex(router => router.name == name)
 
-      if(realCurrent != vm.current) {
-        vm.SETCURRENT(realCurrent)
+        if(realCurrent != vm.current) {
+          vm.SETCURRENT(realCurrent)
+        }
       }
     })
   },
