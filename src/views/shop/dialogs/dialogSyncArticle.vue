@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图文素材'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图文素材'" :showFooter="false">
       <div>
         <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
@@ -30,6 +30,10 @@
             class="page_nav">
             </el-pagination>
         </p>
+        <p class="txt_center">
+            <el-button type="primary" @click="submit()" :disabled="disNum">确 认</el-button>
+            <el-button  @click="visible = false">取 消</el-button>
+        </p>
       </div>
   </DialogBase>
 </template>
@@ -48,6 +52,7 @@ export default {
       currentPage:1,
       pageSize:20,
       total:0,
+      disNum:true
     }
   },
   props: {
@@ -112,11 +117,14 @@ export default {
           datas.push(obj)
         }        
       })
-      let query = {
-        fileGroupInfoId:'-1',
-        data:datas
+      if(this.datas){
+        this.disNum = false
+        let query = {
+          fileGroupInfoId:'-1',
+          data:datas
+        }
+        this.$emit('submit',{syncImage:{query:query}})
       }
-      this.$emit('submit',{syncImage:{query:query}})
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){
@@ -246,5 +254,14 @@ export default {
   .page_nav{
     display: inline-block;
   }
+}
+.pages{
+  width: 100%;
+  text-align: right;
+}
+.txt_center{
+  width: 100%;
+  text-align: center;
+  margin-top:20px;
 }
 </style>

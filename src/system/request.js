@@ -38,23 +38,25 @@ class Ajax {
   initGlobal() {
     this.service.interceptors.response.use(
       response => {
-        const res = response.data
-        if (res.status === 'success' || res.status === 200) {
-          if (res.accessToken) {
-            return res;
+        if(response.status === 'error' && response.code === "10088"){
+          return '该店铺已停用！'
+        }else if(response.status === 'error' && response.code === "10089"){
+          return '该店铺已过期！'
+        }else{
+          const res = response.data
+          if (res.status === 'success' || res.status === 200) {
+            if (res.accessToken) {
+              return res;
+            }
+            if(res.msg == 'existProduct') {
+              return res
+            }
+            return res.data;
+          } else if (res.errno === 0) {
+            return res.data;
+          }else {
+            return Promise.reject(res.msg)
           }
-          if(res.msg == 'existProduct') {
-            return res
-          }
-          return res.data;
-        } else if (res.errno === 0) {
-          return res.data;
-        }else if(res.status === 'error' && res.code === "10088"){
-            this.$message.warning('该店铺已停用！')
-        }else if(res.status === 'error' && res.code === "10089"){
-            this.$message.warning('该店铺已过期！')
-        }else {
-          return Promise.reject(res.msg)
         }
       },
       error => {

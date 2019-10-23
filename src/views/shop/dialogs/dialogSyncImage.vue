@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图片素材'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图片素材'" :showFooter="false">
       <div class="content">
         <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
@@ -12,22 +12,9 @@
                     <p>
                       <span>
                         <el-checkbox v-model="item.checked" @change="handleChecked"></el-checkbox>
-                        <!-- <i class="wx_icon" v-if="item.isSyncWechat"></i> -->
                       </span>
-                      <!-- <span>
-                        {{item.imgPixelWidth || '0'}}*{{item.imgPixelHeight || '0'}}px
-                      </span>
-                      <span>
-                        <i class="el-icon-link oper" @click="copyLink(item.filePath)"></i>
-                        <i class="el-icon-download oper" @click="downImage(item.filePath,item.fileName)"></i>
-                      </span> -->
                     </p>
                   </div>
-                  <!-- <div class="operate" ref="operate">
-                    <el-button type="primary" plain class="block mt10 ml10" @click="moveGroup(item.id)">分组</el-button>
-                    <el-button type="primary" plain class="block mt10">剪裁</el-button>
-                    <el-button type="primary" plain class="block mt10" @click="deleteImage(item.id,'imageId')">删除</el-button>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -44,6 +31,10 @@
             </p>
           </div>
         </div>
+        <p class="txt_center">
+            <el-button type="primary" @click="submit()" :disabled="disNum">确 认</el-button>
+            <el-button  @click="visible = false">取 消</el-button>
+        </p>
       </div>
   </DialogBase>
 </template>
@@ -62,6 +53,7 @@ export default {
       currentPage:1,
       pageSize:20,
       total:0,
+      disNum:true
     }
   },
   props: {
@@ -126,11 +118,14 @@ export default {
           datas.push(obj)
         }        
       })
-      let query = {
-        fileGroupInfoId:'-1',
-        data:datas
+      if(this.datas){
+        this.disNum = false
+        let query = {
+          fileGroupInfoId:'-1',
+          data:datas
+        }
+        this.$emit('submit',{syncImage:{query:query}})
       }
-      this.$emit('submit',{syncImage:{query:query}})
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){
@@ -268,5 +263,14 @@ export default {
       cursor: pointer;
     }
   }
+}
+.pages{
+  width: 100%;
+  text-align: right;
+}
+.txt_center{
+  width: 100%;
+  text-align: center;
+  margin-top:20px;
 }
 </style>
