@@ -267,7 +267,7 @@ export default {
             return Math.floor(v) === v;
         },
         saveLabel(isRepeat) {
-            if(!isRepeat) {
+            if(!isRepeat && !this.$route.query.id) {
                 this.$notify({
                     title: '警告',
                     message: '标签名不能重复',
@@ -371,56 +371,56 @@ export default {
                     formObj.preUnitPriceMax = formObj.preUnitPriceMax == "" ? 0:formObj.preUnitPriceMax;
                     formObj.totalScoreMin = formObj.totalScoreMin == "" ? 0:formObj.totalScoreMin;
                     formObj.totalScoreMax = formObj.totalScoreMax == "" ? 0:formObj.totalScoreMax;
-                    if(this.$route.query.id) {
-                        if(formObj.tagType == '0') {
-                            this._apis.client.updateTag({tagType: formObj.tagType, tagName: formObj.tagName, id: this.$route.query.id}).then((response) => {
-                                this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "标签编辑成功",
-                                    type: 'success'
-                                });                      
-                            }).catch((error) => {
-                                console.log(error);
-                            })
-                        }else{
-                            this._apis.client.updateTag(formObj).then((response) => {
-                                this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "标签编辑成功",
-                                    type: 'success'
-                                });
-                            }).catch((error) => {
-                                console.log(error);
-                            })
-                        }
-                    }else{
-                        if(formObj.tagType == '0') {
-                            this._apis.client.addTag({tagType: formObj.tagType, tagName: formObj.tagName}).then((response) => {
-                                this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "添加标签成功",
-                                    type: 'success'
-                                });
-                            }).catch((error) => {
-                                console.log(error);
-                            })
-                        }else{
-                            this._apis.client.addTag(formObj).then((response) => {
-                                this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "添加标签成功",
-                                    type: 'success'
-                                });
+                    // if(this.$route.query.id) {
+                    //     if(formObj.tagType == '0') {
+                    //         this._apis.client.updateTag({tagType: formObj.tagType, tagName: formObj.tagName, id: this.$route.query.id}).then((response) => {
+                    //             this._routeTo('clientLabel');
+                    //             this.$notify({
+                    //                 title: '成功',
+                    //                 message: "标签编辑成功",
+                    //                 type: 'success'
+                    //             });                      
+                    //         }).catch((error) => {
+                    //             console.log(error);
+                    //         })
+                    //     }else{
+                    //         this._apis.client.updateTag(formObj).then((response) => {
+                    //             this._routeTo('clientLabel');
+                    //             this.$notify({
+                    //                 title: '成功',
+                    //                 message: "标签编辑成功",
+                    //                 type: 'success'
+                    //             });
+                    //         }).catch((error) => {
+                    //             console.log(error);
+                    //         })
+                    //     }
+                    // }else{
+                    //     if(formObj.tagType == '0') {
+                    //         this._apis.client.addTag({tagType: formObj.tagType, tagName: formObj.tagName}).then((response) => {
+                    //             this._routeTo('clientLabel');
+                    //             this.$notify({
+                    //                 title: '成功',
+                    //                 message: "添加标签成功",
+                    //                 type: 'success'
+                    //             });
+                    //         }).catch((error) => {
+                    //             console.log(error);
+                    //         })
+                    //     }else{
+                    //         this._apis.client.addTag(formObj).then((response) => {
+                    //             this._routeTo('clientLabel');
+                    //             this.$notify({
+                    //                 title: '成功',
+                    //                 message: "添加标签成功",
+                    //                 type: 'success'
+                    //             });
                                 
-                            }).catch((error) => {
-                                console.log(error);
-                            })
-                        }
-                    }
+                    //         }).catch((error) => {
+                    //             console.log(error);
+                    //         })
+                    //     }
+                    // }
                 }
             }
         }

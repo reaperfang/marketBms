@@ -22,7 +22,7 @@
                             </div>
                         </el-form-item>
                         <el-form-item label="积分抵现条件：">
-                            <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash"></el-checkbox>
+                            <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash" @change="handleCheck2"></el-checkbox>
                             <span class="marR50">订单满</span>
                             <div style="width: 222px; display: inline-block">
                                 <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderMoney" @keyup.native="checkZero($event,ruleForm.scoreToCashOrderMoney,'scoreToCashOrderMoney')"></el-input>
@@ -107,6 +107,11 @@ export default {
         handleCheck() {
             if(!this.ruleForm.scoreEnableOrderHighCash) {
                 this.ruleForm.scoreToCashOrderRate = "";
+            }
+        },
+        handleCheck2() {
+            if(!this.ruleForm.scoreEnableOrderAchieveCash) {
+                this.ruleForm.scoreToCashOrderMoney = "";
             }
         },
         checkZero(event,val,ele) {
