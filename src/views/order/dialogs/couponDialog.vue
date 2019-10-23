@@ -1,6 +1,6 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="346px" :showFooter="showFooter">
-        <div class="coupon-box" v-show="data.usedCouponList.concat(data.usedPromotionList).length">
+        <div class="coupon-box">
             <template v-if="data.coupon">
                 <div class="coupon" v-for="(item, index) in data.usedCouponList" :key="index">
                     <div class="item lefter">

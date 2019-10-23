@@ -95,12 +95,13 @@ export default {
                 }
                 if(!ids.length) {
                   this.list = [];
+                  this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                   return;
                 }
                 this.loading = true;
                 this._apis.goods.fetchCategoryList({ids}).then((response)=>{
                     this.list = response;
-                    this._globalEvent.$emit('fetchGoods', componentData);
+                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                     this.loading = false;
                 }).catch((error)=>{
                     // this.$notify.error({
@@ -109,6 +110,7 @@ export default {
                     // });
                     console.error(error);
                     this.list = [];
+                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                     this.loading = false;
                 });
           }

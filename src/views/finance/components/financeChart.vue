@@ -17,7 +17,6 @@ export default {
   watch:{
     dataList(newData,oldData){
       this.dataList = newData
-      // this.makeOption(this.dataList)
       this.init();
     }
   },
@@ -25,10 +24,10 @@ export default {
   methods: {
     //设置图表数据项
     makeOption(){
-      this.data.dates = []
-      this.data.incomes = []
-      this.data.expends = []
-      this.data.realIncomes = []
+      // this.data.dates = []
+      // this.data.incomes = []
+      // this.data.expends = []
+      // this.data.realIncomes = []
       
 
       this.option = {
@@ -55,7 +54,7 @@ export default {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: this.data.dates.reverse()
+            data: this.dataList.dates.reverse()
         },
         yAxis: {
             type: 'value'
@@ -66,32 +65,32 @@ export default {
                 type:'line',
                 stack: '总量',
                 // data:[1,2,3,4,6,0]
-                data: this.data.incomes
+                data: this.dataList.incomes
             },
             {
                 name:'总支出',
                 type:'line',
                 stack: '总量',
                 // data:[0,0,0,0,0,0]
-                data: this.data.expends
+                data: this.dataList.expends
             },
             {
                 name:'实际收入',
                 type:'line',
                 stack: '总量',
                 // data:[1,2,3,4,6,0]
-                data: this.data.realIncomes
+                data: this.dataList.realIncomes
             }
         ]
       };
-      this.dataList.map((item)=>{
-        item.accountDate = item.accountDate.substring(0,10)
-        this.data.dates.push(item.accountDate)
-        // this.dates = this.datas.reverse();
-        this.data.incomes.push(item.income)
-        this.data.expends.push(item.expend)
-        this.data.realIncomes.push(item.realIncome)
-      })
+      // this.dataList.map((item)=>{
+      //   item.accountDate = item.accountDate.substring(0,10)
+      //   this.data.dates.push(item.accountDate)
+      //   // this.dates = this.datas.reverse();
+      //   this.data.incomes.push(item.income)
+      //   this.data.expends.push(item.expend)
+      //   this.data.realIncomes.push(item.realIncome)
+      // })
     }
   },
   components: {}

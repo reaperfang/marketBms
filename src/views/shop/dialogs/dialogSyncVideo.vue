@@ -130,6 +130,7 @@ export default {
         data:datas
       }
       this.$emit('submit',{syncImage:{query:query}})
+      this.visible = false
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){

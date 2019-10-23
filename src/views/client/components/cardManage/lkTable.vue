@@ -21,7 +21,7 @@
         label="卡号">
       </el-table-column>
       <el-table-column
-        prop="memberInfoId"
+        prop="memberSn"
         label="领取人ID"
       >
       </el-table-column>

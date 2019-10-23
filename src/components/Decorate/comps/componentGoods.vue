@@ -175,8 +175,16 @@ export default {
                     if(ids) {
                         if(Object.prototype.toString.call(ids) === '[object Object]') {
                             params = this.setGroupGoodsParams(ids);
+                            if(!params.ids || !params.ids.length) {
+                                this.list = [];
+                                return;
+                            }
                         }else if(Array.isArray(ids) && ids.length){
                             params = this.setNormalGoodsParams(ids);
+                            if(!params.ids || !params.ids.length) {
+                                this.list = [];
+                                return;
+                            }
                         }else{
                             if(this.$route.path.indexOf('templateEdit') < 0) {
                                 this.list = [];

@@ -108,7 +108,7 @@ export default {
             cid:this.cid,
             mediaId:item.media_id,
             sourceMaterialType:'0',
-            fileName:item.name,
+            fileName:'微信同步图片',
             filePath:escape(item.url),
             imgPixelWidth:'',
             imgPixelHeight:'',
@@ -123,6 +123,7 @@ export default {
         data:datas
       }
       this.$emit('submit',{syncImage:{query:query}})
+      this.visible = false
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){

@@ -162,7 +162,7 @@
                 </div>
                 <div class="row align-center">
                     <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                        <el-select style="margin-right: 5px;" v-model="goodsListMessage.consultType" placeholder="请选择">
+                        <el-select style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
                             <el-option
                             v-for="item in reducePriceTypeList"
                             :key="item.value"
@@ -172,7 +172,7 @@
                         </el-select>
                     </div>
                     <div v-else-if="orderDetail.orderInfo.consultMoney">
-                        <el-select disabled style="margin-right: 5px;" v-model="goodsListMessage.consultType" placeholder="请选择">
+                        <el-select disabled style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
                             <el-option
                             v-for="item in reducePriceTypeList"
                             :key="item.value"
@@ -188,7 +188,7 @@
                         <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
                     </div>
                     <div v-else-if="orderDetail.orderInfo.consultMoney">
-                        <span>{{orderDetail.orderInfo.consultMoney}}</span>
+                        <span>¥{{orderDetail.orderInfo.consultMoney}}</span>
                     </div>
                 </div>
                 <div class="row">
@@ -240,7 +240,7 @@
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
-
+//consultType 协商类型 1加价,2减价
 export default {
     data() {
         return {
@@ -411,7 +411,7 @@ export default {
             this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
         reducePriceHandler() {
-            if(this.goodsListMessage.consultType == 2) {
+            if(this.orderInfo.consultType == 2) {
                 if(this.orderDetail.orderInfo.receivableMoney < this.goodsListMessage.consultMoney) {
                     this.$message({
                         message: '不能大于应收金额',
@@ -421,7 +421,7 @@ export default {
                 }
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-            consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
+            consultType: this.orderInfo.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
                 // this.$notify({
                 //     title: '成功',
@@ -440,7 +440,7 @@ export default {
             }) 
         },
         reducePriceHandler() {
-            if(this.goodsListMessage.consultType == 2) {
+            if(this.orderInfo.consultType == 2) {
                 if(this.orderDetail.orderInfo.receivableMoney < this.goodsListMessage.consultMoney) {
                     this.$message({
                         message: '不能大于应收金额',
@@ -450,7 +450,7 @@ export default {
                 }
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-            consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
+            consultType: this.orderInfo.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
                 // this.$notify({
                 //     title: '成功',

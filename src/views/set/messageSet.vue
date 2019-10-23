@@ -1,7 +1,7 @@
 /*消息设置 */
 <template>
  <div class="main">
-   <p class="title">买家通知</p>
+   <p class="title">买家通知<span><i>请注意：</i>1、由于公众号、小程序官方后台最多支持25条模板信息，所以已设置成功的消息开启时不再重新获取&nbsp;&nbsp;&nbsp;&nbsp;2、在微信官方后台删除模板时，请不要删除已设置成功的模板</span></p>
       <!-- :span-method="objectSpanMethod" -->
     <el-table
       v-loading="loading"
@@ -228,6 +228,13 @@ export default {
 .title{
   height: 60px;
   line-height: 60px;
+  span{
+    margin-left: 20px;
+    i{
+      color: red;
+      font-style: normal;
+    }
+  }
 }
 .preview_title{
   padding-left: 6px;

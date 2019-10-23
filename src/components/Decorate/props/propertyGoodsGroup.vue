@@ -9,7 +9,7 @@
             :key="key"
             closable
             type="success" @close="deleteItem(tag)">
-            {{tag.name}}
+            {{tag.catagoryData.name}}
           </el-tag>
         </div>
       </el-form-item>
@@ -134,7 +134,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="ruleForm.ids"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="list"></component>
   </el-form>
 </template>
 
@@ -169,7 +169,7 @@ export default {
       rules: {
 
       },
-      list: [],
+      list: {},
       dialogVisible: false,
       currentDialog: '',
 
@@ -185,7 +185,7 @@ export default {
         for(let k in newValue) {
           catagoryIds[k] = [];
           for(let item of newValue[k].goods) {
-            catagoryIds[k].push(item.id);
+            catagoryIds[k].push(item);
           }
         }
         this.ruleForm.ids = catagoryIds;
@@ -212,12 +212,19 @@ export default {
               ids.push(item);
             }
             if(!ids.length) {
-              this.list = [];
+              this.list = {};
               return;
             }
             this.loading = true;
             this._apis.goods.fetchCategoryList({ids}).then((response)=>{
-                this.list = response;
+              let data = {};
+                for(let item of response) {
+                  data[item.id] = {
+                    catagoryData: item,
+                    goods: this.ruleForm.ids[item.id]
+                  };
+                }
+                this.list = data;
                 this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                 this.loading = false;
             }).catch((error)=>{
@@ -226,11 +233,25 @@ export default {
                 //   message: error
                 // });
                 console.error(error);
-                this.list = [];
+                this.list = {};
                 this.loading = false;
             });
       }
       }
+    },
+
+     /* 删除数据项 */
+    deleteItem(item) {
+      if(item.fakeData) {  //如果是假数据
+        this.$alert('示例数据不支持删除操作，请在右侧替换真实数据后重试!', '警告', {
+          confirmButtonText: '确定'
+        })
+        return;
+      }
+      const tempItems = {...this.list};
+      delete tempItems[item.catagoryData.id];
+      this.list = tempItems;
+      this.items = tempItems;
     },
 
   }
