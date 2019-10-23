@@ -35,8 +35,8 @@
                             <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice}}</font></p>
                             <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.unitPrice}}</p>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1" class="kai"></componentButton>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1" class="pin"></componentButton>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="kai"></componentButton>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="pin"></componentButton>
                         <p class="activity_end" v-if="item.soldOut==1">已售罄</p>
                     </div>
                 </li>

@@ -49,10 +49,10 @@ export default {
             hasCancel: true,
             enable: false,
             distinguish: '',
-            allMember:"",
-            noMember:"",
-            newMember:"",
-            oldMember:""
+            allMember:"0",
+            noMember:"0",
+            newMember:"0",
+            oldMember:"0"
         }
     },
     methods: {
@@ -98,10 +98,10 @@ export default {
                 let sceneRule = JSON.parse(row.sceneRule);
                 this.enable = row.enable == '启用'?true:false;
                 this.distinguish = sceneRule.distinguish?"1":"0";
-                this.allMember = sceneRule.noDistinguish.allMember;
-                this.oldMember = sceneRule.yesDistinguish.oldMember;
-                this.newMember = sceneRule.yesDistinguish.newMember;
-                this.noMember = sceneRule.yesDistinguish.noMember;
+                this.allMember = sceneRule.noDistinguish.allMember || 0;
+                this.oldMember = sceneRule.yesDistinguish.oldMember || 0;
+                this.newMember = sceneRule.yesDistinguish.newMember || 0;
+                this.noMember = sceneRule.yesDistinguish.noMember || 0;
             }
         }
     },

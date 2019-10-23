@@ -607,6 +607,12 @@ export default {
             message: "请选择一项等级权益",
             type: "warning"
           });
+        }else if(this.$route.query.level !== '1' && this.condition2 == "") {
+          this.$notify({
+            title: "警告",
+            message: "请选择升级条件",
+            type: "warning"
+          });
         } else {
           if (this.condition1) {
             let params1 = {};
@@ -827,15 +833,6 @@ export default {
               upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
             }
           }
-          // let upgradePackage = "";
-          // let upgradeArr = [];
-          // upgradeRewardList.map(v => {
-          //   if (upgradeArr.indexOf(v.label) == -1) {
-          //     upgradeArr.push(v.label);
-          //     upgradePackage += "" + v.label + ",";
-          //   }
-          // });
-          // upgradePackage = upgradePackage.replace(/undefined/g, "");
           upgradeRewardList.map(v => {
             if (v.label) {
               delete v.label;

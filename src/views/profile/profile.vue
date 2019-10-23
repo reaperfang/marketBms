@@ -30,10 +30,26 @@
                     <i class="el-icon-refresh" @click="refresh"></i>    
                 </p>
                 <div class="p_r_list">
-                    <p>待办售罄<span>({{toBeSoldOut || 0}})</span></p>
-                    <p>待发货订单<span>({{staySendCount || 0}})</span></p>
-                    <p>售后待处理<span>({{stayProcessedCount || 0}})</span></p>
-                    <p>售后单待审核<span>({{stayAuthCount || 0}})</span></p>
+                    <p>待办售罄
+                        <router-link to="/goods/goodsList">
+                            <span>({{toBeSoldOut || 0}})</span>
+                        </router-link>    
+                    </p>
+                    <p>待发货订单
+                        <router-link to="/goods/goodsList">
+                            <span>({{staySendCount || 0}})</span>
+                        </router-link>
+                    </p>
+                    <p>售后待处理
+                        <router-link to="/order/afterSalesManagement">
+                            <span>({{stayProcessedCount || 0}})</span>
+                        </router-link>
+                    </p>
+                    <p>售后单待审核
+                        <router-link to="/order/afterSalesManagement">
+                            <span>({{stayAuthCount || 0}})</span>
+                        </router-link>
+                    </p>
                     <!-- <p>积分商城订单待发货<span>(23)</span></p> -->
                 </div>
             </div>

@@ -32,7 +32,7 @@
                     <div class="price_line">
                         <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice}}</font></p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.soldOut!=1&&item.activityEnd!=1"></componentButton>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
                     <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
                     <p class="activity_end" v-if="item.activityEnd==1">活动结束</p>
                 </div>

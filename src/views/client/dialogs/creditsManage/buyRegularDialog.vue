@@ -133,9 +133,9 @@ export default {
       payAmount1: "1",
       payAmount: "1",
       allMember: "0",
-      noMember: "",
-      newMember: "",
-      oldMember: "",
+      noMember: "0",
+      newMember: "0",
+      oldMember: "0",
       selectProducts: [],
       isAllProduct: null,
       distinguish: null,
@@ -317,9 +317,9 @@ export default {
         this.distinguish = sceneRule.distinguish ? "1" : "0";
         //this.payAmount1 = sceneRule.noDistinguish.payAmount;
         this.allMember = sceneRule.noDistinguish.allMember || 0;
-        this.oldMember = sceneRule.yesDistinguish.oldMember;
-        this.newMember = sceneRule.yesDistinguish.newMember;
-        this.noMember = sceneRule.yesDistinguish.noMember;
+        this.oldMember = sceneRule.yesDistinguish.oldMember || 0;
+        this.newMember = sceneRule.yesDistinguish.newMember || 0;
+        this.noMember = sceneRule.yesDistinguish.noMember || 0;
         //this.payAmount = sceneRule.yesDistinguish.payAmount;
       }
     }

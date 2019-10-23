@@ -48,22 +48,24 @@
         </div>
 
         <div class="block form">
-          <el-form-item 
-            :key="key"
-            :label="item.title"
-            :prop="'moduleList.'+ key +'.titleValue'"
-            :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]"
-            v-for="(item, key) in ruleForm.moduleList">
-            <div class="module_block">
-                <el-input v-model="item.titleValue"></el-input>
-                <div class="img_preview">
-                  <img :src="item.icon || require('@/assets/images/shop/userCenter/' + item.defaultIcon + '.png')" alt="">
-                  <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
-                </div>
-                <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
-                <!-- <el-button type="text">重置</el-button> -->
-            </div>
-          </el-form-item>
+          <template v-for="(item, key) in ruleForm.moduleList">
+            <el-form-item 
+              v-if="item.name !== 'integralMarket'"
+              :key="key"
+              :label="item.title"
+              :prop="'moduleList.'+ key +'.titleValue'"
+              :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]">
+              <div class="module_block">
+                  <el-input v-model="item.titleValue"></el-input>
+                  <div class="img_preview">
+                    <img :src="item.icon || require('@/assets/images/shop/userCenter/' + item.defaultIcon + '.png')" alt="">
+                    <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
+                  </div>
+                  <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
+                  <!-- <el-button type="text">重置</el-button> -->
+              </div>
+            </el-form-item>
+          </template>
         </div>  
 
         <div class="block button">
