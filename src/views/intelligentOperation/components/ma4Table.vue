@@ -40,7 +40,7 @@
         prop="niceRatio"
         label="满意率">
         <template slot-scope="scope">
-          {{(scope.row.niceRatio*100).toFixed(2)}}%
+          {{(scope.row.niceRatio*1).toFixed(2)}}%
         </template>
       </el-table-column>
       <el-table-column
@@ -50,10 +50,9 @@
       </el-table-column>
       <el-table-column
         prop="badRatio"
-        label="差评率"
-        >
+        label="差评率" >
         <template slot-scope="scope">
-          {{(scope.row.badRatio*100).toFixed(2)}}%
+          {{(scope.row.badRatio*1).toFixed(2)}}%
         </template>
       </el-table-column>
       <el-table-column

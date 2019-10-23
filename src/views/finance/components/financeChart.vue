@@ -11,7 +11,6 @@ export default {
       incomes:[],
       expends:[],
       realIncomes:[],
-      dataLists:[]
     };
   },
   props:['dataList'],
@@ -26,18 +25,11 @@ export default {
   methods: {
     //设置图表数据项
     makeOption(){
-      this.dates = []
-      this.incomes = []
-      this.expends = []
-      this.realIncomes = []
-      this.dataList.map((item)=>{
-        item.accountDate = item.accountDate.substring(0,10)
-        this.dates.push(item.accountDate)
-        // this.dates = this.datas.reverse();
-        this.incomes.push(item.income)
-        this.expends.push(item.expend)
-        this.realIncomes.push(item.realIncome)
-      })
+      this.data.dates = []
+      this.data.incomes = []
+      this.data.expends = []
+      this.data.realIncomes = []
+      
 
       this.option = {
         title: {
@@ -63,7 +55,7 @@ export default {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: this.dates.reverse()
+            data: this.data.dates.reverse()
         },
         yAxis: {
             type: 'value'
@@ -73,22 +65,33 @@ export default {
                 name:'总收入',
                 type:'line',
                 stack: '总量',
-                data: this.incomes
+                // data:[1,2,3,4,6,0]
+                data: this.data.incomes
             },
             {
                 name:'总支出',
                 type:'line',
                 stack: '总量',
-                data: this.expends
+                // data:[0,0,0,0,0,0]
+                data: this.data.expends
             },
             {
                 name:'实际收入',
                 type:'line',
                 stack: '总量',
-                data: this.realIncomes
+                // data:[1,2,3,4,6,0]
+                data: this.data.realIncomes
             }
         ]
       };
+      this.dataList.map((item)=>{
+        item.accountDate = item.accountDate.substring(0,10)
+        this.data.dates.push(item.accountDate)
+        // this.dates = this.datas.reverse();
+        this.data.incomes.push(item.income)
+        this.data.expends.push(item.expend)
+        this.data.realIncomes.push(item.realIncome)
+      })
     }
   },
   components: {}

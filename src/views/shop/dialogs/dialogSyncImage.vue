@@ -118,13 +118,11 @@ export default {
           datas.push(obj)
         }        
       })
-      if(this.datas){
-        let query = {
-          fileGroupInfoId:'-1',
-          data:datas
-        }
-        this.$emit('submit',{syncImage:{query:query}})
+      let query = {
+        fileGroupInfoId:'-1',
+        data:datas
       }
+      this.$emit('submit',{syncImage:{query:query}})
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){

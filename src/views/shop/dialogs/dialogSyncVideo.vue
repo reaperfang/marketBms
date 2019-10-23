@@ -14,6 +14,8 @@
                 </p>
                 <div class="img_body">
                   <p class="title">{{item.title}}</p>
+                  <!-- <img :src="item.fileCover" class="imgCover">
+                  <span class="btn" @click="openVideo(item)"></span> -->
                   <video v-if="item.down_url !=''"  
                   :src="item.down_url"
                   class="avatar video-avatar"
@@ -45,11 +47,12 @@
 </template>
 
 <script>
+import dialogVideo from './dialogVideo';
 import DialogBase from "@/components/DialogBase";
 import utils from "@/utils";
 export default {
   name: "dialogSyncImage",
-  components: {DialogBase},
+  components: {DialogBase,dialogVideo},
   data() {
     return {
       checkedAll:false,
@@ -58,7 +61,8 @@ export default {
       currentPage:1,
       pageSize:10,
       total:0,
-      disNum:true
+      disNum:true,
+      data:'',
     }
   },
   props: {
@@ -121,13 +125,11 @@ export default {
           datas.push(obj)
         }        
       })
-      if(this.datas){
-        let query = {
-          fileGroupInfoId:'-1',
-          data:datas
-        }
-        this.$emit('submit',{syncImage:{query:query}})
+      let query = {
+        fileGroupInfoId:'-1',
+        data:datas
       }
+      this.$emit('submit',{syncImage:{query:query}})
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){
@@ -217,13 +219,27 @@ export default {
           padding:10px 10px;
           font-size: 14px;
           color: #44434B;
+          position: relative;
           .title{
             height: 25px;
             line-height: 25px;
           }
-          .imgs{
+          .imgCover{
             width: 100%;
             height:85px;
+            object-fit:cover;
+          }
+          .btn{
+            position:absolute;
+            top:55px;
+            left:110px;
+            width: 40px;
+            height: 40px;
+            background: url('../../../assets/images/shop/bofang.png');
+            background-size: cover;
+            &:hover{
+              cursor: pointer;
+            }
           }
         }
         .img_bottom{
@@ -296,5 +312,9 @@ export default {
   width: 100%;
   text-align: center;
   margin-top:20px;
+}
+.video-avatar{
+  width: 227px;
+  height: 147px;
 }
 </style>
