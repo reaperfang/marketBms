@@ -16,10 +16,7 @@
                   <p class="title">{{item.title}}</p>
                   <!-- <img :src="item.fileCover" class="imgCover">
                   <span class="btn" @click="openVideo(item)"></span> -->
-                  <video v-if="item.down_url !=''"  
-                  :src="item.down_url"
-                  class="avatar video-avatar"
-                  controls="controls">您的浏览器不支持视频播放</video> 
+                  <video v-if="item.down_url !=''" :src="item.down_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
                   <!-- <img :src="item.filePath" class="imgs"> -->
                 </div>
               </div>

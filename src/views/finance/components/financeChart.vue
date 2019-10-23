@@ -23,13 +23,7 @@ export default {
   created() { },
   methods: {
     //设置图表数据项
-    makeOption(){
-      // this.data.dates = []
-      // this.data.incomes = []
-      // this.data.expends = []
-      // this.data.realIncomes = []
-      
-
+    makeOption(){    
       this.option = {
         title: {
             text: '金额（元）'
@@ -64,33 +58,22 @@ export default {
                 name:'总收入',
                 type:'line',
                 stack: '总量',
-                // data:[1,2,3,4,6,0]
                 data: this.dataList.incomes
             },
             {
                 name:'总支出',
                 type:'line',
                 stack: '总量',
-                // data:[0,0,0,0,0,0]
                 data: this.dataList.expends
             },
             {
                 name:'实际收入',
                 type:'line',
                 stack: '总量',
-                // data:[1,2,3,4,6,0]
                 data: this.dataList.realIncomes
             }
         ]
       };
-      // this.dataList.map((item)=>{
-      //   item.accountDate = item.accountDate.substring(0,10)
-      //   this.data.dates.push(item.accountDate)
-      //   // this.dates = this.datas.reverse();
-      //   this.data.incomes.push(item.income)
-      //   this.data.expends.push(item.expend)
-      //   this.data.realIncomes.push(item.realIncome)
-      // })
     }
   },
   components: {}

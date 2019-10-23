@@ -170,25 +170,7 @@ export default {
                     name: "老会员"
                 }
             ],
-            tradeCount: [
-                // {
-                //     id: null,
-                //     name: "不限"
-                // },
-                // {
-                //     id: "0-1",
-                //     name: "1次"
-                // },{
-                //     id: "2-5",
-                //     name: "2-5次"
-                // },{
-                //     id: "6-8",
-                //     name: "6-8次"
-                // },{
-                //     id: "8",
-                //     name: "8次以上"
-                // }
-            ],
+            tradeCount: [  ],
             customerCount:'',
             customerRatio:'',
             newMemberCount:'',
