@@ -60,7 +60,7 @@ export default {
       type: Boolean,
       required: true
     },
-    seletedGroupInfo: []
+    seletedGroupInfo: {}
   },
   data() {
     return {

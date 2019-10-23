@@ -38,25 +38,37 @@ class Ajax {
   initGlobal() {
     this.service.interceptors.response.use(
       response => {
-        if(response.status === 'error' && response.code === "10088"){
-          return '该店铺已停用！'
-        }else if(response.status === 'error' && response.code === "10089"){
-          return '该店铺已过期！'
-        }else{
-          const res = response.data
-          if (res.status === 'success' || res.status === 200) {
-            if (res.accessToken) {
-              return res;
-            }
-            if(res.msg == 'existProduct') {
-              return res
-            }
-            return res.data;
-          } else if (res.errno === 0) {
-            return res.data;
-          }else {
-            return Promise.reject(res.msg)
+        const res = response.data
+        if (res.status === 'success' || res.status === 200) {
+          if (res.accessToken) {
+            return res;
           }
+          if(res.msg == 'existProduct') {
+            return res
+          }
+          return res.data;
+        }else if(res.status === 'error' && res.code === "10088"){
+          MessageBox.alert('该店铺已停用！', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              store.dispatch('LogOut').then(() => {
+                location.reload()
+              })
+            }
+          });
+        }else if(res.status === 'error' && res.code === "10089"){
+          MessageBox.alert('该店铺已过期！', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              store.dispatch('LogOut').then(() => {
+                location.reload()
+              })
+            }
+          });
+        }else if (res.errno === 0) {
+          return res.data;
+        }else {
+          return Promise.reject(res.msg)
         }
       },
       error => {

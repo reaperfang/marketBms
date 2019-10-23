@@ -98,7 +98,7 @@ export default {
       ruleForm: {
         pageNum: 1,
         name: '',
-        selectStatus: 1
+        selectStatus: '0,1'
       },
       rules: {}
     };

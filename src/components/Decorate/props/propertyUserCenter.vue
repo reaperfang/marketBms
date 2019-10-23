@@ -8,9 +8,9 @@
           <el-form-item label="背景图片" prop="backgroundImage" style="margin-bottom: 0;">
             <div class="img_preview" v-if="ruleForm.backgroundImage">
               <img :src="ruleForm.backgroundImage" alt="">
-              <span @click="currentModule=ruleForm; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+              <span @click="changeBackground">更换图片</span>
             </div>
-            <div class="add_button" v-if="!ruleForm.backgroundImage" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+            <div class="add_button" v-if="!ruleForm.backgroundImage" @click="changeBackground">
               <i class="inner"></i>
             </div>
             <span style="color:rgba(182,181,200,1);">建议尺寸 750*426 像素</span>
@@ -244,10 +244,10 @@ export default {
 
      /* 弹框选中图片 */
     imageSelected(dialogData) {
-      if(this.currentModule.icon) {
+      if(this.currentModule.icon !== undefined && this.currentModule.icon !== null) {
         this.currentModule.icon = dialogData.filePath;
       }
-      if(this.currentModule.backgroundImage) {
+      if(this.currentModule.backgroundImage !== undefined && this.currentModule.backgroundImage !== null) {
         this.currentModule.backgroundImage = dialogData.filePath;
       }
     },
@@ -294,6 +294,13 @@ export default {
       }).catch((error)=>{
         this.$message({ message: error, type: 'error' });
       });
+    },
+
+    /* 改变背景图片 */
+    changeBackground() {
+      this.currentModule=this.ruleForm; 
+      this.dialogVisible=true; 
+      this.currentDialog='dialogSelectImageMaterial';
     }
   }
 }

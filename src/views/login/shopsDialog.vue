@@ -62,16 +62,12 @@ export default {
             })
           })
       }).catch(error => {
-        this.$notify.warning({
-          title: '提示',
-          message: error
-        })
+        console.log(error)
       })
     },
 
     handleClose(){
       this.showDialog = false
-      // this.route == 'login' && removeToken()
       this.$emit('handleClose')
     }
   }
