@@ -5,7 +5,7 @@
       <div class="userCenter">
         <!-- 第一部分 用户个人信息 -->
         <div class="userCenter_first">
-          <div class="userCenter_firstTop" :style="data.backgroundGradients===1?bg:bg1">
+          <div class="userCenter_firstTop" :style="data.backgroundGradients===1?bg1:bg">
             <!-- 动态变换部分：样式一，左 -->
             <div class="userCenter_firstTitle" v-if="data.avatarPosition===1">
               <div class="userCenter_firstTitlel fl">
@@ -317,7 +317,7 @@ export default {
     border-bottom: 6px solid #f7f7f7;
     & > .userCenter_firstTop {
       height: 222px;
-      background-size: 100% 100%;
+      background-size: cover!important;
       position: relative;
       & > .userCenter_firstTitle {
         height: 100px;

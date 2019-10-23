@@ -9,7 +9,7 @@
                 <p class="img_head">
                   <span>
                     <el-checkbox v-model="item.checked" @change="handleChecked"></el-checkbox>
-                    {{item.update_time | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                    {{item.update_time*1000 | formatDate('yyyy-MM-dd hh:mm:ss')}}
                     </span>
                 </p>
                 <div class="img_body">

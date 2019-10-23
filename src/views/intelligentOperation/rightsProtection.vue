@@ -38,11 +38,12 @@
                             <span class="span_label">维权原因</span>
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.ProtectionReason">
-                                    <el-option label="不限" value="null"></el-option>
+                                    <el-option v-for="item in reasons" :label="item.name" :value="item.id" :key="item.id"></el-option>
+                                    <!-- <el-option label="不限" value="null"></el-option>
                                     <el-option label="不想要了" value="1"></el-option>
                                     <el-option label="卖家缺货" value="2"></el-option>
                                     <el-option label="拍错了订单信息错误" value="3"></el-option>
-                                    <el-option label="其他" value="4"></el-option>
+                                    <el-option label="其他" value="4"></el-option> -->
                                 </el-select>
                             </div>
                              <span class="span_label">会员类型</span>
@@ -102,6 +103,7 @@ export default {
             },
             pickerMinDate: '',
             dateRange: [],
+            reasons:[],
             pickerOptions: {
                 onPick: ({ maxDate, minDate }) => {
                     this.pickerMinDate = minDate.getTime()
@@ -124,6 +126,12 @@ export default {
         }
     },
     methods: {
+        //获取维权原因
+        getReasons(){
+            this._apis.data.getReasons().then(response => {
+                this.reasons = response
+            })
+        },
         // 获取维权全部数据
         getRightsProtection(idx,pageS){
             this.form.loads = true
@@ -195,6 +203,7 @@ export default {
     },
     created(){
         this.getRightsProtection()
+        this.getReasons()
     }
 }
 </script>
@@ -254,7 +263,8 @@ export default {
     }
 }
 .marT20s{
-    position: relative;
+    // position: relative;
+    margin-top:10px;
 }
 .contents{
     width: 100%;

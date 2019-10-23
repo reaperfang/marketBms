@@ -70,13 +70,13 @@
                 <p class="p_title">营销活动：</p>
                 <div class="p_list" v-if="activeData.length != 0">
                     <div class="p_m_item" v-for="item in activeData" :key="item.id">
-                        <router-link :to="item.url">
+                        <span  @click="linkTo(item)">
                             <img :src="item.appImage" alt="" style="height:40px;width:40px;">
                             <div>
                                 <p>{{item.appName}}</p>
                                 <p>{{item.description}}</p>
                             </div>
-                        </router-link>
+                        </span>
                     </div>
                 </div>
                 <div class="p_list" v-else>
@@ -112,6 +112,7 @@
     </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 import profileCont from '@/system/constant/profile'
 export default {
     name: 'profile',
@@ -138,6 +139,7 @@ export default {
         }
     },
     methods:{
+        ...mapMutations(['SETCURRENT']),
         // 概况详情
         getOverviewDetails(){ 
          this._apis.overview.overviewDetails({}).then(response => {
@@ -186,6 +188,18 @@ export default {
              this._apis.overview.getMarketing(this.selectList).then(response => {
                  this.activeData = response.slice(0,10)
          })
+        },
+        //常用功能跳转
+        linkTo(item){
+            if(item.appName == '公众号管理'){
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum'}})
+                this.SETCURRENT(8)
+            }else if(item.appName == '小程序管理'){
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp'}})
+                this.SETCURRENT(8)
+            }else{
+                this.$router.push({path:item.url})
+            }
         }
     },
     created(){

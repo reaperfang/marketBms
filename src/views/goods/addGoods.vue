@@ -19,6 +19,7 @@
                     filterable>
                 </el-cascader>
                 <span class="category-display">您当前的选择是：{{itemCatText}}</span>
+                <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
             </el-form-item>
             <el-form-item label="商品名称" prop="name">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
@@ -317,6 +318,7 @@
                         :value="item.id">
                     </el-option>
                 </el-select>
+                <p class="goods-message" v-if="pinpaiMessage != '' && pinpaiMessage == true && ruleForm.productBrandInfoId == ''">历史品牌已被禁用或删除，请您重新选择</p>
             </el-form-item>
         </section>
         <section class="form-section">
@@ -627,6 +629,9 @@ export default {
             materialIndex: 0,
             material: false,
             hideUpload: false,
+            leimuMessage: '',
+            pinpaiMessage: '',
+            catcheProductBrandInfoId: ''
         }
     },
     created() {
@@ -804,6 +809,16 @@ export default {
                 })
 
                 this.itemCatText = _arr.map(val => val.name).join(' > ')
+
+                if(!this.itemCatText) {
+                    this.leimuMessage = true
+                }
+
+                if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
+                    this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
+                    this.ruleForm.productBrandInfoId = ''
+                    this.pinpaiMessage = true
+                }
 
                 let specs = JSON.parse(res.goodsInfo.specs)
 
@@ -1669,6 +1684,11 @@ $blue: #655EFF;
 }
 /deep/ .el-upload-list__item.is-uploading {
     display: none;
+}
+.goods-message {
+    color: #FD4C2B;
+    font-size: 12px;
+    margin-top: 5px;
 }
 </style>
 

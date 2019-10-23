@@ -9,11 +9,6 @@
       v-loading="loading"
       >
       <el-table-column
-        type="selection"
-        prop="choose"
-        label="选择">
-      </el-table-column>
-      <el-table-column
         prop="alias"
         label="会员卡等级">
       </el-table-column>

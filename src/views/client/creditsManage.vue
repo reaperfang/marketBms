@@ -8,7 +8,7 @@
                         <el-form-item label="是否开启积分抵现：" prop="scoreToCash">
                             <div class="marL20">
                                 <br>
-                                <el-radio v-model="ruleForm.scoreToCash" label="0">不开启</el-radio><span class="c_warn">说明：开启用用户可以使用积分抵现（但不支持积分商城订单）</span><br>
+                                <el-radio v-model="ruleForm.scoreToCash" label="0" @change="closeScoreToCash">不开启</el-radio><span class="c_warn">&nbsp;&nbsp;&nbsp;&nbsp;说明：开启用用户可以使用积分抵现（但不支持积分商城订单）</span><br>
                                 <el-radio v-model="ruleForm.scoreToCash" label="1" @change="openScoreToCash">开启</el-radio><br>
                                 <span>抵现比例：</span>
                                 <div style="width: 140px; display: inline-block">
@@ -43,7 +43,7 @@
                             <div class="marL20">
                                 <br>
                                 <el-radio v-model="ruleForm.scoreCleanType" label="0">不清零</el-radio><br>
-                                <el-radio v-model="ruleForm.scoreCleanType" label="1">自然年清零上一年获得的积分</el-radio><span class="c_warn">每年12月31日清空上一年获得的积分</span>
+                                <el-radio v-model="ruleForm.scoreCleanType" label="1">自然年清零上一年获得的积分</el-radio><span class="c_warn">&nbsp;&nbsp;&nbsp;&nbsp;每年12月31日清空上一年获得的积分</span>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -130,6 +130,12 @@ export default {
                 this.ruleForm.scorePercentageMoney = 1
             }
         },
+        closeScoreToCash(val) {
+            if(val == '0') {
+                this.ruleForm.scorePercentageMoney = "";
+                this.ruleForm.scorePercentage = "";
+            }
+        },
         save() {
             let formObj = this.ruleForm;
             if(formObj.scoreToCash == '1' && formObj.scorePercentage == "" && formObj.scorePercentage == "") {
@@ -186,12 +192,12 @@ export default {
         checkCreditRule() {
             this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
                 this.ruleForm.scoreToCash = response.scoreToCash.toString();
-                this.ruleForm.scorePercentage = response.scorePercentage;
-                this.ruleForm.scorePercentageMoney = response.scorePercentageMoney;
+                this.ruleForm.scorePercentage = response.scoreToCash == 1 ? response.scorePercentage:'';
+                this.ruleForm.scorePercentageMoney = response.scoreToCash == 1 ? response.scorePercentageMoney:'';
                 this.ruleForm.scoreEnableOrderAchieveCash = response.scoreEnableOrderAchieveCash == 1?true:false;
                 this.ruleForm.scoreEnableOrderHighCash = response.scoreEnableOrderHighCash == 1?true:false;
-                this.ruleForm.scoreToCashOrderMoney = response.scoreToCashOrderMoney;
-                this.ruleForm.scoreToCashOrderRate = response.scoreToCashOrderRate;
+                this.ruleForm.scoreToCashOrderMoney = response.scoreEnableOrderAchieveCash == 1?response.scoreToCashOrderMoney:'';
+                this.ruleForm.scoreToCashOrderRate = response.scoreEnableOrderHighCash == 1?response.scoreToCashOrderRate:'';
                 this.ruleForm.scoreCleanType = response.scoreCleanType.toString();
                 this.ruleForm.scoreUpperCount = response.scoreUpperCount;
                 this.isSwitch = response.scoreUpper == 1? true:false;

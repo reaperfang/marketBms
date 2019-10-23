@@ -26,7 +26,7 @@
                     </div>
                     
                 </el-form-item>
-                <el-form-item label="会员类型">
+                <el-form-item label="客户类型">
                     <div class="input_wrap2">
                         <el-select v-model="form.memberType"  @change="getData">
                             <el-option v-for="item in customType" :label="item.name" :value="item.id" :key="item.id"></el-option>
