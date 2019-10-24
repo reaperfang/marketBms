@@ -183,7 +183,11 @@ export default {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
                 this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
-                    console.log('关闭成功');
+                    this.$notify({
+                        title: '成功',
+                        message: '关闭成功',
+                        type: 'success'
+                    });
                 }).catch((error) => {
                     console.log(error);
                 })

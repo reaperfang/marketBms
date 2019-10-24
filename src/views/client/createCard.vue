@@ -280,6 +280,10 @@ export default {
           this.ruleForm.phone = "";
           if (this.$route.query.cardData.level !== 1) {
             this.getCardPublic();
+          }else{
+            this.ruleForm.explain = response.explain;
+            this.ruleForm.notice = response.notice;
+            this.ruleForm.phone = response.phone;
           }
           //用于回显领取条件
           if (this.ruleForm.levelConditionInfoView) {
@@ -691,7 +695,11 @@ export default {
                 obj.giftNumber = 1;
                 obj.label = "赠送红包";
                 upgradeRewardDtoList.push(obj);
-                upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
+                if(!!v.hongbaoTotalMoney) {
+                  upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
+                }else{
+                  upgradePackage = upgradePackage + "赠送红包,";
+                }
               });
             }
           }

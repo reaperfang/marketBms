@@ -352,6 +352,18 @@ export default {
                         this.canSubmit = false;
                     }
                 }
+                if(this.ruleForm.anyOrAllCondition == "0") {
+                    let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
+                    let isSelect = arr.some(ele => ele == true)
+                    if(!isSelect) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请选择任意一个交易条件',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
                 if(!!this.canSubmit) {
                     let formObj = Object.assign({}, this.ruleForm);
                     formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
@@ -436,7 +448,7 @@ export default {
                     this.ruleForm = Object.assign({}, response);
                     this.ruleForm.tagType = this.ruleForm.tagType.toString();
                     this.ruleForm.anyOrAllCondition = typeof(this.ruleForm.anyOrAllCondition) == 'number' ? this.ruleForm.anyOrAllCondition.toString():"";
-                    this.ruleForm.consumeTimeType = this.ruleForm.consumeTimeType ? this.ruleForm.consumeTimeType.toString():'';
+                    this.ruleForm.consumeTimeType = typeof(this.ruleForm.consumeTimeType) == 'number' ? this.ruleForm.consumeTimeType.toString():'';
                     this.ruleForm.isLastConsumeTime = Boolean(this.ruleForm.isLastConsumeTime);
                     this.ruleForm.isTotalConsumeTimes = Boolean(this.ruleForm.isTotalConsumeTimes);
                     this.ruleForm.isTotalConsumeMoney = Boolean(this.ruleForm.isTotalConsumeMoney);
@@ -447,6 +459,12 @@ export default {
                     this.selectedIds = this.ruleForm.productInfoIds;   
                     if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
                         this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
+                    }
+                    if(this.ruleForm.consumeTimeType == "0") {
+                        this.consumeTime = "";
+                    }else{
+                        this.ruleForm.consumeTimeValue = "";
+                        this.ruleForm.consumeTimeUnit = "";
                     }
                 }
             }).catch((error) => {
