@@ -6,7 +6,8 @@
                 <template v-if="$route.query.type == 'deliverGoods'">
                     发货成功，您可以到订单详情页 
                     <router-link :to="{ path: '/order/orderDetail?id=' + this.$route.query.orderId + '&tab=2' }">查看发货信息</router-link> 或 
-                    <router-link v-if="!$route.query.print" :to="{ path: '/order/printingElectronicForm', query: {ids: this.$route.query.orderId} }">打印电子面单</router-link> 或 
+                    <router-link v-if="$route.query.print == 'false'" :to="{ path: '/order/printingElectronicForm', query: {ids: this.$route.query.orderId} }">打印电子面单</router-link> 
+                    <span v-if="$route.query.print == 'false'">或</span> 
                     <router-link :to="{ path: '/order/printDistributionSheet', query: {ids: this.$route.query.id} }">打印配送单</router-link>
                 </template>
                 <template v-else-if="$route.query.type == 'orderBulkDelivery'">

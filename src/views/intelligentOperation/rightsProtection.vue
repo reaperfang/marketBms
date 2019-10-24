@@ -46,7 +46,7 @@
                                     <el-option label="其他" value="4"></el-option> -->
                                 </el-select>
                             </div>
-                             <span class="span_label">会员类型</span>
+                             <span class="span_label">客户类型</span>
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.memberType">
                                     <el-option label="全部" value="null"></el-option>

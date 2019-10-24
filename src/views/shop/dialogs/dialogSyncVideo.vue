@@ -16,7 +16,7 @@
                   <p class="title">{{item.title}}</p>
                   <!-- <img :src="item.fileCover" class="imgCover">
                   <span class="btn" @click="openVideo(item)"></span> -->
-                  <video v-if="item.down_url !=''" :src="item.down_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
+                  <video v-if="item.video_url !=''" :src="item.video_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
                   <!-- <img :src="item.filePath" class="imgs"> -->
                 </div>
               </div>
@@ -113,7 +113,7 @@ export default {
             cid:this.cid,
             mediaId:item.media_id,
             sourceMaterialType:'2',
-            filePath:escape(item.down_url),
+            filePath:escape(item.video_url),
             fileSize:'',
             name:item.name,
             fileover:'',
