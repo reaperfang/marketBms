@@ -45,11 +45,12 @@ router.beforeEach((to, from, next) => {
         // })
       } else {
         // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
-        if (hasPermission(msfList, to)) {
-          next()
-        } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
-        }
+        // if (hasPermission(msfList, to)) {
+        //   next()
+        // } else {
+        //   next({ path: '/401', replace: true, query: { noGoBack: true }})
+        // }
+        next()
         // 可删 ↑
       }
     }

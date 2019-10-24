@@ -62,7 +62,7 @@
         label="维权原因"
         >
         <template slot-scope="scope">
-             <span style="line-height:60px;display:inline-block" v-if="scope.row.protectionReason">{{{1:'不想要了',2:'卖家缺货',3:'拍错了订单信息错误',4:'其他'}[scope.row.protectionReason]}}</span>
+             <span style="line-height:60px;display:inline-block" v-if="scope.row.protectionReason">{{{5:'不想要了',6:'卖家缺货',7:'发票问题',8:'拍错了/订单信息错误',9:'其他'}[scope.row.protectionReason]}}</span>
              <span style="line-height:60px;display:inline-block" v-else>-</span>
         </template>
       </el-table-column>
@@ -95,7 +95,7 @@ export default {
     listObj:{
       type:Object,
       default:{}
-    }
+    },
   },
   created() {
 
