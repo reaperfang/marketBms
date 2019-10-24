@@ -364,6 +364,18 @@ export default {
                         this.canSubmit = false;
                     }
                 }
+                if(this.ruleForm.anyOrAllCondition == "1") {
+                    let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
+                    let isSelect = arr.every(ele => ele == true)
+                    if(!isSelect) {
+                        this.$notify({
+                            title: '警告',
+                            message: '请选择所有交易条件',
+                            type: 'warning'
+                        });
+                        this.canSubmit = false;
+                    }
+                }
                 if(!!this.canSubmit) {
                     let formObj = Object.assign({}, this.ruleForm);
                     formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
