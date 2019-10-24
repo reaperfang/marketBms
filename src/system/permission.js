@@ -12,7 +12,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 function hasPermission(msfList, route) {
   if (route && route.path) {
-    return msfList.some(item => route.meta.title == item.name) || route.path == '/profile/profile' || route.path == '/401' || route.path == '/login'
+    return msfList.some(item => route.meta.title == item.name) || route.path == '/apply' || route.path == '/401' || route.path == '/login'
   } else {
     return true
   }
@@ -45,11 +45,13 @@ router.beforeEach((to, from, next) => {
         // })
       } else {
         // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
-        // if (hasPermission(msfList, to)) {
-        //   next()
-        // } else {
-        //   next({ path: '/401', replace: true, query: { noGoBack: true }})
-        // }
+        if(from.name == 'profile'){
+          if (hasPermission(msfList, to)) {
+            next()
+          } else {
+            next({ path: '/401', replace: true, query: { noGoBack: true }})
+          }
+        }
         next()
         // 可删 ↑
       }
