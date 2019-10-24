@@ -113,7 +113,7 @@ export default {
               }
               return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
               }
-              return time.getTime() > Date.now() - 8.64e7
+              return time.getTime() > Date.now()
           }
       },
       visitSourceType: "0",
