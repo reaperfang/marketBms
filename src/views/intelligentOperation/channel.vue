@@ -44,7 +44,7 @@
 
                     <el-form-item class="marT20">
                         <div class="buttonfl">
-                            <el-button class="minor_btn" icon="el-icon-search" @click="goSearch">查询</el-button>
+                            <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
                             <el-button class="border_btn" @click="reSet">重 置</el-button>
                         </div>
                     </el-form-item>

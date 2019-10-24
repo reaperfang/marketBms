@@ -44,7 +44,7 @@
                         <td style="height: 45px; text-align: center;">商品名称</td>
                         <td style="height: 45px; text-align: center;">数量</td>
                         <td style="height: 45px; text-align: center;">单价</td>
-                        <td style="height: 45px; text-align: center;">优惠</td>
+                        <!-- <td style="height: 45px; text-align: center;">优惠</td> -->
                         <td style="height: 45px; text-align: center;">金额</td>
                     </tr>
                     <template v-if="$route.query.afterSale">
@@ -53,7 +53,7 @@
                             <td style="height: 45px; text-align: center;">{{sendItem.goodsName}}</td>
                             <td style="height: 45px; text-align: center;">{{sendItem.sendCount}}</td>
                             <td style="height: 45px; text-align: center;">-</td>
-                            <td style="height: 45px; text-align: center;">-</td>
+                            <!-- <td style="height: 45px; text-align: center;">-</td> -->
                             <td style="height: 45px; text-align: center;">-</td>
                         </tr>
                     </template>
@@ -63,7 +63,7 @@
                             <td style="height: 45px; text-align: center;">{{sendItem.goodsName}}</td>
                             <td style="height: 45px; text-align: center;">{{sendItem.sendCount}}</td>
                             <td style="height: 45px; text-align: center;">{{sendItem.salePrice}}</td>
-                            <td style="height: 45px; text-align: center;">{{((sendItem.salePrice - sendItem.goodsPrice) * sendItem.sendCount).toFixed(2)}}</td>
+                            <!-- <td style="height: 45px; text-align: center;">{{((sendItem.salePrice - sendItem.goodsPrice) * sendItem.sendCount).toFixed(2)}}</td> -->
                             <td style="height: 45px; text-align: center;">{{(sendItem.goodsPrice * sendItem.sendCount).toFixed(2)}}</td>
                         </tr>
                     </template>
