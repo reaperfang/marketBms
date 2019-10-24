@@ -40,11 +40,6 @@ export default {
             bottom: '3%',
             containLabel: true
         },
-        // toolbox: {
-        //     feature: {
-        //         saveAsImage: {}
-        //     }
-        // },
         xAxis: {
             type: 'category',
             boundaryGap: false,
@@ -57,19 +52,19 @@ export default {
             {
                 name:'总收入',
                 type:'line',
-                stack: '总量',
+                // stack: '总量',
                 data: this.dataList.incomes
             },
             {
                 name:'总支出',
                 type:'line',
-                stack: '总量',
+                // stack: '总量',
                 data: this.dataList.expends
             },
             {
                 name:'实际收入',
                 type:'line',
-                stack: '总量',
+                // stack: '总量',
                 data: this.dataList.realIncomes
             }
         ]
