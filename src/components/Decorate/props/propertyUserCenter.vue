@@ -347,4 +347,7 @@ export default {
     margin-right: 10px;
   }
 }
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
+}
 </style>

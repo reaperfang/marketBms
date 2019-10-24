@@ -20,13 +20,13 @@
         <div class="phone-footer">
           <ul class="navs type1" v-if="ruleForm.navStyle.id == 1">
             <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].navIconActive" alt="">
+              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <span>{{ruleForm.navMap[item].navName}}</span>
             </li>
           </ul>
           <ul class="navs type2" v-if="ruleForm.navStyle.id == 2">
             <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].navIconActive" alt="">
+              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
             </li>
           </ul>
           <ul class="navs type3" v-if="ruleForm.navStyle.id == 3">
@@ -45,7 +45,7 @@
               </span>
             </li>
             <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].navIconActive" alt="">
+              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
             </li>
           </ul>
 

@@ -82,4 +82,7 @@ export default {
 /deep/.edui-editor{
     z-index: initial!important;
 }
+/deep/.m-colorPicker .box.open {
+    z-index: 9999!important;
+}
 </style>

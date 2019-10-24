@@ -255,4 +255,7 @@ ul.item_list{
     }
   }
 }
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
+}
 </style>

@@ -24,7 +24,7 @@
               :class="{'active': ruleForm.navMap[item].active}"
               :key="key"
               @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].navIconActive" alt="">
+              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <span v-if="ruleForm.navMap[item].active" :style="{color: ruleForm.activeColor}">{{ruleForm.navMap[item].navName}}</span>
               <span v-else :style="{color: ruleForm.unactiveColor}">{{ruleForm.navMap[item].navName}}</span>
             </li>
@@ -541,5 +541,8 @@ export default {
   .el-checkbox{
     margin-right: 10px;
   }
+}
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
 }
 </style>
