@@ -20,12 +20,12 @@ function hasPermission(msfList, route) {
 
 const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 
-const msfList = JSON.parse(localStorage.getItem('shopInfos')).data.msfList
 let flag = 0
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   //  if (true) { // determine if there has token  
   if(store.getters.token){
+    const msfList = JSON.parse(localStorage.getItem('shopInfos')).data.msfList
     /* has token*/
     if (to.path === '/login') {
       next({ path: '/' })
