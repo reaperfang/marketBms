@@ -169,19 +169,6 @@ export default {
                 this.listObj = res; //信息列表数据
                 this.totalCount = res.totalPage * this.form.pageSize;
                 this.form.loads = false
-                // if(memberType == 1){ //新会员 
-                //     this.textTips = true;
-                //     this.memberNum = res.newMemberCount;
-                //     this.memberCount = res.newMemberRatio;
-                // }else if(memberType == 2){ //老会员
-                //     this.textTips = true;
-                //     this.memberNum = res.oldMemberCount;
-                //     this.memberCount = res.oldMemberRatio;
-                // }else{ //其他
-                //     this.textTips = false;
-                // }
-                console.log(res)
-                // console.log(this.repeatPaymentRatio)
             }).catch(error => {
                 this.$message.error(error);
             });

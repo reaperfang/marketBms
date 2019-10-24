@@ -39,11 +39,6 @@
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.ProtectionReason">
                                     <el-option v-for="item in reasons" :label="item.name" :value="item.id" :key="item.id"></el-option>
-                                    <!-- <el-option label="不限" value="null"></el-option>
-                                    <el-option label="不想要了" value="1"></el-option>
-                                    <el-option label="卖家缺货" value="2"></el-option>
-                                    <el-option label="拍错了订单信息错误" value="3"></el-option>
-                                    <el-option label="其他" value="4"></el-option> -->
                                 </el-select>
                             </div>
                              <span class="span_label">客户类型</span>
@@ -140,16 +135,6 @@ export default {
             this.form.protectionType == 'null' && (this.form.protectionType = null)
             this.form.ProtectionReason == 'null' && (this.form.ProtectionReason = null)
             this.form.memberType == 'null' && (this.form.memberType = null)
-            // let data ={
-            //     timeType:this.form.timeType,
-            //     startTime:this.form.startTime,
-            //     endTime:this.form.endTime,
-            //     protectionType:this.form.protectionType,
-            //     ProtectionReason:this.form.ProtectionReason,
-            //     pageSize:this.form.pageSize,
-            //     startIndex:this.form.startIndex,
-
-            // }
             this._apis.data.rightsProtection(this.form).then(response => {
                 this.listObj = response;
                 this.form.loads = false
