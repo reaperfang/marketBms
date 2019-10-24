@@ -187,6 +187,9 @@ export default {
         }
     },
     created() {
+        if(typeof this.$route.query.orderAfterSaleStatus != 'undefined') {
+            this.listQuery = Object.assign({}, this.listQuery, {orderAfterSaleStatus: this.$route.query.orderAfterSaleStatus})
+        }
         this.getList()
     },
     filters: {

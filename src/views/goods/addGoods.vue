@@ -206,7 +206,7 @@
                             width="180">
                             <template slot-scope="scope">
                                 <!-- <span>¥{{scope.row.costPrice}}</span> -->
-                                <el-input v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -225,7 +225,7 @@
                             label="库存预警">
                             <template slot-scope="scope">
                                 <!-- <span>¥{{scope.row.costPrice}}</span> -->
-                                <el-input v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -233,7 +233,7 @@
                             label="重量(kg)">
                             <template slot-scope="scope">
                                 <!-- <span>{{scope.row.weight}}(kg)</span> -->
-                                <el-input v-model="scope.row.weight" placeholder="请输入重量"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.weight" placeholder="请输入重量"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -241,7 +241,7 @@
                             label="体积(m³)">
                             <template slot-scope="scope">
                                 <!-- <span>{{scope.row.volume}}(m³)</span> -->
-                                <el-input v-model="scope.row.volume" placeholder="请输入体积"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -810,16 +810,6 @@ export default {
 
                 this.itemCatText = _arr.map(val => val.name).join(' > ')
 
-                if(!this.itemCatText) {
-                    this.leimuMessage = true
-                }
-
-                if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
-                    this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
-                    this.ruleForm.productBrandInfoId = ''
-                    this.pinpaiMessage = true
-                }
-
                 let specs = JSON.parse(res.goodsInfo.specs)
 
                 let specsLabelArr = []
@@ -881,6 +871,17 @@ export default {
                 }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
+
+                if(!this.itemCatText) {
+                    this.leimuMessage = true
+                    this.ruleForm.productCategoryInfoId = ''
+                }
+
+                if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
+                    this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
+                    this.ruleForm.productBrandInfoId = ''
+                    this.pinpaiMessage = true
+                }
 
                 // if(this.ruleForm.productDetail) {
                 //     let _productDetail = ''

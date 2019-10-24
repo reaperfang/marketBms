@@ -180,7 +180,7 @@
                             应退还积分：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnScore}}
+                            {{orderAfterSale.shouldReturnScore || 0}}
                         </div>
                     </div>
                     <div class="row">
@@ -188,7 +188,7 @@
                             应退金额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnMoney}}
+                            {{orderAfterSale.shouldReturnMoney || 0}}
                         </div>
                     </div>
                     <div class="row">
@@ -196,7 +196,7 @@
                             应退还余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnBalance}}
+                            {{orderAfterSale.shouldReturnBalance || 0}}
                         </div>
                     </div>
                     <div class="row">
@@ -256,7 +256,7 @@
                         </div>
                         <div class="col">
                             <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnScore}}</span>
+                            <span v-else>{{orderAfterSale.realReturnScore || 0}}</span>
                         </div>
                     </div>
                     <div class="row align-center">
@@ -265,7 +265,7 @@
                         </div>
                         <div class="col">
                             <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0" min="0" type="number" @change="realReturnMoneyHandler" v-model="orderAfterSale.realReturnMoney"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnMoney}}</span>
+                            <span v-else>{{orderAfterSale.realReturnMoney || 0}}</span>
                         </div>
                     </div>
                     <div class="row align-center">

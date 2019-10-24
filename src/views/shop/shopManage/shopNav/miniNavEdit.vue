@@ -17,7 +17,7 @@
         </div>
 
         <!-- 手机底部 小程序-->
-        <div class="phone-footer">
+        <div class="phone-footer" :style="{backgroundColor: ruleForm.backgroundColor}">
           <ul class="navs type1">
             <li
               v-for="(item, key) of ruleForm.navIds"
@@ -25,7 +25,8 @@
               :key="key"
               @click="selectNav(item)">
               <img :src="ruleForm.navMap[item].navIconActive" alt="">
-              <span>{{ruleForm.navMap[item].navName}}</span>
+              <span v-if="ruleForm.navMap[item].active" :style="{color: ruleForm.activeColor}">{{ruleForm.navMap[item].navName}}</span>
+              <span v-else :style="{color: ruleForm.unactiveColor}">{{ruleForm.navMap[item].navName}}</span>
             </li>
           </ul>
         </div>

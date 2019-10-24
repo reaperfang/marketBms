@@ -270,6 +270,9 @@ export default {
         }
     },
     created() {
+        if(typeof this.$route.query.status != 'undefined') {
+            this.listQuery = Object.assign({}, this.listQuery, {status: +this.$route.query.status})
+        }
         this.getList()
         this.getCategoryList()
     },

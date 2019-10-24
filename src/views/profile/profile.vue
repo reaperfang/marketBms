@@ -31,22 +31,22 @@
                 </p>
                 <div class="p_r_list">
                     <p>待办售罄
-                        <router-link to="/goods/goodsList">
+                        <router-link to="/goods/goodsList?status=-1">
                             <span>({{toBeSoldOut || 0}})</span>
                         </router-link>    
                     </p>
                     <p>待发货订单
-                        <router-link to="/goods/goodsList">
+                        <router-link to="/order/deliveryManagement?status=3">
                             <span>({{staySendCount || 0}})</span>
                         </router-link>
                     </p>
                     <p>售后待处理
-                        <router-link to="/order/afterSalesManagement">
+                        <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
                             <span>({{stayProcessedCount || 0}})</span>
                         </router-link>
                     </p>
                     <p>售后单待审核
-                        <router-link to="/order/afterSalesManagement">
+                        <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
                             <span>({{stayAuthCount || 0}})</span>
                         </router-link>
                     </p>
@@ -59,10 +59,10 @@
                 <p class="p_title" style="padding-left: 29px">常用功能：</p>
                 <div class="p_list">
                     <div class="p_l_item clearfix" v-for="item in commonData" :key="item.id">
-                        <router-link :to="item.url">
+                        <div @click="linkTo(item)">
                             <img :src="item.img" alt="">
                             <span>{{item.text}}</span>
-                        </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <p class="p_title">营销活动：</p>
                 <div class="p_list" v-if="activeData.length != 0">
                     <div class="p_m_item" v-for="item in activeData" :key="item.id">
-                        <span  @click="linkTo(item)">
+                        <span  @click="linkToApply(item)">
                             <img :src="item.appImage" alt="" style="height:40px;width:40px;">
                             <div>
                                 <p>{{item.appName}}</p>
@@ -199,6 +199,13 @@ export default {
                 this.SETCURRENT(8)
             }else{
                 this.$router.push({path:item.url})
+            }
+        },
+        //营销活动跳转
+        linkToApply(item){
+            if(item.url){
+                this.$router.push({path:'/apply',query:{paths:item.url}})
+                this.SETCURRENT(8)
             }
         }
     },
