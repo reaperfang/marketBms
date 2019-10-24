@@ -19,7 +19,7 @@ export default [
 				path: "index",
 				component: () => import("@/views/shop/shopManage/index"),
 				name: "index",
-				meta: { title: "店铺主页", noCache: true }
+				meta: { title: "店铺", noCache: true }
 			},
 			{
 				path: "pageManageIndex",

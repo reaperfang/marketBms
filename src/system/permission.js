@@ -12,7 +12,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 function hasPermission(msfList, route) {
   if (route && route.path) {
-    return msfList.some(item => route.meta.title == item.name) || route.path == '/profile/profile' || route.path == '/401'
+    return msfList.some(item => route.meta.title == item.name) || route.path == '/profile/profile' || route.path == '/401' || route.path == '/login'
   } else {
     return true
   }
