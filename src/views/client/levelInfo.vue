@@ -604,7 +604,7 @@ export default {
       }
       this._apis.client.checkLevelValue(params).then((response) => {
         if(response == "no") {
-          this.xfjem = "";
+          this[ele] = "";
           this.$notify({
             title: "警告",
             message: "高会员卡等级条件数值要大于低会员卡等级的条件数值",
