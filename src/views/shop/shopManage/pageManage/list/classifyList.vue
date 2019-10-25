@@ -16,9 +16,13 @@
     <div class="table">
       <p>微页面分类（共{{total || 0}}个）</p>
       <el-table :data="tableList" stripe v-loading="loading">
-        <el-table-column prop="name" label="分类名称"></el-table-column>
+        <el-table-column prop="name" label="分类名称">
+           <template slot-scope="scope">
+            <span class="page_name" @click="_routeTo('decorateClassifyPreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="pageNum" label="页面数量"></el-table-column>
-        <el-table-column prop="updateTime" label="创建/编辑时间"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="创建/编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
         <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
@@ -151,5 +155,11 @@ export default {
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
   color:#837DFF!important;
+}
+.page_name{
+  cursor: pointer;
+  &:hover{
+    color: $globalMainColor;
+  }
 }
 </style>

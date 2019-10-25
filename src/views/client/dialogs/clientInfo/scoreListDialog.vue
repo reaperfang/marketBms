@@ -56,15 +56,14 @@ export default {
               new Date(Number(v.createTime)),
               "yyyy-MM-dd hh:mm:ss"
             );
+            if(v.changeScore !== 0) {
+              v.changeScore = v.changeType == 1?"-" + v.changeScore:"+" + v.changeScore;
+            }
           });
             this.scoreList = [].concat(list);
             this.total = response.total;
         }).catch((error) => {
           console.log(error);
-            // this.$notify.error({
-            //     title: "错误",
-            //     message: error
-            // });
         })
     },
     handleSizeChange(val) {

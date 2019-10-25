@@ -19,6 +19,7 @@
                     filterable>
                 </el-cascader>
                 <span class="category-display">您当前的选择是：{{itemCatText}}</span>
+                <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
             </el-form-item>
             <el-form-item label="商品名称" prop="name">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
@@ -62,7 +63,7 @@
                         clearable>
                     </el-cascader>
                 </div>
-                <div v-if="ruleForm.productCategoryInfoId" @click="addCategory" class="blue pointer" style="display: inline-block; margin-left: 24px;">新增分类</div>
+                <div v-if="ruleForm.productCategoryInfoId" @click="$router.push('/goods/classify')" class="blue pointer" style="display: inline-block; margin-left: 24px;">新增分类</div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
                 <div class="add-tag">
@@ -72,7 +73,8 @@
                                 v-for="item in productLabelList"
                                 :key="item.id"
                                 :label="item.name"
-                                :value="item.id">
+                                :value="item.id"
+                                :disabled="item.enable == 0">
                             </el-option>
                         </el-select>
                     </div>
@@ -204,7 +206,7 @@
                             width="180">
                             <template slot-scope="scope">
                                 <!-- <span>¥{{scope.row.costPrice}}</span> -->
-                                <el-input v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -223,7 +225,7 @@
                             label="库存预警">
                             <template slot-scope="scope">
                                 <!-- <span>¥{{scope.row.costPrice}}</span> -->
-                                <el-input v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -231,7 +233,7 @@
                             label="重量(kg)">
                             <template slot-scope="scope">
                                 <!-- <span>{{scope.row.weight}}(kg)</span> -->
-                                <el-input v-model="scope.row.weight" placeholder="请输入重量"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.weight" placeholder="请输入重量"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -239,7 +241,7 @@
                             label="体积(m³)">
                             <template slot-scope="scope">
                                 <!-- <span>{{scope.row.volume}}(m³)</span> -->
-                                <el-input v-model="scope.row.volume" placeholder="请输入体积"></el-input>
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -316,6 +318,7 @@
                         :value="item.id">
                     </el-option>
                 </el-select>
+                <p class="goods-message" v-if="pinpaiMessage != '' && pinpaiMessage == true && ruleForm.productBrandInfoId == ''">历史品牌已被禁用或删除，请您重新选择</p>
             </el-form-item>
         </section>
         <section class="form-section">
@@ -626,15 +629,23 @@ export default {
             materialIndex: 0,
             material: false,
             hideUpload: false,
+            leimuMessage: '',
+            pinpaiMessage: '',
+            catcheProductBrandInfoId: ''
         }
     },
     created() {
-        this.getCategoryList()
-        this.getProductLabelList()
-        this.getUnitList()
-        this.getBrandList()
-        this.getTemplateList()
-        this.getOperateCategoryList().then(res => {
+        // this.getOperateCategoryList().then(res => {
+        //     this.getCategoryList()
+        //     this.getProductLabelList()
+        //     this.getUnitList()
+        //     this.getBrandList()
+        //     this.getTemplateList()
+        //     if(this.$route.query.id && this.$route.query.goodsInfoId) {
+        //         this.getGoodsDetail()
+        //     }
+        // })
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
@@ -694,14 +705,23 @@ export default {
             this.dialogVisible = true
         },
         getTemplateList() {
-            this._apis.order.fetchTemplatePageList().then((res) => {
-                this.shippingTemplates = res.list
-            }).catch(error => {
-                this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+            return new Promise((resolve, reject) => {
+                this._apis.order.fetchTemplatePageList({pageSize: 1000}).then((res) => {
+                    res.list.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
+                    this.shippingTemplates = res.list
+
+                    resolve()
+                }).catch(error => {
+                    this.visible = false
+                    this.$notify.error({
+                        title: '错误',
+                        message: error
+                    });
+                    reject(error)
+                })
             })
         },
         deleteSpec(index) {
@@ -846,8 +866,22 @@ export default {
                         this.ruleForm.otherUnit = this.ruleForm.productUnit
                     }
                 }
+                if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
+                    this.ruleForm.productLabelId = ''
+                }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
+
+                if(!this.itemCatText) {
+                    this.leimuMessage = true
+                    this.ruleForm.productCategoryInfoId = ''
+                }
+
+                if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
+                    this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
+                    this.ruleForm.productBrandInfoId = ''
+                    this.pinpaiMessage = true
+                }
 
                 // if(this.ruleForm.productDetail) {
                 //     let _productDetail = ''
@@ -1065,19 +1099,35 @@ export default {
         },
         // 获取单品牌管理列表
         getBrandList() {
-           this._apis.goodsOperate.fetchBrandList().then(res => {
-                this.brandList = res
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goodsOperate.fetchBrandList().then(res => {
+                    res.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
+                    this.brandList = res
 
-            })   
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
+            })
         },
         // 获取单位计量列表
         getUnitList() {
-           this._apis.goodsOperate.fetchUnitList().then(res => {
-                this.unitList = res
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goodsOperate.fetchUnitList().then(res => {
+                    res.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
+                    this.unitList = res
 
-            })   
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
+            })
         },
         itemCatHandleChange(value) {
             let _value = [...value]
@@ -1108,11 +1158,18 @@ export default {
             })
         },
         getProductLabelList() {
-            this._apis.goods.fetchAllTagsList().then(res => {
-                console.log(res)
-                this.productLabelList = res
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goods.fetchAllTagsList().then(res => {
+                    res.unshift({
+                        id: '',
+                        name: '请选择'
+                    })
+                    this.productLabelList = res
 
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
             })
         },
         transTreeData(data, pid) {
@@ -1132,13 +1189,17 @@ export default {
             return result;
         },
         getCategoryList() {
-            this._apis.goods.fetchCategoryList().then((res) => {
-                this.flatCategoryList = res
-                let arr = this.transTreeData(res, 0)
-                
-                this.categoryOptions = arr
-            }).catch(error => {
+            return new Promise((resolve, reject) => {
+                this._apis.goods.fetchCategoryList().then((res) => {
+                    this.flatCategoryList = res
+                    let arr = this.transTreeData(res, 0)
+                    
+                    this.categoryOptions = arr
 
+                    resolve()
+                }).catch(error => {
+                    reject(error)
+                })
             })
         },
         handleChange(value) {
@@ -1624,6 +1685,11 @@ $blue: #655EFF;
 }
 /deep/ .el-upload-list__item.is-uploading {
     display: none;
+}
+.goods-message {
+    color: #FD4C2B;
+    font-size: 12px;
+    margin-top: 5px;
 }
 </style>
 

@@ -116,6 +116,8 @@ export default {
           if (valid) {
             if(this.form.cashOutUpper <= this.form.cashOutLower){
               this.$message.error('单笔提现金额上限应大于单笔最低提现金额');
+            }else if(!(this.form.cashOutUpperChecked || this.form.cashOutLowerChecked || this.form.cashOutTimesChecked ||this.form.cashOutMoneyChecked)){
+              this.$message.error('允许状态下至少勾选一个条件');
             }else{
               let id = this.cid
               this.form.cashOutUpperChecked == false && (this.form.cashOutUpper = null)

@@ -14,26 +14,36 @@
       <el-table-column
         prop="id"
         label="ID">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id ? scope.row.id : '-'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
-        label="会员类型">
+        label="客户类型">
         <template slot-scope="scope">
-             <span style="line-height:60px;display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
+            <span  v-if="scope.row.memberType" style="line-height:60px;display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
+            <span v-else> - </span>
         </template>
       </el-table-column>
       <el-table-column
         prop="name"
         label="会员昵称">
+        <template slot-scope="scope">
+          <span>{{ scope.row.name ? scope.row.name : '-'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="phone"
         label="手机号">
+        <template slot-scope="scope">
+          <span>{{ scope.row.phone ? scope.row.phone : '-'}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         label="维权时间"
         width="150">
         <template slot-scope="scope">
-          <span>{{Number(scope.row.tradeTime) | time}}</span>
+          <span>{{scope.row.tradeTime && Number(scope.row.tradeTime) | time}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -52,7 +62,7 @@
         label="维权原因"
         >
         <template slot-scope="scope">
-             <span style="line-height:60px;display:inline-block" v-if="scope.row.protectionReason">{{{1:'不想要了',2:'卖家缺货',3:'拍错了订单信息错误',4:'其他'}[scope.row.protectionReason]}}</span>
+             <span style="line-height:60px;display:inline-block" v-if="scope.row.protectionReason">{{{5:'不想要了',6:'卖家缺货',7:'发票问题',8:'拍错了/订单信息错误',9:'其他'}[scope.row.protectionReason]}}</span>
              <span style="line-height:60px;display:inline-block" v-else>-</span>
         </template>
       </el-table-column>
@@ -85,7 +95,7 @@ export default {
     listObj:{
       type:Object,
       default:{}
-    }
+    },
   },
   created() {
 

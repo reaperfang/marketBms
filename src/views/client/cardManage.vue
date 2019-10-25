@@ -104,11 +104,10 @@ export default {
             return isLt2M;
         },
         handleFind() {
-
             let obj = {
-                name: this.selected == "" ? null : this.selected,
-                startTime: this.getTime == "" ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
-                endTime: this.getTime == "" ? "":utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
+                name: this.selected == "" || this.selected == "全部"? null : this.selected,
+                startTime: this.getTime == "" || this.getTime == null ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
+                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
             }
             this.lkParams = Object.assign({},obj);
         },
@@ -122,6 +121,7 @@ export default {
         getCardNames() {
             this._apis.client.getCardNames({}).then((response) => {
                 this.cardNames = [].concat(response);
+                this.cardNames.unshift({name:'全部', id: '001'})
             }).catch((error) => {
                 console.log(error);
             })

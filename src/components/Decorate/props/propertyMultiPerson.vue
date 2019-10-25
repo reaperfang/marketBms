@@ -7,25 +7,25 @@
           <el-radio :label="2">自动获取</el-radio>
         </el-radio-group>
       </el-form-item>
-     <el-form-item label="选择商品" v-if="ruleForm.addType === 1" prop="goods">
+     <el-form-item label="选择商品" prop="goods">
       </el-form-item>
-      <div class="goods_list" v-if="ruleForm.addType === 1" prop="goods">
+      <div class="goods_list" prop="goods">
         <ul>
-          <template v-if="ruleForm.addType === 1">
+          <template>
             <template v-for="(item, key) of list">
               <li :key="key" v-if="item.status !== 2">
                 <img :src="item.image" alt="">
-                <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+                <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
               </li>
             </template>
           </template>
-          <template v-else-if="ruleForm.addType === 2">
+          <!-- <template v-else-if="ruleForm.addType === 2">
             <li v-for="(item, key) of []" :key="key">
               <img :src="item.image" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
-          </template>
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'">
+          </template> -->
+          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'" v-if="ruleForm.addType === 1">
             <i class="inner"></i>
           </li>
         </ul>
@@ -219,6 +219,9 @@ export default {
     'ruleForm.addType'(newValue) {
         if(newValue == 2) {
             this.fetch();
+        }else{
+          this.list = [];
+          this.fetch();
         }
     },
     'ruleForm.showNumber'(newValue) {

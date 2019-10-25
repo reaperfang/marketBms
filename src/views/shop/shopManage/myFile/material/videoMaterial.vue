@@ -24,7 +24,7 @@
                   </span>
                   <span>
                     <i class="wx_icon" v-if="item.isSyncWechat"></i>
-                    {{item.fileSize}} MB
+                    {{item.fileSize || 0}} MB
                   </span>
               </p>
               <div class="img_body">

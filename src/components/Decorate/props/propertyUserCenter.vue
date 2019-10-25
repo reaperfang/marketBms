@@ -8,9 +8,9 @@
           <el-form-item label="背景图片" prop="backgroundImage" style="margin-bottom: 0;">
             <div class="img_preview" v-if="ruleForm.backgroundImage">
               <img :src="ruleForm.backgroundImage" alt="">
-              <span @click="currentModule=ruleForm; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+              <span @click="changeBackground">更换图片</span>
             </div>
-            <div class="add_button" v-if="!ruleForm.backgroundImage" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+            <div class="add_button" v-if="!ruleForm.backgroundImage" @click="changeBackground">
               <i class="inner"></i>
             </div>
             <span style="color:rgba(182,181,200,1);">建议尺寸 750*426 像素</span>
@@ -48,22 +48,24 @@
         </div>
 
         <div class="block form">
-          <el-form-item 
-            :key="key"
-            :label="item.title"
-            :prop="'moduleList.'+ key +'.titleValue'"
-            :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]"
-            v-for="(item, key) in ruleForm.moduleList">
-            <div class="module_block">
-                <el-input v-model="item.titleValue"></el-input>
-                <div class="img_preview">
-                  <img :src="item.icon || require('@/assets/images/shop/userCenter/' + item.defaultIcon + '.png')" alt="">
-                  <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
-                </div>
-                <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
-                <!-- <el-button type="text">重置</el-button> -->
-            </div>
-          </el-form-item>
+          <template v-for="(item, key) in ruleForm.moduleList">
+            <el-form-item 
+              v-if="item.name !== 'integralMarket'"
+              :key="key"
+              :label="item.title"
+              :prop="'moduleList.'+ key +'.titleValue'"
+              :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]">
+              <div class="module_block">
+                  <el-input v-model="item.titleValue"></el-input>
+                  <div class="img_preview">
+                    <img :src="item.icon || require('@/assets/images/shop/userCenter/' + item.defaultIcon + '.png')" alt="">
+                    <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
+                  </div>
+                  <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
+                  <!-- <el-button type="text">重置</el-button> -->
+              </div>
+            </el-form-item>
+          </template>
         </div>  
 
         <div class="block button">
@@ -199,7 +201,14 @@ export default {
         this.$emit('userCenterDataChanged', newValue);
       },
       deep: true
+    },
+    shopInfo: {
+      handler(newValue) {
+        this.getQrcode();
+      },
+      deep: true
     }
+    
   },
   created() {
     const _self = this;
@@ -220,6 +229,7 @@ export default {
     });
 
     this.ruleForm.backgroundImage= '';
+    this.$store.dispatch('getShopInfo');
     this.$emit('userCenterDataChanged', this.ruleForm);
   },
   mounted() {
@@ -228,16 +238,18 @@ export default {
     }
   },
   computed: {
-    
+      shopInfo() {
+        return this.$store.getters.shopInfo || {};
+      }
   },
   methods: {
 
      /* 弹框选中图片 */
     imageSelected(dialogData) {
-      if(this.currentModule.icon) {
+      if(this.currentModule.icon !== undefined && this.currentModule.icon !== null) {
         this.currentModule.icon = dialogData.filePath;
       }
-      if(this.currentModule.backgroundImage) {
+      if(this.currentModule.backgroundImage !== undefined && this.currentModule.backgroundImage !== null) {
         this.currentModule.backgroundImage = dialogData.filePath;
       }
     },
@@ -276,13 +288,21 @@ export default {
       this._apis.shop.getQrcode({
         url: this.ruleForm.shareUrl.replace("&","[^]"),
         width: '150',
-        height: '150'
+        height: '150',
+        logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
       }).catch((error)=>{
         this.$message({ message: error, type: 'error' });
       });
+    },
+
+    /* 改变背景图片 */
+    changeBackground() {
+      this.currentModule=this.ruleForm; 
+      this.dialogVisible=true; 
+      this.currentDialog='dialogSelectImageMaterial';
     }
   }
 }
@@ -326,5 +346,8 @@ export default {
   .el-checkbox{
     margin-right: 10px;
   }
+}
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
 }
 </style>

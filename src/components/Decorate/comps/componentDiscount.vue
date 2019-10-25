@@ -38,7 +38,7 @@
                         <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice}}</font></p>
                         <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice}}</p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1"></componentButton>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1 && listStyle != 3 && listStyle != 6"></componentButton>
                     <p class="activity_end" v-if="false">已售罄</p>
                     <p class="activity_end" v-if="false">活动结束</p>
                 </div>

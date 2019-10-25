@@ -59,6 +59,28 @@ import DialogBase from '@/components/DialogBase'
 
 export default {
     data() {
+        var sendPhoneValidator = (rule, value, callback) => {
+            if(!this.ruleForm.sendPhone) {
+                callback(new Error('发货人电话不能为空'));
+            } else {
+                if(!/^\d{11}$/.test(this.ruleForm.sendPhone)) {
+                    callback(new Error('电话格式错误'));
+                } else {
+                    callback();
+                }
+            }
+        };
+        var receivedPhoneValidator = (rule, value, callback) => {
+            if(!this.ruleForm.receivedPhone) {
+                callback(new Error('收货人电话不能为空'));
+            } else {
+                if(!/^\d{11}$/.test(this.ruleForm.receivedPhone)) {
+                    callback(new Error('电话格式错误'));
+                } else {
+                    callback();
+                }
+            }
+        };
         return {
             ruleForm: {
                 receivedName: '',
@@ -87,7 +109,7 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 receivedPhone: [
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { validator: receivedPhoneValidator, trigger: 'blur' },
                 ],
                 receivedDetail: [
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -100,7 +122,7 @@ export default {
                     { required: true, message: '请输入', trigger: 'blur' },
                 ],
                 sendPhone: [
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { validator: sendPhoneValidator, trigger: 'blur' },
                 ],
                 sendDetail: [
                     { required: true, message: '请输入', trigger: 'blur' },
@@ -340,6 +362,16 @@ export default {
     }
     .demo-ruleForm {
         padding-right: 70px;
+    }
+    /deep/ label[for="sendPhone"]::before {
+        content: '*';
+        color: #f56c6c;
+        margin-right: 4px;
+    }
+    /deep/ label[for="receivedPhone"]::before {
+        content: '*';
+        color: #f56c6c;
+        margin-right: 4px;
     }
 </style>
 <style lang="scss">

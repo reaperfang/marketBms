@@ -3,12 +3,12 @@
   <DialogBase :visible.sync="visible" width="816px" :title="'选择商品分类'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
-        <el-form-item label prop="name">
+        <!-- <el-form-item label prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
         <el-form-item label prop="name">
           <el-button type="primary" @click="fetch">搜 索</el-button>
-        </el-form-item>
+        </el-form-item> -->
       </div>
     </el-form>
 
@@ -41,6 +41,7 @@
       @dialogDataSelected="dialogDataSelected"
       :categoryId="currentCategory.id"
       :categoryName="currentCategory.categoryName"
+      :goodsEcho.sync="list"
     ></component>
   </DialogBase>
 </template>
@@ -58,7 +59,8 @@ export default {
     dialogVisible: {
       type: Boolean,
       required: true
-    }
+    },
+    seletedGroupInfo: {}
   },
   data() {
     return {
@@ -79,7 +81,8 @@ export default {
       dialogVisible2: false, //子弹窗是否显示
       currentDialog: "", //当前弹窗
       currentCategory: {}, //当前选中的分类
-      resultData: {} //生成的结果数据
+      resultData: {}, //生成的结果数据
+      seletedGroupGoodsLengths: {}  //已选中的商品分类里的商品个数
     };
   },
   computed: {
@@ -93,6 +96,7 @@ export default {
     }
   },
   created() {
+    this.convertGoodsLengths();
     this.fetch();
   },
   methods: {
@@ -101,8 +105,9 @@ export default {
       this._apis.goods
         .fetchCategoryList(this.ruleForm)
         .then(response => {
-          this.responseData = response;
-          let arr = this.transTreeData(response, 0);
+          let data = this.restoreData(response);
+          this.responseData = data;
+          let arr = this.transTreeData(data, 0);
           this.categoryData = arr;
           this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)));
           this.loading = false;
@@ -115,6 +120,36 @@ export default {
           console.error(error);
           this.loading = false;
         });
+    },
+
+    //拉取点击选中的分类下的商品
+    fetchSelectedGoods(callback) {
+      this.loading = true;
+      if(this.resultData[this.currentCategory.id] && this.resultData[this.currentCategory.id].goods.length) {
+        this._apis.goods.fetchAllSpuGoodsList({
+            status: '1',
+            ids: this.resultData[this.currentCategory.id].goods,
+            productCatalogInfoId: this.currentCategory.id
+        }).then((response)=>{
+            callback && callback(response);
+            this.loading = false;
+        }).catch((error)=>{
+            callback && callback(false);
+            this.loading = false;
+        });
+      }else{
+        callback([]);
+        this.loading = false;
+      }
+    },
+
+    //转换商品个数
+    convertGoodsLengths() {
+      if(this.seletedGroupInfo) {
+        for(let k in this.seletedGroupInfo) {
+          this.seletedGroupGoodsLengths[k] = this.seletedGroupInfo[k].goods.length;
+        }
+      }
     },
 
     transTreeData(data, pid) {
@@ -175,7 +210,7 @@ export default {
            <img class="td img" src={data.image}/>
            {data.categoryName}
            </span>
-          <span class="td state">{data.goods ? data.goods.length : 0}</span>
+          <span class="td state">{(this.seletedGroupGoodsLengths ? this.seletedGroupGoodsLengths[data.id] : data.goods.length) || 0}</span>
           <span class="td operate">
             {
               <span class="blue" on-click={() => this.change(node, data)}>
@@ -189,8 +224,11 @@ export default {
 
     change(node, data) {
       this.currentCategory = data;
-      this.currentDialog = "dialogSelectGoods";
-      this.dialogVisible2 = true;
+      this.fetchSelectedGoods((list) => {
+        this.list = list;
+        this.currentDialog = "dialogSelectGoods";
+        this.dialogVisible2 = true;
+      });
     },
 
     /* 向父组件提交选中的数据 */
@@ -206,7 +244,8 @@ export default {
       /* 重置树形数据，把选中的商品回显到列表中 */
       for (let item of this.responseData) {
         if (this.currentCategory.id === item.id) {
-          item["goods"] = items;
+          item["goods"] = items.map(function(item){return item.id});
+          this.seletedGroupGoodsLengths[item.id] = items.length;
         }
       }
       this.categoryData = this.transTreeData(this.responseData, 0);
@@ -214,9 +253,31 @@ export default {
       //把选中的数据收集起来发给父组件
       this.resultData[this.currentCategory.id] = {
         catagoryData: this.currentCategory,
-        goods: items
+        goods: items.map(function(item){return item.id})
       };
       this.currentDialog = "";
+    },
+
+    /* 恢复选中的商品数据 */
+    restoreData(response) {
+      if(!this.seletedGroupInfo) {  //没有数据的分类不添加
+        return;
+      }
+      /* 重置树形数据，把选中的商品回显到列表中 */
+      for(let k in this.seletedGroupInfo) {
+        // this.seletedGroupGoodsLengths[k] = this.seletedGroupInfo[k].length;
+        for (let item of response) {
+          if (item.id === k) {
+            item["goods"] = this.seletedGroupInfo[k].goods;
+            //把选中的数据收集起来发给父组件
+            this.resultData[k] = {
+              catagoryData: item,
+              goods: this.seletedGroupInfo[k].goods
+            };
+          }
+        }
+      }
+      return response;
     }
   }
 };

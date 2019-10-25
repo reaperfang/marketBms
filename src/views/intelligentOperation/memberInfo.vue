@@ -26,7 +26,7 @@
                     </div>
                     
                 </el-form-item>
-                <el-form-item label="会员类型">
+                <el-form-item label="客户类型">
                     <div class="input_wrap2">
                         <el-select v-model="form.memberType"  @change="getData">
                             <el-option v-for="item in customType" :label="item.name" :value="item.id" :key="item.id"></el-option>
@@ -35,10 +35,7 @@
                     <span class="span_label">交易次数</span>
                     <div class="input_wrap2 marR20">
                         <el-select v-model="form.tradeCountRange"  @change="getData">
-                            <el-option label="1次" value="1"></el-option>
-                            <el-option label="2-5次" value="2"></el-option>
-                            <el-option label="6-8次" value="3"></el-option>
-                            <el-option label="8次以上" value="4"></el-option>
+                            <el-option v-for="item in tradeCount" :label="item.name" :value="item.value" :key="item.id"></el-option>
                         </el-select>
                     </div>
                     <el-checkbox-group v-model="form.queryRepeatPaymentRatio" style="display:inline-block">
@@ -70,7 +67,7 @@
             <div class="m_line clearfix">
                 <p class="fl">该筛选条件下：
                     <i v-if="form.memberType== null" style="font-style:normal">
-                        全部会员共计<span>{{customerCount + newMemberCount + oldMemberCount || 0}}</span>人；
+                        全部会员共计<span>{{newMemberCount + oldMemberCount || 0}}</span>人；
                         占客户总数的<span>{{allRatio}}%</span>;    
                     </i>
                     <i v-if="form.memberType==0" style="font-style:normal">
@@ -92,7 +89,7 @@
                     <el-button class="yellow_btn" icon="el-icon-share" @click="mIexport">导出</el-button>
                 </div>
             </div>
-            <maTable class="marT20" 
+            <maTable class="marT20s" 
                 @sizeChange = "sizeChange"
                 @currentChange = "currentChange"                   
                 :listObj="listObj" 
@@ -100,10 +97,13 @@
             </maTable>
         </div>
         <p>运营建议:</p>
-             <p v-if="form.tradeCountRange==1" class="proposal"><b>"交易次数1次："</b>此用户群体为低频用户，建议提升产品认可度，提升服务质量，有助于提升低频用户交易次数。</p> 
-             <p v-if="form.tradeCountRange==2" class="proposal"><b>"交易次数2-5次："</b>此用户群体为中频用户，建议提升产品认可度，提升服务质量，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受95折，有助于提升低频用户交易次数。</p> 
-             <p v-if="form.tradeCountRange==3" class="proposal"><b>"交易次数6-8次："</b>此用户群体为高频用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受9折，有助于提升低频用户交易次数。</p> 
-             <p v-if="form.tradeCountRange==4" class="proposal"><b>"交易次数8次以上："</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p> 
+             <p v-if="form.tradeCountRange == '1-1'" class="proposal"><b>"交易次数1次"：</b>此用户群体为低频用户，建议提升产品认可度，提升服务质量，有助于提升低频用户交易次数。</p> 
+             <p v-if="form.tradeCountRange == '2-5'" class="proposal"><b>"交易次数2-5次"：</b>此用户群体为中频用户，建议提升产品认可度，提升服务质量，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受95折，有助于提升低频用户交易次数。</p> 
+             <p v-if="form.tradeCountRange == '6-8'" class="proposal"><b>"交易次数6-8次"：</b>此用户群体为高频用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受9折，有助于提升低频用户交易次数。</p> 
+             <p v-if="form.tradeCountRange == '8-8'" class="proposal"><b>"交易次数8次以上"：</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p>
+             <p v-if="form.tradeCountRange == '10-50'" class="proposal"><b>"交易次数10-50次"：</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p>  
+            <div class="contents"></div>
+            <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
         </div>
 </template>
 <script>
@@ -117,19 +117,19 @@ export default {
                 onPick: ({ maxDate, minDate }) => {
                     this.pickerMinDate = minDate.getTime()
                     if (maxDate) {
-                    this.pickerMinDate = ''
+                        this.pickerMinDate = ''
                     }
                 },
                 disabledDate: (time) => {
                     if (this.pickerMinDate !== '') {
-                    const day90 = (90 - 1) * 24 * 3600 * 1000
-                    let maxTime = this.pickerMinDate + day90
-                    if (maxTime > new Date()) {
-                        maxTime = new Date()- 8.64e7
+                        const day90 = (90 - 1) * 24 * 3600 * 1000
+                        let maxTime = this.pickerMinDate + day90
+                        if (maxTime > new Date()) {
+                            maxTime = new Date()- 8.64e7
+                        }
+                        return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
                     }
-                    return time.getTime() > maxTime
-                    }
-                    return time.getTime() > Date.now() - 8.64e7
+                    return time.getTime() > Date.now()
                 }
             },
             form: {
@@ -144,8 +144,8 @@ export default {
                 timeType:1,
                 startIndex:1,
                 pageSize:10,
-                sur:''
-            },
+                loads:false,
+            },            
             lowprice:'',
             highprice:'',
             textTips:false, 
@@ -170,25 +170,7 @@ export default {
                     name: "老会员"
                 }
             ],
-            tradeCount: [
-                // {
-                //     id: null,
-                //     name: "不限"
-                // },
-                // {
-                //     id: "0-1",
-                //     name: "1次"
-                // },{
-                //     id: "2-5",
-                //     name: "2-5次"
-                // },{
-                //     id: "6-8",
-                //     name: "6-8次"
-                // },{
-                //     id: "8",
-                //     name: "8次以上"
-                // }
-            ],
+            tradeCount: [  ],
             customerCount:'',
             customerRatio:'',
             newMemberCount:'',
@@ -199,9 +181,9 @@ export default {
     },
     computed:{
         allRatio(){
-            if(this.customerRatio && this.newMemberRatio && this.oldMemberRatio){
-                if((this.customerRatio*100 + this.newMemberRatio*100 + this.oldMemberRatio*100) != 0){
-                    return (this.customerRatio*100 + this.newMemberRatio*100 + this.oldMemberRatio*100).toFixed(2)
+            if(this.newMemberRatio && this.oldMemberRatio){
+                if((this.newMemberRatio*100 + this.oldMemberRatio*100) != 0){
+                    return (this.newMemberRatio*100 + this.oldMemberRatio*100).toFixed(2)
                 }
             }else{
                 return 0
@@ -228,7 +210,6 @@ export default {
                     endTime:null
                 });
             }
-            console.log(this.form)
         },
 
         //获取交易次数
@@ -242,15 +223,14 @@ export default {
                         name:item.name
                     })                  
                 }
-                //   console.log(reviseitem)
                   this.tradeCount=reviseitem;
             }).catch(error =>{
                 console.log('error',error)
             })
         },
-
         //查询
-        goSearch(){
+        goSearch(){ 
+            this.form.loads = true
             if((this.lowprice != '' && this.highprice == '' ) || (this.lowprice == '' && this.highprice != '' )){
                 this.$message.warning('最低金额于最高金额需要同时输入')
                 return
@@ -272,6 +252,7 @@ export default {
                 this.oldMemberRatio = res.oldMemberRatio || 0;
                 this.customerCount = res.customerCount;
                 this.customerRatio = res.customerRatio || 0;
+                this.form.loads = false
                 // if(memberType == 1){ //新会员
                 //     this.textTips = true;
                 //     this.newMemberCount = res.newMemberCount;
@@ -287,6 +268,7 @@ export default {
                 // }else{ //其他
                 //     this.textTips = false;
                 // }
+
             }).catch(error => {
                 this.$message.error(error);
             });
@@ -403,8 +385,28 @@ export default {
         }
     }
 }
+.marT20s{
+    position: relative;
+}
 .mr10{
     margin-right:10px;
+}
+.contents{
+    width: 100%;
+    height:45px;
+    background: #fff;
+}
+.loadings{
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 60%;
+    top: 53%;
+    transform: translate(-50%,-50%);
+}
+.loadings>img{
+    width: 220px;
+    height: 220px;
 }
 </style>
 

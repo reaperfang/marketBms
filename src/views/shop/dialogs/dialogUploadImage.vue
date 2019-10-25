@@ -66,8 +66,8 @@
             :show-file-list="false"
             :data="{json: JSON.stringify({cid: cid})}"
             @on-error="loading = false"
+            :on-success="handleCoverSuccess"
             :before-upload="beforeAvatarUpload1">
-            <!-- :on-success="handleCoverSuccess" -->
             <img v-if="form.imageUrls" :src="form.imageUrls" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
@@ -101,7 +101,7 @@ export default {
       form:{
         imageUrl:'',
         name:'',
-        groupValue:'',
+        groupValue:'-1',
         imageUrls:''
       },
       fileData:{},
@@ -254,14 +254,18 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.avatar-uploader{
+<style lang="scss" scoped>
+.note{
+  font-size: 14px;
+  color: #D3D8DF;
+}
+/deep/ .avatar-uploader{
   width: 80px;
   height: 80px;
   display: inline-block;
   vertical-align: middle;
 }
-.avatar-uploader .el-upload {
+/deep/ .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -269,10 +273,10 @@ export default {
     overflow: hidden;
     display: inline-block;
   }
-  .avatar-uploader .el-upload:hover {
+/deep/ .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
   }
-  .avatar-uploader-icon {
+/deep/ .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
     width: 60px;
@@ -284,19 +288,16 @@ export default {
     left:10px;
     z-index: 10;
   }
-  .avatar {
+/deep/ .avatar {
     width: 80px;
     height: 80px;
     display: inline-block;
     vertical-align: middle;
-    object-fit:fill;
+/deep/ img{
+      width: 80px;
+      height: 80px;
+      object-fit:fill;
+      display: inline-block;
+    }
   }
-</style>
-
-
-<style lang="scss" scoped>
-.note{
-  font-size: 14px;
-  color: #D3D8DF;
-}
 </style>

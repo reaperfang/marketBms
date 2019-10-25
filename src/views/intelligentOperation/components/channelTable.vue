@@ -26,6 +26,9 @@
                 label="（活动）名称"
                 align="center"
             >
+            <template slot-scope="scope">
+                <span>{{ scope.row.chanelName ? scope.row.activityName : '-' }}</span>
+            </template>
             </el-table-column>
             <el-table-column
                 prop="changeRatio"

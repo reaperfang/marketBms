@@ -134,7 +134,7 @@
           </span>
         </div>
       </div>
-      <financeChart class="financeChart" :dataList="dataList"></financeChart>
+      <financeChart class="financeChart" :dataList="chartData"></financeChart>
     </div>
   </div>
 </template>
@@ -166,17 +166,31 @@ export default {
         chainRatioRealIncome:0 
       },
       dataList:[],
-      days:7
+      days:7,
+      chartData:{}
     }
   },
   components: {financeChart},
   watch: {
-    // timeValue(){
-    //   this.getDataDateRs()
-    // },
     days(){
       this.getDataNumRs()
       this.init(this.days)
+    },
+    dataList(){
+      let dataObj = {
+        dates:[],
+        incomes:[],
+        expends:[],
+        realIncomes:[]
+      }
+      this.dataList.map(item =>{
+        item.accountDate = item.accountDate.substring(0,10)
+        dataObj.dates.push(item.accountDate)
+        dataObj.incomes.push(item.income)
+        dataObj.expends.push(item.expend)
+        dataObj.realIncomes.push(item.realIncome)
+      })
+      this.chartData = dataObj
     }
   },
   created() {

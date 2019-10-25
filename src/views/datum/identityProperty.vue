@@ -50,7 +50,7 @@
           <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
         </el-radio-group>
         <div class="input_wrap" v-if="nearDay2 == 4">
-          <el-date-picker v-model="date2" type="month" @change="changeDate2" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker>
+          <el-date-picker v-model="date2" type="month" @change="changeDate2" placeholder="选择月份" :picker-options="pickerOptions"></el-date-picker>
         </div>
         <span class="fr" @click="toLink()">会员消费</span>
       </div>
@@ -111,9 +111,9 @@ export default {
               if (maxTime > new Date()) {
                   maxTime = new Date()- 8.64e7
               }
-              return time.getTime() > maxTime
+              return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
               }
-              return time.getTime() > Date.now() - 8.64e7
+              return time.getTime() > Date.now()
           }
       },
       visitSourceType: "0",
@@ -264,6 +264,7 @@ export default {
         this.nearDay2 = val;
         this.startTime2 = "";
         this.endTime2 = "";
+        this.date2 = ''
         this.getPaymentTrend();
       }
     },

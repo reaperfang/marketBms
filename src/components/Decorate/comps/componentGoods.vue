@@ -15,7 +15,7 @@
                     <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
                         <p class="price">￥<font>{{item.goodsInfos[0].salePrice}}</font></p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1" class="button"></componentButton>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                 </div>
             </li>
         </ul>
@@ -27,6 +27,7 @@
 import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
 import GOODS_LIST from '@/assets/json/goodsList.json'; 
+import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
     name:"componentGoods",
     mixins:[componentMixin],
@@ -53,7 +54,7 @@ export default {
             // 上拉加载
             goodListLoading: false,
             goodListFinished: false,
-            list:  this.$route.path.indexOf('templateEdit') > -1 ? GOODS_LIST: [],
+            list:  this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
             loading: false
         }
     },
@@ -175,8 +176,16 @@ export default {
                     if(ids) {
                         if(Object.prototype.toString.call(ids) === '[object Object]') {
                             params = this.setGroupGoodsParams(ids);
+                            if(!params.ids || !params.ids.length) {
+                                this.list = [];
+                                return;
+                            }
                         }else if(Array.isArray(ids) && ids.length){
                             params = this.setNormalGoodsParams(ids);
+                            if(!params.ids || !params.ids.length) {
+                                this.list = [];
+                                return;
+                            }
                         }else{
                             if(this.$route.path.indexOf('templateEdit') < 0) {
                                 this.list = [];

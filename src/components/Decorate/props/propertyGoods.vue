@@ -137,6 +137,7 @@ import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from '@/views/shop/dialogs/dialogSelectGoods';
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
 import GOODS_LIST from '@/assets/json/goodsList.json'; 
+import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
   name: 'propertyGoods',
   mixins: [propertyMixin],
@@ -164,7 +165,7 @@ export default {
       rules: {
 
       },
-      list: this.$route.path.indexOf('templateEdit') > -1 ? GOODS_LIST: [],
+      list: this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
       dialogVisible: false,
       currentDialog: '',
       seletedGroup: null,   //临时选中的商品分类
@@ -221,10 +222,18 @@ export default {
             if(!componentData.source || (componentData.source === 1)) {
                 const ids = componentData.ids;
                 if(ids) {
-                    if(Object.prototype.toString.call(ids) === '[object Object]') {
+                   if(Object.prototype.toString.call(ids) === '[object Object]') {
                         params = this.setGroupGoodsParams(ids);
+                        if(!params.ids || !params.ids.length) {
+                            this.list = [];
+                            return;
+                        }
                     }else if(Array.isArray(ids) && ids.length){
                         params = this.setNormalGoodsParams(ids);
+                        if(!params.ids || !params.ids.length) {
+                            this.list = [];
+                            return;
+                        }
                     }else{
                       if(this.$route.path.indexOf('templateEdit') < 0) {
                         this.list = [];

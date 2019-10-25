@@ -7,23 +7,25 @@
             如果开通支付，公众号和小程序的appid依据自己开通的售卖渠道必须填写一项
           </span>
         </h1>
-        <el-form ref="form" :model="form" :rules="rules" label-width="180px">
+        <el-form ref="form" :model="form" :rules="rules">
             <!-- <el-form-item label="微信商户名称:" prop="mchName">
                 <el-input v-model="form.mchName" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item> -->
-            <el-form-item label="公众号（AppId）:" prop="appId">
+            <el-form-item prop="appId">
+                <span class="require">公众号（AppId）:</span>
                 <el-input v-model="form.appId" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="小程序（AppId）:" prop="mpAppId">
+            <el-form-item prop="mpAppId">
+                <span class="require">小程序（AppId）:</span>
                 <el-input v-model="form.mpAppId" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="支付商户号（Mch_Id）:" prop="channelMchId">
+            <el-form-item label="支付商户号（Mch_Id）:" prop="channelMchId" label-width="180px">
                 <el-input v-model="form.channelMchId" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="支付密钥（APIKEY）:" prop="key">
+            <el-form-item label="支付密钥（APIKEY）:" prop="key" label-width="180px">
                 <el-input v-model="form.key" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="证书密码:" prop="certPassword">
+            <el-form-item label="证书密码:" prop="certPassword" label-width="180px">
                 <el-input v-model="form.certPassword" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item>
 
@@ -46,7 +48,7 @@
             </div>
             </el-form-item> -->
 
-            <el-form-item label="CERT证书文件" prop="certBase64Content">
+            <el-form-item label="CERT证书文件:" prop="certBase64Content" label-width="180px">
               <input type="file"  @change="fileChange" style="width:75px;">
               <span>{{form.certFileName}}</span>
             </el-form-item>
@@ -69,7 +71,7 @@
             </div>
             </el-form-item>
              -->
-            <el-form-item>
+            <el-form-item label-width="180px">
                 <el-button type="primary" @click="onSubmit('form')">保存</el-button>
                 <el-button  @click="_routeTo('payType')">返回</el-button>
             </el-form-item>
@@ -104,12 +106,12 @@ export default {
         channelMchId:[
           { required: true, message: '请输入微信商户号', trigger: 'blur' },
         ],
-        appId:[
-          { required: true, message: '请输入公众号AppId', trigger: 'blur' },
-        ],
-        mpAppId:[
-          { required: true, message: '请输入小程序AppId', trigger: 'blur' },
-        ],
+        // appId:[
+        //   { required: true, message: '请输入公众号AppId', trigger: 'blur' },
+        // ],
+        // mpAppId:[
+        //   { required: true, message: '请输入小程序AppId', trigger: 'blur' },
+        // ],
         key:[
           { required: true, message: '请输入密钥', trigger: 'blur' },
         ],
@@ -197,8 +199,13 @@ export default {
 
     onSubmit(formName){
       this.$refs[formName].validate((valid) => {
-        if (valid) {
+        if (valid && this.form.appId || this.form.mpAppId) {
           this.id ? this.updateShopPayInfo() : this.addShopPayInfo()
+        }else{
+          this.$notify.error({
+          title: '提示',
+          message: '如果开通支付，公众号和小程序的appid依据自己开通的售卖渠道必须填写一项'
+        });
         }
       })   
     },
@@ -333,5 +340,12 @@ export default {
     padding: 2px 6px;
     margin-right: 18px;
     color:rgba(255,255,255,1);
+  }
+  .require{
+    margin: 0px 10px 0px 50px;
+    &:before{
+      content:'*';
+      color: #ff4246;
+    }
   }
 </style>

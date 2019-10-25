@@ -5,7 +5,7 @@
             <el-radio v-model="exchangeConfirmation" :label="1">是</el-radio>
             <el-radio v-model="exchangeConfirmation" :label="0">否</el-radio>
             <div class="footer">
-                <el-button>取消</el-button>
+                <el-button @click="visible = false">取消</el-button>
                 <el-button @click="submit" type="primary">确定</el-button>
             </div>
         </div>

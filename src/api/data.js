@@ -318,6 +318,16 @@ export function rightsProtection(data) {
       data
     })
   }
+// 获取维权原因
+export function getReasons(data) {
+  return request({
+    target:'AUTOMATIC-ANALYSE-PROTECTION-REASON-PROCESSOR',
+    method: 'post',
+    apiType: 'data',
+    data
+  })
+}
+
 // 维权类型查询 
 export function rightsTypeQuery(data) {
     return request({

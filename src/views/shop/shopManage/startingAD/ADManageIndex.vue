@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="table">
-      <p>广告（28个）</p>
+      <p>广告（{{total || 0}}个）</p>
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"  
@@ -247,7 +247,8 @@ export default {
 
     /* 开关状态切换 */
     switchStatusChange(value) {
-      this._apis.shop.changeSwitchStatus({id:this.cid, adOpenType: value === true ? 1 : 0}).then((response)=>{
+      this._apis.shop.changeSwitchStatus({id:this.cid, adOpenType: value === true ? 1 : 0})
+      .then((response)=>{
         this.$notify({
           title: '成功',
           message: '修改成功！',

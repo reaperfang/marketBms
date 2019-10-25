@@ -4,7 +4,7 @@
     <div class="group_shop">
       <ul>
         <li>
-          <img :src="shopInfo.logo" alt />
+          <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
         </li>
         <li class="ellipsis">{{shopInfo.shopName || '店铺名称'}}</li>
         <li class="ellipsis">{{currentComponentData.data.words}}</li>

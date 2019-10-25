@@ -5,7 +5,7 @@
       <div class="userCenter">
         <!-- 第一部分 用户个人信息 -->
         <div class="userCenter_first">
-          <div class="userCenter_firstTop" :style="data.backgroundGradients===1?bg:bg1">
+          <div class="userCenter_firstTop" :style="data.backgroundGradients===1?bg1:bg">
             <!-- 动态变换部分：样式一，左 -->
             <div class="userCenter_firstTitle" v-if="data.avatarPosition===1">
               <div class="userCenter_firstTitlel fl">
@@ -153,7 +153,7 @@
         <div class="userCenter_three">
           <div class="userCenter_three1">
             <ul>
-              <li>
+              <!-- <li>
                 <div class="userCenter_three1Img">
                   <img :src="(data.moduleList.integralMarket&&data.moduleList.integralMarket.icon) || require('../../../assets/images/shop/userCenter/userCenter11.png')" alt />
                 </div>
@@ -167,13 +167,13 @@
                     <img src="../../../assets/images/shop/userCenter/triangle.png" alt />
                   </div>
                 </div>
-              </li>
+              </li> -->
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.integralMarket&&data.moduleList.messageCenter.icon || require('../../../assets/images/shop/userCenter/userCenter12.png')" alt />
+                  <img :src="data.moduleList.messageCenter&&data.moduleList.messageCenter.icon || require('../../../assets/images/shop/userCenter/userCenter12.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
-                  <p class="fl" :style="{color: data.moduleList.integralMarket&&data.moduleList.messageCenter.color}">{{data.moduleList.integralMarket&&data.moduleList.messageCenter.titleValue}}</p>
+                  <p class="fl" :style="{color: data.moduleList.messageCenter&&data.moduleList.messageCenter.color}">{{data.moduleList.messageCenter&&data.moduleList.messageCenter.titleValue}}</p>
                   <div class="userCenter_three1Cont_r">
                     <div class="userCenter_three1Cont_r1">99+</div>
                     <img src="../../../assets/images/shop/userCenter/triangle.png" alt />
@@ -317,7 +317,7 @@ export default {
     border-bottom: 6px solid #f7f7f7;
     & > .userCenter_firstTop {
       height: 222px;
-      background-size: 100% 100%;
+      background-size: cover!important;
       position: relative;
       & > .userCenter_firstTitle {
         height: 100px;

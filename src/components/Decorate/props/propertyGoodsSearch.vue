@@ -150,4 +150,7 @@ export default {
     margin-left: 10px;
     vertical-align: bottom;
   }
+  /deep/.m-colorPicker .box.open {
+      z-index: 10!important;
+  }
 </style>

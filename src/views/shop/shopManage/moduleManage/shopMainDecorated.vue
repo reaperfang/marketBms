@@ -7,6 +7,7 @@
       <div class="shop_code">
         <h3>店铺手机预览</h3>
         <h4>使用微信扫描二维码，预览店铺效果</h4>
+        <!-- {{this.homePageData.shareUrl.replace("&","[^]")}} -->
         <div class="qrcode_wrapper">
           <img :src="qrCode" alt="">
         </div>
@@ -34,6 +35,30 @@
           <li>
             <el-button type="primary" plain  @click="_routeTo('templateManageIndex')">店铺模板</el-button>
           </li>
+          <li v-if="miniProgramStatus && miniProgramStatus.status === 1">
+            <el-popover
+              ref="popover2"
+              placement="top-start"
+              title=""
+              style="margin-left:10px;"
+              width="170"
+              trigger="click"
+              content="">
+              <img v-if="showCode" :src="miniAppcode" alt="" style="width:150px;height:170px;">
+              <span v-else>无分享地址</span>
+              <el-button slot="reference" @click="showCode=true" type="primary" plain>
+                <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
+                  <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
+                </el-tooltip>
+              </el-button>
+            </el-popover>
+            <!-- <el-button type="primary" plain>
+              <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
+                <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
+              </el-tooltip>
+            </el-button> -->
+            <p :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.data.current_name || ''}}</p>  
+          </li>
         </ul>
       </div>
     </div>
@@ -51,7 +76,11 @@ export default {
     return {
       utils,
       qrCode: '',
-      height: 0
+      miniAppcode: '',   //小程序码
+      height: 0,
+      miniProgramStatus: null,
+      openMiniAppcodeLoading: false,  //获取小程序码loading
+      showCode: false  //显示小程序码
     };
   },
   computed: {
@@ -63,12 +92,14 @@ export default {
     },
     colorStyle() {
       return this.$store.getters.colorStyle || {};
-    },
+    }
   },
   created() {
     this.$store.dispatch('getShopInfo');
     this.$store.dispatch('getShopStyle');
     this.getQrcode();
+    this.getMiniAppQrcode();
+    this.getMiniProgramStatus();
   },
   mounted() {
     this.height = document.body.clientHeight - 238 - 20;
@@ -100,7 +131,56 @@ export default {
         // });
         console.error(error);
       });
-    }
+    },
+
+    /* 获取小程序状态 */
+    getMiniProgramStatus() {
+      this._apis.shop.getMiniProgramStatus().then((response)=>{
+        this.miniProgramStatus = response;
+      }).catch((error)=>{
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
+      });
+    },
+
+    /* 获取小程序状态文字颜色值 */
+    getMiniAppColor(status) {
+      switch(status) {
+        case 'none':
+          return '#FD4C2B';
+          break;
+        case 'uncheck':
+          return '#655EFF';
+          break;
+        case 'checking':
+          return '#655EFF';
+          break;
+        case 'checkerr':
+          return '#FD4C2B';
+          break;
+        case 'published':
+          return '#008000';
+          break;
+        case 'unauthorize':
+          return '#FD4C2B';
+          break;
+      }
+    },
+
+      /* 获取小程序码 */
+    getMiniAppQrcode() {
+      this.openMiniAppcodeLoading = true;
+      this._apis.shop.getMiniAppQrcode({id: '1'}).then((response)=>{
+        this.miniAppcode = response;
+        this.openMiniAppcodeLoading = false;
+      }).catch((error)=>{
+        this.openMiniAppcodeLoading = false;
+        this.$message({ message: error, type: 'error' });
+      });
+    },
 
   }
 };

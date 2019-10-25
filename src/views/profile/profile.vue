@@ -30,10 +30,26 @@
                     <i class="el-icon-refresh" @click="refresh"></i>    
                 </p>
                 <div class="p_r_list">
-                    <p>待办售罄<span>({{toBeSoldOut || 0}})</span></p>
-                    <p>待发货订单<span>({{staySendCount || 0}})</span></p>
-                    <p>售后待处理<span>({{stayProcessedCount || 0}})</span></p>
-                    <p>售后单待审核<span>({{stayAuthCount || 0}})</span></p>
+                    <p>待办售罄
+                        <router-link to="/goods/goodsList?status=-1">
+                            <span>({{toBeSoldOut || 0}})</span>
+                        </router-link>    
+                    </p>
+                    <p>待发货订单
+                        <router-link to="/order/deliveryManagement?status=3">
+                            <span>({{staySendCount || 0}})</span>
+                        </router-link>
+                    </p>
+                    <p>售后待处理
+                        <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                            <span>({{stayProcessedCount || 0}})</span>
+                        </router-link>
+                    </p>
+                    <p>售后单待审核
+                        <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+                            <span>({{stayAuthCount || 0}})</span>
+                        </router-link>
+                    </p>
                     <!-- <p>积分商城订单待发货<span>(23)</span></p> -->
                 </div>
             </div>
@@ -43,10 +59,10 @@
                 <p class="p_title" style="padding-left: 29px">常用功能：</p>
                 <div class="p_list">
                     <div class="p_l_item clearfix" v-for="item in commonData" :key="item.id">
-                        <router-link :to="item.url">
+                        <div @click="linkTo(item)">
                             <img :src="item.img" alt="">
                             <span>{{item.text}}</span>
-                        </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,13 +70,13 @@
                 <p class="p_title">营销活动：</p>
                 <div class="p_list" v-if="activeData.length != 0">
                     <div class="p_m_item" v-for="item in activeData" :key="item.id">
-                        <router-link :to="item.url">
+                        <span  @click="linkToApply(item)">
                             <img :src="item.appImage" alt="" style="height:40px;width:40px;">
                             <div>
                                 <p>{{item.appName}}</p>
                                 <p>{{item.description}}</p>
                             </div>
-                        </router-link>
+                        </span>
                     </div>
                 </div>
                 <div class="p_list" v-else>
@@ -96,6 +112,7 @@
     </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 import profileCont from '@/system/constant/profile'
 export default {
     name: 'profile',
@@ -122,6 +139,7 @@ export default {
         }
     },
     methods:{
+        ...mapMutations(['SETCURRENT']),
         // 概况详情
         getOverviewDetails(){ 
          this._apis.overview.overviewDetails({}).then(response => {
@@ -170,6 +188,25 @@ export default {
              this._apis.overview.getMarketing(this.selectList).then(response => {
                  this.activeData = response.slice(0,10)
          })
+        },
+        //常用功能跳转
+        linkTo(item){
+            if(item.appName == '公众号管理'){
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum'}})
+                this.SETCURRENT(8)
+            }else if(item.appName == '小程序管理'){
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp'}})
+                this.SETCURRENT(8)
+            }else{
+                this.$router.push({path:item.url})
+            }
+        },
+        //营销活动跳转
+        linkToApply(item){
+            if(item.url){
+                this.$router.push({path:'/apply',query:{paths:item.url}})
+                this.SETCURRENT(8)
+            }
         }
     },
     created(){

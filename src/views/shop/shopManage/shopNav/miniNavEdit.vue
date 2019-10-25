@@ -17,15 +17,16 @@
         </div>
 
         <!-- 手机底部 小程序-->
-        <div class="phone-footer">
+        <div class="phone-footer" :style="{backgroundColor: ruleForm.backgroundColor}">
           <ul class="navs type1">
             <li
               v-for="(item, key) of ruleForm.navIds"
               :class="{'active': ruleForm.navMap[item].active}"
               :key="key"
               @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].navIconActive" alt="">
-              <span>{{ruleForm.navMap[item].navName}}</span>
+              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <span v-if="ruleForm.navMap[item].active" :style="{color: ruleForm.activeColor}">{{ruleForm.navMap[item].navName}}</span>
+              <span v-else :style="{color: ruleForm.unactiveColor}">{{ruleForm.navMap[item].navName}}</span>
             </li>
           </ul>
         </div>
@@ -121,6 +122,14 @@ export default {
   props: ['apiNavData'],
   components: {dialogSelectImageMaterial},
   data () {
+    let validLength = (RULE, value, callback) => {
+      let regExp = /^([A-z]{1,8}|[\u4e00-\u9fa5]{1,4})$/;
+      if (regExp.test(value) === false) {
+          callback(new Error('请输入4个汉字或8个字母'));
+      } else {
+          callback();
+      }
+    };
     return {
       resetDataLoading: false,  //重置loading
       saveLoading: false,  //保存loading
@@ -135,7 +144,14 @@ export default {
         activeColor: '#000',
         unactiveColor: '#ddd'
       },
-      rules: {},
+      rules: {
+        navName: [
+          { required: true, message: "请输入导航名称", trigger: "blur" },
+          {
+            validator: validLength, trigger: 'blur'
+          }
+        ]
+      },
       currentNav: null,  //当前导航对象
       currentImg: 'active',  //当前上传图片类型   高亮和普通
       bodyHeight: {},  //内容区高度
@@ -258,27 +274,35 @@ export default {
 
     /* 保存并启用 */
     saveAndApply() {
-      this.saveAndApplyLoading = true,
-      this.$emit('submitNavData',{
-        navigationKey: '',
-        status: '0',
-        navigation_type: '1',
-        navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
-      }, (status) => {
-        this.saveAndApplyLoading = false;
+      this.$refs.ruleForm.validate( valid => {
+        if(valid) {
+          this.saveAndApplyLoading = true;
+          this.$emit('submitNavData',{
+            navigationKey: '',
+            status: '0',
+            navigation_type: '1',
+            navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
+          }, (status) => {
+            this.saveAndApplyLoading = false;
+          })
+        }
       })
     },
 
     /* 保存 */
     save() {
-      this.saveLoading = true,
-      this.$emit('submitNavData', {
-        navigationKey: '',
-        status: '1',
-        navigation_type: '1',
-        navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
-      }, (status) => {
-        this.saveLoading = false;
+       this.$refs.ruleForm.validate( valid => {
+        if(valid) {
+          this.saveLoading = true;
+          this.$emit('submitNavData', {
+            navigationKey: '',
+            status: '1',
+            navigation_type: '1',
+            navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
+          }, (status) => {
+            this.saveLoading = false;
+          })
+        }
       })
     },
 
@@ -517,5 +541,8 @@ export default {
   .el-checkbox{
     margin-right: 10px;
   }
+}
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
 }
 </style>

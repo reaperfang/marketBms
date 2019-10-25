@@ -8,7 +8,8 @@
       <div class="c_right">
         <p class="head">图文信息</p>
         <div class="bodys">
-          <el-input v-model="ruleForm.title" @change="titleNum" placeholder="标题请勿超过64个字，必填"></el-input>
+          <el-input v-model="ruleForm.title" @blur="titleNum" placeholder="标题请勿超过64个字，必填"></el-input>
+          <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="isSave">标题请勿超过64个字</p>
           <p class="mt10">封面图片</p>
           <img :src="ruleForm.fileCover" class="coverImage" v-if="ruleForm.fileCover">
           <p class="uploadImage">
@@ -38,7 +39,7 @@
     <p class="btns">
       <!-- <el-button type="primary">预览</el-button> -->
       <el-button type="primary" plain @click="_routeTo('fileManageIndex')">取消</el-button>
-      <el-button type="primary" @click.once="save">保存</el-button>
+      <el-button type="primary" @click="save">保存</el-button>
     </p>
     <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
   </div>
@@ -75,6 +76,7 @@ export default {
         // 初始容器宽度
         initialFrameWidth: 700
       },
+      isSave:false
     }
   },
   created() {
@@ -89,7 +91,7 @@ export default {
   methods: {
     titleNum(){
       let lg = this.ruleForm.title.length
-      lg > 64 && this.$message.error('标题请勿超过64个字!')      
+      this.isSave = lg > 64 ? true : false 
     },
     getArticle(){
       let query ={
@@ -112,45 +114,48 @@ export default {
     },
     //保存
     save(){
-      this.titleNum()
-      let id = this.$route.query.id
-      if(id){
-        let query = {
-          id:id,
-          title: this.ruleForm.title,
-          fileCover: this.ruleForm.fileCover,
-          isCover: this.ruleForm.isCover,
-          sourceMaterial:this.ruleForm.sourceMaterial
+      if(!this.isSave){
+        let id = this.$route.query.id
+        if(id){
+          let query = {
+            id:id,
+            title: this.ruleForm.title,
+            fileCover: this.ruleForm.fileCover,
+            isCover: this.ruleForm.isCover,
+            sourceMaterial:this.ruleForm.sourceMaterial
+          }
+          this._apis.file.editArticle(query).then((response)=>{
+            this.$notify.success({
+              title: '成功',
+              message: '修改图文成功！'
+            });
+            this.$router.push({
+              name: 'fileManageIndex',
+            })
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          })
+        }else{
+          this._apis.file.saveArticle(this.ruleForm).then((response)=>{
+            this.$notify.success({
+              title: '成功',
+              message: '创建图文成功！'
+            });
+            this.$router.push({
+              name: 'fileManageIndex',
+            })
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          })
         }
-        this._apis.file.editArticle(query).then((response)=>{
-          this.$notify.success({
-            title: '成功',
-            message: '修改图文成功！'
-          });
-          this.$router.push({
-            name: 'fileManageIndex',
-          })
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-        })
       }else{
-        this._apis.file.saveArticle(this.ruleForm).then((response)=>{
-          this.$notify.success({
-            title: '成功',
-            message: '创建图文成功！'
-          });
-          this.$router.push({
-            name: 'fileManageIndex',
-          })
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-        })
+        return false
       }
     },
     beforeAvatarUpload(){

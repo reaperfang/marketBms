@@ -8,32 +8,32 @@
                         <el-form-item label="是否开启积分抵现：" prop="scoreToCash">
                             <div class="marL20">
                                 <br>
-                                <el-radio v-model="ruleForm.scoreToCash" label="0">不开启</el-radio><span class="c_warn">说明：开启用用户可以使用积分抵现（但不支持积分商城订单）</span><br>
+                                <el-radio v-model="ruleForm.scoreToCash" label="0" @change="closeScoreToCash">不开启</el-radio><span class="c_warn">&nbsp;&nbsp;&nbsp;&nbsp;说明：开启用用户可以使用积分抵现（但不支持积分商城订单）</span><br>
                                 <el-radio v-model="ruleForm.scoreToCash" label="1" @change="openScoreToCash">开启</el-radio><br>
                                 <span>抵现比例：</span>
                                 <div style="width: 140px; display: inline-block">
-                                    <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage"></el-input>
+                                    <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
                                 </div>
                                 <span>积分</span>
                                 <div style="width: 54px; display: inline-block">
-                                    <el-input v-model="ruleForm.scorePercentageMoney"></el-input>
+                                    <el-input v-model="ruleForm.scorePercentageMoney" :disabled="true"></el-input>
                                 </div>
                                 <span>元</span>
                             </div>
                         </el-form-item>
                         <el-form-item label="积分抵现条件：">
-                            <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash"></el-checkbox>
+                            <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash" @change="handleCheck2"></el-checkbox>
                             <span class="marR50">订单满</span>
                             <div style="width: 222px; display: inline-block">
-                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderMoney"></el-input>
+                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderMoney" @keyup.native="checkZero($event,ruleForm.scoreToCashOrderMoney,'scoreToCashOrderMoney')"></el-input>
                             </div>
                             <span>元</span>
                         </el-form-item>
                         <el-form-item>
-                            <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px"></el-checkbox>
+                            <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px" @change="handleCheck"></el-checkbox>
                             <span class="marL105">最高可抵现订单金额的</span>
                             <div style="width: 222px; display: inline-block; margin-left: 20px">
-                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderRate"></el-input>
+                                <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderRate" @keyup.native="checkPersent($event,ruleForm.scoreToCashOrderRate,'scoreToCashOrderRate')"></el-input>
                             </div>
                             <span>%</span>
                         </el-form-item>
@@ -43,7 +43,7 @@
                             <div class="marL20">
                                 <br>
                                 <el-radio v-model="ruleForm.scoreCleanType" label="0">不清零</el-radio><br>
-                                <el-radio v-model="ruleForm.scoreCleanType" label="1">自然年清零上一年获得的积分</el-radio><span class="c_warn">每年12月31日清空上一年获得的积分</span>
+                                <el-radio v-model="ruleForm.scoreCleanType" label="1">自然年清零上一年获得的积分</el-radio><span class="c_warn">&nbsp;&nbsp;&nbsp;&nbsp;每年12月31日清空上一年获得的积分</span>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -62,7 +62,7 @@
                     <span class="marR20">积分获取上限</span>
                     <span>每日最高获得：</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch"></el-input>
+                        <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch" @keyup.native="checkZero($event,ruleForm.scoreUpperCount,'scoreUpperCount')"></el-input>
                     </div>
                     <span>积分</span>
                     <el-button type="primary" class="marL20" v-if="isSwitch" @click="save2">保存</el-button>
@@ -87,7 +87,7 @@ export default {
                 //抵现比例 积分
                 scorePercentage:"",
                 //抵现比例 元
-                scorePercentageMoney:"",
+                scorePercentageMoney:"1",
                 //积分抵现条件：是否选择积分满
                 scoreEnableOrderAchieveCash:"",
                 //积分抵现条件：是否选择最高可抵现
@@ -104,9 +104,36 @@ export default {
         }
     },
     methods: {
+        handleCheck() {
+            if(!this.ruleForm.scoreEnableOrderHighCash) {
+                this.ruleForm.scoreToCashOrderRate = "";
+            }
+        },
+        handleCheck2() {
+            if(!this.ruleForm.scoreEnableOrderAchieveCash) {
+                this.ruleForm.scoreToCashOrderMoney = "";
+            }
+        },
+        checkZero(event,val,ele) {
+            val = val.replace(/[^\d.]/g,'');
+            val = val.replace(/^0/g,'');
+            this.ruleForm[ele] = val;
+        },
+        checkPersent(event,val,ele) {
+            val = val.replace(/[^\d.]/g,'');
+            val = val.replace(/^0/g,'');
+            val = val.replace(/^100/g,'');
+            this.ruleForm[ele] = val;
+        },
         openScoreToCash(val) {
             if(val == '1') {
                 this.ruleForm.scorePercentageMoney = 1
+            }
+        },
+        closeScoreToCash(val) {
+            if(val == '0') {
+                this.ruleForm.scorePercentageMoney = "";
+                this.ruleForm.scorePercentage = "";
             }
         },
         save() {
@@ -127,6 +154,7 @@ export default {
                         message: '保存积分规则成功',
                         type: 'success'
                     });
+                    this.checkCreditRule();
                 }).catch((error) => {
                     console.log(error);
                 })
@@ -155,7 +183,11 @@ export default {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
                 this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
-                    console.log('关闭成功');
+                    this.$notify({
+                        title: '成功',
+                        message: '关闭成功',
+                        type: 'success'
+                    });
                 }).catch((error) => {
                     console.log(error);
                 })
@@ -164,12 +196,12 @@ export default {
         checkCreditRule() {
             this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
                 this.ruleForm.scoreToCash = response.scoreToCash.toString();
-                this.ruleForm.scorePercentage = response.scorePercentage;
-                this.ruleForm.scorePercentageMoney = response.scorePercentageMoney;
+                this.ruleForm.scorePercentage = response.scoreToCash == 1 ? response.scorePercentage:'';
+                this.ruleForm.scorePercentageMoney = response.scoreToCash == 1 ? response.scorePercentageMoney:'';
                 this.ruleForm.scoreEnableOrderAchieveCash = response.scoreEnableOrderAchieveCash == 1?true:false;
                 this.ruleForm.scoreEnableOrderHighCash = response.scoreEnableOrderHighCash == 1?true:false;
-                this.ruleForm.scoreToCashOrderMoney = response.scoreToCashOrderMoney;
-                this.ruleForm.scoreToCashOrderRate = response.scoreToCashOrderRate;
+                this.ruleForm.scoreToCashOrderMoney = response.scoreEnableOrderAchieveCash == 1?response.scoreToCashOrderMoney:'';
+                this.ruleForm.scoreToCashOrderRate = response.scoreEnableOrderHighCash == 1?response.scoreToCashOrderRate:'';
                 this.ruleForm.scoreCleanType = response.scoreCleanType.toString();
                 this.ruleForm.scoreUpperCount = response.scoreUpperCount;
                 this.isSwitch = response.scoreUpper == 1? true:false;

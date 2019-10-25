@@ -141,6 +141,7 @@ export default {
     },
 
     submit() {
+      this.$emit('submit',{imageTailor:{}})
       this.$refs.cropper.getCropData((data) => {
         let urlData = data.substring(23, data.length);
         axios.post(this.uploadUrl,"json={\"cid\":\""+ this.cid +"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",{headers: {'Origin':'http'}}).then((response) => {
@@ -162,7 +163,7 @@ export default {
               message: error
             });
           })
-          this.$emit('submit',{imageTailor:{}})
+          // this.$emit('submit',{imageTailor:{}})
         }).catch((error) => {
           this.$notify.error({
             title: '错误',

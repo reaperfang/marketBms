@@ -74,7 +74,7 @@ export default {
     }
   },
   mounted() {
-    this.changeValidate('');
+    // this.changeValidate('');
   },
   methods: {
 
@@ -141,5 +141,8 @@ export default {
 }
 /deep/.edui-editor{
     z-index: initial!important;
+}
+/deep/.el-radio-group label:last-child{
+  margin-left:0;
 }
 </style>

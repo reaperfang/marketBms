@@ -177,10 +177,10 @@
                 <div class="col" style="margin-right: 50px;">
                     <div class="row">
                         <div class="col">
-                            应退积分：
+                            应退还积分：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnScore}}
+                            {{orderAfterSale.shouldReturnScore || 0}}
                         </div>
                     </div>
                     <div class="row">
@@ -188,23 +188,23 @@
                             应退金额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnMoney}}
+                            {{orderAfterSale.shouldReturnMoney || 0}}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            应退余额：
+                            应退还余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnBalance}}
+                            {{orderAfterSale.shouldReturnBalance || 0}}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            剩余退还余额：
+                            应退还第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnWalletMoney}}
+                            {{orderAfterSale.shouldReturnWalletMoney || 0}}
                         </div>
                     </div>
                     <!-- <div class="row">
@@ -252,11 +252,11 @@
                 <div class="col">
                     <div class="row align-center">
                         <div class="col">
-                            退还积分：
+                            实退积分：
                         </div>
                         <div class="col">
                             <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnScore}}</span>
+                            <span v-else>{{orderAfterSale.realReturnScore || 0}}</span>
                         </div>
                     </div>
                     <div class="row align-center">
@@ -265,12 +265,12 @@
                         </div>
                         <div class="col">
                             <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0" min="0" type="number" @change="realReturnMoneyHandler" v-model="orderAfterSale.realReturnMoney"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnMoney}}</span>
+                            <span v-else>{{orderAfterSale.realReturnMoney || 0}}</span>
                         </div>
                     </div>
                     <div class="row align-center">
                         <div class="col">
-                            退还余额：
+                            实退余额：
                         </div>
                         <div class="col">
                             {{orderAfterSale.realReturnBalance || 0}}
@@ -278,10 +278,10 @@
                     </div>
                     <div class="row align-center">
                         <div class="col">
-                            剩余退还余额：
+                            实退第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnWalletMoney}}
+                            {{orderAfterSale.realReturnWalletMoney || 0}}
                         </div>
                     </div>
                 </div>

@@ -5,7 +5,7 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
                 <el-form-item label="标签名称：" prop="tagName">
                     <div class="input_wrap">
-                        <el-input v-model="ruleForm.tagName" placeholder="请输入标签名称" :maxLength="6" @blur="doubleCheck"></el-input>
+                        <el-input v-model="ruleForm.tagName" placeholder="请输入标签名称" :maxLength="6"></el-input>
                     </div>
                 </el-form-item>
                 <el-form-item label="标签类型：" prop="tagType">
@@ -29,7 +29,7 @@
                 <el-form-item>
                     <el-radio v-model="ruleForm.consumeTimeType" label="0" @change="handleCheck5">最近</el-radio>
                     <div class="input_wrap3">
-                        <el-input v-model="ruleForm.consumeTimeValue"></el-input>
+                        <el-input v-model="ruleForm.consumeTimeValue" @keyup.native="checkZero2($event,ruleForm.consumeTimeValue,'consumeTimeValue')"></el-input>
                     </div>
                     <div class="input_wrap2">
                         <el-select v-model="ruleForm.consumeTimeUnit" placeholder="请选择">
@@ -57,44 +57,44 @@
                 <el-form-item>
                     <el-checkbox v-model="ruleForm.isTotalConsumeTimes" @change="handleCheck1">累计消费次数</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMin" @keyup.native="checkZero2($event,ruleForm.consumeTimesMin,'consumeTimesMin')"></el-input>
                     </div>
                     <span>次 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMax" @keyup.native="checkZero2($event,ruleForm.consumeTimesMax,'consumeTimesMax')"></el-input>
                     </div>
                     <span>次</span>
                 </el-form-item>
                 <el-form-item>
                     <el-checkbox v-model="ruleForm.isTotalConsumeMoney" @change="handleCheck2">累计消费金额</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMin" @keyup.native="checkZero($event,ruleForm.consumeMoneyMin,'consumeMoneyMin')"></el-input>
                     </div>
                     <span>元 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMax" @keyup.native="checkZero($event,ruleForm.consumeMoneyMax,'consumeMoneyMax')"></el-input>
                     </div>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item>
                     <el-checkbox v-model="ruleForm.isPreUnitPrice" @change="handleCheck3">客单价</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMin" @keyup.native="checkZero($event,ruleForm.preUnitPriceMin,'preUnitPriceMin')"></el-input>
                     </div>
                     <span>元 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMax" @keyup.native="checkZero($event,ruleForm.preUnitPriceMax,'preUnitPriceMax')"></el-input>
                     </div>
                     <span>元</span>
                 </el-form-item>
                 <el-form-item label="资产条件：">
                     <el-checkbox v-model="ruleForm.isTotalScore" @change="handleCheck4">累计获得积分</el-checkbox>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMin"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMin" @keyup.native="checkZero2($event,ruleForm.totalScoreMin,'totalScoreMin')"></el-input>
                     </div>
                     <span>分 — </span>
                     <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMax"></el-input>
+                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMax" @keyup.native="checkZero2($event,ruleForm.totalScoreMax,'totalScoreMax')"></el-input>
                     </div>
                     <span>分</span>
                 </el-form-item>
@@ -107,7 +107,7 @@
             </el-form>
         </div>
         <div class="btn_cont">
-            <el-button type="primary" @click="saveLabel" v-permission="['客户', '客户标签', '默认页面', '保存']">保 存</el-button>
+            <el-button type="primary" @click="doubleCheck" v-permission="['客户', '客户标签', '默认页面', '保存']">保 存</el-button>
             <el-button @click="_routeTo('clientLabel')">取 消</el-button>
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @getSelected="getSelected"></component>
@@ -167,10 +167,22 @@ export default {
             dialogVisible: false,
             currentData:{},
             selectedIds: "",
-            canSubmit: true
+            canSubmit: true,
+            isRepeat: ""
         }
     },
     methods: {
+        checkZero(event,val,ele) {
+            val = val.replace(/[^\d.]/g,'');
+            val = val.replace(/\.{2,}/g,'.');
+            val = val.replace(/^0/g,'');
+            this.ruleForm[ele] = val;
+        },
+        checkZero2(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/^0/g,'');
+            this.ruleForm[ele] = val;
+        },
         handleCheck1(val) {
             if(!val) {
                 this.ruleForm.consumeTimesMin = "";
@@ -221,18 +233,19 @@ export default {
             }
         },
         doubleCheck() {
-            this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
-                if(!response) {
-                    this.ruleForm.tagName = ""
-                    this.$notify({
-                        title: '警告',
-                        message: '此标签名已存在',
-                        type: 'warning'
-                    });
-                }
-            }).catch((error) => {
-                console.log(error);
-            })
+            if(this.ruleForm.tagName !== "") {
+                this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
+                    this.saveLabel(response);
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }else{
+                this.$notify({
+                    title: '警告',
+                    message: '标签名称不能为空',
+                    type: 'warning'
+                });
+            }
         },
         chooseProduct() {
             this.dialogVisible = true;
@@ -253,11 +266,11 @@ export default {
             let v = Number(val);
             return Math.floor(v) === v;
         },
-        saveLabel() {
-            if(this.ruleForm.tagName == "") {
+        saveLabel(isRepeat) {
+            if(!isRepeat && !this.$route.query.id) {
                 this.$notify({
                     title: '警告',
-                    message: '标签名称不能为空',
+                    message: '标签名不能重复',
                     type: 'warning'
                 });
             }else{
@@ -337,6 +350,34 @@ export default {
                             type: 'warning'
                         });
                         this.canSubmit = false;
+                    }
+                }
+                if(this.ruleForm.tagType == '1') {
+                    if(this.ruleForm.anyOrAllCondition == "0") {
+                        let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
+                        let isSelect = arr.some(ele => ele == true)
+                        if(!isSelect) {
+                            this.$notify({
+                                title: '警告',
+                                message: '请选择任意一个交易条件',
+                                type: 'warning'
+                            });
+                            this.canSubmit = false;
+                        }
+                    }
+                }
+                if(this.ruleForm.tagType == '1') {
+                    if(this.ruleForm.anyOrAllCondition == "1") {
+                        let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
+                        let isSelect = arr.every(ele => ele == true)
+                        if(!isSelect) {
+                            this.$notify({
+                                title: '警告',
+                                message: '请选择所有交易条件',
+                                type: 'warning'
+                            });
+                            this.canSubmit = false;
+                        }
                     }
                 }
                 if(!!this.canSubmit) {
@@ -423,7 +464,7 @@ export default {
                     this.ruleForm = Object.assign({}, response);
                     this.ruleForm.tagType = this.ruleForm.tagType.toString();
                     this.ruleForm.anyOrAllCondition = typeof(this.ruleForm.anyOrAllCondition) == 'number' ? this.ruleForm.anyOrAllCondition.toString():"";
-                    this.ruleForm.consumeTimeType = this.ruleForm.consumeTimeType ? this.ruleForm.consumeTimeType.toString():'';
+                    this.ruleForm.consumeTimeType = typeof(this.ruleForm.consumeTimeType) == 'number' ? this.ruleForm.consumeTimeType.toString():'';
                     this.ruleForm.isLastConsumeTime = Boolean(this.ruleForm.isLastConsumeTime);
                     this.ruleForm.isTotalConsumeTimes = Boolean(this.ruleForm.isTotalConsumeTimes);
                     this.ruleForm.isTotalConsumeMoney = Boolean(this.ruleForm.isTotalConsumeMoney);
@@ -431,9 +472,15 @@ export default {
                     this.ruleForm.isTotalScore = Boolean(this.ruleForm.isTotalScore);
                     this.ruleForm.isProduct = Boolean(this.ruleForm.isProduct);
                     this.ruleForm.consumeTimeUnit = this.ruleForm.consumeTimeUnit.toString();
-                    this.selectedIds = this.ruleForm.productInfoIds;
+                    this.selectedIds = this.ruleForm.productInfoIds;   
                     if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
                         this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
+                    }
+                    if(this.ruleForm.consumeTimeType == "0") {
+                        this.consumeTime = "";
+                    }else{
+                        this.ruleForm.consumeTimeValue = "";
+                        this.ruleForm.consumeTimeUnit = "";
                     }
                 }
             }).catch((error) => {

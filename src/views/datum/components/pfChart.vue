@@ -78,6 +78,7 @@ export default {
         },
         yAxis: {
           type: "value",
+          minInterval: 1
           // axisLabel:{
           //   formatter:'{value}(人)'
           // }

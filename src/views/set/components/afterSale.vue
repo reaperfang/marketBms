@@ -43,7 +43,7 @@
                 天后，售后自动关闭
             </el-form-item>
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <h2>评价相关：</h2>
             <el-form-item label="评价功能开启" prop="orderComment">
                 <el-radio-group v-model="form.orderComment">
@@ -65,7 +65,7 @@
                 </el-input-number>
                 天后,自动评价为好评
             </el-form-item>
-        </div>
+        </div> -->
         <div class="item">
             <h2>资产相关：</h2>
             <el-form-item label="发票功能开启" prop="invoiceOpen">

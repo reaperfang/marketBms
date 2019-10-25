@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图片素材'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图片素材'" :showFooter="false">
       <div class="content">
         <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
@@ -12,22 +12,9 @@
                     <p>
                       <span>
                         <el-checkbox v-model="item.checked" @change="handleChecked"></el-checkbox>
-                        <!-- <i class="wx_icon" v-if="item.isSyncWechat"></i> -->
                       </span>
-                      <!-- <span>
-                        {{item.imgPixelWidth || '0'}}*{{item.imgPixelHeight || '0'}}px
-                      </span>
-                      <span>
-                        <i class="el-icon-link oper" @click="copyLink(item.filePath)"></i>
-                        <i class="el-icon-download oper" @click="downImage(item.filePath,item.fileName)"></i>
-                      </span> -->
                     </p>
                   </div>
-                  <!-- <div class="operate" ref="operate">
-                    <el-button type="primary" plain class="block mt10 ml10" @click="moveGroup(item.id)">分组</el-button>
-                    <el-button type="primary" plain class="block mt10">剪裁</el-button>
-                    <el-button type="primary" plain class="block mt10" @click="deleteImage(item.id,'imageId')">删除</el-button>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -44,6 +31,10 @@
             </p>
           </div>
         </div>
+        <p class="txt_center">
+            <el-button type="primary" @click="submit()" :disabled="disNum">确 认</el-button>
+            <el-button  @click="visible = false">取 消</el-button>
+        </p>
       </div>
   </DialogBase>
 </template>
@@ -62,6 +53,7 @@ export default {
       currentPage:1,
       pageSize:20,
       total:0,
+      disNum:true
     }
   },
   props: {
@@ -116,7 +108,7 @@ export default {
             cid:this.cid,
             mediaId:item.media_id,
             sourceMaterialType:'0',
-            fileName:item.name,
+            fileName:'微信同步图片',
             filePath:escape(item.url),
             imgPixelWidth:'',
             imgPixelHeight:'',
@@ -131,6 +123,7 @@ export default {
         data:datas
       }
       this.$emit('submit',{syncImage:{query:query}})
+      this.visible = false
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){
@@ -147,11 +140,13 @@ export default {
       if(val){
         this.list.map(item =>{
           item.checked = true
+          this.disNum = false
           return this.list
         })
       }else{
         this.list.map(item =>{
           item.checked = false
+          this.disNum = true
           return this.list
         })
       }
@@ -161,8 +156,12 @@ export default {
         this.checkedAll = this.list.every(item => {
           return item.checked == true
         })
+         this.disNum = !this.list.some(item => {
+          return item.checked == true
+        })
       }else{
         this.checkedAll = false
+        this.disNum = true
       }
     },
 
@@ -268,5 +267,14 @@ export default {
       cursor: pointer;
     }
   }
+}
+.pages{
+  width: 100%;
+  text-align: right;
+}
+.txt_center{
+  width: 100%;
+  text-align: center;
+  margin-top:20px;
 }
 </style>

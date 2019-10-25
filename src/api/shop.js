@@ -312,6 +312,16 @@ export function getQrcode(data) {
   })
 }
 
+// 获取小程序码
+export function getMiniAppQrcode(data) {
+  return request({
+    target: 'DECORATION-MINI-PROGRAMS-PROCESSOR',
+    method: 'post',
+    apiType: 'decorate',
+    data
+  })
+}
+
 //重置商品分类
 export function resetGoodsGroup(data) {
   return request({
@@ -574,6 +584,16 @@ export function changeSwitchStatus(data) {
         method: 'get',
         baseURL: process.env.SALE_API,
         params: data
+      })
+  }
+
+  //获取小程序状态
+  export function getMiniProgramStatus(data) {
+      return request({
+        target: 'DECORATION-GET-MINI-APP-STATUS-PROCESSOR',
+        method: 'post',
+        params: data,
+        apiType: 'decorate'
       })
   }
 

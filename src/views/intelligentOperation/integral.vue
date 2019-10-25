@@ -28,14 +28,11 @@
                 <el-form-item label="消耗次数">
                     <div class="input_wrap2">
                         <el-select v-model="form.scorePaymentCountRange" @change="getData">
-                           <el-option label="1-5次" value="1"></el-option>
-                           <el-option label="5-10次" value="2"></el-option>
-                           <el-option label="10-15次" value="3"></el-option>
-                           <el-option label="15次以上" value="4"></el-option>
+                            <el-option v-for="item in consumTimes" :label="item.name" :value="item.value" :key="item.id"></el-option>
                         </el-select>
                     </div>
                 </el-form-item>
-                <el-form-item label="会员类型">
+                <el-form-item label="客户类型">
                     <div class="input_wrap2">
                         <el-select v-model="form.memberType"  @change="getData">
                             <el-option v-for="item in customType" :label="item.name" :value="item.id" :key="item.id"></el-option>
@@ -43,7 +40,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item class="fr marT20">
-                    <el-button class="minor_btn" icon="el-icon-search" @click="goSearch">查询</el-button>
+                    <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
                     <el-button class="border_btn" @click="reSet">重 置</el-button>
                 </el-form-item>
             </el-form>
@@ -55,7 +52,7 @@
                 </div>
             </div>
             <ma3Table 
-                class="marT20" 
+                class="marT20s" 
                 @sizeChange="sizeChange"
                 @currentChange="currentChange"
                 :pageSize="10"
@@ -64,10 +61,14 @@
             </ma3Table>
         </div>
         <p>运营建议:</p>
-            <p v-if="form.scorePaymentCountRange==1" class="proposal"><b>"消耗次数1-5次："</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="form.scorePaymentCountRange==2" class="proposal"><b>"消耗次数5-10次："</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="form.scorePaymentCountRange==3" class="proposal"><b>"消耗次数10-15次："</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="form.scorePaymentCountRange==4" class="proposal"><b>"消耗次数15次以上："</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+            <p v-if="form.scorePaymentCountRange == '1-5'" class="proposal"><b>"消耗次数1-5次"：</b>建议针对此类用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+            <p v-if="form.scorePaymentCountRange == '5-10'" class="proposal"><b>"消耗次数5-10次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+            <p v-if="form.scorePaymentCountRange == '10-15'" class="proposal"><b>"消耗次数10-15次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+            <p v-if="form.scorePaymentCountRange == '15-10000000'" class="proposal"><b>"消耗次数15次以上"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+            <p v-if="form.scorePaymentCountRange == '15-20'" class="proposal"><b>"消耗次数15-20次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+            <p v-if="form.scorePaymentCountRange == '50-100'" class="proposal"><b>"消耗次数50-100次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+        <div class="contents"></div>
+        <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
     </div>
 </template>
 <script>
@@ -91,9 +92,9 @@ export default {
                     if (maxTime > new Date()) {
                         maxTime = new Date() - 8.64e7
                     }
-                    return time.getTime() > maxTime
+                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
                     }
-                    return time.getTime() > Date.now() - 8.64e7
+                    return time.getTime() > Date.now()
                 }
             },
             daterange:'',
@@ -104,6 +105,7 @@ export default {
                 memberType:null,
                 timeType:1,
                 startIndex:1,
+                loads:false,
                 pageSize:10
             },
             memberCount:0, //会员数
@@ -157,26 +159,16 @@ export default {
         //
         //查询
         goSearch(){
+            this.form.loads = true
             let memberType = this.form.memberType;
+            let scorePaymentCountRange = this.form.scorePaymentCountRange;
             this.form.scorePaymentCountRange == 'null' && (this.form.scorePaymentCountRange = null)
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
                 this.ratio = res.ratio;
                 this.listObj = res; //信息列表数据
                 this.totalCount = res.totalPage * this.form.pageSize;
-                // if(memberType == 1){ //新会员 
-                //     this.textTips = true;
-                //     this.memberNum = res.newMemberCount;
-                //     this.memberCount = res.newMemberRatio;
-                // }else if(memberType == 2){ //老会员
-                //     this.textTips = true;
-                //     this.memberNum = res.oldMemberCount;
-                //     this.memberCount = res.oldMemberRatio;
-                // }else{ //其他
-                //     this.textTips = false;
-                // }
-                console.log(res)
-                // console.log(this.repeatPaymentRatio)
+                this.form.loads = false
             }).catch(error => {
                 this.$message.error(error);
             });
@@ -193,6 +185,7 @@ export default {
                       })
                   }
                   this.consumTimes = pages;
+                  this.form.scorePaymentCountRange = value
                 // console.log('res',res)
             }).catch(error =>{
                 console.log('error',error)
@@ -222,7 +215,6 @@ export default {
             data.startTime = this.form.startTime
             data.endTime = this.form.endTime
             data.scorePaymentCountRange = this.form.scorePaymentCountRange
-            data.queryRepeatPaymentRatio = this.form.queryRepeatPaymentRatio
             data.memberType = this.form.memberType            
             data.timeType = this.form.timeType
             this._apis.data.integralConsumptionExport(data)
@@ -298,5 +290,25 @@ export default {
             }
         }
     }
+}
+.marT20s{
+       position: relative;
+}
+.contents{
+    width: 100%;
+    height: 45px;
+    background: #fff;
+}
+.loadings{
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 60%;
+    top: 52%;
+    transform: translate(-50%,-50%);
+}
+.loadings>img{
+     width: 220px;
+     height: 220px;
 }
 </style>

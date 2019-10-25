@@ -10,11 +10,12 @@ import { getToken } from '@/system/auth' // getToken from cookie
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
-// permission judge function
-function hasPermission(roles, permissionRoles) {
-  if (roles.indexOf('admin') >= 0) return true // admin permission passed directly
-  if (!permissionRoles) return true
-  return roles.some(role => permissionRoles.indexOf(role) >= 0)
+function hasPermission(msfList, route) {
+  if (route && route.path) {
+    return msfList.some(item => route.meta.title == item.name) || route.path == '/apply' || route.path == '/401' || route.path == '/login'
+  } else {
+    return true
+  }
 }
 
 const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
@@ -24,13 +25,13 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   //  if (true) { // determine if there has token  
   if(store.getters.token){
+    const msfList = JSON.parse(localStorage.getItem('shopInfos')).data.msfList
     /* has token*/
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
         if(flag == 0){
-          let msfList = JSON.parse(localStorage.getItem('shopInfos')).data.msfList
           store.dispatch('GenerateRoutes', msfList).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
              next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
@@ -44,11 +45,14 @@ router.beforeEach((to, from, next) => {
         // })
       } else {
         // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
-        if (hasPermission(store.getters.roles, to.meta.roles)) {
-          next()
-        } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
+        if(from.name == 'profile'){
+          if (hasPermission(msfList, to)) {
+            next()
+          } else {
+            next({ path: '/401', replace: true, query: { noGoBack: true }})
+          }
         }
+        next()
         // 可删 ↑
       }
     }

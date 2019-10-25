@@ -82,7 +82,7 @@ export default {
       rules: {
         shopName: [
           { required: true, message: '请输入商户名称', trigger: 'blur' },
-          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
         ],
         phone:[
           { required: true, message: '请输入联系电话', trigger: 'blur' },
@@ -227,50 +227,6 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
-.avatar-uploader{
-  width: 80px;
-  height: 80px;
-  display: inline-block;
-  vertical-align: middle;
-}
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    text-align: center;
-    position: absolute;
-    top:10px;
-    left:10px;
-    z-index: 10;
-  }
-  .avatar {
-    width: 80px;
-    height: 80px;
-    display: inline-block;
-    vertical-align: middle;
-    img{
-      width: 80px;
-      height: 80px;
-      object-fit:fill;
-      display: inline-block;
-    }
-  }
-</style>
-
 <style rel="stylesheet/scss" lang="scss" scoped>
 .shopInfo{
    width: 100%;
@@ -290,4 +246,45 @@ export default {
 .note{
   color: #92929B;
 }
+/deep/ .avatar-uploader{
+  width: 80px;
+  height: 80px;
+  display: inline-block;
+  vertical-align: middle;
+}
+/deep/ .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+/deep/ .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+/deep/ .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    position: absolute;
+    top:10px;
+    left:10px;
+    z-index: 10;
+  }
+/deep/ .avatar {
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    vertical-align: middle;
+/deep/ img{
+      width: 80px;
+      height: 80px;
+      object-fit:fill;
+      display: inline-block;
+    }
+  }
 </style>

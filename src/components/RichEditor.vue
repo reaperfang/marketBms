@@ -124,7 +124,7 @@ export default {
       this.editor = editorInstance;
       const iframe = editorInstance.iframe;
       const document = iframe.contentDocument;
-      utils.asyncLoadCss(document, this.myConfig.UEDITOR_HOME_URL + 'dialogs/xiumi/xiumi-ue-v5.css').then(()=>{
+      utils.asyncLoadCss(document, this.config.UEDITOR_HOME_URL + 'dialogs/xiumi/xiumi-ue-v5.css').then(()=>{
         console.log('秀米编辑器样式加载成功！')
       }).catch(()=>{
         console.log('秀米编辑器样式加载失败！')

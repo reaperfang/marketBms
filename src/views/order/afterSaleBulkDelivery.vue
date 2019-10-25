@@ -140,6 +140,12 @@ export default {
     this.getDetail();
     this.getExpressCompanyList()
   },
+  computed: {
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    }
+  },
   methods: {
     checkExpress(index) {
       let expressCompanyCodes
@@ -356,6 +362,29 @@ export default {
               })
           })
           this.list = res;
+
+          this._apis.order
+            .fetchOrderAddress({ id: this.cid, cid: this.cid })
+            .then(response => {
+              this.list.forEach(res => {
+                res.orderAfterSaleSendInfo.sendName = response.senderName;
+                res.orderAfterSaleSendInfo.sendPhone = response.senderPhone;
+                res.orderAfterSaleSendInfo.sendProvinceCode = response.provinceCode;
+                res.orderAfterSaleSendInfo.sendProvinceName = response.province;
+                res.orderAfterSaleSendInfo.sendCityCode = response.cityCode;
+                res.orderAfterSaleSendInfo.sendCityName = response.city;
+                res.orderAfterSaleSendInfo.sendAreaCode = response.areaCode;
+                res.orderAfterSaleSendInfo.sendAreaName = response.area;
+                res.orderAfterSaleSendInfo.sendDetail = response.address;
+              });
+            })
+            .catch(error => {
+              this.visible = false;
+              this.$notify.error({
+                title: "错误",
+                message: error
+              });
+            });
         })
         .catch(error => {
           this.visible = false;

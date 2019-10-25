@@ -9,11 +9,6 @@
       v-loading="loading"
       >
       <el-table-column
-        type="selection"
-        prop="choose"
-        label="选择">
-      </el-table-column>
-      <el-table-column
         prop="alias"
         label="会员卡等级">
       </el-table-column>
@@ -32,9 +27,14 @@
       >
       </el-table-column>
       <el-table-column
-        prop="upgradePackage"
         label="升级礼包"
       >
+        <template slot-scope="scope">
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[0]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[1]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[2]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[3]:''}}</p>
+        </template>
       </el-table-column>
       <el-table-column
         prop="validity"

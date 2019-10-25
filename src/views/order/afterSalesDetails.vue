@@ -64,24 +64,19 @@ export default {
             this.getDetail()
         },
         confirmTakeOver() {
-            this._apis.order.orderAfterConfirmExchange({
-                id: this.orderAfterSale.id,
-                exchangeConfirmation: 1
-            }).then((res) => {
-                this.getDetail()
-                this.visible = false
+            this._apis.order.orderConfirmReceived({id: this.orderAfterSale.id, isSellerReceived: 1}).then(res => {
                 this.$notify({
                     title: '成功',
-                    message: '确认收货成功！',
+                    message: '确认收货成功',
                     type: 'success'
                 });
+                this.getDetail()
             }).catch(error => {
-                this.visible = false
                 this.$notify.error({
                     title: '错误',
                     message: error
                 });
-            })
+            }) 
         },
         reject() {
             this.currentDialog = 'RejectDialog'

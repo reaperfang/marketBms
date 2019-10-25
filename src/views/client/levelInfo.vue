@@ -28,12 +28,12 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right">
         <el-form-item label="等级称谓：" prop="name">
           <div class="input_wrap">
-            <el-input v-model="ruleForm.name" placeholder="请输入等级名称，比如普通会员"></el-input>
+            <el-input v-model="ruleForm.name" placeholder="请输入等级名称，比如普通会员" :maxLength="15"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="等级说明：">
           <div class="input_wrap">
-            <el-input v-model="ruleForm.explain" placeholder="请输入等级描述"></el-input>
+            <el-input v-model="ruleForm.explain" placeholder="请输入等级描述" :maxLength="25"></el-input>
           </div>
         </el-form-item>
         <div class="line"></div>
@@ -56,7 +56,7 @@
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费金额满') !== -1">
             <el-radio v-model="condition2" label="消费金额满" @change="handleCheck1">消费金额满：</el-radio>
             <div class="input_wrap2">
-              <el-input placeholder="请输入数字" v-model="xfjem"></el-input>
+              <el-input placeholder="请输入数字" v-model="xfjem" @keyup.native="checkZero($event, xfjem,'xfjem')" @blur="checkLevelValue('xfjem')"></el-input>
             </div>
             <span>元</span>
             <span>即可升级</span>
@@ -64,7 +64,7 @@
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费次数满') !== -1">
             <el-radio v-model="condition2" label="消费次数满" @change="handleCheck2">消费次数满：</el-radio>
             <div class="input_wrap2">
-              <el-input placeholder="请输入数字" v-model="xfcsm"></el-input>
+              <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZero($event, xfcsm,'xfcsm')" @blur="checkLevelValue('xfcsm')"></el-input>
             </div>
             <span>次</span>
             <span>即可升级</span>
@@ -72,7 +72,7 @@
           <div class="radio_line" v-if="getIndex(this.conditionList,'积分获得满') !== -1">
             <el-radio v-model="condition2" label="积分获得满">积分获得满：</el-radio>
             <div class="input_wrap2">
-              <el-input placeholder="请输入数字" v-model="jfhdm"></el-input>
+              <el-input placeholder="请输入数字" v-model="jfhdm" @keyup.native="checkZero($event, jfhdm,'jfhdm')"></el-input>
             </div>
             <span>分</span>
             <span>即可升级</span>
@@ -85,7 +85,7 @@
           <el-checkbox v-model="right1" @change="handleCheck3">满包邮</el-checkbox>
           <span>订单金额满</span>
           <div class="input_wrap3">
-            <el-input placeholder="请输入数字" v-model="mby"></el-input>
+            <el-input placeholder="请输入数字" v-model="mby" @keyup.native="checkZero($event, mby,'mby')"></el-input>
           </div>
           <span>包邮</span>
         </el-form-item>
@@ -93,7 +93,7 @@
           <el-checkbox v-model="right2" @change="handleCheck4">会员折扣</el-checkbox>
           <span>享受后买商品售价</span>
           <div class="input_wrap">
-            <el-input placeholder="填写数字（如：八折输入8,八五折输入8.5）" v-model="hyzk" @blur="handleBlur"></el-input>
+            <el-input placeholder="填写数字（如：八折输入8,八五折输入8.5）" v-model="hyzk" @blur="handleBlur($event, hyzk, 'hyzk')"></el-input>
           </div>
           <span>折</span>
           <span class="l_warn">（仅对支仅持参加会员折扣的商品生效）</span>
@@ -105,7 +105,7 @@
           <el-checkbox v-model="upgrade1" @change="handleCheck5">赠送积分</el-checkbox>
           <span>送</span>
           <div class="input_wrap3">
-            <el-input placeholder="填写数字" v-model="zsjf"></el-input>
+            <el-input placeholder="填写数字" v-model="zsjf" @keyup.native="checkZero($event, zsjf,'zsjf')"></el-input>
           </div>
           <span>积分</span>
         </el-form-item>
@@ -182,7 +182,7 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入等级称谓", trigger: "blur" }]
       },
-      condition1: true,
+      condition1: false,
       condition2: "",
       xfjem: "",
       xfcsm: "",
@@ -216,8 +216,11 @@ export default {
         hobby: false
       },
       disabled1: false,
-      conInfos: ["绑定手机号", "姓名"],
-      canSubmit: true
+      conInfos: [],
+      canSubmit: true,
+      mapCondition: {
+        "birthday": "生日", "area": "地区", "gender": "性别", "name": "姓名", "email": "邮箱", "hobby": "爱好", "phone":"绑定手机号"
+      }
     };
   },
   computed: {
@@ -227,6 +230,33 @@ export default {
     }
   },
   methods: {
+    checkZero(event,val,ele) {
+      val = val.replace(/[^\d]/g,'');
+      val = val.replace(/^0/g,'');
+      this[ele] = val;
+    },
+    handleBlur(event,val,ele) {
+      val = val.replace(/[^\d.]/g,'');
+      val = val.replace(/\.{2,}/g,'.');
+      val = val.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+      val = val.replace(/^0/g,'');
+      if(val >= 10) {
+        this.$notify({
+          title: "警告",
+          message: "只能输入10以内数字",
+          type: "warning"
+        });
+        val = "";
+      }else if(val <= 0) {
+        this.$notify({
+          title: "警告",
+          message: "不能输入小于0数字",
+          type: "warning"
+        });
+        val = "";
+      }
+      this[ele] = val;
+    },
     handleCheck1() {
       if(this.condition2 == "消费金额满") {
         this.xfcsm = "";
@@ -250,23 +280,6 @@ export default {
     handleCheck5(val) {
       if(!val) {
         this.zsjf = "";
-      }
-    },
-    handleBlur() {
-      if(this.hyzk >= 10) {
-        this.$notify({
-          title: "警告",
-          message: "只能输入10以内数字",
-          type: "warning"
-        });
-        this.hyzk = "";
-      }else if(this.hyzk <= 0) {
-        this.$notify({
-          title: "警告",
-          message: "不能输入小于0数字",
-          type: "warning"
-        });
-        this.hyzk = "";
       }
     },
     handleAvatarSuccess(res, file) {
@@ -303,6 +316,11 @@ export default {
               ) {
                 this.condition1 = true;
                 this.currentData.info = JSON.parse(v.conditionValue);
+                for(let i in this.currentData.info) {
+                  if(this.currentData.info[i] == true) {
+                    this.conInfos.push(this.mapCondition[i]);
+                  }
+                }
                 this.selectedInfos = this.currentData.info;
               }
               if (
@@ -357,7 +375,7 @@ export default {
                 v.upgradeRewardInfoId == this.getId(this.rewardList, "赠送红包")
               ) {
                 this.upgrade2 = true;
-                this.selectedReds.push({ name: v.giftName, id: v.giftProduct });
+                this.selectedReds.push({ name: v.giftName, id: v.giftProduct,  });
                 redArr.push(v.giftProduct);
               }
               if (
@@ -528,6 +546,7 @@ export default {
         this.currentDialog = "giftListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedGifts = [];
       }
     },
     showCouponDialog(val) {
@@ -536,6 +555,7 @@ export default {
         this.currentDialog = "couponListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedCoupons = [];
       }
     },
     showRedDialog(val) {
@@ -544,6 +564,7 @@ export default {
         this.currentDialog = "redListDialog";
       } else {
         this.dialogVisible = false;
+        this.selectedReds = [];
       }
     },
     getSelection(obj) {
@@ -574,6 +595,26 @@ export default {
     getSelectedInfo(obj) {
       this.selectedInfos = Object.assign({}, obj);
     },
+    checkLevelValue(ele) {
+      let params = {
+        level: this.$route.query.level,
+        type: 0,
+        levelConditionId: this.getId(this.conditionList, this.condition2),
+        conditionValue: this[ele]
+      }
+      this._apis.client.checkLevelValue(params).then((response) => {
+        if(response == "no") {
+          this.xfjem = "";
+          this.$notify({
+            title: "警告",
+            message: "高会员卡等级条件数值要大于低会员卡等级的条件数值",
+            type: "warning"
+          });
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
     save() {
       if (this.ruleForm.name == "") {
         this.$notify({
@@ -589,6 +630,12 @@ export default {
           this.$notify({
             title: "警告",
             message: "请选择一项等级权益",
+            type: "warning"
+          });
+        }else if(this.$route.query.level !== 1 && this.condition2 == "") {
+          this.$notify({
+            title: "警告",
+            message: "请选择升级条件",
             type: "warning"
           });
         } else {
@@ -669,6 +716,7 @@ export default {
             "[object Object]",
             ""
           );
+          receiveConditionsRemarks = receiveConditionsRemarks.substring(0,receiveConditionsRemarks.length - 1);
           levelConditionList.map(v => {
             delete v.label;
           });
@@ -709,10 +757,12 @@ export default {
           rightsList.map(v => {
             rights += "" + v.label + v.rightsValue + ",";
           });
+          rights = rights.substring(0, rights.length - 1);
           rightsList.map(v => {
             delete v.label;
           });
           let upgradeRewardList = [];
+          let upgradePackage = "";
           if (this.upgrade1) {
             if (this.zsjf == "") {
               this.$notify({
@@ -730,6 +780,7 @@ export default {
               params5.giftNumber = this.zsjf;
               params5.label = "赠送积分";
               upgradeRewardList.push(params5);
+              upgradePackage = upgradePackage + "赠送" + this.zsjf + "个积分,";
             }
           }
           if (this.upgrade2) {
@@ -751,10 +802,12 @@ export default {
                 obj.giftName = v.name;
                 obj.label = "赠送红包";
                 upgradeRewardList.push(obj);
+                upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
               });
             }
           }
           if (this.upgrade3) {
+            let zpNum = 0;
             if (this.selectedGifts.length == 0) {
               this.$notify({
                 title: "警告",
@@ -774,10 +827,13 @@ export default {
                 obj.label = "赠送赠品";
                 obj.giftNumber = v.number;
                 upgradeRewardList.push(obj);
+                zpNum = zpNum + v.number;
               });
+              upgradePackage = upgradePackage + "赠送" + zpNum + "个赠品,";
             }
           }
           if (this.upgrade4) {
+            var yhzNum = 0;
             if (this.selectedCoupons.length == 0) {
               this.$notify({
                 title: "警告",
@@ -797,18 +853,11 @@ export default {
                 obj.giftNumber = v.number;
                 obj.label = "赠送优惠券";
                 upgradeRewardList.push(obj);
+                yhzNum = yhzNum + v.number;
               });
+              upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
             }
           }
-          let upgradePackage = "";
-          let upgradeArr = [];
-          upgradeRewardList.map(v => {
-            if (upgradeArr.indexOf(v.label) == -1) {
-              upgradeArr.push(v.label);
-              upgradePackage += "" + v.label + ",";
-            }
-          });
-          upgradePackage = upgradePackage.replace(/undefined/g, "");
           upgradeRewardList.map(v => {
             if (v.label) {
               delete v.label;

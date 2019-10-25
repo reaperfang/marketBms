@@ -97,6 +97,12 @@ export default {
         this.$emit('goodsGroupPageDataChanged', newValue);
       },
       deep: true
+    },
+    shopInfo: {
+      handler(newValue) {
+        this.getQrcode();
+      },
+      deep: true
     }
   },
   created() {
@@ -116,6 +122,8 @@ export default {
     this._globalEvent.$on('goodsGroupPageSettingResetLoading', (status) => {
       _self.resetLoading = false;
     });
+
+    this.$store.dispatch('getShopInfo');
     this.$emit('goodsGroupPageDataChanged', this.ruleForm);
   },
   mounted() {
@@ -124,7 +132,9 @@ export default {
     }
   },
   computed: {
-    
+      shopInfo() {
+        return this.$store.getters.shopInfo || {};
+      }
   },
   methods: {
       /* 获取二维码 */
@@ -135,7 +145,8 @@ export default {
       this._apis.shop.getQrcode({
         url: this.ruleForm.shareUrl.replace("&","[^]"),
         width: '150',
-        height: '150'
+        height: '150',
+        logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);

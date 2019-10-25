@@ -60,7 +60,7 @@
                     <p>待处理</p>
                     <p class="des">客户已退货，商户未发货</p>
                     <div class="button-box">
-                        <el-button @click="confirmTakeOver">确认收货</el-button>
+                        <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                         <el-button type="primary" @click="sendGoods">发货</el-button>
                     </div>
                 </div>
@@ -82,6 +82,7 @@
                 <div class="col righter">
                     <p>待收货</p>
                     <p class="des">商户已换货发货，客户未收货</p>
+                    <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>

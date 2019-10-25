@@ -87,9 +87,9 @@ export default {
               if (maxTime > new Date()) {
                   maxTime = new Date()- 8.64e7
               }
-              return time.getTime() > maxTime
+              return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
               }
-              return time.getTime() > Date.now() - 8.64e7
+              return time.getTime() > Date.now()
           }
       },
       activeName: "first",
@@ -204,37 +204,43 @@ export default {
 
     //浏览量/访客量 or 到店时段 or 访问次数 or 访问来源
     changeType(e) {
-      switch (e) {
-        case '1':
-          this.getFlowAnalysis()
-          break;
-        case '2':
-          this.getUvhour()
-          break;
-        case '3': 
-            this.getPvady()
+      if(this.nearDay != 4 || this.range != ''){
+        switch (e) {
+          case '1':
+            this.getFlowAnalysis()
             break;
-        case '4': 
-            this.getChannel()
+          case '2':
+            this.getUvhour()
             break;
+          case '3': 
+              this.getPvady()
+              break;
+          case '4': 
+              this.getChannel()
+              break;
+        }
       }
     },
 
     //停留时长 or 跳出率
     changeDp(e){
-      switch(e){
-        case '1':
-          this.getResidetime()
-          break;
-        case '2':
-          this.getPathOut()
-          break;
+      if(this.nearDay != 4 || this.range != ''){
+        switch(e){
+          case '1':
+            this.getResidetime()
+            break;
+          case '2':
+            this.getPathOut()
+            break;
+        }
       }
     },
 
     //全部 or  小程序  or  公众号
     all() {
-      this.changeType(this.analysisType)
+      if(this.nearDay != 4 || this.range != ''){
+        this.changeType(this.analysisType)
+      }
     },
 
 

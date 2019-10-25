@@ -110,7 +110,9 @@ export default {
   created() {
     this.goodsList.forEach((row, index) => {
       this.$nextTick(() => {
-        this.$refs.multipleTable.toggleRowSelection(row, true);
+        if(!row.fakeData) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, true);
+        }
       })
     })
   },

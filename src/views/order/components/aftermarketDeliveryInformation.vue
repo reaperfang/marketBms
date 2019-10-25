@@ -63,19 +63,19 @@
             </div>
         </div>
 
-        <div v-if="orderAfterSale.expressNo" class="delivery-information-header">
+        <div v-if="orderAfterSaleSendInfo.expressNos" class="delivery-information-header">
             商家发货
         </div>
         <div class="container">
-            <div v-if="orderAfterSale.expressNo" class="item" :class="{close: !showContent}">
+            <div v-if="orderAfterSaleSendInfo.expressNos" class="item" :class="{close: !showContent}">
                 <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
-                        <div class="header-lefter-item ">快递单号：{{orderAfterSale.expressNo}}</div>
-                        <div @click="showLogistics(orderAfterSale.expressNo)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div class="header-lefter-item ">快递单号：{{orderAfterSaleSendInfo.expressNos}}</div>
+                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
-                        <div class="header-righter-item">{{orderAfterSale | businessFilter}}</div>
+                        <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
                         <div class="header-righter-item">发货人：{{orderAfterSale.sendName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.receiveGoodsTime}}</div>
                         <div @click="showContent = !showContent">
@@ -183,10 +183,10 @@ export default {
                 return ''
             }
         },
-        businessFilter(value) {
+        businessFilter(value, expressNos) {
             if(value.memberReceiveGoodsTime) {
                 return '【客户签收】'
-            } else if(this.orderAfterSaleSendInfo.expressNo) {
+            } else if(expressNos) {
                 return '【商户发货】'
             } else {
                 return ''

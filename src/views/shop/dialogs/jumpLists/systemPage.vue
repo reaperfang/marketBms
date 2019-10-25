@@ -1,6 +1,6 @@
 <template>
   <div>
-      <el-table  :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" @row-click="rowClick">
+      <el-table  :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange">
         <el-table-column prop="" label="选择" :width="50">
             <template slot-scope="scope">
               <el-checkbox v-model="scope.row.active" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>

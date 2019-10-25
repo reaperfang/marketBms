@@ -62,6 +62,7 @@ export default {
               new Date(Number(v.tradeTime)),
               "yyyy-MM-dd hh:mm:ss"
             );
+            v.changeAmount = v.changeAmount > 0?"+" + v.changeAmount:v.changeAmount;
           });
           this.balanceList = [].concat(list);
           this.total = response.total;

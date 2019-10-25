@@ -2,11 +2,12 @@
 <template>
     <div class="main">
         <h1>成为老会员条件：</h1>
-        <el-form ref="form" :model="form">
-            <el-form-item label="新会员交易次数达到" prop="num">
+        <el-form ref="form" :rules="rules" :model="form">
+            <el-form-item label="新会员交易次数达到" prop="oldMemberSet">
                 <el-input-number 
                 v-model="form.oldMemberSet" 
                 :min="1" 
+                :precision="0"
                 style="width:200px;" 
                 label="请输入阿拉伯数字进行设置">
                 </el-input-number>
@@ -27,6 +28,11 @@ export default {
     return {
         form:{
             oldMemberSet:''
+        },
+        rules:{
+          oldMemberSet:[
+            { required: true, message: '请输入具体次数', trigger: 'blur' },
+          ]
         }
     }
   },
@@ -60,7 +66,7 @@ export default {
               oldMemberSet:this.form.oldMemberSet
             }
             this._apis.set.updateShopInfo(data).then(response =>{
-              this.$notify.error({
+              this.$notify.success({
                 title: '成功',
                 message: '保存成功！'
               });

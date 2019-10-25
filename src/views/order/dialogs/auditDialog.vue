@@ -22,6 +22,13 @@ export default {
     },
     methods: {
         submit() {
+            if(this.auditStatus == '') {
+                this.$message({
+                message: '请选择审核类型',
+                type: 'warning'
+                });
+                return
+            }
             this.$emit('audit', this.auditStatus)
             this.visible = false
         }

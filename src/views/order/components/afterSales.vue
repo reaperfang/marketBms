@@ -91,7 +91,7 @@
                     label="收货人电话">
                 </el-table-column>
                 <el-table-column
-                    prop="orderAfterSaleStatus"
+                    prop="status"
                     label="状态">
                     <template slot-scope="scope">
                         <span>{{scope.row.status | statusFilter}}</span>
@@ -104,8 +104,8 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <div class="operate-box">
-                            <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
-                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 3" @click="$router.push('/order/orderAfterDeliverGoods?id=' + scope.row.orderAfterSaleId + '&afterSale=' + true)">发货</span>
+                            <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
+                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push('/order/orderAfterDeliverGoods?id=' + scope.row.orderAfterSaleId + '&afterSale=' + true)">发货</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -161,12 +161,18 @@ export default {
     filters: {
         statusFilter(code) {
             switch(+code) {
+                case 0:
+                    return '待审核'
+                case 1:
+                    return '待退货'
+                case 2:
+                    return '待处理'
                 case 3:
-                    return '待发货'
-                case 4:
                     return '待收货'
-                case 5:
+                case 4:
                     return '已完成'
+                case 5:
+                    return '已关闭'
             }
         },
     },
@@ -176,7 +182,7 @@ export default {
                 this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
                 return
             }
-            if(this.multipleSelection.some(val => val.status != 3)) {
+            if(this.multipleSelection.some(val => val.status != 2)) {
             this.confirm({title: '提示', icon: true, text: '请选择待发货的售后单'})
                 return
             }

@@ -21,11 +21,11 @@
           <div v-if="distinguish == '0'">
             <span>每消费</span>
             <div class="input_wrap">
-              <el-input v-model="payAmount1"></el-input>
+              <el-input v-model="payAmount1" :disabled="true"></el-input>
             </div>
             <span>元 获得</span>
             <div class="input_wrap">
-              <el-input v-model="allMember"></el-input>
+              <el-input v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')" :maxLength="10"></el-input>
             </div>
             <span>积分</span>
           </div>
@@ -33,7 +33,7 @@
             <div class="marB10">
               <span>每消费&nbsp;&nbsp;&nbsp;</span>
               <div class="input_wrap2" style="margin-left:14px">
-                <el-input placeholder="请输入整数" v-model="payAmount"></el-input>
+                <el-input placeholder="请输入整数" v-model="payAmount" :disabled="true"></el-input>
               </div>
               <span>元 获得</span>
             </div>
@@ -130,12 +130,12 @@ export default {
       productLabelName: "",
       name: "",
       skuList: [],
-      payAmount1: "",
-      payAmount: "",
-      allMember: "",
-      noMember: "",
-      newMember: "",
-      oldMember: "",
+      payAmount1: "1",
+      payAmount: "1",
+      allMember: "0",
+      noMember: "0",
+      newMember: "0",
+      oldMember: "0",
       selectProducts: [],
       isAllProduct: null,
       distinguish: null,
@@ -145,6 +145,11 @@ export default {
     };
   },
   methods: {
+    checkZero(event,val,ele) {
+      val = val.replace(/[^\d.]/g,'');
+      val = val.replace(/^0/g,'');
+      this[ele] = val;
+    },
     getRowKeys(row) {
       return row.id
     },
@@ -161,8 +166,7 @@ export default {
     submit() {
       let params;
       if (this.enable) {
-        if(this.distinguish == '0') {
-          params = { 
+        params = { 
             id: this.data.row.id,
             enable: this.enable,
             sceneRule: {
@@ -174,26 +178,6 @@ export default {
                 allMember: this.allMember
               },
               yesDistinguish: {
-                payAmount: "",
-                noMember: "",
-                newMember: "",
-                oldMember: ""
-              }
-            }
-          };
-        }else{
-          params = { 
-            id: this.data.row.id,
-            enable: this.enable,
-            sceneRule: {
-              isAllProduct: this.isAllProduct == "0" ? true : false,
-              selectProducts: this.selectProducts,
-              distinguish: this.distinguish == "0" ? false : true,
-              noDistinguish: {
-                payAmount: "",
-                allMember: ""
-              },
-              yesDistinguish: {
                 payAmount: this.payAmount,
                 noMember: this.noMember,
                 newMember: this.newMember,
@@ -201,7 +185,6 @@ export default {
               }
             }
           };
-        }
       }else{
         params = {
           id: this.data.row.id,
@@ -215,7 +198,6 @@ export default {
           type: "warning"
         });
       } else {
-        console.log('params' + JSON.stringify(params));
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
@@ -292,7 +274,6 @@ export default {
           this.skuList = [].concat(response.list);
           this.total = response.total;
           let selectProducts = JSON.parse(this.data.row.sceneRule).selectProducts;
-          console.log(selectProducts);
           selectProducts.map(v => {
               this.skuList.forEach(row => {
                 if (row.goodsInfo.id == v.id) {
@@ -325,7 +306,6 @@ export default {
           obj.name = v.goodsInfo.name;
           this.selectProducts.push(obj);
         });
-        console.log(selections);
       }
     },
     getInfo() {
@@ -335,12 +315,12 @@ export default {
         this.enable = row.enable == '启用' ? true:false;
         this.isAllProduct = sceneRule.isAllProduct ? "0" : "1";
         this.distinguish = sceneRule.distinguish ? "1" : "0";
-        this.payAmount1 = sceneRule.noDistinguish.payAmount;
-        this.allMember = sceneRule.noDistinguish.allMember;
-        this.oldMember = sceneRule.yesDistinguish.oldMember;
-        this.newMember = sceneRule.yesDistinguish.newMember;
-        this.noMember = sceneRule.yesDistinguish.noMember;
-        this.payAmount = sceneRule.yesDistinguish.payAmount;
+        //this.payAmount1 = sceneRule.noDistinguish.payAmount;
+        this.allMember = sceneRule.noDistinguish.allMember || 0;
+        this.oldMember = sceneRule.yesDistinguish.oldMember || 0;
+        this.newMember = sceneRule.yesDistinguish.newMember || 0;
+        this.noMember = sceneRule.yesDistinguish.noMember || 0;
+        //this.payAmount = sceneRule.yesDistinguish.payAmount;
       }
     }
   },

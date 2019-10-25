@@ -123,12 +123,12 @@ export default {
     },
     //充值记录
     toRecord(){
-      this.$router.push({path:'/apply',params:{paths:'/application/toolapp/paySms'}})
+      this.$router.push({path:'/apply',query:{paths:'/application/toolapp/paySms'}})
       this.SETCURRENT(8)
     },
     //申请开票
     applyTicket(){
-      this.$router.push({path:'/apply',params:{paths:'/application/toolapp/rechargeHistory'}})
+      this.$router.push({path:'/apply',query:{paths:'/application/toolapp/rechargeHistory'}})
       this.SETCURRENT(8)
     }
   }

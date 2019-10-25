@@ -17,7 +17,7 @@
               <div class="col">
                 <div class="row align-center">
                   <div class="col reviews-image">
-                    <img :src="customerReviews.url" alt />
+                    <img width="66" :src="orderProductComment.goodsImage" alt />
                   </div>
                   <div class="col">
                     <div class="goods-name">
@@ -40,13 +40,24 @@
                 <p>{{orderProductComment.content}}</p>
                 <div class="row">
                   <div class="col">
-                    <img
-                      width="66"
-                      :src="item"
-                      alt
-                      v-for="(item, index) in orderProductComment.images"
-                      :key="index"
-                    />
+                    <template v-for="(item, index) in orderProductComment.images">
+                      <template v-if="/\.mp4|\.ogg$/.test(item)">
+                        <video width="66" controls="controls">
+                          <source :src="item" type="video/ogg">
+                          <source :src="item" type="video/mp4">
+                        Your browser does not support the video tag.
+                        </video>
+                      </template>
+                      <template v-else>
+                        <img
+                        width="66"
+                        :src="item"
+                        alt
+                        v-for="(item, index) in orderProductComment.images"
+                        :key="index"
+                      />
+                      </template>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -73,7 +84,7 @@
         </div>
       </div>
     </section>
-    <section class="replay">
+    <!-- <section class="replay">
       <div class="title">
         <div class="row">
           <div class="col replay-label">商户回复</div>
@@ -88,7 +99,7 @@
           <el-button @click="replyComment" type="primary">确 定</el-button>
         </div>
       </div>
-    </section>
+    </section> -->
     <section class="record">
       <div class="title">操作记录</div>
       <div class="table-box">
@@ -147,11 +158,13 @@ export default {
         initialFrameWidth: 500
       },
       orderProductComment: {},
-      recordList: []
+      recordList: [],
+      systomSensitiveList: []
     };
   },
   created() {
     this.getDetail();
+    this.getPublicList()
   },
   filters: {
     typeFilter(code) {
@@ -185,15 +198,77 @@ export default {
     }
   },
   methods: {
+    getPublicList(param) {
+        this._apis.goodsOperate.fetchPublicSensitiveList().then((res) => {
+            this.systomSensitiveList = res
+        }).catch(error => {
+            this.$notify.error({
+                title: '错误',
+                message: error
+            });
+        })
+    },
     replyComment() {
-        if(this.textarea.length > 200) {
+      let replaced = this.textarea.replace(/<[^>]*>|<\/[^>]*>/gm, "")
+
+      if(!replaced) {
+          this.$message({
+          message: '回复不能为空',
+          type: 'warning'
+        });
+        return
+        }
+        if(/^\s+$/.test(replaced)) {
+          this.$message({
+          message: '回复不能为空字符',
+          type: 'warning'
+        });
+        return
+        }
+        if(replaced.length > 200) {
           this.$message({
           message: '回复字符不能超过200',
           type: 'warning'
         });
         return
         }
-        this._apis.order.replyComment({id: this.$route.query.id, replyContent: this.textarea}).then((res) => {
+        let _textarea = this.textarea
+
+        var  replaceContent = function(html,keywords,replacecontents){
+          //匹配html标签中间的内容
+          var patt1 = new RegExp(">(.*?)(?=<)","g");
+          //每个匹配结果会多一个>比如<p>哈哈</p>,匹配出来会是>哈哈,后面将>进行替换
+          var matchStrs = html.match(patt1);
+          var words = [];
+          //替换>
+          for(var i=0;i<matchStrs.length;i++){
+              var matchStr = matchStrs[i].substring(1,matchStrs[i].length);
+              for(var j=0;j<keywords.length;j++){
+                  var patt2 = new RegExp(keywords[j],"g");
+                  matchStr = matchStr.replace(patt2,replacecontents[j]);
+              }
+              words.push(matchStr);
+          }
+          // 将html中间的内容进行替换方便后面连接,如将<p>哈哈</p>替换成<p>%s</p>
+          var temp = html.replace(patt1,">%s");
+          //将拆分出来的标签按顺序和替换敏感字后的中间内容进行连接
+          var arr = temp.split("%s");
+          var finalStr = "";
+          for(var i=0;i<(arr.length-1);i++){
+              finalStr += arr[i] + words[i];
+          }
+          finalStr += arr[arr.length - 1]
+
+          return finalStr;
+      }
+
+      // this.systomSensitiveList.forEach(word => {
+      //     let _word = word
+
+      //     _textarea = replaceContent(_textarea, word, '**')
+      //   })
+
+        this._apis.order.replyComment({id: this.$route.query.id, replyContent: _textarea}).then((res) => {
             this.$notify({
               title: "成功",
               message: "回复成功！",

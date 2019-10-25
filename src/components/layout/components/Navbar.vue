@@ -96,6 +96,7 @@ export default {
     //推出登录
     logout() {
       this.$store.dispatch('LogOut').then(() => {
+        console.log('退出')
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     },
