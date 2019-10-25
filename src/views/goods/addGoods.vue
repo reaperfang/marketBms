@@ -901,6 +901,10 @@ export default {
                     this.pinpaiMessage = true
                 }
 
+                if(this.ruleForm.productDetail) {
+                    this.ruleForm.productDetail = window.decodeURIComponent(window.atob(this.ruleForm.productDetail))
+                }
+
                 // if(this.ruleForm.productDetail) {
                 //     let _productDetail = ''
 
@@ -1101,8 +1105,12 @@ export default {
                     } else {
                         obj.goodsInfos = this.ruleForm.goodsInfos
                     }
-
-                    params = Object.assign({}, this.ruleForm, obj)
+                    console.log(this.ruleForm.productDetail)
+                    console.log(window.encodeURIComponent(this.ruleForm.productDetail))
+                    console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
+                    params = Object.assign({}, this.ruleForm, obj, {
+                        productDetail: window.btoa(window.encodeURIComponent(this.ruleForm.productDetail))
+                    })
                     
                     if(!this.editor) {
                         this.addGoods(params)

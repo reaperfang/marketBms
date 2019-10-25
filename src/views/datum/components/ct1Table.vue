@@ -29,6 +29,9 @@
         prop="rateUvPays"
         label="访问支付转化率"
       >
+      <template slot-scope="scope">
+        {{scope.row.rateUvPays == 0 ? 0 : (scope.row.rateUvPays*100).toFixed(2)}}%
+      </template>
       </el-table-column>
     </el-table>
   </div>

@@ -198,11 +198,13 @@ export default {
       return arr1.join(' ')
     },
     changeDate1(val) {
-      let arr = this.getTimeArr(val);
-      this.startTime1 = arr[0];
-      this.endTime1 = arr[1];
-      this.nearDay1 = "";
-      this.getMemberTrend();
+      if(val){
+        let arr = this.getTimeArr(val);
+        this.startTime1 = arr[0];
+        this.endTime1 = arr[1];
+        this.nearDay1 = "";
+        this.getMemberTrend();
+      }
     },
     changeDate2(val) {
       let arr = this.getTimeArr(val);

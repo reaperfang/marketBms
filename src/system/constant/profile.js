@@ -16,13 +16,13 @@ export default {
             text: "支付订单",
             price: 0
         },
-        {   
-            id: "003",
-            url: require("@/assets/images/profile/t_03.png"),
-            color: "#2F88EE",
-            text: "退款金额",
-            price: 0
-        },
+        // {   
+        //     id: "003",
+        //     url: require("@/assets/images/profile/t_03.png"),
+        //     color: "#2F88EE",
+        //     text: "退款金额",
+        //     price: 0
+        // },
         {   
             id: "004",
             url: require("@/assets/images/profile/t_04.png"),

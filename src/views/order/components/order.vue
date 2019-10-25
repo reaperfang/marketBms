@@ -30,7 +30,7 @@
                     </div>
                     <div class="item righter">
                         <span>订单类型：{{order.orderType | orderTypeFilter}}</span>
-                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>客户ID：{{order.memebrName}}</span>
+                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>客户ID：{{order.memberSn}}</span>
                         <span>订单来源：{{order.channelName}}</span>
                         <!-- <i v-permission="['订单', '订单查询', '商城订单', '删除订单']" @click="closeOrder(order.id)" v-if="order.orderStatus == 2" class="el-icon-delete"></i> -->
                     </div>
