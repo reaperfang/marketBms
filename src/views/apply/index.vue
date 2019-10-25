@@ -13,6 +13,7 @@ export default {
             src:'',
             path: '',
             defultPath: '/application/appIndex',
+            refreshPath:'',
             token:'',
             cid:'',
             iframeWin: null,
@@ -27,6 +28,9 @@ export default {
         window.addEventListener('message', this.onMessage)
         this.iframeWin = this.$refs.refreshFrame.contentWindow;
         this.isLoaded  = true;
+        window.onbeforeunload = function (){
+            this.refreshPath = window.localStorage.getItem('marketing_router_path')
+        }
     },
     methods:{
         init(){
@@ -36,7 +40,7 @@ export default {
             if(this.$route.query.paths){
                 this.path = this.$route.query.paths
             }else{
-                this.path = window.localStorage.getItem('marketing_router_path') || this.defultPath;
+                this.path = this.refreshPath || this.defultPath;
             }
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
             this.src = `${process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`

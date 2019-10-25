@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <vue-ueditor-wrap v-if="config" ref="editor" v-model="richValue" :config="config" @ready="ready" :init="init"></vue-ueditor-wrap>
+    <vue-ueditor-wrap mode="observer" :observerDebounceTime="100" v-if="config" ref="editor" v-model="richValue" :config="config" @ready="ready" :init="init"></vue-ueditor-wrap>
      <!-- 动态弹窗 -->
     <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @videoSelected="videoSelected"></component>
   </div>
