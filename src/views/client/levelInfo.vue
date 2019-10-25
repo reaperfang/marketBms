@@ -56,7 +56,7 @@
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费金额满') !== -1">
             <el-radio v-model="condition2" label="消费金额满" @change="handleCheck1">消费金额满：</el-radio>
             <div class="input_wrap2">
-              <el-input placeholder="请输入数字" v-model="xfjem" @keyup.native="checkZero($event, xfjem,'xfjem')" @blur="checkLevelValue('xfjem')"></el-input>
+              <el-input placeholder="请输入数字" v-model="xfjem" @keyup.native="checkZero($event, xfjem,'xfjem')" ></el-input>
             </div>
             <span>元</span>
             <span>即可升级</span>
@@ -64,7 +64,7 @@
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费次数满') !== -1">
             <el-radio v-model="condition2" label="消费次数满" @change="handleCheck2">消费次数满：</el-radio>
             <div class="input_wrap2">
-              <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZero($event, xfcsm,'xfcsm')" @blur="checkLevelValue('xfcsm')"></el-input>
+              <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZero($event, xfcsm,'xfcsm')"></el-input>
             </div>
             <span>次</span>
             <span>即可升级</span>
@@ -595,26 +595,6 @@ export default {
     getSelectedInfo(obj) {
       this.selectedInfos = Object.assign({}, obj);
     },
-    checkLevelValue(ele) {
-      let params = {
-        level: this.$route.query.level,
-        type: 0,
-        levelConditionId: this.getId(this.conditionList, this.condition2),
-        conditionValue: this[ele]
-      }
-      this._apis.client.checkLevelValue(params).then((response) => {
-        if(response == "no") {
-          this[ele] = "";
-          this.$notify({
-            title: "警告",
-            message: "高会员卡等级条件数值要大于低会员卡等级的条件数值",
-            type: "warning"
-          });
-        }
-      }).catch((error) => {
-        console.log(error);
-      })
-    },
     save() {
       if (this.ruleForm.name == "") {
         this.$notify({
@@ -863,31 +843,123 @@ export default {
               delete v.label;
             }
           });
-          if(!!this.canSubmit) {
-            formObj.levelConditionList = [].concat(levelConditionList);
-            formObj.rightsList = [].concat(rightsList);
-            formObj.upgradeRewardList = [].concat(upgradeRewardList);
-            formObj.upgradePackage = upgradePackage;
-            formObj.receiveConditionsRemarks = receiveConditionsRemarks;
-            formObj.rights = rights;
-            formObj.id = this.ruleForm.id;
-            formObj.cid = this.ruleForm.cid;
-            formObj.name = this.ruleForm.name;
-            formObj.levelImageUrl = this.ruleForm.levelImageUrl;
-            formObj.explain = this.ruleForm.explain;
-            this._apis.client
-              .editLevel(formObj)
-              .then(response => {
-                this.$notify({
-                  title: "成功",
-                  message: "等级编辑成功",
-                  type: "success"
-                });
-                this._routeTo("clientLevel");
-              })
-              .catch(error => {
+          if(this.condition2 == "消费金额满") {
+            let params = {
+              level: this.$route.query.level,
+              type: 0,
+              levelConditionId: this.getId(this.conditionList, "消费金额满"),
+              conditionValue: this.xfjem
+            }
+            this._apis.client.checkLevelValue(params).then((response) => {
+                if(response == "no") {
+                  this.$notify({
+                    title: "警告",
+                    message: "高会员卡等级条件数值要大于低会员卡等级的条件数值",
+                    type: "warning"
+                  });
+                }else{
+                  if(!!this.canSubmit) {
+                    formObj.levelConditionList = [].concat(levelConditionList);
+                    formObj.rightsList = [].concat(rightsList);
+                    formObj.upgradeRewardList = [].concat(upgradeRewardList);
+                    formObj.upgradePackage = upgradePackage;
+                    formObj.receiveConditionsRemarks = receiveConditionsRemarks;
+                    formObj.rights = rights;
+                    formObj.id = this.ruleForm.id;
+                    formObj.cid = this.ruleForm.cid;
+                    formObj.name = this.ruleForm.name;
+                    formObj.levelImageUrl = this.ruleForm.levelImageUrl;
+                    formObj.explain = this.ruleForm.explain;
+                    this._apis.client
+                      .editLevel(formObj)
+                      .then(response => {
+                        this.$notify({
+                          title: "成功",
+                          message: "等级编辑成功",
+                          type: "success"
+                        });
+                        this._routeTo("clientLevel");
+                      })
+                      .catch(error => {
+                        console.log(error);
+                      });
+                  }
+                }
+              }).catch((error) => {
                 console.log(error);
-              });
+              })
+          }else if(this.condition2 == "消费次数满") {
+            let params = {
+              level: this.$route.query.level,
+              type: 0,
+              levelConditionId: this.getId(this.conditionList, "消费次数满"),
+              conditionValue: this.xfcsm
+            }
+            this._apis.client.checkLevelValue(params).then((response) => {
+                if(response == "no") {
+                  this.$notify({
+                    title: "警告",
+                    message: "高会员卡等级条件数值要大于低会员卡等级的条件数值",
+                    type: "warning"
+                  });
+                }else{
+                  if(!!this.canSubmit) {
+                    formObj.levelConditionList = [].concat(levelConditionList);
+                    formObj.rightsList = [].concat(rightsList);
+                    formObj.upgradeRewardList = [].concat(upgradeRewardList);
+                    formObj.upgradePackage = upgradePackage;
+                    formObj.receiveConditionsRemarks = receiveConditionsRemarks;
+                    formObj.rights = rights;
+                    formObj.id = this.ruleForm.id;
+                    formObj.cid = this.ruleForm.cid;
+                    formObj.name = this.ruleForm.name;
+                    formObj.levelImageUrl = this.ruleForm.levelImageUrl;
+                    formObj.explain = this.ruleForm.explain;
+                    this._apis.client
+                      .editLevel(formObj)
+                      .then(response => {
+                        this.$notify({
+                          title: "成功",
+                          message: "等级编辑成功",
+                          type: "success"
+                        });
+                        this._routeTo("clientLevel");
+                      })
+                      .catch(error => {
+                        console.log(error);
+                      });
+                  }
+                }
+              }).catch((error) => {
+                console.log(error);
+              })
+          }else{
+            if(!!canSubmit) {
+              formObj.levelConditionList = [].concat(levelConditionList);
+              formObj.rightsList = [].concat(rightsList);
+              formObj.upgradeRewardList = [].concat(upgradeRewardList);
+              formObj.upgradePackage = upgradePackage;
+              formObj.receiveConditionsRemarks = receiveConditionsRemarks;
+              formObj.rights = rights;
+              formObj.id = this.ruleForm.id;
+              formObj.cid = this.ruleForm.cid;
+              formObj.name = this.ruleForm.name;
+              formObj.levelImageUrl = this.ruleForm.levelImageUrl;
+              formObj.explain = this.ruleForm.explain;
+              this._apis.client
+                .editLevel(formObj)
+                .then(response => {
+                  this.$notify({
+                    title: "成功",
+                    message: "等级编辑成功",
+                    type: "success"
+                  });
+                  this._routeTo("clientLevel");
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            }
           }
         }
       }
