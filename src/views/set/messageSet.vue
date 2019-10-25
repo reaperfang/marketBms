@@ -128,10 +128,12 @@ export default {
         response.splice(response.length - 1, 1);
         this.tableData = []
         response.map(item => {
-          item.msgWechatPublic = item.msgWechatPublic == 0 ? false : true
-          item.msgWechatApp = item.msgWechatApp == 0 ? false : true
-          item.msgSms = item.msgSms == 0 ? false : true
-          this.tableData.push(item);
+          if(item.tcShopInfoMsgTemplateId != 21){
+            item.msgWechatPublic = item.msgWechatPublic == 0 ? false : true
+            item.msgWechatApp = item.msgWechatApp == 0 ? false : true
+            item.msgSms = item.msgSms == 0 ? false : true
+            this.tableData.push(item);
+          }
         })
         this.loading = false
       }).catch(error =>{
