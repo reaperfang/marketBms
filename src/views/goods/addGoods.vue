@@ -63,7 +63,7 @@
                         clearable>
                     </el-cascader>
                 </div>
-                <div v-if="ruleForm.productCategoryInfoId" @click="$router.push('/goods/classify')" class="blue pointer" style="display: inline-block; margin-left: 24px;">新增分类</div>
+                <div v-if="ruleForm.productCategoryInfoId" @click="addCategory" class="blue pointer" style="display: inline-block; margin-left: 24px;">新增分类</div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
                 <div class="add-tag">
@@ -454,6 +454,7 @@ import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMat
 
 
 export default {
+    name: 'addGoods',
     data() {
         var productUnitValidator = (rule, value, callback) => {
             // if(value === '') {
@@ -695,14 +696,31 @@ export default {
         //     this.getOperateCategoryList()
         // }
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            try {
+                if(from.name == 'classify') {
+                    let addGoods = localStorage.getItem('addGoods')
+                    if(addGoods) {
+                        vm.ruleForm = Object.assign({}, vm.ruleForm, JSON.parse(addGoods))
+                        localStorage.removeItem('addGoods')
+                    }
+                }
+            } catch(e) {
+
+            }
+        });
+    },
     methods: {
         changeUpload() {
             this.hideUpload = this.imagesLength >= 6
         },
         addCategory() {
-            this.currentDialog = 'AddCategoryDialog'
-            this.currentData = {level: 0, add: true}
-            this.dialogVisible = true
+            // this.currentDialog = 'AddCategoryDialog'
+            // this.currentData = {level: 0, add: true}
+            // this.dialogVisible = true
+            localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
+            this.$router.push('/goods/classify')
         },
         getTemplateList() {
             return new Promise((resolve, reject) => {
