@@ -27,6 +27,7 @@
 import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
 import GOODS_LIST from '@/assets/json/goodsList.json'; 
+import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
     name:"componentGoods",
     mixins:[componentMixin],
@@ -53,7 +54,7 @@ export default {
             // 上拉加载
             goodListLoading: false,
             goodListFinished: false,
-            list:  this.$route.path.indexOf('templateEdit') > -1 ? GOODS_LIST: [],
+            list:  this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
             loading: false
         }
     },
