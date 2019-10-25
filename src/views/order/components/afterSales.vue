@@ -91,7 +91,7 @@
                     label="收货人电话">
                 </el-table-column>
                 <el-table-column
-                    prop="orderAfterSaleStatus"
+                    prop="status"
                     label="状态">
                     <template slot-scope="scope">
                         <span>{{scope.row.status | statusFilter}}</span>
@@ -161,16 +161,18 @@ export default {
     filters: {
         statusFilter(code) {
             switch(+code) {
+                case 0:
+                    return '待审核'
                 case 1:
                     return '待退货'
                 case 2:
                     return '待处理'
                 case 3:
-                    return '待发货'
-                case 4:
                     return '待收货'
-                case 5:
+                case 4:
                     return '已完成'
+                case 5:
+                    return '已关闭'
             }
         },
     },

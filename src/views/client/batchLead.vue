@@ -352,28 +352,32 @@ export default {
                         this.canSubmit = false;
                     }
                 }
-                if(this.ruleForm.anyOrAllCondition == "0") {
-                    let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
-                    let isSelect = arr.some(ele => ele == true)
-                    if(!isSelect) {
-                        this.$notify({
-                            title: '警告',
-                            message: '请选择任意一个交易条件',
-                            type: 'warning'
-                        });
-                        this.canSubmit = false;
+                if(this.ruleForm.tagType == '1') {
+                    if(this.ruleForm.anyOrAllCondition == "0") {
+                        let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
+                        let isSelect = arr.some(ele => ele == true)
+                        if(!isSelect) {
+                            this.$notify({
+                                title: '警告',
+                                message: '请选择任意一个交易条件',
+                                type: 'warning'
+                            });
+                            this.canSubmit = false;
+                        }
                     }
                 }
-                if(this.ruleForm.anyOrAllCondition == "1") {
-                    let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
-                    let isSelect = arr.every(ele => ele == true)
-                    if(!isSelect) {
-                        this.$notify({
-                            title: '警告',
-                            message: '请选择所有交易条件',
-                            type: 'warning'
-                        });
-                        this.canSubmit = false;
+                if(this.ruleForm.tagType == '1') {
+                    if(this.ruleForm.anyOrAllCondition == "1") {
+                        let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
+                        let isSelect = arr.every(ele => ele == true)
+                        if(!isSelect) {
+                            this.$notify({
+                                title: '警告',
+                                message: '请选择所有交易条件',
+                                type: 'warning'
+                            });
+                            this.canSubmit = false;
+                        }
                     }
                 }
                 if(!!this.canSubmit) {

@@ -11,7 +11,7 @@
             <div class="c_line" v-if="getIndex(data.conditionList,'消费次数满') !== -1">
                 <el-radio v-model="condition1" label="消费次数满">消费次数满：</el-radio>
                 <div class="input_wrap">
-                    <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZero($event,xfcsm,'xfcsm')"></el-input>
+                    <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZen($event,xfcsm,'xfcsm')"></el-input>
                 </div>
                 <span>次</span>
             </div>
@@ -37,7 +37,8 @@ export default {
             condition1: "",
             xfjem:"",
             xfcsm:"",
-            jfhdm:""
+            jfhdm:"",
+            canSubmit: true
         }
     },
     methods: {
@@ -46,36 +47,72 @@ export default {
             val = val.replace(/^0/g,'');
             this[ele] = val;
         },
+        checkZen(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/^0/g,'');
+            this[ele] = val;
+        },
         submit() {
-            if(this.condition1) {
-                let params = {};
-                switch(this.condition1) {
-                    case '消费金额满':
-                        params.levelConditionId = this.getId(this.data.conditionList,'消费金额满');
-                        params.conditionValue = this.xfjem;
-                        params.label = "消费金额满";
-                        break;
-                    case '消费次数满':
-                        params.levelConditionId = this.getId(this.data.conditionList,'消费次数满');
-                        params.conditionValue = this.xfcsm;
-                        params.label = "消费次数满";
-                        break;
-                    case '积分获得满':
-                        params.levelConditionId = this.getId(this.data.conditionList,'积分获得满');
-                        params.conditionValue = this.jfhdm;
-                        params.label = "积分获得满";
-                        break;
-                    default:
-                        break;
-                }
-                if(params.conditionValue == "") {
+            let params;
+            if(this.condition1 == "消费金额满") {
+                if(this.xfjem !== "") {
+                    params = {
+                        level: this.data.level,
+                        levelConditionValueDto: {
+                            levelConditionId: this.getId(this.data.conditionList,'消费金额满'),
+                            conditionValue: this.xfjem,
+                            conditionName: "消费金额满"
+                        }
+                    }
+                    this._apis.client.checkCardValue(params).then((response) => {
+                        if(!response) {
+                            this.$notify({
+                                title: '警告',
+                                message: '高等级条件数值要大于低等级的条件数值',
+                                type: 'warning'
+                            });
+                        }else{
+                            this.$emit('getCondition', {levelConditionId: this.getId(this.data.conditionList,'消费金额满'), conditionValue: this.xfjem, label: '消费金额满'});
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+                }else{
                     this.$notify({
                         title: '警告',
-                        message: '请输入所选条件的值',
+                        message: '请输入消费金额',
                         type: 'warning'
                     });
+                }
+            }else if(this.condition1 == "消费次数满") {
+                if(this.xfcsm !== "") {
+                    params = {
+                        level: this.data.level,
+                        levelConditionValueDto: {
+                            levelConditionId: this.getId(this.data.conditionList,'消费次数满'),
+                            conditionValue: this.xfcsm,
+                            conditionName: "消费次数满"
+                        }
+                    }
+                    this._apis.client.checkCardValue(params).then((response) => {
+                        if(!response) {
+                            this.$notify({
+                                title: '警告',
+                                message: '高等级条件数值要大于低等级的条件数值',
+                                type: 'warning'
+                            });
+                        }else{
+                            this.$emit('getCondition', {levelConditionId: this.getId(this.data.conditionList,'消费次数满'), conditionValue: this.xfcsm, label: '消费次数满'});
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    })
                 }else{
-                    this.$emit('getCondition', params);
+                    this.$notify({
+                        title: '警告',
+                        message: '请输入消费次数',
+                        type: 'warning'
+                    });
                 }
             }else{
                 this.$notify({

@@ -85,7 +85,7 @@
               type="textarea"
               :rows="5"
               :maxlength="255"
-              placeholder="请输入该等级或会员卡通用的特权说明，最多不超过255个字符"
+              placeholder="请输入会员卡通用的特权说明，最多不超过255个字符"
               v-model="ruleForm.explain"
             ></el-input>
           </div>
@@ -251,7 +251,7 @@ export default {
   },
   methods: {
     checkZero(event,val,ele) {
-      val = val.replace(/[^\d.]/g,'');
+      val = val.replace(/[^\d]/g,'');
       val = val.replace(/^0/g,'');
       this[ele] = val;
     },
@@ -459,6 +459,7 @@ export default {
       this.dialogVisible = true;
       this.currentDialog = "createCardDialog";
       this.currentData.conditionList = this.conditionList;
+      this.currentData.level = this.ruleForm.level;
     },
     showRedDialog(val) {
       if (val) {
@@ -488,6 +489,7 @@ export default {
       }
     },
     getCondition(val) {
+      console.log(val);
       this.levelConditionValueDto = Object.assign({}, val);
     },
     getSelectedCoupon(obj) {

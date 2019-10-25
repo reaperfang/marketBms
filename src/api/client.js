@@ -603,3 +603,21 @@ export function labelDoubleCheck(data) {
         data
     })
 }
+//检查当前会员等级条件值是否低于上一级
+export function checkLevelValue(data) {
+    return request({
+        target:'LEVEL-CHECK-CONDITION-VALUE-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//检查当前会员卡条件值是否低于上一级
+export function checkCardValue(data) {
+    return request({
+        target:'CARD-LEVEL-INFO-CHECK-CONDITION-VALUE-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}

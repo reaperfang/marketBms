@@ -47,11 +47,17 @@
         label="下单支付转化率"
         width="150"
         >
+        <template slot-scope="scope">
+          {{scope.row.rateOrderPay == 0 ? 0 : (scope.row.rateOrderPay*100).toFixed(2)}}%
+        </template>
       </el-table-column>
       <el-table-column
         prop="rateRepurchase"
         label="复购率"
         >
+        <template slot-scope="scope" v-if="scope.row.rateRepurchase">
+          {{scope.row.rateRepurchase == 0 ? 0 : (scope.row.rateRepurchase*100).toFixed(2)}}%
+        </template>
       </el-table-column>
     </el-table>
     <!-- <div class="page_styles">

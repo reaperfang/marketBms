@@ -264,6 +264,12 @@ export default {
     checkExpress() {
       let expressName
 
+      if(this.ruleForm.expressNos) {
+        this.ruleForm.expressNos = ''
+      }
+      if(this.ruleForm.other) {
+        this.ruleForm.other = ''
+      }
       if(this.ruleForm.expressCompanyCode == 'other') {
             expressName = 'other'
           } else {

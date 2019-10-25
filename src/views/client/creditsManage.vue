@@ -147,6 +147,7 @@ export default {
             }else{
                 formObj.scoreEnableOrderAchieveCash = formObj.scoreEnableOrderAchieveCash == true?'1':'0';
                 formObj.scoreEnableOrderHighCash = formObj.scoreEnableOrderHighCash == true?'1':'0';
+                formObj.scoreToCashOrderMoney = formObj.scoreToCashOrderMoney == "" ? -1:formObj.scoreToCashOrderMoney;
                 formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
                 this._apis.client.saveCreditRule(formObj).then((response) => {
                     this.$notify({

@@ -82,6 +82,7 @@
                 <div class="col righter">
                     <p>待收货</p>
                     <p class="des">商户已换货发货，客户未收货</p>
+                    <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>

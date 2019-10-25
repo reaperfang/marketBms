@@ -250,7 +250,7 @@ export default {
             }) 
         },
         drawback(row) {
-            this._apis.order.orderAfterSaleDrawback({id: row.id}).then((res) => {
+            this._apis.order.orderAfterSaleDrawback({id: row.id, memberInfoId: row.memberInfoId}).then((res) => {
                 console.log(res)
                 this.$notify({
                     title: '成功',

@@ -128,6 +128,7 @@
                                 style="width: 623px;"
                                 type="textarea"
                                 :rows="2"
+                                maxlength="100"
                                 placeholder="非必填，请输入，不超过100个字符"
                                 v-model="ruleForm.remark">
                             </el-input>
