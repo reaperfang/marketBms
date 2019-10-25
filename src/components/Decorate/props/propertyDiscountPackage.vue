@@ -110,12 +110,12 @@
         <el-input v-if="ruleForm.showContents.includes('6') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input>
       </el-form-item>
       <el-form-item label="更多设置">
-        <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄商品</el-checkbox>
-        <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox>
+        <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox>
         <el-radio-group v-model="ruleForm.hideType">
           <el-radio :label="1">24小时后隐藏</el-radio>
           <el-radio :label="2">立即隐藏</el-radio>
-        </el-radio-group>
+        </el-radio-group> -->
       </el-form-item>
     </div>
 
