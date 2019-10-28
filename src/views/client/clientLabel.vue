@@ -59,6 +59,12 @@ export default {
         reset() {
             this.tagName = "";
             this.tagType = "";
+            this.params = {
+                startIndex: 1,
+                pageSize: 10,
+                tagName: "",
+                tagType: ""
+            }
         }
     }
 }

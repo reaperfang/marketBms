@@ -144,8 +144,8 @@
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonTextPrimary"></el-input>
       </el-form-item>
       <el-form-item label="更多设置" prop="hideSaledGoods">
-        <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄拼团商品</el-checkbox>
-        只展示活动进行中的拼团商品
+        <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
+        <!-- 只展示活动进行中的拼团商品 -->
       </el-form-item>
     </div>
 

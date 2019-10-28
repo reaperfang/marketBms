@@ -63,6 +63,14 @@ export default {
   created() {
     this.current = localStorage.getItem('siderBarCurrent') || '0'
     this.setSidebarItems()
+
+    let name = this.$route.path.replace(/^(\/[^(?:\/|\?)]+)\/.*$/, '$1')
+    let realCurrent = this.permission_routers_tree.findIndex(router => router.path == name)
+
+    if(realCurrent != this.current) {
+      this.current = realCurrent
+      this.setSidebarItems()
+    }
   },
   methods: {
     // setUserType() {
@@ -164,9 +172,8 @@ export default {
       padding-bottom: 20px;
       a {
         color: #92929B;
-        padding: 8px;
         border-radius: 15px;
-        padding-right:10px;
+        padding: 5px 10px;
         &.active {
           background-color: #f0efff;
           color: #7f79ff;
@@ -181,7 +188,7 @@ export default {
         border: none;
       }
       h2, .item-child {
-        padding: 10px 0;
+        margin-bottom: 10px;
       }
       h2 {
         font-family:PingFangSC-Medium;
@@ -189,10 +196,6 @@ export default {
         color:#161617;
         line-height:20px;
         font-size: 14px;
-      }
-      .item-child {
-        margin-top: 10px;
-        
       }
     }
   }

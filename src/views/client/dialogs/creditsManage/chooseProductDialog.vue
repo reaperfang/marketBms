@@ -127,6 +127,7 @@ export default {
         this.categoryValue = [];
         this.productLabelName = "";
         this.name = "";
+        this.getSkuList(1,10);
     }
   },
   computed: {

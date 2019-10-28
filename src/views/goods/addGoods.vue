@@ -902,7 +902,8 @@ export default {
                 }
 
                 if(this.ruleForm.productDetail) {
-                    this.ruleForm.productDetail = window.decodeURIComponent(window.atob(this.ruleForm.productDetail))
+                    //this.ruleForm.productDetail = window.decodeURIComponent(window.atob(this.ruleForm.productDetail))
+                    this.ruleForm.productDetail = window.unescape(this.ruleForm.productDetail)
                 }
 
                 // if(this.ruleForm.productDetail) {
@@ -1109,7 +1110,7 @@ export default {
                     console.log(window.encodeURIComponent(this.ruleForm.productDetail))
                     console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
                     params = Object.assign({}, this.ruleForm, obj, {
-                        productDetail: window.btoa(window.encodeURIComponent(this.ruleForm.productDetail))
+                        productDetail: window.escape(this.ruleForm.productDetail)
                     })
                     
                     if(!this.editor) {

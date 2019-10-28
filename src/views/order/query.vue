@@ -251,9 +251,6 @@ export default {
         color: #aaa9ad;
       }
     }
-    .tabs {
-      margin-left: 60px;
-    }
   }
 }
 /deep/ .el-input {

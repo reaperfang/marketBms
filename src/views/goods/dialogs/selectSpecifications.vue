@@ -108,6 +108,13 @@ export default {
     handleCheckChange() {
       let res = this.$refs.tree.getCheckedNodes(true);
       let arr = [];
+
+      if(res && res.filter(val => val.type == 'new') && res.filter(val => val.type == 'new').find(val => val.level == 1)) {
+        this.$message({
+          message: '请新建规格值',
+          type: 'warning'
+        });
+      }
       res.forEach(item => {
         arr.push(item.id);
       });

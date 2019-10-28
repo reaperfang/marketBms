@@ -9,7 +9,7 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSale.returnExpressNo}}</div>
-                        <div @click="showLogistics(orderAfterSale.returnExpressNo)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div @click="showLogistics(orderAfterSale.returnExpressNo, true)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | customerFilter}}</div>
@@ -72,11 +72,11 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSaleSendInfo.expressNos}}</div>
-                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSale.sendName}}</div>
+                        <div class="header-righter-item">发货人：{{orderAfterSaleSendInfo.sendName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.receiveGoodsTime}}</div>
                         <div @click="showContent = !showContent">
                             <i v-if="showContent" class="el-icon-caret-top pointer"></i>
@@ -125,7 +125,7 @@
                 </div>
             </div>
         </div>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
+        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
     </div>
 </template>
 <script>
@@ -154,7 +154,9 @@ export default {
             dialogVisible: false,
             currentData: {},
             showCustomerContent: true,
-            showContent: true
+            showContent: true,
+            expressNo: '',
+            expressCompanys: ''
         }
     },
     filters: {
@@ -194,7 +196,13 @@ export default {
         }
     },
     methods: {
-        showLogistics(expressNo) {
+        showLogistics(expressNo, isComstomer) {
+            this.expressNo = expressNo
+            if(isComstomer) {
+                this.expressCompanys = this.orderAfterSale.returnExpressName
+            } else {
+                this.expressCompanys = this.orderAfterSaleSendInfo.expressCompanys
+            }
             this._apis.order.orderLogistics({expressNo}).then(res => {
                 this.currentDialog = 'LogisticsDialog'
                 this.currentData = res.traces

@@ -164,6 +164,7 @@ export default {
         this.categoryValue = [];
         this.productLabelName = "";
         this.name = "";
+        this.getSkuList(this.startIndex, this.pageSize);
     }
   },
   computed: {

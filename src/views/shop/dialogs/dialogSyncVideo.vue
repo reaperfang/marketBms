@@ -116,7 +116,7 @@ export default {
             filePath:escape(item.video_url),
             fileSize:'',
             name:item.name,
-            fileover:item.video_thumb,
+            fileCover:escape(item.video_thumb),
             isSyncWechat:'1'
           }
           datas.push(obj)
