@@ -61,6 +61,13 @@ export default {
   mixins: [ResizeMixin],
   created() {
     this.current = localStorage.getItem('siderBarCurrent') || '0'
+
+    let name = this.$route.path.replace(/^(\/[^(?:\/|\?)]+)\/.*$/, '$1')
+    let realCurrent = this.permission_routers_tree.findIndex(router => router.path == name)
+
+    if(realCurrent != this.current) {
+      this.current = realCurrent
+    }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {

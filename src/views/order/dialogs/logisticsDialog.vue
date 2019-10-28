@@ -8,7 +8,7 @@
     :showFooter="showFooter"
   >
     <div class="container">
-        <p><span>物流公司：</span><span>快递单号：{{expressNo}}</span></p>
+        <p><span>物流公司：{{expressCompanys}}</span><span style="margin-left: 5px;">快递单号：{{expressNo}}</span></p>
       <!-- <div class="header">
                 <div class="item">时间</div>
                 <div class="item">状态</div>
@@ -70,7 +70,8 @@ export default {
       required: true
     },
     reject: {},
-    expressNo: {}
+    expressNo: {},
+    expressCompanys: {}
   },
   components: {
     DialogBase,

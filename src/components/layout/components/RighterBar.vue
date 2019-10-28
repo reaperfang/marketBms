@@ -63,6 +63,14 @@ export default {
   created() {
     this.current = localStorage.getItem('siderBarCurrent') || '0'
     this.setSidebarItems()
+
+    let name = this.$route.path.replace(/^(\/[^(?:\/|\?)]+)\/.*$/, '$1')
+    let realCurrent = this.permission_routers_tree.findIndex(router => router.path == name)
+
+    if(realCurrent != this.current) {
+      this.current = realCurrent
+      this.setSidebarItems()
+    }
   },
   methods: {
     // setUserType() {

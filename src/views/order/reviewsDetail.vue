@@ -53,8 +53,6 @@
                         width="66"
                         :src="item"
                         alt
-                        v-for="(item, index) in orderProductComment.images"
-                        :key="index"
                       />
                       </template>
                     </template>
@@ -134,17 +132,12 @@ export default {
         level: 4,
         reviewsContent: "声音小",
         reviewsImages: [
-          {
-            url: require("../../assets/images/order/reviewsImages.png")
-          },
-          {
-            url: require("../../assets/images/order/reviewsImages.png")
-          }
+          
         ],
         orderNumber: 1,
         customerId: 1,
-        reviewsTime: "2019",
-        integral: "2019"
+        reviewsTime: "",
+        integral: ""
       },
       textarea: "",
       tableData: [],
