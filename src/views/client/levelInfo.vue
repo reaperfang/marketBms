@@ -31,7 +31,7 @@
             <el-input v-model="ruleForm.name" placeholder="请输入等级名称，比如普通会员" :maxLength="15"></el-input>
           </div>
         </el-form-item>
-        <el-form-item label="等级说明：">
+        <el-form-item label="等级说明：" style="margin-left: 9px">
           <div class="input_wrap">
             <el-input v-model="ruleForm.explain" placeholder="请输入等级描述" :maxLength="25"></el-input>
           </div>
@@ -83,7 +83,7 @@
         <br />
         <el-form-item v-if="getIndex(this.rightsList,'满包邮') !== -1">
           <el-checkbox v-model="right1" @change="handleCheck3">满包邮</el-checkbox>
-          <span>订单金额满</span>
+          <span class="marl20">订单金额满</span>
           <div class="input_wrap3">
             <el-input placeholder="请输入数字" v-model="mby" @keyup.native="checkZero($event, mby,'mby')"></el-input>
           </div>
@@ -91,7 +91,7 @@
         </el-form-item>
         <el-form-item v-if="getIndex(this.rightsList,'会员折扣') !== -1">
           <el-checkbox v-model="right2" @change="handleCheck4">会员折扣</el-checkbox>
-          <span>享受后买商品售价</span>
+          <span class="marl20">享受后买商品售价</span>
           <div class="input_wrap">
             <el-input placeholder="填写数字（如：八折输入8,八五折输入8.5）" v-model="hyzk" @blur="handleBlur($event, hyzk, 'hyzk')"></el-input>
           </div>
@@ -102,7 +102,7 @@
         <p class="l_title" style="margin-left: -19px;">升级奖励（非必选，可多选）：</p>
         <br />
         <el-form-item v-if="getIndex(this.rewardList,'赠送积分') !== -1">
-          <el-checkbox v-model="upgrade1" @change="handleCheck5">赠送积分</el-checkbox>
+          <el-checkbox v-model="upgrade1" @change="handleCheck5" class="marR20">赠送积分</el-checkbox>
           <span>送</span>
           <div class="input_wrap3">
             <el-input placeholder="填写数字" v-model="zsjf" @keyup.native="checkZero($event, zsjf,'zsjf')"></el-input>
@@ -110,7 +110,7 @@
           <span>积分</span>
         </el-form-item>
         <el-form-item v-if="getIndex(this.rewardList,'赠送红包') !== -1">
-          <el-checkbox v-model="upgrade2" @change="showRedDialog" class="fl">赠送红包</el-checkbox>
+          <el-checkbox v-model="upgrade2" @change="showRedDialog" class="fl marR20">赠送红包</el-checkbox>
           <div class="giftList">
             <div v-for="(item, index) in selectedReds" :key="item.id">
               <span>{{ item.name }}</span>
@@ -119,7 +119,7 @@
           </div>
         </el-form-item>
         <el-form-item v-if="getIndex(this.rewardList,'赠送赠品') !== -1">
-          <el-checkbox v-model="upgrade3" @change="showGiftDialog" class="fl">赠送赠品</el-checkbox>
+          <el-checkbox v-model="upgrade3" @change="showGiftDialog" class="fl marR20">赠送赠品</el-checkbox>
           <div class="giftList">
             <div v-for="(item, index) in selectedGifts" :key="item.id">
               <span>{{ item.goodsName }}</span>
@@ -129,7 +129,7 @@
           </div>
         </el-form-item>
         <el-form-item v-if="getIndex(this.rewardList,'赠送优惠券') !== -1">
-          <el-checkbox v-model="upgrade4" @change="showCouponDialog" class="fl">赠送优惠券</el-checkbox>
+          <el-checkbox v-model="upgrade4" @change="showCouponDialog" class="fl marR20">赠送优惠券</el-checkbox>
           <div class="giftList">
             <div v-for="(item, index) in selectedCoupons" :key="item.id">
               <span>{{ item.name }}</span>
@@ -986,6 +986,9 @@ export default {
   background-color: #fff;
   .marl20 {
     margin-left: 20px;
+  }
+  .marR20{
+    margin-right: 20px;
   }
   .level_order {
     color: #3d434a;

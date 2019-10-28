@@ -266,6 +266,21 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-form-item__label{
+  width: 86px;
+  text-align: right;
+  overflow: hidden;
+  height: 38px;
+}
+/deep/ .el-range-editor--small .el-range-separator{
+  width: 20px;
+}
+/deep/ .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+  width: 230px;
+}
+/deep/.el-date-editor .el-range-input{
+  width: 41%;
+}
 /deep/ .cell {
   .btns {
     span {
@@ -314,7 +329,7 @@ export default {
   }
 }
 .a_line {
-  padding-left: 17px;
+  padding-left: 14px;
 }
 .page_styles{
   text-align: center;

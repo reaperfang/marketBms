@@ -14,7 +14,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" :offset="1">
                         <el-form-item prop="labelValue">
                             <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20"><el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button></el-input>
                         </el-form-item>
@@ -43,7 +43,7 @@
                             <el-checkbox v-for="item in labels" :label="item" :key="item" border>{{item}}</el-checkbox>
                         </el-checkbox-group>
                     </div>
-                    <el-button type="primary" class="absoPosition fl" @click="_routeTo('batchImport')">添 加</el-button>
+                    <el-button type="primary" class="fl" @click="_routeTo('batchImport')" :style="{'margin-left': labels.length == 0?'0':'15px'}">添 加</el-button>
                     <img src="../../assets/images/client/icon_down.png" alt="" class="down_img fl" @click="extendTag" v-if="labels.length > 5" :style="{transform: showMoreTag ? 'rotate(180deg)':''}">
                 </el-form-item>
                 <el-form-item label="客户渠道：" class="relaPosition" prop="channelId">
