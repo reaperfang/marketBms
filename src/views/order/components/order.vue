@@ -277,10 +277,25 @@ export default {
         }
         .order-container {
             margin-top: 20px;
+            width: 100%;
+            overflow-x: scroll;
+            &::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px!important;
+                background: rgba(101,94,255,.4)!important;
+            }
+            &::-webkit-scrollbar-track {
+                border-radius: 0!important;
+                background: rgba(101,94,255,.1)!important;
+            }
             .container-item {
                 border: 1px solid rgb(202, 207, 203);
                 border-radius:10px;
                 margin-bottom: 20px;
+                width: 1108px;
                 .container-item-header {
                     display: flex;
                     justify-content: space-between;

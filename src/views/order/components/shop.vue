@@ -1,6 +1,6 @@
 <template>
     <div class="order">
-        <order ref="order" :list="list" @getList="getList" v-bind="$attrs"></order>
+        <order ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
         <el-checkbox @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
         <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
@@ -112,7 +112,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+    .order-list {
+        padding-bottom: 10px;
+    }
 </style>
 
 

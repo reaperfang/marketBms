@@ -58,7 +58,8 @@ export default {
       flex: 1;
       padding: 20px;
       overflow-y: scroll;
-      overflow-x: hidden;
+      overflow-x: scroll;
+      width: 0;
     }
   }
 }
