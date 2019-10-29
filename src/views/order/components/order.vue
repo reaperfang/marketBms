@@ -295,7 +295,7 @@ export default {
                 border: 1px solid rgb(202, 207, 203);
                 border-radius:10px;
                 margin-bottom: 20px;
-                width: 1108px;
+                min-width: 1108px;
                 .container-item-header {
                     display: flex;
                     justify-content: space-between;

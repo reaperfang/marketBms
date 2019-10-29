@@ -5,12 +5,12 @@
         <!-- <sidebar class="sidebar-righter" /> -->
         <righter-bar></righter-bar>
       </div>
-      <div class="content-main">
-        <transition name="fade-transform" mode="out-in">
+      <div class="content-main" :class="{'content-main-classify': $route.meta.classify}">
+        <!-- <transition name="fade-transform" mode="out-in"> -->
           <keep-alive :include="cachedViews">
             <router-view :key="key"/>
           </keep-alive>
-        </transition>
+        <!-- </transition> -->
       </div>
     </div>
   </section>

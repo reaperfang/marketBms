@@ -419,7 +419,7 @@ export default {
 
     /* 删除当前导航 */
     deleteNav() {
-      if(this.ruleForm.navIds.length <= 1) {
+      if(this.ruleForm.navIds.length <= 2) {
         return;
       }
       const id = this.currentNav.id;

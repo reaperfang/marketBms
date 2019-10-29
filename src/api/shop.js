@@ -388,7 +388,6 @@ export function getShopInfo(data) {
     target: 'SHOP-API-100-PROCESSOR',
     method: 'post',
     apiType: 'manager',
-    noCid: true,
     data
   })
 }
@@ -399,7 +398,6 @@ export function changeSwitchStatus(data) {
     target: 'SHOP-API-102-PROCESSOR',
     method: 'post',
     apiType: 'manager',
-    noCid: true,
     data
   })
 }

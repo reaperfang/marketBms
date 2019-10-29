@@ -53,7 +53,7 @@
                 <p class="description prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
             </el-form-item>
             <el-form-item label="商品分类" prop="productCatalogInfoId">
-                <div class="block" style="display: inline-block;margin-left: 5px">
+                <div class="block" style="display: inline-block;">
                     <el-cascader
                         :disabled="!ruleForm.productCategoryInfoId"
                         :options="categoryOptions"
@@ -1717,6 +1717,12 @@ $blue: #655EFF;
     color: #FD4C2B;
     font-size: 12px;
     margin-top: 5px;
+}
+/deep/ .el-icon-arrow-down:before {
+    content: "\e790";
+}
+/deep/ .el-input {
+    width: 208px;
 }
 </style>
 

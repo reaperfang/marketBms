@@ -12,7 +12,7 @@
             <div v-if="distinguish == '0'">
                 <span>获得</span>
                 <div class="input_wrap">
-                    <el-input placeholder="请输入整数" v-model="allMember"></el-input>
+                    <el-input placeholder="请输入整数" v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')"></el-input>
                 </div>
                 <span>积分</span>
             </div>
@@ -20,19 +20,19 @@
                 <div class="marB10">
                     <span>客户获得</span>
                     <div class="input_wrap" style="margin-left:14px">
-                        <el-input placeholder="请输入整数" v-model="noMember"></el-input>
+                        <el-input placeholder="请输入整数" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
                     </div>
                 </div>
                 <div class="marB10">
                     <span>新会员获得</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="newMember"></el-input>
+                        <el-input placeholder="请输入整数" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')"></el-input>
                     </div>
                 </div>
                 <div class="marB10">
                     <span>老会员获得</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="oldMember"></el-input>
+                        <el-input placeholder="请输入整数" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')"></el-input>
                     </div>
                 </div>
             </div>
@@ -57,6 +57,11 @@ export default {
         }
     },
     methods: {
+        checkZero(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/^0/g,'');
+            this[ele] = val;
+        },
         submit() {
             this.distinguish = this.distinguish == '0'? false : true;
             let params;

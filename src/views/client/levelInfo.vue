@@ -780,9 +780,14 @@ export default {
                 );
                 obj.giftProduct = v.id;
                 obj.giftName = v.name;
+                obj.giftNumber = 1;
                 obj.label = "赠送红包";
                 upgradeRewardList.push(obj);
-                upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
+                if(!!v.hongbaoTotalMoney) {
+                  upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
+                }else{
+                  upgradePackage = upgradePackage + "赠送红包,";
+                }
               });
             }
           }

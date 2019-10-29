@@ -33,28 +33,28 @@
             <div class="marB10">
               <span>每消费&nbsp;&nbsp;&nbsp;</span>
               <div class="input_wrap2" style="margin-left:14px">
-                <el-input placeholder="请输入整数" v-model="payAmount" :disabled="true"></el-input>
+                <el-input placeholder="请输入整数" v-model="payAmount" :disabled="true" @keyup.native="checkZero($event,payAmount,'payAmount')"></el-input>
               </div>
               <span>元 获得</span>
             </div>
             <div class="marB10">
               <span>客户获得</span>
               <div class="input_wrap2" style="margin-left:14px">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="noMember"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
               </div>
               <span>积分</span>
             </div>
             <div class="marB10">
               <span>新会员获得</span>
               <div class="input_wrap2">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="newMember"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')"></el-input>
               </div>
               <span>积分</span>
             </div>
             <div class="marB10">
               <span>老会员获得</span>
               <div class="input_wrap2">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="oldMember"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')"></el-input>
               </div>
               <span>积分</span>
             </div>
@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     checkZero(event,val,ele) {
-      val = val.replace(/[^\d.]/g,'');
+      val = val.replace(/[^\d]/g,'');
       val = val.replace(/^0/g,'');
       this[ele] = val;
     },

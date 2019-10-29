@@ -21,7 +21,7 @@ export default [
         path: 'classify',
         component: () => import('@/views/goods/classify'),
         name: 'classify',
-        meta: { title: '商品分类', noCache: true, tabTitle: '商品管理' },
+        meta: { title: '商品分类', noCache: true, tabTitle: '商品管理', classify: true },
       },
       {
         path: 'tag',
