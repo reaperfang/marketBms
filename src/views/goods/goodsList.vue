@@ -2,15 +2,15 @@
     <div class="goods-list">
         <header class="header">
             <div v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">新建商品</div>
-            <div v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="item pointer" @click="$router.push('/goods/batchPriceChange')">批量改价</div>
-            <div v-permission="['商品', '商品列表', '默认页面', '商品导入']" class="item pointer" @click="$router.push('/goods/import')">商品导入</div>
+            <!-- <div v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="item pointer" @click="$router.push('/goods/batchPriceChange')">批量改价</div>
+            <div v-permission="['商品', '商品列表', '默认页面', '商品导入']" class="item pointer" @click="$router.push('/goods/import')">商品导入</div> -->
         </header>
         <div class="search">
-            <el-form :inline="true" :model="listQuery" class="demo-form-inline">
-                <el-form-item label="商品名称">
+            <el-form :inline="true" :model="listQuery" ref="form" class="demo-form-inline">
+                <el-form-item label="商品名称" prop="name">
                     <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                 </el-form-item>
-                <el-form-item label="商品状态">
+                <el-form-item label="商品状态" prop="status">
                     <el-select v-model="listQuery.status" placeholder="请选择商品状态">
                         <el-option label="全部" value=""></el-option>
                     <el-option label="上架" :value="1"></el-option>
@@ -18,7 +18,7 @@
                     <el-option label="售罄" :value="-1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品分类">
+                <el-form-item label="商品分类" prop="productCatalogInfoId">
                     <el-cascader
                         v-model="categoryValue"
                         :options="categoryOptions"
@@ -29,6 +29,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
                 </el-form>
         </div>
@@ -315,6 +316,11 @@ export default {
         }
     },
     methods: {
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+            this.categoryValue = ''
+            this.getList()
+        },
         allDelete() {
             let ids = this.multipleSelection.map(val => val.goodsInfo.id)
 

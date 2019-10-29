@@ -788,7 +788,7 @@ export default {
               }else{
                 this.$notify({
                   title: '警告',
-                  message: "没有满足条件",
+                  message: "高等级条件数值要大于低等级的条件数值",
                   type: 'warning'
                 });
               }

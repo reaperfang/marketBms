@@ -67,7 +67,8 @@
                             type="textarea"
                             :rows="2"
                             placeholder="请输入内容"
-                            v-model="orderInfo.sellerRemark">
+                            v-model="orderInfo.sellerRemark"
+                            maxlength="50">
                         </el-input>
                         <span v-if="!remarkVisible" @click="remarkVisible = true" class="blue pointer">我要备注</span>
                         <span v-if="remarkVisible" class="blue pointer" @click="remarkHandler">完成</span>

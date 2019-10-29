@@ -5,24 +5,24 @@
         <el-col :span="12">
           <div class="grid-content header-lefter">
             <el-button @click="$router.push('/goods/addGoods')" type="primary">新建商品</el-button>
-            <el-button @click="$router.push('/goods/batchPriceChange')" class="border-button">批量改价</el-button>
+            <!-- <el-button @click="$router.push('/goods/batchPriceChange')" class="border-button">批量改价</el-button> -->
           </div>
         </el-col>
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <div class="grid-content header-righter">
             <span @click="renovate" class="span-box pointer">
               <span>刷新</span>
               <i></i>
             </span>
           </div>
-        </el-col>
+        </el-col> -->
       </el-row>
       <div class="search">
-        <el-form :inline="true" :model="listQuery" class="form-inline">
-          <el-form-item label="商品名称：">
+        <el-form :inline="true" :model="listQuery" ref="form" class="form-inline">
+          <el-form-item label="商品名称：" prop="name">
             <el-input v-model="listQuery.name" placeholder="请输入关键字…"></el-input>
           </el-form-item>
-          <el-form-item label="商品状态：">
+          <el-form-item label="商品状态：" prop="status">
             <el-select v-model="listQuery.status" placeholder="请选择商品状态">
               <el-option label="全部" value=""></el-option>
               <el-option label="上架" :value="1"></el-option>
@@ -32,6 +32,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="getList" type="primary">查询</el-button>
+            <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -176,6 +177,10 @@ export default {
     }
   },
   methods: {
+    resetForm(formName) {
+        this.$refs[formName].resetFields();
+        this.getList()
+    },
     priceChange() {
       if (!this.multipleSelection.length) {
         this.confirm({

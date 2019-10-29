@@ -63,7 +63,10 @@
                         clearable>
                     </el-cascader>
                 </div>
-                <div v-if="ruleForm.productCategoryInfoId" @click="addCategory" class="blue pointer" style="display: inline-block; margin-left: 24px;">新增分类</div>
+                <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
+                    <span @click="addCategory">新增分类</span>
+                    <el-button type="primary" @click="getCategoryList">刷新</el-button>
+                </div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
                 <div class="add-tag">
@@ -720,7 +723,10 @@ export default {
             // this.currentData = {level: 0, add: true}
             // this.dialogVisible = true
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
-            this.$router.push('/goods/classify')
+            //this.$router.push('/goods/classify')
+            let routeData = this.$router.resolve({ path: '/goods/classify' });
+
+            window.open(routeData.href, '_blank');
         },
         getTemplateList() {
             return new Promise((resolve, reject) => {
@@ -1723,6 +1729,9 @@ $blue: #655EFF;
 }
 /deep/ .el-input {
     width: 208px;
+}
+/deep/ .el-radio-group .el-radio {
+    margin-right: 30px;
 }
 </style>
 

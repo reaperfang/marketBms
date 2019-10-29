@@ -5,7 +5,7 @@
                 <el-col :span="12">
                     <div class="grid-content header-lefter">
                         <el-button @click="$router.push('/goods/addGoods')" type="primary">新建商品</el-button>
-                        <el-button @click="$router.push('/goods/batchPriceChange')" class="border-button">批量改价</el-button>
+                        <!-- <el-button @click="$router.push('/goods/batchPriceChange')" class="border-button">批量改价</el-button> -->
                         <!-- <span class="import-records">导入记录</span> -->
                     </div>
                 </el-col>

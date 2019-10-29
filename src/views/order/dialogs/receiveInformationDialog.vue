@@ -59,6 +59,28 @@ import DialogBase from '@/components/DialogBase'
 
 export default {
     data() {
+        var sendNameValidator = (rule, value, callback) => {
+            if(!this.ruleForm.sendName) {
+                callback(new Error('发货人姓名不能为空'));
+            } else {
+                if(/^\s+$/.test(this.ruleForm.sendName)) {
+                    callback(new Error('发货人姓名不能为空白字符'));
+                } else {
+                    callback();
+                }
+            }
+        };
+        var receivedNameValidator = (rule, value, callback) => {
+            if(!this.ruleForm.receivedName) {
+                callback(new Error('收货人姓名不能为空'));
+            } else {
+                if(/^\s+$/.test(this.ruleForm.receivedName)) {
+                    callback(new Error('收货人姓名不能为空白字符'));
+                } else {
+                    callback();
+                }
+            }
+        };
         var sendPhoneValidator = (rule, value, callback) => {
             if(!this.ruleForm.sendPhone) {
                 callback(new Error('发货人电话不能为空'));
@@ -76,6 +98,28 @@ export default {
             } else {
                 if(!/^\d{11}$/.test(this.ruleForm.receivedPhone)) {
                     callback(new Error('电话格式错误'));
+                } else {
+                    callback();
+                }
+            }
+        };
+        var sendDetailValidator = (rule, value, callback) => {
+            if(!this.ruleForm.sendDetail) {
+                callback(new Error('详细地址不能为空'));
+            } else {
+                if(/^\s+$/.test(this.ruleForm.sendDetail)) {
+                    callback(new Error('详细地址不能为空白字符'));
+                } else {
+                    callback();
+                }
+            }
+        };
+        var receivedDetailValidator = (rule, value, callback) => {
+            if(!this.ruleForm.receivedDetail) {
+                callback(new Error('详细地址不能为空'));
+            } else {
+                if(/^\s+$/.test(this.ruleForm.receivedDetail)) {
+                    callback(new Error('详细地址不能为空白字符'));
                 } else {
                     callback();
                 }
@@ -106,26 +150,26 @@ export default {
             },
             rules: {
                 receivedName: [
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { validator: receivedNameValidator, trigger: 'blur' },
                 ],
                 receivedPhone: [
                     { validator: receivedPhoneValidator, trigger: 'blur' },
                 ],
                 receivedDetail: [
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { validator: receivedDetailValidator, trigger: 'blur' },
                 ],
                 deliveryAddress: [
                     { required: true, message: '请选择收货地址', trigger: 'blur' },
                 ],
 
                 sendName: [
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { validator: sendNameValidator, trigger: 'blur' },
                 ],
                 sendPhone: [
                     { validator: sendPhoneValidator, trigger: 'blur' },
                 ],
                 sendDetail: [
-                    { required: true, message: '请输入', trigger: 'blur' },
+                    { validator: sendDetailValidator, trigger: 'blur' },
                 ],
             },
             showFooter: false
@@ -369,6 +413,16 @@ export default {
         margin-right: 4px;
     }
     /deep/ label[for="receivedPhone"]::before {
+        content: '*';
+        color: #f56c6c;
+        margin-right: 4px;
+    }
+    /deep/ label[for="sendName"]::before {
+        content: '*';
+        color: #f56c6c;
+        margin-right: 4px;
+    }
+    /deep/ label[for="receivedName"]::before {
         content: '*';
         color: #f56c6c;
         margin-right: 4px;

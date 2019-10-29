@@ -55,8 +55,11 @@
         prop="rateRepurchase"
         label="复购率"
         >
-        <template slot-scope="scope" v-if="scope.row.rateRepurchase">
+        <template slot-scope="scope">
+          <span v-if="scope.row.rateRepurchase">
           {{scope.row.rateRepurchase == 0 ? 0 : (scope.row.rateRepurchase*100).toFixed(2)}}%
+          </span>
+          <span v-else> 0% </span>
         </template>
       </el-table-column>
     </el-table>
