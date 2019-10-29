@@ -341,7 +341,7 @@ export default {
 
             if(this.orderInfo.payWay == 2) {
                 return this.orderInfo.receivedName
-            } else if(this.orderInfo.isConsumeBalance == 1 && !this.orderInfo.actualMoney) {
+            } else if(this.orderInfo.isConsumeBalance == 1 && (this.orderInfo.actualMoney == '0.00' || this.orderInfo.actualMoney == null)) {
                 return this.orderInfo.memberName
             } else {
                 if(this.orderDetail.orderPayRecordList) {

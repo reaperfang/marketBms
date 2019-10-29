@@ -74,7 +74,7 @@
                     <img :src="currentNav.navIconActive" alt="">
                     <span @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">修改</span>
                   </div>
-                  <div class="add_button" v-if="!currentNav.navIconActive" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+                  <div class="add_button" v-if="!currentNav.navIconActive" @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
                     <i class="inner"></i>
                   </div>
                 </div>
@@ -84,7 +84,7 @@
                     <img :src="currentNav.navIcon" alt="">
                     <span @click="currentImg='normal';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">修改</span>
                   </div>
-                  <div class="add_button" v-if="!currentNav.navIcon" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+                  <div class="add_button" v-if="!currentNav.navIcon" @click="currentImg='normal';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
                     <i class="inner"></i>
                   </div>
                 </div>
@@ -638,6 +638,8 @@ export default {
               width:24px;
               height:24px;
               object-fit: cover;
+              background:#D8D8D8;
+              display:block;
             }
             span{
               margin-top:5px;
@@ -654,6 +656,8 @@ export default {
               width:30px;
               height:30px;
               object-fit: cover;
+              background:#D8D8D8;
+              display:block;
             }
           }
         }

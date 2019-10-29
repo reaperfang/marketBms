@@ -168,7 +168,7 @@
                   </div>
                 </div>
               </li> -->
-              <li>
+              <!-- <li>
                 <div class="userCenter_three1Img">
                   <img :src="data.moduleList.messageCenter&&data.moduleList.messageCenter.icon || require('../../../assets/images/shop/userCenter/userCenter12.png')" alt />
                 </div>
@@ -179,7 +179,7 @@
                     <img src="../../../assets/images/shop/userCenter/triangle.png" alt />
                   </div>
                 </div>
-              </li>
+              </li> -->
               <li>
                 <div class="userCenter_three1Img">
                   <img :src="data.moduleList.memberRank.icon || require('../../../assets/images/shop/userCenter/userCenter13.png')" alt />
