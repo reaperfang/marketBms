@@ -44,7 +44,7 @@
                     </div>
                     <div class="righter">
                         <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">搜 索</el-button>
+                        <el-button @click="getList" type="primary">查询</el-button>
                     </div>
                 </div>
             </el-form>

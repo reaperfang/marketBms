@@ -31,7 +31,7 @@
                 <div class="marB10">
                     <span>老会员</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="oldMember"></el-input>
+                        <el-input placeholder="请输入整数" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')"></el-input>
                     </div>
                 </div>
             </div>

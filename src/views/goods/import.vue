@@ -6,14 +6,14 @@
                     <div class="grid-content header-lefter">
                         <el-button @click="$router.push('/goods/addGoods')" type="primary">新建商品</el-button>
                         <el-button @click="$router.push('/goods/batchPriceChange')" class="border-button">批量改价</el-button>
-                        <span class="import-records">导入记录</span>
+                        <!-- <span class="import-records">导入记录</span> -->
                     </div>
                 </el-col>
-                <el-col :span="12">
+                <!-- <el-col :span="12">
                     <div class="grid-content header-righter">
                         <span @click="renovate" class="span-box pointer"><span>刷新</span><i></i></span>
                     </div>
-                </el-col>
+                </el-col> -->
             </el-row>
             <el-steps class="steps" :space="234" :active="active" finish-status="success">
                 <el-step title="上传模板"></el-step>

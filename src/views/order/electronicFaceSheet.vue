@@ -36,7 +36,7 @@
           <div class="col">
             <el-form-item>
               <span @click="resetForm('formInline')" class="orange resetting pointer">重置</span>
-              <el-button type="primary" @click="onSubmit">搜 索</el-button>
+              <el-button type="primary" @click="onSubmit">查询</el-button>
             </el-form-item>
           </div>
         </div>
