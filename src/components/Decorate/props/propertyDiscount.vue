@@ -1,7 +1,7 @@
 <template>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :style="bodyHeight">
     <div class="block form">
-      <el-form-item label="选择商品" prop="goods">
+      <el-form-item label="选择活动" prop="goods">
       </el-form-item>
       <div class="goods_list">
         <ul>

@@ -35,7 +35,17 @@
           <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
         </el-radio-group>
         <div class="input_wrap" v-if="nearDay1 == 4">
-          <el-date-picker v-model="date1" type="month" @change="changeDate1" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker>
+          <el-date-picker
+            v-model="date1"
+            type="daterange"
+            range-separator="—"
+            value-format="yyyy-MM-dd"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :picker-options="pickerOptions"
+            @change="changeDate1"
+          ></el-date-picker>
+          <!-- <el-date-picker v-model="date1" type="month" @change="changeDate1" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker> -->
         </div>
       </div>
       <div class="chart2_container">
@@ -150,6 +160,10 @@ export default {
       str+='%';
       return str;
     },
+    getDate(date) {
+      return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
+    },
+
     /*
      **属性比例
      */
@@ -197,20 +211,29 @@ export default {
       arr1[0] = arr2.join('-')
       return arr1.join(' ')
     },
+
     changeDate1(val) {
       if(val){
-        let arr = this.getTimeArr(val);
-        this.startTime1 = arr[0];
-        this.endTime1 = arr[1];
+        this.startTime1 = this.getDate(val[0])
+        this.endTime1 = this.getDate(val[1])
         this.nearDay1 = "";
+        this.date1 = ''
         this.getMemberTrend();
       }
+      // if(val){
+      //   let arr = this.getTimeArr(val);
+      //   this.startTime1 = arr[0];
+      //   this.endTime1 = arr[1];
+      //   this.nearDay1 = "";
+      //   this.getMemberTrend();
+      // }
     },
     changeDate2(val) {
       let arr = this.getTimeArr(val);
       this.startTime2 = arr[0];
       this.endTime2 = arr[1];
       this.nearDay2 = "";
+      this.date2 = ''
       this.getPaymentTrend();
     },
     /*
