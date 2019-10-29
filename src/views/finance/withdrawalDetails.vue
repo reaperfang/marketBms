@@ -227,6 +227,7 @@ export default {
         status:-1,
         memberSn:''
       }
+      this.fetch()
     },
     //导出
     exportToExcel() {

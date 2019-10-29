@@ -176,6 +176,7 @@ export default {
         pageSize:10,
       }
       this.times= []
+      this.fetch()
     },
      //当前页码改变
     handleCurrentChange(pIndex=1) {

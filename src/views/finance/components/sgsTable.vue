@@ -156,6 +156,7 @@ export default {
         orderBy:'send_time desc'
       }
       this.timeValue = []
+      this.fetch()
     },
      //当前页码改变
     handleCurrentChange(pIndex=1) {

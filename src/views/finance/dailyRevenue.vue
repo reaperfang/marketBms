@@ -138,6 +138,7 @@ export default {
       this.ruleForm = {
         timeValue:''
       }
+      this.fetch()
     },
 
     //导出
