@@ -1,13 +1,13 @@
 <template>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :style="bodyHeight">
     <div class="block form">
-      <el-form-item label="商品来源" prop="addType">
+      <el-form-item label="活动来源" prop="addType">
         <el-radio-group v-model="ruleForm.addType">
           <el-radio :label="1">手动添加</el-radio>
           <el-radio :label="2">自动获取</el-radio>
         </el-radio-group>
       </el-form-item>
-     <el-form-item label="选择商品" prop="goods">
+     <el-form-item label="选择活动" prop="goods">
       </el-form-item>
       <div class="goods_list" prop="goods">
         <ul>

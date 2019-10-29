@@ -202,6 +202,7 @@ export default {
     .import {
         background-color: #fff;
         padding: 32px 63px;
+        font-size: 14px;
         section {
             border-bottom: 1px dashed #d3d3d3;
             padding-top: 15px;
@@ -232,6 +233,9 @@ export default {
         .importing {
             color: rgb(93, 93, 99);
             margin-top: 15px;
+            p:nth-child(2) {
+                margin-top: 5px;
+            }
             .step {
                 list-style-type:none;counter-reset:sectioncounter;
                 li {
@@ -284,6 +288,27 @@ export default {
     .records {
         color: $globalMainColor;
         margin-bottom: 23px;
+    }
+    /deep/ .el-step__title {
+        margin-top: 10px;
+    }
+    /deep/ .el-step:first-child {
+        .el-step__title {
+            margin-left: -13px;
+        }
+    }
+    /deep/ .el-step:nth-child(2) {
+        .el-step__title {
+            margin-left: -27px;
+        }
+    }
+    /deep/ .el-step:nth-child(3) {
+        .el-step__title {
+            margin-left: 4px;
+        }
+    }
+    /deep/ .el-button--primary {
+        background-color: #655eff;
     }
 </style>
 

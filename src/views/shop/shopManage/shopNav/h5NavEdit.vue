@@ -20,13 +20,15 @@
         <div class="phone-footer">
           <ul class="navs type1" v-if="ruleForm.navStyle.id == 1">
             <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <img src="" alt="" class="empty_img" v-else>
               <span>{{ruleForm.navMap[item].navName}}</span>
             </li>
           </ul>
           <ul class="navs type2" v-if="ruleForm.navStyle.id == 2">
             <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <img src="" alt="" class="empty_img" v-else>
             </li>
           </ul>
           <ul class="navs type3" v-if="ruleForm.navStyle.id == 3">
@@ -45,7 +47,8 @@
               </span>
             </li>
             <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <img src="" alt="" class="empty_img" v-else>
             </li>
           </ul> -->
 
@@ -638,8 +641,10 @@ export default {
               width:24px;
               height:24px;
               object-fit: cover;
-              background:#D8D8D8;
               display:block;
+              &.empty_img{
+                background:#D8D8D8;
+              }
             }
             span{
               margin-top:5px;
@@ -656,8 +661,10 @@ export default {
               width:30px;
               height:30px;
               object-fit: cover;
-              background:#D8D8D8;
               display:block;
+              &.empty_img{
+                background:#D8D8D8;
+              }
             }
           }
         }
@@ -714,6 +721,9 @@ export default {
             img{
               width: 100%;
               height: 100%;
+              &.empty_img{
+                background:#D8D8D8;
+              }
             }
             &:nth-child(1){
               top:  27px;

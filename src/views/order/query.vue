@@ -248,7 +248,7 @@ export default {
     .statistics {
       color: #e0dee8;
       span {
-        color: #aaa9ad;
+        color: #45444c;
       }
     }
   }

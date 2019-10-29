@@ -6,7 +6,7 @@
         <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
         <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
     </header> -->
-    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="160px" class="demo-ruleForm">
+    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="148px" class="demo-ruleForm">
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
@@ -1732,6 +1732,15 @@ $blue: #655EFF;
 }
 /deep/ .el-radio-group .el-radio {
     margin-right: 30px;
+}
+/deep/ .el-form-item__content {
+    line-height: 32px;
+}
+/deep/ .el-radio {
+    margin-right: 30px;
+}
+/deep/ .spec-information .el-input__inner {
+    width: 92px;
 }
 </style>
 
