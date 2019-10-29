@@ -12,7 +12,7 @@
                     <div class="countdown">
                         <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                         <div class="content">
-                            <p class="caption">距开始仅剩</p>
+                            <p class="caption">{{item.status==0?'距开始仅剩':'距结束仅剩'}}</p>
                             <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                             <!-- <p class="time">{{item.endTime}}</p> -->
                         </div>

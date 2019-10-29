@@ -12,7 +12,7 @@
                                 <el-radio v-model="ruleForm.scoreToCash" label="1" @change="openScoreToCash">开启</el-radio><br>
                                 <span>抵现比例：</span>
                                 <div style="width: 140px; display: inline-block">
-                                    <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
+                                    <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
                                 </div>
                                 <span>积分</span>
                                 <div style="width: 54px; display: inline-block">
@@ -62,7 +62,7 @@
                     <span class="marR20">积分获取上限</span>
                     <span>每日最高获得：</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch" @keyup.native="checkZero($event,ruleForm.scoreUpperCount,'scoreUpperCount')"></el-input>
+                        <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch" @keyup.native="checkZero2($event,ruleForm.scoreUpperCount,'scoreUpperCount')"></el-input>
                     </div>
                     <span>积分</span>
                     <el-button type="primary" class="marL20" v-if="isSwitch" @click="save2">保存</el-button>
@@ -119,8 +119,13 @@ export default {
             val = val.replace(/^0/g,'');
             this.ruleForm[ele] = val;
         },
+        checkZero2(event,val,ele) {
+            val = val.replace(/[^\d]/g,'');
+            val = val.replace(/^0/g,'');
+            this.ruleForm[ele] = val;
+        },
         checkPersent(event,val,ele) {
-            val = val.replace(/[^\d.]/g,'');
+            val = val.replace(/[^\d]/g,'');
             val = val.replace(/^0/g,'');
             val = val.replace(/^100/g,'');
             this.ruleForm[ele] = val;

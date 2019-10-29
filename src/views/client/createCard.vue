@@ -489,7 +489,6 @@ export default {
       }
     },
     getCondition(val) {
-      console.log(val);
       this.levelConditionValueDto = Object.assign({}, val);
     },
     getSelectedCoupon(obj) {
@@ -759,15 +758,6 @@ export default {
               upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
             }
           }
-          // let upgradePackage = "";
-          // let upgradeArr = [];
-          // upgradeRewardDtoList.map(v => {
-          //   if (upgradeArr.indexOf(v.label) == -1) {
-          //     upgradeArr.push(v.label);
-          //     upgradePackage += "" + v.label + ",";
-          //   }
-          // });
-          // upgradePackage = upgradePackage.replace(/undefined/g, "");
           upgradeRewardDtoList.map(v => {
             if (v.label) {
               delete v.label;
@@ -777,21 +767,50 @@ export default {
           formObj.rights = rights;
           formObj.levelRightsInfoDtoList = [].concat(rightsDtoList);
           formObj.upgradeRewardDtoList = [].concat(upgradeRewardDtoList);
-          if(!!this.canSubmit) {
-            this._apis.client
-              .editCard(formObj)
-              .then(response => {
-                this._routeTo('cardManage');
+          if(formObj.receiveSetting == '0') {
+            this._apis.client.checkCardValue({level: formObj.level, levelConditionValueDto: null}).then((response) => {
+              if(response) {
+                if(!!this.canSubmit) {
+                  this._apis.client
+                    .editCard(formObj)
+                    .then(response => {
+                      this._routeTo('cardManage');
+                      this.$notify({
+                        title: "成功",
+                        message: "编辑成功",
+                        type: "success"
+                      });
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    });
+                }
+              }else{
                 this.$notify({
-                  title: "成功",
-                  message: "编辑成功",
-                  type: "success"
+                  title: '警告',
+                  message: "没有满足条件",
+                  type: 'warning'
                 });
-                
-              })
-              .catch(error => {
-                console.log(error);
-              });
+              }
+            }).catch((error) => {
+              console.log(error);
+            })
+          }else{
+            if(!!this.canSubmit) {
+              this._apis.client
+                .editCard(formObj)
+                .then(response => {
+                  this._routeTo('cardManage');
+                  this.$notify({
+                    title: "成功",
+                    message: "编辑成功",
+                    type: "success"
+                  });
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            }
           }
         }
       }

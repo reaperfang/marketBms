@@ -333,6 +333,7 @@ export default {
         amountMax:'',
         timeValue:''
       }
+      this.onSubmit()
     },
    
   //导出

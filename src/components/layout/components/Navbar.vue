@@ -54,7 +54,7 @@
 import { mapGetters, Store } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import shopsDialog from '@/views/login/shopsDialog'
-import { userInfo } from 'os';
+// import { userInfo } from 'os';
 
 export default {
   data(){
@@ -75,10 +75,10 @@ export default {
       'device',
     ]),
     userInfo(){
-      return JSON.parse(this.$store.getters.userInfo)
+      return JSON.parse(localStorage.getItem('userInfo'))
     },
     userType(){
-      let userInfo = JSON.parse(this.$store.getters.userInfo)
+      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
       if(userInfo && userInfo.type == "admin") {
         return true

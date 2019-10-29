@@ -124,14 +124,14 @@ export default {
           //   defaultIcon: 'userCenter11',
           //   color: '#000'
           // },
-          messageCenter: {
-            name: 'messageCenter',
-            title: '消息中心',
-            titleValue: '消息中心',
-            icon: '',
-            defaultIcon: 'userCenter12',
-            color: '#000'
-          },
+          // messageCenter: {
+          //   name: 'messageCenter',
+          //   title: '消息中心',
+          //   titleValue: '消息中心',
+          //   icon: '',
+          //   defaultIcon: 'userCenter12',
+          //   color: '#000'
+          // },
           memberRank: {
             name: 'memberRank',
             title: '会员等级',

@@ -253,6 +253,9 @@ export default {
 }
 </script>
 <style lang="scss">
+.content-main-classify {
+    overflow-x: hidden!important;
+}
 .blue {
     color: $globalMainColor;
 }

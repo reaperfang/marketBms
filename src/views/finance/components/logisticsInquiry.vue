@@ -188,6 +188,7 @@ export default {
         timeValue:'',
         expressCompany:'',
       }
+      this.fetch()
     },
     //导出
     exportToExcel() {

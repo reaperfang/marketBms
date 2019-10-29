@@ -186,6 +186,7 @@ export default {
         businessType:'',
         timeValue:''
       }
+      this.fetch()
     },
     //导出
     exportToExcel() {

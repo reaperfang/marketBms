@@ -24,7 +24,7 @@
               :class="{'active': ruleForm.navMap[item].active}"
               :key="key"
               @click="selectNav(item)">
-              <img :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
+              <img :src="ruleForm.navMap[item].active? (ruleForm.navMap[item].navIconActive || defaultActiveImg(ruleForm.navMap[item])): (ruleForm.navMap[item].navIcon || defaultImg(ruleForm.navMap[item]))" alt="">
               <span v-if="ruleForm.navMap[item].active" :style="{color: ruleForm.activeColor}">{{ruleForm.navMap[item].navName}}</span>
               <span v-else :style="{color: ruleForm.unactiveColor}">{{ruleForm.navMap[item].navName}}</span>
             </li>
@@ -50,7 +50,7 @@
                     <img :src="currentNav.navIconActive" alt="">
                     <span @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">修改</span>
                   </div>
-                  <div class="add_button" v-if="!currentNav.navIconActive" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+                  <div class="add_button" v-if="!currentNav.navIconActive" @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
                     <i class="inner"></i>
                   </div>
                 </div>
@@ -60,7 +60,7 @@
                     <img :src="currentNav.navIcon" alt="">
                     <span @click="currentImg='normal';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">修改</span>
                   </div>
-                  <div class="add_button" v-if="!currentNav.navIcon" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+                  <div class="add_button" v-if="!currentNav.navIcon" @click="currentImg='normal';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
                     <i class="inner"></i>
                   </div>
                 </div>
@@ -426,6 +426,8 @@ export default {
               width:24px;
               height:24px;
               object-fit: cover;
+              background:#D8D8D8;
+              display:block;
             }
             span{
               margin-top:5px;
@@ -442,6 +444,8 @@ export default {
               width:30px;
               height:30px;
               object-fit: cover;
+              background:#D8D8D8;
+              display:block;
             }
           }
         }

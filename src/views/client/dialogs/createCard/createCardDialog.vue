@@ -60,8 +60,7 @@ export default {
                         level: this.data.level,
                         levelConditionValueDto: {
                             levelConditionId: this.getId(this.data.conditionList,'消费金额满'),
-                            conditionValue: this.xfjem,
-                            conditionName: "消费金额满"
+                            conditionValue: this.xfjem
                         }
                     }
                     this._apis.client.checkCardValue(params).then((response) => {
@@ -90,8 +89,7 @@ export default {
                         level: this.data.level,
                         levelConditionValueDto: {
                             levelConditionId: this.getId(this.data.conditionList,'消费次数满'),
-                            conditionValue: this.xfcsm,
-                            conditionName: "消费次数满"
+                            conditionValue: this.xfcsm
                         }
                     }
                     this._apis.client.checkCardValue(params).then((response) => {

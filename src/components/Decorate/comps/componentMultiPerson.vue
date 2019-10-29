@@ -9,11 +9,11 @@
                         <img :src="item.image" alt="" :class="{goodsFill:goodsFill!=1}">
                     </div>
                     <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                        <h1 class="title">{{item.activeName}}</h1>
+                        <h1 class="title">{{item.activeName || '多人拼团'}}</h1>
                         <div class="countdown">
                             <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                             <div class="content">
-                                <p class="caption">距开始仅剩</p>
+                                <p class="caption">{{item.status==0?'距开始仅剩':'距结束仅剩'}}</p>
                                 <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                                 <!-- <p class="time">{{item.endTime}}</p> -->
                             </div>

@@ -272,7 +272,7 @@ export default {
     getClientList() {
         let canSubmit = true;
         if(!!this.isNumber(this.form.scoreMin)) {
-            if(!this.isNumber(this.form.scoreMax) || this.form.scoreMax <= this.form.scoreMin) {
+            if(!this.isNumber(this.form.scoreMax) || Number(this.form.scoreMax) <= Number(this.form.scoreMin)) {
                 this.$notify({
                     title: '警告',
                     message: '请正确输入最大积分',
@@ -282,7 +282,7 @@ export default {
             }
         }
         if(!!this.isNumber(this.form.scoreMax)) {
-            if(!this.isNumber(this.form.scoreMin) || this.form.scoreMin >= this.form.scoreMax) {
+            if(!this.isNumber(this.form.scoreMin) || Number(this.form.scoreMin) >= Number(this.form.scoreMax)) {
                 this.$notify({
                     title: '警告',
                     message: '请正确输入最小积分',
@@ -292,7 +292,7 @@ export default {
             }
         }
         if(!!this.isNumber(this.form.totalDealMoneyMin)) {
-            if(!this.isNumber(this.form.totalDealMoneyMax) || this.form.totalDealMoneyMax <= this.form.totalDealMoneyMin) {
+            if(!this.isNumber(this.form.totalDealMoneyMax) || Number(this.form.totalDealMoneyMax) <= Number(this.form.totalDealMoneyMin)) {
                 this.$notify({
                     title: '警告',
                     message: '请正确输入累计最大金额',
@@ -302,7 +302,8 @@ export default {
             }
         }
         if(!!this.isNumber(this.form.totalDealMoneyMax)) {
-            if(!this.isNumber(this.form.totalDealMoneyMin) || this.form.totalDealMoneyMin >= this.form.totalDealMoneyMax) {
+            if(!this.isNumber(this.form.totalDealMoneyMin) || Number(this.form.totalDealMoneyMin) >= Number(this.form.totalDealMoneyMax)) {
+
                 this.$notify({
                     title: '警告',
                     message: '请正确输入累计最小金额',
@@ -312,7 +313,7 @@ export default {
             }
         }
         if(!!this.isNumber(this.form.dealTimesMin)) {
-            if(!this.isNumber(this.form.dealTimesMax) || this.form.dealTimesMax <= this.form.dealTimesMin) {
+            if(!this.isNumber(this.form.dealTimesMax) || Number(this.form.dealTimesMax) <= Number(this.form.dealTimesMin)) {
                 this.$notify({
                     title: '警告',
                     message: '请正确输入最大购买次数',
@@ -322,7 +323,7 @@ export default {
             }
         }
         if(!!this.isNumber(this.form.dealTimesMax)) {
-            if(!this.isNumber(this.form.dealTimesMin) || this.form.dealTimesMin >= this.form.dealTimesMax) {
+            if(!this.isNumber(this.form.dealTimesMin) || Number(this.form.dealTimesMin) >= Number(this.form.dealTimesMax)) {
                 this.$notify({
                     title: '警告',
                     message: '请正确输入最小购买次数',
@@ -332,7 +333,7 @@ export default {
             }
         }
         if(!!this.isNumber(this.form.perUnitPriceMin)) {
-            if(!this.isNumber(this.form.perUnitPriceMax) || this.form.perUnitPriceMax <= this.form.perUnitPriceMin) {
+            if(!this.isNumber(this.form.perUnitPriceMax) || Number(this.form.perUnitPriceMax) <= Number(this.form.perUnitPriceMin)) {
                 this.$notify({
                     title: '警告',
                     message: '请正确输入最大客单价',
@@ -342,7 +343,7 @@ export default {
             }
         }
         if(!!this.isNumber(this.form.perUnitPriceMax)) {
-            if(!this.isNumber(this.form.perUnitPriceMin) || this.form.perUnitPriceMin >= this.form.perUnitPriceMax) {
+            if(!this.isNumber(this.form.perUnitPriceMin) || Number(this.form.perUnitPriceMin) >= Number(this.form.perUnitPriceMax)) {
                 this.$notify({
                     title: '警告',
                     message: '请正确输入最小客单价',
