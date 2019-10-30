@@ -621,3 +621,21 @@ export function checkCardValue(data) {
         data
     })
 }
+//冻结优惠券
+export function frozenCoupons(data) {
+    return request({
+        url: '/v1/b/app-coupon-member-get/activity/frozen',
+        method: 'post',
+        baseURL: process.env.SALE_API,
+        data
+    })
+}
+//批量冻结优惠券
+export function batchFrozenCoupons(data) {
+    return request({
+        url: '/v1/b/app-coupon-member-get/activity/batch-frozen',
+        method: 'post',
+        baseURL: process.env.SALE_API,
+        data
+    })
+}

@@ -27,6 +27,12 @@ export default {
     },
     methods: {
         submit() {
+            //营销解除黑名单
+            this._apis.client.frozenCoupons({memberId: this.data.id, frozenType: 0}).then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.log(error)
+            });
             this._apis.client.removeFromBlack({memberInfoId: this.data.id}).then((response) => {
                 this.$notify({
                     title: '成功',
@@ -36,10 +42,7 @@ export default {
                 this.$emit('freshTable');
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
+                
             })
         },
         getFreezeList() {

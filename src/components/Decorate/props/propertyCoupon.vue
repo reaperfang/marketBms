@@ -9,14 +9,16 @@
       </el-form-item>
       <el-form-item label="" prop="addType">
         <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectCoupon'" v-if="ruleForm.addType === 1">添加优惠券(最多添加10张优惠券)</el-button>
-        <el-tag
-          v-for="tag in list"
-          :key="tag.title"
-          :closable="ruleForm.addType === 1"
-          style="margin-right:5px;"
-          type="success" @close="deleteItem(tag)" :title="getTitleTips(tag)">
-          {{tag.title}}
-        </el-tag>
+        <div class="tag_wrapper">
+          <el-tag
+            v-for="tag in list"
+            :key="tag.title"
+            :closable="ruleForm.addType === 1"
+            style="margin-right:5px;"
+            type="success" @close="deleteItem(tag)" :title="getTitleTips(tag)">
+            {{tag.title}}
+          </el-tag>
+        </div>
       </el-form-item>
       <el-form-item label="券活动数" prop="couponNumberType" v-if="ruleForm.addType === 2">
         <el-radio-group v-model="ruleForm.couponNumberType">
@@ -189,5 +191,8 @@ export default {
 </script>
 
 <style lang="scss">
-
+.tag_wrapper{
+  max-height:300px;
+  overflow-y: auto;
+}
 </style>

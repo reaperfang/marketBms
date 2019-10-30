@@ -131,12 +131,12 @@
           <el-checkbox label="8">购买按钮</el-checkbox>
         </el-checkbox-group>
         <el-radio-group v-if="ruleForm.showContents.includes('8')" v-model="ruleForm.buttonStyle">
-          <el-radio :label="1">样式1</el-radio>
-          <el-radio :label="2">样式2</el-radio>
+          <el-radio :label="1" :disabled="true">样式1</el-radio>
+          <el-radio :label="2" :disabled="true">样式2</el-radio>
           <el-radio :label="3" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式3</el-radio>
           <el-radio :label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式4</el-radio>
-          <el-radio :label="5">样式5</el-radio>
-          <el-radio :label="6">样式6</el-radio>
+          <el-radio :label="5" :disabled="true">样式5</el-radio>
+          <el-radio :label="6" :disabled="true">样式6</el-radio>
           <el-radio :label="7" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式7</el-radio>
           <el-radio :label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式8</el-radio>
         </el-radio-group>
@@ -181,7 +181,7 @@ export default {
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
         hideSaledGoods: true,//隐藏已售罄拼团商品
-        buttonStyle: 1,// 购买按钮样式
+        buttonStyle: 3,// 购买按钮样式
         ids: [],//商品id列表 
         buttonText: '拼团',// 次要按钮文字
         buttonTextPrimary: '开团',//主要按钮文字
@@ -213,7 +213,7 @@ export default {
      //如果新值是一行3个或横向滑动且老值不是这个就把按钮样式改为第一个
     'ruleForm.listStyle'(newValue, oldValue) {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
-        this.ruleForm.buttonStyle = 1;
+        this.ruleForm.buttonStyle = 3;
       }
     },
     'ruleForm.addType'(newValue) {

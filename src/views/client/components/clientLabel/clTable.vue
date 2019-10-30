@@ -39,7 +39,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
             <span class="edit_span" @click="edit(scope.row)" v-permission="['客户', '客户标签', '默认页面', '查看标签']">
-                <i class="edit_i"></i>
+                <!-- <i class="edit_i"></i> -->
                 查看&编辑
             </span>
         </template>

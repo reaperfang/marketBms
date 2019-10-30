@@ -50,7 +50,7 @@
         <div class="block form">
           <template v-for="(item, key) in ruleForm.moduleList">
             <el-form-item 
-              v-if="item.name !== 'integralMarket'"
+              v-if="item.name !== 'integralMarket' && item.name !== 'messageCenter'"
               :key="key"
               :label="item.title"
               :prop="'moduleList.'+ key +'.titleValue'"

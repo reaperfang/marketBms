@@ -482,6 +482,43 @@ export default {
             }
         }
     }
+    /deep/ .el-step__title {
+        margin-top: 10px;
+    }
+    /deep/ .el-step:nth-child(1) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step:nth-child(2) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step:nth-child(3) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -61px;
+        }
+    }
+    /deep/ .el-step:nth-child(4) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+    }
+    /deep/ .el-step:nth-child(5) {
+        .el-step__title {
+            margin-left: 5px;
+        }
+    }
 </style>
 
 

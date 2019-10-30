@@ -7,7 +7,7 @@
                 <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(i,index) in couponIds" :key="index">
-                        <el-select v-model="i.id" style="margin-bottom: 10px">
+                        <el-select v-model="i.id" style="margin-bottom: 10px" @change="handleChange">
                             <el-option v-for="item in allCoupons" :key="item.id" :label="item.name" :value="item.id"></el-option>
                         </el-select>
                         <span class="marL20 addMainColor pointer" @click="deleteCoupon(index)">删除</span>
@@ -19,7 +19,7 @@
                 <el-checkbox v-model="checkCode" label="优惠码" class="fl marT10" style="margin-left: 85px"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(i,index) in codeIds" :key="index">
-                        <el-select v-model="i.id" style="margin-bottom: 10px">
+                        <el-select v-model="i.id" style="margin-bottom: 10px" @change="handleChange2">
                             <el-option v-for="item in allCodes" :key="item.id" :label="item.name" :value="item.id"></el-option>
                         </el-select>
                         <span class="marL20 addMainColor pointer" @click="deleteCode(index)">删除</span>
@@ -57,11 +57,50 @@ export default {
         }
     },
     methods: {
+        isRepeat(arr) {
+            let hash = {};
+            for(let i in arr) {
+                if(hash[arr[i]]) {
+                    return true;
+                }
+                hash[arr[i]] = true;
+            }
+            return false;
+        }, 
+        handleChange() {
+            let arr = [];
+            this.couponIds.map((v) => {arr.push(v.id)});
+            let flag = this.isRepeat(arr);
+            if(flag) {
+                this.couponIds.splice(this.couponIds.length - 1,1);
+                this.$notify({
+                    title: '警告',
+                    message: '不能选择重复的优惠券',
+                    type: 'warning'
+                });
+            }
+        },
+        handleChange2() {
+            let arr = [];
+            this.codeIds.map((v) => {arr.push(v.id)});
+            let flag = this.isRepeat(arr);
+            if(flag) {
+                this.codeIds.splice(this.codeIds.length - 1,1);
+                this.$notify({
+                    title: '警告',
+                    message: '不能选择重复的优惠码',
+                    type: 'warning'
+                });
+            }
+        },
         submit() {
             this.canSubmit = true;
             let params = {};
             let blackListMapDtos = [];
             let memberInfoIds = [];
+            let couponIdList = [];
+            let couponIdList2 = [];
+            let memberIdList = [];
             if(!!this.checkCoupon) {
                 if(this.couponIds[0].id == "") {
                     this.$notify({
@@ -79,6 +118,7 @@ export default {
                         blackInfold: this.couponId,
                         disableItemValue: arr.join(',')
                     }
+                    couponIdList = [].concat(arr);
                     blackListMapDtos.push(obj);
                 }
             }
@@ -99,6 +139,7 @@ export default {
                         blackInfold: this.codeId,
                         disableItemValue: arr.join(',')
                     }
+                    couponIdList2 = [].concat(arr);
                     blackListMapDtos.push(obj);
                 }
             }
@@ -114,9 +155,26 @@ export default {
             this.data.checkedItem.map((v) => {
                 memberInfoIds.push(v.id);
             });
+            memberIdList = [].concat(memberInfoIds);
             params.memberInfoIds = memberInfoIds.join(',');
             params.blackListMapDtos = [].concat(blackListMapDtos);
             if(!!this.canSubmit && params.blackListMapDtos.length > 0) {
+                //营销优惠券加入黑名单
+                if(couponIdList.length > 0) {
+                    this._apis.client.batchFrozenCoupons({couponIdList: couponIdList, memberIdList:memberIdList, frozenType: 1}).then((response) => {
+                        console.log(response);
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                }
+                if(couponIdList2.length > 0) {
+                    this._apis.client.batchFrozenCoupons({couponIdList: couponIdList2, memberIdList:memberIdList, frozenType: 1}).then((response) => {
+                        console.log(response);
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                }
+                //电商批量加入黑名单
                 this._apis.client.batchToBlack(params).then((response) => {
                     this.$notify({
                         title: '成功',
@@ -145,10 +203,6 @@ export default {
                 this.codeId = this.checks[1].id;
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         },
         addCouponSel() {

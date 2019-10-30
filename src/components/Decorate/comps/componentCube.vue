@@ -207,7 +207,7 @@ export default {
 .cube_preview{
   li{
     .type{
-        height:300px;
+        // height:300px;
     }
   }
 }

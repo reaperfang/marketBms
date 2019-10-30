@@ -165,17 +165,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.name_wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  img {
-    width: 50px;
-    height: 50px;
-    display: block;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    object-fit: cover;
-  }
-}
+
 </style>
