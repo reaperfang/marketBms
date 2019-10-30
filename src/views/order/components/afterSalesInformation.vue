@@ -1,7 +1,7 @@
 <template>
     <div class="after-sales-information">
         <section class="information">
-            <p class="section-header">售后信息</p>
+            <!-- <p class="section-header">售后信息</p> -->
             <div class="row align-center justify-between">
                 <div class="col">
                     <div class="row justify-between">
@@ -463,12 +463,14 @@ export default {
             margin: 20px 0;
             color: #161617;
             font-size: 16px;
+            margin-top: 0;
         }
         &.flow-path {
             margin-top: 50px;
         }
         &.information {
             margin-top: 0;
+            padding-top: 0;
             .list-lefter {
                 margin-right: 20px;
             }

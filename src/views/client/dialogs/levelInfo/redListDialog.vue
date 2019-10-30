@@ -59,16 +59,16 @@ export default {
     submit() {
         this.$emit('getSelectedRed', {selection: this.selectedRow});
     },
-    getSel() {
-      let redArr = this.data.redArr;
-      redArr.map((v) => {
-        this.redList.forEach(row => {
-          if(row.id = v) {
-            this.$refs.redTable.toggleRowSelection(row, true);
-          }
-        });
-      })
-    },
+    // getSel() {
+    //   let redArr = this.data.redArr;
+    //   redArr.map((v) => {
+    //     this.redList.forEach(row => {
+    //       if(row.id = v) {
+    //         this.$refs.redTable.toggleRowSelection(row, true);
+    //       }
+    //     });
+    //   })
+    // },
     handleCurrentChange(val) {
       this.selectedRow = Object.assign({},val);
     },
@@ -129,11 +129,11 @@ export default {
   components: {
     DialogBase
   },
-  updated() {
-    if(this.data.redArr) {
-      this.getSel();
-    }
-  }
+  // updated() {
+  //   if(this.data.redArr) {
+  //     this.getSel();
+  //   }
+  // }
 };
 </script>
 <style lang="scss" scoped>

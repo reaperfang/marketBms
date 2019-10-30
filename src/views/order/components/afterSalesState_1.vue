@@ -188,6 +188,10 @@ export default {
             padding-left: 30px;
             p {
                 margin-bottom: 20px;
+                margin-bottom: 20px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
                 &:first-child {
                     font-size: 20px;
                 }
