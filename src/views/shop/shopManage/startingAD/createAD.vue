@@ -23,27 +23,27 @@
         </div>
         <div class="block form">
           <el-form-item label="出现页面" prop="type">
-            <el-radio-group v-model="ruleForm.type">
+            <el-radio-group v-model="ruleForm.type" :disabled="showType === 'view'">
               <el-radio :label="0">首页</el-radio>
               <el-radio :label="1">微页面</el-radio>
               <el-radio :label="2">微页面分类</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="广告名称" prop="name">
-             <el-input v-model="ruleForm.name" placeholder="请输入广告名称"></el-input>
+             <el-input v-model="ruleForm.name" placeholder="请输入广告名称" :disabled="showType === 'view'"></el-input>
           </el-form-item>
           <el-form-item label="广告图片" prop="imagePath">
             <div class="img_preview" v-if="ruleForm.imagePath">
               <img :src="ruleForm.imagePath" alt="">
-              <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+              <span v-if="showType !== 'view'" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
             </div>
-            <div class="add_button" v-if="!ruleForm.imagePath" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+            <div class="add_button" v-if="(showType !== 'view') && (!ruleForm.imagePath)" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
               <i class="inner"></i>
             </div>
             <span class="upload_tips">建议尺寸:640 * 350 , 请将所有广告图片尺寸保持一致，图片只能选择一张</span>
           </el-form-item>
           <el-form-item label="广告链接" prop="advertiseUrl">
-            <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">{{ruleForm.advertiseJump ? ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name) : '选择跳转页面'}}</el-button>
+            <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">{{ruleForm.advertiseJump ? ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name) : '选择跳转页面'}}</el-button>
           </el-form-item>
           <el-form-item label="展示时间" prop="">
             <div>
@@ -52,7 +52,8 @@
                 type="datetime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
-                :picker-options="pickerOptions">
+                :picker-options="pickerOptions" 
+                :disabled="showType === 'view'">
               </el-date-picker>
             </div>
             至
@@ -62,7 +63,8 @@
                 type="datetime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
-                :picker-options="pickerOptions">
+                :picker-options="pickerOptions" 
+                :disabled="showType === 'view'">
               </el-date-picker>
             </div>
           </el-form-item>
@@ -71,7 +73,7 @@
         <div class="block button">
           <div class="help_blank"></div>
           <div class="buttons">
-            <el-button @click="saveData" type="primary" :loading="saveDataLoading">保    存</el-button>
+            <el-button @click="saveData" type="primary" :loading="saveDataLoading" :disabled="showType === 'view'">保    存</el-button>
             <el-button @click="_routeTo('ADManageIndex')">取    消  </el-button>
           </div>
         </div>
@@ -92,6 +94,7 @@ export default {
   data () {
     return {
       currentADId: this.$route.query.ADId || '',
+      showType: this.$route.query.showType,
       dialogVisible: false,
       currentDialog: '',
       loading: false,

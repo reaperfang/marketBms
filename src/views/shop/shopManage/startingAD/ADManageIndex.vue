@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入广告名称"></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入广告名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="fetch">查询</el-button>
@@ -51,9 +51,14 @@
         <el-table-column prop="pv" label="浏览数" width="100"></el-table-column>
         <el-table-column prop="updateTime" label="展示时间">
           <template slot-scope="scope">
-            {{scope.row.startTime}} - {{scope.row.endTime}}
+            {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
         </el-table-column>
+        <el-table-column prop="createTime" sortable label="创建时间" :width="170"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="更新时间" :width="170"></el-table-column>
+        <!-- <el-table-column prop="startTime" sortable label="开始时间" :width="170"></el-table-column>
+        <el-table-column prop="endTime" sortable label="结束时间" :width="170"></el-table-column> -->
+        <el-table-column prop="createUserName" label="操作账号"></el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0">展示中</span>
@@ -63,10 +68,9 @@
             <span v-else>--</span>
           </template>
         </el-table-column>
-        <el-table-column prop="startTime" label="创建时间" ></el-table-column>
-        <el-table-column prop="createUserName" label="操作账号"></el-table-column>
         <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
+            <span class="table-btn" v-if="scope.row.status === 0" @click="_routeTo('createAD', {ADId: scope.row.id, showType: 'view'})">查看</span>
             <span class="table-btn" v-if="scope.row.status === 3" @click="startAD(scope.row)">启用</span>
             <span class="table-btn" v-else-if="scope.row.status === 0 || scope.row.status === 1" @click="stopAD(scope.row)">停用</span>
             <span class="table-btn" v-else>---</span>

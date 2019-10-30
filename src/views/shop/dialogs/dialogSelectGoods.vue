@@ -4,7 +4,7 @@
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
         <el-form-item label prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
         </el-form-item>
         <el-form-item label prop="name">
           <el-button type="primary" @click="fetch">搜 索</el-button>

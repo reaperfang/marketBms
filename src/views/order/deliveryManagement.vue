@@ -45,8 +45,7 @@ export default {
     .delivery-management {
         background-color: #fff;
         section {
-          padding: 20px;
-          padding-top: 0;
+          padding: 0 0 20px 0;
         }
     }
     /deep/ .el-tabs__nav-scroll {
@@ -60,6 +59,9 @@ export default {
     }
     /deep/ #tab-order {
         padding-left: 0;
+    }
+    /deep/ .el-tabs__header {
+        margin: 0 20px;
     }
 </style>
 

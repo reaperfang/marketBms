@@ -11,7 +11,7 @@
                 v-model="seletedClassify"></treeselect>
             </el-form-item>
             <el-form-item label="" prop="name">
-              <el-input v-model="ruleForm.name" placeholder="请输入商品名称"></el-input>
+              <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
             </el-form-item>
             <!-- <el-form-item label="" prop="id">
               <el-input v-model="ruleForm.id" placeholder="请输入编码"></el-input>

@@ -1,10 +1,10 @@
 /* 选择限时秒杀弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择秒杀商品'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择秒杀活动'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
         <el-form-item label="" prop="goodsName">
-          <el-input v-model="ruleForm.goodsName" placeholder="请输入商品名称"></el-input>
+          <el-input v-model="ruleForm.goodsName" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="fetch">搜  索</el-button>

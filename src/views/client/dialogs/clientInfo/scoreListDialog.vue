@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" @submit="submit" title="积分记录" :hasCancel="hasCancel">
     <div class="c_container">
-        <div class="marB20"><span>总积分：{{ data.score }}</span><span class="marL20">可用积分：{{ data.score-data.frozenScore }}</span></div>
+        <div class="marB20"><span>总积分：{{ data.score + data.frozenScore }}</span><span class="marL20">可用积分：{{ data.score }}</span></div>
         <el-table
             :data="scoreList"
             style="width: 100%"

@@ -9,7 +9,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="页面名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入页面名称"></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入页面名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="fetch">查询</el-button>
@@ -62,7 +62,8 @@
         </el-table-column>
         <el-table-column prop="vv" label="访客数"></el-table-column>
         <el-table-column prop="pv" label="浏览数"></el-table-column>
-        <el-table-column prop="updateTime" sortable label="创建时间"></el-table-column>
+        <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
         <el-table-column prop="" label="操作" :width="'250px'">
           <template slot-scope="scope">

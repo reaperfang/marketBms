@@ -30,10 +30,10 @@
                             退款方式
                         </div>
                         <div class="col list-righter">
-                            {{orderAfterSale.refundway | refundwayFilter}}
+                            {{orderAfterSale.refundWay | refundwayFilter}}
                         </div>
                     </div>
-                    <div class="row justify-between">
+                    <div v-if="orderAfterSale.type != 2" class="row justify-between">
                         <div class="col list-lefter">
                             退款收款人
                         </div>
@@ -41,13 +41,22 @@
                             {{orderAfterSale.memberName}}
                         </div>
                     </div>
-                    <div class="row justify-between">
+                    <div v-if="orderAfterSale.type == 2" class="row justify-between">
                         <div class="col list-lefter">
                             客户收货信息
                         </div>
                         <div class="col list-righter">
-                            <p>{{orderAfterSale.receivedname}} {{orderAfterSale.receivedPhone}}</p>
-                            <p>{{orderAfterSale.receiveddetail}}</p>
+                            <p>{{orderAfterSaleSendInfo.receivedName}} {{orderAfterSaleSendInfo.receivedPhone}}</p>
+                            <p>{{orderAfterSaleSendInfo.receivedDetail}}</p>
+                        </div>
+                    </div>
+                    <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row justify-between">
+                        <div class="col list-lefter">
+                            商户收货信息
+                        </div>
+                        <div class="col list-righter">
+                            <p>{{orderAfterSaleSendInfo.sendName}} {{orderAfterSaleSendInfo.sendPhone}}</p>
+                            <p>{{orderAfterSaleSendInfo.sendDetail}}</p>
                         </div>
                     </div>
                 </div>
@@ -92,18 +101,22 @@
                             label="数量">
                         </el-table-column>
                         <el-table-column
+                            prop="goodsPrice"
+                            label="商品单价">
+                        </el-table-column>
+                        <el-table-column
                             prop="subtotalMoney"
                             label="小计">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             prop="afterSaleLimitTime"
                             label="售后有效期">
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
                 </div>
             </div>
         </section>
-        <section class="gift">
+        <!-- <section class="gift">
             <p class="section-header">买家退还奖励</p>
             <div class="row">
                 <div class="col">
@@ -112,7 +125,7 @@
                 <div class="col">
                     {{orderAfterSale.memberReturnScore}}
                 </div>
-            </div>
+            </div> -->
             <!-- <div class="row">
                 <div class="col">
                     赠品：
@@ -170,7 +183,7 @@
                     </div>
                 </div>
             </div> -->
-        </section>
+        <!-- </section> -->
         <section class="drawback">
             <p class="section-header">卖家退款合计</p>
             <div class="row justity-between align-center">
@@ -347,11 +360,11 @@ export default {
                     return '退款'
             }
         },
-        refundwayFilter(code) {
+        refundwayFilter(code) {// 1线上 2线下
             if(code == 1) {
-                return '线上退款'
+                return '原支付方式返还'
             } else if(code == 2) {
-                return '线下退款'
+                return '原支付方式返还'
             }
         },
         channelTypeFilter(code) {
@@ -397,21 +410,21 @@ export default {
             // realReturnWalletMoney 剩余退还余额
             // realReturnMoney 实退金额
             // realReturnBalance 退还余额
-            if(this.orderAfterSale.realReturnWalletMoney == 0) {
+            if(this.catchRealReturnWalletMoney == 0 || this.catchRealReturnWalletMoney == '0.00' || this.catchRealReturnWalletMoney == null) {
                 // 剩余退还余额 0
-                this.orderAfterSale.realReturnWalletMoney = this.orderAfterSale.realReturnMoney
-            } else if(this.orderAfterSale.realReturnBalance == 0) {
+                this.orderAfterSale.realReturnBalance = this.orderAfterSale.realReturnMoney
+            } else if(this.catchRealReturnBalance == 0 || this.catchRealReturnBalance == '0.00' || this.catchRealReturnBalance == null) {
                 this.orderAfterSale.realReturnWalletMoney = this.orderAfterSale.realReturnMoney
             } else {
-                let _number = this.orderAfterSale.realReturnMoney - this.orderAfterSale.realReturnBalance
+                let _number = +this.orderAfterSale.realReturnMoney - +this.orderAfterSale.realReturnBalance
 
                 if(_number < 0) {
-                    let _realReturnBalance = this.orderAfterSale.realReturnBalance + _number
-                    this.orderAfterSale.realReturnBalance = _realReturnBalance
+                    let _realReturnBalance = +this.orderAfterSale.realReturnBalance + _number
+                    this.orderAfterSale.realReturnBalance = _realReturnBalance.toFixed(2)
 
                     this.orderAfterSale.realReturnWalletMoney  = 0
                 } else {
-                    this.orderAfterSale.realReturnWalletMoney = _number
+                    this.orderAfterSale.realReturnWalletMoney = _number.toFixed(2)
                 }
             }
         }
@@ -425,13 +438,16 @@ export default {
             type: Object,
             default: {}
         },
+        orderAfterSaleSendInfo: {},
         itemList: {
             type: Array,
             default: []
         },
         orderType: {
 
-        }
+        },
+        catchRealReturnWalletMoney: {},
+        catchRealReturnBalance: {}
     }
 }
 </script>

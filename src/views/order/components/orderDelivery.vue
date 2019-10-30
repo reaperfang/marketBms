@@ -67,8 +67,9 @@
                 </div>
             </el-form>
         </div>
+        <div class="line"></div>
         <div class="content">
-            <p>已选择 {{multipleSelection.length}} 项，全部{{total}}项</p>
+            <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
             <el-table
                 v-loading="loading"
                 ref="multipleTable"
@@ -180,6 +181,12 @@ export default {
     filters: {
         statusFilter(code) {
             switch(code) {
+                case 0:
+                    return '待付款'
+                case 1:
+                    return '待成团'
+                case 2:
+                    return '关闭'
                 case 3:
                     return '待发货'
                 case 4:
@@ -340,6 +347,7 @@ export default {
 .order-delivery {
     .search {
         background-color: #fff;
+        margin: 0 20px;
         .top {
             background-color: rgb(255, 247, 238);
             color: rgb(254, 121, 95);
@@ -359,13 +367,22 @@ export default {
             }
         }
     }
+    .line {
+        height: 20px;
+        background-color: #f2f2f9;
+    }
     .content {
         background-color: #fff;
         padding: 20px;
+        margin: 0 20px;
+        padding-top: 0;
         p {
             font-size: 16px;
             color: #B6B5C8;
             margin: 23px 0 20px 0;
+            span {
+                color: #45444c;
+            }
         }
     }
 }

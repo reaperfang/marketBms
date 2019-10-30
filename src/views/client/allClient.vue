@@ -62,7 +62,7 @@
                         <el-col :span="8">
                             <el-form-item label="积分：" prop="scoreMin">
                                 <div class="input_wrap">
-                                    <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number($event,form.scoreMin,'scoreMin')"></el-input>
+                                    <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number2($event,form.scoreMin,'scoreMin')"></el-input>
                                 </div>
                                 <span>分</span>
                                 <span>-</span>
@@ -75,12 +75,12 @@
                         <el-col :span="8">
                             <el-form-item label="累计消费金额：" prop="totalDealMoneyMin">
                                 <div class="input_wrap">
-                                    <el-input v-model="form.totalDealMoneyMin" placeholder="最小值"></el-input>
+                                    <el-input v-model="form.totalDealMoneyMin" placeholder="最小值" @keyup.native="number3($event,form.totalDealMoneyMin,'totalDealMoneyMin')"></el-input>
                                 </div>
                                 <span>元</span>
                                 <span>-</span>
                                 <div class="input_wrap">
-                                    <el-input v-model="form.totalDealMoneyMax" placeholder="最大值"></el-input>
+                                    <el-input v-model="form.totalDealMoneyMax" placeholder="最大值" @keyup.native="number4($event,form.totalDealMoneyMax,'totalDealMoneyMax')"></el-input>
                                 </div>
                                 <span>元</span>
                             </el-form-item>
@@ -88,7 +88,7 @@
                         <el-col :span="8">
                             <el-form-item label="购买次数：" prop="dealTimesMin">
                                 <div class="input_wrap">
-                                    <el-input v-model="form.dealTimesMin" placeholder="最小值" @keyup.native="number($event,form.dealTimesMin,'dealTimesMin')"></el-input>
+                                    <el-input v-model="form.dealTimesMin" placeholder="最小值" @keyup.native="number2($event,form.dealTimesMin,'dealTimesMin')"></el-input>
                                 </div>
                                 <span>次</span>
                                 <span>-</span>
@@ -103,12 +103,12 @@
                         <el-col :span="8">
                             <el-form-item label="客单价：" prop="perUnitPriceMin">
                                 <div class="input_wrap">
-                                    <el-input v-model="form.perUnitPriceMin" placeholder="最小值"></el-input>
+                                    <el-input v-model="form.perUnitPriceMin" placeholder="最小值" @keyup.native="number3($event,form.perUnitPriceMin,'perUnitPriceMin')"></el-input>
                                 </div>
                                 <span>元</span>
                                 <span>-</span>
                                 <div class="input_wrap">
-                                    <el-input v-model="form.perUnitPriceMax" placeholder="最大值"></el-input>
+                                    <el-input v-model="form.perUnitPriceMax" placeholder="最大值" @keyup.native="number4($event,form.perUnitPriceMax,'perUnitPriceMax')"></el-input>
                                 </div>
                                 <span>元</span>
                             </el-form-item>
@@ -224,11 +224,32 @@ export default {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
+    //匹配积分等的最大值
     number(event,val,ele) {
         val = val.replace(/[^\.\d]/g,'');
         val = val.replace('.','');
         val = val.replace(/^0/g,'');
         this.form[ele] = val;
+    },
+    //匹配积分等最小值（正整数，可为0）
+    number2(event,val,ele) {
+        val = val.replace(/[^\d]/g,'');
+        this.form[ele] = val;
+    },
+    //匹配小数 可为0，两位
+    number3(event,val,ele) {
+      val = val.replace(/[^\d.]/g,'');
+      val = val.replace(/\.{2,}/g,'.');
+      val = val.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+      this.form[ele] = val;
+    },
+    //匹配小数 不能为0，两位
+    number4(event,val,ele) {
+      val = val.replace(/[^\d.]/g,'');
+      val = val.replace(/^0/g,'');
+      val = val.replace(/\.{2,}/g,'.');
+      val = val.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+      this.form[ele] = val;
     },
     goToSet() {
         this.$router.push({path:'/set/memberSet'});

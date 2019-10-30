@@ -9,7 +9,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="" prop="idOrName">
-              <el-input v-model="ruleForm.idOrName" placeholder="请输入活动名称"></el-input>
+              <el-input v-model="ruleForm.idOrName" placeholder="请输入活动名称" clearable></el-input>
             </el-form-item>
             <el-form-item label="" prop="">
               <el-button type="primary" @click="fetch">搜  索</el-button>
