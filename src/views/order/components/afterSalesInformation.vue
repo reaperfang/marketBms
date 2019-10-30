@@ -410,21 +410,32 @@ export default {
             // realReturnWalletMoney 剩余退还余额
             // realReturnMoney 实退金额
             // realReturnBalance 退还余额
-            if(this.catchRealReturnWalletMoney == 0 || this.catchRealReturnWalletMoney == '0.00' || this.catchRealReturnWalletMoney == null) {
-                // 剩余退还余额 0
-                this.orderAfterSale.realReturnBalance = this.orderAfterSale.realReturnMoney
-            } else if(this.catchRealReturnBalance == 0 || this.catchRealReturnBalance == '0.00' || this.catchRealReturnBalance == null) {
-                this.orderAfterSale.realReturnWalletMoney = this.orderAfterSale.realReturnMoney
+            // if(this.catchRealReturnWalletMoney == 0 || this.catchRealReturnWalletMoney == '0.00' || this.catchRealReturnWalletMoney == null) {
+            //     // 剩余退还余额 0
+            //     this.orderAfterSale.realReturnBalance = this.orderAfterSale.realReturnMoney
+            // } else if(this.catchRealReturnBalance == 0 || this.catchRealReturnBalance == '0.00' || this.catchRealReturnBalance == null) {
+            //     this.orderAfterSale.realReturnWalletMoney = this.orderAfterSale.realReturnMoney
+            // } else {
+            //     let _number = +this.orderAfterSale.realReturnMoney - +this.orderAfterSale.realReturnBalance
+
+            //     if(_number < 0) {
+            //         let _realReturnBalance = +this.orderAfterSale.realReturnBalance + _number
+            //         this.orderAfterSale.realReturnBalance = _realReturnBalance.toFixed(2)
+
+            //         this.orderAfterSale.realReturnWalletMoney  = 0
+            //     } else {
+            //         this.orderAfterSale.realReturnWalletMoney = _number.toFixed(2)
+            //     }
+            // }
+            if(this.orderAfterSale.shouldReturnBalance == null || this.orderAfterSale.shouldReturnBalance == '0.00' || this.orderAfterSale.shouldReturnBalance == 0) {
+                this.orderAfterSale.realReturnWalletMoney = (+this.orderAfterSale.realReturnMoney).toFixed(2)
             } else {
-                let _number = +this.orderAfterSale.realReturnMoney - +this.orderAfterSale.realReturnBalance
-
-                if(_number < 0) {
-                    let _realReturnBalance = +this.orderAfterSale.realReturnBalance + _number
-                    this.orderAfterSale.realReturnBalance = _realReturnBalance.toFixed(2)
-
-                    this.orderAfterSale.realReturnWalletMoney  = 0
+                if(+this.orderAfterSale.realReturnMoney > +this.orderAfterSale.shouldReturnBalance) {
+                    this.orderAfterSale.realReturnBalance = +this.orderAfterSale.shouldReturnBalance
+                    this.orderAfterSale.realReturnWalletMoney = (+this.orderAfterSale.realReturnMoney - this.orderAfterSale.realReturnBalance).toFixed(2)
                 } else {
-                    this.orderAfterSale.realReturnWalletMoney = _number.toFixed(2)
+                    this.orderAfterSale.realReturnWalletMoney = 0
+                    this.orderAfterSale.realReturnBalance = this.orderAfterSale.realReturnMoney
                 }
             }
         }
