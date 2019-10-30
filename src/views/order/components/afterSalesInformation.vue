@@ -4,7 +4,7 @@
             <!-- <p class="section-header">售后信息</p> -->
             <div class="row align-center justify-between">
                 <div class="col">
-                    <div class="row justify-between">
+                    <div class="row">
                         <div class="col list-lefter">
                             售后原因
                         </div>
@@ -12,7 +12,7 @@
                             {{orderAfterSale.reason}}
                         </div>
                     </div>
-                    <div class="row justify-between">
+                    <div class="row">
                         <div class="col list-lefter">
                             问题描述
                         </div>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="col righter-col">
-                    <div class="row justify-between">
+                    <div class="row">
                         <div class="col list-lefter">
                             退款方式
                         </div>
@@ -33,7 +33,7 @@
                             {{orderAfterSale.refundWay | refundwayFilter}}
                         </div>
                     </div>
-                    <div v-if="orderAfterSale.type != 2" class="row justify-between">
+                    <div v-if="orderAfterSale.type != 2" class="row">
                         <div class="col list-lefter">
                             退款收款人
                         </div>
@@ -41,7 +41,7 @@
                             {{orderAfterSale.memberName}}
                         </div>
                     </div>
-                    <div v-if="orderAfterSale.type == 2" class="row justify-between">
+                    <div v-if="orderAfterSale.type == 2" class="row">
                         <div class="col list-lefter">
                             客户收货信息
                         </div>
@@ -50,7 +50,7 @@
                             <p>{{orderAfterSaleSendInfo.receivedDetail}}</p>
                         </div>
                     </div>
-                    <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row justify-between">
+                    <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
                         <div class="col list-lefter">
                             商户收货信息
                         </div>
@@ -458,6 +458,12 @@ export default {
         margin-top: 20px;
         .row {
             margin: 10px 0;
+            &:first-child {
+                margin-top: 0;
+            }
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
         .section-header {
             margin: 20px 0;
@@ -473,6 +479,8 @@ export default {
             padding-top: 0;
             .list-lefter {
                 margin-right: 20px;
+                width: 80px;
+                text-align: right;
             }
             .list-righter {
                 color: #9FA29F;  

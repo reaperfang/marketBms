@@ -54,7 +54,7 @@
             </div>
             <p class="space"></p>
             <div>
-              <p>商品页</p>
+              <p>商品详情页</p>
               <p>{{dataObj.uv[4]}}</p>
             </div>
             <p class="space"></p>
