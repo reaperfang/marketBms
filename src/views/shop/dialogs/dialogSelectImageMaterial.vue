@@ -333,6 +333,9 @@ export default {
     margin-bottom: 10px;
     cursor: pointer;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     img{
       max-width: 100%;
     }

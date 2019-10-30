@@ -346,6 +346,7 @@ export default {
             background-color: #fff;
             margin-top: 20px;
             padding: 20px;
+            padding-top: 5px;
         }
         .goods-detail {
             display: flex;

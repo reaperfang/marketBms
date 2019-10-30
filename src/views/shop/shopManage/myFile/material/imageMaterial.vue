@@ -497,7 +497,7 @@ export default {
           img{
             width: 240px;
             height:150px;
-            object-fit: cover;
+            object-fit: contain;
           }
           .img_bottom{
             width:100%;
@@ -590,6 +590,9 @@ export default {
 //     margin-bottom: 10px;
 //     cursor: pointer;
 //     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
 //     img{
 //       max-width: 100%;
 //     }

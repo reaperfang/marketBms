@@ -123,7 +123,7 @@
           <div class="giftList">
             <div v-for="(item, index) in selectedGifts" :key="item.id">
               <span>{{ item.goodsName }}</span>
-              <el-input-number v-model="item.number"></el-input-number>
+              <el-input-number v-model="item.number" :max="10"></el-input-number>
               <span style="margin-left:20px" class="pointer" @click="deleteGift(index)">删除</span>
             </div>
           </div>
@@ -133,7 +133,7 @@
           <div class="giftList">
             <div v-for="(item, index) in selectedCoupons" :key="item.id">
               <span>{{ item.name }}</span>
-              <el-input-number v-model="item.number"></el-input-number>
+              <el-input-number v-model="item.number" :max="10"></el-input-number>
               <span style="margin-left:20px" class="pointer" @click="deleteCoupon(index)">删除</span>
             </div>
           </div>
@@ -568,19 +568,29 @@ export default {
       }
     },
     getSelection(obj) {
+      let arr = [];
       obj.selection.map(v => {
-        v.number = 1;
+        let o = {};
+        o.goodsName = v.goodsName;
+        o.id = v.id;
+        o.number = 1;
+        arr.push(o);
       });
-      this.selectedGifts = [].concat(obj.selection);
+      this.selectedGifts = [].concat(arr);
     },
     deleteGift(index) {
       this.selectedGifts.splice(index, 1);
     },
     getSelectedCoupon(obj) {
+      let arr = [];
       obj.selection.map(v => {
-        v.number = 1;
+        let o = {};
+        o.name = v.name;
+        o.number = 1;
+        o.id = v.id;
+        arr.push(o);
       });
-      this.selectedCoupons = [].concat(obj.selection);
+      this.selectedCoupons = [].concat(arr);
     },
     deleteCoupon(index) {
       this.selectedCoupons.splice(index, 1);
