@@ -12,7 +12,7 @@
           :disabled="$route.query.mode == 'look'"
         >
           <el-form-item label="模板名称" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="请输入，不超过20个字符"></el-input>
+            <el-input class="template-name" v-model="ruleForm.name" placeholder="请输入，不超过20个字符"></el-input>
           </el-form-item>
           <el-form-item label="计费方式" prop="calculationWay">
             <el-radio v-model="ruleForm.calculationWay" :label="1">按件计费</el-radio>
@@ -462,6 +462,14 @@ export default {
     content: '*';
     color: #f56c6c;
     margin-right: 4px;
+}
+/deep/ .template-name {
+  input {
+    width: 350px;
+  }
+}
+/deep/ .el-radio {
+  margin-right: 30px;
 }
 </style>
 

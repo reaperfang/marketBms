@@ -76,7 +76,7 @@
             </div>
             <div class="row">
               <div class="col reviews-label">评论获得积分</div>
-              <div class="col gray">{{orderProductComment.gainScore}}</div>
+              <div class="col gray">{{orderProductComment.gainScore || 0}}</div>
             </div>
           </div>
         </div>
@@ -332,6 +332,9 @@ export default {
           .goods-name {
             p {
               margin-bottom: 10px;
+              &:first-child {
+                padding-right: 30px;
+              }
             }
             p:last-child {
               color: #9fa29f;
@@ -349,6 +352,12 @@ export default {
         .reviews-righter {
           border-left: 1px solid #cacfcb;
           padding: 10px 20px;
+          .row {
+            margin-bottom: 10px;
+            .reviews-label {
+              text-align: right;
+            }
+          }
           .reviews-label {
             width: 84px;
           }

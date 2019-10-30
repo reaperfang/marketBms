@@ -243,6 +243,20 @@ export default {
     }
 };
 </script>
+<style lang="scss">
+  .app-main .content-main .new-electronic-faceSheet::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .app-main .content-main .new-electronic-faceSheet::-webkit-scrollbar-thumb {
+    border-radius: 10px!important;
+    background: rgba(101,94,255,.4)!important;
+  }
+  .app-main .content-main .new-electronic-faceSheet::-webkit-scrollbar-track {
+    border-radius: 0!important;
+    background: rgba(101,94,255,.1)!important;
+  }
+</style>
 <style lang="scss" scoped>
 .new-electronic-faceSheet {
   background-color: #fff;
@@ -257,7 +271,7 @@ export default {
       width: 50%;
       border-right: 1px solid #cacfcb;
       .account-explain {
-        margin-left: -282px;
+        margin-left: -355px;
         margin-top: 18px;
         color: $globalMainColor;
         position: absolute;
@@ -283,6 +297,9 @@ export default {
     content: '*';
     color: #f56c6c;
     margin-right: 4px;
+}
+/deep/ .el-input {
+  width: 260px!important;
 }
 </style>
 

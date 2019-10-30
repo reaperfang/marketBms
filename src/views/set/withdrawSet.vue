@@ -116,14 +116,14 @@ export default {
           if (valid) {
             if(this.form.cashOutUpper <= this.form.cashOutLower){
               this.$message.error('单笔提现金额上限应大于单笔最低提现金额');
-            }else if(!(this.form.cashOutUpperChecked || this.form.cashOutLowerChecked || this.form.cashOutTimesChecked ||this.form.cashOutMoneyChecked)){
+            }else if(!(this.cashOutUpperChecked || this.cashOutLowerChecked || this.cashOutTimesChecked || this.cashOutMoneyChecked)){
               this.$message.error('允许状态下至少勾选一个条件');
             }else{
               let id = this.cid
-              this.form.cashOutUpperChecked == false && (this.form.cashOutUpper = null)
-              this.form.cashOutLowerChecked == false && (this.form.cashOutLower = null)
-              this.form.cashOutTimesChecked == false && (this.form.cashOutTimes = null)
-              this.form.cashOutMoneyChecked == false && (this.form.cashOutMoney = null)
+              this.cashOutUpperChecked == false && (this.form.cashOutUpper = null)
+              this.cashOutLowerChecked == false && (this.form.cashOutLower = null)
+              this.cashOutTimesChecked == false && (this.form.cashOutTimes = null)
+              this.cashOutMoneyChecked == false && (this.form.cashOutMoney = null)
               let data = Object.assign({id:id},this.form)
               this._apis.set.updateShopInfo(data).then(response =>{
                 this.$notify.success({

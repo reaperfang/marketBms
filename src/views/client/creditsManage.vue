@@ -153,6 +153,7 @@ export default {
                 formObj.scoreEnableOrderAchieveCash = formObj.scoreEnableOrderAchieveCash == true?'1':'0';
                 formObj.scoreEnableOrderHighCash = formObj.scoreEnableOrderHighCash == true?'1':'0';
                 formObj.scoreToCashOrderMoney = formObj.scoreToCashOrderMoney == "" ? -1:formObj.scoreToCashOrderMoney;
+                formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
                 formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
                 this._apis.client.saveCreditRule(formObj).then((response) => {
                     this.$notify({
@@ -206,8 +207,8 @@ export default {
                 this.ruleForm.scorePercentageMoney = response.scoreToCash == 1 ? response.scorePercentageMoney:'';
                 this.ruleForm.scoreEnableOrderAchieveCash = response.scoreEnableOrderAchieveCash == 1?true:false;
                 this.ruleForm.scoreEnableOrderHighCash = response.scoreEnableOrderHighCash == 1?true:false;
-                this.ruleForm.scoreToCashOrderMoney = response.scoreEnableOrderAchieveCash == 1?response.scoreToCashOrderMoney:'';
-                this.ruleForm.scoreToCashOrderRate = response.scoreEnableOrderHighCash == 1?response.scoreToCashOrderRate:'';
+                this.ruleForm.scoreToCashOrderMoney = response.scoreToCashOrderMoney == -1?'':response.scoreToCashOrderMoney;
+                this.ruleForm.scoreToCashOrderRate = response.scoreToCashOrderRate == -1?'':response.scoreToCashOrderRate;
                 this.ruleForm.scoreCleanType = response.scoreCleanType.toString();
                 this.ruleForm.scoreUpperCount = response.scoreUpperCount;
                 this.isSwitch = response.scoreUpper == 1? true:false;
