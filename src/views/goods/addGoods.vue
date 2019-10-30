@@ -1742,6 +1742,9 @@ $blue: #655EFF;
 /deep/ .spec-information .el-input__inner {
     width: 92px;
 }
+/deep/ .spec-information-editor .el-input {
+    width: auto;
+}
 </style>
 
 
