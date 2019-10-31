@@ -277,7 +277,7 @@
                             实退金额：
                         </div>
                         <div class="col">
-                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" @change="realReturnMoneyHandler" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2)"></el-input>
+                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" @change="realReturnMoneyHandler" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
                             <span v-else>{{orderAfterSale.realReturnMoney || 0}}</span>
                         </div>
                     </div>
@@ -431,6 +431,11 @@ export default {
             //         this.orderAfterSale.realReturnWalletMoney = _number.toFixed(2)
             //     }
             // }
+            if(+this.orderAfterSale.realReturnMoney < 0) {
+                this.orderAfterSale.realReturnBalance = '0.00'
+                this.orderAfterSale.realReturnWalletMoney = '0.00'
+                return
+            }
             if(this.orderAfterSale.shouldReturnBalance == null || this.orderAfterSale.shouldReturnBalance == '0.00' || this.orderAfterSale.shouldReturnBalance == 0) {
                 this.orderAfterSale.realReturnWalletMoney = +this.orderAfterSale.realReturnMoney
             } else {

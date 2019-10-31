@@ -59,6 +59,7 @@
       :data="currentData"
       :reject="reject"
       :expressNo="expressNo"
+      :expressCompanys="expressCompanys"
     ></component>
   </div>
 </template>
@@ -168,17 +169,17 @@ export default {
         this.currentData = [];
         this.reject = true;
         this.expressNo = expressNo
-        this.expressCompanys = expressCompanys
+        this.expressCompanys = ''
         this.dialogVisible = true;
       } else {
         this.reject = false;
         this.expressNo = expressNo
-        this.expressCompanys = expressCompanys
         this._apis.order
           .orderLogistics({ expressNo })
           .then(res => {
             this.currentDialog = "LogisticsDialog";
             this.currentData = res.traces;
+            this.expressCompanys = res.shipperName
             this.dialogVisible = true;
           })
           .catch(error => {

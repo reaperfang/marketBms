@@ -310,13 +310,11 @@ export default {
     },
     handleSubmit(datas){
       this._apis.finance.examineWd(datas).then((response)=>{
-          // this.dialogVisible = false
-          // this.otherVisible = true
           this.fetch()
       }).catch((error)=>{
           this.$notify.error({
           title: '错误',
-          message: error
+          message: '网络原因,审核失败！'
           });
       })
     }

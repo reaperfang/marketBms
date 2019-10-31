@@ -114,15 +114,19 @@ export default {
             } else {
                 orderAfterSaleStatus = 1
             }
-            this._apis.order.orderAfterSaleUpdateStatus({
+            let params = {
                 id: this.orderAfterSale.id,
                 realReturnScore: this.orderAfterSale.realReturnScore,
-                realReturnMoney: this.orderAfterSale.realReturnMoney,
-                realReturnBalance: this.orderAfterSale.realReturnBalance,
-                realReturnWalletMoney: this.orderAfterSale.realReturnWalletMoney,
+                //realReturnMoney: this.orderAfterSale.realReturnMoney,
+                //realReturnBalance: this.orderAfterSale.realReturnBalance,
+                //realReturnWalletMoney: this.orderAfterSale.realReturnWalletMoney,
                 orderAfterSaleStatus: orderAfterSaleStatus
+            }
 
-            }).then((res) => {
+            if(this.orderAfterSale.realReturnMoney != this.orderAfterSale.shouldReturnMoney) {
+                params.realReturnMoney = this.orderAfterSale.realReturnMoney
+            }
+            this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                 this.getDetail()
                 this.visible = false
                 this.$notify({
