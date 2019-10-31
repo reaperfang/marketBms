@@ -13,7 +13,7 @@
         <ul>
           <template>
             <template v-for="(item, key) of list">
-              <li :key="key" v-if="item.status !== 2">
+              <li :key="key" v-if="item.status !== 2" :title="item.activeName">
                 <img :src="item.image" alt="">
                 <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
               </li>

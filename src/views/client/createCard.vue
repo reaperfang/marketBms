@@ -66,92 +66,97 @@
         <div class="line"></div>
         <p class="l_title" style="margin-left: -19px;">权益礼包（最少选1个）：</p>
         <br />
-        <el-form-item label="会员卡权益:">
-          <el-form-item v-if="getIndex(this.rightsList,'优先发货') !== -1">
-            <el-checkbox v-model="right1">优先发货</el-checkbox>
+        <div style="margin-left: 25px">
+          <el-form-item label="会员卡权益:">
+            <el-form-item v-if="getIndex(this.rightsList,'优先发货') !== -1">
+              <el-checkbox v-model="right1">优先发货</el-checkbox>
+            </el-form-item>
+            <el-form-item style="margin-left: 87px" v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1">
+              <el-checkbox v-model="right2" @change="handleCheck1">积分回馈倍率</el-checkbox>
+              <div class="input_wrap3">
+                <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
+              </div>
+              <span>倍</span>
+            </el-form-item>
           </el-form-item>
-          <el-form-item style="margin-left: 87px" v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1">
-            <el-checkbox v-model="right2" @change="handleCheck1">积分回馈倍率</el-checkbox>
-            <div class="input_wrap3">
-              <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
+          <el-form-item label="特权说明：" prop="explain">
+            <div class="input_wrap4">
+              <el-input
+                type="textarea"
+                :rows="5"
+                :maxlength="255"
+                placeholder="请输入会员卡通用的特权说明，最多不超过255个字符"
+                v-model="ruleForm.explain"
+              ></el-input>
             </div>
-            <span>倍</span>
-            <span class="gray">(当前积分兑换率：1元1积分)</span>
           </el-form-item>
-        </el-form-item>
-        <el-form-item label="特权说明：" prop="explain">
-          <div class="input_wrap4">
-            <el-input
-              type="textarea"
-              :rows="5"
-              :maxlength="255"
-              placeholder="请输入会员卡通用的特权说明，最多不超过255个字符"
-              v-model="ruleForm.explain"
-            ></el-input>
-          </div>
-        </el-form-item>
-        <p class="l_title" style="margin-left: -19px;">领取礼包:</p>
+        </div>
+        <p class="l_title" style="margin-left: -19px;">领卡奖励:</p>
         <br />
-        <el-form-item v-if="getIndex(this.rewardList,'赠送积分') !== -1">
-          <el-checkbox v-model="upgrade1" @change="handleCheck2" class="marR20">赠送积分</el-checkbox>
-          <span>送</span>
-          <div class="input_wrap3">
-            <el-input placeholder="填写数字" v-model="zsjf" @keyup.native="checkZero($event, zsjf,'zsjf')"></el-input>
-          </div>
-          <span>积分</span>
-        </el-form-item>
-        <el-form-item v-if="getIndex(this.rewardList,'赠送红包') !== -1">
-          <el-checkbox v-model="upgrade2" @change="showRedDialog" class="fl marR20">赠送红包</el-checkbox>
-          <div class="giftList">
-            <div v-for="(item, index) in selectedReds" :key="item.id">
-              <span>{{ item.name }}</span>
-              <span style="margin-left:20px" class="pointer" @click="deleteRed(index)">删除</span>
+        <div style="margin-left: 25px">
+          <el-form-item v-if="getIndex(this.rewardList,'赠送积分') !== -1">
+            <el-checkbox v-model="upgrade1" @change="handleCheck2" class="marR20">赠送积分</el-checkbox>
+            <span>送</span>
+            <div class="input_wrap3">
+              <el-input placeholder="填写数字" v-model="zsjf" @keyup.native="checkZero($event, zsjf,'zsjf')"></el-input>
             </div>
-          </div>
-        </el-form-item>
-        <el-form-item v-if="getIndex(this.rewardList,'赠送赠品') !== -1">
-          <el-checkbox v-model="upgrade3" @change="showGiftDialog" class="fl marR20">赠送赠品</el-checkbox>
-          <div class="giftList">
-            <div v-for="(item, index) in selectedGifts" :key="item.id">
-              <span>{{ item.goodsName }}</span>
-              <el-input-number v-model="item.number" :max="10"></el-input-number>
-              <span style="margin-left:20px" class="pointer" @click="deleteGift(index)">删除</span>
+            <span>积分</span>
+          </el-form-item>
+          <el-form-item v-if="getIndex(this.rewardList,'赠送红包') !== -1">
+            <el-checkbox v-model="upgrade2" @change="showRedDialog" class="fl marR20">赠送红包</el-checkbox>
+            <div class="giftList">
+              <div v-for="(item, index) in selectedReds" :key="item.id">
+                <span>{{ item.name }}</span>
+                <span style="margin-left:20px" class="pointer" @click="deleteRed(index)">删除</span>
+              </div>
             </div>
-          </div>
-        </el-form-item>
-        <el-form-item v-if="getIndex(this.rewardList,'赠送优惠券') !== -1">
-          <el-checkbox v-model="upgrade4" @change="showCouponDialog" class="fl marR20">赠送优惠券</el-checkbox>
-          <div class="giftList">
-            <div v-for="(item, index) in selectedCoupons" :key="item.id">
-              <span>{{ item.name }}</span>
-              <el-input-number v-model="item.number" :max="10"></el-input-number>
-              <span style="margin-left:20px" class="pointer" @click="deleteCoupon(index)">删除</span>
+          </el-form-item>
+          <el-form-item v-if="getIndex(this.rewardList,'赠送赠品') !== -1">
+            <el-checkbox v-model="upgrade3" @change="showGiftDialog" class="fl marR20">赠送赠品</el-checkbox>
+            <div class="giftList">
+              <div v-for="(item, index) in selectedGifts" :key="item.id">
+                <span>{{ item.goodsName }}</span>
+                <el-input-number v-model="item.number" :max="10"></el-input-number>
+                <span style="margin-left:20px" class="pointer" @click="deleteGift(index)">删除</span>
+              </div>
             </div>
-          </div>
-        </el-form-item>
+          </el-form-item>
+          <el-form-item v-if="getIndex(this.rewardList,'赠送优惠券') !== -1">
+            <el-checkbox v-model="upgrade4" @change="showCouponDialog" class="fl marR20">赠送优惠券</el-checkbox>
+            <div class="giftList">
+              <div v-for="(item, index) in selectedCoupons" :key="item.id">
+                <span>{{ item.name }}</span>
+                <el-input-number v-model="item.number" :max="10"></el-input-number>
+                <span style="margin-left:20px" class="pointer" @click="deleteCoupon(index)">删除</span>
+              </div>
+            </div>
+          </el-form-item>
+        </div>
         <div class="line"></div>
         <p class="l_title" style="margin-left: -19px;">同步微信卡包：</p>
         <br />
-        <el-form-item label="是否同步到微信卡包：" prop="isSyncWechat">
-          <el-radio v-model="ruleForm.isSyncWechat" label="1">是</el-radio>
-          <el-radio v-model="ruleForm.isSyncWechat" label="0">否</el-radio>
-        </el-form-item>
-        <el-form-item label="使用须知：" prop="notice">
-          <div class="input_wrap4" >
-            <el-input
-              type="textarea"
-              :rows="5"
-              :maxlength="1024"
-              placeholder="请输入会员卡通用使用须知，最多不超过1024个汉字"
-              v-model="ruleForm.notice"
-            ></el-input>
-          </div>
-        </el-form-item>
-        <el-form-item label="客户电话：" prop="phone">
-          <div class="input_wrap">
-            <el-input v-model="ruleForm.phone" placeholder="请输入联系电话"></el-input>
-          </div>
-        </el-form-item>
+        <div style="margin-left: 25px">
+          <el-form-item label="是否同步到微信卡包：" prop="isSyncWechat">
+            <el-radio v-model="ruleForm.isSyncWechat" label="1">是</el-radio>
+            <el-radio v-model="ruleForm.isSyncWechat" label="0">否</el-radio>
+          </el-form-item>
+          <el-form-item label="使用须知：" prop="notice">
+            <div class="input_wrap4" >
+              <el-input
+                type="textarea"
+                :rows="5"
+                :maxlength="1024"
+                placeholder="请输入会员卡通用使用须知，最多不超过1024个汉字"
+                v-model="ruleForm.notice"
+              ></el-input>
+            </div>
+          </el-form-item>
+          <el-form-item label="客户电话：" prop="phone" style="margin-left: 10px">
+            <div class="input_wrap">
+              <el-input v-model="ruleForm.phone" placeholder="请输入联系电话"></el-input>
+            </div>
+          </el-form-item>
+        </div>
       </el-form>
     </div>
     <div class="btn_container midText">
@@ -578,6 +583,7 @@ export default {
           formObj.notice = this.ruleForm.notice;
           formObj.phone = this.ruleForm.phone;
           formObj.explain = this.ruleForm.explain;
+          formObj.enable = 0;
           if(formObj.receiveSetting == '0') {
             formObj.receiveConditionsRemarks = '可直接领取';
           }else{
@@ -589,10 +595,17 @@ export default {
               });
               this.canSubmit = false;
             }else{
-              formObj.receiveConditionsRemarks =
-              "" +
-              this.levelConditionValueDto.label +
-              this.levelConditionValueDto.conditionValue;
+              if(this.levelConditionValueDto.label == "消费金额满") {
+                formObj.receiveConditionsRemarks =
+                "" +
+                this.levelConditionValueDto.label +
+                this.levelConditionValueDto.conditionValue + '元';
+              }else if(this.levelConditionValueDto.label == "消费次数满"){
+                formObj.receiveConditionsRemarks =
+                "" +
+                this.levelConditionValueDto.label +
+                this.levelConditionValueDto.conditionValue + '次';
+              }
               formObj.levelConditionValueDto = this.levelConditionValueDto;
               delete formObj.levelConditionValueDto.label;
             }

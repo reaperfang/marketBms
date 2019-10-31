@@ -700,7 +700,13 @@ export default {
           }
           let receiveConditionsRemarks = "";
           levelConditionList.map(v => {
-            receiveConditionsRemarks += "" + v.label + v.conditionValue + ",";
+            if(v.label == "消费金额满") {
+              receiveConditionsRemarks += "" + v.label + v.conditionValue + "元" + ",";
+            }else if(v.label == "消费次数满") {
+              receiveConditionsRemarks += "" + v.label + v.conditionValue + "次" + ",";
+            }else{
+              receiveConditionsRemarks += "" + v.label + v.conditionValue + ",";
+            }
           });
           receiveConditionsRemarks = receiveConditionsRemarks.replace(
             "[object Object]",
@@ -745,7 +751,13 @@ export default {
           }
           let rights = "";
           rightsList.map(v => {
-            rights += "" + v.label + v.rightsValue + ",";
+            if(v.label == "会员折扣") {
+              rights += "" + v.label + v.rightsValue + "折" + ",";
+            }else if(v.label == "满包邮") {
+              rights += "" + v.label + v.rightsValue + "元" + ",";
+            }else{
+              rights += "" + v.label + v.rightsValue + ",";
+            }
           });
           rights = rights.substring(0, rights.length - 1);
           rightsList.map(v => {

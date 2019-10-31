@@ -230,6 +230,7 @@ export default {
                 orderAfterSaleProductNames: '',
                 expressCompanys: '',
             }
+            this.getList()
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;

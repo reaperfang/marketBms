@@ -194,5 +194,17 @@ export default {
 .tag_wrapper{
   max-height:300px;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+      width: 2px;
+      height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+      border-radius: 10px!important;
+      background: rgba(101,94,255,.4)!important;
+  }
+  &::-webkit-scrollbar-track {
+      border-radius: 0!important;
+      background: rgba(101,94,255,.1)!important;
+  }
 }
 </style>

@@ -5,7 +5,7 @@
       </el-form-item>
       <div class="goods_list">
         <ul>
-          <li v-for="(item, key) of list" :key="key">
+          <li v-for="(item, key) of list" :key="key" :title="item.activityName">
             <img :src="item.goodsImgUrl" alt="">
             <i class="delete_btn" @click.stop="deleteItem(item)"></i>
           </li>

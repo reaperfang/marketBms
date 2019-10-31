@@ -314,6 +314,7 @@ export default {
                 expressCompanys: '',
                 receivedName: '',
             }
+            this.getList()
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;

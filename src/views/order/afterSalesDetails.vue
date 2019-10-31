@@ -140,7 +140,7 @@ export default {
                 }
                 this.orderAfterSale = res.orderAfterSale || {}
                 this.orderAfterSaleSendInfo = res.orderAfterSaleSendInfo || {}
-                this.recordList = res.recordList
+                this.recordList = res.recordList.filter(val => val.operationType != 1 && val.operationType != 2 && val.operationType != 5 && val.operationType != 8)
                 this.sendItemList = res.sendItemList
                 this.orderType = res.orderType
                 this.catchRealReturnWalletMoney = this.orderAfterSale.realReturnWalletMoney

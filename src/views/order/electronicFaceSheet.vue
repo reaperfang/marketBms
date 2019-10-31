@@ -117,6 +117,7 @@ export default {
             startTime: '',
             endTime: ''
           })
+          this.getList()
       },
     deleteElectronicFaceSheet(row) {
       this.confirm({title: '提示', text: '删除后无法撤销，确定删除吗？'}).then(() => {

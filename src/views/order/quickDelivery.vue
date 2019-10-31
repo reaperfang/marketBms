@@ -197,6 +197,7 @@ export default {
         startTime: "",
         endTime: ""
       });
+      this.getList()
     },
     getList() {
       this.loading = true;

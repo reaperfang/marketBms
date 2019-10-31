@@ -53,6 +53,10 @@ export default {
 
                 this.list = arr
             }
+
+            let number = this.list.filter(val => val.checked).length
+
+            this._globalEvent.$emit('checkedLength', number)
         },
         getList() {
             let _params

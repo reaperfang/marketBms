@@ -5,7 +5,7 @@
                 <span>订单编号：{{orderDetail.orderInfo.code}}</span>
                 <span>{{orderDetail.orderInfo.channelInfoId | channelInfoIdFilter}}</span>
                 <span>{{orderDetail.orderInfo.orderType | orderTypeFilter}}</span>
-                <span v-if="orderDetail.orderInfo.orderType == 1">拼团编号：{{orderDetail.orderInfo.assembleCode}}</span>
+                <span v-if="orderDetail.orderInfo.orderType == 1 && orderDetail.orderInfo.groupId">拼团编号：{{orderDetail.orderInfo.groupId}}</span>
             </div>
             <div class="righter">
                 <i class="memberLevelImg" :style="{background: `url(${orderDetail.memberLevelImg})`}"></i>
@@ -299,6 +299,7 @@ export default {
                 let id = this.$route.query.id
 
                 this._apis.order.fetchOrderDetail({id}).then((res) => {
+                    res.orderInfo && (res.orderInfo.consultType = res.orderInfo.consultType || 2)
                     this.orderDetail = res
                     resolve(res)
                 }).catch(error => {

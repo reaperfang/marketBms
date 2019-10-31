@@ -342,6 +342,7 @@ export default {
                 auditStatus: '',
                 starNum: '',
             })
+            this.getList()
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
