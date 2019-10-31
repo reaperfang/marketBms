@@ -7,7 +7,7 @@
           <el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch>
         </div>
         <div v-if="enable" class="giveBottom">
-          <div>购买获得积分，订单确认收货后按规则发放积分</div>
+          <div>购买获得积分，订单售后结束后按规则发放积分</div>
           <div>
             <span>赠送积分的商品：</span>
             <el-radio v-model="isAllProduct" label="0">全部商品</el-radio>
