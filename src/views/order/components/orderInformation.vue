@@ -420,7 +420,7 @@ export default {
         },
         reducePriceHandler() {
             if(this.orderInfo.consultType == 2) {
-                if(this.orderDetail.orderInfo.receivableMoney < this.goodsListMessage.consultMoney) {
+                if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
                     this.$message({
                         message: '不能大于应收金额',
                         type: 'warning'
@@ -429,7 +429,7 @@ export default {
                 }
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-            consultType: this.orderInfo.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
+            consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
                 this.changePriceVisible = false
                 // this.$notify({
                 //     title: '成功',
@@ -449,7 +449,7 @@ export default {
         },
         reducePriceHandler() {
             if(this.orderInfo.consultType == 2) {
-                if(this.orderDetail.orderInfo.receivableMoney < this.goodsListMessage.consultMoney) {
+                if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
                     this.$message({
                         message: '不能大于应收金额',
                         type: 'warning'
@@ -458,7 +458,7 @@ export default {
                 }
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-            consultType: this.orderInfo.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
+            consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
                 this.changePriceVisible = false
                 // this.$notify({
                 //     title: '成功',

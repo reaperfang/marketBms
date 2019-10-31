@@ -32,10 +32,10 @@
           <el-radio :label="2">自定义封面</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="" v-if="coverType === 2" prop="coverUrl">
+      <el-form-item label="" prop="coverUrl">
         <div v-if="ruleForm.coverUrl" class="img_preview">
           <img :src="ruleForm.coverUrl" alt="">
-          <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+          <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" v-if="coverType === 2">更换图片</span>
         </div>
         <div v-else class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
@@ -60,7 +60,8 @@ export default {
   data () {
     return {
       source: 1,
-      coverType: 2,
+      coverType: 1,
+      originCoverUrl: '',
       ruleForm: {
         videoUrl: '',//视频地址
         coverUrl: ''//封面图地址
@@ -70,6 +71,15 @@ export default {
       },
       dialogVisible: false,
       currentDialog: '',
+    }
+  },
+  watch: {
+    coverType(newValue) {
+      if(newValue == 1) {
+        this.ruleForm.coverUrl = this.originCoverUrl;
+      }else if(newValue == 2) {
+        this.ruleForm.coverUrl = this.ruleForm.coverUrl;
+      }
     }
   },
   methods: {
@@ -82,6 +92,8 @@ export default {
     /* 弹框选中视频 */
     videoSelected(dialogData) {
       this.ruleForm.videoUrl= dialogData.filePath;
+      this.ruleForm.coverUrl= dialogData.fileCover;
+      this.originCoverUrl= dialogData.fileCover;
     }
   }
 }
