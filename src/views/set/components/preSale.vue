@@ -143,14 +143,7 @@ export default {
             orderAutoSend: '',
             oasType: ''
         },
-     rules: {
-        // autoCancelUnpayOrder: [
-        //     { required: true, message: '请输入订单自动关闭时间', trigger: 'blur' }
-        // ],
-        // orderAutoSend: [
-        //     { required: true, message: '请输入订单自动发货时间', trigger: 'blur' }
-        // ]
-     },
+     rules: { },
      options: [
         {
           value: 1,
