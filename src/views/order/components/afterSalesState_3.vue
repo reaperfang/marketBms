@@ -16,10 +16,10 @@
                 <div class="col righter">
                     <p>待审核</p>
                     <p class="des">客户申请售后，待审核</p>
-                    <!-- <div class="button-box">
+                    <div class="button-box">
                         <el-button @click="reject">拒绝</el-button>
                         <el-button type="primary" @click="auth">同意</el-button>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </template>

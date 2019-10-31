@@ -107,13 +107,20 @@ export default {
             })
         },
         auth() {
+            let orderAfterSaleStatus
+
+            if(this.orderAfterSale.type == 3) {
+                orderAfterSaleStatus = 2
+            } else {
+                orderAfterSaleStatus = 1
+            }
             this._apis.order.orderAfterSaleUpdateStatus({
                 id: this.orderAfterSale.id,
                 realReturnScore: this.orderAfterSale.realReturnScore,
                 realReturnMoney: this.orderAfterSale.realReturnMoney,
                 realReturnBalance: this.orderAfterSale.realReturnBalance,
                 realReturnWalletMoney: this.orderAfterSale.realReturnWalletMoney,
-                orderAfterSaleStatus: 1
+                orderAfterSaleStatus: orderAfterSaleStatus
 
             }).then((res) => {
                 this.getDetail()

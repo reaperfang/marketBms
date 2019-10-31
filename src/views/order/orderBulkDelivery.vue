@@ -25,7 +25,7 @@
               <div class="col">
                 <div class="row align-center row-margin">
                   <div class="col" style="width: 180px;">收货信息</div>
-                  <div class="col">查看物流</div>
+                  <div class="col">物流信息</div>
                 </div>
               </div>
             </div>

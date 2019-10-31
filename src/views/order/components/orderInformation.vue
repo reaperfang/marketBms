@@ -183,8 +183,8 @@
                         </el-select>
                     </div>
                     <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                        <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
-                        <span v-if="!changePriceVisible">{{goodsListMessage.consultMoney}}</span>
+                        <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="orderInfo.consultMoney"></el-input>
+                        <span v-if="!changePriceVisible">{{orderInfo.consultMoney}}</span>
                         <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
                         <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
                     </div>
@@ -415,7 +415,8 @@ export default {
             }
         },
         handleInput2(e) {
-            this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+            //this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+            this.orderInfo.consultMoney = (this.orderInfo.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
         reducePriceHandler() {
             if(this.orderInfo.consultType == 2) {
