@@ -4,7 +4,7 @@
             <el-checkbox-group
                 v-model="checkedItems"
                 :max="5">
-                <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag">{{tag}}</el-checkbox>
+                <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag" :disabled="data.selectedNames.indexOf(tag) !== -1">{{tag}}</el-checkbox>
             </el-checkbox-group>
         </div>
     </DialogBase>
@@ -64,10 +64,6 @@ export default {
                 this.tagList = [].concat(response); 
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         }
     },
@@ -92,7 +88,7 @@ export default {
         this.getLabels();
         this.$nextTick(() => {
             this.checkedItems = [];
-        })
+        });
     },
     props: {
         data: {

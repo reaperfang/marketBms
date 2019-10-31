@@ -233,19 +233,20 @@ export default {
                 this.getMemberInfo();
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         },
         addTag() {
+            let arr = [];
+            this.clientInfoById.labelRecordViews.map((v) => {
+                arr.push(v.memberLabelInfoName);
+            });
             this.hackReset = false;
             this.$nextTick(() => {
                 this.hackReset = true;
             })
             this.dialogVisible = true;
             this.currentData.id = this.userId;
+            this.currentData.selectedNames = [].concat(arr);
             this.currentDialog = "addTagDialog";
         },
         showBalanceList() {
@@ -435,10 +436,6 @@ export default {
                     });
                 }).catch((error) => {
                     console.log(error);
-                    // this.$notify.error({
-                    //     title: '错误',
-                    //     message: error
-                    // });
                 })
             }
         },

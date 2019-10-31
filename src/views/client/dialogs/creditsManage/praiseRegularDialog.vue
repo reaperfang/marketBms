@@ -43,7 +43,7 @@
         <div>
           <span>条件2： 满</span>
           <div class="input_wrap">
-            <el-input v-model="fullWord2" @keyup.native="checkBigger($event,fullWord2,'fullWord2')"></el-input>
+            <el-input v-model="fullWord2" @blur="checkBigger($event,fullWord2,'fullWord2')"></el-input>
           </div>
           <span>字</span>
           <span v-if="distinguish2 == false">额外获得</span>

@@ -869,7 +869,7 @@ export default {
                 if(response == "no") {
                   this.$notify({
                     title: "警告",
-                    message: "高会员卡等级条件数值要大于低会员卡等级的条件数值",
+                    message: "高等级条件数值要大于低等级的条件数值",
                     type: "warning"
                   });
                 }else{

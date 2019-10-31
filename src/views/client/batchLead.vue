@@ -23,86 +23,87 @@
                     <el-radio v-model="ruleForm.anyOrAllCondition" label="0">满足任意一个被选中的条件即可</el-radio>
                     <el-radio v-model="ruleForm.anyOrAllCondition" label="1">必须满足所有条件</el-radio>
                 </el-form-item>
-                <el-form-item label="交易条件：">
-                    <el-checkbox v-model="ruleForm.isLastConsumeTime" @change="handleCheck8">最后消费时间</el-checkbox>
-                </el-form-item>
-                <el-form-item>
-                    <el-radio v-model="ruleForm.consumeTimeType" label="0" @change="handleCheck5">最近</el-radio>
-                    <div class="input_wrap3">
-                        <el-input v-model="ruleForm.consumeTimeValue" @keyup.native="checkZero2($event,ruleForm.consumeTimeValue,'consumeTimeValue')"></el-input>
-                    </div>
-                    <div class="input_wrap2">
-                        <el-select v-model="ruleForm.consumeTimeUnit" placeholder="请选择">
-                            <el-option
-                                v-for="item in unitOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </el-form-item>
-                <el-form-item>
-                    <el-radio v-model="ruleForm.consumeTimeType" label="1" @change="handleCheck6">自定义</el-radio>
-                    <div class="input_wrap">
-                        <el-date-picker
-                            v-model="consumeTime"
-                            type="daterange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期">
-                        </el-date-picker>
-                    </div>
-                </el-form-item>
-                <el-form-item>
-                    <el-checkbox v-model="ruleForm.isTotalConsumeTimes" @change="handleCheck1">累计消费次数</el-checkbox>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMin" @keyup.native="checkZero2($event,ruleForm.consumeTimesMin,'consumeTimesMin')"></el-input>
-                    </div>
-                    <span>次 — </span>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMax" @keyup.native="checkZero2($event,ruleForm.consumeTimesMax,'consumeTimesMax')"></el-input>
-                    </div>
-                    <span>次</span>
-                </el-form-item>
-                <el-form-item>
-                    <el-checkbox v-model="ruleForm.isTotalConsumeMoney" @change="handleCheck2">累计消费金额</el-checkbox>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMin" @keyup.native="checkZero($event,ruleForm.consumeMoneyMin,'consumeMoneyMin')"></el-input>
-                    </div>
-                    <span>元 — </span>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMax" @keyup.native="checkZero($event,ruleForm.consumeMoneyMax,'consumeMoneyMax')"></el-input>
-                    </div>
-                    <span>元</span>
-                </el-form-item>
-                <el-form-item>
-                    <el-checkbox v-model="ruleForm.isPreUnitPrice" @change="handleCheck3">客单价</el-checkbox>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMin" @keyup.native="checkZero($event,ruleForm.preUnitPriceMin,'preUnitPriceMin')"></el-input>
-                    </div>
-                    <span>元 — </span>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMax" @keyup.native="checkZero($event,ruleForm.preUnitPriceMax,'preUnitPriceMax')"></el-input>
-                    </div>
-                    <span>元</span>
-                </el-form-item>
-                <el-form-item label="资产条件：">
-                    <el-checkbox v-model="ruleForm.isTotalScore" @change="handleCheck4">累计获得积分</el-checkbox>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMin" @keyup.native="checkZero2($event,ruleForm.totalScoreMin,'totalScoreMin')"></el-input>
-                    </div>
-                    <span>分 — </span>
-                    <div class="input_wrap2">
-                        <el-input placeholder="请输入" v-model="ruleForm.totalScoreMax" @keyup.native="checkZero2($event,ruleForm.totalScoreMax,'totalScoreMax')"></el-input>
-                    </div>
-                    <span>分</span>
-                </el-form-item>
-                <el-form-item label="资产条件：">
-                    <el-checkbox v-model="ruleForm.isProduct" @change="handleCheck7">商品条件</el-checkbox>
-                    <span>购买以下任意商品</span>
-                    <span class="addMainColor marL20 pointer" @click="chooseProduct">选择商品</span>
-                </el-form-item>
+                <div style="margin-left: 32px">
+                    <el-form-item label="交易条件：">
+                        <el-checkbox v-model="ruleForm.isLastConsumeTime" @change="handleCheck8">最后消费时间</el-checkbox>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-radio v-model="ruleForm.consumeTimeType" label="0" @change="handleCheck5">最近</el-radio>
+                        <div class="input_wrap3">
+                            <el-input v-model="ruleForm.consumeTimeValue" @keyup.native="checkZero2($event,ruleForm.consumeTimeValue,'consumeTimeValue')"></el-input>
+                        </div>
+                        <div class="input_wrap2">
+                            <el-select v-model="ruleForm.consumeTimeUnit" placeholder="请选择">
+                                <el-option
+                                    v-for="item in unitOptions"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-radio v-model="ruleForm.consumeTimeType" label="1" @change="handleCheck6">自定义</el-radio>
+                        <div class="input_wrap">
+                            <el-date-picker
+                                v-model="consumeTime"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                            </el-date-picker>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-checkbox v-model="ruleForm.isTotalConsumeTimes" @change="handleCheck1">累计消费次数</el-checkbox>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMin" @keyup.native="checkZero2($event,ruleForm.consumeTimesMin,'consumeTimesMin')"></el-input>
+                        </div>
+                        <span>次 — </span>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.consumeTimesMax" @keyup.native="checkZero2($event,ruleForm.consumeTimesMax,'consumeTimesMax')"></el-input>
+                        </div>
+                        <span>次</span>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-checkbox v-model="ruleForm.isTotalConsumeMoney" @change="handleCheck2">累计消费金额</el-checkbox>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMin" @keyup.native="checkZero($event,ruleForm.consumeMoneyMin,'consumeMoneyMin')"></el-input>
+                        </div>
+                        <span>元 — </span>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.consumeMoneyMax" @keyup.native="checkZero($event,ruleForm.consumeMoneyMax,'consumeMoneyMax')"></el-input>
+                        </div>
+                        <span>元</span>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-checkbox v-model="ruleForm.isPreUnitPrice" @change="handleCheck3">客单价</el-checkbox>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMin" @keyup.native="checkZero($event,ruleForm.preUnitPriceMin,'preUnitPriceMin')"></el-input>
+                        </div>
+                        <span>元 — </span>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.preUnitPriceMax" @keyup.native="checkZero($event,ruleForm.preUnitPriceMax,'preUnitPriceMax')"></el-input>
+                        </div>
+                        <span>元</span>
+                    </el-form-item>
+                    <el-form-item label="资产条件：">
+                        <el-checkbox v-model="ruleForm.isTotalScore" @change="handleCheck4">累计获得积分</el-checkbox>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.totalScoreMin" @keyup.native="checkZero2($event,ruleForm.totalScoreMin,'totalScoreMin')"></el-input>
+                        </div>
+                        <span>分 — </span>
+                        <div class="input_wrap2">
+                            <el-input placeholder="请输入" v-model="ruleForm.totalScoreMax" @keyup.native="checkZero2($event,ruleForm.totalScoreMax,'totalScoreMax')"></el-input>
+                        </div>
+                        <span>分</span>
+                    </el-form-item>
+                    <el-form-item label="商品条件：">
+                        <el-checkbox v-model="ruleForm.isProduct" @change="handleCheck7">购买以下任意商品</el-checkbox>
+                        <span class="addMainColor marL20 pointer" @click="chooseProduct">选择商品</span>
+                    </el-form-item>
+                </div>
                 </div>
             </el-form>
         </div>

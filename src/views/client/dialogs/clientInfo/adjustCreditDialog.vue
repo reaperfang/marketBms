@@ -6,7 +6,7 @@
       <div class="marB20">
           <span><span style="color:red">*</span>调整积分数值：</span>
           <div class="input_wrap">
-              <el-input placeholder="请输入调整数值" v-model="adjustmentScore" @blur="handleBlur"></el-input>
+              <el-input placeholder="请输入调整数值" v-model="adjustmentScore" @blur="handleBlur" @keyup.native="number($event,adjustmentScore,'adjustmentScore')"></el-input>
           </div>
       </div>
       <p class="marB20">调整后积分: {{adjustmentAfterScore}}</p>
@@ -33,6 +33,11 @@ export default {
     };
   },
   methods: {
+    number(event,val,ele) {
+        val = val.replace(/[^\d]/g,'');
+        val = val.replace(/^0/g,'');
+        this[ele] = val;
+    },
     submit() {
       if(this.adjustmentScore == null) {
         this.$notify({

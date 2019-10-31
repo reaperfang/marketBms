@@ -41,13 +41,13 @@
                             {{orderAfterSale.memberName}}
                         </div>
                     </div>
-                    <div v-if="orderAfterSale.type == 2" class="row">
+                    <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
                         <div class="col list-lefter">
                             客户收货信息
                         </div>
                         <div class="col list-righter">
-                            <p>{{orderAfterSaleSendInfo.receivedName}} {{orderAfterSaleSendInfo.receivedPhone}}</p>
-                            <p>{{orderAfterSaleSendInfo.receivedDetail}}</p>
+                            <p>{{orderSendInfo.receivedName}} {{orderSendInfo.receivedPhone}}</p>
+                            <p>{{orderSendInfo.receivedDetail}}</p>
                         </div>
                     </div>
                     <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
@@ -55,8 +55,8 @@
                             商户收货信息
                         </div>
                         <div class="col list-righter">
-                            <p>{{orderAfterSaleSendInfo.sendName}} {{orderAfterSaleSendInfo.sendPhone}}</p>
-                            <p>{{orderAfterSaleSendInfo.sendDetail}}</p>
+                            <p>{{orderSendInfo.sendName}} {{orderSendInfo.sendPhone}}</p>
+                            <p>{{orderSendInfo.sendDetail}}</p>
                         </div>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
                             应退金额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnMoney || 0}}
+                            {{orderAfterSale.shouldReturnMoney || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
@@ -209,7 +209,7 @@
                             应退还余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnBalance || 0}}
+                            {{orderAfterSale.shouldReturnBalance || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
@@ -217,7 +217,7 @@
                             应退还第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnWalletMoney || 0}}
+                            {{orderAfterSale.shouldReturnWalletMoney || '0.00'}}
                         </div>
                     </div>
                     <!-- <div class="row">
@@ -268,7 +268,7 @@
                             实退积分：
                         </div>
                         <div class="col">
-                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
+                            <el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
                             <span v-else>{{orderAfterSale.realReturnScore || 0}}</span>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                             实退金额：
                         </div>
                         <div class="col">
-                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0" min="0" type="number" @change="realReturnMoneyHandler" v-model="orderAfterSale.realReturnMoney"></el-input>
+                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" @change="realReturnMoneyHandler" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2)"></el-input>
                             <span v-else>{{orderAfterSale.realReturnMoney || 0}}</span>
                         </div>
                     </div>
@@ -286,7 +286,7 @@
                             实退余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnBalance || 0}}
+                            {{orderAfterSale.realReturnBalance || '0.00'}}
                         </div>
                     </div>
                     <div class="row align-center">
@@ -294,7 +294,7 @@
                             实退第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnWalletMoney || 0}}
+                            {{orderAfterSale.realReturnWalletMoney || '0.00'}}
                         </div>
                     </div>
                 </div>
@@ -410,21 +410,32 @@ export default {
             // realReturnWalletMoney 剩余退还余额
             // realReturnMoney 实退金额
             // realReturnBalance 退还余额
-            if(this.catchRealReturnWalletMoney == 0 || this.catchRealReturnWalletMoney == '0.00' || this.catchRealReturnWalletMoney == null) {
-                // 剩余退还余额 0
-                this.orderAfterSale.realReturnBalance = this.orderAfterSale.realReturnMoney
-            } else if(this.catchRealReturnBalance == 0 || this.catchRealReturnBalance == '0.00' || this.catchRealReturnBalance == null) {
-                this.orderAfterSale.realReturnWalletMoney = this.orderAfterSale.realReturnMoney
+            // if(this.catchRealReturnWalletMoney == 0 || this.catchRealReturnWalletMoney == '0.00' || this.catchRealReturnWalletMoney == null) {
+            //     // 剩余退还余额 0
+            //     this.orderAfterSale.realReturnBalance = this.orderAfterSale.realReturnMoney
+            // } else if(this.catchRealReturnBalance == 0 || this.catchRealReturnBalance == '0.00' || this.catchRealReturnBalance == null) {
+            //     this.orderAfterSale.realReturnWalletMoney = this.orderAfterSale.realReturnMoney
+            // } else {
+            //     let _number = +this.orderAfterSale.realReturnMoney - +this.orderAfterSale.realReturnBalance
+
+            //     if(_number < 0) {
+            //         let _realReturnBalance = +this.orderAfterSale.realReturnBalance + _number
+            //         this.orderAfterSale.realReturnBalance = _realReturnBalance.toFixed(2)
+
+            //         this.orderAfterSale.realReturnWalletMoney  = 0
+            //     } else {
+            //         this.orderAfterSale.realReturnWalletMoney = _number.toFixed(2)
+            //     }
+            // }
+            if(this.orderAfterSale.shouldReturnBalance == null || this.orderAfterSale.shouldReturnBalance == '0.00' || this.orderAfterSale.shouldReturnBalance == 0) {
+                this.orderAfterSale.realReturnWalletMoney = +this.orderAfterSale.realReturnMoney
             } else {
-                let _number = +this.orderAfterSale.realReturnMoney - +this.orderAfterSale.realReturnBalance
-
-                if(_number < 0) {
-                    let _realReturnBalance = +this.orderAfterSale.realReturnBalance + _number
-                    this.orderAfterSale.realReturnBalance = _realReturnBalance.toFixed(2)
-
-                    this.orderAfterSale.realReturnWalletMoney  = 0
+                if(+this.orderAfterSale.realReturnMoney > +this.orderAfterSale.shouldReturnBalance) {
+                    this.orderAfterSale.realReturnBalance = (+this.orderAfterSale.shouldReturnBalance).toFixed(2)
+                    this.orderAfterSale.realReturnWalletMoney = (+this.orderAfterSale.realReturnMoney - this.orderAfterSale.realReturnBalance).toFixed(2)
                 } else {
-                    this.orderAfterSale.realReturnWalletMoney = _number.toFixed(2)
+                    this.orderAfterSale.realReturnWalletMoney = 0
+                    this.orderAfterSale.realReturnBalance = (+this.orderAfterSale.realReturnMoney).toFixed(2)
                 }
             }
         }
@@ -447,7 +458,8 @@ export default {
 
         },
         catchRealReturnWalletMoney: {},
-        catchRealReturnBalance: {}
+        catchRealReturnBalance: {},
+        orderSendInfo: {}
     }
 }
 </script>
@@ -479,7 +491,7 @@ export default {
             padding-top: 0;
             .list-lefter {
                 margin-right: 20px;
-                width: 80px;
+                width: 90px;
                 text-align: right;
             }
             .list-righter {

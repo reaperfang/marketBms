@@ -2,7 +2,7 @@
     <div class="deliver-goods">
         <div class="deliver-goods-header">
             <div class="item">补填物流信息</div>
-            <div class="item"><el-button>返 回</el-button></div>
+            <div class="item"><el-button @click="$router.go(-1)">返 回</el-button></div>
         </div>
         <div class="container">
             <div class="container-item">

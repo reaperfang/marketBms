@@ -57,7 +57,9 @@ export default {
   },
   methods: {
     submit() {
+      if(JSON.stringify(this.selectedRow) !== "{}") {
         this.$emit('getSelectedRed', {selection: this.selectedRow});
+      } 
     },
     // getSel() {
     //   let redArr = this.data.redArr;

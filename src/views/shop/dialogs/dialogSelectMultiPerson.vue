@@ -3,10 +3,10 @@
    <DialogBase :visible.sync="visible" width="816px" :title="'选择拼团活动'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
-        <el-form-item label prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入活动名称" clearable></el-input>
+        <el-form-item label prop="activeName">
+          <el-input v-model="ruleForm.activeName" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
-        <el-form-item label prop="name">
+        <el-form-item label>
           <el-button type="primary" @click="fetch">搜 索</el-button>
         </el-form-item>
       </div>
@@ -20,11 +20,11 @@
       v-loading="loading"
     >
       <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-      <el-table-column prop="goodName" label="商品标题">
+      <el-table-column prop="activeName" label="活动标题">
         <template slot-scope="scope">
           <div class="name_wrapper">
             <img :src="scope.row.goodImg" alt="" />
-            <p>{{scope.row.goodName}}</p>
+            <p>{{scope.row.activeName}}</p>
           </div>
         </template>
       </el-table-column>
@@ -80,7 +80,7 @@ export default {
       pageNum: 1,
       ruleForm: {
         pageNum: 1,
-        name: '',
+        activeName: '',
       },
       rules: {}
     };

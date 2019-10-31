@@ -50,13 +50,17 @@
                             label="数量">
                         </el-table-column>
                         <el-table-column
+                            prop="goodsPrice"
+                            label="商品单价">
+                        </el-table-column>
+                        <el-table-column
                             prop="subtotalMoney"
                             label="小计">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             prop="afterSaleLimitTime"
                             label="售后有效期">
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
                     <!-- <div class="remark">快递单号：{{}}</div> -->
                 </div>

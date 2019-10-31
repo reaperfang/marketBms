@@ -3,8 +3,8 @@
   <DialogBase :visible.sync="visible" width="816px" :title="'选择秒杀活动'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
-        <el-form-item label="" prop="goodsName">
-          <el-input v-model="ruleForm.goodsName" placeholder="请输入活动名称" clearable></el-input>
+        <el-form-item label="" prop="activityName">
+          <el-input v-model="ruleForm.activityName" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="fetch">搜  索</el-button>
@@ -24,11 +24,11 @@
           :reserve-selection="true"
           width="30">
         </el-table-column>
-        <el-table-column prop="goodsName" label="标题" :width="300">
+        <el-table-column prop="activityName" label="活动标题" :width="300">
           <template slot-scope="scope">
             <div class="name_wrapper">
               <img :src="scope.row.goodsImgUrl" alt="加载错误" />
-              <p>{{scope.row.goodsName}}</p>
+              <p>{{scope.row.activityName}}</p>
             </div>
           </template>
         </el-table-column>
@@ -91,7 +91,7 @@ export default {
       pageNum: 1,
       ruleForm: {
         pageNum: 1,
-        goodsName: '',
+        activityName: '',
       },
       rules: {}
     };
