@@ -11,9 +11,8 @@
                 </p>
                 <div class="img_body">
                   <p class="title">{{item.title}}</p>
-                  <img :src="item.url" class="imgs">
-                  <p class="content">
-                    {{item.content}}
+                  <img :src="item.thumb_url" class="imgs">
+                  <p class="content" v-html="item.content">
                   </p>
                 </div>
               </div>
@@ -88,6 +87,7 @@ export default {
         this.list = []
         response.item.map(item => {
           let data = Object.assign({checked:false}, item)
+          data.thumb_url = "http://img01.store.sogou.com/net/a/04/link?appid=100520029&url=" + data.thumb_url;
           this.list.push(data)
         })
         this.total = response.total

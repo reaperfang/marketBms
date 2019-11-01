@@ -37,6 +37,7 @@
               <div class="img_body">
                 <p class="title">{{item.title}}</p>
                 <img :src="item.fileCover" class="imgs">
+
                 <p class="content">
                   {{item.sourceMaterialNoHtml}}
                 </p>
@@ -296,6 +297,7 @@ export default {
           height:85px;
           object-fit: cover;
         }
+    
         .content{
           line-height: 20px;
           height: 60px;
