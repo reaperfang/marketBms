@@ -116,6 +116,7 @@ export default {
             fileCover: escape(item.thumb_url)
           }
           datas.push(obj)
+          
         }        
       })
       let query = {
