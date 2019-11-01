@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="50px" :style="bodyHeight">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="70px" :style="bodyHeight">
     <div class="block form">
       <el-form-item label="视频" prop="source">
         <el-radio-group v-model="source">
@@ -28,16 +28,16 @@
       </el-form-item>
       <el-form-item label="封面图">
         <el-radio-group v-model="coverType">
-          <el-radio :label="1">原视频封面</el-radio>
+          <el-radio :label="1" :disabled="!originAble">原视频封面</el-radio>
           <el-radio :label="2">自定义封面</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="" v-if="coverType === 2" prop="coverUrl">
+      <el-form-item label="" prop="coverUrl">
         <div v-if="ruleForm.coverUrl" class="img_preview">
           <img :src="ruleForm.coverUrl" alt="">
-          <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+          <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" v-if="coverType === 2">更换图片</span>
         </div>
-        <div v-else class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+        <div v-else-if="coverType === 2" class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
         </div>
         建议图片宽高比16:9
@@ -60,28 +60,52 @@ export default {
   data () {
     return {
       source: 1,
-      coverType: 2,
+      coverType: 1,
+      originCoverUrl: '',
+      customCoverUrl: '',
       ruleForm: {
-        videoUrl: '',
-        coverUrl: ''
+        videoUrl: '',//视频地址
+        coverUrl: ''//封面图地址
       },
       rules: {
 
       },
       dialogVisible: false,
       currentDialog: '',
+      originAble: true
+    }
+  },
+  watch: {
+    coverType(newValue) {
+      if(newValue == 1) {
+        this.$set(this.ruleForm, 'coverUrl', this.originCoverUrl);
+      }else if(newValue == 2) {
+        this.$set(this.ruleForm, 'coverUrl', this.customCoverUrl);
+      }
+    },
+    source(newValue) {
+      if(newValue == 1) {
+        this.originAble = true;
+      }else if(newValue == 2) {
+        this.originAble = false;
+        this.coverType = 2;
+        this.$set(this.ruleForm, 'coverUrl', this.customCoverUrl);
+      }
     }
   },
   methods: {
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.ruleForm.coverUrl= dialogData.filePath;
+      this.customCoverUrl= dialogData.filePath;
+      this.$set(this.ruleForm, 'coverUrl', dialogData.filePath);
     },
 
 
     /* 弹框选中视频 */
     videoSelected(dialogData) {
       this.ruleForm.videoUrl= dialogData.filePath;
+      this.originCoverUrl= dialogData.fileCover;
+       this.$set(this.ruleForm, 'coverUrl', dialogData.fileCover);
     }
   }
 }

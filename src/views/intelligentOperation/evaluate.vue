@@ -6,9 +6,9 @@
                         <el-form-item label="交易时间">
                             <div class="p_line">
                     <el-radio-group v-model="form.timeType">
-                        <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="1">7天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="2">15天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="3">30天</el-radio-button>
                         <el-radio-button class="btn_bor" label="5">最近一季度</el-radio-button>
                         <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
                         </el-radio-group>
@@ -28,35 +28,33 @@
                         </el-form-item>
                         <el-form-item label="满意率">
                             <div class="input_wrap2">
-                                <el-select v-model="form.niceRatioRange">
-                                    <el-option label="不限" value="null"></el-option>
-                                    <el-option label="0-1%" value="1"></el-option>
-                                    <el-option label="2-5%" value="2"></el-option>
-                                    <el-option label="5%以上" value="3"></el-option>
+                                <el-select v-model="form.niceRatioRange" @change="changeTime">
+                                  <el-option v-for="item in satisfaction" :label="item.name" :value="item.value" :key="item.id"></el-option>
                                 </el-select>
                             </div>
                             <span class="span_label">差评率</span>
                             <div class="input_wrap2 marR20">
-                                <el-select v-model="form.badRatioRange">
-                                    <el-option label="不限" value="null"></el-option>
-                                    <el-option label="0-1%" value="1"></el-option>
-                                    <el-option label="2-5%" value="2"></el-option>
-                                    <el-option label="5%以上" value="3"></el-option>
+                                <el-select v-model="form.badRatioRange" @change="changeTime">
+                                  <el-option v-for="item in badreviews" :label="item.name" :value="item.value" :key="item.id"></el-option>
                                 </el-select>
                             </div>
-                            <span class="span_label">会员类型</span>
+                            <span class="span_label">客户类型</span>
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.memberType">
                                     <el-option label="全部" value="null"></el-option>
-                                    <el-option label="非会员" value="1"></el-option>
-                                    <el-option label="新会员" value="2"></el-option>
-                                    <el-option label="老会员" value="3"></el-option>
+                                    <el-option label="非会员" value="0"></el-option>
+                                    <el-option label="新会员" value="1"></el-option>
+                                    <el-option label="老会员" value="2"></el-option>
                                 </el-select>
                             </div>
                             <el-button class="minor_btn" icon="el-icon-search" @click="getEvaluation()">查询</el-button>
                             <el-button class="border_btn" @click="resetAll()">重 置</el-button>
                         </el-form-item>
                     </el-form>
+                    <div class="m_line clearfix">
+                        <p style="line-height:40px;">该筛选条件下：会员共计<span>{{listObj.memberCount}}</span>人，占客户总数的<span>{{(listObj.ratio*100).toFixed(2)}}</span>%；</p>
+                        <p style="line-height:40px;">其中订单总计<span>{{listObj.orderCount}}</span>个，商品总计<span>{{listObj.goodsCount}}</span>个，满意商品数共计<span>{{listObj.niceGoodsCount}}</span>个,满意率<span>{{(listObj.niceGoodsRatio*100).toFixed(2)}}%</span>；差评商品数共计<span>{{listObj.badGoodsCount}}</span>个，差评率<span>{{(listObj.badGoodsRatio*100).toFixed(2)}}</span>%;</p>
+                    </div>
                     <div class="m_line clearfix">
                         <div class="fr marT20">
                             <el-button class="minor_btn" @click="rescreen()">重新筛选</el-button>
@@ -65,8 +63,23 @@
                             </el-tooltip>
                         </div>
                     </div>
-                    <ma4Table class="marT20" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
+                    <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
                 </div>
+                <p>运营建议:</p>
+                <p v-if="form.niceRatioRange == '0.00-1.00'" class="proposal"><b>"满意率0-1%/满意个数1个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，从而来提升满意率。</p>                
+                <p v-if="form.niceRatioRange == '2.00-5.00'" class="proposal"><b>"满意率2%-5%/满意个数2-5个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
+                <p v-if="form.niceRatioRange == '5.00-100.00'" class="proposal"><b>"满意率5%以上/满意个数5个以上"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
+                <p v-if="form.niceRatioRange == '30.00-80.00'" class="proposal"><b>"满意率30%-80%/满意个数30-80个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
+                <p v-if="form.niceRatioRange == '12.00-20.00'" class="proposal"><b>"满意率12%-20%/满意个数12-20个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
+                <p v-if="form.niceRatioRange == '80.00-90.00'" class="proposal"><b>"满意率80%-90%/满意个数80-90个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
+               
+                <p v-if="form.badRatioRange == '0.00-1.00'"  class="proposal"><b>"差评率0-1%/差评个数1个"：</b>建议针对此类用户客服即时回复，发放现金红包补偿，从而降低差评率。</p>                
+                <p v-if="form.badRatioRange == '2.00-5.00'"  class="proposal"><b>"差评率2%-5%/差评个数2-5个"：</b>建议针对此类用户赠送礼品，提升认可度，整体改进，提升售后服务，从而降低差评率。</p>
+                <p v-if="form.badRatioRange == '5.00-100.00'"  class="proposal"><b>"差评率5%以上/差评个数5个以上"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
+                <p v-if="form.badRatioRange == '10.00-15.00'"  class="proposal"><b>"差评率10%-15%/差评个数10-15个"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
+                <p v-if="form.badRatioRange == '70.00-90.00'"  class="proposal"><b>"差评率70%-90%/差评个数70-90个"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
+                <div class="contents"></div>
+                <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
     </div>
 </template>
 <script>
@@ -84,57 +97,93 @@ export default {
                 timeType:1,
                 memberType:null,
                 pageSize:10,
+                loads:false,
                 startIndex:1,
             },
             range:'',
             listObj:{
                
             },
+            satisfaction:[],  //满意率
+            badreviews:[],  //差评率       
             pickerMinDate: '',
             dateRange: [],
             pickerOptions: {
-          onPick: ({ maxDate, minDate }) => {
-            this.pickerMinDate = minDate.getTime()
-            if (maxDate) {
-              this.pickerMinDate = ''
-            }
-          },
-          disabledDate: (time) => {
-            if (this.pickerMinDate !== '') {
-              const day30 = (90 - 1) * 24 * 3600 * 1000
-              let maxTime = this.pickerMinDate + day30
-              if (maxTime > new Date()) {
-                maxTime = new Date()
-              }
-              return time.getTime() > maxTime
-            }
-            return time.getTime() > Date.now()
-          }
-        },
+                onPick: ({ maxDate, minDate }) => {
+                    this.pickerMinDate = minDate.getTime()
+                    if (maxDate) {
+                    this.pickerMinDate = ''
+                    }
+                },
+                disabledDate: (time) => {
+                    if (this.pickerMinDate !== '') {
+                    const day30 = (90 - 1) * 24 * 3600 * 1000
+                    let maxTime = this.pickerMinDate + day30
+                    if (maxTime > new Date()) {
+                        maxTime = new Date() - 8.64e7
+                    }
+                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
+                    }
+                    return time.getTime() > Date.now()
+                }
+            },
 
         }
     },
     methods: {
-        // 获取评价全部数据
+        // 查询
         getEvaluation(idx,pageS){
+            this.form.loads = true
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
-            // let data ={
-            //     timeType:this.form.timeType,
-            //     startTime:this.form.startTime,
-            //     endTime:this.form.endTime,
-            //     niceRatioRange:this.form.niceRatioRange,
-            //     badRatioRange:this.form.badRatioRange,
-            //     pageSize:this.form.pageSize,
-            //     startIndex:this.form.startIndex,
-            // }
+            this.form.memberType == 'null' && (this.form.memberType = null)
+            this.form.niceRatioRange == 'null' && (this.form.niceRatioRange = null)
+            this.form.badRatioRange == 'null' && (this.form.badRatioRange = null)
             this._apis.data.evaluation(this.form).then(response => {
                 this.listObj = response;
+                this.form.loads = false
+            })
+        },
+        //获取口碑满意率
+         memberInforNum(){
+            this._apis.data.memberInforNum({type:5}).then(res => { 
+                let pleased = [];
+                for(let item of res){
+                    pleased.push({
+                        id: item.id,
+                        value: item.minNum+'-'+ item.maxNum,
+                        name: item.name
+                    })
+                }
+                // console.log('res',res)
+                // console.log(pleased)
+                this.satisfaction = pleased
+            }).catch(error =>{
+                console.log('error',error)
+            })
+        },
+        //获取口碑差评率
+          membercha(){
+            this._apis.data.memberInforNum({type:7}).then(res => { 
+                let differences = [];
+                for(let item of res){
+                    differences.push({
+                        id: item.id,
+                        value: item.minNum+'-'+item.maxNum,
+                        name: item.name
+                    })
+                }
+                // console.log('res',res)
+                // console.log(differences)
+                this.badreviews = differences
+            }).catch(error =>{
+                console.log('error',error)
             })
         },
         changeTime(val){
             this.form.startTime = val[0]
             this.form.endTime = val[1]
+            console.log(this.form)
         },
         // 重置
         resetAll(){
@@ -155,7 +204,7 @@ export default {
         },
         // 导出
         exportExl(){
-            this._apis.data.exportOfrights(this.form).then(response => {
+            this._apis.data.evaluationExport(this.form).then(response => {
                 window.open(response);
             })
         },
@@ -179,7 +228,9 @@ export default {
         }
     },
     created(){
-        this.getEvaluation()
+        this.getEvaluation();
+        this.memberInforNum();
+        this.membercha();
     }
 }
 </script>
@@ -202,6 +253,9 @@ export default {
 }
 /deep/.el-checkbox.is-bordered.is-checked{
     background:rgba(101,94,255,0.1);
+}
+.proposal{
+    margin-left: 65px;
 }
 .m_container{
     background-color: #fff;
@@ -234,5 +288,25 @@ export default {
             }
         }
     }
+}
+.marT20s{
+    position: relative;
+}
+.contents{
+    width: 100%;
+    height: 45px;
+    background: #fff;
+}
+.loadings{
+    width: 220px;
+    height: 220px;
+    position: absolute;
+    left: 53%;
+    top: 34%;
+    transform: translate(-50%,-50%);
+}
+.loadings>img{
+     width: 220px;
+     height: 220px;
 }
 </style>

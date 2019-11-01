@@ -5,6 +5,8 @@
         :visible.sync="showShopsDialog"
         width="40%"
         :before-close="handleClose"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
         style="margin-top:20vh;">
         <span slot="title" class="dialog_title">
             <a>返回官网</a> | <a>创建店铺</a>
@@ -17,7 +19,7 @@
             <!-- <el-button>创建店铺</el-button> -->
             </div>
             <div class="content_main">
-              <div v-for="item in shopList" :key="item.id" @click="toShop(item)">
+              <div v-for="item in shopList" :key="item.id" @click="toShop(item)" class="shopItem">
                   <span>{{item.shopName}}</span>
                   <span>移动商城</span>
               </div>
@@ -29,6 +31,7 @@
 
 <script>
 import DialogBase from "@/components/DialogBase";
+import { removeToken } from '@/system/auth'
 export default {
   name: 'shopsDialog',
   data() {
@@ -38,7 +41,7 @@ export default {
           shopLists:[]
       }
   },
-  props:['showShopsDialog','shopList'],
+  props:['showShopsDialog','shopList','route'],
   watch: {
       showShopsDialog(newValue,oldValue){
           this.showDialog = newValue
@@ -48,14 +51,18 @@ export default {
   methods: {
     //进入店铺
     toShop(shop){
-      this.$store.dispatch('getShopInfos',shop).then(() => {
-        this.handleClose()
-        this.$router.push({ path: '/profile/profile' })
+      this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
+          this.$store.dispatch('setShopInfos',shop).then(() => {
+            this.handleClose()
+            this.$router.push({ path: '/profile/profile' })
+          }).catch(error => {
+            this.$notify.error({
+              title: '失败',
+              message: error
+            })
+          })
       }).catch(error => {
-        this.$notify.error({
-          title: '失败',
-          message: error
-        })
+        console.log(error)
       })
     },
 
@@ -74,25 +81,31 @@ export default {
     justify-content: space-between;
   }
   .content_main{
+    width: 100%;
     display:flex;
-    // justify-content: space-between;
+    flex-wrap: wrap;
     flex: 1;
     margin:20px 0px 30px 0px;
-    div{
+    .shopItem{
       width: 143px;
-      height: 60px;
+      height: 76px;
       border-radius:4px;
       background:rgba(101,94,255,1);
       opacity:0.5;
-      margin-right:10px;
+      margin:0px 10px 10px 0px;
+      cursor: pointer;
+      display:inline-block;
       span{
+        width: 123px;
+        height:35px;
+        line-height: 25px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         padding:10px;
-        height: 20px;
-        line-height: 20px;
         display: block;
         font-size: 14px;
         color: #FFFFFF;
-        text-align: left;
       }
     }
   }

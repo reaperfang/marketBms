@@ -3,7 +3,7 @@
   <div class="componentCoupon" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
     <!-- 样式一 -->
     <div class="coupon_first">
-      <ul>
+       <ul>
         <!-- status:true时候是已领取,hideScrambled:false, -->
         <template  v-for="(item, key) in list">
           <li
@@ -12,8 +12,8 @@
             :key="key"
             >
             <div class="first_money">
-              <span :class="style1">{{item.name}}</span>
-              <!-- <span :class="style1">元</span> -->
+              <span :class="style1">{{item.useType === 0 ? item.useTypeFullcut : item.useTypeDiscount  * 10}}
+                {{item.useType === 0 ? '元' : '折'}}</span>
               <span :class="style1"></span>
             </div>
             <div :class="style2" class="first_present">
@@ -26,13 +26,13 @@
             </div>
           </li>
           <li
-            v-else-if="item.status=== 0"
+            v-else-if="currentComponentData.data.hideScrambled===true && (item.status=== 0 || item.status=== 1)"
             :style="item.status===2?imgs1:imgs "
             :key="key"
             >
             <div class="first_money">
-              <span :class="style1">{{item.name}}</span>
-              <!-- <span :class="style1">元</span> -->
+              <span :class="style1">{{item.useType === 0 ? item.useTypeFullcut : item.useTypeDiscount  * 10}}
+                {{item.useType === 0 ? '元' : '折'}}</span>
               <span :class="style1"></span>
             </div>
             <div :class="style2" class="first_present">
@@ -64,17 +64,27 @@
   </div>
 </template>
 
+
+
 <script>
 import componentMixin from '../mixins/mixinComps';
-import mixinCoupon from '../mixins/mixinCoupon';
 export default {
   name: 'componentCoupon',
-  mixins:[componentMixin, mixinCoupon],
+  mixins:[componentMixin],
   components: {},
   data () {
     return {
-      list: []
+      list: [],
+      loading: false
     }
+  },
+  created() {
+    this.fetch();
+    this._globalEvent.$on('fetchCoupon', (componentData, componentId) => {
+      if(this.currentComponentId === componentId) {
+        this.fetch(componentData);
+      }
+    });
   },
   computed: {
     style1() {
@@ -112,9 +122,81 @@ export default {
       }
     }
   },
-  methods: {
+  watch: {
+    /* 监听添加类型，自动获取状态则拉取一下数据 */
+    'currentComponentData.data.addType'(newValue) {
+      if(newValue == 2) {
+        this.fetch();
+      }else{
+        this.list = [];
+        this.fetch();
+      }
+    },
 
-  }
+    /* 监听显示个数类型 */
+    'currentComponentData.data.couponNumberType'(newValue) {
+      this.fetch();
+    },
+
+    /* 监听显示个数 */
+    'currentComponentData.data.showNumber'(newValue) {
+      this.fetch();
+    }
+  },
+  methods: {
+    //根据ids拉取数据
+    fetch(componentData = this.currentComponentData.data) {
+        if(componentData) {
+          let params = {};
+            if(componentData.addType == 2) {
+              if(componentData.couponNumberType === 1) {
+                params = {
+                  couponType: 0
+                };
+              }else {
+                params = {
+                  couponType: 0,
+                  limitedQuantity: componentData.showNumber
+                };
+              }
+            }else{
+              if(componentData.ids.length) {
+                params = {
+                  couponType: 0,
+                  ids: componentData.ids
+                };
+              }else{
+                this.list = [];
+                return;
+              }
+            }
+
+            this.loading = true;
+            this.list = [];
+            this._apis.shop.getCouponListByIds(params).then((response)=>{
+                this.createList(response);
+                this.loading = false;
+            }).catch((error)=>{
+                // this.$notify.error({
+                //     title: '错误',
+                //     message: error
+                // });
+                console.error(error);
+                this.list = [];
+                this.loading = false;
+            });
+        }
+    },
+
+      /* 创建数据 */
+    createList(datas) {
+       this.list = datas;
+    },
+  },
+  beforeDestroy() {
+      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
+      this._globalEvent.$off('fetchCoupon');
+  },
 }
 </script>
 

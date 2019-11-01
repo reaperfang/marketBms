@@ -3,66 +3,90 @@
         <div class="clearfix">
           <div class="fr">
             <el-radio-group class="fr" v-model="visitSourceType" @change="all">
-              <el-radio-button class="btn_bor" label="0">全部</el-radio-button>
-              <el-radio-button class="btn_bor" label="1">小程序</el-radio-button>
-              <el-radio-button class="btn_bor" label="2">公众号</el-radio-button>
+              <el-radio-button class="btn_bor" label="0" v-permission="['数据', '商品交易', '全部']">全部</el-radio-button>
+              <el-radio-button class="btn_bor" label="1" v-permission="['数据', '商品交易', '小程序']">小程序</el-radio-button>
+              <el-radio-button class="btn_bor" label="2" v-permission="['数据', '商品交易', '公众号']">公众号</el-radio-button>
             </el-radio-group>
           </div>
-      </div>
-                <div class="pane_container">
-                    <p class="p_title">商品总况：</p>
-                    <div class="p_blocks">
-                        <div class="p_item" v-for="item in Condition" :key="item.id" >
-                            <img :src="item.url" alt="" class="fl">
-                            <div class="fr">
-                                <p>{{item.text}}</p>
-                                <p :style="{color: item.color}">{{item.num}}</p>
-                            </div>
-                        </div>
+        </div>
+        <div class="pane_container">
+            <p class="p_title">商品总况：</p>
+            <div class="p_blocks">
+                <div class="p_item" v-for="item in Condition" :key="item.id" >
+                    <img :src="item.url" alt="" class="fl">
+                    <div class="fr">
+                        <p>{{item.text}}</p>
+                        <p :style="{color: item.color}">{{item.num}}</p>
                     </div>
-                    <div class="title_line clearfix">
-                        <p class="fl" style="font-size: 16px">热销TOP5商品榜单：</p>
-                    </div>
-                    <ct1Table  :hotData="hotData"></ct1Table>
-                    <div class="c_line">
-                        <span class="c_title">商品详情</span>
-                        <span class="c_label">筛选日期：</span>
-                         <el-radio-group v-model="dateType" @change="changeDayM">
-                            <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
-                            <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
-                            <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
-                            <el-radio-button class="btn_bor" label="4">自定义</el-radio-button>
-                        </el-radio-group>
-                        <div class="input_wrap" v-if="dateType == 4">
-                            <el-date-picker
-                                v-model="range"
-                                type="daterange"
-                                range-separator="—"
-                                value-format="yyyy-MM-dd"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                @change="changeTime"
-                            ></el-date-picker>
-                        </div>
-                    </div>
-                    <ct2Table style="margin-top: 26px" :listObj="listObj" @getProductDetails="getProductDetails"></ct2Table>
                 </div>
+            </div>
+            <div class="title_line clearfix">
+                <p class="fl" style="font-size: 16px">热销TOP5商品榜单：</p>
+            </div>
+            <ct1Table  :hotData="hotData"></ct1Table>
+            <div class="c_line">
+                <span class="c_title">商品详情</span>
+                <span>
+                    <span class="c_label">筛选日期：</span>
+                    <el-radio-group v-model="dateType" @change="changeDayM">
+                        <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="4">自定义</el-radio-button>
+                    </el-radio-group>
+                </span>
+            </div>
+            <div class="input_wrap" v-if="dateType == 4">
+                <span></span>
+                <el-date-picker
+                    v-model="range"
+                    type="daterange"
+                    range-separator="—"
+                    value-format="yyyy-MM-dd"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    :picker-options="pickerOptions"
+                    @change="changeTime"
+                ></el-date-picker>
+            </div>
+            <ct2Table style="margin-top: 26px" :listObj="listObj" @getProductDetails="getProductDetails"></ct2Table>
+        </div>
     </div>
 </template>
 <script>
 import datumCont from '@/system/constant/datum';
 import ct1Table from './components/ct1Table'
 import ct2Table from './components/ct2Table'
+import utils from '@/utils';
 export default {
     name: 'commodityTransaction',
     components: { ct1Table, ct2Table },
     data() {
         return {
+            pickerOptions: {
+                onPick: ({ maxDate, minDate }) => {
+                    this.pickerMinDate = minDate.getTime()
+                    if (maxDate) {
+                    this.pickerMinDate = ''
+                    }
+                },
+                disabledDate: (time) => {
+                    if (this.pickerMinDate !== '') {
+                    const day90 = (90 - 1) * 24 * 3600 * 1000
+                    let maxTime = this.pickerMinDate + day90
+                    if (maxTime > new Date()) {
+                        maxTime = new Date()- 8.64e7
+                    }
+                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
+                    }
+                    return time.getTime() > Date.now()
+                }
+            },
+            visitSourceType:0,
             activeName: "first", 
             value:'',
             range: "",
-            visitSourceType:0,
-            dateType:1,
+            dateType:7,
             queryTime:'',
             startTime:'',
             endTime:'',
@@ -71,94 +95,98 @@ export default {
             dataObj:{},
             Condition:[],
             hotData:[],
-            listObj:{}
+            listObj:[]
         }
     },
     computed: {},
+    created(){
+        this.getGeneralCondition()
+        this.getHotGoods()
+        this.getProductDetails()
+    },
     methods:{
         //获取商品总况
         getGeneralCondition(){
+            this.Condition = datumCont.goodsTotleData
             let data ={
-                visitSourceType:this.visitSourceType
+                channel:this.visitSourceType,
             }
             this._apis.data.generalCondition(data).then(response => {
-                let nums = response.shopGoodsSurveyView;
-                datumCont.goodsTotleData.forEach(e => {
+                this.Condition.forEach(e => {
                     switch (e.id){
-                        case '001': e.num = nums.saleGoodsTotal
+                        case '001': e.num = response.online
                          break;
-                        case '002': e.num = nums.visitGoodsTotal
+                        case '002': e.num = response.visit
                          break;
-                        case '003': e.num = nums.addPurchasesTotal
+                        case '003': e.num = response.shoppingCart
                          break;
-                        case '004': e.num = nums.submitOrderTotal
+                        case '004': e.num = response.orders
                          break;
-                        case '005': e.num = nums.rightsGoodsTotal
+                        case '005': e.num = response.rights
                          break;
-                        case '006': e.num = nums.goodsSoldOutTotal
+                        case '006': e.num = response.soldOut
                          break;
-                        case '007': e.num = nums.payGoodsTotal
+                        case '007': e.num = response.pays
                          break;
-                        case '008': e.num = nums.againBuyGoodsTotal
+                        case '008': e.num = response.repurchase
                          break;
                     }                        
-                    this.Condition = datumCont.goodsTotleData
                 });
-        }).catch(error => {
-          this.$message.error(error);
-        });
+            }).catch(error => {
+                this.$message.error(error);
+            });
         },
+
         // 获取热销商品
         getHotGoods(){
             let data ={
-                visitSourceType:this.visitSourceType
+                channel:this.visitSourceType
             }
             this._apis.data.hotGoods(data).then(response => {
-                this.hotData = response.shopHotSellGoodsList
-        }).catch(error => {
-          this.$message.error(error);
-        });
+                this.hotData = []
+                let arr = Object.keys(response) 
+                if(arr.length != 0){
+                    let data = response
+                    for(let key in data){
+                        let goodsObj = data[key]
+                        this.hotData.push(goodsObj)
+                    }                
+                }
+            }).catch(error => {
+                this.$message.error(error);
+            });
         },
+
         // 获取商品详情
-        getProductDetails(idx,pages){
-            this.startIndex = idx;
-            this.pageSize = pages;
+        getProductDetails(){
             let data ={
-                visitSourceType:this.visitSourceType,
-                dateType:this.dateType,
-                // queryTime:this.queryTime,
+                channel:this.visitSourceType,
+                nearDay:this.dateType == '4' ? null : this.dateType,
                 startTime:this.startTime,
                 endTime:this.endTime,
-                pageSize:this.pageSize,
-                startIndex:this.startIndex
             }
             this._apis.data.productDetails(data).then(response => {
-                this.listObj = response
+                response && (this.listObj = response)
         }).catch(error => {
           this.$message.error(error);
         });
         },
-        changeDayM(val){
-            if(val != 4){
-                this.getProductDetails(1,10)
-            }
+        changeDayM(){
+            this.startTime = '';
+            this.endTime = '';
+            this.getProductDetails()
         },
         changeTime(val){
             this.startTime = val[0];
             this.endTime = val[1];
-            this.getProductDetails(1,10)
+            this.getProductDetails()
         },
         all(){
             this.getGeneralCondition()
             this.getHotGoods()
-            this.getProductDetails(1,10)
+            this.getProductDetails()
         }
     },
-    created(){
-        this.getGeneralCondition()
-        this.getHotGoods()
-        this.getProductDetails(1,10)
-    }
 }
 </script>
 <style lang="scss" scoped>
@@ -206,22 +234,26 @@ export default {
         .c_line{
             padding-top: 30px;
             border-top: 1px dashed #D3D3D3;
-            .input_wrap{
-                width: 220px;
-                display: inline-block;
-            }
+            display:flex;
+            justify-content:space-between;
             span{
                 color: #655EFF;
-                margin-left: 20px;
+                // margin-left: 20px;
                 &.c_title{
                     font-weight: bold;
                     color: #474C53;
                 }
                 &.c_label{
-                    margin-left: 300px;
+                    // margin-left: 300px;
                     color: #474C53;
                 }
             }
+        }
+        .input_wrap{
+            width: 100%;
+            margin-top:10px;
+            display:flex;
+            justify-content:flex-end;
         }
     }
 }

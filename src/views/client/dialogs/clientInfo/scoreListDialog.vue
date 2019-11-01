@@ -1,14 +1,14 @@
 <template>
   <DialogBase :visible.sync="visible" @submit="submit" title="积分记录" :hasCancel="hasCancel">
     <div class="c_container">
-        <div class="marB20"><span>总积分：{{ data.score }}</span><span class="marL20">可用积分：{{ data.score-data.frozenScore }}</span></div>
+        <div class="marB20"><span>总积分：{{ data.score + data.frozenScore }}</span><span class="marL20">可用积分：{{ data.score }}</span></div>
         <el-table
             :data="scoreList"
             style="width: 100%"
             :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort="{prop: 'date', order: 'descending'}"
           >
-            <el-table-column prop="createUserName" label="操作人"></el-table-column>
+            <el-table-column prop="updateUserName" label="操作人"></el-table-column>
             <el-table-column prop="createTime" label="操作时间"></el-table-column>
             <el-table-column prop="businessTypeName" label="交易类型"></el-table-column>
             <el-table-column prop="remarks" label="原因"></el-table-column>
@@ -29,6 +29,7 @@
   </DialogBase>
 </template>
 <script>
+import utils from "@/utils";
 import clientApi from "@/api/client";
 import DialogBase from "@/components/DialogBase";
 export default {
@@ -49,13 +50,20 @@ export default {
     },
     getPointList(startIndex, pageSize) {
         this._apis.client.getPointList({startIndex, pageSize, memberInfoId: this.data.id, sort:'desc'}).then((response) => {
-            this.scoreList = [].concat(response.list);
+          let list = response.list;
+          list.map(v => {
+            v.createTime = utils.formatDate(
+              new Date(Number(v.createTime)),
+              "yyyy-MM-dd hh:mm:ss"
+            );
+            if(v.changeScore !== 0) {
+              v.changeScore = v.changeType == 1?"-" + v.changeScore:"+" + v.changeScore;
+            }
+          });
+            this.scoreList = [].concat(list);
             this.total = response.total;
         }).catch((error) => {
-            this.$notify.error({
-                title: "错误",
-                message: error
-            });
+          console.log(error);
         })
     },
     handleSizeChange(val) {

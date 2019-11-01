@@ -8,12 +8,14 @@
       <div class="c_right">
         <p class="head">图文信息</p>
         <div class="bodys">
-          <el-input v-model="ruleForm.title" placeholder="标题请勿超过64个字，必填"></el-input>
+          <el-input v-model="ruleForm.title" @blur="titleNum" placeholder="标题请勿超过64个字，必填"></el-input>
+          <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="isSave">标题请勿超过64个字</p>
           <p class="mt10">封面图片</p>
           <img :src="ruleForm.fileCover" class="coverImage" v-if="ruleForm.fileCover">
           <p class="uploadImage">
             <el-upload
               class="upload-demo"
+              v-loading="loading"
               :action="uploadUrl"
               :data="{json: JSON.stringify({cid: cid})}"
               :on-preview="handlePreview"
@@ -22,6 +24,7 @@
               multiple
               :limit="1"
               :on-exceed="handleExceed"
+              :before-upload="beforeAvatarUpload"
               :on-success="handleAvatarSuccess"
               :show-file-list="false">
               <el-button size="small" type="primary">点击上传</el-button>
@@ -34,7 +37,7 @@
       </div>
     </div>
     <p class="btns">
-      <el-button type="primary">预览</el-button>
+      <!-- <el-button type="primary">预览</el-button> -->
       <el-button type="primary" plain @click="_routeTo('fileManageIndex')">取消</el-button>
       <el-button type="primary" @click="save">保存</el-button>
     </p>
@@ -59,6 +62,7 @@ export default {
         isCover: false,
         sourceMaterial:''
       },
+      loading:false,
       rules: {},
       fileList:[],
       fileData:'',
@@ -70,12 +74,9 @@ export default {
         // 初始容器高度
         initialFrameHeight: 400,
         // 初始容器宽度
-        initialFrameWidth: 700,
-        // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
-        serverUrl: 'http://35.201.165.105:8000/controller.php',
-        // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
-        UEDITOR_HOME_URL: '/static/UEditor/'
+        initialFrameWidth: 700
       },
+      isSave:false
     }
   },
   created() {
@@ -88,6 +89,10 @@ export default {
       }
   },
   methods: {
+    titleNum(){
+      let lg = this.ruleForm.title.length
+      this.isSave = lg > 64 ? true : false 
+    },
     getArticle(){
       let query ={
         id:this.$route.query.id,
@@ -109,48 +114,56 @@ export default {
     },
     //保存
     save(){
-      let id = this.$route.query.id
-      if(id){
-        let query = {
-          id:id,
-          title: this.ruleForm.title,
-          fileCover: this.ruleForm.fileCover,
-          isCover: this.ruleForm.isCover,
-          sourceMaterial:this.ruleForm.sourceMaterial
+      if(!this.isSave){
+        let id = this.$route.query.id
+        if(id){
+          let query = {
+            id:id,
+            title: this.ruleForm.title,
+            fileCover: this.ruleForm.fileCover,
+            isCover: this.ruleForm.isCover,
+            sourceMaterial:this.ruleForm.sourceMaterial
+          }
+          this._apis.file.editArticle(query).then((response)=>{
+            this.$notify.success({
+              title: '成功',
+              message: '修改图文成功！'
+            });
+            this.$router.push({
+              name: 'fileManageIndex',
+            })
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          })
+        }else{
+          this._apis.file.saveArticle(this.ruleForm).then((response)=>{
+            this.$notify.success({
+              title: '成功',
+              message: '创建图文成功！'
+            });
+            this.$router.push({
+              name: 'fileManageIndex',
+            })
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          })
         }
-        this._apis.file.editArticle(query).then((response)=>{
-          this.$notify.success({
-            title: '成功',
-            message: '修改图文成功！'
-          });
-          this.$router.push({
-            name: 'fileManageIndex',
-          })
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-        })
       }else{
-        this._apis.file.saveArticle(this.ruleForm).then((response)=>{
-          this.$notify.success({
-            title: '成功',
-            message: '创建图文成功！'
-          });
-          this.$router.push({
-            name: 'fileManageIndex',
-          })
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-        })
+        return false
       }
+    },
+    beforeAvatarUpload(){
+      this.loading = true
     },
     //图片上传成功
     handleAvatarSuccess(res, file) {
+      this.loading = false
       this.fileData = res.data
       this.ruleForm.fileCover = res.data.url
     },

@@ -2,20 +2,25 @@
   <DialogBase :visible.sync="visible" width="600px" :title="title" @submit="uploadImage">
     <el-form :model="form" class="demo-form-inline" label-width="90px">
         <el-form-item label="本地上传" v-if="title == '上传图片'">
+          <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
           <el-upload
             class="avatar-uploader"
+            v-loading="loading"
             :action="uploadUrl"
             :show-file-list="false"
-            :limit="1"
             :data="{json: JSON.stringify({cid: cid})}"
             :on-success="handleAvatarSuccess"
+            @on-error="loading = false"
             :before-upload="beforeAvatarUpload">
-            <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <i class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <p class="note">仅支持jpg,png格式，大小不超过3.0MB</p>
+          <p class="note">仅支持jpg,jpeg,png格式，大小不超过3.0MB</p>
         </el-form-item>
         <el-form-item label="本地上传" v-if="title == '上传视频'">
+          <video v-if="this.videoData.url !=undefined && !videoFlag"  
+            :src="this.videoData.url"
+            class="avatar video-avatar"
+            controls="controls">您的浏览器不支持视频播放</video> 
           <el-upload class="avatar-uploader el-upload--text"
             :action="uploadUrl" 
             :data="{json: JSON.stringify({cid: cid})}"
@@ -24,22 +29,19 @@
             :on-success="handleVideoSuccess" 
             :before-upload="beforeUploadVideo" 
             :on-progress="uploadVideoProcess"> 
-          <video v-if="this.fileData.url !='' && !videoFlag"  
-            :src="this.fileData.url"
-            class="avatar video-avatar"
-            controls="controls">您的浏览器不支持视频播放</video> 
-          <i v-else-if="this.fileData.url =='' && !videoFlag"
-            class="el-icon-plus avatar-uploader-icon"></i>  
+            <i class="el-icon-plus avatar-uploader-icon"></i> 
+          <!-- <i v-else-if="this.videoData.url =='' && !videoFlag"
+            class="el-icon-plus avatar-uploader-icon"></i>   -->
           <el-progress v-if="videoFlag == true"
               type="circle"
               :percentage="videoUploadPercent"
               style="width:80px;height:80px;">
           </el-progress>
-          <el-button class="video-btn"
+          <!-- <el-button class="video-btn"
                 slot="trigger"
                 size="small"
                 v-if="isShowUploadVideo"
-                type="primary">选取文件</el-button>
+                type="primary">选取文件</el-button> -->
           </el-upload>
           <p v-if="isShowUploadVideo">视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p>
         </el-form-item>
@@ -59,16 +61,17 @@
        <el-form-item label="封面" v-if="title == '上传视频'">
           <el-upload
             class="avatar-uploader"
+            v-loading="loading1"
             :action="uploadUrl"
             :show-file-list="false"
-            :limit="1"
             :data="{json: JSON.stringify({cid: cid})}"
+            @on-error="loading = false"
             :on-success="handleCoverSuccess"
-            :before-upload="beforeAvatarUpload">
+            :before-upload="beforeAvatarUpload1">
             <img v-if="form.imageUrls" :src="form.imageUrls" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <p class="note">建议尺寸：800*800，支持jpg,png格式，大小不超过3.0MB。</p>
+          <p class="note">建议尺寸：800*800，支持jpg,jpeg,png格式，大小不超过3.0MB。</p>
           <p class="note">如果不添加封面，系统会默认截取视频的第一个画面作为封面</p>
         </el-form-item>
       </el-form>
@@ -98,14 +101,17 @@ export default {
       form:{
         imageUrl:'',
         name:'',
-        groupValue:'',
+        groupValue:'-1',
         imageUrls:''
       },
       fileData:{},
+      videoData:{},
       groupList:[],
       videoFlag:false , //是否显示进度条
 		  videoUploadPercent:"", //进度条的进度，
-		  isShowUploadVideo:false
+      isShowUploadVideo:false,
+      loading:false,
+      loading1:false,
     };
   },
   computed: {
@@ -158,12 +164,12 @@ export default {
       }else{
         let query ={
           fileGroupInfoId:this.form.groupValue,
-          fileName:this.fileData.original,
-          filePath:this.fileData.url,
-          fileSize:this.fileData.size,
+          fileName:this.videoData.original,
+          filePath:this.videoData.url,
+          fileSize:this.videoData.size,
           name:this.form.name,
-          fileover:this.form.imageUrls,
-          sign:this.fileData.sign,
+          fileCover:this.form.imageUrls,
+          sign:'',
         }
         this.$emit('submit',{uploadVideo:{query:query}})
       }
@@ -174,24 +180,42 @@ export default {
     // },
 
     handleAvatarSuccess(res, file) {
+      this.loading = false
       this.fileData = res.data
       this.form.imageUrl = res.data.url
     },
     handleCoverSuccess(res, file){
+      this.loading1 = false
       this.fileData = res.data
       this.form.imageUrls = res.data.url
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
+      this.loading = true
+      const isJPG = file.type === 'image/jpg';
+      const isJPEG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+      if (!(isJPG || isJPEG || isPNG)) {
+        this.$message.error('上传图片支持jpg,jpeg,png格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 3MB!');
       }
-      return isJPG && isLt2M;
+      return isJPG || isJPEG || isPNG && isLt2M;
+    },
+    beforeAvatarUpload1(file){
+      this.loading1 = true
+      const isJPG = file.type === 'image/jpg';
+      const isJPEG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 / 1024 < 3;
+      if (!(isJPG || isJPEG || isPNG)) {
+        this.$message.error('上传图片支持jpg,jpeg,png格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 3MB!');
+      }
+      return isJPG || isJPEG || isPNG && isLt2M;
     },
 
     //上传成功回调
@@ -200,7 +224,8 @@ export default {
         this.videoFlag = false;
         this.videoUploadPercent = 0;
         if (res.status == "success") {
-            this.fileData.url = res.data.url;
+          console.log('url',res.data)
+            this.videoData = res.data;
         } else {
             this.$message.error('视频上传失败，请重新上传！');
         }
@@ -229,36 +254,50 @@ export default {
 }
 </script>
 
-<style>
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-</style>
-
-
 <style lang="scss" scoped>
 .note{
   font-size: 14px;
   color: #D3D8DF;
 }
+/deep/ .avatar-uploader{
+  width: 80px;
+  height: 80px;
+  display: inline-block;
+  vertical-align: middle;
+}
+/deep/ .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+/deep/ .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+/deep/ .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    position: absolute;
+    top:10px;
+    left:10px;
+    z-index: 10;
+  }
+/deep/ .avatar {
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    vertical-align: middle;
+/deep/ img{
+      width: 80px;
+      height: 80px;
+      object-fit:fill;
+      display: inline-block;
+    }
+  }
 </style>

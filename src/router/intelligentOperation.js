@@ -7,7 +7,8 @@ export default [
         name: 'intelligentOperation',
         meta: {
         title: '运营',
-        icon: 'icon_opera'
+        icon: 'icon_opera',
+        activeIcon:'icon_operas'
         },
         children: [
             {
@@ -20,7 +21,7 @@ export default [
                 path: 'memberInfo',
                 component: () => import('@/views/intelligentOperation/memberInfo'),
                 name: 'memberInfo',
-                meta: { title: '会员信息', noCache: true, tabTitle: '会员分析' }
+                meta: { title: '客户信息', noCache: true, tabTitle: '会员分析' }
             },
             {
                 path: 'channel',

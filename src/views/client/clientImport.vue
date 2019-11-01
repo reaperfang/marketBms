@@ -38,7 +38,7 @@
                                 <el-button size="small" type="primary">点击上传</el-button>
                                 <div slot="tip" class="el-upload__tip">支持文件格式：.csv .xsl ，单个文件不能超过10M</div>
                             </el-upload>
-                            <el-button class="download_btn">下载导入模板</el-button>
+                            <el-button class="download_btn" @click="handleDownload">下载导入模板</el-button>
                         </div>
                     </el-form-item>
                 </el-form>
@@ -69,7 +69,7 @@
                     </el-option>
                 </el-select>
                 <el-button type="primary" class="marL20" @click="handleCheck">查 询</el-button>
-                <el-button>重 置</el-button>
+                <el-button @click="handleReset">重 置</el-button>
             </div>
             <ciTable style="margin-top: 68px" :params="params"></ciTable>
         </div>
@@ -77,6 +77,7 @@
     </div>
 </template>
 <script type="es6">
+import utils from "@/utils";
 import Blob from '@/excel/Blob'
 import Export2Excel from '@/excel/Export2Excel.js'
 import ciTable from './components/clientImport/ciTable';
@@ -113,13 +114,14 @@ export default {
             currentData: {}
         }
     },
-    computed:{
-        cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-            return shopInfo.id
-        }
-    },
     methods: {
+        handleReset() {
+            this.importTime = "";
+            this.channelId2 = "";
+        }, 
+        handleDownload() {
+            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/b8861e2467c045b8a162f9ce4ad444b9.xlsx`;
+        },
         refreshPage() {
             this.getChannels();
         },
@@ -144,8 +146,8 @@ export default {
         },
         handleCheck() {
             let params = {
-                importTimeStart: this.importTime[0],
-                importTimeEnd: this.importTime[1],
+                importTimeStart: !!this.importTime ? utils.formatDate(new Date(this.importTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'',
+                importTimeEnd: !!this.importTime ? utils.formatDate(new Date(this.importTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):"",
                 channelId: this.channelId2
             }
             this.params = Object.assign({}, params);
@@ -155,10 +157,7 @@ export default {
             this._apis.client.getChannels({}).then((response) => {
                 this.channelOptions = [].concat(response);
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
             })
         },
         handleNew() {
@@ -210,15 +209,9 @@ export default {
         }
     },
     computed: {
-        importTimeStart() {
-            if(this.importTime) {
-                return this.importTime[0]
-            }
-        },
-        importTimeEnd() {
-            if(this.importTime) {
-                return this.importTime[1]
-            }
+        cid(){
+            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            return shopInfo.id
         }
     },
     mounted() {

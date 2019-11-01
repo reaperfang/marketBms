@@ -64,7 +64,11 @@ export default {
       })
     },
     submit() {
-      this.$emit('submit',{moveGroup:{imageId:this.arrayData,groupId:this.form.groupId}})
+      if(this.arrayData.length){
+        this.$emit('submit',{moveGroup:{imageId:this.arrayData,groupId:this.form.groupId}})
+      }else{
+        this.$message.error('请选择移动分组的数据')
+      }
     }
   }
 };

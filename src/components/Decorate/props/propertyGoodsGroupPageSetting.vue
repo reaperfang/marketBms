@@ -1,23 +1,23 @@
 <template>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" :style="bodyHeight">
         <div class="block header">
-          <p class="title">商品分组页设置</p>
+          <p class="title">商品分类页设置</p>
           <p class="state" :class="{'normal': ruleForm.status === 0}">{{ruleForm.status === 0 ? '生效中' : '未生效'}}</p>
         </div>
         <div class="block form">
-          <el-form-item label="分组样式" prop="groupStyle">
+          <el-form-item label="分类样式" prop="groupStyle">
             <el-radio-group v-model="ruleForm.groupStyle">
               <el-radio :label="1">左侧样式</el-radio>
               <el-radio :label="2">顶部样式</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="分组字体" prop="groupFont">
+          <el-form-item label="分类字体" prop="groupFont">
              <el-radio-group v-model="ruleForm.groupFont">
               <el-radio :label="1">常规体</el-radio>
               <el-radio :label="2">加粗体</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="分组图片" prop="groupImg">
+          <el-form-item label="分类图片" prop="groupImg">
              <el-radio-group v-model="ruleForm.groupImg">
               <el-radio :label="1">直角</el-radio>
               <el-radio :label="2">圆角</el-radio>
@@ -32,7 +32,7 @@
              <span>{{ruleForm.pageMargin}}像素</span>
             </div>
           </el-form-item>
-          <el-form-item label="分组间距" prop="groupFont">
+          <el-form-item label="分类间距" prop="groupFont">
              <div class="slider-wrapper">
               <el-slider v-model="ruleForm.groupMargin" :min="0" :max="30"></el-slider>
               <span>{{ruleForm.groupMargin}}像素</span>
@@ -41,9 +41,9 @@
         </div>
 
         <div class="block button">
-          <el-button @click="resetData">重    置</el-button>
-          <el-button @click="save">保    存</el-button>
-          <el-button type="primary" @click="saveAndApply">保存并生效</el-button>
+          <el-button @click="resetLoading = true; resetData()" :loading="resetLoading">重    置</el-button>
+          <el-button @click="saveDataLoading = true; save()" :loading="saveDataLoading">保    存</el-button>
+          <el-button type="primary" @click="saveAndApplyDataLoading = true; saveAndApply()" :loading="saveAndApplyDataLoading">保存并生效</el-button>
           <el-popover
             ref="popover2"
             placement="bottom"
@@ -68,12 +68,15 @@ export default {
   props: ['saveAndApply', 'save', 'resetData', 'data'],
   data () {
     return {
+      resetLoading: false,  //重置loading
+      saveDataLoading: false,  //保存loading
+      saveAndApplyDataLoading: false,  //保存并应用loading
       ruleForm: {
-        groupStyle: 1,  //分组样式
-        groupFont: 1,  //分组字体
+        groupStyle: 1,  //分类样式
+        groupFont: 1,  //分类字体
         groupImg: 1,  //图片圆角
         pageMargin: 15,  //页面边距
-        groupMargin: 20  //分组间距
+        groupMargin: 20  //分类间距
       },
       rules: {},
       bodyHeight: {},  //装修区高度
@@ -94,9 +97,33 @@ export default {
         this.$emit('goodsGroupPageDataChanged', newValue);
       },
       deep: true
+    },
+    shopInfo: {
+      handler(newValue) {
+        this.getQrcode();
+      },
+      deep: true
     }
   },
   created() {
+    const _self = this;
+
+    /* 监听接口操作结束事件，用来响应loading  保存按钮*/
+    this._globalEvent.$on('goodsGroupPageSettingSaveLoading', (status) => {
+      _self.saveDataLoading = false;
+    });
+
+     /* 监听接口操作结束事件，用来响应loading  保存并应用按钮*/
+    this._globalEvent.$on('goodsGroupPageSettingSaveAndApplyLoading', (status) => {
+      _self.saveAndApplyDataLoading = false;
+    });
+
+     /* 监听接口操作结束事件，用来响应loading  重置按钮*/
+    this._globalEvent.$on('goodsGroupPageSettingResetLoading', (status) => {
+      _self.resetLoading = false;
+    });
+
+    this.$store.dispatch('getShopInfo');
     this.$emit('goodsGroupPageDataChanged', this.ruleForm);
   },
   mounted() {
@@ -105,7 +132,9 @@ export default {
     }
   },
   computed: {
-    
+      shopInfo() {
+        return this.$store.getters.shopInfo || {};
+      }
   },
   methods: {
       /* 获取二维码 */
@@ -114,17 +143,19 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: this.ruleForm.shareUrl,
+        url: this.ruleForm.shareUrl.replace("&","[^]"),
         width: '150',
-        height: '150'
+        height: '150',
+        logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
       });
     }
   }

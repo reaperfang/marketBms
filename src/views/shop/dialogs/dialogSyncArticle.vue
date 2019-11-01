@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图文素材'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图文素材'" :showFooter="false">
       <div>
         <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
@@ -11,9 +11,8 @@
                 </p>
                 <div class="img_body">
                   <p class="title">{{item.title}}</p>
-                  <img :src="item.url" class="imgs">
-                  <p class="content">
-                    {{item.content}}
+                  <img :src="item.thumb_url" class="imgs">
+                  <p class="content" v-html="item.content">
                   </p>
                 </div>
               </div>
@@ -29,6 +28,10 @@
             :total="total*1"
             class="page_nav">
             </el-pagination>
+        </p>
+        <p class="txt_center">
+            <el-button type="primary" @click="submit()" :disabled="disNum">确 认</el-button>
+            <el-button  @click="visible = false">取 消</el-button>
         </p>
       </div>
   </DialogBase>
@@ -48,6 +51,7 @@ export default {
       currentPage:1,
       pageSize:20,
       total:0,
+      disNum:true
     }
   },
   props: {
@@ -83,6 +87,7 @@ export default {
         this.list = []
         response.item.map(item => {
           let data = Object.assign({checked:false}, item)
+          data.thumb_url = "http://img01.store.sogou.com/net/a/04/link?appid=100520029&url=" + data.thumb_url;
           this.list.push(data)
         })
         this.total = response.total
@@ -95,41 +100,37 @@ export default {
     },
     submit() {
       let datas = []
+      console.log(1111111);
       this.list.map(item =>{
         if(item.checked == true){
           let obj = {
             cid:this.cid,
             mediaId:item.media_id,
             sourceMaterialType:'1',
+            linksOriginal:escape(item.url),
+            isCover:'',
+            summary:item.digest,
+            author:item.author,
             title:item.title,
-            sourceMaterial:item.content_source_url,
-            isCover:item.url ? '1' : '0',
-            fileCover:escape(item.url)
+            sourceMaterial:item.content,
+            isSyncWechat:'1',
+            fileCover: escape(item.thumb_url)
           }
           datas.push(obj)
+          
         }        
       })
       let query = {
         fileGroupInfoId:'-1',
         data:datas
       }
-      this._apis.file.syncMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '同步微信图文成功！'
-        });
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
-      this.$emit('submit',{syncImage:''})
+      this.$emit('submit',{syncImage:{query:query}})
+      this.visible = false
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){
-      this.pageSize = val || this.pageSize
-      this.getList()
+      this.pageSize = val || this.pageSize;
+      this.getList();
     },
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage
@@ -141,11 +142,13 @@ export default {
       if(val){
         this.list.map(item =>{
           item.checked = true
+          this.disNum = false
           return this.list
         })
       }else{
         this.list.map(item =>{
           item.checked = false
+          this.disNum = true
           return this.list
         })
       }
@@ -155,8 +158,12 @@ export default {
         this.checkedAll = this.list.every(item => {
           return item.checked == true
         })
+        this.disNum = !this.list.some(item => {
+          return item.checked == true
+        })
       }else{
         this.checkedAll = false
+        this.disNum = true
       }
     },
 
@@ -254,5 +261,14 @@ export default {
   .page_nav{
     display: inline-block;
   }
+}
+.pages{
+  width: 100%;
+  text-align: right;
+}
+.txt_center{
+  width: 100%;
+  text-align: center;
+  margin-top:20px;
 }
 </style>

@@ -7,6 +7,7 @@
       ref="clientLabelTable"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading"
       >
       <el-table-column
         type="selection"
@@ -22,7 +23,8 @@
       </el-table-column>
       <el-table-column label="包含人数">
         <template slot-scope="scope">
-            <span class="edit_span" @click="_routeTo('allClient', {memberLabels: scope.row.id})">{{scope.row.labelContains}}</span>
+            <span class="edit_span" @click="_routeTo('allClient', {memberLabels: scope.row.id})" v-if="scope.row.labelContains !== 0">{{scope.row.labelContains}}</span>
+            <span class="edit_span" v-else style="color:#000">{{scope.row.labelContains}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -36,8 +38,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <span class="edit_span" @click="edit(scope.row)">
-                <i class="edit_i"></i>
+            <span class="edit_span" @click="edit(scope.row)" v-permission="['客户', '客户标签', '默认页面', '查看标签']">
+                <!-- <i class="edit_i"></i> -->
                 查看&编辑
             </span>
         </template>
@@ -71,7 +73,9 @@ export default {
   data() {
     return {
       checkAll: false,
-      tagList: []
+      tagList: [],
+      loading: false,
+      canDelete: true
     };
   },
   computed: {
@@ -81,6 +85,13 @@ export default {
 
   },
   methods: {
+    checkSelectable(row,index) {
+      if(row.labelContains==0) {
+        return 1;
+      }else{
+        return 0;
+      }
+    },
     handleSizeChange(val) {
       this.getLabelList(1, val);
       this.pageSize = val;
@@ -94,24 +105,41 @@ export default {
       });
     },
     getLabelList(startIndex, pageSize) {
+      this.loading = true;
       this._apis.client.getLabelList(Object.assign(this.params, {startIndex, pageSize})).then((response) => {
+        this.loading = false;
+        this.$emit('stopLoading');
         response.list.map((v) => {
           v.tagType = v.tagType == 0 ? '手工':'自动';
         })
         this.tagList = [].concat(response.list);
         this.total = response.total;
       }).catch((error) => {
-        this.$notify.error({
-            title: '错误',
-            message: error
-        });
+        this.loading = false;
+        console.log(error);
       })
     },
     edit(row) {
       this._routeTo('batchImport',{id: row.id});
     },
     batchDelete() {
+      this.canDelete = true;
       let rows = this.$refs.clientLabelTable.selection;
+      let removeArrs = [];
+      rows.map((v) => {
+        if(v.labelContains !== 0) {
+          this.canDelete = false;
+        }else{
+          removeArrs.push(v);
+        }
+      })
+      if(!this.canDelete) {
+        this.$notify({
+            title: '警告',
+            message: '有包含人数的标签不能删除',
+            type: 'warning'
+          });
+      }
       if(rows.length == 0) {
         this.$notify({
           title: '警告',
@@ -120,23 +148,22 @@ export default {
         });
       }else{
         let arr = [];
-        rows.map((v) => {
+        removeArrs.map((v) => {
           arr.push(v.id);
-        })
-        this._apis.client.batchDeleteTag({ labelIds: arr }).then((response) => {
-          this.$notify({
-            title: '成功',
-            message: "批量删除标签成功",
-            type: 'success'
-          });
-          this.getLabelList(1, this.pageSize);
-          this.checkAll = false;
-        }).catch((error) => {
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-        })
+        });
+        if(arr.length > 0) {
+          this._apis.client.batchDeleteTag({ labelIds: arr }).then((response) => {
+            this.$notify({
+              title: '成功',
+              message: "批量删除标签成功",
+              type: 'success'
+            });
+            this.getLabelList(this.startIndex, this.pageSize);
+            this.checkAll = false;
+          }).catch((error) => {
+            console.log(error);
+          })
+        }
       }
     }
   },

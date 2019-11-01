@@ -5,12 +5,12 @@
                 <span>{{ruleForm.name}}</span>
             </el-form-item>
             <el-form-item label="售卖价:" prop="salePrice">
-                <el-input v-model="ruleForm.salePrice"></el-input>
+                <el-input type="number" v-model="ruleForm.salePrice"></el-input>
             </el-form-item>
         </el-form>
         <div class="footer">
             <el-button @click="submit('ruleForm')" type="primary">确定</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="visible = false">取消</el-button>
         </div>
     </DialogBase>
 </template>

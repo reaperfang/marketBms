@@ -7,7 +7,8 @@ export default [
         name: 'set',
         meta: {
         title: '设置',
-        icon: 'icon_set'
+        icon: 'icon_set',
+        activeIcon:'icon_sets'
         },
         children: [
             {

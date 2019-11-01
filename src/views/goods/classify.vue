@@ -1,23 +1,25 @@
 <template>
-    <div class="classify">
+    <div class="app-content classify">
         <div class="search">
-            <el-button @click="addLevel1Category" type="primary">新增商品分类</el-button>
+            <el-button v-permission="['商品', '商品分类', '默认页面', '新建分类']" @click="addLevel1Category" type="primary">新增商品分类</el-button>
             <el-form :inline="true" :model="formInline" class="form-inline">
                 <el-form-item label="搜索分类：">
-                    <el-input v-model="formInline.classify" placeholder="请输入分类名称..."></el-input>
+                    <el-input v-model="formInline.name" placeholder="请输入分类名称..."></el-input>
                 </el-form-item>
-                <el-form-item label="分类状态：">
-                    <el-select v-model="formInline.state" placeholder="所有状态">
-                        <el-option :label="item.state" :value="item.value" v-for="(item, index) in items" :key="index"></el-option>
+                <!-- <el-form-item label="分类状态：">
+                    <el-select v-model="formInline.enable">
+                        <el-option label="所有状态" value=""></el-option>
+                        <el-option label="启用" :value="1"></el-option>
+                        <el-option label="禁用" :value="0"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                    <el-button type="primary" @click="getTreeList">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="categoryTh" style="background:'#ebeafa'; color:'#655EFF';">
-			<div class="treeRow th">
+			<div class="treeRow th" :style="{background:'#ebeafa', color:'#655EFF'}">
 			<span class="td">分类名称</span>
 			<span class="td">状态</span>
 			<span class="td">操作</span>
@@ -30,27 +32,29 @@
 			:props="defaultProps"
 			node-key="id"
 			ref="category"
+            default-expand-all
 			:expand-on-click-node="false"
 			:render-content="renderContent">
 		</el-tree>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :add="add" :data="currentData"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :add="add" :data="currentData" :onSubmit="getTreeList"></component>
     </div>
 </template>
 <script>
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
+import TransferGoodsDialog from '@/views/goods/dialogs/transferGoodsDialog'
 
 export default {
     data() {
         return {
             formInline: {
-                classify: '',
-                state: ''
+                name: '',
+                enable: ''
             },
             items: [],
             loading:false,
             defaultProps: {
-                children: 'childrenList',
-                label: 'categoryName'
+                children: 'childrenCatalogs',
+                label: 'name'
             },
             categoryData: [],
             currentDialog: '',
@@ -61,9 +65,21 @@ export default {
         }
     },
     created() {
-        this.getList()
+        //this.getList()
+        this.getTreeList()
     },
     methods: {
+        getTreeList() {
+            this.loading = true
+            this._apis.goods.fetchTreeCategoryList({
+                name: this.formInline.name,
+            }).then((res) => {
+                this.categoryData = res
+                this.loading = false
+            }).catch(error => {
+                this.loading = false
+            })
+        },
         onSubmit() {
 
         },
@@ -115,22 +131,22 @@ export default {
             if(node.level < 3) {
                 return (
                     <div class="treeRow">
-                        <span class="td first">{data.categoryName}</span>
+                        <span class="td first">{data.name}</span>
                         <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
                         <span class="td operate">
                             {
                                 <span class="blue" on-click={() => this.change(node, data)}>修改</span>
                             }
                             {
-                                <span class="blue" on-click={() => this.addCategory(node, data)}>新增子分类</span>
+                                <span v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="blue" on-click={() => this.addCategory(node, data)}>新增子分类</span>
                             }
                             {
-                                <span class="blue" on-click={() => this.forbidden(node, data)}>{
+                                <span v-permission="['商品', '商品分类', '默认页面', '隐藏']" class="blue" on-click={() => this.forbidden(node, data)}>{
                                     node.data.enable === 1 ? '禁用' : '启用'
                                 }</span>
                             }
                             {
-                                <span class="deleteColor" on-click={() => this.delete(node, data)}>删除</span>
+                                <span v-permission="['商品', '商品分类', '默认页面', '删除']" class="deleteColor" on-click={() => this.delete(node, data)}>删除</span>
                             }
                         </span>
                     </div>
@@ -138,8 +154,8 @@ export default {
             } else {
                 return (
                     <div class="treeRow">
-                        <span class="td first">{data.categoryName}</span>
-                        <span class="td state">{data.state}</span>
+                        <span class="td first">{data.name}</span>
+                        <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
                         <span class="td operate">
                             {
                                 <span class="blue" on-click={() => this.change(node, data)}>修改</span>
@@ -162,6 +178,7 @@ export default {
             this.currentDialog = 'AddCategoryDialog'
             this.currentData = {
                 id: data.id,
+                parentId: data.parentId,
                 editor: true
             }
             this.dialogVisible = true
@@ -181,7 +198,7 @@ export default {
                 _enable = 1
             }
             this._apis.goods.enableCategory({id: node.data.id, enable: _enable}).then((res) => {
-                this.getList()
+                this.getTreeList()
             }).catch(error => {
 
             })
@@ -189,32 +206,56 @@ export default {
         delete(node, data) {
             this.confirm({title: '立即删除', icon: true, text: '删除后此分类无法展示，确认删除吗？'}).then(() => {
                 this._apis.goods.deleteCategory({id: node.data.id}).then((res) => {
-                    this.getList()
+                    this.$notify({
+                                title: '成功',
+                                message: '删除成功！',
+                                type: 'success'
+                            });
+                    this.getTreeList()
+                    if(res && res.msg == 'existProduct') {
+                        this.confirm({title: '转移商品', icon: false, text: '是否将此分类其下的全部商品转移到其他分类中？'}).then(() => {
+                            this.currentData = node.data.id
+                            this.currentDialog = 'TransferGoodsDialog'
+                            this.dialogVisible = true
+                        })
+                    }
                 }).catch(error => {
-
+                    this.$notify.error({
+                                title: '错误',
+                                message: error
+                            });
                 })
             })
         },
         submit() {
-            this.getList()
+            this.getTreeList()
         },
         getList() {
-            this._apis.goods.fetchCategoryList().then((res) => {
+            this.loading = true
+            this._apis.goods.fetchCategoryList({
+                name: this.formInline.name,
+                enable: this.formInline.enable
+            }).then((res) => {
                 let arr = this.transTreeData(res, 0)
                 
                 this.categoryData = arr
                 this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
+                this.loading = false
             }).catch(error => {
-
+                this.loading = false
             })
         }
     },
     components: {
-        AddCategoryDialog
+        AddCategoryDialog,
+        TransferGoodsDialog
     }
 }
 </script>
 <style lang="scss">
+.content-main-classify {
+    overflow-x: hidden!important;
+}
 .blue {
     color: $globalMainColor;
 }
@@ -257,6 +298,23 @@ export default {
 .treeRow .td.short{width: 10%}
 .treeRow .td:nth-child(2){position:absolute; left:35%}
 .treeRow .td:nth-child(3){position:absolute; left:75%; min-width:200px}
+/deep/ .el-tree-node__expand-icon:before {
+    content: "\e7a0";
+    color: #655EFF;
+    font-size: 14px;
+}
+/deep/ .expanded.el-tree-node__expand-icon:before {
+    content: "\e7a2";
+    color: #655EFF;
+    font-size: 14px;
+}
+/deep/ .is-leaf.el-tree-node__expand-icon:before {
+    content: "";
+
+}
+/deep/ .el-tree-node__expand-icon.expanded {
+    transform: rotate(0deg);
+}
 }
 .operate {
     span {

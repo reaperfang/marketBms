@@ -16,16 +16,19 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit" v-permission="['财务', '每日营收', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()'>导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '每日营收', '默认页面', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <el-table
+        v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -38,15 +41,21 @@
         </el-table-column>
         <el-table-column
           prop="income"
-          label="收入（元）">
+          label="总收入（元）">
+          <template slot-scope="scope">
+            {{'+' + scope.row.income}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="expend"
-          label="支出（元）">
+          label="总支出（元）">
+          <template slot-scope="scope">
+            {{'-' + scope.row.expend}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="realIncome"
-          label="总收入（元）">
+          label="实际收入（元）">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -83,6 +92,7 @@ export default {
       },
       dataList:[ ],
       total:0,
+      loading:true
     }
   },
   watch: { },
@@ -106,13 +116,15 @@ export default {
     fetch(){
       let query = this.init();
       this._apis.finance.getListDr(query).then((response)=>{
-        this.dataList = response.list
+        this.dataList = []
+        response.list.map(item =>{
+          item.accountDate = item.accountDate.substring(0,item.accountDate.length-8)
+          this.dataList.push(item)
+        })
         this.total = response.total || 0
+        this.loading = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
 
@@ -126,6 +138,7 @@ export default {
       this.ruleForm = {
         timeValue:''
       }
+      this.fetch()
     },
 
     //导出

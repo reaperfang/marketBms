@@ -119,8 +119,15 @@ export default {
   methods: {
     downloadTemplate() {
         let a = document.createElement("a");
+        let str = ''
 
-        a.setAttribute("href", location.protocol + '//' + location.host + '/static/template/批量导入发货模板.xls');
+        if(this.$route.query.afterSale) {
+          str = '/bp/static/template/afterSale'
+        } else {
+          str = '/bp/static/template'
+        }
+
+        a.setAttribute("href", location.protocol + '//' + location.host + `${str}/${encodeURIComponent('批量导入发货模板')}.xls`);
         a.setAttribute("target", "_blank");
         a.click();
     },

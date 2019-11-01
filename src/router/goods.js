@@ -7,7 +7,8 @@ export default [
     name: 'goods',
     meta: {
       title: '商品',
-      icon: 'icon_goods'
+      icon: 'icon_goods',
+      activeIcon:'icon_goodss'
     },
     children: [
     	{
@@ -17,23 +18,36 @@ export default [
         meta: { title: '商品列表', noCache: true, tabTitle: '商品管理' },
       },
       {
-        path: 'addGoods',
-        component: () => import('@/views/goods/addGoods'),
-        name: 'addGoods',
-        meta: { title: '新建商品', noCache: true, tabTitle: '商品管理' },
-      },
-      {
         path: 'classify',
         component: () => import('@/views/goods/classify'),
         name: 'classify',
-        meta: { title: '商品分类', noCache: true, tabTitle: '分类管理' },
+        meta: { title: '商品分类', noCache: true, tabTitle: '商品管理', classify: true },
       },
       {
         path: 'tag',
         component: () => import('@/views/goods/tag'),
         name: 'tag',
-        meta: { title: '商品标签', noCache: true, tabTitle: '标签管理' },
+        meta: { title: '商品标签', noCache: true, tabTitle: '商品管理' },
       },
+      {
+        path: 'addGoods',
+        component: () => import('@/views/goods/addGoods'),
+        name: 'addGoods',
+        hidden: true,
+        meta: { title: '新建商品', noCache: true, tabTitle: '商品管理' },
+      },
+      // {
+      //   path: 'classify',
+      //   component: () => import('@/views/goods/classify'),
+      //   name: 'classify',
+      //   meta: { title: '商品分类', noCache: true, tabTitle: '分类管理' },
+      // },
+      // {
+      //   path: 'tag',
+      //   component: () => import('@/views/goods/tag'),
+      //   name: 'tag',
+      //   meta: { title: '商品标签', noCache: true, tabTitle: '标签管理' },
+      // },
       {
         path: 'import',
         component: () => import('@/views/goods/import'),

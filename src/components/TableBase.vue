@@ -5,16 +5,15 @@ import utils from '@/utils';
 export default {
   name: 'tableBase',
   data() {
-    const pageSize = 10;
     return {
       startIndex: 1,
-      pageSize: pageSize,
+      pageSize: 10,
       total: 0,
       totalPages: 0,
       loading:false,
       ruleForm: {
         startIndex: 1,
-        pageSize: pageSize,
+        pageSize: 10,
       },
       tableData: [],
       multipleSelection: [],
@@ -24,6 +23,7 @@ export default {
   },
 
   created() {
+    this.ruleForm.pageSize = this.pageSize;
     this.fetch();
   },
 

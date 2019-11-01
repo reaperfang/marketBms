@@ -50,6 +50,25 @@ export function updateShopPayInfo(data) {
   })
 }
 
+/* 获取店铺交易物流信息 */
+export function getShopLogistics(data) {
+  return request({
+    target: 'SHOP-KDNIAO-DETAIL-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+
+/* 更新店铺交易物流信息 */
+export function updateShopLogistics(data) {
+  return request({
+    target: 'SHOP-KDNIAO-ADD-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
 
 /* 获取店铺消息列表 */
 export function getShopMessage(data) {

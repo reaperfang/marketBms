@@ -89,10 +89,11 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          console.log(error);
+          // this.$notify.error({
+          //   title: "错误",
+          //   message: error
+          // });
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -112,10 +113,11 @@ export default {
           this.skuList = [].concat(response.list);
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          console.log(error);
+          // this.$notify.error({
+          //   title: "错误",
+          //   message: error
+          // });
         });
     },
     handleSearch() {
@@ -125,6 +127,7 @@ export default {
         this.categoryValue = [];
         this.productLabelName = "";
         this.name = "";
+        this.getSkuList(1,10);
     }
   },
   computed: {

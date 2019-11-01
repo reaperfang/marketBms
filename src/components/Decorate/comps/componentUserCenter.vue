@@ -5,7 +5,7 @@
       <div class="userCenter">
         <!-- 第一部分 用户个人信息 -->
         <div class="userCenter_first">
-          <div class="userCenter_firstTop" :style="data.backgroundGradients===1?bg:bg1">
+          <div class="userCenter_firstTop" :style="data.backgroundGradients===1?bg1:bg">
             <!-- 动态变换部分：样式一，左 -->
             <div class="userCenter_firstTitle" v-if="data.avatarPosition===1">
               <div class="userCenter_firstTitlel fl">
@@ -62,7 +62,7 @@
                 <p
                   class="userCenter_firstTitle2_title ellipsis"
                   :style="{color:data.nickColor}"
-                >考虑设计费</p>
+                >用户微信名称</p>
               </div>
               <div class="userCenter_firstTitle2r">
                 <p class="userCenter_firstTitler_img">
@@ -153,12 +153,12 @@
         <div class="userCenter_three">
           <div class="userCenter_three1">
             <ul>
-              <li>
+              <!-- <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.integralMarket.icon || '../../../assets/images/shop/userCenter/userCenter11.png'" alt />
+                  <img :src="(data.moduleList.integralMarket&&data.moduleList.integralMarket.icon) || require('../../../assets/images/shop/userCenter/userCenter11.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
-                  <p class="fl" :style="{color: data.moduleList.integralMarket.color}">{{data.moduleList.integralMarket.titleValue}}</p>
+                  <p class="fl" :style="{color: data.moduleList.integralMarket&&data.moduleList.integralMarket.color}">{{data.moduleList.integralMarket&&data.moduleList.integralMarket.titleValue}}</p>
                   <div class="fr userCenter_three1Cont_r">
                     <div class="userCenter_three1Cont_r1">
                       <span>NEW</span>
@@ -167,22 +167,22 @@
                     <img src="../../../assets/images/shop/userCenter/triangle.png" alt />
                   </div>
                 </div>
-              </li>
-              <li>
+              </li> -->
+              <!-- <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.messageCenter.icon || '../../../assets/images/shop/userCenter/userCenter12.png'" alt />
+                  <img :src="data.moduleList.messageCenter&&data.moduleList.messageCenter.icon || require('../../../assets/images/shop/userCenter/userCenter12.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
-                  <p class="fl" :style="{color: data.moduleList.messageCenter.color}">{{data.moduleList.messageCenter.titleValue}}</p>
+                  <p class="fl" :style="{color: data.moduleList.messageCenter&&data.moduleList.messageCenter.color}">{{data.moduleList.messageCenter&&data.moduleList.messageCenter.titleValue}}</p>
                   <div class="userCenter_three1Cont_r">
                     <div class="userCenter_three1Cont_r1">99+</div>
                     <img src="../../../assets/images/shop/userCenter/triangle.png" alt />
                   </div>
                 </div>
-              </li>
+              </li> -->
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.memberRank.icon || '../../../assets/images/shop/userCenter/userCenter13.png'" alt />
+                  <img :src="data.moduleList.memberRank.icon || require('../../../assets/images/shop/userCenter/userCenter13.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
                   <p class="fl" :style="{color: data.moduleList.memberRank.color}">{{data.moduleList.memberRank.titleValue}}</p>
@@ -198,7 +198,7 @@
             <ul>
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.coupon.icon || '../../../assets/images/shop/userCenter/userCenter14.png'" alt />
+                  <img :src="data.moduleList.coupon.icon || require('../../../assets/images/shop/userCenter/userCenter14.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
                   <p class="fl" :style="{color: data.moduleList.coupon.color}">{{data.moduleList.coupon.titleValue}}</p>
@@ -210,7 +210,7 @@
               </li>
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.couponCode.icon || '../../../assets/images/shop/userCenter/userCenter15.png'" alt />
+                  <img :src="data.moduleList.couponCode.icon || require('../../../assets/images/shop/userCenter/userCenter15.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
                   <p class="fl" :style="{color: data.moduleList.couponCode.color}">{{data.moduleList.couponCode.titleValue}}</p>
@@ -222,7 +222,7 @@
               </li>
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.gift.icon || '../../../assets/images/shop/userCenter/userCenter16.png'" alt />
+                  <img :src="data.moduleList.gift.icon || require('../../../assets/images/shop/userCenter/userCenter16.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
                   <p class="fl" :style="{color: data.moduleList.gift.color}">{{data.moduleList.gift.titleValue}}</p>
@@ -234,7 +234,7 @@
               </li>
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.myAssemble.icon || '../../../assets/images/shop/userCenter/userCenter17.png'" alt />
+                  <img :src="data.moduleList.myAssemble.icon || require('../../../assets/images/shop/userCenter/userCenter17.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
                   <p class="fl" :style="{color: data.moduleList.myAssemble.color}">{{data.moduleList.myAssemble.titleValue}}</p>
@@ -250,7 +250,7 @@
             <ul>
               <li>
                 <div class="userCenter_three1Img">
-                  <img :src="data.moduleList.address.icon || '../../../assets/images/shop/userCenter/userCenter18.png'" alt />
+                  <img :src="data.moduleList.address.icon || require('../../../assets/images/shop/userCenter/userCenter18.png')" alt />
                 </div>
                 <div class="userCenter_three1Cont">
                   <p class="fl" :style="{color: data.moduleList.address.color}">{{data.moduleList.address.titleValue}}</p>
@@ -277,11 +277,11 @@ export default {
       bg: {
         background:
           "linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)),url('" +
-          this.data.backgroundImage +
+          (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) +
           "') no-repeat center"
       },
       bg1: {
-        background: "url('" + this.data.backgroundImage + "') no-repeat"
+        background: "url('" + (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) + "') no-repeat"
       }
     };
   },
@@ -293,11 +293,11 @@ export default {
         this.bg= {
           background:
             "linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)),url('" +
-            this.data.backgroundImage +
+            (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) +
             "') no-repeat center"
         };
         this.bg1= {
-          background: "url('" + this.data.backgroundImage + "') no-repeat"
+          background: "url('" + (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) + "') no-repeat"
         };
       },
       deep: true
@@ -317,7 +317,7 @@ export default {
     border-bottom: 6px solid #f7f7f7;
     & > .userCenter_firstTop {
       height: 222px;
-      background-size: 100% 100%;
+      background-size: cover!important;
       position: relative;
       & > .userCenter_firstTitle {
         height: 100px;
@@ -913,6 +913,7 @@ export default {
               width: 35px;
               height: 35px;
               margin-top: 12px;
+              object-fit: cover;
             }
           }
           & > .userCenter_three1Cont {

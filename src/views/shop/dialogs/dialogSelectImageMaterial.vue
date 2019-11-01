@@ -87,6 +87,15 @@ export default {
     this.getGroups();
     this.fetch();
   },
+  mounted() {
+    this.$nextTick(() => {
+      if(this.$parent.$refs.dialog) {
+        let zIndex = this.$el.style.zIndex;
+        zIndex = Number(zIndex) + 2;
+        this.$parent.$el.style.zIndex = zIndex + '';
+      }
+    })
+  },
   methods: {
     fetch() {
       this.loading = true;
@@ -324,6 +333,9 @@ export default {
     margin-bottom: 10px;
     cursor: pointer;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     img{
       max-width: 100%;
     }

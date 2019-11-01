@@ -2,14 +2,14 @@
   <div class="tag">
     <div class="search">
       <div>
-        <el-button @click="currentDialog = 'AddTagDialog'; dialogVisible = true" type="primary">新建标签</el-button>
+        <el-button v-permission="['商品', '商品标签', '默认页面', '新建标签']" @click="currentDialog = 'AddTagDialog'; dialogVisible = true" type="primary">新建标签</el-button>
         <el-button class="border-button" @click="moreManageHandler">批量管理</el-button>
       </div>
-      <el-form :inline="true" :model="listQuery" class="form-inline">
-        <el-form-item label="搜索标签：">
+      <el-form :inline="true" :model="listQuery" ref="form" class="form-inline">
+        <el-form-item label="搜索标签：" prop="name">
           <el-input v-model="listQuery.name" placeholder="请输入标签名称..."></el-input>
         </el-form-item>
-        <el-form-item label="标签状态：">
+        <el-form-item label="标签状态：" prop="enable">
           <el-select v-model="listQuery.enable" placeholder="请选择标签状态">
             <el-option
               :label="item.label"
@@ -21,10 +21,12 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="getList" type="primary">查询</el-button>
+          <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-table
+      v-loading="loading"
       :data="list"
       ref="table"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -41,11 +43,11 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <span class="operate-span blue pointer" @click="change(scope.row)">修改</span>
-          <span class="operate-span blue pointer" @click="hide(scope.row)">
+          <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="operate-span blue pointer" @click="change(scope.row)">修改</span>
+          <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="operate-span blue pointer" @click="hide(scope.row)">
             {{scope.row.enable | operateEnable}}
           </span>
-          <span class="operate-span deleteColor pointer" @click="deleteTag(scope.row)">删除</span>
+          <span v-permission="['商品', '商品标签', '默认页面', '删除']" class="operate-span deleteColor pointer" @click="deleteTag(scope.row)">删除</span>
         </template>
       </el-table-column>
     </el-table>
@@ -55,9 +57,9 @@
           <el-button v-if="showTableCheck" @click="checkAllHandler">全选</el-button>
         </div>
         <div class="col" v-if="showTableCheck">
-          <el-button @click="hideTags" class="border-button">隐 藏</el-button>
-          <el-button @click="showTags" type="primary">显 示</el-button>
-          <el-button @click="deleteTags" class="delete-button">删 除</el-button>
+          <el-button v-permission="['商品', '商品标签', '默认页面', '批量显示/隐藏']" @click="hideTags" class="border-button">隐 藏</el-button>
+          <el-button v-permission="['商品', '商品标签', '默认页面', '批量显示/隐藏']" @click="showTags" type="primary">显 示</el-button>
+          <el-button v-permission="['商品', '商品标签', '默认页面', '批量删除']" @click="deleteTags" class="delete-button">删 除</el-button>
           <el-button @click="showTableCheck = false" type="primary">完 成</el-button>
         </div>
       </div>
@@ -100,7 +102,8 @@ export default {
       currentDialog: "",
       currentData: {},
       dialogVisible: "",
-      total: 0
+      total: 0,
+      loading: false
     };
   },
   created() {
@@ -125,6 +128,10 @@ export default {
     }
   },
   methods: {
+    resetForm(formName) {
+        this.$refs[formName].resetFields();
+        this.getList()
+    },
     hideTags() {
       if(!this.multipleSelection.length) {
         this.confirm({title: '批量隐藏', icon: true, text: '请选择想要批量隐藏的标签。'})
@@ -246,14 +253,16 @@ export default {
     },
     async getList() {
       try {
+        this.loading = true
         let res = await fetchTagsList(this.listQuery)
 
         if(res) {
           this.list = res.list
-          this.total = res.total
+          this.total = +res.total
+          this.loading = false
         }
       } catch(error) {
-
+        this.loading = false
       }
     }
   },

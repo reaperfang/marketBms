@@ -60,8 +60,9 @@
       border: 1px solid #ddd;
 
       img {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
       }
 
       span {
@@ -86,7 +87,20 @@
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-
+            max-height: 350px;
+            overflow-y: auto;
+            &::-webkit-scrollbar {
+                width: 2px;
+                height: 8px;
+            }
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px!important;
+                background: rgba(101,94,255,.4)!important;
+            }
+            &::-webkit-scrollbar-track {
+                border-radius: 0!important;
+                background: rgba(101,94,255,.1)!important;
+            }
             li {
                   width: 80px;
                   height: 80px;
@@ -119,6 +133,7 @@
                   img {
                         width: 100%;
                         height: 100%;
+                        object-fit: contain;
                   }
 
                   i.delete_btn {
@@ -148,6 +163,12 @@ ul.cube {
 
                   &:last-child {
                         margin-right: 0;
+                  }
+                  img{
+                        width:100%;
+                        height:100%;
+                        vertical-align: baseline;
+                        object-fit: contain;
                   }
             }
 
@@ -245,7 +266,7 @@ ul.cube {
                   .fill_block1,
                   .fill_block2 {
                         width: 100%;
-                        height: 100%;
+                        height: 50%;
                         margin-right: 0;
                         margin-bottom: 2px;
                   }
@@ -368,15 +389,16 @@ ul.cube {
             .phone-body {
                   height: 775px;
                   overflow-y: auto;
-
+                  // border-left: 1px solid #f0eeee;
+                  // border-right: 1px solid #f0eeee;
                   .component_wrapper {
-                        // background: #fff;
-                        min-height: 50px;
-                        // line-height: 50px;
                         position: relative;
-                        // border: 1px solid #eee;
-                        border-bottom: none;
                         cursor: pointer;
+                        border-top: 1px solid #f0eeee;
+                        min-height:10px;
+                        &:last-child{
+                              border-bottom: 1px solid #f0eeee;
+                        }
                   }
             }
       }
@@ -390,7 +412,20 @@ ul.cube {
                   display: block!important;
             }
 
+            .el-button--text{
+                font-size:14px!important;    
+                span{
+                  width: 220px!important;
+                  overflow-x: hidden!important;
+                  text-overflow: ellipsis!important;
+                  white-space: nowrap!important;
+                  display: block!important;
+                  text-align: left!important;
+                }          
+            }
+
             .block {
+                  margin-bottom: 10px;
                   &.header {
                         padding: 10px;
                         display: flex;
@@ -446,7 +481,10 @@ ul.cube {
       }
 
       .block {
-            margin-bottom: 10px;
             background: #fff;
       }
+}
+
+.el-radio-group label:last-child {
+    margin-left: 0;
 }

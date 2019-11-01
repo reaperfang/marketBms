@@ -39,17 +39,22 @@
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()' class="mb10">导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+          <el-button class="yellow_btn mb10" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '每日营收', '默认页面', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <el-table
+      v-loading="loading"
         :data="dataList"
         style="width: 100%"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-        :default-sort = "{prop: 'createTime', order: 'descending'}"
+        @sort-change="sortTable"
         >
+        <!-- :default-sort = "{prop: 'createTime', order: 'descending'}" -->
         <el-table-column
           prop="memberId"
-          label="客户ID">
+          label="客户ID"
+          :render-header="renderMemberId">
         </el-table-column>
         <el-table-column
           prop="presentType"
@@ -103,15 +108,19 @@ export default {
         presentType:0,
         startTime:'',
         stopTime:'',
+        sort:'desc',
         pageSize:10,
         pageNum:1
       },
+      loading:true
     };
   },
   watch: {
     times(){
-      this.ruleForm.startTime = utils.formatDate(this.times[0], "yyyy-MM-dd hh:mm:ss")
-      this.ruleForm.stopTime = utils.formatDate(this.times[1], "yyyy-MM-dd hh:mm:ss")
+      if(this.times.length != 0){
+        this.ruleForm.startTime = utils.formatDate(this.times[0], "yyyy-MM-dd hh:mm:ss")
+        this.ruleForm.stopTime = utils.formatDate(this.times[1], "yyyy-MM-dd hh:mm:ss")
+      }
     }
   },
   computed:{
@@ -119,24 +128,42 @@ export default {
       return financeCons.rewards;
     }
   },
-  created() {
-    this.fetch();
-  },
+  created() {},
   methods: {
+    renderMemberId(){
+      return(
+        <div style="height:49px;line-height:49px;">
+          <span style="font-weight:bold;vertical-align:middle;">客户ID</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="160"
+            trigger="hover"
+            content="所有参与超级海报获得奖励的客户ID">
+            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
+          </el-popover>
+        </div>
+      )
+    },
     fetch(){
       this._apis.finance.getListTa(this.ruleForm).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
+        this.loading = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
     onSubmit(){
       this.fetch();
     },
+    //排序
+    sortTable(column){
+      let obj = column
+      this.ruleForm.sort = obj.order == 'descending' ? 'desc' : 'asc'
+      this.fetch()
+    },
+
     //重置
     resetForm(){
       this.ruleForm = {
@@ -144,10 +171,12 @@ export default {
         presentType:0,
         startTime:'',
         stopTime:'',
+        sort:'desc',
         pageNum:1,
         pageSize:10,
       }
       this.times= []
+      this.fetch()
     },
      //当前页码改变
     handleCurrentChange(pIndex=1) {

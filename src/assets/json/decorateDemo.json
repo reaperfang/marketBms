@@ -48,7 +48,7 @@
             {
                 "id": "533f10c2-432a-44a2-80f9-a3bd30e8d1fd",
                 "type": "goodsGroup",
-                "title": "商品分组",
+                "title": "商品分类",
                 "data": {
                     "source": 1,
                     "showAllGroup": 1,
@@ -338,7 +338,7 @@
             {
                 "id": "642c36e0-c44f-4e9a-b878-6b6373d44001",
                 "type": "goodsGroup",
-                "title": "商品分组",
+                "title": "商品分类",
                 "data": {
                     "source": 1,
                     "showAllGroup": 1,
@@ -617,7 +617,7 @@
             {
                 "id": "533f10c2-432a-44a2-80f9-a3bd30e8d1fd",
                 "type": "goodsGroup",
-                "title": "商品分组",
+                "title": "商品分类",
                 "data": {
                     "source": 1,
                     "showAllGroup": 1,
@@ -907,7 +907,7 @@
             {
                 "id": "642c36e0-c44f-4e9a-b878-6b6373d44001",
                 "type": "goodsGroup",
-                "title": "商品分组",
+                "title": "商品分类",
                 "data": {
                     "source": 1,
                     "showAllGroup": 1,

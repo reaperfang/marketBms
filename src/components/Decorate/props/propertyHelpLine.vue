@@ -4,8 +4,8 @@
       <el-form-item label="颜色" prop="lineColor">
         <div class="color_block">
           <el-input v-model="ruleForm.lineColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.lineColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.lineColor" defaultColor="rgb(229,229,229)"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="边距" prop="lineMargin">
@@ -34,9 +34,9 @@ export default {
   data () {
     return {
       ruleForm: {
-        lineColor: 'rgb(229,229,229)',
-        lineMargin: 1,
-        lineStyle: 1
+        lineColor: 'rgb(229,229,229)',//颜色
+        lineMargin: 1,//	边距
+        lineStyle: 1//	样式
       },
       rules: {
 
@@ -49,6 +49,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
+}
 </style>

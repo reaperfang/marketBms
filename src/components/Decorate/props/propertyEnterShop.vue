@@ -20,7 +20,7 @@ export default {
   data () {
     return {
       ruleForm: {
-        words: '进入店铺'
+        words: '进入店铺'//文案
       },
       rules: {
 

@@ -42,22 +42,22 @@
       <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.backgroundColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#f2f2f2"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="框体颜色" prop="borderColor">
         <div class="color_block">
           <el-input v-model="ruleForm.borderColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.borderColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.borderColor" defaultColor="#ffffff"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="文字颜色" prop="fontColor">
         <div class="color_block">
           <el-input v-model="ruleForm.fontColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.fontColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.fontColor" defaultColor="rgb(153,153,153)"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="文本位置" prop="textPosition">
@@ -66,6 +66,12 @@
           <el-radio :label="2">居中</el-radio>
         </el-radio-group>
       </el-form-item>
+      <!-- <el-form-item label="消息按钮" prop="noticeCartBtn">
+        <el-radio-group v-model="ruleForm.noticeCartBtn">
+          <el-radio :label="1">显示</el-radio>
+          <el-radio :label="2">不显示</el-radio>
+        </el-radio-group>
+      </el-form-item> -->
       <el-form-item label="购物车按钮" prop="shoppingCartBtn">
         <el-radio-group v-model="ruleForm.shoppingCartBtn">
           <el-radio :label="1">显示</el-radio>
@@ -89,14 +95,15 @@ export default {
       dialogVisible: false,
       currentDialog: '',
       ruleForm: {
-        hotWords: [],
-        borderStyle: 2,
-        borderHeight: 40,
-        backgroundColor: '#f2f2f2',
-        borderColor: '#ffffff',
-        fontColor: 'rgb(153,153,153)',
-        textPosition: 1,
-        shoppingCartBtn: 1
+        hotWords: [],//热词列表
+        borderStyle: 2,//框体样式
+        borderHeight: 40,//框体高度
+        backgroundColor: '#f2f2f2',//背景颜色
+        borderColor: '#ffffff',//框体颜色
+        fontColor: 'rgb(153,153,153)',//文字颜色
+        textPosition: 1,//文本位置
+        shoppingCartBtn: 1,//购物车按钮显示	
+        noticeCartBtn: 1 //通知消息按钮显示	
       },
       rules: {},
       inputVisible: false,
@@ -142,5 +149,8 @@ export default {
     width: 90px;
     margin-left: 10px;
     vertical-align: bottom;
+  }
+  /deep/.m-colorPicker .box.open {
+      z-index: 10!important;
   }
 </style>

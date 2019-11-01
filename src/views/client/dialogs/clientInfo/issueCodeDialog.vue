@@ -8,10 +8,10 @@
         </div>
         <div class="fl r_block">
           <div class="sel_cont" v-for="(i,index) in selectList" :key="index">
-            <el-select v-model="i.appCouponId" style="margin-bottom: 10px">
+            <el-select v-model="i.appCouponId" style="margin-bottom: 10px" @change="handleChange">
               <el-option v-for="item in data.allCodes" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
-            <el-input-number v-model="i.couponNum" :min="1"></el-input-number>
+            <el-input-number v-model="i.couponNum" :min="1" :max="10"></el-input-number>
             <span class="addMainColor pointer" @click="handleDelete(index)" style="margin-left: 20px">删除</span>
           </div>
           <span class="add pointer" @click="handleAdd">添加</span>
@@ -31,26 +31,78 @@ export default {
       hasCancel: true,
       coupon:"",
       selectList: [
-        {couponNum: 1,appCouponId:"",memberId:"1",receiveType:"1",receiveActivityId:"1"}
+        {couponNum: 1,appCouponId:"",memberId:this.data.id,receiveType:"1",receiveActivityId:"1",weChartNickname: this.data.weChartNickname}
       ]
     };
   },
   methods: {
     submit() {
-      this._apis.client.distributeCoupon(this.selectList).then((response) => {
-        console.log(response);
-      }).catch((error) => {
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+      let canSubmit = true;
+      this.selectList.map((v) => {
+        if(v.appCouponId == "") {
+          canSubmit = false;
+        }
       })
+      if(this.selectList[0].appCouponId.length > 0 && !!canSubmit) {
+        this._apis.client.distributeCoupon(this.selectList).then((response) => {
+          response.map((v) => {
+            if(!!v.receiveDesc) {
+              let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
+              this.$notify({
+                title: '提示',
+                message: errMsg,
+                type: 'warning'
+              });
+            }else{
+              this.$notify({
+                title: '成功',
+                message: "发放成功",
+                type: 'success'
+              });
+              this.$emit('refreshPage');
+            }
+          })
+        }).catch((error) => {
+          console.log(error);
+        })
+      }else{
+        this.$notify({
+            title: '警告',
+            message: '请正确选择优惠码',
+            type: 'warning'
+          });
+      }
     },
     handleAdd() {
-      this.selectList.push({couponNum: 1,appCouponId:"",memberId:"1",receiveType:"1",receiveActivityId:"1"});
+      if(this.selectList.length > 9) {
+        this.$notify({
+            title: '警告',
+            message: '发放优惠码不能超过10种',
+            type: 'warning'
+          });
+      }else{
+        this.selectList.push({couponNum: 1,appCouponId:"",memberId:this.data.id,receiveType:"1",receiveActivityId:"1",weChartNickname: this.data.weChartNickname});
+      }
     },
     handleDelete(index) {
       this.selectList.splice(index, 1);
+    },
+    handleChange(val) {
+      let i = 0;
+      if(this.selectList.length > 1) {
+        this.selectList.map((v) => {
+          if(v.appCouponId == val) {
+            i++;
+          }
+        });
+        if(i == 2) {
+          this.$notify({
+            title: '警告',
+            message: '不能选择重复的优惠券',
+            type: 'warning'
+          });
+        }
+      }
     }
   },
   computed: {

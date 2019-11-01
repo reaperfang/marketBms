@@ -114,19 +114,21 @@
                 <p>3.填写物流信息</p>
                 <div class="logistics">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                        <el-form-item label="快递公司" prop="expressCompanys">
-                            <el-select v-model="ruleForm.expressCompanyCode" placeholder="请选择">
+                        <el-form-item label="快递公司" prop="expressCompanyCode">
+                            <el-select @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
+                            <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input v-model="ruleForm.expressNos"></el-input>
+                            <el-input :disabled="!express" v-model="ruleForm.expressNos"></el-input>
                         </el-form-item>
                         <el-form-item label="物流备注" prop="remark">
                             <el-input
                                 style="width: 623px;"
                                 type="textarea"
                                 :rows="2"
+                                maxlength="100"
                                 placeholder="非必填，请输入，不超过100个字符"
                                 v-model="ruleForm.remark">
                             </el-input>
@@ -135,7 +137,7 @@
                 </div>
             </div>
             <div class="footer">
-                <el-button type="primary" @click="sendGoodsHandler">发 货</el-button>
+                <el-button type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
             </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title"></component>
@@ -146,6 +148,21 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 
 export default {
     data() {
+        var expressCompanyCodeValidator = (rule, value, callback) => {
+          if(this.ruleForm.expressCompanyCode != 'other') {
+              if(!this.ruleForm.expressCompanyCode) {
+                  callback(new Error('请选择快递公司'));
+              } else {
+                  callback();
+              }
+          } else {
+              if(!this.ruleForm.other || /^\s+$/.test(this.ruleForm.other)) {
+                callback(new Error('请输入快递公司名称'));
+              } else {
+                callback();
+              }
+          }
+      };
         return {
             tableData: [
                 
@@ -157,10 +174,13 @@ export default {
                 remark: '',
                 expressCompanyCode: '',
                 expressCompany: '',
-                expressNos: ''
+                expressNos: '',
+                other: ''
             },
             rules: {
-
+                expressCompanyCode: [
+                    { validator: expressCompanyCodeValidator, trigger: "blur" }
+                ]
             },
             orderDetail: {},
             nameList: [],
@@ -172,7 +192,8 @@ export default {
             expressCompanyList: [],
             isReceived: true,
             title: '',
-            sendGoods: ''
+            sendGoods: '',
+            express: true
         }
     },
     created() {
@@ -186,11 +207,73 @@ export default {
             } else {
                 return false
             }
-        }
+        },
+        cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    }
     },
     methods: {
+        fetchOrderAddress() {
+      this._apis.order
+        .fetchOrderAddress({ id: this.cid, cid: this.cid })
+        .then(res => {
+          this.orderAfterSaleSendInfo.sendName = res.senderName;
+          this.orderAfterSaleSendInfo.sendPhone = res.senderPhone;
+          this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
+          this.orderAfterSaleSendInfo.sendProvinceName = res.province;
+          this.orderAfterSaleSendInfo.sendCityCode = res.cityCode;
+          this.orderAfterSaleSendInfo.sendCityName = res.city;
+          this.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
+          this.orderAfterSaleSendInfo.sendAreaName = res.area;
+          this.orderAfterSaleSendInfo.sendDetail = res.address;
+        })
+        .catch(error => {
+          this.visible = false;
+          this.$notify.error({
+            title: "错误",
+            message: error
+          });
+        });
+    },
+        checkExpress() {
+        let expressName
+
+        if(this.ruleForm.expressCompanyCode == 'other') {
+                expressName = 'other'
+            } else {
+                expressName = this.expressCompanyList.find(
+                val => val.expressCompanyCode == this.ruleForm.expressCompanyCode
+                ).expressCompany;
+            }
+        this._apis.order
+            .checkExpress({expressName})
+            .then(res => {
+            this.express = res;
+            if(this.express) {
+                this.$set(this.rules, "expressNos", [
+                    { required: true, message: "请输入快递单号", trigger: "blur" }
+                ]);
+            } else {
+                this.$set(this.rules, "expressNos", [
+                { required: false, message: "请输入快递单号", trigger: "blur" }
+              ]);
+            }
+            })
+            .catch(error => {
+            this.visible = false;
+            this.$notify.error({
+                title: "错误",
+                message: error
+            });
+            });
+        },
         getExpressCompanyList() {
             this._apis.order.fetchExpressCompanyList().then((res) => {
+                res.push({
+                    expressCompanyCode: 'other',
+                    expressCompany: '其他'
+                })
                 this.expressCompanyList = res
             }).catch(error => {
                 this.visible = false
@@ -200,55 +283,83 @@ export default {
                 });
             })
         },
-        sendGoodsHandler() {
+        sendGoodsHandler(formName) {
             let params
 
-            this.ruleForm.expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == this.ruleForm.expressCompanyCode).expressCompany
-
-            params = {
-                orderAfterSaleSendInfoDtoList: [
-                    {
-                        orderAfterSaleId: this.$route.query.id,
-                        memberInfoId: this.orderAfterSaleSendInfo.memberInfoId,
-                        orderAfterSaleCode: this.orderAfterSaleSendInfo.orderAfterSaleCode,
-                        expressCompanys: this.ruleForm.expressCompany,
-                        expressCompanyCodes: this.ruleForm.expressCompanyCode,
-                        expressNos: this.ruleForm.expressNos,
-                        receivedName: this.orderAfterSaleSendInfo.receivedName,
-                        receivedPhone: this.orderAfterSaleSendInfo.receivedPhone,
-                        receivedProvinceCode: this.orderAfterSaleSendInfo.receivedProvinceCode,
-                        receivedProvinceName: this.orderAfterSaleSendInfo.receivedProvinceName,
-                        receivedCityCode: this.orderAfterSaleSendInfo.receivedCityCode,
-                        receivedCityName: this.orderAfterSaleSendInfo.receivedCityName,
-                        receivedAreaCode: this.orderAfterSaleSendInfo.receivedAreaCode,
-                        receivedAreaName: this.orderAfterSaleSendInfo.receivedAreaName,
-                        receivedDetail: this.orderAfterSaleSendInfo.receivedDetail,
-                        sendName: this.orderAfterSaleSendInfo.sendName,
-                        sendPhone: this.orderAfterSaleSendInfo.sendPhone,
-                        sendProvinceCode: this.orderAfterSaleSendInfo.sendProvinceCode,
-                        sendProvinceName: this.orderAfterSaleSendInfo.sendProvinceName,
-                        sendCityCode: this.orderAfterSaleSendInfo.sendCityCode,
-                        sendCityName: this.orderAfterSaleSendInfo.sendCityName,
-                        sendAreaCode: this.orderAfterSaleSendInfo.sendAreaCode,
-                        sendAreaName: this.orderAfterSaleSendInfo.sendAreaName,
-                        sendDetail: this.orderAfterSaleSendInfo.sendDetail,
-                        remark: this.ruleForm.remark 
-                    }
-                ],
+            if(!this.ruleForm.expressCompanyCode) {
+                this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
+                return
             }
-            this._apis.order.orderAfterSaleSend(params).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '发货成功',
-                    type: 'success'
-                });
-                this.$router.push('/order/deliverGoodsSuccess?id=' + this.$route.query.id + '&type=orderAfterDeliverGoods')
-            }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
-            })
+
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请选择需要发货的商品'})
+                return
+            }
+
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    if(this.ruleForm.expressCompanyCode == 'other') {
+                        this.ruleForm.expressCompany = this.ruleForm.other
+                    } else {
+                        this.ruleForm.expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == this.ruleForm.expressCompanyCode).expressCompany
+                    }
+
+                    params = {
+                        orderAfterSaleSendInfoDtoList: [
+                            {
+                                orderAfterSaleId: this.$route.query.id,
+                                memberInfoId: this.orderAfterSaleSendInfo.memberInfoId,
+                                orderAfterSaleCode: this.orderAfterSaleSendInfo.orderAfterSaleCode,
+                                expressCompanys: this.ruleForm.expressCompany,
+                                expressCompanyCodes: this.ruleForm.expressCompanyCode,
+                                expressNos: this.ruleForm.expressNos,
+                                receivedName: this.orderAfterSaleSendInfo.receivedName,
+                                receivedPhone: this.orderAfterSaleSendInfo.receivedPhone,
+                                receivedProvinceCode: this.orderAfterSaleSendInfo.receivedProvinceCode,
+                                receivedProvinceName: this.orderAfterSaleSendInfo.receivedProvinceName,
+                                receivedCityCode: this.orderAfterSaleSendInfo.receivedCityCode,
+                                receivedCityName: this.orderAfterSaleSendInfo.receivedCityName,
+                                receivedAreaCode: this.orderAfterSaleSendInfo.receivedAreaCode,
+                                receivedAreaName: this.orderAfterSaleSendInfo.receivedAreaName,
+                                receivedDetail: this.orderAfterSaleSendInfo.receivedDetail,
+                                sendName: this.orderAfterSaleSendInfo.sendName,
+                                sendPhone: this.orderAfterSaleSendInfo.sendPhone,
+                                sendProvinceCode: this.orderAfterSaleSendInfo.sendProvinceCode,
+                                sendProvinceName: this.orderAfterSaleSendInfo.sendProvinceName,
+                                sendCityCode: this.orderAfterSaleSendInfo.sendCityCode,
+                                sendCityName: this.orderAfterSaleSendInfo.sendCityName,
+                                sendAreaCode: this.orderAfterSaleSendInfo.sendAreaCode,
+                                sendAreaName: this.orderAfterSaleSendInfo.sendAreaName,
+                                sendDetail: this.orderAfterSaleSendInfo.sendDetail,
+                                remark: this.ruleForm.remark 
+                            }
+                        ],
+                    }
+                    this._apis.order.orderAfterSaleSend(params).then((res) => {
+                        this.$notify({
+                            title: '成功',
+                            message: '发货成功',
+                            type: 'success'
+                        });
+                        this.$router.push({
+                            path: '/order/deliverGoodsSuccess',
+                            query: {
+                                id: this.$route.query.id,
+                                type: 'orderAfterDeliverGoods',
+                                print: this.express
+                            }
+                        })
+                    }).catch(error => {
+                        this.$notify.error({
+                            title: '错误',
+                            message: error
+                        });
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         },
         changeReceivedInfo() {
             this.currentDialog = 'ReceiveInformationDialog'
@@ -273,6 +384,7 @@ export default {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.id]}).then((res) => {
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
+                this.fetchOrderAddress();
             }).catch(error => {
                 this.$notify.error({
                     title: '错误',
@@ -373,5 +485,10 @@ export default {
             }
         }
     }
+    /deep/ label[for="expressCompanyCode"]::before {
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+}
 </style>
 

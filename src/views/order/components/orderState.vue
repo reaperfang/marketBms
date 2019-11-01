@@ -10,7 +10,7 @@
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
                         <el-step title="客戶收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -28,7 +28,7 @@
                         <el-step title="客户付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -43,7 +43,7 @@
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -63,7 +63,7 @@
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -82,14 +82,11 @@
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
                     <p>待收货</p>
-                    <div>
-                        <span>待收货</span>
-                    </div>
                 </div>
             </template>
             <template v-else-if="orderState == 6">
@@ -100,7 +97,7 @@
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" :description="orderInfo.complateTime"></el-step>
+                        <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -113,7 +110,7 @@
                     <el-steps :active="active">
                         <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="订单关闭" :description="orderInfo.closeTime"></el-step>
-                        <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                        <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -132,7 +129,7 @@
                         <el-step title="客户付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -150,7 +147,7 @@
                         <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" description=""></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -165,7 +162,7 @@
                         <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" description="客户已完成付款，请尽快完成发货"></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -179,12 +176,12 @@
             <template v-else-if="orderState == 4">
                 <!-- 部分发货 -->
                 <div class="item lefter">
-                    <el-steps :active="active">
+                    <el-steps active="3">
                         <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" description="客户已完成付款，请尽快完成剩余发货"></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -203,14 +200,11 @@
                         <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
                         <el-step title="客户收货" description="等待签收"></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
                     <p>待收货</p>
-                    <div>
-                        <span>待收货</span>
-                    </div>
                 </div>
             </template>
             <template v-else-if="orderState == 6">
@@ -221,7 +215,7 @@
                         <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
                         <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" :description="orderInfo.complateTime"></el-step>
+                        <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
@@ -229,13 +223,13 @@
                 </div>
             </template>
             <template v-else-if="orderState == 2">
-                <template v-if="orderInfo.closeReaosn == 0">
+                <template v-if="orderInfo.closeReason == 0">
                     <!-- 超时取消 -->
                     <div class="item lefter">
                         <el-steps active="3">
                             <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="orderInfo.closeTime"></el-step>
-                            <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                            <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
                     </div>
                     <div class="item righter">
@@ -243,7 +237,7 @@
                         <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
                     </div>
                 </template>
-                <template v-else-if="orderInfo.closeReaosn == 1">
+                <template v-else-if="orderInfo.closeReason == 1">
                     <!-- 客户取消 -->
                     <template v-if="orderInfo.payComplateTime">
                         <!-- 客户付款 -->
@@ -252,7 +246,7 @@
                                 <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`客户取消订单${orderInfo.closeTime}`"></el-step>
-                                <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
                         </div>
                         <div class="item righter">
@@ -266,7 +260,7 @@
                             <el-steps active="3">
                                 <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`客户取消订单${orderInfo.closeTime}`"></el-step>
-                                <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
                         </div>
                         <div class="item righter">
@@ -275,7 +269,7 @@
                         </div>
                     </template>
                 </template>
-                <template v-else-if="orderInfo.closeReaosn == 2">
+                <template v-else-if="orderInfo.closeReason == 2">
                     <!-- 商户关闭 -->
                     <template v-if="orderInfo.payComplateTime">
                         <!-- 客户付款 -->
@@ -284,7 +278,7 @@
                                 <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
-                                <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
                         </div>
                         <div class="item righter">
@@ -298,7 +292,7 @@
                             <el-steps active="3">
                                 <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
-                                <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
                         </div>
                         <div class="item righter">
@@ -307,13 +301,13 @@
                         </div>
                     </template>
                 </template>
-                <template v-else-if="orderInfo.closeReaosn == 3">
+                <template v-else-if="orderInfo.closeReason == 3">
                     <!-- 拼团失败 -->
                     <div class="item lefter">
                         <el-steps active="3">
                             <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="`拼团活动关闭${orderInfo.closeTime}`"></el-step>
-                            <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                            <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
                     </div>
                     <div class="item righter">
@@ -321,13 +315,13 @@
                         <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
                     </div>
                 </template>
-                <template v-else-if="orderInfo.closeReaosn == 4">
+                <template v-else-if="orderInfo.closeReason == 4">
                     <!-- 商户关闭拼团 -->
                     <div class="item lefter">
                         <el-steps active="3">
                             <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="`商户关闭拼团${orderInfo.closeTime}`"></el-step>
-                            <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                            <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
                     </div>
                     <div class="item righter">
@@ -335,7 +329,7 @@
                         <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
                     </div>
                 </template>
-                <template v-else-if="orderInfo.closeReaosn == 5">
+                <template v-else-if="orderInfo.closeReason == 5">
                     <!-- 客户拒收 -->
                     <div class="item lefter">
                         <el-steps active="5">
@@ -343,7 +337,7 @@
                             <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                             <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
                             <el-step title="客户收货" description="客户拒绝签收"></el-step>
-                            <el-step title="结束" :description="orderInfo.closeTime"></el-step>
+                            <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
                     </div>
                     <div class="item righter">
@@ -471,9 +465,19 @@ export default {
 <style lang="scss" scoped>
     .order-state {
         background-color: #fff;
-        padding: 30px;
+        padding: 30px 50px;
         display: flex;
         justify-content: space-between;
+        .item.righter {
+            margin-left: 10px;
+            p {
+                line-height: 21px;
+            }
+            p:nth-child(2) {
+                font-size: 14px;
+                margin-top: 5px;
+            }
+        }
         .item {
             &.righter {
                 width: 230px;
@@ -486,6 +490,54 @@ export default {
             &.lefter {
                 flex: 1;
             }
+        }
+    }
+    /deep/ .el-step__title {
+        margin-top: 10px;
+    }
+    /deep/ .el-step:nth-child(1) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step:nth-child(2) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step:nth-child(3) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step:nth-child(4) {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step:nth-child(5) {
+        .el-step__title {
+            margin-left: 5px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step.close {
+        .el-step__title {
+            margin-left: 5px;
         }
     }
 </style>

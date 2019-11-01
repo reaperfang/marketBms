@@ -7,14 +7,16 @@ export default [
     name: 'apply',
     meta: {
       title: '应用',
-      icon: 'icon_apply'
+      icon: 'icon_apply',
+      activeIcon:'icon_applys'
     },
+    iframe: true,
     children: [
       {
         path: '',
         component: () => import('@/views/apply/index'),
         name: 'index',
-        meta: { title: '应用', noCache: true }
+        meta: { title: '应用', noCache: true },
       },
     ]
   }

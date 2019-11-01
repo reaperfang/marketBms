@@ -15,7 +15,7 @@
                     <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
                         <p class="price">￥<font>{{item.goodsInfos[0].salePrice}}</font></p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1" class="button"></componentButton>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                 </div>
             </li>
         </ul>
@@ -26,10 +26,11 @@
 <script>
 import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
-import mixinGoods from '../mixins/mixinGoods';
+import GOODS_LIST from '@/assets/json/goodsList.json'; 
+import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
     name:"componentGoods",
-    mixins:[componentMixin, mixinGoods],
+    mixins:[componentMixin],
     props: ['currentCatagoryId', 'origin'],
     data(){
         return{
@@ -53,11 +54,26 @@ export default {
             // 上拉加载
             goodListLoading: false,
             goodListFinished: false,
-            list: []
+            list:  this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
+            loading: false
         }
     },
     components:{
         componentButton
+    },
+    created() {
+        const _self = this;
+        this._globalEvent.$on('goodsListOfGroupChange', (list, componentId)=>{
+            if(this.currentComponentId === componentId) {
+                this.list = list;
+            }
+        })
+        this.fetch();
+        this._globalEvent.$on('fetchGoods', (componentData, componentId) => {
+            if(_self.currentComponentId === componentId) {
+                _self.fetch(componentData);
+            }
+        });
     },
     mounted() {
         this.decoration();
@@ -65,6 +81,12 @@ export default {
     watch: {
         currentComponentData(){
             this.decoration();
+        },
+        currentCatagoryId(newValue) {
+            this.fetch();
+        },
+        'ruleForm.currentCatagoryId'() {
+            this.fetch();
         },
     },
     methods:{
@@ -118,7 +140,7 @@ export default {
             }
             else if(this.listStyle=='5'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
-                var bodyWidth = document.body.clientWidth;
+                var bodyWidth = 370;
                 if('showTemplate' in this.currentComponentData.data){
                     this.showTemplate= this.currentComponentData.data.showTemplate;
                     if(this.showTemplate!=1){
@@ -145,7 +167,105 @@ export default {
             this.buttonStyle = this.currentComponentData.data.buttonStyle;
         },
 
-    }
+        //根据ids拉取数据
+        fetch(componentData = this.currentComponentData.data) {
+            if(componentData) {
+                let params = {};
+                if(!componentData.source || (componentData.source === 1)) {
+                    const ids = componentData.ids;
+                    if(ids) {
+                        if(Object.prototype.toString.call(ids) === '[object Object]') {
+                            params = this.setGroupGoodsParams(ids);
+                            if(!params.ids || !params.ids.length) {
+                                this.list = [];
+                                return;
+                            }
+                        }else if(Array.isArray(ids) && ids.length){
+                            params = this.setNormalGoodsParams(ids);
+                            if(!params.ids || !params.ids.length) {
+                                this.list = [];
+                                return;
+                            }
+                        }else{
+                            if(this.$route.path.indexOf('templateEdit') < 0) {
+                                this.list = [];
+                            }
+                            return;
+                        }
+                    }else{
+                        if(this.$route.path.indexOf('templateEdit') < 0) {
+                            this.list = [];
+                        }
+                        return;
+                    }
+                }else if(componentData.source === 2){
+                    params = {
+                        status: '1',
+                        productCatalogInfoId: componentData.currentCatagoryId
+                    };
+                }
+
+                this.loading = true;
+                this._apis.goods.fetchAllSpuGoodsList(params).then((response)=>{
+                    this.createList(response, componentData);
+                    this.loading = false;
+                }).catch((error)=>{
+                    // this.$notify.error({
+                    //     title: '错误',
+                    //     message: error
+                    // });
+                    console.error(error);
+                    if(this.$route.path.indexOf('templateEdit') < 0) {
+                        this.list = [];
+                    }
+                    this.loading = false;
+                });
+            }
+        },
+
+        /* 创建数据 */
+        createList(datas, componentData) {
+            this.list = datas;
+        },
+
+         /* 设置分类商品参数 */
+        setGroupGoodsParams(ids) {
+            let params = {};
+            if(this.currentCatagoryId === 'all') {
+                const allIds = [];
+                for(let k in ids) {
+                    for(let item of ids[k]) {
+                        allIds.push(item);
+                    }
+                }
+                params = {
+                    status: '1',
+                    ids: allIds
+                }
+            }else{
+                params = {
+                    status: '1',
+                    ids: ids[this.currentCatagoryId],
+                    productCatalogInfoId: this.currentCatagoryId
+                }
+            }
+            return params;
+        },
+
+        /* 设置普通商品参数 */
+        setNormalGoodsParams(ids) {
+            return {
+                status: '1',
+                ids: ids,
+            }
+        }
+
+    },
+    beforeDestroy() {
+        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
+        this._globalEvent.$off('fetchGoods');
+        this._globalEvent.$off('goodsListOfGroupChange');
+    },
 }
 </script>
 
@@ -611,6 +731,7 @@ export default {
             }
             &:nth-of-type(3n+1){
                 overflow:hidden;
+                width:100% !important;
                 .img{
                     padding-bottom:100%;
                     height:0;
@@ -656,6 +777,12 @@ export default {
                 margin-top:15px;
                 width:170px;
                 overflow:hidden;
+                &:nth-of-type(1){
+                    margin-top:0 !important;
+                }
+                &:nth-of-type(2){
+                    margin-top:0 !important;
+                }
                 .img{
                     position:relative;
                     overflow:hidden;
@@ -701,6 +828,12 @@ export default {
                 margin-top:15px;
                 width:170px;
                 overflow:hidden;
+                &:nth-of-type(1){
+                    margin-top:0 !important;
+                }
+                &:nth-of-type(2){
+                    margin-top:0 !important;
+                }
                 .img{
                     position:relative;
                     overflow:hidden;

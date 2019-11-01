@@ -1,29 +1,30 @@
 /* 选择多人拼团弹框 */
 <template>
-   <DialogBase :visible.sync="visible" width="816px" :title="'选择拼团商品'" @submit="submit">
+   <DialogBase :visible.sync="visible" width="816px" :title="'选择拼团活动'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
-        <el-form-item label prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入商品名称"></el-input>
+        <el-form-item label prop="activeName">
+          <el-input v-model="ruleForm.activeName" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
-        <el-form-item label prop="name">
+        <el-form-item label>
           <el-button type="primary" @click="fetch">搜 索</el-button>
         </el-form-item>
       </div>
     </el-form>
     <el-table
-      :data="tableList"
       stripe
+      :data="tableList"
       ref="multipleTable"
+      :row-key="getRowKey"
       @selection-change="handleSelectionChange"
       v-loading="loading"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="goodName" label="商品标题">
+      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+      <el-table-column prop="activeName" label="活动标题">
         <template slot-scope="scope">
           <div class="name_wrapper">
-            <img :src="scope.row.url" alt="" />
-            <p>{{scope.row.goodName}}</p>
+            <img :src="scope.row.goodImg" alt="" />
+            <p>{{scope.row.activeName}}</p>
           </div>
         </template>
       </el-table-column>
@@ -66,15 +67,20 @@ export default {
           type: Boolean,
           required: true
       },
+      goodsEcho: {
+        type: Array,
+        required: true
+      }
   },
   data() {
     return {
+      pageSize: 5,
       tableList: [],
       multipleSelection: [],
       pageNum: 1,
       ruleForm: {
         pageNum: 1,
-        name: '',
+        activeName: '',
       },
       rules: {}
     };
@@ -87,9 +93,24 @@ export default {
       set(val) {
           this.$emit('update:dialogVisible', val)
       }
+    },
+    goodsList: {
+      get() {
+          return this.goodsEcho
+      },
+      set(val) {
+          this.$emit('update:goodsEcho', val)
+      }
     }
   },
   created() {
+    this.goodsList.forEach((row, index) => {
+      this.$nextTick(() => {
+        if(!row.fakeData) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, true);
+        }
+      })
+    })
   },
   methods: {
     fetch() {
@@ -99,10 +120,11 @@ export default {
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
         this.loading = false;
       });
     },
@@ -119,6 +141,12 @@ export default {
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    getRowKey(row) {
+      return row.activeId
+    }
   }
 };
 </script>
@@ -134,6 +162,10 @@ export default {
     display: block;
     margin-right: 10px;
     border: 1px solid #ddd;
+    object-fit: contain;
+  }
+  p{
+    width: calc(100% - 50px);
   }
 }
 </style>

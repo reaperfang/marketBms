@@ -17,7 +17,7 @@
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;">
+          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
             <el-option
               v-for="item in fsTypes"
               :key="item.value"
@@ -42,16 +42,19 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit" v-permission="['财务', '物流对账', '电子面单', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()'>导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '物流对账', '电子面单', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <el-table
+      v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -68,10 +71,14 @@
         <el-table-column
           prop="businessType"
           label="业务类型">
+          <template slot-scope="scope">
+            {{scope.row.businessType ? '售后发货' : '订单发货'}}
+          </template>  
         </el-table-column>
         <el-table-column
           prop="relationSn"
-          label="关联单据编号">
+          label="关联单据编号"
+          :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
           prop="createUserName"
@@ -116,12 +123,13 @@ export default {
       ruleForm:{
         searchType:'relationSn',
         searchValue:'',
-        businessType:1,
+        businessType:-1,
         expressCompany:'',
         timeValue:''
       },
       dataList:[ ],
-      total:0
+      total:0,
+      loading:true
     }
   },
   watch: {},
@@ -136,6 +144,21 @@ export default {
   created() {    
   },
   methods: {
+    renderRelationSn(){
+      return(
+        <div style="height:49px;line-height:49px;">
+          <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="160"
+            trigger="hover"
+            content="订单编号、售后单编号、提现编号">
+            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
+          </el-popover>
+        </div>
+      )
+    },
     init(){
       let query = {
         queryType:0,
@@ -158,6 +181,7 @@ export default {
           }
         }
       }
+      query.businessType = this.ruleForm.businessType == -1 ? null : this.ruleForm.businessType
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.startTime = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
@@ -171,11 +195,9 @@ export default {
       this._apis.finance.getListFs(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
+        this.loading = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
     //搜索
@@ -187,10 +209,11 @@ export default {
       this.ruleForm = {
         searchType:'relationSn',
         searchValue:'',
-        businessType:1,
+        businessType:'',
         expressCompany:'',
         timeValue:''
       }
+      this.fetch()
     },
     //导出
     exportToExcel() {

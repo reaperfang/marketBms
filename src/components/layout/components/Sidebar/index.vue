@@ -36,9 +36,12 @@ export default {
   },
   components: { SidebarItem },
   computed: {
-    ...mapState({
-      current: state => state.menu.current,
-    }),
+    // ...mapState({
+    //   current: state => state.menu.current,
+    // }),
+    current() {
+      return localStorage.getItem('siderBarCurrent') || '0'
+    },
     ...mapGetters([
       'permission_routers',
       'permission_routers_tree',
@@ -57,10 +60,14 @@ export default {
       let _path = _permission_routers_tree[this.current].path
       let children = _permission_routers_tree[this.current].children
 
-      children.forEach(val => {
-        val.path = _path + '/' + val.path
-      })
-      this.sidebarItems = children
+      if(_permission_routers_tree[this.current].iframe) {
+        this.sidebarItems = []
+      } else {
+        children.forEach(val => {
+          val.path = _path + '/' + val.path
+        })
+        this.sidebarItems = children
+      }
     }
   },
   watch: {

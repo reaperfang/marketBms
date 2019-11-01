@@ -24,7 +24,7 @@ export default {
                 arr.push(v.id);
             });
             arr = arr.join(',');
-            this._api.client.batchDeleteMember({ids:arr}).then((response) => {
+            this._apis.client.batchDeleteMember({ids:arr}).then((response) => {
                 this.$notify({
                     title: '成功',
                     message: '批量删除成功',
@@ -32,10 +32,11 @@ export default {
                 });
                 this.$emit('freshTable');
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
+                // this.$notify.error({
+                //     title: '错误',
+                //     message: error
+                // });
             })
         }
     },

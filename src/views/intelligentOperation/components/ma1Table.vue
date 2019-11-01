@@ -20,7 +20,7 @@
         label="会员昵称">
       </el-table-column>
       <el-table-column
-        label="会员类型">
+        label="客户类型">
        <template slot-scope="scope">
              <span style="line-height:60px;display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
         </template>

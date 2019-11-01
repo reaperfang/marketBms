@@ -6,9 +6,9 @@
                         <el-form-item label="交易时间">
                             <div class="p_line">
                     <el-radio-group v-model="form.timeType">
-                        <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="1">7天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="2">15天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="3">30天</el-radio-button>
                         <el-radio-button class="btn_bor" label="5">最近一季度</el-radio-button>
                         <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
                         </el-radio-group>
@@ -38,26 +38,25 @@
                             <span class="span_label">维权原因</span>
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.ProtectionReason">
-                                    <el-option label="不限" value="null"></el-option>
-                                    <el-option label="不想要了" value="1"></el-option>
-                                    <el-option label="卖家缺货" value="2"></el-option>
-                                    <el-option label="拍错了订单信息错误" value="3"></el-option>
-                                    <el-option label="其他" value="4"></el-option>
+                                    <el-option v-for="item in reasons" :label="item.name" :value="item.id" :key="item.id"></el-option>
                                 </el-select>
                             </div>
-                             <span class="span_label">会员类型</span>
+                             <span class="span_label">客户类型</span>
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.memberType">
                                     <el-option label="全部" value="null"></el-option>
-                                    <el-option label="非会员" value="1"></el-option>
-                                    <el-option label="新会员" value="2"></el-option>
-                                    <el-option label="老会员" value="3"></el-option>
+                                    <el-option label="非会员" value="0"></el-option>
+                                    <el-option label="新会员" value="1"></el-option>
+                                    <el-option label="老会员" value="2"></el-option>
                                 </el-select>
                             </div>
                             <el-button class="minor_btn" icon="el-icon-search" @click="getRightsProtection()">查询</el-button>
                             <el-button class="border_btn" @click="resetAll()">重 置</el-button>
                         </el-form-item>
                     </el-form>
+                    <div class="m_line clearfix">
+                        <p style="line-height:40px;">该筛选条件下：会员共计<span>{{listObj.memberCount}}</span>人，占客户总数的<span>{{(listObj.ratio*100).toFixed(2)}}</span>%；订单共计<span>{{listObj.orderCount}}</span>个、商品总数共计<span>{{listObj.goodsCount}}</span>个；维权次数共计<span>{{listObj.protectionCount}}</span>次；</p>
+                    </div>
                     <div class="m_line clearfix">
                         <div class="fr marT20">
                             <el-button class="minor_btn" @click="rescreen()">重新筛选</el-button>
@@ -66,8 +65,14 @@
                             </el-tooltip>
                         </div>
                     </div>
-                    <ma2Table class="marT20" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
+                    <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
                 </div>
+                <h3>运营建议:</h3>
+                <p v-if="form.ProtectionReason==1" class="proposal"><b>"不想要了":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>                
+                <p v-if="form.ProtectionReason==2" class="proposal"><b>"卖家缺货":</b>建议针对此类用户免费调换商品。</p>
+                <p v-if="form.ProtectionReason==3" class="proposal"><b>"拍错了/订单信息错误":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>
+                <div class="contents"></div>
+                <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
     </div>
 </template>
 <script>
@@ -85,6 +90,7 @@ export default {
                 timeType:1,
                 memberType:null,
                 pageSize:10,
+                loads:false,
                 startIndex:1
             },
             listObj:{
@@ -92,44 +98,46 @@ export default {
             },
             pickerMinDate: '',
             dateRange: [],
+            reasons:[],
             pickerOptions: {
-          onPick: ({ maxDate, minDate }) => {
-            this.pickerMinDate = minDate.getTime()
-            if (maxDate) {
-              this.pickerMinDate = ''
-            }
-          },
-          disabledDate: (time) => {
-            if (this.pickerMinDate !== '') {
-              const day30 = (90 - 1) * 24 * 3600 * 1000
-              let maxTime = this.pickerMinDate + day30
-              if (maxTime > new Date()) {
-                maxTime = new Date()
-              }
-              return time.getTime() > maxTime
-            }
-            return time.getTime() > Date.now()
-          }
-        },
+                onPick: ({ maxDate, minDate }) => {
+                    this.pickerMinDate = minDate.getTime()
+                    if (maxDate) {
+                    this.pickerMinDate = ''
+                    }
+                },
+                disabledDate: (time) => {
+                    if (this.pickerMinDate !== '') {
+                    const day30 = (90 - 1) * 24 * 3600 * 1000
+                    let maxTime = this.pickerMinDate + day30
+                    if (maxTime > new Date()) {
+                        maxTime = new Date() - 8.64e7
+                    }
+                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
+                    }
+                    return time.getTime() > Date.now()
+                }
+            },
         }
     },
     methods: {
+        //获取维权原因
+        getReasons(){
+            this._apis.data.getReasons().then(response => {
+                this.reasons = response
+            })
+        },
         // 获取维权全部数据
         getRightsProtection(idx,pageS){
+            this.form.loads = true
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
-            // let data ={
-            //     timeType:this.form.timeType,
-            //     startTime:this.form.startTime,
-            //     endTime:this.form.endTime,
-            //     protectionType:this.form.protectionType,
-            //     ProtectionReason:this.form.ProtectionReason,
-            //     pageSize:this.form.pageSize,
-            //     startIndex:this.form.startIndex,
-
-            // }
+            this.form.protectionType == 'null' && (this.form.protectionType = null)
+            this.form.ProtectionReason == 'null' && (this.form.ProtectionReason = null)
+            this.form.memberType == 'null' && (this.form.memberType = null)
             this._apis.data.rightsProtection(this.form).then(response => {
                 this.listObj = response;
+                this.form.loads = false
             })
         },
         changeTime(val){
@@ -180,6 +188,7 @@ export default {
     },
     created(){
         this.getRightsProtection()
+        this.getReasons()
     }
 }
 </script>
@@ -202,6 +211,9 @@ export default {
 }
 /deep/.el-checkbox.is-bordered.is-checked{
     background:rgba(101,94,255,0.1);
+}
+.proposal{
+    margin-left: 65px;
 }
 .m_container{
     background-color: #fff;
@@ -234,5 +246,26 @@ export default {
             }
         }
     }
+}
+.marT20s{
+    // position: relative;
+    margin-top:10px;
+}
+.contents{
+    width: 100%;
+    height: 45px;
+    background: #fff;    
+}
+.loadings{
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 60%;
+    top: 43%;
+    transform: translate(-50%,-50%);
+}
+.loadings>img{
+    width: 220px;
+    height: 220px;
 }
 </style>

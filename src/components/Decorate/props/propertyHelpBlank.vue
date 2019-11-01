@@ -20,7 +20,7 @@ export default {
   data () {
     return {
       ruleForm: {
-        blankHeight: 30
+        blankHeight: 30//	空白高度
       },
       rules: {
 

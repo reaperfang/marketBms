@@ -11,7 +11,7 @@
                         <div class="label">收货信息</div>
                         <div class="value">
                             <p>{{orderInfo.receivedName}} / {{orderInfo.receivedPhone}}</p>
-                            <p>{{orderInfo.receivedDetail}}</p>
+                            <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
                     <p @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
@@ -20,7 +20,7 @@
             <el-col :span="8"><div class="grid-content center">
                 <div class="item">
                     <div class="label">付款人</div>
-                    <div class="value">{{orderDetail.orderSendInfo && orderDetail.orderSendInfo.sendName}}</div> <!-- <span class="blue">详情</span> -->
+                    <div class="value" style="word-break: break-all;">{{payMan}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
                 </div>
                 <div class="item">
                     <div class="label">付款方式</div>
@@ -30,17 +30,21 @@
                     <div class="label">付款时间</div>
                     <div class="value">{{orderInfo.payComplateTime}}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="orderDetail.orderPayRecordList && orderDetail.orderPayRecordList.filter(val => val.tradeCode).length">
                     <div class="label">交易流水号</div>
-                    <div class="value">{{orderInfo.transactionCode}}</div>
+                    <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | tradeCodeFilter}}</div>
+                </div>
+                <div class="item" v-if="wechatLength">
+                    <div class="label">微信流水号</div>
+                    <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
                 <div class="item">
                     <div class="label">本单获得</div>
                     <div class="value">
-                        <p>积分 {{orderInfo.gainScore}}</p>
-                        <p>赠品 {{orderInfo.gift}}</p>
-                        <p>优惠券 {{gainCoupon}}</p>
-                        <p>优惠码 {{gainPromotionCode}}</p>
+                        <p>积分 {{rewardScore}}</p>
+                        <p style="word-break: break-all;">赠品 {{gift}}</p>
+                        <p style="word-break: break-all;">优惠券 {{gainCouponList}}</p>
+                        <p style="word-break: break-all;">优惠码 {{gainCouponCodeList}}</p>
                     </div>
                 </div>
             </div></el-col>
@@ -51,7 +55,7 @@
                         <p>发票类型 {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
                         <p>发票抬头 {{orderInfo.invoiceTitle}}</p>
                         <p>发票内容 商品明细</p>
-                        <p>电子发票将在订单完成后1-2天内开具</p>
+                        <!-- <p>电子发票将在订单完成后1-2天内开具</p> -->
                     </div>
                 </div>
                 <div class="item">
@@ -67,7 +71,8 @@
                             type="textarea"
                             :rows="2"
                             placeholder="请输入内容"
-                            v-model="orderInfo.sellerRemark">
+                            v-model="orderInfo.sellerRemark"
+                            maxlength="50">
                         </el-input>
                         <span v-if="!remarkVisible" @click="remarkVisible = true" class="blue pointer">我要备注</span>
                         <span v-if="remarkVisible" class="blue pointer" @click="remarkHandler">完成</span>
@@ -75,12 +80,172 @@
                 </div>
             </div></el-col>
         </el-row>
+
+        <div class="goods-list">
+            <p class="header">订单清单</p>
+            <el-table
+                :data="orderDetail.orderItems"
+                style="width: 100%"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                <el-table-column
+                    label="商品"
+                    width="380">
+                    <template slot-scope="scope">
+                        <div class="goods-detail">
+                            <div class="item image-box">
+                                <img width="66" :src="scope.row.goodsImage" alt="">
+                            </div>
+                            <div class="item">
+                                <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                <p class="goods-specs">{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
+                            </div>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="goodsUnit"
+                    label="单位"
+                    width="180">
+                </el-table-column>
+                <el-table-column
+                    prop="goodsCount"
+                    label="数量">
+                </el-table-column>
+                <el-table-column
+                    label="商品单价">
+                    <template slot-scope="scope">
+                        ¥{{scope.row.salePrice}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="商品小计">
+                    <template slot-scope="scope">
+                        ¥{{(+scope.row.salePrice * scope.row.goodsCount).toFixed(2)}}
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="goods-list-message">
+                <div class="row">
+                    <div class="col">运费:</div>
+                    <div class="col">+ ¥{{orderDetail.orderInfo.freight}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">订单金额:</div>
+                    <div class="col">¥{{orderAmount}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">优惠券金额:</div>
+                    <div class="col">
+                        -¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
+                        <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true}; dialogVisible = true" class="coupon-img"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">优惠码金额:</div>
+                    <div class="col">
+                        -¥{{orderDetail.orderInfo.consumeCouponCodeMoney || '0.00'}}
+                        <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false}; dialogVisible = true" class="coupon-img"></i>
+                    </div>
+                </div>
+                <template v-if="orderDetail.orderInfo.activityListJson">
+                    <div class="row" v-for="(item, index) in JSON.parse(orderDetail.orderInfo.activityListJson)" :key="index">
+                        <div class="col">{{`${item.activityTypeName}（${item.name}）`}}:</div>
+                        <div class="col">- ¥{{item.reduceMoney || '0.00'}}</div>
+                    </div>
+                </template>
+                <div class="row">
+                    <div class="col">会员折扣:</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney || '0.00'}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">优惠套装:</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.discountPackageMoney || '0.00'}}</div>
+                </div>
+                <div class="row" v-if="orderDetail.orderInfo && orderDetail.orderInfo.discountFreight">
+                    <div class="col">满包邮:</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.discountFreight}}</div>
+                </div>
+                <div class="row align-center">
+                    <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
+                        <el-select style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
+                            <el-option
+                            v-for="item in reducePriceTypeList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div v-else-if="orderDetail.orderInfo.consultMoney">
+                        <el-select disabled style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
+                            <el-option
+                            v-for="item in reducePriceTypeList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
+                        <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="orderInfo.consultMoney"></el-input>
+                        <span v-if="!changePriceVisible">{{orderInfo.consultMoney}}</span>
+                        <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
+                        <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
+                    </div>
+                    <div v-else-if="orderDetail.orderInfo.consultMoney">
+                        <span>¥{{orderDetail.orderInfo.consultMoney}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">应收金额:</div>
+                    <div class="col">¥{{yingshow}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">余额使用:</div>
+                    <div class="col">¥{{orderDetail.orderInfo.consumeBalanceMoney || 0}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">积分抵现:</div>
+                    <div class="col">¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">第三方支付:</div>
+                    <div class="col">¥{{orderDetail.orderInfo.actualMoney || 0}}</div>
+                </div>
+            </div>
+            <div class="operate-record">
+                <p class="header">操作记录</p>
+                <el-table
+                    :data="orderDetail.orderOperationRecordList"
+                    style="width: 100%"
+                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                    <el-table-column
+                        label="操作"
+                        width="180">
+                        <template slot-scope="scope">
+                            {{scope.row.operationType | operationTypeFilter}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="createUserName"
+                        label="操作人"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="createTime"
+                        label="操作时间">
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :ajax="ajax" :sendGoods="sendGoods" @submit="submit"></component>
     </div>
 </template>
 <script>
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
-
+import CouponDialog from '@/views/order/dialogs/couponDialog'
+import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
+//consultType 协商类型 1加价,2减价
 export default {
     data() {
         return {
@@ -100,12 +265,44 @@ export default {
             dialogVisible: false,
             remarkVisible: false,
             ajax: false,
-            sendGoods: 'received'
+            sendGoods: 'received',
+            goodsListMessage: {
+               consultType: 1,
+               consultMoney: 0,
+               reducePriceVisible: false
+            },
+            reducePriceTypeList: [
+                {
+                    label: '协商加价',
+                    value: 1
+                },
+                {
+                    label: '协商减价',
+                    value: 2
+                }
+            ],
+            changePriceVisible: false,
+            orderAmount: '0.00',
+            yingshow: '0.00',
+            rewardScore: 0,
+            gift: '',
+            gainCouponList: '',
+            gainCouponCodeList: ''
             //replacePayWechatNames: ''
         }
     },
     created() {
         //this.getOrderPayRecordList()
+        this.getGain()
+    },
+    watch: {
+        orderInfo: {
+            deep: true,
+            handler() {
+                this.getOrderAmount()
+                this.getYingshou()
+            }
+        }
     },
     computed: {
         gainCoupon() {
@@ -142,6 +339,36 @@ export default {
             return promotionCodeStr
             
         },
+        usedCouponList() {
+            return this.orderDetail.orderCouponList && this.orderDetail.orderCouponList.filter(val => val.couponType == 1) || []
+        },
+        usedPromotionList() {
+            return this.orderDetail.orderPromotionCodeList && this.orderDetail.orderPromotionCodeList.filter(val => val.promotionCodeType == 1) || []
+        },
+        payMan() {
+            let str = ''
+            let _arr
+
+            if(this.orderInfo.payWay == 2) {
+                return this.orderInfo.receivedName
+            } else if(this.orderInfo.isConsumeBalance == 1 && (this.orderInfo.actualMoney == '0.00' || this.orderInfo.actualMoney == null)) {
+                return this.orderInfo.memberName
+            } else {
+                if(this.orderDetail.orderPayRecordList) {
+                    //_arr = this.orderDetail.orderPayRecordList.slice(0, 3)
+                    _arr = this.orderDetail.orderPayRecordList
+                    str = _arr.map(val => val.memberName).join(',')
+                }
+            }
+
+            return str
+        },
+        wechatLength() {
+            if(this.orderDetail.orderPayRecordList) {
+                return this.orderDetail.orderPayRecordList.filter(val => val.transactionCode).length
+            }
+            return 0
+        }
     },
     methods: {
         // getOrderPayRecordList() {
@@ -163,6 +390,127 @@ export default {
         //         });
         //     }) 
         // },
+        getGain() {
+            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+
+            this._apis.order.getGain({
+                businessId:1,
+                tenantId:shopInfo.tenantInfoId,
+                merchantId:shopInfo.id
+            }).then(res => {
+                this.rewardScore = res.rewardScore || 0,
+                this.gift = res.giftList && res.giftList.map(val => val.appGift.goodsName).join(',') || ''
+                this.gainCouponList = res.couponList && res.couponList.map(val => val.appCoupon.name).join(',') || ''
+                this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
+            }).catch(error => {
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
+            })
+        },
+        getOrderAmount() {
+            let goodsAmount
+            let freight
+            let total
+
+            goodsAmount = (typeof this.orderInfo.goodsAmount == 'string') ? parseFloat(this.orderInfo.goodsAmount) : this.orderInfo.goodsAmount
+            freight = (typeof this.orderInfo.freight == 'string') ? parseFloat(this.orderInfo.freight) : this.orderInfo.freight
+            total = goodsAmount + freight
+            total = total.toFixed(2)
+
+            this.orderAmount = total
+        },
+        getYingshou() {
+            let consumeBalanceMoney
+            let consumeScoreConvertMoney
+            let actualMoney
+            let receivableMoney
+            let total
+
+            consumeBalanceMoney = typeof this.orderInfo.consumeBalanceMoney == 'string' ? parseFloat(this.orderInfo.consumeBalanceMoney) : this.orderInfo.consumeBalanceMoney
+            consumeScoreConvertMoney = typeof this.orderInfo.consumeScoreConvertMoney == 'string' ? parseFloat(this.orderInfo.consumeScoreConvertMoney) : this.orderInfo.consumeScoreConvertMoney
+            actualMoney = typeof this.orderInfo.actualMoney == 'string' ? parseFloat(this.orderInfo.actualMoney) : this.orderInfo.actualMoney
+            receivableMoney = typeof this.orderInfo.receivableMoney == 'string' ? parseFloat(this.orderInfo.receivableMoney) : this.orderInfo.receivableMoney
+
+            if(this.orderInfo.orderStatus == 3) {
+                if(this.orderInfo.payWay == 2) {
+                    total = consumeBalanceMoney + consumeScoreConvertMoney + receivableMoney
+                    total = total.toFixed(2)
+                    this.yingshow = total
+                } else {
+                    total = consumeBalanceMoney + consumeScoreConvertMoney + actualMoney
+                    total = total.toFixed(2)
+                    this.yingshow = total
+                }
+            } else {
+                total = consumeBalanceMoney + consumeScoreConvertMoney + receivableMoney
+                total = total.toFixed(2)
+                this.yingshow = total
+            }
+        },
+        handleInput2(e) {
+            //this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+            this.orderInfo.consultMoney = (this.orderInfo.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
+        },
+        reducePriceHandler() {
+            if(this.orderInfo.consultType == 2) {
+                if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
+                    this.$message({
+                        message: '不能大于应收金额',
+                        type: 'warning'
+                    });
+                    return
+                }
+            }
+            this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
+            consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
+                this.changePriceVisible = false
+                // this.$notify({
+                //     title: '成功',
+                //     message: '添加成功！',
+                //     type: 'success'
+                // });
+                this.currentDialog = 'ChangePriceDialog'
+                this.dialogVisible = true
+                this.getDetail()
+            }).catch(error => {
+                this.changePriceVisible = false
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
+            }) 
+        },
+        reducePriceHandler() {
+            if(this.orderInfo.consultType == 2) {
+                if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
+                    this.$message({
+                        message: '不能大于应收金额',
+                        type: 'warning'
+                    });
+                    return
+                }
+            }
+            this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
+            consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
+                this.changePriceVisible = false
+                // this.$notify({
+                //     title: '成功',
+                //     message: '添加成功！',
+                //     type: 'success'
+                // });
+                this.$emit('getDetail')
+                this.currentDialog = 'ChangePriceDialog'
+                this.dialogVisible = true
+            }).catch(error => {
+                this.changePriceVisible = false
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
+            }) 
+        },
         submit() {
             this.$emit('getDetail')
         },
@@ -209,6 +557,62 @@ export default {
             } else if(code === 2) {
                 return '公司'
             }
+        },
+        orderPayRecordListFilter(arr) {
+            let str = ''
+            let _arr
+
+            if(this.orderInfo.payWay == 2) {
+                return this.orderInfo.receivedName
+            } else if(this.orderInfo.isConsumeBalance == 1 && !this.orderInfo.actualMoney) {
+                return this.orderInfo.memberName
+            } else {
+                if(arr) {
+                    _arr = arr.slice(0, 3)
+                    str = _arr.map(val => val.memberName).join(',')
+                }
+            }
+
+            return str
+        },
+        operationTypeFilter(code) {
+            switch(code) {
+                case 1:
+                    return '确认收款'
+                case 2:
+                    return '改价'
+                case 3:
+                    return '继续发货'
+                case 4:
+                    return '补填物流信息'
+                case 5:
+                    return '发货'
+                case 6:
+                    return '关闭订单'
+                case 7:
+                    return '提前关闭订单'
+            }
+        },
+        yingshouFilter(val) {
+            if(val.orderStatus == 3) {
+                return val.consumeBalanceMoney + val.consumeScoreConvertMoney + val.actualMoney
+            } else {
+                return val.consumeBalanceMoney + val.consumeScoreConvertMoney + val.receivableMoney
+            }
+        },
+        tradeCodeFilter(value) {
+            if(value && value instanceof Array) {
+                return value.map(val => val.tradeCode).join(',')
+            } else {
+                return ''
+            }
+        },
+        wechatFilter(value) {
+            if(value && value instanceof Array) {
+                return value.map(val => val.transactionCode).join(',')
+            } else {
+                return ''
+            }
         }
     },
     props: {
@@ -222,7 +626,9 @@ export default {
         }
     },
     components: {
-        ReceiveInformationDialog
+        ReceiveInformationDialog,
+        CouponDialog,
+        ChangePriceDialog
     }
 }
 </script>
@@ -263,6 +669,9 @@ export default {
                 margin-top: 10px;
                 .label {
                     margin-right: 20px;
+                    flex-shrink: 0;
+                    width: 70px;
+                    text-align: right;
                 }
                 .value {
                     color: #9FA29F;
@@ -273,6 +682,67 @@ export default {
     /deep/ .remark-box .el-textarea {
         width: 180px;
     }
+
+    .goods-list, .operate-record {
+            background-color: #fff;
+            margin-top: 20px;
+            padding: 20px;
+            .header {
+                padding-bottom: 20px;
+                font-size: 16px;
+                color: #161617;
+            }
+        }
+        .goods-list-message {
+            margin-top: 20px;
+            padding-right: 50px;
+            float: right;
+            .item {
+                display: flex;
+                margin-top: 10px;
+            }
+            .reduce-price {
+                display: flex;
+                align-items: center;
+                /deep/ .el-input {
+                    width: 100px;
+                }
+            }
+            .coupon-img {
+                width: 14px;
+                height: 14px;
+                display: inline-block;
+                background: url(../../../assets/images/order/icon-coupon.png);
+                margin-left: 14px;
+            }
+            .row {
+                margin-bottom: 10px;
+                .reduce-price-input {
+                    width: 100px;
+                }
+                .col:first-child {
+                    width: 200px;
+                    text-align: right;
+                    margin-right: 5px;
+                }
+            }
+        }
+        .operate-record {
+            clear: both;
+        }
+        .reduce-price-input {
+        width: auto;
+    }
+    .orderPayRecordList {
+        margin-left: 5px;
+    }
+    .goods-detail {
+            display: flex;
+            align-items: center;
+        }
+        .image-box {
+            margin-right: 5px;
+        }
 </style>
 
 

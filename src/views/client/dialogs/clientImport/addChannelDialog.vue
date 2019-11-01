@@ -37,6 +37,7 @@ export default {
                     });
                     this.$emit('refreshPage')
                 }).catch((error) => {
+                    //为了验证渠道重名的情况，打开此错误提示
                     this.$notify.error({
                         title: '错误',
                         message: error

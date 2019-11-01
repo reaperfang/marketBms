@@ -1,9 +1,10 @@
 /*消息设置 */
 <template>
  <div class="main">
-   <p class="title">买家通知</p>
+   <p class="title">买家通知<span><br><i>请注意：</i>1、设置前，请务必保证公众号或小程序已申请开通消息模板（约2-3个工作日） <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、由于公众号、小程序官方后台最多支持25条模板消息，所以已设置成功的消息开启时不再重新获取  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、在微信官方后台删除模板时，请不要删除已设置成功的模板</span></p>
       <!-- :span-method="objectSpanMethod" -->
     <el-table
+      v-loading="loading"
       :data="tableData"
       border
       style="width: 100%;">
@@ -27,19 +28,23 @@
         align="center">
         <template slot-scope="scope">
           <el-switch
+          v-if="!!scope.row.wechatPublicId"
           v-model="scope.row.msgWechatPublic"
-          @change="switchMessage(scope.row.id,scope.row.msgWechatPublic,scope.row.msgWechatApp,scope.row.msgSms)"
+          @change="switchMessage1(scope.row.id,scope.row.msgWechatPublic)"
           active-color="#13ce66"
-          inactive-color="#ff4949">
+          inactive-color="#eee"
+          v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
           <el-popover
+            :disabled="!scope.row.wechatPublicId"
             placement="right"
             width="400"
             trigger="click">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
-              <div v-html="scope.row.preview" class="preview_content"></div>
-              <p class="preview_id">模板ID:{{scope.row.previewId}}</p>
-            <el-link type="primary" slot="reference">预览</el-link>
+              <div class="preview_content" v-html="scope.row.wechatPublicPreview"></div>
+              <p class="checkInfo" v-if="scope.row.isGotoWechatPublicDetail == 1">详情</p>
+              <p class="preview_id">模板ID:{{scope.row.wechatPublicId}}</p>
+            <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.wechatPublicId?'预览':'--'}}</el-link>
           </el-popover>
         </template>
       </el-table-column>
@@ -49,19 +54,23 @@
         align="center">
         <template slot-scope="scope">
           <el-switch
+          v-if="!!scope.row.wechatAppId"
           v-model="scope.row.msgWechatApp"
-          @change="switchMessage(scope.row.id,scope.row.msgWechatPublic,scope.row.msgWechatApp,scope.row.msgSms)"
+          @change="switchMessage2(scope.row.id,scope.row.msgWechatApp)"
           active-color="#13ce66"
-          inactive-color="#ff4949">
+          inactive-color="#eee"
+          v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
           <el-popover
+            :disabled="!scope.row.wechatAppId"
             placement="right"
             width="400"
             trigger="click">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
-              <div v-html="scope.row.preview2" class="preview_content"></div>
-              <p class="preview_id">模板ID:{{scope.row.previewId2}}</p>
-            <el-link type="primary" slot="reference">预览</el-link>
+              <div v-html="scope.row.wechatAppPreview" class="preview_content"></div>
+              <p class="checkInfo" v-if="scope.row.isGotoWechatAppDetail == 1">查看详情</p>
+              <p class="preview_id">模板ID:{{scope.row.wechatAppId}}</p>
+            <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.wechatAppId?'预览':'--'}}</el-link>
           </el-popover>
         </template>
       </el-table-column>
@@ -71,18 +80,21 @@
         align="center">
         <template slot-scope="scope">
           <el-switch
+          v-if="!!scope.row.smsTemplateKey"
           v-model="scope.row.msgSms"
-          @change="switchMessage(scope.row.id,scope.row.msgWechatPublic,scope.row.msgWechatApp,scope.row.msgSms)"
+          @change="switchMessage3(scope.row.id,scope.row.msgSms)"
           active-color="#13ce66"
-          inactive-color="#ff4949">
+          inactive-color="#eee"
+          v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
           <el-popover
+            :disabled="scope.row.smsPreview == undefined || !scope.row.smsTemplateKey"
             placement="right"
             width="400"
             trigger="click">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
-              <div v-html="scope.row.preview3" class="preview_content"></div>
-            <el-link type="primary" slot="reference">预览</el-link>
+              <div v-html="scope.row.smsPreview" class="preview_content"></div>
+            <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.smsTemplateKey?'预览':'--'}}</el-link>
           </el-popover>
         </template>
       </el-table-column>
@@ -93,12 +105,12 @@
 <script>
 import buyer from "./components/buyer";
 import seller from "./components/seller";
-import setCont from '@/system/constant/set';
 export default {
   name: 'messageSet',
   data() {
     return {
       tableData: [],
+      loading:true
     }
   },
   components: {buyer, seller},
@@ -106,15 +118,6 @@ export default {
     
   },
   computed: {
-    previewContent() {
-      return setCont.previewContent
-    },
-    previewContent2() {
-      return setCont.previewContent2
-    },
-    previewContent3() {
-      return setCont.previewContent3
-    }
   }, 
   created() {
     this.getShopMessage()
@@ -122,46 +125,44 @@ export default {
   methods: {
     getShopMessage(){
       this._apis.set.getShopMessage().then(response =>{
+        response.splice(response.length - 1, 1);
         this.tableData = []
         response.map(item => {
-          item.msgWechatPublic = item.msgWechatPublic == 0 ? false : true
-          item.msgWechatApp = item.msgWechatApp == 0 ? false : true
-          item.msgSms = item.msgSms == 0 ? false : true
-          //加预览内容
-          this.previewContent.map((v) => {
-            if(v.title == item.msgTitle) {
-              item.preview = v.content;
-              item.previewId = v.id
-            }
-          })
-          this.previewContent2.map((v) => {
-            if(v.title == item.msgTitle) {
-              item.preview2 = v.content;
-              item.previewId2 = v.id
-            }
-          })
-          this.previewContent3.map((v) => {
-            if(v.title == item.msgTitle) {
-              item.preview3 = v.content;
-            }
-          })
-          this.tableData.push(item);
+          if(item.tcShopInfoMsgTemplateId != 21){
+            item.msgWechatPublic = item.msgWechatPublic == 0 ? false : true
+            item.msgWechatApp = item.msgWechatApp == 0 ? false : true
+            item.msgSms = item.msgSms == 0 ? false : true
+            this.tableData.push(item);
+          }
         })
+        this.loading = false
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
 
-    switchMessage(id,publics,app,sms){
+    switchMessage1(id,publics){
       let query = {
         id:id,
         msgWechatPublic: publics == false ? 0 : 1,
+      }
+      this.handleSwitch(query);
+    },
+    switchMessage2(id,app){
+      let query = {
+        id:id,
         msgWechatApp: app == false ? 0 : 1,
+      }
+      this.handleSwitch(query);
+    },
+    switchMessage3(id,sms){
+      let query = {
+        id:id,
         msgSms: sms == false ? 0 : 1
       }
+      this.handleSwitch(query);
+    },
+    handleSwitch(query) {
       this.$msgbox({
         title: '确认提示',
         message: '确认要进行此项操作吗？',
@@ -180,10 +181,12 @@ export default {
             title: '错误',
             message: error
           });
+          this.getShopMessage()
         })        
+      }).catch(() =>{
+        this.getShopMessage()
       })
     },
-
     handleClick(comp) {
       this.currentTab = comp.name;
     },
@@ -225,8 +228,15 @@ export default {
   background: #fff;
 }
 .title{
-  height: 60px;
-  line-height: 60px;
+  line-height: 26px;
+  padding-bottom: 10px;
+  span{
+    margin-left: 20px;
+    i{
+      color: red;
+      font-style: normal;
+    }
+  }
 }
 .preview_title{
   padding-left: 6px;
@@ -240,5 +250,9 @@ export default {
 }
 .preview_id{
   padding: 6px 0 0 6px;
+}
+.checkInfo{
+  color: red;
+  padding: 4px 0 0 6px;
 }
 </style>

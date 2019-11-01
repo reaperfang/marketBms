@@ -1,9 +1,10 @@
 <template>
-<!-- 组件-商品分组 -->
+<!-- 组件-商品分类 -->
     <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
         <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
-            <p class="active" v-if="showAllGroup==1" @click="currentCatagory=null">全部</p>
-            <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0}" :key="key" @click="currentCatagory=item">{{item.name}}</p>
+            <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+            <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
+            @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
         </div>
         <div class="componentGoodsGroup_content">
             <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : 'all'"></componentGoods>
@@ -14,15 +15,14 @@
 import componentButton from './componentButton';
 import componentGoods from './componentGoods';
 import componentMixin from '../mixins/mixinComps';
-import mixinGoodsGroup from '../mixins/mixinGoodsGroup';
 export default {
     name:"componentGoodsGroup",
-    mixins:[componentMixin, mixinGoodsGroup],
+    mixins:[componentMixin],
     data() {
       return {
         // 商品列表
         componentGoodsItemData: {},
-        // 商品分组列表
+        // 商品分类列表
         list: [],
         // 样式属性
         listStyle: "",
@@ -31,11 +31,25 @@ export default {
         menuStyle: "",
         menuPosition: "",
         componentGoodsGroup_tabWidth: "",
-        currentCatagory: null
+        currentCatagory: null,
+        loading: false,
+        // 当前分类id
+        activeGoodId:'',
+        // 商品请求分类id集合
+        allGoodClassId:[],
+        allGoodClassId1:[]
       }
     },
     components: {
       componentGoods
+    },
+    created() {
+      this.fetch();
+      this._globalEvent.$on('fetchGoodsGroup', (componentData, componentId) => {
+        if(this.currentComponentId === componentId) {
+          this.fetch(componentData);
+        }
+      });
     },
     mounted() {
         this.decoration();
@@ -70,9 +84,51 @@ export default {
             this.menuStyle = this.currentComponentData.data.menuStyle;
             this.menuPosition = this.currentComponentData.data.menuPosition;
         },
+
+        //根据ids拉取数据
+        fetch(componentData = this.currentComponentData.data) {
+          if(componentData) {
+              if(componentData.ids) {
+                let ids = [];
+                for(let item in componentData.ids) {
+                  ids.push(item);
+                }
+                if(!ids.length) {
+                  this.list = [];
+                  this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                  return;
+                }
+                this.loading = true;
+                this._apis.goods.fetchCategoryList({ids}).then((response)=>{
+                    this.list = response;
+                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                    this.loading = false;
+                }).catch((error)=>{
+                    // this.$notify.error({
+                    //   title: '错误',
+                    //   message: error
+                    // });
+                    console.error(error);
+                    this.list = [];
+                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                    this.loading = false;
+                });
+          }
+          }
+        },
+        getIdData(id){
+          this.activeGoodId = id;
+          if(id!=''){
+            this.allGoodClassId = [];  
+            this.allGoodClassId.push(id);
+          }
+          else{
+            this.allGoodClassId = this.allGoodClassId1;
+          }
+        }
+
         // handleScroll(){
         //     let componentGoodsGroupHeight = document.getElementById("componentGoodsGroup").clientHeight;  
-        //     console.log(componentGoodsGroupHeight);
         //     // let scrollObj = document.getElementById("componentGoodsGroup_tab");
         //     // let scrollTop = scrollObj.scrollTop; 
         //     // let scrollHeight = scrollObj.scrollHeight;
@@ -81,7 +137,11 @@ export default {
         //     // }  
         // }
 
-    }
+    },
+    beforeDestroy() {
+        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
+        this._globalEvent.$off('fetchGoodsGroup');
+    },
 }
 </script>
 <style lang="scss" scoped>

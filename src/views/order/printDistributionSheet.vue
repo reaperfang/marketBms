@@ -18,6 +18,7 @@
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.orderAfterSaleSendInfo.receivedName}}</div>
+                            <div class="item" style="width: 280px;">联系电话：{{item.orderAfterSaleSendInfo.receivedPhone}}</div>
                             <div class="item">收货地址：{{item.orderAfterSaleSendInfo.receivedDetail}}</div>
                         </div>
                     </template>
@@ -32,6 +33,7 @@
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.receivedName}}</div>
+                            <div class="item" style="width: 280px;">联系电话：{{item.receivedPhone}}</div>
                             <div class="item">收货地址：{{item.receivedDetail}}</div>
                         </div>
                     </template>
@@ -42,7 +44,7 @@
                         <td style="height: 45px; text-align: center;">商品名称</td>
                         <td style="height: 45px; text-align: center;">数量</td>
                         <td style="height: 45px; text-align: center;">单价</td>
-                        <td style="height: 45px; text-align: center;">优惠</td>
+                        <!-- <td style="height: 45px; text-align: center;">优惠</td> -->
                         <td style="height: 45px; text-align: center;">金额</td>
                     </tr>
                     <template v-if="$route.query.afterSale">
@@ -51,7 +53,7 @@
                             <td style="height: 45px; text-align: center;">{{sendItem.goodsName}}</td>
                             <td style="height: 45px; text-align: center;">{{sendItem.sendCount}}</td>
                             <td style="height: 45px; text-align: center;">-</td>
-                            <td style="height: 45px; text-align: center;">-</td>
+                            <!-- <td style="height: 45px; text-align: center;">-</td> -->
                             <td style="height: 45px; text-align: center;">-</td>
                         </tr>
                     </template>
@@ -60,13 +62,13 @@
                             <td style="height: 45px; text-align: center;">{{index + 1}}</td>
                             <td style="height: 45px; text-align: center;">{{sendItem.goodsName}}</td>
                             <td style="height: 45px; text-align: center;">{{sendItem.sendCount}}</td>
-                            <td style="height: 45px; text-align: center;">-</td>
-                            <td style="height: 45px; text-align: center;">-</td>
-                            <td style="height: 45px; text-align: center;">-</td>
+                            <td style="height: 45px; text-align: center;">{{sendItem.salePrice}}</td>
+                            <!-- <td style="height: 45px; text-align: center;">{{((sendItem.salePrice - sendItem.goodsPrice) * sendItem.sendCount).toFixed(2)}}</td> -->
+                            <td style="height: 45px; text-align: center;">{{(sendItem.goodsPrice * sendItem.sendCount).toFixed(2)}}</td>
                         </tr>
                     </template>
                 </table>
-                <div class="table-footer" style="border: 1px solid rgb(205, 208, 206); border-top: none; color: #161617; font-size: 14px; padding: 20px 25px; padding-bottom: 10px;">
+                <div class="table-footer" style="border: 1px solid rgb(205, 208, 206); border-top: none; color: #161617; font-size: 14px; padding: 20px 25px; padding-bottom: 20px;">
                     <div style="display: flex;">
                         <template v-if="$route.query.afterSale">
                             <div class="item" style="margin-right: 40px;">店铺名称：{{item.shopInfo.shopName}}</div>

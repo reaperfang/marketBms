@@ -16,11 +16,11 @@
                     </el-option>
                 </el-select>
             </div>
-            <el-button type="primary" @click="getLabelList">查 询</el-button>
+            <el-button type="primary" @click="getLabelList" :loading="btnloading">查 询</el-button>
             <el-button @click="reset">重 置</el-button>
         </div>
-        <el-button type="primary" @click="_routeTo('batchImport')">添加标签</el-button>
-        <clTable style="margin-top: 30px" :params="params"></clTable>
+        <el-button type="primary" @click="_routeTo('batchImport')" v-permission="['客户', '客户标签', '默认页面', '添加标签']">添加标签</el-button>
+        <clTable style="margin-top: 30px" :params="params" @stopLoading="stopLoading"></clTable>
     </div>
 </template>
 <script type="es6">
@@ -36,14 +36,19 @@ export default {
                 {label: '手工',value: 0},
                 {label: '自动',value: 1}
             ],
-            params: {}
+            params: {},
+            btnloading: false
         }
     },
     computed: {
         
     },
     methods: {
+        stopLoading() {
+            this.btnloading = false;
+        },
         getLabelList() {
+            this.btnloading = true;
             this.params = {
                 startIndex: 1,
                 pageSize: 10,
@@ -54,6 +59,12 @@ export default {
         reset() {
             this.tagName = "";
             this.tagType = "";
+            this.params = {
+                startIndex: 1,
+                pageSize: 10,
+                tagName: "",
+                tagType: ""
+            }
         }
     }
 }

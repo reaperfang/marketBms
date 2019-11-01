@@ -9,7 +9,7 @@ class Ajax {
   constructor() {
     this.systemRequest = 'head';
     this.service = axios.create({
-      timeout: 10000, // request timeout
+      timeout: 100000, // request timeout
     });
 
     this.initGlobal();
@@ -20,13 +20,15 @@ class Ajax {
 
   // request拦截器
   requestGlobal(config) {
+    let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+    let cid = shopInfo && shopInfo.id || ''
     config.headers = Object.assign(
       {
         businessId: 1,
-        tenantId: 1,
-        merchantId: 2,
+        tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
+        merchantId: cid,
         loginUserId: 1,
-        token: '123'
+        token: store.getters.token || getToken('authToken')
       },
       config.headers
     ) 
@@ -41,10 +43,31 @@ class Ajax {
           if (res.accessToken) {
             return res;
           }
+          if(res.msg == 'existProduct') {
+            return res
+          }
           return res.data;
-        } else if (res.errno === 0) {
+        }else if(res.status === 'error' && res.code === "10088"){
+          MessageBox.alert('该店铺已停用！', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              store.dispatch('LogOut').then(() => {
+                location.reload()
+              })
+            }
+          });
+        }else if(res.status === 'error' && res.code === "10089"){
+          MessageBox.alert('该店铺已过期！', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              store.dispatch('LogOut').then(() => {
+                location.reload()
+              })
+            }
+          });
+        }else if (res.errno === 0) {
           return res.data;
-        } else {
+        }else {
           return Promise.reject(res.msg)
         }
       },
@@ -82,7 +105,7 @@ class Ajax {
     let head = {
         target: config.target,
         // accessToken:'09255c7724fe9b8df952aa2f7e3ec718eb753655b3975a50a4f6307bc84718bd',
-        accessToken: store.getters.token || localStorage.getItem('authToken'),
+        accessToken: store.getters.token || getToken('authToken'),
         client: CONST.CLIENT,
         version: CONST.VERSION,
         requestTime: utils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
@@ -94,7 +117,7 @@ class Ajax {
     //获取cid和shopInfoId
     // let cid = store.getters.userInfo && store.getters.userInfo.cid ? store.getters.userInfo.cid : '';
     let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-    let cid = shopInfo && shopInfo.id || '2'
+    let cid = shopInfo && shopInfo.id || ''
     let shopInfoId = store.getters.userInfo && store.getters.userInfo.shopInfoId ? store.getters.userInfo.shopInfoId
       : '';
 
@@ -135,8 +158,8 @@ class Ajax {
             config.baseURL = `${process.env.DATA_API}/api-commodity-web/commodity/api.do`; // 王浩
             break;
           case 'order': //订单系统
-            //config.baseURL = `${process.env.DATA_API}/api-order-web/order/api.do`; // 李刚 尹茂凯
-            config.baseURL = `/order_server/api-order-web/order/api.do`; // 李刚 尹茂凯
+            config.baseURL = `${process.env.DATA_API}/api-order-web/order/api.do`; // 李刚 尹茂凯
+            //config.baseURL = `/order_server/api-order-web/order/api.do`; // 李刚 尹茂凯
             break;
           case 'decorate':  //装修接口
             config.baseURL = `${process.env.DATA_API}/api-decoration-web/decoration/api.do`;
@@ -145,8 +168,8 @@ class Ajax {
             config.baseURL = `${process.env.DATA_API}/api-financial-web/financial/api.do`;
             break;
           case 'goodsOperate':  //商品运营
-            //config.baseURL = `${process.env.DATA_API}/api-public-web/public/api.do`;
-            config.baseURL = `/goodsOperate_server/api-public-web/public/api.do`;
+            config.baseURL = `${process.env.DATA_API}/api-public-web/public/api.do`;
+            //config.baseURL = `/goodsOperate_server/api-public-web/public/api.do`;
             break;
           case 'manager':  //广告和导航开关修改  许涛
             config.baseURL = `${process.env.DATA_API}/api-manager-web/manager/api.do`;
@@ -157,14 +180,17 @@ class Ajax {
           case 'overview':  //概况待办售罄
             config.baseURL = `${process.env.DATA_API}/api-commodity-web/commodity/api.do`;
             break;
-          case 'over':  //待办2-4 
-            config.baseURL = `${process.env.DATA_API}/order-api/order/api.do`;
-            break;
           case 'pay':  //微信支付设置
             config.baseURL = `${process.env.DATA_API}/api-payment-web/payment/api.do`;
             break;
           case 'uploadImage':  //图片上传
             config.baseURL = `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`;
+            break;
+          case 'matrix':  //智能运营数据查询条件来源
+            config.baseURL = `${process.env.DATA_API}/matrix-admin/matrix/api.do`;
+            break;
+          case 'orderGain':  
+            config.baseURL = `${process.env.DATA_API}/mkt-api/v1/b/order-after-sale/order-rewards/100006489`;
             break;
         }
       }

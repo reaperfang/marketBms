@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="发放会员卡" :hasCancel="hasCancel">
         <div class="c_container">
-            <p class="user_id">用户ID：{{data.id}}</p>
+            <p class="user_id">用户ID：{{data.memberSn}}</p>
             <div class="s_cont">
                 <span>发放会员卡：</span>
                 <el-select v-model="selectLevel" style="margin-bottom: 10px">
@@ -35,17 +35,19 @@ export default {
                     }
                 });
                 let params = {memberInfoId: this.data.id, cardLevelInfoId: levelInfoId, name: levelInfoName};
-                this._apis.client.cardChange(params).then((response) => {
+                this._apis.client.giveCard(params).then((response) => {
                     this.$notify({
                         title: '成功',
                         message: "发放会员成功",
                         type: 'success'
                     });
+                    this.$emit('refreshPage');
                 }).catch((error) => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    console.log(error);
+                    // this.$notify.error({
+                    //     title: '错误',
+                    //     message: error
+                    // });
                 })
             }else{
                 this.$notify({
@@ -57,13 +59,17 @@ export default {
             
         },
         getLevelList() {
-            this._apis.client.getLevelList({}).then((response) => {
-                this.levelList = [].concat(response);
+            this._apis.client.getCardList({}).then((response) => {
+                let list = response.list.filter((v) => {
+                    return v.enable == 0
+                })
+                this.levelList = [].concat(list);
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
+                // this.$notify.error({
+                //     title: '错误',
+                //     message: error
+                // });
             })
         }
     },

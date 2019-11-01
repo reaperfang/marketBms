@@ -10,15 +10,15 @@
       <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.backgroundColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="rgb(255,248,233)"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="文字颜色" prop="fontColor">
         <div class="color_block">
           <el-input v-model="ruleForm.fontColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.fontColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.fontColor" defaultColor="rgb(102,102,102)"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
     </div>
@@ -34,9 +34,9 @@ export default {
   data () {
     return {
       ruleForm: {
-        notice: '',
-        backgroundColor: 'rgb(255,248,233)',
-        fontColor: 'rgb(102,102,102)'
+        notice: '',//公告文本
+        backgroundColor: 'rgb(255,248,233)',//背景颜色 
+        fontColor: 'rgb(102,102,102)'//文字颜色 
       },
       rules: {
 
@@ -49,6 +49,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
+}
 </style>

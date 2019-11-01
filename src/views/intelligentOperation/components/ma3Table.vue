@@ -18,12 +18,15 @@
       <el-table-column
         prop="phone"
         label="手机号码">
+        <template slot-scope="scope">
+          {{scope.row.phone ? scope.row.phone : '-'}}
+        </template>
       </el-table-column>
       <el-table-column
         label="客户类型"
       >
       <template slot-scope="scope">
-             <span style="line-height:60px;display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
+             <span style="line-height:60px;display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -35,12 +38,16 @@
         prop="score"
         label="积分(余额)"
       >
+        <template slot-scope="scope">
+          <span>{{scope.row.score || 0}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         label="入会时间"
       >
         <template slot-scope="scope">
-          <span>{{Number(scope.row.joinTime) | time}}</span>
+          <span v-if="scope.row.joinTime">{{Number(scope.row.joinTime) | time}}</span>
+          <span v-else> - </span>
         </template>
       </el-table-column>
       <el-table-column

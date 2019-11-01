@@ -78,7 +78,7 @@ export default {
   components:{ taTable },
   data() {
     return {
-      flag:1,
+      flag:4,
       survey:{
         hongbao:0,
         integrate:0,
@@ -88,7 +88,11 @@ export default {
       },
     }
   },
-  watch: { },
+  watch: { 
+    flag(){
+      this.getSurvey()
+    }
+  },
   computed:{
     surveyStatus(){
       return financeCons.surveyStatus;

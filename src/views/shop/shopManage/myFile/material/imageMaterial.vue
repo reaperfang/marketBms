@@ -36,7 +36,7 @@
                 </div>
                 <div class="operate" ref="operate">
                   <el-button type="primary" plain class="block mt10 ml10" @click="moveGroup(item.id)">分组</el-button>
-                  <el-button type="primary" plain class="block mt10" v-if="!item.isSyncWechat" @click="imageTailor(item.filePath)">剪裁</el-button>
+                  <el-button type="primary" plain class="block mt10" v-if="!item.isSyncWechat" @click="imageTailor(item)">剪裁</el-button>
                   <el-button type="primary" plain class="block mt10" @click="deleteImage(item.id,'imageId')">删除</el-button>
                 </div>
               </div>
@@ -58,7 +58,7 @@
         <div class="groups">
           <p class="groups_head">全部图片</p>
           <p class="item" v-for="item in groupList" :key="item.id">
-            <span @click="getList(item.id)">{{item.name}}</span>
+            <span @click="getList(item.id)" class="group_name">{{item.name}}</span>
             <span v-if="item.id != -1">
               <i class="el-icon-edit" @click="newGroup(item.id,item.name,'edit')"></i>
               <i class="el-icon-delete" @click="deleteImage(item.id,'groupId')"></i>
@@ -118,11 +118,13 @@ export default {
       }
       this._apis.file.getMaterialList(query).then((response)=>{
         this.list = []
-        response.list.map(item => {
-          item.isSyncWechat && (item.filePath = 'http://img01.store.sogou.com/net/a/04/link?appid=100520029&url='+ item.filePath)
-          let data = Object.assign({checked:false}, item)
-          this.list.push(data)
-        })
+        if(response && response.list.length != 0){
+          response.list.map(item => {
+            item.isSyncWechat && (item.filePath = 'http://img01.store.sogou.com/net/a/04/link?appid=100520029&url='+ item.filePath)
+            let data = Object.assign({checked:false}, item)
+            this.list.push(data)
+          })
+        }
         this.total = response.total
       }).catch((error)=>{
         this.$notify.error({
@@ -133,10 +135,27 @@ export default {
     },
     //下载图片
     downImage(filepath,fileName){
-      let a = document.createElement('a')
-          a.download = fileName || '图片名称'
-          a.href = filepath;
-          a.click();
+      this.downloadIamge(filepath, fileName)
+    },
+    downloadIamge(imgsrc, name){
+      var image = new Image();
+      // 解决跨域 Canvas 污染问题
+      image.setAttribute("crossOrigin", "anonymous");
+      image.onload = function() {
+        var canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        var context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0, image.width, image.height);
+        var url = canvas.toDataURL("image/png"); //得到图片的base64编码数据
+    
+        var a = document.createElement("a"); // 生成一个a元素
+        var event = new MouseEvent("click"); // 创建一个单击事件
+        a.download = name || "photo"; // 设置图片名称
+        a.href = url; // 将生成的URL设置为a.href属性
+        a.dispatchEvent(event); // 触发a的单击事件
+      };
+      image.src = imgsrc;
     },
     //复制链接
     copyLink(link){
@@ -239,10 +258,15 @@ export default {
             this.handleDeleteImage(data.deleteImage.imageId)
           break;
           case 'syncImage':
-            this.handleSyncImage()
+            this.handleSyncImage(data.syncImage.query)
           break;
           case 'uploadImage':
             this.uploadImage(data.uploadImage.query)
+          break;
+          case 'imageTailor':
+            setTimeout(() =>{
+              this.getList()
+            },1000)
           break;
         }
       }
@@ -319,10 +343,12 @@ export default {
     },
 
     //图片裁剪
-    imageTailor(url){
+    imageTailor(item){
       this.dialogVisible = true;
       this.currentDialog = 'dialogImageTailor'
-      this.data = url
+      this.data = item.filePath;
+      this.arrayData = [];
+      this.arrayData.push(item.id);
     },
     /**********************************        单张图片      **********************/
     onMouseOver(index){
@@ -342,7 +368,7 @@ export default {
           title: '成功',
           message: '移动分组成功！'
         });
-        this.getGroups()
+        this.getList()
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',
@@ -386,8 +412,19 @@ export default {
     },
 
     //同步图片
-    handleSyncImage(){
-      this.getList()
+    handleSyncImage(query){
+      this._apis.file.syncMaterial(query).then((response)=>{
+        this.$notify.success({
+          title: '成功',
+          message: '同步微信图片成功！'
+        });
+        this.getList()
+      }).catch((error)=>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })
     },
     /**********************************        分页相关      **********************/
     handleSizeChange(val){
@@ -460,6 +497,7 @@ export default {
           img{
             width: 240px;
             height:150px;
+            object-fit: contain;
           }
           .img_bottom{
             width:100%;
@@ -498,7 +536,7 @@ export default {
     }
   }
   .groups{
-    width: 200px;
+    width: 300px;
     border: 1px solid #e6e6e6;
     font-size: 14px;
     color: #44434B;
@@ -516,6 +554,12 @@ export default {
       padding:0 20px;
       display: flex;
       justify-content: space-between;
+      .group_name{
+        width:95px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+      }
       i{
         margin: 0 5px;
         cursor: pointer;
@@ -546,6 +590,9 @@ export default {
 //     margin-bottom: 10px;
 //     cursor: pointer;
 //     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
 //     img{
 //       max-width: 100%;
 //     }

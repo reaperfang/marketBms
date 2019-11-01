@@ -2,7 +2,8 @@
     <div class="c_container">
         <div>
             <span class="marR10">状态</span>
-            <el-select v-model="status" placeholder="全部" clearable>
+            <el-select v-model="status" placeholder="请选择" clearable>
+                <el-option label="全部" value="2"></el-option>
                 <el-option label="禁用" value="0"></el-option>
                 <el-option label="启用" value="1"></el-option>
             </el-select>
@@ -31,7 +32,7 @@ export default {
             this.params = Object.assign({},{
                 startIndex:"",
                 pageSize:"",
-                status:this.status
+                status:this.status == '2' ? '':this.status
             })
         }
     }

@@ -19,7 +19,9 @@ const app = {
     // 获取店铺信息
     getShopInfo({ commit }) {
       return new Promise((resolve, reject) => {
-        this._apis.shop.getShopInfo({id: '2'}).then((response)=>{
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let cid = shopInfo.id || '';
+        this._apis.shop.getShopInfo({id: cid}).then((response)=>{
           commit('setShopInfo', response);
           resolve()
         }).catch((error)=>{

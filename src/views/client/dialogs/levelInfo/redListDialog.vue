@@ -26,7 +26,7 @@
         <div class="page_styles">
             <el-pagination
               @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
+              @current-change="handleCurrentChange2"
               :current-page="Number(page) || 1"
               :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
               :page-size="pageSize*1"
@@ -57,18 +57,20 @@ export default {
   },
   methods: {
     submit() {
+      if(JSON.stringify(this.selectedRow) !== "{}") {
         this.$emit('getSelectedRed', {selection: this.selectedRow});
+      } 
     },
-    getSel() {
-      let redArr = this.data.redArr;
-      redArr.map((v) => {
-        this.redList.forEach(row => {
-          if(row.id = v) {
-            this.$refs.redTable.toggleRowSelection(row, true);
-          }
-        });
-      })
-    },
+    // getSel() {
+    //   let redArr = this.data.redArr;
+    //   redArr.map((v) => {
+    //     this.redList.forEach(row => {
+    //       if(row.id = v) {
+    //         this.$refs.redTable.toggleRowSelection(row, true);
+    //       }
+    //     });
+    //   })
+    // },
     handleCurrentChange(val) {
       this.selectedRow = Object.assign({},val);
     },
@@ -88,10 +90,11 @@ export default {
               })
             }
         }).catch((error) => {
-            this.$notify.error({
-                title: '错误',
-                message: error
-            });
+          console.log(error);
+            // this.$notify.error({
+            //     title: '错误',
+            //     message: error
+            // });
         })
     },
     search() {
@@ -101,7 +104,7 @@ export default {
       this.getRedList(this.key, this.page, val);
       this.pageSize = val;
     },
-    handleCurrentChange(val) {
+    handleCurrentChange2(val) {
       this.getRedList(this.key, val, this.pageSize);
     }
   },
@@ -128,11 +131,11 @@ export default {
   components: {
     DialogBase
   },
-  updated() {
-    if(this.data.redArr) {
-      this.getSel();
-    }
-  }
+  // updated() {
+  //   if(this.data.redArr) {
+  //     this.getSel();
+  //   }
+  // }
 };
 </script>
 <style lang="scss" scoped>

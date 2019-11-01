@@ -12,43 +12,37 @@
             <p>
                 <span>姓名</span>
                 <span>
-                    <el-switch v-model="info.name" active-color="#66CCAC"></el-switch>
-                </span>
-            </p>
-            <p>
-                <span>微信</span>
-                <span>
-                    <el-switch v-model="info.wechart_sn" active-color="#66CCAC"></el-switch>
+                    <el-switch v-model="info.name" active-color="#66CCAC" @change="handleSwitch('name',info.name)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>性别</span>
                 <span>
-                    <el-switch v-model="info.gender" active-color="#66CCAC"></el-switch>
+                    <el-switch v-model="info.gender" active-color="#66CCAC" @change="handleSwitch('gender',info.gender)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>生日</span>
                 <span>
-                    <el-switch v-model="info.birthday" active-color="#66CCAC"></el-switch>
+                    <el-switch v-model="info.birthday" active-color="#66CCAC" @change="handleSwitch('birthday',info.birthday)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>邮箱</span>
                 <span>
-                    <el-switch v-model="info.email" active-color="#66CCAC"></el-switch>
+                    <el-switch v-model="info.email" active-color="#66CCAC" @change="handleSwitch('email',info.email)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>地区</span>
                 <span>
-                    <el-switch v-model="info.area" active-color="#66CCAC"></el-switch>
+                    <el-switch v-model="info.area" active-color="#66CCAC" @change="handleSwitch('area',info.area)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>爱好</span>
                 <span>
-                    <el-switch v-model="info.hobby" active-color="#66CCAC"></el-switch>
+                    <el-switch v-model="info.hobby" active-color="#66CCAC" @change="handleSwitch('hobby',info.hobby)"></el-switch>
                 </span>
             </p>
         </div>
@@ -63,20 +57,22 @@ export default {
         return {
             hasCancel: true,
             info: {
-                name: false,
-                wechart_sn: false,
+                phone: true,
+                name: true,
                 gender: false,
                 birthday: false,
                 email: false,
                 area: false,
-                hobby: false,
-                phone: false
+                hobby: false
             },
         }
     },
     methods: {
         submit() {
             this.$emit('getSelectedInfo', this.info);
+        },
+        handleSwitch(label,val) {
+            this.$emit('changeSwitch',{label:label, val: val})
         }
     },
     computed: {
@@ -104,7 +100,6 @@ export default {
     mounted() {
         if(this.data.info) {
             this.info = Object.assign({}, this.data.info);
-            console.log(this.info);
         }
     }
 }

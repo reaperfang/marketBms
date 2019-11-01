@@ -64,10 +64,11 @@ export default {
         }
         this.loading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
         this.loading = false;
       });
     },
@@ -83,7 +84,7 @@ export default {
         status: '0',
         pageKey: '',
         pageData: utils.compileStr(JSON.stringify(this.ruleForm))
-      });
+      }, 'saveAndApply');
     },
 
     /* 保存 */
@@ -97,7 +98,6 @@ export default {
 
     /* 重置 */
     resetData() {
-      this.loading = true;
       this._apis.shop.resetPersonalInfo({}).then((response)=>{
         this.$notify({
           title: '成功',
@@ -117,31 +117,38 @@ export default {
           this.ruleForm['status'] = response.status;
           this.ruleForm['shareUrl'] = response.shareUrl;
         }
-        this.loading = false;
+        this._globalEvent.$emit('userCenterResetLoading', true);
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',
           message: error
         });
-        this.loading = false;
+        this._globalEvent.$emit('userCenterResetLoading', false);
       });
     },
 
-    submit(params) {
-      this.loading = true;
+    submit(params, type) {
       this._apis.shop.editUserCenterPage(params).then((response)=>{
         this.$notify({
           title: '成功',
           message: '编辑成功！',
           type: 'success'
         });
-        this.loading = false;
+        if(type === 'saveAndApply') {
+          this._globalEvent.$emit('userCenterSaveAndApplyLoading', true);
+        }else{
+          this._globalEvent.$emit('userCenterSaveLoading', true);
+        }
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',
           message: error
         });
-        this.loading = false;
+        if(type === 'saveAndApply') {
+          this._globalEvent.$emit('userCenterSaveAndApplyLoading', false);
+        }else{
+          this._globalEvent.$emit('userCenterSaveLoading', false);
+        }
       });
     }
   }

@@ -17,12 +17,18 @@
                 label="渠道类型"
                 align="center"
             >
+            <template slot-scope="scope">
+                <span>{{ scope.row.chanelName ? scope.row.chanelName : '直接购买' }}</span>
+            </template>
             </el-table-column>
             <el-table-column
                 prop="activityName"
                 label="（活动）名称"
                 align="center"
             >
+            <template slot-scope="scope">
+                <span>{{ scope.row.chanelName ? scope.row.activityName : '-' }}</span>
+            </template>
             </el-table-column>
             <el-table-column
                 prop="changeRatio"
@@ -30,6 +36,9 @@
                 align="center"
                 sortable
             >
+            <template slot-scope="scope">
+                <span>{{ (scope.row.changeRatio*100).toFixed(2)}}%</span>
+            </template>
             </el-table-column>
         </el-table>
         <div class="page_styles">
@@ -58,7 +67,6 @@ export default {
         };
     },
     created() {
-
     },
     methods: {
         //更改每页条数

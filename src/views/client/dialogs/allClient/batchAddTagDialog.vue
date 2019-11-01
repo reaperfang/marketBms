@@ -41,28 +41,30 @@ export default {
                 memberInfoIds.push(v.id);
             });
             memberInfoIds = memberInfoIds.join(',');
-            //console.log({memberInfoIds,memberLabelInfoIds});
-            this._apis.client.batchMarkLabel({memberInfoIds,memberLabelInfoIds}).then((response) => {
+            if(memberLabelInfoIds.length > 0) {
+                this._apis.client.batchMarkLabel({memberInfoIds,memberLabelInfoIds}).then((response) => {
+                    this.$notify({
+                        title: '成功',
+                        message: '批量打标签成功',
+                        type: 'success'
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }else{
                 this.$notify({
-                    title: '成功',
-                    message: '批量打标签成功',
-                    type: 'success'
+                    title: '警告',
+                    message: '请选择标签',
+                    type: 'warning'
                 });
-            }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
-            })
+            }
+            
         },
         getLabels() {
             this._apis.client.getLabels({tagType:0}).then((response) => {
                 this.tagList = [].concat(response); 
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
             })
         }
     },
@@ -105,7 +107,7 @@ export default {
     text-align: left;
 }
 /deep/ .el-checkbox{
-    margin-bottom: 9px;
+    margin: 0 10px 9px 0;
 }
 .c_container{
     padding: 0 30px;

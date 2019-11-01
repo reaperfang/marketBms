@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="交易类型">
-          <el-select v-model="ruleForm.businessType" style="width:100px;">
+          <el-select v-model="ruleForm.businessType" style="width:100px;" placeholder="全部">
             <el-option
               v-for="item in transactionTypes"
               :key="item.value"
@@ -29,17 +29,20 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit" v-permission="['财务', '客户余额', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()'>导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '客户余额', '默认页面', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <!-- <cbTable style="margin-top:20px"></cbTable> -->
       <el-table
+        v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -51,7 +54,8 @@
         </el-table-column>
         <el-table-column
           prop="relationSn"
-          label="关联单据编号">
+          label="关联单据编号"
+          :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
           prop="memberInfoId"
@@ -60,10 +64,16 @@
         <el-table-column
           prop="businessType"
           label="交易类型">
+          <template slot-scope="scope">
+            {{transactionTypes[scope.row.businessType].label}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="changeAmount"
           label="变动金额（元）">
+          <template slot-scope="scope">
+            {{scope.row.changeAmount > 0 ? '+'+scope.row.changeAmount : scope.row.changeAmount}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="surplusAmount"
@@ -107,11 +117,12 @@ export default {
       inline:true,
       ruleForm:{
         tradeDetailSn:'',
-        businessType:1,
+        businessType:-1,
         timeValue:''
       },
       dataList:[ ],
       total:0,
+      loading:true
     }
   },
   watch: { },
@@ -122,10 +133,25 @@ export default {
   },
   created() { },
   methods: {
+    renderRelationSn(){
+      return(
+        <div style="height:49px;line-height:49px;">
+          <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="160"
+            trigger="hover"
+            content="订单编号、售后单编号、提现编号">
+            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
+          </el-popover>
+        </div>
+      )
+    },
     init(){
       let query = {
         tradeDetailSn:this.ruleForm.tradeDetailSn,
-        businessType:this.ruleForm.businessType,
+        businessType:this.ruleForm.businessType == -1 ? null : this.ruleForm.businessType,
         startTime:'',
         endTime:'',
         startIndex:this.ruleForm.startIndex,
@@ -144,11 +170,9 @@ export default {
       this._apis.finance.getListCb(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
+        this.loading = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
 
@@ -159,9 +183,10 @@ export default {
     resetForm(){
       this.ruleForm = {
         tradeDetailSn:'',
-        businessType:1,
+        businessType:'',
         timeValue:''
       }
+      this.fetch()
     },
     //导出
     exportToExcel() {

@@ -6,12 +6,12 @@
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
                     <el-steps :active="2">
-                        <el-step title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                        <el-step title="商户处理" description=""></el-step>
-                        <el-step title="客户退货" description=""></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                        <el-step class="word4" title="商户处理" description=""></el-step>
+                        <el-step class="word4" title="客户退货" description=""></el-step>
+                        <el-step class="word4" title="商户发货" description=""></el-step>
+                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
@@ -29,12 +29,12 @@
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
                     <el-steps :active="3">
-                        <el-step title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                        <el-step title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step title="客户退货" description=""></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                        <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
+                        <el-step class="word4" title="客户退货" description=""></el-step>
+                        <el-step class="word4" title="商户发货" description=""></el-step>
+                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
@@ -48,19 +48,19 @@
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
                     <el-steps :active="4">
-                        <el-step title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                        <el-step title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                        <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
+                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="商户发货" description=""></el-step>
+                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
                     <p>待处理</p>
                     <p class="des">客户已退货，商户未发货</p>
                     <div class="button-box">
-                        <el-button @click="confirmTakeOver">确认收货</el-button>
+                        <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                         <el-button type="primary" @click="sendGoods">发货</el-button>
                     </div>
                 </div>
@@ -71,17 +71,18 @@
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
                     <el-steps :active="5">
-                        <el-step title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                        <el-step title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
-                        <el-step title="商户发货" :description="orderAfterSale.sendTime"></el-step>
-                        <el-step title="客户收货" description=""></el-step>
-                        <el-step title="完成" description=""></el-step>
+                        <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                        <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
+                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="商户发货" :description="orderAfterSale.sendTime"></el-step>
+                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
                     <p>待收货</p>
                     <p class="des">商户已换货发货，客户未收货</p>
+                    <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>
@@ -91,16 +92,16 @@
                 <div class="col flex1 lefter">
                     <template v-if="orderAfterSale.closeReason == 1">
                         <el-steps :active="3">
-                            <el-step title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                            <el-step title="撤销申请" :description="orderAfterSale.cancelTime"></el-step>
-                            <el-step title="申请已撤销" :description="orderAfterSale.cancelTime"></el-step>
+                            <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                            <el-step class="word4" title="撤销申请" :description="orderAfterSale.cancelTime"></el-step>
+                            <el-step class="word5" title="申请已撤销" :description="orderAfterSale.cancelTime"></el-step>
                         </el-steps>
                     </template>
                     <template v-else>
                         <el-steps :active="3">
-                            <el-step title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                            <el-step title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                            <el-step title="拒绝申请，已完结" :description="orderAfterSale.examineTime"></el-step>
+                            <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                            <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
+                            <el-step class="word8" title="拒绝申请，已完结" :description="orderAfterSale.examineTime"></el-step>
                         </el-steps>
                     </template>
                 </div>
@@ -115,12 +116,12 @@
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
                     <el-steps :active="6">
-                        <el-step title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                        <el-step title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
-                        <el-step title="商户发货" :description="orderAfterSale.sendTime"></el-step>
-                        <el-step title="客户收货" :description="orderAfterSale.memberTeceiveGoodsTime"></el-step>
-                        <el-step title="完成" :description="orderAfterSale.memberTeceiveGoodsTime"></el-step>
+                        <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                        <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
+                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="商户发货" :description="orderAfterSale.sendTime"></el-step>
+                        <el-step class="word4" title="客户收货" :description="orderAfterSale.memberTeceiveGoodsTime"></el-step>
+                        <el-step class="word2" title="完成" :description="orderAfterSale.memberTeceiveGoodsTime"></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
@@ -189,6 +190,9 @@ export default {
             padding-left: 30px;
             p {
                 margin-bottom: 20px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
                 &:first-child {
                     font-size: 20px;
                 }
@@ -200,5 +204,32 @@ export default {
     }
     .button-box {
         margin-top: 20px;
+    }
+    /deep/ .el-step__title {
+        margin-top: 10px;
+    }
+    /deep/ .el-step.word2 {
+        .el-step__title {
+            margin-left: 5px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step.word4 {
+        .el-step__title {
+            margin-left: -12px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
+    }
+    /deep/ .el-step.word5 {
+        .el-step__title {
+            margin-left: -20px;
+        }
+        .el-step__description {
+            margin-left: -28px;
+        }
     }
 </style>

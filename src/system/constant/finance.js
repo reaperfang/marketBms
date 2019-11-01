@@ -8,6 +8,7 @@ export default {
     ],
     //收支明细---业务类型
     rebusinessTypes:[
+        { value: 0, label: '全部'},
         { value: 1, label: '订单收款' },
         { value: 2, label: '售后退款' },
         { value: 3, label: '退还奖励' },
@@ -16,18 +17,26 @@ export default {
     ],
     //收支明细---支付方式
     payTypes:[
+        { value: -1, label: '全部' },
         { value: 0, label: '微信支付' },
         { value: 1, label: '货到付款' },
         { value: 2, label: '余额支付' },
         { value: 3, label: '红包支付' }
     ],
+    //收支明细---收支类型
+    tradeTypes:[
+        { value: -1, label: '全部' },
+        { value: 0, label: '收入' },
+        { value: 1, label: '支出' }
+    ],
     //提现明细---提现方式--------------------
     presentations:[
-        { value: 1, label: '提现编号' },
-        { value: 2, label: '交易流水号' },
+        { value: 'cashoutSn', label: '提现编号' },
+        { value: 'tradeDetailSn', label: '交易流水号' },
     ],
     //提现明细---提现状态
     presentationStatus:[
+        { value: -1, label: '全部' },
         { value: 0, label: '待审核' },
         { value: 1, label: '处理中' },
         { value: 2, label: '成功' },
@@ -40,6 +49,7 @@ export default {
     ],
     //买家余额明细---交易类型
     transactionTypes:[
+        { value: -1, label: '全部' },
         { value: 1, label: '订单付款' },
         { value: 2, label: '售后退款' },
         { value: 3, label: '申请提现' },
@@ -51,23 +61,23 @@ export default {
     ],
     //积分明细---业务类型
     idbusinessTypes:[
-        { value: 1, label: '登陆' },
+        { value: -1, label: '全部' },
+        { value: 1, label: '登录' },
         { value: 2, label: '购买' },
         { value: 3, label: '复购' },
-        { value: 4, label: '红包' },
-        { value: 5, label: '互动' },
-        { value: 6, label: '多人拼团' },
-        { value: 7, label: '限时秒杀' },
-        { value: 8, label: '评价' },
-        { value: 9, label: '填写信息' },
-        { value: 10, label: '签到' },
-        { value: 11, label: '节日有礼' },
-        { value: 12, label: '积分兑换' },
-        { value: 13, label: '手动调整' },
-        { value: 14, label: '清空' },
-        { value: 15, label: '会员升级奖励' },
-        { value: 16, label: '会员卡升级奖励' },
-        { value: 17, label: '退货' }
+        { value: 4, label: '超级海报' },
+        { value: 5, label: '满减/满折' },
+        { value: 6, label: '评价' },
+        { value: 7, label: '签到' },
+        { value: 8, label: '节日有礼' },
+        { value: 9, label: '积分兑换' },
+        { value: 10, label: '手动调整' },
+        { value: 11, label: '清空' },
+        { value: 12, label: '会员升级奖励' },
+        { value: 13, label: '会员卡升级奖励' },
+        { value: 14, label: '退货' },
+        { value: 15, label: '冻结积分' },
+        { value: 16, label: '解冻积分' }
     ],
     //推客奖励---奖励方式??????
     rewards:[
@@ -92,6 +102,7 @@ export default {
     ],
     //物流对账---电子面单---业务类型
     fsTypes:[
+        { value: -1, label: '全部' },
         { value: 0, label: '订单发货' },
         { value: 1, label: '售后发货' },
     ],

@@ -10,7 +10,7 @@
         </el-form>
         <div class="footer">
             <el-button @click="submit('ruleForm')" type="primary">确定</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="visible = false">取消</el-button>
         </div>
     </DialogBase>
 </template>

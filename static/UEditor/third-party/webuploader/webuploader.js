@@ -612,7 +612,6 @@
                             me.off( name, once );
                             return callback.apply( context || me, arguments );
                         };
-    
                     once._cb = callback;
                     me.on( name, once, context );
                 });

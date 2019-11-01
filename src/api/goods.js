@@ -16,7 +16,7 @@ export function fetchAllTagsList(data) {
   return request({
     apiType: 'goods',
     method: 'post',
-    target: 'PRODUCT-LABEL-PAGE-LIST-PROCESSOR',
+    target: 'PRODUCT-LABEL-LIST-PROCESSOR',
     data
   })
 }
@@ -247,6 +247,7 @@ export function importGoods(data) {
   return request({
     apiType: 'goods',
     method: 'post',
+    timeout: 100000,
     target: 'PRODUCT-IMPORT-PROCESSOR',
     data
   })
@@ -258,6 +259,26 @@ export function getSPUGoodsList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-SPU-PAGE-LIST-PROCESSOR',
+    data
+  })
+}
+
+// 转移商品
+export function transferGoods(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-TRANSFER-PROCESSOR',
+    data
+  })
+}
+
+// 商品分类树形列表
+export function fetchTreeCategoryList(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-CATALOG-TREE-LIST-PROCESSOR',
     data
   })
 }

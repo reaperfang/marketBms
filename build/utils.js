@@ -38,6 +38,11 @@ exports.cssLoaders = function(options) {
     // (which is the case during production build)
     if (options.extract) {
       loaders.push(MiniCssExtractPlugin.loader)
+      // return ExtractTextPlugin.extract({
+      //   use:loaders,
+      //   fallback:'vue-style-loader',
+      //   publicPath:'../../'
+      // })
     } else {
       loaders.push('vue-style-loader')
     }

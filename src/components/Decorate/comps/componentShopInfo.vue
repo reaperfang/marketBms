@@ -5,7 +5,7 @@
     <div v-if="displayStyle1" class="shopinfo1" :style="background">
       <div class="shopinfo_cont">
         <div class="shopinfo_img">
-          <img :src="shopInfo.logo" alt />
+          <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
         </div>
         <div class="shopinfo_introduce">
           <p class="shopinfo_title">{{shopInfo.shopName || '店铺名称'}}</p>
@@ -25,7 +25,7 @@
       </div>
       <div class="shopinfo2_two">
         <div class="shopinfo2_img">
-          <img :src="shopInfo.logo" alt />
+          <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
         </div>
         <div class="shopinfo2_introduce">
           <span>全部商品999</span>
@@ -38,7 +38,7 @@
     <div v-if="displayStyle3" class="shopinfo3" :style="background">
       <div class="shopinfo3_cont">
         <div class="shopinfo3_img">
-          <img :src="shopInfo.logo" alt />
+          <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
         </div>
         <div class="shopinfo3_introduce">
           <p>{{shopInfo.shopName || '店铺名称'}}</p>
@@ -55,7 +55,7 @@
       <div class="shopinfo4_bg" :style="background"></div>
       <div class="shopinfo4_two">
         <div class="shopinfo4_img">
-          <img :src="shopInfo.logo" alt />
+          <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
         </div>
         <div class="shopinfo4_introduce">
           <div class="shopinfo4_title">{{shopInfo.shopName || '店铺名称'}}</div>
@@ -70,7 +70,7 @@
     <!-- 样式五 -->
     <div v-if="displayStyle5" class="shopinfo5" :style="background">
       <div class="shopinfo5_img">
-        <img :src="shopInfo.logo" alt />
+        <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
       </div>
       <div class="shopinfo5_title">{{shopInfo.shopName || '店铺名称'}}</div>
       <div class="shopinfo5_line"></div>
@@ -128,7 +128,7 @@ export default {
       return {
         'backgroundImage': `url(${url})`,
         'backgroundRepeat': 'no-repeat',
-        'backgroundSize': '100% 100%'
+        'backgroundSize': 'cover'
       }
     }
   },
@@ -155,6 +155,7 @@ export default {
         & > img {
           width: 100%;
           height: 100%;
+          object-fit: cover;
         }
       }
       & > .shopinfo_introduce {
@@ -216,6 +217,7 @@ export default {
         & > img {
           width: 100%;
           height: 100%;
+          object-fit: cover;
           border-radius: 50%;
           border:1px solid #ddd;
         }
@@ -267,6 +269,7 @@ export default {
         & > img {
           width: 100%;
           height: 100%;
+          object-fit: cover;
         }
       }
       & > .shopinfo3_introduce {
@@ -324,6 +327,7 @@ export default {
         & > img {
           width: 100%;
           height: 100%;
+          object-fit: cover;
           border-radius: 50%;
           border:1px solid #ddd;
         }
@@ -377,6 +381,7 @@ export default {
         height: 100%;
         border-radius: 50%;
         border:1px solid #ddd;
+        object-fit: cover;
       }
     }
     & > .shopinfo5_title {

@@ -4,7 +4,7 @@
             <el-radio v-model="auditStatus" label="1">通过</el-radio>
             <el-radio v-model="auditStatus" label="2">不通过</el-radio>
             <div class="footer">
-                <el-button>取消</el-button>
+                <el-button @click="visible = false">取消</el-button>
                 <el-button @click="submit" type="primary">确定</el-button>
             </div>
         </div>
@@ -22,6 +22,13 @@ export default {
     },
     methods: {
         submit() {
+            if(this.auditStatus == '') {
+                this.$message({
+                message: '请选择审核类型',
+                type: 'warning'
+                });
+                return
+            }
             this.$emit('audit', this.auditStatus)
             this.visible = false
         }

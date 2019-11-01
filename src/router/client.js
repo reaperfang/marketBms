@@ -7,7 +7,8 @@ export default [
     name: 'client',
     meta: {
       title: '客户',
-      icon: 'icon_client'
+      icon: 'icon_client',
+      activeIcon:'icon_clients'
     },
     children: [
       {

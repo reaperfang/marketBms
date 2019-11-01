@@ -3,7 +3,7 @@
 import chartBase from "@/components/ChartBase";
 
 export default {
-  name: "pfChart",
+  name: "ip4Chart",
   extends: chartBase,
    computed:{
       
@@ -21,9 +21,13 @@ export default {
   methods: {
     // 数据显示控制
     con(n){
-      console.log(n)
-      this.flow = n;
-      console.log(n,this.flow)
+      // console.log('data',n)
+      this.flow = {
+        xAxis:n.xAxis,
+        yAxisSubmitOrderData:n.series[0].data,
+        yAxisPayOrderData:n.series[1].data,
+        yAxisOrderConversionData:n.series[2].data
+      }
       this.makeOption(n);
       this.oChart.setOption(this.option, true);
     },
@@ -45,15 +49,15 @@ export default {
           bottom: "2%",
           containLabel: true
         },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
+        // toolbox: {
+        //   feature: {
+        //     saveAsImage: {}
+        //   }
+        // },
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: this.flow['xAxisData']
+          data: this.flow['xAxis']
         },
         yAxis: {
           type: "value",

@@ -30,25 +30,25 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="list"></component>
   </el-form>
 </template>
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import mixinFullReduction from "../mixins/mixinFullReduction";
 import dialogSelectFullReduction from '@/views/shop/dialogs/dialogSelectFullReduction';
 import uuid from 'uuid/v4';
 export default {
   name: 'propertyFullReduction',
-  mixins: [propertyMixin, mixinFullReduction],
+  mixins: [propertyMixin],
   components: {dialogSelectFullReduction},
   data () {
     return {
       ruleForm: {
-        title: '满减/满折',
-        displayStyle: 1,
-        ids: []
+        title: '满减/满折',//显示标题
+        displayStyle: 1,//展示样式
+        ids: [],//满减满折活动id列表
+        loading: false
       },
       rules: {
 
@@ -59,6 +59,7 @@ export default {
     }
   },
   created() {
+    this.fetch();
   },
    watch: {
     'items': {
@@ -67,12 +68,42 @@ export default {
         for(let item of newValue) {
           this.ruleForm.ids.push(item.id);
         }
-        this._globalEvent.$emit('fetchFullReduction');
+        this.fetch();
+        this._globalEvent.$emit('fetchFullReduction', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     }
   },
   methods: {
+     //根据ids拉取数据
+    fetch(componentData = this.ruleForm) {
+      if(componentData) {
+          if(Array.isArray(componentData.ids) && componentData.ids.length){
+              this.loading = true;
+              this._apis.shop.getFullReductionListByIds({
+                  ids: componentData.ids.join(',')
+              }).then((response)=>{
+                  this.createList(response);
+                  this.loading = false;
+              }).catch((error)=>{
+                  // this.$notify.error({
+                  //     title: '错误',
+                  //     message: error
+                  // });
+                  console.error(error);
+                  this.list = [];
+                  this.loading = false;
+              });
+          }else{
+              this.list = [];
+          }
+      }
+    },
+
+      /* 创建数据 */
+    createList(datas) {
+        this.list = datas;
+    },
   }
 }
 </script>

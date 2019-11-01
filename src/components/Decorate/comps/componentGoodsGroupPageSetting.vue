@@ -315,6 +315,11 @@ export default {
             margin-top: 20px;
             font-size:13px;
             color:rgba(51,51,51,1);
+            text-align: center;
+            width: 74px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
           }
         }
       }

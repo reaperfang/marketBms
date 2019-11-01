@@ -65,11 +65,14 @@ const decorate = {
 			if (params.id === state.basePropertyId) {
 				state.baseInfo = params.data;
 			}
-			//对列表组件处理
+			//对列表组件处理(一定要深拷贝，否则会出现同类型组件数据污染现象)
 			const tempComponentDataMap = { ...state.componentDataMap };
 			const componentData = tempComponentDataMap[params.id];
 			if (componentData) {
-				componentData['data'] = params.data;
+				const newComponentData = {...componentData};
+				delete tempComponentDataMap[params.id];
+				newComponentData['data'] = {...params.data};
+				tempComponentDataMap[params.id] = newComponentData;
 				state.componentDataMap = tempComponentDataMap;
 			}
 		},

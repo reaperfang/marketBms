@@ -4,16 +4,16 @@
       <p class="marB20">客户ID: {{ data.memberSn }}</p>
       <p class="marB20">当前积分: {{ data.score }}</p>
       <div class="marB20">
-          <span>调整积分数值：</span>
+          <span><span style="color:red">*</span>调整积分数值：</span>
           <div class="input_wrap">
-              <el-input placeholder="请输入调整数值" v-model="adjustmentScore"></el-input>
+              <el-input placeholder="请输入调整数值" v-model="adjustmentScore" @blur="handleBlur" @keyup.native="number($event,adjustmentScore,'adjustmentScore')"></el-input>
           </div>
       </div>
       <p class="marB20">调整后积分: {{adjustmentAfterScore}}</p>
       <div class="marB20 clearfix">
-          <span class="fl">变更原因：</span>
+          <span class="fl"><span style="color:red">*</span>变更原因：</span>
           <div class="input_wrap2 fl">
-              <el-input placeholder="请输入变更原因" v-model="remarks" type="textarea" :row="3"></el-input>
+              <el-input placeholder="请输入变更原因" v-model="remark" type="textarea" :row="3" :maxlength="50"></el-input>
           </div>
       </div>
     </div>
@@ -29,18 +29,29 @@ export default {
     return {
       hasCancel: true,
       adjustmentScore: null,
-      remarks: ""
+      remark: ""
     };
   },
   methods: {
+    number(event,val,ele) {
+        val = val.replace(/[^\d]/g,'');
+        val = val.replace(/^0/g,'');
+        this[ele] = val;
+    },
     submit() {
-      if(this.adjustmentScore == "") {
+      if(this.adjustmentScore == null) {
         this.$notify({
           title: '警告',
           message: '请输入调整数值',
           type: 'warning'
         });
-      }else if(this.remarks == "") {
+      }else if(Number(this.data.score) == 0 && Number(this.adjustmentScore) < 0) {
+        this.$notify({
+          title: '警告',
+          message: '当前积分为0时不能输入负数',
+          type: 'warning'
+        });
+      }else if(this.remark == "") {
         this.$notify({
           title: '警告',
           message: '请输入变更原因',
@@ -52,7 +63,7 @@ export default {
           currentScore: this.data.score,
           adjustmentScore: this.adjustmentScore,
           adjustmentAfterScore: this.adjustmentAfterScore,
-          remarks: this.remarks
+          remark: this.remark
         }
         this._apis.client.manualChangeCredit(params).then((response) => {
           this.$notify({
@@ -60,12 +71,19 @@ export default {
             message: "调整积分成功",
             type: 'success'
           });
+          this.$emit('refreshPage');
         }).catch((error) => {
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          console.log(error);
         })
+      }
+    },
+    handleBlur() {
+      if(Number(this.data.score) == 0 && Number(this.adjustmentScore) < 0) {
+        this.$notify({
+          title: '警告',
+          message: '当前积分为0时不能输入负数',
+          type: 'warning'
+        });
       }
     }
   },

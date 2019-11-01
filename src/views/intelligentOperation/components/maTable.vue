@@ -13,22 +13,26 @@
       </el-table-column>
       <el-table-column
         prop="id"
-        label="ID">
+        label="客户ID">
       </el-table-column>
       <el-table-column
-        label="会员类型">
+        label="客户类型">
         <template slot-scope="scope">
-             <span style="line-height:60px;display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
+          <span style="line-height:60px; display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="phone"
         label="手机号码"
       >
+        <template slot-scope="scope">
+            <span v-if="!scope.row.phone" class="txtCenter"> - </span>
+            <span v-else>{{scope.row.phone}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="name"
-        label="会员昵称"
+        label="昵称"
       >
       </el-table-column>
       <el-table-column
@@ -37,10 +41,13 @@
       >
       </el-table-column>
       <el-table-column
-        label="入会时间"
+        label="（会员）入会时间"
+        width="150"
       >
         <template slot-scope="scope">
-          <span>{{Number(scope.row.joinTime) | time}}</span>
+          <span v-if="scope.row.joinTime">
+            {{Number(scope.row.joinTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -57,7 +64,7 @@
         label="最后交易时间"
       >
         <template slot-scope="scope">
-          <span>{{Number(scope.row.lastTradeTime) | time}}</span>
+          <span>{{Number(scope.row.lastTradeTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -117,19 +124,6 @@ export default {
     }
     
   },
-  filters:{
-    //时间戳过滤
-      time:function(value) {
-      let date = new Date(value)
-      let Y = date.getFullYear() + '-'
-      let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
-      let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' '
-      let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':'
-      let m = date.getMinutes() < 10 ? '0' + date.getMinutes() + '' : date.getMinutes()
-      let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-      return Y + M + D + h + m
-    }
-  },
   components: {}
 };
 </script>
@@ -142,5 +136,9 @@ export default {
                 }
             }
         }
-
+.txtCenter{
+  text-align:center; 
+  width:80%;
+  display:inline-block
+}
 </style>

@@ -26,15 +26,23 @@
 
 <script>
 import componentMixin from "../mixins/mixinComps";
-import mixinFullReduction from "../mixins/mixinFullReduction";
 export default {
   name: "componentFullReduction",
-  mixins: [componentMixin, mixinFullReduction],
+  mixins: [componentMixin],
   components: {},
   data() {
     return {
-      list: []
+      list: [],
+      loading: false
     };
+  },
+  created() {
+    this.fetch();
+    this._globalEvent.$on('fetchFullReduction', (componentData, componentId) =>{
+      if(this.currentComponentId === componentId) {
+        this.fetch(componentData);
+      }
+    });
   },
   computed: {
     reductionStyle() {
@@ -48,8 +56,42 @@ export default {
 
     discountData(item2) {
       return `满${item2.useCondition}${item2.unit == 1 ? '元' : '件'}打${item2.discount * 10}折`;
-    }
-  }
+    },
+
+    //根据ids拉取数据
+    fetch(componentData = this.currentComponentData.data) {
+      if(componentData) {
+          if(Array.isArray(componentData.ids) && componentData.ids.length){
+              this.loading = true;
+              this._apis.shop.getFullReductionListByIds({
+                  ids: componentData.ids.join(',')
+              }).then((response)=>{
+                  this.createList(response);
+                  this.loading = false;
+              }).catch((error)=>{
+                  // this.$notify.error({
+                  //     title: '错误',
+                  //     message: error
+                  // });
+                  console.error(error);
+                  this.list = [];
+                  this.loading = false;
+              });
+          }else{
+              this.list = [];
+          }
+      }
+    },
+
+      /* 创建数据 */
+    createList(datas) {
+        this.list = datas;
+    },
+  },
+  beforeDestroy() {
+      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
+      this._globalEvent.$off('fetchFullReduction');
+  },
 };
 </script>
 

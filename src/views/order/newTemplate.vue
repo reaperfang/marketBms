@@ -9,9 +9,10 @@
           ref="ruleForm"
           label-width="100px"
           class="demo-ruleForm"
+          :disabled="$route.query.mode == 'look'"
         >
           <el-form-item label="模板名称" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="请输入，不超过20个字符"></el-input>
+            <el-input class="template-name" v-model="ruleForm.name" placeholder="请输入，不超过20个字符"></el-input>
           </el-form-item>
           <el-form-item label="计费方式" prop="calculationWay">
             <el-radio v-model="ruleForm.calculationWay" :label="1">按件计费</el-radio>
@@ -32,6 +33,7 @@
                 <span class="des">说明：除指定区域外，其余区域按默认计算。</span>
               </div>
               <div
+                v-if="$route.query.mode != 'look'"
                 @click="currentDialog = 'RegionDialog'; dialogVisible = true"
                 class="col blue pointer"
               >为指定区域设置运费</div>
@@ -46,34 +48,34 @@
             >
               <el-table-column prop="areaInfoList" label="配送到" width="180">
                 <template slot-scope="scope">
-                  <span>{{scope.row.areaInfoList.map(val => val.cityName).join(',')}}</span>
+                  <span>{{scope.row.areaInfoList.map(val => val.cityName).join(',') || '默认运费（全国）'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="首件" width="180">
+              <el-table-column :label="one" width="180">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.theFirst"></el-input>件或以内
+                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
                 </template>
               </el-table-column>
               <el-table-column label="运费（元）">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.freight"></el-input>
+                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.freight"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="续件" width="180">
+              <el-table-column :label="two" width="180">
                 <template slot-scope="scope">
                   每增加
-                  <el-input v-model="scope.row.superaddition"></el-input>
+                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.superaddition"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}
                 </template>
               </el-table-column>
               <el-table-column label="续费（元）" width="180">
                 <template slot-scope="scope">
                   运费增加
-                  <el-input v-model="scope.row.renew"></el-input>
+                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.renew"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <span @click="deleteRow(scope.$index)" v-if="scope.$index != 0" class="blue">删除</span>
+                  <span @click="deleteRow(scope.$index)" v-if="scope.$index != 0 && $route.query.mode != 'look'" class="blue">删除</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -98,12 +100,12 @@
               </div>
         </div>-->
       </div>
-      <div class="footer">
-        <el-button>取 消</el-button>
-        <el-button @click="submit" type="primary">确 定</el-button>
+      <div v-if="$route.query.mode != 'look'" class="footer">
+        <el-button @click="$router.go(-1)">取 消</el-button>
+        <el-button @click="submit('ruleForm')" type="primary">确 定</el-button>
       </div>
     </section>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
   </div>
 </template>
 <script>
@@ -111,6 +113,18 @@ import RegionDialog from "@/views/order/dialogs/regionDialog";
 
 export default {
   data() {
+    var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入模板名称'));
+        } else if(/^\s*$/.test(value)) {
+          callback(new Error('模板名称不能为空'));
+        } else {
+          if(value.length > 20) {
+            callback(new Error('模板名称不超过20个字符'));
+          }
+          callback();
+        }
+      };
     return {
       ruleForm: {
         name: "",
@@ -118,7 +132,14 @@ export default {
       },
       noDistribution: "",
       noDistributionList: ["新建", "内蒙"],
-      rules: {},
+      rules: {
+          name: [
+            { validator: validatePass, trigger: 'blur' },
+          ],
+          calculationWay: [
+            { required: true, message: '请选择计费方式', trigger: 'blur' },
+          ],
+        },
       tableData: [],
       currentDialog: "",
       dialogVisible: false
@@ -127,7 +148,50 @@ export default {
   created() {
     if (this.$route.query.id) {
       this.getDetail();
+    } else {
+      this.tableData.push({
+        "areaInfoList": [{
+				"receivedProvinceCode": "",
+				"receivedCityCode": "",
+				"cityName": ""
+			}],
+			"theFirst": "",
+			"freight": "",
+			"superaddition": "",
+			"renew": ""
+      })
     }
+  },
+  filters: {
+    calculationWayFilter(value) {
+      if(value == 1) {
+        return '件'
+      } else if(value == 2) {
+        return 'KG'
+      } else if(value == 3) {
+        return 'm³'
+      }
+    }
+  },
+  computed: {
+    one() {
+      if(this.ruleForm.calculationWay == 1) {
+        return '首件'
+      } else if(this.ruleForm.calculationWay == 2) {
+        return '首重'
+      } else if(this.ruleForm.calculationWay == 3) {
+        return '首体积'
+      }
+    },
+    two() {
+      if(this.ruleForm.calculationWay == 1) {
+        return '续件'
+      } else if(this.ruleForm.calculationWay == 2) {
+        return '续重'
+      } else if(this.ruleForm.calculationWay == 3) {
+        return '续体积'
+      }
+    },
   },
   methods: {
     deleteRow(index) {
@@ -179,16 +243,83 @@ export default {
           });
         });
     },
-    submit() {
-      if(this.$route.query.id) {
-        if(this.$route.query.mode == 'copy') {
-          this.add()
-        } else {
-          this.editor()
-        }
-      } else {
-        this.add()
-      }
+    submit(formName) {
+      this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/.test(val.freight))) {
+                this.$message({
+                  message: '运费仅支持输入正数，允许小数点后两位',
+                  type: 'warning'
+                });
+                return
+              }
+              if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/.test(val.renew))) {
+                this.$message({
+                  message: '续费仅支持输入正数，允许小数点后两位',
+                  type: 'warning'
+                });
+                return
+              }
+            if(this.ruleForm.calculationWay == 1) {
+              if(this.tableData.some(val => !/^[1-9]\d*$/.test(val.theFirst))) {
+                this.$message({
+                  message: '首件仅支持正整数',
+                  type: 'warning'
+                });
+                return
+              }
+              if(this.tableData.some(val => !/^[1-9]\d*$/.test(val.superaddition))) {
+                this.$message({
+                  message: '续件仅支持正整数',
+                  type: 'warning'
+                });
+                return
+              }
+            } else if(this.ruleForm.calculationWay == 2) {
+              if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,3})?$/.test(val.theFirst))) {
+                this.$message({
+                  message: '首重仅支持输入正数，允许小数点后三位',
+                  type: 'warning'
+                });
+                return
+              }
+              if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,3})?$/.test(val.superaddition))) {
+                this.$message({
+                  message: '续重仅支持输入正数，允许小数点后三位',
+                  type: 'warning'
+                });
+                return
+              }
+            } else if(this.ruleForm.calculationWay == 3) {
+              if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,3})?$/.test(val.theFirst))) {
+                this.$message({
+                  message: '首体积仅支持输入正数，允许小数点后三位',
+                  type: 'warning'
+                });
+                return
+              }
+              if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,3})?$/.test(val.superaddition))) {
+                this.$message({
+                  message: '续体积仅支持输入正数，允许小数点后三位',
+                  type: 'warning'
+                });
+                return
+              }
+            }
+            if(this.$route.query.id) {
+              if(this.$route.query.mode == 'copy') {
+                this.add()
+              } else {
+                this.editor()
+              }
+            } else {
+              this.add()
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
     },
     onSubmit(value) {
       console.log(value);
@@ -236,7 +367,13 @@ export default {
               areaInfoList.forEach(areaInfo => {
                 let receivedProvinceCode = areaInfo.receivedProvinceCode
                 let receivedCityCode = areaInfo.receivedCityCode
-                let cityName = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                let cityName = ''
+
+                if(receivedProvinceCode == '' && receivedCityCode == '') {
+                  cityName = '默认运费（全国）'
+                } else {
+                  cityName = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                }
 
                 areaInfo.cityName = cityName
               })
@@ -320,6 +457,19 @@ export default {
 }
 /deep/ .el-input {
   width: auto;
+}
+/deep/ label[for="name"]::before {
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+}
+/deep/ .template-name {
+  input {
+    width: 350px;
+  }
+}
+/deep/ .el-radio {
+  margin-right: 30px;
 }
 </style>
 

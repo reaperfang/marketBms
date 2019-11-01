@@ -18,7 +18,7 @@
       <el-form-item label="背景颜色" prop="colorStyle">
         <div class="color_block">
           <el-input v-model="ruleForm.colorStyle" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.colorStyle"></colorPicker >
+          <colorPicker  v-model="ruleForm.colorStyle" defaultColor="#fff"></colorPicker >
         </div>
       </el-form-item>
     </div>
@@ -35,30 +35,47 @@ export default {
     return {
       classifyList: [],
       ruleForm: {
-        name: '微页面名称',
-        title: '微页面标题',
+        name: '',
+        title: '',
         explain: '',
-        pageCategoryInfoId: '',
+        pageCategoryInfoId: '-1',
         colorStyle: '#fff',
         pageKey: '',
-        status: 0,
-        isBaseComponent: true
+        status: 0
       },
       rules: {
         name: [
-          { required: true, message: "请输入内容", trigger: "blur" }
+          { required: true, message: "请输入内容", trigger: "blur" },
+          {
+            min: 1,
+            max: 10,
+            message: "要求1~10个字符",
+            trigger: "blur"
+          }
         ],
         title: [
-          { required: true, message: "请输入内容", trigger: "blur" }
+          { required: true, message: "请输入内容", trigger: "blur" },
+          {
+            min: 1,
+            max: 10,
+            message: "要求1~10个字符",
+            trigger: "blur"
+          }
         ],
         explain: [
-          { required: false, message: "请输入内容", trigger: "blur" }
+          { required: true, message: "请输入内容", trigger: "blur" },
+          {
+            min: 1,
+            max: 20,
+            message: "长度在 1 到 20 个字符",
+            trigger: "blur"
+          }
         ],
         pageCategoryInfoId: [
-          { required: true, message: "请输入内容", trigger: "change" }
+          { required: false, message: "请输入内容", trigger: "change" }
         ],
         colorStyle: [
-          { required: true, message: "请输入内容", trigger: "change" }
+          { required: false, message: "请输入内容", trigger: "change" }
         ],
       },
     }
@@ -74,16 +91,15 @@ export default {
         this.classifyList = response;
         // this.ruleForm.pageCategoryInfoId = response[0].id;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message({ message: error, type: 'error' });
       });
     }
   }
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
+}
 </style>

@@ -23,8 +23,8 @@
       <el-form-item label="背景颜色" prop="backgroundColor" v-if="ruleForm.titleTemplate === 1">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.backgroundColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#ffffff"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="日期" prop="date" v-if="ruleForm.titleTemplate === 2">
@@ -44,9 +44,13 @@
       <el-form-item label="导航名称" prop="navName">
         <el-input placeholder="请输入名称" v-model="ruleForm.navName"></el-input>
       </el-form-item>
-      <el-form-item label="链接到" prop="linkTo">
-        <el-input placeholder="" v-model="ruleForm.linkTo"></el-input>
-        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">修改</el-button>
+       <el-form-item label="跳转链接" prop="linkTo">
+        <el-button 
+        type="text" 
+        @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" 
+        :title="ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'">
+        {{ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'}}
+        </el-button>
       </el-form-item>
     </div>
 
@@ -65,15 +69,15 @@ export default {
   data () {
     return {
       ruleForm: {
-        mainTitle: '',
-        titleTemplate: 1,
-        displayPosition: 1,
-        subTitle: '',
-        backgroundColor: '',
-        navName: '',
-        linkTo: '',
-        author: '',
-        date: ''
+        mainTitle: '',//标题名
+        titleTemplate: 1,//标题模板
+        displayPosition: 1,//显示位置
+        subTitle: '',//副标题
+        backgroundColor: '#ffffff',//背景颜色
+        navName: '',//导航名称
+        linkTo: null,//链接到
+        author: '',//作者
+        date: ''//时间
       },
       rules: {
 
@@ -85,13 +89,15 @@ export default {
   methods: {
 
     /* 弹窗选中了跳转链接 */
-    seletedPage(jumpLink) {
-      console.log(jumpLink);
+    seletedPage(linkTo) {
+      this.ruleForm.linkTo = linkTo;
     },
   }
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
+}
 </style>

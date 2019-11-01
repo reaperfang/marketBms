@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入广告名称"></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入广告名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="fetch">查询</el-button>
@@ -29,15 +29,15 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('createAD')">新建广告</el-button>
-        <el-button type="warning" plain>批量删除</el-button>
+        <el-button type="warning" plain @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
     <div class="table">
-      <p>广告（28个）</p>
-      <el-table :data="tableList" stripe>
+      <p>广告（{{total || 0}}个）</p>
+      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"  
-          width="55">
+          width="30">
         </el-table-column>
         <el-table-column prop="imagePath" label="广告图">
           <template slot-scope="scope">
@@ -46,10 +46,19 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="广告名称" :width="'200px'"></el-table-column>
-        <el-table-column prop="vv" label="访客数"></el-table-column>
-        <el-table-column prop="pv" label="浏览数"></el-table-column>
-        <el-table-column prop="updateTime" label="展示时间" :width="'400px'"></el-table-column>
+        <el-table-column prop="name" label="广告名称"></el-table-column>
+        <el-table-column prop="vv" label="访客数" width="100"></el-table-column>
+        <el-table-column prop="pv" label="浏览数" width="100"></el-table-column>
+        <el-table-column prop="updateTime" label="展示时间">
+          <template slot-scope="scope">
+            {{scope.row.startTime}} 至 {{scope.row.endTime}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" sortable label="创建时间" :width="170"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="更新时间" :width="170"></el-table-column>
+        <!-- <el-table-column prop="startTime" sortable label="开始时间" :width="170"></el-table-column>
+        <el-table-column prop="endTime" sortable label="结束时间" :width="170"></el-table-column> -->
+        <el-table-column prop="createUserName" label="操作账号"></el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0">展示中</span>
@@ -59,14 +68,13 @@
             <span v-else>--</span>
           </template>
         </el-table-column>
-        <el-table-column prop="startTime" label="创建时间"  :width="'200px'"></el-table-column>
-        <el-table-column prop="createUserName" label="操作账号"  :width="'150px'"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'300px'">
+        <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
+            <span class="table-btn" v-if="scope.row.status === 0" @click="_routeTo('createAD', {ADId: scope.row.id, showType: 'view'})">查看</span>
             <span class="table-btn" v-if="scope.row.status === 3" @click="startAD(scope.row)">启用</span>
             <span class="table-btn" v-else-if="scope.row.status === 0 || scope.row.status === 1" @click="stopAD(scope.row)">停用</span>
             <span class="table-btn" v-else>---</span>
-            <span class="table-btn" @click="_routeTo('createAD', {ADId: scope.row.id})">编辑</span>
+            <span class="table-btn" v-if="scope.row.status !== 0" @click="_routeTo('createAD', {ADId: scope.row.id})">编辑</span>
             <span class="table-btn" @click="deleteAD(scope.row)">删除</span>
             <!-- <el-button class="table-btn" type="text" @click="deleteAD(scope.row)" :disabled="true">删除</el-button> -->
           </template>
@@ -132,7 +140,7 @@ export default {
 
     /* 启用广告 */
     startAD(item) {
-      this.$confirm('确定停用此广告吗？', '提示', {
+      this.$confirm('确定启用此广告吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -198,21 +206,53 @@ export default {
         })
     },
 
+     /* 批量删除广告 */
+    batchDeleteAD(item) {
+       this.$confirm(`确定删除吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          const ids = [];
+          for(let item of this.multipleSelection) {
+            ids.push(item.id);
+          }
+          this._apis.shop.deleteADs({advertiseIds: ids}).then((response)=>{
+            this.$notify({
+              title: '成功',
+              message: '删除成功！',
+              type: 'success'
+            });
+            this.fetch();
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          });
+        })
+    },
+
     fetch() {
+      this.loading = true;
       this._apis.shop.getADList(this.ruleForm).then((response)=>{
         this.tableList = response.list;
         this.total = response.total;
+        this.loading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
+        this.loading = false;
       });
     },
 
     /* 开关状态切换 */
     switchStatusChange(value) {
-      this._apis.shop.changeSwitchStatus({id:this.cid, adOpenType: value === true ? 1 : 0}).then((response)=>{
+      this._apis.shop.changeSwitchStatus({id:this.cid, adOpenType: value === true ? 1 : 0})
+      .then((response)=>{
         this.$notify({
           title: '成功',
           message: '修改成功！',
@@ -267,6 +307,10 @@ export default {
       width:40px;
       height:50px;
       margin-right:10px;
+      object-fit: contain;
+    }
+    p{
+      width: calc(100% - 50px);
     }
 }
 </style>

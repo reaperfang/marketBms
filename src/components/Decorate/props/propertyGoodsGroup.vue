@@ -1,20 +1,20 @@
 <template>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :style="bodyHeight">
     <div class="block form">
-      <el-form-item label="商品分组" prop="goodsGroups">
-        <el-button type="text"  @click="dialogVisible=true; currentDialog='dialogSelectGoodsGroup'">添加商品分组</el-button>
+      <el-form-item label="商品分类" prop="goodsGroups">
+        <el-button type="text"  @click="dialogVisible=true; currentDialog='dialogSelectGoodsGroup'">添加商品分类</el-button>
         <div class="goods_groups">
           <el-tag
             v-for="(tag, key) in list"
             :key="key"
             closable
             type="success" @close="deleteItem(tag)">
-            {{tag.name}}
+            {{tag.catagoryData.name}}
           </el-tag>
         </div>
       </el-form-item>
-      <el-form-item label="全部分组" prop="showAllGroup">
-        全部分组为商品的集合分组，增加消费者逛的体验
+      <el-form-item label="全部分类" prop="showAllGroup">
+        全部分类为商品的集合分类，增加消费者逛的体验
         <el-radio-group v-model="ruleForm.showAllGroup">
           <el-radio :label="1">展示</el-radio>
           <el-radio :label="2">不展示</el-radio>
@@ -85,7 +85,7 @@
       <el-form-item label="图片比例" prop="goodsRatio">
         <el-radio-group v-model="ruleForm.goodsRatio">
           <el-radio :label="1">3:2</el-radio>
-          <el-radio :label="2">3:2</el-radio>
+          <el-radio :label="2">1:1</el-radio>
           <el-radio :label="3">3:4</el-radio>
           <el-radio :label="4">16:9</el-radio>
         </el-radio-group>
@@ -122,59 +122,61 @@
         <el-radio-group v-if="ruleForm.showContents.includes('4')" v-model="ruleForm.buttonStyle">
           <el-radio :label="1">样式1</el-radio>
           <el-radio :label="2">样式2</el-radio>
-          <el-radio :label="3" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式3</el-radio>
-          <el-radio :label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式4</el-radio>
+          <el-radio :label="3" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6 || (ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式3</el-radio>
+          <el-radio :label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6 || (ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式4</el-radio>
           <el-radio :label="5">样式5</el-radio>
           <el-radio :label="6">样式6</el-radio>
-          <el-radio :label="7" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式7</el-radio>
-          <el-radio :label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式8</el-radio>
+          <el-radio :label="7" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6 || (ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式7</el-radio>
+          <el-radio :label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6 || (ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式8</el-radio>
         </el-radio-group>
         <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input>
       </el-form-item>
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="list"></component>
   </el-form>
 </template>
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import mixinGoodsGroup from '../mixins/mixinGoodsGroup';
 import dialogSelectGoodsGroup from '@/views/shop/dialogs/dialogSelectGoodsGroup';
 export default {
   name: 'propertyGoodsGroup',
-  mixins: [propertyMixin, mixinGoodsGroup],
+  mixins: [propertyMixin],
   components: {dialogSelectGoodsGroup},
   data () {
     return {
       ruleForm: {
-        showAllGroup: 1,
-        showTemplate: 1,
-        menuStyle: 1,
-        menuPosition: 1,
-        listStyle: 1,
-        pageMargin: 15,
-        goodsMargin: 10,
-        goodsStyle: 1,
-        goodsChamfer: 1,
-        goodsRatio: 1,
-        goodsFill: 2,
-        textStyle: 1,
-        textAlign: 1,
-        showContents: ['1', '2', '3', '4'],
-        buttonStyle: 1,
-        ids: [],
-        buttonText: '加入购物车'
+        showAllGroup: 1, //显示全部分类
+        showTemplate: 1,//展示模板方式
+        menuStyle: 1,//菜单样式
+        menuPosition: 1,//菜单位置
+        listStyle: 1,//列表样式
+        pageMargin: 15,//页面边距
+        goodsMargin: 10,//商品边距
+        goodsStyle: 1,//商品样式
+        goodsChamfer: 1,//商品倒角
+        goodsRatio: 2,//图片比例
+        goodsFill: 2,//图片填充
+        textStyle: 1,//文本样式
+        textAlign: 1,//文本对齐
+        showContents: ['1', '2', '3', '4'],//显示内容
+        buttonStyle: 1,//购买按钮样式
+        ids: [],//商品分类列表 
+        buttonText: '加入购物车'//按钮文字
       },
       rules: {
 
       },
-      list: [],
+      list: {},
       dialogVisible: false,
       currentDialog: '',
 
     }
+  },
+  created() {
+    this.fetch();
   },
   watch: {
     'items': {
@@ -183,11 +185,12 @@ export default {
         for(let k in newValue) {
           catagoryIds[k] = [];
           for(let item of newValue[k].goods) {
-            catagoryIds[k].push(item.id);
+            catagoryIds[k].push(item);
           }
         }
         this.ruleForm.ids = catagoryIds;
-        this._globalEvent.$emit('fetchGoodsGroup');
+        this.fetch();
+        this._globalEvent.$emit('fetchGoodsGroup', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -200,6 +203,56 @@ export default {
     }
   },
   methods: {
+     //根据ids拉取数据
+    fetch(componentData = this.ruleForm) {
+      if(componentData) {
+          if(componentData.ids) {
+            let ids = [];
+            for(let item in componentData.ids) {
+              ids.push(item);
+            }
+            if(!ids.length) {
+              this.list = {};
+              return;
+            }
+            this.loading = true;
+            this._apis.goods.fetchCategoryList({ids}).then((response)=>{
+              let data = {};
+                for(let item of response) {
+                  data[item.id] = {
+                    catagoryData: item,
+                    goods: this.ruleForm.ids[item.id]
+                  };
+                }
+                this.list = data;
+                this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+                this.loading = false;
+            }).catch((error)=>{
+                // this.$notify.error({
+                //   title: '错误',
+                //   message: error
+                // });
+                console.error(error);
+                this.list = {};
+                this.loading = false;
+            });
+      }
+      }
+    },
+
+     /* 删除数据项 */
+    deleteItem(item) {
+      if(item.fakeData) {  //如果是假数据
+        this.$alert('示例数据不支持删除操作，请在右侧替换真实数据后重试!', '警告', {
+          confirmButtonText: '确定'
+        })
+        return;
+      }
+      const tempItems = {...this.list};
+      delete tempItems[item.catagoryData.id];
+      this.list = tempItems;
+      this.items = tempItems;
+    },
 
   }
 }

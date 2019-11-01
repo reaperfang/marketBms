@@ -37,7 +37,7 @@ export default {
             {
               type: 'goodsGroup',
               iconClass: 'goods-group',
-              title: '商品分组'
+              title: '商品分类'
             },
             {
               type: 'articleAD',

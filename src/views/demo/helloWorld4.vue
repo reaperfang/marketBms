@@ -6,7 +6,7 @@
     <!-- 取色器demo -->
     <el-card style="height: 380px;">
       <h1>取色器</h1>
-      <colorPicker  v-model="color"></colorPicker >
+      <colorPicker  v-model="color" defaultColor="#ff0000"></colorPicker >
     </el-card>
 
     <!-- 时间轴demo -->

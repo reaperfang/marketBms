@@ -16,18 +16,30 @@
       </div>
       <el-table
         :data="skuList"
+        :row-key="getRowKeys"
         style="width: 100%"
         ref="skuTable"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column type="selection" prop="choose" label="选择"></el-table-column>
+        <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true"></el-table-column>
         <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column>
         <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
         <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
         <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
         <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
       </el-table>
+      <div class="page_styles">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="Number(startIndex) || 1"
+          :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
+          :page-size="pageSize*1"
+          :total="total*1"
+          layout="total, sizes, prev, pager, next, jumper"
+        ></el-pagination>
+      </div>
     </div>
   </DialogBase>
 </template>
@@ -43,14 +55,27 @@ export default {
       categoryValue: [],
       productLabelName: "",
       name: "",
-      skuList: JSON.parse(localStorage.getItem('skuList')) || []
+      skuList: [],
+      total: 0,
+      pageSize: 10,
+      startIndex: 1
     };
   },
   methods: {
+    getRowKeys(row) {
+      return row.id
+    },
+    handleSizeChange(val) {
+      this.getSkuList(1, val);
+      this.pageSize = val;
+    },
+    handleCurrentChange(val) {
+      this.getSkuList(val, this.pageSize);
+    },
     submit() {
-        let selection = this.$refs.skuTable.selection;
+        let selections = this.$refs.skuTable.selection;
         let selectedIds = [];
-        selection.map((v) => {
+        selections.map((v) => {
             selectedIds.push(v.goodsInfo.id);
         });
         selectedIds = selectedIds.join(',');
@@ -89,10 +114,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          console.log(error);
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -110,21 +132,39 @@ export default {
               v.goodsInfo.specs = v.goodsInfo.specs.replace(/{|}|"|"/g,"");
           })
           this.skuList = [].concat(response.list);
+          this.total = response.total;
+          let productInfoIds;
+          if(!!this.data.productInfoIds) {
+            if(this.data.productInfoIds.indexOf(',') !== -1) {
+              productInfoIds = this.data.productInfoIds.split(',');
+            }else{
+              productInfoIds = [this.data.productInfoIds]
+            }
+          }
+          if(productInfoIds && productInfoIds.length > 0) {
+            productInfoIds.map((v) => {
+                this.skuList.forEach(row => {
+                    if(row.goodsInfo.id == v) {
+                      this.$nextTick(() => {
+                        this.$refs.skuTable.toggleRowSelection(row);
+                      })
+                    }
+                })
+            })
+          }
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          console.log(error);
         });
     },
     handleSearch() {
-        this.getSkuList(1,10);
+        this.getSkuList(this.startIndex, this.pageSize);
     },
     reset() {
         this.categoryValue = [];
         this.productLabelName = "";
         this.name = "";
+        this.getSkuList(this.startIndex, this.pageSize);
     }
   },
   computed: {
@@ -140,18 +180,6 @@ export default {
   mounted() {
     this.getProductClass();
     this.getSkuList(1,10);
-    let productInfoIds = this.data.productInfoIds.split(',');
-    this.$nextTick(() => {
-        if(productInfoIds.length > 0) {
-            productInfoIds.map((v) => {
-                this.skuList.forEach(row => {
-                    if(row.goodsInfo.id == v) {
-                        this.$refs.skuTable.toggleRowSelection(row);
-                    }
-                })
-            })
-        }
-    })
   },
   props: {
     data: {},
@@ -181,6 +209,10 @@ export default {
       width: 174px;
       display: inline-block;
     }
+  }
+  .page_styles{
+    text-align: center;
+    overflow-x: auto;
   }
 }
 </style>

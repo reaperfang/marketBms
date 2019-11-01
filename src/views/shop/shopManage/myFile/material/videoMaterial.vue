@@ -24,21 +24,22 @@
                   </span>
                   <span>
                     <i class="wx_icon" v-if="item.isSyncWechat"></i>
-                    {{item.fileSize}} MB
+                    {{item.fileSize || 0}} MB
                   </span>
               </p>
               <div class="img_body">
                 <p class="title">{{item.title}}</p>
-                <video v-if="item.filePath !=''"  
+                <!-- <video v-if="item.filePath !=''"  
                 :src="item.filePath"
                 class="avatar video-avatar"
-                controls="controls">您的浏览器不支持视频播放</video> 
-                <!-- <img :src="item.filePath" class="imgs"> -->
+                controls="controls">您的浏览器不支持视频播放</video>  -->
+                <img :src="item.fileCover" class="imgs">
+                <span class="btn" @click="openVideo(item)"></span>
               </div>
               <p class="img_bottom">
                 <!-- <span @click="uploadImage(item.id,'videoId')"><i class="el-icon-edit"></i></span> -->
                 <span @click="moveGroup(item.id)"><i class="el-icon-folder"></i></span>
-                <span @click="downVideo(item.filePath,item.fileName)"><i class="el-icon-download"></i></span>
+                <span @click="downVideo(item.filePath,item.fileName)"><i class="el-icon-video-camera"></i></span>
                 <span @click="deleteImage(item.id,'videoId')"><i class="el-icon-delete"></i></span>
               </p>
             </div>
@@ -59,7 +60,7 @@
         <div class="groups">
           <p class="groups_head">全部视频</p>
           <p class="item" v-for="item in groupList" :key="item.id">
-            <span @click="getList(item.id)">{{item.name}}</span>
+            <span @click="getList(item.id)" class="group_name">{{item.name}}</span>
             <span v-if="item.id != -1">
               <i class="el-icon-edit" @click="newGroup(item.id,item.name,'edit')"></i>
               <i class="el-icon-delete" @click="deleteImage(item.id,'groupId')"></i>
@@ -75,7 +76,7 @@
 </template>
 
 <script>
-import dialogUploadVideo from '../../../dialogs/dialogUploadVideo';
+import dialogVideo from '../../../dialogs/dialogVideo';
 import dialogUploadImage from '../../../dialogs/dialogUploadImage';
 import dialogSyncVideo from '../../../dialogs/dialogSyncVideo';
 import dialogDelete from '../../../dialogs/dialogDelete';
@@ -83,7 +84,7 @@ import dialogGroups from '../../../dialogs/dialogGroups';
 import dialogGroupsMove from '../../../dialogs/dialogGroupsMove';
 export default {
   name: 'videoMaterial',
-  components: {dialogUploadVideo,dialogUploadImage,dialogSyncVideo,dialogDelete,dialogGroups,dialogGroupsMove},
+  components: {dialogVideo,dialogUploadImage,dialogSyncVideo,dialogDelete,dialogGroups,dialogGroupsMove},
   data () {
     return {
       dialogVisible: false,
@@ -118,7 +119,6 @@ export default {
     getList(id){
       let query ={
         fileGroupInfoId:id || '',
-        fileGroupInfoId:'',
         startIndex:this.currentPage,
         pageSize:this.pageSize,
         sourceMaterialType:'2'
@@ -141,7 +141,7 @@ export default {
     //下载视频
     downVideo(filepath,fileName){
       let a = document.createElement('a')
-          a.download = fileName || '图片名称'
+          a.download = fileName || '视频名称'
           a.href = filepath;
           a.click();
     },
@@ -241,7 +241,7 @@ export default {
             this.deleteVideo(data.deleteImage.imageId)
           break;
           case 'syncImage':
-            this.handleSyncImage()
+            this.handleSyncImage(data.syncImage.query)
           break;
           case 'uploadVideo':
             this.uploadVideo(data.uploadVideo.query)
@@ -318,8 +318,26 @@ export default {
       this.currentDialog = 'dialogSyncVideo'
     },
 
-    handleSyncImage(){
-      this.getList()
+    //播放视频
+    openVideo(item){
+      this.dialogVisible = true;
+      this.currentDialog = 'dialogVideo'
+      this.data = item
+    },
+
+    handleSyncImage(query){
+      this._apis.file.syncMaterial(query).then((response)=>{
+        this.$notify.success({
+          title: '成功',
+          message: '同步微信视频成功！'
+        });
+        this.getList()
+      }).catch((error)=>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })
     },
     /**********************************        单个视频      **********************/
     
@@ -464,6 +482,7 @@ export default {
           padding:10px 10px;
           font-size: 14px;
           color: #44434B;
+          position: relative;
           .title{
             height: 25px;
             line-height: 25px;
@@ -471,6 +490,19 @@ export default {
           .imgs{
             width: 100%;
             height:85px;
+            object-fit:cover;
+          }
+          .btn{
+            position:absolute;
+            top:55px;
+            left:110px;
+            width: 40px;
+            height: 40px;
+            background: url('../../../../../assets/images/shop/bofang.png');
+            background-size: cover;
+            &:hover{
+              cursor: pointer;
+            }
           }
         }
         .img_bottom{
@@ -494,7 +526,7 @@ export default {
     }
   }
   .groups{
-    width: 200px;
+    width: 300px;
     border: 1px solid #e6e6e6;
     font-size: 14px;
     color: #44434B;
@@ -511,6 +543,12 @@ export default {
       padding:0 20px;
       display: flex;
       justify-content: space-between;
+      .group_name{
+        width:95px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+      }
       i{
         margin: 0 5px;
         cursor: pointer;

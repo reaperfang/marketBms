@@ -6,12 +6,8 @@
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading"
       >
-      <el-table-column
-        type="selection"
-        prop="choose"
-        label="选择">
-      </el-table-column>
       <el-table-column
         prop="alias"
         label="会员卡等级">
@@ -31,9 +27,14 @@
       >
       </el-table-column>
       <el-table-column
-        prop="upgradePackage"
         label="升级礼包"
       >
+        <template slot-scope="scope">
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[0]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[1]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[2]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[3]:''}}</p>
+        </template>
       </el-table-column>
       <el-table-column
         prop="validity"
@@ -43,15 +44,17 @@
       <el-table-column
         label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.enable" @change="changeSwitch(scope.row)"></el-switch>
+          <!-- <el-switch v-model="scope.row.enable" @change="changeSwitch(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '启用/禁用']"></el-switch> -->
+          <span class="edit_span" v-if="scope.row.enable == 0" v-permission="['客户', '会员卡', '会员卡管理', '启用/禁用']">启用</span>
+          <span class="edit_span" v-if="scope.row.enable == 1" v-permission="['客户', '会员卡', '会员卡管理', '启用/禁用']">未启用</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
             <div class="btns clearfix">
-                <span v-if="scope.row.name" @click="goToEdit(scope.row)">编辑</span>
-                <span v-if="scope.row.name" @click="sendCard(scope.row)">发卡</span>
-                <span v-if="!scope.row.name" :style="{color: scope.row.isGray ? '#eee':'#655EFF'}" @click="handleConfig(scope.row)">待配置</span>
+                <span v-if="!!scope.row.name" @click="goToEdit(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '查看']">编辑</span>
+                <span v-if="!!scope.row.name" @click="sendCard(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '发卡']">发卡</span>
+                <span v-if="!scope.row.name" :style="{color: scope.row.isGray ? '#eee':'#655EFF'}" @click="handleConfig(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '待配置']">待配置</span>
             </div>
         </template>
       </el-table-column>
@@ -66,16 +69,44 @@ export default {
   name: "cdTable",
   extends: TableBase,
   components: { sendCardDialog },
-  props: ['cardList'],
   data() {
     return {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      hackReset: false
+      hackReset: false,
+      cardList: [],
+      loading: false
     };
   },
   methods: {
+    getCardList() {
+      this.loading = true;
+      let obj = {
+          "startIndex": 1,
+          "pageSize": 10
+      }
+      this._apis.client.getCardList(obj).then((response) => {
+          this.loading = false;
+          response.list.map((v) => {
+              v.validity = "永久有效";
+              v.isGray = true;
+              //v.enable = v.enable == 0?true:false;
+          });
+          let i = response.list.findIndex((value,index,arr) => {
+              return value.name == null || value.name == "";
+          });
+          if(i !== -1) {
+              this.$set(response.list[i], 'isGray', false);
+          }else{
+              this.$set(response.list[0], 'isGray', false);
+          }
+          this.cardList = [].concat(response.list);
+      }).catch((error) => {
+          this.loading = false;
+          console.log(error);
+      })
+    },
     changeSwitch(row) {
       this._apis.client.toggleStatus({id:row.id, enable: row.enable?1:0}).then((response) => {
         this.$notify({
@@ -85,10 +116,7 @@ export default {
         });
         this.$emit('refreshTable');
       }).catch((error) => {
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        console.log(error);
       })
     },
     sendCard(row) {
@@ -101,12 +129,6 @@ export default {
       this.currentData.name = row.name;
       this.currentData.id = row.id;
       this.currentData.level = row.level;
-    },
-    getFirstConfig() {
-      let i = this.cardList.findIndex((value,index,arr) => {
-        return value.name == "";
-      });
-      this.$set(this.cardList[i], 'isGray', false);
     },
     handleConfig(row) {
       if(!row.isGray) {
@@ -124,7 +146,7 @@ export default {
     
   },
   mounted() {
-    
+    this.getCardList();
   }
 };
 </script>

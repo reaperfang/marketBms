@@ -7,7 +7,7 @@ export function getDemoDetail(data) {
   return request({
     url: '/admin/coupon/detail',
     method: 'post',
-    baseURL: process.env.DATA_API,
+    baseURL: process.env.SALE_API,
     data
   })
 }

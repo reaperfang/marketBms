@@ -4,7 +4,7 @@
     <el-form-item label="背景颜色">
       <div class="color_block">
         <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
-        <colorPicker  v-model="ruleForm.backgroundColor"></colorPicker>
+        <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#ffffff"></colorPicker>
       </div>
     </el-form-item>
     <el-form-item label="页面边距">
@@ -36,9 +36,9 @@ export default {
           initialFrameWidth: 306
       },
       ruleForm: {
-        backgroundColor: '#ffffff',
-        remainPageMargin: true,
-        richValue: ''
+        backgroundColor: '#ffffff',//背景颜色
+        remainPageMargin: true,//是否保留边距
+        richValue: ''//富文本内容
       },
       rules: {
 
@@ -79,4 +79,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/.edui-editor{
+    z-index: initial!important;
+}
+/deep/.m-colorPicker .box.open {
+    z-index: 9999!important;
+}
 </style>

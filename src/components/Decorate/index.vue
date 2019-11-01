@@ -57,7 +57,6 @@ export default {
   },
   created() {
     const id = uuid();
-    console.log(id);
     this.$store.commit('addComponent', Object.assign({id}, this.componentConfig));
     this.$store.commit('setBasePropertyId', id);
   },
@@ -85,6 +84,7 @@ export default {
 .editor-wrapper {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 </style>
 

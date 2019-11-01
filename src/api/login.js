@@ -6,6 +6,7 @@ export function login(data) {
     target: 'MANAGER-API-100',
     method: 'post',
     apiType: 'manager',
+    noCid:'true',
     data
   })
 }

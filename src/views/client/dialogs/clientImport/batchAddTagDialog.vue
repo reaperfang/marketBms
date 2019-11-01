@@ -36,27 +36,34 @@ export default {
                 });
             }
             memberLabelInfoIds = memberLabelInfoIds.join(',');
-            this._apis.client.addImportLabel({importRecordId: this.data.id, memberLabelInfoIds}).then((response) => {
+            if(memberLabelInfoIds.length > 0) {
+                this._apis.client.addImportLabel({importRecordId: this.data.id, memberLabelInfoIds}).then((response) => {
+                    this.$notify({
+                        title: '成功',
+                        message: '添加标签成功',
+                        type: 'success'
+                    });
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }else{
                 this.$notify({
-                    title: '成功',
-                    message: '添加标签成功',
-                    type: 'success'
+                    title: '警告',
+                    message: '请选择标签',
+                    type: 'warning'
                 });
-            }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
-            })
+            }
+            
         },
         getLabels() {
             this._apis.client.getLabels({tagType:0}).then((response) => {
                 this.tagList = [].concat(response); 
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
+                // this.$notify.error({
+                //     title: '错误',
+                //     message: error
+                // });
             })
         }
     },

@@ -11,7 +11,6 @@ export default {
     };
   },
   created() {
-  
   },
   methods: {
     con(n){
@@ -23,8 +22,7 @@ export default {
     makeOption(data) {
       this.option = {
         title: {
-         // text: "某站点用户访问来源",
-         // subtext: "纯属虚构",
+         text: "属性比例",
           x: "center"
         },
         tooltip: {
@@ -34,33 +32,12 @@ export default {
         legend: {
           orient: "horizontal",
           x: "right",
-         // data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+          data: ["非会员", "会员"]
         },
-        toolbox: {
-          show: false,
-          feature: {
-            mark: { show: false },
-            dataView: { show: true, readOnly: false },
-            magicType: {
-              show: false,
-              type: ["pie", "funnel"],
-              option: {
-                funnel: {
-                  x: "25%",
-                  width: "50%",
-                  funnelAlign: "left",
-                  max: 1548
-                }
-              }
-            },
-            restore: { show: true },
-            saveAsImage: { show: true }
-          }
-        },
-        calculable: false,
+        calculable: true,
         series: [
           {
-            name: "访问来源",
+            name: "",
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],

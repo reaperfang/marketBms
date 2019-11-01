@@ -3,7 +3,7 @@
     <div class="head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" label-width="80px" :inline="true">
         <el-form-item label="分类名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入分类名称"></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="fetch">查询</el-button>
@@ -16,15 +16,16 @@
     <div class="table">
       <p>微页面分类（共{{total || 0}}个）</p>
       <el-table :data="tableList" stripe v-loading="loading">
-        <el-table-column
-          type="selection"  
-          width="55">
+        <el-table-column prop="name" label="分类名称">
+           <template slot-scope="scope">
+            <span class="page_name" @click="_routeTo('decorateClassifyPreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
+          </template>
         </el-table-column>
-        <el-table-column prop="name" label="分类名称"></el-table-column>
         <el-table-column prop="pageNum" label="页面数量"></el-table-column>
-        <el-table-column prop="updateTime" label="创建/编辑时间"></el-table-column>
+        <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'300px'">
+        <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('classifyEditor', {pageId: scope.row.id})">编辑</span>
             <span class="table-btn" @click="deleteClassify(scope.row)">删除</span>
@@ -34,7 +35,7 @@
               trigger="click">
               <div style="display:flex;">
                 <el-input v-model="scope.row.shareUrl" placeholder="请输入内容" style="margin-right:10px"></el-input>
-                <el-button type="primary">复制</el-button>
+                <el-button type="primary" v-clipboard:copy="scope.row.shareUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
               </div>
               <span class="table-btn" slot="reference" @click="link(scope.row)">链接</span>
             </el-popover>
@@ -115,12 +116,24 @@ export default {
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
         this.loading = false;
       });
+    },
+
+    onCopy () {
+      this.$message({
+        message: `复制成功！`,
+        type: 'success'
+      });
+    //   this.snackBar.info(this.$t('prompt.copySuccess'))
+    },
+    onError () {
+      this.$message.error(this.$t('prompt.copyFail'))
     }
   }
 }
@@ -143,5 +156,11 @@ export default {
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
   color:#837DFF!important;
+}
+.page_name{
+  cursor: pointer;
+  &:hover{
+    color: $globalMainColor;
+  }
 }
 </style>

@@ -1,46 +1,24 @@
 <template>
   <div>
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-          <div class="inline-head">
-            <el-form-item label="" prop="name">
-              <el-input v-model="ruleForm.name" placeholder="请输入分组名称"></el-input>
-            </el-form-item>
-            <el-form-item label="" prop="">
-              <el-button type="primary" @click="fetch">搜  索</el-button>
-            </el-form-item>
-          </div>
-        </el-form>
-        <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" @row-click="rowClick" v-loading="loading">
-          <el-table-column
-            type="selection"  
-            width="55">
-          </el-table-column>
-          <el-table-column prop="classifyName" label="分类名称"></el-table-column>
-          <el-table-column prop="goodsNumber" label="商品数量"></el-table-column>
-        </el-table>
-      <div class="pagination">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="Number(startIndex) || 1"
-          :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
-          :page-size="pageSize*1"
-          :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
-          >
-        </el-pagination>
+    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+      <div class="inline-head">
+        <!-- <el-form-item label="" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入分类名称"></el-input>
+        </el-form-item>
+        <el-form-item label="" prop="">
+          <el-button type="primary" @click="fetch">搜  索</el-button>
+        </el-form-item> -->
       </div>
+    </el-form>
+    <el-tree :data="categoryData" :props="defaultProps" @node-click="handleNodeClick" :default-expand-all="true" :highlight-current="true" :expand-on-click-node="false"></el-tree>
   </div>
 </template>
 
 <script>
-import tableBase from '@/components/TableBase';
 export default {
   name: "goodsGroup",
-  extends: tableBase,
   components: {},
   props: {
-     
   },
   data() {
     return {
@@ -48,36 +26,37 @@ export default {
         name: ''
       },
       rules: {},
-      goodsClassifyList: []
+      goodsClassifyList: [],
+      categoryData: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      }
     };
   },
   created() {
+    this.fetch();
   },
   methods: {
     fetch() {
-      this._apis.shop.getClassifyList({
+       this._apis.goods.fetchCategoryList({
         enable: '1'
       }).then((response)=>{
-        this.goodsClassifyList = response.list;
+        this.responseData = response;
+        let arr = this.transTreeData(response, 0)
+        this.categoryData = arr
+        this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
+        this.loading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
+        this.loading = false;
       });
     },
 
-    /* 选中某一行 */
-    rowClick(row, column, event) {
-      this.$emit('seletedRow',  {
-        pageType: 'goodsGroup',
-        data: {
-          id: row.id,
-          name: row.name,
-          title: row.title
-        }
-      });
-    },
 
      transTreeData(data, pid) {
       var result = [], temp;
@@ -129,12 +108,34 @@ export default {
       return result;
     },
 
+    handleNodeClick(data) {
+      
+      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let cid = shopInfo && shopInfo.id || ''
+
+      /* 向父组件发送选中的数据 */
+      this.$emit('seletedRow',  {
+        pageType: 'goodsGroup',
+        typeName: '商品分类',
+        id: 4,
+        data: {
+          id: data.id,
+          name: data.label
+        },
+        cid
+      });
+    }
+
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .inline-head{
   justify-content: flex-end;
+}
+/deep/.el-tree{
+    height: 300px;
+    overflow-y: auto;
 }
 </style>

@@ -30,10 +30,13 @@
             >
             </el-table-column>
             <el-table-column
-                prop="channelType"
+                prop="channelName"
                 label="渠道类型"
                 align="center"
             >
+            <template slot-scope="scope">
+                <span>{{ scope.row.channelName ? scope.row.channelName : '直接购买' }}</span>
+            </template>
             </el-table-column>
             <el-table-column
                 prop="activityName"
@@ -79,7 +82,6 @@ export default {
         };
     },
     mounted(){
-        this.ruleForm.cid = this.$route.query.cid;
         this.ruleForm.startTime = this.$route.query.startTime;
         this.ruleForm.endTime = this.$route.query.endTime;
         this.ruleForm.channel = this.$route.query.channel;
@@ -103,10 +105,9 @@ export default {
         //导出
         exportExl(){
             let data = {};
-            data.cid = ""
             data.startTime = this.ruleForm.startTime
             data.endTime = this.ruleForm.endTime
-            if(this.ruleForm.channel!='null'){
+            if(this.ruleForm.channel!= null){
                 data.channel = Number(this.ruleForm.channel);
             }else{
                 data.channel = null

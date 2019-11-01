@@ -1,5 +1,8 @@
 ## 电商前端pc端框架
 
+http://test-omo.aiyouyi.cn/xiaoyaoji/doc/2ShuYz40m这个是接口地址
+
+名：admin-mdl  密码：123456
 
 ### 项目运行
 

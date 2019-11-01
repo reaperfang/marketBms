@@ -6,7 +6,7 @@ export function fetchCategoryList(data) {
   return request({
     apiType: 'goodsOperate',
     method: 'post',
-    target: 'PUBLIC-CATEGORY-LIST-PROCESSOR',
+    target: 'PUBLIC-PRODUCT-CATEGORYLIST-QUERYPROCESSOR',
     data
   })
 }

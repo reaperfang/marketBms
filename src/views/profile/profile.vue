@@ -5,7 +5,7 @@
                 <p class="p_title">
                     实时概况：<i class="el-icon-time"></i><span>今日数据更新时间：{{new Date() | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
                 </p>
-                <div class="p_t_list">
+                <div class="p_t_list" v-if="realTimeData.length != 0">
                     <div class="p_t_item clearfix" v-for="item in realTimeData" :key="item.id">
                         <img :src="item.url" alt="" class="fl">
                         <div class="fl p_t_text" :style="{color:item.color}">
@@ -14,15 +14,43 @@
                         </div>
                     </div>
                 </div>
+                <div class="p_t_list" v-else>
+                    <div class="p_t_item clearfix" v-for="item in realTimeDataNull" :key="item.id">
+                        <img :src="item.url" alt="" class="fl">
+                        <div class="fl p_t_text" :style="{color:item.color}">
+                            <p>{{item.text}}</p>
+                            <p>0</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="p_top_r">
-                <p class="p_title">待办提醒：</p>
+                <p class="p_title warn">
+                    <span>待办提醒：</span>
+                    <i class="el-icon-refresh" @click="refresh"></i>    
+                </p>
                 <div class="p_r_list">
-                    <p>待办售罄<span>({{toBeSoldOut}})</span></p>
-                    <p>待发货订单<span>({{staySendCount}})</span></p>
-                    <p>售后待处理<span>({{stayProcessedCount}})</span></p>
-                    <p>售后单待审核<span>({{stayAuthCount}})</span></p>
-                    <p>积分商城订单待发货<span>(23)</span></p>
+                    <p>待办售罄
+                        <router-link to="/goods/goodsList?status=-1">
+                            <span>({{toBeSoldOut || 0}})</span>
+                        </router-link>    
+                    </p>
+                    <p>待发货订单
+                        <router-link to="/order/deliveryManagement?status=3">
+                            <span>({{staySendCount || 0}})</span>
+                        </router-link>
+                    </p>
+                    <p>售后待处理
+                        <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                            <span>({{stayProcessedCount || 0}})</span>
+                        </router-link>
+                    </p>
+                    <p>售后单待审核
+                        <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+                            <span>({{stayAuthCount || 0}})</span>
+                        </router-link>
+                    </p>
+                    <!-- <p>积分商城订单待发货<span>(23)</span></p> -->
                 </div>
             </div>
         </div>
@@ -31,20 +59,35 @@
                 <p class="p_title" style="padding-left: 29px">常用功能：</p>
                 <div class="p_list">
                     <div class="p_l_item clearfix" v-for="item in commonData" :key="item.id">
-                        <img :src="item.url" alt="">
-                        <span>{{item.text}}</span>
+                        <div @click="linkTo(item)">
+                            <img :src="item.img" alt="">
+                            <span>{{item.text}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="p_b_m">
                 <p class="p_title">营销活动：</p>
-                <div class="p_list">
+                <div class="p_list" v-if="activeData.length != 0">
                     <div class="p_m_item" v-for="item in activeData" :key="item.id">
-                        <img :src="item.appImage" alt="" style="height:40px;">
-                        <div>
-                            <p>{{item.appName}}</p>
-                            <p>{{item.description}}</p>
-                        </div>
+                        <span  @click="linkToApply(item)">
+                            <img :src="item.appImage" alt="" style="height:40px;width:40px;">
+                            <div>
+                                <p>{{item.appName}}</p>
+                                <p>{{item.description}}</p>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="p_list" v-else>
+                    <div class="p_m_item" v-for="item in activeDataNull" :key="item.id">
+                        <router-link :to="item.url">
+                            <img :src="item.img" alt="" style="height:40px;">
+                            <div>
+                                <p>{{item.title}}</p>
+                                <p>{{item.sub}}</p>
+                            </div>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -69,6 +112,7 @@
     </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
 import profileCont from '@/system/constant/profile'
 export default {
     name: 'profile',
@@ -80,43 +124,50 @@ export default {
             staySendCount:'',
             stayAuthCount:'',
             activeData:[],
-            selectList:{merchantId:'2',tenantId:1,loginUserId:'1',businessId:'2'}
+            selectList:{merchantId:'2',tenantId:1,loginUserId:'1',businessId:'2'},
         }
     },
     computed: {
         commonData() {
             return profileCont.commonData
         },
-        // activeData() {
-        //     return profileCont.activeData
-        // } 
+        realTimeDataNull(){
+            return profileCont.realTimeData
+        },
+        activeDataNull(){
+            return profileCont.activeData
+        }
     },
     methods:{
+        ...mapMutations(['SETCURRENT']),
         // 概况详情
         getOverviewDetails(){ 
          this._apis.overview.overviewDetails({}).then(response => {
-            let nums = response.shopOverviewView
-             console.log(profileCont.realTimeData)
            profileCont.realTimeData.forEach(e => {
                     switch (e.id){
-                        case '001': e.price = nums.payAmount
+                        case '001': e.price = response.payMoneyAmount
                          break;
-                        case '002': e.price = nums.payOrderNum
+                        case '002': e.price = response.payNum
                          break;
-                        case '003': e.price = nums.refundAmount
+                        case '003': e.price = response.refundMoneyAmount
                          break;
-                        case '004': e.price = nums.refundAOrderNum
+                        case '004': e.price = response.refundNum
                          break;
-                        case '005': e.price = nums.perCustomerPrice
+                        case '005': e.price = response.customPayerNum
                          break;
-                        case '006': e.price = nums.payCustomerNum
+                        case '006': e.price = response.averageMoney
                          break;
-                        case '007': e.price = nums.vipPayOrder
+                        case '007': e.price = response.memberPayerNum
                          break;
                          }
              this.realTimeData = profileCont.realTimeData
          })
          })
+        },
+        //刷新
+        refresh(){
+            this.getOerviewRemind()
+            this.getOverviewSelling()
         },
         // 待办提醒
         getOerviewRemind(){
@@ -137,6 +188,25 @@ export default {
              this._apis.overview.getMarketing(this.selectList).then(response => {
                  this.activeData = response.slice(0,10)
          })
+        },
+        //常用功能跳转
+        linkTo(item){
+            if(item.appName == '公众号管理'){
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum'}})
+                this.SETCURRENT(8)
+            }else if(item.appName == '小程序管理'){
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp'}})
+                this.SETCURRENT(8)
+            }else{
+                this.$router.push({path:item.url})
+            }
+        },
+        //营销活动跳转
+        linkToApply(item){
+            if(item.url){
+                this.$router.push({path:'/apply',query:{paths:item.url}})
+                this.SETCURRENT(8)
+            }
         }
     },
     created(){
@@ -168,6 +238,7 @@ export default {
     width: 717px;
     height: 251px;
     padding: 24px 21px;
+    border-radius: 5px;
     .p_t_list{
         width: 660px;
         display: flex;
@@ -176,6 +247,10 @@ export default {
             width: 140px;
             height: 60px;
             margin: 27px 25px 0 0; 
+            img{
+                width: 50px;
+                height: 56px;
+            }
             .p_t_text{
                 width: 65px;
                 height: 44px;
@@ -199,6 +274,7 @@ export default {
     height: 251px;
     margin-left: 20px;
     color: #3D434A;
+    border-radius: 5px;
     .p_r_list{
         margin-top: 25px;
         p{
@@ -217,6 +293,7 @@ export default {
     margin-top: 20px;
     background-color: #fff;
     padding: 13px 0 0px 14px;
+    border-radius: 5px;
     .p_l_item{
         width: 140px;
         height: 60px;
@@ -239,6 +316,7 @@ export default {
     min-height: 337px;
     padding: 13px 0 0px 14px;
     margin: 20px 0 0 20px;
+    border-radius: 5px;
     .p_m_item{
         width: 174px;
         height: 60px;
@@ -250,6 +328,12 @@ export default {
         }
         div{
             float: left;
+            p{
+                width:110px; 
+                height:18px; 
+                line-height:18px; 
+                overflow: hidden;
+            }
             p:first-child{
                 margin: 10px 0 0 5px;
             }
@@ -297,6 +381,30 @@ export default {
                 white-space: nowrap;
             }
         }
+    }
+}
+.p_top {
+    display: flex;
+    .p_top_r {
+        flex: 1;
+    }
+}
+.p_bottom {
+    display: flex;
+    .p_b_m {
+        flex: 1;
+    }
+}
+.warn{
+    display: flex;
+    justify-content:space-between;
+    span{
+        font-size: 14px;
+        font-weight:500;
+        color: #3D434A;
+    }
+    i{
+        cursor: pointer;
     }
 }
 </style>

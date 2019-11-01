@@ -26,16 +26,19 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit" v-permission="['财务', '短信成本', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total*1}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()'>导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()'  v-permission="['财务', '短信成本', '默认页面', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <el-table
+      v-loading="loading"
       :data="dataList"
       style="width: 100%; margin-top:20px;"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -116,13 +119,16 @@ export default {
         pageNum:1,
         orderBy:'send_time desc'
       },
-      timeValue:[]
+      timeValue:[],
+      loading:true
     };
   },
   watch: {
     timeValue(){
-      this.ruleForm.startTime = utils.formatDate(this.timeValue[0], "yyyy-MM-dd hh:mm:ss")
-      this.ruleForm.endTime = utils.formatDate(this.timeValue[1], "yyyy-MM-dd hh:mm:ss")
+      if(this.timeValue.length != 0){
+        this.ruleForm.startTime = utils.formatDate(this.timeValue[0], "yyyy-MM-dd hh:mm:ss")
+        this.ruleForm.endTime = utils.formatDate(this.timeValue[1], "yyyy-MM-dd hh:mm:ss")
+      }
     }
   },
   created() { },
@@ -131,11 +137,9 @@ export default {
       this._apis.finance.smsPagelist(this.ruleForm).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
+        this.loading = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
     onSubmit(){
@@ -152,6 +156,7 @@ export default {
         orderBy:'send_time desc'
       }
       this.timeValue = []
+      this.fetch()
     },
      //当前页码改变
     handleCurrentChange(pIndex=1) {
@@ -162,7 +167,11 @@ export default {
     //导出
     exportToExcel(){
       let query = {
-        filename:'短信成本列表'
+        filename:'短信成本列表',
+        acceptStatus:this.ruleForm.acceptStatus,
+        startTime:this.ruleForm.startTime,
+        endTime:this.ruleForm.endTime,
+        orderBy:'send_time desc'
       }
       this._apis.finance.smsExport(query).then((response)=>{
         window.location.href = response.url

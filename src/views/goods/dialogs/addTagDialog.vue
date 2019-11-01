@@ -64,6 +64,11 @@ export default {
       .then(response => {
         this.$emit("submit");
         this.visible = false;
+        this.$notify({
+            title: '成功',
+            message: '新增成功！',
+            type: 'success'
+        });
       })
       .catch(error => {
         this.visible = false;
@@ -80,6 +85,11 @@ export default {
       .then(response => {
         this.$emit("submit");
         this.visible = false;
+        this.$notify({
+            title: '成功',
+            message: '修改成功！',
+            type: 'success'
+        });
       })
       .catch(error => {
         this.visible = false;

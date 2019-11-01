@@ -3,7 +3,7 @@
     <el-tabs v-model="currentTab">
       <el-tab-pane label="店铺主页" :name="shopMain" v-loading="loading"></el-tab-pane>
       <el-tab-pane label="个人中心" name="personCenter"></el-tab-pane>
-      <el-tab-pane label="商品分组" name="goodsGroup"></el-tab-pane>
+      <el-tab-pane label="商品分类" name="goodsGroup"></el-tab-pane>
     </el-tabs>
     <component :is="currentTab" :homePageData="homePageData"></component>
   </div>
@@ -15,7 +15,7 @@ import shopMainDecorated from './moduleManage/shopMainDecorated';
 import personCenter from './moduleManage/personCenter';
 import goodsGroup from './moduleManage/goodsGroup';
 import utils from "@/utils";
-import decorateMixin from '@/components/Decorate/decorateMixin';
+import decorateMixin from '@/components/Decorate/mixins/decorateMixin';
 export default {
   name: 'index',
   mixins: [decorateMixin],
@@ -51,10 +51,11 @@ export default {
         }
         this.loading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
         this.loading = false;
       });
     },

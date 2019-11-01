@@ -6,12 +6,8 @@
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading"
       >
-      <el-table-column
-        type="selection"
-        prop="choose"
-        label="选择">
-      </el-table-column>
       <el-table-column
         prop="importTime"
         label="导入时间">
@@ -35,7 +31,7 @@
       >
       </el-table-column>
       <el-table-column
-        prop="operatorId"
+        prop="createUserName"
         label="操作人"
       >
       </el-table-column>
@@ -83,7 +79,10 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData:{},
-      hackReset: false
+      hackReset: false,
+      loading: false,
+      startIndex: 1,
+      pageSize: 10
     };
   },
   computed: {
@@ -97,32 +96,34 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      this.getImportList(1, val);
+      this.getImportList(this.startIndex, val);
       this.pageSize = val;
     },
     handleCurrentChange(val) {
       this.getImportList(val, this.pageSize);
     },
     getImportList(startIndex, pageSize) {
+      this.loading = true;
       this._apis.client.importMemberList(Object.assign(this.params,{startIndex, pageSize})).then((response) => {
+        this.loading = false;
         this.importList = [].concat(response.list);
         this.total = response.total;
       }).catch((error) => {
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false;
+        console.log(error);
       })
     },
     addTag(row) {
-      this.hackReset = false;
-      this.$nextTick(() => {
-        this.hackReset = true;
-      })
-      this.dialogVisible = true;
-      this.currentDialog = "batchAddTagDialog";
-      this.currentData.successNum = row.successNum;
-      this.currentData.id = row.id;
+      if(row.successNum !== 0) {
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        })
+        this.dialogVisible = true;
+        this.currentDialog = "batchAddTagDialog";
+        this.currentData.successNum = row.successNum;
+        this.currentData.id = row.id;
+      }
     },
     modify(row) {
       this.hackReset = false;

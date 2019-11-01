@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/components/layout/Layout'
 Vue.use(Router)
-import demo from './demo';
+// import demo from './demo';
 import shop from './shop';
 import goods from './goods';
 import order from './order';
@@ -16,7 +16,7 @@ import apply from './apply';
 
  
 export const asyncRouterMap = [  //异步路由表
-	...demo,
+	// ...demo,
   ...profile,
   ...shop,
   ...goods,

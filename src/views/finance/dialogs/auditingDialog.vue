@@ -1,7 +1,7 @@
 /* 审核 */
 <template>
   <div>
-  <DialogBase :visible.sync="visible" @submit="submit" title="审核">
+  <DialogBase :visible.sync="visible" :showFooter="false" title="审核">
     <div class="c_container">
       <div class="clearfix">
         <span class="fl c_label">提现申请</span>
@@ -37,8 +37,15 @@
                 :rows="3"
                 class="marT20"
                 placeholder="请输入拒绝原因，不超过20个字"
-                v-model="remarks">
+                v-model="remarks"
+                v-if="radio == 1"
+                @blur="checkNull">
             </el-input>
+            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;" v-if="note">请输入拒绝原因</p>
+            <p style="text-align:center; margin-top:10px;">
+               <el-button type="primary"  @click="submit">确定</el-button>
+                <el-button @click="cancel">取消</el-button> 
+            </p>
         </div>
       </div>
     </div>
@@ -69,7 +76,8 @@ export default {
       info:{},
       radio: "0",
       remarks:'',
-      otherVisible: false
+      otherVisible: false,
+      note:false
     };
   },
   props: {
@@ -85,6 +93,7 @@ export default {
   computed: {
     visible: {
       get() {
+        this.remarks = ''
         return this.dialogVisible;
       },
       set(val) {
@@ -92,26 +101,42 @@ export default {
       }
     }
   },
+  watch:{
+      data(){
+          this.getInfo()
+      },
+      radio(){
+        this.radio == 0 && (this.note = false)
+      }
+  },
   created() {
     this.getInfo()
   },
   methods: {
-    submit() {   
+    submit() { 
       let datas = {
         ids:[this.data.id],
         auditStatus:this.radio,
-        remarks:this.remarks
+        remarks:this.remarks.trim()
       }
-      this._apis.finance.examineWd(datas).then((response)=>{
-          this.dialogVisible = false
-          this.otherVisible = true
-          this.$emit("handleSubmit");
-      }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: error
-          });
-      })
+      if(this.radio == 0){
+        this.$emit("handleSubmit",datas);
+        this.visible = false
+      }else if(this.radio == 1 && this.remarks.trim()){
+         this.$emit("handleSubmit",datas);
+         this.visible = false
+      }else{
+        return false
+      }      
+    },
+    cancel(){
+      this.$emit("fetch");
+      this.visible = false
+    },
+    checkNull(){
+        if(this.radio == 1 && this.remarks.trim() == ''){
+            this.note = true
+        }
     },
     getInfo(){
       this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{

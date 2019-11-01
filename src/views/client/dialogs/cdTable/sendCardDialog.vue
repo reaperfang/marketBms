@@ -5,12 +5,12 @@
             <div class="clearfix">
                 <p class="c_label fl">发放人群：</p>
                 <div class="fl tags_container">
-                    <el-checkbox-group v-model="checkList">
+                    <el-checkbox-group v-model="checkList" @change="handleChange">
                         <el-checkbox v-for="item in tags" :key="item.id" :label="item.tagName"></el-checkbox>
                     </el-checkbox-group>
                 </div>
             </div> 
-            <p class="red">确定给女性用户、年轻用户发放会员卡：{{data.name}}吗？</p>
+            <p class="red">确定给{{this.labels || '  '}}发放会员卡：{{data.name}}吗？</p>
         </div>
     </DialogBase>
 </template>
@@ -24,7 +24,8 @@ export default {
         return {
             hasCancel: true,
             tags: [],
-            checkList: []
+            checkList: [],
+            labels: ""
         }
     },
     methods: {
@@ -52,10 +53,7 @@ export default {
                         type: 'success'
                     });
                 }).catch((error) => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    console.log(error);
                 })
             }else{
                 this.$notify.info({
@@ -69,11 +67,11 @@ export default {
             this._apis.client.getLabels(params).then((response) => {
                 this.tags = [].concat(response);
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
             })
+        },
+        handleChange() {
+            this.labels = this.checkList.join(',');
         }
     },
     computed: {

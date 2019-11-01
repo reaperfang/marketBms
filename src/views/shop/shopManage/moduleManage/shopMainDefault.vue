@@ -34,7 +34,7 @@
                 </div>
               </div>
               <div class="person" style="margin-top:91px;">
-                <img src="@/assets/images/shop/talk-person.png" />
+                <img src="@/assets/images/shop/talk-person2.png" />
               </div>
             </div>
             <div class="item item-talkThree">
@@ -56,7 +56,7 @@
                 </div>
               </div>
               <div class="person" style="margin-top:91px;">
-                <img src="@/assets/images/shop/talk-person.png" />
+                <img src="@/assets/images/shop/talk-person2.png" />
               </div>
             </div>
           </div>
@@ -192,6 +192,7 @@ export default {
           .text{
             left:15px;
             top:20px;
+            width: 237px;
             p{
               margin:0;
             }

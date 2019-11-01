@@ -2,64 +2,68 @@
 <template>
   <div>
     <el-table
-      :data="listObj.shopGoodsSellInfoDataList"
+      :data="listObj"
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-      :default-sort = "{prop: 'date', order: 'descending'}"
+      :default-sort = "{prop: 'pv', order: 'descending'}"
       >
       <el-table-column
-        label="商品名称">
+        prop="productName"
+        label="商品名称">        
         <template slot-scope="scope">
           <div  style="height:60px; display:flex">
-            <img :src="scope.row.goodsImgUrl" alt="" style="width:60px;height:60px;display:inline-block" />
-             <span style="line-height:60px;display:inline-block">{{scope.row.goodsName}}</span>
+            <img :src="scope.row.mainImage" alt="" style="width:60px;height:60px;display:inline-block" />
+             <span style="line-height:60px;display:inline-block">{{scope.row.productName}}</span>
             </div>
         </template>
       </el-table-column>
       <el-table-column
-        prop="browGoodsTotal"
+        prop="pv"
         label="浏览量"
-        sortable
        >
       </el-table-column>
       <el-table-column
-        prop="visitGoodsTotal"
+        prop="pv"
         label="访客量"
-        sortable
         >
       </el-table-column>
       <el-table-column
-        prop="addPurchasedPersonTotal"
+        prop="shoppingCart"
         label="加购人数"
-        sortable
         >
       </el-table-column>
       <el-table-column
-        prop="orderSubmitPersonTotal"
+        prop="orders"
         label="下单人数"
-        sortable
         >
       </el-table-column>
       <el-table-column
-        prop="payOrderPersonTotal"
+        prop="pays"
         label="支付人数"
-        sortable
         >
       </el-table-column>
       <el-table-column
-        prop="submitOrderConversionRate"
+        prop="rateOrderPay"
         label="下单支付转化率"
-        sortable
+        width="150"
         >
+        <template slot-scope="scope">
+          {{scope.row.rateOrderPay == 0 ? 0 : (scope.row.rateOrderPay*100).toFixed(2)}}%
+        </template>
       </el-table-column>
       <el-table-column
-        prop="againBuyGoodsRate"
+        prop="rateRepurchase"
         label="复购率"
-        sortable
         >
+        <template slot-scope="scope">
+          <span v-if="scope.row.rateRepurchase">
+          {{scope.row.rateRepurchase == 0 ? 0 : (scope.row.rateRepurchase*100).toFixed(2)}}%
+          </span>
+          <span v-else> 0% </span>
+        </template>
       </el-table-column>
     </el-table>
-    <div class="page_styles">
+    <!-- <div class="page_styles">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -69,7 +73,7 @@
         layout="sizes, prev, pager, next"
         :total="listObj.totalPage">
       </el-pagination>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -78,19 +82,17 @@ import TableBase from "@/components/TableBase";
 export default {
   name: "ct2Table",
   extends: TableBase,
-  props:{
-    listObj:{
-      type:Object,
-      default:[]
-    }
-  },
+  props:['listObj'],
   data() {
     return {
       pageSize:10
     };
   },
-  created() {
-
+  created() { },
+  watch:{
+    listObj(newValue,oldValue){
+      return newValue
+    }
   },
   methods: {
     handleCurrentChange(val){

@@ -37,8 +37,8 @@ export default {
   data () {
     return {
       ruleForm: {
-        displayStyle: 1,
-        backgroundImage: ''
+        displayStyle: 1,//显示样式
+        backgroundImage: ''//背景图片
       },
       rules: {
 

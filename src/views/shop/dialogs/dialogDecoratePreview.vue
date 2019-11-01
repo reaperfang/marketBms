@@ -4,8 +4,8 @@
     <div class="preview_wrapper">
       <editView :dragable="false" v-if="height > 0" :height="height"></editView>
       <div class="shop_info">
-        <img class="shop_logo" :src="shopInfo.logo" alt />
-        <div class="shop_name">{{shopInfo.name || '店铺名称'}}</div>
+        <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
+        <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
         <div class="shop_code">
           <h3>手机扫码访问</h3>
           <h4>微信扫一扫分享至朋友圈</h4>
@@ -36,10 +36,6 @@ export default {
   data() {
     return {
       utils,
-      shopInfo: {
-        logo: 'http://attachments.chyangwa.net/portal/201907/24/100734twkfbss2zsiqkki2.jpg',
-        name: '源源的店铺'
-      },
       qrCode: '',
       height: 0
     };
@@ -55,31 +51,47 @@ export default {
     },
     baseInfo() {
       return this.$store.getters.baseInfo;
+    },
+    shopInfo() {
+      return this.$store.getters.shopInfo || {};
     }
   },
   created() {
+    this.$store.dispatch('getShopInfo');
     this.getQrcode();
   },
   mounted() {
     this.height = document.body.clientHeight - 290;
   },
+  watch: {
+    shopInfo:{
+      handler(newValue) {
+        this.getQrcode();
+      },
+      deep: true
+    }
+  },
   methods: {
 
     /* 获取二维码 */
     getQrcode(codeType, callback) {
+      if(!this.homePageData) {
+        return;
+      }
       this._apis.shop.getQrcode({
-        url: this.homePageData.shareUrl,
+        url: this.homePageData.shareUrl.replace("&","[^]"),
         width: '250',
         height: '250',
-        logoUrl: this.shopInfo.logo
+        logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
       }).then((response)=>{
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
       });
     },
   }
@@ -106,6 +118,8 @@ export default {
       .shop_logo{
         height:100px;
         width:100%;
+        object-fit: contain;
+        border: 1px solid #ddd;
       }
       .shop_name{
         margin-top:18px;

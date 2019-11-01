@@ -1,5 +1,5 @@
 <template>
-  <div :style="{backgroundImage:'url('+require('@/assets/images/bg_login.png')+')', backgroundSize:'100% 100%'}" class="login-container">
+  <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <img src="@/assets/images/chahua.png" alt="">
       <div class="main">
@@ -8,14 +8,14 @@
         </div>
         <el-form-item prop="userName">
           <span class="svg-container svg-container_login">
-            <img :src="require('@/assets/images/icon_username.png')">
+            <img src="@/assets/images/icon_username.png">
           </span>
           <el-input v-model="loginForm.userName" name="userName" type="text" placeholder="用户名" style="border:none;"  class="login_input"/>
         </el-form-item>
 
         <el-form-item prop="password">
           <span class="svg-container">
-            <img :src="require('@/assets/images/icon_password.png')">
+            <img src="../../assets/images/icon_password.png">
           </span>
           <el-input :type="passwordType" v-model="loginForm.password" name="password" placeholder="密码" @keyup.enter.native="handleLogin" class="login_input"/>
           <span class="show-pwd" @click="showPwd">
@@ -23,13 +23,14 @@
             <!-- <svg-icon icon-class="eye" /> -->
           </span>
         </el-form-item>
+        <p style="color:red">{{errorMsg}}</p>
         <el-form-item class="remember">
           <span>
-            <el-checkbox v-model="checked">记住用户名</el-checkbox>            
+            <!-- <el-checkbox v-model="checked">记住用户名</el-checkbox>             -->
           </span>
           <!-- <span @click="_routeTo('profile/passwordChange')">修改密码</span> -->
         </el-form-item>
-        <el-button :loading="loading" type="primary" class="btn-login" @click.native.prevent="handleLogin">登 录</el-button>
+        <el-button :loading="loading" type="primary" class="btn-login" @click.prevent="handleLogin">登 录</el-button>
       </div>
     </el-form>
     <el-dialog
@@ -44,7 +45,7 @@
         <el-button @click="dialogVisible = false">暂不创建</el-button>
       </span>
     </el-dialog>
-    <shopsDialog :showShopsDialog="showShopsDialog" @handleClose="handleClose" :shopList="shopList"></shopsDialog>
+    <shopsDialog :showShopsDialog="showShopsDialog" @handleClose="handleClose" :shopList="shopList" :route="route"></shopsDialog>
   </div>
 </template>
 
@@ -74,7 +75,7 @@ export default {
         password: '',
         validateCodeKey: '700233df-30c6-4412-92cd-6eebd24af07a',
         validateCode: 'K5UW',
-        platform: '13416032592F'
+        platform: '134160222D87'
       },
       loginRules: {
         userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -87,7 +88,9 @@ export default {
       showShopsDialog:false,
       checked:false,
       shopName:'',
-      shopList:[]
+      shopList:[],
+      errorMsg:'',
+      route:'login'
     }
   },
   components: {
@@ -121,23 +124,32 @@ export default {
           this.loading = true
           this.$store.dispatch('login', this.loginForm).then((response) => {
             this.loading = false
+            this.shopList = []
             let info = JSON.parse(localStorage.getItem('userInfo'))
             let arr = Object.keys(info.shopInfoMap) 
-            if(arr.length == 0){
+            if(arr.length == 0){//没有店铺时，提示去创建店铺
               this.dialogVisible = true
-            }else{
+            }else{//有店铺时
               let data = info.shopInfoMap
               for(let key in data){
                 let shopObj = data[key]
                 this.shopList.push(shopObj)
               }
-              this.showShopsDialog = true
+              if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
+                this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
+                  this.$router.push({ path: '/profile/profile' })
+                }).catch(error => {
+                  this.$notify.error({
+                    title: '失败',
+                    message: error
+                  })
+                })
+              }else{//多个店铺时，展示店铺列表弹窗
+                this.showShopsDialog = true
+              }
             }
           }).catch(error => {
-            this.$notify.error({
-              title: '失败',
-              message: error
-            })
+            this.errorMsg = error
             this.loading = false
           })
         } else {
@@ -185,6 +197,8 @@ $light_block:#000;
 
 /* reset element-ui css */
 .login-container {
+  background-image: url(../../assets/images/bg_login.png);
+  background-size: 100%;
   .login_input {
     display: inline-block;
     height: 47px;

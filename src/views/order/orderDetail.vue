@@ -5,7 +5,7 @@
                 <span>订单编号：{{orderDetail.orderInfo.code}}</span>
                 <span>{{orderDetail.orderInfo.channelInfoId | channelInfoIdFilter}}</span>
                 <span>{{orderDetail.orderInfo.orderType | orderTypeFilter}}</span>
-                <span v-if="orderDetail.orderInfo.orderType == 1">拼团编号：{{orderDetail.orderInfo.assembleCode}}</span>
+                <span v-if="orderDetail.orderInfo.orderType == 1 && orderDetail.orderInfo.groupId">拼团编号：{{orderDetail.orderInfo.groupId}}</span>
             </div>
             <div class="righter">
                 <i class="memberLevelImg" :style="{background: `url(${orderDetail.memberLevelImg})`}"></i>
@@ -23,7 +23,7 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <div class="goods-list">
+        <!-- <div class="goods-list">
             <p class="header">订单清单</p>
             <el-table
                 :data="orderDetail.orderItems"
@@ -78,21 +78,21 @@
                 <div class="row">
                     <div class="col">优惠券金额:</div>
                     <div class="col">
-                        ¥{{orderDetail.orderInfo.consumeCouponMoney}}
+                        ¥{{orderDetail.orderInfo.consumeCouponMoney || 0}}
                         <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList}; dialogVisible = true" class="coupon-img"></i>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">满减/满折:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountMoney}}</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.discountMoney || 0}}</div>
                 </div>
                 <div class="row">
                     <div class="col">会员折扣:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney}}</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney || 0}}</div>
                 </div>
                 <div class="row">
                     <div class="col">优惠套装:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountPackageMoney}}</div>
+                    <div class="col">- ¥{{orderDetail.orderInfo.discountPackageMoney || 0}}</div>
                 </div>
                 <div class="row" v-if="orderDetail.orderInfo && orderDetail.orderInfo.discountFreight">
                     <div class="col">满包邮:</div>
@@ -110,7 +110,7 @@
                         </el-select>
                     </div>
                     <div class="col">
-                        <el-input v-if="changePriceVisible" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
+                        <el-input v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
                         <span v-if="!changePriceVisible">{{goodsListMessage.consultMoney}}</span>
                         <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
                         <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
@@ -145,7 +145,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-        </div>
+        </div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -188,11 +188,11 @@ export default {
             },
             reducePriceTypeList: [
                 {
-                    label: '协商加减',
+                    label: '协商加价',
                     value: 1
                 },
                 {
-                    label: '协商减减',
+                    label: '协商减价',
                     value: 2
                 }
             ],
@@ -285,6 +285,7 @@ export default {
                     message: '添加成功！',
                     type: 'success'
                 });
+                this.getDetail()
             }).catch(error => {
                 this.changePriceVisible = false
                 this.$notify.error({
@@ -298,9 +299,14 @@ export default {
                 let id = this.$route.query.id
 
                 this._apis.order.fetchOrderDetail({id}).then((res) => {
+                    res.orderInfo && (res.orderInfo.consultType = res.orderInfo.consultType || 2)
                     this.orderDetail = res
                     resolve(res)
                 }).catch(error => {
+                    this.$notify.error({
+                        title: '错误',
+                        message: error
+                    });
                     reject(error)
                 })
             })
@@ -341,6 +347,7 @@ export default {
             background-color: #fff;
             margin-top: 20px;
             padding: 20px;
+            padding-top: 5px;
         }
         .goods-detail {
             display: flex;

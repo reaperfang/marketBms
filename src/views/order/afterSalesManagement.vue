@@ -6,7 +6,7 @@
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
                             <el-option label="售后单编号" value="code"></el-option>
-                            <el-option label="订单编号" value="orderInfoCode"></el-option>
+                            <el-option label="订单编号" value="orderCode"></el-option>
                             <el-option label="客户ID" value="memberSn"></el-option>
                         </el-select>
                     </el-input>
@@ -14,10 +14,11 @@
                 <el-form-item label="申请时间">
                     <el-date-picker
                         v-model="listQuery.applicationDate"
-                        type="daterange"
+                        type="datetimerange"
                         range-separator="-"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="售后类型">
@@ -31,7 +32,7 @@
                 <el-form-item label="状态">
                     <el-select v-model="listQuery.orderAfterSaleStatus">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="提交申请" value="0"></el-option>
+                        <el-option label="待审核" value="0"></el-option>
                         <el-option label="待退货" value="1"></el-option>
                         <el-option label="待处理" value="2"></el-option>
                         <el-option label="待收货" value="3"></el-option>
@@ -41,18 +42,19 @@
                 </el-form-item>
                 <div class="buttons">
                     <div class="lefter">
-                        <el-button class="border-button" @click="exportOrder">导出</el-button>
-                        <el-button class="border-button" @click="batchUpdateStatus">批量审核</el-button>
+                        <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
+                        <el-button v-permission="['订单', '售后管理', '默认页', '批量审核']" class="border-button" @click="batchUpdateStatus">批量审核</el-button>
                     </div>
                     <div class="righter">
                         <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">搜 索</el-button>
+                        <el-button @click="getList" type="primary">查询</el-button>
                     </div>
                 </div>
             </el-form>
         </div>
+        <div class="line"></div>
         <div class="content">
-            <p>已选择 {{multipleSelection.length}} 项，全部{{total}}项</p>
+            <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
             <el-table
                 v-loading="loading"
                 ref="multipleTable"
@@ -78,7 +80,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="orderInfoCode"
+                    prop="orderCode"
                     label="订单编号"
                     width="120">
                 </el-table-column>
@@ -100,12 +102,13 @@
                 </el-table-column>
                 <el-table-column label="操作" width="220">
                     <template slot-scope="scope">
-                        <span class="blue pointer" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
-                        <span class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
-                        <span class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
-                        <span class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2">查看物流</span>
-                        <span class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2">确认收货</span>
-                        <span class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2">退款</span>
+                        <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
+                        <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
+                        <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
+                        <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3">查看物流</span>
+                        <span v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3">确认收货</span>
+                        <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
+                        <span class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -121,6 +124,7 @@ import AuditDialog from '@/views/order/dialogs/auditDialog'
 import BatchUpdateStatusDialog from '@/views/order/dialogs/batchUpdateStatusDialog'
 import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 import LogisticsDialog from '@/views/order/dialogs/logisticsDialog'
+import utils from "@/utils";
 
 export default {
     data() {
@@ -171,9 +175,10 @@ export default {
                 startIndex: 1,
                 pageSize: 20,
                 searchValue: '',
-                searchType: '',
+                searchType: 'code',
                 applicationDate: '',
-                orderAfterSaleStatus: ''
+                orderAfterSaleStatus: '',
+                type: ''
             },
             currentDialog: '',
             dialogVisible: false,
@@ -183,6 +188,9 @@ export default {
         }
     },
     created() {
+        if(typeof this.$route.query.orderAfterSaleStatus != 'undefined') {
+            this.listQuery = Object.assign({}, this.listQuery, {orderAfterSaleStatus: this.$route.query.orderAfterSaleStatus})
+        }
         this.getList()
     },
     filters: {
@@ -197,7 +205,7 @@ export default {
         },
         orderAfterSaleStatusFilter(code) {
             if(code == 0) {
-                return '提交申请'
+                return '待审核'
             } else if(code == 1) {
                 return '待退货 '
             } else if(code == 2) {
@@ -222,6 +230,7 @@ export default {
                     message: '确认收货成功',
                     type: 'success'
                 });
+                this.getList()
             }).catch(error => {
                 this.$notify.error({
                     title: '错误',
@@ -242,7 +251,7 @@ export default {
             }) 
         },
         drawback(row) {
-            this._apis.order.orderAfterSaleDrawback({id: row.id}).then((res) => {
+            this._apis.order.orderAfterSaleDrawback({id: row.id, memberInfoId: row.memberInfoId}).then((res) => {
                 console.log(res)
                 this.$notify({
                     title: '成功',
@@ -261,8 +270,17 @@ export default {
             // })
         },
         exportOrder() {
-           this._apis.order.orderAfterSaleExport({ids: this.multipleSelection.map(val => val.id)}).then((res) => {
+            let _param
+            
+            _param = Object.assign({}, this.listQuery, {
+                [this.listQuery.searchType]: this.listQuery.searchValue,
+                createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[0], "yyyy-MM-dd hh:mm:ss") : '',
+                createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[1], "yyyy-MM-dd hh:mm:ss") : '',
+                ids: this.multipleSelection.map(val => val.id)
+            })
+           this._apis.order.orderAfterSaleExport(_param).then((res) => {
                 console.log(res)
+                window.location.href = res
                 this.$notify({
                     title: '成功',
                     message: '导出成功！',
@@ -347,20 +365,30 @@ export default {
             })
         },
         updateStatus(row) {
-            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: 1}).then((res) => {
+            let _orderAfterSaleStatus
+
+            if(row.type == 3) {
+                _orderAfterSaleStatus = 2
+            } else {
+                _orderAfterSaleStatus = 1
+            }
+            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
                 console.log(res)
                 this.getList()
-                // this.$notify({
-                //     title: '成功',
-                //     message: '审核成功！',
-                //     type: 'success'
-                // });
                 // this.confirm({title: '换货确认', icon: true, text: `是否确认${_title}？`}).then(() => {
                     
                 // })
-                this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = row
-                this.dialogVisible = true
+                if(row.type == 2) {
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = row
+                    this.dialogVisible = true
+                } else {
+                    this.$notify({
+                        title: '成功',
+                        message: '审核成功！',
+                        type: 'success'
+                    });
+                }
             }).catch(error => {
                 this.$notify.error({
                     title: '错误',
@@ -388,10 +416,12 @@ export default {
                 startIndex: 1,
                 pageSize: 20,
                 searchValue: '',
-                searchType: '',
+                searchType: 'code',
                 applicationDate: '',
-                orderAfterSaleStatus: ''
+                orderAfterSaleStatus: '',
+                type: ''
             }
+            this.getList()
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -402,8 +432,8 @@ export default {
             
             _param = Object.assign({}, this.listQuery, param, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
-                createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? this.listQuery.applicationDate[0] : '',
-                createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? this.listQuery.applicationDate[1] : ''
+                createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[0], "yyyy-MM-dd hh:mm:ss") : '',
+                createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[1], "yyyy-MM-dd hh:mm:ss") : ''
             })
 
             this._apis.order.getOrderAfterSalePageList(_param).then((res) => {
@@ -429,6 +459,7 @@ export default {
 .after-sales {
     .search {
         background-color: #fff;
+        margin: 0 20px;
         .form-inline {
             padding: 20px;
         }
@@ -441,13 +472,22 @@ export default {
             }
         }
     }
+    .line {
+        height: 20px;
+        background-color: #f2f2f9;
+    }
     .content {
         background-color: #fff;
         padding: 20px;
+        margin: 0 20px;
+        padding-top: 23px;
         p {
             font-size: 16px;
             color: #B6B5C8;
-            margin: 23px 0 20px 0;
+            margin: 0 0 20px 0;
+            span {
+                color: #45444c;
+            }
         }
     }
 }

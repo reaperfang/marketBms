@@ -7,7 +7,8 @@ export default [
     name: 'finance',
     meta: {
       title: '财务',
-      icon: 'icon_finance'
+      icon: 'icon_finance',
+      activeIcon:'icon_finances'
     },
     children: [
       {

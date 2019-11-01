@@ -23,17 +23,25 @@
 
 <script>
 import componentMixin from "../mixins/mixinComps";
-import mixinBuyNotice from "../mixins/mixinBuyNotice";
 export default {
   name: "componentBuyNotice",
-  mixins: [componentMixin, mixinBuyNotice],
+  mixins: [componentMixin],
   components: {},
   data() {
     return { 
       animate: true, 
       list: [],
-      timer: null 
+      timer: null ,
+      loading: false
     };
+  },
+  created() {
+    this.fetch();
+    this._globalEvent.$on('fetchBuyNotice', (componentData, componentId) => {
+      if(this.currentComponentId === componentId) {
+        this.fetch(componentData);
+      }
+    });
   },
   methods: {
     scroll() {
@@ -51,9 +59,43 @@ export default {
       }
     },
 
+    //根据ids拉取数据
+    fetch(componentData = this.currentComponentData.data) {
+        if(componentData) {
+          if(Array.isArray(componentData.ids) && componentData.ids.length){
+            this.loading = true;
+            this._apis.order.getBuyNotice({
+                    productIds: componentData.ids,
+                }).then((response)=>{
+                this.createList(response);
+                this.loading = false;
+            }).catch((error)=>{
+                // this.$notify.error({
+                //     title: '错误',
+                //     message: error
+                // });
+                console.error(error);
+                this.list = [];
+                this.loading = false;
+            });
+          }else{
+            this.list = [];
+          }
+        }
+    },
+
+      /* 创建数据 */
+    createList(datas) {
+      this.list = datas;
+    },
+
   },
   mounted() {
     this.timer = setInterval(this.scroll, 2000);
+  },
+  beforeDestroy() {
+      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
+      this._globalEvent.$off('fetchBuyNotice');
   },
   destroyed() {
     clearInterval(this.timer);
@@ -86,8 +128,8 @@ export default {
   transition: all 0.5s;
 }
 .componentBuyNotice {
-  height: 29px;
-  line-height: 29px;
+  // height: 29px;
+  // line-height: 29px;
   & > ul {
     padding: 0px 10px;
     display: flex;

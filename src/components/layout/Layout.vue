@@ -8,9 +8,15 @@
       </div>
       <ul>
         <li :class="{active: index == current}" @click="menuHandler(index)" v-if="!item.hidden && item.children" 
-          v-for="(item, index) in permission_routers_tree">
-          <i class="icons" :class="{[item.meta.icon]: true}"></i>
-          <span class="ellipsis">{{item.meta.title}}</span>
+          v-for="(item, index) in permission_routers_tree" :key="index">
+          <i v-if="index != current" class="icons" :class="{[item.meta.icon]: true}"></i>
+          <i v-else class="icons" :class="{[item.meta.activeIcon]: true}"></i>
+          <template v-if="!item.iframe">
+            <span class="ellipsis">{{item.meta.title}}</span>
+          </template>
+          <template v-else>
+            <router-link :to="{path: item.path}">{{item.meta.title}}</router-link>
+          </template>
         </li>
       </ul>
     </div>
@@ -27,16 +33,20 @@
 import { Navbar, Sidebar, AppMain, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState, mapGetters, mapMutations } from 'vuex'
+import path from 'path'
+
+var isExternal = function(path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}
 
 export default {
   name: 'Layout',
   data() {
     return {
-      
+      current: '0'
     }
   },
   created() {
-    console.log('111111',this.permission_routers_tree)
     let path = '/' + this.$route.path.split('/')[1]
     let index = this.permission_routers_tree.findIndex(val => val.path == path)
 
@@ -49,10 +59,32 @@ export default {
     TagsView
   },
   mixins: [ResizeMixin],
+  created() {
+    this.current = localStorage.getItem('siderBarCurrent') || '0'
+
+    let name = this.$route.path.replace(/^(\/[^(?:\/|\?)]+)\/.*$/, '$1')
+    let realCurrent = this.permission_routers_tree.findIndex(router => router.path == name)
+
+    if(realCurrent != this.current) {
+      this.current = realCurrent
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if(to.path) {
+        let name = to.path.replace(/^(\/[^(?:\/|\?)]+)\/.*$/, '$1')
+        let realCurrent = vm.permission_routers_tree.findIndex(router => router.path == name)
+
+        if(realCurrent != vm.current) {
+          vm.SETCURRENT(realCurrent)
+        }
+      }
+    })
+  },
   computed: {
-    ...mapState({
-      current: state => state.menu.current,
-    }),
+    // ...mapState({
+    //   current: state => state.menu.current,
+    // }),
     ...mapGetters([
       'permission_routers_tree',
     ]),
@@ -78,6 +110,36 @@ export default {
     },
     menuHandler(index) {
       this.SETCURRENT(index)
+      localStorage.setItem('siderBarCurrent', index)
+
+      this.jumpTo(index)
+    },
+    jumpTo(index) {
+      let current = localStorage.getItem('siderBarCurrent') || '0'
+      let currentBar = this.permission_routers_tree[current]
+
+      let basePath = currentBar.path
+      let children = currentBar.children
+
+      if(children && children.length) {
+        let _path = children[0].path
+
+        this.$router.push({path: this.resolvePath(basePath, _path)})
+      }
+    },
+    resolvePath(basePath, routePath) {
+      if (this.isExternalLink(routePath)) {
+        return routePath
+      }
+      return path.resolve(basePath, routePath)
+    },
+    isExternalLink(routePath) {
+      return isExternal(routePath)
+    },
+  },
+  watch: {
+    '$store.state.menu.current': function(index) {
+      this.current = index
     }
   }
 }
@@ -102,7 +164,7 @@ export default {
       color: #9596a9;
       font-size:16px;
       ul li {
-        padding: 20px 0 20px 17px;
+        padding: 15px 0 15px 17px;
         display: flex;
         align-items: center;
         cursor: pointer;
@@ -131,8 +193,9 @@ export default {
         margin-top: 17px;
       }
       .logo{
-        width: 60px;
-        height: 27px;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
       }
     }
     .main-container {
@@ -160,40 +223,80 @@ export default {
     background: url('../../assets/images/icons/profile.png') no-repeat;
     background-size: cover;
   }
+  .icon_profiles{
+    background: url('../../assets/images/icons/profiles.png') no-repeat;
+    background-size: cover;
+  }
   .icon_shop{
     background: url('../../assets/images/icons/shop.png') no-repeat;
+    background-size: cover;
+  }
+  .icon_shops{
+    background: url('../../assets/images/icons/shops.png') no-repeat;
     background-size: cover;
   }
   .icon_goods{
     background: url('../../assets/images/icons/goods.png') no-repeat;
     background-size: cover;
   }
+  .icon_goodss{
+    background: url('../../assets/images/icons/goodss.png') no-repeat;
+    background-size: cover;
+  }
   .icon_order{
     background: url('../../assets/images/icons/order.png') no-repeat;
+    background-size: cover;
+  }
+  .icon_orders{
+    background: url('../../assets/images/icons/orders.png') no-repeat;
     background-size: cover;
   }
   .icon_client{
     background: url('../../assets/images/icons/client.png') no-repeat;
     background-size: cover;
   }
+  .icon_clients{
+    background: url('../../assets/images/icons/clients.png') no-repeat;
+    background-size: cover;
+  }
   .icon_datum{
     background: url('../../assets/images/icons/datum.png') no-repeat;
+    background-size: cover;
+  }
+  .icon_datums{
+    background: url('../../assets/images/icons/datums.png') no-repeat;
     background-size: cover;
   }
   .icon_opera{
     background: url('../../assets/images/icons/opera.png') no-repeat;
     background-size: cover;
   }
+  .icon_operas{
+    background: url('../../assets/images/icons/operas.png') no-repeat;
+    background-size: cover;
+  }
   .icon_finance{
     background: url('../../assets/images/icons/finance.png') no-repeat;
+    background-size: cover;
+  }
+  .icon_finances{
+    background: url('../../assets/images/icons/finances.png') no-repeat;
     background-size: cover;
   }
   .icon_apply{
     background: url('../../assets/images/icons/apply.png') no-repeat;
     background-size: cover;
   }
+  .icon_applys{
+    background: url('../../assets/images/icons/applys.png') no-repeat;
+    background-size: cover;
+  }
   .icon_set{
     background: url('../../assets/images/icons/set.png') no-repeat;
+    background-size: cover;
+  }
+  .icon_sets{
+    background: url('../../assets/images/icons/sets.png') no-repeat;
     background-size: cover;
   }
 </style>

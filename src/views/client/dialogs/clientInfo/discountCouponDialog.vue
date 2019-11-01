@@ -8,9 +8,9 @@
             <p class="fl">共{{couponList.length || 0}}张</p>
             <div class="fr">
               <el-select v-model="couponType" style="margin-bottom: 10px" @change="getStatus">
-                <el-option label="全部状态" value="2"></el-option>
-                <el-option label="未使用" value="0"></el-option>
-                <el-option label="已使用" value="1"></el-option>
+                <el-option label="全部状态" value="0"></el-option>
+                <el-option label="可使用" value="1"></el-option>
+                <el-option label="已失效" value="2"></el-option>
               </el-select>
             </div>
           </div>
@@ -23,7 +23,7 @@
             >
             <el-table-column prop="name" label="优惠券名称"></el-table-column>
             <el-table-column prop="receiveType" label="领取方式"></el-table-column>
-            <el-table-column prop="beginTime" label="获取时间"></el-table-column>
+            <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
             <el-table-column prop="consumeStatus" label="状态"></el-table-column>
           </el-table>
           </div>
@@ -33,9 +33,9 @@
             <p class="fl">共{{codeList.length || 0}}张</p>
             <div class="fr">
               <el-select v-model="codeType" style="margin-bottom: 10px" @change="getCodeStatus">
-                <el-option label="全部状态" value="2"></el-option>
-                <el-option label="未使用" value="0"></el-option>
-                <el-option label="已使用" value="1"></el-option>
+                <el-option label="全部状态" value="0"></el-option>
+                <el-option label="可使用" value="1"></el-option>
+                <el-option label="已失效" value="2"></el-option>
               </el-select>
             </div>
           </div>
@@ -47,7 +47,7 @@
           >
             <el-table-column prop="name" label="优惠券名称"></el-table-column>
             <el-table-column prop="receiveType" label="领取方式"></el-table-column>
-            <el-table-column prop="beginTime" label="获取时间"></el-table-column>
+            <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
             <el-table-column prop="consumeStatus" label="状态"></el-table-column>
           </el-table>
         </el-tab-pane>
@@ -65,8 +65,8 @@ export default {
     return {
       hasCancel: true,
       activeName: "first",
-      couponType: '1',
-      codeType: "1",
+      couponType: '0',
+      codeType: "0",
       couponList: [],
       codeList:[],
       reciveMap: 
@@ -103,49 +103,49 @@ export default {
     sendDiscount() {
       this.$emit("sendDiscount");
     },
-    getUsedCoupon(status) {
-      let params = {usedType:"1", couponType: "0", memberId: "1"};
-      if(status !== '2') {
-        params.usedStatus = status;
+    getUsedCoupon(type) {
+      let params;
+      if(type == "0") {
+        params = {couponType: "0", memberId: this.data.id};
+      }else{
+        params = {usedType:type, couponType: "0", memberId: this.data.id};
       }
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.couponList = [];
           response.map((v) => {
-              v.appCoupon.consumeStatus = v.consumeStatus == 0?'未使用':'已使用';
+              v.appCoupon.consumeStatus = v.consumeStatus == 0?'可使用':'已失效';
               v.appCoupon.receiveType = this.reciveMap[v.receiveType];
+              v.appCoupon.receiveTime = v.receiveTime;
               this.couponList.push(v.appCoupon);
           })
       }).catch((error) => {
-          this.$notify.error({
-              title: '错误',
-              message: error
-          });
+        console.log(error);
       })
     },
-    getUsedCode(status) {
-      let params = {usedType:"1", couponType: "1", memberId: "1"};
-      if(status !== '2') {
-        params.usedStatus = status;
+    getUsedCode(type) {
+      let params;
+      if(type == "0") {
+        params = {couponType: "1", memberId: this.data.id};
+      }else{
+        params = {usedType: type, couponType: "1", memberId: this.data.id};
       }
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.codeList = [];
           response.map((v) => {
-            v.appCoupon.consumeStatus = v.consumeStatus == 0?'未使用':'已使用';
+            v.appCoupon.consumeStatus = v.consumeStatus == 0?'可使用':'已失效';
             v.appCoupon.receiveType = this.reciveMap[v.receiveType];
+            v.appCoupon.receiveTime = v.receiveTime;
             this.codeList.push(v.appCoupon);
           })
       }).catch((error) => {
-          this.$notify.error({
-              title: '错误',
-              message: error
-          });
+        console.log(error);
       })
     },
-    getStatus(val) {
-      this.getUsedCoupon(val);
+    getStatus(status) {
+      this.getUsedCoupon(status);
     },
-    getCodeStatus(val) {
-      this.getUsedCode(val);
+    getCodeStatus(status) {
+      this.getUsedCode(status);
     }
   },
   computed: {
@@ -159,6 +159,11 @@ export default {
     }
   },
   mounted() {
+    if(this.data.type == '0') {
+      this.activeName = "first"
+    }else{
+      this.activeName = "second"
+    }
     this.getUsedCoupon();
     this.getUsedCode();
   },

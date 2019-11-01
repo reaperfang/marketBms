@@ -1,19 +1,27 @@
 /* 选择优惠套餐弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套餐活动'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套餐'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
         <el-form-item label="" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入活动名称"></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入套餐名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="" prop="name">
           <el-button type="primary" @click="fetch">搜  索</el-button>
         </el-form-item>
       </div>
     </el-form>
-    <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange"  v-loading="loading">
+    <el-table
+      stripe
+      :data="tableList"
+      :row-key="getRowKey"
+      ref="multipleTable"
+      @selection-change="handleSelectionChange"
+      v-loading="loading">
         <el-table-column
           type="selection"  
+          :selectable="itemSelectable"
+          :reserve-selection="true"
           width="30">
         </el-table-column>
         <el-table-column prop="name" label="优惠活动标题" :width="300">
@@ -25,11 +33,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="packagePrice" label="套餐价格"></el-table-column>
-        <el-table-column prop="status" label="活动状态">  <!-- 0是未生效  1是生效中 2是已失效-->
+         <el-table-column prop="status" label="状态">  <!-- 0是未生效  1是生效中 2是已失效-->
            <template slot-scope="scope">
             <span v-if="scope.row.status === 0">未生效</span>
             <span v-else-if="scope.row.status === 1">生效中</span>
-            <span v-else-if="scope.row.status === 2">已生效</span>
+            <span v-else-if="scope.row.status === 2">已失效</span>
           </template>
         </el-table-column>
         <el-table-column prop="" label="活动时间" :width="400">
@@ -68,9 +76,14 @@ export default {
           type: Boolean,
           required: true
       },
+      goodsEcho: {
+        type: Array,
+        required: true
+      }
   },
   data() {
     return {
+      pageSize: 5,
       tableList: [],
       multipleSelection: [],
       pageNum: 1,
@@ -89,9 +102,24 @@ export default {
       set(val) {
           this.$emit('update:dialogVisible', val)
       }
+    },
+    goodsList: {
+      get() {
+          return this.goodsEcho
+      },
+      set(val) {
+          this.$emit('update:goodsEcho', val)
+      }
     }
   },
   created() {
+    this.goodsList.forEach((row, index) => {
+      this.$nextTick(() => {
+        if(!row.fakeData) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, true);
+        }
+      })
+    })
   },
   mounted() {
   },
@@ -103,10 +131,11 @@ export default {
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
         this.loading = false;
       });
     },
@@ -124,6 +153,17 @@ export default {
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    itemSelectable(row, index) {
+      if(row.status !== 2) {
+        return true;
+      }
+    },
+    getRowKey(row) {
+      return row.id
+    }
   }
 };
 </script>
@@ -139,6 +179,10 @@ export default {
       display: block;
       margin-right: 10px;
       border: 1px solid #ddd;
+      object-fit: contain;
+    }
+    p{
+      width: calc(100% - 50px);
     }
 }
 </style>

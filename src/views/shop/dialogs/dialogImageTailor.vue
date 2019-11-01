@@ -1,12 +1,12 @@
 <template>
   <DialogBase :visible.sync="visible" width="600px" :title="'图片裁剪'" @submit="submit">
     <div class="cropper-content">
-       <el-button @click="finish">裁剪</el-button>
+       <!-- <el-button @click="finish">裁剪</el-button> -->
       <div class="cropper" style="text-align:center;margin:10px 0;">
         <vueCropper
           ref="cropper"
           :img="option.img"
-          :outputSize="option.size"
+          :outputSize="option.outputSize"
           :outputType="option.outputType"
           :info="true"
           :full="option.full"
@@ -14,6 +14,8 @@
           :canMoveBox="option.canMoveBox"
           :original="option.original"
           :autoCrop="option.autoCrop"
+          :autoCropWidth="option.autoCropWidth"
+          :autoCropHeight="option.autoCropHeight"
           :fixed="option.fixed"
           :fixedNumber="option.fixedNumber"
           :centerBox="option.centerBox"
@@ -22,6 +24,7 @@
         ></vueCropper>
       </div>
     </div>
+    <img :src="imgUrl" alt="">
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item label="裁剪尺寸：">
           <el-select v-model="sizeNum" placeholder="请选择">
@@ -41,6 +44,7 @@
 import { VueCropper }  from 'vue-cropper'
 import DialogBase from "@/components/DialogBase";
 import utils from "@/utils";
+import axios from "axios";
 export default {
   name: "dialogImageTailor",
   components: {DialogBase,VueCropper},
@@ -54,6 +58,7 @@ export default {
   },
   data() {
     return {
+      imgUrl:"",
       form:{},
       sizeNum:'1',
       groupList:[
@@ -84,20 +89,22 @@ export default {
         outputType: 'jpeg', // 裁剪生成图片的格式
         canScale: false, // 图片是否允许滚轮缩放
         autoCrop: true, // 是否默认生成截图框
-        // autoCropWidth: 300, // 默认生成截图框宽度
-        // autoCropHeight: 200, // 默认生成截图框高度
-        fixedBox: true, // 固定截图框大小 不允许改变
-        fixed: true, // 是否开启截图框宽高固定比例
+        autoCropWidth: 200, // 默认生成截图框宽度
+        autoCropHeight: 200, // 默认生成截图框高度
+        fixedBox: false, // 固定截图框大小 不允许改变
+        fixed: false, // 是否开启截图框宽高固定比例
         fixedNumber: [7, 5], // 截图框的宽高比例
         full: true, // 是否输出原图比例的截图
         canMoveBox: false, // 截图框能否拖动
         original: false, // 上传图片按照原始比例渲染
         centerBox: false, // 截图框是否被限制在图片里面
-        infoTrue: true // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
+        infoTrue: true, // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
       },
       picsList: [],  //页面显示的数组
       // 防止重复提交
-      loading: false
+      loading: false,
+      uploadData: null,
+      uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`,
     }
   },
   computed: {
@@ -114,78 +121,57 @@ export default {
         return shopInfo.id
     }
   },
-  // watch:{
-  //   sizeNum(){
-  //     this.groupList.map(item =>{
-  //       if(item.value == this.sizeNum){
-  //         let arr = item.label.split('*')
-  //         this.option.autoCropWidth = arr[0]
-  //         this.option.autoCropHeight = arr[1]
-  //       }
-  //     })
-  //   }
-  // },
+  watch:{
+    sizeNum(){
+      this.groupList.map(item =>{
+        if(item.value == this.sizeNum){
+          let arr = item.label.split('*')
+          this.option.autoCropWidth = parseInt(arr[0])
+          this.option.autoCropHeight = parseInt(arr[1])
+        }
+      })
+    }
+  },
   created() {
     this.init()
   },
   methods: {
     init(){
-      this.option.img = this.data
+      this.option.img = this.data;
     },
 
     submit() {
-      this.$emit('submit','')
-    },    
-
-     // 点击裁剪，这一步是可以拿到处理后的地址
-    finish() {
-      this.$refs.cropper.getCropBlob((data) => {
-        var fileName = 'tailor' +  Math.random()
-        this.loading = true
-       //上传服务器
-        let formData = {}
-        formData = Object.assign({file:data},{json:JSON.stringify({cid: 222})})
-        // console.log('data',data)
-        // formData.append("file", data, fileName);
-        // formData.append("json",JSON.stringify({cid: 222}));
-        this._apis.set.uploadImage(formData).then(response =>{
-          console.log('999999',response)
-          
-        }).catch(error =>{
-
+      this.$emit('submit',{imageTailor:{}})
+      this.$refs.cropper.getCropData((data) => {
+        let urlData = data.substring(23, data.length);
+        axios.post(this.uploadUrl,"json={\"cid\":\""+ this.cid +"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",{headers: {'Origin':'http'}}).then((response) => {
+         let params = {
+            id: this.arrayData[0],
+            filePath: response.data.data.url,
+            imgPixelWidth: response.data.data.width,
+            imgPixelHeight: response.data.data.height
+          }
+          this._apis.file.editArticle(params).then((response) => {
+            this.$notify({
+              title: '成功',
+              message: '图片裁剪成功',
+              type: 'success'
+            });
+          }).catch((error) => {
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          })
+          // this.$emit('submit',{imageTailor:{}})
+        }).catch((error) => {
+          this.$notify.error({
+            title: '错误',
+            message: error
+          });
         })
       })
-    }
-
-    //上传图片（点击上传按钮）
-    // finish(type) { 
-    //   console.log('finish')
-    //   let _this = this;
-    //   let formData = new FormData();
-    //   // 输出 
-    //   if (type === 'blob') { 
-    //     this.$refs.cropper.getCropBlob((data) => { 
-    //       let img = window.URL.createObjectURL(data) 
-    //       this.model = true; 
-    //       this.modelSrc = img; 
-    //       formData.append("file", data, this.fileName);
-    //       formData.append("json",JSON.stringify({cid: 222}));
-    //       // formData = Object.assign(formData,{cid: 222})
-    //     this._apis.set.uploadImage(formData).then(response =>{
-    //         console.log('999999',response)
-            
-    //       }).catch(error =>{
-
-    //       })
-    //     }) 
-    //   } else { 
-    //     this.$refs.cropper.getCropData((data) => { 
-    //       this.model = true; 
-    //       this.modelSrc = data; 
-    //     }) 
-    //   } 
-    // }, 
-
+    },    
   }
 };
 </script>

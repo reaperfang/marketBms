@@ -1,7 +1,7 @@
 <template>
     <div class="c_container">
         <el-tabs v-model="activeName">
-            <el-tab-pane label="会员卡管理" name="first">
+            <el-tab-pane label="会员卡管理" name="first" v-permission="['客户', '会员卡', '会员卡管理']">
                 <div class="pane_container">
                     <div class="c_card">
                         <img v-if="imgUrl" :src="imgUrl" class="cardImg" />
@@ -32,9 +32,9 @@
                     </div>
                     <p class="c_warn">建议上传图片尺寸1000*630像素，不超过2M，格式支持JPG、PNG、JPEG</p>
                 </div>
-                <cdTable :cardList="cardList" @refreshTable="refreshTable"></cdTable>
+                <cdTable></cdTable>
             </el-tab-pane>
-            <el-tab-pane label="领卡记录" name="second">
+            <el-tab-pane label="领卡记录" name="second" v-permission="['客户', '会员卡', '领卡记录']">
                 <div class="c_line">
                     <span>卡名称：</span>
                     <div class="input_wrap">
@@ -64,6 +64,7 @@
     </div>
 </template>
 <script type="es6">
+import utils from "@/utils";
 import cdTable from './components/cardManage/cdTable';
 import lkTable from './components/cardManage/lkTable';
 export default {
@@ -78,9 +79,10 @@ export default {
             popVisible: false,
             selected:"",
             getTime: "",
-            cardList: [],
             cardNames: [],
-            lkParams: {}
+            lkParams: {},
+            isLoading: true,
+            loading: false
         }
     },
     computed:{
@@ -95,22 +97,17 @@ export default {
             this.addCardBg();
         },
         beforeAvatarUpload(file) {
-        //const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        // if (!isJPG) {
-        //     this.$message.error('上传图片只能是 JPG 格式!');
-        // }
-        if (!isLt2M) {
-            this.$message.error("上传图片大小不能超过 2MB!");
-        }
-        return isLt2M;
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                this.$message.error("上传图片大小不能超过 2MB!");
+            }
+            return isLt2M;
         },
         handleFind() {
             let obj = {
-                name: this.selected,
-                startTime: this.getTime[0],
-                endTime: this.getTime[1] 
+                name: this.selected == "" || this.selected == "全部"? null : this.selected,
+                startTime: this.getTime == "" || this.getTime == null ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
+                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
             }
             this.lkParams = Object.assign({},obj);
         },
@@ -118,43 +115,15 @@ export default {
             this.selected = "";
             this.getTime = "";
         },
-        getCardList() {
-            let obj = {
-                "startIndex": 1,
-                "pageSize": 10
-            }
-            this._apis.client.getCardList(obj).then((response) => {
-                response.list.map((v) => {
-                    v.validity = "永久有效";
-                    v.isGray = true;
-                    v.enable = v.enable == 0?true:false;
-                });
-                let i = response.list.findIndex((value,index,arr) => {
-                    return value.name == "";
-                });
-                if(i !== -1) {
-                    this.$set(response.list[i], 'isGray', false);
-                }
-                this.cardList = [].concat(response.list);
-            }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
-            })
-        },
         refreshTable() {
-            console.log(1);
             this.getCardList();
         },
         getCardNames() {
             this._apis.client.getCardNames({}).then((response) => {
                 this.cardNames = [].concat(response);
+                this.cardNames.unshift({name:'全部', id: '001'})
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                })
+                console.log(error);
             })
         },
         addCardBg() {
@@ -171,10 +140,7 @@ export default {
                     type: 'success'
                 });
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                })
+                console.log(error);
             })
         },
         checkCardBg() {
@@ -184,15 +150,11 @@ export default {
                     this.imgId = response.id;
                 }
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                })
+                console.log(error);
             })
         }
     },
     mounted() {
-        this.getCardList();
         this.getCardNames();
         this.checkCardBg();
     }

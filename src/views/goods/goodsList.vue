@@ -1,41 +1,46 @@
 <template>
     <div class="goods-list">
         <header class="header">
-            <div class="item pointer" @click="$router.push('/goods/addGoods')">新建商品</div>
-            <div class="item pointer" @click="$router.push('/goods/batchPriceChange')">批量改价</div>
-            <div class="item pointer" @click="$router.push('/goods/import')">商品导入</div>
+            <div v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">新建商品</div>
+            <!-- <div v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="item pointer" @click="$router.push('/goods/batchPriceChange')">批量改价</div>
+            <div v-permission="['商品', '商品列表', '默认页面', '商品导入']" class="item pointer" @click="$router.push('/goods/import')">商品导入</div> -->
         </header>
         <div class="search">
-            <el-form :inline="true" :model="listQuery" class="demo-form-inline">
-                <el-form-item label="商品名称">
+            <el-form :inline="true" :model="listQuery" ref="form" class="demo-form-inline">
+                <el-form-item label="商品名称" prop="name">
                     <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                 </el-form-item>
-                <el-form-item label="商品状态">
+                <el-form-item label="商品状态" prop="status">
                     <el-select v-model="listQuery.status" placeholder="请选择商品状态">
+                        <el-option label="全部" value=""></el-option>
                     <el-option label="上架" :value="1"></el-option>
                     <el-option label="下架" :value="0"></el-option>
-                    <el-option label="售罄" :value="2"></el-option>
+                    <el-option label="售罄" :value="-1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品分类">
+                <el-form-item label="商品分类" prop="productCatalogInfoId">
                     <el-cascader
                         v-model="categoryValue"
                         :options="categoryOptions"
-                        @change="handleChange">
+                        @change="handleChange":props="{ multiple: false, checkStrictly: true }"
+                    clearable
+                    filterable>
                     </el-cascader>
                 </el-form-item>
                 <el-form-item>
                     <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
                 </el-form>
         </div>
         <div>
             <div class="table-header">
-                <div :class="{active: state === 1}" @click="stateHandler(1)" class="item">出售中</div>
-                <div :class="{active: state === 0}" @click="stateHandler(0)" class="item">仓库中</div>
-                <div :class="{active: state === 2}" @click="stateHandler(2)" class="item">已售罄</div>
+                <div :class="{active: listQuery.status === 1}" @click="stateHandler(1)" class="item">出售中</div>
+                <div :class="{active: listQuery.status === 0}" @click="stateHandler(0)" class="item">仓库中</div>
+                <div :class="{active: listQuery.status === -1}" @click="stateHandler(-1)" class="item">已售罄</div>
             </div>
             <el-table
+                v-loading="loading"
                 :data="list"
                 ref="table"
                 style="width: 100%"
@@ -50,42 +55,43 @@
                 label="商品名称"
                 width="380">
                     <template slot-scope="scope">
-                        <div class="ellipsis" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}</div>
+                        <div class="ellipsis" style="width: 350px;" :title="scope.row.goodsInfo.name">{{scope.row.name}}</div>
+                        <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div>
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="状态"
                     width="180">
                     <template slot-scope="scope">
-                        <span @click="upperAndLowerRacks(scope.row)" class="goods-state">
+                        <span class="goods-state">
                             {{scope.row.goodsInfo.status | statusFilter}}
-                            <i :class="{grounding: scope.row.goodsInfo.status == 1, undercarriage: scope.row.goodsInfo.status == 0}" class="i-bg pointer"></i>
+                            <i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacks(scope.row)" :class="{grounding: scope.row.goodsInfo.status == 1, undercarriage: scope.row.goodsInfo.status == 0}" class="i-bg pointer"></i>
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="商品分类">
                     <template slot-scope="scope">
-                        <span>{{scope.row.categoryName}}</span>
+                        <span>{{scope.row.productCatalogInfoName}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="库存">
                     <template slot-scope="scope">
-                        <span @click="(currentDialog = 'EditorStock') && (dialogVisible = true) && (currentData = scope.row)" class="store">{{scope.row.goodsInfo.stock}}<i @click="editorStore(scope.row)" class="i-bg pointer"></i></span>
+                        <span :class="{red: scope.row.goodsInfo.warningStock && (scope.row.goodsInfo.stock <= scope.row.goodsInfo.warningStock)}" class="store">{{scope.row.goodsInfo.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStock') && (dialogVisible = true) && (currentData = scope.row)" class="i-bg pointer"></i></span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="price"
                     label="售卖价（元）">
                     <template slot-scope="scope">
-                        <span @click="currentData = scope.row; currentDialog = 'EditorPrice'; dialogVisible = true" class="price">{{scope.row.goodsInfo.salePrice}}<i class="i-bg pointer"></i></span>
+                        <span class="price">{{scope.row.goodsInfo.salePrice}}<i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = scope.row; currentDialog = 'EditorPrice'; dialogVisible = true" class="i-bg pointer"></i></span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" width="140">
                     <template slot-scope="scope">
-                        <span @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.goodsInfo.id)" class="operate-editor"><i class="i-bg pointer"></i>编辑</span>
-                        <span @click="deleleHandler(scope.row)" class="operate-delete"><i class="i-bg pointer"></i>删除</span>
+                        <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.goodsInfo.id)" class="operate-editor pointer"><i class="i-bg"></i>编辑</span>
+                        <span v-permission="['商品', '商品列表', '默认页面', '删除商品']" @click="deleleHandler(scope.row)" class="operate-delete pointer"><i class="i-bg"></i>删除</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -93,15 +99,15 @@
                 <el-button @click="moreManageHandler" type="primary">批量管理</el-button>
                 <el-button v-if="showTableCheck" @click="checkAllHandler">全选</el-button>
                 <div v-if="showTableCheck" class="image-box">
-                    <div @click="allUpper" class="item">
+                    <div v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allUpper" class="item">
                         <i class="i-bg up"></i>
                         <p>上架</p>
                     </div>
-                    <div @click="allLower" class="item">
+                    <div v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="item">
                         <i class="i-bg down"></i>
                         <p>下架</p>
                     </div>
-                    <div @click="allDelete" class="item">
+                    <div v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="item">
                         <i class="i-bg delete"></i>
                         <p>删除</p>
                     </div>
@@ -130,6 +136,7 @@
         margin-right: 18px;
         .item {
             margin-right: 22px;
+            cursor: pointer;
             .i-bg {
                 position: relative;
                 display: inline-block;
@@ -161,6 +168,9 @@
         padding-bottom: 18px;
         .item {
             margin-right: 40px;
+            &:hover {
+                color: #7f79ff;
+            }
         }
     }
     .search {
@@ -170,7 +180,7 @@
     .i-bg {
         position: relative;
         display: inline-block;
-        width: 13px;
+        width: 14px;
         height: 13px;
         top: 1px;
     }
@@ -217,6 +227,12 @@
 .footer {
     margin-top: 10px;
 }
+.gray {
+    color: #92929B;
+}
+.red {
+    color: #FD4C2B;
+}
 </style>
 
 <script>
@@ -239,7 +255,7 @@ export default {
             ],
             list: [],
             total: 0,
-            listLoading: true,
+            loading: false,
             listQuery: {
                 startIndex: 1,
                 pageSize: 20,
@@ -255,6 +271,9 @@ export default {
         }
     },
     created() {
+        if(typeof this.$route.query.status != 'undefined') {
+            this.listQuery = Object.assign({}, this.listQuery, {status: +this.$route.query.status})
+        }
         this.getList()
         this.getCategoryList()
     },
@@ -264,8 +283,8 @@ export default {
                 return '上架'
             } else if(val == 0) {
                 return '下架'
-            } else if(val == 2) {
-                return '自动上架'
+            } else if(val == -1) {
+                return '已售馨'
             }
         },
         async productCatalogFilter(id) {
@@ -280,9 +299,28 @@ export default {
             //     return ''
             // }
 
+        },
+        specsFilter(value) {
+            let str = ''
+
+            if(typeof value == 'string') {
+                value = JSON.parse(value)
+            }
+            for(let i in value) {
+                str += i + ':' + value[i] + ','
+            }
+
+            str = str.replace(/(^.*?)\,$/, '$1')
+
+            return str
         }
     },
     methods: {
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+            this.categoryValue = ''
+            this.getList()
+        },
         allDelete() {
             let ids = this.multipleSelection.map(val => val.goodsInfo.id)
 
@@ -402,23 +440,29 @@ export default {
             this.multipleSelection = val;
         },
         stateHandler(val) {
-            this.state = val
+            if(this.listQuery.status === val) {
+                this.listQuery.status = ''
+            } else {
+                this.listQuery.status = val
+            }
 
-            let param = {status: val}
+            let param = {status: this.listQuery.status}
 
             this.getList(param)
         },
         getList(param) {
-            //this.listLoading = true
+            this.loading = true
             let _param
             
             _param = Object.assign({}, this.listQuery, param)
 
             this._apis.goods.fetchGoodsList(_param).then((res) => {
                 this.total = +res.total
-                this.getCategoryName(res.list)
+                //this.getCategoryName(res.list)
+                this.list = res.list
+                this.loading = false
             }).catch(error => {
-                //this.listLoading = false
+                this.loading = false
             })
         },
         getCategoryName(goodsList) {
@@ -444,11 +488,11 @@ export default {
         },
         deleleHandler(row) {
             if(row.activity) {
-                this.confirm({title: '立即删除', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。'}).then(() => {
+                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。'}).then(() => {
                     
                 })
             } else {
-                this.confirm({title: '立即删除', icon: true, text: '是否确认删除？'}).then(() => {
+                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                     this._apis.goods.allDelete({ids: [row.goodsInfo.id]}).then((res) => {
                         this.getList()
                         this.visible = false

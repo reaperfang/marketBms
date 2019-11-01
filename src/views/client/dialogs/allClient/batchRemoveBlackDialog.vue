@@ -23,19 +23,22 @@ export default {
             this.data.checkedItem.map((v) => {
                 memberInfoIds.push(v.id);
             });
+            //优惠券解除
+            this._apis.client.batchFrozenCoupons({memberIdList: memberInfoIds, frozenType: 0}).then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.log(error)
+            });
             let params = {memberInfoIds: memberInfoIds.join(',')}
             this._apis.client.batchRemoveFromBlack(params).then((response) => {
                 this.$notify({
                     title: '成功',
-                    message: "批量加入黑名单成功",
+                    message: "批量解除黑名单成功",
                     type: 'success'
                 });
                 this.$emit('freshTable');
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
             })
         }
     },

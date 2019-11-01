@@ -22,6 +22,7 @@
       </div>
       <div class="bottom_part">
         <el-table
+        v-loading="loading"
         :data="dataList"
         style="width: 100%"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -91,7 +92,8 @@ export default {
       },
       shops:[ ],
       multipleSelection:[],
-      total:0
+      total:0,
+      loading:true
     }
   },
   watch: {
@@ -128,11 +130,13 @@ export default {
       this._apis.set.getRoleList(query).then(response =>{
         this.dataList = response.list
         this.total = response.total
+        this.loading = false
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
       })
     },
     //查询
@@ -151,21 +155,33 @@ export default {
     deleteRole(roleName){
       let roleNames = []
       roleName ? roleNames.push(roleName) : roleNames = this.multipleSelection
-      this._apis.set.deleteRole({roleNames:roleNames}).then(response =>{
-        this.$notify.success({
-          title: '成功',
-          message: '删除成功！'
+      this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._apis.set.deleteRole({roleNames:roleNames}).then(response =>{
+            this.$notify.success({
+              title: '成功',
+              message: '删除成功！'
+            });
+            this.getRoleList()
+          }).catch(error =>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          })          
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
-        this.getRoleList()
-      }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
     },
     //批量操作
     handleSelectionChange(val) {
+      this.multipleSelection = []
       val.map(item =>{
         this.multipleSelection.push(item.roleName)
       })

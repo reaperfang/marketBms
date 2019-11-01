@@ -4,38 +4,29 @@
       <el-form-item label="商品来源" prop="source">
         <el-radio-group v-model="ruleForm.source">
           <el-radio :label="1">商品</el-radio>
-          <el-radio :label="2">商品分组</el-radio>
+          <el-radio :label="2">商品分类</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="商品" v-if="ruleForm.source === 1" prop="goods">
-        <div class="goods_list">
-          <ul>
-            <li v-for="(item, key) of list" :key="key">
-              <img :src="item.mainImage" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-            </li>
-            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
-              <i class="inner"></i>
-            </li>
-          </ul>
-        </div>
       </el-form-item>
-      <el-form-item label="商品分组" v-if="ruleForm.source === 2" prop="goodsGroup">
-        <el-button type="text"  @click="dialogVisible=true; currentDialog='dialogSelectGoodsGroup'">从商品分组中选择</el-button>
-        <div class="goods_groups">
-          <el-tag
-            v-for="tag in ruleForm.goodsGroups"
-            :key="tag.title"
-            closable
-            type="success" @close="deleteGoodsGroup(tag)">
-            {{tag.title}}
-          </el-tag>
-        </div>
+      <div class="goods_list" v-if="ruleForm.source === 1" prop="goods">
+        <ul>
+          <li v-for="(item, key) of list" :key="key" :title="item.name">
+            <img :src="item.mainImage" alt="">
+            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+          </li>
+          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
+            <i class="inner"></i>
+          </li>
+        </ul>
+      </div>
+      <el-form-item label="商品分类" v-if="ruleForm.source === 2" prop="goodsGroup">
+        <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{seletedGroup && seletedGroup.data.name || '从商品分类中选择'}}</el-button>
       </el-form-item>
-      <el-form-item label="显示个数" v-if="ruleForm.source === 2" prop="showNumber">
+      <!-- <el-form-item label="显示个数" v-if="ruleForm.source === 2" prop="showNumber">
         <el-input  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
         最多显示50个
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -131,48 +122,58 @@
     </div>
     
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" @dialogGoodsGroupSelected="dialogGoodsGroupSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected"></component>
+
+    <!-- 商品分类选择弹框 -->
+    <DialogBase :visible.sync="pageDialogVisible" width="816px" title="选择商品分类" @submit="seletePage">
+      <component v-if="pageDialogVisible" :is="currentPageDialog" @seletedRow="rowSeleted"></component>
+    </DialogBase>
   </el-form>
 </template>
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import mixinGoods from '../mixins/mixinGoods';
+import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from '@/views/shop/dialogs/dialogSelectGoods';
-import dialogSelectGoodsGroup from '@/views/shop/dialogs/dialogSelectGoodsGroup';
+import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
+import GOODS_LIST from '@/assets/json/goodsList.json'; 
+import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
   name: 'propertyGoods',
-  mixins: [propertyMixin, mixinGoods],
-  components: {dialogSelectGoods, dialogSelectGoodsGroup},
+  mixins: [propertyMixin],
+  components: {DialogBase, dialogSelectGoods, goodsGroup},
   data () {
     return {
       ruleForm: {
-        source: 1,
-        goodsGroups: [],
-        showNumber: 0,
-        listStyle: 1,
-        pageMargin: 15,
-        goodsMargin: 10,
-        goodsStyle: 1,
-        goodsChamfer: 1,
-        goodsRatio: 1,
-        goodsFill: 2,
-        textStyle: 1,
-        textAlign: 1,
-        showContents: ['1', '2', '3', '4'],
-        buttonStyle: 1,
-        ids: [],
+        source: 1,//商品来源
+        showNumber: 30,//商品分类显示个数 
+        listStyle: 1,//列表样式
+        pageMargin: 15,//页面边距
+        goodsMargin: 10,//商品边距
+        goodsStyle: 1,//商品样式
+        goodsChamfer: 1,//商品倒角
+        goodsRatio: 2,//图片比例
+        goodsFill: 2,//图片填充
+        textStyle: 1,//文本样式
+        textAlign: 1,// 文本对齐
+        showContents: ['1', '2', '3', '4'],//显示内容
+        buttonStyle: 1,// 购买按钮样式
+        ids: [],//商品id列表
+        currentCatagoryId: '',  //选中的商品分类id
         buttonText: '加入购物车'
       },
       rules: {
 
       },
-      list: [],
+      list: this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
       dialogVisible: false,
-      currentDialog: ''
+      currentDialog: '',
+      seletedGroup: null,   //临时选中的商品分类
+      pageDialogVisible: false
     }
   },
   created() {
+    this.fetch();
   },
   watch: {
     'items': {
@@ -181,7 +182,8 @@ export default {
         for(let item of newValue) {
           this.ruleForm.ids.push(item.id);
         }
-        this._globalEvent.$emit('fetchGoods');
+        this.fetch();
+        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -191,28 +193,141 @@ export default {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
-    }
+    },
+
+    currentCatagoryId(newValue) {
+        this.fetch();
+        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+    },
+    'ruleForm.currentCatagoryId'() {
+        this.fetch();
+        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+    },
   },
   methods: {
 
-    /* 弹窗选中了商品分组 */
-    dialogGoodsGroupSelected(goodsGroup) {
-      this.ruleForm.goodsGroups = goodsGroup;
+    rowSeleted(row) {
+      this.seletedGroup = row;
     },
 
-     /* 删除项 */
-    deleteGoodsGroup(item) {
-      const tempGoodsGroups = [...this.ruleForm.goodsGroups];
-      for(let i=0;i<tempGoodsGroups.length;i++) {
-        if(item === tempGoodsGroups[i]) {
-          tempGoodsGroups.splice(i, 1);
+     /* 弹窗选中了跳转链接 */
+    seletePage() {
+      this.ruleForm.currentCatagoryId = this.seletedGroup.data.id;
+    },
+
+    //根据ids拉取数据
+    fetch(componentData = this.ruleForm) {
+        if(componentData) {
+            let params = {};
+            if(!componentData.source || (componentData.source === 1)) {
+                const ids = componentData.ids;
+                if(ids) {
+                   if(Object.prototype.toString.call(ids) === '[object Object]') {
+                        params = this.setGroupGoodsParams(ids);
+                        if(!params.ids || !params.ids.length) {
+                            this.list = [];
+                            return;
+                        }
+                    }else if(Array.isArray(ids) && ids.length){
+                        params = this.setNormalGoodsParams(ids);
+                        if(!params.ids || !params.ids.length) {
+                            this.list = [];
+                            return;
+                        }
+                    }else{
+                      if(this.$route.path.indexOf('templateEdit') < 0) {
+                        this.list = [];
+                      }
+                        return;
+                    }
+                }else{
+                     if(this.$route.path.indexOf('templateEdit') < 0) {
+                        this.list = [];
+                      }
+                    return;
+                }
+            }else if(componentData.source === 2){
+                params = {
+                    status: '1',
+                    productCatalogInfoId: this.ruleForm.currentCatagoryId
+                };
+            }
+
+            this.loading = true;
+            this._apis.goods.fetchAllSpuGoodsList(params).then((response)=>{
+                this.createList(response);
+                this.loading = false;
+            }).catch((error)=>{
+                // this.$notify.error({
+                //     title: '错误',
+                //     message: error
+                // });
+                console.error(error);
+                 if(this.$route.path.indexOf('templateEdit') < 0) {
+                        this.list = [];
+                      }
+                this.loading = false;
+            });
         }
+    },
+
+      /* 创建数据 */
+    createList(datas) {
+      this.list = datas;
+      if(this.currentComponentData.data.source === 2) {
+          this._globalEvent.$emit('goodsListOfGroupChange', datas, this.$parent.currentComponentId);  //告知中央组件list数据更改
       }
-      this.ruleForm.goodsGroups = tempGoodsGroups;
+    },
+
+     /* 设置分类商品参数 */
+    setGroupGoodsParams(ids) {
+        let params = {};
+        if(this.currentCatagoryId === 'all') {
+            const allIds = [];
+            for(let k in ids) {
+                for(let item of ids[k]) {
+                    allIds.push(item);
+                }
+            }
+            params = {
+                status: '1',
+                ids: allIds
+            }
+        }else{
+            params = {
+                status: '1',
+                ids: ids[this.currentCatagoryId],
+                productCatalogInfoId: this.currentCatagoryId
+            }
+        }
+        return params;
+    },
+
+    /* 设置普通商品参数 */
+    setNormalGoodsParams(ids) {
+        return {
+            status: '1',
+            ids: ids,
+        }
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+/deep/.el-form-item__label{
+  text-align: left;
+}
+/deep/.el-radio-group{
+  margin-top: 9px;
+  /deep/.el-radio {
+    margin-right: 10px;
+    margin-bottom: 5px;
+  }
+}
+/deep/.el-checkbox-group{
+  /deep/.el-checkbox{
+    margin-right: 10px;
+  }
+}
 </style>

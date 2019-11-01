@@ -4,7 +4,7 @@
             <el-checkbox-group
                 v-model="checkedItems"
                 :max="5">
-                <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag">{{tag}}</el-checkbox>
+                <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag" :disabled="data.selectedNames.indexOf(tag) !== -1">{{tag}}</el-checkbox>
             </el-checkbox-group>
         </div>
     </DialogBase>
@@ -39,28 +39,31 @@ export default {
                 memberInfoId:this.data.id, 
                 memberLabelInfoIds: memberLabelInfoIds
             }
-            this._apis.client.markLabel(params).then((response) => {
+            if(params.memberLabelInfoIds.length > 0) {
+                this._apis.client.markLabel(params).then((response) => {
+                    this.$notify({
+                        title: '成功',
+                        message: '打标签成功',
+                        type: 'success'
+                    });
+                    this.$emit('refreshPage');
+                }).catch((error) => {
+                    console.log(error);
+                }) 
+            }else{
                 this.$notify({
-                    title: '成功',
-                    message: '打标签成功',
-                    type: 'success'
+                    title: '警告',
+                    message: '请选择要添加的标签',
+                    type: 'warning'
                 });
-                this.$emit('refreshPage');
-            }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
-            }) 
+            }
+            
         },
         getLabels() {
             this._apis.client.getLabels({tagType:0}).then((response) => {
                 this.tagList = [].concat(response); 
             }).catch((error) => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                console.log(error);
             })
         }
     },
@@ -85,7 +88,7 @@ export default {
         this.getLabels();
         this.$nextTick(() => {
             this.checkedItems = [];
-        })
+        });
     },
     props: {
         data: {

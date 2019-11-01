@@ -56,7 +56,8 @@ export default {
     },
     methods: {
         deleteSensitive(item) {
-            this._apis.order.deleteSensitiveWord({id: item.id}).then((res) => {
+            this.confirm({title: '提示', icon: true, text: '是否确认删除'}).then(() => {
+                this._apis.order.deleteSensitiveWord({id: item.id}).then((res) => {
                 this.getList()
                 this.visible = false
                 this.$notify({
@@ -71,6 +72,7 @@ export default {
                     message: error
                 });
             })
+            })
         },
         onSubmit(words) {
             words = words.replace(/^\s+|\s+$/g, '')
@@ -79,11 +81,19 @@ export default {
             this._apis.order.addSensitiveWord({names: wordsArr.join(',')}).then((res) => {
                 this.getList()
                 this.visible = false
-                this.$notify({
+                if(!res.length) {
+                    this.$notify({
                     title: '成功',
                     message: '添加成功！',
                     type: 'success'
                 });
+                } else {
+                    this.$notify({
+                    title: '消息',
+                    message: '敏感词重复！',
+                    type: 'warning'
+                });
+                }
             }).catch(error => {
                 this.visible = false
                 this.$notify.error({
@@ -106,11 +116,6 @@ export default {
             this._apis.goodsOperate.fetchPublicSensitiveList().then((res) => {
                 this.systomSensitiveList = res
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
             }).catch(error => {
                 this.visible = false
                 this.$notify.error({

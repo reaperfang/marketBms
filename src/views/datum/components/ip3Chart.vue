@@ -6,14 +6,12 @@ export default {
   extends: chartBase,
   data() {
     return {
-      flow:{}
+      flow: {}
     };
   },
-  created() {
-
-  },
+  created() {},
   methods: {
-    con(n){
+    con(n) {
       this.flow = n;
       this.makeOption(n);
       this.oChart.setOption(this.option, true);
@@ -21,24 +19,12 @@ export default {
     //设置图表数据项
     makeOption(data) {
       this.option = {
+        color: ["#c23531", "#2f4554", "#61a0a8", "#eee"],
         title: {
-          x: "center",
-          text: "支付趋势",
+          text: "支付趋势（人）",
           //subtext: "Rainbow bar example",
-          link: "http://echarts.baidu.com/doc/example.html"
+          // link: "http://echarts.baidu.com/doc/example.html"
         },
-        // tooltip: {
-        //   trigger: "item"
-        // },
-        toolbox: {
-          show: false,
-          feature: {
-            dataView: { show: true, readOnly: false },
-            restore: { show: true },
-            saveAsImage: { show: true }
-          }
-        },
-        calculable: true,
         grid: {
           borderWidth: 0,
           y: 100,
@@ -47,79 +33,27 @@ export default {
         xAxis: [
           {
             type: "category",
-            show: false,
-            // data: this.flow['xAxisData']
+            data: this.flow["xAxis"]
           }
         ],
         yAxis: [
           {
-            type: "value",
-            show: false
+            type: "value"
           }
         ],
         series: [
           {
-            name: "支付趋势",
             type: "bar",
             itemStyle: {
               normal: {
+                //这里是重点
                 color: function(params) {
-                  // build a color map as your need.
-                  var colorList = [
-                    "#8FDE80",
-                    "#358FF4",
-                    "#FF9235",
-                    "#FF501E"
-                  ];
+                  var colorList = ["#A1E174", "#578EFA", "#FD932B", "#FD4C2B"];
                   return colorList[params.dataIndex];
-                },
-                label: {
-                  show: false,
-                  position: "top",
-                  formatter: "{b}\n{c}"
                 }
               }
             },
-            data: this.flow['xAxisData'],
-            markPoint: {
-              tooltip: {
-                // trigger: "item",
-                backgroundColor: "rgba(0,0,0,0)",
-                formatter: function(params) {
-                  return (
-                    '<img src="' +
-                    params.data.symbol.replace("image://", "") +
-                    '"/>'
-                  );
-                }
-              },
-              data: [
-                {
-                  xAxis: 1,
-                  y: 350,
-                  name: "Line",
-                  symbolSize: 20,
-                },
-                {
-                  xAxis: 2,
-                  y: 350,
-                  name: "Bar",
-                  symbolSize: 20,
-                },
-                {
-                  xAxis: 3,
-                  y: 350,
-                  name: "Scatter",
-                  symbolSize: 20,
-                },
-                {
-                  xAxis: 4,
-                  y: 350,
-                  name: "K",
-                  symbolSize: 20,
-                }
-              ]
-            }
+            data: this.flow["yAxis"]
           }
         ]
       };

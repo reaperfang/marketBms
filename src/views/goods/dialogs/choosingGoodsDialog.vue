@@ -1,18 +1,22 @@
 <template>
-    <zdialog :visible.sync="visible" title="选择关联商品" width="659px" :hasCancel="hasCancel" :showFooter="showFooter">
+    <zdialog :visible.sync="visible" title="选择关联商品" width="659px" :showFooter="showFooter">
         <div class="search">
             <el-cascader
                 class="classify"
-                v-model="value"
-                :options="options"
-                @change="handleChange">
+                v-model="categoryValue"
+                :options="categoryOptions"
+                @change="handleChange"
+                :props="{ multiple: false, checkStrictly: true }"
+                    clearable
+                    filterable>
             </el-cascader>
-            <div>
-                <el-input v-model="input" placeholder="请输入商品关键字"></el-input>
-                <el-button><i class="el-icon-search"></i></el-button>
+            <div class="search-box">
+                <el-input v-model="listQuery.name" placeholder="请输入商品关键字"></el-input>
+                <el-button @click="getList"><i class="el-icon-search"></i></el-button>
             </div>
         </div>
         <el-table
+            v-loading="loading"
             :data="tableData"
             style="width: 100%">
             <el-table-column
@@ -42,7 +46,7 @@
                 </template>
                 </el-table-column>
         </el-table>
-        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+        <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </zdialog>
 </template>
 <script>
@@ -52,39 +56,67 @@ import Pagination from '@/components/Pagination'
 export default {
     data() {
         return {
-            value: [],
-            options: [],
+            categoryValue: [],
+            categoryOptions: [],
             tableData: [
-                {
-                    id: '1',
-                    name: '商品名称1',
-                    unit: 'kg',
-                    price: 100,
-                }
+                
             ],
             total: 1,
             listQuery: {
-                page: 1,
-                limit: 20,
+                startIndex: 1,
+                pageSize: 20,
+                productCatalogInfoId: '',
+                name: ''
             },
-            showFooter: false
+            showFooter: false,
+            loading: false
         }
     },
     created() {
+        this.getCategoryList()
         this.getList()
     },
     methods: {
+        transTreeData(data, pid) {
+            var result = [], temp;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].parentId == pid) {
+                    var obj = {"categoryName": data[i].name,"id": data[i].id, 
+                        parentId: data[i].parentId, level: data[i].level, sort: data[i].sort, 
+                        image: data[i].image, enable: data[i].enable, label: data[i].name, value: data[i].id};
+                    temp = this.transTreeData(data, data[i].id);
+                    if (temp.length > 0) {
+                        obj.children = temp;
+                    }
+                    result.push(obj);
+                }
+            }
+            return result;
+        },
+        getCategoryList() {
+            this._apis.goods.fetchCategoryList().then((res) => {
+                let arr = this.transTreeData(res, 0)
+                
+                this.categoryOptions = arr
+            }).catch(error => {
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
+            })
+        },
         submit() {
             
         },
         handleChange(value) {
-
+            let arr = [...value]
+            this.listQuery.productCatalogInfoId = arr.pop()
         },
         handleAdd(index, row) {
             this.$emit('submit', row)
         },
         getList(param) {
-            //this.listLoading = true
+            this.loading = true
             let _param
             
             _param = Object.assign({}, this.listQuery, param)
@@ -92,8 +124,13 @@ export default {
             this._apis.goods.getSPUGoodsList(_param).then((res) => {
                 this.total = +res.total
                 this.tableData = res.list
+                this.loading = false
             }).catch(error => {
-                //this.listLoading = false
+                this.loading = false
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
             })
         },
     },
@@ -140,6 +177,13 @@ export default {
         align-items: center;
         .classify {
             margin-right: 37px;
+        }
+    }
+    .search-box {
+        display: flex;
+        /deep/ .el-button {
+            border-left: none;
+            margin-left: -3px;
         }
     }
 </style>

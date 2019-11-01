@@ -5,7 +5,7 @@ import request from '@/system/request'
 // 概况详情首页
 export function overviewDetails(data) {
   return request({
-    target: 'CUSTOMER-SHOPX-OVERVIEWX-DATA-PROCESSOR',
+    target: 'OVER-VIEW-PROCESSOR',
     method: 'post',
     apiType: 'data',
     data
@@ -16,7 +16,7 @@ export function overviewRemind(data) {
     return request({
       target: 'ORDER-REMIND-PROCESSOR',
       method: 'post',
-      apiType: 'over',
+      apiType: 'order',
       data
     })
   }
@@ -32,7 +32,7 @@ export function overviewSelling(data) {
 // 营销活动
 export function getMarketing(data) {
     return request({
-      url: 'api/v1/b/app/my',
+      url: '/v1/b/app/my',
       method: 'get',
       baseURL: process.env.SALE_API,
       params:data

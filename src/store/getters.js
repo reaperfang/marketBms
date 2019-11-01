@@ -6,7 +6,7 @@ const getters = {
   roles: state => state.user.roles,
   shopInfos: state => state.user.shopInfos,
   permission_routers: state => state.permission.routers,
-  permission_routers_tree: state => state.permission.routers.filter(val => !val.hidden && val.children),
+  permission_routers_tree: state => state.permission.routers && state.permission.routers.filter(val => !val.hidden && val.children),
   addRouters: state => state.permission.addRouters,
 
   mapLoaded: state => state.app.mapLoaded,

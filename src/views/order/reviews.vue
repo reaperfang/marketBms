@@ -29,22 +29,22 @@
                 <el-form-item label="评论时间">
                     <el-date-picker
                         v-model="listQuery.orderDate"
-                        type="daterange"
+                        type="datetimerange"
                         range-separator="-"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd hh:mm:ss">
+                        :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
                 </el-form-item>
                 <div class="buttons">
                     <div class="lefter">
-                        <el-button @click="batchAudit" class="border-button">批量审核</el-button>
-                        <el-button @click="batchReply" class="border-button">批量回复</el-button>
-                        <el-button @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button>
+                        <el-button v-permission="['订单', '评价管理', '默认页面', '批量审核']" @click="batchAudit" class="border-button">批量审核</el-button>
+                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '批量回复']" @click="batchReply" class="border-button">批量回复</el-button> -->
+                        <el-button v-permission="['订单', '评价管理', '默认页面', '敏感词设置']" @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button>
                     </div>
                     <div class="righter">
                         <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">搜 索</el-button>
+                        <el-button @click="getList" type="primary">查询</el-button>
                     </div>
                 </div>
             </el-form>
@@ -123,9 +123,15 @@
                     <el-table-column label="操作" width="150px">
                         <template slot-scope="scope">
                             <div class="operate-box">
-                                <span v-if="scope.row.auditStatus == 0" class="blue" @click="currentDialog = 'AuditDialog'; title='审核'; batch = false; currentData = scope.row; dialogVisible = true">审核</span>
-                            <span class="blue" @click="setChoiceness(scope.row)">{{scope.row.isChoiceness == 1 ? '取消精选' : '设为精选'}}</span>
-                            <span @click="$router.push({ path: '/order/reviewsDetail?id=' +  scope.row.id})" class="blue">查看</span>
+                                <span v-permission="['订单', '评价管理', '默认页面', '审核']" v-if="scope.row.auditStatus == 0" class="blue" @click="currentDialog = 'AuditDialog'; title='审核'; batch = false; currentData = scope.row; dialogVisible = true">审核</span>
+                            <!-- <span class="blue" @click="setChoiceness(scope.row)">{{scope.row.isChoiceness == 1 ? '取消精选' : '设为精选'}}</span> -->
+                            <template v-if="scope.row.auditStatus == 1 && scope.row.isChoiceness == 1">
+                                <span v-permission="['订单', '评价管理', '默认页面', '取消精选']" class="blue" @click="setChoiceness(scope.row)">取消精选</span>
+                            </template>
+                            <template v-if="scope.row.auditStatus == 1 && !scope.row.isChoiceness">
+                                <span v-permission="['订单', '评价管理', '默认页面', '设为精选']" class="blue" @click="setChoiceness(scope.row)">设为精选</span>
+                            </template>
+                            <span v-permission="['订单', '评价管理', '默认页面', '查看']" @click="$router.push({ path: '/order/reviewsDetail?id=' +  scope.row.id})" class="blue">查看</span>
                             </div>
                         </template>
                     </el-table-column>
@@ -140,6 +146,7 @@
 import Pagination from '@/components/Pagination'
 import BatchReplyDialog from '@/views/order/dialogs/batchReplyDialog'
 import AuditDialog from '@/views/order/dialogs/auditDialog'
+import utils from "@/utils";
 
 export default {
     data() {
@@ -235,7 +242,7 @@ export default {
             if(this.batch) {
                 params.ids = ids
             } else {
-                params.id = this.currentData.id
+                params.ids = [+this.currentData.id]
             }
             this._apis.order.orderCommentAuth(params).then((res) => {
                 this.getList()
@@ -280,9 +287,16 @@ export default {
         onSubmit(value) {
             console.log(value)
             this._apis.order.replyComment({ids: this.multipleSelection.map(val => val.id), replyContent: value}).then((res) => {
-                console.log(res)
+                this.$notify({
+                    title: '成功',
+                    message: '批量回复成功！',
+                    type: 'success'
+                });
             }).catch(error => {
-                
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
             })
         },
         batchAudit() {
@@ -328,6 +342,7 @@ export default {
                 auditStatus: '',
                 starNum: '',
             })
+            this.getList()
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -346,12 +361,17 @@ export default {
             let _param
             
             _param = Object.assign({}, this.listQuery, param, {
-                createTimeStart: this.listQuery.orderDate[0],
-                creaTetimeEnd: this.listQuery.orderDate[1]
+                createTimeStart: this.listQuery.orderDate[0] ? utils.formatDate(new Date(this.listQuery.orderDate[0] * 1), "yyyy-MM-dd hh:mm:ss") : '',
+                creaTetimeEnd: this.listQuery.orderDate[1] ? utils.formatDate(new Date(this.listQuery.orderDate[1] * 1), "yyyy-MM-dd hh:mm:ss") : ''
             })
 
             this._apis.order.getCommentList(_param).then((res) => {
                 this.total = +res.total
+                res.list.forEach(val => {
+                    if(!val.isChoiceness) {
+                        val.isChoiceness = 0
+                    }
+                })
                 this.tableData = res.list
                 this.loading = false
             }).catch(error => {

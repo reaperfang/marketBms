@@ -5,15 +5,15 @@
                 <el-col :span="12">
                     <div class="grid-content header-lefter">
                         <el-button @click="$router.push('/goods/addGoods')" type="primary">新建商品</el-button>
-                        <el-button @click="$router.push('/goods/batchPriceChange')" class="border-button">批量改价</el-button>
-                        <span class="import-records">导入记录</span>
+                        <!-- <el-button @click="$router.push('/goods/batchPriceChange')" class="border-button">批量改价</el-button> -->
+                        <!-- <span class="import-records">导入记录</span> -->
                     </div>
                 </el-col>
-                <el-col :span="12">
+                <!-- <el-col :span="12">
                     <div class="grid-content header-righter">
                         <span @click="renovate" class="span-box pointer"><span>刷新</span><i></i></span>
                     </div>
-                </el-col>
+                </el-col> -->
             </el-row>
             <el-steps class="steps" :space="234" :active="active" finish-status="success">
                 <el-step title="上传模板"></el-step>
@@ -44,11 +44,12 @@
                 </el-upload>
                 <el-button @click="importGoods" class="import-button" type="primary"><i></i>批量导入商品</el-button>
             </p>
-            <p class="download-box">导入规则：请先<a class="download" href="javascript:;">下载商品导入模板</a>，在模板中按要求填写商品信息，然后上传该文件</p>
+            <p class="download-box">导入规则：请先<a class="download" href="javascript:;" @click="downloadTemplate">下载商品导入模板</a>，在模板中按要求填写商品信息，然后上传该文件</p>
         </section>
         <section>
             <p class="records">导入记录</p>
             <el-table
+                v-loading="loading"
                 :data="tableData"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                 style="width: 100%">
@@ -100,7 +101,8 @@ export default {
             },
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
             url: '',
-            showFileList: false
+            showFileList: false,
+            loading: false,
         }
     },
     computed:{
@@ -113,6 +115,13 @@ export default {
         this.getList()
     },
     methods: {
+        downloadTemplate() {
+            let a = document.createElement("a");
+
+            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`);
+            a.setAttribute("target", "_blank");
+            a.click();
+        },
         renovate() {
             this.getList()
         },
@@ -126,32 +135,39 @@ export default {
             }
         },
         getList(param) {
-            //this.listLoading = true
+            this.loading = true
             let _param
             
             _param = Object.assign({}, this.listQuery, param)
 
             this._apis.goods.getImportPageList(_param).then((res) => {
-                console.log(res)
                 this.total = +res.total
                 res.list.forEach((val, index) => {
                     val.number = index
                 })
                 this.tableData = res.list
+                this.loading = false
             }).catch(error => {
-                //this.listLoading = false
+                this.loading = false
+                // this.$notify.error({
+                //     title: '错误',
+                //     message: error
+                // });
             })
         },
         importGoods() {
+            let message = this.$message({
+            showClose: true,
+            message: '导入中...',
+            duration: 0
+            });
+
             this._apis.goods.importGoods({cid: this.cid, importUrl: this.url}).then((res) => {
-                console.log(res)
                 this.url = res.url
-                // this.$notify({
-                //     title: '成功',
-                //     message: '导入成功！',
-                //     type: 'success'
-                // });
                 let _text = ''
+
+                message.close()
+                this.getList()
 
                 if(res.importFailCount == 0) {
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
@@ -164,11 +180,13 @@ export default {
                     this.confirm({title: '数据导入失败', text: _text})
                 }
             }).catch(error => {
+                message.close()
                 this.visible = false
                 this.$notify.error({
                     title: '错误',
                     message: error
                 });
+                this.active = 1
             })
         },
         next() {
@@ -184,6 +202,7 @@ export default {
     .import {
         background-color: #fff;
         padding: 32px 63px;
+        font-size: 14px;
         section {
             border-bottom: 1px dashed #d3d3d3;
             padding-top: 15px;
@@ -214,6 +233,9 @@ export default {
         .importing {
             color: rgb(93, 93, 99);
             margin-top: 15px;
+            p:nth-child(2) {
+                margin-top: 5px;
+            }
             .step {
                 list-style-type:none;counter-reset:sectioncounter;
                 li {
@@ -266,6 +288,27 @@ export default {
     .records {
         color: $globalMainColor;
         margin-bottom: 23px;
+    }
+    /deep/ .el-step__title {
+        margin-top: 10px;
+    }
+    /deep/ .el-step:first-child {
+        .el-step__title {
+            margin-left: -13px;
+        }
+    }
+    /deep/ .el-step:nth-child(2) {
+        .el-step__title {
+            margin-left: -27px;
+        }
+    }
+    /deep/ .el-step:nth-child(3) {
+        .el-step__title {
+            margin-left: 4px;
+        }
+    }
+    /deep/ .el-button--primary {
+        background-color: #655eff;
     }
 </style>
 

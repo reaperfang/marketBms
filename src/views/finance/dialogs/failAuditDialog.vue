@@ -25,9 +25,9 @@
                 </div>
             </div>
             <div class="c_steps clearfix">
-                <div class="c_step_l gray">
+                <div class="c_step_l">
                     <span class="c_green"></span>
-                    {{info1.amount}}
+                    {{info1.createTime}}
                 </div>
                 <div class="c_step_r">
                     <p>提交申请</p>
@@ -40,7 +40,7 @@
                     审核未通过原因：
                 </div>
                 <div class="fl gray">
-                    {{info1.remarks}}
+                    {{info.remarks}}
                 </div>
             </div>
         </div> 
@@ -78,6 +78,11 @@ export default {
             set(val) {
                 this.$emit('update:dialogVisible', val)
             }
+        }
+    },
+    watch:{
+        data(){
+            this.getInfo()
         }
     },
     created(){

@@ -6,18 +6,19 @@
 @import './sidebar-righter.scss';
 @import './decorate/publicStyle.scss';
 @import './decorate/iconfont.css';
-@font-face {
-  font-family: 'PingFangSC-Regular';
-  src: url('../assets/font/PingFangSCRegular.ttf'); //你的资源目录
-  font-weight: normal;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: 'PingFangSC-Regular';
+//   src: url('../assets/font/PingFangSCRegular.ttf'); //你的资源目录
+//   font-weight: normal;
+//   font-style: normal;
+// }
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: PingFangSC-Regular, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  // font-family: PingFangSC-Regular, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
   background:rgba(242,242,249,1);
   font-size: 14px;
 }
@@ -255,15 +256,14 @@ table.yuan-table{
 
 	.colorBtn {
 		margin-left: 20px;
-		margin-right: 10px;
-		margin-top: 2px;
-		width: 25px !important;
-		height: 25px !important;
+    margin-right: 10px;
+    margin-top: 0px;
+    width: 31px !important;
+    height: 31px !important;
     border: 1px solid #ddd;
 	}
 }
 .m-colorPicker{
-  z-index:10;
   .box{
 	  width:230px!important;
     left: -185px!important;
@@ -393,20 +393,6 @@ table.yuan-table{
 .el-upload-list__item{
   width:80px!important;
   height:80px!important;
-}
-
-.color_block{
-  display:flex;
-  .el-input{
-    width:120px!important;
-  }
-  .colorBtn{
-    margin-left: 20px;
-    margin-right: 10px;
-    margin-top: 2px;
-    width: 25px !important;
-    height: 25px !important;
-  }
 }
 
 .description {
@@ -555,6 +541,9 @@ table.yuan-table{
   width: 500px;
   padding-bottom: 30px;
 }
+.el-time-panel__footer .confirm{
+  width: auto !important;
+}
 .confirm-big {
   width: 523px;
 }
@@ -592,11 +581,20 @@ table.yuan-table{
       order: 0;
   }
   .el-button:first-child {
-      display: none;
+      //display: none;
+      margin-left: 10px;
+  }
+}
+
+.goods-custom .el-message-box__btns {
+  .el-button:first-child {
+      display: block;
+      margin-left: 50px;
   }
 }
 
 .goods-specs {
+  margin-top: 10px!important;
   color: #9FA29F;
   font-size: 12px;
 }
@@ -637,6 +635,122 @@ table.yuan-table{
   }
 }
 
-.edui-editor{
-    z-index: initial!important;
+// .edui-editor{
+//     z-index: initial!important;
+// }
+
+.content-menu:empty {
+  display: none;
 }
+
+// ::-webkit-scrollbar {
+//   width: 8px;
+//   height: 8px;
+// }
+// ::-webkit-scrollbar-thumb {
+//   border-radius: 10px!important;
+//   background: rgba(101,94,255,.4)!important;
+// }
+// ::-webkit-scrollbar-track {
+//   border-radius: 0!important;
+//   background: rgba(101,94,255,.1)!important;
+// }
+// #app .main-container {
+//   overflow-x: hidden;
+// }
+
+.app-main .content-main .app-content {
+  min-height: calc(100vh - 100px);
+}
+
+.app-main .content-main::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.app-main .content-main::-webkit-scrollbar-thumb {
+  border-radius: 10px!important;
+  background: rgba(101,94,255,.4)!important;
+}
+.app-main .content-main::-webkit-scrollbar-track {
+  border-radius: 0!important;
+  background: rgba(101,94,255,.1)!important;
+}
+.content-main{
+  .el-pagination{
+    font-weight: normal;
+  }
+}
+
+.el-select .el-input .el-select__caret:before {
+  content: "\e78f";
+}
+
+.el-radio-group label:last-child {
+  margin-left: 5px;
+}
+
+.deliver-goods {
+  color: #44434B;
+  .deliver-goods-header {
+    color: #161617;
+  }
+  .deliver-goods-number {
+    color: #161617;
+  }
+  .deliver-goods-list {
+    .title {
+      span:first-child {
+        margin-right: 20px;
+        color: #161617;
+      }
+      span:last-child {
+        color: #44434B;
+      }
+    }
+    .content {
+      .goods-detail {
+        display: flex;
+        align-items: center;
+        .goods-detail-item {
+          &:first-child {
+            margin-right: 10px;
+          }
+          &:last-child {
+            p {
+              margin-bottom: 10px;
+              &:first-child {
+                max-width: 300px;
+              }
+              &:last-child {
+                color: #CACFCB;
+              }
+            }
+          }
+        }
+      }
+      input {
+        width: 100px;
+      }
+    }
+  }
+  .deliver-goods-address {
+    .content {
+      .item {
+        margin-bottom: 10px;
+        .label {
+          width: 60px;
+        }
+      }
+    }
+  }
+  .deliver-goods-logistics {
+    input {
+      width: 250px;
+    }
+    textarea {
+      height: 100px;
+    }
+  }
+}
+
+

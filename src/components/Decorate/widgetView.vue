@@ -5,7 +5,7 @@
         <template v-if="key != 'hiddenWidget'">
           <div class="widget-title">{{item.title}}</div>
           <div class="widget-list">
-            <ul class="tile-list n3">
+            <ul class="tile-list n4">
               <li v-for="(item2, key2) of item.list" :key="key2" @click="addComponent(item2)">
                 <i :class="item2.iconClass"></i>
                 <p>{{item2.title}}</p>
@@ -58,7 +58,7 @@ export default {
 
 <style lang="scss" scoped>
   .widget{
-    width: 220px;
+    width: 320px;
     height: 835px;
     overflow-y: auto;
     .widget-title{

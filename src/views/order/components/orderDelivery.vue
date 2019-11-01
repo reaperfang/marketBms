@@ -8,7 +8,7 @@
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
                         <el-option label="订单编号" value="orderCode"></el-option>
                         <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-                        <el-option label="快递单号" value="expressNo"></el-option>
+                        <el-option label="快递单号" value="expressNos"></el-option>
                         <el-option label="客户ID" value="memberSn"></el-option>
                         </el-select>
                     </el-input>
@@ -32,8 +32,8 @@
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue2" class="input-with-select">
                         <el-select v-model="listQuery.searchType2" slot="prepend" placeholder="请输入">
-                        <el-option label="商品名称" value="orderProductName"></el-option>
-                        <el-option label="快递公司" value="expressCompany"></el-option>
+                        <el-option label="商品名称" value="orderProductNames"></el-option>
+                        <el-option label="快递公司" value="expressCompanys"></el-option>
                         <el-option label="收货人" value="receivedName"></el-option>
                         </el-select>
                     </el-input>
@@ -45,29 +45,31 @@
                     </el-select>
                     <el-date-picker
                         v-model="listQuery.orderTimeValue"
-                        type="daterange"
+                        :picker-options="pickerBeginDateBefore"
+                        type="datetimerange"
                         range-separator="-"
-                        value-format="yyyy-MM-dd hh:mm:ss"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
+                        :default-time="['00:00:00', '23:59:59']"
                     ></el-date-picker>
                 </el-form-item>
                 <div class="buttons">
                     <div class="lefter">
-                        <el-button class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
-                        <el-button class="border-button" @click="batchSendGoods">批量发货</el-button>
-                        <el-button class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
-                        <el-button class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
+                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
+                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
+                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
+                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
                     </div>
                     <div class="righter">
                         <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">搜 索</el-button>
+                        <el-button @click="getList" type="primary">查询</el-button>
                     </div>
                 </div>
             </el-form>
         </div>
+        <div class="line"></div>
         <div class="content">
-            <p>已选择 {{multipleSelection.length}} 项，全部{{total}}项</p>
+            <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
             <el-table
                 v-loading="loading"
                 ref="multipleTable"
@@ -123,13 +125,13 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <div class="operate-box">
-                            <span @click="$router.push('/order/orderDetail?id=' + scope.row.id)">查看</span>
+                            <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>
                             <template v-if="scope.row.status == 4">
-                                <span @click="$router.push('/order/deliverGoods?id=' + scope.row.orderId)">继续发货</span>
+                                <span v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + scope.row.orderId)">继续发货</span>
                             </template>
                             <template v-else-if="scope.row.status == 3">
-                                <span v-if="!scope.row.isAutoSend" @click="$router.push('/order/deliverGoods?id=' + scope.row.orderId)">发货</span>
-                                <span v-else @click="$router.push('/order/supplementaryLogistics?id=' + scope.row.id)">补填物流</span>
+                                <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push('/order/deliverGoods?id=' + scope.row.orderId)">发货</span>
+                                <span v-else @click="$router.push('/order/supplementaryLogistics?id=' + scope.row.orderId)">补填物流</span>
                             </template>
                         </div>
                     </template>
@@ -141,9 +143,11 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
+import utils from "@/utils";
 
 export default {
     data() {
+
         return {
             multipleSelection: [],
             multipleTable: [
@@ -157,25 +161,32 @@ export default {
                 searchValue: '',
                 status: '',
                 isAutosend: '',
-                searchType2: 'orderProductName',
+                searchType2: 'orderProductNames',
                 searchValue2: '',
                 searchTimeType: 'send',
                 orderTimeValue: '',
                 orderCode: '',
                 receivedPhone: '',
-                expressNo: '',
+                expressNos: '',
                 memberSn: '',
-                orderProductName: '',
-                expressCompany: '',
+                orderProductNames: '',
+                expressCompanys: '',
                 receivedName: '',
             },
             tableData: [],
-            loading: false
+            loading: false,
+            express: false
         }
     },
     filters: {
         statusFilter(code) {
             switch(code) {
+                case 0:
+                    return '待付款'
+                case 1:
+                    return '待成团'
+                case 2:
+                    return '关闭'
                 case 3:
                     return '待发货'
                 case 4:
@@ -188,7 +199,18 @@ export default {
         },
     },
     created() {
+        if(typeof this.$route.query.status != 'undefined') {
+            this.listQuery = Object.assign({}, this.listQuery, {status: this.$route.query.status})
+        }
         this.getList()
+        this.$nextTick(() => {
+      this.pickerBeginDateBefore = {
+        disabledDate(time) {
+          return time.getTime() > new Date().getTime()
+        }
+      };
+    })
+    //this.checkExpress()
     },
     computed:{
         cid(){
@@ -197,19 +219,74 @@ export default {
         }
     },
     methods: {
+        checkExpress() {
+        this._apis.order
+            .checkExpress()
+            .then(res => {
+            this.express = res;
+            })
+            .catch(error => {
+            this.visible = false;
+            this.$notify.error({
+                title: "错误",
+                message: error
+            });
+            });
+        },
+        pickerBeginDateBefore (time) {
+            
+        },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要发货的订单'})
+                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量发货的单据。'})
+                return
+            }
+            if(this.multipleSelection.some(val => val.status != 3 && val.status != 4)) {
+            this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
+                return
+            }
+            if(this.multipleSelection.some(val => val.isFillUp)) {
+            this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
                 return
             }
             this.$router.push('/order/orderBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderId).join(','))
         },
         batchPrintElectronicForm() {
+            if(this.express) {
+                this.confirm({title: '提示', icon: true, text: '不支持打印电子面单。'})
+                return
+            }
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量打印电子面单的单据。'})
+                return
+            }
+            if(this.multipleSelection.filter(val => val.isAutoSend).some(val => val.isFillUp == 1)) {
+                this.confirm({title: '提示', icon: true, text: '自动发货订单，未填报物流信息，不能批量打印电子面单。'})
+                return
+            }
+            if(this.multipleSelection.filter(val => !val.isAutoSend).some(val => (val.status != 4 && val.status != 5 && val.status != 6))) {
+                this.confirm({title: '提示', icon: true, text: '没有完成发货，不能批量打印电子面单。'})
+                return
+            }
+
+            if(this.multipleSelection.some(val => val.isKDBird === null)) {
+                this.confirm({title: '提示', icon: true, text: '不支持打印电子面单。'})
+                return
+            }
+
             let ids = this.multipleSelection.map(val => val.orderId).join(',')
 
             this.$router.push('/order/printingElectronicForm?ids=' + ids)
         },
         batchPrintDistributionSlip() {
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量打印配送单的单据。'})
+                return
+            }
+            if(this.multipleSelection.some(val => val.status == 3)) {
+                this.confirm({title: '提示', icon: true, text: '勾选订单包含未发货或未付款订单，无法批量打印；请重新勾选已发货订单批量打印配送单。'})
+                return
+            }
             let ids = this.multipleSelection.map(val => val.id).join(',')
 
             this.$router.push('/order/printDistributionSheet?ids=' + ids)
@@ -218,7 +295,26 @@ export default {
 
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
+            this.listQuery = {
+                startIndex: 1,
+                pageSize: 20,
+                searchType: 'orderCode',
+                searchValue: '',
+                status: '',
+                isAutosend: '',
+                searchType2: 'orderProductNames',
+                searchValue2: '',
+                searchTimeType: 'send',
+                orderTimeValue: '',
+                orderCode: '',
+                receivedPhone: '',
+                expressNos: '',
+                memberSn: '',
+                orderProductNames: '',
+                expressCompanys: '',
+                receivedName: '',
+            }
+            this.getList()
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -231,8 +327,8 @@ export default {
                 cid:this.cid,
                 [this.listQuery.searchType]: this.listQuery.searchValue,
                 [this.listQuery.searchType2]: this.listQuery.searchValue2,
-                [`${this.listQuery.searchTimeType}StartTime`]: this.listQuery.orderTimeValue ? this.listQuery.orderTimeValue[0] : '',
-                [`${this.listQuery.searchTimeType}EndTime`]: this.listQuery.orderTimeValue ? this.listQuery.orderTimeValue[1] : ''
+                [`${this.listQuery.searchTimeType}TimeStart`]: this.listQuery.orderTimeValue ? utils.formatDate(this.listQuery.orderTimeValue[0], "yyyy-MM-dd hh:mm:ss") : '',
+                [`${this.listQuery.searchTimeType}TimeEnd`]: this.listQuery.orderTimeValue ? utils.formatDate(this.listQuery.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss") : ''
             })
             this._apis.order.orderSendPageList(params).then((res) => {
                 this.tableData = res.list
@@ -252,6 +348,7 @@ export default {
 .order-delivery {
     .search {
         background-color: #fff;
+        margin: 0 20px;
         .top {
             background-color: rgb(255, 247, 238);
             color: rgb(254, 121, 95);
@@ -271,13 +368,22 @@ export default {
             }
         }
     }
+    .line {
+        height: 20px;
+        background-color: #f2f2f9;
+    }
     .content {
         background-color: #fff;
         padding: 20px;
+        margin: 0 20px;
+        padding-top: 0;
         p {
             font-size: 16px;
             color: #B6B5C8;
             margin: 23px 0 20px 0;
+            span {
+                color: #45444c;
+            }
         }
     }
 }
@@ -308,6 +414,9 @@ export default {
     }
     /deep/ .searchTimeType .date-picker-select .el-input {
         width: 100px;
+    }
+    /deep/ .searchTimeType .el-form-item__content {
+        display: flex;
     }
 </style>
 

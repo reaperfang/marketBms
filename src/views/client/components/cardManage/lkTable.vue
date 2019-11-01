@@ -6,6 +6,7 @@
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading"
       >
       <el-table-column
         prop="name"
@@ -20,7 +21,7 @@
         label="卡号">
       </el-table-column>
       <el-table-column
-        prop="memberInfoId"
+        prop="memberSn"
         label="领取人ID"
       >
       </el-table-column>
@@ -63,6 +64,7 @@ export default {
   data() {
     return {
       lklist:[],
+      loading: false
     };
   },
   created() {
@@ -77,8 +79,10 @@ export default {
       this.pageSize = val;
     },
     getLkList(startIndex, pageSize) {
+      this.loading = true;
       let params = {};
       this._apis.client.getLkList(Object.assign(this.lkParams, {startIndex, pageSize})).then((response) => {
+        this.loading = false;
         this.lklist = [].concat(response.list);
         this.lklist.map((v) => {
           v.enable = v.enable == 0?'禁用':'启用';
@@ -86,10 +90,12 @@ export default {
         })
         this.total = response.total;
       }).catch((error) => {
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false;
+        console.log(error);
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
       })
     }
   },

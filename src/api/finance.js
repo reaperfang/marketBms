@@ -4,27 +4,27 @@ import request from '@/system/request'
 //推客奖励 ------
 export function getListTa(data) {
     return request({
-      url: '/api/v1/b/recordMarketingPresent/detail-list',
+      url: '/v1/b/recordMarketingPresent/detail-list',
       method: 'get',
-      baseURL: process.env.DATA_API,
+      baseURL: process.env.SALE_API,
       params:data
     })
 }
 
 export function exportTa(data) {
     return request({
-      url: '/api/v1/b/recordMarketingPresent/export',
+      url: '/v1/b/recordMarketingPresent/export',
       method: 'get',
-      baseURL: process.env.DATA_API,
+      baseURL: process.env.SALE_API,
       params:data
     })
 }
 
 export function statisticsTa(data) {
     return request({
-      url: '/api/v1/b/recordMarketingPresent/statistics',
+      url: '/v1/b/recordMarketingPresent/statistics',
       method: 'get',
-      baseURL: process.env.DATA_API,
+      baseURL: process.env.SALE_API,
       params:data
     })
 }
@@ -187,39 +187,39 @@ export function exportFs(data) {
   })
 }
 
-export function getListLi(data) {
-  return request({
-    target: 'FINANCIAL-EXPRESS-QUERY-PROCESSOR',
-    method: 'post',
-    apiType: 'finance',
-    data
-  })
-}
+// export function getListLi(data) {
+//   return request({
+//     target: 'FINANCIAL-EXPRESS-QUERY-PROCESSOR',
+//     method: 'post',
+//     apiType: 'finance',
+//     data
+//   })
+// }
 
 //短信成本 ------
 export function smsStatistics(data) {
   return request({
-    url: 'api/v1/b/sms/statistics',
+    url: '/v1/b/sms/statistics',
     method: 'get',
-    baseURL: process.env.DATA_API,
+    baseURL: process.env.SALE_API,
     params:data
   })
 }
 
 export function smsPagelist(data) {
   return request({
-    url: 'api/v1/b/sms/send-record/accept/pagelist',
+    url: '/v1/b/sms/send-record/accept/pagelist',
     method: 'get',
-    baseURL: process.env.DATA_API,
+    baseURL: process.env.SALE_API,
     params:data
   })
 }
 
 export function smsExport(data) {
   return request({
-    url: 'api/v1/b/sms/send-record/accept/list/export',
+    url: '/v1/b/sms/send-record/accept/list/export',
     method: 'get',
-    baseURL: process.env.DATA_API,
+    baseURL: process.env.SALE_API,
     params:data
   })
 }

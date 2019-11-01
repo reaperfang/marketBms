@@ -19,15 +19,15 @@
       <el-form-item label="文字颜色" prop="fontColor">
         <div class="color_block">
           <el-input v-model="ruleForm.fontColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.fontColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.fontColor" defaultColor="#000000"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.backgroundColor"></colorPicker >
-          <el-button type="text">重置</el-button>
+          <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#ffffff"></colorPicker >
+          <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
       <el-form-item label="显示设置" prop="displayStyle">
@@ -38,7 +38,12 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="跳转链接" prop="linkTo">
-        <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
+        <el-button 
+        type="text" 
+        @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" 
+        :title="ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'">
+        {{ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'}}
+        </el-button>
       </el-form-item>
       <el-form-item label="更多设置" prop="showDivider">
         <el-checkbox v-model="ruleForm.showDivider">显示底部分割线</el-checkbox>
@@ -60,13 +65,13 @@ export default {
   data () {
     return {
       ruleForm: {
-        textContent: "",
-        fontSize: 2,
-        fontColor: '#000000',
-        backgroundColor: '#ffffff',
-        displayStyle: 2,
-        linkTo: 'http://www.baidu.com',
-        showDivider: true
+        textContent: "",//文本
+        fontSize: 2,//字体大小
+        fontColor: '#000000',//文本颜色
+        backgroundColor: '#ffffff',//背景颜色
+        displayStyle: 2,//显示位置
+        linkTo: null,//链接
+        showDivider: false// 显示底部分割线
       },
       rules: {
 
@@ -79,13 +84,15 @@ export default {
   methods: {
 
     /* 弹窗选中了跳转链接 */
-    seletedPage(jumpLink) {
-      console.log(jumpLink);
+    seletedPage(linkTo) {
+      this.ruleForm.linkTo = linkTo;
     },
   }
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+/deep/.m-colorPicker .box.open {
+    z-index: 10!important;
+}
 </style>

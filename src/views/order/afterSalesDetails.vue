@@ -3,7 +3,7 @@
         <div class="header">
             <el-row>
                 <el-col :span="12">
-                    <span>售后单编号：{{orderAfterSale.orderCode}}</span>
+                    <span>售后单编号：{{orderAfterSale.code}}</span>
                     <span>【{{orderAfterSale.type | typeFilter}}】</span>
                 </el-col>
                 <el-col class="header-righter" :span="12">
@@ -16,11 +16,11 @@
         </section>
         <section class="container">
             <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="售后信息" name="afterSalesInformation"></el-tab-pane>
-                <el-tab-pane label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
+                <el-tab-pane v-permission="['订单', '售后详情', '售后信息']" label="售后信息" name="afterSalesInformation"></el-tab-pane>
+                <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSale.expressNo)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :itemList="itemList" :sendItemList="sendItemList"></component>
+        <component :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
@@ -37,10 +37,15 @@ export default {
             currentView: 'afterSalesInformation',
             itemList: [],
             orderAfterSale: {},
+            orderAfterSaleSendInfo: {},
             recordList: [],
             sendItemList: [],
             currentDialog: '',
-            dialogVisible: false
+            dialogVisible: false,
+            orderType: '',
+            catchRealReturnWalletMoney: '',
+            catchRealReturnBalance: '',
+            orderSendInfo: ''
         }
     },
     created() {
@@ -62,24 +67,19 @@ export default {
             this.getDetail()
         },
         confirmTakeOver() {
-            this._apis.order.orderAfterConfirmExchange({
-                id: this.orderAfterSale.id,
-                exchangeConfirmation: 1
-            }).then((res) => {
-                this.getDetail()
-                this.visible = false
+            this._apis.order.orderConfirmReceived({id: this.orderAfterSale.id, isSellerReceived: 1}).then(res => {
                 this.$notify({
                     title: '成功',
-                    message: '确认收货成功！',
+                    message: '确认收货成功',
                     type: 'success'
                 });
+                this.getDetail()
             }).catch(error => {
-                this.visible = false
                 this.$notify.error({
                     title: '错误',
                     message: error
                 });
-            })
+            }) 
         },
         reject() {
             this.currentDialog = 'RejectDialog'
@@ -107,15 +107,26 @@ export default {
             })
         },
         auth() {
-            this._apis.order.orderAfterSaleUpdateStatus({
+            let orderAfterSaleStatus
+
+            if(this.orderAfterSale.type == 3) {
+                orderAfterSaleStatus = 2
+            } else {
+                orderAfterSaleStatus = 1
+            }
+            let params = {
                 id: this.orderAfterSale.id,
                 realReturnScore: this.orderAfterSale.realReturnScore,
-                realReturnMoney: this.orderAfterSale.realReturnMoney,
-                realReturnBalance: this.orderAfterSale.realReturnBalance,
-                realReturnWalletMoney: this.orderAfterSale.realReturnWalletMoney,
-                orderAfterSaleStatus: 1
+                //realReturnMoney: this.orderAfterSale.realReturnMoney,
+                //realReturnBalance: this.orderAfterSale.realReturnBalance,
+                //realReturnWalletMoney: this.orderAfterSale.realReturnWalletMoney,
+                orderAfterSaleStatus: orderAfterSaleStatus
+            }
 
-            }).then((res) => {
+            if(this.orderAfterSale.realReturnMoney != this.orderAfterSale.shouldReturnMoney) {
+                params.realReturnMoney = this.orderAfterSale.realReturnMoney
+            }
+            this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                 this.getDetail()
                 this.visible = false
                 this.$notify({
@@ -139,13 +150,14 @@ export default {
                     res.orderAfterSale.descriptionimages = res.orderAfterSale.descriptionimages ? res.orderAfterSale.descriptionimages.split(',') : []
                 }
                 this.orderAfterSale = res.orderAfterSale || {}
-                this.recordList = res.recordList
+                this.orderAfterSaleSendInfo = res.orderAfterSaleSendInfo || {}
+                this.recordList = res.recordList.filter(val => val.operationType != 1 && val.operationType != 2 && val.operationType != 5 && val.operationType != 8)
                 this.sendItemList = res.sendItemList
-                this.$notify({
-                    title: '成功',
-                    message: '查询成功！',
-                    type: 'success'
-                });
+                this.orderType = res.orderType
+                this.catchRealReturnWalletMoney = this.orderAfterSale.realReturnWalletMoney
+                this.catchRealReturnBalance = this.orderAfterSale.realReturnBalance
+                this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
+                this.orderSendInfo = res.orderSendInfo
             }).catch(error => {
                 this.visible = false
                 this.$notify.error({
@@ -174,7 +186,6 @@ export default {
             line-height: 60px;
             background-color: #fff;
             padding: 0 20px;
-            box-shadow:5px 5px 10px 0px rgba(227,233,228,1);
             .header-righter {
                 text-align: right;
                 color: #b8b8bb;
@@ -183,7 +194,7 @@ export default {
 
         section {
             background-color: #fff;
-            padding: 20px;
+            padding: 20px 40px;
             margin-top: 20px;
             &.container {
                 padding-top: 0;
@@ -197,7 +208,7 @@ export default {
                 font-size: 16px;
             }
             &.flow-path {
-                margin-top: 50px;
+                margin-top: 20px;
             }
             &.information {
                 margin-top: 20px;

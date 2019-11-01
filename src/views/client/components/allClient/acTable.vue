@@ -1,31 +1,51 @@
 /* 全部客户列表 */
 <template>
   <div class="acTable_container">
-    <el-button @click="exportToLocal" class="export_btn">导出</el-button>
+    <el-button @click="exportToLocal" class="export_btn" v-permission="['客户', '全部客户', '默认页面', '客户导出']">导出</el-button>
     <el-table
       :data="memberList"
+      :row-key="getRowKeys"
       ref="allClientTable"
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
       :default-sort="{prop: 'date', order: 'descending'}"
+      v-loading="loading"
     >
-      <el-table-column type="selection"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true"></el-table-column>
       <el-table-column prop="memberSn" label="客户ID"></el-table-column>
-      <el-table-column prop="nickName" label="客户信息"></el-table-column>
+      <el-table-column label="客户信息">
+        <template slot-scope="scope">
+          <div class="clearfix icon_cont">
+            
+            <img :src="scope.row?scope.row.headIcon:require('../../../../assets/images/client/head_default.png')" alt="" class="headIcon fl">
+            <span class="fr">{{scope.row?scope.row.nickName:""}}</span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="phone" label="手机号"></el-table-column>
-      <el-table-column prop="memberType" label="身份"></el-table-column>
+      <el-table-column label="身份">
+        <template slot-scope="scope">
+          <div class="clearfix iden_cont">
+            <span class="fl">{{scope.row?scope.row.memberType:""}}</span>
+            <div class="fr">
+              <span>{{scope.row?scope.row.levelName:""}}</span>
+              <span>{{scope.row?scope.row.cardLevelName:""}}</span>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
       <el-table-column prop="totalDealMoney" label="累计消费金额" sortable></el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
       <el-table-column prop="perUnitPrice" label="客单价（元）" sortable></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <div class="btns clearfix">
-            <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})">详情</span>
-            <span class="s2" @click="handelDelete(scope.row.id)">删除</span>
+            <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['客户', '全部客户', '默认页面', '查看详情']">详情</span>
+            <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['客户', '全部客户', '默认页面', '删除']">删除</span> -->
             <span class="s3" @click="addTag(scope.row.id)">标签</span>
-            <span class="s4" @click="addBlackList(scope.row)" v-if="scope.row.status == 0">加入黑名单</span>
-            <span class="s5" @click="removeBlack(scope.row)" v-if="scope.row.status == 1">解除黑名单</span>
+            <span class="s4" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
+            <span class="s5" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
           </div>
         </template>
       </el-table-column>
@@ -43,10 +63,10 @@
     </div>
     <div class="a_line">
       <el-checkbox v-model="checkAll" @change="handleChange"></el-checkbox>
-      <el-button type="primary" @click="batchDelete">批量删除</el-button>
-      <el-button class="border_btn" @click="batchAddTag">打标签</el-button>
-      <el-button class="border_btn" @click="batchAddBlack">加入黑名单</el-button>
-      <el-button class="border_btn" @click="batchRemoveBlack">取消黑名单</el-button>
+      <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
+      <el-button class="border_btn" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
+      <el-button class="border_btn" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
+      <el-button class="border_btn" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
     </div>
     <component
       :is="currentDialog"
@@ -87,7 +107,8 @@ export default {
       memberList: [],
       currentDialog: "",
       dialogVisible: false,
-      currentData: {}
+      currentData: {},
+      loading: false
     };
   },
   computed: {
@@ -96,24 +117,23 @@ export default {
     }
   },
   mounted() {
-    this.getMembers(1, this.pageSize);
+    //this.getMembers(1, this.pageSize);
   },
   methods: {
+    getRowKeys(row) {
+      return row.id
+    },
     exportToLocal() {
       let selection = this.$refs.allClientTable.selection;
       let idList = []
       if (selection.length > 0) {
         selection.map((v) => {
-          v.id = Number(v.id);
           idList.push(v.id)
         });
         this._apis.client.exportToLocal({idList: idList}).then((response) => {
           window.location.href = response
         }).catch((error) => {
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          console.log(error);
         })
       }else{
         this.$notify({
@@ -206,31 +226,58 @@ export default {
       });
     },
     getMembers(startIndex, pageSize) {
+      this.loading = true;
       this._apis.client
         .getMemberList(Object.assign(this.newForm,{startIndex, pageSize}))
         .then(response => {
-          this.memberList = [].concat(response.list);
+          this.loading = false;
+          let list = response.list;
+          list.map((v) => {
+            if(v) {
+              v.memberType = v.memberType == 0 ? '客户':'会员'
+            }
+          })
+          this.memberList = [].concat(list);
           this.total = response.total;
+          this.$emit('stopLoading');
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.loading = false;
+          console.log(error);
+          // this.$notify.error({
+          //   title: "错误",
+          //   message: error
+          // });
         });
     },
     freshTable() {
+      this.checkAll = false;
       this.getMembers(1, this.pageSize);
     }
   },
   watch: {
-    newForm() {
+    newForm(val) {
       this.getMembers(1, this.pageSize);
     }
   },
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-form-item__label{
+  width: 86px;
+  text-align: right;
+  overflow: hidden;
+  height: 38px;
+}
+/deep/ .el-range-editor--small .el-range-separator{
+  width: 20px;
+}
+/deep/ .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner{
+  width: 230px;
+}
+/deep/.el-date-editor .el-range-input{
+  width: 41%;
+}
 /deep/ .cell {
   .btns {
     span {
@@ -279,6 +326,52 @@ export default {
   }
 }
 .a_line {
-  padding-left: 17px;
+  padding-left: 14px;
+}
+.page_styles{
+  text-align: center;
+}
+.icon_cont{
+  width: 130px;
+  span{
+    display: block;
+    width: 84px;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 36px;
+  }
+  .headIcon{
+    display: block;
+    width: 32px;
+    height: 32px;
+  }
+}
+.iden_cont{
+  width: 120px;
+  > span{
+    line-height: 46px;
+  }
+  div{
+    width: 80px;
+    span{
+      display: block;
+      font-size: 12px;
+      height: 20px;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+      &:first-child{
+        color: #F55858;
+      }
+      &:last-child{
+        color: #FD932B
+      }
+    }
+  }
+}
+@media screen and (max-width: 1600px) {
+  .icon_cont{
+    width: 117px;
+  }
 }
 </style>

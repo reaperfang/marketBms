@@ -24,7 +24,8 @@ function filterAsyncRouter(routes, msfList) {
     if (!hasPermission(msfList, tmp)) {
       routes.splice(i,1)
       i--;
-      if (tmp.children) {
+    }else{
+      if (tmp.children && tmp.meta.title != '店铺') {
         tmp.children = filterAsyncRouter(tmp.children, msfList)
       }
     }

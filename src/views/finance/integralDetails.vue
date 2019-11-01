@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.memberInfoId" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessTypeId" style="width:100px;">
+          <el-select v-model="ruleForm.businessTypeId" style="width:100px;" placeholder="全部">
             <el-option
               v-for="item in idbusinessTypes"
               :key="item.value"
@@ -29,17 +29,20 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit" v-permission="['财务', '积分明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()'>导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '积分明细', '默认页面', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <!-- <idTable style="margin-top:20px"></idTable> -->
       <el-table
+        v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -56,10 +59,18 @@
         <el-table-column
           prop="businessTypeId"
           label="业务类型">
+          <template slot-scope="scope">
+            {{idbusinessTypes[scope.row.businessTypeId] && idbusinessTypes[scope.row.businessTypeId].label}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="changeScore"
           label="变动积分">
+          <template slot-scope="scope">
+            <span v-if="scope.row.changeType == 1 || scope.row.changeType == 3"> - </span>
+            <span v-else> + </span>
+            {{scope.row.changeScore}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="surplusScore"
@@ -107,11 +118,12 @@ export default {
       inline:true,
       ruleForm:{
         memberInfoId:'',
-        businessTypeId:1,
+        businessTypeId:-1,
         timeValue:''
       },
       dataList:[ ],
       total:0,
+      loading:true
     }
   },
   watch: { },
@@ -125,7 +137,7 @@ export default {
     init(){
       let query = {
         memberInfoId:this.ruleForm.memberInfoId,
-        businessTypeId:this.ruleForm.businessTypeId,
+        businessTypeId:this.ruleForm.businessTypeId == -1 ? null : this.ruleForm.businessTypeId,
         startTime:'',
         endTime:'',
         startIndex:this.ruleForm.startIndex,
@@ -144,11 +156,9 @@ export default {
       this._apis.finance.getListId(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
+        this.loading = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
 
@@ -159,9 +169,10 @@ export default {
     resetForm(){
       this.ruleForm = {
         memberInfoId:'',
-        businessTypeId:1,
+        businessTypeId:'',
         timeValue:''
       }
+      this.fetch()
     },
     //导出
     exportToExcel() {

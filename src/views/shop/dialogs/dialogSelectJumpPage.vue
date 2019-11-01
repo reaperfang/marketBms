@@ -1,11 +1,11 @@
 /* 选择页面跳转弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择跳转页面'" @submit="submit">
-    <div class="jump_wrapper" style="background:rgb(242,242,249);">
+    <div class="jump_wrapper">
       <el-tabs v-model="currentTab">
         <el-tab-pane label="微页面" name="microPage"></el-tab-pane>
         <el-tab-pane label="微页面分类" name="microPageClassify"></el-tab-pane>
-        <el-tab-pane label="商品分组" name="goodsGroup"></el-tab-pane>
+        <el-tab-pane label="商品分类" name="goodsGroup"></el-tab-pane>
         <el-tab-pane label="商品详情" name="goods"></el-tab-pane>
         <el-tab-pane label="营销活动" name="marketCampaign"></el-tab-pane>
         <el-tab-pane label="系统页面" name="systemPage"></el-tab-pane>
@@ -68,7 +68,8 @@ export default {
 
 <style lang="scss" scoped>
 .jump_wrapper{
-  padding:0 20px;
+  padding:0 20px 20px;
+  background:rgb(242,242,249);
 }
 .name_wrapper{
     display: flex;
@@ -78,6 +79,10 @@ export default {
       width:50px;
       height:50px;
       margin-right:10px;
+      object-fit: contain;
+    }
+    p{
+      width: calc(100% - 50px);
     }
 }
 </style>

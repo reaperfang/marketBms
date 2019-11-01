@@ -1,43 +1,56 @@
 <template>
   <DialogBase :visible.sync="visible" title="区域选择" width="500px" :showFooter="showFooter">
-      <div>
-          <div class="wrapper">
-            <template v-for="(item, key) of region">
-              <div class="province" :key="key">
-                <div class="title" @mouseenter="titleMouseover(item)">
-                  <el-checkbox v-model="item.checked"></el-checkbox>{{item.name}}
-                  <div class="citys" v-if="item.checked"  @mouseover="titleMouseover(item)" @mouseout="titleMouseout(item)">
-                    <div class="tr">
-                      <i class="el-icon-close" @click="closeCitys"></i>
-                    </div>
-                    <el-checkbox-group v-model="checkList">
-                      <el-checkbox v-for="(city, key2) of item.citys" :key="key2" 
-                      :label="{
-                        code: item.code,
-                        name: item.name, 
-                        city: {
-                          code: city.code, 
-                          name: city.name
-                        }
-                      }">{{city.name}}</el-checkbox>
-                    </el-checkbox-group>
-                  </div>
+    <div>
+      <div class="wrapper">
+        <template v-for="(item, key) of region">
+          <div class="province" :key="key">
+            <div class="title" @mouseenter="titleMouseover(item)" @mouseleave="closeCity(key)">
+              <el-checkbox
+                :indeterminate="item.isIndeterminate"
+                @change="checkboxChange(item.checked, key)"
+                v-model="item.checked"
+              ></el-checkbox>
+              {{item.name}}
+              <div
+                class="citys"
+                v-if="item.over"
+                @mouseover="titleMouseover(item)"
+                @mouseout="titleMouseout(item)"
+              >
+                <div class="tr">
+                  <i class="el-icon-close" @click="closeCitys"></i>
                 </div>
+                <el-checkbox-group @change="checkListchange(key)" v-model="item.checkList">
+                  <el-checkbox
+                    v-for="(city, key2) of item.citys"
+                    :key="key2"
+                    :label="`${item.code},${item.name},${city.code},${city.name}`"
+                  >{{city.name}}</el-checkbox>
+                </el-checkbox-group>
               </div>
-            </template>
+            </div>
           </div>
-          <div>
-            已选中：<el-tag v-for="(item, key) of checkList" :key="key" style="margin-right:5px;margin-bottom:5px;">{{item.city.name}}</el-tag>
-          </div>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="visible = false">取 消</el-button>
-            <el-button type="primary" @click="submit" :loading="loading">确 定</el-button>
-          </div>
+        </template>
       </div>
-  </DialogBase>    
+      <div>
+        已选中：
+        <el-tag
+          closable
+          @close="handleClose(item)"
+          v-for="(item, key) of checkList"
+          :key="key"
+          style="margin-right:5px;margin-bottom:5px;"
+        >{{item.split(',')[3]}}</el-tag>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="visible = false">取 消</el-button>
+        <el-button type="primary" @click="submit" :loading="loading">确 定</el-button>
+      </div>
+    </div>
+  </DialogBase>
 </template>
 <script>
-import DialogBase from '@/components/DialogBase'
+import DialogBase from "@/components/DialogBase";
 import { _nationalRegionInfo } from "@/api/order";
 export default {
   name: "regionDialog",
@@ -46,9 +59,8 @@ export default {
     return {
       region: [], //地区列表json
       // dialogWidth: '1000px',
-      checkList: [], //选中的地区
       dialogFormVisible: true,
-
+      checkList: [],
       showFooter: false
     };
   },
@@ -57,41 +69,111 @@ export default {
     this.convertData();
   },
   computed: {
-      visible: {
-          get() {
-              return this.dialogVisible
-          },
-          set(val) {
-              this.$emit('update:dialogVisible', val)
-          }
+    visible: {
+      get() {
+        return this.dialogVisible;
       },
+      set(val) {
+        this.$emit("update:dialogVisible", val);
+      }
+    },
   },
   props: {
-      data: {
-
-      },
-      dialogVisible: {
-          type: Boolean,
-          required: true
-      },
+    data: {},
+    dialogVisible: {
+      type: Boolean,
+      required: true
+    }
+  },
+  watch: {
+    region: {
+      deep: true,
+      handler() {
+        this.checkList = this.region.reduce((total, val) => {
+        return total.concat(val.checkList);
+      }, []);
+      }
+    }
   },
   components: {
-      DialogBase
+    DialogBase
   },
   methods: {
-    closeCitys() {
-      let _region = [...this.region]
+    checkListchange(key) {
+      let _region = this.region[key];
+
+      if (_region.citys.length == _region.checkList.length) {
+        this.region[key].checked = true;
+        this.region[key].isIndeterminate = false;
+      } else if (!_region.checkList.length) {
+        this.region[key].checked = false;
+        this.region[key].isIndeterminate = false;
+      } else {
+        this.region[key].isIndeterminate = true;
+        this.region[key].checked = false;
+      }
+    },
+    checkboxChange(checked, key) {
+      let checkList = [];
+
+      if (checked) {
+        this.region.forEach((val, index) => {
+          if (index == key) {
+            val.citys.forEach(item => {
+              let str = "";
+
+              str += val.code;
+              str += "," + val.name;
+              str += "," + item.code;
+              str += "," + item.name;
+
+              checkList.push(str);
+            });
+          }
+        });
+      }
+      this.region.splice(
+        key,
+        1,
+        Object.assign({}, this.region[key], {
+          checkList,
+          isIndeterminate: false
+        })
+      );
+    },
+    handleClose(tag) {
+      this.checkList.splice(this.checkList.indexOf(tag), 1);
+    },
+    closeCity(index) {
+      let _region = [...this.region];
 
       _region.forEach(val => {
-        val.checked = false
-      })
+        //val.checked = false
+        val.over = false;
+      });
 
-      this.region = _region
+      this.region = _region;
+    },
+    closeCitys() {
+      let _region = [...this.region];
+
+      _region.forEach(val => {
+        //val.checked = false;
+        val.over = false;
+      });
+
+      this.region = _region;
     },
     fetch() {
       this.loading = true;
-      this._apis.order.getArea()
+      this._apis.order
+        .getArea()
         .then(response => {
+          response.forEach(val => {
+            val.isIndeterminate = false;
+            val.over = false;
+            val.checkList = [];
+          });
           this.region = response;
           this.loading = false;
         })
@@ -102,24 +184,37 @@ export default {
     },
 
     submit() {
-      this.$emit("submit", this.checkList);
+      this.$emit(
+        "submit",
+        this.checkList.map(val => {
+          let arr = val.split(",");
+
+          return {
+            code: arr[0],
+            name: arr[1],
+            city: {
+              code: arr[2],
+              name: arr[3]
+            }
+          };
+        })
+      );
       this.visible = false;
     },
 
     convertData() {
       this.checkList = [];
-      if(this.data && this.data.deliveryAreaPrice){
-        for(let key in this.data.deliveryAreaPrice){
+      if (this.data && this.data.deliveryAreaPrice) {
+        for (let key in this.data.deliveryAreaPrice) {
           let oneType = this.data.deliveryAreaPrice[key];
-          if(key !== '000000'){
-            const provinces = key.split(',');
-            for(let item of provinces){
+          if (key !== "000000") {
+            const provinces = key.split(",");
+            for (let item of provinces) {
               // if(item === ) {
-
               // }
             }
             const citys = [];
-            for(let item of oneType.subArea){
+            for (let item of oneType.subArea) {
               citys.push({
                 code: item.zoneCode,
                 name: item.zoneName
@@ -135,9 +230,11 @@ export default {
       const tempItem = [...this.region];
       for (let one of tempItem) {
         if (one.code === item.code) {
-          one.checked = true;
+          //one.checked = true;
+          one.over = true;
         } else {
-          one.checked = false;
+          //one.checked = false;
+          one.over = false;
         }
       }
       this.region = tempItem;
@@ -151,9 +248,7 @@ export default {
       // }
       // this.region = tempItem;
     },
-    close() {
-      
-    }
+    close() {}
   }
 };
 </script>
@@ -208,6 +303,9 @@ export default {
 // p.title:hover + .citys{
 // 	display:block;
 // }
+/deep/ .el-tag {
+  padding: 0 5px;
+}
 </style>
 
 

@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="footer">
-            <el-button>取消</el-button>
+            <el-button @click="visible = false">取消</el-button>
             <el-button @click="submit" type="primary">确定</el-button>
         </div>
     </DialogBase>
@@ -51,6 +51,20 @@ export default {
                 operationRemark = '库存不足'
             } else if(this.operationType == 9) {
                 operationRemark = this.operationRemark
+                if(!this.operationRemark) {
+                    this.$message({
+                    message: '请输入关闭原因',
+                    type: 'warning'
+                    });
+                    return
+                }
+                if(/^\s+$/.test(this.operationRemark)) {
+                    this.$message({
+                    message: '关闭原因不能为空',
+                    type: 'warning'
+                    });
+                    return
+                }
             }
             this.$emit('submit', {
                 operationType: 6,

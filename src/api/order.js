@@ -26,6 +26,7 @@ export function exportOrders(data) {
   return request({
     apiType: 'order',
     method: 'post',
+    timeout: 22000,
     target: 'ORDER-INFO-EXPORT-PROCESSOR',
     data
   })
@@ -296,7 +297,7 @@ export function editorElectronicFaceSheet(data) {
   return request({
     apiType: 'order',
     method: 'post',
-    target: 'EDIT-EXPRESS-ELECTRONIC-SHEET',
+    target: 'EDIT-EXPRESS-ELECTRONIC-SHEET-PROCESSOR',
     data
   })
 }
@@ -476,7 +477,7 @@ export function orderSendInfoFillUpExpress(data) {
   return request({
     apiType: 'order',
     method: 'post',
-    target: 'ORDER-SENDINFO-FILLUP-EXPRESS-PROCESS',
+    target: 'ORDERSENDINFOBATCHPROCESS',
     data
   })
 }
@@ -544,10 +545,59 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
  //修改发货地址
  export function orderUpdateAddress(data) {
   return request({
-    token: '09255c7724fe9b8df952aa2f7e3ec718768b8ae62e74d1ef2214c0aead86a36b',
+    //token: '09255c7724fe9b8df952aa2f7e3ec718768b8ae62e74d1ef2214c0aead86a36b',
     target: 'SHOP-API-102-PROCESSOR',
     method: 'post',
     apiType: 'manager',
+    data
+  })
+}
+
+ //修改发货地址
+ export function fetchOrderAddress(data) {
+  return request({
+    target: 'SHOP-API-100-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+ //电子面单 获取快递公司
+ export function getElectronicFaceSheetExpressCompanyList(data) {
+  return request({
+    target: 'PUBLIC-EXPRESS-COMPANY-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'goodsOperate',
+    data
+  })
+}
+
+ //快递鸟-详情
+ export function getIsTrace(data) {
+  return request({
+    target: 'SHOP-KDNIAO-DETAIL-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+
+ //订单发货-校验快递单号是否必填
+ export function checkExpress(data) {
+  return request({
+    target: 'CHECK-EXPRESSNO-REQUIRED-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+
+ //活动赠品
+ export function getGain(data) {
+  return request({
+    method: 'get',
+    apiType: 'orderGain',
     data
   })
 }

@@ -5,9 +5,9 @@
                     <el-form-item label="交易时间">
                         <div class="p_line">
                             <el-radio-group v-model="form.timeType">
-                                <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
-                                <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
-                                <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
+                                <el-radio-button class="btn_bor" label="1">7天</el-radio-button>
+                                <el-radio-button class="btn_bor" label="2">15天</el-radio-button>
+                                <el-radio-button class="btn_bor" label="3">30天</el-radio-button>
                                 <el-radio-button class="btn_bor" label="5">最近一季度</el-radio-button>
                                 <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
                             </el-radio-group>
@@ -28,28 +28,23 @@
                         
                     <el-form-item label="转化渠道">
                         <div class="input_wrap2">
-                            <el-select v-model="form.channel">
+                            <el-select v-model="form.channel" @change="changeTime">
                                 <el-option label="不限" value="null"></el-option>
-                                <el-option label="限时折扣" value="401"></el-option>
-                                <el-option label="限时秒杀" value="506"></el-option>
+                                <el-option label="直接购买" value="1"></el-option>
+                                <el-option label="活动类型" value="2"></el-option>
                             </el-select>
                         </div>
                         <span class="span_label">（成功）支付转化率</span>
                         <div class="input_wrap2 marR20">
-                            <el-select v-model="form.changeRatioRange">
-                                <el-option label="不限" value="null"></el-option>
-                                <el-option label="10%以上" value="10"></el-option>
-                                <el-option label="5%-10%" value="5-10"></el-option>
-                                <el-option label="3%-5%" value="3-5"></el-option>
-                                <el-option label="1%-3%" value="1-3"></el-option>
-                                <el-option label="0%-1%" value="0-1"></el-option>
+                            <el-select v-model="form.changeRatioRange" @change="changeTime">
+                                <el-option v-for="item in productiveness" :label="item.name" :value="item.value" :key="item.id"></el-option>
                             </el-select>
                         </div>
                     </el-form-item>
 
                     <el-form-item class="marT20">
                         <div class="buttonfl">
-                            <el-button class="minor_btn" icon="el-icon-search" @click="goSearch">查询</el-button>
+                            <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
                             <el-button class="border_btn" @click="reSet">重 置</el-button>
                         </div>
                     </el-form-item>
@@ -64,13 +59,22 @@
                 </div>
                 
                 <channel-table 
-                    class="marT20" 
+                    class="marT20s" 
                     :listObj="listObj"
                     @sizeChange="sizeChange"
                     @currentChange="currentChange"
                 >
-                </channel-table>
+                </channel-table>               
             </div>
+            <p>运营建议:</p>
+                <p v-if="form.changeRatioRange == '0.00-1.00'" class="proposal"><b>"转化率0-1%"：</b>建议针对此类用户推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '1.00-3.00'" class="proposal"><b>"转化率1-3%"：</b>建议针对此类用户推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '3.00-5.00'" class="proposal"><b>"转化率3-5%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '5.00-10.00'" class="proposal"><b>"转化率5-10%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '10.00-100.00'" class="proposal"><b>"转化率10%以上"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+                <p v-if="form.changeRatioRange == '20.00-50.00'" class="proposal"><b>"转化率20-60"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+            <div class="contents"></div>
+           <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
     </div>
 </template>
 <script>
@@ -80,22 +84,6 @@ export default {
     components: { channelTable },
     data() {
         return {
-            form: {
-                cid:"",
-                startTime:null,
-                endTime:null,
-                channel:null,
-                changeRatioRange:null,
-                timeType:1,
-                startIndex:1,
-                pageSize: '10',
-            },
-            listObj:{
-                list:[]
-            },
-            totalCount:0,//总页数
-            pickerMinDate: '',
-            dateRange: [],
             pickerOptions: {
                 onPick: ({ maxDate, minDate }) => {
                     this.pickerMinDate = minDate.getTime()
@@ -105,20 +93,40 @@ export default {
                 },
                 disabledDate: (time) => {
                     if (this.pickerMinDate !== '') {
-                        const day30 = (90 - 1) * 24 * 3600 * 1000
-                    let maxTime = this.pickerMinDate + day30
+                    const day90 = (90 - 1) * 24 * 3600 * 1000
+                    let maxTime = this.pickerMinDate + day90
                     if (maxTime > new Date()) {
-                        maxTime = new Date()
+                        maxTime = new Date() - 8.64e7
                     }
-                    return time.getTime() > maxTime
-                }
+                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
+                    }
                     return time.getTime() > Date.now()
                 }
             },
+            form: {
+                startTime:null,
+                endTime:null,
+                channel:null,
+                changeRatioRange:null,
+                timeType:1,
+                startIndex:1,
+                loads:false,
+                pageSize: '10',
+            },
+            productiveness:[
+
+            ],
+            listObj:{
+                list:[]
+            },
+            totalCount:0,//总页数
+            pickerMinDate: '',
+            dateRange: [],
         }
     },
     mounted(){
         this.goSearch();
+        this.memberInforNum();
     },
     methods: {
         changeTime(val){
@@ -127,15 +135,18 @@ export default {
         },
         //查询
         goSearch(){
+            this.form.loads = true
+            this.form.channel == 'null' && (this.form.channel = null)
+            this.form.changeRatioRange == 'null' && (this.form.changeRatioRange = null)
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
-                console.log(this.listObj.totalSize)
+                // console.log(response)
+                 this.form.loads = false
             })
         },
         // 重置
         reSet(){
             this.form = {
-                cid:"",
                 startTime:null,
                 endTime:null,
                 channel:null,
@@ -154,7 +165,6 @@ export default {
         //导出
         exportExl(){
             let data = {};
-            data.cid = ""
             data.startTime = this.form.startTime
             data.endTime = this.form.endTime
             if(this.form.channel!='null'){
@@ -172,6 +182,23 @@ export default {
                 this.$message.error(err);
             })
         },
+         //获取会员直接购买转化率
+        memberInforNum(){
+            this._apis.data.memberInforNum({type:2}).then(res => {   
+                let vipcake = [];
+                for(let item of res){
+                    vipcake.push({
+                        id:item.id,
+                        value:item.minNum+'-'+item.maxNum,
+                        name:item.name
+                    })                   
+                }
+                this.productiveness = vipcake
+            }).catch(error =>{
+                console.log('error',error)
+            })
+              this.goSearch();
+        },
         //查看详情
         showDetails(){
             this._routeTo('channelDetail',this.form)
@@ -183,7 +210,7 @@ export default {
         currentChange(val){
             this.form.startIndex = val;
             this.goSearch();
-        }
+        },
     }
 }
 </script>
@@ -206,6 +233,9 @@ export default {
 }
 /deep/.el-checkbox.is-bordered.is-checked{
     background:rgba(101,94,255,0.1);
+}
+.proposal{
+    margin-left: 65px;
 }
 .m_container{
     background-color: #fff;
@@ -239,8 +269,28 @@ export default {
         }
     }
 }
+.marT20s{
+    position: relative;
+}
 .buttonfl{
     -webkit-box-pack: end;
     display: -webkit-box;
+}
+.contents{
+    width: 100%;
+    height: 45px;
+    background: #fff;
+}
+.loadings{
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 60%;
+    top: 45%;
+    transform: translate(-50%,-50%);
+}
+.loadings>img{
+    width: 220px;
+    height: 220px;
 }
 </style>

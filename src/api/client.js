@@ -144,8 +144,17 @@ export function identityChange(data) {
         data
     })
 }
-//变换会员卡
+//变更会员卡
 export function cardChange(data) {
+    return request({
+        target:'MEMBERINFO-CHANGECARD-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//发放会员卡
+export function giveCard(data) {
     return request({
         target:'MEMBERINFO-GRANTCARD-PROCESSOR',
         method: 'post',
@@ -273,18 +282,18 @@ export function manualChangeCredit(data) {
 //获取优惠券下拉
 export function getAllCoupons(data) {
     return request({
-        url: '/api/v1/b/app-coupon/activity/page-list',
+        url: '/v1/b/app-coupon/activity/page-list',
         method: 'get',
-        baseURL: process.env.DATA_API,
+        baseURL: process.env.SALE_API,
         params:data
     })
 }
 //优惠券/码发放
 export function distributeCoupon(data) {
     return request({
-        url: '/api/v1/b/app-coupon-member-get/activity/distribute',
+        url: '/v1/b/app-coupon-member-get/activity/distribute',
         method: 'post',
-        baseURL: process.env.DATA_API,
+        baseURL: process.env.SALE_API,
         data
     })
 }
@@ -345,27 +354,27 @@ export function blackChecks(data) {
 //用户已经有的优惠券
 export function getUsedCoupon(data) {
     return request({
-        url: '/api/v1/b/app-coupon-member-get/activity/customer-list',
+        url: '/v1/b/app-coupon-member-get/activity/customer-list',
         method: 'get',
-        baseURL: process.env.DATA_API,
+        baseURL: process.env.SALE_API,
         params: data
     })
 }
 //赠品列表
 export function getGiftList(data) {
     return request({
-        url: '/api/v1/b/app-gift/activity/page-list',
+        url: '/v1/b/app-gift/activity/page-list',
         method: 'get',
-        baseURL: process.env.DATA_API,
+        baseURL: process.env.SALE_API,
         params: data
     })
 }
 //红包列表
 export function getRedPacket(data) {
     return request({
-        url: '/api/v1/b/hongbao',
+        url: '/v1/b/hongbao',
         method: 'get',
-        baseURL: process.env.DATA_API,
+        baseURL: process.env.SALE_API,
         params: data
     })
 }
@@ -582,6 +591,51 @@ export function getColorUrl(data) {
         target:'CARD-BG-IMG-PROCESSOR',
         method: 'post',
         apiType: 'goodsOperate',
+        data
+    })
+}
+//校验标签名是否重复
+export function labelDoubleCheck(data) {
+    return request({
+        target:'MEMBER-LABLE-DUPLICATION-CHECK-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//检查当前会员等级条件值是否低于上一级
+export function checkLevelValue(data) {
+    return request({
+        target:'LEVEL-CHECK-CONDITION-VALUE-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//检查当前会员卡条件值是否低于上一级
+export function checkCardValue(data) {
+    return request({
+        target:'CARD-LEVEL-INFO-CHECK-CONDITION-VALUE-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//冻结优惠券
+export function frozenCoupons(data) {
+    return request({
+        url: '/v1/b/app-coupon-member-get/activity/frozen',
+        method: 'post',
+        baseURL: process.env.SALE_API,
+        data
+    })
+}
+//批量冻结优惠券
+export function batchFrozenCoupons(data) {
+    return request({
+        url: '/v1/b/app-coupon-member-get/activity/batch-frozen',
+        method: 'post',
+        baseURL: process.env.SALE_API,
         data
     })
 }

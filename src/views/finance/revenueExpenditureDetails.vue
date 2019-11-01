@@ -2,7 +2,7 @@
 <template>
   <div>
     <div class="top_part">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="inline" label-width="70px">
+      <el-form :model="ruleForm" ref="ruleForm" :inline="inline" label-width="70px">
         <el-form-item>
           <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;">
             <el-option
@@ -17,7 +17,7 @@
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;">
+          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
             <el-option
               v-for="item in rebusinessTypes"
               :key="item.value"
@@ -27,7 +27,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="支付方式">
-          <el-select v-model="ruleForm.payWay" style="width:210px;">
+          <el-select v-model="ruleForm.payWay" style="width:210px;" placeholder="全部">
             <el-option
               v-for="item in payTypes"
               :key="item.value"
@@ -36,12 +36,22 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="收支类型">
+          <el-select v-model="ruleForm.tradeType" style="width:150px;" placeholder="全部">
+            <el-option
+              v-for="item in tradeTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="交易金额">
-          <el-input v-model="ruleForm.amountMin" placeholder="请输入" style="width:120px;"></el-input>
+          <el-input-number v-model="ruleForm.amountMin" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
           -
         </el-form-item>
         <el-form-item>
-          <el-input v-model="ruleForm.amountMax" placeholder="请输入" style="width:120px;"></el-input>
+          <el-input-number v-model="ruleForm.amountMax" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
         </el-form-item>
         <el-form-item label="交易时间" style="margin-left:25px;">
           <el-date-picker
@@ -56,40 +66,58 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit" v-permission="['财务', '收支明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="under_part">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
-        <el-button icon="document" @click='exportToExcel()'>导出</el-button>
+        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+        <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '收支明细', '默认页面', '导出']">导出</el-button>
+        </el-tooltip>
       </div>
       <el-table
+        v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-        :default-sort = "{prop: 'tradeTime', order: 'descending'}"
+        @sort-change="sortTable"
         >
+        <!-- :default-sort = "{prop: 'tradeTime', order: 'descending'}" -->
         <el-table-column
           prop="tradeDetailSn"
-          label="交易流水号">
+          label="交易流水号"
+          :render-header="renderTradeDetailSn"
+          width="130px">
         </el-table-column>
         <el-table-column
           prop="tradeType"
-          label="收支类型">
+          label="收支类型"
+          :render-header="renderTradeTypen">
+          <template slot-scope="scope">
+            {{scope.row.tradeType ? '支出' : '收入' }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="businessType"
-          label="业务类型">
+          label="业务类型"
+          :render-header="renderBusinessType">
+          <template slot-scope="scope">
+            {{rebusinessTypes[scope.row.businessType].label}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="relationSn"
-          label="关联单据编号">
+          label="关联单据编号"
+          :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
           prop="payWay"
           label="支付方式">
+          <template slot-scope="scope">
+            {{payTypes[scope.row.payWay+1].label}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="wechatTradeSn"
@@ -102,6 +130,9 @@
         <el-table-column
           prop="isInvoice"
           label="开票">
+          <template slot-scope="scope">
+            {{scope.row.isInvoice ? '开票' : '未开票' }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="tradeTime"
@@ -142,15 +173,17 @@ export default {
       ruleForm:{
         searchType:'tradeDetailSn',
         searchValue:'',
-        businessType:1,
-        payWay:1,
+        businessType:0,
+        payWay:-1,
+        tradeType:-1,
         amountMin:'',
         amountMax:'',
         timeValue:'',
         pageNum:''
       },
       dataList:[ ],
-      total:0
+      total:0,
+      loading:true
     }
   },
   watch: {
@@ -165,24 +198,80 @@ export default {
     },
     payTypes(){
       return financeCons.payTypes;
+    },
+    tradeTypes(){
+      return financeCons.tradeTypes;
     }
   },
   created() { },
   methods: {
-    init(){
+    renderTradeDetailSn(){
+      return(
+        <div style="height:49px;line-height:49px;">
+          <span style="font-weight:bold;vertical-align:middle;">交易流水号</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="160"
+            trigger="hover"
+            content="本系统所有收入和支出相应的交易流水号">
+            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
+          </el-popover>
+        </div>
+      )
+    },
+    renderBusinessType(){
+      return(
+        <div style="height:49px;line-height:49px;">
+          <span style="font-weight:bold;vertical-align:middle;">业务类型</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="160"
+            trigger="hover"
+            content="本系统所有产生收入和支出相应的操作">
+            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
+          </el-popover>
+        </div>
+      )
+    },
+    renderRelationSn(){
+      return(
+        <div style="height:49px;line-height:49px;">
+          <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="160"
+            trigger="hover"
+            content="订单编号、售后单编号、提现编号">
+            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
+          </el-popover>
+        </div>
+      )
+    },
+    renderTradeTypen(){
+       return(
+        <div>
+          <span style="font-weight:bold;vertical-align:middle;">收支类型</span>
+        </div>
+      )
+    },
+    init(orde){
       let query = {
         tradeDetailSn:'',
         relationSn:'',
         wechatTradeSn:'',
-        businessType:1,
+        businessType:'',
         tradeType:'',
-        payWay:1,
+        payWay:'',
         amountMin:'',
         amountMax:'',
         tradeTimeStart:'',
         tradeTimeEnd:'',
-        startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        sort:'',
+        startIndex:'',
+        pageSize:''
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
@@ -194,41 +283,57 @@ export default {
           }
         }
       }
+      query.businessType = this.ruleForm.businessType == 0 ? null : this.ruleForm.businessType
+      query.tradeType = this.ruleForm.tradeType == -1 ? null : this.ruleForm.tradeType
+      query.payWay = this.ruleForm.payWay == -1 ? null : this.ruleForm.payWay
+      query.amountMin = this.ruleForm.amountMin == 0 ? '' : this.ruleForm.amountMin
+      query.amountMax = this.ruleForm.amountMax == 0 ? '' : this.ruleForm.amountMax
+      query.sort = orde
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.tradeTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
         query.tradeTimeEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
       }
       return query;
-    },
-
-    fetch(){
-      let query = this.init();
-      this._apis.finance.getListRe(query).then((response)=>{
-        this.dataList = response.list
-        this.total = response.total || 0
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
+    },  
+    fetch(orde){
+      if(this.ruleForm.amountMin > this.ruleForm.amountMax){
+        this.$message('交易金额最小值应该小于最大值')
+      }else{
+        let query = this.init(orde);
+        this._apis.finance.getListRe(query).then((response)=>{
+          this.dataList = response.list
+          this.total = response.total || 0
+          this.loading = false
+        }).catch((error)=>{
+          this.loading = false
+        })
+      }
     },
     //搜索
     onSubmit(){
-      this.fetch()
+      let orde = 'desc'
+      this.fetch(orde)
+    },
+    //排序
+    sortTable(column){
+      let obj = column
+      let orde = obj.order == 'descending' ? 'desc' : 'asc'
+      this.fetch(orde)
     },
     //重置
     resetForm(){
       this.ruleForm = {
         searchType:'tradeDetailSn',
         searchValue:'',
-        businessType:1,
-        payWay:1,
+        businessType:'',
+        payWay:'',
+        tradeType:'',
         amountMin:'',
         amountMax:'',
         timeValue:''
       }
+      this.onSubmit()
     },
    
   //导出

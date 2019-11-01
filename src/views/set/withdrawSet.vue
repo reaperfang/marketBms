@@ -1,7 +1,7 @@
 /*提现设置 */
 <template>
     <div class="main">
-      <el-form ref="form" :model="form" label-width="140px">
+      <el-form ref="form" :model="form">
         <el-form-item label="是否允许提现:" prop="cashOut">
           <el-radio-group v-model="form.cashOut">
             <el-radio :label="0">不允许</el-radio>
@@ -10,26 +10,39 @@
         </el-form-item>
         <div class="pdl100" v-if="form.cashOut == 1">
           <p class="note note1">提示：请确认您在微信支付中开通了【商户支付】功能，否则用户将无法提现！</p>
-          <p class="note note2">开通教程链接：https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1</p>
-          <el-form-item label="单笔提现金额上限" prop="cashOutUpper">
-            <el-input-number v-model="form.cashOutUpper" :min="0" label="请输入整数">
+          <p class="note note2">
+            开通教程链接：
+            <a href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1" target="_blank">
+              https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1
+            </a>            
+          </p>
+          <el-form-item prop="cashOutUpper">
+            <el-checkbox v-model="cashOutUpperChecked"></el-checkbox>
+            单笔提现金额上限
+            <el-input-number v-model="form.cashOutUpper" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
-          <el-form-item label="单笔最低提现金额" prop="cashOutLower">
-            <el-input-number v-model="form.cashOutLower" :min="0" label="请输入整数">
+          <el-form-item prop="cashOutLower">
+            <el-checkbox v-model="cashOutLowerChecked"></el-checkbox>
+            单笔最低提现金额
+            <el-input-number v-model="form.cashOutLower" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
-          <el-form-item label="每日提现次数上限" prop="cashOutTimes">
-            <el-input-number v-model="form.cashOutTimes" :min="0" label="请输入整数">
+          <el-form-item prop="cashOutTimes">
+            <el-checkbox v-model="cashOutTimesChecked"></el-checkbox>
+            每日提现次数上限
+            <el-input-number v-model="form.cashOutTimes" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 次
           </el-form-item>
-          <el-form-item label="余额满" prop="cashOutMoney">
-            <el-input-number v-model="form.cashOutMoney" :min="0" label="请输入整数">
+          <el-form-item prop="cashOutMoney">
+            <el-checkbox v-model="cashOutMoneyChecked"></el-checkbox>
+            余额满
+            <el-input-number v-model="form.cashOutMoney" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 元,可提现
           </el-form-item>
         </div>
         <el-form-item class="save">
-          <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+          <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '提现设置', '默认页面', '保存']">保存</el-button>
         </el-form-item>
       </el-form>
     </div>    
@@ -43,7 +56,14 @@ export default {
       form:{
         cashOut:0,
         cashOutUpper:0,
+        cashOutLower:0,
+        cashOutTimes:0,
+        cashOutMoney:0,        
       },
+      cashOutUpperChecked:false,
+      cashOutLowerChecked:false,
+      cashOutTimesChecked:false,
+      cashOutMoneyChecked:false,
     }
   },
   components: {},
@@ -67,6 +87,10 @@ export default {
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
         this.form = response
+        this.form.cashOutUpper != null  && (this.cashOutUpperChecked = true)
+        this.form.cashOutLower != null  && (this.cashOutLowerChecked = true)
+        this.form.cashOutTimes != null  && (this.cashOutTimesChecked = true)
+        this.form.cashOutMoney != null  && (this.cashOutMoneyChecked = true)
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
@@ -90,22 +114,29 @@ export default {
     save(formName){
       this.$refs[formName].validate((valid) => {
           if (valid) {
-            let id = this.cid
-            let data = {
-              id:id,
-              cashOut:this.form.cashOut
+            if(this.form.cashOutUpper <= this.form.cashOutLower){
+              this.$message.error('单笔提现金额上限应大于单笔最低提现金额');
+            }else if(!(this.cashOutUpperChecked || this.cashOutLowerChecked || this.cashOutTimesChecked || this.cashOutMoneyChecked)){
+              this.$message.error('允许状态下至少勾选一个条件');
+            }else{
+              let id = this.cid
+              this.cashOutUpperChecked == false && (this.form.cashOutUpper = null)
+              this.cashOutLowerChecked == false && (this.form.cashOutLower = null)
+              this.cashOutTimesChecked == false && (this.form.cashOutTimes = null)
+              this.cashOutMoneyChecked == false && (this.form.cashOutMoney = null)
+              let data = Object.assign({id:id},this.form)
+              this._apis.set.updateShopInfo(data).then(response =>{
+                this.$notify.success({
+                  title: '成功',
+                  message: '保存成功！'
+                });
+              }).catch(error =>{
+                this.$notify.error({
+                  title: '错误',
+                  message: error
+                });
+              })
             }
-            this._apis.set.updateShopInfo(data).then(response =>{
-              this.$notify.error({
-                title: '成功',
-                message: '保存成功！'
-              });
-            }).catch(error =>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
-            })
           }
       })
     },
@@ -131,9 +162,14 @@ export default {
   }
   .note2{
     color: #ccc;
+    a{
+      &:hover{
+        color:#655EFF;
+      }
+    }
   }
   .save{
-    margin: 200px 0 200px;
+    margin: 200px 0 200px 140px;
   }
   .pdl100{
     padding-left: 100px;

@@ -16,13 +16,13 @@
                 </el-form-item> -->
                 <template v-if="data.add && data.level === 1">
                     <el-form-item label="上级分类：">
-                        <span>第一级：{{data.categoryName}}</span>
+                        <span>第一级：{{data.name}}</span>
                     </el-form-item>
                 </template>
                 <template v-else-if="data.add && data.level === 2">
                     <el-form-item label="上级分类：">
                         <span>第一级：{{level1Title}}</span>
-                        <span style="margin-left: 20px;">第二级：{{data.categoryName}}</span>
+                        <span style="margin-left: 20px;">第二级：{{data.name}}</span>
                     </el-form-item>
                 </template>
                 <el-form-item label="分类名称：" prop="name">
@@ -41,15 +41,15 @@
                         <li @click="currentDialog = 'DialogSelectImageMaterial'; libraryVisible = true" class="upload">
                             <i class="el-icon-plus"><br /><span>上传图片</span></i>
                         </li>
-                        <li v-if="basicForm.imageUrl" class="image">
-                            <img src="" alt="">
-                            <i class="el-icon-error"></i>
+                        <li v-if="imageVisible" class="image">
+                            <div :style="{backgroundImage: `url(${basicForm.image})`}" class="image-div"></div>
+                            <i @click="deleteImage" class="el-icon-error"></i>
                         </li>
                     </ul>
                 </el-form-item>
             </el-form>
             <div class="footer">
-                <el-button @click="submit('basicForm')" type="primary">确认</el-button>
+                <el-button @click="submitCategory('basicForm')" type="primary">确认</el-button>
                 <el-button @click="visible = false">取消</el-button>
             </div>
         </DialogBase>
@@ -72,7 +72,8 @@ export default {
                 enable: 1, // 状态
                 sort: 0, // 分类顺序
                 parentId: 0, // 分类父ID
-                image:'image', // 分类图片
+                imageUrl:'', // 分类图片
+                image: ''
             },
             basicRules:{
                 name: [
@@ -85,14 +86,15 @@ export default {
                 sort: [
                     { required: true, message: '请输入分类排序', trigger: 'blur' },
                 ],
-                // image: [
-                //     { required: true, message: '请上传分类图片', trigger: 'blur' },
-                // ],
+                image: [
+                    { required: true, message: '请上传分类图片', trigger: 'blur' },
+                ],
             },
             categoryData: [],
             currentDialog: '',
             libraryVisible: false,
-            level1Title: ''
+            level1Title: '',
+            imageVisible: false
         }
     },
     created() {
@@ -103,6 +105,9 @@ export default {
                 this.basicForm.enable = res.enable
                 this.basicForm.sort = res.sort
                 this.basicForm.image = res.image
+                if(res.image) {
+                    this.imageVisible = true
+                }
                 
             })
         }
@@ -115,10 +120,15 @@ export default {
         }
     },
     methods: {
-        imageSelected(image) {
-            this.basicForm.imageUrl = image.src
+        deleteImage() {
+            this.basicForm.image =  ''
+            this.imageVisible = false
         },
-        submit(formName) {
+        imageSelected(image) {
+            this.basicForm.image = decodeURIComponent(image.filePath)
+            this.imageVisible = true
+        },
+        submitCategory(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let param = Object.assign({}, this.basicForm)
@@ -137,25 +147,45 @@ export default {
                         }
 
                         this._apis.goods.addCategory(param).then(res => {
+                            this.$notify({
+                                title: '成功',
+                                message: '新增成功！',
+                                type: 'success'
+                            });
                             this.$emit('submit')
+                            this.onSubmit()
                         }).catch(error => {
-
+                            this.$notify.error({
+                                title: '错误',
+                                message: error
+                            });
                         })
                     } else {
-                        let param = Object.assign({}, this.basicForm, {id: this.data.id})
+                        let param = Object.assign({}, this.basicForm, {id: this.data.id, parentId: this.data.parentId})
+
+                        delete param.parentId
 
                         this._apis.goods.editorCategory(param).then(res => {
+                            this.$notify({
+                                title: '成功',
+                                message: '修改成功！',
+                                type: 'success'
+                            });
                             this.$emit('submit')
+                            this.onSubmit()
                         }).catch(error => {
-
+                            this.$notify.error({
+                                title: '错误',
+                                message: error
+                            });
                         })
                     }
+                    this.visible = false
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
-            this.visible = false
         },
         getCategoryDetail(id) {
             return  new Promise((resolve, reject) => {
@@ -203,6 +233,9 @@ export default {
         add: {
             type: Boolean,
             required: true
+        },
+        onSubmit: {
+            type: Function
         }
     },
     components: {
@@ -246,11 +279,22 @@ export default {
             }
             &.image {
                 position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .image-div {
+                    width: 60px;
+                    height: 60px;
+                    background-size: 100%;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
                 .el-icon-error {
                     position: absolute;
                     right: -5px;
                     top: -5px;
-                    color: rgb(254, 211, 203);
+                    color: rgb(253, 76, 43);
+                    cursor: pointer;
                 }
             }
         }

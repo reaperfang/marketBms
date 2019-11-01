@@ -1,5 +1,5 @@
 <template>
-  <div class="righter-bar">
+  <div class="righter-bar" v-if="sidebarItems.length">
     <div class="righter-bar-content">
       <div v-if="!item.hidden" v-for="item in sidebarItems" class="item">
         <template v-if="item.children">
@@ -11,8 +11,8 @@
         <template v-else-if="item.tabTitle">
           <h2>{{item.tabTitle}}</h2>
           <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
-            <div v-if="child.meta.title == '修改密码' && userType"></div>
-            <div v-else>
+            <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
+            <div>
               <router-link class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
             </div>
           </div>
@@ -38,36 +38,50 @@ export default {
     return {
       sidebarItems: [],
       basePath: '',
-      userType: false,
+      //userType: false,
+      current: '0'
     }
   },
   components: { },
   computed: {
-    ...mapState({
-      current: state => state.menu.current,
-    }),
+    // ...mapState({
+    //   current: state => state.menu.current,
+    // }),
     ...mapGetters([
       'permission_routers',
       'permission_routers_tree',
     ]),
-    // userType(){
-    //   let userInfo = JSON.parse(this.$store.getters.userInfo)
-    //   return userInfo.type == "admin" ? true : false
-    // }
-  },
-  created() {
-    this.setSidebarItems()
-  },
-  methods: {
-    setUserType() {
+    userType(){
       let userInfo = JSON.parse(this.$store.getters.userInfo)
 
-      if(userInfo && userInfo.type == 'admin') {
-        this.userType = true
-      } else {
-        this.userType = false
+      if(userInfo && userInfo.type == "admin") {
+        return true
       }
-    },
+      return false
+    }
+  },
+  created() {
+    this.current = localStorage.getItem('siderBarCurrent') || '0'
+    this.setSidebarItems()
+
+    let name = this.$route.path.replace(/^(\/[^(?:\/|\?)]+)\/.*$/, '$1')
+    let realCurrent = this.permission_routers_tree.findIndex(router => router.path == name)
+
+    if(realCurrent != this.current) {
+      this.current = realCurrent
+      this.setSidebarItems()
+    }
+  },
+  methods: {
+    // setUserType() {
+    //   let userInfo = JSON.parse(this.$store.getters.userInfo)
+
+    //   if(userInfo && userInfo.type == 'admin') {
+    //     this.userType = true
+    //   } else {
+    //     this.userType = false
+    //   }
+    // },
     handleTabTitle(arr) {
       var map = {},
           dest = [];
@@ -99,14 +113,18 @@ export default {
       let _path = _permission_routers_tree[this.current].path
       let children = _permission_routers_tree[this.current].children
 
-      children.forEach(val => {
-        val.path = _path + '/' + val.path
-      })
+      if(_permission_routers_tree[this.current].iframe) {
+        this.sidebarItems = []
+      } else {
+        children.forEach(val => {
+          val.path = _path + '/' + val.path
+        })
 
-      if(children.some(val => val.meta.tabTitle)) {
-        children = this.handleTabTitle(children)
+        if(children.some(val => val.meta.tabTitle)) {
+          children = this.handleTabTitle(children)
+        }
+        this.sidebarItems = children
       }
-      this.sidebarItems = children
     },
     resolvePath(...routePath) {
       if (this.isExternalLink(routePath)) {
@@ -119,12 +137,16 @@ export default {
     },
   },
   watch: {
-    current() {
+    // current() {
+    //   this.setSidebarItems()
+    // }
+    '$store.state.menu.current': function(index) {
+      this.current = index
       this.setSidebarItems()
     },
-    "$store.getters.userInfo": function() {
-      this.setUserType()
-    }
+    // "$store.getters.userInfo": function() {
+    //   this.setUserType()
+    // }
   }
 }
 </script>
@@ -150,9 +172,8 @@ export default {
       padding-bottom: 20px;
       a {
         color: #92929B;
-        padding: 8px;
         border-radius: 15px;
-        padding-right:10px;
+        padding: 5px 10px;
         &.active {
           background-color: #f0efff;
           color: #7f79ff;
@@ -167,7 +188,7 @@ export default {
         border: none;
       }
       h2, .item-child {
-        padding: 10px 0;
+        margin-bottom: 10px;
       }
       h2 {
         font-family:PingFangSC-Medium;
@@ -175,10 +196,6 @@ export default {
         color:#161617;
         line-height:20px;
         font-size: 14px;
-      }
-      .item-child {
-        margin-top: 10px;
-        
       }
     }
   }

@@ -5,10 +5,11 @@
         <el-form-item label="创建时间">
           <el-date-picker
             v-model="form.timeValue"
-            type="daterange"
+            type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -28,7 +29,7 @@
       <p class="list_top">图文素材<span>{{total*1}}</span>条</p>
       <div class="list_main">
         <div class="list_img">
-            <div class="item_img" v-for="(item,index) in list" :key="item.id" @mouseenter="onMouseOver(index)" @mouseleave="onMouseOut(index)">
+            <div class="item_img" v-for="(item,index) in list" :key="item.id" @mouseenter="onMouseOver(index,item.isSyncWechat)" @mouseleave="onMouseOut(index)">
               <p class="img_head">
                 <span>{{item.updateTime}}</span>
                 <i class="wx_icon" v-if="item.isSyncWechat"></i>
@@ -36,6 +37,7 @@
               <div class="img_body">
                 <p class="title">{{item.title}}</p>
                 <img :src="item.fileCover" class="imgs">
+
                 <p class="content">
                   {{item.sourceMaterialNoHtml}}
                 </p>
@@ -45,7 +47,7 @@
                 <span><i class="el-icon-delete" @click="handleDeleteArticle(item.id,'articleId')"></i></span>
               </p>
               <div ref="operate" class="operate">
-                <i class="el-icon-view" @click="_routeTo('generalArticle',{id:item.id})"> 预览文章</i>
+                <i class="el-icon-view" @click="lookArticle(item.linksOriginal)"> 预览文章</i>
               </div>
             </div>
         </div>
@@ -72,14 +74,24 @@
 import utils from "@/utils";
 import dialogSyncArticle from '../../../dialogs/dialogSyncArticle';
 import dialogDelete from '../../../dialogs/dialogDelete';
+import dialogQRcode from '../../../dialogs/dialogQRcode';
 export default {
   name: 'articleMaterial',
-  components: {dialogSyncArticle,dialogDelete},
+  components: {dialogSyncArticle,dialogDelete,dialogQRcode},
   data () {
     return {
       pickerNowDateBefore: {
+        onPick: ({ maxDate, minDate }) => {
+              this.pickerMinDate = minDate.getTime()
+              if (maxDate) {
+                  this.pickerMinDate = ''
+              }
+          },
         disabledDate: (time) => {
-          return time.getTime() > new Date();
+          if (this.pickerMinDate !== '') {
+            return time.getTime() == this.pickerMinDate
+          }
+          return time.getTime() > Date.now()
         }
       },
       form:{
@@ -143,7 +155,7 @@ export default {
             this.deleteActicle(data.deleteActicle.articleId) 
           break;
           case 'syncImage':
-            this.handleSyncImage()
+            this.handleSyncImage(data.syncImage.query)
           break;
         }
       }
@@ -155,8 +167,19 @@ export default {
       this.currentDialog = 'dialogSyncArticle'
     },
 
-    handleSyncImage(){
-      this.getList()
+    handleSyncImage(query){
+      this._apis.file.syncMaterial(query).then((response)=>{
+        this.$notify.success({
+          title: '成功',
+          message: '同步微信图文成功！'
+        });
+        this.getList()
+      }).catch((error)=>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })
     },
 
     handleDeleteArticle(id,type){
@@ -187,8 +210,12 @@ export default {
         });
       })
     },
-    onMouseOver(index){
-      this.$refs.operate[index].style.display="block"
+    onMouseOver(index,isSyncWechat){
+      if(isSyncWechat){
+        this.$refs.operate[index].style.display="block"
+      }else{
+        this.$refs.operate[index].style.display="none"
+      }
     },
     onMouseOut(index){
       this.$refs.operate[index].style.display="none"
@@ -201,6 +228,14 @@ export default {
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage
       this.getList()
+    },
+    //预览文章
+    lookArticle(url){
+      this.dialogVisible = true;
+      this.currentDialog = 'dialogQRcode'
+      this.data = {
+        url:url
+      }
     },
   }
 }
@@ -260,7 +295,9 @@ export default {
         .imgs{
           width: 100%;
           height:85px;
+          object-fit: cover;
         }
+    
         .content{
           line-height: 20px;
           height: 60px;

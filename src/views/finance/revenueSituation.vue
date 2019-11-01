@@ -27,30 +27,32 @@
           <span class="money">总收入（元）</span>
           <span class="num">
             <em>{{surveyDay.income}}</em>
-            <!-- <i class="el-icon-top red"></i> -->
-            <i class="el-icon-bottom green"></i>
           </span>
         </div>
         <div class="item">
           <span class="money">总支出（元）</span>
           <span class="num">
             <em>{{surveyDay.expend}}</em>
-            <i class="el-icon-top red"></i>
           </span>
         </div>
         <div class="item">
           <span class="money">实际收入（元）</span>
           <span class="num">
             <em>{{surveyDay.realIncome}}</em>
-            <i class="el-icon-top red"></i>
           </span>
         </div>
-        <span class="details" @click="_routeTo('revenueExpenditureDetails')">收支明细</span>
+        <span 
+        class="details" 
+        @click="_routeTo('revenueExpenditureDetails')"
+        v-permission="['财务', '营收状况', '默认页面', '收支明细']"
+        >
+        收支明细
+        </span>
       </div>
     </div>
     <div class="under_part">
       <div class="title">
-        <span class="name">趋势分析</span>
+        <span class="name">趋势分析<em>（截止到昨日）</em></span>
         <div class="time">
           <el-radio-group v-model="days" class="mr20">
             <el-radio-button label="7">最近7天</el-radio-button>
@@ -66,6 +68,7 @@
             end-placeholder="结束日期"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
+          <el-button type="primary" @click="getDataDateRs">确定</el-button>
         </div>
       </div>
       <div class="data_statistics">
@@ -74,22 +77,64 @@
           <span class="money">总收入（元）</span>
           <span class="num">
             <em>{{survey.income}}</em>
+            <span v-if="survey.chainRatioIncome != null">
+               <el-popover v-if="survey.chainRatioIncome >= 0" placement="top-start" title="" width="130" trigger="hover">
+                <p>环比上升{{survey.chainRatioIncome}}%</p>
+                <i class="el-icon-top red" slot="reference"></i>
+              </el-popover>              
+              <el-popover v-else-if="survey.chainRatioIncome == 0"  placement="top-start" title="" width="130" trigger="hover">
+                <p>环比持平{{survey.chainRatioIncome}}%</p>
+                  <img src="@/assets/images/finance/gray.png" class="gray" slot="reference">
+              </el-popover>              
+              <el-popover v-else placement="top-start" title="" width="130" trigger="hover">
+                <p>环比下降{{survey.chainRatioIncome}}%</p>
+                <i class="el-icon-bottom green" slot="reference"></i>
+              </el-popover>
+            </span>
           </span>
         </div>
         <div class="item">
           <span class="money">总支出（元）</span>
           <span class="num">
             <em>{{survey.expend}}</em>
+            <span v-if="survey.chainRatioExpend != null">
+              <el-popover v-if="survey.chainRatioExpend >= 0" placement="top-start" title="" width="130" trigger="hover">
+                <p>环比上升{{survey.chainRatioExpend}}%</p>
+                <i class="el-icon-top red" slot="reference"></i>
+              </el-popover>              
+              <el-popover v-else-if="survey.chainRatioExpend == 0"  placement="top-start" title="" width="130" trigger="hover">
+                <p>环比持平{{survey.chainRatioExpend}}%</p>
+                  <img src="@/assets/images/finance/gray.png" class="gray" slot="reference">
+              </el-popover>              
+              <el-popover v-else placement="top-start" title="" width="130" trigger="hover">
+                <p>环比下降{{survey.chainRatioExpend}}%</p>
+                <i class="el-icon-bottom green" slot="reference"></i>
+              </el-popover>
+            </span>
           </span>
         </div>
         <div class="item">
           <span class="money">实际收入（元）</span>
           <span class="num">
             <em>{{survey.realIncome}}</em>
+            <span v-if="survey.chainRatioRealIncome != null">
+              <el-popover v-if="survey.chainRatioRealIncome >= 0" placement="top-start" title="" width="130" trigger="hover">
+                <p>环比上升{{survey.chainRatioRealIncome}}%</p>
+                <i class="el-icon-top red" slot="reference"></i>
+              </el-popover>              
+              <el-popover v-else-if="survey.chainRatioRealIncome == 0"  placement="top-start" title="" width="130" trigger="hover">
+                <p>环比持平{{survey.chainRatioRealIncome}}%</p>
+                  <img src="@/assets/images/finance/gray.png" class="gray" slot="reference">
+              </el-popover>              
+              <el-popover v-else placement="top-start" title="" width="130" trigger="hover">
+                <p>环比下降{{survey.chainRatioRealIncome}}%</p>
+                <i class="el-icon-bottom green" slot="reference"></i>
+              </el-popover>
+            </span>
           </span>
         </div>
       </div>
-      <financeChart class="financeChart" :dataList="dataList"></financeChart>
+      <financeChart class="financeChart" :dataList="chartData"></financeChart>
     </div>
   </div>
 </template>
@@ -115,31 +160,50 @@ export default {
       survey:{
         income:0,
         expend:0,
-        realIncome:0
+        realIncome:0,
+        chainRatioExpend:0, 
+        chainRatioIncome:0,
+        chainRatioRealIncome:0 
       },
       dataList:[],
-      days:7
+      days:7,
+      chartData:{}
     }
   },
   components: {financeChart},
   watch: {
-    timeValue(){
-      this.getDataDateRs()
-    },
     days(){
       this.getDataNumRs()
+      this.init(this.days)
+    },
+    dataList(){
+      let dataObj = {
+        dates:[],
+        incomes:[],
+        expends:[],
+        realIncomes:[]
+      }
+      this.dataList.map(item =>{
+        item.accountDate = item.accountDate.substring(0,10)
+        dataObj.dates.push(item.accountDate)
+        dataObj.incomes.push(item.income)
+        dataObj.expends.push(item.expend)
+        dataObj.realIncomes.push(item.realIncome)
+      })
+      this.chartData = dataObj
     }
   },
   created() {
-    this.init();
+    this.init(7);
+    this.getDataDateRs()
     this.getSurveyDay();
   },
   methods: {
     //初始化数据
-    init(){
+    init(day){
       let date = new Date()
       let endDate = utils.formatDate(date, "yyyy-MM-dd")
-      let startDate = utils.countDate(-7)
+      let startDate = utils.countDate(-day)
       this.timeValue = [startDate,endDate]
     },
     //概况
@@ -161,16 +225,14 @@ export default {
       }
       this._apis.finance.getDataDateRs(queryDate).then((response)=>{
         if(response){
-          this.survey.expend = response.expend
-          this.survey.income = response.income
-          this.survey.realIncome = response.realIncome
+          this.survey = response   
           this.dataList = response.accountList
         }else{
           this.$notify.info({
             title: '消息',
             message: "查询结果集为空，没有可以显示的数据"
           });
-          this.init()
+          this.init(this.days)
         }
       }).catch((error)=>{
         this.$notify.error({
@@ -183,16 +245,14 @@ export default {
     getDataNumRs(){
       this._apis.finance.getDataNumRs({recentDays:this.days}).then((response)=>{
         if(response){
-          this.survey.expend = response.expend
-          this.survey.income = response.income
-          this.survey.realIncome = response.realIncome
+          this.survey = response
           this.dataList = response.accountList
         }else{
           this.$notify.info({
             title: '消息',
             message: "查询结果集为空，没有可以显示的数据"
           });
-          this.days = 7
+          // this.days = 7
         }
       }).catch((error)=>{
         this.$notify.error({
@@ -215,6 +275,12 @@ export default {
 }
 .green{
   color:green;
+}
+.gray{
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  // background: url('@/assets/images/finance/gray.png')
 }
 .top_part{
   width: 100%;
@@ -290,6 +356,11 @@ export default {
     .name{
       color: #161617;
       font-size: 16px;
+      em{
+        font-size: 12px;
+        color: #666;
+        text-decoration: none;
+      }
     }
     ul{
       width: 123px;

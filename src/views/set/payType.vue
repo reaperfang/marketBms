@@ -6,7 +6,7 @@
             <img src="@/assets/images/set/set-pay1.png"/>
             <div class="note">
               <h3>微信支付</h3>
-              <p>如果是微信支付，授权目录与“支付选项”中的说明不同，应在公众平台->微信支付->公众号支付 追加一条支付授权目录：http://omo.aiyouyi.cn/app/</p>
+              <p>如果是微信支付，授权目录与“支付选项”中的说明不同，应在公众平台->微信支付->公众号支付 追加一条支付授权目录：<a href="https://omo.aiyouyi.cn/app/" target="_blank" class="links">https://omo.aiyouyi.cn/app/</a></p>
             </div>
           </div>
           <div class="right_cont">
@@ -14,9 +14,10 @@
               v-model="wechatPay"
               @change="handleWechatPay"
               active-color="#13ce66"
-              inactive-color="#ff4949">
+              inactive-color="#eee"
+              v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
-            <a class="wxinfo_set" @click="_routeTo('wxSet')">设置支付信息</a>
+            <a class="wxinfo_set" @click="_routeTo('wxSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
           </div>
         </div>
         <div class="pay_item">
@@ -32,7 +33,8 @@
               v-model="balanceOfAccountPay"
               @change="handleBalanceOfAccountPay"
               active-color="#13ce66"
-              inactive-color="#ff4949">
+              inactive-color="#eee"
+              v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
           </div>
         </div>
@@ -49,7 +51,8 @@
               v-model="payOnDelivery"
               @change="handlePayOnDelivery"
               active-color="#13ce66"
-              inactive-color="#ff4949">
+              inactive-color="#eee"
+              v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
           </div>
         </div>
@@ -108,6 +111,7 @@ export default {
     },
     //微信支付开关
     handleWechatPay(val){
+      this.getShopInfo()
       if(val == true && this.wechatBinding == 0){
         this.wechatPay = false
         this.dialogVisible = true
@@ -137,10 +141,11 @@ export default {
       let id = this.cid
       let query = Object.assign({id:id},data)
       this._apis.set.updateShopInfo(query).then(response =>{
-        this.$notify.error({
+        this.$notify.success({
           title: '成功',
           message: '保存成功！'
         });
+        this.getShopInfo()
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
@@ -200,5 +205,8 @@ export default {
       margin-top: 10px;
     }
   }
+}
+.links:hover{
+  color:#655EFF;
 }
 </style>

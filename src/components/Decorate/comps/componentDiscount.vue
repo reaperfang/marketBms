@@ -7,13 +7,13 @@
                     <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
                 </div>
                 <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                    <h1 class="title">{{item.activityName}}</h1>
+                    <h1 class="title">{{item.activityName || '限时折扣'}}</h1>
                     <div class="countdown">
                         <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                         <div class="content">
-                            <p class="caption">距开始仅剩</p>
-                            <!-- <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p> -->
-                            <p class="time">{{item.endTime}}</p>
+                            <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
+                            <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                            <!-- <p class="time">{{item.endTime}}</p> -->
                         </div>
                     </div>
                 </div>
@@ -21,19 +21,24 @@
                     <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction}}元</font>{{item.goodsName}}</p>
                     <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
                     <div class="limit_line" v-if="showContents.indexOf('6')!=-1||showContents.indexOf('7')!=-1">
-                        <p class="limit" v-if="showContents.indexOf('7')!=-1">限 {{item.activityJoinLimit}}件/人</p>
+                        <p class="limit" v-if="showContents.indexOf('7')!=-1">
+                            <template v-if="item.activityJoinLimit >= 0">
+                                限 {{item.activityJoinLimit}}件/人
+                            </template>
+                            <template v-else>不限制</template>
+                        </p>
                         <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
                             <div class="jd_line">
                                 <div class="current_line"></div>
                             </div>
-                            <p>已抢<font>{{item.stock - item.remainStock}}</font>件</p>
+                            <p>已抢<font>{{(item.stock - item.remainStock) > -1 ? (item.stock - item.remainStock) : 0}}</font>件</p>
                         </div>
                     </div>
                     <div class="price_line">
                         <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice}}</font></p>
                         <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice}}</p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1"></componentButton>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1 && listStyle != 3 && listStyle != 6"></componentButton>
                     <p class="activity_end" v-if="false">已售罄</p>
                     <p class="activity_end" v-if="false">活动结束</p>
                 </div>
@@ -45,10 +50,9 @@
 <script>
 import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
-import mixinDiscount from '../mixins/mixinDiscount';
 export default {
     name:"componentDiscount",
-    mixins:[componentMixin, mixinDiscount],
+    mixins:[componentMixin],
     data(){
         return{
             // 样式属性
@@ -66,11 +70,20 @@ export default {
             // 自己定义的
             goodWidth:'',
             goodMargin:'',
-            list: []
+            list: [],
+            loading: false
         }
     },
     components:{
         componentButton
+    },
+    created() {
+        this.fetch();
+        this._globalEvent.$on('fetchDiscount', (componentData, componentId) => {
+            if(this.currentComponentId === componentId) {
+                this.fetch(componentData);
+            }
+        });
     },
     mounted() {
         this.decoration();
@@ -122,7 +135,42 @@ export default {
             this.buttonStyle = this.currentComponentData.data.buttonStyle;
         },
 
-    }
+         //根据ids拉取数据
+        fetch(componentData = this.currentComponentData.data) {
+            if(componentData) {
+                if(Array.isArray(componentData.ids) && componentData.ids.length){
+                    this.loading = true;
+                    this._apis.shop.getDiscountListByIds({
+                        rightsDiscount: 1, 
+                        spuIds: componentData.ids.join(',')
+                    }).then((response)=>{
+                        this.createList(response);
+                        this.loading = false;
+                    }).catch((error)=>{
+                        // this.$notify.error({
+                        //     title: '错误',
+                        //     message: error
+                        // });
+                        console.error(error);
+                        this.list = [];
+                        this.loading = false;
+                    });
+                }else{
+                    this.list = [];
+                }
+            }
+        },
+
+        /* 创建数据 */
+        createList(datas) {
+            this.list = datas;
+        },
+
+    },
+    beforeDestroy() {
+      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
+      this._globalEvent.$off('fetchDiscount');
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -132,9 +180,11 @@ export default {
             margin-top:0 !important;
         }
         .countdown_Bar{
+            display:flex;
+            justify-content: space-between;
             .countdown{
                 float:right;
-                width:189px;
+                width:158px;
                 height:43px;
                 padding:0 3.5px 0 15px;
                 .content{
@@ -455,7 +505,7 @@ export default {
                         font-size:9px;
                         margin-left:2px;
                         font{
-                            width:12px;
+                            min-width:12px;
                             height:12px;
                             color:#FC3D42;
                             font-size:9px;
@@ -613,9 +663,11 @@ export default {
             &:nth-of-type(3n+1){
                 width:100% !important;
                 .countdown_Bar{
+                    display:flex;
+                    justify-content: space-between;
                     .countdown{
                         float:right;
-                        width:189px;
+                        width:155px;
                         height:43px;
                         padding:0 3.5px 0 15px;
                         .content{

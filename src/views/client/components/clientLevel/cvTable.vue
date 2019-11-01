@@ -7,11 +7,8 @@
       ref="levelTable"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading"
       >
-      <el-table-column
-        type="selection"
-      >
-      </el-table-column>
       <el-table-column
         prop="alias"
         label="等级排序">
@@ -25,7 +22,7 @@
         label="说明">
       </el-table-column>
       <el-table-column
-        prop="levelConditionId"
+        prop="receiveConditionsRemarks"
         label="等级条件">
       </el-table-column>
       <el-table-column
@@ -33,25 +30,32 @@
         label="等级权益">
       </el-table-column>
       <el-table-column
-        prop="upgradePackage"
         label="升级奖励">
+        <template slot-scope="scope">
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[0]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[1]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[2]:''}}</p>
+          <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[3]:''}}</p>
+        </template>
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-            <el-switch v-model="scope.row.status" @change="handleSwitch(scope.row)"></el-switch>
+            <!-- <el-switch v-model="scope.row.status" @change="handleSwitch(scope.row)" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']"></el-switch> -->
+            <span class="edit_span" v-if="scope.row.status == 1" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">启用</span>
+            <span class="edit_span" v-if="scope.row.status == 0" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">未启用</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name">编辑</span>
-            <span class="edit_span" @click="edit(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}">待配置</span>
+            <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['客户', '会员等级', '默认页面', '查看']">编辑</span>
+            <span class="edit_span" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['客户', '会员等级', '默认页面', '待配置']">待配置</span>
         </template>
       </el-table-column>
     </el-table>
-    <div class="single_check">
+    <!-- <div class="single_check">
         <el-checkbox v-model="checked" @change="handleAll"></el-checkbox>
         <el-button class="other_btn" @click="batchDisable">批量禁用</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -64,7 +68,8 @@ export default {
   data() {
     return {
       checked: false,
-      levelList: []
+      levelList: [],
+      loading: false
     };
   },
   computed: {
@@ -75,27 +80,30 @@ export default {
   },
   methods: {
     getLevelsList() {
+      this.loading = true;
       this._apis.client.getLevelsList(this.params).then((response) => {
-        response.list.map((v) => {v.status = Boolean(v.status)});
+        this.loading = false;
+        response.list.map((v) => {
+          v.isGray = true;
+        });
         this.levelList = [].concat(response.list);
         let i = this.levelList.findIndex((value,index,arr) => {
-            return value.name == "";
+            return value.name == null;
         });
-        this.levelList.map((v,index) => {
-          if(index > 2) {
-            v.isGray = true
-          }
-        });
+        if(i !== -1) {
+          this.$set(response.list[i], 'isGray', false);
+        }
       }).catch((error) => {
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false;
+        console.log(error);
       })
     },
     edit(row) {
+      this._routeTo('levelInfo',{id: row.id, level: row.level});
+    },
+    handleConfig(row) {
       if(!row.isGray) {
-        this._routeTo('levelInfo',{id: row.id});
+        this._routeTo('levelInfo',{id: row.id, level: row.level});
       }
     },
     handleSwitch(row) {
@@ -107,10 +115,7 @@ export default {
           type: 'success'
         });
       }).catch((error) => {
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        console.log(error);
       })
     },
     handleAll(val) {
@@ -137,10 +142,7 @@ export default {
           });
           this.getLevelsList();
         }).catch((error) => {
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          console.log(error);
         })
       }
     }

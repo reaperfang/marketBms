@@ -38,11 +38,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="客户ID">
-          <el-input v-model="ruleForm.memberInfoId" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -50,11 +50,15 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <span>
-          <el-button type="primary" @click="batchCheck">批量审批</el-button>
-          <el-button icon="document" @click='exportToExcel()'>导出</el-button>
+         <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button>
+          <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+          <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+            <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
+          </el-tooltip>
         </span>
       </div>
       <el-table
+        v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -96,8 +100,8 @@
         <el-table-column
         label="操作">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-            <el-button type="text" size="small" v-if="scope.row.status == 0" @click="examine(scope.row)">审核</el-button>
+            <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button>
+            <el-button type="text" size="small" v-if="scope.row.status == 0" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -142,18 +146,19 @@ export default {
       },
       inline:true,
       ruleForm:{
-        searchType:1,
+        searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
-        status:0,
-        memberInfoId:''
+        status:-1,
+        memberSn:''
       },
       dataList:[ ],
       total:0,
       currentDialog:"",
       dialogVisible: false,
       currentData:{},
-      multipleSelection:[]
+      multipleSelection:[],
+      loading:true
     }
   },
   watch: { },
@@ -171,14 +176,14 @@ export default {
   methods: {
     init(){
       let query = {
-        memberInfoId:'',
+        memberSn:'',
         tradeDetailSn:'',
         cashoutSn:'',
         applyTimeStart:'',
         applyTimeEnd:'',
         status:'',
-        startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        startIndex:'',
+        pageSize:''
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
@@ -190,6 +195,7 @@ export default {
           }
         }
       }
+      query.status = this.ruleForm.status == -1 ? null : this.ruleForm.status
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.applyTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
@@ -203,11 +209,9 @@ export default {
       this._apis.finance.getListWd(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
+        this.loading = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
     //搜索
@@ -217,12 +221,13 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        searchType:1,
+        searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
-        status:1,
-        memberInfoId:''
+        status:-1,
+        memberSn:''
       }
+      this.fetch()
     },
     //导出
     exportToExcel() {
@@ -250,7 +255,7 @@ export default {
       let isCheck = true
       let ids = []
       if(this.multipleSelection.length == 0){
-        this.currentData.text = "请选择需要审核的数据";
+        this.currentData.text = "请选择需要审核的数据 !";
         this.dialogVisible = true;
         this.currentDialog = "warnDialog";
       }else{
@@ -303,8 +308,15 @@ export default {
       this.dialogVisible = true
       this.currentDialog = auditingDialog
     },
-    handleSubmit(){
-      this.fetch()
+    handleSubmit(datas){
+      this._apis.finance.examineWd(datas).then((response)=>{
+          this.fetch()
+      }).catch((error)=>{
+          this.$notify.error({
+          title: '错误',
+          message: '网络原因,审核失败！'
+          });
+      })
     }
   }
 }

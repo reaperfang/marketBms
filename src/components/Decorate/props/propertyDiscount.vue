@@ -1,20 +1,20 @@
 <template>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :style="bodyHeight">
     <div class="block form">
-      <el-form-item label="选择商品" prop="goods">
-        <div class="goods_list">
-          <ul>
-            <li v-for="(item, key) of list" :key="key">
-              <img :src="item.goodsImgUrl" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-            </li>
-            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectDiscount'">
-              <i class="inner"></i>
-            </li>
-          </ul>
-        </div>
-        最多添加30个商品
+      <el-form-item label="选择活动" prop="goods">
       </el-form-item>
+      <div class="goods_list">
+        <ul>
+          <li v-for="(item, key) of list" :key="key" :title="item.activityName">
+            <img :src="item.goodsImgUrl" alt="">
+            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+          </li>
+          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectDiscount'">
+            <i class="inner"></i>
+          </li>
+        </ul>
+      </div>
+      最多添加30个商品
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -114,35 +114,34 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected"></component>
   </el-form>
 </template>
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import mixinDiscount from '../mixins/mixinDiscount';
 import dialogSelectDiscount from '@/views/shop/dialogs/dialogSelectDiscount';
 import uuid from 'uuid/v4';
 export default {
   name: 'propertyDiscount',
-  mixins: [propertyMixin, mixinDiscount],
+  mixins: [propertyMixin],
   components: {dialogSelectDiscount},
   data () {
     return {
       ruleForm: {
-        listStyle: 1,
-        pageMargin: 15,
-        goodsMargin: 10,
-        goodsStyle: 1,
-        goodsChamfer: 1,
-        goodsRatio: 1,
-        goodsFill: 2,
-        textStyle: 1,
-        textAlign: 1,
-        showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],
-        buttonStyle: 1,
-        ids: [],
-        buttonText: '加入购物车'
+        listStyle: 1,//列表样式
+        pageMargin: 15,//页面边距
+        goodsMargin: 10,//商品边距
+        goodsStyle: 1,//商品样式
+        goodsChamfer: 1,//商品倒角
+        goodsRatio: 2,//图片比例
+        goodsFill: 2,//图片填充
+        textStyle: 1,//文本样式
+        textAlign: 1,//文本对齐
+        showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
+        buttonStyle: 1,//购买按钮样式
+        ids: [],//折扣商品id列表
+        buttonText: '加入购物车'//按钮文字
       },
       rules: {
 
@@ -153,6 +152,7 @@ export default {
     }
   },
   created() {
+    this.fetch();
   },
   watch: {
     'items': {
@@ -161,7 +161,8 @@ export default {
         for(let item of newValue) {
           this.ruleForm.ids.push(item.spuId);
         }
-        this._globalEvent.$emit('fetchDiscount');
+        this.fetch();
+        this._globalEvent.$emit('fetchDiscount', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -174,11 +175,54 @@ export default {
     }
   },
   methods: {
+      //根据ids拉取数据
+      fetch(componentData = this.ruleForm) {
+          if(componentData) {
+              if(Array.isArray(componentData.ids) && componentData.ids.length){
+                  this.loading = true;
+                  this._apis.shop.getDiscountListByIds({
+                      rightsDiscount: 1, 
+                      spuIds: componentData.ids.join(',')
+                  }).then((response)=>{
+                      this.createList(response);
+                      this.loading = false;
+                  }).catch((error)=>{
+                      // this.$notify.error({
+                      //     title: '错误',
+                      //     message: error
+                      // });
+                      console.error(error);
+                      this.list = [];
+                      this.loading = false;
+                  });
+              }else{
+                  this.list = [];
+              }
+          }
+      },
 
+      /* 创建数据 */
+    createList(datas) {
+      this.list = datas;
+    },
   }
 }
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+/deep/.el-form-item__label{
+  text-align: left;
+}
+/deep/.el-radio-group{
+  margin-top: 9px;
+  /deep/.el-radio {
+    margin-right: 10px;
+    margin-bottom: 5px;
+  }
+}
+/deep/.el-checkbox-group{
+  /deep/.el-checkbox{
+    margin-right: 10px;
+  }
+}
 </style>

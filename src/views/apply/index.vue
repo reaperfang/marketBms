@@ -1,31 +1,85 @@
 /*应用*/
 <template>
-    <div class="main">        
-        <iframe :src="src"></iframe>
+    <div class="main" v-loading="isLoaded">       
+        <iframe :src="src" ref="refreshFrame" @load="iframeLoad"></iframe>
     </div>
 </template>
 
 <script>
+import { getToken } from '@/system/auth'
 export default {
     data(){
         return{
-            src:'http://test-omo.aiyouyi.cn/vue/marketing/application/appIndex?access=1&token=123&businessId=1&loginUserId=1&tenantId=1&cid=2'
+            src:'',
+            path: '',
+            defultPath: '/application/appIndex',
+            refreshPath:'',
+            token:'',
+            cid:'',
+            iframeWin: null,
+            isLoaded: false,
+            tenantId:localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId
+        }
+    },
+    created() {
+        this.init();
+    },
+    mounted () {
+        window.addEventListener('message', this.onMessage)
+        this.iframeWin = this.$refs.refreshFrame.contentWindow;
+        this.isLoaded  = true;
+        window.onbeforeunload = function (){
+            this.refreshPath = window.localStorage.getItem('marketing_router_path')
         }
     },
     methods:{
+        init(){
+            this.token = getToken('authToken')
+            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            this.cid = shopInfo && shopInfo.id || ''
+            if(this.$route.query.paths){
+                this.path = this.$route.query.paths
+            }else{
+                this.path = this.refreshPath || this.defultPath;
+            }
+            // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
+            this.src = `${process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
+        },
 
+        // iframe 刷新  -- 暂时不用
+        sendMessage () {
+            this.iframeWin.postMessage({ cmd: 'marketing_router_refresh', params: {} }, '*')
+        },
+
+        // iframe 加载完成
+        iframeLoad () {
+            this.isLoaded  = false;
+        },
+
+        // iframe 接收消息
+        async onMessage (event) {
+            let message = event.data;
+            if (typeof(message) !== 'object') {
+                return false;
+            }
+            if ( message.cmd == 'marketing_router_path' ) {
+                this.path = message.params.path; // 营销路由
+                window.localStorage.setItem('marketing_router_path', this.path);
+                this.isLoaded  = false;
+            }
+        },
     }
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.main{
-    width: 100%;
-    height: 100%;
-    iframe{
-        width:100%;
+    .main {
+        width: 100%;
         height: 100%;
-        border:none;
+        iframe{
+            width:100%;
+            height: 100%;
+            border:none;
+        }
     }
-}
 </style>

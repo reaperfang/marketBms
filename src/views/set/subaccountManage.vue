@@ -27,6 +27,7 @@
       </div>
       <div class="bottom_part">
         <el-table
+        v-loading="loading"
         :data="dataList"
         style="width: 100%"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -49,8 +50,8 @@
           label="手机号">
         </el-table-column>
         <el-table-column
-          prop="status"
-          label="添加人">
+          prop="createUserName"
+          label="创建人">
         </el-table-column>
         <el-table-column
           prop="createTime"
@@ -102,7 +103,8 @@ export default {
       roles:[],
       dataList: [],
       total:0,
-      multipleSelection:[]
+      multipleSelection:[],
+      loading:true
     }
   },
   watch: {
@@ -137,13 +139,15 @@ export default {
     getSubAccount(){
       let query = Object.assign({cid:this.cid},this.form)
       this._apis.set.getSubAccount(query).then(response =>{
-        this.dataList = response.list
+        this.loading = false
+        this.dataList = []        
+        response && response.list.map(item =>{
+          item.roleNames = item.roleNames.split(',')[0]
+          this.dataList.push(item)
+        })
         this.total = response.total
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.loading = false
       })
     },
     //查询
@@ -163,18 +167,29 @@ export default {
     deleteAccount(id){
       let ids = []
       id ? ids.push(id) : ids = this.multipleSelection
-      this._apis.set.deleteAccount({userIds:ids}).then(response =>{
-        this.$notify.success({
-          title: '成功',
-          message: '删除成功！'
+      this.$confirm('此操作将永久删除该子账号, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._apis.set.deleteAccount({userIds:ids}).then(response =>{
+            this.$notify.success({
+              title: '成功',
+              message: '删除成功！'
+            });
+            this.getSubAccount()
+          }).catch(error =>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          })   
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
-        this.getSubAccount()
-      }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
     },
     //批量操作
     handleSelectionChange(val) {
@@ -185,6 +200,15 @@ export default {
     //编辑
     handleClick(row){
       this.$router.push({name:'createAccount',params:{data:row}})
+    },
+    //分页
+    handleSizeChange(val){
+      this.form.pageSize = val
+      this.getSubAccount()
+    },
+    handleCurrentChange(val){
+      this.form.startIndex = val
+      this.getSubAccount()
     },
   }
 }

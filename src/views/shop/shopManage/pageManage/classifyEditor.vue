@@ -5,7 +5,7 @@
 <script>
 import utils from "@/utils";
 import Decorate from '@/components/Decorate';
-import decorateMixin from '@/components/Decorate/decorateMixin';
+import decorateMixin from '@/components/Decorate/mixins/decorateMixin';
 export default {
   name: "classifyEditor",
   mixins: [decorateMixin],
@@ -36,10 +36,12 @@ export default {
          this.homePageData = response;
          this.convertDecorateData(response);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        this.loading = false;
+        console.error(error);
       });
     },
 
@@ -66,7 +68,7 @@ export default {
           sortType: data.sortType,
           explain: utils.uncompileStr(data.explain),
           showType: data.showType,
-          pageIdList: data.pageIdList
+          pageInfos: data.pageInfos
         }
       });
     },
@@ -74,51 +76,53 @@ export default {
     /* 保存数据 */
     saveData() {
       const resultData = this.collectData();
-      const copyResultData = {...resultData};
-      copyResultData['explain'] = utils.compileStr(copyResultData.explain);
-       if(!resultData.name) {
-         this.$alert('请填写基础信息后重试，点击确认开始编辑分类信息!', '警告', {
-          confirmButtonText: '确定',
-          callback: action => {
-            //打开基础信息面板
-            this.$store.commit('setCurrentComponentId', this.basePropertyId);
-          }
-        });
-        return;
-      }
-      this.loading = true;
-      if(this.id) {
-        this._apis.shop.editClassifyInfo(copyResultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: '编辑成功！',
-            type: 'success'
+      if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
+        const copyResultData = {...resultData};
+        copyResultData['explain'] = utils.compileStr(copyResultData.explain);
+        if(!resultData.name || !resultData.explain) {
+          this.$alert('请填写基础信息后重试，点击确认返回编辑分类信息!', '警告', {
+            confirmButtonText: '确定',
+            callback: action => {
+              //打开基础信息面板
+              this.$store.commit('setCurrentComponentId', this.basePropertyId);
+              this._globalEvent.$emit('decorateSaveLoading', false, this.id);
+            }
           });
-          this._routeTo('pageManageIndex');
-          this.loading = false;
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
+          return;
+        }
+        if(this.id) {
+          this._apis.shop.editClassifyInfo(copyResultData).then((response)=>{
+            this.$notify({
+              title: '成功',
+              message: '编辑成功！',
+              type: 'success'
+            });
+            this._routeTo('pageManageIndex');
+            this._globalEvent.$emit('decorateSaveLoading', true, this.id);
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+            this._globalEvent.$emit('decorateSaveLoading', false, this.id);
           });
-          this.loading = false;
-        });
-      }else{
-        this._apis.shop.createClassify(copyResultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: '创建成功！',
-            type: 'success'
+        }else{
+          this._apis.shop.createClassify(copyResultData).then((response)=>{
+            this.$notify({
+              title: '成功',
+              message: '创建成功！',
+              type: 'success'
+            });
+            this._routeTo('pageManageIndex');
+            this._globalEvent.$emit('decorateSaveLoading', true, this.id);
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+            this._globalEvent.$emit('decorateSaveLoading', false, this.id);
           });
-          this._routeTo('pageManageIndex');
-          this.loading = false;
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-          this.loading = false;
-        });
+        }
       }
     }
 

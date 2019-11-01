@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信视频素材'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信视频素材'" :showFooter="false">
       <div class="content">
         <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
@@ -9,15 +9,14 @@
                 <p class="img_head">
                   <span>
                     <el-checkbox v-model="item.checked" @change="handleChecked"></el-checkbox>
-                    {{item.update_time | formatDate('yyyy-MM-dd hh:mm:ss')}}
+                    {{item.update_time*1000 | formatDate('yyyy-MM-dd hh:mm:ss')}}
                     </span>
                 </p>
                 <div class="img_body">
                   <p class="title">{{item.title}}</p>
-                  <video v-if="item.down_url !=''"  
-                  :src="item.down_url"
-                  class="avatar video-avatar"
-                  controls="controls">您的浏览器不支持视频播放</video> 
+                  <!-- <img :src="item.fileCover" class="imgCover">
+                  <span class="btn" @click="openVideo(item)"></span> -->
+                  <video v-if="item.video_url !=''" :src="item.video_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
                   <!-- <img :src="item.filePath" class="imgs"> -->
                 </div>
               </div>
@@ -36,16 +35,21 @@
             </p>
           </div>
         </div>
+        <p class="txt_center">
+            <el-button type="primary" @click="submit()" :disabled="disNum">确 认</el-button>
+            <el-button  @click="visible = false">取 消</el-button>
+        </p>
       </div>
   </DialogBase>
 </template>
 
 <script>
+import dialogVideo from './dialogVideo';
 import DialogBase from "@/components/DialogBase";
 import utils from "@/utils";
 export default {
   name: "dialogSyncImage",
-  components: {DialogBase},
+  components: {DialogBase,dialogVideo},
   data() {
     return {
       checkedAll:false,
@@ -54,6 +58,8 @@ export default {
       currentPage:1,
       pageSize:10,
       total:0,
+      disNum:true,
+      data:'',
     }
   },
   props: {
@@ -107,11 +113,11 @@ export default {
             cid:this.cid,
             mediaId:item.media_id,
             sourceMaterialType:'2',
-            fileName:'',
-            filePath:escape(item.down_url),
+            filePath:escape(item.video_url),
             fileSize:'',
             name:item.name,
-            fileover:'',
+            fileCover:escape(item.video_thumb),
+            isSyncWechat:'1'
           }
           datas.push(obj)
         }        
@@ -120,18 +126,8 @@ export default {
         fileGroupInfoId:'-1',
         data:datas
       }
-      this._apis.file.syncMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '同步微信视频成功！'
-        });
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
-      this.$emit('submit',{syncImage:''})
+      this.$emit('submit',{syncImage:{query:query}})
+      this.visible = false
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){
@@ -148,11 +144,13 @@ export default {
       if(val){
         this.list.map(item =>{
           item.checked = true
+          this.disNum = false
           return this.list
         })
       }else{
         this.list.map(item =>{
           item.checked = false
+          this.disNum = true
           return this.list
         })
       }
@@ -162,8 +160,12 @@ export default {
         this.checkedAll = this.list.every(item => {
           return item.checked == true
         })
+        this.disNum = !this.list.some(item => {
+          return item.checked == true
+        })
       }else{
         this.checkedAll = false
+        this.disNum = true
       }
     },
 
@@ -215,13 +217,27 @@ export default {
           padding:10px 10px;
           font-size: 14px;
           color: #44434B;
+          position: relative;
           .title{
             height: 25px;
             line-height: 25px;
           }
-          .imgs{
+          .imgCover{
             width: 100%;
             height:85px;
+            object-fit:cover;
+          }
+          .btn{
+            position:absolute;
+            top:55px;
+            left:110px;
+            width: 40px;
+            height: 40px;
+            background: url('../../../assets/images/shop/bofang.png');
+            background-size: cover;
+            &:hover{
+              cursor: pointer;
+            }
           }
         }
         .img_bottom{
@@ -289,5 +305,14 @@ export default {
 }
 .ml10{
   margin-left: 10px;
+}
+.txt_center{
+  width: 100%;
+  text-align: center;
+  margin-top:20px;
+}
+.video-avatar{
+  width: 227px;
+  height: 147px;
 }
 </style>

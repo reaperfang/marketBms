@@ -212,7 +212,7 @@ export function setShopStyle(data) {
   })
 }
 
-// 获取商品分组页面数据
+// 获取商品分类页面数据
 export function getGoodsGroup(data) {
   return request({
     target: 'DECORATION-PAGEINFO-COMMODITY-PROCESSOR',
@@ -222,7 +222,7 @@ export function getGoodsGroup(data) {
   })
 }
 
-// 编辑商品分组页面数据
+// 编辑商品分类页面数据
 export function editGoodsGroup(data) {
   return request({
     target: 'DECORATION-PAGE-INFO-COMMODITY-INSERT-PROCESSOR',
@@ -312,7 +312,17 @@ export function getQrcode(data) {
   })
 }
 
-//重置商品分组
+// 获取小程序码
+export function getMiniAppQrcode(data) {
+  return request({
+    target: 'DECORATION-MINI-PROGRAMS-PROCESSOR',
+    method: 'post',
+    apiType: 'decorate',
+    data
+  })
+}
+
+//重置商品分类
 export function resetGoodsGroup(data) {
   return request({
     target: 'DECORATION-PAGE-INFO-COMMODITY-RESET-PROCESSOR',
@@ -378,7 +388,6 @@ export function getShopInfo(data) {
     target: 'SHOP-API-100-PROCESSOR',
     method: 'post',
     apiType: 'manager',
-    noCid: true,
     data
   })
 }
@@ -389,7 +398,6 @@ export function changeSwitchStatus(data) {
     target: 'SHOP-API-102-PROCESSOR',
     method: 'post',
     apiType: 'manager',
-    noCid: true,
     data
   })
 }
@@ -397,7 +405,7 @@ export function changeSwitchStatus(data) {
   //优惠券B端选择
   export function getCouponList(data) {
       return request({
-        url: 'api/v1/b/app-coupon/activity/home-page-list',
+        url: '/v1/b/app-coupon/activity/home-page-list',
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data
@@ -407,7 +415,7 @@ export function changeSwitchStatus(data) {
   //拼团B端选择商品
   export function getMultiPersonList(data) {
       return request({
-        url: 'api/v1/b/app-group-buy/pageGoods',
+        url: '/v1/b/app-group-buy/pageGoods',
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data
@@ -417,9 +425,9 @@ export function changeSwitchStatus(data) {
   //秒杀B端选择商品
   export function getSecondkillList(data) {
       return request({
-        url: 'api/v1/b/seckill/app-goods-page-list',
+        url: '/v1/b/seckill/app-goods-page-list',
         method: 'get',
-        baseURL: process.env.CAOSHUAI_API,
+        baseURL: process.env.SALE_API,
         params:data
       })
   }
@@ -427,9 +435,9 @@ export function changeSwitchStatus(data) {
   //限时折扣B端选择商品
   export function getDiscountList(data) {
       return request({
-        url: 'api/v1/b/limit-discount/app-goods-page-list',
+        url: '/v1/b/limit-discount/app-goods-page-list',
         method: 'get',
-        baseURL: process.env.CAOSHUAI_API,
+        baseURL: process.env.SALE_API,
         params:data
       })
   }
@@ -437,9 +445,9 @@ export function changeSwitchStatus(data) {
   //优惠套装B端选择商品
   export function getDiscountPackageList(data) {
       return request({
-        url: 'api/v1/b/package-buy/app-page-list',
+        url: '/v1/b/package-buy/app-page-list',
         method: 'get',
-        baseURL: process.env.CAOSHUAI_API,
+        baseURL: process.env.SALE_API,
         params:data
       })
   }
@@ -447,7 +455,7 @@ export function changeSwitchStatus(data) {
   //满减选择活动B端选择
   export function getFullReductionList(data) {
       return request({
-        url: 'api/v1/b/app-reward/page',
+        url: '/v1/b/app-reward/page',
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data
@@ -457,7 +465,7 @@ export function changeSwitchStatus(data) {
     //N元N件B端选择商品
   export function getNyuanList(data) {
       return request({
-        url: 'api/v1/b/goodsbale/page-list',
+        url: '/v1/b/goodsbale/page-list',
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data
@@ -468,7 +476,7 @@ export function changeSwitchStatus(data) {
   //优惠券C端展示
   export function getCouponListByIds(data) {
       return request({
-        url: 'api/v1/b/app-coupon/home-page/page-list',
+        url: '/v1/b/app-coupon/home-page/page-list',
         method: 'post',
         baseURL: process.env.SALE_API, 
         data
@@ -478,7 +486,7 @@ export function changeSwitchStatus(data) {
   //拼团C端展示
   export function getMultiPersonListByIds(data) {
       return request({
-        url: 'api/v1/c/app-group-buy/listGoods',
+        url: '/v1/c/app-group-buy/listGoods',
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data
@@ -488,9 +496,9 @@ export function changeSwitchStatus(data) {
   //秒杀C端展示
   export function getSecondkillListByIds(data) {
       return request({
-        url: 'api/v1/c/seckill/get-activity-goods',
+        url: '/v1/c/seckill/get-activity-goods',
         method: 'get',
-        baseURL: process.env.CAOSHUAI_API,
+        baseURL: process.env.SALE_API,
         params:data
       })
   }
@@ -498,9 +506,9 @@ export function changeSwitchStatus(data) {
   //限时折扣C端展示
   export function getDiscountListByIds(data) {
       return request({
-        url: 'api/v1/c/limit-discount/get-activity-goods',
+        url: '/v1/c/limit-discount/get-activity-goods',
         method: 'get',
-        baseURL: process.env.CAOSHUAI_API,
+        baseURL: process.env.SALE_API,
         params:data
       })
   }
@@ -508,9 +516,9 @@ export function changeSwitchStatus(data) {
   //优惠套装C端展示
   export function getDiscountPackageListByIds(data) {
       return request({
-        url: 'api/v1/c/package-buy/get-package-buy-list',
+        url: '/v1/c/package-buy/get-package-buy-list',
         method: 'get',
-        baseURL: process.env.CAOSHUAI_API,
+        baseURL: process.env.SALE_API,
         params:data
       })
   }
@@ -518,7 +526,7 @@ export function changeSwitchStatus(data) {
   //满减C端展示
   export function getFullReductionListByIds(data) {
       return request({
-        url: 'api/v1/c/app-reward',
+        url: '/v1/c/app-reward',
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data
@@ -528,7 +536,7 @@ export function changeSwitchStatus(data) {
   //N元N件C端展示
   export function getNyuanListByIds(data) {
       return request({
-        url: `api/v1/c/goodsbale/list/${data.baleIds}`,
+        url: `/v1/c/goodsbale/list/${data.baleIds}`,
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data
@@ -542,6 +550,48 @@ export function changeSwitchStatus(data) {
         method: 'post',
         apiType: 'decorate',
         data
+      })
+  }
+
+
+  //批量修改分类
+  export function modifyClassify(data) {
+      return request({
+        target: 'DECORATION-MOVING-CATEGO-RYPROCESSOR',
+        method: 'post',
+        apiType: 'decorate',
+        data
+      })
+  }
+
+  //获取营销活动类型列表
+  export function getActivitiesList(data) {
+      return request({
+        // url: 'api/v1/b/module-code',
+        url: '/v1/b/app-general-info/pull',
+        method: 'get',
+        baseURL: process.env.SALE_API,
+        params: data
+      })
+  }
+
+  //根据营销类型code获取营销活动数据
+  export function getActivitiesData(data) {
+      return request({
+        url: '/v1/b/app-general-info/list',
+        method: 'get',
+        baseURL: process.env.SALE_API,
+        params: data
+      })
+  }
+
+  //获取小程序状态
+  export function getMiniProgramStatus(data) {
+      return request({
+        target: 'DECORATION-GET-MINI-APP-STATUS-PROCESSOR',
+        method: 'post',
+        params: data,
+        apiType: 'decorate'
       })
   }
 

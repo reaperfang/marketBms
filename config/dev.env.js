@@ -1,12 +1,10 @@
 module.exports = {
 	NODE_ENV: '"development"',
   ENV_CONFIG: '"dev"',
-  DATA_API: '"/data-server"',
-  SALE_API: '"/sale_server"',
+  DATA_API: '"/data-server"', // "/data-server" "http://test-omo.aiyouyi.cn"
+  SALE_API: '"/sale_server"', // "/sale_server" "http://test-mkt.xinmt.com"
   WEBSOCKET_server:'"ws://127.0.0.1:9000"',
   staticHost: 'https://test-m-aiyouyi.yun300.cn/',
-  UPLOAD_SERVER:'"/upload_server"',
-  UPLOAD_COUPON_SERVER:'"/upload_coupon_server"',
-  CAOSHUAI_API: '"/caoshaui_server"'
+  UPLOAD_SERVER:'"/upload_server"', // "/upload_server"
 }
  

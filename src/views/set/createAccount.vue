@@ -37,7 +37,7 @@
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item class="mtb100">
-                <el-button type="primary" @click.native.prevent="onSubmit">保存</el-button>
+                <el-button type="primary" @click.native.prevent="onSubmit('form')">保存</el-button>
                 <el-button @click="_routeTo('subaccountManage')">返回</el-button>
             </el-form-item>
         </el-form>
@@ -49,6 +49,17 @@
 export default {
   name: 'createAccount',
   data() {
+    var validateMobile = (rule,value,callback) =>{
+      let regFormat = /^[1][3578][0-9]{9}$/; //正确手机号
+      if (!value) {
+        return callback(new Error('不能为空'));
+      }
+      if (!(regFormat.test(value))) {
+        callback(new Error('请输入正确手机号'));
+      } else {
+        callback();
+      }
+    }
     return {
       form: {
           userName: '',
@@ -59,10 +70,11 @@ export default {
       rules:{
         userName: [
           { required: true, message: '请输入人员名称', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '要求1~10个字符', trigger: 'blur' }
         ],
         mobile:[
           { required: true, message: '请输入登录手机号', trigger: 'blur' },
+          { validator: validateMobile, trigger: 'blur' }
         ],
         roleName:[
           { required: true, message: '请选择角色', trigger: 'blur' },
@@ -165,7 +177,9 @@ export default {
       })
     },
     //保存
-    onSubmit(){
+    onSubmit(formName){
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
         let id = this.accountInfo && this.accountInfo.id
         if(id){//修改子账号
            let query = {
@@ -214,6 +228,8 @@ export default {
                 });
             })
         }
+        }
+      })
     }
   }
 }

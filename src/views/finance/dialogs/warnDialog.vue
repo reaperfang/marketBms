@@ -1,8 +1,8 @@
 /*提示 */
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提示" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" :width="widthPx" title="提示" :hasCancel="hasCancel">
         <div class="c_container">
-            <div>
+            <div style="text-align:center">
                 {{data.text}}
             </div>
         </div>
@@ -16,7 +16,8 @@ export default {
     props: ['data'],
     data() {
         return {
-            hasCancel: false
+            hasCancel: false,
+            widthPx:'450px'
         }
     },
     methods: {

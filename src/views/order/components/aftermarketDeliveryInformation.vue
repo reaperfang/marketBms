@@ -1,15 +1,15 @@
 <template>
     <div class="aftermarketDeliveryInformation">
-        <div class="delivery-information-header">
+        <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             客户发货
         </div>
         <div class="container">
-            <div class="item">
+            <div v-if="orderAfterSale.returnExpressNo" class="item" :class="{close: !showCustomerContent}">
                 <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSale.returnExpressNo}}</div>
-                        <div @click="showLogistics(orderAfterSale.returnExpressNo)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div @click="showLogistics(orderAfterSale.returnExpressNo, true)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | customerFilter}}</div>
@@ -17,7 +17,7 @@
                         <div class="header-righter-item">{{orderAfterSale.memberReturnGoodsTime}}</div>
                         <div @click="showCustomerContent = !showCustomerContent">
                             <i v-if="showCustomerContent" class="el-icon-caret-top pointer"></i>
-                            <i v-if="!showCustomerContent" class="el-icon-caret-top pointer"></i>
+                            <i v-if="!showCustomerContent" class="el-icon-caret-bottom pointer"></i>
                         </div>
                     </div>
                 </div>
@@ -50,37 +50,41 @@
                             label="数量">
                         </el-table-column>
                         <el-table-column
+                            prop="goodsPrice"
+                            label="商品单价">
+                        </el-table-column>
+                        <el-table-column
                             prop="subtotalMoney"
                             label="小计">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             prop="afterSaleLimitTime"
                             label="售后有效期">
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
                     <!-- <div class="remark">快递单号：{{}}</div> -->
                 </div>
             </div>
         </div>
 
-        <div class="delivery-information-header">
+        <div v-if="orderAfterSaleSendInfo.expressNos" class="delivery-information-header">
             商家发货
         </div>
         <div class="container">
-            <div class="item">
+            <div v-if="orderAfterSaleSendInfo.expressNos" class="item" :class="{close: !showContent}">
                 <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
-                        <div class="header-lefter-item ">快递单号：{{orderAfterSale.expressNo}}</div>
-                        <div @click="showLogistics(orderAfterSale.expressNo)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div class="header-lefter-item ">快递单号：{{orderAfterSaleSendInfo.expressNos}}</div>
+                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
-                        <div class="header-righter-item">{{orderAfterSale | businessFilter}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSale.sendName}}</div>
+                        <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
+                        <div class="header-righter-item">发货人：{{orderAfterSaleSendInfo.sendName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.receiveGoodsTime}}</div>
                         <div @click="showContent = !showContent">
                             <i v-if="showContent" class="el-icon-caret-top pointer"></i>
-                            <i v-if="!showContent" class="el-icon-caret-top pointer"></i>
+                            <i v-if="!showContent" class="el-icon-caret-bottom pointer"></i>
                         </div>
                     </div>
                 </div>
@@ -94,7 +98,7 @@
                             <template slot-scope="scope">
                                 <div class="row justity-between">
                                     <div class="col">
-                                        <img :src="scope.row.goodsImage" alt="">
+                                        <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
@@ -125,7 +129,7 @@
                 </div>
             </div>
         </div>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
+        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
     </div>
 </template>
 <script>
@@ -154,7 +158,9 @@ export default {
             dialogVisible: false,
             currentData: {},
             showCustomerContent: true,
-            showContent: true
+            showContent: true,
+            expressNo: '',
+            expressCompanys: ''
         }
     },
     filters: {
@@ -177,16 +183,16 @@ export default {
         customerFilter(value) {
             if(value.receiveGoodsTime) {
                 return '【商户签收】'
-            } else if(value.memberTeturnGoodsTime) {
+            } else if(value.returnExpressNo) {
                 return '【客户发货】'
             } else {
                 return ''
             }
         },
-        businessFilter(value) {
-            if(value.memberTeceiveGoodsTime) {
+        businessFilter(value, expressNos) {
+            if(value.memberReceiveGoodsTime) {
                 return '【客户签收】'
-            } else if(value.sendTime) {
+            } else if(expressNos) {
                 return '【商户发货】'
             } else {
                 return ''
@@ -194,7 +200,13 @@ export default {
         }
     },
     methods: {
-        showLogistics(expressNo) {
+        showLogistics(expressNo, isComstomer) {
+            this.expressNo = expressNo
+            if(isComstomer) {
+                this.expressCompanys = this.orderAfterSale.returnExpressName
+            } else {
+                this.expressCompanys = this.orderAfterSaleSendInfo.expressCompanys
+            }
             this._apis.order.orderLogistics({expressNo}).then(res => {
                 this.currentDialog = 'LogisticsDialog'
                 this.currentData = res.traces
@@ -217,6 +229,10 @@ export default {
             default: []
         },
         orderAfterSale: {
+            type: Object,
+            default: {}
+        },
+        orderAfterSaleSendInfo: {
             type: Object,
             default: {}
         }
@@ -242,6 +258,11 @@ export default {
             .item {
                 border-radius: 10px;
                 border: 1px solid #cacfcb;
+                &.close {
+                    .header {
+                        border-radius: 10px;
+                    }
+                }
                 .header {
                     height: 60px;
                     background-color: rgb(243, 244, 244);

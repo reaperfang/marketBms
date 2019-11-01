@@ -4,7 +4,7 @@
 
 <script>
 import Decorate from '@/components/Decorate';
-import decorateMixin from '@/components/Decorate/decorateMixin';
+import decorateMixin from '@/components/Decorate/mixins/decorateMixin';
 import utils from '@/utils';
 export default {
   name: "shopEditor",
@@ -48,10 +48,11 @@ export default {
          this.homePageData = response;
          this.convertDecorateData(response);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        // this.$notify.error({
+        //   title: '错误',
+        //   message: error
+        // });
+        console.error(error);
         this.loading = false;
       });
     },
@@ -89,15 +90,19 @@ export default {
     /* 保存数据 */
     saveData() {
       let resultData = this.collectData();
-      resultData['status'] = '1';
-      this.submit(resultData);
+      if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
+        resultData['status'] = '1';
+        this.submit(resultData);
+      }
     },
 
     /* 保存并生效数据 */
     saveAndApplyData() {
       let resultData = this.collectData();
-      resultData['status'] = '0';
-      this.submit(resultData);
+      if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
+        resultData['status'] = '0';
+        this.submit(resultData, 'saveAndApply');
+      }
     },
 
     /* 保存到模板 */
@@ -129,18 +134,23 @@ export default {
         });
     },
 
-    submit(resultData) {
-      if(!resultData.name) {
-         this.$alert('请填写基础信息后重试，点击确认开始编辑页面信息!', '警告', {
+    submit(resultData, type) {
+
+      if(!resultData.name || !resultData.title || !resultData.explain) {
+         this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
           confirmButtonText: '确定',
           callback: action => {
             //打开基础信息面板
             this.$store.commit('setCurrentComponentId', this.basePropertyId);
+            if(type === 'saveAndApply') {
+              this._globalEvent.$emit('decorateSaveAndApplyLoading', false, this.id);
+            }else{
+              this._globalEvent.$emit('decorateSaveLoading', false, this.id);
+            }
           }
         });
         return;
       }
-      this.loading = true;
       if(this.id) {
         this._apis.shop.editPageInfo(resultData).then((response)=>{
           this.$notify({
@@ -148,14 +158,22 @@ export default {
             message: '编辑成功！',
             type: 'success'
           });
+          if(type === 'saveAndApply') {
+            this._globalEvent.$emit('decorateSaveAndApplyLoading', true, this.id);
+          }else{
+            this._globalEvent.$emit('decorateSaveLoading', true, this.id);
+          }
           this._routeTo('pageManageIndex');
-          this.loading = false;
         }).catch((error)=>{
+          if(type === 'saveAndApply') {
+            this._globalEvent.$emit('decorateSaveAndApplyLoading', false, this.id);
+          }else{
+            this._globalEvent.$emit('decorateSaveLoading', false, this.id);
+          }
           this.$notify.error({
             title: '错误',
             message: error
           });
-          this.loading = false;
         });
       }else{
         this._apis.shop.createPage(resultData).then((response)=>{
@@ -164,14 +182,22 @@ export default {
             message: '创建成功！',
             type: 'success'
           });
+          if(type === 'saveAndApply') {
+            this._globalEvent.$emit('decorateSaveAndApplyLoading', true, this.id);
+          }else{
+            this._globalEvent.$emit('decorateSaveLoading', true, this.id);
+          }
           this._routeTo('pageManageIndex');
-          this.loading = false;
         }).catch((error)=>{
           this.$notify.error({
             title: '错误',
             message: error
           });
-          this.loading = false;
+          if(type === 'saveAndApply') {
+            this._globalEvent.$emit('decorateSaveAndApplyLoading', false, this.id);
+          }else{
+            this._globalEvent.$emit('decorateSaveLoading', false, this.id);
+          }
         });
       }
     }

@@ -7,7 +7,8 @@ export default [
     name: 'datum',
     meta: {
       title: '数据',
-      icon: 'icon_datum'
+      icon: 'icon_datum',
+      activeIcon:'icon_datums'
     },
     children: [
       {
