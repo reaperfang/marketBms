@@ -593,6 +593,7 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
   })
 }
 
+<<<<<<< HEAD
  //活动赠品
  export function getGain(data) {
   return request({
@@ -602,6 +603,8 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
   })
 }
 
+=======
+>>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
 
 
 
