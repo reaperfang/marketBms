@@ -465,9 +465,19 @@ export default {
 <style lang="scss" scoped>
     .order-state {
         background-color: #fff;
-        padding: 30px;
+        padding: 30px 50px;
         display: flex;
         justify-content: space-between;
+        .item.righter {
+            margin-left: 10px;
+            p {
+                line-height: 21px;
+            }
+            p:nth-child(2) {
+                font-size: 14px;
+                margin-top: 5px;
+            }
+        }
         .item {
             &.righter {
                 width: 230px;

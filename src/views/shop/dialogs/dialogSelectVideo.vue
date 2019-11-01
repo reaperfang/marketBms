@@ -143,6 +143,7 @@ ul.video_list{
     width: 100%;
     padding: 20px;
     padding-top: 0;
+    height: 210px;
   }
 }
 </style>

@@ -37,7 +37,7 @@ export default {
 .componentVideo {
   .video {
     width: 100%;
-    height: 210spx;
+    height: 210px;
   }
 }
 </style>
