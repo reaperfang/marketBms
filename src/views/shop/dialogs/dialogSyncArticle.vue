@@ -128,8 +128,8 @@ export default {
     },
   /**********************************        分页相关      **********************/
     handleSizeChange(val){
-      this.pageSize = val || this.pageSize
-      this.getList()
+      this.pageSize = val || this.pageSize;
+      this.getList();
     },
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage
