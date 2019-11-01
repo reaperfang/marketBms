@@ -20,11 +20,7 @@
             <el-col :span="8"><div class="grid-content center">
                 <div class="item">
                     <div class="label">付款人</div>
-<<<<<<< HEAD
                     <div class="value" style="word-break: break-all;">{{payMan}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
-=======
-                    <div class="value">{{payMan}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
                 </div>
                 <div class="item">
                     <div class="label">付款方式</div>
@@ -36,30 +32,19 @@
                 </div>
                 <div class="item" v-if="orderDetail.orderPayRecordList && orderDetail.orderPayRecordList.filter(val => val.tradeCode).length">
                     <div class="label">交易流水号</div>
-<<<<<<< HEAD
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | tradeCodeFilter}}</div>
                 </div>
                 <div class="item" v-if="wechatLength">
                     <div class="label">微信流水号</div>
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
-=======
-                    <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | orderPayRecordListFilter}}</div>
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
                 </div>
                 <div class="item">
                     <div class="label">本单获得</div>
                     <div class="value">
-<<<<<<< HEAD
                         <p>积分 {{rewardScore}}</p>
                         <p style="word-break: break-all;">赠品 {{gift}}</p>
                         <p style="word-break: break-all;">优惠券 {{gainCouponList}}</p>
                         <p style="word-break: break-all;">优惠码 {{gainCouponCodeList}}</p>
-=======
-                        <p>积分 {{orderInfo.gainScore}}</p>
-                        <p>赠品 {{orderInfo.gift || 0}}</p>
-                        <p>优惠券 {{gainCoupon || 0}}</p>
-                        <p>优惠码 {{gainPromotionCode || 0}}</p>
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
                     </div>
                 </div>
             </div></el-col>
@@ -380,27 +365,20 @@ export default {
                 return this.orderInfo.memberName
             } else {
                 if(this.orderDetail.orderPayRecordList) {
-<<<<<<< HEAD
                     //_arr = this.orderDetail.orderPayRecordList.slice(0, 3)
                     _arr = this.orderDetail.orderPayRecordList
-=======
-                    _arr = this.orderDetail.orderPayRecordList.slice(0, 3)
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
                     str = _arr.map(val => val.memberName).join(',')
                 }
             }
 
             return str
         },
-<<<<<<< HEAD
         wechatLength() {
             if(this.orderDetail.orderPayRecordList) {
                 return this.orderDetail.orderPayRecordList.filter(val => val.transactionCode).length
             }
             return 0
         }
-=======
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
     },
     methods: {
         // getOrderPayRecordList() {
@@ -422,7 +400,6 @@ export default {
         //         });
         //     }) 
         // },
-<<<<<<< HEAD
         getGain() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
 
@@ -442,8 +419,6 @@ export default {
                 });
             })
         },
-=======
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
         getOrderAmount() {
             let goodsAmount
             let freight
@@ -635,17 +610,12 @@ export default {
                 return val.consumeBalanceMoney + val.consumeScoreConvertMoney + val.receivableMoney
             }
         },
-<<<<<<< HEAD
         tradeCodeFilter(value) {
-=======
-        orderPayRecordListFilter(value) {
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
             if(value && value instanceof Array) {
                 return value.map(val => val.tradeCode).join(',')
             } else {
                 return ''
             }
-<<<<<<< HEAD
         },
         wechatFilter(value) {
             if(value && value instanceof Array) {
@@ -653,8 +623,6 @@ export default {
             } else {
                 return ''
             }
-=======
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
         }
     },
     props: {
