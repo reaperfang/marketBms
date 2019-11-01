@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="加入黑名单" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="加入黑名单" :hasCancel="hasCancel" :isHing="isHing">
         <div class="c_container">
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
@@ -53,7 +53,8 @@ export default {
             codeId: "",
             allCoupons: [],
             allCodes: [],
-            canSubmit: true
+            canSubmit: true,
+            isHing: false
         }
     },
     methods: {

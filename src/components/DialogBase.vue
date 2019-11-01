@@ -60,6 +60,9 @@ export default {
         hasCancel: {
             type: Boolean,
             default: true
+        },
+        isHing: {
+            type: Boolean
         }
     }
 }

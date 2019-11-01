@@ -204,7 +204,7 @@ export default {
             justify-content: space-between;
             .countdown{
                 float:right;
-                width:189px;
+                width:155px;
                 height:43px;
                 padding:0 3.5px 0 15px;
                 .content{
@@ -630,7 +630,7 @@ export default {
                     justify-content: space-between;
                     .countdown{
                         float:right;
-                        width:189px;
+                        width:155px;
                         height:43px;
                         padding:0 3.5px 0 15px;
                         .content{
