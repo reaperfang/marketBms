@@ -113,6 +113,7 @@ export default {
             title:item.title,
             sourceMaterial:item.content,
             isSyncWechat:'1',
+            fileCover: escape(item.thumb_url)
           }
           datas.push(obj)
         }        

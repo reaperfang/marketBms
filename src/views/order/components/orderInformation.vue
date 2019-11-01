@@ -32,7 +32,7 @@
                 </div>
                 <div class="item">
                     <div class="label">交易流水号</div>
-                    <div class="value">{{orderInfo.transactionCode}}</div>
+                    <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | orderPayRecordListFilter}}</div>
                 </div>
                 <div class="item">
                     <div class="label">本单获得</div>
@@ -51,7 +51,7 @@
                         <p>发票类型 {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
                         <p>发票抬头 {{orderInfo.invoiceTitle}}</p>
                         <p>发票内容 商品明细</p>
-                        <p>电子发票将在订单完成后1-2天内开具</p>
+                        <!-- <p>电子发票将在订单完成后1-2天内开具</p> -->
                     </div>
                 </div>
                 <div class="item">
@@ -110,13 +110,13 @@
                 <el-table-column
                     label="商品单价">
                     <template slot-scope="scope">
-                        ¥{{scope.row.goodsPrice}}
+                        ¥{{scope.row.salePrice}}
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="商品小计">
                     <template slot-scope="scope">
-                        ¥{{scope.row.subtotalMoney}}
+                        ¥{{(+scope.row.salePrice * scope.row.goodsCount).toFixed(2)}}
                     </template>
                 </el-table-column>
             </el-table>
@@ -565,6 +565,13 @@ export default {
                 return val.consumeBalanceMoney + val.consumeScoreConvertMoney + val.receivableMoney
             }
         },
+        orderPayRecordListFilter(value) {
+            if(value && value instanceof Array) {
+                return value.map(val => val.tradeCode).join(',')
+            } else {
+                return ''
+            }
+        }
     },
     props: {
         orderInfo: {
@@ -620,6 +627,9 @@ export default {
                 margin-top: 10px;
                 .label {
                     margin-right: 20px;
+                    flex-shrink: 0;
+                    width: 70px;
+                    text-align: right;
                 }
                 .value {
                     color: #9FA29F;
