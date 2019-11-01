@@ -3,6 +3,7 @@
   <div class="componentVideo" v-if="currentComponentData && currentComponentData.data">
     <div v-on:click="playVideo()">
       <video
+        v-if="show"
         :src="currentComponentData.data.videoUrl"
         controls="controls"
         class="video"
@@ -20,6 +21,7 @@ export default {
   components: {},
   data () {
     return {
+      show: true
     }
   },
   created() {
@@ -27,6 +29,17 @@ export default {
   },
   computed: {
    
+  },
+  watch: {
+    'currentComponentData.data.coverType': {
+      handler(newValue) {
+        this.show = false;
+        this.$nextTick(()=>{
+          this.show = true;
+        })
+      },
+      deep:true
+    },
   },
   methods: {
   }

@@ -16,8 +16,9 @@
       <el-table-column label="客户信息">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
-            <span class="fl">{{scope.row?scope.row.nickName:""}}</span>
-            <img :src="scope.row?scope.row.headIcon:require('../../../../assets/images/client/head_default.png')" alt="" class="headIcon fr">
+            
+            <img :src="scope.row?scope.row.headIcon:require('../../../../assets/images/client/head_default.png')" alt="" class="headIcon fl">
+            <span class="fr">{{scope.row?scope.row.nickName:""}}</span>
           </div>
         </template>
       </el-table-column>
@@ -133,10 +134,6 @@ export default {
           window.location.href = response
         }).catch((error) => {
           console.log(error);
-          // this.$notify.error({
-          //   title: '错误',
-          //   message: error
-          // });
         })
       }else{
         this.$notify({
@@ -338,14 +335,12 @@ export default {
   width: 130px;
   span{
     display: block;
-    float: left;
     width: 84px;
     white-space: nowrap;
     overflow: hidden;
     line-height: 36px;
   }
   .headIcon{
-    float: right;
     display: block;
     width: 32px;
     height: 32px;

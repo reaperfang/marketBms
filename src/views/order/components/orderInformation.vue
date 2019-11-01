@@ -11,7 +11,7 @@
                         <div class="label">收货信息</div>
                         <div class="value">
                             <p>{{orderInfo.receivedName}} / {{orderInfo.receivedPhone}}</p>
-                            <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}}{{orderInfo.receivedDetail}}</p>
+                            <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
                     <p @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>

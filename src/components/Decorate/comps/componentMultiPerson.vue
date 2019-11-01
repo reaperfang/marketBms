@@ -13,7 +13,7 @@
                         <div class="countdown">
                             <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                             <div class="content">
-                                <p class="caption">{{item.status==0?'距开始仅剩':'距结束仅剩'}}</p>
+                                <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
                                 <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                                 <!-- <p class="time">{{item.endTime}}</p> -->
                             </div>
@@ -226,6 +226,8 @@ export default {
             margin-top:0 !important;
         }
         .countdown_Bar{
+            display:flex;
+            justify-content: space-between;
             .countdown{
                 float:right;
                 width:189px;
@@ -519,7 +521,7 @@ export default {
                         font-size:9px;
                         margin-left:2px;
                         font{
-                            width:12px;
+                            min-width:12px;
                             height:12px;
                             color:#FC3D42;
                             font-size:9px;
@@ -666,6 +668,8 @@ export default {
                     }
                 }
                 .countdown_Bar{
+                    display:flex;
+                    justify-content: space-between;
                     .countdown{
                         float:right;
                         width:189px;
