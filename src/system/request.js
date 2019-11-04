@@ -192,9 +192,6 @@ class Ajax {
           case 'orderGain':  
             config.baseURL = `${process.env.DATA_API}/mkt-api/v1/b/order-after-sale/order-rewards/100006489`;
             break;
-          case 'orderGain':  
-            config.baseURL = `${process.env.DATA_API}/mkt-api/v1/b/order-after-sale/order-rewards/100006489`;
-            break;
         }
       }
     }
