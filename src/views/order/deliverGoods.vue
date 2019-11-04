@@ -485,7 +485,7 @@ export default {
         .then(res => {
           res[0].orderItemList.forEach(val => {
             val.cacheSendCount = val.sendCount;
-            val.sendCount = "";
+            val.sendCount = val.goodsCount - val.sendCount;
           });
           this.tableData = res[0].orderItemList;
           this.orderInfo = res[0];

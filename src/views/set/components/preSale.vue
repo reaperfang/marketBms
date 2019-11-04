@@ -11,7 +11,6 @@
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
                 :min="0" 
-                :max="24"
                 v-if="form.acuoType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -20,7 +19,6 @@
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
                 :min="0" 
-                :max="60"
                 v-else>
                 </el-input-number>
                 <el-select 
@@ -96,7 +94,6 @@
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
                 :min="0" 
-                :max="24"
                 v-if="form.oasType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -105,7 +102,6 @@
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
                 :min="0" 
-                :max="60"
                 v-else>
                 </el-input-number>
                 <el-select 

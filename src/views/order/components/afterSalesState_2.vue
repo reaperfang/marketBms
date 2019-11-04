@@ -127,6 +127,7 @@
                 <div class="col righter">
                     <p>已完成</p>
                     <p class="des">退款消息给客户，客户确认收款。</p>
+                    <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>

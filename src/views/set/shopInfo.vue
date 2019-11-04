@@ -63,7 +63,7 @@ export default {
     var validatePass = (rule, value, callback) => {
       let mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
       let tel = /^\d{3,4}-?\d{7,9}$/;
-      if (!tel.test(value)||!mobile.test(value)){
+      if (!tel.test(value) && !mobile.test(value)){
           return callback(new Error('请填写联系电话(座机格式\'区号-座机号码\')'));
       } else {
         callback();

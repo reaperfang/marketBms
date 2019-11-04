@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" width="600px" :title="title" @submit="uploadImage">
+  <DialogBase :visible.sync="visible" width="600px" :title="title" :showFooter="false">
     <el-form :model="form" class="demo-form-inline" label-width="90px">
         <el-form-item label="本地上传" v-if="title == '上传图片'">
           <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
@@ -75,6 +75,10 @@
           <p class="note">如果不添加封面，系统会默认截取视频的第一个画面作为封面</p>
         </el-form-item>
       </el-form>
+      <p class="txt_center">
+          <el-button type="primary" @click="submit()">确 认</el-button>
+          <el-button  @click="visible = false">取 消</el-button>
+      </p>
   </DialogBase>
 </template>
 
@@ -145,7 +149,7 @@ export default {
       })
     },
    //上传图片
-    uploadImage(){
+    submit(){
       if(this.title == '上传图片'){
         let query ={
           fileGroupInfoId:this.form.groupValue,
@@ -161,17 +165,26 @@ export default {
           ]
         }
         this.$emit('submit',{uploadImage:{query:query}})
+        this.visible = false
       }else{
-        let query ={
-          fileGroupInfoId:this.form.groupValue,
-          fileName:this.videoData.original,
-          filePath:this.videoData.url,
-          fileSize:this.videoData.size,
-          name:this.form.name,
-          fileCover:this.form.imageUrls,
-          sign:'',
+        if(this.videoData.url !=undefined){
+          let query ={
+            fileGroupInfoId:this.form.groupValue,
+            fileName:this.videoData.original,
+            filePath:this.videoData.url,
+            fileSize:this.videoData.size,
+            name:this.form.name,
+            fileCover:this.form.imageUrls,
+            sign:'',
+          }
+          this.$emit('submit',{uploadVideo:{query:query}})
+          this.visible = false
+        }else{
+          this.$notify.warning({
+            title: '提示',
+            message: '请上传视频或等待视频上传完成后保存'
+          });
         }
-        this.$emit('submit',{uploadVideo:{query:query}})
       }
     },
     //上传视频
@@ -224,7 +237,6 @@ export default {
         this.videoFlag = false;
         this.videoUploadPercent = 0;
         if (res.status == "success") {
-          console.log('url',res.data)
             this.videoData = res.data;
         } else {
             this.$message.error('视频上传失败，请重新上传！');
@@ -300,4 +312,9 @@ export default {
       display: inline-block;
     }
   }
+.txt_center{
+  width: 100%;
+  text-align: center;
+  margin-top:20px;
+}
 </style>
