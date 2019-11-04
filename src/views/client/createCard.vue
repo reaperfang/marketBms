@@ -103,13 +103,18 @@
             <span>积分</span>
           </el-form-item>
           <el-form-item v-if="getIndex(this.rewardList,'赠送红包') !== -1">
-            <el-checkbox v-model="upgrade2" @change="showRedDialog" class="fl marR20">赠送红包</el-checkbox>
-            <div class="giftList">
+            <el-checkbox v-model="upgrade2" class="marR20">赠送红包</el-checkbox>
+            <span>送</span>
+            <div class="input_wrap3">
+              <el-input placeholder="填写数字" v-model="zshb" @keyup.native="checkZero($event, zshb,'zshb')"></el-input>
+            </div>
+            <span>元红包1个</span>
+            <!-- <div class="giftList">
               <div v-for="(item, index) in selectedReds" :key="item.id">
                 <span>{{ item.name }}</span>
                 <span style="margin-left:20px" class="pointer" @click="deleteRed(index)">删除</span>
               </div>
-            </div>
+            </div> -->
           </el-form-item>
           <el-form-item v-if="getIndex(this.rewardList,'赠送赠品') !== -1">
             <el-checkbox v-model="upgrade3" @change="showGiftDialog" class="fl marR20">赠送赠品</el-checkbox>
@@ -169,7 +174,6 @@
       :data="currentData"
       @getCondition="getCondition"
       @getSelectedCoupon="getSelectedCoupon"
-      @getSelectedRed="getSelectedRed"
       @getSelection="getSelection"
     ></component>
   </div>
@@ -229,6 +233,7 @@ export default {
       right2: "",
       jfhkbl: "",
       zsjf: "",
+      zshb: "",
       upgrade1: "",
       upgrade2: "",
       upgrade3: "",
@@ -330,8 +335,9 @@ export default {
                 v.upgradeRewardInfoId == this.getId(this.rewardList, "赠送红包")
               ) {
                 this.upgrade2 = true;
-                this.selectedReds.push({ name: v.giftName, id: v.giftProduct });
-                redArr.push(v.giftProduct);
+                this.zshb = v.giftNumber;
+                // this.selectedReds.push({ name: v.giftName, id: v.giftProduct });
+                // redArr.push(v.giftProduct);
               }
               if (
                 v.upgradeRewardInfoId == this.getId(this.rewardList, "赠送赠品")
@@ -694,37 +700,48 @@ export default {
               upgradeParams1.levelType = 1;
               upgradeParams1.giftNumber = this.zsjf;
               upgradeParams1.label = "赠送积分";
+              upgradeParams1.giftName = "赠送积分";
               upgradeRewardDtoList.push(upgradeParams1);
               upgradePackage = upgradePackage + "赠送" + this.zsjf + "个积分,";
             }
           }
           if (this.upgrade2) {
-            if (this.selectedReds.length == 0) {
+            if (this.zshb == "") {
               this.$notify({
                 title: "警告",
-                message: "请选择红包",
+                message: "请输入赠送红包金额",
                 type: "warning"
               });
               this.canSubmit = false;
             } else {
-              this.selectedReds.map(v => {
-                let obj = {};
-                obj.upgradeRewardInfoId = this.getId(
-                  this.rewardList,
-                  "赠送红包"
-                );
-                obj.levelType = 1;
-                obj.giftName = v.name;
-                obj.giftProduct = v.id;
-                obj.giftNumber = 1;
-                obj.label = "赠送红包";
-                upgradeRewardDtoList.push(obj);
-                if(!!v.hongbaoTotalMoney) {
-                  upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
-                }else{
-                  upgradePackage = upgradePackage + "赠送红包,";
-                }
-              });
+              let upgradeParams2 = {};
+              upgradeParams2.upgradeRewardInfoId = this.getId(
+                this.rewardList,
+                "赠送红包"
+              );
+              upgradeParams2.giftNumber = this.zshb;
+              upgradeParams2.label = "赠送红包";
+              upgradeParams2.giftName = "赠送红包";
+              upgradeRewardDtoList.push(upgradeParams2);
+              upgradePackage = upgradePackage + "赠送" + this.zshb + "元红包,";
+              // this.selectedReds.map(v => {
+              //   let obj = {};
+              //   obj.upgradeRewardInfoId = this.getId(
+              //     this.rewardList,
+              //     "赠送红包"
+              //   );
+              //   obj.levelType = 1;
+              //   obj.giftName = v.name;
+              //   obj.giftProduct = v.id;
+              //   obj.giftNumber = 1;
+              //   obj.label = "赠送红包";
+              //   upgradeRewardDtoList.push(obj);
+              //   if(!!v.hongbaoTotalMoney) {
+              //     upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
+              //   }else{
+              //     upgradePackage = upgradePackage + "赠送红包,";
+              //   }
+              // });
             }
           }
           if (this.upgrade3) {

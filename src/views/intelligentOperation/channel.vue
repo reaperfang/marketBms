@@ -271,6 +271,7 @@ export default {
 }
 .marT20s{
     position: relative;
+    top:10px;
 }
 .buttonfl{
     -webkit-box-pack: end;

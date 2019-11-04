@@ -58,7 +58,7 @@
           :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
-          prop="memberInfoId"
+          prop="memberSn"
           label="客户ID">
         </el-table-column>
         <el-table-column

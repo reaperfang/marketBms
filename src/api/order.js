@@ -593,6 +593,15 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
   })
 }
 
+ //活动赠品
+ export function getGain(data) {
+  return request({
+    method: 'get',
+    apiType: 'orderGain',
+    data
+  })
+}
+
 
 
 

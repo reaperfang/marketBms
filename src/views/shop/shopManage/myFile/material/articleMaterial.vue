@@ -91,7 +91,7 @@ export default {
           if (this.pickerMinDate !== '') {
             return time.getTime() == this.pickerMinDate
           }
-          return time.getTime() > Date.now()
+          return time.getTime() > Date.now() + 8.64e7
         }
       },
       form:{
@@ -291,11 +291,12 @@ export default {
         .title{
           height: 25px;
           line-height: 25px;
+          overflow: hidden;
         }
         .imgs{
-          width: 100%;
-          height:85px;
-          object-fit: cover;
+          width: 240px;
+          height:150px;
+          object-fit: contain;
         }
     
         .content{

@@ -55,7 +55,12 @@
                         </el-form-item>
                     </el-form>
                     <div class="m_line clearfix">
-                        <p style="line-height:40px;">该筛选条件下：会员共计<span>{{listObj.memberCount}}</span>人，占客户总数的<span>{{(listObj.ratio*100).toFixed(2)}}</span>%；订单共计<span>{{listObj.orderCount}}</span>个、商品总数共计<span>{{listObj.goodsCount}}</span>个；维权次数共计<span>{{listObj.protectionCount}}</span>次；</p>
+                        <p style="line-height:40px;" v-if="listObj">
+                        该筛选条件下：会员共计<span>{{listObj.memberCount || 0}}</span>人，
+                        占客户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；
+                        订单共计<span>{{listObj.orderCount || 0}}</span>个、商品总数共计<span>{{listObj.goodsCount || 0}}</span>个；
+                        维权次数共计<span>{{listObj.protectionCount || 0}}</span>次；
+                        </p>
                     </div>
                     <div class="m_line clearfix">
                         <div class="fr marT20">

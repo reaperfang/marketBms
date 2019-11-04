@@ -53,7 +53,7 @@
           label="积分流水号">
         </el-table-column>
         <el-table-column
-          prop="memberInfoId"
+          prop="memberSn"
           label="客户ID">
         </el-table-column>
         <el-table-column
