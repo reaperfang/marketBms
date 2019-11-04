@@ -27,7 +27,7 @@ export default {
   methods: {
     init(){
       let name = this.$route.query.active;
-      this.currentTab = name
+      name && (this.currentTab = name)
     },
     handleClick(comp) {
       this.currentTab = comp.name;
