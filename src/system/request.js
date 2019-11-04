@@ -189,18 +189,12 @@ class Ajax {
           case 'matrix':  //智能运营数据查询条件来源
             config.baseURL = `${process.env.DATA_API}/matrix-admin/matrix/api.do`;
             break;
-<<<<<<< HEAD
-<<<<<<< HEAD
           case 'orderGain':  
             config.baseURL = `${process.env.DATA_API}/mkt-api/v1/b/order-after-sale/order-rewards/100006489`;
             break;
-=======
->>>>>>> 7c21cfb264f82b38022d802cd7ac691255e9bb28
-=======
           case 'orderGain':  
             config.baseURL = `${process.env.DATA_API}/mkt-api/v1/b/order-after-sale/order-rewards/100006489`;
             break;
->>>>>>> dev
         }
       }
     }
