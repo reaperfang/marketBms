@@ -4,7 +4,7 @@
     <div class="top_part">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="客户ID">
-          <el-input v-model="ruleForm.memberId" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <!-- <el-form-item label="订单编号">
           <el-input v-model="ruleForm.value2" placeholder="请输入" style="width:226px;"></el-input>
@@ -52,7 +52,7 @@
         >
         <!-- :default-sort = "{prop: 'createTime', order: 'descending'}" -->
         <el-table-column
-          prop="memberId"
+          prop="memberSn"
           label="客户ID"
           :render-header="renderMemberId">
         </el-table-column>
@@ -104,7 +104,7 @@ export default {
       inline:true,
       times:[],
       ruleForm:{
-        memberId:'',
+        memberSn:'',
         presentType:0,
         startTime:'',
         stopTime:'',
@@ -167,7 +167,7 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        memberId:'',
+        memberSn:'',
         presentType:0,
         startTime:'',
         stopTime:'',
