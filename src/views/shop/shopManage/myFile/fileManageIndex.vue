@@ -22,9 +22,13 @@ export default {
     }
   },
   created() {
-
+    this.init()
   },
   methods: {
+    init(){
+      let name = this.$route.query.active;
+      this.currentTab = name
+    },
     handleClick(comp) {
       this.currentTab = comp.name;
     }
