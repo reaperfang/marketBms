@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     number(event,val,ele) {
-        val = val.replace(/[^\d]/g,'');
+        val = val.replace(/[^-\d]/g,'');
         val = val.replace(/^0/g,'');
         this[ele] = val;
     },

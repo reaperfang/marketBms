@@ -1,6 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="500px" :showFooter="showFooter">
         <div>
+            <p style="margin-bottom: 10px;">拒绝申请可能会受到客户差评，如果确定拒绝售后，请选择拒绝原因：</p>
             <el-radio v-model="refuseReasonLabel" :label="1">人为破坏拒绝售后</el-radio>
             <el-radio v-model="refuseReasonLabel" :label="2">其他</el-radio>
             <el-input
@@ -8,6 +9,7 @@
             v-if="refuseReasonLabel == 2"
             type="textarea"
             :rows="2"
+            maxlength="20"
             placeholder="请输入原因"
             v-model="refuseReason">
             </el-input>

@@ -4,7 +4,7 @@
     <div class="top_part">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="客户ID">
-          <el-input v-model="ruleForm.memberInfoId" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
           <el-select v-model="ruleForm.businessTypeId" style="width:100px;" placeholder="全部">
@@ -117,7 +117,7 @@ export default {
       },
       inline:true,
       ruleForm:{
-        memberInfoId:'',
+        memberSn:'',
         businessTypeId:-1,
         timeValue:''
       },
@@ -136,7 +136,7 @@ export default {
   methods: {
     init(){
       let query = {
-        memberInfoId:this.ruleForm.memberInfoId,
+        memberSn:this.ruleForm.memberSn,
         businessTypeId:this.ruleForm.businessTypeId == -1 ? null : this.ruleForm.businessTypeId,
         startTime:'',
         endTime:'',
@@ -168,7 +168,7 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        memberInfoId:'',
+        memberSn:'',
         businessTypeId:'',
         timeValue:''
       }
