@@ -51,9 +51,15 @@
                             <el-button class="border_btn" @click="resetAll()">重 置</el-button>
                         </el-form-item>
                     </el-form>
-                    <div class="m_line clearfix">
-                        <p style="line-height:40px;">该筛选条件下：会员共计<span>{{listObj.memberCount}}</span>人，占客户总数的<span>{{(listObj.ratio*100).toFixed(2)}}</span>%；</p>
-                        <p style="line-height:40px;">其中订单总计<span>{{listObj.orderCount}}</span>个，商品总计<span>{{listObj.goodsCount}}</span>个，满意商品数共计<span>{{listObj.niceGoodsCount}}</span>个,满意率<span>{{(listObj.niceGoodsRatio*100).toFixed(2)}}%</span>；差评商品数共计<span>{{listObj.badGoodsCount}}</span>个，差评率<span>{{(listObj.badGoodsRatio*100).toFixed(2)}}</span>%;</p>
+                    <div class="m_line clearfix" v-if="listObj">
+                        <p style="line-height:40px;">该筛选条件下：会员共计<span>{{listObj.memberCount || 0}}</span>人，
+                        占客户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；</p>
+                        <p style="line-height:40px;">其中订单总计<span>{{listObj.orderCount || 0}}</span>个，
+                        商品总计<span>{{listObj.goodsCount || 0}}</span>个，
+                        满意商品数共计<span>{{listObj.niceGoodsCount}}</span>个,
+                        满意率<span>{{listObj.niceGoodsRatio ? (listObj.niceGoodsRatio*100).toFixed(2) : 0}}%</span>；
+                        差评商品数共计<span>{{listObj.badGoodsCount || 0}}</span>个，
+                        差评率<span>{{listObj.badGoodsRatio ? (listObj.badGoodsRatio*100).toFixed(2) : 0}}</span>%;</p>
                     </div>
                     <div class="m_line clearfix">
                         <div class="fr marT20">
@@ -291,6 +297,7 @@ export default {
 }
 .marT20s{
     position: relative;
+    top:10px;
 }
 .contents{
     width: 100%;
