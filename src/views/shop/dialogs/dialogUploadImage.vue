@@ -237,7 +237,6 @@ export default {
         this.videoFlag = false;
         this.videoUploadPercent = 0;
         if (res.status == "success") {
-          console.log('url',res.data)
             this.videoData = res.data;
         } else {
             this.$message.error('视频上传失败，请重新上传！');
