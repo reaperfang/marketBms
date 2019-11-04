@@ -421,7 +421,8 @@ export default {
                 expressCompanys: this.ruleForm.expressCompany, // 快递公司名称
                 expressNos: this.ruleForm.expressNos, // 快递单号
                 expressCompanyCodes: this.ruleForm.expressCompanyCode, // 快递公司编码
-                remark: this.ruleForm.remark // 发货备注
+                remark: this.ruleForm.remark, // 发货备注
+                sendRemark: this.ruleForm.sendRemark // 发货备注
               }
             ]
           };
