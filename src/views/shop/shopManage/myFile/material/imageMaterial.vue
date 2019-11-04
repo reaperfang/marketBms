@@ -101,6 +101,7 @@ export default {
       currentPage:1,
       pageSize:10,
       total:0,
+      groupId:''
     }
   },
   created() {
@@ -110,6 +111,7 @@ export default {
   methods: {
     //获取图片列表
     getList(id){
+      id && (this.groupId = id)
       let query ={
         fileGroupInfoId:id || '',
         startIndex:this.currentPage,
@@ -429,11 +431,11 @@ export default {
     /**********************************        分页相关      **********************/
     handleSizeChange(val){
       this.pageSize = val || this.pageSize
-      this.getList()
+      this.getList(this.groupId)
     },
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage
-      this.getList()
+      this.getList(this.groupId)
     },
 
     /**********************************        全选相关      **********************/
