@@ -14,7 +14,7 @@
             </el-form-item>
             <el-form-item label="商户LOGO:">
                 <span v-if="form.logo" class="avatar">
-                  <img :src="form.logo">
+                  <img :src="form.logo" class="logo_img">
                   <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
                 </span>
                 <el-upload
@@ -281,6 +281,12 @@ export default {
     display: inline-block;
     vertical-align: middle;
 /deep/ img{
+      width: 80px;
+      height: 80px;
+      object-fit:fill;
+      display: inline-block;
+    }
+    .logo_img{
       width: 80px;
       height: 80px;
       object-fit:fill;

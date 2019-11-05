@@ -26,19 +26,19 @@
         <div class="item">
           <span class="money">总收入（元）</span>
           <span class="num">
-            <em>{{surveyDay.income}}</em>
+            <em>{{surveyDay.income ? surveyDay.income.toFixed(2) : 0}}</em>
           </span>
         </div>
         <div class="item">
           <span class="money">总支出（元）</span>
           <span class="num">
-            <em>{{surveyDay.expend}}</em>
+            <em>{{surveyDay.expend ? surveyDay.expend.toFixed(2) : 0}}</em>
           </span>
         </div>
         <div class="item">
           <span class="money">实际收入（元）</span>
           <span class="num">
-            <em>{{surveyDay.realIncome}}</em>
+            <em>{{surveyDay.realIncome ? surveyDay.realIncome.toFixed(2) : 0}}</em>
           </span>
         </div>
         <span 
