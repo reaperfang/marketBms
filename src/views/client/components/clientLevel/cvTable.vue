@@ -41,8 +41,8 @@
       <el-table-column label="状态">
         <template slot-scope="scope">
             <!-- <el-switch v-model="scope.row.status" @change="handleSwitch(scope.row)" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']"></el-switch> -->
-            <span class="edit_span" v-if="scope.row.status == 1" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">启用</span>
-            <span class="edit_span" v-if="scope.row.status == 0" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">未启用</span>
+            <span v-if="scope.row.status == 1" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">启用</span>
+            <span v-if="scope.row.status == 0" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">未启用</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">

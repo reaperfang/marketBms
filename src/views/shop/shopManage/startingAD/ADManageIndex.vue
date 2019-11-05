@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="on_off">
-      <p>店铺的各个页面可以通过导航串联起来。通过精心设置的导航，方便买家在栏目间快速切换，引导买家前往你期望的页面。 </p>
+      <p>启动广告有助于促进您的推广，建议开启 </p>
       <el-switch
         v-model="openAD"
         active-color="#13ce66"

@@ -179,7 +179,7 @@ export default {
                 //营销优惠券加入黑名单
                 if(couponIdList.length > 0) {
                     this._apis.client.frozenCoupons({couponIdList: couponIdList, memberId:this.data.id, frozenType: 1}).then((response) => {
-                        console.log(response);
+                        //console.log(response);
                     }).catch((error) => {
                         console.log(error);
                     });
@@ -187,7 +187,7 @@ export default {
                 //优惠码加入黑名单
                 if(couponIdList2.length > 0) {
                     this._apis.client.frozenCoupons({couponIdList: couponIdList2, memberId:this.data.id, frozenType: 1}).then((response) => {
-                        console.log(response);
+                        //console.log(response);
                     }).catch((error) => {
                         console.log(error);
                     })

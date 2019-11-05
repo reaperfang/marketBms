@@ -9,8 +9,8 @@
         </div>
       </div>
       <div class="radio-box">
-        <el-radio v-model="mode" :label="0">组合运费（推荐）</el-radio>
-        <el-radio v-model="mode" :label="1">按商品累加运费</el-radio>
+        <el-radio :disabled="mode == 1" v-model="mode" :label="0">组合运费（推荐）</el-radio>
+        <el-radio :disabled="mode == 0" v-model="mode" :label="1">按商品累加运费</el-radio>
         <span
           @click="currentDialog = 'FreightRulesDialog'; dialogVisible = true"
           class="blue pointer"

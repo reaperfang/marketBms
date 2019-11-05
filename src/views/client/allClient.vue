@@ -459,7 +459,7 @@ export default {
     display: none;
 }
 /deep/.el-checkbox.is-bordered.el-checkbox--small{
-    padding: 5px 10px 5px 10px;
+    padding: 7px 10px 5px 10px;
     background:rgba(211,211,211,0.3);
     margin-right: 10px;
 }

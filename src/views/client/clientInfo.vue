@@ -206,10 +206,6 @@ export default {
             this.getUsedCoupon();
             this.getUsedCode();
         },
-        //根据levelId查询该用户的level等级
-        getLevel() {
-            console.log(this.clientInfoById.levelInfoId);
-        },
         changeIdentity() {
             this.hackReset = false;
             this.$nextTick(() => {
