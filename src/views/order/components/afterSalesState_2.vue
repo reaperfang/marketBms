@@ -115,7 +115,7 @@
             <!-- 已完成 -->
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
-                    <el-steps :active="6">
+                    <el-steps :active="7">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
                         <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
