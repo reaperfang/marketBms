@@ -49,8 +49,8 @@
             style="margin-left:20px;"
             class="fl addMainColor pointer marl20"
             @click="openDialog"
+            :style="{color: condition1 ? '':'#ddd'}"
           >选择变更</p>
-          <!-- <p style="margin-left:115px;">姓名 <span class="addMainColor marL20 pointer" @click="openDialog">选择变更</span></p> -->
         </el-form-item>
         <el-form-item>
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费金额满') !== -1">
@@ -304,8 +304,16 @@ export default {
       return isLt2M;
     },
     openDialog() {
-      this.currentDialog = "levelInfoDialog";
-      this.dialogVisible = true;
+      if(this.condition1) {
+        this.currentDialog = "levelInfoDialog";
+        this.dialogVisible = true;
+      }else{
+        this.$notify({
+          title: "警告",
+          message: "请选择完善信息",
+          type: "warning"
+        });
+      }
     },
     getLevelsInfo(id) {
       this._apis.client

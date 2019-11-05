@@ -86,16 +86,19 @@ export default {
         this.lklist = [].concat(response.list);
         this.lklist.map((v) => {
           v.enable = v.enable == 0?'禁用':'启用';
-          v.receiveWay = v.receiveWay == 0?'手动发放':'无门槛领取';
+         // v.receiveWay = v.receiveWay == 0?'手动发放':'无门槛领取';
+          if(v.receiveWay == 0) {
+            v.receiveWay = "手动发放";
+          }else if(v.receiveWay == 1) {
+            v.receiveWay = "无门槛领取";
+          }else if(v.receiveWay == 2) {
+            v.receiveWay = "满足特定条件";
+          }
         })
         this.total = response.total;
       }).catch((error) => {
         this.loading = false;
         console.log(error);
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
       })
     }
   },

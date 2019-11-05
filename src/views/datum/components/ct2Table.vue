@@ -23,7 +23,7 @@
        >
       </el-table-column>
       <el-table-column
-        prop="pv"
+        prop="uv"
         label="访客量"
         >
       </el-table-column>

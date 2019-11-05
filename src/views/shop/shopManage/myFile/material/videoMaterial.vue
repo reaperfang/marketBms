@@ -108,6 +108,7 @@ export default {
       currentPage:1,
       pageSize:10,
       total:0,
+      groupId:''
     }
   },
   created() {
@@ -117,6 +118,7 @@ export default {
   methods: {
     //获取视频列表
     getList(id){
+      id && (this.groupId = id)
       let query ={
         fileGroupInfoId:id || '',
         startIndex:this.currentPage,
@@ -397,11 +399,11 @@ export default {
     //分页相关
     handleSizeChange(val){
       this.pageSize = val || this.pageSize
-      this.getList()
+      this.getList(this.groupId)
     },
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage
-      this.getList()
+      this.getList(this.groupId)
     },
     /**********************************        全选相关      **********************/
     allChecked(val){
@@ -488,13 +490,13 @@ export default {
             line-height: 25px;
           }
           .imgs{
-            width: 100%;
-            height:85px;
-            object-fit:cover;
+            width: 240px;
+            height:150px;
+            object-fit: contain;
           }
           .btn{
             position:absolute;
-            top:55px;
+            top:75px;
             left:110px;
             width: 40px;
             height: 40px;

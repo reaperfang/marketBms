@@ -5,23 +5,39 @@
     <div class="coupon_first">
        <ul>
         <!-- status:true时候是已领取,hideScrambled:false, -->
-        <template  v-for="(item, key) in list">
+        <template v-for="(item, key) in list">
+          <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
+            <div class="first_money">
+              <span :class="style1">{{item.useType==0?item.useTypeFullcut:(item.useTypeDiscount * 10).toFixed(1)}}</span>
+              <span :class="style1">{{item.useType==0?'元':'折'}}</span>
+            </div>
+            <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
+          </li>
+          <!-- <li v-else-if="item.status=='false'" :style="item.status=='true'?imgs1:imgs " :key="key">
+            <div class="first_money">
+              <span :class="style1">{{item.useType==0?item.useTypeFullcut:item.useTypeDiscount * 10}}</span>
+              <span :class="style1">{{item.useType==0?'元':'折'}}</span>
+            </div>
+            <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
+          </li> -->
+        </template>
+        <!-- <template  v-for="(item, key) in list">
           <li
             v-if="currentComponentData.data.hideScrambled===false"
             :style="item.status===2?imgs1:imgs "
             :key="key"
             >
             <div class="first_money">
-              <span :class="style1">{{item.useType === 0 ? item.useTypeFullcut : item.useTypeDiscount  * 10}}
+              <span :class="style1">{{item.useType === 0 ? Number(item.useTypeFullcut).toFixed(2) : ( Number(item.useTypeDiscount)  * 10).toFixed(1)}}
                 {{item.useType === 0 ? '元' : '折'}}</span>
               <span :class="style1"></span>
             </div>
             <div :class="style2" class="first_present">
               <span v-if="item.useCondition > -1">
-                满{{item.useCondition}},减{{item.useTypeFullcut}}
+                满{{ Number(item.useCondition).toFixed(2)}},减{{ Number(item.useTypeFullcut).toFixed(2)}}
               </span>
               <span v-else>
-                减{{item.useTypeFullcut}}
+                减{{ Number(item.useTypeFullcut).toFixed(2)}}
               </span>
             </div>
           </li>
@@ -31,19 +47,19 @@
             :key="key"
             >
             <div class="first_money">
-              <span :class="style1">{{item.useType === 0 ? item.useTypeFullcut : item.useTypeDiscount  * 10}}
+              <span :class="style1">{{item.useType === 0 ?  Number(item.useTypeFullcut).toFixed(2) : ( Number(item.useTypeDiscount)  * 10).toFixed(1)}}
                 {{item.useType === 0 ? '元' : '折'}}</span>
               <span :class="style1"></span>
             </div>
             <div :class="style2" class="first_present">
               <span v-if="item.useCondition > -1">
-                满{{item.useCondition}},减{{item.useTypeFullcut}}
+                满{{ Number(item.useCondition).toFixed(2)}},减{{ Number(item.useTypeFullcut).toFixed(2)}}
               </span>
               <span v-else>
-                减{{item.useTypeFullcut}}
+                减{{ Number(item.useTypeFullcut).toFixed(2)}}
               </span>
             </div>
-          </li>
+          </li> -->
           <!-- <li :style="imgs">
             <div class="first_money">
               <span
@@ -58,7 +74,7 @@
               class="first_present"
             >无门开使用</div>
           </li>-->
-        </template>
+        <!-- </template> -->
       </ul>
     </div>
   </div>

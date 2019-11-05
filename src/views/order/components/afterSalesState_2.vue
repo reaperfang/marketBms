@@ -120,8 +120,9 @@
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
                         <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
                         <el-step class="word4" title="商户发货" :description="orderAfterSale.sendTime"></el-step>
-                        <el-step class="word4" title="客户收货" :description="orderAfterSale.memberTeceiveGoodsTime"></el-step>
-                        <el-step class="word2" title="完成" :description="orderAfterSale.memberTeceiveGoodsTime"></el-step>
+                        <el-step class="word4" title="商户收货" :description="orderAfterSale.receiveGoodsTime"></el-step>
+                        <el-step class="word4" title="客户收货" :description="orderAfterSale.memberReceiveGoodsTime"></el-step>
+                        <el-step class="word2" title="完成" :description="orderAfterSale.memberReceiveGoodsTime"></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
