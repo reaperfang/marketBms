@@ -350,7 +350,7 @@ export default {
             this.dialogVisible = true
         },
         rejectHandler(value) {
-            this._apis.order.orderAfterSaleUpdateStatus({id: this.currentData.id, orderAfterSaleStatus: 5, refuseReason: value.refuseReason}).then((res) => {
+            this._apis.order.orderAfterSaleUpdateStatus({id: this.currentData.id, orderAfterSaleStatus: 5, refuseReason: value}).then((res) => {
                 this.getList()
                 this.$notify({
                     title: '成功',

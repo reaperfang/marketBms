@@ -213,8 +213,9 @@ export default {
           line-height: 25px;
         }
         .imgs{
-          width: 100%;
-          height:85px;
+          width: 240px;
+          height:150px;
+          object-fit: contain;
         }
         .content{
           line-height: 20px;

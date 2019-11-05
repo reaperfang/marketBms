@@ -47,7 +47,7 @@
             <el-table-column prop="goodsUnit" label="单位" width="300"></el-table-column>
             <el-table-column prop="sendCount" label="本次发货数量"></el-table-column>
           </el-table>
-          <div class="remark">备注: {{orderDetail.orderInfo.sellerRemark}}</div>
+          <div class="remark">备注: {{orderDetail.orderSendInfo.sendRemark}}</div>
         </div>
       </div>
       <Empty v-show="!orderSendItems || (orderSendItems && !orderSendItems.length)"></Empty>

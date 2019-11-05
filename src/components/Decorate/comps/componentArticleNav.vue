@@ -159,54 +159,74 @@ export default {
     }
   }
   // 文字导航小于5个数
-  .img_nav3 {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    height: 42px;
-    & > li {
+.img_nav3 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 42px;
+  & > li {
       flex: 1;
       text-align: center;
       box-sizing: border-box;
       position: relative;
-      & > span {
-        font-size: 14px;
-        position: absolute;
-        // box-sizing: border-box;
-        left: 50%;
-        top: 50%;
-        transform: (-50% -50%);
-        transform: translate(-50%, -50%);
-        width: 100%;
-        border-right: 1px solid #e5e5e5;
-      }
+    & > span {
+      font-size: 14px;
+      position: absolute;
+      // box-sizing: border-box;
+      left: 50%;
+      top: 50%;
+      transform: (-50% -50%);
+      transform: translate(-50%, -50%);
+      width: 100%;
+      border-left: 1px solid #e5e5e5;
     }
-    & > li:last-child {
-      & > span {
-        border-right: 0px;
+    &:first-child{
+      &>span{
+      border-left:0;
       }
     }
   }
+  }
   // 文字导航大于5个数
-  // .img_nav4 {
-  //   display: flex;
-  //   flex-direction: row;
-  //   flex-wrap: wrap;
-  //   & > li {
-  //     text-align: center;
-  //     margin-bottom: 10px;
-  //     width: 20%;
-  //     height: 30px;
-  //     line-height: 30px;
-  //     background: #f2f1ff;
-  //     & > span {
-  //       font-size: 14px;
-  //     }
-  //   }
-  //   & > li:nth-child(5n) {
-  //     margin-right: 0px;
-  //   }
-  // }
+  .img_nav4 {
+    min-height: 42px;
+    overflow:hidden;
+    padding:5px 0;
+    & > li {
+      text-align: center;
+      box-sizing: border-box;
+      position: relative;
+      float:left;
+      width:20%;
+      margin-top:5px;
+      &:nth-of-type(1){
+        margin-top:0;
+      }
+      &:nth-of-type(2){
+        margin-top:0;
+      }
+      &:nth-of-type(3){
+        margin-top:0;
+      }
+      &:nth-of-type(4){
+        margin-top:0;
+      }
+      &:nth-of-type(5){
+        margin-top:0;
+      }               
+      & > span {
+        font-size: 14px;
+        width: 100%;
+        display:block;
+        border-left: 1px solid #e5e5e5;
+      }         
+    }
+    & > li:nth-of-type(5n+1) {
+      & > span {
+        border-left: 0px;
+      }
+    }
+  }
   // 文字导航横向滑动
   .img_nav5 {
     display: -webkit-box;

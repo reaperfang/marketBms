@@ -142,14 +142,14 @@
             <el-form-item label="快递单号" prop="expressNos">
               <el-input :disabled="!express" v-model="ruleForm.expressNos"></el-input>
             </el-form-item>
-            <el-form-item label="物流备注" prop="remark">
+            <el-form-item label="物流备注" prop="sendRemark">
               <el-input
                 style="width: 623px;"
                 type="textarea"
                 :rows="2"
                 maxlength="100"
                 placeholder="非必填，请输入，不超过100个字符"
-                v-model="ruleForm.remark"
+                v-model="ruleForm.sendRemark"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -197,6 +197,7 @@ export default {
         name: "",
         number: "",
         remark: "",
+        sendRemark: '',
         expressCompanyCode: "",
         expressCompany: "",
         other: ''
@@ -420,7 +421,8 @@ export default {
                 expressCompanys: this.ruleForm.expressCompany, // 快递公司名称
                 expressNos: this.ruleForm.expressNos, // 快递单号
                 expressCompanyCodes: this.ruleForm.expressCompanyCode, // 快递公司编码
-                remark: this.ruleForm.remark // 发货备注
+                remark: this.ruleForm.remark, // 发货备注
+                sendRemark: this.ruleForm.sendRemark // 发货备注
               }
             ]
           };

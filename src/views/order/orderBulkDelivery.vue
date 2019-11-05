@@ -55,7 +55,7 @@
                     <el-input
                       type="number"
                       min="1"
-                      :max="goods.goodsCount -goods.cacheSendCount"
+                      :max="goods.goodsCount - goods.cacheSendCount"
                       v-model="goods.sendCount"
                       placeholder="请输入"
                     ></el-input>
@@ -475,14 +475,15 @@ export default {
             val.expressCompanyCodes = "";
             val.orderItemList.forEach(goods => {
               goods.checked = false;
-              goods.sendCount = "";
+              goods.cacheSendCount = +goods.sendCount
+              goods.sendCount = goods.goodsCount - goods.cacheSendCount;
             });
           });
-          res.forEach(val => {
-            val.orderItemList.forEach(item => {
-              item.cacheSendCount = item.sendCount;
-            });
-          });
+          // res.forEach(val => {
+          //   val.orderItemList.forEach(item => {
+          //     item.cacheSendCount = item.sendCount;
+          //   });
+          // });
           this.list = res;
           this._apis.order
             .fetchOrderAddress({ id: this.cid, cid: this.cid })

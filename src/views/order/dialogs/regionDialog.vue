@@ -143,6 +143,22 @@ export default {
     },
     handleClose(tag) {
       this.checkList.splice(this.checkList.indexOf(tag), 1);
+      let _region = JSON.parse(JSON.stringify(this.region))
+
+      _region.forEach(val => {
+        for(let i=0; i<val.checkList.length; i++) {
+          if(val.checkList[i] == tag) {
+            val.checkList.splice(i, 1)
+            i--
+          }
+        }
+      })
+
+      this.region = _region
+
+      this.region.forEach((val, index) => {
+        this.checkListchange(index)
+      })
     },
     closeCity(index) {
       let _region = [...this.region];
