@@ -168,7 +168,8 @@ export default {
       list: this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
       dialogVisible: false,
       currentDialog: '',
-      seletedGroup: null,   //临时选中的商品分类
+      tempGroup: null,   //临时选中的商品分类
+      seletedGroup: null,   //选中的商品分类
       pageDialogVisible: false
     }
   },
@@ -207,12 +208,13 @@ export default {
   methods: {
 
     rowSeleted(row) {
-      this.seletedGroup = row;
+      this.tempGroup = row;
     },
 
      /* 弹窗选中了跳转链接 */
     seletePage() {
-      this.ruleForm.currentCatagoryId = this.seletedGroup.data.id;
+      this.ruleForm.currentCatagoryId = this.tempGroup.data.id;
+      this.seletedGroup = this.tempGroup;
     },
 
     //根据ids拉取数据

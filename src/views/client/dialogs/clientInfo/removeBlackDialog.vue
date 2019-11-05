@@ -29,7 +29,7 @@ export default {
         submit() {
             //营销解除黑名单
             this._apis.client.frozenCoupons({memberId: this.data.id, frozenType: 0}).then((response) => {
-                console.log(response);
+                //console.log(response);
             }).catch((error) => {
                 console.log(error)
             });

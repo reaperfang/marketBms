@@ -25,7 +25,7 @@ export default {
             });
             //优惠券解除
             this._apis.client.batchFrozenCoupons({memberIdList: memberInfoIds, frozenType: 0}).then((response) => {
-                console.log(response);
+                //console.log(response);
             }).catch((error) => {
                 console.log(error)
             });

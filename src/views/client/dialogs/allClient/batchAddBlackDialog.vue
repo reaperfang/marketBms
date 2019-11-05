@@ -162,14 +162,14 @@ export default {
                 //营销优惠券加入黑名单
                 if(couponIdList.length > 0) {
                     this._apis.client.batchFrozenCoupons({couponIdList: couponIdList, memberIdList:memberIdList, frozenType: 1}).then((response) => {
-                        console.log(response);
+                        //console.log(response);
                     }).catch((error) => {
                         console.log(error);
                     });
                 }
                 if(couponIdList2.length > 0) {
                     this._apis.client.batchFrozenCoupons({couponIdList: couponIdList2, memberIdList:memberIdList, frozenType: 1}).then((response) => {
-                        console.log(response);
+                        //console.log(response);
                     }).catch((error) => {
                         console.log(error);
                     });
