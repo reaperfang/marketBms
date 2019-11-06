@@ -6,11 +6,7 @@ export default {
   extends: chartBase,
   data() {
     return {
-      datas:[],
-      dates:[],
-      incomes:[],
-      expends:[],
-      realIncomes:[],
+
     };
   },
   props:['dataList'],
@@ -43,7 +39,7 @@ export default {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: this.dataList.dates.reverse()
+            data: this.dataList && this.dataList.dates && this.dataList.dates.reverse()
         },
         yAxis: {
             type: 'value'

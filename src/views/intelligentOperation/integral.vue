@@ -186,9 +186,8 @@ export default {
                   }
                   this.consumTimes = pages;
                   this.form.scorePaymentCountRange = value
-                // console.log('res',res)
             }).catch(error =>{
-                console.log('error',error)
+               
             })
         },
         // 重置
