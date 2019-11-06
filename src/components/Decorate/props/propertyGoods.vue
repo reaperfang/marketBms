@@ -105,19 +105,19 @@
           <el-checkbox label="1">商品名称</el-checkbox>
           <el-checkbox label="2">商品价格</el-checkbox>
           <el-checkbox label="3">商品描述</el-checkbox>
-          <el-checkbox label="4">购买按钮</el-checkbox>
+          <el-checkbox label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
         </el-checkbox-group>
-        <el-radio-group v-if="ruleForm.showContents.includes('4')" v-model="ruleForm.buttonStyle">
+        <el-radio-group v-if="ruleForm.showContents.includes('4') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
           <el-radio :label="1">样式1</el-radio>
           <el-radio :label="2">样式2</el-radio>
-          <el-radio :label="3" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式3</el-radio>
-          <el-radio :label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式4</el-radio>
+          <el-radio :label="3">样式3</el-radio>
+          <el-radio :label="4">样式4</el-radio>
           <el-radio :label="5">样式5</el-radio>
           <el-radio :label="6">样式6</el-radio>
-          <el-radio :label="7" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式7</el-radio>
-          <el-radio :label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">样式8</el-radio>
+          <el-radio :label="7">样式7</el-radio>
+          <el-radio :label="8">样式8</el-radio>
         </el-radio-group>
-        <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input>
+        <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
       </el-form-item>
     </div>
     

@@ -15,7 +15,7 @@
                                 </el-option>
                             </el-select>
                         </div>
-                        <span class="addMainColor pointer" @click="handleNew">新建</span>
+                        <span class="addMainColor pointer marL20" @click="handleNew">新建</span>
                     </el-form-item>
                     <el-form-item label="身份：" prop="memberType">
                         <div class="input_wrap">
@@ -126,7 +126,6 @@ export default {
             this.getChannels();
         },
         handleAvatarSuccess(res, file) {
-            // this.fileData = res.data
             this.importUrl = res.data.url;
         },
         beforeAvatarUpload(file) {

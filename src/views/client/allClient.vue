@@ -16,7 +16,9 @@
                     </el-col>
                     <el-col :span="6" :offset="1">
                         <el-form-item prop="labelValue">
-                            <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20"><el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button></el-input>
+                            <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20">
+                                <el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button>
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -205,7 +207,6 @@ export default {
         return clientCont.clientStatusOps
     },
     clientChannelOps() {
-        //return clientCont.clientChannelOps
         let arr = [];
         clientCont.clientChannelOps.map((v) => {
             arr.push(v.channerlName)
@@ -394,6 +395,7 @@ export default {
                     })
                 });
             }
+            
             labelIds = labelIds.join(',');
             if(channelNames.length > 0) {
                 this.channelsList.map((item) => {
