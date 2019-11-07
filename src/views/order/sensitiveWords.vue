@@ -24,10 +24,11 @@
                 <div class="content-title">
                     系统敏感词库
                 </div>
-                <div class="content-sensitive">
-                    <span v-for="(item, index) in systomSensitiveList" :key="index">
+                <div class="content-sensitive pingbi">
+                    <!-- <span v-for="(item, index) in systomSensitiveList" :key="index">
                         {{item}},
-                    </span>
+                    </span> -->
+                    <span>系统已自动为您屏蔽了30000+敏感词</span>
                 </div>  
             </section>
         </div>
@@ -173,6 +174,11 @@ export default {
                 }
             }
         }
+    }
+    .pingbi {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 </style>
 
