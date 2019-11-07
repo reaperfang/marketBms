@@ -236,10 +236,6 @@ export default {
                 this.allCoupons = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         },
         getAllCodes() {
@@ -247,10 +243,6 @@ export default {
                 this.allCodes = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         },
     },
@@ -262,13 +254,7 @@ export default {
             set(val) {
                 this.$emit('update:dialogVisible', val)
             }
-        },
-        // allCoupons() {
-        //     return JSON.parse(localStorage.getItem('allCoupons'));
-        // },
-        // allCodes() {
-        //     return JSON.parse(localStorage.getItem('allCodes'));
-        // }
+        }
     },
     created() {
         this.getBlackChecks();

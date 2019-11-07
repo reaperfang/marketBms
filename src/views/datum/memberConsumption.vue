@@ -24,46 +24,45 @@
                     </el-input>
                 </div>
             </div>
-            <!-- <mcTable style="margin-top: 50px" :list="list" @getMember="getMemberConsumption"></mcTable> -->
-                <el-table
-                :data="list"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-                style="margin-top:30px;width: 100%" 
-                >
-                <el-table-column
-                    type="index"
-                    label="排行">
-                </el-table-column>
-                <el-table-column
-                    prop="name"
-                    label="会员昵称">
-                </el-table-column>
-                <el-table-column
-                    prop="phone"
-                    label="手机号">
-                </el-table-column>
-                <el-table-column
-                    prop="levelName"
-                    label="等级"
-                >
-                </el-table-column>
-                <el-table-column
-                    prop="score"
-                    label="积分（余额）"
-                >
-                </el-table-column>
-                <el-table-column
-                    prop="totalTradeMoney"
-                    label="消费金额（累计）"
-                >
-                </el-table-column>
-                <el-table-column
-                    prop="orderCount"
-                    label="订单数（累计）"
-                >
-                </el-table-column>
-                </el-table>
-                <div class="page_styles">
+            <el-table
+            :data="list"
+            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+            style="margin-top:30px;width: 100%" 
+            >
+            <el-table-column
+                type="index"
+                label="排行">
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                label="会员昵称">
+            </el-table-column>
+            <el-table-column
+                prop="phone"
+                label="手机号">
+            </el-table-column>
+            <el-table-column
+                prop="levelName"
+                label="等级"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="score"
+                label="积分（余额）"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="totalTradeMoney"
+                label="消费金额（累计）"
+            >
+            </el-table-column>
+            <el-table-column
+                prop="orderCount"
+                label="订单数（累计）"
+            >
+            </el-table-column>
+            </el-table>
+            <div class="page_styles">
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -124,7 +123,7 @@ export default {
             this.getMemberConsumption()
         },
         changKeyWord(val){
-            this.getMemberConsumption(1,10)
+            this.getMemberConsumption()
         }
 
         // all(){
@@ -143,7 +142,6 @@ export default {
     .pane_container{
         color: #3D434A;
         .i_line{
-            padding-left: 35px;
             .input_wrap{
                 width: 320px;
                 display: inline-block;

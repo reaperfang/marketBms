@@ -20,10 +20,10 @@
                         </div>
                     </div>
                     <div class="info_box"  v-if="showContents.length > 0">
-                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.teamPeople}}人团</font>{{item.goodName}}</p>
+                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.teamPeople || 0}}人团</font>{{item.goodName}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.goodDes}}</p>
                         <div class="limit_line">
-                            <div class="label">{{item.peopleNum}}人团</div>
+                            <div class="label">{{item.peopleNum || 0}}人团</div>
                             <p class="limit" v-if="showContents.indexOf('7')!=-1">
                                 <template v-if="item.buyLimit >= 0">
                                     限 {{item.buyLimit}}件/人

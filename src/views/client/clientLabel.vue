@@ -50,8 +50,6 @@ export default {
         getLabelList() {
             this.btnloading = true;
             this.params = {
-                startIndex: 1,
-                pageSize: 10,
                 tagName: this.tagName,
                 tagType: this.tagType
             }
@@ -60,8 +58,6 @@ export default {
             this.tagName = "";
             this.tagType = "";
             this.params = {
-                startIndex: 1,
-                pageSize: 10,
                 tagName: "",
                 tagType: ""
             }

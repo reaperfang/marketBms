@@ -62,10 +62,6 @@ export default {
                 this.tagList = [].concat(response); 
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         }
     },

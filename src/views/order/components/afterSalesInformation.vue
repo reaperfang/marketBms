@@ -19,7 +19,21 @@
                         <div class="col list-righter">
                             {{orderAfterSale.description}}
                             <div class="images">
-                                <img height="51" v-for="(item, index) in orderAfterSale.descriptionimages" :src="item" alt="" :key="index">
+                                <img height="51" v-for="(item, index) in orderAfterSale.descriptionImages" :src="item" alt="" :key="index">
+                                <template v-if="/\.mp4|\.ogg$/.test(item)">
+                                    <video width="66" controls="controls">
+                                    <source :src="item" type="video/ogg">
+                                    <source :src="item" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                    </video>
+                                </template>
+                                <template v-else>
+                                    <img
+                                    width="66"
+                                    :src="item"
+                                    alt
+                                />
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -510,6 +524,12 @@ export default {
                 border-left: 2px solid #CACFCB;
                 padding: 10px 20px;
             }
+        }
+    }
+    .images {
+        margin-top: 5px;
+        img, video {
+            margin-right: 5px;
         }
     }
 </style>

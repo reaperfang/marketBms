@@ -16,7 +16,9 @@
                     </el-col>
                     <el-col :span="6" :offset="1">
                         <el-form-item prop="labelValue">
-                            <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20"><el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button></el-input>
+                            <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20">
+                                <el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button>
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -205,7 +207,6 @@ export default {
         return clientCont.clientStatusOps
     },
     clientChannelOps() {
-        //return clientCont.clientChannelOps
         let arr = [];
         clientCont.clientChannelOps.map((v) => {
             arr.push(v.channerlName)
@@ -437,7 +438,7 @@ export default {
         this.form.perUnitPriceMax = "";
         this.form.becameCustomerTimeEnd = "";
         this.form.lastPayTimeEnd = "";
-        this.newForm = Object.assign({},{});
+        this.newForm = {};
     }
   },
   mounted() {
@@ -446,7 +447,7 @@ export default {
       if(this.$route.query.memberLabels) {
           this.newForm = Object.assign({}, this.$route.query);
       }else{
-          this.newForm = Object.assign({}, {});
+          this.newForm = {};
       }
   }
 }

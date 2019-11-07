@@ -32,7 +32,7 @@
       </div>
 
       <div class="chart_container">
-        <div class="path_line clearfix">
+        <div class="path_line clearfix" v-if="dataObj.uv">
           <div class="p_l">
             <p>第一步</p>
             <p>访客（人）</p>
@@ -64,7 +64,7 @@
             </div>
           </div>
         </div>
-         <div class="p_top">
+         <div class="p_top" v-if="dataObj.orderUvPathTransformation">
             <p :title="'首页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[1]*100).toFixed(2)+ '%'}}
             </p>
@@ -94,7 +94,7 @@
             </div>
           </div>
         </div>
-         <div class="p_top1">
+         <div class="p_top1" v-if="dataObj.payOrderPathTransformation">
               <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
               </p>
@@ -111,7 +111,7 @@
             <p>支付（人）</p>
           </div>
           <div class="p_r p_3">           
-            <div class="p_bottom">
+            <div class="p_bottom" v-if="dataObj.pay">
               <div>
                 <p>支付成功</p>
                 <p>{{dataObj.pay[1]}}</p>
@@ -167,16 +167,10 @@ export default {
       endTime: "",
       dateType: 7,
       dataObj: {},
-      channel: "0",
-      aaa1:'yel'
+      channel: "0"
     };
   },
   methods: {
-    toPersent(num) {
-      let str = Number(num*100);
-      str+='%';
-      return str;
-    },
     getDate(date) {
       return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
     },

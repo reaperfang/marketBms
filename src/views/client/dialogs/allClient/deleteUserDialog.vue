@@ -28,10 +28,6 @@ export default {
                 this.$emit('freshTable');
             }).catch((error) => {
                 console.log(error);
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
             })
         }
     },
