@@ -147,7 +147,10 @@ export default {
                 console.log(res)
                 this.itemList = res.itemList
                 if(res.orderAfterSale && res.orderAfterSale.descriptionImages) {
-                    res.orderAfterSale.descriptionImages = res.orderAfterSale.descriptionImages ? res.orderAfterSale.descriptionImages.split(',') : []
+                    res.orderAfterSale.descriptionImages = res.orderAfterSale.descriptionImages ? res.orderAfterSale.descriptionImages.split(',').map(val => ({
+                        image: val,
+                        over: false
+                    })) : []
                 }
                 this.orderAfterSale = res.orderAfterSale || {}
                 this.orderAfterSaleSendInfo = res.orderAfterSaleSendInfo || {}

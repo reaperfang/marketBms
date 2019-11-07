@@ -20,19 +20,29 @@
                             {{orderAfterSale.description}}
                             <div class="images">
                                 <template v-for="(item, index) in orderAfterSale.descriptionImages">
-                                    <template v-if="/\.mp4|\.ogg$/.test(item)">
-                                        <video width="51" controls="controls">
-                                        <source :src="item" type="video/ogg">
-                                        <source :src="item" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                        </video>
+                                    <template v-if="/\.mp4|\.ogg$/.test(item.image)">
+                                        <div @click="dialogVisible = true; bigMessage.image = false; bigMessage.url = item.image;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
+                                            <video width="51" controls="controls">
+                                            <source :src="item.image" type="video/ogg">
+                                            <source :src="item.image" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                            </video>
+                                            <div class="over">
+                                                <i class="el-icon-zoom-in"></i>
+                                            </div>
+                                        </div>
                                     </template>
                                     <template v-else>
-                                        <img
-                                        width="51"
-                                        :src="item"
-                                        alt
-                                    />
+                                        <div @click="dialogVisible = true; bigMessage.image = true; bigMessage.url = item.image;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
+                                            <img
+                                                width="51"
+                                                :src="item.image"
+                                                alt
+                                            />
+                                            <div class="over">
+                                                <i class="el-icon-zoom-in"></i>
+                                            </div>
+                                        </div>
                                     </template>
                                 </template>
                             </div>
@@ -339,6 +349,25 @@
                 </el-table-column>
             </el-table>
         </section>
+        <el-dialog
+            title=""
+            :visible.sync="dialogVisible"
+            width="540px">
+            <template v-if="bigMessage.image">
+                <img width="500" :src="bigMessage.url" />
+            </template>
+            <template v-else>
+                <video width="500" controls="controls">
+                <source :src="bigMessage.url" type="video/ogg">
+                <source :src="bigMessage.url" type="video/mp4">
+                Your browser does not support the video tag.
+                </video>
+            </template>
+            <!-- <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span> -->
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -354,6 +383,8 @@ export default {
                 limit: '2019',
                 code: '1'
             },
+            dialogVisible: false,
+            bigMessage: {}
         }
     },
     filters: {
@@ -529,9 +560,44 @@ export default {
     }
     .images {
         margin-top: 5px;
-        img, video {
+        display: flex;
+        .image-item {
             margin-right: 5px;
+            width: 51px;
+            height: 51px;
+            position: relative;
+            overflow: hidden;
+            .over {
+                position: absolute;
+                width: 51px;
+                height: 51px;
+                z-index: 1000;
+                left: -999px;
+                top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            &.active {
+                outline: 2px solid #35383a;
+                .over {
+                    left: 0;
+                }
+            }
+            img, video {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
         }
+    }
+    /deep/ .el-icon-zoom-in:before {
+        font-size: 18px;
+    }
+    /deep/ .el-dialog__body {
+        text-align: center;
     }
 </style>
 
