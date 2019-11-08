@@ -172,6 +172,13 @@ export default {
             // message: '导入中...',
             // duration: 0
             // });
+            if(!this.url) {
+                this.$message({
+                    message: '请先上传文件',
+                    type: 'warning'
+                });
+                return
+            }
             this.showImport = false
             this.importing = true
 

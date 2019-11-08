@@ -156,7 +156,7 @@
         </div>
       </div>
       <div class="footer">
-        <el-button type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+        <el-button :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
       </div>
     </div>
     <component
@@ -217,7 +217,8 @@ export default {
       expressCompanyList: [],
       sendGoods: "",
       title: "",
-      express: true
+      express: true,
+      sending: false
     };
   },
   created() {
@@ -388,6 +389,8 @@ export default {
             ).expressCompany;
           }
 
+          this.sending = true
+
           params = {
             sendInfoDtoList: [
               {
@@ -435,6 +438,7 @@ export default {
                 message: "发货成功",
                 type: "success"
               });
+              this.sending = false
               // this.$router.push(
               //   "/order/deliverGoodsSuccess?id=" +
               //     res.success[0].expressParameter.orderSendInfo.id +
@@ -455,6 +459,7 @@ export default {
                 title: "错误",
                 message: error
               });
+              this.sending = false
             });
         } else {
           console.log("error submit!!");
