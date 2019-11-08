@@ -127,7 +127,7 @@
         </div>
       </section>
       <div class="footer">
-        <el-button @click="sendGoodsHandler" type="primary">批量发货</el-button>
+        <el-button :loading="sending" @click="sendGoodsHandler" type="primary">批量发货</el-button>
       </div>
     </div>
     <component
@@ -153,6 +153,7 @@ export default {
       sendGoods: "",
       title: "",
       expressCompanyList: [],
+      sending: false
     };
   },
   created() {
@@ -311,6 +312,8 @@ export default {
           return;
         }
 
+        this.sending = true
+
         params = {
           sendInfoDtoList: this.list.filter(val => val.checked).map(item => {
             let expressCompanys = "";
@@ -369,6 +372,7 @@ export default {
               message: "发货成功",
               type: "success"
             });
+            this.sending = false
             // this.$router.push(
             //   "/order/deliverGoodsSuccess?ids=" +
             //     this.list.map(val => val.id).join(",") +
@@ -401,6 +405,7 @@ export default {
               title: "错误",
               message: error
             });
+            this.sending = false
           });
       } catch (e) {
         console.error(e);

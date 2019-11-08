@@ -138,7 +138,7 @@
             <div class="footer">
                 <!-- <el-button class="border-button" @click="printingElectronicForm">打印电子面单</el-button>
                 <el-button class="border-button" @click="printDistributionSheet">打印配送单</el-button> -->
-                <el-button type="primary" @click="sendGoodsHandler('ruleForm')">确定</el-button>
+                <el-button :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">确定</el-button>
             </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods"></component>
@@ -193,7 +193,8 @@ export default {
             expressCompanyList: [],
             sendGoods: '',
             title: '',
-            express: true
+            express: true,
+            sending: false
         }
     },
     created() {
@@ -294,6 +295,8 @@ export default {
                         this.ruleForm.expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == this.ruleForm.expressCompanyCode).expressCompany
                     }
 
+                    this.sending = true
+
                     params = {
                         sendInfoDtoList: [
                             {
@@ -337,12 +340,14 @@ export default {
                             message: '补填物流成功',
                             type: 'success'
                         });
+                        this.sending = false
                         this.$router.push('/order/query')
                     }).catch(error => {
                         this.$notify.error({
                             title: '错误',
                             message: error
                         });
+                        this.sending = false
                     })
                 } else {
                     console.log('error submit!!');
