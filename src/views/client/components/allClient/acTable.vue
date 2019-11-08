@@ -232,11 +232,11 @@ export default {
         .then(response => {
           this.loading = false;
           let list = response.list;
-          list.map((v) => {
-            if(v) {
+          if(list.length > 0) {
+            list.map((v) => {
               v.memberType = v.memberType == 0 ? '客户':'会员'
-            }
-          })
+            })
+          }
           this.memberList = [].concat(list);
           this.total = response.total;
           this.$emit('stopLoading');
@@ -244,10 +244,6 @@ export default {
         .catch(error => {
           this.loading = false;
           console.log(error);
-          // this.$notify.error({
-          //   title: "错误",
-          //   message: error
-          // });
         });
     },
     freshTable() {

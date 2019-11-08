@@ -58,7 +58,7 @@
     </div>
     <div class="a_line">
       <el-checkbox v-model="checkAll" @change="handleChange"></el-checkbox>
-      <el-button type="primary" @click="batchDelete">批量删除</el-button>
+      <el-button type="primary" @click="batchDelete" class="marL20">批量删除</el-button>
     </div>
   </div>
 </template>
@@ -169,15 +169,18 @@ export default {
   },
   watch: {
     params() {
-      this.getLabelList(1, this.pageSize);
+      this.getLabelList(this.startIndex, this.pageSize);
     }
   },
   mounted() {
-    this.getLabelList(1, this.pageSize);
+    this.getLabelList(this.startIndex, this.pageSize);
   } 
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+.marL20{
+  margin-left: 20px;
+}
 .edit_span{
     color: #655EFF;
     cursor: pointer;

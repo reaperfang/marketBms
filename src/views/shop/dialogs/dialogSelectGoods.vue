@@ -20,7 +20,7 @@
       v-loading="loading"
     >
       <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-      <el-table-column prop="title" label="商品标题" :width="500">
+      <el-table-column prop="title" label="商品名称" :width="500">
         <template slot-scope="scope">
           <div class="name_wrapper">
             <img :src="scope.row.mainImage" alt="加载错误" />

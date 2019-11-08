@@ -146,8 +146,11 @@ export default {
             this._apis.order.getOrderAfterSaleDetail({id: this.$route.query.id}).then((res) => {
                 console.log(res)
                 this.itemList = res.itemList
-                if(res.orderAfterSale && res.orderAfterSale.descriptionimages) {
-                    res.orderAfterSale.descriptionimages = res.orderAfterSale.descriptionimages ? res.orderAfterSale.descriptionimages.split(',') : []
+                if(res.orderAfterSale && res.orderAfterSale.descriptionImages) {
+                    res.orderAfterSale.descriptionImages = res.orderAfterSale.descriptionImages ? res.orderAfterSale.descriptionImages.split(',').map(val => ({
+                        image: val,
+                        over: false
+                    })) : []
                 }
                 this.orderAfterSale = res.orderAfterSale || {}
                 this.orderAfterSaleSendInfo = res.orderAfterSaleSendInfo || {}

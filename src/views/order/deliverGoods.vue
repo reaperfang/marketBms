@@ -128,7 +128,7 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="快递公司" prop="expressCompanyCode">
+            <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
               <el-select @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                 <el-option
                   :label="item.expressCompany"
@@ -139,7 +139,7 @@
               </el-select>
               <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
             </el-form-item>
-            <el-form-item label="快递单号" prop="expressNos">
+            <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
               <el-input :disabled="!express" v-model="ruleForm.expressNos"></el-input>
             </el-form-item>
             <el-form-item label="物流备注" prop="sendRemark">
@@ -156,7 +156,7 @@
         </div>
       </div>
       <div class="footer">
-        <el-button type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+        <el-button :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
       </div>
     </div>
     <component
@@ -217,7 +217,8 @@ export default {
       expressCompanyList: [],
       sendGoods: "",
       title: "",
-      express: true
+      express: true,
+      sending: false
     };
   },
   created() {
@@ -388,6 +389,8 @@ export default {
             ).expressCompany;
           }
 
+          this.sending = true
+
           params = {
             sendInfoDtoList: [
               {
@@ -435,6 +438,7 @@ export default {
                 message: "发货成功",
                 type: "success"
               });
+              this.sending = false
               // this.$router.push(
               //   "/order/deliverGoodsSuccess?id=" +
               //     res.success[0].expressParameter.orderSendInfo.id +
@@ -455,6 +459,7 @@ export default {
                 title: "错误",
                 message: error
               });
+              this.sending = false
             });
         } else {
           console.log("error submit!!");
@@ -587,6 +592,14 @@ export default {
     content: '*';
     color: #f56c6c;
     margin-right: 4px;
+}
+/deep/ .el-form-item.is-disabled {
+  .el-form-item__error {
+    display: none;
+  }
+  .el-input__inner {
+    border: 1px solid #DCDFE6;
+  }
 }
 </style>
 

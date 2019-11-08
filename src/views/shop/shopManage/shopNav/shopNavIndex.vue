@@ -140,6 +140,9 @@ export default {
           message: '重置成功！',
           type: 'success'
         });
+        if(!response || !response.navigationJson) {
+          return;
+        }
         const string = utils.uncompileStr(response.navigationJson);
         if(string.indexOf('navIds') < 0) {
           return;

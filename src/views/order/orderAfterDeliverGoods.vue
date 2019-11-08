@@ -137,7 +137,7 @@
                 </div>
             </div>
             <div class="footer">
-                <el-button type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+                <el-button :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
             </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title"></component>
@@ -193,7 +193,8 @@ export default {
             isReceived: true,
             title: '',
             sendGoods: '',
-            express: true
+            express: true,
+            sending: false
         }
     },
     created() {
@@ -304,6 +305,8 @@ export default {
                         this.ruleForm.expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == this.ruleForm.expressCompanyCode).expressCompany
                     }
 
+                    this.sending = true
+
                     params = {
                         orderAfterSaleSendInfoDtoList: [
                             {
@@ -341,6 +344,7 @@ export default {
                             message: '发货成功',
                             type: 'success'
                         });
+                        this.sending = false
                         this.$router.push({
                             path: '/order/deliverGoodsSuccess',
                             query: {
@@ -354,6 +358,7 @@ export default {
                             title: '错误',
                             message: error
                         });
+                        this.sending = false
                     })
                 } else {
                     console.log('error submit!!');

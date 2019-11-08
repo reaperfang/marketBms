@@ -32,6 +32,8 @@
             </ol>
             <p class="import-box tc">
                 <el-upload
+                    v-show="showImport"
+                    ref="upload"
                     :action="uploadUrl"
                     :limit="1"
                     list-type="picture-card"
@@ -42,7 +44,14 @@
                     <i class="el-icon-plus"></i>
                     <p style="line-height: 21px; margin-top: -39px; color: #92929B;">上传文件</p>
                 </el-upload>
-                <el-button @click="importGoods" class="import-button" type="primary"><i></i>批量导入商品</el-button>
+                <el-button @click="importGoods" class="import-button" type="primary" :loading="importing">
+                    <template v-if="importing">
+                        导入中
+                    </template>
+                    <template v-else>
+                        <i class="i-import"></i>批量导入商品
+                    </template>
+                </el-button>
             </p>
             <p class="download-box">导入规则：请先<a class="download" href="javascript:;" @click="downloadTemplate">下载商品导入模板</a>，在模板中按要求填写商品信息，然后上传该文件</p>
         </section>
@@ -103,6 +112,8 @@ export default {
             url: '',
             showFileList: false,
             loading: false,
+            showImport: true,
+            importing: false
         }
     },
     computed:{
@@ -156,37 +167,54 @@ export default {
             })
         },
         importGoods() {
-            let message = this.$message({
-            showClose: true,
-            message: '导入中...',
-            duration: 0
-            });
+            // let message = this.$message({
+            // showClose: true,
+            // message: '导入中...',
+            // duration: 0
+            // });
+            if(!this.url) {
+                this.$message({
+                    message: '请先上传文件',
+                    type: 'warning'
+                });
+                return
+            }
+            this.showImport = false
+            this.importing = true
 
             this._apis.goods.importGoods({cid: this.cid, importUrl: this.url}).then((res) => {
                 this.url = res.url
                 let _text = ''
 
-                message.close()
+                //message.close()
                 this.getList()
 
                 if(res.importFailCount == 0) {
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
 
                     this.confirm({title: '数据导入成功', text: _text})
+                    this.active = 3
                 } else {
                     _text = ''
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
                     _text += '<br>' + res.failureMsg
                     this.confirm({title: '数据导入失败', text: _text})
+                    this.active = 1
                 }
+                this.$refs.upload.clearFiles();
+                this.showImport = true
+                this.importing = false
             }).catch(error => {
-                message.close()
+                //message.close()
                 this.visible = false
                 this.$notify.error({
                     title: '错误',
                     message: error
                 });
                 this.active = 1
+                this.$refs.upload.clearFiles();
+                this.showImport = true
+                this.importing = false
             })
         },
         next() {
@@ -252,7 +280,7 @@ export default {
                     display: inline-flex;
                     align-items: center;
                 }
-                i {
+                .i-import {
                     display: inline-block;
                     width: 18px;
                     height: 16px;

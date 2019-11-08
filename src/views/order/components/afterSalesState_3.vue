@@ -29,7 +29,7 @@
                 <div class="col flex1 lefter">
                     <el-steps :active="3">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
-                        <el-step class="word4" title="商户处理" description=""></el-step>
+                        <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
                         <el-step class="word2" title="退款" description=""></el-step>
                         <el-step class="word5" title="系统处理中" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>

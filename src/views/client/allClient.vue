@@ -395,7 +395,6 @@ export default {
                     })
                 });
             }
-            
             labelIds = labelIds.join(',');
             if(channelNames.length > 0) {
                 this.channelsList.map((item) => {
@@ -439,7 +438,7 @@ export default {
         this.form.perUnitPriceMax = "";
         this.form.becameCustomerTimeEnd = "";
         this.form.lastPayTimeEnd = "";
-        this.newForm = Object.assign({},{});
+        this.newForm = {};
     }
   },
   mounted() {
@@ -448,7 +447,7 @@ export default {
       if(this.$route.query.memberLabels) {
           this.newForm = Object.assign({}, this.$route.query);
       }else{
-          this.newForm = Object.assign({}, {});
+          this.newForm = {};
       }
   }
 }
