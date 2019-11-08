@@ -135,28 +135,32 @@ export default {
     /* 重置 */
     resetData(params, callback) {
       this._apis.shop.resetShopNav(params).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '重置成功！',
-          type: 'success'
-        });
-        if(!response || !response.navigationJson) {
-          return;
+        if(response !== null) {
+          this.$notify({
+            title: '成功',
+            message: '重置成功！',
+            type: 'success'
+          });
+          if(!response || !response.navigationJson) {
+            return;
+          }
+          const string = utils.uncompileStr(response.navigationJson);
+          if(string.indexOf('navIds') < 0) {
+            return;
+          }
+          let pageData = JSON.parse(string);
+          if(Object.prototype.toString.call(pageData) !== '[object Object]') {
+            return;
+          }
+          if(pageData && pageData.navIds) {
+            this.apiNavData = pageData;
+            this.apiNavData['status'] = response.status;
+            this._globalEvent.$emit('apiNavDataChange', this.apiNavData, this.navigation_type);
+          }
+          callback && callback(true);
+        }else{
+          callback && callback(true);
         }
-        const string = utils.uncompileStr(response.navigationJson);
-        if(string.indexOf('navIds') < 0) {
-          return;
-        }
-        let pageData = JSON.parse(string);
-        if(Object.prototype.toString.call(pageData) !== '[object Object]') {
-          return;
-        }
-        if(pageData && pageData.navIds) {
-          this.apiNavData = pageData;
-          this.apiNavData['status'] = response.status;
-          this._globalEvent.$emit('apiNavDataChange', this.apiNavData, this.navigation_type);
-        }
-        callback && callback(true);
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',
