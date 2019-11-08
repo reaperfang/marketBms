@@ -152,6 +152,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-dialog__body{
+  min-height: 400px;
+}
 .name_wrapper {
   display: flex;
   flex-direction: row;

@@ -94,7 +94,6 @@ export default {
     },
   },
   methods: {
-
     /* 获取分类列表 */
     getGoodsClassifyList() {
       this._apis.goods.fetchCategoryList({
@@ -125,6 +124,9 @@ export default {
         })
       }else{
         params = this.ruleForm;
+        if(!!params.productCatalogInfoId) {
+          delete params.productCatalogInfoId;
+        }
       }
       this._apis.goods.fetchSpuGoodsList(params).then((response)=>{
         this.tableData = response.list;
