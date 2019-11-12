@@ -65,7 +65,7 @@
                   <div class="col">
                     <el-form :model="item" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="快递公司" prop="expressCompanys">
-                            <el-select @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
+                            <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
                             <el-input
