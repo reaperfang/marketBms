@@ -27,7 +27,7 @@
                             </template>
                             <template v-else>不限制</template>
                         </p>
-                        <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
+                        <div class="remainder_box">
                             <div class="jd_line">
                                 <div class="current_line"></div>
                             </div>

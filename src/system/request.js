@@ -65,6 +65,15 @@ class Ajax {
               })
             }
           });
+        }else if(res.status === 'error' && res.code === "10020"){
+          MessageBox.alert('用户登录已经超时！', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              store.dispatch('LogOut').then(() => {
+                location.reload()
+              })
+            }
+          });
         }else if (res.errno === 0) {
           return res.data;
         }else {

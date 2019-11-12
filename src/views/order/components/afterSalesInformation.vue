@@ -209,7 +209,7 @@
                 </div>
             </div> -->
         <!-- </section> -->
-        <section class="drawback">
+        <section class="drawback" v-if="orderAfterSale.type != 2">
             <p class="section-header">卖家退款合计</p>
             <div class="row justity-between align-center">
                 <div class="col" style="margin-right: 50px;">
@@ -352,7 +352,9 @@
         <el-dialog
             title=""
             :visible.sync="dialogVisible"
-            width="540px">
+            width="540px"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false">
             <template v-if="bigMessage.image">
                 <img width="500" :src="bigMessage.url" />
             </template>

@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="设置领取条件" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="设置领取条件" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <div class="c_line" v-if="getIndex(data.conditionList,'消费金额满') !== -1">
                 <el-radio v-model="condition1" label="消费金额满">消费金额满：</el-radio>
@@ -22,6 +22,12 @@
                 </div>
                 <span>分</span>
             </div>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -71,9 +77,11 @@ export default {
                                 type: 'warning'
                             });
                         }else{
+                            this.visible = false;
                             this.$emit('getCondition', {levelConditionId: this.getId(this.data.conditionList,'消费金额满'), conditionValue: this.xfjem, label: '消费金额满'});
                         }
                     }).catch((error) => {
+                        this.visible = false;
                         console.log(error);
                     })
                 }else{
@@ -100,9 +108,11 @@ export default {
                                 type: 'warning'
                             });
                         }else{
+                            this.visible = false;
                             this.$emit('getCondition', {levelConditionId: this.getId(this.data.conditionList,'消费次数满'), conditionValue: this.xfcsm, label: '消费次数满'});
                         }
                     }).catch((error) => {
+                        this.visible = false;
                         console.log(error);
                     })
                 }else{
@@ -192,6 +202,9 @@ export default {
             display: inline-block;
         }
     }
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 
 </style>

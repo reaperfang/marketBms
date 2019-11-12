@@ -485,6 +485,9 @@ ul.cube {
       }
 }
 
-.el-radio-group label:last-child {
-    margin-left: 0;
+.block.form .el-radio-group label{
+      margin-right: 5px;
+      &:last-child {
+            margin-left: 0;
+      }
 }

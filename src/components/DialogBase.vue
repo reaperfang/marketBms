@@ -3,6 +3,8 @@
         :visible.sync="dialogVisible"
         :width="width"
         :title="title"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
         v-bind="$attrs"
         v-on="$listeners">
         <div class="dialog-container">

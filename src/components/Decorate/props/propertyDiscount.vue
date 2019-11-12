@@ -95,7 +95,7 @@
           <el-checkbox label="3">商品价格</el-checkbox>
           <el-checkbox label="4">商品原价</el-checkbox>
           <el-checkbox label="5">抢购倒计时</el-checkbox>
-          <el-checkbox label="6">抢购进度条</el-checkbox>
+          <el-checkbox label="6" v-if="false">抢购进度条</el-checkbox>
           <el-checkbox label="7">限制规则</el-checkbox>
           <el-checkbox label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
         </el-checkbox-group>

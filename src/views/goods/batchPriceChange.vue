@@ -58,7 +58,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column v-if="operateType == 1 || operateType == 2" type="selection" width="55"></el-table-column>
+        <el-table-column v-if="operateType == 1" type="selection" width="55"></el-table-column>
         <el-table-column prop="name" label="商品名称" width="380">
           <template slot-scope="scope">
             <div

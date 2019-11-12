@@ -128,7 +128,7 @@ export default {
       return {
         'backgroundImage': `url(${url})`,
         'backgroundRepeat': 'no-repeat',
-        'backgroundSize': 'cover'
+        'backgroundSize': '100% 100%'
       }
     }
   },

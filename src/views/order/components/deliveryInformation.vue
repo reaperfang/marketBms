@@ -183,10 +183,10 @@ export default {
             this.dialogVisible = true;
           })
           .catch(error => {
-            this.$notify.error({
-              title: "错误",
-              message: error
-            });
+            // this.$notify.error({
+            //   title: "错误",
+            //   message: error
+            // });
           });
       }
     },

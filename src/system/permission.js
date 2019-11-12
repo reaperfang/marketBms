@@ -12,7 +12,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 function hasPermission(msfList, route) {
   if (route && route.path) {
-    return msfList.some(item => route.meta.title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login'
+    return msfList.some(item => route.meta.title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop'
   } else {
     return true
   }
@@ -49,7 +49,8 @@ router.beforeEach((to, from, next) => {
           if (hasPermission(msfList, to)) {
             next()
           } else {
-            next({ path: '/401', replace: true, query: { noGoBack: true }})
+            next({ path: '/401'})
+            // next({ path: '/401', replace: true, query: { noGoBack: true }})
           }
         }
         next()

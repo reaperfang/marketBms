@@ -1,11 +1,17 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="加标签" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="加标签" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <el-checkbox-group
                 v-model="checkedItems"
                 :max="5">
                 <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag" :disabled="data.selectedNames.indexOf(tag) !== -1">{{tag}}</el-checkbox>
             </el-checkbox-group>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -41,6 +47,7 @@ export default {
             }
             if(params.memberLabelInfoIds.length > 0) {
                 this._apis.client.markLabel(params).then((response) => {
+                    this.visible = false;
                     this.$notify({
                         title: '成功',
                         message: '打标签成功',
@@ -48,6 +55,7 @@ export default {
                     });
                     this.$emit('refreshPage');
                 }).catch((error) => {
+                    this.visible = false;
                     console.log(error);
                 }) 
             }else{
@@ -113,6 +121,9 @@ export default {
 }
 .c_container{
     padding: 0 30px;
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

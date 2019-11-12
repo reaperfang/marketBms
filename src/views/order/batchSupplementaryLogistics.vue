@@ -283,7 +283,11 @@ export default {
           }
       },
       getExpressCompanyList() {
-        this._apis.order.fetchExpressCompanyList().then((res) => {
+        this._apis.order.getElectronicFaceSheetExpressCompanyList({isElectronicSingle: 1}).then((res) => {
+          res.forEach(val => {
+              val.expressCompanyCode = val.expressCode
+              val.expressCompany = val.expressName
+          })
           res.push({
             expressCompanyCode: "other",
             expressCompany: "其他"
