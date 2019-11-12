@@ -108,13 +108,21 @@ export default {
           this.getInfo()
       },
       radio(){
-        this.radio == 0 && (this.note = false)
+        this.init()
       }
   },
   created() {
     this.getInfo()
+    this.init()
   },
   methods: {
+    init(){
+      if(this.radio == 1 && this.remarks.trim() == ''){
+        this.note = true
+      }else{
+        this.note = false
+      }
+    },
     submit() { 
       let datas = {
         ids:[this.data.id],
@@ -136,9 +144,7 @@ export default {
       this.visible = false
     },
     checkNull(){
-        if(this.radio == 1 && this.remarks.trim() == ''){
-            this.note = true
-        }
+        this.init()
     },
     getInfo(){
       this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
