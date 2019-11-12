@@ -64,22 +64,20 @@
           >满足特定条件</el-radio>
         </el-form-item>
         <div class="line"></div>
-        <p class="l_title" style="margin-left: -19px;">权益礼包（最少选1个）：</p>
+        <span class="red" style="color: red;">*</span>
+        <p class="l_title" style="margin-left: -19px; display: inline">权益礼包（最少选1个）：</p>
         <br />
-        <div style="margin-left: 25px">
-          <el-form-item label="会员卡权益:" style="position: relative">
-            <span class="red" style="position: absolute; color: red; left: -8px; top: 2px">*</span>
-            <el-form-item v-if="getIndex(this.rightsList,'优先发货') !== -1">
+        <div style="margin-top:20px">
+            <el-form-item v-if="getIndex(this.rightsList,'优先发货') !== -1" style="margin-left: 94px">
               <el-checkbox v-model="right1">优先发货</el-checkbox>
             </el-form-item>
-            <el-form-item style="margin-left: 87px" v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1">
+            <el-form-item v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1" style="margin-left: 94px">
               <el-checkbox v-model="right2" @change="handleCheck1">积分回馈倍率</el-checkbox>
               <div class="input_wrap3">
                 <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
               </div>
               <span>倍</span>
             </el-form-item>
-          </el-form-item>
           <el-form-item label="特权说明：" prop="explain">
             <div class="input_wrap4">
               <el-input
@@ -95,7 +93,7 @@
         <p class="l_title" style="margin-left: -19px;">领卡奖励:</p>
         <br />
         <div style="margin-left: 25px">
-          <el-form-item v-if="getIndex(this.rewardList,'赠送积分') !== -1">
+          <el-form-item v-if="getIndex(this.rewardList,'赠送积分') !== -1" style="margin-left: 70px">
             <el-checkbox v-model="upgrade1" @change="handleCheck2" class="marR20">赠送积分</el-checkbox>
             <span>送</span>
             <div class="input_wrap3">
@@ -103,7 +101,7 @@
             </div>
             <span>积分</span>
           </el-form-item>
-          <el-form-item v-if="getIndex(this.rewardList,'赠送红包') !== -1">
+          <el-form-item v-if="getIndex(this.rewardList,'赠送红包') !== -1" style="margin-left: 70px">
             <el-checkbox v-model="upgrade2" class="marR20">赠送红包</el-checkbox>
             <span>送</span>
             <div class="input_wrap3">
@@ -117,7 +115,7 @@
               </div>
             </div> -->
           </el-form-item>
-          <el-form-item v-if="getIndex(this.rewardList,'赠送赠品') !== -1">
+          <el-form-item v-if="getIndex(this.rewardList,'赠送赠品') !== -1" style="margin-left: 70px">
             <el-checkbox v-model="upgrade3" @change="showGiftDialog" class="fl marR20">赠送赠品</el-checkbox>
             <div class="giftList">
               <div v-for="(item, index) in selectedGifts" :key="item.id">
@@ -127,7 +125,7 @@
               </div>
             </div>
           </el-form-item>
-          <el-form-item v-if="getIndex(this.rewardList,'赠送优惠券') !== -1">
+          <el-form-item v-if="getIndex(this.rewardList,'赠送优惠券') !== -1" style="margin-left: 70px">
             <el-checkbox v-model="upgrade4" @change="showCouponDialog" class="fl marR20">赠送优惠券</el-checkbox>
             <div class="giftList">
               <div v-for="(item, index) in selectedCoupons" :key="item.id">

@@ -64,7 +64,7 @@
             <span v-if="scope.row.status === 0">展示中</span>
             <span v-else-if="scope.row.status === 1">排期中</span>
             <span v-else-if="scope.row.status === 2">已过期</span>
-            <span v-else-if="scope.row.status === 3">已停用</span>
+            <span v-else-if="scope.row.status === 3">停用</span>
             <span v-else>--</span>
           </template>
         </el-table-column>

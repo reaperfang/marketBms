@@ -16,8 +16,8 @@
                 <el-form-item label="订单状态">
                     <el-select v-model="listQuery.status">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="待付款" value="0"></el-option>
-                        <el-option label="待成团" value="1"></el-option>
+                        <!-- <el-option label="待付款" value="0"></el-option>
+                        <el-option label="待成团" value="1"></el-option> -->
                         <el-option label="已关闭" value="2"></el-option>
                         <el-option label="待发货" value="3"></el-option>
                         <el-option label="部分发货" value="4"></el-option>

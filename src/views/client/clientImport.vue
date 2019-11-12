@@ -133,10 +133,10 @@ export default {
             const isLt10M = file.size / 1024 / 1024 < 10;
 
             if (!isCSV) {
-                this.$message.error('上传图片只能是 .csv或.xsl 格式!');
+                this.$message.error('上传模板只能是 .csv或.xsl 格式!');
             }
             if (!isLt10M) {
-                this.$message.error("上传图片大小不能超过 10MB!");
+                this.$message.error("上传模板大小不能超过 10MB!");
             }
             return isLt10M && isCSV;
         },
