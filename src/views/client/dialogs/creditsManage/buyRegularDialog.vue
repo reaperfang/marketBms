@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DialogBase :visible.sync="visible" @submit="submit" title="购买商品获取积分规则" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="购买商品获取积分规则" :hasCancel="hasCancel" :showFooter="false"> 
       <div class="c_container">
         <div class="clearfix">
           <span class="fl marR20 marB20">购买商品获取积分规则</span>
@@ -61,6 +61,12 @@
           </div>
         </div>
       </div>
+      <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
+        </div>
     </DialogBase>
     <el-dialog :visible.sync="otherVisible" width="40%" title="选择商品">
       <div class="dialog-container">
@@ -201,6 +207,7 @@ export default {
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
+            this.visible = false;
             this.$notify({
               title: "成功",
               message: "保存成功",
@@ -209,6 +216,7 @@ export default {
             this.$emit('refreshPage')
           })
           .catch(error => {
+            this.visible = false;
             console.log(error);
           });
       }
@@ -398,6 +406,9 @@ export default {
     overflow-x: auto;
     text-align: center;
   }
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

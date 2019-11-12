@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="批量加入黑名单" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="批量加入黑名单" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">满足以上搜索条件共{{data.checkedItem.length}}个客户</p>
             <div class="clearfix">
@@ -31,6 +31,12 @@
                 <el-checkbox v-for="item in checks.slice(2,checks.length)" :key="item.id" v-model="item.checked" :label="item.name" class="check_item"></el-checkbox><br>
             </div>
             <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -176,6 +182,7 @@ export default {
                 }
                 //电商批量加入黑名单
                 this._apis.client.batchToBlack(params).then((response) => {
+                    this.visible = false;
                     this.$notify({
                         title: '成功',
                         message: "批量加入黑名单成功",
@@ -183,6 +190,7 @@ export default {
                     });
                     this.$emit('freshTable');
                 }).catch((error) => {
+                    this.visible = false;
                     console.log(error);
                 })
             }else{
@@ -298,6 +306,9 @@ export default {
 .red{
     color: #F55858;
     margin-top: 15px;
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

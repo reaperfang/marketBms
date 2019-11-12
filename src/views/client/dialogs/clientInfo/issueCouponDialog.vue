@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" @submit="submit" title="发放优惠券" :hasCancel="hasCancel">
+  <DialogBase :visible.sync="visible" @submit="submit" title="发放优惠券" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
       <p class="marB20">客户ID: {{data.memberSn}}</p>
       <div class="clearfix">
@@ -18,6 +18,12 @@
         </div>
       </div>
     </div>
+    <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
+        </div>
   </DialogBase>
 </template>
 <script>
@@ -47,6 +53,7 @@ export default {
         this._apis.client.distributeCoupon(this.selectList).then((response) => {
         response.map((v) => {
           if(!!v.receiveDesc) {
+            this.visible = false;
             let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
             this.$notify({
               title: '提示',
@@ -54,6 +61,7 @@ export default {
               type: 'warning'
             });
           }else{
+            this.visible = false;
             this.$notify({
               title: '成功',
               message: "发放成功",
@@ -63,6 +71,7 @@ export default {
           }
         })
         }).catch((error) => {
+          this.visible = false;
           console.log(error);
         })
       }else{
@@ -156,6 +165,9 @@ export default {
     .marB20{
       margin-bottom: 20px;
     }
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="批量加标签" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="批量加标签" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="c_info">该批次导入客户共{{data.successNum}}人，确定批量添加以下标签吗？</p>
             <el-checkbox-group
@@ -7,6 +7,12 @@
                 :max="5">
                 <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag">{{tag}}</el-checkbox>
             </el-checkbox-group>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -38,12 +44,14 @@ export default {
             memberLabelInfoIds = memberLabelInfoIds.join(',');
             if(memberLabelInfoIds.length > 0) {
                 this._apis.client.addImportLabel({importRecordId: this.data.id, memberLabelInfoIds}).then((response) => {
+                    this.visible = false;
                     this.$notify({
                         title: '成功',
                         message: '添加标签成功',
                         type: 'success'
                     });
                 }).catch((error) => {
+                    this.visible = false;
                     console.log(error);
                 })
             }else{
@@ -115,6 +123,9 @@ export default {
         font-size: 18px;
         margin-bottom: 20px;
     }
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

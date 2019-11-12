@@ -1,5 +1,6 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="加入黑名单" :hasCancel="hasCancel" :isHing="isHing">
+<div>
+    <DialogBase :visible.sync="visible" @submit="submit" title="加入黑名单" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
@@ -32,7 +33,14 @@
             </div>
             <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
         </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
+        </div>
     </DialogBase>
+</div> 
 </template>
 <script>
 import clientApi from '@/api/client';
@@ -53,8 +61,7 @@ export default {
             codeId: "",
             allCoupons: [],
             allCodes: [],
-            canSubmit: true,
-            isHing: false
+            canSubmit: true
         }
     },
     methods: {
@@ -196,6 +203,7 @@ export default {
                 }
                 //电商加入黑名单
                 this._apis.client.addToBlack(params).then((response) => {
+                    this.visible = false;
                     this.$notify({
                         title: '成功',
                         message: "加入黑名单成功",
@@ -203,6 +211,7 @@ export default {
                     });
                     this.$emit('freshTable');
                 }).catch((error) => {
+                    this.visible = false;
                     console.log(error);
                 })
             } 
@@ -312,6 +321,9 @@ export default {
 .red{
     color: #F55858;
     margin-top: 15px;
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

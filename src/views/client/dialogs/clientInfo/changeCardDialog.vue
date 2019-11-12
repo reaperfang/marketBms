@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="变更会员卡" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="变更会员卡" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{data.memberSn}}</p>
             <p class="user_id">当前会员卡等级：{{data.level}}</p>
@@ -9,6 +9,12 @@
                     <el-option v-for="item in levelList" :label="item.alias" :value="item.id" :key="item.id"></el-option>
                 </el-select>
             </div>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -40,12 +46,14 @@ export default {
                     let params = {memberInfoId: this.data.id, cardLevelInfoId: levelInfoId, name: levelInfoName};
                     this._apis.client.cardChange(params).then((response) => {
                         this.$emit('refreshPage');
+                        this.visible = false;
                         this.$notify({
                             title: '成功',
                             message: "变更会员成功",
                             type: 'success'
                         });
                     }).catch((error) => {
+                        this.visible = false;
                         console.log(error);
                     })
                 }else{
@@ -119,6 +127,9 @@ export default {
 .s_cont{
     text-align: left;
     padding-left: 16px;
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

@@ -67,7 +67,8 @@
         <p class="l_title" style="margin-left: -19px;">权益礼包（最少选1个）：</p>
         <br />
         <div style="margin-left: 25px">
-          <el-form-item label="会员卡权益:">
+          <el-form-item label="会员卡权益:" style="position: relative">
+            <span class="red" style="position: absolute; color: red; left: -8px; top: 2px">*</span>
             <el-form-item v-if="getIndex(this.rightsList,'优先发货') !== -1">
               <el-checkbox v-model="right1">优先发货</el-checkbox>
             </el-form-item>

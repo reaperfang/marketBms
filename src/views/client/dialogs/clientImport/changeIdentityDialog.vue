@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="批量变更客户身份" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="批量变更客户身份" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">该批次导入客户共{{data.successNum}}人，确定批量变更为以下会员等级吗？</p>
             <div class="s_cont">
@@ -9,6 +9,12 @@
                 </el-select>
                 <p>注：若客户当前会员等级高于变更级别，则此次变更无效</p>
             </div>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -37,17 +43,15 @@ export default {
                 });
                 let params = {importRecordId: this.data.id, levelInfoId: levelInfoId, levelName: levelInfoName};
                 this._apis.client.modifyImportIdentity(params).then((response) => {
+                    this.visible = false;
                     this.$notify({
                         title: '成功',
                         message: "批量变更身份成功",
                         type: 'success'
                     });
                 }).catch((error) => {
+                    this.visible = false;
                     console.log(error);
-                    // this.$notify.error({
-                    //     title: '错误',
-                    //     message: error
-                    // });
                 })
             }else{
                 this.$notify({
@@ -105,6 +109,9 @@ export default {
 .s_cont{
     text-align: left;
     padding-left: 16px;
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 
