@@ -51,6 +51,9 @@ export default {
         isBase: false,
         hidden: false,
       }));
+      this.$nextTick(()=>{
+        this._globalEvent.$emit('scrollToBottom');
+      })
     }
   }
 }

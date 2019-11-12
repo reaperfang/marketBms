@@ -394,7 +394,7 @@ ul.cube {
                   .component_wrapper {
                         position: relative;
                         cursor: pointer;
-                        border-top: 1px solid #f0eeee;
+                        // border-top: 1px solid #f0eeee;
                         min-height:10px;
                         &:last-child{
                               border-bottom: 1px solid #f0eeee;
@@ -490,4 +490,13 @@ ul.cube {
       &:last-child {
             margin-left: 0;
       }
+}
+
+.temp_block{
+    padding:15px;
+}
+.empty_data_img{
+      width:50%;
+      display:block;
+      margin:0 auto;
 }

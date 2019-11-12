@@ -99,6 +99,9 @@ export default {
   },
   created() {
     this.loadTemplateLists();
+    this._globalEvent.$on('scrollToBottom', ()=>{
+      this.scrollToBottom();
+    })
   },
   mounted() {
     this.bodyHeight = {
@@ -171,6 +174,19 @@ export default {
       if(!event || (event.target.className.indexOf('phone-head') > -1 || event.target.className.indexOf('phone-body') > -1)) {
        this.$store.commit('setCurrentComponentId',  this.basePropertyId);
       }
+    },
+
+    scrollToBottom () {
+        this.$nextTick(() => {
+            var container = this.$el.querySelector(".phone-body");
+            let tempScrollHeight = container.scrollHeight;
+            setTimeout(()=>{
+              container.scrollTo({
+                top: tempScrollHeight,
+                behavior: "smooth"
+              });
+            });
+        });
     }
   }
 }

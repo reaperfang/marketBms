@@ -1,49 +1,55 @@
 <template>
   <!-- 图文导航 -->
   <div class="componentArticleNav" :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="currentComponentData && currentComponentData.data">
-    <!-- 1、图片导航 -->
-    <div v-if="currentComponentData.data.templateType===1">
-      <!-- (1)固定 -->
-      <div v-if="currentComponentData.data.slideType===1">
-        <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
-          <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-            <div>
-              <img :src="item.url" alt />
-            </div>
-            <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
-          </li>
-        </ul>
+
+    <template v-if="hasContent">
+      <!-- 1、图片导航 -->
+      <div v-if="currentComponentData.data.templateType===1">
+        <!-- (1)固定 -->
+        <div v-if="currentComponentData.data.slideType===1">
+          <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
+            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+              <div :class="{'default': !item.url}">
+                <img :src="item.url" alt />
+              </div>
+              <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
+            </li>
+          </ul>
+        </div>
+        <!-- (2)横向滑动 -->
+        <div v-if="currentComponentData.data.slideType===2">
+          <ul class="img_nav2">
+            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+              <div >
+                <img :src="item.url" alt />
+              </div>
+              <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
+            </li>
+          </ul>
+        </div>
       </div>
-      <!-- (2)横向滑动 -->
-      <div v-if="currentComponentData.data.slideType===2">
-        <ul class="img_nav2">
-          <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-            <div >
-              <img :src="item.url" alt />
-            </div>
-            <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
-          </li>
-        </ul>
+      <!-- 2、文字导航 -->
+      <div v-if="currentComponentData.data.templateType===2">
+        <!-- (1)固定 -->
+        <div v-if="currentComponentData.data.slideType===1">
+          <ul :class="currentComponentData.data.itemList.length>5?'img_nav4':'img_nav3'">
+            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+              <span :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
+            </li>
+          </ul>
+        </div>
+        <!-- (2)横向滑动 -->
+        <div v-if="currentComponentData.data.slideType===2">
+          <ul class="img_nav5">
+            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+              <span class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <!-- 2、文字导航 -->
-    <div v-if="currentComponentData.data.templateType===2">
-      <!-- (1)固定 -->
-      <div v-if="currentComponentData.data.slideType===1">
-        <ul :class="currentComponentData.data.itemList.length>5?'img_nav4':'img_nav3'">
-          <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-            <span :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
-          </li>
-        </ul>
-      </div>
-      <!-- (2)横向滑动 -->
-      <div v-if="currentComponentData.data.slideType===2">
-        <ul class="img_nav5">
-          <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-            <span class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
-          </li>
-        </ul>
-      </div>
+    </template>
+    <div v-else class="temp_block">
+       <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
     </div>
   </div>
 </template>
@@ -68,6 +74,21 @@ export default {
       }
     }
   },
+  computed: {
+    /* 检测是否有数据 */
+    hasContent() {
+        let value = false;
+        if(this.currentComponentData.data.itemList) {
+          for(let k in this.currentComponentData.data.itemList) {
+            if(this.currentComponentData.data.itemList[k].title) {
+              value = true;
+              break;
+            }
+          }
+        }
+        return value;
+    }
+  },
   methods: {}
 };
 </script>
@@ -85,6 +106,9 @@ export default {
         width:50px;
         height:50px;
         margin:0 auto;
+        &.default{
+          background: #ddd;
+        }
         & > img {
           width: 100%;
           height: 100%;

@@ -1,7 +1,7 @@
 <template>
   <!-- 视频 -->
   <div class="componentVideo" v-if="currentComponentData && currentComponentData.data">
-    <div v-on:click="playVideo()">
+    <div>
       <video
         v-if="show"
         :src="currentComponentData.data.videoUrl"

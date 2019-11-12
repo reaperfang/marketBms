@@ -1,47 +1,51 @@
 <template>
 <!-- 组件-多人拼团 -->
     <div class="componentMultiPerson" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-        <ul>
-            <template  v-for="(item,key) of list">
-                <li :key="key" v-if="item.status !== 2" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
-                    <div class="img_box">
-                        <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.sold > -1 ? item.sold : 0}}人已团</p>
-                        <img :src="item.image" alt="" :class="{goodsFill:goodsFill!=1}">
-                    </div>
-                    <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                        <h1 class="title">{{item.activeName || '多人拼团'}}</h1>
-                        <div class="countdown">
-                            <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
-                            <div class="content">
-                                <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                                <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
-                                <!-- <p class="time">{{item.endTime}}</p> -->
+
+        <template v-if="hasContent">
+            <ul>
+                <template  v-for="(item,key) of list">
+                    <li :key="key" v-if="item.status !== 2" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                        <div class="img_box">
+                            <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.sold > -1 ? item.sold : 0}}人已团</p>
+                            <img :src="item.image" alt="" :class="{goodsFill:goodsFill!=1}">
+                        </div>
+                        <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
+                            <h1 class="title">{{item.activeName || '多人拼团'}}</h1>
+                            <div class="countdown">
+                                <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
+                                <div class="content">
+                                    <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
+                                    <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                    <!-- <p class="time">{{item.endTime}}</p> -->
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="info_box"  v-if="showContents.length > 0">
-                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.teamPeople || 0}}人团</font>{{item.goodName}}</p>
-                        <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.goodDes}}</p>
-                        <div class="limit_line">
-                            <div class="label">{{item.peopleNum || 0}}人团</div>
-                            <p class="limit" v-if="showContents.indexOf('7')!=-1">
-                                <template v-if="item.buyLimit >= 0">
-                                    限 {{item.buyLimit}}件/人
-                                </template>
-                                <template v-else>不限制</template>
-                            </p>
+                        <div class="info_box"  v-if="showContents.length > 0">
+                            <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.teamPeople || 0}}人团</font>{{item.goodName}}</p>
+                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.goodDes}}</p>
+                            <div class="limit_line">
+                                <div class="label">{{item.peopleNum || 0}}人团</div>
+                                <p class="limit" v-if="showContents.indexOf('7')!=-1">
+                                    <template v-if="item.buyLimit >= 0">
+                                        限 {{item.buyLimit}}件/人
+                                    </template>
+                                    <template v-else>不限制</template>
+                                </p>
+                            </div>
+                            <div class="price_line">
+                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice}}</font></p>
+                                <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.unitPrice}}</p>
+                            </div>
+                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="kai"></componentButton>
+                            <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="pin"></componentButton> -->
+                            <p class="activity_end" v-if="item.soldOut==1">已售罄</p>
                         </div>
-                        <div class="price_line">
-                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice}}</font></p>
-                            <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.unitPrice}}</p>
-                        </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="kai"></componentButton>
-                        <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="pin"></componentButton> -->
-                        <p class="activity_end" v-if="item.soldOut==1">已售罄</p>
-                    </div>
-                </li>
-            </template>
-        </ul>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <img v-else class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
     </div>
 
 </template>
@@ -105,6 +109,16 @@ export default {
         'currentComponentData.data.sortRule'(newValue) {
             this.fetch();
         },
+    },
+    computed: {
+         /* 检测是否有数据 */
+        hasContent() {
+            let value = false;
+            if(this.list && this.list.length) {
+                value = true;
+            }
+            return value;
+        }
     },
     components:{
         componentButton

@@ -2,7 +2,7 @@
 <!-- 组件-商品列表 -->
 <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
     <!-- <van-list v-model="goodListLoading" :finished="goodListFinished" finished-text="没有更多了" @load="goodListLoad" > -->
-        <ul v-if="list && list.length">
+        <ul v-if="hasContent">
             <li v-for="(item,key) in list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                 <div class="img" >
                     <div class="imgAbsolute">
@@ -19,7 +19,9 @@
                 </div>
             </li>
         </ul>
-        <div v-else>暂无数据</div>
+        <div v-else>
+            <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
+        </div>
     <!-- </van-list> -->
 </div>
 </template>
@@ -88,6 +90,16 @@ export default {
         'ruleForm.currentCatagoryId'() {
             this.fetch();
         },
+    },
+    computed: {
+         /* 检测是否有数据 */
+        hasContent() {
+            let value = false;
+            if(this.list && this.list.length) {
+               value = true;
+            }
+            return value;
+        }
     },
     methods:{
         decoration(){

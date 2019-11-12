@@ -1,25 +1,29 @@
 <template>
   <!-- 标题 -->
   <div class="componentTitle" :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="currentComponentData && currentComponentData.data">
-    <!-- 1、传统样式 -->
-    <div v-if="currentComponentData.data.titleTemplate===1" :class="'title'+currentComponentData.data.displayPosition">
-      <div class="title_Title">
-        <span class="title_Title1">{{currentComponentData.data.mainTitle}}</span>
-        <span class="title_Title2"> {{currentComponentData.data.navName}}</span>
+
+    <template v-if="hasContent">
+      <!-- 1、传统样式 -->
+      <div v-if="currentComponentData.data.titleTemplate===1" :class="'title'+currentComponentData.data.displayPosition">
+        <div class="title_Title">
+          <span class="title_Title1">{{currentComponentData.data.mainTitle}}</span>
+          <span class="title_Title2"> {{currentComponentData.data.navName}}</span>
+        </div>
+        <div class="title_vice" @click="_routeTo('')">{{currentComponentData.data.subTitle}}</div>
       </div>
-      <div class="title_vice" @click="_routeTo('')">{{currentComponentData.data.subTitle}}</div>
-    </div>
-    <!-- 2、模仿微信图文页样式 -->
-    <div v-if="currentComponentData.data.titleTemplate===2" :class="'title'+currentComponentData.data.displayPosition">
-      <div class="title_Title">
-        <span class="title_Title1">{{currentComponentData.data.mainTitle}}</span>
+      <!-- 2、模仿微信图文页样式 -->
+      <div v-if="currentComponentData.data.titleTemplate===2" :class="'title'+currentComponentData.data.displayPosition">
+        <div class="title_Title">
+          <span class="title_Title1">{{currentComponentData.data.mainTitle}}</span>
+        </div>
+        <div class="title_two">
+          <span class="title_time">{{currentComponentData.data.date}}</span>
+          <span class="title_author">{{currentComponentData.data.author}}</span>
+          <span class="title_link" @click="_routeTo('')">链接</span>
+        </div>
       </div>
-      <div class="title_two">
-        <span class="title_time">{{currentComponentData.data.date}}</span>
-        <span class="title_author">{{currentComponentData.data.author}}</span>
-        <span class="title_link" @click="_routeTo('')">链接</span>
-      </div>
-    </div>
+    </template>
+    <img v-else class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
   </div>
 </template>
 
@@ -38,7 +42,14 @@ export default {
 
   },
   computed: {
-    
+    /* 检测是否有数据 */
+    hasContent() {
+        let value = false;
+        if(this.currentComponentData.data.mainTitle) {
+            value = true;
+        }
+        return value;
+    }
   },
   methods: {
   }
