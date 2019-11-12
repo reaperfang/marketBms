@@ -54,6 +54,8 @@
         title="提示"
         :visible.sync="otherVisible"
         width="30%"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
     >
         <div class="other_cont">
             <img src="../../../assets/images/finance/icon_success.png" alt="" style="display:block; margin: 0 auto">

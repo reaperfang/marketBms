@@ -129,7 +129,7 @@
             class="demo-ruleForm"
           >
             <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
-              <el-select @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
+              <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                 <el-option
                   :label="item.expressCompany"
                   :value="item.expressCompanyCode"

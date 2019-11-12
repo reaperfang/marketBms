@@ -352,7 +352,9 @@
         <el-dialog
             title=""
             :visible.sync="dialogVisible"
-            width="540px">
+            width="540px"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false">
             <template v-if="bigMessage.image">
                 <img width="500" :src="bigMessage.url" />
             </template>

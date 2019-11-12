@@ -37,10 +37,13 @@ export default {
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             this.cid = shopInfo && shopInfo.id || ''
+            console.log('路由',this.$route)
             if(this.$route.query.paths){
                 this.path = this.$route.query.paths
+                console.log('应用',this.path)
             }else{
                 this.path = this.refreshPath || this.defultPath;
+                console.log('其他')
             }
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
             this.src = `${process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`

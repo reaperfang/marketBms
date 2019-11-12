@@ -46,7 +46,9 @@
                     <i class="el-icon-plus"></i>
                     <p style="line-height: 21px; margin-top: -39px; color: #92929B;">上传图片</p>
                 </el-upload>
-                <el-dialog :visible.sync="imageDialogVisible">
+                <el-dialog :visible.sync="imageDialogVisible"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false">
                     <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
                 <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span>
