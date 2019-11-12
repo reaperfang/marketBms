@@ -73,7 +73,8 @@
         </li>
       </ul>
       <el-button type="info" plain style="width:100%" @click="addNav">添加一个图文</el-button>
-      <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航，拖动选中的导航可对其排序小程序 v2.3.1 及以上版本支持</p>
+      <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航</p>
+      <!-- <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航，拖动选中的导航可对其排序小程序 v2.3.1 及以上版本支持</p> -->
     </div>
 
      <!-- 动态弹窗 -->

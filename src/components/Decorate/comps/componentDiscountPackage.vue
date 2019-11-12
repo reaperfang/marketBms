@@ -24,7 +24,7 @@
                     <div class="limit_line" v-if="showContents.indexOf('5')!=-1">
                         <p class="limit">
                             <template v-if="item.joinLimit >= 0">
-                                限 {{item.joinLimit}}件/人
+                                限 {{item.joinLimit}}次/人
                             </template>
                             <template v-else>不限制</template>
                         </p>
