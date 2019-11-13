@@ -4,10 +4,11 @@
     <!-- <sidebar class="sidebar-container"/> -->
     <div class="sidebar-lefter">
       <div class="logo-con">
-        <img :src="require('@/assets/images/logo.png')" class="logo">
+        <img :src="logo" class="logo">
+        <!-- <img :src="require('@/assets/images/logo.png')" class="logo"> -->
       </div>
       <ul>
-        <li :class="{active: index == current}" @click="menuHandler(index)" v-if="!item.hidden && item.children" 
+        <li :class="{active: index == current}" @click="menuHandler(index)" v-show="!item.hidden && item.children" 
           v-for="(item, index) in permission_routers_tree" :key="index">
           <i v-if="index != current" class="icons" :class="{[item.meta.icon]: true}"></i>
           <i v-else class="icons" :class="{[item.meta.activeIcon]: true}"></i>
@@ -43,7 +44,8 @@ export default {
   name: 'Layout',
   data() {
     return {
-      current: '0'
+      current: '0',
+      logo:"require('@/assets/images/logo.png')"
     }
   },
   created() {
@@ -68,6 +70,7 @@ export default {
     if(realCurrent != this.current) {
       this.current = realCurrent
     }
+    this.getShopInfo()
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -101,6 +104,10 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
+    },
+    cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        return shopInfo.id
     }
   },
   methods: {
@@ -135,6 +142,17 @@ export default {
     },
     isExternalLink(routePath) {
       return isExternal(routePath)
+    },
+    getShopInfo(){
+      let id = this.cid
+      this._apis.set.getShopInfo({id:id}).then(response =>{
+        this.logo = response.logo
+      }).catch(error =>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })
     },
   },
   watch: {

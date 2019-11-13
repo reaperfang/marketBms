@@ -77,14 +77,14 @@
 
 <script>
 import dialogVideo from '../../../dialogs/dialogVideo';
-import dialogUploadImage from '../../../dialogs/dialogUploadImage';
+import dialogUploadVideo from '../../../dialogs/dialogUploadVideo';
 import dialogSyncVideo from '../../../dialogs/dialogSyncVideo';
 import dialogDelete from '../../../dialogs/dialogDelete';
 import dialogGroups from '../../../dialogs/dialogGroups';
 import dialogGroupsMove from '../../../dialogs/dialogGroupsMove';
 export default {
   name: 'videoMaterial',
-  components: {dialogVideo,dialogUploadImage,dialogSyncVideo,dialogDelete,dialogGroups,dialogGroupsMove},
+  components: {dialogVideo,dialogUploadVideo,dialogSyncVideo,dialogDelete,dialogGroups,dialogGroupsMove},
   data () {
     return {
       dialogVisible: false,
@@ -309,10 +309,7 @@ export default {
     //上传视频
     uploadImage(id,type){
       this.dialogVisible = true;
-      this.currentDialog = 'dialogUploadImage'
-      this.data = {
-        txt:'上传视频',
-      }
+      this.currentDialog = 'dialogUploadVideo'
     },
     //同步视频
     syncImage(){

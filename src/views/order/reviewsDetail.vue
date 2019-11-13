@@ -31,7 +31,14 @@
             <div class="row">
               <div class="col reviews-label">评论等级</div>
               <div class="col">
-                <el-rate disabled :colors="colors" v-model="orderProductComment.starNum"></el-rate>
+                <div class="row align-center">
+                  <div class="col">
+                    <el-rate disabled :colors="colors" v-model="orderProductComment.starNum"></el-rate>
+                  </div>
+                  <div class="col">
+                    <span>{{orderProductComment.starNum | starNumFilter}}</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -188,6 +195,22 @@ export default {
       str = str.replace(/(^.*)\,$/, '$1')
 
       return str
+    },
+    starNumFilter(value) {
+      switch (value) {
+        case 1:
+          return "差评";
+        case 2:
+          return "一般";
+        case 3:
+          return "挺好";
+        case 4:
+          return "满意";
+        case 5:
+          return "非常满意";
+        default:
+          return "";
+      }
     }
   },
   methods: {
