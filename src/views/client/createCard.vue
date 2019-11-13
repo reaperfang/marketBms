@@ -144,22 +144,24 @@
             <el-radio v-model="ruleForm.isSyncWechat" label="1">是</el-radio>
             <el-radio v-model="ruleForm.isSyncWechat" label="0">否</el-radio>
           </el-form-item>
-          <el-form-item label="使用须知：" prop="notice">
-            <div class="input_wrap4" >
-              <el-input
-                type="textarea"
-                :rows="5"
-                :maxlength="1024"
-                placeholder="请输入会员卡通用使用须知，最多不超过1024个汉字"
-                v-model="ruleForm.notice"
-              ></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="客户电话：" prop="phone" style="margin-left: 10px">
-            <div class="input_wrap">
-              <el-input v-model="ruleForm.phone" placeholder="请输入联系电话"></el-input>
-            </div>
-          </el-form-item>
+          <div v-if="ruleForm.isSyncWechat == '1'">
+            <el-form-item label="使用须知：" prop="notice">
+              <div class="input_wrap4" >
+                <el-input
+                  type="textarea"
+                  :rows="5"
+                  :maxlength="1024"
+                  placeholder="请输入会员卡通用使用须知，最多不超过1024个汉字"
+                  v-model="ruleForm.notice"
+                ></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="客户电话：" prop="phone">
+              <div class="input_wrap">
+                <el-input v-model="ruleForm.phone" placeholder="请输入联系电话"></el-input>
+              </div>
+            </el-form-item>
+          </div>
         </div>
       </el-form>
     </div>
@@ -219,6 +221,9 @@ export default {
         ],
         notice: [
           { required: true, message: "请输入使用须知", trigger: "blur" }
+        ],
+        phone: [
+          { required: true, message: "请输入客户电话", trigger: "blur" }
         ],
         isSyncWechat: [
           {
@@ -568,12 +573,6 @@ export default {
           message: "请输入特权说明",
           type: "warning"
         });
-      }else if(this.ruleForm.notice == "") {
-        this.$notify({
-          title: "警告",
-          message: "请输入使用须知",
-          type: "warning"
-        });
       }else {
         if (this.ruleForm.id) {
           let formObj = {};
@@ -585,8 +584,6 @@ export default {
           formObj.backgroundType = this.ruleForm.backgroundType;
           formObj.receiveSetting = this.ruleForm.receiveSetting;
           formObj.isSyncWechat = this.ruleForm.isSyncWechat;
-          formObj.notice = this.ruleForm.notice;
-          formObj.phone = this.ruleForm.phone;
           formObj.explain = this.ruleForm.explain;
           formObj.enable = 0;
           if(formObj.receiveSetting == '0') {
@@ -723,24 +720,6 @@ export default {
               upgradeParams2.giftName = "赠送红包";
               upgradeRewardDtoList.push(upgradeParams2);
               upgradePackage = upgradePackage + "赠送" + this.zshb + "元红包,";
-              // this.selectedReds.map(v => {
-              //   let obj = {};
-              //   obj.upgradeRewardInfoId = this.getId(
-              //     this.rewardList,
-              //     "赠送红包"
-              //   );
-              //   obj.levelType = 1;
-              //   obj.giftName = v.name;
-              //   obj.giftProduct = v.id;
-              //   obj.giftNumber = 1;
-              //   obj.label = "赠送红包";
-              //   upgradeRewardDtoList.push(obj);
-              //   if(!!v.hongbaoTotalMoney) {
-              //     upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
-              //   }else{
-              //     upgradePackage = upgradePackage + "赠送红包,";
-              //   }
-              // });
             }
           }
           if (this.upgrade3) {
@@ -796,6 +775,26 @@ export default {
               });
               upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
             }
+          }
+          if(this.ruleForm.isSyncWechat == "1") {
+            if(this.ruleForm.notice == "") {
+              this.$notify({
+                title: "警告",
+                message: "请输入使用须知",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            }
+            if(this.ruleForm.phone == "") {
+              this.$notify({
+                title: "警告",
+                message: "请输入客户电话",
+                type: "warning"
+              });
+              this.canSubmit = false;
+            }
+            formObj.notice = this.ruleForm.notice;
+            formObj.phone = this.ruleForm.phone;
           }
           upgradeRewardDtoList.map(v => {
             if (v.label) {
