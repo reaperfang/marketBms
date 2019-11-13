@@ -239,6 +239,7 @@ export default {
           title: '成功',
           message: '保存成功！'
         });
+        this.getShopPayInfo()
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
@@ -274,6 +275,11 @@ export default {
       }
       this._apis.set.addShopPayInfo(query).then(response =>{
         this.updateWechatBinding()
+        this.$notify.success({
+          title: '成功',
+          message: '保存成功！'
+        });
+        this.getShopPayInfo()
       }).catch(error =>{
         this.$notify.error({
           title: '错误',

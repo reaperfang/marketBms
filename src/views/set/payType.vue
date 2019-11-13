@@ -6,7 +6,7 @@
             <img src="@/assets/images/set/set-pay1.png"/>
             <div class="note">
               <h3>微信支付</h3>
-              <p>如果是微信支付，授权目录与“支付选项”中的说明不同，应在公众平台->微信支付->公众号支付 追加一条支付授权目录：<a href="https://omo.aiyouyi.cn/app/" target="_blank" class="links">https://omo.aiyouyi.cn/app/</a></p>
+              <p>如果是微信支付，授权目录与“支付选项”中的说明不同，应在公众平台->微信支付->公众号支付 追加一条支付授权目录：<a href="https://omo.aiyouyi.cn/cp/" target="_blank" class="links">https://omo.aiyouyi.cn/app/</a></p>
             </div>
           </div>
           <div class="right_cont">
