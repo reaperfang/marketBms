@@ -19,7 +19,8 @@
                         <el-option label="待发货" value="3"></el-option>
                         <el-option label="部分发货" value="4"></el-option>
                         <el-option label="待收货" value="5"></el-option>
-                        <el-option label="完成" value="6"></el-option>
+                        <el-option label="已关闭" value="2"></el-option>
+                        <el-option label="已完成" value="6"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="自动发货">
@@ -186,7 +187,7 @@ export default {
                 case 1:
                     return '待成团'
                 case 2:
-                    return '关闭'
+                    return '已关闭'
                 case 3:
                     return '待发货'
                 case 4:
@@ -194,7 +195,7 @@ export default {
                 case 5:
                     return '待收货'
                 case 6:
-                    return '完成'
+                    return '已完成'
             }
         },
     },

@@ -1,14 +1,19 @@
 <template>
 <!-- 组件-商品分类 -->
     <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-        <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
-            <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-            <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
-            @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
-        </div>
-        <div class="componentGoodsGroup_content">
-            <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : 'all'"></componentGoods>
-        </div> 
+      <template v-if="hasContent">
+          <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
+              <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+              <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
+              @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
+          </div>
+          <div class="componentGoodsGroup_content">
+              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : 'all'"></componentGoods>
+          </div> 
+      </template>
+      <div v-else class="temp_block">
+          <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
+      </div>
     </div>
 </template>
 <script>
@@ -64,6 +69,16 @@ export default {
       currentComponentData(){
          this.decoration();
       }
+    },
+    computed: {
+        /* 检测是否有数据 */
+        hasContent() {
+            let value = false;
+            if(this.list && this.list.length) {
+               value = true;
+            }
+            return value;
+        }
     },
     // mounted: function() {
     //   window.addEventListener("scroll", this.handleScroll, true);

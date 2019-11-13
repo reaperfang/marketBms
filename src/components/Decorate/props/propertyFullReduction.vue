@@ -9,7 +9,7 @@
       </el-form-item> -->
       <el-form-item label="选择活动" prop="promotions">
         <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectFullReduction'">选择活动</el-button>
-        <div>
+        <div v-loading="loading">
           <el-tag
             v-for="tag in list"
             :key="tag.name"

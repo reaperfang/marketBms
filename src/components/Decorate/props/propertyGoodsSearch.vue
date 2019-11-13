@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :style="bodyHeight">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="90px" :style="bodyHeight">
     <div class="block form">
       <el-form-item label="搜索热词" prop="">
         <p>鼠标拖拽调整热词顺序，搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中

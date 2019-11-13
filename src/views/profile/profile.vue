@@ -191,10 +191,10 @@ export default {
         },
         //常用功能跳转
         linkTo(item){
-            if(item.appName == '公众号管理'){
+            if(item.text == '公众号管理'){
                 this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum'}})
                 this.SETCURRENT(8)
-            }else if(item.appName == '小程序管理'){
+            }else if(item.text == '小程序管理'){
                 this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp'}})
                 this.SETCURRENT(8)
             }else{

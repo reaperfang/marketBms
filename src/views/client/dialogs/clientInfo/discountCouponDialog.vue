@@ -24,7 +24,7 @@
             <el-table-column prop="name" label="优惠券名称"></el-table-column>
             <el-table-column prop="receiveType" label="领取方式"></el-table-column>
             <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
-            <el-table-column prop="consumeStatus" label="状态"></el-table-column>
+            <el-table-column prop="usedType" label="状态"></el-table-column>
           </el-table>
           </div>
         </el-tab-pane>
@@ -48,7 +48,7 @@
             <el-table-column prop="name" label="优惠券名称"></el-table-column>
             <el-table-column prop="receiveType" label="领取方式"></el-table-column>
             <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
-            <el-table-column prop="consumeStatus" label="状态"></el-table-column>
+            <el-table-column prop="usedType" label="状态"></el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -113,7 +113,7 @@ export default {
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.couponList = [];
           response.map((v) => {
-              v.appCoupon.consumeStatus = v.consumeStatus == 0?'可使用':'已失效';
+              v.appCoupon.usedType = v.usedType == 1?'可使用':'已失效';
               v.appCoupon.receiveType = this.reciveMap[v.receiveType];
               v.appCoupon.receiveTime = v.receiveTime;
               this.couponList.push(v.appCoupon);
@@ -132,7 +132,7 @@ export default {
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.codeList = [];
           response.map((v) => {
-            v.appCoupon.consumeStatus = v.consumeStatus == 0?'可使用':'已失效';
+            v.appCoupon.usedType = v.usedType == 1?'可使用':'已失效';
             v.appCoupon.receiveType = this.reciveMap[v.receiveType];
             v.appCoupon.receiveTime = v.receiveTime;
             this.codeList.push(v.appCoupon);

@@ -12,6 +12,7 @@
                 :rows="4"
                 placeholder="请输入拒绝原因，不超过20个字"
                 v-model="remarks"
+                v-if="radio == 1"
                 @blur="checkNull">
             </el-input>
             <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="note">请输入拒绝原因</p>
@@ -80,11 +81,20 @@ export default {
     },
     watch:{
         radio(){
-            this.radio == 0 && (this.note = false)
+            this.init()
         }
     },
-    created() {  },
+    created() { 
+        this.init()
+     },
     methods: {
+        init(){
+            if(this.radio == 1 && this.remarks.trim() == ''){
+                this.note = true
+            }else{
+                this.note = false
+            }
+        },
         submit() {
             let datas = {
                 ids:this.data,
@@ -106,9 +116,7 @@ export default {
             this.visible = false
         },
         checkNull(){
-            if(this.radio == 1 && this.remarks.trim() == ''){
-                this.note = true
-            }
+            this.init()
         }
     },    
 }

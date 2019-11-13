@@ -1,11 +1,7 @@
 <template>
   <!-- 图片广告 -->
   <div class="componentArticleAD" v-if="currentComponentData && currentComponentData.data">
-
-    <div class="temp_block" v-if="!currentComponentData.data.itemList[0].title && !currentComponentData.data.itemList[0].linkTo">
-      <p>点击编辑图片广告</p>
-    </div>
-    <template v-else>
+    <template v-if="hasContent">
 
       <!-- 1、一行一个 -->
       <div v-if="currentComponentData.data.templateType==1" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
@@ -72,7 +68,9 @@
         </van-swipe>
       </div>
     </template>
-
+    <div v-else class="temp_block">
+       <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
+    </div>
   </div>
 </template>
 
@@ -91,7 +89,19 @@ export default {
 
   },
   computed: {
-    
+     /* 检测是否有数据 */
+    hasContent() {
+      let value = false;
+      if(this.currentComponentData.data.itemList) {
+        for(let k in this.currentComponentData.data.itemList) {
+          if(this.currentComponentData.data.itemList[k].url) {
+            value = true;
+            break;
+          }
+        }
+      }
+      return value;
+    }
   },
   methods: {
   }
@@ -100,18 +110,6 @@ export default {
 
 <style lang="scss" scoped>
 .componentArticleAD {
-  .temp_block{
-    width: 100%;
-    height: 180px;
-    background: #eeedfb;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    p{
-      font-size:15px;
-      color:rgba(101,94,255,1);
-    }
-  }
 
   .article_first {
     width: 100%;

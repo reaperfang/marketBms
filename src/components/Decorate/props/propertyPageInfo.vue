@@ -14,6 +14,7 @@
         <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
           <el-option v-for="(item, key) of classifyList" :key="key" :label="item.name" :value="item.id"></el-option>
         </el-select>
+        <span v-else style="color:#ccc">未获取到页面分类,默认未分类</span>
       </el-form-item>
       <el-form-item label="背景颜色" prop="colorStyle">
         <div class="color_block">
@@ -39,7 +40,7 @@ export default {
         title: '',
         explain: '',
         pageCategoryInfoId: '-1',
-        colorStyle: '#fff',
+        colorStyle: '#ffffff',
         pageKey: '',
         status: 0
       },
@@ -72,10 +73,10 @@ export default {
           }
         ],
         pageCategoryInfoId: [
-          { required: false, message: "请输入内容", trigger: "change" }
+          { required: true, message: "请输入内容", trigger: "change" }
         ],
         colorStyle: [
-          { required: false, message: "请输入内容", trigger: "change" }
+          { required: true, message: "请输入内容", trigger: "change" }
         ],
       },
     }
@@ -97,7 +98,7 @@ export default {
   }
 }
 </script>
-
+3
 <style lang="scss" scoped>
 /deep/.m-colorPicker .box.open {
     z-index: 10!important;

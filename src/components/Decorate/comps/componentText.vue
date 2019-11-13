@@ -10,8 +10,11 @@
       class="group_text"
       :class="['font_size'+currentComponentData.data.fontSize,'style'+currentComponentData.data.displayStyle]"
       :style="{'color':currentComponentData.data.fontColor}"
-      v-if="currentComponentData && currentComponentData.data"
+      v-if="hasContent"
     >{{currentComponentData.data.textContent}}</div>
+     <div v-else class="temp_block">
+       <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
+    </div>
   </div>
 </template>
 
@@ -30,7 +33,14 @@ export default {
 
   },
   computed: {
-   
+    /* 检测是否有数据 */
+    hasContent() {
+        let value = false;
+        if(this.currentComponentData.data.textContent) {
+            value = true;
+        }
+        return value;
+    }
   },
   methods: {
   }

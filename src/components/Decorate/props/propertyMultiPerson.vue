@@ -9,7 +9,7 @@
       </el-form-item>
      <el-form-item label="选择活动" prop="goods">
       </el-form-item>
-      <div class="goods_list" prop="goods">
+      <div class="goods_list" prop="goods" v-loading="loading">
         <ul>
           <template>
             <template v-for="(item, key) of list">
@@ -191,7 +191,8 @@ export default {
       },
       list: [],
       dialogVisible: false,
-      currentDialog: ''
+      currentDialog: '',
+      loading: false
     }
   },
   created() {

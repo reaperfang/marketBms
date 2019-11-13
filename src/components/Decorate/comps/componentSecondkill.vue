@@ -1,43 +1,47 @@
 <template>
 <!-- 组件-限时秒杀 -->
     <div class="componentSecondkill" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-        <ul>
-            <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
-                <div class="img_box">
-                    <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
-                </div>
-                <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                    <h1 class="title">{{item.activityName || '限时秒杀'}}</h1>
-                    <div class="countdown">
-                        <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
-                        <div class="content">
-                            <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                            <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
-                            <!-- <p class="time">{{item.endTime}}</p> -->
+
+        <template v-if="hasContent">
+            <ul>
+                <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                    <div class="img_box">
+                        <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                    </div>
+                    <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
+                        <h1 class="title">{{item.activityName || '限时秒杀'}}</h1>
+                        <div class="countdown">
+                            <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
+                            <div class="content">
+                                <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
+                                <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                <!-- <p class="time">{{item.endTime}}</p> -->
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="info_box" v-if="showContents.length > 0">
-                    <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction}}元</font>{{item.goodsName}}</p>
-                    <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
-                    <div class="limit_line">
-                        <p class="limit" v-if="showContents.indexOf('7')!=-1">
-                            <template v-if="item.activityJoinLimit >= 0">
-                                限 {{item.activityJoinLimit}}件/人
-                            </template>
-                            <template v-else>不限制</template>
-                        <p class="remainder" v-if="showContents.indexOf('6')!=-1">仅剩{{item.remainStock}}件</p>
+                    <div class="info_box" v-if="showContents.length > 0">
+                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction}}元</font>{{item.goodsName}}</p>
+                        <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
+                        <div class="limit_line">
+                            <p class="limit" v-if="showContents.indexOf('7')!=-1">
+                                <template v-if="item.activityJoinLimit >= 0">
+                                    限 {{item.activityJoinLimit}}件/人
+                                </template>
+                                <template v-else>不限制</template>
+                            <p class="remainder" v-if="showContents.indexOf('6')!=-1">仅剩{{item.remainStock}}件</p>
+                        </div>
+                        <div class="price_line">
+                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice}}</font></p>
+                            <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice}}</p>
+                        </div>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
+                        <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
+                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p>
                     </div>
-                    <div class="price_line">
-                        <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice}}</font></p>
-                        <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice}}</p>
-                    </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
-                    <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
-                    <p class="activity_end" v-if="item.activityEnd==1">活动结束</p>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
+        </template>
+        <img  v-else class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
     </div>
 
 </template>
@@ -86,6 +90,16 @@ export default {
                 this.fetch(componentData);
             }
         });
+    },
+    computed: {
+         /* 检测是否有数据 */
+        hasContent() {
+            let value = false;
+            if(this.list && this.list.length) {
+                value = true;
+            }
+            return value;
+        }
     },
     methods:{
         decoration(){

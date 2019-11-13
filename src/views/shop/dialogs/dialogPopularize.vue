@@ -215,7 +215,7 @@ export default {
           }
         ],
         picture: [
-          { required: true, message: "请选择logo", trigger: "change" }
+          { required: false, message: "请选择logo", trigger: "change" }
         ]
       },
       rulesMini: {
@@ -238,7 +238,7 @@ export default {
           }
         ],
         picture: [
-          { required: true, message: "请选择logo", trigger: "change" }
+          { required: false, message: "请选择logo", trigger: "change" }
         ]
       },
       qrCode: '',

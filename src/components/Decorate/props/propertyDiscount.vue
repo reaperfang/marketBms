@@ -3,7 +3,7 @@
     <div class="block form">
       <el-form-item label="选择活动" prop="goods">
       </el-form-item>
-      <div class="goods_list">
+      <div class="goods_list" v-loading="loading">
         <ul>
           <li v-for="(item, key) of list" :key="key" :title="item.activityName">
             <img :src="item.goodsImgUrl" alt="">
@@ -95,7 +95,7 @@
           <el-checkbox label="3">商品价格</el-checkbox>
           <el-checkbox label="4">商品原价</el-checkbox>
           <el-checkbox label="5">抢购倒计时</el-checkbox>
-          <el-checkbox label="6">抢购进度条</el-checkbox>
+          <el-checkbox label="6" v-if="false">抢购进度条</el-checkbox>
           <el-checkbox label="7">限制规则</el-checkbox>
           <el-checkbox label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
         </el-checkbox-group>
@@ -148,7 +148,8 @@ export default {
       },
       list: [],
       dialogVisible: false,
-      currentDialog: ''
+      currentDialog: '',
+      loading: false
     }
   },
   created() {

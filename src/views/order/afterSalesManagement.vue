@@ -114,7 +114,7 @@
             </el-table>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
     </div>
 </template>
 <script>
@@ -239,6 +239,8 @@ export default {
             }) 
         },
         showLogistics(row) {
+            this.expressNo = row.returnExpressNo
+            this.expressCompanys = row.returnExpressName
             this._apis.order.orderLogistics({expressNo: row.returnExpressNo}).then(res => {
                 this.currentDialog = 'LogisticsDialog'
                 this.currentData = res.traces

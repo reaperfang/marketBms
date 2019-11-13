@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="发放会员卡" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="发放会员卡" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">会员卡：{{data.name}}</p>
             <div class="clearfix">
@@ -11,6 +11,12 @@
                 </div>
             </div> 
             <p class="red">确定给{{this.labels || '  '}}发放会员卡：{{data.name}}吗？</p>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -47,13 +53,18 @@ export default {
                     name: this.data.name
                 }
                 this._apis.client.sendCard(params).then((response) => {
+                    this.visible = false;
                     this.$notify({
                         title: '成功',
                         message: '发卡成功',
                         type: 'success'
                     });
                 }).catch((error) => {
-                    console.log(error);
+                    this.visible = false;
+                    this.$notify.info({
+                        title: '提示',
+                        message: error
+                    });
                 })
             }else{
                 this.$notify.info({
@@ -126,6 +137,9 @@ export default {
 .red{
     color: #F55858;
     margin-top: 15px;
+}
+.dialog-footer{
+    margin-top: 20px;
 }
 </style>
 

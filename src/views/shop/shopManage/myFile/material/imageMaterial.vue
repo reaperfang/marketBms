@@ -16,7 +16,7 @@
       <div class="list_main">
         <div class="list_img">
           <div class="imgs">
-            <div class="item_img" v-for="(item,index) in list" :key="item.id"  @mouseenter="onMouseOver(index)" @mouseleave="onMouseOut(index)">
+            <div class="item_img" v-for="(item,index) in list" :key="item.index"  @mouseenter="onMouseOver(index)" @mouseleave="onMouseOut(index)">
               <div class="img_info">
                 <img :src="item.filePath">
                 <div class="img_bottom">
@@ -313,9 +313,6 @@ export default {
     handleUploadImage(){
       this.dialogVisible = true;
       this.currentDialog = 'dialogUploadImage'
-      this.data = {
-        txt:'上传图片'
-      }
     },
 
     //同步图片

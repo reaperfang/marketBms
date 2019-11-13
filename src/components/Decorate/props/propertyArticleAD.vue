@@ -69,7 +69,7 @@
         </li>
       </ul>
       <el-button type="info" plain style="width:100%" @click="addNav">添加一个背景图</el-button>
-      <p style="margin-top:10px;color:rgb(211,211,211)">建议宽度305像素</p>
+      <p style="margin-top:10px;color:rgb(211,211,211)">建议宽度305像素,设置图片以后预览才可见</p>
     </div>
 
      <div class="block form">

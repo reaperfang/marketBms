@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" @submit="submit" title="手动调整余额" :hasCancel="hasCancel">
+  <DialogBase :visible.sync="visible" @submit="submit" title="手动调整余额" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
       <p class="marB20">客户ID: {{ data.memberSn }}</p>
       <p class="marB20">当前余额: {{ data.balance }}</p>
@@ -16,6 +16,12 @@
               <el-input placeholder="请输入变更原因" v-model="remark" type="textarea" :row="3" :maxlength="50"></el-input>
           </div>
       </div>
+    </div>
+    <div>
+      <span slot="footer" class="dialog-footer fcc">
+          <el-button type="primary" @click="submit">确 认</el-button>
+          <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+      </span>
     </div>
   </DialogBase>
 </template>
@@ -55,6 +61,7 @@ export default {
           remark: this.remark
         }
         this._apis.client.manualChangeBalance(params).then((response) => {
+          this.visible = false;
           this.$notify({
             title: '成功',
             message: "调整余额成功",
@@ -62,6 +69,7 @@ export default {
           });
           this.$emit('refreshPage');
         }).catch((error) => {
+          this.visible = false;
           console.log(error);
         })
       }

@@ -42,10 +42,11 @@
             </div>
             <span class="upload_tips">建议尺寸:640 * 350 , 请将所有广告图片尺寸保持一致，图片只能选择一张</span>
           </el-form-item>
-          <el-form-item label="广告链接" prop="advertiseUrl">
-            <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">{{ruleForm.advertiseJump ? ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name) : '选择跳转页面'}}</el-button>
+          <el-form-item label="广告链接" prop="advertiseJump">
+            <el-button v-if="ruleForm.advertiseJump" type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">{{ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name)}}</el-button>
+            <el-button v-else type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">选择跳转页面</el-button>
           </el-form-item>
-          <el-form-item label="展示时间" prop="">
+          <el-form-item label="展示时间" prop="startTime">
             <div>
               <el-date-picker
                 v-model="ruleForm.startTime"
@@ -103,7 +104,7 @@ export default {
         type: 0,
         name: '',
         imagePath: '',
-        advertiseUrl: '',
+        advertiseJump: null,
         startTime: '',
         endTime: '',
       },
@@ -116,6 +117,15 @@ export default {
             message: "请勿超过30个字符",
             trigger: "blur"
           },
+        ],
+        imagePath: [
+          { required: true, message: "请上传图片", trigger: "change" },
+        ],
+        advertiseJump: [
+          { required: true, message: "请选择跳转链接", trigger: "change" },
+        ],
+        startTime: [
+          { required: true, message: "请设置展示时间", trigger: "change" },
         ]
       },
       bodyHeight: {},
