@@ -82,7 +82,8 @@ class Ajax {
       },
       error => {
         if (error.code === "ECONNABORTED") {
-          error.message = "登录连接超时（后台不能连接，请联系系统管理员）";
+          // error.message = "登录连接超时（后台不能连接，请联系系统管理员）";
+          error.message = "网络连接失败，请刷新重试";
         }
         return Promise.reject(error.message);
       }
