@@ -3,7 +3,7 @@
     <div class="block form">
       <el-form-item label="选择活动" prop="goods">
       </el-form-item>
-      <div class="goods_list">
+      <div class="goods_list" v-loading="loading">
         <ul>
           <li v-for="(item, key) of list" :key="key" :title="item.activityName">
             <img :src="item.goodsImgUrl" alt="">
@@ -148,7 +148,8 @@ export default {
       },
       list: [],
       dialogVisible: false,
-      currentDialog: ''
+      currentDialog: '',
+      loading: false
     }
   },
   created() {

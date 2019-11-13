@@ -550,6 +550,7 @@ export default {
                 margin-right: 20px;
                 width: 90px;
                 text-align: right;
+                flex-shrink: 0;
             }
             .list-righter {
                 color: #9FA29F;  

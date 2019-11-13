@@ -1,28 +1,75 @@
 <template>
-  <Decorate :componentConfig="componentConfig" :saveData="saveData" :saveAndApplyData="saveAndApplyData" :homePageData="homePageData" :saveToTemplate="saveToTemplate"></Decorate>
+  <div>
+
+    <!-- 装修编辑器 -->
+    <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
+
+    <!-- 动态弹窗 预览 -->
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :decorateData="decorateData"></component>
+  </div>
 </template>
 
 <script>
 import Decorate from '@/components/Decorate';
-import decorateMixin from '@/components/Decorate/mixins/decorateMixin';
 import utils from '@/utils';
+import dialogDecoratePreview from '@/views/shop/dialogs/dialogDecoratePreview';
 export default {
   name: "shopEditor",
   props: ["pageId"],
-  mixins: [decorateMixin],
-  components: {Decorate},
+  components: {Decorate, dialogDecoratePreview},
   data() {
     return {
       loading: false,
       id: this.pageId || this.$route.query.pageId,
-      dataLoaded: false,
-      homePageData: null,
-      componentConfig: {
-        type: 'pageInfo',
-        isBase: true,
-        hidden: true,
-        title: '页面信息'
-      }
+      dialogVisible: false,
+      currentDialog: '',
+      saveType: 'save',  //保存类型  save:保存到草稿箱   saveAndApply:保存并应用
+      /* 装修编辑器配置 */
+      config: {
+        pageBase: {
+          type: 'pageInfo',
+          isBase: true,
+          hidden: true,
+          title: '页面信息'
+        },
+        buttons: {
+          saveData: {
+            title: '保存草稿',
+            function: this.saveData,
+            type: 'primary',
+            show: () => true,
+            loading: false
+          },
+          saveAndApplyData: {
+            title: '保存并生效',
+            function: this.saveAndApplyData,
+            type: 'primary',
+            show: () => !!this.id,
+            loading: false
+          },
+          resetData: {
+            title: '重   置',
+            function: this.resetData,
+            type: '',
+            show: () => true,
+            loading: false
+          },
+          preview: {
+            title: '预览',
+            function: this.preview,
+            type: '',
+            show: () => !!this.id,
+            loading: false
+          }
+        },
+        callbacks: {
+          setBaseInfo: this.setBaseInfo
+        },
+        showWidget: true,
+        showProp: true,
+        dragable: true
+      },
+      decorateData: null
     };
   },
   watch: {
@@ -32,6 +79,24 @@ export default {
       }
       this.$store.commit("clearAllData");
       this.fetch();
+    }
+  },
+  created() {
+    this.$store.commit("clearAllData");
+    this.fetch();
+  },
+  computed: {
+    baseInfo() {
+      return this.$store.getters.baseInfo;
+    },
+    componentDataIds() {
+      return this.$store.getters.componentDataIds;
+    },
+    componentDataMap() {
+      return this.$store.getters.componentDataMap;
+    },
+    basePropertyId() {
+      return this.$store.getters.basePropertyId;
     }
   },
   methods: {
@@ -44,162 +109,116 @@ export default {
       this.loading = true;
       this._apis.shop.getPageInfo({id: this.id}).then((response)=>{
          this.loading = false;
-         this.dataLoaded = true;
-         this.homePageData = response;
-         this.convertDecorateData(response);
+         this.decorateData = response;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
     },
 
-    /* 检查数据可用性 */
-    checkData(data) {
-      const string = utils.uncompileStr(data.pageData);
-      if(string.indexOf('id') < 0) {
-        return;
-      }
-      let pageData = JSON.parse(string);
-      if(!Array.isArray(pageData)) {
-        return;
-      }
-      return pageData;
-    },
-
      /* 拼装基础数据 */
     setBaseInfo(data) {
-       //还原页面基础信息
-
-      this.$store.commit('updateComponent', {
-        id: this.basePropertyId,
-        data: {
-          name: data.name,
-          title: data.title,
-          explain: data.explain,
-          pageCategoryInfoId: data.pageCategoryInfoId,
-          colorStyle: data.colorStyle,
-          pageKey: data.pageKey
-        }
-      });
+      return {
+        name: data.name,
+        title: data.title,
+        explain: data.explain,
+        pageCategoryInfoId: data.pageCategoryInfoId,
+        colorStyle: data.colorStyle,
+        pageKey: data.pageKey
+      }
     },
 
     /* 保存数据 */
     saveData() {
-      let resultData = this.collectData();
+      this.saveType = 'save';
+      let resultData = this.$refs.Decorate.collectData();
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
+        this.id && (resultData['id'] = this.id);
         resultData['status'] = '1';
-        this.submit(resultData);
+        if(this.checkInput(resultData)) {
+          this.setLoading(true);
+          if(this.id) {
+            this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
+          }else{
+            this.sendRequest({methodName: 'createPage', resultData, tipWord: '创建成功!'});
+          }
+        };
       }
     },
 
     /* 保存并生效数据 */
     saveAndApplyData() {
-      let resultData = this.collectData();
+      this.saveType = 'saveAndApply';
+      let resultData = this.$refs.Decorate.collectData();
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
+        this.id && (resultData['id'] = this.id);
         resultData['status'] = '0';
-        this.submit(resultData, 'saveAndApply');
+        if(this.checkInput(resultData)) {
+          this.setLoading(true);
+          if(this.id) {
+            this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
+          }else{
+            this.sendRequest({methodName: 'createPage', resultData, tipWord: '创建成功!'});
+          }
+        };
       }
     },
 
-    /* 保存到模板 */
-    saveToTemplate() {
-      let result = this.baseInfo;
-      result['id'] = this.id;
-      let pageData = [];
-      for(let item of this.componentDataIds) {
-        const componentData = this.componentDataMap[item];
-        if(componentData) {
-          pageData.push(componentData);
+    /* 检查输入正确性 */
+    checkInput(resultData) {
+      if (this.baseInfo.vError) {
+        this.$message({ message: '请填写正确信息', type: 'warning' });
+        return false;
+      }else{
+        if(!resultData.name || !resultData.title || !resultData.explain) {
+          this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+            confirmButtonText: '确定',
+            callback: action => {
+              //打开基础信息面板
+              this.$store.commit('setCurrentComponentId', this.basePropertyId);
+              this.setLoading(false);
+            }
+          });
+          return false;
+        }else{
+          return true;
         }
       }
-      result['pageData'] = utils.compileStr(JSON.stringify(pageData));;
-      result['pageTemplateId'] = '1';
-      result['sort'] = '1';
-      this._apis.shop.saveToTemplate(result).then((response)=>{
+      return true;
+    },
+
+    /* 发起请求 */
+    sendRequest(params) {
+      this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$notify({
             title: '成功',
-            message: '保存成功！',
+            message: params.tipWord,
             type: 'success'
           });
-          this._routeTo('templateManageIndex');
+          this.setLoading(false);
+          this._routeTo('pageManageIndex');
         }).catch((error)=>{
           this.$notify.error({
             title: '错误',
             message: error
           });
+          this.setLoading(false);
         });
     },
 
-    submit(resultData, type) {
-
-      if(!resultData.name || !resultData.title || !resultData.explain) {
-         this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-          confirmButtonText: '确定',
-          callback: action => {
-            //打开基础信息面板
-            this.$store.commit('setCurrentComponentId', this.basePropertyId);
-            if(type === 'saveAndApply') {
-              this._globalEvent.$emit('decorateSaveAndApplyLoading', false, this.id);
-            }else{
-              this._globalEvent.$emit('decorateSaveLoading', false, this.id);
-            }
-          }
-        });
-        return;
-      }
-      if(this.id) {
-        this._apis.shop.editPageInfo(resultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: '编辑成功！',
-            type: 'success'
-          });
-          if(type === 'saveAndApply') {
-            this._globalEvent.$emit('decorateSaveAndApplyLoading', true, this.id);
-          }else{
-            this._globalEvent.$emit('decorateSaveLoading', true, this.id);
-          }
-          this._routeTo('pageManageIndex');
-        }).catch((error)=>{
-          if(type === 'saveAndApply') {
-            this._globalEvent.$emit('decorateSaveAndApplyLoading', false, this.id);
-          }else{
-            this._globalEvent.$emit('decorateSaveLoading', false, this.id);
-          }
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-        });
+    /* 设置loading */
+    setLoading(status) {
+      if(this.saveType === 'saveAndApply') {
+        this.config.buttons.saveAndApplyData.loading = status;
       }else{
-        this._apis.shop.createPage(resultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: '创建成功！',
-            type: 'success'
-          });
-          if(type === 'saveAndApply') {
-            this._globalEvent.$emit('decorateSaveAndApplyLoading', true, this.id);
-          }else{
-            this._globalEvent.$emit('decorateSaveLoading', true, this.id);
-          }
-          this._routeTo('pageManageIndex');
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-          if(type === 'saveAndApply') {
-            this._globalEvent.$emit('decorateSaveAndApplyLoading', false, this.id);
-          }else{
-            this._globalEvent.$emit('decorateSaveLoading', false, this.id);
-          }
-        });
+        this.config.buttons.saveData.loading = status;
       }
+    },
+
+    /* 打开预览 */
+    preview() {
+      this.dialogVisible=true;
+      this.currentDialog='dialogDecoratePreview';
     }
 
   },

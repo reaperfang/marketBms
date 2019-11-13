@@ -7,41 +7,52 @@
     <div class="phone-body" @click="clickTitle($event)" :style="bodyHeight">
 
       <!-- 可拖拽调整顺序 -->
-       <vuedraggable 
-        v-if="dragable"
-        class="drag-wrap"
-        :list='componentDataIds'
-        :group='{
-            name: "group"
-        }'
-        v-bind="dragOptions"
-        @start="drag=true"
-        @end="onEndHandler"
-        :disabled='disable'
-        :move='onMoveHandler'>
-          <template v-for="(item, key) of componentDataIds">
-            <div 
-            class="component_wrapper" 
-            v-if="!getComponentData(item).hidden"
-            :key="key" 
-            :class="{'actived': item === currentComponentId}"
-            @click="selectComponent(item)" 
-            @dragstart.self="selectItem = item" 
-            @dragend.self="selectItem = {}">
-              <component v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" ></component>
-              <i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
-            </div>
-          </template>
-    </vuedraggable>
+      <vuedraggable 
+      v-if="dragable"
+      class="drag-wrap"
+      :list='componentDataIds'
+      :group='{
+          name: "group"
+      }'
+      v-bind="dragOptions"
+      @start="drag=true"
+      @end="onEndHandler"
+      :disabled='disable'
+      :move='onMoveHandler'>
+        <template v-for="(item, key) of componentDataIds">
+          <div 
+          class="component_wrapper" 
+          v-if="!getComponentData(item).hidden"
+          :key="key" 
+          :class="{'actived': item === currentComponentId}"
+          @click="selectComponent(item)" 
+          @dragstart.self="selectItem = item" 
+          @dragend.self="selectItem = {}">
+            <component v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" ></component>
+            <i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
+          </div>
+        </template>
+      </vuedraggable>
 
-    <!-- 不可拖拽调整顺序,可用来预览 -->
-    <template v-else>
-      <template v-for="(item, key) of componentDataIds">
-        <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentData(item).hidden">
-          <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" ></component>
-        </div>
+      <!-- 不可拖拽调整顺序,可用来预览 -->
+      <template v-else>
+        <template v-for="(item, key) of componentDataIds">
+          <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentData(item).hidden">
+            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" ></component>
+          </div>
+        </template>
       </template>
-    </template>
+    </div>
+    <div class="page_mover">
+      <i class="default_btn animated fadeIn faster" v-if="defaultBtnShow" @mouseover="btnMouseover($event)"></i>
+      <div class="hover_btns animated fadeIn" v-if="pageMoveBtnShow" @mouseleave="btnMouseleave($event)">
+        <div class="to_top" @click="scrollToTop">
+          <i></i>
+        </div>
+        <div class="to_bottom" @click="scrollToBottom">
+          <i></i>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -77,7 +88,9 @@ export default {
       selectItem: {},
       allTemplateLoaded: false,  //所有模板加载结束
       templateList: {},  //模板对象列表
-      bodyHeight: {}
+      bodyHeight: {},
+      defaultBtnShow: true,  //默认圈圈按钮可见
+      pageMoveBtnShow: false  //页面移动按钮可见
     }
   },
   computed:{
@@ -176,6 +189,19 @@ export default {
       }
     },
 
+    scrollToTop () {
+        this.$nextTick(() => {
+            var container = this.$el.querySelector(".phone-body");
+            let tempScrollHeight = container.scrollHeight;
+            setTimeout(()=>{
+              container.scrollTo({
+                top: 0,
+                behavior: "smooth"
+              });
+            });
+        });
+    },
+
     scrollToBottom () {
         this.$nextTick(() => {
             var container = this.$el.querySelector(".phone-body");
@@ -187,6 +213,16 @@ export default {
               });
             });
         });
+    },
+
+    btnMouseover(ev) {
+      this.defaultBtnShow = false;
+      this.pageMoveBtnShow = true;
+    },
+
+    btnMouseleave(ev) {
+      this.defaultBtnShow = true;
+      this.pageMoveBtnShow = false;
     }
   }
 }
@@ -194,6 +230,7 @@ export default {
 
 <style lang="scss" scoped>
  .view {
+   position:relative;
     .phone-body {
       .component_wrapper{
         // min-height: 50px;
@@ -209,6 +246,64 @@ export default {
           top:0;
           right:0;
           cursor:pointer;
+        }
+      }
+    }
+    .page_mover{
+      position:absolute;
+      bottom:90px;
+      .default_btn{
+        background:url('../../assets/images/shop/editor/moren.png') no-repeat 0 0;
+        width:48px;
+        height:48px;
+        display: block;
+      }
+      .hover_btns{
+        width:48px;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .to_top{
+          border-radius:50%;
+          background:rgb(168,168,173);
+          margin-bottom:8px;
+          width:48px;
+          height:48px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor:pointer;
+          transition:all 0.4s;
+          &:hover{
+            background:rgb(140,140,144);
+          }
+          i{
+            background:url('../../assets/images/shop/editor/toTop.png') no-repeat 0 0;
+            width: 22px;
+            height: 24px;
+            display: block;
+          }
+        }
+        .to_bottom{
+          border-radius:50%;
+          background:rgb(168,168,173);
+          width:48px;
+          height:48px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor:pointer;
+          transition:all 0.4s;
+          &:hover{
+            background:rgb(140,140,144);
+          }
+          i{
+            background:url('../../assets/images/shop/editor/toBottom.png') no-repeat 0 0;
+            width: 22px;
+            height: 24px;
+            display: block;
+          }
         }
       }
     }

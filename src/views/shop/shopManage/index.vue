@@ -5,7 +5,7 @@
       <el-tab-pane label="个人中心" name="personCenter"></el-tab-pane>
       <el-tab-pane label="商品分类" name="goodsGroup"></el-tab-pane>
     </el-tabs>
-    <component :is="currentTab" :homePageData="homePageData"></component>
+    <component :is="currentTab" :decorateData="decorateData"></component>
   </div>
 </template>
 
@@ -15,10 +15,8 @@ import shopMainDecorated from './moduleManage/shopMainDecorated';
 import personCenter from './moduleManage/personCenter';
 import goodsGroup from './moduleManage/goodsGroup';
 import utils from "@/utils";
-import decorateMixin from '@/components/Decorate/mixins/decorateMixin';
 export default {
   name: 'index',
-  mixins: [decorateMixin],
   components: {shopMainDefault, shopMainDecorated, personCenter, goodsGroup},
   data () {
     return {
@@ -26,8 +24,12 @@ export default {
       shopMain: 'shopMainDefault',  //当前主页类型
       loading: true,
       hasHomePage: false,  //是否有首页装修数据
-      homePageData: null  //首页装修数据
+      decorateData: null  //首页装修数据
     }
+  },
+
+  created() {
+    this.fetch();
   },
 
   methods: {
@@ -46,30 +48,12 @@ export default {
           this.hasHomePage = true;
           this.shopMain = 'shopMainDecorated';
           this.currentTab = 'shopMainDecorated';
-          this.homePageData = response;
-          this.convertDecorateData(response);
+          this.decorateData = response;
         }
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
-      });
-    },
-
-     /* 拼装基础数据 */
-    setBaseInfo(data) {
-       //还原页面基础信息
-      this.$store.commit("setBaseInfo", {
-        name: data.name,
-        title: data.title,
-        explain: data.explain,
-        pageCategoryInfoId: data.pageCategoryInfoId,
-        colorStyle: data.colorStyle,
-        pageKey: data.pageKey
       });
     }
   }

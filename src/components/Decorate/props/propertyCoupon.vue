@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="" prop="addType">
         <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectCoupon'" v-if="ruleForm.addType === 1">添加优惠券(最多添加10张优惠券)</el-button>
-        <div class="tag_wrapper">
+        <div class="tag_wrapper" v-loading="loading">
           <el-tag
             v-for="tag in list"
             :key="tag.title"
@@ -88,6 +88,7 @@ export default {
       list: [],
       dialogVisible: false,
       currentDialog: '',
+      loading: false
     }
   },
   created() {

@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="商品" v-if="ruleForm.source === 1" prop="goods">
       </el-form-item>
-      <div class="goods_list" v-if="ruleForm.source === 1" prop="goods">
+      <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
         <ul>
           <li v-for="(item, key) of list" :key="key" :title="item.name">
             <img :src="item.mainImage" alt="">
@@ -170,7 +170,8 @@ export default {
       currentDialog: '',
       tempGroup: null,   //临时选中的商品分类
       seletedGroup: null,   //选中的商品分类
-      pageDialogVisible: false
+      pageDialogVisible: false,
+      loading: false
     }
   },
   created() {
