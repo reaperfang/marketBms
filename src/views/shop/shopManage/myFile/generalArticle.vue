@@ -8,8 +8,8 @@
       <div class="c_right">
         <p class="head">图文信息</p>
         <div class="bodys">
-          <el-input v-model="ruleForm.title" @blur="titleNum" placeholder="标题请勿超过64个字，必填"></el-input>
-          <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="isSave">标题请勿超过64个字</p>
+          <el-input v-model="ruleForm.title" @blur="titleNum" placeholder="标题请勿超过64个字，必填" class="name"></el-input>
+          <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="isSave">标题请勿超过64个字,必填</p>
           <p class="mt10">封面图片</p>
           <img :src="ruleForm.fileCover" class="coverImage" v-if="ruleForm.fileCover">
           <p class="uploadImage">
@@ -90,8 +90,8 @@ export default {
   },
   methods: {
     titleNum(){
-      let lg = this.ruleForm.title.length
-      this.isSave = lg > 64 ? true : false 
+      let lg = this.ruleForm.title.trim().length
+      this.isSave = lg == 0 ||  lg > 64 ? true : false 
     },
     getArticle(){
       let query ={
@@ -230,6 +230,17 @@ export default {
     }
   }
 }
+.name{
+  padding-left:10px;
+  position: relative;
+  &:before{
+    content: '*';
+    color: red;
+    position:absolute;
+    top:15px;
+    left:-3px;
+  }
+}  
 .coverImage{
   width: 230px;
   height: 230px;
