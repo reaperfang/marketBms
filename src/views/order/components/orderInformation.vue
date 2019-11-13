@@ -463,40 +463,40 @@ export default {
             //this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
             this.orderInfo.consultMoney = (this.orderInfo.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
+        // reducePriceHandler() {
+        //     if(this.orderInfo.consultType == 2) {
+        //         if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
+        //             this.$message({
+        //                 message: '不能大于第三方待支付金额',
+        //                 type: 'warning'
+        //             });
+        //             return
+        //         }
+        //     }
+        //     this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
+        //     consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
+        //         this.changePriceVisible = false
+        //         // this.$notify({
+        //         //     title: '成功',
+        //         //     message: '添加成功！',
+        //         //     type: 'success'
+        //         // });
+        //         this.currentDialog = 'ChangePriceDialog'
+        //         this.dialogVisible = true
+        //         this.getDetail()
+        //     }).catch(error => {
+        //         this.changePriceVisible = false
+        //         this.$notify.error({
+        //             title: '错误',
+        //             message: error
+        //         });
+        //     }) 
+        // },
         reducePriceHandler() {
             if(this.orderInfo.consultType == 2) {
-                if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
+                if(parseFloat(this.orderDetail.orderInfo.receivableMoney) < this.orderInfo.consultMoney) {
                     this.$message({
                         message: '不能大于第三方待支付金额',
-                        type: 'warning'
-                    });
-                    return
-                }
-            }
-            this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-            consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
-                this.changePriceVisible = false
-                // this.$notify({
-                //     title: '成功',
-                //     message: '添加成功！',
-                //     type: 'success'
-                // });
-                this.currentDialog = 'ChangePriceDialog'
-                this.dialogVisible = true
-                this.getDetail()
-            }).catch(error => {
-                this.changePriceVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
-            }) 
-        },
-        reducePriceHandler() {
-            if(this.orderInfo.consultType == 2) {
-                if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
-                    this.$message({
-                        message: '不能大于应收金额',
                         type: 'warning'
                     });
                     return
