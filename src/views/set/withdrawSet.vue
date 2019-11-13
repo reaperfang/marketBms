@@ -19,13 +19,13 @@
           <el-form-item prop="cashOutUpper">
             <el-checkbox v-model="cashOutUpperChecked"></el-checkbox>
             单笔提现金额上限
-            <el-input-number v-model="form.cashOutUpper" :min="0" label="请输入整数" :precision="0">
+            <el-input-number v-model="form.cashOutUpper" :min="0" :max="5000" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
           <el-form-item prop="cashOutLower">
             <el-checkbox v-model="cashOutLowerChecked"></el-checkbox>
             单笔最低提现金额
-            <el-input-number v-model="form.cashOutLower" :min="0" label="请输入整数" :precision="0">
+            <el-input-number v-model="form.cashOutLower" :min="0" :max="5000" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
           <el-form-item prop="cashOutTimes">
@@ -37,7 +37,7 @@
           <el-form-item prop="cashOutMoney">
             <el-checkbox v-model="cashOutMoneyChecked"></el-checkbox>
             余额满
-            <el-input-number v-model="form.cashOutMoney" :min="0" label="请输入整数" :precision="0">
+            <el-input-number v-model="form.cashOutMoney" :min="0" :max="5000" label="请输入整数" :precision="0">
             </el-input-number> 元,可提现
           </el-form-item>
         </div>
