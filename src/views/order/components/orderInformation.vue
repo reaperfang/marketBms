@@ -467,7 +467,7 @@ export default {
             if(this.orderInfo.consultType == 2) {
                 if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
                     this.$message({
-                        message: '不能大于应收金额',
+                        message: '不能大于第三方待支付金额',
                         type: 'warning'
                     });
                     return
