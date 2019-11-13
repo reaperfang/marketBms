@@ -32,7 +32,7 @@
           </div>
           <div class="btn_tabs clearfix">
             <el-radio-group class="fr" v-model="analysisType" @change="changeType">
-              <el-radio-button class="btn_bor" label="1">浏览量/访问量</el-radio-button>
+              <el-radio-button class="btn_bor" label="1">浏览量/访客量</el-radio-button>
               <el-radio-button class="btn_bor" label="2">到店时段</el-radio-button>
               <el-radio-button class="btn_bor" label="3">访问次数</el-radio-button>
               <el-radio-button class="btn_bor" label="4"  v-if="visitSourceType ==0 ">访问来源</el-radio-button>

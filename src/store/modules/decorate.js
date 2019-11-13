@@ -14,7 +14,7 @@ const decorate = {
 			state.currentComponentId = id;
 		},
 
-		/* 设置当前组件id */
+		/* 设置基础属性组件id */
 		setBasePropertyId: (state, id) => {
 			state.basePropertyId = id;
 		},
@@ -92,7 +92,7 @@ const decorate = {
 			state.componentDataMap = componentDataMap;
 		},
 
-		//初始化所有数据
+		//清除所有装修数据
 		clearAllData(state) {
 			state.baseInfo = {};
 			state.componentDataIds = [];

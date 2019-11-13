@@ -2,13 +2,13 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :style="bodyHeight">
     <div class="block form">
       <el-form-item label="页面名称" prop="name">
-        <el-input v-model="ruleForm.name" placeholder="请输入页面名称"></el-input>
+        <el-input v-model="ruleForm.name" placeholder="请输入页面名称" @blur="changeValidate"></el-input>
       </el-form-item>
       <el-form-item label="页面标题" prop="title">
-        <el-input v-model="ruleForm.title" placeholder="请输入页面标题"></el-input>
+        <el-input v-model="ruleForm.title" placeholder="请输入页面标题" @blur="changeValidate"></el-input>
       </el-form-item>
       <el-form-item label="页面描述" prop="explain">
-        <el-input v-model="ruleForm.explain" placeholder="请输入页面描述" type="textarea" :rows="5"></el-input>
+        <el-input v-model="ruleForm.explain" placeholder="请输入页面描述" @blur="changeValidate" type="textarea" :rows="5"></el-input>
       </el-form-item>
       <el-form-item label="页面分类" prop="pageCategoryInfoId">
         <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
@@ -42,7 +42,8 @@ export default {
         pageCategoryInfoId: '-1',
         colorStyle: '#ffffff',
         pageKey: '',
-        status: 0
+        status: 0,
+        vError: false
       },
       rules: {
         name: [
@@ -94,11 +95,19 @@ export default {
       }).catch((error)=>{
         this.$message({ message: error, type: 'error' });
       });
+    },
+
+    // 值改变
+    changeValidate(value) {
+      let self = this;
+      this.$refs.ruleForm.validate( valid => {
+        self.ruleForm.vError = !valid;
+      })
     }
   }
 }
 </script>
-3
+
 <style lang="scss" scoped>
 /deep/.m-colorPicker .box.open {
     z-index: 10!important;

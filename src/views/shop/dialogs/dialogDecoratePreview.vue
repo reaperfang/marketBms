@@ -29,7 +29,7 @@ export default {
           type: Boolean,
           required: true
       },
-      homePageData: {
+      decorateData: {
         type: Object
       }
   },
@@ -75,11 +75,11 @@ export default {
 
     /* 获取二维码 */
     getQrcode(codeType, callback) {
-      if(!this.homePageData) {
+      if(!this.decorateData) {
         return;
       }
       this._apis.shop.getQrcode({
-        url: this.homePageData.shareUrl.replace("&","[^]"),
+        url: this.decorateData.shareUrl.replace("&","[^]"),
         width: '250',
         height: '250',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo

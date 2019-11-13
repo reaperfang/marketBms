@@ -1,28 +1,30 @@
 <template>
   <div class="module props">
+
+      <!-- 头部标题栏 -->
       <div class="block header">
-        <p class="title" v-if="this.componentDataMap[this.currentComponentId]">
-          {{this.componentDataMap[this.currentComponentId].title}}
+        <p class="title" v-if="componentDataMap[currentComponentId]">
+          {{componentDataMap[currentComponentId].title}}
         </p>
         <p class="title" v-else>
           编辑
         </p>
       </div>
+
+      <!-- 属性渲染区 -->
       <transition name="fade" :duration="{ enter: 200, leave: 100 }">
-        <component :is='currentComponent' @change="propsChange" v-bind="this.componentDataMap[this.currentComponentId]" key="components"></component>
+        <component :is='currentComponent' @change="propsChange" v-bind="componentDataMap[currentComponentId]" key="components"></component>
       </transition>
-      <div class="block button" v-loading="loading">
+
+      <!-- 底部按钮区 -->
+      <div class="block button">
         <div class="help_blank"></div>
         <div class="buttons">
-          <el-button @click="resetLoading = true; resetData.call(parentScope)" v-if="resetData" :loading="resetLoading">重   置</el-button>
-          <el-button @click="savePropData(parentScope)" type="primary" :loading="saveDataLoading">{{$route.name === 'classifyEditor' ? '保存' : '保存草稿'}}</el-button>
-          <el-button type="primary" @click="saveAndApplyDataLoading = true; saveAndApplyData.call(parentScope)" v-if="saveAndApplyData && id" :loading="saveAndApplyDataLoading">保存并生效</el-button>
-          <el-button @click="dialogVisible=true; currentDialog='dialogDecoratePreview'" v-if="id">预    览</el-button>
-          <!-- <el-button @click="saveToTemplate.call(parentScope)" v-if="saveToTemplate">保存到模板</el-button> -->
+          <template v-for="(item, key) in buttonList">
+            <el-button v-if="item.show() && item.function" :key="key" @click="item.function" :loading="item.loading" :type="item.type">{{item.title}}</el-button>
+          </template>
         </div>
       </div>
-      <!-- 动态弹窗 -->
-      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :homePageData="homePageData"></component>
     </div>
 </template>
 
@@ -31,19 +33,17 @@ import utils from '@/utils';
 import dialogDecoratePreview from '@/views/shop/dialogs/dialogDecoratePreview';
 export default {
   name: 'propView', 
-  components: {dialogDecoratePreview},
-  props: ['saveData', 'saveAndApplyData', 'resetData', 'saveToTemplate', 'parentScope', 'homePageData'],
+  props: {
+    buttons: {
+      type: Object
+    }
+  },
   data () {
     return {
       currentComponent: null,  //当前组件名称
-      dialogVisible: false,
-      currentDialog: '',
       utils,
       id: this.$route.query.pageId,
-      loading: false,
-      resetLoading: false,  //重置loading
-      saveDataLoading: false,  //保存loading
-      saveAndApplyDataLoading: false  //保存并应用loading
+      buttonList: this.buttons || {}
     }
   },
   computed:{
@@ -67,33 +67,12 @@ export default {
     'currentComponentId'(newValue, oldValue) {
       this.loadPropTemplate();
     },
-    // 'basePropertyId'(newValue, oldValue) {
-    //   this.loadPropTemplate();
-    // }
-  },
-  created() {
-    const _self = this;
-
-    /* 监听接口操作结束事件，用来响应loading  保存按钮*/
-    this._globalEvent.$on('decorateSaveLoading', (status, id) => {
-      if(id === _self.id) {
-        _self.saveDataLoading = false;
-      }
-    });
-
-     /* 监听接口操作结束事件，用来响应loading  保存并应用按钮*/
-    this._globalEvent.$on('decorateSaveAndApplyLoading', (status, id) => {
-      if(id === _self.id) {
-        _self.saveAndApplyDataLoading = false;
-      }
-    });
-
-     /* 监听接口操作结束事件，用来响应loading  重置按钮*/
-    this._globalEvent.$on('decorateResetLoading', (status, id) => {
-      if(id === _self.id) {
-        _self.resetLoading = false;
-      }
-    });
+    'buttons': {
+      handler(newValue) {
+        this.buttonList = newValue;
+      },
+      deep: true
+    }
   },
   mounted() {
     this.loadPropTemplate();
@@ -119,16 +98,6 @@ export default {
     /* 更新组件数据 */
     propsChange(params) {
       this.$store.commit('updateComponent', params);
-    },
-
-    // 保存数据
-    savePropData(parentScope) {
-      if (this.baseInfo.vError) {
-        this.$message({ message: '请填写正确信息', type: 'warning' });
-      } else {
-        this.saveDataLoading = true;
-        this.saveData.call(parentScope);
-      }
     }
   }
 }

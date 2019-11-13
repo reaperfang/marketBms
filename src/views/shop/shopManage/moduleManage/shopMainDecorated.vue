@@ -1,8 +1,7 @@
 <template>
   <div class="preview_wrapper">
-    <div class="module view" :style="{backgroundColor: baseInfo&&baseInfo.pageBackground}">
-      <editView :dragable="false" v-if="height > 0" :height="height"></editView>
-    </div>
+    <!-- 装修编辑器 -->
+    <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config"></Decorate>
     <div class="shop_info">
       <div class="shop_code">
         <h3>店铺手机预览</h3>
@@ -30,7 +29,7 @@
             </div>
           </li>
           <li>
-            <el-button type="primary" plain @click="_routeTo('shopEditor', {pageId: homePageData.id})">首页装修</el-button>
+            <el-button type="primary" plain @click="_routeTo('shopEditor', {pageId: decoratePageData.id})">首页装修</el-button>
           </li>
           <li>
             <el-button type="primary" plain  @click="_routeTo('templateManageIndex')">店铺模板</el-button>
@@ -67,11 +66,11 @@
 
 <script>
 import utils from "@/utils";
-import editView from "@/components/Decorate/editView";
+import Decorate from '@/components/Decorate';
 export default {
   name: "shopMainDecorated",
-  props: ['homePageData'],
-  components: {editView},
+  props: ['decorateData'],
+  components: {Decorate},
   data() {
     return {
       utils,
@@ -80,23 +79,49 @@ export default {
       height: 0,
       miniProgramStatus: null,
       openMiniAppcodeLoading: false,  //获取小程序码loading
-      showCode: false  //显示小程序码
+      showCode: false,  //显示小程序码
+       /* 装修编辑器配置 */
+      config: {
+        pageBase: {
+          type: 'pageInfo',
+          isBase: true,
+          hidden: true,
+          title: '页面信息'
+        },
+        callbacks: {
+          setBaseInfo: this.setBaseInfo
+        },
+        showWidget: false,
+        showProp: false,
+        dragable: false
+      },
+      decoratePageData: this.decorateData
     };
   },
   computed: {
+    colorStyle() {
+      return this.$store.getters.colorStyle || {};
+    },
     baseInfo() {
       return this.$store.getters.baseInfo;
     },
+    componentDataIds() {
+      return this.$store.getters.componentDataIds;
+    },
+    componentDataMap() {
+      return this.$store.getters.componentDataMap;
+    },
+    basePropertyId() {
+      return this.$store.getters.basePropertyId;
+    },
     shopInfo() {
       return this.$store.getters.shopInfo || {};
-    },
-    colorStyle() {
-      return this.$store.getters.colorStyle || {};
     }
   },
   created() {
     this.$store.dispatch('getShopInfo');
     this.$store.dispatch('getShopStyle');
+    this.$store.commit("clearAllData");
     this.getQrcode();
     this.getMiniAppQrcode();
     this.getMiniProgramStatus();
@@ -110,14 +135,32 @@ export default {
         this.getQrcode();
       },
       deep: true
-    }
+    },
+    decorateData: {
+      handler(newValue) {
+        this.decoratePageData = newValue;
+      },
+      deep: true
+    },
   },
   methods: {
+
+     /* 拼装基础数据 */
+    setBaseInfo(data) {
+      return {
+        name: data.name,
+        title: data.title,
+        explain: data.explain,
+        pageCategoryInfoId: data.pageCategoryInfoId,
+        colorStyle: data.colorStyle,
+        pageKey: data.pageKey
+      }
+    },
 
       /* 获取二维码 */
     getQrcode(codeType, callback) {
       this._apis.shop.getQrcode({
-        url: this.homePageData.shareUrl.replace("&","[^]"),
+        url: this.decoratePageData.shareUrl.replace("&","[^]"),
         width: '250',
         height: '250',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo

@@ -1,8 +1,8 @@
 <template>
   <div class="editor-wrapper">
-    <widgetView v-if="showWidget"></widgetView>
-    <editView :dragable="true" v-if="height > 0" :height="height"></editView>
-    <propView :saveData="saveData" :saveAndApplyData="saveAndApplyData" :resetData="resetData" :parentScope="this" :homePageData="homePageData" :saveToTemplate="saveToTemplate"></propView>
+    <widgetView v-if="config.showWidget"></widgetView>
+    <editView v-if="height > 0" :dragable="config.dragable" :height="height"></editView>
+    <propView v-if="config.showProp" :buttons="buttonList"></propView>
     <!-- <div style="width:600px;">
       页面基础数据：
       <el-tag type="primary" style="width: 100%;overflow-x: auto;">{{baseInfo}}</el-tag>
@@ -27,37 +27,24 @@ export default {
   name: "decorate",
   components: { widgetView, editView, propView },
   props: {
-    componentConfig: {
+    decorateData: {
       type: Object
     },
-    saveData: {
-      type: Function
-    },
-    saveAndApplyData: {
-      type: Function
-    },
-    saveToTemplate: {
-      type: Function
-    },
-    resetData: {
-      type: Function
-    },
-    homePageData: {
+    config: {
       type: Object
-    },
-    showWidget: {
-      type: Boolean,
-      default: true
-    },
+    }
   },
   data() {
     return {
-      height: 0
+      height: 0,
+      buttonList: this.config.buttons,
+      decoratePageData:this.decorateData
     };
   },
   created() {
     const id = uuid();
-    this.$store.commit('addComponent', Object.assign({id}, this.componentConfig));
+    this.convertDecorateData(this.decoratePageData);
+    this.$store.commit('addComponent', Object.assign({id}, this.config.pageBase));
     this.$store.commit('setBasePropertyId', id);
   },
   mounted() {
@@ -72,11 +59,77 @@ export default {
     },
     componentDataMap() {
       return this.$store.getters.componentDataMap;
+    },
+    basePropertyId() {
+      return this.$store.getters.basePropertyId;
     }
   },
-  methods: {
-
+  watch: {
+    'config.buttons': {
+      handler(newValue) {
+        this.buttonList = newValue;
+      },
+      deep: true
+    },
+    'decorateData': {
+      handler(newValue) {
+        this.decoratePageData = newValue;
+        this.convertDecorateData(this.decoratePageData);
+      },
+      deep: true
+    },
   },
+  methods: {
+    /* 转换接口获取的装修数据 */
+    convertDecorateData(data) {
+      if(!data) {
+        return;
+      }
+      
+      //还原组件列表
+      let componentDataIds = [];
+      let componentDataMap = {};
+      const string = utils.uncompileStr(data.pageData);
+      if(string.indexOf('id') < 0) {
+        return;
+      }
+      let pageData = JSON.parse(string);
+      if(!Array.isArray(pageData)) {
+        return;
+      }
+      for (let item of pageData) {
+        componentDataIds.push(item.id);
+        componentDataMap[item.id] = item;
+        if(item.isBase) {  //设置为基础信息组件
+          this.$store.commit('setBasePropertyId', item.id);
+        }
+      }
+      this.$store.commit("setComponentDataIds", componentDataIds);
+      this.$store.commit("setComponentDataMap", componentDataMap);
+
+      //设置全局基础信息
+      this.$store.commit('updateComponent', {
+        id: this.basePropertyId,
+        data: this.config.callbacks.setBaseInfo(data)
+      });
+      this.$store.commit('setCurrentComponentId', this.basePropertyId);
+    },
+
+    /* 保存前收集装修数据 */
+    collectData() {
+      let result = this.baseInfo;
+      let pageData = [];
+      for(let item of this.componentDataIds) {
+        const componentData = this.componentDataMap[item];
+        if(componentData) {
+          pageData.push(componentData);
+        }
+      }
+
+      result['pageData'] = utils.compileStr(JSON.stringify(pageData));;
+      return result;
+    }
+  }
 
 };
 </script>

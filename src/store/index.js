@@ -29,6 +29,5 @@ const store = new Vuex.Store({
   getters
 });
 store._apis = api;
-store._apis = api;
 
 export default store

@@ -2,7 +2,7 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" :style="bodyHeight">
     <div class="block form">
       <el-form-item label="分类名称" prop="name">
-        <el-input placeholder="请勿超过10个字" v-model="ruleForm.name" @input="changeValidate"></el-input>
+        <el-input placeholder="请勿超过10个字" v-model="ruleForm.name" @blur="changeValidate"></el-input>
       </el-form-item>
       <el-form-item label="排序优先级" prop="sortType">
         <el-radio-group v-model="ruleForm.sortType">
