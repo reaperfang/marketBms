@@ -284,9 +284,9 @@ export default {
       this._apis.client
         .getCardInfo({ id: id })
         .then(response => {
-          response.backgroundType = typeof(response.backgroundType) == 'number' ? response.backgroundType.toString():'';
-          response.isSyncWechat = typeof(response.isSyncWechat) == 'number' ? response.isSyncWechat.toString():'';
-          response.receiveSetting = typeof(response.receiveSetting) == 'number' ? response.receiveSetting.toString():'';
+          response.backgroundType = typeof(response.backgroundType) == 'number' ? response.backgroundType.toString():'0';
+          response.isSyncWechat = typeof(response.isSyncWechat) == 'number' ? response.isSyncWechat.toString():'1';
+          response.receiveSetting = typeof(response.receiveSetting) == 'number' ? response.receiveSetting.toString():'0';
           this.ruleForm = Object.assign({}, response);
           //公共部分先清空，判读卡等级再去获取公共的部分
           this.ruleForm.explain = "";
@@ -618,11 +618,13 @@ export default {
               this.canSubmit = false;
             }else{
               if(this.levelConditionValueDto.label == "消费金额满") {
+                this.canSubmit = true;
                 formObj.receiveConditionsRemarks =
                 "" +
                 this.levelConditionValueDto.label +
                 this.levelConditionValueDto.conditionValue + '元';
               }else if(this.levelConditionValueDto.label == "消费次数满"){
+                this.canSubmit = true;
                 formObj.receiveConditionsRemarks =
                 "" +
                 this.levelConditionValueDto.label +
@@ -647,9 +649,12 @@ export default {
                 type: "warning"
               });
               this.canSubmit = false;
+            }else{
+              this.canSubmit = true;
             }
           } else if (this.ruleForm.backgroundType == "1") {
             if (this.imageUrl) {
+              this.canSubmit = true;
               formObj.background = this.imageUrl;
             } else {
               this.$notify({
@@ -677,6 +682,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               let rightParam2 = {};
               rightParam2.rightsInfoId = this.getId(
                 this.rightsList,
@@ -708,6 +714,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               let upgradeParams1 = {};
               upgradeParams1.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -730,6 +737,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               let upgradeParams2 = {};
               upgradeParams2.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -752,6 +760,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               this.selectedGifts.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
@@ -779,6 +788,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               this.selectedCoupons.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
@@ -828,6 +838,8 @@ export default {
                     .catch(error => {
                       console.log(error);
                     });
+                }else{
+                  console.log('error222');
                 }
               }else{
                 this.$notify({
@@ -854,6 +866,8 @@ export default {
                 .catch(error => {
                   console.log(error);
                 });
+            }else{
+              console.log('error');
             }
           }
         }
