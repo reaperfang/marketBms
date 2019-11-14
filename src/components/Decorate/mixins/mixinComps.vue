@@ -2,6 +2,11 @@
 export default {
   name: "componentMixin",
   props: ["data"],
+  data() {
+    return {
+      allLoaded: true  //全部加载完成
+    }
+  },
   computed: {
     currentComponentId() {
       return this.data.id;
@@ -19,6 +24,12 @@ export default {
   watch: {
       currentComponentData(){
          this.decoration && this.decoration();
+      },
+      allLoaded (newValue) {
+        this.$emit("loadStatusChange", {
+          id: this.data.id,
+          loadStatus: newValue
+        });
       }
     },
 };

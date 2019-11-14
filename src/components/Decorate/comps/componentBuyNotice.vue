@@ -29,6 +29,7 @@ export default {
   components: {},
   data() {
     return { 
+      allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       animate: true, 
       list: [],
       timer: null ,
@@ -87,6 +88,7 @@ export default {
       /* 创建数据 */
     createList(datas) {
       this.list = datas;
+      this.allLoaded = true;
     },
 
   },

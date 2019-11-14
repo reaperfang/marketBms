@@ -28,7 +28,7 @@
           @click="selectComponent(item)" 
           @dragstart.self="selectItem = item" 
           @dragend.self="selectItem = {}">
-            <component v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" ></component>
+            <component v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
             <i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
           </div>
         </template>
@@ -189,6 +189,7 @@ export default {
       }
     },
 
+    /* 滚动到顶部 */
     scrollToTop () {
         this.$nextTick(() => {
             var container = this.$el.querySelector(".phone-body");
@@ -202,6 +203,7 @@ export default {
         });
     },
 
+    /* 滚动到底部 */
     scrollToBottom () {
         this.$nextTick(() => {
             var container = this.$el.querySelector(".phone-body");
@@ -215,14 +217,21 @@ export default {
         });
     },
 
+    /* 按钮鼠标移入 */
     btnMouseover(ev) {
       this.defaultBtnShow = false;
       this.pageMoveBtnShow = true;
     },
 
+    /* 按钮鼠标移开 */
     btnMouseleave(ev) {
       this.defaultBtnShow = true;
       this.pageMoveBtnShow = false;
+    },
+
+    /* 组件加载状态改变 */
+    loadStatusChange(data) {
+      //console.log(data);
     }
   }
 }

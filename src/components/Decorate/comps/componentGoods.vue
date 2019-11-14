@@ -36,6 +36,7 @@ export default {
     props: ['currentCatagoryId', 'origin'],
     data(){
         return{
+            allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
             // 样式属性
             listStyle:'',
             pageMargin:'',
@@ -238,6 +239,7 @@ export default {
         /* 创建数据 */
         createList(datas, componentData) {
             this.list = datas;
+            this.allLoaded = true;
         },
 
          /* 设置分类商品参数 */

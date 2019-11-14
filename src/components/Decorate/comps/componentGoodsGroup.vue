@@ -25,6 +25,7 @@ export default {
     mixins:[componentMixin],
     data() {
       return {
+        allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
         // 商品列表
         componentGoodsItemData: {},
         // 商品分类列表
@@ -118,6 +119,7 @@ export default {
                     this.list = response;
                     this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                     this.loading = false;
+                    this.allLoaded = true;
                 }).catch((error)=>{
                     // this.$notify.error({
                     //   title: '错误',

@@ -95,6 +95,7 @@ export default {
   components: {},
   data () {
     return {
+      allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       list: [],
       loading: false
     }
@@ -221,6 +222,7 @@ export default {
       /* 创建数据 */
     createList(datas) {
        this.list = datas;
+       this.allLoaded = true;
     },
   },
   beforeDestroy() {

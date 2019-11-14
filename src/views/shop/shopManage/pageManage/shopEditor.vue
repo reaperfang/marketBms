@@ -24,15 +24,17 @@ export default {
       dialogVisible: false,
       currentDialog: '',
       saveType: 'save',  //保存类型  save:保存到草稿箱   saveAndApply:保存并应用
+
+      
       /* 装修编辑器配置 */
       config: {
-        pageBase: {
+        pageBase: {  //装修页面基础信息
           type: 'pageInfo',
           isBase: true,
           hidden: true,
           title: '页面信息'
         },
-        buttons: {
+        buttons: {  //按钮组
           saveData: {
             title: '保存草稿',
             function: this.saveData,
@@ -62,12 +64,12 @@ export default {
             loading: false
           }
         },
-        callbacks: {
+        callbacks: {  //对外开放的函数接口
           setBaseInfo: this.setBaseInfo
         },
-        showWidget: true,
-        showProp: true,
-        dragable: true
+        showWidget: true,  //是否显示左侧控件面板
+        showProp: true,  //是否显示右侧属性面板
+        dragable: true   //是否可拖拽排序
       },
       decorateData: null
     };

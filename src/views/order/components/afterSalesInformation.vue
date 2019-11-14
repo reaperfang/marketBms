@@ -302,7 +302,7 @@
                             实退金额：
                         </div>
                         <div class="col">
-                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" @change="realReturnMoneyHandler" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
+                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
                             <span v-else>{{orderAfterSale.realReturnMoney || 0}}</span>
                         </div>
                     </div>
@@ -550,6 +550,7 @@ export default {
                 margin-right: 20px;
                 width: 90px;
                 text-align: right;
+                flex-shrink: 0;
             }
             .list-righter {
                 color: #9FA29F;  

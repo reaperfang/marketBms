@@ -52,6 +52,7 @@ export default {
     mixins:[componentMixin],
     data(){
         return{
+            allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
             // 样式属性
             listStyle: '',
             pageMargin: '',
@@ -198,6 +199,8 @@ export default {
             else{
                 this.list = list;
             }
+
+            this.allLoaded = true;
         },
 
     },

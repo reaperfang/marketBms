@@ -573,8 +573,28 @@ export default {
           message: "请输入特权说明",
           type: "warning"
         });
+      }else if(this.ruleForm.isSyncWechat == "1") {
+        if(this.ruleForm.notice == "") {
+          this.$notify({
+            title: "警告",
+            message: "请输入使用须知",
+            type: "warning"
+          });
+        }else if(this.ruleForm.phone == ""){
+          this.$notify({
+            title: "警告",
+            message: "请输入客户电话",
+            type: "warning"
+          });
+        }else{
+          this.excuteSave();
+        }
       }else {
-        if (this.ruleForm.id) {
+        this.excuteSave();
+      }
+    },
+    excuteSave() {
+      if (this.ruleForm.id) {
           let formObj = {};
           formObj.id = this.ruleForm.id;
           formObj.alias = this.ruleForm.alias;
@@ -776,26 +796,6 @@ export default {
               upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
             }
           }
-          if(this.ruleForm.isSyncWechat == "1") {
-            if(this.ruleForm.notice == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入使用须知",
-                type: "warning"
-              });
-              this.canSubmit = false;
-            }
-            if(this.ruleForm.phone == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入客户电话",
-                type: "warning"
-              });
-              this.canSubmit = false;
-            }
-            formObj.notice = this.ruleForm.notice;
-            formObj.phone = this.ruleForm.phone;
-          }
           upgradeRewardDtoList.map(v => {
             if (v.label) {
               delete v.label;
@@ -803,6 +803,12 @@ export default {
           });
           formObj.upgradePackage = upgradePackage;
           formObj.rights = rights;
+          if(!!this.ruleForm.notice) {
+            formObj.notice = this.ruleForm.notice;
+          }
+          if(!!this.ruleForm.phone) {
+            formObj.phone= this.ruleForm.phone;
+          }
           formObj.levelRightsInfoDtoList = [].concat(rightsDtoList);
           formObj.upgradeRewardDtoList = [].concat(upgradeRewardDtoList);
           if(formObj.receiveSetting == '0') {
@@ -851,7 +857,6 @@ export default {
             }
           }
         }
-      }
     },
     getColorUrl() {
       this._apis.client
