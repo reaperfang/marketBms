@@ -43,8 +43,7 @@ export default {
             condition1: "",
             xfjem:"",
             xfcsm:"",
-            jfhdm:"",
-            canSubmit: true
+            jfhdm:""
         }
     },
     methods: {

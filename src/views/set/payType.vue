@@ -111,30 +111,54 @@ export default {
     },
     //微信支付开关
     handleWechatPay(val){
-      this.getShopInfo()
+      // this.getShopInfo()
       if(val == true && this.wechatBinding == 0){
         this.wechatPay = false
         this.dialogVisible = true
       }else{
-        let data = {
-          wechatPay:this.wechatPay == true ? 1 : 0,
-        }
-        this.onSubmit(data)
+        this.$confirm('此操作将设置微信支付开关, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            wechatPay:this.wechatPay == true ? 1 : 0,
+          }
+          this.onSubmit(data)          
+        }).catch(() => {
+          this.getShopInfo()        
+        });
       }
     },
     //账户余额支付开关
     handleBalanceOfAccountPay(){
-        let data = {
-          balanceOfAccountPay:this.balanceOfAccountPay == true ? 1 : 0,
-        }
-        this.onSubmit(data)
+        this.$confirm('此操作将设置余额支付开关, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            balanceOfAccountPay:this.balanceOfAccountPay == true ? 1 : 0,
+          }
+          this.onSubmit(data)        
+        }).catch(() => {
+          this.getShopInfo()        
+        });
     },
     //货到付款开关
     handlePayOnDelivery(){
-        let data = {
-          payOnDelivery:this.payOnDelivery == true ? 1 : 0,
-        }
-        this.onSubmit(data)
+      this.$confirm('此操作将设置货到付款开关, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            payOnDelivery:this.payOnDelivery == true ? 1 : 0,
+          }
+          this.onSubmit(data)     
+        }).catch(() => {
+          this.getShopInfo()        
+        });
     },
 
     onSubmit(data){

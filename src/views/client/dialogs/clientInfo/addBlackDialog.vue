@@ -114,6 +114,7 @@ export default {
                     });
                     this.canSubmit = false;
                 }else{
+                    this.canSubmit = true;
                     let arr = [];
                     this.couponIds.map((item) => {
                         this.allCoupons.map((i) => {
@@ -143,6 +144,7 @@ export default {
                     });
                     this.canSubmit = false;
                 }else{
+                    this.canSubmit = true;
                     let arr = [];
                     this.codeIds.map((item) => {
                         this.allCodes.map((i) => {

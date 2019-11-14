@@ -116,6 +116,7 @@ export default {
                     });
                     this.canSubmit = false;
                 }else{
+                    this.canSubmit = true;
                     let arr = [];
                     this.couponIds.map((item) => {
                         arr.push(item.id);
@@ -137,6 +138,7 @@ export default {
                     });
                     this.canSubmit = false;
                 }else{
+                    this.canSubmit = true;
                     let arr = [];
                     this.codeIds.map((item) => {
                         arr.push(item.id);

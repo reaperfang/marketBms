@@ -10,7 +10,8 @@
                 controls-position="right" 
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
-                :min="0" 
+                :min="1" 
+                :precision="0"
                 v-if="form.acuoType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -18,7 +19,8 @@
                 controls-position="right" 
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
-                :min="0" 
+                :min="1" 
+                :precision="0"
                 v-else>
                 </el-input-number>
                 <el-select 
@@ -93,7 +95,8 @@
                 controls-position="right" 
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
-                :min="0" 
+                :min="1" 
+                :precision="0"
                 v-if="form.oasType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -101,7 +104,8 @@
                 controls-position="right" 
                 style="width:260px;" 
                 placeholder="当前未启动该功能，输入数值即生效"
-                :min="0" 
+                :min="1" 
+                :precision="0"
                 v-else>
                 </el-input-number>
                 <el-select 

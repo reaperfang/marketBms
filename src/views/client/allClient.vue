@@ -49,9 +49,11 @@
                     <img src="../../assets/images/client/icon_down.png" alt="" class="down_img fl" @click="extendTag" v-if="labels.length > 5" :style="{transform: showMoreTag ? 'rotate(180deg)':''}">
                 </el-form-item>
                 <el-form-item label="客户渠道：" class="relaPosition" prop="channelId">
-                    <el-checkbox-group v-model="form.channelId">
-                        <el-checkbox v-for="item in channels" :label="item" :key="item" border>{{item}}</el-checkbox>
-                    </el-checkbox-group>
+                    <div style="max-width: 80%; overflow: auto;">
+                        <el-checkbox-group v-model="form.channelId" >
+                            <el-checkbox v-for="item in channels" :label="item" :key="item" border>{{item}}</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
                     <div class="more font12" @click="handleMore" v-if="!showFold">更多查询条件<i class="el-icon-arrow-down"></i></div>
                 </el-form-item>
                 <div class="fold_part" v-if="showFold">
