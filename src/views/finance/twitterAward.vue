@@ -14,7 +14,7 @@
             </el-option>
           </el-select>
         </div>
-        <el-popover
+        <!-- <el-popover
           placement="top-start"
           title="数据说明"
           width="300"
@@ -30,7 +30,7 @@
             <i class="el-icon-warning-outline"></i>
             查看数据说明
           </el-button>
-        </el-popover>
+        </el-popover> -->
       </div>
       <div class="data_statistics">
         <div class="item">
