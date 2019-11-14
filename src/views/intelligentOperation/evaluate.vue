@@ -71,7 +71,7 @@
                     </div>
                     <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
                 </div>
-                <p>运营建议:</p>
+                <p v-if="listObj.members">运营建议:</p>
                 <p v-if="form.niceRatioRange == '0.00-1.00'" class="proposal"><b>"满意率0-1%/满意个数1个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，从而来提升满意率。</p>                
                 <p v-if="form.niceRatioRange == '2.00-5.00'" class="proposal"><b>"满意率2%-5%/满意个数2-5个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
                 <p v-if="form.niceRatioRange == '5.00-100.00'" class="proposal"><b>"满意率5%以上/满意个数5个以上"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>

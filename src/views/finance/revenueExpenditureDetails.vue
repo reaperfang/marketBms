@@ -289,7 +289,7 @@ export default {
       query.payWay = this.ruleForm.payWay == -1 ? null : this.ruleForm.payWay
       query.amountMin = this.ruleForm.amountMin == 0 ? '' : this.ruleForm.amountMin
       query.amountMax = this.ruleForm.amountMax == 0 ? '' : this.ruleForm.amountMax
-      query.sort = orde
+      query.sort = orde || 'desc'
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.tradeTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
