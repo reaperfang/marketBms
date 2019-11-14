@@ -16,7 +16,7 @@
                     <img :src="item.url" alt="" class="fl">
                     <div class="fr">
                         <p>{{item.text}}</p>
-                        <p :style="{color: item.color}">{{item.num}}</p>
+                        <p :style="{color: item.color}">{{item.num == null ? 0 : item.num}}</p>
                     </div>
                 </div>
             </div>
