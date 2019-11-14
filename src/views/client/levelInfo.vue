@@ -665,6 +665,7 @@ export default {
                   });
                   this.canSubmit = false;
                 }else{
+                  this.canSubmit = true;
                   params2.conditionValue = this.xfjem;
                   params2.label = "消费金额满";
                 }
@@ -682,6 +683,7 @@ export default {
                   });
                   this.canSubmit = false;
                 }else{
+                  this.canSubmit = true;
                   params2.conditionValue = this.xfcsm;
                   params2.label = "消费次数满";
                 }
@@ -699,6 +701,7 @@ export default {
                   });
                   this.canSubmit = false;
                 }else{
+                  this.canSubmit = true;
                   params2.conditionValue = this.jfhdm;
                   params2.label = "积分获得满";
                 } 
@@ -736,6 +739,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               let params3 = {};
               params3.rightsInfoId = this.getId(this.rightsList, "满包邮");
               params3.rightsValue = this.mby;
@@ -752,6 +756,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               let params4 = {};
               params4.rightsInfoId = this.getId(this.rightsList, "会员折扣");
               params4.rightsValue = this.hyzk;
@@ -784,6 +789,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               let params5 = {};
               params5.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -805,6 +811,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               let params6 = {};
               params6.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -844,6 +851,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               this.selectedGifts.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
@@ -870,6 +878,7 @@ export default {
               });
               this.canSubmit = false;
             } else {
+              this.canSubmit = true;
               this.selectedCoupons.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
