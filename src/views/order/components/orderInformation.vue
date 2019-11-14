@@ -358,8 +358,9 @@ export default {
         payMan() {
             let str = ''
             let _arr
-
-            if(this.orderInfo.payWay == 2) {
+            if(this.orderInfo.payWay == 1) {
+                return this.orderInfo.memberName
+            } else if(this.orderInfo.payWay == 2) {
                 return this.orderInfo.receivedName
             } else if(this.orderInfo.isConsumeBalance == 1 && (this.orderInfo.actualMoney == '0.00' || this.orderInfo.actualMoney == null)) {
                 return this.orderInfo.memberName

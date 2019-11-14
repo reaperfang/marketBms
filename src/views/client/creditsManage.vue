@@ -66,6 +66,7 @@
                     </div>
                     <span>积分</span>
                     <el-button type="primary" class="marL20" v-if="isSwitch" @click="save2">保存</el-button>
+                    <span style="margin-left: 10px">(积分上限只限制登录、购买、复购以及评价场景，其他场景获得的积分不在限制以内)</span>
                 </div>
                 <cmTable></cmTable>
             </el-tab-pane>
