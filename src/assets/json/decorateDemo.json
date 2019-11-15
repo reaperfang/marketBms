@@ -180,7 +180,7 @@
             {
                 "id": "d91e9c5e-5245-4cb9-8a25-0a1ca7fb534c",
                 "type": "discountPackage",
-                "title": "优惠套餐",
+                "title": "优惠套装",
                 "data": {
                     "package": "",
                     "listStyle": 1,
@@ -470,7 +470,7 @@
             {
                 "id": "4833cf71-48fb-49fc-8306-2c25e7786e4f",
                 "type": "discountPackage",
-                "title": "优惠套餐",
+                "title": "优惠套装",
                 "data": {
                     "package": "",
                     "listStyle": 1,
@@ -749,7 +749,7 @@
             {
                 "id": "d91e9c5e-5245-4cb9-8a25-0a1ca7fb534c",
                 "type": "discountPackage",
-                "title": "优惠套餐",
+                "title": "优惠套装",
                 "data": {
                     "package": "",
                     "listStyle": 1,
@@ -1039,7 +1039,7 @@
             {
                 "id": "4833cf71-48fb-49fc-8306-2c25e7786e4f",
                 "type": "discountPackage",
-                "title": "优惠套餐",
+                "title": "优惠套装",
                 "data": {
                     "package": "",
                     "listStyle": 1,

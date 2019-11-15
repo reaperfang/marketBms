@@ -1,6 +1,6 @@
-/* 选择优惠套餐弹框 */
+/* 选择优惠套装弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套餐'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套装'" @submit="submit">
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
       <div class="inline-head">
         <el-form-item label="" prop="name">

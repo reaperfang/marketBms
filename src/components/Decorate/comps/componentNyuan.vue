@@ -1,5 +1,5 @@
 <template>
-<!-- 组件-优惠套餐 -->
+<!-- 组件-优惠套装 -->
     <div class="componentNyuan" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
         <template v-if="hasContent">
             <ul>

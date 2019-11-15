@@ -1,5 +1,5 @@
 <template>
-<!-- 组件-优惠套餐 -->
+<!-- 组件-优惠套装 -->
     <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
         <template v-if="hasContent">
             <ul>
@@ -9,7 +9,7 @@
                         <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
                     </div>
                     <div class="countdown_Bar" v-if="showContents.indexOf('4')!=-1">
-                        <h1 class="title">{{item.activityTypeName || '优惠套餐'}}</h1>
+                        <h1 class="title">{{item.activityTypeName || '优惠套装'}}</h1>
                         <div class="countdown">
                             <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                             <div class="content">

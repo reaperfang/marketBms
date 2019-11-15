@@ -130,7 +130,7 @@ export default {
             id: "04",
             url:'/apply',
             img: require("@/assets/images/profile/m_04.png"),
-            title: "优惠套餐",
+            title: "优惠套装",
             sub: "给我N元，这里商品..."
         },
         {

@@ -248,7 +248,7 @@ export default {
                 case '1':
                     return '拼团订单'
                 case '2':
-                    return '优惠套餐订单'
+                    return '优惠套装订单'
                 case '3':
                     return '特权价'
                 case '4':
