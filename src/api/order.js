@@ -597,9 +597,9 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
  //活动赠品
  export function getGain(data) {
   return request({
+    url: `v1/b/order-after-sale/order-rewards/${data.gainId}`,
     method: 'get',
-    apiType: 'orderGain',
-    data
+    baseURL: process.env.SALE_API
   })
 }
 

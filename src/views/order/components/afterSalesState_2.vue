@@ -31,15 +31,24 @@
                     <el-steps :active="3">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" description=""></el-step>
+                        <el-step v-if="this.orderAfterSale.exchangeConfirmation != 0" class="word4" title="客户退货" description=""></el-step>
                         <el-step class="word4" title="商户发货" description=""></el-step>
                         <el-step class="word4" title="客户收货" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
-                    <p>待退货</p>
-                    <p class="des">商户同意售后，客户未发货。</p>
+                    <template v-if="this.orderAfterSale.exchangeConfirmation != 0">
+                        <p>待退货</p>
+                        <p class="des">商户同意售后，客户未发货。</p>
+                    </template>
+                    <template v-else>
+                        <p>待处理</p>
+                        <p class="des">商户未发货</p>
+                        <div class="button-box">
+                            <el-button type="primary" @click="sendGoods">发货</el-button>
+                        </div>
+                    </template>
                 </div>
             </div>
         </template>

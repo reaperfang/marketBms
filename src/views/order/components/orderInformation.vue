@@ -405,11 +405,12 @@ export default {
         // },
         getGain() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-
+            console.log(this);
             this._apis.order.getGain({
                 businessId:1,
                 tenantId:shopInfo.tenantInfoId,
-                merchantId:shopInfo.id
+                merchantId:shopInfo.id,
+                gainId: this.$route.query.id
             }).then(res => {
                 this.rewardScore = res.rewardScore || 0,
                 this.gift = res.giftList && res.giftList.map(val => val.appGift.goodsName).join(',') || ''
