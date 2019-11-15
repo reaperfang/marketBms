@@ -374,29 +374,10 @@ export default {
             } else {
                 _orderAfterSaleStatus = 1
             }
-            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                console.log(res)
-                this.getList()
-                // this.confirm({title: '换货确认', icon: true, text: `是否确认${_title}？`}).then(() => {
-                    
-                // })
-                if(row.type == 2) {
-                    this.currentDialog = 'ExchangeGoodsDialog'
-                    this.currentData = row
-                    this.dialogVisible = true
-                } else {
-                    this.$notify({
-                        title: '成功',
-                        message: '审核成功！',
-                        type: 'success'
-                    });
-                }
-            }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
-            })
+            this.currentDialog = 'ExchangeGoodsDialog'
+            this.currentData = row;
+            this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
+            this.dialogVisible = true
         },
         // 换货确认
         confirmHandler(value) {
