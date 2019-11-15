@@ -74,11 +74,11 @@
                 </div>
                 <h3 
                 class="marT20s"
-                v-if="form.ProtectionReason==5 || form.ProtectionReason==6 || form.ProtectionReason==8 && listObj.members" 
+                v-if="listObj.members && note" 
                 >运营建议:</h3>
-                <p v-if="form.ProtectionReason==5" class="proposal"><b>"不想要了":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>                
-                <p v-if="form.ProtectionReason==6" class="proposal"><b>"卖家缺货":</b>建议针对此类用户免费调换商品。</p>
-                <p v-if="form.ProtectionReason==8" class="proposal"><b>"拍错了/订单信息错误":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>
+                <p v-if="note == 5" class="proposal"><b>"不想要了":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>                
+                <p v-if="note ==6" class="proposal"><b>"卖家缺货":</b>建议针对此类用户免费调换商品。</p>
+                <p v-if="note ==8" class="proposal"><b>"拍错了/订单信息错误":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>
                 <div class="contents"></div>
                 <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
     </div>
@@ -126,6 +126,7 @@ export default {
                     return time.getTime() > Date.now() - 8.64e7
                 }
             },
+            note:''
         }
     },
     methods: {
@@ -138,6 +139,7 @@ export default {
         // 获取维权全部数据
         getRightsProtection(idx,pageS){
             this.form.loads = true
+            this.note = ''
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
             this.form.protectionType == 'null' && (this.form.protectionType = null)
@@ -146,6 +148,7 @@ export default {
             this._apis.data.rightsProtection(this.form).then(response => {
                 this.listObj = response;
                 this.form.loads = false
+                this.note = this.form.ProtectionReason
             })
         },
         changeTime(val){
