@@ -28,7 +28,7 @@
             <!-- 待退货 -->
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
-                    <el-steps :active="3">
+                    <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 2 : 3">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
                         <el-step v-if="this.orderAfterSale.exchangeConfirmation != 0" class="word4" title="客户退货" description=""></el-step>
@@ -56,10 +56,10 @@
             <!-- 待处理 -->
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
-                    <el-steps :active="4">
+                    <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 3 :4">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
                         <el-step class="word4" title="商户发货" description=""></el-step>
                         <el-step class="word4" title="客户收货" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
@@ -69,7 +69,7 @@
                     <p>待处理</p>
                     <p class="des">客户已退货，商户未发货</p>
                     <div class="button-box">
-                        <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
+                        <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                         <el-button type="primary" @click="sendGoods">发货</el-button>
                     </div>
                 </div>
@@ -79,10 +79,10 @@
             <!-- 待收货 -->
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
-                    <el-steps :active="5">
+                    <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 4: 5">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
                         <el-step class="word4" title="商户发货" :description="orderAfterSale.sendTime"></el-step>
                         <el-step class="word4" title="客户收货" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
@@ -91,7 +91,7 @@
                 <div class="col righter">
                     <p>待收货</p>
                     <p class="des">商户已换货发货，客户未收货</p>
-                    <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
+                    <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>
@@ -124,12 +124,12 @@
             <!-- 已完成 -->
             <div class="row align-center justity-between">
                 <div class="col flex1 lefter">
-                    <el-steps :active="7">
+                    <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 6 :7">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
                         <el-step class="word4" title="商户发货" :description="orderAfterSale.sendTime"></el-step>
-                        <el-step class="word4" title="商户收货" :description="orderAfterSale.receiveGoodsTime"></el-step>
+                        <el-step class="word4" title="商户收货" :description="orderAfterSale.receiveGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
                         <el-step class="word4" title="客户收货" :description="orderAfterSale.memberReceiveGoodsTime"></el-step>
                         <el-step class="word2" title="完成" :description="orderAfterSale.memberReceiveGoodsTime"></el-step>
                     </el-steps>
@@ -137,7 +137,7 @@
                 <div class="col righter">
                     <p>已完成</p>
                     <p class="des">退款消息给客户，客户确认收款。</p>
-                    <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
+                    <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>

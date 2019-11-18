@@ -96,7 +96,7 @@
                 :totalCount="totalCount">
             </maTable>
         </div>
-        <div v-if="listObj.members && note">
+        <div v-if="listObj.members != undefined && note">
             <p>运营建议:</p>
              <p v-if="note == '1-1'" class="proposal"><b>"交易次数1次"：</b>此用户群体为低频用户，建议提升产品认可度，提升服务质量，有助于提升低频用户交易次数。</p> 
              <p v-if="note == '2-5'" class="proposal"><b>"交易次数2-5次"：</b>此用户群体为中频用户，建议提升产品认可度，提升服务质量，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受95折，有助于提升低频用户交易次数。</p> 

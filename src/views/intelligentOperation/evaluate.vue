@@ -71,7 +71,7 @@
                     </div>
                     <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
                 </div>
-                <div v-if="listObj.members && (note || note1)">
+                <div v-if="listObj.members != undefined && (note || note1)">
                     <p>运营建议:</p>
                     <p v-if="note == '0.00-1.00'" class="proposal"><b>"满意率0-1%/满意个数1个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，从而来提升满意率。</p>                
                     <p v-if="note == '2.00-5.00'" class="proposal"><b>"满意率2%-5%/满意个数2-5个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
@@ -196,7 +196,7 @@ export default {
         changeTime(val){
             this.form.startTime = val[0]
             this.form.endTime = val[1]
-            console.log(this.form)
+            // console.log(this.form)
         },
         // 重置
         resetAll(){

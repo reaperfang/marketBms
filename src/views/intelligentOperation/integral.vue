@@ -60,7 +60,7 @@
                 :totalCount="listObj.totalSize">
             </ma3Table>
         </div>
-        <div v-if="listObj.members && note">
+        <div v-if="listObj.members != undefined && note">
             <p>运营建议:</p>
             <p v-if="note == '1-5'" class="proposal"><b>"消耗次数1-5次"：</b>建议针对此类用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
             <p v-if="note == '5-10'" class="proposal"><b>"消耗次数5-10次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
@@ -157,7 +157,7 @@ export default {
                     endTime:null
                 });
             }
-            console.log(this.form)
+            // console.log(this.form)
         },
         //
         //查询

@@ -72,7 +72,7 @@
                     </div>
                     <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
                 </div>
-                <div v-if="listObj.members && note" >
+                <div v-if="listObj.members != undefined && note" >
                     <h3 class="marT20s">运营建议:</h3>
                     <p v-if="note == 5" class="proposal"><b>"不想要了":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>                
                     <p v-if="note ==6" class="proposal"><b>"卖家缺货":</b>建议针对此类用户免费调换商品。</p>

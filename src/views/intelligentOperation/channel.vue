@@ -66,7 +66,7 @@
                 >
                 </channel-table>               
             </div>
-            <div v-if="listObj.list && note">
+            <div v-if="listObj.list.length!=0 && note">
                 <p>运营建议:</p>
                 <p v-if="note == '0.00-1.00'" class="proposal"><b>"转化率0-1%"：</b>建议针对此类用户推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
                 <p v-if="note == '1.00-3.00'" class="proposal"><b>"转化率1-3%"：</b>建议针对此类用户推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
