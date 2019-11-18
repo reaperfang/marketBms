@@ -96,7 +96,7 @@
                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
         </section>
-        <section class="form-section">
+        <section class="form-section showImg">
             <h2>销售信息</h2>
             <el-form-item label="规格信息" prop="goodsInfos">
                 <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button>
@@ -749,9 +749,7 @@ export default {
             })
         },
         deleteSpec(index) {
-            console.log(index);
             this.ruleForm.goodsInfos.splice(index, 1)
-            console.log(this.ruleForm.goodsInfos);
         },
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
@@ -1614,7 +1612,7 @@ $blue: #655EFF;
     width: 66px;
     height: 66px;
 }
-/deep/ .el-upload-list{
+/deep/ .showImg .el-upload-list{
     display: none;
 }
 .input-number {
