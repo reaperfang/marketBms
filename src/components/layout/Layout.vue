@@ -4,8 +4,8 @@
     <!-- <sidebar class="sidebar-container"/> -->
     <div class="sidebar-lefter">
       <div class="logo-con">
-        <img :src="logo" class="logo">
-        <!-- <img :src="require('@/assets/images/logo.png')" class="logo"> -->
+        <img :src="logo" class="logo" v-if="logo">
+        <img :src="require('@/assets/images/logo.png')" class="logo" v-else>
       </div>
       <ul>
         <li :class="{active: index == current}" @click="menuHandler(index)" v-show="!item.hidden && item.children" 
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       current: '0',
-      logo:"require('@/assets/images/logo.png')"
+      logo:""
     }
   },
   created() {

@@ -374,10 +374,26 @@ export default {
             } else {
                 _orderAfterSaleStatus = 1
             }
-            this.currentDialog = 'ExchangeGoodsDialog'
-            this.currentData = row;
-            this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-            this.dialogVisible = true
+            if(row.type == 2) {
+                this.currentDialog = 'ExchangeGoodsDialog'
+                this.currentData = row;
+                this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
+                this.dialogVisible = true
+            }else{
+                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
+                    this.getList();
+                    this.$notify({
+                        title: '成功',
+                        message: '审核成功！',
+                        type: 'success'
+                    });
+                }).catch(error => {
+                    this.$notify.error({
+                        title: '错误',
+                        message: error
+                    });
+                })
+            }
         },
         // 换货确认
         confirmHandler(value) {

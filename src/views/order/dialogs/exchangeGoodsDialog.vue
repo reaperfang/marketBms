@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="换货确认" width="500px" :showFooter="showFooter">
         <div class="container">
-            <p>是否需要{{data.memberName}}发货：</p>
+            <p>是否需要客户发货：</p>
             <el-radio v-model="exchangeConfirmation" :label="1">是</el-radio>
             <el-radio v-model="exchangeConfirmation" :label="0">否</el-radio>
             <div class="footer">

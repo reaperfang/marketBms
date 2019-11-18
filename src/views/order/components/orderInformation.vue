@@ -20,7 +20,7 @@
             <el-col :span="8"><div class="grid-content center">
                 <div class="item">
                     <div class="label">付款人</div>
-                    <div class="value" style="word-break: break-all;">{{payMan}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
+                    <div class="value" style="word-break: break-all;">{{payMan || '--'}}</div> <!-- <span v-if="orderDetail.orderPayRecordList" class="blue orderPayRecordList">详情</span> -->
                 </div>
                 <div class="item">
                     <div class="label">付款方式</div>
@@ -42,9 +42,9 @@
                     <div class="label">本单获得</div>
                     <div class="value">
                         <p>积分 {{rewardScore}}</p>
-                        <p style="word-break: break-all;">赠品 {{gift}}</p>
-                        <p style="word-break: break-all;">优惠券 {{gainCouponList}}</p>
-                        <p style="word-break: break-all;">优惠码 {{gainCouponCodeList}}</p>
+                        <p style="word-break: break-all;">赠品 {{gift || '--'}}</p>
+                        <p style="word-break: break-all;">优惠券 {{gainCouponList || '--'}}</p>
+                        <p style="word-break: break-all;">优惠码 {{gainCouponCodeList || '--'}}</p>
                     </div>
                 </div>
             </div></el-col>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="item">
                     <div class="label">客户备注</div>
-                    <div class="value">{{orderInfo.buyerRemark}}</div>
+                    <div class="value">{{orderInfo.buyerRemark || '--'}}</div>
                 </div>
                 <div class="item remark-box">
                     <div class="label">商户备注</div>
@@ -363,7 +363,7 @@ export default {
             } else if(this.orderInfo.payWay == 2) {
                 return this.orderInfo.receivedName
             } else if(this.orderInfo.payWay == 4) {
-                return this.orderInfo.receivedName
+                return this.orderInfo.memberName
             } else if(this.orderInfo.isConsumeBalance == 1 && (this.orderInfo.actualMoney == '0.00' || this.orderInfo.actualMoney == null)) {
                 return this.orderInfo.memberName
             } else {
@@ -373,7 +373,6 @@ export default {
                     str = _arr.map(val => val.memberName).join(',')
                 }
             }
-
             return str
         },
         wechatLength() {

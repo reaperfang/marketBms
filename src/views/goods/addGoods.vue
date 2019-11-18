@@ -155,16 +155,14 @@
                     </el-table-column>
                     <el-table-column
                         prop="image"
-                        label="图片">
+                        label="图片1">
                         <template slot-scope="scope">
-                            <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div> -->
+                            <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}" style="margin-top:10px"></div>
                             <el-upload
                                 :disabled="!ruleForm.productCategoryInfoId"
                                 class="upload-spec"
                                 :action="uploadUrl"
                                 :class="{hide:scope.row.image}"
-                                list-type="picture-card"
-                                :file-list="scope.row.fileList"
                                 :limit="1"
                                 :data="{json: JSON.stringify({cid: cid})}"
                                 :on-preview="handlePictureCardPreview"
@@ -751,7 +749,9 @@ export default {
             })
         },
         deleteSpec(index) {
+            console.log(index);
             this.ruleForm.goodsInfos.splice(index, 1)
+            console.log(this.ruleForm.goodsInfos);
         },
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
@@ -1613,6 +1613,9 @@ $blue: #655EFF;
 /deep/ .el-upload-list--picture-card .el-upload-list__item {
     width: 66px;
     height: 66px;
+}
+/deep/ .el-upload-list{
+    display: none;
 }
 .input-number {
     span {
