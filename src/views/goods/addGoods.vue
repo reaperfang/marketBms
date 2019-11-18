@@ -155,7 +155,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="image"
-                        label="图片1">
+                        label="图片">
                         <template slot-scope="scope">
                             <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}" style="margin-top:10px"></div>
                             <el-upload
