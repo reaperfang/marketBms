@@ -10,7 +10,7 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right">
         <el-form-item label="会员卡名称：" prop="name">
           <div class="input_wrap">
-            <el-input v-model="ruleForm.name" placeholder="请输入会员卡名称，比如金卡" :maxLength="9"></el-input>
+            <el-input v-model="ruleForm.name" placeholder="请输入会员卡名称，比如金卡" :maxLength="8"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="背景设置：" prop="backgroundType">
