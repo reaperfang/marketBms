@@ -28,7 +28,7 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right">
         <el-form-item label="等级称谓：" prop="name">
           <div class="input_wrap">
-            <el-input v-model="ruleForm.name" placeholder="请输入等级名称，比如普通会员" :maxLength="15"></el-input>
+            <el-input v-model="ruleForm.name" placeholder="请输入等级名称，比如普通会员" :maxLength="8"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="等级说明：" style="margin-left: 9px">

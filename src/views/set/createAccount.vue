@@ -135,14 +135,16 @@ export default {
       } 
       this._apis.set.getRoleList(query).then(response =>{
         this.roles = response.list
-        let roleName = ''
-        if(this.accountInfo && this.accountInfo.roleNames){
-            roleName = this.accountInfo.roleNames.split(',')[0]
-        }else{
-            roleName = this.roles[0].roleName
-            this.form.roleName = roleName
+        if(this.roles.length){
+          let roleName = ''
+          if(this.accountInfo && this.accountInfo.roleNames){
+              roleName = this.accountInfo.roleNames.split(',')[0]
+          }else{
+              roleName = this.roles[0].roleName
+              this.form.roleName = roleName
+          }
+          this.handleShop(roleName)
         }
-        this.handleShop(roleName)
       }).catch(error =>{
         this.$notify.error({
           title: '错误',

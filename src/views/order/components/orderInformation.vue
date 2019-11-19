@@ -603,7 +603,11 @@ export default {
                 case 6:
                     return '关闭订单'
                 case 7:
+                    return '库存不足'
+                case 8:
                     return '提前关闭订单'
+                case 9:
+                    return '商户备注'
             }
         },
         yingshouFilter(val) {
