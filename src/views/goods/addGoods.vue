@@ -252,7 +252,7 @@
                             label="图片">
                             <template slot-scope="scope">
                                 <!-- <img width="66" :src="scope.row.image" alt=""> -->
-                                <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div> -->
+                                <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div>
                                 <el-upload
                                     :disabled="!ruleForm.productCategoryInfoId"
                                     class="upload-spec"
