@@ -94,7 +94,7 @@
                 <div class="item lefter">
                     <el-steps active="5">
                         <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="货到付款" :description="orderInfo.createTime.substring(11,orderInfo.createTime.length)"></el-step>
+                        <el-step title="货到付款" :description="orderInfo.createTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
                         <el-step title="客户收货" :description="orderInfo.complateTime"></el-step>
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
