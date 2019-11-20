@@ -96,7 +96,7 @@
                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
         </section>
-        <section class="form-section showImg">
+        <section class="form-section">
             <h2>销售信息</h2>
             <el-form-item label="规格信息" prop="goodsInfos">
                 <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button>
@@ -157,11 +157,13 @@
                         prop="image"
                         label="图片">
                         <template slot-scope="scope">
-                            <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}" style="margin-top:10px"></div>
+                            <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}" style="margin-top:10px"></div> -->
                             <el-upload
                                 :disabled="!ruleForm.productCategoryInfoId"
                                 class="upload-spec"
                                 :action="uploadUrl"
+                                list-type="picture-card"
+                                :file-list="scope.row.fileList"
                                 :class="{hide:scope.row.image}"
                                 :limit="1"
                                 :data="{json: JSON.stringify({cid: cid})}"
@@ -252,7 +254,7 @@
                             label="图片">
                             <template slot-scope="scope">
                                 <!-- <img width="66" :src="scope.row.image" alt=""> -->
-                                <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div>
+                                <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div> -->
                                 <el-upload
                                     :disabled="!ruleForm.productCategoryInfoId"
                                     class="upload-spec"
@@ -771,6 +773,9 @@ export default {
         },
         specUploadSuccess(response, file, fileList, index, row) {
             if(file.status == "success"){
+                // console.log("fileList",fileList);
+                // row.fileList = row.fileList.push(fileList);
+                // console.log("row",row);
                 this.$message.success(response.msg);
                 //this.ruleForm.goodsInfos[index].image = response.data.url
                 if(!this.editor) {
@@ -1611,9 +1616,6 @@ $blue: #655EFF;
 /deep/ .el-upload-list--picture-card .el-upload-list__item {
     width: 66px;
     height: 66px;
-}
-/deep/ .showImg .el-upload-list{
-    display: none;
 }
 .input-number {
     span {

@@ -831,7 +831,7 @@ export default {
                       this._routeTo('cardManage');
                       this.$notify({
                         title: "成功",
-                        message: "编辑成功",
+                        message: response,
                         type: "success"
                       });
                     })
@@ -859,7 +859,7 @@ export default {
                   this._routeTo('cardManage');
                   this.$notify({
                     title: "成功",
-                    message: "编辑成功",
+                    message: response,
                     type: "success"
                   });
                 })
