@@ -77,6 +77,7 @@
                 <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
               </div>
               <span>倍</span>
+              <span>（仅对登录、购买、复购以及评价情景有效）</span>
             </el-form-item>
           <el-form-item label="特权说明：" prop="explain">
             <div class="input_wrap4">

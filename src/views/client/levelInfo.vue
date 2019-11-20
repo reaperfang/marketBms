@@ -17,7 +17,7 @@
       >
         <el-button size="small" class="border_btn upload_btn">上传图片</el-button>
       </el-upload>
-      <span class="l_warn fl" style="margin: 16px 0 0 32px">大小不超过2M</span>
+      <span class="l_warn fl" style="margin: 16px 0 0 32px">建议尺寸52*52像素</span>
     </div>
     <div class="level_order">
       <span class="red">*</span>
