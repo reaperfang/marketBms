@@ -773,9 +773,8 @@ export default {
         },
         specUploadSuccess(response, file, fileList, index, row) {
             if(file.status == "success"){
-                // console.log("fileList",fileList);
-                // row.fileList = row.fileList.push(fileList);
-                // console.log("row",row);
+                fileList[0].url = fileList[0].response.data.url;
+                row.fileList = [].concat(fileList);
                 this.$message.success(response.msg);
                 //this.ruleForm.goodsInfos[index].image = response.data.url
                 if(!this.editor) {
