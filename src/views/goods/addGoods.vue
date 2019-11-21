@@ -434,7 +434,7 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="商品详情" prop="productDetail">
-                <RichEditor v-if="ruleForm.productCategoryInfoId" @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="this.ruleForm.productDetail"></RichEditor>
+                <RichEditor v-if="ruleForm.productCategoryInfoId" @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="(ruleForm.productDetail && ruleForm.productDetail != 'null') ? ruleForm.productDetail : ''"></RichEditor>
             </el-form-item>
             <div class="footer">
                 <el-button :disabled="!ruleForm.productCategoryInfoId" @click="submitGoods('ruleForm')" type="primary">保存</el-button>
