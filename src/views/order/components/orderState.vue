@@ -214,7 +214,7 @@
                         <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="客户收货" :description="orderInfo.complateTime"></el-step>
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
