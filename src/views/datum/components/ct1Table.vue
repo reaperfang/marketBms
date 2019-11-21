@@ -13,7 +13,7 @@
         <template slot-scope="scope">
           <div  style="height:60px; display:flex">
             <img :src="scope.row.mainImage" alt="" style="width:60px;height:60px;display:inline-block;object-fit:fill;" />
-             <span style="line-height:60px;display:inline-block">{{scope.row.productName}}</span>
+             <span style="line-height:60px;display:inline-block;width:125px;overflow: hidden; text-overflow:ellipsis; white-space: nowrap;" :title="scope.row.productName">{{scope.row.productName}}</span>
             </div>
         </template>
       </el-table-column>
