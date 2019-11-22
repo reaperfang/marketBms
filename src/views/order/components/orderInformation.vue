@@ -597,7 +597,7 @@ export default {
                 case 3:
                     return '继续发货'
                 case 4:
-                    return '补填物流信息'
+                    return '修改收货地址'
                 case 5:
                     return '发货'
                 case 6:
