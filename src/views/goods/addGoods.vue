@@ -1108,6 +1108,7 @@ export default {
                             })
 
                             val.specs = _specs
+                            val.fileList = []
 
                             return val
                         })
@@ -1116,9 +1117,9 @@ export default {
                     } else {
                         obj.goodsInfos = this.ruleForm.goodsInfos
                     }
-                    console.log(this.ruleForm.productDetail)
-                    console.log(window.encodeURIComponent(this.ruleForm.productDetail))
-                    console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
+                    // console.log(this.ruleForm.productDetail)
+                    // console.log(window.encodeURIComponent(this.ruleForm.productDetail))
+                    // console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
                     params = Object.assign({}, this.ruleForm, obj, {
                         productDetail: window.escape(this.ruleForm.productDetail)
                     })
