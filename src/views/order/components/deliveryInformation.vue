@@ -22,7 +22,7 @@
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
             <div class="header-righter-item">发货人：{{orderDetail.orderSendInfo.sendName}}</div>
-            <div class="header-righter-item">{{item.time}}</div>
+            <div class="header-righter-item">{{orderDetail.sendTime}}</div>
             <div @click="showContent(index)">
               <i v-if="item.showContent" class="el-icon-caret-top pointer"></i>
               <i v-if="!item.showContent" class="el-icon-caret-bottom pointer"></i>
