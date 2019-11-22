@@ -597,7 +597,7 @@ export default {
                 case 3:
                     return '继续发货'
                 case 4:
-                    return '修改收货地址'
+                    return '补填物流信息'
                 case 5:
                     return '发货'
                 case 6:
@@ -608,6 +608,8 @@ export default {
                     return '提前关闭订单'
                 case 9:
                     return '商户备注'
+                case 10:
+                    return '修改收货信息'
             }
         },
         yingshouFilter(val) {
