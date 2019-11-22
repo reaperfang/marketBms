@@ -46,7 +46,7 @@
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="sendCount"
+                            prop="afterSaleCount"
                             label="本次发货数量">
                         </el-table-column>
                         <!-- <el-table-column
