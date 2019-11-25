@@ -9,7 +9,8 @@
                         <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
                     </div>
                     <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                        <h1 class="title">{{item.activityName || '限时秒杀'}}</h1>
+                        <!-- <h1 class="title">{{item.activityName || '限时秒杀'}}</h1> -->
+                        <h1 class="title">限时秒杀</h1>
                         <div class="countdown">
                             <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                             <div class="content">

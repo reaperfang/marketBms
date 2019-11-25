@@ -25,7 +25,7 @@
             <el-option label="全部" value></el-option>
             <el-option label="普通订单" :value="0"></el-option>
             <el-option label="拼团订单" :value="1"></el-option>
-            <el-option label="优惠套餐订单" :value="2"></el-option>
+            <el-option label="优惠套装订单" :value="2"></el-option>
             <el-option label="赠品订单" :value="4"></el-option>
           </el-select>
         </el-form-item>
@@ -131,7 +131,7 @@ export default {
         receivedPhone: "", // 收货人手机号
         receivedName: "", // 收货人姓名
         channelInfoId: "", // 订单来源
-        orderType: "", // 订单类型 1普通订单,2拼团订单,3优惠套餐订单,4赠品订单
+        orderType: "", // 订单类型 1普通订单,2拼团订单,3优惠套装订单,4赠品订单
         payWay: "", // 付款方式:1线上支付,2货到付款,3找人代付
         sendType: "", // 发货类型:1正常发货,2自动发货,3优先发货
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成

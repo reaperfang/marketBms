@@ -202,6 +202,16 @@ export function getOrderAfterSaleDetail(data) {
   })
 }
 
+// 换货确认
+export function orderAfterSaleConfirmExchange(data) {
+  return request({
+    apiType: 'order',
+    method: 'post',
+    target: 'ORDER-AFTER-SALE-CONFIRM-EXCHANGE-PROCESSOR',
+    data
+  })
+}
+
 //  审核/批量审核
 export function orderAfterSaleUpdateStatus(data) {
   return request({
@@ -222,15 +232,15 @@ export function orderAfterSaleExport(data) {
   })
 }
 
-//  换货确认
-export function orderAfterConfirmExchange(data) {
-  return request({
-    apiType: 'order',
-    method: 'post',
-    target: 'ORDER-AFTER-SALE-CONFIRM-EXCHANGE-PROCESSOR',
-    data
-  })
-}
+// //  换货确认
+// export function orderAfterConfirmExchange(data) {
+//   return request({
+//     apiType: 'order',
+//     method: 'post',
+//     target: 'ORDER-AFTER-SALE-CONFIRM-EXCHANGE-PROCESSOR',
+//     data
+//   })
+// }
 
 //  订单支付信息
 export function getOrderPayRecordList(data) {
@@ -422,15 +432,6 @@ export function orderAfterSaleSend(data) {
   })
 }
 
-// 换货确认
-export function orderAfterSaleConfirmExchange(data) {
-  return request({
-    apiType: 'order',
-    method: 'post',
-    target: 'ORDER-AFTER-SALE-CONFIRM-EXCHANGE-PROCESSOR',
-    data
-  })
-}
 
 // 退款
 export function orderAfterSaleDrawback(data) {
@@ -596,9 +597,9 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
  //活动赠品
  export function getGain(data) {
   return request({
+    url: `v1/b/order-after-sale/order-rewards/${data.gainId}`,
     method: 'get',
-    apiType: 'orderGain',
-    data
+    baseURL: process.env.SALE_API
   })
 }
 

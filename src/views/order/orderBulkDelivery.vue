@@ -67,7 +67,8 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.receivedName}}</p>
                     <p>联系电话: {{item.receivedPhone}}</p>
-                    <p>收货地址: {{item.receivedDetail}}</p>
+                    <p>收货地址: {{item.receivedProvinceName}} {{item.receivedCityName}} {{item.receivedAreaName}} {{item.receivedDetail}}
+                    </p>
                   </div>
                   <div class="col">
                     <el-form :model="item" label-width="100px" class="demo-ruleForm">
@@ -121,6 +122,9 @@
               <div class="item">
                 <div class="label">发货信息</div>
                 <div class="value">{{list[0] && list[0].sendDetail}}</div>
+                <div class="value" v-if="list[0]">
+                  {{list[0].sendProvinceName}} {{list[0].sendCityName}} {{list[0].sendAreaName}} {{list[0].sendDetail}}</div>
+                <div class="value" v-else>--</div>
               </div>
             </div>
           </div>

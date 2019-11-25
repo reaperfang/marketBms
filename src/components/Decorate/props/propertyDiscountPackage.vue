@@ -149,7 +149,7 @@ export default {
         hideSaledGoods: true,// 隐藏已售罄套餐
         hideEndGoods: false,//隐藏活动结束套餐
         hideType: 1,//隐藏类型
-        ids: [],//优惠套餐id列表
+        ids: [],//优惠套装id列表
         buttonText: '查看活动'//按钮文字
       },
       rules: {

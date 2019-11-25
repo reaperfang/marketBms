@@ -32,7 +32,8 @@
             <el-button type="warning" plain v-if="item.state === 1">立即购买</el-button>
           </div> -->
           <div class="bottom">
-            <el-button type="success" size="mini"  plain>免费</el-button>
+            <div style="color:green;line-height: 25px;">免费</div>
+            <!-- <el-button type="success" size="mini"  plain>免费</el-button> -->
             <!-- <span class="price" v-if="item.price !== 0">￥{{item.price}}</span> -->
             <el-button type="success" plain @click="_routeTo('templateEdit', {id: item.id})">立即应用</el-button>
           </div>

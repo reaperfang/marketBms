@@ -11,7 +11,8 @@
                             <img :src="item.image" alt="" :class="{goodsFill:goodsFill!=1}">
                         </div>
                         <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                            <h1 class="title">{{item.activeName || '多人拼团'}}</h1>
+                            <!-- <h1 class="title">{{item.activeName || '多人拼团'}}</h1> -->
+                            <h1 class="title">多人拼团</h1>
                             <div class="countdown">
                                 <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                                 <div class="content">

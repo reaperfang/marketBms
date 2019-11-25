@@ -10,7 +10,7 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right">
         <el-form-item label="会员卡名称：" prop="name">
           <div class="input_wrap">
-            <el-input v-model="ruleForm.name" placeholder="请输入会员卡名称，比如金卡" :maxLength="9"></el-input>
+            <el-input v-model="ruleForm.name" placeholder="请输入会员卡名称，比如金卡" :maxLength="8"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="背景设置：" prop="backgroundType">
@@ -77,6 +77,7 @@
                 <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
               </div>
               <span>倍</span>
+              <span>（仅对登录、购买、复购以及评价情景有效）</span>
             </el-form-item>
           <el-form-item label="特权说明：" prop="explain">
             <div class="input_wrap4">
@@ -831,7 +832,7 @@ export default {
                       this._routeTo('cardManage');
                       this.$notify({
                         title: "成功",
-                        message: "编辑成功",
+                        message: response,
                         type: "success"
                       });
                     })
@@ -859,7 +860,7 @@ export default {
                   this._routeTo('cardManage');
                   this.$notify({
                     title: "成功",
-                    message: "编辑成功",
+                    message: response,
                     type: "success"
                   });
                 })

@@ -94,9 +94,9 @@
                 <div class="item lefter">
                     <el-steps active="5">
                         <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="货到付款" description=""></el-step>
+                        <el-step title="货到付款" :description="orderInfo.createTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="客户收货" :description="orderInfo.complateTime"></el-step>
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
@@ -214,7 +214,7 @@
                         <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="客户收货" :description="orderInfo.complateTime"></el-step>
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
@@ -351,7 +351,7 @@
     </div>
 </template>
 <script>
-// sendType 订单类型 ,1普通订单,2拼团订单,3优惠套餐订单,4赠品订单
+// sendType 订单类型 ,1普通订单,2拼团订单,3优惠套装订单,4赠品订单
 // payWay 付款方式 1线上支付,2货到付款,3找人代付 4线下支付
 // orderStatus 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
 // 订单关闭原因: 0超时取消 1客户取消 2商户关闭 3拼团失败 4商户关闭拼团 5客户拒收

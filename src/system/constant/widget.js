@@ -94,7 +94,7 @@ export default {
             {
               type: 'discountPackage',
               iconClass: 'discountPackage',
-              title: '优惠套餐'
+              title: '优惠套装'
             },
             {
               type: 'fullReduction',

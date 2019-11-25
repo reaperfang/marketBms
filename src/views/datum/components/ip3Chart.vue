@@ -62,3 +62,9 @@ export default {
   components: {}
 };
 </script>
+<style>
+.color_block{
+  height: 19px;
+  line-height: 19px;
+}
+</style>

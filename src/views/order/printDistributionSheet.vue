@@ -19,7 +19,8 @@
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.orderAfterSaleSendInfo.receivedName}}</div>
                             <div class="item" style="width: 280px;">联系电话：{{item.orderAfterSaleSendInfo.receivedPhone}}</div>
-                            <div class="item">收货地址：{{item.orderAfterSaleSendInfo.receivedDetail}}</div>
+                            <div class="item">收货地址：{{item.orderAfterSaleSendInfo.receivedProvinceName}} {{item.orderAfterSaleSendInfo.receivedCityName}} {{item.orderAfterSaleSendInfo.receivedAreaName}} {{item.orderAfterSaleSendInfo.receivedDetail}}
+                            </div>
                         </div>
                     </template>
                     <template v-else>

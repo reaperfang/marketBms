@@ -157,14 +157,14 @@
                         prop="image"
                         label="图片">
                         <template slot-scope="scope">
-                            <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div> -->
+                            <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}" style="margin-top:10px"></div> -->
                             <el-upload
                                 :disabled="!ruleForm.productCategoryInfoId"
                                 class="upload-spec"
                                 :action="uploadUrl"
-                                :class="{hide:scope.row.image}"
                                 list-type="picture-card"
                                 :file-list="scope.row.fileList"
+                                :class="{hide:scope.row.image}"
                                 :limit="1"
                                 :data="{json: JSON.stringify({cid: cid})}"
                                 :on-preview="handlePictureCardPreview"
@@ -434,7 +434,7 @@
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="商品详情" prop="productDetail">
-                <RichEditor v-if="ruleForm.productCategoryInfoId" @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="this.ruleForm.productDetail"></RichEditor>
+                <RichEditor v-if="ruleForm.productCategoryInfoId" @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="(ruleForm.productDetail && ruleForm.productDetail != 'null') ? ruleForm.productDetail : ''"></RichEditor>
             </el-form-item>
             <div class="footer">
                 <el-button :disabled="!ruleForm.productCategoryInfoId" @click="submitGoods('ruleForm')" type="primary">保存</el-button>
@@ -773,6 +773,8 @@ export default {
         },
         specUploadSuccess(response, file, fileList, index, row) {
             if(file.status == "success"){
+                fileList[0].url = fileList[0].response.data.url;
+                row.fileList = [].concat(fileList);
                 this.$message.success(response.msg);
                 //this.ruleForm.goodsInfos[index].image = response.data.url
                 if(!this.editor) {
@@ -1106,6 +1108,7 @@ export default {
                             })
 
                             val.specs = _specs
+                            val.fileList = []
 
                             return val
                         })
@@ -1114,9 +1117,9 @@ export default {
                     } else {
                         obj.goodsInfos = this.ruleForm.goodsInfos
                     }
-                    console.log(this.ruleForm.productDetail)
-                    console.log(window.encodeURIComponent(this.ruleForm.productDetail))
-                    console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
+                    // console.log(this.ruleForm.productDetail)
+                    // console.log(window.encodeURIComponent(this.ruleForm.productDetail))
+                    // console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
                     params = Object.assign({}, this.ruleForm, obj, {
                         productDetail: window.escape(this.ruleForm.productDetail)
                     })

@@ -184,7 +184,7 @@ export default {
             border-color: #655EFF;
             color:#655EFF;
             background: transparent;
-            right: 7px;
+            right: -79px;
             bottom: 6px;
         }
         .mini_2{
@@ -192,7 +192,7 @@ export default {
             border-color: #FD4C2B;
             color:#FD4C2B;
             background: transparent;
-            right: 7px;
+            right: -79px;
             bottom: 6px;
             padding: 5px 16px;
         }

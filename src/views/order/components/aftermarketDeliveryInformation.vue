@@ -47,16 +47,16 @@
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
-                            label="数量">
+                            label="本次发货数量">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             prop="goodsPrice"
                             label="商品单价">
                         </el-table-column>
                         <el-table-column
                             prop="subtotalMoney"
                             label="小计">
-                        </el-table-column>
+                        </el-table-column> -->
                         <!-- <el-table-column
                             prop="afterSaleLimitTime"
                             label="售后有效期">
@@ -81,7 +81,7 @@
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
                         <div class="header-righter-item">发货人：{{orderAfterSaleSendInfo.sendName}}</div>
-                        <div class="header-righter-item">{{orderAfterSale.receiveGoodsTime}}</div>
+                        <div class="header-righter-item">{{orderAfterSaleSendInfo.sendTime}}</div>
                         <div @click="showContent = !showContent">
                             <i v-if="showContent" class="el-icon-caret-top pointer"></i>
                             <i v-if="!showContent" class="el-icon-caret-bottom pointer"></i>
@@ -113,20 +113,21 @@
                             width="180">
                         </el-table-column>
                         <el-table-column
-                            prop="afterSaleCount"
-                            label="数量">
+                            prop="sendCount"
+                            label="本次发货数量">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             prop="subtotalMoney"
                             label="小计">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleLimitTime"
                             label="售后有效期">
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
                     <!-- <div class="remark">快递单号：{{}}</div> -->
                 </div>
+                <div class="content" v-if="orderAfterSaleSendInfo && orderAfterSaleSendInfo.sendRemark">备注：{{orderAfterSaleSendInfo.sendRemark}}</div>
             </div>
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
