@@ -87,21 +87,21 @@ export default {
           {
             name: "访客",
             type: "line",
-            stack: "总量",
+            stack: "访客",
             data: this.flow['yAxis']
           },
           {
             name: "浏览",
             type: "line",
-            stack: "总量",
+            stack: "浏览",
             data: this.flow['yAxis'] 
           }
         ]
       };
       this.flow = {
         xAxis:this.n.xAxis,
-        yAxis1:this.n.series[1] && this.n.series[1].data,
-        yAxis2:this.n.series[0] && this.n.series[0].data,
+        yAxis1:this.n.series[0] && this.n.series[0].data,
+        yAxis2:this.n.series[1] && this.n.series[1].data,
       }
       this.nearDay(this.type)
       this.makeOption(this.flow);
