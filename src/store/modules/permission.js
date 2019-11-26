@@ -6,10 +6,14 @@ import { asyncRouterMap, syncRouterMap } from '@/router'
  * @param route
  */
 function hasPermission(msfList, route) {
-  if (route && route.meta.title) {
-    return msfList.some(item => route.meta.title == item.name && route.meta.navType == item.navType ) || route.meta.title == '概况首页' || route.meta.title == '概况'
-  } else {
-    return true
+  if(msfList){
+    if (route && route.meta.title) {
+      return msfList.some(item => route.meta.title == item.name && route.meta.navType == item.navType ) || route.meta.title == '概况首页' || route.meta.title == '概况'
+    }else{
+      return true
+    }
+  }else {
+    return route.meta.title == '概况首页' || route.meta.title == '概况' ? true : false
   }
 }
 
