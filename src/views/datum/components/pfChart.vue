@@ -100,8 +100,8 @@ export default {
       };
       this.flow = {
         xAxis:this.n.xAxis,
-        yAxis1:this.n.series[0] && this.n.series[0].data,
-        yAxis2:this.n.series[1] && this.n.series[1].data,
+        yAxis1:this.n.series[1] && this.n.series[1].data,
+        yAxis2:this.n.series[0] && this.n.series[0].data,
       }
       this.nearDay(this.type)
       this.makeOption(this.flow);
