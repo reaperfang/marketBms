@@ -44,9 +44,9 @@
                 <el-popover
                   placement="top-start"
                   title="选择计费方式"
-                  width="300"
+                  width="430"
                   trigger="hover">
-                  <div>
+                  <div class="scrollContent">
                     <p>选择计费方式说明</p>
                     <p>支持商家选择【按商品累加运费】和【组合运费】，默认使用组合运费。</p>
                     <p>1.按商品累加运费</p>
@@ -248,4 +248,9 @@ export default {
     cursor: pointer;
     border:none;
   }
+.scrollContent{
+  width:400px;
+  height: 200px;
+  overflow-y: scroll;
+}
 </style>
