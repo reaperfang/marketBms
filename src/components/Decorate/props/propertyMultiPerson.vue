@@ -253,7 +253,8 @@ export default {
                 if(Array.isArray(ids) && ids.length){
                     params = {
                         spuIds: ids.join(','),
-                        order: componentData.sortRule
+                        order: componentData.sortRule,
+                        status: 2
                     };
                 }else{
                     this.list = [];

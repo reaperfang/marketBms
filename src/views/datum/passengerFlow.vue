@@ -177,6 +177,7 @@ export default {
     //停留时长
     getResidetime(){
        let data = {
+         channel:this.visitSourceType,
           startTime: this.startTime,
           endTime: this.endTime,
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
@@ -191,6 +192,7 @@ export default {
     //跳出率
     getPathOut(){
         let data = {
+          channel:this.visitSourceType,
           startTime: this.startTime,
           endTime: this.endTime,
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
@@ -240,6 +242,7 @@ export default {
     all() {
       if(this.nearDay != 4 || this.range != ''){
         this.changeType(this.analysisType)
+        this.changeDp(this.duration)
       }
     },
 

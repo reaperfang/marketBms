@@ -182,13 +182,15 @@ export default {
         this.getList()
     },
     priceChange() {
-      if (!this.multipleSelection.length) {
-        this.confirm({
-          title: "提示",
-          icon: true,
-          text: '请选择需要批量改价的商品'
-        })
-        return
+      if(this.operateType == 1) {
+        if (!this.multipleSelection.length) {
+          this.confirm({
+            title: "提示",
+            icon: true,
+            text: '请选择需要批量改价的商品'
+          })
+          return
+        }
       }
       this.currentDialog = 'PriceChangeDialog'
       this.dialogVisible = true

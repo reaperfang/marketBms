@@ -8,7 +8,8 @@ export default [
     meta: {
       title: '应用',
       icon: 'icon_apply',
-      activeIcon:'icon_applys'
+      activeIcon:'icon_applys',
+      navType:1
     },
     iframe: true,
     children: [
@@ -16,7 +17,7 @@ export default [
         path: '',
         component: () => import('@/views/apply/index'),
         name: 'index',
-        meta: { title: '应用', noCache: true },
+        meta: { title: '应用', noCache: true , navType:1},
       },
     ]
   }

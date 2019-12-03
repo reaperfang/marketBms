@@ -87,13 +87,13 @@ export default {
           {
             name: "访客",
             type: "line",
-            stack: "总量",
+            stack: "访客",
             data: this.flow['yAxis']
           },
           {
             name: "浏览",
             type: "line",
-            stack: "总量",
+            stack: "浏览",
             data: this.flow['yAxis'] 
           }
         ]

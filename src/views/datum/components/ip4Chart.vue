@@ -66,19 +66,19 @@ export default {
           {
             name:"下单单数",
             type: "line",
-            stack: "总量",
+            stack: "下单单数",
             data: this.flow['yAxisSubmitOrderData']
           },
           {
             name:"支付单数",
             type: "line",
-            stack: "总量",
+            stack: "支付单数",
             data: this.flow['yAxisPayOrderData'] 
           },
           {
             name:"单数转化",
             type: "line",
-            stack: "总量",
+            stack: "单数转化",
             data: this.flow['yAxisOrderConversionData'] 
           }
         ]

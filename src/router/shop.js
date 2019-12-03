@@ -12,14 +12,15 @@ export default [
 			roles: ["shop"],
 			title: "店铺",
 			icon: "icon_shop",
-			activeIcon:'icon_shops'
+			activeIcon:'icon_shops',
+			navType:1
 		},
 		children: [
 			{
 				path: "index",
 				component: () => import("@/views/shop/shopManage/index"),
 				name: "index",
-				meta: { title: "店铺", noCache: true }
+				meta: { title: "店铺", noCache: true}
 			},
 			{
 				path: "pageManageIndex",

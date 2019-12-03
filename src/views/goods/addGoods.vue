@@ -162,6 +162,7 @@
                                 :disabled="!ruleForm.productCategoryInfoId"
                                 class="upload-spec"
                                 :action="uploadUrl"
+                                :ref="`uploadImage_${scope.$index}`"
                                 list-type="picture-card"
                                 :file-list="scope.row.fileList"
                                 :class="{hide:scope.row.image}"
@@ -763,7 +764,7 @@ export default {
                 volume: '',
                 image: '',
             }))
-
+            this.$refs[`uploadImage_${index}`].clearFiles()
             console.log(this.ruleForm.goodsInfos)
         },
         specHandleRemove(index) {

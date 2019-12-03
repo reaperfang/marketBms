@@ -42,9 +42,11 @@ const user = {
               //所有店铺的功能点列表由扁平化数据转为树形结构
               let data = user.shopInfoMap
               for(let key in data){
-                let list = JSON.parse(JSON.stringify(data[key].data.msfList))
-                let functions = utils.buildTree(list)
-                data[key].data = Object.assign(data[key].data,{functions:functions})
+                if(data[key].data){
+                  let list = JSON.parse(JSON.stringify(data[key].data.msfList))
+                  let functions = utils.buildTree(list)
+                  data[key].data = Object.assign(data[key].data,{functions:functions})
+                }
               }
               commit('SET_USER_INFO', user)
             }
@@ -60,7 +62,7 @@ const user = {
     setShopInfos({commit},shop){
       return new Promise((resolve, reject) => {
         commit('SET_SHOP_INFO',shop)
-        window.eventHub.$emit('onShopInfos')
+        // window.eventHub.$emit('onShopInfos')
         resolve()
       }).catch(error => {
         reject(error)

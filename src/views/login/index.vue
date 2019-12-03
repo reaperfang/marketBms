@@ -80,7 +80,7 @@ export default {
       loginRules: {
         userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword },
-        { min: 1, max: 8, message: '密码不能超过8位', trigger: 'blur' }]
+        { min: 1, max: 12, message: '密码不能超过12位', trigger: 'blur' }]
       },
       passwordType: 'password',
       loading: false,
