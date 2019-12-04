@@ -137,10 +137,10 @@ export default {
           this.isTrace = res.isTrace;
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          // this.$notify.error({
+          //   title: "错误",
+          //   message: error
+          // });
         });
     },
     getOrderSendItems() {

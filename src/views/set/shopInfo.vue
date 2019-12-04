@@ -35,8 +35,14 @@
                 <el-input v-model="form.phone" placeholder="如输入手机号，不填区号" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="联系地址:" prop="address">
-                <area-cascader :level="1" :data='$pcaa' v-model='form.addressCode' style="width:200px;"></area-cascader>
-                <!-- <el-cascader :options="area" v-model="form.address" expand-trigger="hover"/> -->
+                <area-cascader 
+                  :level="1" 
+                  :data='$pcaa' 
+                  v-model='form.addressCode'
+                  @change="handleChange" 
+                  style="width:200px;">
+                </area-cascader>
+                <!-- <el-cascader :options="cityLists" :props="cityProps" v-model="form.addressCode" expand-trigger="hover"/> -->
                 <el-input v-model="form.address" style="width:300px; margin-top:10px;" placeholder="详细地址"/>
             </el-form-item>
             <el-form-item label="店铺简介:" prop="shopIntroduce">
@@ -49,7 +55,7 @@
               </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '店铺信息', '默认页面', '保存']">保存</el-button>
+                <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '店铺信息', '默认页面', '保存']" v-loading="loading">保存</el-button>
             </el-form-item>
         </el-form>
     </div>    
@@ -101,6 +107,10 @@ export default {
       imageUrl: '',
       area: [],
       shopInfo:{},
+      province:'',
+      city:'',
+      area:'',
+      loading:false,
       uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
       uploadUrlBase64: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`,
       //canvas:{}
@@ -123,9 +133,15 @@ export default {
     this.getShopInfo()
   },
   mounted() {
-
+    
   },
   methods: {
+    handleChange(){
+      this.province = this.$pcaa[86][this.form.addressCode[0]]
+      this.city = this.$pcaa[this.form.addressCode[0]][this.form.addressCode[1]]
+      this.area = this.$pcaa[this.form.addressCode[1]][this.form.addressCode[2]]
+    },
+
     getShopInfo(){
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
@@ -146,6 +162,7 @@ export default {
     },
 
     onSubmit(formName){
+      this.loading = true
       this.$refs[formName].validate((valid) => {
           if (valid) {
             let id = this.cid
@@ -155,6 +172,9 @@ export default {
               logo:this.form.logo,
               logoCircle:this.form.logoCircle,
               phone:this.form.phone,
+              province: this.province,
+              city: this.city,
+              area: this.area,
               provinceCode:this.form.addressCode[0],
               cityCode:this.form.addressCode[1],
               areaCode:this.form.addressCode[2],
@@ -162,18 +182,31 @@ export default {
               shopIntroduce:this.form.shopIntroduce
             }
             this._apis.set.updateShopInfo(data).then(response =>{
-              this.$notify.success({
-                title: '成功',
-                message: '保存成功！'
-              });
+              this.setShopName()              
             }).catch(error =>{
               this.$notify.error({
                 title: '错误',
                 message: error
               });
+              this.loading = false
             })
           }
       })
+    },
+
+    setShopName(){
+      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let name = shopInfo.shopName
+      if(name != this.form.shopName){
+        shopInfo.shopName = this.form.shopName
+      }
+      this.$store.dispatch('setShopInfos',shopInfo).then(() => {
+        this.$notify.success({
+          title: '成功',
+          message: '保存成功！'
+        });
+        this.loading = false
+      }).catch(error=>{ })
     },
 
     handleAvatarSuccess(res, file) {
@@ -202,7 +235,11 @@ export default {
     },
 
     uploadCircle(urlData){
-      axios.post(this.uploadUrlBase64,"json={\"cid\":\""+this.cid+"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",{headers: {'Origin':'http'}}).then((response) => {
+      axios.post(
+        this.uploadUrlBase64,
+        "json={\"cid\":\""+this.cid+"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",
+        {headers: {'Origin':'http'}}
+      ).then((response) => {
         this.form.logoCircle = response.data.data.url
       }).catch((error) => {
         console.log(error);
