@@ -122,12 +122,12 @@
         <el-radio-group v-if="ruleForm.showContents.includes('4') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
           <el-radio :label="1">样式1</el-radio>
           <el-radio :label="2">样式2</el-radio>
-          <el-radio :label="3" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式3</el-radio>
-          <el-radio :label="4" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式4</el-radio>
+          <el-radio :label="3" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式3</el-radio>
+          <el-radio :label="4" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式4</el-radio>
           <el-radio :label="5">样式5</el-radio>
           <el-radio :label="6">样式6</el-radio>
-          <el-radio :label="7" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式7</el-radio>
-          <el-radio :label="8" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 5))">样式8</el-radio>
+          <el-radio :label="7" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式7</el-radio>
+          <el-radio :label="8" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式8</el-radio>
         </el-radio-group>
         <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
       </el-form-item>
@@ -198,6 +198,9 @@ export default {
      //如果新值是一行3个或横向滑动且老值不是这个就把按钮样式改为第一个
     'ruleForm.listStyle'(newValue, oldValue) {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
+        this.ruleForm.buttonStyle = 1;
+      } 
+      if(this.ruleForm.showTemplate == 2 && [2,4,5].includes(newValue) && ![2,4,5].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
     }

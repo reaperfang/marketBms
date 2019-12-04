@@ -17,6 +17,7 @@
                         type="textarea"
                         :rows="2"
                         placeholder="街道、楼牌号等"
+                        maxlength="100"
                         v-model="ruleForm.sendDetail">
                     </el-input>
                 </el-form-item>
@@ -43,6 +44,7 @@
                         type="textarea"
                         :rows="2"
                         placeholder="街道、楼牌号等"
+                        maxlength="100"
                         v-model="ruleForm.receivedDetail">
                     </el-input>
                 </el-form-item>
