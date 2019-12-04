@@ -253,12 +253,16 @@ export default {
             this.$router.push('/order/orderBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderId).join(','))
         },
         batchPrintElectronicForm() {
-            if(this.express) {
-                this.confirm({title: '提示', icon: true, text: '不支持打印电子面单。'})
-                return
-            }
+            // if(this.express) {
+            //     this.confirm({title: '提示', icon: true, text: '不支持打印电子面单。'})
+            //     return
+            // }
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量打印电子面单的单据。'})
+                return
+            }
+            if(!this.multipleSelection.map(val => val.isKDBird).every(val => val == true)) {
+                this.confirm({title: '提示', icon: true, text: '勾选单据中包含不支持电子面单的单据，无法批量打印，请先依据支持电子面单的快递公司筛选单据后，再打印。'})
                 return
             }
             if(this.multipleSelection.filter(val => val.isAutoSend).some(val => val.isFillUp == 1)) {

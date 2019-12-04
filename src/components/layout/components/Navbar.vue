@@ -84,7 +84,11 @@ export default {
         return true
       }
       return false
-    }
+    },
+    // shopName(){
+    //   let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+    //   return shopInfo.shopName || ''
+    // }
   },
   created(){ 
     this.getShopName()
