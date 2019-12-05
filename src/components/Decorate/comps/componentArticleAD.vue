@@ -30,7 +30,7 @@
       </div>
       <!-- 3、大图横向滑动 -->
       <div v-if="currentComponentData.data.templateType==3" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <van-swipe :loop="false" :width="340 + currentComponentData.data.imgMargin">
+        <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="340 + currentComponentData.data.imgMargin" :height="'auto'" class="big_image">
           <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
             <img
               :src="item.url"
@@ -40,10 +40,11 @@
             />
           </van-swipe-item>
         </van-swipe>
+        <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
       </div>
       <!-- 4、小图横向滑动 -->
       <div v-if="currentComponentData.data.templateType==4" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <van-swipe :loop="false" :show-indicators="false" :width="118 + currentComponentData.data.imgMargin" :height="110">
+        <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="118 + currentComponentData.data.imgMargin" :height="110">
           <van-swipe-item class="pdr_16" v-for="(item, key) of currentComponentData.data.itemList" :key="key">
             <img
               :src="item.url"
@@ -53,10 +54,11 @@
             />
           </van-swipe-item>
         </van-swipe>
+        <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
       </div>
       <!-- 5、导航横向滑动 -->
       <div v-if="currentComponentData.data.templateType==5" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <van-swipe :loop="false" :show-indicators="false" :width="93 + currentComponentData.data.imgMargin" :height="93">
+        <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="93 + currentComponentData.data.imgMargin" :height="93">
           <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
             <img
               :src="item.url"
@@ -66,6 +68,7 @@
             />
           </van-swipe-item>
         </van-swipe>
+        <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
       </div>
     </template>
     <div v-else class="temp_block">
@@ -103,6 +106,15 @@ export default {
       return value;
     }
   },
+  watch: {
+    'currentComponentData.data.templateType'(newValue) {
+      let tempData = {...this.currentComponentData.data.itemList};
+      this.currentComponentData.data.itemList = [];
+      this.$nextTick(()=>{
+        this.currentComponentData.data.itemList = tempData;
+      })
+    }
+  },
   methods: {
   }
 }
@@ -129,6 +141,15 @@ export default {
     img {
       width: 100%;
       height: 100%;
+    }
+  }
+  .big_image{
+    /deep/ .van-swipe__track {
+      height: auto;
+      img {
+        width: 100%;  
+        height: 100%;
+      }
     }
   }
   /deep/ .van-swipe-item {

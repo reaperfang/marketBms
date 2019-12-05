@@ -149,6 +149,14 @@ export default {
     this._globalEvent.$on("total", number => {
       this.total = number;
     });
+
+    if(this.$route.query.orderStatus) {
+          let orderStatus = +this.$route.query.orderStatus
+
+          this.listQuery = Object.assign({}, this.listQuery, {
+              orderStatus
+          })
+      }
   },
   methods: {
     batchSendGoods() {
