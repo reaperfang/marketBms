@@ -38,6 +38,7 @@
                 <area-cascader 
                   :level="1" 
                   :data='$pcaa' 
+                  ref="cascaderAddr"
                   v-model='form.addressCode'
                   @change="handleChange" 
                   style="width:200px;">
