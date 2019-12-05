@@ -161,7 +161,9 @@ export default {
             showCustomerContent: true,
             showContent: true,
             expressNo: '',
-            expressCompanys: ''
+            expressCompanys: '',
+            isTrace: 0,
+            reject: false,
         }
     },
     filters: {
@@ -200,6 +202,15 @@ export default {
             }
         }
     },
+    computed: {
+        cid() {
+            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            return shopInfo.id;
+        }
+    },
+    created() {
+        this.getIsTrace();
+    },
     methods: {
         showLogistics(expressNo, isComstomer) {
             this.expressNo = expressNo
@@ -208,16 +219,56 @@ export default {
             } else {
                 this.expressCompanys = this.orderAfterSaleSendInfo.expressCompanys
             }
-            this._apis.order.orderLogistics({expressNo}).then(res => {
-                this.currentDialog = 'LogisticsDialog'
-                this.currentData = res.traces
-                this.dialogVisible = true
-            }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+            // this._apis.order.orderLogistics({expressNo}).then(res => {
+            //     this.currentDialog = 'LogisticsDialog'
+            //     this.currentData = res.traces
+            //     this.dialogVisible = true
+            // }).catch(error => {
+            //     this.$notify.error({
+            //         title: '错误',
+            //         message: error
+            //     });
+            // }) 
+
+            if (this.isTrace == 0) {
+                this.currentDialog = "LogisticsDialog";
+                this.currentData = [];
+                this.reject = true;
+                this.expressNo = expressNo
+                this.expressCompanys = this.expressCompanys
+                this.dialogVisible = true;
+            } else {
+                this.reject = false;
+                this.expressNo = expressNo
+                this._apis.order
+                .orderLogistics({ expressNo })
+                .then(res => {
+                    this.currentDialog = "LogisticsDialog";
+                    this.currentData = res.traces;
+                    this.expressCompanys = this.expressCompanys
+                    this.dialogVisible = true;
+                })
+                .catch(error => {
+                    // this.$notify.error({
+                    //   title: "错误",
+                    //   message: error
+                    // });
                 });
-            }) 
+            }
+        },
+        getIsTrace() {
+            this._apis.order
+                .getIsTrace({ cid: this.cid })
+                .then(res => {
+                console.log(res);
+                this.isTrace = res.isTrace;
+                })
+                .catch(error => {
+                // this.$notify.error({
+                //     title: "错误",
+                //     message: error
+                // });
+            });
         },
     },
     props: {
