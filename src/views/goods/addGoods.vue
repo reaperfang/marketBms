@@ -905,7 +905,10 @@ export default {
                     this.leimuMessage = true
                     this.ruleForm.productCategoryInfoId = ''
                 }
-
+                
+                if(this.ruleForm.productBrandInfoId && (typeof this.ruleForm.productBrandInfoId == 'string')) {
+                    this.ruleForm.productBrandInfoId = +this.ruleForm.productBrandInfoId
+                }
                 if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
                     this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
                     this.ruleForm.productBrandInfoId = ''
