@@ -45,7 +45,7 @@
 
         <!-- 设置区 -->
         <div class="setting" v-loading="loading">
-          <template v-if="currentType === 'h5'">
+          <div v-show="currentType === 'h5'">
             <div style="display:flex;">
               <el-input v-model="pageLink" placeholder="右击右侧按钮复制链接" style="margin-right:20px;"></el-input>
               <el-button type="primary"  v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
@@ -94,8 +94,8 @@
                 <el-button @click="openSetting = false">取消</el-button>
               </el-form-item>
             </el-form>
-          </template>
-          <template v-else>
+          </div>
+          <div v-show="currentType === 'mini'">
             <div>
               <el-button type="text" @click="openSetting = true">更多设置</el-button>
               <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
@@ -140,7 +140,7 @@
                 <el-button @click="openSetting = false">取消</el-button>
               </el-form-item>
             </el-form>
-          </template>
+          </div>
         </div>
       </div>
     </el-tabs>
