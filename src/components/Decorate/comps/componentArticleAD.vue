@@ -129,7 +129,7 @@ export default {
     & > img {
       width: 100%;
       // height: 180px;
-      display: inline-block;
+      display: block;
       //   object-fit: contain;
     }
     & > img:last-child {

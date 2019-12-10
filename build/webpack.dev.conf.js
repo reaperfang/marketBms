@@ -32,6 +32,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     disableHostCheck: true,
     clientLogLevel: 'warning',
     historyApiFallback: true,
+    https:true,
     hot: true,
     compress: true,
     host: HOST || config.dev.host,
