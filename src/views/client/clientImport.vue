@@ -189,6 +189,7 @@ export default {
                     importUrl: this.importUrl
                 }
                 this._apis.client.importMemberFile(params).then((response) => {
+                    this.getChannels();
                     this.$notify({
                         title: '成功',
                         message: '导入成功',
