@@ -36,7 +36,7 @@
                                 :data="{json: JSON.stringify({cid: cid})}"
                                 :file-list="fileList">
                                 <el-button size="small" type="primary">点击上传</el-button>
-                                <div slot="tip" class="el-upload__tip">支持文件格式：.csv .xsl ，单个文件不能超过10M</div>
+                                <div slot="tip" class="el-upload__tip">导入规则：请先下载导入模板，在模板中按要求填写客户信息，然后上传该文件</div>
                             </el-upload>
                             <el-button class="download_btn" @click="handleDownload">下载导入模板</el-button>
                         </div>
@@ -129,16 +129,17 @@ export default {
             this.importUrl = res.data.url;
         },
         beforeAvatarUpload(file) {
-            const isCSV = file.type.indexOf('ms-excel') !== -1 || file.type.indexOf('sheet') !== -1;
+            console.log('file',file, file.type);
+            //const isCSV = file.type.indexOf('ms-excel') !== -1 || file.type.indexOf('sheet') !== -1;
             const isLt10M = file.size / 1024 / 1024 < 10;
 
-            if (!isCSV) {
-                this.$message.error('上传模板只能是 .csv或.xsl 格式!');
-            }
+            // if (!isCSV) {
+            //     this.$message.error('上传模板只能是 .csv或.xsl 格式!');
+            // }
             if (!isLt10M) {
                 this.$message.error("上传模板大小不能超过 10MB!");
             }
-            return isLt10M && isCSV;
+            return isLt10M ;
         },
         handleRemove(file) {
             this.importUrl = "";
