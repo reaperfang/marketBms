@@ -120,7 +120,7 @@
             </div>
         </div>
         <div class="c_mid" style="border-bottom: none">
-            <p>交易统计：<span style="color: #b9b9b9">（当前交易统计只统计微信支付成功的订单，不包含余额支付以及货到付款订单）</span></p>
+            <p>交易统计：<span style="color: #b9b9b9">（当前交易统计只统计微信支付和余额支付成功的订单，不包含货到付款订单）</span></p>
             <div class="assets">
                 <div class="assets_item">
                     <p>最近下单时间</p>
