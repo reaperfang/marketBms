@@ -129,7 +129,6 @@ export default {
             this.importUrl = res.data.url;
         },
         beforeAvatarUpload(file) {
-            console.log('file',file, file.type);
             //const isCSV = file.type.indexOf('ms-excel') !== -1 || file.type.indexOf('sheet') !== -1;
             const isLt10M = file.size / 1024 / 1024 < 10;
 
@@ -253,7 +252,7 @@ export default {
                 display: inline-block;
                 width: 202px;
                 .upload-block{
-                    width: 300px;
+                    width: 500px;
                 }
                 .download_btn{
                     position: absolute;
