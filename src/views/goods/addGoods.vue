@@ -1026,6 +1026,15 @@ export default {
         submitGoods(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    if(this.ruleForm.other) {
+                        if(/\s+/.test(this.ruleForm.otherUnit)) {
+                            this.$message({
+                                message: '单位计量不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    }
                     let params
                     let _goodsInfos
                     let obj = {
@@ -1035,6 +1044,14 @@ export default {
                     }
 
                     let calculationWay
+
+                    if(/\s+/.test(this.ruleForm.name)) {
+                        this.$message({
+                            message: '商品名称不能为空',
+                            type: 'warning'
+                        });
+                        return
+                    }
                     
                     if(this.ruleForm.isFreeFreight == 0) {
                         let id = this.ruleForm.freightTemplateId

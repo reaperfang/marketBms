@@ -16,7 +16,7 @@
         <div class="input_wrap">
           <el-input
             placeholder="请输入调整数值"
-            v-model="adjustmentScore"
+            v-model.trim="adjustmentScore"
             @blur="handleBlur"
             @keyup.native="number($event,adjustmentScore,'adjustmentScore')"
           ></el-input>
@@ -28,7 +28,7 @@
           <span style="color:red">*</span>变更原因：
         </span>
         <div class="input_wrap2 fl">
-          <el-input placeholder="请输入变更原因" v-model="remark" type="textarea" :row="3" :maxlength="50"></el-input>
+          <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50"></el-input>
         </div>
       </div>
     </div>

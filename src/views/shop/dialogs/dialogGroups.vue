@@ -2,7 +2,7 @@
   <DialogBase :visible.sync="visible" width="500px" :title="'分组'" :showFooter="false">
     <el-form ref="form" :rules="rules" :model="form" label-width="100px">
         <el-form-item label="分组名称：" prop="groupName">
-           <el-input v-model="form.groupName" class="w250"></el-input>
+           <el-input v-model.trim="form.groupName" class="w250"></el-input>
         </el-form-item>
          <el-form-item  class="dialog-footer">
             <el-button type="primary" @click="submit('form')">确 认</el-button>

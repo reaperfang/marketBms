@@ -438,8 +438,8 @@ export default {
         this.form.totalDealMoneyMax = "";
         this.form.dealTimesMax = "";
         this.form.perUnitPriceMax = "";
-        this.form.becameCustomerTimeEnd = "";
-        this.form.lastPayTimeEnd = "";
+        this.becameCustomerTime = "";
+        this.lastPayTime = "";
         this.newForm = {};
     }
   },

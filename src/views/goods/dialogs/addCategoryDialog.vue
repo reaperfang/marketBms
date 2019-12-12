@@ -133,6 +133,14 @@ export default {
                 if (valid) {
                     let param = Object.assign({}, this.basicForm)
 
+                    if(/\s+/.test(this.basicForm.name)) {
+                        this.$message({
+                            message: '分类名称不能为空',
+                            type: 'warning'
+                        });
+                        return
+                    }
+
                     if(this.data.add) {
                         // 新增
                         if(this.data.level === 0) { 

@@ -4,7 +4,7 @@
         <h1>基本信息</h1>
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <el-form-item label="商户名称:" prop="shopName">
-                <el-input v-model="form.shopName" style="width:200px;"></el-input>
+                <el-input v-model.trim="form.shopName" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="主营类目:">
               {{form.business}}

@@ -7,4 +7,3 @@ module.exports = {
 	staticHost: 'https://test-m-aiyouyi.yun300.cn/',
 	UPLOAD_SERVER:'"http://omo.aiyouyi.cn"',
 }
-

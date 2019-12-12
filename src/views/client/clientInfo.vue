@@ -26,7 +26,7 @@
                     <el-form ref="form">
                         <el-form-item label="姓名：">
                             <div class="input_wrap">
-                                <el-input v-model="clientInfoById.memberName" placeholder="请输入名字"></el-input>
+                                <el-input v-model.trim="clientInfoById.memberName" placeholder="请输入名字"></el-input>
                             </div>
                         </el-form-item>
                         <el-form-item label="姓别：">
@@ -52,7 +52,7 @@
                         </el-form-item> -->
                         <el-form-item label="邮箱：">
                             <div class="input_wrap">
-                                <el-input v-model="clientInfoById.email" placeholder="请输入邮箱"></el-input>
+                                <el-input v-model.trim="clientInfoById.email" placeholder="请输入邮箱"></el-input>
                             </div>
                         </el-form-item>
                         <el-form-item label="地区：">
@@ -62,7 +62,7 @@
                         </el-form-item>
                         <el-form-item>
                             <div class="input_wrap">
-                                <el-input v-model="clientInfoById.address" placeholder="详细地址"></el-input>
+                                <el-input v-model.trim="clientInfoById.address" placeholder="详细地址"></el-input>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -120,7 +120,7 @@
             </div>
         </div>
         <div class="c_mid" style="border-bottom: none">
-            <p>交易统计：<span style="color: #b9b9b9">（当前交易统计只统计微信支付成功的订单，不包含余额支付以及货到付款订单）</span></p>
+            <p>交易统计：<span style="color: #b9b9b9">（当前交易统计只统计微信支付和余额支付成功的订单，不包含货到付款订单）</span></p>
             <div class="assets">
                 <div class="assets_item">
                     <p>最近下单时间</p>

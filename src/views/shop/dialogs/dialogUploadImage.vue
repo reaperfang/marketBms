@@ -101,7 +101,8 @@ export default {
           fileGroupInfoId:this.form.groupValue,
           data:[
             {
-              fileName:this.fileData.original,
+              // fileName:this.fileData.original,
+              fileName:'文件上传',
               filePath:this.fileData.url,
               imgPixelWidth:this.fileData.width,
               imgPixelHeight:this.fileData.height,
