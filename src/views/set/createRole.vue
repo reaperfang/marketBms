@@ -27,7 +27,7 @@
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item class="mtb200">
-                <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+                <el-button type="primary" @click="onSubmit('form')" v-loading="loading">保存</el-button>
                 <el-button @click="_routeTo('roleManage')">返回</el-button>
             </el-form-item>
         </el-form>
@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      loading:false,
       form: {
           roleName:'',
           roleDesc: '',
@@ -162,24 +163,28 @@ export default {
 
     //新建角色
     onSubmit(formName){
+        this.loading = true
         this.$refs[formName].validate((valid) => {
         if (valid) {
             let roleName = this.roleInfo && this.roleInfo.roleName
             let msg = roleName ? '修改成功！' : '添加成功！'
             if(this.form.shops.length){
                 this._apis.set.newRole(this.form).then(response =>{
+                    this.loading = false
                     this.$notify.success({
                         title: '成功',
                         message: msg
                     });
                     this.$router.push({path:'roleManage'})
                 }).catch(error =>{
+                    this.loading = false
                     this.$notify.error({
                         title: '错误',
                         message: error
                     });
                 })
             }else{
+                this.loading = false
                 this.$notify.warning({
                     title: '提示',
                     message: '创建没有店铺权限的角色无效！'

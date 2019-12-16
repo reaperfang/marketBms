@@ -110,7 +110,7 @@
             </el-form-item>
         </div>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '交易设置', '售后相关', '保存']">保存</el-button>
+            <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '交易设置', '售后相关', '保存']" v-loading="loading">保存</el-button>
         </el-form-item>
     </el-form>
   </div>     
@@ -121,6 +121,7 @@ export default {
   name: 'afterSale',
   data() {
     return {
+      loading:false,
       currentTab: 'afterSale',
       form: {
             memberAutoConfirmReceive: '',
@@ -193,6 +194,7 @@ export default {
     },
 
     onSubmit(formName){
+      this.loading = true
       this.$refs[formName].validate((valid) => {
           if (valid) {
             this.afterSale()
@@ -211,9 +213,10 @@ export default {
           invoiceOpen:this.form.invoiceOpen,
         }
         this._apis.set.updateShopInfo(data).then(response =>{
+          this.loading = false
           this.logistics()
         }).catch(error =>{
-
+          this.loading = false
       })
     },
     logistics(){

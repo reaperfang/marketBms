@@ -72,7 +72,7 @@
             </el-form-item>
              -->
             <el-form-item label-width="180px">
-                <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+                <el-button type="primary" @click="onSubmit('form')" v-loading="loading">保存</el-button>
                 <el-button  @click="_routeTo('payType')">返回</el-button>
             </el-form-item>
         </el-form>
@@ -85,6 +85,7 @@ export default {
   name: 'wxSet',
   data() {
     return {
+      loading:false,
       form: {
           appId: '',
           mpAppId:'',
@@ -198,6 +199,7 @@ export default {
     },
 
     onSubmit(formName){
+      this.loading = true
       this.$refs[formName].validate((valid) => {
         if (valid && this.form.appId || this.form.mpAppId) {
           this.id ? this.updateShopPayInfo() : this.addShopPayInfo()
@@ -234,6 +236,7 @@ export default {
         param:JSON.stringify(param)
       }
       this._apis.set.updateShopPayInfo(query).then(response =>{
+        this.loading = false
         this.updateWechatBinding()
         this.$notify.success({
           title: '成功',
@@ -241,6 +244,7 @@ export default {
         });
         this.getShopPayInfo()
       }).catch(error =>{
+        this.loading = false
         this.$notify.error({
           title: '错误',
           message: error
@@ -274,6 +278,7 @@ export default {
         param:JSON.stringify(param)
       }
       this._apis.set.addShopPayInfo(query).then(response =>{
+        this.loading = false
         this.updateWechatBinding()
         this.$notify.success({
           title: '成功',
@@ -281,6 +286,7 @@ export default {
         });
         this.getShopPayInfo()
       }).catch(error =>{
+        this.loading = false
         this.$notify.error({
           title: '错误',
           message: error

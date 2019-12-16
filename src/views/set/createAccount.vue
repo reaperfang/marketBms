@@ -37,7 +37,7 @@
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item class="mtb100">
-                <el-button type="primary" @click.native.prevent="onSubmit('form')">保存</el-button>
+                <el-button type="primary" @click.native.prevent="onSubmit('form')" v-loading="loading">保存</el-button>
                 <el-button @click="_routeTo('subaccountManage')">返回</el-button>
             </el-form-item>
         </el-form>
@@ -61,6 +61,7 @@ export default {
       }
     }
     return {
+      loading:false,
       form: {
           userName: '',
           mobile: '',
@@ -180,6 +181,7 @@ export default {
     },
     //保存
     onSubmit(formName){
+      this.loading = true
       this.$refs[formName].validate((valid) => {
         if (valid) {
         let id = this.accountInfo && this.accountInfo.id
@@ -196,16 +198,18 @@ export default {
                shopInfoIds:this.form.shopInfoIds
            } 
            this._apis.set.editSubAccount(query).then(response =>{
-                this.$notify.success({
-                    title: '成功',
-                    message: '修改成功！'
-                });
-                this.$router.push({path:'subaccountManage'})
+              this.loading = false
+              this.$notify.success({
+                  title: '成功',
+                  message: '修改成功！'
+              });
+              this.$router.push({path:'subaccountManage'})
             }).catch(error =>{
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+              this.loading = false
+              this.$notify.error({
+                  title: '错误',
+                  message: error
+              });
             }) 
         }else{//新建子账号
             let query = {
@@ -218,16 +222,18 @@ export default {
                shopInfoIds:this.form.shopInfoIds
            } 
             this._apis.set.newSubAccount(query).then(response =>{
-                this.$notify.success({
-                    title: '成功',
-                    message: '添加成功！'
-                });
-                this.$router.push({path:'subaccountManage'})
+              this.loading = false
+              this.$notify.success({
+                  title: '成功',
+                  message: '添加成功！'
+              });
+              this.$router.push({path:'subaccountManage'})
             }).catch(error =>{
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+              this.loading = false
+              this.$notify.error({
+                  title: '错误',
+                  message: error
+              });
             })
         }
         }

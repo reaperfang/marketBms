@@ -42,7 +42,7 @@
           </el-form-item>
         </div>
         <el-form-item class="save">
-          <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '提现设置', '默认页面', '保存']">保存</el-button>
+          <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '提现设置', '默认页面', '保存']" v-loading="loading">保存</el-button>
         </el-form-item>
       </el-form>
     </div>    
@@ -53,6 +53,7 @@ export default {
   name: 'withdrawSet',
   data() {
     return {
+      loading:false,
       form:{
         cashOut:0,
         cashOutUpper:0,
@@ -100,6 +101,7 @@ export default {
     },
 
     onSubmit(formName){
+      this.loading = true
       this.$msgbox({
         title: '确认提示',
         message: '请确认开通了【商户支付】功能，否则将可能会产生相关客诉，因此产生的法律风险商家需要自行承担',
@@ -151,11 +153,13 @@ export default {
               }else{
                 let data = Object.assign({id:id},this.form)
                 this._apis.set.updateShopInfo(data).then(response =>{
+                  this.loading = false
                   this.$notify.success({
                     title: '成功',
                     message: '保存成功！'
                   });
                 }).catch(error =>{
+                  this.loading = false
                   this.$notify.error({
                     title: '错误',
                     message: error
