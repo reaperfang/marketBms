@@ -63,7 +63,7 @@
       </div>
       <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -147,7 +147,8 @@ export default {
       distinguish: null,
       total: 0,
       pageSize: 10,
-      startIndex: 1
+      startIndex: 1,
+      btnLoading: false
     };
   },
   methods: {
@@ -170,6 +171,7 @@ export default {
       this.getSkuList(val, this.pageSize);
     },
     submit() {
+      this.btnLoading = true;
       let params;
       if (this.enable) {
         params = { 
@@ -198,6 +200,7 @@ export default {
         }
       }
       if (this.enable && !params.sceneRule.isAllProduct && this.selectProducts.length == 0) {
+        this.btnLoading = false;
         this.$notify({
           title: "警告",
           message: "请选择指定产品",
@@ -207,6 +210,7 @@ export default {
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
+            this.btnLoading = false;
             this.visible = false;
             this.$notify({
               title: "成功",
@@ -216,6 +220,7 @@ export default {
             this.$emit('refreshPage')
           })
           .catch(error => {
+            this.btnLoading = false;
             this.visible = false;
             console.log(error);
           });

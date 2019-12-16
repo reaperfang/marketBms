@@ -20,7 +20,7 @@
     </div>
     <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -38,11 +38,13 @@ export default {
       coupon:"",
       selectList: [
         {couponNum: 1,appCouponId:"",memberId:this.data.id,receiveType:"1",receiveActivityId:"1",weChartNickname: this.data.weChartNickname}
-      ]
+      ],
+      btnLoading: false
     };
   },
   methods: {
     submit() {
+      this.btnLoading = true;
       let canSubmit = true;
       this.selectList.map((v) => {
         if(v.appCouponId == "") {
@@ -53,6 +55,7 @@ export default {
         this._apis.client.distributeCoupon(this.selectList).then((response) => {
           response.map((v) => {
             if(!!v.receiveDesc) {
+              this.btnLoading = false;
               this.visible = false;
               let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
               this.$notify({
@@ -61,6 +64,7 @@ export default {
                 type: 'warning'
               });
             }else{
+              this.btnLoading = false;
               this.visible = false;
               this.$notify({
                 title: '成功',
@@ -71,10 +75,12 @@ export default {
             }
           })
         }).catch((error) => {
+          this.btnLoading = false;
           this.visible = false;
           console.log(error);
         })
       }else{
+        this.btnLoading = false;
         this.$notify({
             title: '警告',
             message: '请正确选择优惠码',

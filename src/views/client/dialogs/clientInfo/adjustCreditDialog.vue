@@ -34,7 +34,7 @@
     </div>
     <div>
       <span slot="footer" class="dialog-footer fcc">
-        <el-button type="primary" @click="submit">确 认</el-button>
+        <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
         <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
       </span>
     </div>
@@ -50,7 +50,8 @@ export default {
     return {
       hasCancel: true,
       adjustmentScore: null,
-      remark: ""
+      remark: "",
+      btnLoading: false
     };
   },
   methods: {
@@ -60,7 +61,9 @@ export default {
       this[ele] = val;
     },
     submit() {
+      this.btnLoading = true;
       if (this.adjustmentScore == null) {
+        this.btnLoading = false;
         this.$notify({
           title: "警告",
           message: "请输入调整数值",
@@ -70,12 +73,14 @@ export default {
         Number(this.data.score) == 0 &&
         Number(this.adjustmentScore) < 0
       ) {
+        this.btnLoading = false;
         this.$notify({
           title: "警告",
           message: "当前积分为0时不能输入负数",
           type: "warning"
         });
       } else if (this.remark == "") {
+        this.btnLoading = false;
         this.$notify({
           title: "警告",
           message: "请输入变更原因",
@@ -92,6 +97,7 @@ export default {
         this._apis.client
           .manualChangeCredit(params)
           .then(response => {
+            this.btnLoading = false;
             this.visible = false;
             this.$notify({
               title: "成功",
@@ -101,6 +107,7 @@ export default {
             this.$emit("refreshPage");
           })
           .catch(error => {
+            this.btnLoading = false;
             this.visible = false;
             console.log(error);
           });

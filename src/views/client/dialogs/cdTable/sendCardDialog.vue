@@ -14,7 +14,7 @@
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -31,11 +31,13 @@ export default {
             hasCancel: true,
             tags: [],
             checkList: [],
-            labels: ""
+            labels: "",
+            btnLoading: false
         }
     },
     methods: {
         submit() {
+            this.btnLoading = true;
             let tagIds = [];
             if(this.checkList.length !== 0) {
                 this.checkList.map((v) => {
@@ -54,12 +56,14 @@ export default {
                 }
                 this._apis.client.sendCard(params).then((response) => {
                     this.visible = false;
+                    this.btnLoading = false;
                     this.$notify({
                         title: '成功',
                         message: '发卡成功',
                         type: 'success'
                     });
                 }).catch((error) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     this.$notify.info({
                         title: '提示',
@@ -67,6 +71,7 @@ export default {
                     });
                 })
             }else{
+                this.btnLoading = false;
                 this.$notify.info({
                     title: '提示',
                     message: '请选择标签'

@@ -34,7 +34,7 @@
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -59,7 +59,8 @@ export default {
             codeId: "",
             allCoupons: [],
             allCodes: [],
-            canSubmit: true
+            canSubmit: true,
+            btnLoading: false
         }
     },
     methods: {
@@ -100,6 +101,7 @@ export default {
             }
         },
         submit() {
+            this.btnLoading = true;
             this.canSubmit = true;
             let params = {};
             let blackListMapDtos = [];
@@ -107,6 +109,7 @@ export default {
             let couponIdList2 = [];
             if(this.checkCoupon) {
                 if(this.couponIds[0].id.length == 0) {
+                    this.btnLoading = false;
                     this.$notify({
                         title: '警告',
                         message: '请选择优惠券',
@@ -137,6 +140,7 @@ export default {
             }
             if(this.checkCode) {
                 if(this.codeIds[0].id.length == 0) {
+                    this.btnLoading = false;
                     this.$notify({
                         title: '警告',
                         message: '请选择优惠码',
@@ -178,6 +182,7 @@ export default {
             params.memberInfoId = this.data.id;
             params.blackListMapDtos = [].concat(blackListMapDtos);
             if(!this.canSubmit || params.blackListMapDtos.length == 0) {
+                this.btnLoading = false;
                 this.$notify({
                     title: '警告',
                     message: '请选择禁用选项',
@@ -201,6 +206,7 @@ export default {
                     })
                 }
                 this._apis.client.addToBlack(params).then((response) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     this.$notify({
                         title: '成功',
@@ -209,6 +215,7 @@ export default {
                     });
                     this.$emit('refreshPage');
                 }).catch((error) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     console.log(error);
                 })

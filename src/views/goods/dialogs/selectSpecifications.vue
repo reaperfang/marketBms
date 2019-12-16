@@ -81,6 +81,13 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
         }).then(({ value }) => {
+            if(/\s+/.test(value)) {
+                this.$message({
+                    message: '规格名称不能为空',
+                    type: 'warning'
+                });
+                return
+            }
             if(this.data.find(val => val.name == value)) {
                 this.$message({
                 message: '规格名称重复',
@@ -139,6 +146,13 @@ export default {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
         }).then(({ value }) => {
+            if(/\s+/.test(value)) {
+                this.$message({
+                    message: '规格值不能为空',
+                    type: 'warning'
+                });
+                return
+            }
             if(data.list.find(val => val.name == value)) {
                 this.$message({
                 message: '规格值重复',

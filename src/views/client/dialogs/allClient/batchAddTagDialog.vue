@@ -10,7 +10,7 @@
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -26,11 +26,13 @@ export default {
         return {
             hasCancel: true,
             checkedItems:[],
-            tagList:[]
+            tagList:[],
+            btnLoading: false
         }
     },
     methods: {
         submit() {
+            this.btnLoading = true;
             let memberLabelInfoIds = [];
             if(this.checkedItems.length > 0) {
                 this.tagList.map((item) => {
@@ -49,6 +51,7 @@ export default {
             memberInfoIds = memberInfoIds.join(',');
             if(memberLabelInfoIds.length > 0) {
                 this._apis.client.batchMarkLabel({memberInfoIds,memberLabelInfoIds}).then((response) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     this.$notify({
                         title: '成功',
@@ -56,10 +59,12 @@ export default {
                         type: 'success'
                     });
                 }).catch((error) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     console.log(error);
                 })
             }else{
+                this.btnLoading = false;
                 this.$notify({
                     title: '警告',
                     message: '请选择标签',

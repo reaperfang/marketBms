@@ -103,6 +103,13 @@ export default {
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if(/\s+/.test(this.ruleForm.name)) {
+              this.$message({
+                  message: '标签名称不能为空',
+                  type: 'warning'
+              });
+              return
+          }
           if(this.data.editor) {
             this.editor()
           } else {

@@ -8,7 +8,7 @@
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -23,12 +23,15 @@ export default {
     data() {
         return {
             hasCancel: true,
-            channerlName:""
+            channerlName:"",
+            btnLoading: false
         }
     },
     methods: {
         submit() {
+            this.btnLoading = true;
             if(this.channerlName == "") {
+                this.btnLoading = false;
                 this.$notify({
                     title: '警告',
                     message: '请输入渠道名称',
@@ -36,6 +39,7 @@ export default {
                 });
             }else{
                 this._apis.client.addChannel({channerlName: this.channerlName}).then((response) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     this.$notify({
                         title: '成功',
@@ -45,6 +49,7 @@ export default {
                     this.$emit('refreshPage')
                 }).catch((error) => {
                     //为了验证渠道重名的情况，打开此错误提示
+                    this.btnLoading = false;
                     this.visible = false;
                     this.$notify.error({
                         title: '错误',

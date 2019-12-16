@@ -12,7 +12,7 @@
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -28,11 +28,13 @@ export default {
         return {
             hasCancel: true,
             selectLevel:"",
-            levelList: []
+            levelList: [],
+            btnLoading: false
         }
     },
     methods: {
         submit() {
+            this.btnLoading = true;
             if(this.selectLevel.length > 0) {
                 let levelInfoId, levelInfoName;
                 this.levelList.map((v) => {
@@ -43,6 +45,7 @@ export default {
                 });
                 let params = {importRecordId: this.data.id, levelInfoId: levelInfoId, levelName: levelInfoName};
                 this._apis.client.modifyImportIdentity(params).then((response) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     this.$notify({
                         title: '成功',
@@ -50,10 +53,12 @@ export default {
                         type: 'success'
                     });
                 }).catch((error) => {
+                    this.btnLoading = false;
                     this.visible = false;
                     console.log(error);
                 })
             }else{
+                this.btnLoading = false;
                 this.$notify({
                     title: '警告',
                     message: '请选择用户等级',

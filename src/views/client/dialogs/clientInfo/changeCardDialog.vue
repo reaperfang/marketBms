@@ -12,7 +12,7 @@
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
                 <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
             </span>
         </div>
@@ -29,11 +29,13 @@ export default {
             hasCancel: true,
             selectLevel:"",
             levelList: [],
-            canSubmit: true
+            canSubmit: true,
+            btnLoading: false
         }
     },
     methods: {
         submit() {
+            this.btnLoading = true;
             if(this.canSubmit) {
                 if(this.selectLevel.length > 0 ) {
                     let levelInfoId, levelInfoName;
@@ -45,6 +47,7 @@ export default {
                     });
                     let params = {memberInfoId: this.data.id, cardLevelInfoId: levelInfoId, name: levelInfoName};
                     this._apis.client.cardChange(params).then((response) => {
+                        this.btnLoading = false;
                         this.$emit('refreshPage');
                         this.visible = false;
                         this.$notify({
@@ -53,10 +56,12 @@ export default {
                             type: 'success'
                         });
                     }).catch((error) => {
+                        this.btnLoading = false;
                         this.visible = false;
                         console.log(error);
                     })
                 }else{
+                    this.btnLoading = false;
                     this.$notify({
                         title: '警告',
                         message: '请选择用户等级',

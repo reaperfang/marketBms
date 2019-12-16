@@ -19,7 +19,7 @@
     </div>
     <div>
       <span slot="footer" class="dialog-footer fcc">
-          <el-button type="primary" @click="submit">确 认</el-button>
+          <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
           <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
       </span>
     </div>
@@ -35,18 +35,22 @@ export default {
     return {
       hasCancel: true,
       adjustmentBalance: null,
-      remark: ""
+      remark: "",
+      btnLoading: false
     };
   },
   methods: {
     submit() {
+      this.btnLoading = true;
       if(Number(this.adjustmentBalance) <= 0 || this.adjustmentBalance == "") {
+        this.btnLoading = false;
         this.$notify({
           title: '警告',
           message: '请输入增加余额, 且不能为0或负数',
           type: 'warning'
         });
       }else if(this.remark == "") {
+        this.btnLoading = false;
         this.$notify({
           title: '警告',
           message: '请输入变更原因',
@@ -61,6 +65,7 @@ export default {
           remark: this.remark
         }
         this._apis.client.manualChangeBalance(params).then((response) => {
+          this.btnLoading = false;
           this.visible = false;
           this.$notify({
             title: '成功',
@@ -69,6 +74,7 @@ export default {
           });
           this.$emit('refreshPage');
         }).catch((error) => {
+          this.btnLoading = false;
           this.visible = false;
           console.log(error);
         })
