@@ -31,7 +31,7 @@ export default {
 .componentHelpBlank {
   & > .help_blank {
     width: 100%;
-    background: #fff;
+    // background: #fff;
   }
 }
 </style>
