@@ -123,7 +123,7 @@
             </el-form-item>
         </div>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '交易设置', '售前相关', '保存']">保存</el-button>
+            <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '交易设置', '售前相关', '保存']" v-loading="loading">保存</el-button>
         </el-form-item>
     </el-form>
   </div>     
@@ -134,6 +134,7 @@ export default {
   name: 'preSale',
   data() {
     return {
+      loading:false,
       currentTab: 'preSale',
       form: {
             autoCancelUnpayOrder: '',
@@ -193,6 +194,7 @@ export default {
     },
 
     onSubmit(formName){
+      this.loading = true
       this.$refs[formName].validate((valid) => {
           if (valid) {
             let id = this.cid
@@ -206,11 +208,13 @@ export default {
               oasType:this.form.oasType
             }
             this._apis.set.updateShopInfo(data).then(response =>{
+              this.loading = false
               this.$notify.success({
                 title: '成功',
                 message: '保存成功！'
               });
             }).catch(error =>{
+              this.loading = false
               this.$notify.error({
                 title: '错误',
                 message: error

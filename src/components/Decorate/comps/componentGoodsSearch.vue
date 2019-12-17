@@ -1,7 +1,7 @@
 <template>
 <!-- 组件-公用搜索框 -->
-    <div class="componentGoodsSearch" style="z-index:4;" v-if="currentComponentData && currentComponentData.data">
-        <div class="inputBox" :class="[{'textPosition':textPosition!=1},{'borderStyle':borderStyle!=1}]" :style="[{background:backgroundColor},{height:borderHeight+'px'},{border:'1px solid'+borderColor},{color:fontColor}]">
+    <div class="componentGoodsSearch" style="z-index:4;" :style="[{background:backgroundColor}]" v-if="currentComponentData && currentComponentData.data">
+        <div class="inputBox" :class="[{'textPosition':textPosition!=1},{'borderStyle':borderStyle!=1}]" :style="[{background:borderColor},{height:borderHeight+'px'},{border:'1px solid'+borderColor},{color:fontColor}]">
             <img src="@/assets/images/shop/fdj.png" class="fdj" />
             <p :style="{color:fontColor}">{{hotWords[0]}}</p>
         </div>
@@ -9,7 +9,7 @@
             <img src="@/assets/images/shop/notice.png" alt="消息">
             <span></span>
         </div> -->
-        <p class="searchButton">搜索</p>
+        <!-- <p class="searchButton">搜索</p> -->
         <div class="gwcIcon" v-if="shoppingCartBtn==1">
             <img src="@/assets/images/shop/gwcIcon2.png" alt="">
         </div>

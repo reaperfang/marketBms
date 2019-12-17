@@ -42,17 +42,17 @@
       <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#f2f2f2"></colorPicker >
+          <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#ffffff"></colorPicker >
           <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
-      <el-form-item label="框体颜色" prop="borderColor">
+      <!-- <el-form-item label="框体颜色" prop="borderColor">
         <div class="color_block">
           <el-input v-model="ruleForm.borderColor" :disabled="true"></el-input>
           <colorPicker  v-model="ruleForm.borderColor" defaultColor="#ffffff"></colorPicker >
-          <!-- <el-button type="text">重置</el-button> -->
+          <el-button type="text">重置</el-button>
         </div>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="文字颜色" prop="fontColor">
         <div class="color_block">
           <el-input v-model="ruleForm.fontColor" :disabled="true"></el-input>
@@ -98,8 +98,9 @@ export default {
         hotWords: [],//热词列表
         borderStyle: 2,//框体样式
         borderHeight: 40,//框体高度
-        backgroundColor: '#f2f2f2',//背景颜色
-        borderColor: '#ffffff',//框体颜色
+        backgroundColor: '#ffffff',//背景颜色
+        // borderColor: '#ffffff',//框体颜色
+        borderColor: '#eff1f0',//框体颜色
         fontColor: 'rgb(153,153,153)',//文字颜色
         textPosition: 1,//文本位置
         shoppingCartBtn: 1,//购物车按钮显示	
