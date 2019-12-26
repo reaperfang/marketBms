@@ -22,6 +22,12 @@
               <el-radio :label="1">直角</el-radio>
               <el-radio :label="2">圆角</el-radio>
             </el-radio-group>
+          </el-form-item> 
+          <el-form-item label="搜索样式" prop="searchStyle">
+             <el-radio-group v-model="ruleForm.searchStyle">
+              <el-radio :label="1">方形</el-radio>
+              <el-radio :label="2">圆形</el-radio>
+            </el-radio-group>
           </el-form-item>
         </div>
 
@@ -76,7 +82,8 @@ export default {
         groupFont: 1,  //分类字体
         groupImg: 1,  //图片圆角
         pageMargin: 15,  //页面边距
-        groupMargin: 20  //分类间距
+        groupMargin: 20,  //分类间距
+        searchStyle: 2  //搜索框样式  1方形  2圆形
       },
       rules: {},
       bodyHeight: {},  //装修区高度
@@ -88,6 +95,9 @@ export default {
     data:{
       handler(newValue) {
         this.ruleForm = newValue;
+        // if(!this.ruleForm['searchStyle']) {
+        //   this.ruleForm['searchStyle'] = 2;
+        // }
         this.getQrcode();
       },
       deep: true

@@ -30,6 +30,8 @@ export default {
       }
       else if(this.decorationStyle==6){
         this.buttonStyle='buttonStyle' + this.decorationStyle + ' iconfont icon-gouwuche2';
+      }else if(this.decorationStyle==9){
+        this.buttonStyle='buttonStyle' + this.decorationStyle + ' iconfont';
       }
     }
   },
@@ -123,5 +125,13 @@ export default {
   color:#FF4444;
   min-width:40px;
   height:24px;
+}
+.componentButton.buttonStyle9{
+  @include borderRadius(50%);
+  color:#fff;
+  &:before{
+    font-size:17px;
+  }
+  background:url('../../../assets/images/shop/guibocui-btn.png') no-repeat 0 0;
 }
 </style>

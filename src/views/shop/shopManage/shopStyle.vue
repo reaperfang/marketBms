@@ -1,6 +1,6 @@
 <template>
   <div class="shop_style_wrapper">
-    <h3>风格配色</h3>
+    <h3>风格配色<span class="tips">设置成功后将替换小程序和公众号现有风格（全部页面）</span></h3>
     <div class="style_btns">
       <span>选择店铺整体配色： </span>
       <ul class="style_list" ref="styleList">
@@ -88,6 +88,10 @@ export default {
         {
           type: 12,
           colors: ['rgba(136,76,255,1)', 'rgba(239,230,255,1)', 'rgba(255,255,255,1)'],
+        }, 
+        {
+          type: 13,
+          colors: ['#00555D', '#D6A48A', 'rgba(255,255,255,1)'],
         }
       ],
       selectedItem: null  //当前选中的样式
@@ -160,6 +164,11 @@ export default {
   height: 100%;
   h3{
     margin-bottom:20px;
+    .tips{
+      font-size:14px;
+      color:red;
+      margin-left:20px;
+    }
   }
   .style_btns{
     display:flex;
