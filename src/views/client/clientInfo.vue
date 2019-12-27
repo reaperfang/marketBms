@@ -10,8 +10,8 @@
             <div class="c_top_m fl">
                 <p style="margin-top: 0">客户ID: <span>{{clientInfoById.memberSn}}</span></p>
                 <p>微信公众号关注状态: <span>已关注</span></p>
-                <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p>
-                <p>手机号: <span>{{clientInfoById.phone}}</span></p>
+                <!-- <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p> -->
+                <!-- <p>手机号: <span>{{clientInfoById.phone}}</span></p> -->
                 <p>客户渠道: <span>{{clientInfoById.channelName}}</span></p>
                 <p>成为客户时间: <span>{{clientInfoById.becameCustomerTime}}</span></p>
                 <p>成为会员时间: <span>{{clientInfoById.becameMemberTime}}</span></p>
@@ -20,52 +20,15 @@
             <div class="c_top_r fl">
                 <div class="c_title">
                     个人资料
-                    <el-button size="mini" class="btn" @click="saveInfo">保存</el-button>
+                    <!-- <el-button size="mini" class="btn" @click="saveInfo">保存</el-button> -->
                 </div>
                 <div class="form_container">
-                    <el-form ref="form">
-                        <el-form-item label="姓名：">
-                            <div class="input_wrap">
-                                <el-input v-model.trim="clientInfoById.memberName" placeholder="请输入名字"></el-input>
-                            </div>
-                        </el-form-item>
-                        <el-form-item label="姓别：">
-                            <div class="input_wrap">
-                                <el-radio v-model="clientInfoById.sex" label="1">男</el-radio>
-                                <el-radio v-model="clientInfoById.sex" label="2">女</el-radio>
-                                <el-radio v-model="clientInfoById.sex" label="0">未知</el-radio>
-                            </div>
-                        </el-form-item>
-                        <el-form-item label="生日：">
-                            <div class="input_wrap">
-                                <el-date-picker
-                                    v-model="clientInfoById.birthday"
-                                    type="date"
-                                    placeholder="请选择日期">
-                                </el-date-picker>
-                            </div>
-                        </el-form-item>
-                        <!-- <el-form-item label="微信号：">
-                            <div class="input_wrap">
-                                <el-input v-model="clientInfoById.wechatSn" placeholder="请输入微信号"></el-input>
-                            </div>
-                        </el-form-item> -->
-                        <el-form-item label="邮箱：">
-                            <div class="input_wrap">
-                                <el-input v-model.trim="clientInfoById.email" placeholder="请输入邮箱"></el-input>
-                            </div>
-                        </el-form-item>
-                        <el-form-item label="地区：">
-                            <div class="input_wrap">
-                                <area-cascader :level="1" :data='$pcaa' v-model='clientInfoById.selected' size="large" type="all"></area-cascader>
-                            </div>
-                        </el-form-item>
-                        <el-form-item>
-                            <div class="input_wrap">
-                                <el-input v-model.trim="clientInfoById.address" placeholder="详细地址"></el-input>
-                            </div>
-                        </el-form-item>
-                    </el-form>
+                    <p>昵称：<span>{{clientInfoById.nickName}}</span></p>
+                    <p>姓名：<span>{{clientInfoById.memberName}}</span></p>
+                    <p>性别：<span>{{clientInfoById.sex}}</span></p>
+                    <p>爱好：<span>{{clientInfoById.hobby}}</span></p>
+                    <p>手机号：<span>{{clientInfoById.phone}}</span></p>
+                    <p>邮箱：<span>{{clientInfoById.email}}</span></p>
                 </div>  
             </div>
         </div>
@@ -584,6 +547,9 @@ export default {
                     display: inline-block;
                     width: 205px;
                     margin-right: 120px;
+                }
+                p{
+                    margin-bottom: 20px;
                 }
             }
         }
