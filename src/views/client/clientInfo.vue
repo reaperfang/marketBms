@@ -10,8 +10,6 @@
             <div class="c_top_m fl">
                 <p style="margin-top: 0">客户ID: <span>{{clientInfoById.memberSn}}</span></p>
                 <p>微信公众号关注状态: <span>已关注</span></p>
-                <!-- <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p> -->
-                <!-- <p>手机号: <span>{{clientInfoById.phone}}</span></p> -->
                 <p>客户渠道: <span>{{clientInfoById.channelName}}</span></p>
                 <p>成为客户时间: <span>{{clientInfoById.becameCustomerTime}}</span></p>
                 <p>成为会员时间: <span>{{clientInfoById.becameMemberTime}}</span></p>
@@ -20,7 +18,6 @@
             <div class="c_top_r fl">
                 <div class="c_title">
                     个人资料
-                    <!-- <el-button size="mini" class="btn" @click="saveInfo">保存</el-button> -->
                 </div>
                 <div class="form_container">
                     <p>昵称：<span>{{clientInfoById.nickName}}</span></p>

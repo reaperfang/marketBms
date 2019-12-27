@@ -17,7 +17,7 @@
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
             <img v-if="scope.row.headIcon" :src="scope.row.headIcon" alt="" class="headIcon fl">
-            <img v-else src="../../../../assets/images/client/head_default.png" alt="11" class="headIcon fl">
+            <img v-else src="../../../../assets/images/client/head_default.png" alt="" class="headIcon fl">
             <span class="fr">{{scope.row?scope.row.nickName:""}}</span>
           </div>
         </template>
