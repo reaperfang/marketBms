@@ -128,7 +128,7 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectSecondkill from '@/views/shop/dialogs/dialogSelectSecondkill';
+import dialogSelectSecondkill from '@/views/shop/dialogs/decorateDialogs/dialogSelectSecondkill';
 import uuid from 'uuid/v4';
 export default {
   name: 'propertySecondkill',

@@ -127,7 +127,7 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectNyuan from '@/views/shop/dialogs/dialogSelectNyuan';
+import dialogSelectNyuan from '@/views/shop/dialogs/decorateDialogs/dialogSelectNyuan';
 import uuid from 'uuid/v4';
 export default {
   name: 'propertyNyuan',

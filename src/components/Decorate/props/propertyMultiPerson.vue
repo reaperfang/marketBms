@@ -156,8 +156,8 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectMultiPerson from '@/views/shop/dialogs/dialogSelectMultiPerson';
-import dialogMultiPersonDemo from '@/views/shop/dialogs/dialogMultiPersonDemo';
+import dialogSelectMultiPerson from '@/views/shop/dialogs/decorateDialogs/dialogSelectMultiPerson';
+import dialogMultiPersonDemo from '@/views/shop/dialogs/decorateDialogs/dialogMultiPersonDemo';
 import uuid from 'uuid/v4';
 export default {
   name: 'propertyMultiPerson',

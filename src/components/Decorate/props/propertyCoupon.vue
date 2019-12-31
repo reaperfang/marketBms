@@ -65,7 +65,7 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectCoupon from '@/views/shop/dialogs/dialogSelectCoupon';
+import dialogSelectCoupon from '@/views/shop/dialogs/decorateDialogs/dialogSelectCoupon';
 import wxColor from '@/components/Wxcolor';
 export default {
   name: 'propertyCoupon',

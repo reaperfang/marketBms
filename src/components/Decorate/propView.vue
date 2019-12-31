@@ -30,7 +30,7 @@
 
 <script>
 import utils from '@/utils';
-import dialogDecoratePreview from '@/views/shop/dialogs/dialogDecoratePreview';
+import dialogDecoratePreview from '@/views/shop/dialogs/decorateDialogs/dialogDecoratePreview';
 export default {
   name: 'propView', 
   props: {

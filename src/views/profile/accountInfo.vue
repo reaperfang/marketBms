@@ -15,6 +15,9 @@
                     <!-- <el-radio :label="3" class="ml10">保密</el-radio> -->
                 </el-radio-group>
             </el-form-item>
+            <el-form-item label="手机号:" >
+                <el-input v-model="form.mobile" style="width:200px;"></el-input>
+            </el-form-item>
             <el-form-item label="QQ:" >
                 <el-input v-model="form.qq" style="width:200px;"></el-input>
             </el-form-item>
@@ -38,6 +41,7 @@ export default {
           remark:'',
           userName: '',
           sex: 2,
+          mobile:'',
           qq: '',
           email: ''
       },
@@ -79,7 +83,8 @@ export default {
             remark:this.form.remark,
             email:this.form.email,
             qq:this.form.qq,
-            sex:this.form.sex
+            sex:this.form.sex,
+            mobile:this.form.mobile
         }
         this._apis.login.updateUserInfo(query).then(response =>{
             this.$notify.success({

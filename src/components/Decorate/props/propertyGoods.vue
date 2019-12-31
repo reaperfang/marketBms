@@ -135,7 +135,7 @@
 <script>
 import propertyMixin from '../mixins/mixinProps';
 import DialogBase from "@/components/DialogBase";
-import dialogSelectGoods from '@/views/shop/dialogs/dialogSelectGoods';
+import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
 import GOODS_LIST from '@/assets/json/goodsList.json'; 
 import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
