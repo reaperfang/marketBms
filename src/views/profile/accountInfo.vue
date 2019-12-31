@@ -3,10 +3,10 @@
     <div class="main">
         <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="登录账号:" >
-                {{form.mobile}}
+                {{form.userName}}
             </el-form-item>
-            <el-form-item label="昵称:" prop="userName">
-                <el-input v-model="form.userName" style="width:200px;"></el-input>
+            <el-form-item label="昵称:" prop="remark">
+                <el-input v-model="form.remark" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="性别:">
                 <el-radio-group v-model="form.sex">
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       form: {
-          mobile:'',
+          remark:'',
           userName: '',
           sex: 2,
           qq: '',
@@ -76,7 +76,7 @@ export default {
             id:this.form.id,
             userName:this.form.userName,
             userNameOld:this.userNameOld,
-            mobile:this.form.mobile,
+            remark:this.form.remark,
             email:this.form.email,
             qq:this.form.qq,
             sex:this.form.sex
