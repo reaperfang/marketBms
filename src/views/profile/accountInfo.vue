@@ -1,7 +1,7 @@
 /*账号信息 */
 <template>
     <div class="main">
-        <el-form ref="form" :model="form" label-width="120px">
+        <el-form ref="form" :model="form" label-width="120px" v-loading="loading">
             <el-form-item label="登录账号:" >
                 {{form.userName}}
             </el-form-item>
@@ -37,6 +37,7 @@ export default {
   name: 'accountInfo',
   data() {
     return {
+      loading:true,
       form: {
           remark:'',
           userName: '',
@@ -67,7 +68,9 @@ export default {
         this._apis.login.getUserInfo({id:this.userInfo.id}).then(response =>{
             this.userNameOld = response.userName
             this.form = response
+            this.loading = false
         }).catch(error =>{
+            this.loading = false
             this.$notify.error({
                 title: '失败',
                 message: error

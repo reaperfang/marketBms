@@ -83,15 +83,6 @@ class Ajax {
               })
             }
           });
-        }else if(res.status === 'error' && res.code === "10090"){
-          MessageBox.alert('该店铺为延迟开通，请先设置开通！', '提示', {
-            confirmButtonText: '确定',
-            callback: action => {
-              store.dispatch('LogOut').then(() => {
-                location.reload()
-              })
-            }
-          });
         }else if (res.errno === 0) {
           return res.data;
         }else {
