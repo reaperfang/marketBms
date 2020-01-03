@@ -110,7 +110,7 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectJumpPage from '@/views/shop/dialogs/dialogSelectJumpPage';
+import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: 'propertyArticleAD',
