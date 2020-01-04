@@ -753,5 +753,8 @@ table.yuan-table{
     }
   }
 }
+.confirm.alert .el-message-box__btns .el-button:first-child {
+  display: none;
+}
 
 
