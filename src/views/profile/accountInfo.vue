@@ -1,7 +1,7 @@
 /*账号信息 */
 <template>
     <div class="main">
-        <el-form ref="form" :model="form" label-width="120px">
+        <el-form ref="form" :model="form" label-width="120px" v-loading="loading">
             <el-form-item label="登录账号:" >
                 {{form.userName}}
             </el-form-item>
@@ -14,6 +14,9 @@
                     <el-radio :label="2" class="ml10">女</el-radio>
                     <!-- <el-radio :label="3" class="ml10">保密</el-radio> -->
                 </el-radio-group>
+            </el-form-item>
+            <el-form-item label="手机号:" >
+                <el-input v-model="form.mobile" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="QQ:" >
                 <el-input v-model="form.qq" style="width:200px;"></el-input>
@@ -34,10 +37,12 @@ export default {
   name: 'accountInfo',
   data() {
     return {
+      loading:true,
       form: {
           remark:'',
           userName: '',
           sex: 2,
+          mobile:'',
           qq: '',
           email: ''
       },
@@ -63,7 +68,9 @@ export default {
         this._apis.login.getUserInfo({id:this.userInfo.id}).then(response =>{
             this.userNameOld = response.userName
             this.form = response
+            this.loading = false
         }).catch(error =>{
+            this.loading = false
             this.$notify.error({
                 title: '失败',
                 message: error
@@ -79,7 +86,8 @@ export default {
             remark:this.form.remark,
             email:this.form.email,
             qq:this.form.qq,
-            sex:this.form.sex
+            sex:this.form.sex,
+            mobile:this.form.mobile
         }
         this._apis.login.updateUserInfo(query).then(response =>{
             this.$notify.success({

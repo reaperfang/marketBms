@@ -8,12 +8,12 @@ import { asyncRouterMap, syncRouterMap } from '@/router'
 function hasPermission(msfList, route) {
   if(msfList){
     if (route && route.meta.title) {
-      return msfList.some(item => route.meta.title == item.name && route.meta.navType == item.navType ) || route.meta.title == '概况首页' || route.meta.title == '概况'
+      return msfList.some(item => route.meta.title == item.name && route.meta.navType == item.navType ) || route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息'
     }else{
       return true
     }
   }else {
-    return route.meta.title == '概况首页' || route.meta.title == '概况' ? true : false
+    return route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息' ? true : false 
   }
 }
 

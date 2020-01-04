@@ -173,7 +173,7 @@ export default {
     getShopPayInfo(){
       let query = {
         mchId:this.cid,
-        channelId:'WX_JSAPI',
+        channelId:'WX_ALL',
       }
       this._apis.set.getShopPayInfo(query).then(response =>{
         this.id = response.id
@@ -228,8 +228,7 @@ export default {
       let query = {
         id:this.id,
         mchId:this.cid,
-        channelId:'WX_JSAPI',
-        // mchName:this.$store.user.userInfo.shopName,
+        channelId:'WX_ALL',
         mchName:this.shopName,
         channelName:'WX',
         channelMchId:this.form.channelMchId,
@@ -270,8 +269,7 @@ export default {
       }
       let query = {
         mchId:this.cid,
-        channelId:'WX_JSAPI',
-        // mchName:this.$store.user.userInfo.shopName,
+        channelId:'WX_ALL',
         mchName:this.shopName,
         channelName:'WX',
         channelMchId:this.form.channelMchId,
@@ -318,6 +316,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .main{
     width: 100%;
+    height:100%;
     background: #fff;
     padding:20px;
     h1{
