@@ -132,6 +132,16 @@ export function fetchGoodsList(data) {
   })
 }
 
+// sku商品分页列表(无分页)
+export function fetchGoodsSKUList(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SKU-LIST-PROCESSOR',
+    data
+  })
+}
+
 // 新增商品
 export function addGoods(data) {
   return request({

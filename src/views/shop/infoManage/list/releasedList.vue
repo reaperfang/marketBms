@@ -2,76 +2,54 @@
   <div>
     <div class="head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" label-width="80px" :inline="true">
-        <el-form-item label="" prop="pageCategoryInfoId">
-          <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
-            <el-option label="全部分类" value=""></el-option>
-            <el-option v-for="(item, key) of classifyList" :key="key" :label="item.name" :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="页面名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入页面名称" clearable></el-input>
+        <el-form-item label="资讯标题" prop="title">
+          <el-input v-model="ruleForm.title" placeholder="请输入资讯标题" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">查询</el-button>
+          <el-button type="primary" @click="fetch">搜索</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">
-        <el-button type="primary" @click="_routeTo('p_createInfo')">新建页面</el-button>
-        <el-popover
-          ref="popover4"
-          placement="right"
-          width="400"
-          title="修改分类"
-          v-model="visible"
-          trigger="click">
-          <el-radio-group v-model="seletedClassify">
-            <div v-for="(item, key) of classifyList" :key="key">
-              <el-radio :label="item.id">{{item.name}}</el-radio>
-            </div>
-          </el-radio-group>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false; modifyClassify()">确定</el-button>
-          </div>
-        </el-popover>
-        <el-button type="primary" plain v-popover:popover4 :disabled="!this.multipleSelection.length">批量改分类</el-button>
-
-        <el-button type="warning" plain @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+        <el-button type="primary" @click="_routeTo('p_createInfo')">新建资讯</el-button>
+        <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
     <div class="table">
-      <p>微页面（共{{total || 0}}个）</p>
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"
           :selectable='selectInit'
           width="30">
         </el-table-column>
-        <el-table-column prop="name" label="页面名称">
+        <el-table-column prop="title" label="标题"></el-table-column>
+        <el-table-column prop="cover" label="封面状态">
           <template slot-scope="scope">
-            <span class="page_name" @click="_routeTo('p_previewInfo', {pageId: scope.row.id})">{{scope.row.name}} </span>
-            <span class="index_page_flag" v-if="scope.row.isHomePage == 1">首页</span>
+            <span v-if="scope.row.cover">已上传</span>
+            <span v-else>未上传</span>
+          </template>
+        </el-table-column>  
+        <el-table-column prop="author" label="作者"></el-table-column>
+        <el-table-column prop="authorHeadPath" label="作者头像"></el-table-column>
+        <el-table-column prop="channelType" label="展示渠道">
+          <template slot-scope="scope">
+            <span v-if="scope.row.channelType == 3">PC端</span>
+            <span v-else-if="scope.row.channelType == 4">WAP端</span>
+          </template>
+        </el-table-column>  
+        <el-table-column prop="type" label="状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.type == 0">已保存</span>
+            <span v-else-if="scope.row.type == 1">已发布</span>
+            <span v-else-if="scope.row.type == 2">已下线</span>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="页面标题"></el-table-column>
-        <el-table-column prop="pageCategoryName" label="所属分类">
-          <template slot-scope="scope">
-            <span v-if="scope.row.pageCategoryInfoId == '-1'">未分类</span>
-            <span v-else>{{scope.row.pageCategoryName}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="vv" label="访客数"></el-table-column>
-        <el-table-column prop="pv" label="浏览数"></el-table-column>
-        <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
-        <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
+        <el-table-column prop="updateTime" sortable label="最后编辑时间"></el-table-column>
+        <el-table-column prop="updateUserName" label="最后操作人"></el-table-column>
         <el-table-column prop="" label="操作" :width="'250px'">
           <template slot-scope="scope">
-            <span class="table-btn" @click="copyPage(scope.row)">复制</span>
-            <span class="table-btn" @click="_routeTo('p_createInfo', {pageId: scope.row.id})">编辑</span>
-            <span class="table-btn" @click="deletePage(scope.row)" v-if="scope.row.isHomePage !== 1">删除</span>
-            <span class="table-btn" @click="spread(scope.row)">推广</span>
-            <span class="table-btn" @click="setIndex(scope.row)" v-if="scope.row.isHomePage !== 1">设为首页</span>
+            <span class="table-btn" @click="_routeTo('p_previewInfo', {id: scope.row.id})">查看</span>
+            <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span>
+            <span class="table-btn" @click="offline(scope.row)">下线</span>
           </template>
         </el-table-column>
       </el-table>
@@ -88,73 +66,39 @@
         </el-pagination>
       </div>
     </div>
-     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :pageId="currentItem.id" :pageLink="currentItem.shareUrl"></component>
   </div>
 </template>
 
 <script>
 import tableBase from '@/components/TableBase';
 import uuid from 'uuid/v4';
-import dialogPopularize from '@/views/shop/dialogs/decorateDialogs/dialogPopularize';
 export default {
   name: 'pageList',
   extends: tableBase,
-  components: {dialogPopularize},
   data () {
     return {
       tableList:[],
-      classifyList: [],
-      dialogVisible: false,
-      currentDialog: '',
-      currentItem: {},
       ruleForm: {
-        status: '0',
-        pageCategoryInfoId: '',
-        name: ''
+        title: '',
+        type: '',
+        status: 0
       },
-      seletedClassify: '',   //选中的分类
       visible: false  //是否显示批量该分类浮层
     }
   },
   created() {
-    this.getClassifyList();
+
   },
   methods: {
 
-    /* 复制页面 */
-    copyPage(item) {
-      this.currentItem = item;
-      this.$confirm(`确定复制 [ ${item.name} ] 吗？`, '提示', {
+    /* 删除 */
+    deleteInfo(item) {
+       this.$confirm(`确定删除 [ ${item.title} ] 吗？`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this._apis.shop.copyPage({id: item.id}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '复制成功！',
-              type: 'success'
-            });
-            this.fetch();
-          }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
-          });
-        })
-    },
-
-    /* 删除页面 */
-    deletePage(item) {
-       this.currentItem = item;
-       this.$confirm(`确定删除 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this._apis.shop.deletePages({ids: [item.id]}).then((response)=>{
+          this._apis.shop.deleteInfos({ids: [item.id], status: 0}).then((response)=>{
             this.$notify({
               title: '成功',
               message: '删除成功！',
@@ -169,9 +113,32 @@ export default {
           });
         })
     },
+    
+    /* 下线 */
+    offline(item) {
+       this.$confirm(`确定下线 [ ${item.title} ] 吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._apis.shop.modifyInfoType({id: item.id, type: 2}).then((response)=>{
+            this.$notify({
+              title: '成功',
+              message: '下线成功！',
+              type: 'success'
+            });
+            this.fetch();
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+          });
+        })
+    }, 
 
-    /* 批量删除页面 */
-    batchDeletePage(item) {
+    /* 批量删除 */
+    batchDeleteInfo(item) {
        this.$confirm(`确定删除吗？`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -181,41 +148,10 @@ export default {
           for(let item of this.multipleSelection) {
             ids.push(item.id);
           }
-          this._apis.shop.deletePages({ids}).then((response)=>{
+          this._apis.shop.deleteInfos({ids, status: 0}).then((response)=>{
             this.$notify({
               title: '成功',
               message: '删除成功！',
-              type: 'success'
-            });
-            this.fetch();
-          }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
-          });
-        })
-    },
-
-    /* 推广 */
-    spread(item) {
-       this.currentItem = item;
-       this.dialogVisible=true; 
-       this.currentDialog='dialogPopularize';
-    },
-
-    /* 设为首页 */
-    setIndex(item) {
-       this.currentItem = item;
-       this.$confirm(`确定将 [ ${item.name} ] 设为首页吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this._apis.shop.setIndex({id: item.id}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '设置成功！',
               type: 'success'
             });
             this.fetch();
@@ -230,7 +166,7 @@ export default {
 
     fetch() {
       this.loading = true;
-      this._apis.shop.getPageList(this.ruleForm).then((response)=>{
+      this._apis.shop.getInfoList(this.ruleForm).then((response)=>{
         this.tableList = response.list;
         this.total = response.total;
         this.loading = false;
@@ -241,45 +177,6 @@ export default {
         // });
         console.error(error);
         this.loading = false;
-      });
-    },
-
-    
-    //获取分类列表
-    getClassifyList() {
-      this._apis.shop.selectAllClassify({}).then((response)=>{
-        this.classifyList = response;
-      }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
-        console.error(error);
-      });
-    },
-
-    // 修改分类
-    modifyClassify() {
-      const ids = [];
-      for(let item of this.multipleSelection) {
-        ids.push(item.id);
-      }
-      this._apis.shop.modifyClassify({
-        status: '0',
-        ids,
-        pageCategoryInfoId: this.seletedClassify
-      }).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '修改成功！',
-          type: 'success'
-        });
-        this.fetch();
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
       });
     },
 

@@ -35,7 +35,8 @@
             <div style="color:green;line-height: 25px;">免费</div>
             <!-- <el-button type="success" size="mini"  plain>免费</el-button> -->
             <!-- <span class="price" v-if="item.price !== 0">￥{{item.price}}</span> -->
-            <el-button type="success" plain @click="_routeTo('p_templateEdit', {id: item.id})">立即应用</el-button>
+            <!-- <el-button type="success" plain @click="_routeTo('p_templateEdit', {id: item.id})">立即应用</el-button> -->
+            <el-button type="success" plain>立即应用</el-button>
           </div>
         </div>
       </li>
@@ -49,8 +50,13 @@ export default {
   components: {},
   data () {
     return {
-      loading: true,
-      templateList: []
+      loading: false,
+      templateList: [
+        {
+          name: '瑰柏翠',
+          url: require('../../../../assets/images/shop/pc-template.png')
+        }
+      ]
     }
   },
   created() {
@@ -58,18 +64,18 @@ export default {
   },
   methods: {
     fetch() {
-      this.loading = true;
-      this._apis.shop.getTemplateList({}).then((response)=>{
-        this.templateList = response;
-        this.loading = false;
-      }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
-        console.error(error);
-        this.loading = false;
-      });
+      // this.loading = true;
+      // this._apis.shop.getTemplateList({}).then((response)=>{
+      //   this.templateList = response;
+      //   this.loading = false;
+      // }).catch((error)=>{
+      //   // this.$notify.error({
+      //   //   title: '错误',
+      //   //   message: error
+      //   // });
+      //   console.error(error);
+      //   this.loading = false;
+      // });
     },
   }
 }

@@ -593,5 +593,100 @@ export function changeSwitchStatus(data) {
         params: data,
         apiType: 'decorate'
       })
+  }  
+  
+  //获取资讯列表
+  export function getInfoList(data) {
+      return request({
+        target: 'DECORATION-PAGEINFORMATION-LIST-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  }  
+  
+  //批量删除资讯
+  export function deleteInfos(data) {
+      return request({
+        target: 'DECORATION-PAGE-INFORMATION-BATCH-DELETE-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
   }
+
+  //获取单条资讯
+  export function getInfo(data) {
+      return request({
+        target: 'DECORATION-PAGE-INFORMATION-FIND-BY-ID-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  }  
+  
+  //修改资讯
+  export function modifyInfo(data) {
+      return request({
+        target: 'DECORATION-PAGE-INFORMATION-UPDATE-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  }  
+  
+  //修改资讯状态
+  export function modifyInfoType(data) {
+      return request({
+        target: 'DECORATION-PAGE-INFORMATION-UPDATE-TYPE-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  } 
+  
+  //创建资讯
+  export function createInfo(data) {
+      return request({
+        target: 'DECORATION-PAGE-INFORMATION-INSERT-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  }   
+  
+  
+  
+  //获取橱窗列表
+  export function getWindowList(data) {
+      return request({
+        target: 'DECORATION-PAGE-PC-INFO-FIND-ALL-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  }  
+  
+  //修改橱窗内容
+  export function modifyWindow(data) {
+      return request({
+        target: 'DECORATION-PAGE-PC-INFO-UPDATE-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  }  
+  
+  //获取橱窗内容
+  export function getWindow(data) {
+      return request({
+        target: 'DECORATION-PAGE-PC-INFO-FIND-BY-TYPE-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
+  }   
+
+
+  
 
