@@ -11,6 +11,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-tiaozhuan:before {
+  content: "\e641";
+}
+
 .icon-gouwuche2:before {
   content: "\e716";
 }
