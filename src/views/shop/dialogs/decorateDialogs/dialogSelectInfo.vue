@@ -1,16 +1,6 @@
 /* 选择图文资讯 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" title="选择图文资讯" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
-        <el-form-item label prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入货品名称" clearable></el-input>
-        </el-form-item>
-        <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
-        </el-form-item>
-      </div>
-    </el-form>
     <el-table
       stripe
       :data="tableList"
@@ -25,11 +15,11 @@
           <el-checkbox v-model="scope.row.active" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>
         </template>
       </el-table-column>
-      <el-table-column prop="title" label="货品名称" :width="500">
+      <el-table-column prop="title" label="图文名称" :width="500">
         <template slot-scope="scope">
           <div class="name_wrapper">
-            <img :src="scope.row.goodsInfo.image" alt="加载错误" />
-            <p>{{scope.row.goodsInfo.name}}<span style="display:block;color: #92929B;">{{scope.row.goodsInfo.specs}}</span></p>
+            <img :src="scope.row.cover" alt="加载错误" />
+            <p>{{scope.row.title}}</p>
           </div>
         </template>
       </el-table-column>
@@ -55,7 +45,7 @@ import tableBase from "@/components/TableBase";
 import utils from "@/utils";
 import uuid from "uuid/v4";
 export default {
-  name: "dialogSelectGoodsSKU",
+  name: "dialogSelectInfo",
   extends: tableBase,
   components: { DialogBase },
   props: {
@@ -79,8 +69,8 @@ export default {
       tableList: [],
       multipleSelection: [],
       ruleForm: {
-        name: "",
-        status: '1'
+        status: 0,
+        type: 1
       },
       rules: {}
     };
@@ -125,7 +115,7 @@ export default {
 
     fetch() {
       this.loading = true;
-      this._apis.goods.fetchGoodsList(this.ruleForm).then((response)=>{
+      this._apis.shop.getInfoList(this.ruleForm).then((response)=>{
         this.tableList = response.list;
         this.total = response.total;
         this.loading = false;

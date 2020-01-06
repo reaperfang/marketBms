@@ -21,7 +21,7 @@
           :selectable='selectInit'
           width="30">
         </el-table-column>
-        <el-table-column prop="title" label="标题"></el-table-column>
+        <el-table-column prop="title" label="标题" :width="300"></el-table-column>
         <el-table-column prop="cover" label="封面状态">
           <template slot-scope="scope">
             <span v-if="scope.row.cover">已上传</span>

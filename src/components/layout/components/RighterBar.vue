@@ -154,7 +154,7 @@ export default {
 <style lang="scss" scoped>
   .righter-bar {
     .righter-bar-content {
-      height: 680px;
+      height: calc(100% - 60px);
       overflow-y: scroll;
     }
     font-size: 14px;

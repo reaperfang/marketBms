@@ -5,11 +5,12 @@
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入标题" clearable></el-input>
         </el-form-item>
-        <el-form-item label="图片(横向滑动)" prop="backgroundImage">
-          <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">新增</el-button>
-          <div>
-            <span>新浪</span>
-            <el-button type="text">删除</el-button>
+        <el-form-item label="图片(横向滑动)" prop="informationId">
+          <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectInfo'">新增</el-button>
+          <div class="info_block" v-for="(item, key) of infos" :key="key">
+            <img class="cover_img" :src="item.cover" alt="">
+            <span>{{item.title}}</span>
+            <el-button type="text" @click="deleteItem(item)">删除</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -19,25 +20,29 @@
       </div>
     
       <!-- 动态弹窗 -->
-      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
+      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="infos"></component>
     </div>
 </template>
 
 <script>
 import utils from '@/utils';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectInfo from '@/views/shop/dialogs/decorateDialogs/dialogSelectInfo';
 export default {
   name: "5picText",
-  components: {dialogSelectImageMaterial},
+  components: {dialogSelectInfo},
   data() {
     return {
+      id: this.$route.query.id,
       loading: false,
       dialogVisible: false,
       currentDialog: '',
       ruleForm: {
-        title: '',//显示样式
-        informationId: []//背景图片
+        title: '@CRABTREEANDEVELYN',//标题
+        type: this.$route.query.type,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
+        id: this.$route.query.id,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
+        informationId: [] //咨询id集合
       },
+      infos: [],
       rules: {
         title: [
           { required: true, message: "请输入标题", trigger: "blur" },
@@ -58,6 +63,13 @@ export default {
   created() {
     this.fetch();
   },
+  watch: {
+    infos: {
+      handler(newValue) {
+        this.ruleForm.informationId = newVlaue.map(item => item.id);
+      }
+    }
+  },
   methods: {
 
     /* 获取装修数据 */
@@ -65,14 +77,14 @@ export default {
       if(!this.id) {
         return;
       }
-      // this.loading = true;
-      // this._apis.shop.getInfo({id: this.id}).then((response)=>{
-      //    this.loading = false;
-      //    this.decorateData = response;
-      // }).catch((error)=>{
-      //   console.error(error);
-      //   this.loading = false;
-      // });
+      this.loading = true;
+      this._apis.shop.getWindow({type: this.id}).then((response)=>{
+        this.loading = false;
+        this.ruleForm = response;
+      }).catch((error)=>{
+        console.error(error);
+        this.loading = false;
+      });
     },
 
     /* 保存数据 */
@@ -80,32 +92,50 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.submitLoadinig = true;
-          // this._apis.shop[params.methodName](params.resultData).then((response)=>{
-          //   this.$notify({
-          //     title: '成功',
-          //     message: params.tipWord,
-          //     type: 'success'
-          //   });
-          //   this.submitLoadinig = false;
-          //   this._routeTo('p_infoManageIndex');
-          // }).catch((error)=>{
-          //   this.$notify.error({
-          //     title: '错误',
-          //     message: error
-          //   });
-          //   this.submitLoadinig = false;
-          // });
+          this._apis.shop.modifyWindow(this.ruleForm).then((response)=>{
+            this.$notify({
+              title: '成功',
+              message: '修改成功！',
+              type: 'success'
+            });
+            this.submitLoadinig = false;
+            this._routeTo('p_columnIndex');
+          }).catch((error)=>{
+            this.$notify.error({
+              title: '错误',
+              message: error
+            });
+            this.submitLoadinig = false;
+          });
         } else {
           this.$message({ message: '填写正确的信息', type: 'warning' });
         }
       });
     },
 
-     /* 弹框选中图片 */
-    imageSelected(dialogData) {
-      console.log(dialogData);
-      // this.ruleForm.backgroundImage = dialogData.filePath;
-    }
+     /* 弹框选中资讯 */
+    dialogDataSelected(dialogData) {
+      this.infos = dialogData;
+      this.ruleForm.informationId = dialogData.map(item => item.id);
+    },
+
+     /* 删除数据项 */
+    deleteItem(item) {
+      if(item.fakeData) {  //如果是假数据
+        this.$alert('示例数据不支持删除操作，请在右侧替换真实数据后重试!', '警告', {
+          confirmButtonText: '确定'
+        })
+        return;
+      }
+      const tempItems = [...this.infos];
+      for(let i=0;i<tempItems.length;i++) {
+        if(item === tempItems[i]) {
+          tempItems.splice(i, 1);
+        }
+      }
+      this.infos = tempItems;
+    },
+
 
   },
 
@@ -120,6 +150,16 @@ export default {
   flex-direction: row;
   justify-content: center;
   padding-bottom: 30px;
+}
+.info_block{
+  display:flex;
+  align-items: center;
+  .cover_img{
+    width: 50px;
+    height: 40px;
+    object-fit: contain;
+    margin-right:10px;
+  }
 }
 </style>
 
