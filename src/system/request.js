@@ -94,118 +94,13 @@ class Ajax {
   request(config) {
     this.setApiAddress(config);
     if (config.target) {
-      if(config.apiType === 'decorate') {
-        config = this.setRequestParams2(config);
-      }else if(config.apiType === 'goodsOperate') {
-        config = this.setRequestParams3(config);
-      }else {
-        config = this.setRequestParams(config);
-      }
+      config = this.setRequestParams(config);
     } else {
       this.requestGlobal(config);
     }
     return this.service(config);
   }
 
-  // 根据后端接口重置请求 -- 电商
-  setRequestParams2(config) {
-    const CONST = appConfig[this.systemRequest];
-    if (!CONST) {
-      MessageBox.alert('请求参数错误', '警告', {
-        confirmButtonText: '确定',
-        type: 'error'
-      })
-    }
-
-    //拼接参数head
-    let head = {
-        target: config.target,
-        accessToken:'09255c7724fe9b8df952aa2f7e3ec71853417bc88932a6350aa7ef2ed123021c',
-        // accessToken: store.getters.token || getToken('authToken'),
-        client: CONST.CLIENT,
-        version: CONST.VERSION,
-        requestTime: utils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
-        channel: CONST.CHANNEL,
-        key: CONST.KEY
-      };
-      head.value = md5(CONST.VALUE + head.target + head.requestTime);
-
-    //获取cid和shopInfoId
-    // let cid = store.getters.userInfo && store.getters.userInfo.cid ? store.getters.userInfo.cid : '';
-    // let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-    let cid = 2
-    // let shopInfoId = store.getters.userInfo && store.getters.userInfo.shopInfoId ? store.getters.userInfo.shopInfoId
-      // : '';
-
-    //获取cid
-    // let cid = store.getters.cid || (/\/bms\/order\//.test(location.pathname) ? '2' : '7')
-    //拼接全部参数
-    if (config.method == "post") {
-      if (config.noCid) {
-        config.data = `json=${encodeURI(JSON.stringify({ head, data: config.data }))}`;
-      } else {
-        config.data = `json=${encodeURI(JSON.stringify({ head, data: { cid, ...config.data } }))}`;
-      }
-    } else if (config.method == "get") {
-      if (config.noCid) {
-        config.params = { json: { head, data: config.params } };
-      } else {
-        config.params = { json: { head, data: { ...config.params, cid } } };
-      }
-    }
-    return config;
-  } 
-  
-  
-  // 根据后端接口重置请求 -- 电商
-  setRequestParams3(config) {
-    const CONST = appConfig[this.systemRequest];
-    if (!CONST) {
-      MessageBox.alert('请求参数错误', '警告', {
-        confirmButtonText: '确定',
-        type: 'error'
-      })
-    }
-
-    //拼接参数head
-    let head = {
-        target: config.target,
-        accessToken:'09255c7724fe9b8df952aa2f7e3ec7184254abfcc1d78fbec8f79c3efd97b15e',
-        // accessToken: store.getters.token || getToken('authToken'),
-        client: CONST.CLIENT,
-        version: CONST.VERSION,
-        requestTime: utils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
-        channel: CONST.CHANNEL,
-        key: CONST.KEY
-      };
-      head.value = md5(CONST.VALUE + head.target + head.requestTime);
-
-    //获取cid和shopInfoId
-    // let cid = store.getters.userInfo && store.getters.userInfo.cid ? store.getters.userInfo.cid : '';
-    // let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-    let cid = 5
-    // let shopInfoId = store.getters.userInfo && store.getters.userInfo.shopInfoId ? store.getters.userInfo.shopInfoId
-      // : '';
-
-    //获取cid
-    // let cid = store.getters.cid || (/\/bms\/order\//.test(location.pathname) ? '2' : '7')
-    //拼接全部参数
-    if (config.method == "post") {
-      if (config.noCid) {
-        config.data = `json=${encodeURI(JSON.stringify({ head, data: config.data }))}`;
-      } else {
-        config.data = `json=${encodeURI(JSON.stringify({ head, data: { cid, ...config.data } }))}`;
-      }
-    } else if (config.method == "get") {
-      if (config.noCid) {
-        config.params = { json: { head, data: config.params } };
-      } else {
-        config.params = { json: { head, data: { ...config.params, cid } } };
-      }
-    }
-    return config;
-  } 
-  
   // 根据后端接口重置请求 -- 电商
   setRequestParams(config) {
     const CONST = appConfig[this.systemRequest];
@@ -277,16 +172,14 @@ class Ajax {
             //config.baseURL = `/order_server/api-order-web/order/api.do`; // 李刚 尹茂凯
             break;
           case 'decorate':  //装修接口
-            // config.baseURL = `${process.env.DATA_API}/api-decoration-web/decoration/api.do`;
-            config.baseURL = `http://172.22.146.133:8081/api-decoration-web/decoration/api.do`;
+            config.baseURL = `${process.env.DATA_API}/api-decoration-web/decoration/api.do`;
             break;
           case 'finance':  //财务接口
             config.baseURL = `${process.env.DATA_API}/api-financial-web/financial/api.do`;
             break;
           case 'goodsOperate':  //商品运营
-            // config.baseURL = `${process.env.DATA_API}/api-public-web/public/api.do`;
+            config.baseURL = `${process.env.DATA_API}/api-public-web/public/api.do`;
             //config.baseURL = `/goodsOperate_server/api-public-web/public/api.do`;
-            config.baseURL = `http://172.22.146.31:8080/api-public-web/public/api.do`;
             break;
           case 'manager':  //广告和导航开关修改  许涛
             config.baseURL = `${process.env.DATA_API}/api-manager-web/manager/api.do`;
