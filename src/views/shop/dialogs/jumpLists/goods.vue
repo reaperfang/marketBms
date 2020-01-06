@@ -164,7 +164,8 @@ export default {
         id: 5,
         data: {
           id: data.id,
-          name: data.name
+          name: data.name,
+          mainImage: data.mainImage
         },
         cid
       });

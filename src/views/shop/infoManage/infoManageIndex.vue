@@ -16,7 +16,7 @@ export default {
   components: { releasedList, draftList },
   data() {
     return {
-      currentTab: "pageList"
+      currentTab: "releasedList"
     };
   },
   created() {},

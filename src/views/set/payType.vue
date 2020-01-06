@@ -22,6 +22,25 @@
         </div>
         <div class="pay_item">
           <div class="left_cont">
+            <img src="@/assets/images/set/set-pay4.png"/>
+            <div class="note">
+              <h3>支付宝支付</h3>
+              <p>开启后用户可以通过支付宝进行在线支付。（只在pc和wap端生效，微信小程序和微信公众号不支持）</p>
+            </div>
+          </div>
+          <div class="right_cont">
+            <el-switch
+              v-model="aliPay"
+              @change="handleAliPay"
+              active-color="#13ce66"
+              inactive-color="#eee"
+              v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
+            </el-switch>
+            <a class="wxinfo_set" @click="_routeTo('zfbSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
+          </div>
+        </div>
+        <div class="pay_item">
+          <div class="left_cont">
             <img src="@/assets/images/set/set-pay2.png"/>
             <div class="note">
               <h3>账户余额</h3>
@@ -75,9 +94,11 @@ export default {
   data() {
     return {
       wechatPay:false,
+      aliPay:false,
       balanceOfAccountPay:false,
       payOnDelivery:false,
       wechatBinding:0,
+      alipayBinding:0,
       dialogVisible:false,
     }
   },
@@ -102,6 +123,7 @@ export default {
         this.balanceOfAccountPay = response.balanceOfAccountPay == 1 ? true : false
         this.payOnDelivery = response.payOnDelivery == 1 ? true : false
         this.wechatBinding = response.wechatBinding
+        this.alipayBinding = response.alipayBinding
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
@@ -130,7 +152,29 @@ export default {
         });
       }
     },
-    //账户余额支付开关
+
+    //支付宝支付开关
+    handleAliPay(val){
+      if(val == true && this.alipayBinding == 0){
+        this.aliPay = false
+        this.dialogVisible = true
+      }else{
+        this.$confirm('此操作将设置支付宝支付开关, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let data = {
+            alipayPay:this.aliPay == true ? 1 : 0,
+          }
+          this.onSubmit(data)          
+        }).catch(() => {
+          this.getShopInfo()        
+        });
+      }
+    },
+
+    //账户余额支付开关 
     handleBalanceOfAccountPay(){
         this.$confirm('此操作将设置余额支付开关, 是否继续?', '提示', {
           confirmButtonText: '确定',

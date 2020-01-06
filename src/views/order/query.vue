@@ -18,6 +18,8 @@
             <el-option label="全部" value></el-option>
             <el-option label="小程序" :value="1"></el-option>
             <el-option label="公众号" :value="2"></el-option>
+            <el-option label="PC" :value="3"></el-option>
+            <el-option label="WAP" :value="4"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="订单类型">
@@ -29,14 +31,14 @@
             <el-option label="赠品订单" :value="4"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="支付方式">
+        <!-- <el-form-item label="支付方式">
           <el-select v-model="listQuery.payWay" placeholder>
             <el-option label="全部" value></el-option>
             <el-option label="线上支付" :value="1"></el-option>
             <el-option label="货到付款" :value="2"></el-option>
             <el-option label="找人代付" :value="3"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="发货类型">
           <el-select v-model="listQuery.sendType" placeholder>
             <el-option label="全部" value></el-option>

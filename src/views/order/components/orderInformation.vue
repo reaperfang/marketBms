@@ -545,13 +545,17 @@ export default {
         },
         payWayFilter(code) {
             if(code === 1) {
-                return '线上支付'
+                return '微信支付'
             } else if(code === 2) {
                 return '货到付款'
             } else if(code === 3) {
                 return '找人代付'
             } else if(code === 4) {
                 return '线下支付'
+            } else if(code === 5) {
+                return '线上支付'
+            } else if(code === 6) {
+                return '支付宝支付'
             }
         },
         invoiceTypeFilter(code) {

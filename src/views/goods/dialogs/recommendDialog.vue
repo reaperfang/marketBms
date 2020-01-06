@@ -2,36 +2,9 @@
     <div>
         <DialogBase :visible.sync="visible" :title="title" width="659px" :showFooter="showFooter">
             <el-form :model="basicForm" :rules="basicRules" ref="basicForm" label-width="140px" size="small">
-                <!-- <el-form-item label="分类名称：" prop="parentId">
-                    <el-select placeholder="请选择上级分类" class="formInput" v-model="basicForm.parentId">
-                        <el-option label="顶级栏目" value="0" style="paddingLeft:1em"></el-option>
-                            <el-option
-                                v-for="item in data.flatArr"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id"
-                                :style="{paddingLeft:`${item.floor*1.2}em`}"
-                            ></el-option>
-                    </el-select>
-                </el-form-item> -->
-                <template v-if="data.add && data.level === 1">
-                    <el-form-item label="上级分类：">
-                        <span>第一级：{{data.name}}</span>
-                    </el-form-item>
-                </template>
-                <template v-else-if="data.add && data.level === 2">
-                    <el-form-item label="上级分类：">
-                        <span>第一级：{{level1Title}}</span>
-                        <span style="margin-left: 20px;">第二级：{{data.name}}</span>
-                    </el-form-item>
-                </template>
-                <el-form-item label="分类名称：" prop="name">
-                    <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name"></el-input>
-                    <span class="description">仅支持展示最多5个字的文本标签</span>
-                </el-form-item>
-                <el-form-item label="状态：" prop="enable">
-                    <el-radio v-model="basicForm.enable" :label="1">启用</el-radio>
-                    <el-radio v-model="basicForm.enable" :label="0">禁用</el-radio>
+                <el-form-item label="推荐描述：" prop="name">
+                    <el-input placeholder="请输入推荐描述：" class="formInput" v-model="basicForm.name"></el-input>
+                    <span class="description">最多100个中文字符（200个英文）</span>
                 </el-form-item>
                 <el-form-item label="排序：" prop="sort">
                     <el-input class="formInput" v-model="basicForm.sort"></el-input>
@@ -46,6 +19,7 @@
                             <i @click="deleteImage" class="el-icon-error"></i>
                         </li>
                     </ul>
+                    <p class="description">尺寸建议750x750（正方形模式）像素以上，大小2M以下。</p>
                 </el-form-item>
             </el-form>
             <div class="footer">
@@ -61,8 +35,36 @@ import DialogBase from '@/components/DialogBase'
 import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import DialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
 
+function getByteLen(val) {
+    var len = 0;
+
+    for (var i = 0; i < val.length; i++) {
+        var length = val.charCodeAt(i);
+
+        if(length>=0&&length<=128)
+        {
+            len += 1;
+        }
+        else
+        {
+            len += 2;
+        }
+    }
+    return len;
+}
+
 export default {
     data() {
+        var descriptionValidator = (rule, value, callback) => {
+            if(this.ruleForm.name == '') {
+                callback(new Error('推荐描述不能为空'));
+            } else {
+                callback();
+                if(getByteLen(this.ruleForm.name) > 200) {
+                    
+                }
+            }
+        };
         return {
             parentId:' ',
             showFooter: false,
@@ -77,8 +79,8 @@ export default {
             },
             basicRules:{
                 name: [
-                    { required: true, message: '请输入分类名称', trigger: 'blur' },
-                    { max: 5, message: '最多支持5个字符', trigger: 'blur' }
+                    { validator: descriptionValidator, trigger: 'blur' },
+                    { max: 5, message: '最多支持100个中文字符（200个英文）', trigger: 'blur' }
                 ],
                 enable: [
                     { required: true, message: '请选择状态', trigger: 'blur' },
@@ -213,21 +215,7 @@ export default {
             }
         },
         title() {
-            if(this.data.add) {
-                // 新增
-                if(this.data.level === 0) { 
-                    // 新增一级分类
-                    return '新建一级分类'
-                } else if(this.data.level == 1) {
-                    // 新增二级分类
-                    return '新建二级分类'
-                } else if(this.data.level == 2) {
-                    // 新增三级分类
-                    return '新建三级分类'
-                }
-            } else {
-                return '修改分类'
-            }
+            return '一键推荐'
         }
     },
     props: {
@@ -311,6 +299,13 @@ export default {
         text-align: center;
         margin-top: 60px;
         margin-bottom: 40px;
+    }
+    .upload-ul {
+        overflow: hidden;
+    }
+    .description {
+        color: #999999;
+        font-size: 12px;
     }
 </style>
 

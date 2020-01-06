@@ -45,7 +45,7 @@ export default {
   },
 
   watch: {
-    richValue(newValue, oldValue) {
+    richValue(newValue = '', oldValue) {
       const target = 'https://statics.xiumi.us/stc/';
       const convertData = newValue.replace(new RegExp(target,'g'),"https://statics.xiumi.us/stc/");
       this.$emit('editorValueUpdate', convertData);
