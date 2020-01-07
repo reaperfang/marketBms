@@ -623,6 +623,15 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
+  }   
+  //根据ids批量获取资讯
+  export function getInfoByIds(data) {
+      return request({
+        target: 'DECORATION-PAGE-INFORMATION-BYIDS-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'decorate'
+      })
   }  
   
   //修改资讯

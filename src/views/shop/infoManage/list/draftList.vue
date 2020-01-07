@@ -36,7 +36,11 @@
           </template>
         </el-table-column>  
         <el-table-column prop="author" label="作者"></el-table-column>
-        <el-table-column prop="authorHeadPath" label="作者头像"></el-table-column>
+        <el-table-column prop="authorHeadPath" label="作者头像">
+           <template slot-scope="scope">
+             <img class="author_img" :src="scope.row.authorHeadPath" alt="">
+          </template>
+        </el-table-column>
         <el-table-column prop="type" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.type == 0">已保存</span>
@@ -245,5 +249,10 @@ export default {
   &:hover{
     color: $globalMainColor;
   }
+}
+.author_img{
+  width: 50px;
+  height: 40px;
+  object-fit: contain;
 }
 </style>

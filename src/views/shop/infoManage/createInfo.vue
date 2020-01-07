@@ -1,5 +1,5 @@
 <template>
-    <div class="createInfo_container">
+    <div class="gbc_container">
       <h2>新建资讯</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
         <el-form-item label="资讯标题" prop="title">
@@ -175,9 +175,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.createInfo_container{
-  background:#fff;
-}
 .confirm_btn{
   display:flex;
   flex-direction: row;

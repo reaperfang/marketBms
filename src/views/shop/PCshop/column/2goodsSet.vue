@@ -1,6 +1,6 @@
 <template>
-    <div class="column_container">
-      商品橱窗编辑
+    <div class="gbc_container">
+      <h2>商品橱窗编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入标题" clearable></el-input>
@@ -66,8 +66,8 @@ export default {
           { required: true, message: "请输入标题", trigger: "blur" },
           {
             min: 1,
-            max: 64,
-            message: "长度在 1 到 64 个字符",
+            max: 50,
+            message: "长度在 1 到 50 个字符",
             trigger: "blur"
           }
         ]
@@ -80,7 +80,7 @@ export default {
   watch: {
     selectedGoods: {
       handler(newVlaue) {
-        this.ruleForm.commodity = newVlaue.map(item => item.goodsInfo.id);
+        this.ruleForm.commodity = newValue.map(item => item.goodsInfo.id);
       },
       deep: true
     }
@@ -165,9 +165,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.createInfo_container{
-  background:#fff;
-}
 .confirm_btn{
   display:flex;
   flex-direction: row;

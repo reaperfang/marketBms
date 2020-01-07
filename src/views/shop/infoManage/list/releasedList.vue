@@ -29,7 +29,11 @@
           </template>
         </el-table-column>  
         <el-table-column prop="author" label="作者"></el-table-column>
-        <el-table-column prop="authorHeadPath" label="作者头像"></el-table-column>
+        <el-table-column prop="authorHeadPath" label="作者头像">
+           <template slot-scope="scope">
+             <img class="author_img" :src="scope.row.authorHeadPath" alt="">
+          </template>
+        </el-table-column>
         <el-table-column prop="channelType" label="展示渠道">
           <template slot-scope="scope">
             <span v-if="scope.row.channelType == 3">PC端</span>
@@ -217,5 +221,10 @@ export default {
   &:hover{
     color: $globalMainColor;
   }
+}
+.author_img{
+  width: 50px;
+  height: 40px;
+  object-fit: contain;
 }
 </style>

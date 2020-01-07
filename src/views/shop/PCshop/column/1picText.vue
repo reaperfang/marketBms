@@ -1,6 +1,6 @@
 <template>
-    <div class="column_container">
-      图文广告编辑
+    <div class="gbc_container">
+      <h2>图文广告编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入标题" clearable></el-input>
@@ -107,8 +107,8 @@ export default {
           { required: true, message: "请输入标题", trigger: "blur" },
           {
             min: 1,
-            max: 64,
-            message: "长度在 1 到 64 个字符",
+            max: 50,
+            message: "长度在 1 到 50 个字符",
             trigger: "blur"
           }
         ], 
@@ -122,7 +122,13 @@ export default {
           { required: true, message: "请选择按钮使用", trigger: "change" }
         ], 
         buttonName: [
-          { required: true, message: "请输入按钮名称", trigger: "blue" }
+          { required: true, message: "请输入按钮名称", trigger: "blur" },
+          {
+            min: 1,
+            max: 10,
+            message: "长度在 1 到 10 个字符",
+            trigger: "blur"
+          }
         ],
         sourceType: [
           { required: true, message: "请选择数据来源", trigger: "change" }
@@ -224,9 +230,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.createInfo_container{
-  background:#fff;
-}
 .confirm_btn{
   display:flex;
   flex-direction: row;

@@ -1,17 +1,38 @@
 <template>
-    <div class="column_container">
-      图文广告编辑
+    <div class="gbc_container">
+      <h2>图文广告编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="120px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入标题" clearable></el-input>
         </el-form-item>
         <el-form-item label="图片(横向滑动)" prop="informationId">
-          <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectInfo'">新增</el-button>
-          <div class="info_block" v-for="(item, key) of infos" :key="key">
-            <img class="cover_img" :src="item.cover" alt="">
-            <span>{{item.title}}</span>
-            <el-button type="text" @click="deleteItem(item)">删除</el-button>
-          </div>
+          <el-button type="primary" style="margin-bottom:10px;" @click="dialogVisible=true; currentDialog='dialogSelectInfo'">新增</el-button>
+          <el-table
+            :data="infos"
+            style="width: 100%">
+            <el-table-column
+              prop="title"
+              label="标题" :width="600">
+              <template slot-scope="scope">
+                <div class="info_block">
+                  <img class="cover_img" :src="scope.row.cover" alt="">
+                  <span>{{scope.row.title}}</span>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="author" label="作者"></el-table-column>
+            <el-table-column prop="authorHeadPath" label="作者头像">
+              <template slot-scope="scope">
+                <img class="author_img" :src="scope.row.authorHeadPath" alt="">
+              </template>
+            </el-table-column>
+            <el-table-column prop="" label="操作">
+              <template slot-scope="scope">
+                  <span class="table-btn" @click="_routeTo('p_previewInfo', {id: scope.row.id})">查看</span>
+                  <span class="table-btn" @click="deleteItem(scope.row)">删除</span>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-form-item>
       </el-form>
       <div class="confirm_btn">
@@ -48,8 +69,8 @@ export default {
           { required: true, message: "请输入标题", trigger: "blur" },
           {
             min: 1,
-            max: 64,
-            message: "长度在 1 到 64 个字符",
+            max: 50,
+            message: "长度在 1 到 50 个字符",
             trigger: "blur"
           }
         ]
@@ -66,7 +87,7 @@ export default {
   watch: {
     infos: {
       handler(newValue) {
-        this.ruleForm.informationId = newVlaue.map(item => item.id);
+        this.ruleForm.informationId = newValue.map(item => item.id);
       }
     }
   },
@@ -81,6 +102,7 @@ export default {
       this._apis.shop.getWindow({type: this.id}).then((response)=>{
         this.loading = false;
         this.ruleForm = response;
+        this.getInfoListByids(response.informationId);
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
@@ -113,6 +135,14 @@ export default {
       });
     },
 
+    getInfoListByids(ids) {
+        this._apis.shop.getInfoByIds({ids}).then((response)=>{
+          this.infos = response;
+        }).catch((error)=>{
+          console.error(error);
+        });
+    },
+
      /* 弹框选中资讯 */
     dialogDataSelected(dialogData) {
       this.infos = dialogData;
@@ -142,9 +172,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.createInfo_container{
-  background:#fff;
-}
 .confirm_btn{
   display:flex;
   flex-direction: row;
@@ -160,6 +187,11 @@ export default {
     object-fit: contain;
     margin-right:10px;
   }
+}
+.author_img{
+  width: 50px;
+  height: 40px;
+  object-fit: contain;
 }
 </style>
 

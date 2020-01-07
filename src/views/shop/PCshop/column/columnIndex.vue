@@ -1,8 +1,8 @@
 <template>
-  <div>
-    栏目内容
+  <div class="gbc_container">
+    <h2>栏目内容</h2>
     <el-table :data="tableList" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
-      <el-table-column prop="id" label="序号"></el-table-column>
+      <el-table-column prop="id" label="序号" :width="100"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="typeStr" label="类型"></el-table-column>
       <el-table-column prop="" label="操作" :width="'250px'">

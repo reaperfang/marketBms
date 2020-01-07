@@ -1,5 +1,5 @@
 <template>
-  <div style="background:rgb(242,242,249);">
+  <div style="background:#fff;">
     <el-tabs v-model="currentTab">
       <el-tab-pane label="店铺主页" :name="shopMain" v-loading="loading"></el-tab-pane>
       <el-tab-pane label="个人中心" name="personCenter"></el-tab-pane>
@@ -42,16 +42,16 @@ export default {
       this._apis.shop.getHomePage({}).then((response)=>{
 
         //没有装修首页
-        if(!response) {
-          this.hasHomePage = false;
-          this.shopMain = 'shopMainDefault';
-          this.currentTab = 'shopMainDefault';
-        }else{  //装修了首页
-          this.hasHomePage = true;
-          this.shopMain = 'shopMainDecorated';
-          this.currentTab = 'shopMainDecorated';
-          this.decorateData = response;
-        }
+        // if(!response) {
+        //   this.hasHomePage = false;
+        //   this.shopMain = 'shopMainDefault';
+        //   this.currentTab = 'shopMainDefault';
+        // }else{  //装修了首页
+        //   this.hasHomePage = true;
+        //   this.shopMain = 'shopMainDecorated';
+        //   this.currentTab = 'shopMainDecorated';
+        //   this.decorateData = response;
+        // }
         this.loading = false;
       }).catch((error)=>{
         console.error(error);

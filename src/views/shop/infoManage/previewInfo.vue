@@ -1,8 +1,7 @@
 <template>
-    <div>
+    <div class="info_preview_container">
       <h2>{{data.title}}</h2>
-      <span>{{data.updatetime}}</span>
-      <span>文章浏览宽度默认为640px。如需调整，为了保障用户的阅读体验，建议不要超过720px</span>
+      <p class="time"><i class="el-icon-alarm-clock"></i>&nbsp;{{data.updateTime}}</p>
       <div class="rich_wrapper" v-if="data.data" v-html="data.data"></div>
     </div>
 </template>
@@ -46,12 +45,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.rich_wrapper{
-  line-height: initial;
+.info_preview_container{
+  padding:20px;
+  box-sizing: border-box;
   background:#fff;
-  width:640px;
-  p{
-    margin: 5px 0;
+  h2{
+    font-size:18px;
+    font-weight:700;
+    color:rgba(22,22,23,1);
+    line-height:25px;
+    margin-bottom:10px;
+  }
+  p.time{
+    color:rgba(181,189,202,1);
+    line-height:17px;
+    margin-bottom:30px;
+  }
+  .rich_wrapper{
+    line-height: initial;
+    max-width:640px;
+    p{
+      margin: 5px 0;
+    }
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="column_container">
-    <h3>注册条款设置</h3>
+  <div class="gbc_container">
+    <h2>注册条款设置</h2>
     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px">
         <el-form-item label="注册条款：" prop="richValue">
           <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="ruleForm.richValue"></RichEditor>
