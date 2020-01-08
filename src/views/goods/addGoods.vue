@@ -61,7 +61,7 @@
                         :options="categoryOptions"
                         v-model="categoryValue"
                         @change="handleChange"
-                        :props="{ multiple: false, checkStrictly: true }"
+                        :props="{ multiple: true, checkStrictly: true }"
                         clearable
                         filterable>
                     </el-cascader>
@@ -100,7 +100,7 @@
         <section class="form-section">
             <h2>销售信息</h2>
             <el-form-item label="规格信息" prop="goodsInfos">
-                <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button>
+                <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
                 <div>
                     <ul class="added-specs">
                         <li v-for="(item, index) in addedSpecs" :key="index">
@@ -125,7 +125,12 @@
                                     <el-button @click="addNewSpecValue">新增</el-button>
                                 </div>
                                 <ul>
-                                    <li @click="selectSpecValue(index)" :class="{active: item.active}" v-for="(item, index) in specsValues" :key="index">{{item.name}}</li>
+                                    <li @click="selectSpecValue(index)" :class="{active: item.active}" v-for="(item, index) in specsValues" :key="index">
+                                        {{item.name}}
+                                        <i v-if="item.type == 'new'" @click="(e) => {
+                                            deleteSpecValue(index, e)
+                                        }" class="el-icon-circle-close"></i>
+                                    </li>
                                     <div class="clear"></div>
                                 </ul>
                                 <div class="add-specs-value-footer">
@@ -149,6 +154,7 @@
                     </div>
                 </div>
                 <template v-if="!editor">
+                    <el-button @click="batchFilling" class="batch-filling" type="primary">批量填充</el-button>
                     <el-table
                     class="spec-information"
                     :data="ruleForm.goodsInfos"
@@ -160,7 +166,8 @@
                         v-for="(item, index) in specsLabel.split(',')"
                         :key="index"
                         prop="label"
-                        :label="item">
+                        :label="item"
+                        width="80">
                         <template slot-scope="scope">
                             {{scope.row.label.split(',') && scope.row.label.split(',')[index]}}
                         </template>
@@ -173,7 +180,8 @@
                     <el-table-column
                         prop="costPrice"
                         label="成本价"
-                        class-name="costPrice">
+                        class-name="costPrice"
+                        width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.costPrice" placeholder="请输入"></el-input>
                         </template>
@@ -181,7 +189,8 @@
                     <el-table-column
                         prop="salePrice"
                         label="售卖价"
-                        class-name="salePrice">
+                        class-name="salePrice"
+                        width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.salePrice" placeholder="请输入"></el-input>
                         </template>
@@ -189,7 +198,8 @@
                     <el-table-column
                         prop="stock"
                         label="库存"
-                        class-name="stock">
+                        class-name="stock"
+                        width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.stock" placeholder="请输入"></el-input>
                         </template>
@@ -197,7 +207,8 @@
                     <el-table-column
                         prop="warningStock"
                         label="库存预警"
-                        class-name="warningStock">
+                        class-name="warningStock"
+                        width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.warningStock" placeholder="请输入"></el-input>
                         </template>
@@ -205,7 +216,8 @@
                     <el-table-column
                         prop="weight"
                         label="重量"
-                        class-name="weight">
+                        class-name="weight"
+                        width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.weight" placeholder="请输入"></el-input>
                         </template>
@@ -213,7 +225,8 @@
                     <el-table-column
                         prop="volume"
                         label="体积"
-                        class-name="volume">
+                        class-name="volume"
+                        width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.volume" placeholder="请输入"></el-input>
                         </template>
@@ -221,7 +234,8 @@
                     <el-table-column
                         prop="code"
                         label="SKU编码"
-                        class-name="code">
+                        class-name="code"
+                        width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.code" placeholder="请输入"></el-input>
                         </template>
@@ -229,7 +243,8 @@
                     <el-table-column
                         prop="image"
                         label="图片"
-                        class-name="image">
+                        class-name="image"
+                        width="152">
                         <template slot-scope="scope">
                             <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}" style="margin-top:10px"></div> -->
                             <el-upload
@@ -259,7 +274,7 @@
                     </el-table-column>
                     <el-table-column
                         label="操作"
-                        width="90">
+                        width="152">
                         <template slot-scope="scope">
                             <div class="spec-operate">
                                 <span @click="emptySpec(scope.$index)">清空</span>
@@ -283,7 +298,8 @@
                         <el-table-column
                             prop="costPrice"
                             label="成本价"
-                            width="180">
+                            width="180"
+                            class-name="costPrice">
                             <template slot-scope="scope">
                                 <!-- <span>¥{{scope.row.costPrice}}</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
@@ -291,18 +307,21 @@
                         </el-table-column>
                         <el-table-column
                             prop="salePrice"
-                            label="售卖价">
+                            label="售卖价"
+                            class-name="salePrice">
                             <template slot-scope="scope">
                                 <span>¥{{scope.row.salePrice}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="stock"
-                            label="库存">
+                            label="库存"
+                            class-name="stock">
                         </el-table-column>
                         <el-table-column
                             prop="warningStock"
-                            label="库存预警">
+                            label="库存预警"
+                            class-name="warningStock">
                             <template slot-scope="scope">
                                 <!-- <span>¥{{scope.row.costPrice}}</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
@@ -310,7 +329,8 @@
                         </el-table-column>
                         <el-table-column
                             prop="weight"
-                            label="重量(kg)">
+                            label="重量(kg)"
+                            class-name="weight">
                             <template slot-scope="scope">
                                 <!-- <span>{{scope.row.weight}}(kg)</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.weight" placeholder="请输入重量"></el-input>
@@ -318,15 +338,22 @@
                         </el-table-column>
                         <el-table-column
                             prop="volume"
-                            label="体积(m³)">
+                            label="体积(m³)"
+                            class-name="volume">
                             <template slot-scope="scope">
                                 <!-- <span>{{scope.row.volume}}(m³)</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column
+                            prop="code"
+                            label="SKU编码"
+                            class-name="code">
+                        </el-table-column>
+                        <el-table-column
                             prop="image"
-                            label="图片">
+                            label="图片"
+                            class-name="image">
                             <template slot-scope="scope">
                                 <!-- <img width="66" :src="scope.row.image" alt=""> -->
                                 <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div> -->
@@ -592,7 +619,8 @@ export default {
             add: true,
             ruleForm: {
                 productCategoryInfoId: '', // 商品类目id
-                productCatalogInfoId: '', // 商品商家分类ID
+                //productCatalogInfoId: '', // 商品商家分类ID
+                productCatalogInfoIds: '', // 商品商家分类ID
                 name: '', // 商品名称
                 description: '', // 商品描述
                 images: '', // 商品图片
@@ -642,7 +670,7 @@ export default {
                 images: [
                     { required: true, message: '请上传商品图片', trigger: 'blur' },
                 ],
-                productCatalogInfoId: [
+                productCatalogInfoIds: [
                     { required: true, message: '请选择商品分类', trigger: 'blur' },
                 ],
                 // goodsInfos: [
@@ -724,7 +752,8 @@ export default {
             showAddSpecsValueButton: false,
             showAddSpecsInput: false,
             newSpec: '',
-            newSpecValue: ''
+            newSpecValue: '',
+            callObjectSpanMethod: false
         }
     },
     created() {
@@ -817,6 +846,31 @@ export default {
         });
     },
     methods: {
+        batchFilling() {
+            let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
+
+            goodsInfos.forEach((val, index) => {
+                val.costPrice = goodsInfos[0].costPrice
+                val.salePrice = goodsInfos[0].salePrice
+                val.stock = goodsInfos[0].stock
+                val.warningStock = goodsInfos[0].warningStock
+                val.weight = goodsInfos[0].weight
+                val.volume = goodsInfos[0].volume
+                val.image = goodsInfos[0].image
+                val.fileList = goodsInfos[0].fileList
+            })
+
+            this.ruleForm.goodsInfos = goodsInfos
+        },
+        deleteSpecValue(index, e) {
+            e.stopPropagation()
+            let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
+
+            addedSpecs[addedSpecs.length - 1].list.splice(index, 1)
+
+            this.addedSpecs = addedSpecs
+            this.specsValues.splice(index, 1)
+        },
         addNewSpecValue() {
             let value = this.newSpecValue
             let lastAddedSpecs = this.addedSpecs[this.addedSpecs.length - 1]
@@ -854,6 +908,7 @@ export default {
             this.addedSpecs = addedSpecs
             this.flatSpecsList = [...this.flatSpecsList, newChild]
             this.addSpecValue()
+            this.newSpecValue = ''
         },
         addNewSpec() {
             if(/\s+/.test(this.newSpec)) {
@@ -958,6 +1013,7 @@ export default {
             this.getSpecs()
         },
         getSpecs() {
+            this.callObjectSpanMethod = true
             let arr = []
 
             // this.addedSpecs.forEach(val => {
@@ -1004,7 +1060,7 @@ export default {
             }
         },
         addSpecValue() {
-            let item = this.specsList.find(val => val.id == this.addedSpecs[this.addedSpecs.length - 1].id)
+            let item = this.addedSpecs[this.addedSpecs.length - 1]
             let list = JSON.parse(JSON.stringify(item.list))
             
             list.forEach(val => {
@@ -1041,6 +1097,7 @@ export default {
             this.showSpecsList = false
         },
         addSpecs() {
+            this.callObjectSpanMethod = false
             if(this.addedSpecs.find(val => !val.valueList.length)) {
                 this.$message({
                     message: '请添加规格值',
@@ -1051,6 +1108,7 @@ export default {
             this.showAddSpecsInput = true
         },
         objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+            if(!this.callObjectSpanMethod) return
             let length = this.addedSpecs.length
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
 
@@ -1070,11 +1128,17 @@ export default {
 
                             if(number != 1) {
                                 if(rowIndex % number === 0) {
+                                    if((rowIndex == this.ruleForm.goodsInfos.length - 1) && (columnIndex == this.addedSpecs.length + 9 - 1)) {
+                                        this.callObjectSpanMethod = false
+                                    }
                                     return {
                                         rowspan: number,
                                         colspan: 1
                                     }
                                 } else {
+                                    if((rowIndex == this.ruleForm.goodsInfos.length - 1) && (columnIndex == this.addedSpecs.length + 9 - 1)) {
+                                        this.callObjectSpanMethod = false
+                                    }
                                     return {
                                         rowspan: 0,
                                         colspan: 0
@@ -1253,7 +1317,12 @@ export default {
                 let arr = []
                 let itemCatAr = []
 
-                this.getCategoryIds(arr, res.productCatalogInfoId)
+                res.productCatalogInfoIds.forEach((id, index) => {
+                    let _arr = []
+
+                    this.getCategoryIds(_arr, id)
+                    arr.push(_arr)
+                })
                 this.getCategoryInfoIds(itemCatAr, res.productCategoryInfoId)
 
                 let _arr = itemCatAr.map(id => {
@@ -1540,6 +1609,17 @@ export default {
                     //     obj.productDetail = _productDetail
                     // }
 
+                    if(this.categoryValue) {
+                        let categoryValue = JSON.parse(JSON.stringify(this.categoryValue))
+                        let arr = []
+
+                        categoryValue.forEach(val => {
+                            arr.push(val.pop())
+                        })
+                        
+                        this.ruleForm.productCatalogInfoIds = arr
+                    }
+
                     if(!this.editor) {
                         _goodsInfos = this.ruleForm.goodsInfos.map(val => {
                             let _specs = {}
@@ -1562,7 +1642,8 @@ export default {
                     // console.log(window.encodeURIComponent(this.ruleForm.productDetail))
                     // console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
                     params = Object.assign({}, this.ruleForm, obj, {
-                        productDetail: window.escape(this.ruleForm.productDetail)
+                        productDetail: window.escape(this.ruleForm.productDetail),
+                        productCatalogInfoId: ''
                     })
                     
                     if(!this.editor) {
@@ -2100,11 +2181,11 @@ $blue: #655EFF;
         top: 2px;
     }
 }
-/deep/ .spec-information-editor thead th:nth-child(2) .cell,
-    /deep/ .spec-information-editor thead th:nth-child(3) .cell,
-    /deep/ .spec-information-editor thead th:nth-child(4) .cell,
-    /deep/ .spec-information-editor thead th:nth-child(5) .cell,
-    /deep/ .spec-information-editor thead th:nth-child(8) .cell {
+/deep/ .spec-information-editor thead th.costPrice .cell,
+    /deep/ .spec-information-editor thead th.salePrice .cell,
+    /deep/ .spec-information-editor thead th.stock .cell,
+    /deep/ .spec-information-editor thead th.warningStock .cell,
+    /deep/ .spec-information-editor thead th.image .cell {
     position: relative;
     &:before {
         content: '*';
@@ -2288,12 +2369,18 @@ $blue: #655EFF;
         margin: 10px 0;
         li {
             float: left;
-            margin-right: 5px;
+            margin-right: 10px;
             border: 1px solid #ddd;
             padding: 2px 5px;
             cursor: pointer;
+            position: relative;
             &.active {
                 border: 1px solid rgba(22, 155, 213, 1);
+            }
+            i {
+                position: absolute;
+                top: -5px;
+                background-color: #fff;
             }
         }
         .clear {
@@ -2325,6 +2412,21 @@ $blue: #655EFF;
 /deep/ .add-specs {
     button {
         height: 42px;
+    }
+}
+/deep/ .add-specs-input input {
+    border: 1px solid #DCDFE6;
+}
+/deep/ .add-specs-value-input input {
+    border: 1px solid #DCDFE6;
+}
+/deep/ .batch-filling {
+    float: right;
+    margin-bottom: 10px;
+}
+.spec-information {
+    ::-webkit-scrollbar-thumb {
+        background-color:#bbb;
     }
 }
 </style>

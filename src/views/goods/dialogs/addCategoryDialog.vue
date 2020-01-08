@@ -36,6 +36,16 @@
                 <el-form-item label="排序：" prop="sort">
                     <el-input class="formInput" v-model="basicForm.sort"></el-input>
                 </el-form-item>
+                <el-form-item label="分类描述：" prop="description">
+                    <el-input
+                        type="textarea"
+                        :rows="2"
+                        placeholder="请输入内容"
+                        v-model="basicForm.description"
+                        maxlength="100"
+                        show-word-limit>
+                    </el-input>
+                </el-form-item>
                 <el-form-item label="分类图片：" prop="image">
                     <ul class="upload-ul">
                         <li @click="currentDialog = 'DialogSelectImageMaterial'; libraryVisible = true" class="upload">
@@ -73,7 +83,8 @@ export default {
                 sort: 0, // 分类顺序
                 parentId: 0, // 分类父ID
                 imageUrl:'', // 分类图片
-                image: ''
+                image: '',
+                description: ''
             },
             basicRules:{
                 name: [

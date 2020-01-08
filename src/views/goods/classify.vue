@@ -69,6 +69,12 @@ export default {
         //this.getList()
         this.getTreeList()
     },
+    computed: {
+        cid(){
+            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            return shopInfo.id
+        },
+    },
     methods: {
         resetForm(formName) {
             this.formInline.name = ''
@@ -158,9 +164,9 @@ export default {
                                 }</span>
                             }
                             {
-                                <span class="blue">
-                                    {Math.random() > 0.5 ? <span on-click={() => this.recommend(node, data)}>一键推荐</span> : <span on-click={() => this.cancelRecommend(node, data)}>取消推荐</span>}
-                                </span>
+                                <span class="blue" on-click={() => this.recommend(node, data)}>{
+                                    node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'
+                                }</span>
                             }
                             {
                                 <span v-permission="['商品', '商品分类', '默认页面', '隐藏']" class="blue" on-click={() => this.forbidden(node, data)}>{
@@ -193,9 +199,9 @@ export default {
                                 <span class="blue" on-click={() => this.change(node, data)}>修改</span>
                             }
                             {
-                                <span class="blue">
-                                    {Math.random() > 0.5 ? <span on-click={() => this.recommend(node, data)}>一键推荐</span> : <span on-click={() => this.cancelRecommend(node, data)}>取消推荐</span>}
-                                </span>
+                                <span class="blue" on-click={() => this.recommend(node, data)}>{
+                                    node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'
+                                }</span>
                             }
                             {
                                 <span class="blue" on-click={() => this.forbidden(node, data)}>{
@@ -247,10 +253,18 @@ export default {
             })
         },
         recommend(node, data) {
-            
-        },
-        cancelRecommend(node, data) {
+            let isRecommend
 
+            if(node.data.isRecommend === 1) {
+                isRecommend = 0
+            } else {
+                isRecommend = 1
+            }
+            this._apis.goods.recommend({cid: this.cid, id: node.data.id, isRecommend}).then((res) => {
+                this.getTreeList()
+            }).catch(error => {
+
+            })
         },
         delete(node, data) {
             // if(true) {
