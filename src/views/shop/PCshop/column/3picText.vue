@@ -3,7 +3,7 @@
       <h2>图文广告编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" placeholder="请输入标题" clearable></el-input>
+          <el-input v-model="ruleForm.title" placeholder="请输入标题" type="textarea" clearable></el-input>
         </el-form-item>
         <el-form-item label="详情" prop="details">
           <el-input v-model="ruleForm.details" placeholder="请输入详情" type="textarea" clearable></el-input>

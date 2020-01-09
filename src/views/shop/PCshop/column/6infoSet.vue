@@ -3,7 +3,7 @@
       <h2>信息资讯编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="120px">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" placeholder="请输入标题" clearable></el-input>
+          <el-input v-model="ruleForm.title" placeholder="请输入标题" type="textarea" clearable></el-input>
         </el-form-item>
         <el-form-item label="图片(一行一个)" prop="informationId">
          <el-button type="primary" style="margin-bottom:10px;" @click="dialogVisible=true; currentDialog='dialogSelectInfo'">新增</el-button>
