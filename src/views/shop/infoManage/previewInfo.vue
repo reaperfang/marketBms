@@ -21,7 +21,7 @@ export default {
   },
   methods: {
 
-    /* 获取分类装修数据 */
+    /* 获取资讯数据 */
     fetch() {
       if(!this.$route.query.id) {
         return;
@@ -66,6 +66,9 @@ export default {
     max-width:640px;
     p{
       margin: 5px 0;
+    }
+    img{
+      max-width: 100%;
     }
   }
 }
