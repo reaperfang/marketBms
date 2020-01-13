@@ -6,6 +6,8 @@
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '客流分析', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
               <el-radio-button class="btn_bor" label="2" v-permission="['数据', '客流分析', '公众号']">公众号</el-radio-button>
+              <el-radio-button class="btn_bor" label="3">pc</el-radio-button>
+              <el-radio-button class="btn_bor" label="4">wap</el-radio-button>
             </el-radio-group>
           </div>
       </div>

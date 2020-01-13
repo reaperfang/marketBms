@@ -6,6 +6,8 @@
           <el-radio-button class="btn_bor" label="0">全部</el-radio-button>
           <el-radio-button class="btn_bor" label="1">小程序</el-radio-button>
           <el-radio-button class="btn_bor" label="2">公众号</el-radio-button>
+          <el-radio-button class="btn_bor" label="3">pc</el-radio-button>
+          <el-radio-button class="btn_bor" label="4">wap</el-radio-button>
         </el-radio-group>
       </div>
     </div>
@@ -57,11 +59,11 @@
               <p>商品详情页</p>
               <p>{{dataObj.uv[4]}}</p>
             </div>
-            <p class="space"></p>
+            <!-- <p class="space"></p>
             <div>
               <p>其他页</p>
               <p>{{dataObj.uv[5]}}</p>
-            </div>
+            </div> -->
           </div>
         </div>
          <div class="p_top" v-if="dataObj.orderUvPathTransformation">
@@ -121,11 +123,11 @@
                 <p>直接退出</p>
                 <p>{{dataObj.pay[2]}}</p>
               </div>
-               <p class="spaces"></p>
+               <!-- <p class="spaces"></p>
               <div>
                 <p>其他</p>
                 <p>{{dataObj.pay[3]}}</p>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
