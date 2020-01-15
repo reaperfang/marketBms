@@ -48,7 +48,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="msgWechatApp"
         label="小程序模版消息"
         align="center">
@@ -73,7 +73,7 @@
             <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.wechatAppId?'预览':'--'}}</el-link>
           </el-popover>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="msgSms"
         label="短信通知"
