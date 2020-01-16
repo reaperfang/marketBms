@@ -51,6 +51,7 @@
             <el-form-item label="CERT证书文件:" prop="certBase64Content" label-width="180px">
               <input type="file"  @change="fileChange" style="width:75px;">
               <span>{{form.certFileName}}</span>
+              <span style="color:#FC3D42;font-size:12px;"> (请上传.p12类型的证书文件)</span>
             </el-form-item>
             <!-- <el-form-item label="KEY秘钥文件" prop="keyLocalPath">
             <div class="upload_file">
