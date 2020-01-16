@@ -120,6 +120,7 @@ export default {
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
         this.wechatPay = response.wechatPay == 1 ? true : false
+        this.aliPay = response.alipayPay == 1 ? true : false
         this.balanceOfAccountPay = response.balanceOfAccountPay == 1 ? true : false
         this.payOnDelivery = response.payOnDelivery == 1 ? true : false
         this.wechatBinding = response.wechatBinding
