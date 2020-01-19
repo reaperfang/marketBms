@@ -33,12 +33,12 @@
                     <el-switch v-model="info.email" active-color="#66CCAC" @change="handleSwitch('email',info.email)"></el-switch>
                 </span>
             </p>
-            <p>
+            <!-- <p>
                 <span>地区</span>
                 <span>
                     <el-switch v-model="info.area" active-color="#66CCAC" @change="handleSwitch('area',info.area)"></el-switch>
                 </span>
-            </p>
+            </p> -->
             <p>
                 <span>爱好</span>
                 <span>
@@ -62,7 +62,6 @@ export default {
                 gender: false,
                 birthday: false,
                 email: false,
-                area: false,
                 hobby: false
             },
         }
