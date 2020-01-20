@@ -6,8 +6,8 @@
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '商品交易', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '商品交易', '小程序']">小程序</el-radio-button>
               <el-radio-button class="btn_bor" label="2" v-permission="['数据', '商品交易', '公众号']">公众号</el-radio-button>
-              <el-radio-button class="btn_bor" label="3" v-permission="['数据', '商品交易', 'pc']">pc</el-radio-button>
-              <el-radio-button class="btn_bor" label="4" v-permission="['数据', '商品交易', 'wap']">wap</el-radio-button>
+              <el-radio-button class="btn_bor" label="3" v-permission="['数据', '商品交易', 'pc']" v-if="isPc">pc</el-radio-button>
+              <el-radio-button class="btn_bor" label="4" v-permission="['数据', '商品交易', 'wap']" v-if="isPc">wap</el-radio-button>
             </el-radio-group>
           </div>
         </div>
@@ -97,7 +97,8 @@ export default {
             dataObj:{},
             Condition:[],
             hotData:[],
-            listObj:[]
+            listObj:[],
+            isPc:false
         }
     },
     computed: {},
@@ -105,8 +106,24 @@ export default {
         this.getGeneralCondition()
         this.getHotGoods()
         this.getProductDetails()
+        this.getOpen()
     },
     methods:{
+        //pc wap是否开通
+        getOpen(){
+            this._apis.data.openPcWap().then(response => {
+                if(response == null){
+                this.isPc = false
+                }else if(response.onoff == 0){
+                this.isPc = false
+                }else{
+                this.isPc = true
+                }
+            }).catch(error => {
+                this.$message.error(error);
+            });
+        },
+
         //获取商品总况
         getGeneralCondition(){
             this.Condition = datumCont.goodsTotleData
