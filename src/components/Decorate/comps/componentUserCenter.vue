@@ -127,25 +127,25 @@
             </li> -->
             <!-- 会员等级id:会员id,levelId:会员等级id -->
             <li>
-              <img :src="data.moduleList.memberRank.icon || require('../../../assets/images/shop/userCenter/userCenterFunctionListIcon3.png')" alt class="tb" />
+              <img :src="data.moduleList.memberRank.icon || require('../../../assets/images/shop/userCenter/userCenter13.png')" alt class="tb" />
               <p class="name" :style="{color: data.moduleList.memberRank.color}">{{data.moduleList.memberRank.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan">Lv5</p>
             </li>
             <!--赠品包  -->
             <li>
-              <img  :src="data.moduleList.gift.icon || require('../../../assets/images/shop/userCenter/userCenterFunctionListIcon4.png')" alt="" class="tb">
+              <img  :src="data.moduleList.gift.icon || require('../../../assets/images/shop/userCenter/userCenter16.png')" alt="" class="tb">
               <p class="name" :style="{color: data.moduleList.gift.color}">{{data.moduleList.gift.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan">待领取5件</p>
             </li>
             <!-- 我的拼团 -->
             <li>
-              <img :src="data.moduleList.myAssemble.icon || require('../../../assets/images/shop/userCenter/userCenterFunctionListIcon5.png')" alt="" class="tb">
+              <img :src="data.moduleList.myAssemble.icon || require('../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
               <p class="name" :style="{color: data.moduleList.myAssemble.color}">{{data.moduleList.myAssemble.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan">拼团中1个</p>
             </li>
             <!--收货地址  -->
             <li>
-              <img :src="data.moduleList.address.icon || require('../../../assets/images/shop/userCenter/userCenterFunctionListIcon6.png')" alt="" class="tb">
+              <img :src="data.moduleList.address.icon || require('../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
               <p class="name" :style="{color: data.moduleList.address.color}">{{data.moduleList.address.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
