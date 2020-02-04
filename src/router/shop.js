@@ -24,6 +24,14 @@ export default [
 				name: "m_wxShopIndex",
 				meta: { title: "微信店铺", noCache: true, tabTitle: '移动店铺',navType:2}
 			},
+			{
+				path: "m_shopNavIndex",
+				component: () => import("@/views/shop/mobileShop/wxShop/shopNavIndex"),
+				name: "m_shopNavIndex",
+				meta: { title: "店铺导航", noCache: true, tabTitle: '移动店铺',navType:2},
+				hidden:true
+			},
+			
 
 			//移动装修模板相关
 			{
