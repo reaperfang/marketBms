@@ -22,8 +22,8 @@
             <el-timeline-item
               v-for="(activity, index) in data"
               :key="index"
-              :timestamp="activity.AcceptTime"
-            >{{activity.AcceptStation}}</el-timeline-item>
+              :timestamp="activity.acceptTime"
+            >{{activity.acceptStation}}</el-timeline-item>
           </el-timeline>
           <Empty v-show="!data.length"></Empty>
         </template>
@@ -96,6 +96,9 @@ export default {
     align-items: center;
     p {
         align-self: flex-start;
+    }
+    .content {
+      padding-top: 20px;
     }
   }
 }
