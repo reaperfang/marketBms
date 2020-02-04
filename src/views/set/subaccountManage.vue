@@ -39,7 +39,7 @@
         </el-table-column>
         <el-table-column
           prop="userName"
-          label="账号">
+          label="姓名">
         </el-table-column>
         <el-table-column
           prop="roleNames"

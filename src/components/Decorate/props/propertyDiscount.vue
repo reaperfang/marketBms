@@ -120,7 +120,7 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectDiscount from '@/views/shop/dialogs/decorateDialogs/dialogSelectDiscount';
+import dialogSelectDiscount from '@/views/shop/dialogs/dialogSelectDiscount';
 import uuid from 'uuid/v4';
 export default {
   name: 'propertyDiscount',

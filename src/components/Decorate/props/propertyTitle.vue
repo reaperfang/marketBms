@@ -61,7 +61,7 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
+import dialogSelectJumpPage from '@/views/shop/dialogs/dialogSelectJumpPage';
 export default {
   name: 'propertyTitle',
   mixins: [propertyMixin],

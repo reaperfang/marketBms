@@ -287,23 +287,13 @@ export default {
             rewardScore: 0,
             gift: '',
             gainCouponList: '',
-            gainCouponCodeList: '',
-            yingshow: '0.00'
+            gainCouponCodeList: ''
             //replacePayWechatNames: ''
         }
     },
     created() {
         //this.getOrderPayRecordList()
         this.getGain()
-    },
-    watch: {
-        orderInfo: {
-            deep: true,
-            handler() {
-                this.getOrderAmount()
-                this.getYingshou()
-            }
-        }
     },
     watch: {
         orderInfo: {

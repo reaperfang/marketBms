@@ -1,12 +1,12 @@
 /*账号信息 */
 <template>
     <div class="main">
-        <el-form ref="form" :model="form" label-width="120px" v-loading="loading">
+        <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="登录账号:" >
-                {{form.userName}}
+                {{form.mobile}}
             </el-form-item>
-            <el-form-item label="昵称:" prop="remark">
-                <el-input v-model="form.remark" style="width:200px;"></el-input>
+            <el-form-item label="昵称:" prop="userName">
+                <el-input v-model="form.userName" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="性别:">
                 <el-radio-group v-model="form.sex">
@@ -14,9 +14,6 @@
                     <el-radio :label="2" class="ml10">女</el-radio>
                     <!-- <el-radio :label="3" class="ml10">保密</el-radio> -->
                 </el-radio-group>
-            </el-form-item>
-            <el-form-item label="手机号:" >
-                <el-input v-model="form.mobile" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="QQ:" >
                 <el-input v-model="form.qq" style="width:200px;"></el-input>
@@ -37,12 +34,10 @@ export default {
   name: 'accountInfo',
   data() {
     return {
-      loading:true,
       form: {
-          remark:'',
+          mobile:'',
           userName: '',
           sex: 2,
-          mobile:'',
           qq: '',
           email: ''
       },
@@ -68,9 +63,7 @@ export default {
         this._apis.login.getUserInfo({id:this.userInfo.id}).then(response =>{
             this.userNameOld = response.userName
             this.form = response
-            this.loading = false
         }).catch(error =>{
-            this.loading = false
             this.$notify.error({
                 title: '失败',
                 message: error
@@ -83,11 +76,10 @@ export default {
             id:this.form.id,
             userName:this.form.userName,
             userNameOld:this.userNameOld,
-            remark:this.form.remark,
+            mobile:this.form.mobile,
             email:this.form.email,
             qq:this.form.qq,
-            sex:this.form.sex,
-            mobile:this.form.mobile
+            sex:this.form.sex
         }
         this._apis.login.updateUserInfo(query).then(response =>{
             this.$notify.success({

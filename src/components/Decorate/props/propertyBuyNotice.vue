@@ -47,7 +47,7 @@
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
-import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
+import dialogSelectGoods from '@/views/shop/dialogs/dialogSelectGoods';
 export default {
   name: 'propertyBuyNotice',
   mixins: [propertyMixin],

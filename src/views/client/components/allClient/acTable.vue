@@ -16,8 +16,8 @@
       <el-table-column label="客户信息">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
-            <img v-if="scope.row.headIcon" :src="scope.row.headIcon" alt="" class="headIcon fl">
-            <img v-else src="../../../../assets/images/client/head_default.png" alt="" class="headIcon fl">
+            
+            <img :src="scope.row?scope.row.headIcon:require('../../../../assets/images/client/head_default.png')" alt="" class="headIcon fl">
             <span class="fr">{{scope.row?scope.row.nickName:""}}</span>
           </div>
         </template>
@@ -226,7 +226,6 @@ export default {
       });
     },
     getMembers(startIndex, pageSize) {
-      this.memberList = [];
       this.loading = true;
       this._apis.client
         .getMemberList(Object.assign(this.newForm,{startIndex, pageSize}))
