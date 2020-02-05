@@ -27,7 +27,7 @@
           </div>
           建议尺寸：550*550
         </el-form-item>
-        <el-form-item label="资讯正文" prop="editorData">
+        <el-form-item label="资讯正文" prop="data">
           <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="ruleForm.data"></RichEditor>
         </el-form-item>
       </el-form>

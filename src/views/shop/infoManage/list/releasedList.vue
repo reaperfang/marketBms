@@ -49,10 +49,10 @@
         </el-table-column>
         <el-table-column prop="updateTime" sortable label="最后编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="最后操作人"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'250px'">
+        <el-table-column prop="" label="操作" :width="'100px'">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('p_previewInfo', {id: scope.row.id})">查看</span>
-            <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span>
+            <!-- <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span> -->
             <span class="table-btn" @click="offline(scope.row)">下线</span>
           </template>
         </el-table-column>
