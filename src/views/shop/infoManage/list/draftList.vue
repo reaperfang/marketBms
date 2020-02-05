@@ -202,6 +202,11 @@ export default {
         this.tableList = response.list;
         this.total = response.total;
         this.loading = false;
+
+        if(Array.isArray(response.list) && !response.list.length) {
+          this.ruleForm.startIndex = this.ruleForm.startIndex-1 >= 0 ? this.ruleForm.startIndex-1 : 0;
+          this.fetch();
+        }
       }).catch((error)=>{
         // this.$notify.error({
         //   title: '错误',
