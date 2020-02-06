@@ -18,7 +18,7 @@
       <el-table-column prop="title" label="图文名称" :width="500">
         <template slot-scope="scope">
           <div class="name_wrapper">
-            <img :src="scope.row.cover" alt="加载错误" />
+            <img :src="scope.row.cover || require('../../../../assets/images/shop/error_img.png')" alt="加载错误" />
             <p>{{scope.row.title}}</p>
           </div>
         </template>

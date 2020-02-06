@@ -137,7 +137,9 @@ export default {
 
     getInfoListByids(ids) {
         this._apis.shop.getInfoByIds({ids}).then((response)=>{
-          this.infos = response.list;
+          this.infos = response.list.filter((item)=>{
+            return item.status === 0 || item.status === '0'
+          });
         }).catch((error)=>{
           console.error(error);
         });
