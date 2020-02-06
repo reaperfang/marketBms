@@ -8,7 +8,7 @@
         <el-form-item label="状态" prop="type">
           <el-select  v-model="ruleForm.type" placeholder="请选择状态">
             <el-option label="全部" value=""></el-option>
-            <el-option label="已保存" :value="0"></el-option>
+            <el-option label="未发布" :value="0"></el-option>
             <el-option label="已下线" :value="2"></el-option>
           </el-select>
         </el-form-item>
@@ -43,14 +43,14 @@
         </el-table-column>
         <el-table-column prop="type" label="状态">
           <template slot-scope="scope">
-            <span v-if="scope.row.type == 0">已保存</span>
+            <span v-if="scope.row.type == 0">未发布</span>
             <span v-else-if="scope.row.type == 1">已发布</span>
             <span v-else-if="scope.row.type == 2">已下线</span>
           </template>
         </el-table-column>
         <el-table-column prop="updateTime" sortable label="最后编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="最后操作人"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'250px'">
+        <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('p_previewInfo', {id: scope.row.id})">查看</span>
             <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span>
@@ -202,6 +202,11 @@ export default {
         this.tableList = response.list;
         this.total = response.total;
         this.loading = false;
+
+        if(Array.isArray(response.list) && !response.list.length) {
+          this.ruleForm.startIndex = this.ruleForm.startIndex-1 >= 0 ? this.ruleForm.startIndex-1 : 0;
+          this.fetch();
+        }
       }).catch((error)=>{
         // this.$notify.error({
         //   title: '错误',

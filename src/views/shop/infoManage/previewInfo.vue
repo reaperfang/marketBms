@@ -3,6 +3,9 @@
       <h2>{{data.title}}</h2>
       <p class="time"><i class="el-icon-alarm-clock"></i>&nbsp;{{data.updateTime}}</p>
       <div class="rich_wrapper" v-if="data.data" v-html="data.data"></div>
+      <div class="confirm_btn">
+        <el-button @click="$router.go(-1)">返回</el-button>
+      </div>
     </div>
 </template>
 
@@ -70,6 +73,12 @@ export default {
     img{
       max-width: 100%;
     }
+  }
+  .confirm_btn{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 30px;
   }
 }
 </style>

@@ -11,16 +11,16 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('p_createInfo')">新建资讯</el-button>
-        <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+        <!-- <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button> -->
       </div>
     </div>
     <div class="table">
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           :selectable='selectInit'
           width="30">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="title" label="标题" :width="300"></el-table-column>
         <el-table-column prop="cover" label="封面状态">
           <template slot-scope="scope">
@@ -49,10 +49,10 @@
         </el-table-column>
         <el-table-column prop="updateTime" sortable label="最后编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="最后操作人"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'250px'">
+        <el-table-column prop="" label="操作" :width="'100px'">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('p_previewInfo', {id: scope.row.id})">查看</span>
-            <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span>
+            <!-- <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span> -->
             <span class="table-btn" @click="offline(scope.row)">下线</span>
           </template>
         </el-table-column>
@@ -174,6 +174,11 @@ export default {
         this.tableList = response.list;
         this.total = response.total;
         this.loading = false;
+
+        if(Array.isArray(response.list) && !response.list.length) {
+          this.ruleForm.startIndex = this.ruleForm.startIndex-1 >= 0 ? this.ruleForm.startIndex-1 : 0;
+          this.fetch();
+        }
       }).catch((error)=>{
         // this.$notify.error({
         //   title: '错误',
