@@ -33,7 +33,7 @@
       </el-form>
       <div class="confirm_btn">
         <el-button type="primary" @click="saveData" :loading="submitLoadinig">保存到草稿箱</el-button>
-        <el-button type="primary" @click="$router.go(-1)">取消</el-button>
+        <el-button type="primary" @click="$router.go(-1)">返回</el-button>
       </div>
     
       <!-- 动态弹窗 -->

@@ -21,7 +21,12 @@
           :selectable='selectInit'
           width="30">
         </el-table-column> -->
-        <el-table-column prop="title" label="标题" :width="300"></el-table-column>
+        <el-table-column prop="title" label="标题" :width="200">
+          <span slot-scope="scope">
+            <span v-if="scope.row.title && scope.row.title.length >=15" :title="scope.row.title">{{scope.row.title.substring(0,15) + '...'}}</span>
+            <span v-else :title="scope.row.title">{{scope.row.title}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="cover" label="封面状态">
           <template slot-scope="scope">
             <span v-if="scope.row.cover">已上传</span>
@@ -47,6 +52,7 @@
             <span v-else-if="scope.row.type == 2">已下线</span>
           </template>
         </el-table-column>
+        <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" sortable label="最后编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="最后操作人"></el-table-column>
         <el-table-column prop="" label="操作" :width="'100px'">
