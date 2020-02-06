@@ -62,7 +62,7 @@ const user = {
     setShopInfos({commit},shop){
       return new Promise((resolve, reject) => {
         commit('SET_SHOP_INFO',shop)
-        // window.eventHub.$emit('onShopInfos')
+         window.eventHub.$emit('onShopInfos')
         resolve()
       }).catch(error => {
         reject(error)
