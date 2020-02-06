@@ -115,7 +115,8 @@ export default {
         title: '',
         status: 1
       },
-      visible: false  //是否显示批量该分类浮层
+      visible: false,  //是否显示批量该分类浮层
+      isFindPrev: false  //是否向上查询了一页
     }
   },
   created() {
@@ -203,9 +204,12 @@ export default {
         this.total = response.total;
         this.loading = false;
 
-        if(Array.isArray(response.list) && !response.list.length) {
-          this.ruleForm.startIndex = this.ruleForm.startIndex-1 >= 0 ? this.ruleForm.startIndex-1 : 0;
-          this.fetch();
+        if(!this.isFindPrev) {
+          if(Array.isArray(response.list) && !response.list.length) {
+            this.ruleForm.startIndex = this.ruleForm.startIndex-1 > 1 ? this.ruleForm.startIndex-1 : 1;
+            this.fetch();
+            this.isFindPrev = true;
+          }
         }
       }).catch((error)=>{
         // this.$notify.error({
