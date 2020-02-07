@@ -49,7 +49,7 @@
         </el-table-column>  
         <el-table-column prop="author" label="作者名称">
            <template slot-scope="scope">
-            <span>{{scope.row.createTime || '--'}}</span>
+            <span>{{scope.row.author || '--'}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="authorHeadPath" label="作者头像">

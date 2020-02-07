@@ -32,7 +32,7 @@
         </el-form-item>
       </el-form>
       <div class="confirm_btn">
-        <el-button type="primary" @click="saveData" :loading="submitLoadinig">保存到草稿箱</el-button>
+        <el-button type="primary" @click="saveData" :loading="submitLoadinig">保存</el-button>
         <el-button type="primary" @click="$router.go(-1)">返回</el-button>
       </div>
     
