@@ -247,6 +247,19 @@ export default {
 .preview_content{
   padding: 6px 0 0 6px;
   line-height: 25px;
+  /deep/table{
+    border-collapse: collapse;
+    /deep/td{
+      padding: 5px 10px;
+      border: 1px solid #DDD;
+    }
+  }
+  /deep/p{
+    margin: 5px 0;
+  }
+  /deep/img{
+    max-width: 100%!important;
+  }
 }
 .preview_id{
   padding: 6px 0 0 6px;

@@ -15,7 +15,7 @@
               label="标题" :width="600">
               <template slot-scope="scope">
                 <div class="info_block">
-                  <img class="cover_img" :src="scope.row.cover" alt="">
+                  <img class="cover_img" :src="scope.row.cover || require('../../../../assets/images/shop/error_img.png')" alt="">
                   <span>{{scope.row.title}}</span>
                 </div>
               </template>
@@ -137,7 +137,9 @@ export default {
 
     getInfoListByids(ids) {
         this._apis.shop.getInfoByIds({ids}).then((response)=>{
-          this.infos = response.list;
+          this.infos = response.list.filter((item)=>{
+            return item.status === 0 || item.status === '0'
+          });
         }).catch((error)=>{
           console.error(error);
         });

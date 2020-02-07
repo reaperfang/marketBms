@@ -25,7 +25,7 @@
           <div class="add_button" v-if="!ruleForm.authorHeadPath" @click="currentImage= 'authorHeadPath'; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
             <i class="inner"></i>
           </div>
-          建议尺寸：550*550
+          建议尺寸：50*50
         </el-form-item>
         <el-form-item label="资讯正文" prop="data">
           <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="ruleForm.data"></RichEditor>
@@ -33,7 +33,7 @@
       </el-form>
       <div class="confirm_btn">
         <el-button type="primary" @click="saveData" :loading="submitLoadinig">保存到草稿箱</el-button>
-        <el-button type="primary" @click="$router.go(-1)">取消</el-button>
+        <el-button type="primary" @click="$router.go(-1)">返回</el-button>
       </div>
     
       <!-- 动态弹窗 -->
@@ -49,6 +49,14 @@ export default {
   name: "createInfo",
   components: {RichEditor, dialogSelectImageMaterial},
   data() {
+    var validateTitle = (rule, value, callback) => {
+      if (value.trim().length === 0) {
+        callback(new Error('请输入资讯标题'));
+      } else {
+        callback();
+      }
+    };
+
     return {
       loading: false,
       dialogVisible: false,
@@ -72,6 +80,16 @@ export default {
       rules: {
         title: [
           { required: true, message: "请输入资讯标题", trigger: "blur" },
+          {
+            min: 1,
+            max: 64,
+            message: "长度在 1 到 64 个字符",
+            trigger: "blur"
+          },
+          {validator: validateTitle, trigger: "blur"}
+        ], 
+        author: [
+          { required: false, message: "请输入作者名称", trigger: "blur" },
           {
             min: 1,
             max: 64,
@@ -116,9 +134,9 @@ export default {
     saveData() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.submitLoadinig = true;
           let result = {...this.ruleForm};
           result['data'] = escape(this.ruleForm.data);
+          this.submitLoadinig = true;
           if(!this.$route.query.id) {
             this._apis.shop.createInfo(result).then((response)=>{
               this.$notify({
