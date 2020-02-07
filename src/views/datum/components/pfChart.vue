@@ -78,9 +78,11 @@ export default {
         },
         yAxis: {
           type: "value",
-          minInterval: 1
-          // axisLabel:{
-          //   formatter:'{value}(人)'
+          minInterval: 1,
+          // axisLabel: { 
+          //     formatter: function (value, index) { 
+          //       return value.toFixed(1); 
+          //     }                           
           // }
         },
         series: [
@@ -88,20 +90,24 @@ export default {
             name: "访客",
             type: "line",
             stack: "访客",
-            data: this.flow['yAxis']
+            data: this.flow['yAxis1']
+            // data:this.flow['yAxis'].map(item =>{
+            //   return (item*1).toFixed(1)
+            // })
           },
           {
             name: "浏览",
             type: "line",
             stack: "浏览",
-            data: this.flow['yAxis'] 
+            data: this.flow['yAxis2'] 
           }
         ]
       };
+
       this.flow = {
         xAxis:this.n.xAxis,
-        yAxis1:this.n.series[0] && this.n.series[0].data,
-        yAxis2:this.n.series[1] && this.n.series[1].data,
+        yAxis1:this.n.series[0] && this.n.series[0].data.map(item => { return (item*1).toFixed(1)}),
+        yAxis2:this.n.series[1] && this.n.series[1].data.map(item => { return (item*1).toFixed(1)}),
       }
       this.nearDay(this.type)
       this.makeOption(this.flow);
