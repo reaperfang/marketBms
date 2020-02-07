@@ -33,8 +33,18 @@ export default {
 <style lang="scss" scoped>
 .rich_wrapper{
   line-height: initial;
-  p{
-    margin: 5px 0;
-  }
+      /deep/table{
+        border-collapse: collapse;
+        /deep/td{
+          padding: 5px 10px;
+          border: 1px solid #DDD;
+        }
+      }
+      /deep/p{
+        margin: 5px 0;
+      }
+      /deep/img{
+        max-width: 100%!important;
+      }
 }
 </style>
