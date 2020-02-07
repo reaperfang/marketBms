@@ -72,10 +72,10 @@
             <span>{{scope.row.updateUserName || '--'}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="" label="操作" :width="'100px'">
+        <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('p_previewInfo', {id: scope.row.id})">查看</span>
-            <!-- <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span> -->
+            <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span>
             <span class="table-btn" @click="offline(scope.row)">下线</span>
           </template>
         </el-table-column>
