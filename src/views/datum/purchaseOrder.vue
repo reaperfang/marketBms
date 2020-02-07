@@ -310,5 +310,8 @@ export default {
         }
     }
 }
+.el-radio-group label:last-child{
+  margin-left: 0px;
+}
 </style>
 
