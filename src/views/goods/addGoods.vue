@@ -54,7 +54,7 @@
                 <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span>
                 <p class="description prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
             </el-form-item>
-            <el-form-item label="商品分类" prop="productCatalogInfoId">
+            <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoId">
                 <div class="block" style="display: inline-block;">
                     <el-cascader
                         :disabled="!ruleForm.productCategoryInfoId"
@@ -875,6 +875,14 @@ export default {
             let value = this.newSpecValue
             let lastAddedSpecs = this.addedSpecs[this.addedSpecs.length - 1]
 
+            if(value == "") {
+                this.$message({
+                    message: '规格值不能为空',
+                    type: 'warning'
+                });
+                return
+            }
+
             if(/\s+/.test(value)) {
                 this.$message({
                     message: '规格值不能为空',
@@ -1534,7 +1542,7 @@ export default {
 
                     let calculationWay
 
-                    if(/\s+/.test(this.ruleForm.name)) {
+                    if(/^\s+$/.test(this.ruleForm.name)) {
                         this.$message({
                             message: '商品名称不能为空',
                             type: 'warning'
@@ -2427,6 +2435,11 @@ $blue: #655EFF;
 .spec-information {
     ::-webkit-scrollbar-thumb {
         background-color:#bbb;
+    }
+}
+/deep/ .productCatalogInfoId {
+    .el-cascader__tags input {
+        margin-left: 9px;
     }
 }
 </style>
