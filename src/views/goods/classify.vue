@@ -393,7 +393,7 @@ export default {
 }
 .operate {
     span {
-        margin-right: 26px;
+        margin-right: 6px;
     }
 }
 .treeRow {
