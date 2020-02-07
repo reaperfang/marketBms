@@ -48,6 +48,20 @@ export default {
     min-height:80px;
     padding:10px;
     background:#fff;
+    line-height: initial;
+    /deep/table{
+      border-collapse: collapse;
+      /deep/td{
+        padding: 5px 10px;
+        border: 1px solid #DDD;
+      }
+    }
+    /deep/p{
+      margin: 5px 0;
+    }
+    /deep/img{
+      max-width: 100%!important;
+    }
     &.default{
       background:rgba(239,239,239,1);
       font-size:18px;
