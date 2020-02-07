@@ -11,35 +11,22 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('p_createInfo')">新建资讯</el-button>
-        <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+        <!-- <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button> -->
       </div>
     </div>
     <div class="table">
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           :selectable='selectInit'
           width="30">
-        </el-table-column>
-        <el-table-column prop="title" label="标题" :width="300"></el-table-column>
-        <el-table-column prop="cover" label="封面状态">
+        </el-table-column> -->
+        <el-table-column prop="title" label="标题" :width="200">
           <template slot-scope="scope">
-            <span v-if="scope.row.cover">已上传</span>
-            <span v-else>未上传</span>
-          </template>
-        </el-table-column>  
-        <el-table-column prop="author" label="作者"></el-table-column>
-        <el-table-column prop="authorHeadPath" label="作者头像">
-           <template slot-scope="scope">
-             <img class="author_img" :src="scope.row.authorHeadPath" alt="">
+            <span v-if="scope.row.title && scope.row.title.length >=15" :title="scope.row.title">{{scope.row.title.substring(0,15) + '...' || '--'}}</span>
+            <span v-else :title="scope.row.title">{{scope.row.title}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="channelType" label="展示渠道">
-          <template slot-scope="scope">
-            <span v-if="scope.row.channelType == 3">PC端</span>
-            <span v-else-if="scope.row.channelType == 4">WAP端</span>
-          </template>
-        </el-table-column>  
         <el-table-column prop="type" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.type == 0">已保存</span>
@@ -47,9 +34,45 @@
             <span v-else-if="scope.row.type == 2">已下线</span>
           </template>
         </el-table-column>
-        <el-table-column prop="updateTime" sortable label="最后编辑时间"></el-table-column>
-        <el-table-column prop="updateUserName" label="最后操作人"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'250px'">
+        <el-table-column prop="cover" label="上传封面">
+          <template slot-scope="scope">
+            <span v-if="scope.row.cover">已上传</span>
+            <span v-else>未上传</span>
+          </template>
+        </el-table-column>  
+        <el-table-column prop="author" label="作者名称">
+          <template slot-scope="scope">
+            <span>{{scope.row.author || '--'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="authorHeadPath" label="作者头像">
+           <template slot-scope="scope">
+             <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="">
+             <span v-else>--</span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column prop="channelType" label="展示渠道">
+          <template slot-scope="scope">
+            <span v-if="scope.row.channelType == 3">PC端</span>
+            <span v-else-if="scope.row.channelType == 4">WAP端</span>
+          </template>
+        </el-table-column>   -->
+        <el-table-column prop="createTime" sortable label="创建时间">
+          <template slot-scope="scope">
+            <span>{{scope.row.createTime || '--'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="updateTime" sortable label="最后编辑时间" :width="150">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateTime || '--'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="updateUserName" label="最后操作人">
+          <template slot-scope="scope">
+            <span>{{scope.row.updateUserName || '--'}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="" label="操作" :width="'150px'">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('p_previewInfo', {id: scope.row.id})">查看</span>
             <span class="table-btn" @click="_routeTo('p_createInfo', {id: scope.row.id})">编辑</span>
@@ -87,7 +110,8 @@ export default {
         type: '',
         status: 0
       },
-      visible: false  //是否显示批量该分类浮层
+      visible: false,  //是否显示批量该分类浮层
+      isFindPrev: false  //是否向上查询了一页
     }
   },
   created() {
@@ -174,6 +198,14 @@ export default {
         this.tableList = response.list;
         this.total = response.total;
         this.loading = false;
+
+        if(!this.isFindPrev) {
+          if(Array.isArray(response.list) && !response.list.length) {
+            this.ruleForm.startIndex = this.ruleForm.startIndex-1 > 1 ? this.ruleForm.startIndex-1 : 1;
+            this.fetch();
+            this.isFindPrev = true;
+          }
+        }
       }).catch((error)=>{
         // this.$notify.error({
         //   title: '错误',
