@@ -61,7 +61,7 @@
                         </div>
                         <div class="step_b">
                             <p>
-                                <span @click="linkTo({text:'移动店铺装修',url:'/shop/m_templateManageIndex'})">移动店铺装修</span>
+                                <span @click="linkTo({text:'移动店铺装修',url:'/shop/templateManageIndex'})">移动店铺装修</span>
                             </p>
                             <!-- <p>
                                 <span @click="linkTo({text:'拟定用户注册协议',url:'/shop/p_protocolEdit'})">拟定用户注册协议</span>
