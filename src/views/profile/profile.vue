@@ -61,11 +61,11 @@
                         </div>
                         <div class="step_b">
                             <p>
-                                <span @click="linkTo({text:'移动店铺装修',url:'/shop/m_wxShopIndex'})">移动店铺装修</span>
+                                <span @click="linkTo({text:'移动店铺装修',url:'/shop/m_templateManageIndex'})">移动店铺装修</span>
                             </p>
-                            <p>
+                            <!-- <p>
                                 <span @click="linkTo({text:'拟定用户注册协议',url:'/shop/p_protocolEdit'})">拟定用户注册协议</span>
-                            </p>
+                            </p> -->
                         </div>
                     </div>
                     <div class="step">
@@ -633,7 +633,7 @@ export default {
             border-radius: 10px;
             position: absolute;
             bottom: -8px;
-            left: 45%;
+            left: 48%;
         }
     }
     .step_b{
@@ -642,10 +642,10 @@ export default {
         background:rgba(255,255,255,1);
         box-shadow:0px 2px 4px 0px rgba(240,239,255,1);
         border-radius:0px 0px 4px 4px;
-        padding: 18px 0px 10px 18px;
+        padding: 18px;
         p{
             color: #3D434AFF;
-            text-align: left;
+            text-align:center;
             span{
                 color: #655EFFFF;
                 font-size:12px;
