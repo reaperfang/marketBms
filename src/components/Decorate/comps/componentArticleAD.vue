@@ -96,8 +96,8 @@ export default {
     hasContent() {
       let value = false;
       if(this.currentComponentData.data.itemList) {
-        for(let k in this.currentComponentData.data.itemList) {
-          if(this.currentComponentData.data.itemList[k].url) {
+        for(let item of this.currentComponentData.data.itemList) {
+          if(item.url) {
             value = true;
             break;
           }
@@ -108,7 +108,7 @@ export default {
   },
   watch: {
     'currentComponentData.data.templateType'(newValue) {
-      let tempData = {...this.currentComponentData.data.itemList};
+      let tempData = [...this.currentComponentData.data.itemList];
       this.currentComponentData.data.itemList = [];
       this.$nextTick(()=>{
         this.currentComponentData.data.itemList = tempData;
