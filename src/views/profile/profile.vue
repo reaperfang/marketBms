@@ -28,7 +28,7 @@
         <div class="p_main clearfix">
             <div class="p_main_l">
                  <p class="p_title">
-                    开店引导：<span>为了保证店铺的正常运营，您需要在开通店铺前做以下准备工作（带 为必备事项）</span>
+                    开店引导：<span>为了保证店铺的正常运营，您需要在开通店铺前做以下准备工作（带 <img :src="require('@/assets/images/star.png')" alt=""> 为必备事项）</span>
                 </p>
                 <div class="p_main_lt">
                     <div class="step">
@@ -158,7 +158,7 @@
                         <span>客服中心：</span>   
                     </p>
                     <p class="p_email">
-                        联系邮箱：shushangzhong@300.cn
+                        联系邮箱：shuzishangwu@300.cn 
                     </p>
                 </div>
             </div>
