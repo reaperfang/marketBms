@@ -432,7 +432,7 @@ export default {
     .p_main_rt{
         background-color:#fff;
         padding: 24px 21px;
-        width: 265px;
+        width: 280px;
         height: 297px;
         margin-left: 20px;
         color: #3D434A;
@@ -451,7 +451,7 @@ export default {
     .p_main_rb{
         background-color:#fff;
         padding: 24px 21px;
-        width: 265px;
+        width: 280px;
         height: 84px;
         margin-left: 20px;
         color: #3D434A;
