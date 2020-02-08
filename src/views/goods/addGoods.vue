@@ -850,14 +850,14 @@ export default {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
 
             goodsInfos.forEach((val, index) => {
-                val.costPrice = goodsInfos[0].costPrice
-                val.salePrice = goodsInfos[0].salePrice
-                val.stock = goodsInfos[0].stock
-                val.warningStock = goodsInfos[0].warningStock
-                val.weight = goodsInfos[0].weight
-                val.volume = goodsInfos[0].volume
-                val.image = goodsInfos[0].image
-                val.fileList = goodsInfos[0].fileList
+                val.costPrice = val.costPrice || goodsInfos[0].costPrice
+                val.salePrice = val.salePrice || goodsInfos[0].salePrice
+                val.stock = val.stock || goodsInfos[0].stock
+                val.warningStock = val.warningStock || goodsInfos[0].warningStock
+                val.weight = val.weight || goodsInfos[0].weight
+                val.volume = val.volume || goodsInfos[0].volume
+                val.image = val.image || goodsInfos[0].image
+                val.fileList = val.fileList || goodsInfos[0].fileList
             })
 
             this.ruleForm.goodsInfos = goodsInfos
@@ -1231,6 +1231,7 @@ export default {
                 weight: '',
                 volume: '',
                 image: '',
+                code: ''
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
             console.log(this.ruleForm.goodsInfos)
