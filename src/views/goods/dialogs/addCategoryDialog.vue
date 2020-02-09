@@ -34,12 +34,12 @@
                     <el-radio v-model="basicForm.enable" :label="0">禁用</el-radio>
                 </el-form-item>
                 <el-form-item label="排序：" prop="sort">
-                    <el-input class="formInput" v-model="basicForm.sort"></el-input>
+                    <el-input maxlength="6" class="formInput" v-model="basicForm.sort"></el-input>
                 </el-form-item>
                 <el-form-item label="分类描述：" prop="description">
                     <el-input
                         type="textarea"
-                        :rows="2"
+                        :rows="5"
                         placeholder="请输入内容"
                         v-model="basicForm.description"
                         maxlength="100"
