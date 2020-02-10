@@ -101,7 +101,6 @@ export default {
     },
 
     onSubmit(formName){
-      this.loading = true
       this.$msgbox({
         title: '确认提示',
         message: '请确认开通了【商户支付】功能，否则将可能会产生相关客诉，因此产生的法律风险商家需要自行承担',
@@ -151,6 +150,7 @@ export default {
                   type: 'warning'
                 });
               }else{
+                this.loading = true
                 let data = Object.assign({id:id},this.form)
                 this._apis.set.updateShopInfo(data).then(response =>{
                   this.loading = false

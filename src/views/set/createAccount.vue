@@ -181,11 +181,11 @@ export default {
     },
     //保存
     onSubmit(formName){
-      this.loading = true
       this.$refs[formName].validate((valid) => {
         if (valid) {
         let id = this.accountInfo && this.accountInfo.id
         if(id){//修改子账号
+           this.loading = true
            let query = {
                id:id,
                cid:this.cid,
