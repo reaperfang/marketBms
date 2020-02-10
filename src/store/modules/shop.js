@@ -35,7 +35,11 @@ const app = {
     getShopStyle({ commit }) {
       return new Promise((resolve, reject) => {
         this._apis.shop.getShopStyle({}).then((response)=>{
-          commit('setColorStyle', JSON.parse(utils.uncompileStr(response.colorStyle)));
+          if(response && response.colorStyle) {
+            commit('setColorStyle', JSON.parse(utils.uncompileStr(response.colorStyle)));
+          }else{
+            commit('setColorStyle', {});
+          }
           resolve()
         }).catch((error)=>{
           commit('setColorStyle', {});

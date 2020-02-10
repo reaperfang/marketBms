@@ -18,7 +18,10 @@ export default{
       })
   },
   mounted() {
-    
+    const _self = this;
+    window.onresize = function() {
+      _self._globalEvent.$emit('resize')
+    }
   },
   methods: {
 

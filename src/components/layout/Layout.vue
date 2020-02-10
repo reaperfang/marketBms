@@ -7,7 +7,7 @@
         <img :src="logo" class="logo" v-if="logo">
         <img :src="require('@/assets/images/logo.png')" class="logo" v-else>
       </div>
-      <ul>
+      <ul v-calcHeight="74" style="overflow:auto">
         <li :class="{active: index == current}" @click="menuHandler(index)" v-show="!item.hidden && item.children" 
           v-for="(item, index) in permission_routers_tree" :key="index">
           <i v-if="index != current" class="icons" :class="{[item.meta.icon]: true}"></i>

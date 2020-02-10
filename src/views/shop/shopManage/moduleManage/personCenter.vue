@@ -5,7 +5,7 @@
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>个人中心</span>
       </div>
-      <div class="phone-body" :style="bodyHeight">
+      <div class="phone-body" v-calcHeight="220+20">
         <componentUserCenter 
         :data="ruleForm" 
         v-if="ruleForm"
@@ -33,17 +33,13 @@ export default {
   components: {componentUserCenter, propertyUserCenter},
   data() {
     return {
-     ruleForm: null,
-     bodyHeight: {}
+     ruleForm: null
     };
   },
   created() {
     this.fetch();
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 220 - 20 + 'px'
-    }
   },
   methods: {
     fetch() {

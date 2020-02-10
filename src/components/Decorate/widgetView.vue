@@ -1,5 +1,5 @@
 <template>
-   <div class="module widget" :style="bodyHeight">
+   <div class="module widget" v-calcHeight="80">
       <div class="block" v-for="(item, key) of widgetList" :key="key">
         <!-- 隐藏的控件不显示 -->
         <template v-if="key != 'hiddenWidget'">
@@ -25,16 +25,12 @@ export default {
   components: {},
   data () {
     return {
-     widgetList: widget.widgetList,
-     bodyHeight: {}
+     widgetList: widget.widgetList
     }
   },
   created() {
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 80 + 'px'
-    }
   },
   computed: {
     currentComponentId() {
