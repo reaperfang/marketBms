@@ -116,14 +116,14 @@ export default {
     save(){
       if(!this.isSave){
         let id = this.$route.query.id
+        let query = {
+          id:id || '',
+          title: this.ruleForm.title,
+          fileCover: this.ruleForm.fileCover,
+          isCover: this.ruleForm.isCover,
+          sourceMaterial:escape(this.ruleForm.sourceMaterial)
+        }
         if(id){
-          let query = {
-            id:id,
-            title: this.ruleForm.title,
-            fileCover: this.ruleForm.fileCover,
-            isCover: this.ruleForm.isCover,
-            sourceMaterial:this.ruleForm.sourceMaterial
-          }
           this._apis.file.editArticle(query).then((response)=>{
             this.$notify.success({
               title: '成功',
@@ -140,7 +140,7 @@ export default {
             });
           })
         }else{
-          this._apis.file.saveArticle(this.ruleForm).then((response)=>{
+          this._apis.file.saveArticle(query).then((response)=>{
             this.$notify.success({
               title: '成功',
               message: '创建图文成功！'
