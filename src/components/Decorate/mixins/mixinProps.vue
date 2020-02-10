@@ -6,16 +6,13 @@ export default {
     return {
       currentComponentData: {},
       items: [],
-      bodyHeight: {}
+      height: 128+116+20
     }
   },
   created() {
     this.initRuleForm();
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 128 - 116 - 20 + 'px'
-    }
   },
   watch: {
     ruleForm: {
