@@ -34,7 +34,7 @@
                     <div class="label">交易流水号</div>
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | tradeCodeFilter}}</div>
                 </div>
-                <div class="item" v-if="wechatLength">
+                <div class="item" v-if="wechatLength && orderInfo.payWay == 1">
                     <div class="label">微信流水号</div>
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
