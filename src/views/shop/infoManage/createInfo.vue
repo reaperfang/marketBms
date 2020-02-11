@@ -49,11 +49,29 @@ export default {
   name: "createInfo",
   components: {RichEditor, dialogSelectImageMaterial},
   data() {
+
+    var validateTextLength = (value) =>{
+      // 中文、中文标点、全角字符按1长度，英文、英文符号、数字按0.5长度计算
+      let cnReg = /([\u4e00-\u9fa5]|[\u3000-\u303F]|[\uFF00-\uFF60])/g
+      let mat = value.match(cnReg)
+      let length
+      if (mat) {
+        length = (mat.length + (value.length - mat.length) * 0.5)
+        return length
+      } else {
+        return value.length * 0.5
+      }
+    }
+
     var validateTitle = (rule, value, callback) => {
       if (value.trim().length === 0) {
         callback(new Error('请输入资讯标题'));
       } else {
-        callback();
+        if(validateTextLength(value) > 64) {
+          callback(new Error('长度不超过64个汉字/128个英文字符'));
+        }else{
+          callback();
+        }
       }
     };
 
@@ -80,22 +98,11 @@ export default {
       rules: {
         title: [
           { required: true, message: "请输入资讯标题", trigger: "blur" },
-          {
-            min: 1,
-            max: 64,
-            message: "长度在 1 到 64 个字符",
-            trigger: "blur"
-          },
           {validator: validateTitle, trigger: "blur"}
         ], 
         author: [
           { required: false, message: "请输入作者名称", trigger: "blur" },
-          {
-            min: 1,
-            max: 64,
-            message: "长度在 1 到 64 个字符",
-            trigger: "blur"
-          }
+          {validator: validateTitle, trigger: "blur"}
         ], 
         data: [
           { required: true, message: "请输入资讯正文", trigger: "change" }

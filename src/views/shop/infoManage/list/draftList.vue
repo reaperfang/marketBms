@@ -141,6 +141,7 @@ export default {
         }
       ],
       ruleForm: {
+        type: '',
         title: '',
         status: 1
       },
