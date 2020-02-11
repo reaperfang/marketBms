@@ -239,7 +239,9 @@ export default {
         orderTimeValue: ""
       }
 
-      this.$refs["shop"].getList();
+      this.$refs["shop"].getList(Object.assign({}, this.listQuery, {
+        type: 'resetForm'
+      }));
     },
   },
   components: {
