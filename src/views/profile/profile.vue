@@ -465,8 +465,8 @@ export default {
     }
 }
 .p_b_l{
-    float: left;
-    width: 400px;
+    // float: left;
+    width: 50%;
     height: 337px;
     margin-top: 20px;
     background-color: #fff;
@@ -488,9 +488,9 @@ export default {
     }
 }
 .p_b_m{
-    float: left;
+    // float: left;
     background-color: #fff;
-    width: 578px;
+    width: 50%;
     min-height: 337px;
     padding: 13px 0 0px 14px;
     margin: 20px 0 0 20px;
@@ -573,9 +573,9 @@ export default {
 }
 .p_bottom {
     display: flex;
-    .p_b_m {
-        flex: 1;
-    }
+    // .p_b_m {
+    //     flex: 1;
+    // }
 }
 .warn{
     display: flex;
