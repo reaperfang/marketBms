@@ -78,7 +78,7 @@ export default {
     methods: {
         resetForm(formName) {
             this.formInline.name = ''
-            this.getList()
+            this.getTreeList()
         },
         getTreeList() {
             this.loading = true
@@ -233,16 +233,16 @@ export default {
             this.dialogVisible = true
         },
         forbidden(node, data) {
-            // if(true) {
-            //     this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert'}).then(() => {
-
-            //     })
-            //     return
-            // }
             let _enable
 
             if(node.data.enable === 1) {
                 _enable = 0
+                if(data.isRecommend == 1) {
+                    this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert'}).then(() => {
+
+                    })
+                    return
+                }
             } else {
                 _enable = 1
             }
@@ -267,12 +267,12 @@ export default {
             })
         },
         delete(node, data) {
-            // if(true) {
-            //     this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert'}).then(() => {
+            if(data.isRecommend == 1) {
+                this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert'}).then(() => {
 
-            //     })
-            //     return
-            // }
+                })
+                return
+            }
             this.confirm({title: '立即删除', icon: true, text: '删除后此分类无法展示，确认删除吗？'}).then(() => {
                 this._apis.goods.deleteCategory({id: node.data.id}).then((res) => {
                     this.$notify({
