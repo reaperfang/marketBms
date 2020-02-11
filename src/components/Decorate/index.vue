@@ -32,11 +32,14 @@ export default {
     },
     config: {
       type: Object
+    },
+    height: {
+      type: Number,
+      default: 145 - 10
     }
   },
   data() {
     return {
-      height: 0,
       buttonList: this.config.buttons,
       decoratePageData:this.decorateData
     };
@@ -46,9 +49,6 @@ export default {
     this.convertDecorateData(this.decoratePageData);
     this.$store.commit('addComponent', Object.assign({id}, this.config.pageBase));
     this.$store.commit('setBasePropertyId', id);
-  },
-  mounted() {
-    this.height = document.body.clientHeight - 145 - 10;
   },
   computed: {
     baseInfo() {

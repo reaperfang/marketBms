@@ -108,6 +108,9 @@
                   margin-bottom: 20px;
                   position: relative;
                   border: 1px solid #eae9e9;
+                  &:nth-of-type(3n) {
+                        margin-right: 0;
+                  }
 
                   &.add_button {
                         border: 2px dashed rgb(211, 211, 211);

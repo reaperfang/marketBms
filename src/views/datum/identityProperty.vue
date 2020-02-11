@@ -65,7 +65,7 @@
         <span class="fr" @click="toLink()">会员消费</span>
       </div>
 
-      <div class="chart3_container clearfix">
+      <div class="chart3_container clearfix" v-if="ip3Show">
         <div class="chart3">
           <ip3Chart :title="'测试图表'" ref="ip3"></ip3Chart>
         </div>
@@ -93,6 +93,9 @@
             </el-col>
           </el-row>
         </div>
+      </div>
+      <div v-else>
+        <p class="nodata">暂无可显示数据</p>
       </div>
     </div>
   </div>
@@ -146,7 +149,8 @@ export default {
       //支付趋势需要字段
       date2: '',
       startTime2: "",
-      endTime2: ""
+      endTime2: "",
+      ip3Show:true
     };
   },
   created() {
@@ -183,7 +187,7 @@ export default {
           this.$refs.ip1.con(arr);
         })
         .catch(error => {
-          this.$message.error(error);
+          console.log('error',error)
         });
     },
     //获取开始日期及结束日期
@@ -252,7 +256,7 @@ export default {
           this.$refs.ip2.con(response);
         })
         .catch(error => {
-          this.$message.error(error);
+          console.log('error',error)
         });
     },
     changeDayM(val) {
@@ -275,13 +279,19 @@ export default {
       this._apis.data
         .paymentTrend(data)
         .then(response => {
-          this.threeData = response;
-          this.$refs.ip3.con(
-            response
-          );
+          this.threeData = response
+          if(response.yAxis.length == 0){
+            this.ip3Show = false
+          }else{
+            this.ip3Show = true
+            this.$refs.ip3.con(
+              response
+            );
+          }
         })
         .catch(error => {
-          this.$message.error(error);
+          this.ip3Show = fale
+          console.log('error',error)
         });
     },
     changeDayPay(val) {
@@ -374,6 +384,11 @@ export default {
       }
     }
   }
+}
+.nodata{
+  font-size: 16px;
+  text-align: center;
+  padding-bottom:30px;
 }
 </style>
 

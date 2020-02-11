@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" :style="bodyHeight">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-calcHeight="154+20">
         <div class="block header">
           <p class="title">个人信息页设置</p>
           <p class="state" :class="{'normal': ruleForm.status === 0}">{{ruleForm.status === 0 ? '生效中' : '未生效'}}</p>
@@ -183,7 +183,6 @@ export default {
         }
       },
       rules: {},
-      bodyHeight: {},  //装修区高度
       showCode: false,   //是否显示二维码
       qrCode: ''
     }
@@ -233,9 +232,6 @@ export default {
     this.$emit('userCenterDataChanged', this.ruleForm);
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 154 - 20 + 'px'
-    }
   },
   computed: {
       shopInfo() {

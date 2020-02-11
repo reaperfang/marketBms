@@ -4,7 +4,7 @@
       <img src="@/assets/images/chahua.png" alt="">
       <div class="main">
         <div class="title-container">
-          <h3 class="title">新零售客户营销系统</h3>
+          <h3 class="title">移动商城客户营销系统</h3>
         </div>
         <el-form-item prop="userName">
           <span class="svg-container svg-container_login">
@@ -80,7 +80,7 @@ export default {
       loginRules: {
         userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword },
-        { min: 1, max: 12, message: '密码不能超过12位', trigger: 'blur' }]
+        { min: 6, max: 20, message: '密码长度应为6到20位', trigger: 'blur' }]
       },
       passwordType: 'password',
       loading: false,

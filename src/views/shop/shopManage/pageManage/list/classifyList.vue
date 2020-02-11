@@ -13,7 +13,7 @@
         <el-button type="primary" @click="_routeTo('classifyEditor')">新建分类</el-button>
       </div>
     </div>
-    <div class="table">
+    <div class="table" v-calcHeight="300">
       <p>微页面分类（共{{total || 0}}个）</p>
       <el-table :data="tableList" stripe v-loading="loading">
         <el-table-column prop="name" label="分类名称">
@@ -25,7 +25,7 @@
         <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'150px'">
+        <el-table-column prop="" label="操作" :width="'150px'" fixed="right">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('classifyEditor', {pageId: scope.row.id})">编辑</span>
             <span class="table-btn" @click="deleteClassify(scope.row)">删除</span>
@@ -146,6 +146,7 @@ export default {
   padding-top:0;
 }
 /deep/ .table{
+  overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;

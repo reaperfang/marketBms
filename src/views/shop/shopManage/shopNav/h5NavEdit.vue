@@ -12,7 +12,7 @@
         </div>
 
         <!-- 手机中部 -->
-        <div class="phone-body" :style="bodyHeight">
+        <div class="phone-body" v-calcHeight="364">
           <img :src="require('@/assets/images/shop/shopNav.png')" alt="">
         </div>
 
@@ -60,7 +60,7 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" :style="propsHeight">
+        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
           <div class="block header">
             <p class="title">导航设置</p>
             <p class="state" @click="deleteNav" style="cursor:pointer;">删除导航</p>
@@ -222,8 +222,6 @@ export default {
       },
       currentNav: null,  //当前导航对象
       currentImg: 'active',  //当前上传图片类型   高亮和普通
-      bodyHeight: {},  //内容区高度
-      propsHeight: {},  //属性区高度
       seletedData: null  //临时选中的页面
     }
   },
@@ -311,12 +309,6 @@ export default {
     this.initnavMap();
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 364 + 'px'
-    },
-    this.propsHeight = {
-      height: document.body.clientHeight - 364 + 'px'
-    }
   },
   methods: {
 

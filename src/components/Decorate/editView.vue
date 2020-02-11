@@ -4,7 +4,7 @@
       <img src="@/assets/images/shop/editor/phone_head.png" alt="">
       <span>{{baseInfo.title || '页面标题'}}</span>
     </div>
-    <div class="phone-body" @click="clickTitle($event)" :style="bodyHeight">
+    <div class="phone-body" @click="clickTitle($event)" v-calcHeight="height">
 
       <!-- 可拖拽调整顺序 -->
       <vuedraggable 
@@ -88,7 +88,6 @@ export default {
       selectItem: {},
       allTemplateLoaded: false,  //所有模板加载结束
       templateList: {},  //模板对象列表
-      bodyHeight: {},
       defaultBtnShow: true,  //默认圈圈按钮可见
       pageMoveBtnShow: false  //页面移动按钮可见
     }
@@ -117,9 +116,6 @@ export default {
     })
   },
   mounted() {
-    this.bodyHeight = {
-      height: this.height + 'px'
-    }
   },
   methods: {
 

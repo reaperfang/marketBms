@@ -163,9 +163,9 @@ export default {
 
     //新建角色
     onSubmit(formName){
-        this.loading = true
         this.$refs[formName].validate((valid) => {
         if (valid) {
+            this.loading = true
             let roleName = this.roleInfo && this.roleInfo.roleName
             let msg = roleName ? '修改成功！' : '添加成功！'
             if(this.form.shops.length){
