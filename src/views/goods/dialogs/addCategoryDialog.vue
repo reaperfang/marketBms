@@ -116,6 +116,7 @@ export default {
                 this.basicForm.enable = res.enable
                 this.basicForm.sort = res.sort
                 this.basicForm.image = res.image
+                this.basicForm.description = res.description
                 if(res.image) {
                     this.imageVisible = true
                 }
@@ -142,6 +143,13 @@ export default {
         submitCategory(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    if(this.basicForm.sort < 0) {
+                        this.$message({
+                            message: '排序值不能小于0',
+                            type: 'warning'
+                        });
+                        return
+                    }
                     let param = Object.assign({}, this.basicForm)
 
                     if(/\s+/.test(this.basicForm.name)) {

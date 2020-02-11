@@ -78,7 +78,7 @@ export default {
     methods: {
         resetForm(formName) {
             this.formInline.name = ''
-            this.getList()
+            this.getTreeList()
         },
         getTreeList() {
             this.loading = true
