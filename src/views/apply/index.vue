@@ -36,7 +36,7 @@ export default {
         init(){
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-            let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeUrl(JSON.parse(localStorage.getItem('userInfo')).userName)
+            let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
             this.cid = shopInfo && shopInfo.id || ''
             console.log('路由',this.$route)
             if(this.$route.query.paths){
