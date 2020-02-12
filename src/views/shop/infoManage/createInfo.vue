@@ -75,6 +75,22 @@ export default {
       }
     };
 
+    var validateAuthor = (rule, value, callback) => {
+      if(value) {
+        if (value.trim().length === 0) {
+          callback(new Error('请输入作者名称'));
+        } else {
+          if(validateTextLength(value) > 64) {
+            callback(new Error('长度不超过64个汉字/128个英文字符'));
+          }else{
+            callback();
+          }
+        }
+      }else{
+        callback();
+      }
+    };
+
     return {
       loading: false,
       dialogVisible: false,
@@ -102,7 +118,7 @@ export default {
         ], 
         author: [
           { required: false, message: "请输入作者名称", trigger: "blur" },
-          {validator: validateTitle, trigger: "blur"}
+          {validator: validateAuthor, trigger: "blur"}
         ], 
         data: [
           { required: true, message: "请输入资讯正文", trigger: "change" }
