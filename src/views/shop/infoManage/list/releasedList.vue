@@ -51,12 +51,15 @@
              <span v-else>--</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="channelType" label="展示渠道">
+        <el-table-column prop="channelType" label="展示渠道">
           <template slot-scope="scope">
-            <span v-if="scope.row.channelType == 3">PC端</span>
+            <span v-if="scope.row.channelType == 1">小程序</span>
+            <span v-else-if="scope.row.channelType == 2">公众号</span>
+            <span v-else-if="scope.row.channelType == 3">PC端</span>
             <span v-else-if="scope.row.channelType == 4">WAP端</span>
+            <span v-else>PC端</span>
           </template>
-        </el-table-column>   -->
+        </el-table-column>  
         <el-table-column prop="createTime" sortable label="创建时间">
           <template slot-scope="scope">
             <span>{{scope.row.createTime || '--'}}</span>

@@ -81,7 +81,7 @@
           width="30%">
           <span>未设置支付信息</span>
           <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="_routeTo('wxSet')">去设置</el-button>
+            <el-button type="primary" @click="_routeTo(pageName)">去设置</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
           </span>
         </el-dialog>
@@ -100,6 +100,7 @@ export default {
       wechatBinding:0,
       alipayBinding:0,
       dialogVisible:false,
+      pageName:''
     }
   },
   components: {},
@@ -138,6 +139,7 @@ export default {
       if(val == true && this.wechatBinding == 0){
         this.wechatPay = false
         this.dialogVisible = true
+        this.pageName = 'wxSet'
       }else{
         this.$confirm('此操作将设置微信支付开关, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -159,6 +161,7 @@ export default {
       if(val == true && this.alipayBinding == 0){
         this.aliPay = false
         this.dialogVisible = true
+        this.pageName = 'zfbSet'
       }else{
         this.$confirm('此操作将设置支付宝支付开关, 是否继续?', '提示', {
           confirmButtonText: '确定',

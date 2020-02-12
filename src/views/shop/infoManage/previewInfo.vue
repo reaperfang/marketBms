@@ -65,21 +65,7 @@ export default {
     margin-bottom:30px;
   }
   .rich_wrapper{
-    line-height: initial;
     max-width:640px;
-    /deep/table{
-      border-collapse: collapse;
-      /deep/td{
-        padding: 5px 10px;
-        border: 1px solid #DDD;
-      }
-    }
-    /deep/p{
-      margin: 5px 0;
-    }
-    /deep/img{
-      max-width: 100%!important;
-    }
   }
   .confirm_btn{
     display:flex;

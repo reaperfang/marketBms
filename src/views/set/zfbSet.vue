@@ -91,9 +91,9 @@ export default {
     },
 
     onSubmit(formName){
-      this.loading = true
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.loading = true
           this.id ? this.updateShopPayInfo() : this.addShopPayInfo()
         }
       })   

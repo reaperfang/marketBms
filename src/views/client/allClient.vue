@@ -198,7 +198,8 @@ export default {
         memberList: [],
         btnloading: false,
         becameCustomerTime:"",
-        lastPayTime:""
+        lastPayTime:"",
+        isPc: false
     }
   },
   watch: {
@@ -280,9 +281,26 @@ export default {
         this._apis.client.getChannels({}).then((response) => {
             this.channelsList = [].concat(response);
             response.map((v) => {this.channels.push(v.channerlName)});
+            if(!this.isPc) {
+                this.channels.splice(this.channels.indexOf('PC端'),1);
+                this.channels.splice(this.channels.indexOf('wap端'),1);
+            }
         }).catch((error) => {
             console.log(error);
         })
+    },
+    showPc() {
+        this._apis.data.openPcWap().then(response => {
+            if(response == null){
+                this.isPc = false
+            }else if(response.onoff == 0){
+                this.isPc = false
+            }else{
+                this.isPc = true
+            }
+        }).catch(error => {
+            this.$message.error(error);
+        });
     },
     isNumber(val) {
         if(!!val) {
@@ -445,6 +463,7 @@ export default {
   },
   mounted() {
       this.getLabels();
+      this.showPc();
       this.getChannels();
       if(this.$route.query.memberLabels) {
           this.newForm = Object.assign({}, this.$route.query);
