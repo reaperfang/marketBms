@@ -54,7 +54,7 @@
                 <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span>
                 <p class="description prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
             </el-form-item>
-            <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoId">
+            <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" style="display: inline-block;">
                     <el-cascader
                         :disabled="!ruleForm.productCategoryInfoId"
@@ -101,7 +101,7 @@
             <h2>销售信息</h2>
             <el-form-item label="规格信息" prop="goodsInfos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
-                <div>
+                <div v-if="!editor">
                     <ul class="added-specs">
                         <li v-for="(item, index) in addedSpecs" :key="index">
                             <div class="added-specs-header">
@@ -183,7 +183,7 @@
                         class-name="costPrice"
                         width="152">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.costPrice" placeholder="请输入"></el-input>
+                            <el-input v-model="scope.row.costPrice" placeholder="请输入价格(元)"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -192,7 +192,7 @@
                         class-name="salePrice"
                         width="152">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.salePrice" placeholder="请输入"></el-input>
+                            <el-input v-model="scope.row.salePrice" placeholder="请输入价格(元)"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -201,7 +201,7 @@
                         class-name="stock"
                         width="152">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.stock" placeholder="请输入"></el-input>
+                            <el-input v-model="scope.row.stock" placeholder="请输入库存"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -210,7 +210,7 @@
                         class-name="warningStock"
                         width="152">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.warningStock" placeholder="请输入"></el-input>
+                            <el-input v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -219,7 +219,7 @@
                         class-name="weight"
                         width="152">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.weight" placeholder="请输入"></el-input>
+                            <el-input v-model="scope.row.weight" placeholder="请输入重量(kg)"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -228,7 +228,7 @@
                         class-name="volume"
                         width="152">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.volume" placeholder="请输入"></el-input>
+                            <el-input v-model="scope.row.volume" placeholder="请输入体积(m³)"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -237,7 +237,7 @@
                         class-name="code"
                         width="152">
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.code" placeholder="请输入"></el-input>
+                            <el-input v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -753,7 +753,8 @@ export default {
             showAddSpecsInput: false,
             newSpec: '',
             newSpecValue: '',
-            callObjectSpanMethod: false
+            callObjectSpanMethod: false,
+            deleteSpecArr: []
         }
     },
     created() {
@@ -850,14 +851,14 @@ export default {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
 
             goodsInfos.forEach((val, index) => {
-                val.costPrice = val.costPrice || goodsInfos[0].costPrice
-                val.salePrice = val.salePrice || goodsInfos[0].salePrice
-                val.stock = val.stock || goodsInfos[0].stock
-                val.warningStock = val.warningStock || goodsInfos[0].warningStock
-                val.weight = val.weight || goodsInfos[0].weight
-                val.volume = val.volume || goodsInfos[0].volume
-                val.image = val.image || goodsInfos[0].image
-                val.fileList = val.fileList || goodsInfos[0].fileList
+                val.costPrice = goodsInfos[0].costPrice
+                val.salePrice = goodsInfos[0].salePrice
+                val.stock = goodsInfos[0].stock
+                val.warningStock = goodsInfos[0].warningStock
+                val.weight = goodsInfos[0].weight
+                val.volume = goodsInfos[0].volume
+                val.image = goodsInfos[0].image
+                val.fileList = goodsInfos[0].fileList
             })
 
             this.ruleForm.goodsInfos = goodsInfos
@@ -950,6 +951,11 @@ export default {
             let results = [];
             let result = [];
 
+            if(typeof arr[0] != 'object') {
+                this.ruleForm.goodsInfos = []
+                return
+            }
+
             function doExchange(arr, index){
                 for (var i = 0; i<arr[index].length; i++) {
                     result[index] = arr[index][i];
@@ -1020,7 +1026,7 @@ export default {
 
             this.getSpecs()
         },
-        getSpecs() {
+        getSpecs(open) {
             this.callObjectSpanMethod = true
             let arr = []
 
@@ -1043,7 +1049,11 @@ export default {
             })
             this.specIds = arr
             this.selectSpecs(arr)
-            this.visible = false
+            if(open && typeof open == 'boolean') {
+                this.visible = true
+            } else {
+                this.visible = false
+            }
         },
         selectSpecValue(index) {
             let specsValues = JSON.parse(JSON.stringify(this.specsValues))
@@ -1066,6 +1076,8 @@ export default {
                     this.addedSpecs = addedSpecs
                 }
             }
+
+            this.getSpecs(true)
         },
         addSpecValue() {
             let item = this.addedSpecs[this.addedSpecs.length - 1]
@@ -1219,8 +1231,26 @@ export default {
                 })
             })
         },
+        addStyle() {
+            this.$nextTick(() => {
+                this.deleteSpecArr.forEach(val => {
+                    let elem = document.querySelector('.el-table.spec-information .el-table__body').getElementsByClassName('el-table__row')[val]
+                    
+                    elem.style.background = 'B6B5C8'
+                    let tds = elem.getElementsByTagName('td')
+                    
+                    for(let i=0; i<tds.length; i++) {
+                        if(+tds[i].getAttribute('rowspan') > 1) {
+                            tds[i].style.background = '#fff'
+                        }
+                    }
+                })
+            })
+        },
         deleteSpec(index) {
-            this.ruleForm.goodsInfos.splice(index, 1)
+            //this.ruleForm.goodsInfos.splice(index, 1)
+            this.deleteSpecArr.push(index)
+            this.addStyle()
         },
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
@@ -1231,7 +1261,6 @@ export default {
                 weight: '',
                 volume: '',
                 image: '',
-                code: ''
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
             console.log(this.ruleForm.goodsInfos)
@@ -1543,6 +1572,51 @@ export default {
 
                     let calculationWay
 
+                    for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
+                        if(+this.ruleForm.goodsInfos[i].costPrice < 0) {
+                            this.$message({
+                                message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(+this.ruleForm.goodsInfos[i].salePrice < 0) {
+                            this.$message({
+                                message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(+this.ruleForm.goodsInfos[i].stock  < 0) {
+                            this.$message({
+                                message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(+this.ruleForm.goodsInfos[i].warningStock  < 0) {
+                            this.$message({
+                                message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(+this.ruleForm.goodsInfos[i].weight  < 0) {
+                            this.$message({
+                                message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(+this.ruleForm.goodsInfos[i].volume  < 0) {
+                            this.$message({
+                                message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    }
+
                     if(/^\s+$/.test(this.ruleForm.name)) {
                         this.$message({
                             message: '商品名称不能为空',
@@ -1630,7 +1704,14 @@ export default {
                     }
 
                     if(!this.editor) {
-                        _goodsInfos = this.ruleForm.goodsInfos.map(val => {
+                        let __goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
+
+                        if(this.deleteSpecArr.length) {
+                            for(let i=0; i<this.deleteSpecArr.length; i++) {
+                                __goodsInfos.splice(this.deleteSpecArr[i], 1)
+                            }
+                        }
+                        _goodsInfos = __goodsInfos.map(val => {
                             let _specs = {}
 
                             val.label.split(',').forEach((spec, index) => {
@@ -1759,7 +1840,7 @@ export default {
         },
         getCategoryList() {
             return new Promise((resolve, reject) => {
-                this._apis.goods.fetchCategoryList().then((res) => {
+                this._apis.goods.fetchCategoryList({enable: 1}).then((res) => {
                     this.flatCategoryList = res
                     let arr = this.transTreeData(res, 0)
                     
@@ -1773,7 +1854,8 @@ export default {
         },
         handleChange(value) {
             let _value = [...value]
-            this.ruleForm.productCatalogInfoId = _value.pop()
+            //this.ruleForm.productCatalogInfoId = _value.pop()
+            this.ruleForm.productCatalogInfoIds = _value
         },
         timelyShelvingHandler() {
             this.currentDialog = 'TimelyShelvingDialog'
