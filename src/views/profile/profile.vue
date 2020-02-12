@@ -41,14 +41,14 @@
                         <div class="step_b">
                             <p>
                                 <span @click="linkTo({text:'绑定微信公众号'})">绑定微信公众号</span>
-                                和
+                                或
                                 <span @click="linkTo({text:'绑定微信小程序'})">绑定微信小程序</span>
                             </p>
                             <p>
                                 <span @click="linkTo({text:'开通且启用支付方式',url:'/set/payType'})">开通且启用支付方式</span>
                             </p>
                             <p>
-                                <span @click="linkTo({text:'开通短信包'})">开通短信包</span>
+                                <span @click="linkTo({text:'开通短信包'})">开通短信包/设置签名</span>
                             </p>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         <div class="step_b">
                             <p>
                                 <span @click="linkTo({text:'创建商品',url:'/goods/addGoods'})">创建商品</span>
-                                和
+                                或
                                 <span @click="linkTo({text:'商品批量导入',url:'/goods/import'})">商品批量导入</span>
                             </p>
                             <p>
@@ -591,7 +591,7 @@ export default {
     }
 }
 .step{
-    height: 148px;
+    height: 154px;
     .step_t{
         width:100%;
         height:65px;
@@ -638,7 +638,7 @@ export default {
     }
     .step_b{
         width:100%;
-        height:83px;
+        height:86px;
         background:rgba(255,255,255,1);
         box-shadow:0px 2px 4px 0px rgba(240,239,255,1);
         border-radius:0px 0px 4px 4px;

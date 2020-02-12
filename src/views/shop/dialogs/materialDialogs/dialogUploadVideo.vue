@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="600px" title="上传视频" :showFooter="false">
     <el-form :model="form" :rules="rules" ref="form" class="demo-form-inline" label-width="90px">
-        <el-form-item label="本地上传">
+        <el-form-item label="本地上传1">
           <video v-if="this.videoData.url !=undefined && !videoFlag"  
             :src="this.videoData.url"
             class="avatar video-avatar"
@@ -28,7 +28,7 @@
                 v-if="isShowUploadVideo"
                 type="primary">选取文件</el-button> -->
           </el-upload>
-          <p class="note">视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p>
+          <p v-if="isShowUploadVideo">视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p>
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请勿超过20字" style="width:195px"></el-input>
