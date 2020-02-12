@@ -3,10 +3,10 @@
       <h2>商品橱窗编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" placeholder="请输入标题" type="textarea" clearable></el-input>
+          <el-input v-model="ruleForm.title" placeholder="请输入标题" type="textarea" clearable autosize></el-input>
         </el-form-item>
         <el-form-item label="详情" prop="details">
-          <el-input v-model="ruleForm.details" placeholder="请输入详情" type="textarea" clearable></el-input>
+          <el-input v-model="ruleForm.details" placeholder="请输入详情" type="textarea" clearable autosize></el-input>
         </el-form-item>
         <el-form-item label="图片(一张)" prop="photo">
           <div class="img_preview" v-if="ruleForm.photo">
@@ -24,7 +24,7 @@
             <el-radio :label="2">隐藏按钮</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="按钮名称" prop="buttonName">
+        <el-form-item label="按钮名称" prop="buttonName" v-if="ruleForm.buttonType == 1">
           <el-input v-model="ruleForm.buttonName" placeholder="请输入按钮名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="商品分类" prop="goodsGroup">
@@ -81,6 +81,15 @@ export default {
   name: "1picText",
   components: {DialogBase, dialogSelectImageMaterial, goodsGroup, dialogSelectGoodsSKU},
   data() {
+
+    var validateBlank = (rule, value, callback) => {
+      if (value.trim().length === 0) {
+        callback(new Error('请输入内容'));
+      } else {
+        callback();
+      }
+    };
+
     return {
       id: this.$route.query.id,
       loading: false,
@@ -116,10 +125,12 @@ export default {
             max: 100,
             message: "长度在 1 到 100 个字符",
             trigger: "blur"
-          }
+          },
+          {validator: validateBlank, trigger: "blur"}
         ], 
         details: [
-          { required: true, message: "请输入详情", trigger: "blur" }
+          { required: true, message: "请输入详情", trigger: "blur" },
+          {validator: validateBlank, trigger: "blur"}
         ],
         photo: [
           { required: true, message: "请添加图片", trigger: "change" }
@@ -134,7 +145,8 @@ export default {
             max: 20,
             message: "长度在 1 到 20 个字符",
             trigger: "blur"
-          }
+          },
+          {validator: validateBlank, trigger: "blur"}
         ],
       }
     };
