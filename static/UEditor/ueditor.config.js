@@ -43,7 +43,8 @@
             'removeformat', 'formatmatch', 
             // 'autotypeset', 
             // 'blockquote', 
-            'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 
+            'pasteplain', '|', 'forecolor', 'backcolor', 
+            // 'insertorderedlist', 'insertunorderedlist', 
             // 'selectall', 'cleardoc', 
             '|',
             'rowspacingtop', 'rowspacingbottom', 'lineheight',  'link', 'unlink', '|',
@@ -465,7 +466,11 @@
 			tt:     [],
 			u:      [],
 			ul:     ['class', 'style'],
-			video:  ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style']
+			video:  ['autoplay', 'controls', 'loop', 'preload', 'src', '_src', 'height', 'width', 'class', 'style', 'title', 'id'],
+            source: ['src', 'type'],
+            embed: ['type', 'class', 'pluginspage', 'src', 'width', 'height', 'align', 'style', 'wmode', 'play',  
+                +  'autoplay','loop', 'menu', 'allowscriptaccess', 'allowfullscreen', 'controls', 'preload'],
+            iframe: ['src', 'class', 'height', 'width', 'max-width', 'max-height', 'align', 'frameborder', 'allowfullscreen']
 		}
     };
 

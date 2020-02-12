@@ -757,4 +757,24 @@ table.yuan-table{
   display: none;
 }
 
+//富文本统一样式
+.rich_wrapper{
+  line-height: initial;
+  table{
+    border-collapse: collapse;
+    td{
+      padding: 5px 10px;
+      border: 1px solid #DDD;
+    }
+  }
+  p{
+    margin: 5px 0;
+  }
+  img{
+    max-width: 100%!important;
+  }
+  ul,ol, li, dl, dt, dd{
+    list-style: inherit!important;
+  } 
 
+}

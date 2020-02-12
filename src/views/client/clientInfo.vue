@@ -33,7 +33,7 @@
             <p>标签信息：</p>
             <div class="labels">
                 <div class="label_list">
-                    <p v-for="item in clientInfoById.labelRecordViews" :key="item.id">
+                    <p v-for="item in clientInfoById.labelRecordViews" :key="item.id" v-if="item.memberLabelInfoName">
                         <span>{{item.memberLabelInfoName}}
                             <img src="../../assets/images/client/icon_manual.png" alt="" v-if="item.memberLabelInfoType == 0">
                             <img src="../../assets/images/client/icon_auto.png" alt="" v-if="item.memberLabelInfoType == 1">
