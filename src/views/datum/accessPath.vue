@@ -79,9 +79,9 @@
             <p :title="'商品详情页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'}}
             </p>
-            <p :title="'其他页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
+            <!-- <p :title="'其他页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'}}
-            </p>      
+            </p>       -->
          </div>
         <div class="path_line clearfix">
           <div class="p_l">
