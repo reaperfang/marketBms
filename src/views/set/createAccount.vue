@@ -6,10 +6,10 @@
             <!-- <el-form-item label="店铺名称:" prop="shopName">
                 <el-input v-model="form.shopName" style="width:182px;" placeholder="10个汉字"></el-input>
             </el-form-item> -->
-            <el-form-item label="人员名称:" prop="userName">
-                <el-input v-model="form.userName" style="width:182px;" placeholder="10个汉字"></el-input>
+            <el-form-item label="登录账号:" prop="userName">
+                <el-input v-model="form.userName" style="width:182px;" placeholder="10个汉字" :disabled="isEdit"></el-input>
             </el-form-item>
-            <el-form-item label="登录手机号:" prop="mobile">
+            <el-form-item label="手机号:" prop="mobile">
                 <el-input v-model="form.mobile" style="width:182px;" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="角色:" prop="roleName">
@@ -86,7 +86,8 @@ export default {
       },
       roles:[ ],
       shops:[ ],
-      shopsData:[]
+      shopsData:[],
+      isEdit:false
     }
   },
   computed:{
@@ -99,7 +100,7 @@ export default {
      cid(){
         let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
         return shopInfo.id
-     }
+     },
   },
   created(){
       this.getShops()
@@ -115,6 +116,7 @@ export default {
             roleName:this.accountInfo.roleNames && this.accountInfo.roleNames.split(',')[0],
             shopInfoIds:this.accountInfo.shopIds && this.accountInfo.shopIds.split(',')
           }
+          this.isEdit = this.accountInfo.id ? true : false
       }
     },
     //获取所有店铺
@@ -184,8 +186,8 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
         let id = this.accountInfo && this.accountInfo.id
+        this.loading = true
         if(id){//修改子账号
-           this.loading = true
            let query = {
                id:id,
                cid:this.cid,
@@ -196,7 +198,7 @@ export default {
                mcOrganizationId:0,
                roleName:this.form.roleName,
                shopInfoIds:this.form.shopInfoIds
-           } 
+           }
            this._apis.set.editSubAccount(query).then(response =>{
               this.loading = false
               this.$notify.success({
