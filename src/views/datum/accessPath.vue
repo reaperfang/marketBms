@@ -97,15 +97,15 @@
           </div>
         </div>
          <div class="p_top1" v-if="dataObj.payOrderPathTransformation">
-              <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
+              <p style="padding-left:100px;" :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
               </p>
-              <p :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
+              <p style="padding-right:100px;" :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
               </p>            
-              <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
+              <!-- <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}
-              </p>
+              </p> -->
          </div>
         <div class="path_line clearfix">
           <div class="p_l">
