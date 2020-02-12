@@ -3,7 +3,7 @@
       <h2>图文广告编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="120px">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" placeholder="请输入标题" type="textarea" clearable></el-input>
+          <el-input v-model="ruleForm.title" placeholder="请输入标题" type="textarea" clearable autosize></el-input>
         </el-form-item>
         <el-form-item label="图片(横向滑动)" prop="informationId">
           <el-button type="primary" style="margin-bottom:10px;" @click="dialogVisible=true; currentDialog='dialogSelectInfo'">新增</el-button>
@@ -52,6 +52,15 @@ export default {
   name: "5picText",
   components: {dialogSelectInfo},
   data() {
+
+    var validateBlank = (rule, value, callback) => {
+      if (value.trim().length === 0) {
+        callback(new Error('请输入内容'));
+      } else {
+        callback();
+      }
+    };
+
     return {
       id: this.$route.query.id,
       loading: false,
@@ -72,7 +81,8 @@ export default {
             max: 100,
             message: "长度在 1 到 100 个字符",
             trigger: "blur"
-          }
+          },
+          {validator: validateBlank, trigger: "blur"}
         ]
         // informationId: [
         //   { required: true, message: "请添加图片", trigger: "change" }
