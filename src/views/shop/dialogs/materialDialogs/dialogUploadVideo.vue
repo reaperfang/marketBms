@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="600px" title="上传视频" :showFooter="false">
     <el-form :model="form" :rules="rules" ref="form" class="demo-form-inline" label-width="90px">
-        <el-form-item label="本地上传1">
+        <el-form-item label="本地上传">
           <video v-if="this.videoData.url !=undefined && !videoFlag"  
             :src="this.videoData.url"
             class="avatar video-avatar"
