@@ -16,8 +16,6 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-console.log("process.env.env_config", process.env.env_config)
-
 const env = require('../config/' + process.env.env_config + '.env')
 
 // For NamedChunksPlugin
