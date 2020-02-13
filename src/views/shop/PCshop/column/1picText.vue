@@ -33,12 +33,13 @@
             <el-radio :label="2">商品分类</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="商品" v-if="ruleForm.sourceType === 1" prop="goods">
+        <el-form-item label="商品" v-if="ruleForm.sourceType === 1" prop="source">
           <div class="img_preview" v-if="ruleForm.sourceType === 1" v-loading="loading">
             <ul>
               <li v-if="selectedGoods" :title="selectedGoods.name">
                 <img :src="selectedGoods.mainImage" alt="">
                 <span @click="pageDialogVisible=true; currentPageDialog='goods'">更换商品</span>
+                <i class="delete_btn" @click.stop="deleteItem()"></i>
               </li>
               <li v-else class="add_button" @click="pageDialogVisible=true; currentPageDialog='goods'">
                 <i class="inner"></i>
@@ -46,8 +47,9 @@
             </ul>
           </div>
         </el-form-item>
-        <el-form-item label="商品分类" v-if="ruleForm.sourceType === 2" prop="goodsGroup">
+        <el-form-item label="商品分类" v-if="ruleForm.sourceType === 2" prop="source">
           <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{selectedGroup && selectedGroup.name || '从商品分类中选择'}}</el-button>
+          <span v-if="selectedGroup && selectedGroup.name" @click="deleteItem()" style="cursor:pointer;">删除</span>
         </el-form-item>
       </el-form>
       <div class="confirm_btn">
@@ -145,11 +147,21 @@ export default {
         sourceType: [
           { required: true, message: "请选择数据来源", trigger: "change" }
         ],
+        source: [
+          { required: true, message: "请选择商品或商品分类", trigger: "change" }
+        ],
       }
     };
   },
   created() {
     this.fetch();
+  },
+  watch: {
+    'ruleForm.sourceType': {
+      handler(newValue) {
+        this.deleteItem();
+      }
+    }
   },
   methods: {
 
@@ -236,6 +248,16 @@ export default {
         this.selectedGroup = this.tempItem.data;
       }
     },
+
+    /* 删除 */
+    deleteItem() {
+      this.ruleForm.source = '';
+       if(this.ruleForm.sourceType == 1) {
+        this.selectedGoods = null;
+      }else if(this.ruleForm.sourceType == 2){
+        this.selectedGroup = null;
+      }
+    }
 
   },
 

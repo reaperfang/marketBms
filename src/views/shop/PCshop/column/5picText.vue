@@ -41,7 +41,7 @@
       </div>
     
       <!-- 动态弹窗 -->
-      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="infos"></component>
+      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="infos" :multiple="false"></component>
     </div>
 </template>
 
@@ -157,7 +157,15 @@ export default {
 
      /* 弹框选中资讯 */
     dialogDataSelected(dialogData) {
-      this.infos = dialogData;
+      if(this.ruleForm.informationId.includes(dialogData.id)) {
+        this.$notify({
+          title: '警告',
+          message: '已添加此资讯',
+          type: 'warning'
+        });
+      }else{
+        this.infos.push(dialogData);
+      }
       this.ruleForm.informationId = dialogData.map(item => item.id);
     },
 

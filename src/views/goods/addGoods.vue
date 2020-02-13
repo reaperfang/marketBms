@@ -163,6 +163,7 @@
                     :span-method="objectSpanMethod"
                     border>
                     <el-table-column
+                        class-name="columnSpec"
                         v-for="(item, index) in specsLabel.split(',')"
                         :key="index"
                         prop="label"
@@ -1242,7 +1243,12 @@ export default {
                     for(let i=0; i<tds.length; i++) {
                         if(+tds[i].getAttribute('rowspan') > 1) {
                             tds[i].style.background = '#fff'
+                        } else {
+                            if(tds[i].className.indexOf('columnSpec') != -1) {
+                                tds[i].querySelector('.cell').innerHTML = '<s>' + tds[i].querySelector('.cell').innerText + '</s>'
+                            }
                         }
+                        
                     }
                 })
             })
@@ -1572,7 +1578,8 @@ export default {
 
                     let calculationWay
 
-                    for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
+                    try {
+                        for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                         if(+this.ruleForm.goodsInfos[i].costPrice < 0) {
                             this.$message({
                                 message: '不能为负值',
@@ -1580,9 +1587,23 @@ export default {
                             });
                             return
                         }
+                        if(this.ruleForm.goodsInfos[i].costPrice.split(".")[1].length > 2) {
+                            this.$message({
+                                message: '只支持小数点后两位',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(+this.ruleForm.goodsInfos[i].salePrice < 0) {
                             this.$message({
                                 message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(this.ruleForm.goodsInfos[i].salePrice.split(".")[1].length > 2) {
+                            this.$message({
+                                message: '只支持小数点后两位',
                                 type: 'warning'
                             });
                             return
@@ -1615,6 +1636,9 @@ export default {
                             });
                             return
                         }
+                    }
+                    } catch(e) {
+                        console.error(e)
                     }
 
                     if(/^\s+$/.test(this.ruleForm.name)) {
@@ -1838,13 +1862,37 @@ export default {
             }
             return result;
         },
+        sort(arr) {
+            let sortFunction = function(sortArr) {
+                sortArr.sort((obj1, obj2) => {
+                    if(obj1.sort > obj2.sort) {
+                        return 1
+                    } else if(obj1.sort == obj2.sort) {
+                        return 0
+                    } else {
+                        return -1
+                    }
+                })
+
+                sortArr.forEach(val => {
+                    if(val.children) {
+                        sortFunction(val.children)
+                    }
+                })
+            }
+
+            sortFunction(arr)
+
+            return arr
+        },
         getCategoryList() {
             return new Promise((resolve, reject) => {
                 this._apis.goods.fetchCategoryList({enable: 1}).then((res) => {
                     this.flatCategoryList = res
                     let arr = this.transTreeData(res, 0)
+                    let _arr = this.sort(arr)
                     
-                    this.categoryOptions = arr
+                    this.categoryOptions = _arr
 
                     resolve()
                 }).catch(error => {
