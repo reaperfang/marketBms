@@ -1267,6 +1267,7 @@ export default {
                 weight: '',
                 volume: '',
                 image: '',
+                code: ''
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
             console.log(this.ruleForm.goodsInfos)
@@ -1729,10 +1730,11 @@ export default {
 
                     if(!this.editor) {
                         let __goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
+                        let _deleteSpecArr = Array.from(new Set(this.deleteSpecArr))
 
-                        if(this.deleteSpecArr.length) {
-                            for(let i=0; i<this.deleteSpecArr.length; i++) {
-                                __goodsInfos.splice(this.deleteSpecArr[i], 1)
+                        if(_deleteSpecArr.length) {
+                            for(let i=0; i<_deleteSpecArr.length; i++) {
+                                __goodsInfos.splice(_deleteSpecArr[i], 1)
                             }
                         }
                         _goodsInfos = __goodsInfos.map(val => {
