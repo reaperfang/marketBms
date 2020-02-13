@@ -119,7 +119,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="updateTime"
+                    prop="sendTime"
                     label="最新发货时间"
                     width="170">
                 </el-table-column>
