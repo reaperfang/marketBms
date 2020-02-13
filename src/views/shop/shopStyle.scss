@@ -77,6 +77,16 @@
             color: #fff;
             cursor: pointer;
       }
+      i.delete_btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: url("../../assets/images/shop/editor/delete.png") no-repeat 0 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+      }
 }
 
 /* 类商品列表样式 */

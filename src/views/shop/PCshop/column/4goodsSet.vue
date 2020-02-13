@@ -27,10 +27,10 @@
         <el-form-item label="按钮名称" prop="buttonName" v-if="ruleForm.buttonType == 1">
           <el-input v-model="ruleForm.buttonName" placeholder="请输入按钮名称" clearable></el-input>
         </el-form-item>
-        <el-form-item label="商品分类" prop="goodsGroup">
+        <el-form-item label="商品分类" prop="source">
           <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{selectedGroup && selectedGroup.name || '从商品分类中选择'}}</el-button>
         </el-form-item>
-        <el-form-item label="选择货品(2个)" prop="goods">
+        <el-form-item label="选择货品(2个)" prop="commodity">
           <div class="goods_list" v-loading="loading">
             <ul>
               <template>
@@ -90,6 +90,27 @@ export default {
       }
     };
 
+     var validateCommodity = (rule, value, callback) => {
+      let result = true;
+      if(value.length !== 2) {
+        result = false;
+      }else{
+        if(Array.isArray(value)) {
+          for(let item of value) {
+            if(item == '') {
+              result = false;
+              break;
+            }
+          }
+        }
+      }
+      if (!result) {
+        callback(new Error('请选择2个货品'));
+      } else {
+        callback();
+      }
+    };
+
     return {
       id: this.$route.query.id,
       loading: false,
@@ -131,12 +152,19 @@ export default {
         details: [
           { required: true, message: "请输入详情", trigger: "blur" },
           {validator: validateBlank, trigger: "blur"}
+        ], 
+        commodity: [
+          { required: true, message: "请选择2个货品", trigger: "blur" },
+          {validator: validateCommodity, trigger: "blur"}
         ],
         photo: [
           { required: true, message: "请添加图片", trigger: "change" }
         ],
         buttonType: [
           { required: true, message: "请选择按钮使用", trigger: "change" }
+        ],  
+        source: [
+          { required: true, message: "请选择商品分类", trigger: "change" }
         ], 
         buttonName: [
           { required: true, message: "请输入按钮名称", trigger: "blur" },
