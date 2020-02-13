@@ -1695,6 +1695,13 @@ export default {
                         });
                         return
                     }
+                    if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock < 0)) {
+                        this.$message({
+                            message: '规格信息中库存不能小于0',
+                            type: 'warning'
+                        });
+                        return
+                    }
                     if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
                         this.$message({
                             message: '规格信息中库存预警不能为空',
