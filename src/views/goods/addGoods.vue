@@ -163,6 +163,7 @@
                     :span-method="objectSpanMethod"
                     border>
                     <el-table-column
+                        class-name="columnSpec"
                         v-for="(item, index) in specsLabel.split(',')"
                         :key="index"
                         prop="label"
@@ -1242,7 +1243,12 @@ export default {
                     for(let i=0; i<tds.length; i++) {
                         if(+tds[i].getAttribute('rowspan') > 1) {
                             tds[i].style.background = '#fff'
+                        } else {
+                            if(tds[i].className.indexOf('columnSpec') != -1) {
+                                tds[i].querySelector('.cell').innerHTML = '<s>' + tds[i].querySelector('.cell').innerText + '</s>'
+                            }
                         }
+                        
                     }
                 })
             })
