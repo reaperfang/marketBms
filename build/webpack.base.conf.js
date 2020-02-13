@@ -30,7 +30,7 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath:
-      process.env.NODE_ENV === 'production'
+      (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'pre')
         ? config.build.assetsPublicPath : (process.env.NODE_ENV === 'testing' ? config.testBuild.assetsPublicPath
         : config.dev.assetsPublicPath)
   },
