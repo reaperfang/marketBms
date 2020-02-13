@@ -8,8 +8,8 @@
         <el-form-item label="详情" prop="details">
           <el-input v-model="ruleForm.details" placeholder="请输入详情" type="textarea" clearable autosize></el-input>
         </el-form-item>
-        <el-form-item label="货品" prop="goods">
-          <div class="goods_list" prop="goods" v-loading="loading">
+        <el-form-item label="货品" prop="commodity">
+          <div class="goods_list" v-loading="loading">
             <ul>
               <li v-for="(item, key) of selectedGoods" :key="key" :title="item.name">
                 <template v-if="item.goodsInfo">
@@ -49,6 +49,14 @@ export default {
       } else {
         callback();
       }
+    }; 
+    
+    var validateCommodity = (rule, value, callback) => {
+      if (value.length < 1) {
+        callback(new Error('请输入选择货品'));
+      } else {
+        callback();
+      }
     };
 
     return {
@@ -80,6 +88,13 @@ export default {
             trigger: "blur"
           },
           {validator: validateBlank, trigger: "blur"}
+        ],
+        details: [
+          { required: true, message: "请输入详情", trigger: "blur" }
+        ],
+        commodity: [
+          { required: true, message: "请选择货品", trigger: "change" },
+          {validator: validateCommodity, trigger: "blur"}
         ]
       }
     };

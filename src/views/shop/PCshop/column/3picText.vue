@@ -8,7 +8,7 @@
         <el-form-item label="详情" prop="details">
           <el-input v-model="ruleForm.details" placeholder="请输入详情" type="textarea" clearable autosize></el-input>
         </el-form-item>
-        <el-form-item label="图片(三张)" prop="photo">
+        <el-form-item label="图片(三张)" prop="photos">
           <div class="image_wrapper">
             <div class="image_block">
               <div class="img_preview" v-if="ruleForm.photos[0]">
@@ -57,12 +57,13 @@
             <el-radio :label="2">商品分类</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="商品" v-if="ruleForm.sourceType === 1" prop="goods">
+        <el-form-item label="商品" v-if="ruleForm.sourceType === 1" prop="source">
           <div class="img_preview" v-if="ruleForm.sourceType === 1" v-loading="loading">
             <ul>
               <li v-if="selectedGoods" :title="selectedGoods.name">
                 <img :src="selectedGoods.mainImage" alt="">
                 <span @click="pageDialogVisible=true; currentPageDialog='goods'">更换商品</span>
+                <i class="delete_btn" @click.stop="deleteItem()"></i>
               </li>
               <li v-else class="add_button" @click="pageDialogVisible=true; currentPageDialog='goods'">
                 <i class="inner"></i>
@@ -70,8 +71,9 @@
             </ul>
           </div>
         </el-form-item>
-        <el-form-item label="商品分类" v-if="ruleForm.sourceType === 2" prop="goodsGroup">
+        <el-form-item label="商品分类" v-if="ruleForm.sourceType === 2" prop="source">
           <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{selectedGroup && selectedGroup.name || '从商品分类中选择'}}</el-button>
+          <span v-if="selectedGroup && selectedGroup.name" @click="deleteItem()" style="cursor:pointer;">删除</span>
         </el-form-item>
       </el-form>
       <div class="confirm_btn">
@@ -103,6 +105,23 @@ export default {
     var validateBlank = (rule, value, callback) => {
       if (value.trim().length === 0) {
         callback(new Error('请输入内容'));
+      } else {
+        callback();
+      }
+    };
+    
+    var validatePhotos = (rule, value, callback) => {
+      let result = true;
+      if(Array.isArray(value)) {
+        for(let item of value) {
+          if(item == '') {
+            result = false;
+            break;
+          }
+        }
+      }
+      if (!result) {
+        callback(new Error('请添加3张图片'));
       } else {
         callback();
       }
@@ -152,8 +171,9 @@ export default {
           { required: true, message: "请输入详情", trigger: "blur" },
           {validator: validateBlank, trigger: "blur"}
         ],
-        photo: [
-          { required: false, message: "请添加图片", trigger: "change" }
+        photos: [
+          { required: true, message: "请添加3张图片", trigger: "change" },
+          {validator: validatePhotos, trigger: "blur"}
         ],
         buttonType: [
           { required: true, message: "请选择按钮使用", trigger: "change" }
@@ -170,12 +190,22 @@ export default {
         ],
         sourceType: [
           { required: true, message: "请选择数据来源", trigger: "change" }
+        ], 
+        source: [
+          { required: true, message: "请选择商品或商品分类", trigger: "change" }
         ],
       }
     };
   },
   created() {
     this.fetch();
+  },
+  watch: {
+    'ruleForm.sourceType': {
+      handler(newValue) {
+        this.deleteItem();
+      }
+    }
   },
   methods: {
 
@@ -262,6 +292,16 @@ export default {
         this.selectedGroup = this.tempItem.data;
       }
     },
+
+      /* 删除 */
+    deleteItem() {
+      this.ruleForm.source = '';
+       if(this.ruleForm.sourceType == 1) {
+        this.selectedGoods = null;
+      }else if(this.ruleForm.sourceType == 2){
+        this.selectedGroup = null;
+      }
+    }
 
   },
 
