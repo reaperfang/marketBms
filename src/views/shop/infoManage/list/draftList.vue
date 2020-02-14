@@ -26,7 +26,7 @@
         <el-table-column
           type="selection"
           :selectable='selectInit'
-          width="30">
+          width="28">
         </el-table-column>
         <el-table-column prop="title" label="标题" :width="200">
           <template slot-scope="scope">
