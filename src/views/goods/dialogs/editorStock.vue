@@ -48,6 +48,13 @@ export default {
         submit(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    if(+this.ruleForm.stock < 0) {
+                        this.$message({
+                            message: '库存不能小于0',
+                            type: 'warning'
+                        });
+                        return
+                    }
                     this._apis.goods.updateStock({
                         goodsInfoId: this.data.goodsInfo.id,
                         changeType: 0,
