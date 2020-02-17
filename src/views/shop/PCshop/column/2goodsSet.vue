@@ -155,6 +155,9 @@ export default {
 
     //根据id拉取货品列表
     getSkuList() {
+        if(!this.ruleForm.commodity || !this.ruleForm.commodity.length) {
+          return;
+        }
         this._apis.goods.fetchGoodsList({ids: this.ruleForm.commodity, startIndex: 1, pageSize: 100}).then((response)=>{
           this.selectedGoods = response.list;
         }).catch((error)=>{

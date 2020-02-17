@@ -236,7 +236,11 @@ export default {
 
     //根据id拉取货品列表
     getSkuList() {
-        this._apis.goods.fetchGoodsList({ids: this.ruleForm.commodity.length ? this.ruleForm.commodity : ['null'], startIndex: 1, pageSize: 100}).then((response)=>{
+        if(!this.ruleForm.commodity || !this.ruleForm.commodity.length) {
+          this.selectedGoods = [{}, {}]
+          return;
+        }
+        this._apis.goods.fetchGoodsList({ids: this.ruleForm.commodity, startIndex: 1, pageSize: 100}).then((response)=>{
           this.selectedGoods = response.list;
         }).catch((error)=>{
           console.error(error);
