@@ -335,7 +335,6 @@ export default {
         getMemberInfo() {
             this._apis.client.getMemberInfo({id: this.userId}).then((response) => {
                 this.clientInfoById = Object.assign({},response);
-                console.log(typeof(this.clientInfoById.sex),this.clientInfoById.sex);
                 if(this.clientInfoById.sex == 1) {
                     this.sexText = "男";
                 }else if(this.clientInfoById.sex == 2) {
