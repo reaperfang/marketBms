@@ -105,7 +105,6 @@ export default {
       ruleForm: {
         title: '',//标题
         type: this.$route.query.type,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
-        id: this.$route.query.id,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
         details: '',  //详情
         photo: '',//图片
         buttonType: 1, //按钮类型 1:显示 2:隐藏
@@ -167,11 +166,11 @@ export default {
 
     /* 获取装修数据 */
     fetch() {
-      if(!this.id) {
+      if(!this.ruleForm.type) {
         return;
       }
       this.loading = true;
-      this._apis.shop.getWindow({type: this.id}).then((response)=>{
+      this._apis.shop.getWindow({type: this.ruleForm.type}).then((response)=>{
          this.loading = false;
          this.ruleForm = response;
          if(response.sourceType == 1) {
