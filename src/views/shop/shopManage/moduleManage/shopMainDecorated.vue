@@ -19,7 +19,7 @@
             <p>{{shopInfo.adOpenType === 1 ? '已开启' : '已关闭'}}</p>
           </li>
           <li>
-            <el-button type="primary" plain @click="_routeTo('shopNav')">店铺导航</el-button>
+            <el-button type="primary" plain @click="_routeTo('m_shopNavIndex')">店铺导航</el-button>
             <p>{{shopInfo.shopNavigation === 1 ? '已开启' : '已关闭'}}</p>
           </li>
           <li>

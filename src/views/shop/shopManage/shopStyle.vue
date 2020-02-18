@@ -4,9 +4,11 @@
     <div class="style_btns">
       <span>选择店铺整体配色： </span>
       <ul class="style_list" ref="styleList">
-        <li v-for="(item, key) of styleList" :key="key" class="cell-item" @click="selectedStyle($event, item)">
-          <div class="style_block" v-for="(item2, key2) of item.colors" :key="key2" :style="{'backgroundColor': item2}"></div>
-        </li>
+        <template v-for="(item, key) of styleList">
+          <li v-if="!item.hidden" :key="key" class="cell-item" @click="selectedStyle($event, item)">
+            <div class="style_block" v-for="(item2, key2) of item.colors" :key="key2" :style="{'backgroundColor': item2}"></div>
+          </li>
+        </template>
       </ul>
     </div>
 
@@ -64,6 +66,7 @@ export default {
         {
           type: 6,
           colors: ['rgba(102,196,170,1)', 'rgba(221,242,236,1)', 'rgba(255,255,255,1)'],
+          hidden: true
         },
         {
           type: 7,
@@ -72,22 +75,29 @@ export default {
         {
           type: 8,
           colors: ['rgba(105,192,112,1)', 'rgba(225,245,226,1)', 'rgba(255,255,255,1)'],
+          hidden: true
         },
         {
           type: 9,
           colors: ['rgba(75,144,226,1)', 'rgba(218,233,249,1)', 'rgba(255,255,255,1)'],
+          hidden: true
         },
         {
           type: 10,
-          colors: ['rgba(195,167,105,1)', 'rgba(243,238,225,1)', 'rgba(255,255,255,1)'],
+          colors: ['rgba(195,167,105,1)', 'rgba(0,0,0,1)', 'rgba(255,255,255,1)'],
         },
         {
           type: 11,
           colors: ['rgba(51,51,51,1)', 'rgba(255,255,255,1)', 'rgba(255,255,255,1)'],
+          hidden: true
         },
         {
           type: 12,
-          colors: ['rgba(136,76,255,1)', 'rgba(239,230,255,1)', 'rgba(255,255,255,1)'],
+          colors: ['rgba(136,76,255,1)', 'rgba(199,171,255,1)', 'rgba(255,255,255,1)'],
+        }, 
+        {
+          type: 13,
+          colors: ['#03555C', '#D5A58B', 'rgba(255,255,255,1)'],
         }
       ],
       selectedItem: null  //当前选中的样式

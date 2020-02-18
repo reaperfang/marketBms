@@ -6,6 +6,8 @@
           <el-radio-button class="btn_bor" label="0">全部</el-radio-button>
           <el-radio-button class="btn_bor" label="1">小程序</el-radio-button>
           <el-radio-button class="btn_bor" label="2">公众号</el-radio-button>
+          <el-radio-button class="btn_bor" label="3" v-if="isPc">pc</el-radio-button>
+          <el-radio-button class="btn_bor" label="4" v-if="isPc">wap</el-radio-button>
         </el-radio-group>
       </div>
     </div>
@@ -57,11 +59,11 @@
               <p>商品详情页</p>
               <p>{{dataObj.uv[4]}}</p>
             </div>
-            <p class="space"></p>
+            <!-- <p class="space"></p>
             <div>
               <p>其他页</p>
               <p>{{dataObj.uv[5]}}</p>
-            </div>
+            </div> -->
           </div>
         </div>
          <div class="p_top" v-if="dataObj.orderUvPathTransformation">
@@ -77,9 +79,9 @@
             <p :title="'商品详情页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[4]*100).toFixed(2)+ '%'}}
             </p>
-            <p :title="'其他页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
+            <!-- <p :title="'其他页到确认订单页的转化率为'+(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'">
               {{(dataObj.orderUvPathTransformation[5]*100).toFixed(2)+ '%'}}
-            </p>      
+            </p>       -->
          </div>
         <div class="path_line clearfix">
           <div class="p_l">
@@ -95,15 +97,15 @@
           </div>
         </div>
          <div class="p_top1" v-if="dataObj.payOrderPathTransformation">
-              <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
+              <p style="padding-left:100px;" :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
               </p>
-              <p :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
+              <p style="padding-right:100px;" :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
               </p>            
-              <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
+              <!-- <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}
-              </p>
+              </p> -->
          </div>
         <div class="path_line clearfix">
           <div class="p_l">
@@ -121,11 +123,11 @@
                 <p>直接退出</p>
                 <p>{{dataObj.pay[2]}}</p>
               </div>
-               <p class="spaces"></p>
+               <!-- <p class="spaces"></p>
               <div>
                 <p>其他</p>
                 <p>{{dataObj.pay[3]}}</p>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -167,10 +169,30 @@ export default {
       endTime: "",
       dateType: 7,
       dataObj: {},
-      channel: "0"
+      channel: "0",
+      isPc:false
     };
   },
+  created() {
+    this.getPathConversion();
+    this.getOpen()
+  },
   methods: {
+    //pc wap是否开通
+    getOpen(){
+      this._apis.data.openPcWap().then(response => {
+        if(response == null){
+          this.isPc = false
+        }else if(response.onoff == 0){
+          this.isPc = false
+        }else{
+          this.isPc = true
+        }
+      }).catch(error => {
+        this.$message.error(error);
+      });
+    },
+
     getDate(date) {
       return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
     },
@@ -211,9 +233,6 @@ export default {
       }
     }
   },
-  created() {
-    this.getPathConversion();
-  }
 };
 </script>
 <style lang="scss" scoped>
@@ -354,6 +373,9 @@ export default {
       }
     }
   }
+}
+.el-radio-group label:last-child{
+  margin-left: 0px;
 }
 </style>
 

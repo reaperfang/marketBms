@@ -142,15 +142,21 @@ export default {
 
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      let html = `<img src="${ dialogData.filePath}" style="max-width:100%"/>`;
+      let html = `<img _src="${ dialogData.filePath}" src="${ dialogData.filePath}" style="max-width:100%"/>`;
       this.editor.execCommand('insertHtml', html);
     },
 
 
     /* 弹框选中视频 */
     videoSelected(dialogData) {
-      let html = `<video style="max-width:100%" src="${dialogData.filePath}" controls="controls"></video>`;
+      let html = `<iframe src="${this.config.UEDITOR_HOME_URL}dialogs/myVideo/myVideo.html" data-video="${dialogData.filePath}" style="border:none;"></iframe>`;
       this.editor.execCommand('insertHtml', html);
+      if(this.editor.body) {
+        let value = this.editor.body.innerHTML;
+        const target = 'https://statics.xiumi.us/stc/';
+        const convertData = value.replace(new RegExp(target,'g'),"https://statics.xiumi.us/stc/");
+        this.$emit('editorValueUpdate', convertData);
+      }
     }
   }
 }

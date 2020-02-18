@@ -22,8 +22,8 @@
         <div class="info">
           <div class="top">
             <span>{{item.name || '页面模板'}}</span>
-            <i class="mini_program"></i>
-            <i class="wechat"></i>
+            <!-- <i class="mini_program"></i>
+            <i class="wechat"></i> -->
           </div>
           <!-- <div class="bottom">
             <el-button type="success" size="mini" v-if="item.price === 0" plain>免费</el-button>
@@ -32,10 +32,15 @@
             <el-button type="warning" plain v-if="item.state === 1">立即购买</el-button>
           </div> -->
           <div class="bottom">
-            <div style="color:green;line-height: 25px;">免费</div>
+            <div style="color:#3EB488;line-height: 30px;">免费</div>
             <!-- <el-button type="success" size="mini"  plain>免费</el-button> -->
             <!-- <span class="price" v-if="item.price !== 0">￥{{item.price}}</span> -->
+<<<<<<< HEAD:src/views/shop/shopManage/template/templateManageIndex.vue
             <el-button type="success" plain @click="_routeTo('templateEdit', {id: item.id})">立即应用</el-button>
+=======
+            <!-- <el-button type="success" plain @click="_routeTo('p_templateEdit', {id: item.id})">立即应用</el-button> -->
+            <el-button type="success" plain style="color:#3EB488; border-color:#3EB488;background-color:#fff;">立即应用</el-button>
+>>>>>>> dev_gbc_01:src/views/shop/PCshop/template/templateManageIndex.vue
           </div>
         </div>
       </li>
@@ -49,8 +54,13 @@ export default {
   components: {},
   data () {
     return {
-      loading: true,
-      templateList: []
+      loading: false,
+      templateList: [
+        {
+          name: '瑰柏翠',
+          url: require('../../../../assets/images/shop/pc-template.png')
+        }
+      ]
     }
   },
   created() {
@@ -58,18 +68,18 @@ export default {
   },
   methods: {
     fetch() {
-      this.loading = true;
-      this._apis.shop.getTemplateList({}).then((response)=>{
-        this.templateList = response;
-        this.loading = false;
-      }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
-        console.error(error);
-        this.loading = false;
-      });
+      // this.loading = true;
+      // this._apis.shop.getTemplateList({}).then((response)=>{
+      //   this.templateList = response;
+      //   this.loading = false;
+      // }).catch((error)=>{
+      //   // this.$notify.error({
+      //   //   title: '错误',
+      //   //   message: error
+      //   // });
+      //   console.error(error);
+      //   this.loading = false;
+      // });
     },
   }
 }
@@ -77,6 +87,9 @@ export default {
 
 <style lang="scss" scoped>
 .template_wrapper{
+  background:#fff;
+  height: 100%;
+  padding:20px;
   ul{
     li{
       width:255px;

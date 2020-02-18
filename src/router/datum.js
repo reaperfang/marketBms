@@ -22,7 +22,7 @@ export default [
         path: 'accessPath',
         component: () => import('@/views/datum/accessPath'),
         name: 'accessPath',
-        meta: { title: '访问路径', noCache: true, tabTitle: '访问', navType:2 }
+        meta: { title: '路径转化', noCache: true, tabTitle: '访问', navType:2 }
       },
       {
         path: 'identityProperty',

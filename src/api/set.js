@@ -20,7 +20,7 @@ export function updateShopInfo(data) {
   })
 }
 
-/* 店铺微信支付信息 */
+/* 店铺支付信息 */
 export function getShopPayInfo(data) {
   return request({
     target: 'PAYMENT-106-PROCESSOR',
@@ -30,7 +30,7 @@ export function getShopPayInfo(data) {
   })
 }
 
-/* 添加店铺微信支付信息 */
+/* 添加店铺支付信息 */
 export function addShopPayInfo(data) {
   return request({
     target: 'PAYMENT-104-PROCESSOR',
@@ -40,7 +40,7 @@ export function addShopPayInfo(data) {
   })
 }
 
-/* 更新店铺微信支付信息 */
+/* 更新店铺支付信息 */
 export function updateShopPayInfo(data) {
   return request({
     target: 'PAYMENT-105-PROCESSOR',
