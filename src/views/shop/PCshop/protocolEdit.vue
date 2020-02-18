@@ -19,7 +19,6 @@ export default {
   components: {RichEditor},
   data() {
     return {
-      editorData: '',  //富文本数据
       myConfig: {
         // 编辑器不自动被内容撑高
         autoHeightEnabled: false,
@@ -30,6 +29,11 @@ export default {
       },
       ruleForm: {
         richValue: ''
+      },
+      rules: {
+         richValue: [
+          { required: true, message: "请输入协议内容", trigger: "blur" },
+        ], 
       },
       loading: true,
       submitLoadinig: false
@@ -45,7 +49,7 @@ export default {
      * 富文本数据更新
     */
     editorValueUpdate(value) {
-      this.editorData = value;
+      this.ruleForm.richValue = value;
     },
 
      /* 获取会员协议 */
@@ -70,7 +74,7 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if(valid) {
           this.submitLoadinig = true;
-          this._apis.goodsOperate.setProtocol({memberRegistrationProtocol: escape(this.editorData)}).then((response)=>{
+          this._apis.goodsOperate.setProtocol({memberRegistrationProtocol: escape(this.ruleForm.richValue)}).then((response)=>{
             this.$notify({
               title: '成功',
               message: '修改成功！',
