@@ -12,7 +12,7 @@
       </ul>
     </div>
 
-    <ul class="demo_list tile-list n3" v-if="selectedItem">
+    <ul class="demo_list tile-list n3" v-if="selectedItem" v-calcHeight="160+78+40+22">
       <li>
         <img :src="require('@/assets/images/shop/style/goodsDetail'+ selectedItem.type +'.png')" alt="">
         <p>商品详情</p>
@@ -205,8 +205,8 @@ export default {
     }
   }
   ul.demo_list{
-    height: calc(100% - 136px);
     margin-top:33px;
+    overflow-y: auto;
     li{
       width: 252px;
       margin-right: 28px;
@@ -225,7 +225,8 @@ export default {
     display:flex;
     flex-direction: row;
     justify-content: center;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
+    padding-top: 20px;
   }
 }
 </style>

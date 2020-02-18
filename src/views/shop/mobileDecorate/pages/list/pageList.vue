@@ -39,7 +39,7 @@
         <el-button type="warning" plain @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
-    <div class="table">
+    <div class="table" v-calcHeight="300">
       <p>微页面（共{{total || 0}}个）</p>
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
@@ -65,7 +65,7 @@
         <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'250px'">
+        <el-table-column prop="" label="操作" :width="'250px'" fixed="right">
           <template slot-scope="scope">
             <span class="table-btn" @click="copyPage(scope.row)">复制</span>
             <span class="table-btn" @click="_routeTo('m_shopEditor', {pageId: scope.row.id})">编辑</span>
@@ -298,6 +298,7 @@ export default {
   padding-top:0;
 }
 /deep/ .table{
+  overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;

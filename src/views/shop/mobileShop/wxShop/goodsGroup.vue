@@ -5,7 +5,7 @@
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>商品分类</span>
       </div>
-      <div class="phone-body" :style="bodyHeight">
+      <div class="phone-body" v-calcHeight="220+20">
         <componentGoodsGroupPageSetting 
         :data="ruleForm" 
         v-if="ruleForm"
@@ -33,17 +33,13 @@ export default {
   components: {componentGoodsGroupPageSetting, propertyGoodsGroupPageSetting},
   data() {
     return {
-     ruleForm: null,
-     bodyHeight: {}
+     ruleForm: null
     };
   },
   created() {
     this.fetch();
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 220 - 20 + 'px'
-    }
   },
   methods: {
     fetch() {

@@ -95,6 +95,7 @@ export default {
      /* 检测是否有数据 */
     hasContent() {
       let value = false;
+      let array = [];
       if(this.currentComponentData.data.itemList) {
         if(Object.prototype.toString.call(this.currentComponentData.data.itemList) === '[object Object]') {
           this.currentComponentData.data.itemList = [...this.currentComponentData.data.itemList];

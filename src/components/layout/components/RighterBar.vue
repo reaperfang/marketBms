@@ -1,6 +1,6 @@
 <template>
   <div class="righter-bar" v-if="sidebarItems.length">
-    <div class="righter-bar-content">
+    <div class="righter-bar-content" v-calcHeight="60">
       <div v-if="!item.hidden" v-for="item in sidebarItems" class="item">
         <template v-if="item.children">
           <h2>{{item.name}}</h2>

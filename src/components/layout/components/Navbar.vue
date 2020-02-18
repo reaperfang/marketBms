@@ -134,7 +134,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 60px;
+  height: 66px;
   width: calc(100% - 120px);
   line-height: 64px;
   border-radius: 0px !important;

@@ -148,6 +148,12 @@ export default {
           endTime: this.listQuery.time ? utils.formatDate(this.listQuery.time[1], "yyyy-MM-dd hh:mm:ss") : '',
         }))
         .then(res => {
+          if(res == null) {
+            res = {
+              total: 0,
+              list: []
+            }
+          }
           this.total = +res.total
           this.tableData = res.list
           this.loading = false

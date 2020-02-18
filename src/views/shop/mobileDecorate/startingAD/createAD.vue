@@ -5,7 +5,7 @@
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>页面广告</span>
       </div>
-      <div class="phone-body" :style="bodyHeight">
+      <div class="phone-body" v-calcHeight="146+20">
         <div class="img_wrapper">
           <img :src="ruleForm.imagePath" alt="">
           <i></i>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="module props" v-loading="loading">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" :style="propsHeight">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" v-calcHeight="190+20" >
         <div class="block header">
           <p class="title">启动广告设置</p>
           <p :class="{'state': ruleForm.status === 2 || ruleForm.status === 3}" v-if="ruleForm.status === 0">展示中</p>
@@ -128,8 +128,6 @@ export default {
           { required: true, message: "请设置展示时间", trigger: "change" },
         ]
       },
-      bodyHeight: {},
-      propsHeight: {},
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7
@@ -143,12 +141,6 @@ export default {
     }
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 146 - 20 + 'px'
-    },
-    this.propsHeight = {
-      height: document.body.clientHeight - 190 - 20 + 'px'
-    }
   },
   watch: {
     'ruleForm.advertiseJump': {

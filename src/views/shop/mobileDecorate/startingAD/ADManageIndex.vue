@@ -32,7 +32,7 @@
         <el-button type="warning" plain @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
-    <div class="table">
+    <div class="table" v-calcHeight="300">
       <p>广告（{{total || 0}}个）</p>
       <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
@@ -49,7 +49,7 @@
         <el-table-column prop="name" label="广告名称"></el-table-column>
         <el-table-column prop="vv" label="访客数" width="100"></el-table-column>
         <el-table-column prop="pv" label="浏览数" width="100"></el-table-column>
-        <el-table-column prop="updateTime" label="展示时间">
+        <el-table-column prop="updateTime" label="展示时间" :width="170">
           <template slot-scope="scope">
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
@@ -68,7 +68,7 @@
             <span v-else>--</span>
           </template>
         </el-table-column>
-        <el-table-column prop="" label="操作" :width="'150px'">
+        <el-table-column prop="" label="操作" :width="'150px'" fixed="right">
           <template slot-scope="scope">
             <span class="table-btn" v-if="scope.row.status === 0" @click="_routeTo('m_createAD', {ADId: scope.row.id, showType: 'view'})">查看</span>
             <span class="table-btn" v-if="scope.row.status === 3" @click="startAD(scope.row)">启用</span>
@@ -288,6 +288,7 @@ export default {
   padding:20px;
 }
 /deep/ .table{
+  overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;

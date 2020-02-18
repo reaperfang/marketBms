@@ -100,7 +100,6 @@ export default {
     },
     submit() {
       let datas = []
-      console.log(1111111);
       this.list.map(item =>{
         if(item.checked == true){
           let obj = {
@@ -112,7 +111,7 @@ export default {
             summary:item.digest,
             author:item.author,
             title:item.title,
-            sourceMaterial:item.content,
+            sourceMaterial: escape(item.content),
             isSyncWechat:'1',
             fileCover: escape(item.thumb_url)
           }
