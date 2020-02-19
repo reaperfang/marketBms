@@ -147,7 +147,7 @@ export default {
       this.multipleSelection = val;
     },
     getRowKey(row) {
-      return row.id
+      return row.goodsInfo.id
     },
 
     /* 单选选中改变 */
