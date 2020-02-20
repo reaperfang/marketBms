@@ -15,6 +15,7 @@
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
                     :props="{ multiple: false, checkStrictly: true }"
+                    placeholder="请输入关键字"
                     clearable
                     filterable>
                 </el-cascader>
@@ -62,7 +63,7 @@
                         v-model="categoryValue"
                         @change="handleChange"
                         :props="{ multiple: true, checkStrictly: true }"
-                        clearable
+                        placeholder="请输入关键字"
                         filterable>
                     </el-cascader>
                 </div>
@@ -2582,6 +2583,11 @@ $blue: #655EFF;
         margin-left: 9px;
     }
 }
+// /deep/ .el-cascader {
+//     .el-icon-circle-close {
+//         display: none;
+//     }
+// }
 </style>
 
 

@@ -335,7 +335,6 @@ export default {
         getMemberInfo() {
             this._apis.client.getMemberInfo({id: this.userId}).then((response) => {
                 this.clientInfoById = Object.assign({},response);
-                console.log(typeof(this.clientInfoById.sex),this.clientInfoById.sex);
                 if(this.clientInfoById.sex == 1) {
                     this.sexText = "男";
                 }else if(this.clientInfoById.sex == 2) {
@@ -528,7 +527,6 @@ export default {
         }
         .c_top_r{
             width:415px;
-            padding-bottom: 17px;
             box-shadow:0px 0px 14px 0px rgba(208,214,228,1);
             border-radius:10px;
             border:1px solid rgba(204,204,204,1);

@@ -16,7 +16,7 @@
           <div class="add_button" v-if="!ruleForm.photo" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
             <i class="inner"></i>
           </div>
-          建议尺寸：图片大小待补充
+          建议尺寸：633*908像素
         </el-form-item>
         <el-form-item label="按钮使用" prop="buttonType">
           <el-radio-group v-model="ruleForm.buttonType">
@@ -130,7 +130,6 @@ export default {
       ruleForm: {
         title: '',//标题
         type: this.$route.query.type,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
-        id: this.$route.query.id,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
         details: '',  //详情
         photo: '',//图片
         buttonType: 1, //按钮类型 1:显示 2:隐藏
@@ -194,11 +193,11 @@ export default {
 
     /* 获取装修数据 */
     fetch() {
-      if(!this.id) {
+      if(!this.ruleForm.type) {
         return;
       }
       this.loading = true;
-      this._apis.shop.getWindow({type: this.id}).then((response)=>{
+      this._apis.shop.getWindow({type: this.ruleForm.type}).then((response)=>{
         this.loading = false;
         this.ruleForm = response;
         this.getSkuList();
@@ -237,7 +236,11 @@ export default {
 
     //根据id拉取货品列表
     getSkuList() {
-        this._apis.goods.fetchGoodsList({ids: this.ruleForm.commodity.length ? this.ruleForm.commodity : ['null'], startIndex: 1, pageSize: 100}).then((response)=>{
+        if(!this.ruleForm.commodity || !this.ruleForm.commodity.length) {
+          this.selectedGoods = [{}, {}]
+          return;
+        }
+        this._apis.goods.fetchGoodsList({ids: this.ruleForm.commodity, startIndex: 1, pageSize: 100}).then((response)=>{
           this.selectedGoods = response.list;
         }).catch((error)=>{
           console.error(error);

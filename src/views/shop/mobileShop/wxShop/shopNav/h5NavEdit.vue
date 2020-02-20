@@ -92,7 +92,7 @@
                   </div>
                 </div>
               </div>
-              建议尺寸：750*370，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+              建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
             </el-form-item>
             <!-- <el-form-item label="导航链接" prop="navLinkType" v-if="navigation_type === '0'">
               <el-radio-group v-model="currentNav.navLinkType">

@@ -159,5 +159,6 @@ export default {
 .group-wrapper{
   display:flex;
   flex-direction: row;
+  margin-top:10px;
 }
 </style>

@@ -40,7 +40,7 @@
             <div class="add_button" v-if="(showType !== 'view') && (!ruleForm.imagePath)" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
               <i class="inner"></i>
             </div>
-            <span class="upload_tips">建议尺寸:640 * 350 , 请将所有广告图片尺寸保持一致，图片只能选择一张</span>
+            <span class="upload_tips">建议尺寸:640 * 350 像素 , 请将所有广告图片尺寸保持一致，图片只能选择一张</span>
           </el-form-item>
           <el-form-item label="广告链接" prop="advertiseJump">
             <el-button v-if="ruleForm.advertiseJump" type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">{{ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name)}}</el-button>
