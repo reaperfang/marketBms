@@ -41,7 +41,7 @@
             <span v-else-if="scope.row.type == 2">已下线</span>
           </template>
         </el-table-column>
-        <el-table-column prop="cover" label="上传封面">
+        <el-table-column prop="cover" label="封面状态">
           <template slot-scope="scope">
             <span v-if="scope.row.cover">已上传</span>
             <span v-else>未上传</span>

@@ -74,7 +74,6 @@ export default {
       ruleForm: {
         title: '',//标题
         type: this.$route.query.type,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
-        id: this.$route.query.id,  //橱窗类型 1.one,2.two,3.three,4.four,5.five,6.six
         details: '',  //详情
         commodity: [] //货品集合
       },
@@ -114,11 +113,11 @@ export default {
 
     /* 获取装修数据 */
     fetch() {
-      if(!this.id) {
+      if(!this.ruleForm.type) {
         return;
       }
       this.loading = true;
-      this._apis.shop.getWindow({type: this.id}).then((response)=>{
+      this._apis.shop.getWindow({type: this.ruleForm.type}).then((response)=>{
          this.loading = false;
          this.ruleForm = response;
          this.getSkuList();
@@ -156,6 +155,9 @@ export default {
 
     //根据id拉取货品列表
     getSkuList() {
+        if(!this.ruleForm.commodity || !this.ruleForm.commodity.length) {
+          return;
+        }
         this._apis.goods.fetchGoodsList({ids: this.ruleForm.commodity, startIndex: 1, pageSize: 100}).then((response)=>{
           this.selectedGoods = response.list;
         }).catch((error)=>{

@@ -18,7 +18,7 @@
         <div class="add_button" v-if="!ruleForm.backgroundImage" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
         </div>
-        建议尺寸：750*370，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+        建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
       </el-form-item>
     </div>
 

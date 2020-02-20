@@ -28,7 +28,7 @@
               :on-success="handleAvatarSuccess"
               :show-file-list="false">
               <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb，建议尺寸900*500</div>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb，建议尺寸900*500像素</div>
             </el-upload>
             <el-button type="primary" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" class="imgSource">图片素材</el-button>
           </p>

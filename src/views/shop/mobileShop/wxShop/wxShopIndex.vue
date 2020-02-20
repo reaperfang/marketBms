@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#fff;">
+  <div>
     <el-tabs v-model="currentTab">
       <el-tab-pane label="店铺主页" :name="shopMain" v-loading="loading"></el-tab-pane>
       <el-tab-pane label="个人中心" name="personCenter"></el-tab-pane>
@@ -66,5 +66,6 @@ export default {
 .el-tabs{
   padding:20px;
   padding-bottom: 0;
+  background: rgb(255, 255, 255);
 }
 </style>

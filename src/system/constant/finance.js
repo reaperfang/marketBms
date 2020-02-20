@@ -4,7 +4,7 @@ export default {
     revenueExpenditureTerms:[
         { value: 'tradeDetailSn', label: '交易流水号' },
         { value: 'relationSn', label: '关联单据编号' },
-        { value: 'wechatTradeSn', label: '微信流水号' },
+        { value: 'wechatTradeSn', label: '第三方流水号' },
     ],
     //收支明细---业务类型
     rebusinessTypes:[
