@@ -527,7 +527,6 @@ export default {
         }
         .c_top_r{
             width:415px;
-            padding-bottom: 17px;
             box-shadow:0px 0px 14px 0px rgba(208,214,228,1);
             border-radius:10px;
             border:1px solid rgba(204,204,204,1);
