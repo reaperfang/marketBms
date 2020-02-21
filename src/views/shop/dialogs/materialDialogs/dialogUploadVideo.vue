@@ -56,7 +56,7 @@
             <img v-if="form.imageUrls" :src="form.imageUrls" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          <p class="note">建议尺寸：800*800，支持jpg,jpeg,png格式，大小不超过3.0MB。</p>
+          <p class="note">建议尺寸：800*800像素，支持jpg,jpeg,png格式，大小不超过3.0MB。</p>
           <p class="note">如果不添加封面，系统会默认截取视频的第一个画面作为封面</p>
         </el-form-item>
       </el-form>

@@ -228,10 +228,10 @@ export default {
           this.survey = response   
           this.dataList = response.accountList
         }else{
-          this.$notify.info({
-            title: '消息',
-            message: "查询结果集为空，没有可以显示的数据"
-          });
+          // this.$notify.info({
+          //   title: '消息',
+          //   message: "查询结果集为空，没有可以显示的数据"
+          // });
           this.init(this.days)
         }
       }).catch((error)=>{
@@ -248,11 +248,12 @@ export default {
           this.survey = response
           this.dataList = response.accountList
         }else{
-          this.$notify.info({
-            title: '消息',
-            message: "查询结果集为空，没有可以显示的数据"
-          });
+          // this.$notify.info({
+          //   title: '消息',
+          //   message: "查询结果集为空，没有可以显示的数据"
+          // });
           // this.days = 7
+          return
         }
       }).catch((error)=>{
         this.$notify.error({

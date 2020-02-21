@@ -356,3 +356,15 @@ export function memberInforNum(data) {
   })
 }
 
+/*
+** 是否开通pc wap
+*/ 
+export function openPcWap(data) {
+  return request({
+    target:'TC-PCWAP-APPLY-INFO-PROCESSOR',
+    method: 'post',
+    apiType: 'matrix',
+    data
+  })
+}
+

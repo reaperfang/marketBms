@@ -77,6 +77,16 @@
             color: #fff;
             cursor: pointer;
       }
+      i.delete_btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: url("../../assets/images/shop/editor/delete.png") no-repeat 0 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+      }
 }
 
 /* 类商品列表样式 */
@@ -502,4 +512,18 @@ ul.cube {
       width:50%;
       display:block;
       margin:0 auto;
+}
+
+/* 瑰柏翠页面头部样式 */
+.gbc_container{
+//   height: 100%;
+  background: #fff;
+  padding:20px;
+  h2{
+    font-size:16px;
+    font-weight:700!important;
+    color:rgba(22,22,23,1);
+    line-height:25px;
+    margin-bottom:10px;
+  }
 }

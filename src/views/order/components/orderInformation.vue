@@ -34,8 +34,12 @@
                     <div class="label">交易流水号</div>
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | tradeCodeFilter}}</div>
                 </div>
-                <div class="item" v-if="wechatLength">
+                <div class="item" v-if="wechatLength && orderInfo.payWay == 1">
                     <div class="label">微信流水号</div>
+                    <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
+                </div>
+                <div class="item" v-if="wechatLength && orderInfo.payWay != 1">
+                    <div class="label">第三方流水号</div>
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
                 <div class="item">
@@ -545,13 +549,17 @@ export default {
         },
         payWayFilter(code) {
             if(code === 1) {
-                return '线上支付'
+                return '微信支付'
             } else if(code === 2) {
                 return '货到付款'
             } else if(code === 3) {
                 return '找人代付'
             } else if(code === 4) {
                 return '线下支付'
+            } else if(code === 5) {
+                return '线上支付'
+            } else if(code === 6) {
+                return '支付宝支付'
             }
         },
         invoiceTypeFilter(code) {
@@ -679,7 +687,7 @@ export default {
                 .label {
                     margin-right: 20px;
                     flex-shrink: 0;
-                    width: 70px;
+                    width: 84px;
                     text-align: right;
                 }
                 .value {

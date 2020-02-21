@@ -36,7 +36,7 @@ module.exports = {
       '/data-server/**': {
         // target: 'http://172.22.146.133:8081',  // 店铺 李玟霆
         // target: 'http://172.22.146.117:80',// 许涛
-        // target: 'http://172.22.146.3:8080',//
+        // target: 'http://172.22.146.111:8080',//
         target:'http://test-omo.aiyouyi.cn',
 
         changeOrigin: true,

@@ -122,7 +122,7 @@
         </el-table-column>
         <el-table-column
           prop="wechatTradeSn"
-          label="微信流水号">
+          label="第三方流水号">
         </el-table-column>
         <el-table-column
           prop="amount"

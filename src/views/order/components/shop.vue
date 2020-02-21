@@ -58,7 +58,7 @@ export default {
 
             this._globalEvent.$emit('checkedLength', number)
         },
-        getList() {
+        getList(obj) {
             let _params
 
             // const loading = this.$loading({
@@ -82,6 +82,11 @@ export default {
                 [`${this.params.searchTimeType}End`]: this.params.orderTimeValue ? searchTimeTypeEnd : '',
                 memberInfoId: this.$route.query.id
             }, this.listQuery)
+            if(obj && obj.type == 'resetForm') {
+               _params = Object.assign({}, _params, {
+                   [this.params.searchType]: obj.searchValue
+               }) 
+            }
             this._apis.order.fetchOrderList(_params).then((res) => {
                 console.log(res)
                 res.list.forEach((val, index) => {

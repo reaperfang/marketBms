@@ -1,7 +1,7 @@
 <template>
     <div ref="groupWrapper" :style="fontStyle" v-if="data">
       <div class="componentGoodsSearch" style="z-index:4;">
-          <div class="inputBox borderStyle" style="background:rgb(238,238,238);height: 36px;">
+          <div class="inputBox" :class="{'borderStyle': ruleForm.searchStyle==2}" style="background:rgb(238,238,238);height: 36px;">
               <img src="@/assets/images/shop/fdj.png" class="fdj" />
               <p :style="fontStyle">商品搜索</p>
           </div>

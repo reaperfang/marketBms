@@ -26,6 +26,10 @@
         label="支付人数">
       </el-table-column>
       <el-table-column
+        prop="sellingQuantity"
+        label="售卖数量">
+      </el-table-column>
+      <el-table-column
         prop="rateUvPays"
         label="访问支付转化率"
       >

@@ -6,6 +6,8 @@
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '客流分析', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
               <el-radio-button class="btn_bor" label="2" v-permission="['数据', '客流分析', '公众号']">公众号</el-radio-button>
+              <el-radio-button class="btn_bor" label="3"  v-if="isPc">pc</el-radio-button>
+              <el-radio-button class="btn_bor" label="4"  v-if="isPc">wap</el-radio-button>
             </el-radio-group>
           </div>
       </div>
@@ -104,7 +106,8 @@ export default {
       title:'浏览/访问',
       duration:'1',
       channel:0,
-      type:1
+      type:1,
+      isPc:false
     };
   },
   created() {
@@ -114,7 +117,23 @@ export default {
     init(){
       this.getFlowAnalysis()
       this.getResidetime()
+      this.getOpen()
     },
+    //pc wap是否开通
+    getOpen(){
+      this._apis.data.openPcWap().then(response => {
+        if(response == null){
+          this.isPc = false
+        }else if(response.onoff == 0){
+          this.isPc = false
+        }else{
+          this.isPc = true
+        }
+      }).catch(error => {
+        this.$message.error(error);
+      });
+    },
+
     //浏览量/访问量
     getFlowAnalysis(){
       let data = {
@@ -299,6 +318,9 @@ export default {
       border-top: 1px dashed #d3d3d3;
     }
   }
+}
+.el-radio-group label:last-child{
+  margin-left: 0px;
 }
 </style>
 

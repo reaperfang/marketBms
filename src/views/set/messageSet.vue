@@ -48,7 +48,7 @@
           </el-popover>
         </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="msgWechatApp"
         label="小程序模版消息"
         align="center">
@@ -73,7 +73,7 @@
             <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.wechatAppId?'预览':'--'}}</el-link>
           </el-popover>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         prop="msgSms"
         label="短信通知"
@@ -93,7 +93,7 @@
             width="400"
             trigger="click">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
-              <div v-html="scope.row.smsPreview" class="preview_content"></div>
+              <div v-html="scope.row.smsPreview" class="rich_wrapper"></div>
             <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.smsTemplateKey?'预览':'--'}}</el-link>
           </el-popover>
         </template>
@@ -244,7 +244,7 @@ export default {
   line-height: 36px;
   background-color: #eee;
 }
-.preview_content{
+.rich_wrapper{
   padding: 6px 0 0 6px;
   line-height: 25px;
 }

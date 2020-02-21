@@ -1,8 +1,8 @@
 <template>
     <div class="app-content classify">
         <div class="search">
-            <el-button v-permission="['商品', '商品分类', '默认页面', '新建分类']" @click="addLevel1Category" type="primary">新增商品分类</el-button>
-            <el-form :inline="true" :model="formInline" class="form-inline">
+            <el-button v-permission="['商品', '商品分类', '默认页面', '新建分类']" @click="addLevel1Category" type="primary">新建一级分类</el-button>
+            <el-form ref="form" :inline="true" :model="formInline" class="form-inline">
                 <el-form-item label="搜索分类：">
                     <el-input v-model="formInline.name" placeholder="请输入分类名称..."></el-input>
                 </el-form-item>
@@ -15,6 +15,7 @@
                 </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" @click="getTreeList">查询</el-button>
+                    <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -68,7 +69,17 @@ export default {
         //this.getList()
         this.getTreeList()
     },
+    computed: {
+        cid(){
+            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            return shopInfo.id
+        },
+    },
     methods: {
+        resetForm(formName) {
+            this.formInline.name = ''
+            this.getTreeList()
+        },
         getTreeList() {
             this.loading = true
             this._apis.goods.fetchTreeCategoryList({
@@ -131,14 +142,31 @@ export default {
             if(node.level < 3) {
                 return (
                     <div class="treeRow">
-                        <span class="td first">{data.name}</span>
+                        <span class="td first">
+                            { h('span', {
+                                style: {
+                                    backgroundImage: `url(${data.image})`,
+                                    height: '25px',
+                                    width: '25px',
+                                    display: 'inline-block'
+                                }
+                            })}
+                            <span>{data.name}</span>
+                        </span>
                         <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
                         <span class="td operate">
                             {
                                 <span class="blue" on-click={() => this.change(node, data)}>修改</span>
                             }
                             {
-                                <span v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="blue" on-click={() => this.addCategory(node, data)}>新增子分类</span>
+                                <span v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="blue" on-click={() => this.addCategory(node, data)}>{
+                                    node.level == 2 ? '新建三级分类' : (node.level == 1 ? '新建二级分类' : '新建一级分类')
+                                }</span>
+                            }
+                            {
+                                <span class="blue" on-click={() => this.recommend(node, data)}>{
+                                    node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'
+                                }</span>
                             }
                             {
                                 <span v-permission="['商品', '商品分类', '默认页面', '隐藏']" class="blue" on-click={() => this.forbidden(node, data)}>{
@@ -154,11 +182,26 @@ export default {
             } else {
                 return (
                     <div class="treeRow">
-                        <span class="td first">{data.name}</span>
+                        <span class="td first">
+                            { h('span', {
+                                style: {
+                                    backgroundImage: `url(${data.image})`,
+                                    height: '25px',
+                                    width: '25px',
+                                    display: 'inline-block'
+                                }
+                            })}
+                            <span>{data.name}</span>
+                        </span>
                         <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
                         <span class="td operate">
                             {
                                 <span class="blue" on-click={() => this.change(node, data)}>修改</span>
+                            }
+                            {
+                                <span class="blue" on-click={() => this.recommend(node, data)}>{
+                                    node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'
+                                }</span>
                             }
                             {
                                 <span class="blue" on-click={() => this.forbidden(node, data)}>{
@@ -194,6 +237,12 @@ export default {
 
             if(node.data.enable === 1) {
                 _enable = 0
+                if(data.isRecommend == 1) {
+                    this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert'}).then(() => {
+
+                    })
+                    return
+                }
             } else {
                 _enable = 1
             }
@@ -203,21 +252,42 @@ export default {
 
             })
         },
+        recommend(node, data) {
+            let isRecommend
+
+            if(node.data.isRecommend === 1) {
+                isRecommend = 0
+            } else {
+                isRecommend = 1
+            }
+            this._apis.goods.recommend({cid: this.cid, id: node.data.id, isRecommend}).then((res) => {
+                this.getTreeList()
+            }).catch(error => {
+
+            })
+        },
         delete(node, data) {
+            if(data.isRecommend == 1) {
+                this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert'}).then(() => {
+
+                })
+                return
+            }
             this.confirm({title: '立即删除', icon: true, text: '删除后此分类无法展示，确认删除吗？'}).then(() => {
                 this._apis.goods.deleteCategory({id: node.data.id}).then((res) => {
-                    this.$notify({
-                                title: '成功',
-                                message: '删除成功！',
-                                type: 'success'
-                            });
-                    this.getTreeList()
                     if(res && res.msg == 'existProduct') {
                         this.confirm({title: '转移商品', icon: false, text: '是否将此分类其下的全部商品转移到其他分类中？'}).then(() => {
                             this.currentData = node.data.id
                             this.currentDialog = 'TransferGoodsDialog'
                             this.dialogVisible = true
                         })
+                    } else {
+                        this.$notify({
+                            title: '成功',
+                            message: '删除成功！',
+                            type: 'success'
+                        });
+                        this.getTreeList()
                     }
                 }).catch(error => {
                     this.$notify.error({
@@ -232,10 +302,16 @@ export default {
         },
         getList() {
             this.loading = true
-            this._apis.goods.fetchCategoryList({
-                name: this.formInline.name,
-                enable: this.formInline.enable
-            }).then((res) => {
+            let params = {}
+
+            params = Object.assign({}, this.formInline)
+            if(this.formInline.name == '') {
+                delete params.name
+            }
+            if(this.formInline.enable == '') {
+                delete params.enable
+            }
+            this._apis.goods.fetchCategoryList(params).then((res) => {
                 let arr = this.transTreeData(res, 0)
                 
                 this.categoryData = arr
@@ -248,7 +324,7 @@ export default {
     },
     components: {
         AddCategoryDialog,
-        TransferGoodsDialog
+        TransferGoodsDialog,
     }
 }
 </script>
@@ -318,7 +394,17 @@ export default {
 }
 .operate {
     span {
-        margin-right: 26px;
+        margin-right: 6px;
+    }
+}
+.treeRow {
+    .td.first {
+        display: flex;
+        align-items: center;
+        span:first-child {
+            background-size: 100%;
+            margin-right: 5px;
+        }
     }
 }
 </style>

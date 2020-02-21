@@ -9,13 +9,15 @@
           </div>
         </template>
         <template v-else-if="item.tabTitle">
-          <h2>{{item.tabTitle}}</h2>
-          <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
-            <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
-            <div>
-              <router-link class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+          <template v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
+            <h2>{{item.tabTitle}}</h2>
+            <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
+              <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
+              <div>
+                <router-link class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+              </div>
             </div>
-          </div>
+          </template>
         </template>
         <template v-else>
           <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path)">{{item.meta.title}}</router-link>
@@ -39,7 +41,8 @@ export default {
       sidebarItems: [],
       basePath: '',
       //userType: false,
-      current: '0'
+      current: '0',
+      isPc: false  //是否开通了pc和wap店铺
     }
   },
   components: { },
@@ -61,6 +64,18 @@ export default {
     }
   },
   created() {
+    this._apis.data.openPcWap().then(response => {
+      if(response == null){
+        this.isPc = false
+      }else if(response.onoff == 0){
+        this.isPc = false
+      }else{
+        this.isPc = true
+      }
+    }).catch(error => {
+      this.$message.error(error);
+    });
+
     this.current = localStorage.getItem('siderBarCurrent') || '0'
     this.setSidebarItems()
 
@@ -154,7 +169,7 @@ export default {
 <style lang="scss" scoped>
   .righter-bar {
     .righter-bar-content {
-      height: 680px;
+      height: calc(100% - 60px);
       overflow-y: scroll;
     }
     font-size: 14px;

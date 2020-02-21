@@ -1,8 +1,8 @@
 <template>
   <!-- 微页面分类 -->
   <div class="componentClassify" >
-    <div class="rich_editor" v-if="currentComponentData.data.explain" v-html="currentComponentData.data.explain"></div>
-    <div class="rich_editor default" v-else>分类简介预览</div>
+    <div class="rich_wrapper" v-if="currentComponentData.data.explain" v-html="currentComponentData.data.explain"></div>
+    <div class="rich_wrapper default" v-else>分类简介预览</div>
     <ul class="page_list name_list" v-if="currentComponentData.data.showType === 1">
       <li v-for="(item, key) of currentComponentData.data.pageInfos" :key="key">
         <span>{{item.name}}</span>
@@ -44,7 +44,7 @@ export default {
 <style lang="scss" scoped>
 .componentClassify {
   background: rgb(242,242,249);
-  .rich_editor{
+  .rich_wrapper{
     min-height:80px;
     padding:10px;
     background:#fff;

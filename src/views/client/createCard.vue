@@ -157,7 +157,7 @@
                 ></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="客户电话：" prop="phone">
+            <el-form-item label="客服电话：" prop="phone">
               <div class="input_wrap">
                 <el-input v-model="ruleForm.phone" placeholder="请输入联系电话"></el-input>
               </div>
@@ -224,7 +224,7 @@ export default {
           { required: true, message: "请输入使用须知", trigger: "blur" }
         ],
         phone: [
-          { required: true, message: "请输入客户电话", trigger: "blur" }
+          { required: true, message: "请输入客服电话", trigger: "blur" }
         ],
         isSyncWechat: [
           {
@@ -405,7 +405,7 @@ export default {
       if (Number(res.data.width) >= 1000 && Number(res.data.height) >= 600) {
         this.$notify({
           title: "警告",
-          message: "尺寸应设置为宽1000象素以下，高600象素以下",
+          message: "尺寸应设置为宽1000像素以下，高600像素以下",
           type: "warning"
         });
       } else {
@@ -584,7 +584,7 @@ export default {
         }else if(this.ruleForm.phone == ""){
           this.$notify({
             title: "警告",
-            message: "请输入客户电话",
+            message: "请输入客服电话",
             type: "warning"
           });
         }else{

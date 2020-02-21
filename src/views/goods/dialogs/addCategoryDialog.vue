@@ -34,7 +34,17 @@
                     <el-radio v-model="basicForm.enable" :label="0">禁用</el-radio>
                 </el-form-item>
                 <el-form-item label="排序：" prop="sort">
-                    <el-input class="formInput" v-model="basicForm.sort"></el-input>
+                    <el-input maxlength="6" class="formInput" v-model="basicForm.sort"></el-input>
+                </el-form-item>
+                <el-form-item label="分类描述：" prop="description">
+                    <el-input
+                        type="textarea"
+                        :rows="5"
+                        placeholder="请输入内容"
+                        v-model="basicForm.description"
+                        maxlength="100"
+                        show-word-limit>
+                    </el-input>
                 </el-form-item>
                 <el-form-item label="分类图片：" prop="image">
                     <ul class="upload-ul">
@@ -73,7 +83,8 @@ export default {
                 sort: 0, // 分类顺序
                 parentId: 0, // 分类父ID
                 imageUrl:'', // 分类图片
-                image: ''
+                image: '',
+                description: ''
             },
             basicRules:{
                 name: [
@@ -105,6 +116,7 @@ export default {
                 this.basicForm.enable = res.enable
                 this.basicForm.sort = res.sort
                 this.basicForm.image = res.image
+                this.basicForm.description = res.description
                 if(res.image) {
                     this.imageVisible = true
                 }
@@ -131,6 +143,13 @@ export default {
         submitCategory(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    if(this.basicForm.sort < 0) {
+                        this.$message({
+                            message: '排序值不能小于0',
+                            type: 'warning'
+                        });
+                        return
+                    }
                     let param = Object.assign({}, this.basicForm)
 
                     if(/\s+/.test(this.basicForm.name)) {
@@ -217,13 +236,13 @@ export default {
                 // 新增
                 if(this.data.level === 0) { 
                     // 新增一级分类
-                    return '新增一级分类'
+                    return '新建一级分类'
                 } else if(this.data.level == 1) {
                     // 新增二级分类
-                    return '新增二级分类'
+                    return '新建二级分类'
                 } else if(this.data.level == 2) {
                     // 新增三级分类
-                    return '新增三级分类'
+                    return '新建三级分类'
                 }
             } else {
                 return '修改分类'
