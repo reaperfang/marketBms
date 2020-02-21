@@ -15,6 +15,7 @@
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
                     :props="{ multiple: false, checkStrictly: true }"
+                    placeholder="请输入关键字"
                     clearable
                     filterable>
                 </el-cascader>
@@ -62,7 +63,7 @@
                         v-model="categoryValue"
                         @change="handleChange"
                         :props="{ multiple: true, checkStrictly: true }"
-                        clearable
+                        placeholder="请输入关键字"
                         filterable>
                     </el-cascader>
                 </div>
@@ -137,11 +138,12 @@
                                     <el-button @click="getSpecs" type="primary">确定</el-button>
                                 </div>
                             </div>
-                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue">添加规格值</el-button>
+                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
                         </el-popover>
                     </div>
                     <div v-show="!showAddSpecsInput" class="add-specs-button">
                         <el-button @click="addSpecs" type="primary">添加规格</el-button>
+                        <p>请先选择颜色主规格</p>
                     </div>
                     <div v-show="showAddSpecsInput" class="add-specs">
                         <div class="add-specs-input">
@@ -181,7 +183,7 @@
                     <el-table-column
                         prop="costPrice"
                         label="成本价"
-                        class-name="costPrice"
+                        class-name="costPrice operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.costPrice" placeholder="请输入价格(元)"></el-input>
@@ -190,7 +192,7 @@
                     <el-table-column
                         prop="salePrice"
                         label="售卖价"
-                        class-name="salePrice"
+                        class-name="salePrice operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.salePrice" placeholder="请输入价格(元)"></el-input>
@@ -199,7 +201,7 @@
                     <el-table-column
                         prop="stock"
                         label="库存"
-                        class-name="stock"
+                        class-name="stock operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.stock" placeholder="请输入库存"></el-input>
@@ -208,7 +210,7 @@
                     <el-table-column
                         prop="warningStock"
                         label="库存预警"
-                        class-name="warningStock"
+                        class-name="warningStock operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
@@ -217,7 +219,7 @@
                     <el-table-column
                         prop="weight"
                         label="重量"
-                        class-name="weight"
+                        class-name="weight operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.weight" placeholder="请输入重量(kg)"></el-input>
@@ -226,7 +228,7 @@
                     <el-table-column
                         prop="volume"
                         label="体积"
-                        class-name="volume"
+                        class-name="volume operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.volume" placeholder="请输入体积(m³)"></el-input>
@@ -235,7 +237,7 @@
                     <el-table-column
                         prop="code"
                         label="SKU编码"
-                        class-name="code"
+                        class-name="code operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
@@ -275,11 +277,12 @@
                     </el-table-column>
                     <el-table-column
                         label="操作"
-                        width="152">
+                        width="152"
+                        class-name="operateDelete">
                         <template slot-scope="scope">
                             <div class="spec-operate">
                                 <span @click="emptySpec(scope.$index)">清空</span>
-                                <span @click="deleteSpec(scope.$index)">删除</span>
+                                <span class="deleteSpan" @click="deleteSpec(scope.$index)">删除</span>
                             </div>
                         </template>
                     </el-table-column>
@@ -350,6 +353,10 @@
                             prop="code"
                             label="SKU编码"
                             class-name="code">
+                            <template slot-scope="scope">
+                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="image"
@@ -917,7 +924,7 @@ export default {
             
             this.addedSpecs = addedSpecs
             this.flatSpecsList = [...this.flatSpecsList, newChild]
-            this.addSpecValue()
+            this.addSpecValue(true)
             this.newSpecValue = ''
         },
         addNewSpec() {
@@ -1080,7 +1087,7 @@ export default {
 
             this.getSpecs(true)
         },
-        addSpecValue() {
+        addSpecValue(open) {
             let item = this.addedSpecs[this.addedSpecs.length - 1]
             let list = JSON.parse(JSON.stringify(item.list))
             
@@ -1092,7 +1099,9 @@ export default {
                 }
             })
             this.specsValues = list
-            this.visible = !this.visible
+            if(!open) {
+                this.visible = !this.visible
+            }
 
             console.log('addSpecValue', item)
         },
@@ -1237,7 +1246,7 @@ export default {
                 this.deleteSpecArr.forEach(val => {
                     let elem = document.querySelector('.el-table.spec-information .el-table__body').getElementsByClassName('el-table__row')[val]
                     
-                    elem.style.background = 'B6B5C8'
+                    elem.style.background = '#ddd'
                     let tds = elem.getElementsByTagName('td')
                     
                     for(let i=0; i<tds.length; i++) {
@@ -1246,6 +1255,14 @@ export default {
                         } else {
                             if(tds[i].className.indexOf('columnSpec') != -1) {
                                 tds[i].querySelector('.cell').innerHTML = '<s>' + tds[i].querySelector('.cell').innerText + '</s>'
+                                
+                            } else {
+                                if(tds[i].className.indexOf('operateInput') != -1) {
+                                    tds[i].querySelector('.cell input').setAttribute('disabled', true)
+                                }
+                                if(tds[i].className.indexOf('operateDelete') != -1) {
+                                    tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
+                                }
                             }
                         }
                         
@@ -1255,8 +1272,17 @@ export default {
         },
         deleteSpec(index) {
             //this.ruleForm.goodsInfos.splice(index, 1)
-            this.deleteSpecArr.push(index)
-            this.addStyle()
+            
+
+            this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
+                this.deleteSpecArr.push(index)
+                this.addStyle()
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            })
         },
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
@@ -1433,7 +1459,7 @@ export default {
                     }
                 }
                 if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
-                    this.ruleForm.productLabelId = ''
+                    this.ruleForm.productLabelId = '0'
                 }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
@@ -1844,7 +1870,7 @@ export default {
             return new Promise((resolve, reject) => {
                 this._apis.goods.fetchAllTagsList().then(res => {
                     res.unshift({
-                        id: '',
+                        id: '0',
                         name: '请选择'
                     })
                     this.productLabelList = res
@@ -2360,11 +2386,15 @@ $blue: #655EFF;
 .spec-operate {
     span {
         cursor: pointer;
-        &:first-child {
-            color: #655EFF;
-            margin-right: 5px;
-        }
-        &:last-child {
+        color: #655EFF;
+        // &:first-child {
+        //     color: #655EFF;
+        //     margin-right: 5px;
+        // }
+        // &:last-child {
+        //     color: #FD4C2B;
+        // }
+        &.deleteSpan {
             color: #FD4C2B;
         }
     }
@@ -2582,6 +2612,11 @@ $blue: #655EFF;
         margin-left: 9px;
     }
 }
+// /deep/ .el-cascader {
+//     .el-icon-circle-close {
+//         display: none;
+//     }
+// }
 </style>
 
 

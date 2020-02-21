@@ -38,6 +38,10 @@
                     <div class="label">微信流水号</div>
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
+                <div class="item" v-if="wechatLength && orderInfo.payWay != 1">
+                    <div class="label">第三方流水号</div>
+                    <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
+                </div>
                 <div class="item">
                     <div class="label">本单获得</div>
                     <div class="value">
@@ -683,7 +687,7 @@ export default {
                 .label {
                     margin-right: 20px;
                     flex-shrink: 0;
-                    width: 70px;
+                    width: 84px;
                     text-align: right;
                 }
                 .value {

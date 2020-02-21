@@ -19,3 +19,25 @@
  .el-textarea__inner{
    padding: 5px 8px;
  }
+
+ .el-button--warning.is-plain {
+    color:rgba(253,147,43,1);
+    background: #fff;
+    border-color: rgba(253,147,43,1);
+ }
+ .el-button--warning.is-plain:focus, .el-button--warning.is-plain:hover {
+    color:rgba(253,147,43,1);
+    background:rgba(253,147,43,1);
+    color: #fff;
+}
+.el-button--warning.is-plain:active {
+    background: #e48427;
+    border-color: #e48427;
+    color: #fff;
+    outline: 0;
+}
+.el-button--warning.is-plain.is-disabled, .el-button--warning.is-plain.is-disabled:active, .el-button--warning.is-plain.is-disabled:focus, .el-button--warning.is-plain.is-disabled:hover {
+    color: #febe80;
+    background-color: #fff;
+    border-color: #ffe9d5;
+}
