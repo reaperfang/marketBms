@@ -351,6 +351,10 @@
                             prop="code"
                             label="SKU编码"
                             class-name="code">
+                            <template slot-scope="scope">
+                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="image"
