@@ -1440,7 +1440,7 @@ export default {
                     }
                 }
                 if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
-                    this.ruleForm.productLabelId = ''
+                    this.ruleForm.productLabelId = '0'
                 }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
@@ -1851,7 +1851,7 @@ export default {
             return new Promise((resolve, reject) => {
                 this._apis.goods.fetchAllTagsList().then(res => {
                     res.unshift({
-                        id: '',
+                        id: '0',
                         name: '请选择'
                     })
                     this.productLabelList = res
