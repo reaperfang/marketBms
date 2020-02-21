@@ -278,7 +278,7 @@
                     <el-table-column
                         label="操作"
                         width="152"
-                        class-name="operate">
+                        class-name="operateDelete">
                         <template slot-scope="scope">
                             <div class="spec-operate">
                                 <span @click="emptySpec(scope.$index)">清空</span>
@@ -1260,7 +1260,7 @@ export default {
                                 if(tds[i].className.indexOf('operateInput') != -1) {
                                     tds[i].querySelector('.cell input').setAttribute('disabled', true)
                                 }
-                                if(tds[i].className.indexOf('operate') != -1) {
+                                if(tds[i].className.indexOf('operateDelete') != -1) {
                                     tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
                                 }
                             }
