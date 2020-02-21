@@ -13,7 +13,7 @@
           <div class="add_button" v-if="!ruleForm.cover" @click="currentImage= 'cover'; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
             <i class="inner"></i>
           </div>
-          建议尺寸：550*550
+          建议尺寸：550*550像素
         </el-form-item> <el-form-item label="作者名称" prop="author">
           <el-input v-model="ruleForm.author" placeholder="请勿超过64个字" clearable></el-input>
         </el-form-item>
@@ -25,14 +25,14 @@
           <div class="add_button" v-if="!ruleForm.authorHeadPath" @click="currentImage= 'authorHeadPath'; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
             <i class="inner"></i>
           </div>
-          建议尺寸：50*50
+          建议尺寸：50*50像素
         </el-form-item>
         <el-form-item label="资讯正文" prop="data">
           <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="ruleForm.data"></RichEditor>
         </el-form-item>
       </el-form>
       <div class="confirm_btn">
-        <el-button type="primary" @click="saveData" :loading="submitLoadinig">保存</el-button>
+        <el-button type="primary" @click="saveData" :loading="submitLoadinig">保存到草稿箱</el-button>
         <el-button type="primary" @click="$router.go(-1)">返回</el-button>
       </div>
     
