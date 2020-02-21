@@ -1262,9 +1262,9 @@ export default {
             })
         },
         deleteSpec(index) {
-            //this.ruleForm.goodsInfos.splice(index, 1)
+            this.ruleForm.goodsInfos.splice(index, 1)
             this.deleteSpecArr.push(index)
-            this.addStyle()
+            //this.addStyle()
         },
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
