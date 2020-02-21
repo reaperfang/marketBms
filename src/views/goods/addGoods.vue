@@ -138,7 +138,7 @@
                                     <el-button @click="getSpecs" type="primary">确定</el-button>
                                 </div>
                             </div>
-                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue">添加规格值</el-button>
+                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
                         </el-popover>
                     </div>
                     <div v-show="!showAddSpecsInput" class="add-specs-button">
@@ -351,6 +351,10 @@
                             prop="code"
                             label="SKU编码"
                             class-name="code">
+                            <template slot-scope="scope">
+                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
+                            </template>
                         </el-table-column>
                         <el-table-column
                             prop="image"
@@ -918,7 +922,7 @@ export default {
             
             this.addedSpecs = addedSpecs
             this.flatSpecsList = [...this.flatSpecsList, newChild]
-            this.addSpecValue()
+            this.addSpecValue(true)
             this.newSpecValue = ''
         },
         addNewSpec() {
@@ -1081,7 +1085,7 @@ export default {
 
             this.getSpecs(true)
         },
-        addSpecValue() {
+        addSpecValue(open) {
             let item = this.addedSpecs[this.addedSpecs.length - 1]
             let list = JSON.parse(JSON.stringify(item.list))
             
@@ -1093,7 +1097,9 @@ export default {
                 }
             })
             this.specsValues = list
-            this.visible = !this.visible
+            if(!open) {
+                this.visible = !this.visible
+            }
 
             console.log('addSpecValue', item)
         },
@@ -1434,7 +1440,7 @@ export default {
                     }
                 }
                 if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
-                    this.ruleForm.productLabelId = ''
+                    this.ruleForm.productLabelId = '0'
                 }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
@@ -1845,7 +1851,7 @@ export default {
             return new Promise((resolve, reject) => {
                 this._apis.goods.fetchAllTagsList().then(res => {
                     res.unshift({
-                        id: '',
+                        id: '0',
                         name: '请选择'
                     })
                     this.productLabelList = res
