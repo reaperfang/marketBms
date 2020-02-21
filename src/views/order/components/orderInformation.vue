@@ -687,7 +687,7 @@ export default {
                 .label {
                     margin-right: 20px;
                     flex-shrink: 0;
-                    width: 70px;
+                    width: 84px;
                     text-align: right;
                 }
                 .value {

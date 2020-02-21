@@ -138,7 +138,7 @@
                                     <el-button @click="getSpecs" type="primary">确定</el-button>
                                 </div>
                             </div>
-                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue">添加规格值</el-button>
+                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
                         </el-popover>
                     </div>
                     <div v-show="!showAddSpecsInput" class="add-specs-button">
@@ -918,7 +918,7 @@ export default {
             
             this.addedSpecs = addedSpecs
             this.flatSpecsList = [...this.flatSpecsList, newChild]
-            this.addSpecValue()
+            this.addSpecValue(true)
             this.newSpecValue = ''
         },
         addNewSpec() {
@@ -1081,7 +1081,7 @@ export default {
 
             this.getSpecs(true)
         },
-        addSpecValue() {
+        addSpecValue(open) {
             let item = this.addedSpecs[this.addedSpecs.length - 1]
             let list = JSON.parse(JSON.stringify(item.list))
             
@@ -1093,7 +1093,9 @@ export default {
                 }
             })
             this.specsValues = list
-            this.visible = !this.visible
+            if(!open) {
+                this.visible = !this.visible
+            }
 
             console.log('addSpecValue', item)
         },
