@@ -183,7 +183,7 @@
                     <el-table-column
                         prop="costPrice"
                         label="成本价"
-                        class-name="costPrice"
+                        class-name="costPrice operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.costPrice" placeholder="请输入价格(元)"></el-input>
@@ -192,7 +192,7 @@
                     <el-table-column
                         prop="salePrice"
                         label="售卖价"
-                        class-name="salePrice"
+                        class-name="salePrice operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.salePrice" placeholder="请输入价格(元)"></el-input>
@@ -201,7 +201,7 @@
                     <el-table-column
                         prop="stock"
                         label="库存"
-                        class-name="stock"
+                        class-name="stock operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.stock" placeholder="请输入库存"></el-input>
@@ -210,7 +210,7 @@
                     <el-table-column
                         prop="warningStock"
                         label="库存预警"
-                        class-name="warningStock"
+                        class-name="warningStock operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
@@ -219,7 +219,7 @@
                     <el-table-column
                         prop="weight"
                         label="重量"
-                        class-name="weight"
+                        class-name="weight operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.weight" placeholder="请输入重量(kg)"></el-input>
@@ -228,7 +228,7 @@
                     <el-table-column
                         prop="volume"
                         label="体积"
-                        class-name="volume"
+                        class-name="volume operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.volume" placeholder="请输入体积(m³)"></el-input>
@@ -237,7 +237,7 @@
                     <el-table-column
                         prop="code"
                         label="SKU编码"
-                        class-name="code"
+                        class-name="code operateInput"
                         width="152">
                         <template slot-scope="scope">
                             <el-input v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
@@ -277,11 +277,12 @@
                     </el-table-column>
                     <el-table-column
                         label="操作"
-                        width="152">
+                        width="152"
+                        class-name="operate">
                         <template slot-scope="scope">
                             <div class="spec-operate">
                                 <span @click="emptySpec(scope.$index)">清空</span>
-                                <span @click="deleteSpec(scope.$index)">删除</span>
+                                <span class="deleteSpan" @click="deleteSpec(scope.$index)">删除</span>
                             </div>
                         </template>
                     </el-table-column>
@@ -1245,7 +1246,7 @@ export default {
                 this.deleteSpecArr.forEach(val => {
                     let elem = document.querySelector('.el-table.spec-information .el-table__body').getElementsByClassName('el-table__row')[val]
                     
-                    elem.style.background = 'B6B5C8'
+                    elem.style.background = '#ddd'
                     let tds = elem.getElementsByTagName('td')
                     
                     for(let i=0; i<tds.length; i++) {
@@ -1254,6 +1255,14 @@ export default {
                         } else {
                             if(tds[i].className.indexOf('columnSpec') != -1) {
                                 tds[i].querySelector('.cell').innerHTML = '<s>' + tds[i].querySelector('.cell').innerText + '</s>'
+                                
+                            } else {
+                                if(tds[i].className.indexOf('operateInput') != -1) {
+                                    tds[i].querySelector('.cell input').setAttribute('disabled', true)
+                                }
+                                if(tds[i].className.indexOf('operate') != -1) {
+                                    tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
+                                }
                             }
                         }
                         
@@ -1262,9 +1271,18 @@ export default {
             })
         },
         deleteSpec(index) {
-            this.ruleForm.goodsInfos.splice(index, 1)
-            this.deleteSpecArr.push(index)
-            //this.addStyle()
+            //this.ruleForm.goodsInfos.splice(index, 1)
+            
+
+            this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
+                this.deleteSpecArr.push(index)
+                this.addStyle()
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            })
         },
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
