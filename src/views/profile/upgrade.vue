@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="u_title">微商城</p>
+        <p class="u_title">移动商城</p>
         <div class="u_item">
             <div class="u_t p1">
                 <p>当前版本：标准版</p>
@@ -8,10 +8,16 @@
             </div>
             <div class="u_b">
                 <p class="main">标准版功能</p>
-                <p>拼团、特全价、支付推广多种营销玩法</p>
-                <p>分销裂变，让粉丝替你卖货</p>
-                <p>多重有礼，实现精细化会员营销</p>
-                <p>全平台数据分析</p>
+                <p class="title"><span>店铺装修：</span>DIY装修店铺，不同装修打造不同风格；</p>
+                <p><span></span>页面创建，轻松简便；</p>
+                <p><span></span>创建广告，将最新动态一秒触达。</p>
+                <p class="title"><span>客户管理：</span>客户数据全部打通，无需单独管理；</p>
+                <p><span></span>会员特权，营造会员权益的专属化。</p>
+                <p class="title"><span>互动营销：</span>满减、优惠券、限时折扣促销类型众多，提高二次复购；</p>
+                <p><span></span>多种玩法，海报、代付、拼团、秒杀，提高粉丝量。</p>
+                <p class="title"><span>财务查询：</span>展示营收概况及趋势分析、客户余额、推客奖励、积分明细及物流成本核算。</p>
+                <p class="title"><span>智能运营：</span>订单量、客单价、人均消费分析；交易时间、客户类型、复购率分析，快速了解</p>
+                <p><span></span>客户交易情况；好评率、差评率分析提高口碑宣传。</p>
             </div>
         </div>
         <!-- <div class="u_item">
@@ -118,17 +124,29 @@ export default {
     }
     .u_b{
         width: 614px;
-        padding: 22px 40px 100px 20px;
+        padding: 22px;
         background: #fff;
         border-radius: 10px;
         p{
+            font-size: 14px;
             color: #92929B;
-            margin-bottom: 17px;
             &.main{
+                font-size: 16px;
+                color: #3D434A;
+                margin-bottom: 20px;
+            }
+            span{
+                width:73px;
+                height: 17px;
+                display: inline-block;
+                font-size: 14px;
                 color: #3D434A;
             }
         }
     }
+}
+p.title{
+    margin-top: 10px;
 }
 </style>
 
