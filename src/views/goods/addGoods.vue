@@ -1255,11 +1255,13 @@ export default {
                         } else {
                             if(tds[i].className.indexOf('columnSpec') != -1) {
                                 tds[i].querySelector('.cell').innerHTML = '<s>' + tds[i].querySelector('.cell').innerText + '</s>'
+                                
+                            } else {
                                 if(tds[i].className.indexOf('operateInput') != -1) {
-                                    tds[i].querySelector('.cell input').addAttribute('disabled')
+                                    tds[i].querySelector('.cell input').setAttribute('disabled', true)
                                 }
                                 if(tds[i].className.indexOf('operate') != -1) {
-                                    tds[i].querySelector('.cell input .spec-operate .deleteSpan').remove()
+                                    tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
                                 }
                             }
                         }
