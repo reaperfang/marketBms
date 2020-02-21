@@ -143,6 +143,7 @@
                     </div>
                     <div v-show="!showAddSpecsInput" class="add-specs-button">
                         <el-button @click="addSpecs" type="primary">添加规格</el-button>
+                        <p>请先选择颜色主规格</p>
                     </div>
                     <div v-show="showAddSpecsInput" class="add-specs">
                         <div class="add-specs-input">
