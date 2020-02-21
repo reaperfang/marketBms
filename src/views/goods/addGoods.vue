@@ -2386,11 +2386,15 @@ $blue: #655EFF;
 .spec-operate {
     span {
         cursor: pointer;
-        &:first-child {
-            color: #655EFF;
-            margin-right: 5px;
-        }
-        &:last-child {
+        color: #655EFF;
+        // &:first-child {
+        //     color: #655EFF;
+        //     margin-right: 5px;
+        // }
+        // &:last-child {
+        //     color: #FD4C2B;
+        // }
+        &.deleteSpan {
             color: #FD4C2B;
         }
     }
