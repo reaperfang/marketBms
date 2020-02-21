@@ -298,6 +298,7 @@ export default {
             }else{
                 this.isPc = true
             }
+            this.getChannels()
         }).catch(error => {
             this.$message.error(error);
         });
@@ -464,7 +465,6 @@ export default {
   mounted() {
       this.getLabels();
       this.showPc();
-      this.getChannels();
       if(this.$route.query.memberLabels) {
           this.newForm = Object.assign({}, this.$route.query);
       }else{
