@@ -16,7 +16,7 @@
           <div class="add_button" v-if="!ruleForm.photo" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
             <i class="inner"></i>
           </div>
-          建议尺寸：图片大小待补充
+          建议尺寸：583*748
         </el-form-item>
         <el-form-item label="按钮使用" prop="buttonType">
           <el-radio-group v-model="ruleForm.buttonType">
