@@ -1057,6 +1057,7 @@ export default {
             })
             this.specIds = arr
             this.selectSpecs(arr)
+            this.deleteStyle()
             if(open && typeof open == 'boolean') {
                 this.visible = true
             } else {
@@ -1241,11 +1242,76 @@ export default {
                 })
             })
         },
-        addStyle() {
+        deleteStyle() {
             this.$nextTick(() => {
-                this.deleteSpecArr.forEach(val => {
-                    let elem = document.querySelector('.el-table.spec-information .el-table__body').getElementsByClassName('el-table__row')[val]
+                try {
+                    let trs = document.querySelectorAll('.el-table.spec-information .el-table__body tbody tr')
+
+                    trs.forEach(tr => {
+                        let elem = tr
+                        
+                        if(elem.getAttribute('comstomerdelete')) {
+                            elem.style.background = '#fff'
+                            let tds = elem.getElementsByTagName('td')
+                            
+                            for(let i=0; i<tds.length; i++) {
+                                if(+tds[i].getAttribute('rowspan') > 1) {
+                                    tds[i].style.background = '#fff'
+                                } else {
+                                    if(tds[i].className.indexOf('columnSpec') != -1) {
+                                        
+                                        if(tds[i].querySelector('.cell s')) {
+                                            tds[i].querySelector('.cell').innerHTML = tds[i].querySelector('.cell s').innerText 
+                                        }
+                                    } else {
+                                        if(tds[i].className.indexOf('operateInput') != -1) {
+                                            tds[i].querySelector('.cell input').removeAttribute('disabled')
+                                        }
+                                        if(tds[i].className.indexOf('operateDelete') != -1) {
+                                            //tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
+                                        }
+                                    }
+                                }
+                                
+                            }
+                        }
+                    })
+                } catch(e) {
+                    console.error(e)
+                }
+                
+            })
+        },
+        addStyle(index) {
+            this.$nextTick(() => {
+                // this.deleteSpecArr.forEach(val => {
+                //     let elem = document.querySelector('.el-table.spec-information .el-table__body').getElementsByClassName('el-table__row')[val]
                     
+                //     elem.style.background = '#ddd'
+                //     let tds = elem.getElementsByTagName('td')
+                    
+                //     for(let i=0; i<tds.length; i++) {
+                //         if(+tds[i].getAttribute('rowspan') > 1) {
+                //             tds[i].style.background = '#fff'
+                //         } else {
+                //             if(tds[i].className.indexOf('columnSpec') != -1) {
+                //                 tds[i].querySelector('.cell').innerHTML = '<s>' + tds[i].querySelector('.cell').innerText + '</s>'
+                                
+                //             } else {
+                //                 if(tds[i].className.indexOf('operateInput') != -1) {
+                //                     tds[i].querySelector('.cell input').setAttribute('disabled', true)
+                //                 }
+                //                 if(tds[i].className.indexOf('operateDelete') != -1) {
+                //                     tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
+                //                 }
+                //             }
+                //         }
+                        
+                //     }
+                // })
+                let elem = document.querySelector('.el-table.spec-information .el-table__body').getElementsByClassName('el-table__row')[index]
+                    
+                    elem.setAttribute('comstomerdelete', true)
                     elem.style.background = '#ddd'
                     let tds = elem.getElementsByTagName('td')
                     
@@ -1267,7 +1333,6 @@ export default {
                         }
                         
                     }
-                })
             })
         },
         deleteSpec(index) {
@@ -1276,7 +1341,7 @@ export default {
 
             this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                 this.deleteSpecArr.push(index)
-                this.addStyle()
+                this.addStyle(index)
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -1607,6 +1672,7 @@ export default {
 
                     try {
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
+                            this.ruleForm.goodsInfos[i].fileList = null
                         if(+this.ruleForm.goodsInfos[i].costPrice < 0) {
                             this.$message({
                                 message: '不能为负值',
