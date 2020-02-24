@@ -1257,6 +1257,9 @@ export default {
                             for(let i=0; i<tds.length; i++) {
                                 if(+tds[i].getAttribute('rowspan') > 1) {
                                     tds[i].style.background = '#fff'
+                                    if(tds[i].querySelector('.cell s')) {
+                                            tds[i].querySelector('.cell').innerHTML = tds[i].querySelector('.cell s').innerText 
+                                        }
                                 } else {
                                     if(tds[i].className.indexOf('columnSpec') != -1) {
                                         
@@ -1268,7 +1271,7 @@ export default {
                                             tds[i].querySelector('.cell input').removeAttribute('disabled')
                                         }
                                         if(tds[i].className.indexOf('operateDelete') != -1) {
-                                            //tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
+                                            tds[i].querySelector('.cell .spec-operate .deleteSpan').style.display = 'inline-block'
                                         }
                                     }
                                 }
@@ -1327,7 +1330,8 @@ export default {
                                     tds[i].querySelector('.cell input').setAttribute('disabled', true)
                                 }
                                 if(tds[i].className.indexOf('operateDelete') != -1) {
-                                    tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
+                                    //tds[i].querySelector('.cell .spec-operate .deleteSpan').remove()
+                                    tds[i].querySelector('.cell .spec-operate .deleteSpan').style.display = 'none'
                                 }
                             }
                         }
