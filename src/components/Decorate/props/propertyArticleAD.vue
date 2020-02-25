@@ -69,7 +69,7 @@
         </li>
       </ul>
       <el-button type="info" plain style="width:100%" @click="addNav">添加一个背景图</el-button>
-      <p style="margin-top:10px;color:rgb(211,211,211)">建议宽度305像素,设置图片以后预览才可见</p>
+      <p style="margin-top:10px;color:rgb(211,211,211)">{{suggestSize}}</p>
     </div>
 
      <div class="block form">
@@ -133,13 +133,31 @@ export default {
         }],
       },
       rules: {},
-      currentAD: null  //当前操作的图文导航 
+      currentAD: null,  //当前操作的图文导航 
+      suggestSize: '建议尺寸：宽度750像素，高度360像素。' //推荐尺寸文本
     }
   },
   methods: {
 
     selectTemplate(templateType) {
       this.ruleForm.templateType = templateType;
+      switch(Number(templateType)) {
+        case 1:
+          this.suggestSize = '建议尺寸：宽度750像素，高度360像素。';
+          break; 
+        case 2:
+          this.suggestSize = '建议尺寸：宽度750像素，高度320像素。';
+          break; 
+        case 3:
+          this.suggestSize = '建议尺寸：宽度750像素，高度430像素。';
+          break; 
+        case 4:
+          this.suggestSize = '建议尺寸：宽高1：1';
+          break; 
+        case 5:
+          this.suggestSize = '建议尺寸：宽高1：1';
+          break;
+      }
     },
 
     addNav() {
