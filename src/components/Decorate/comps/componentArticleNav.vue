@@ -79,8 +79,11 @@ export default {
     hasContent() {
         let value = false;
         if(this.currentComponentData.data.itemList) {
-          for(let k in this.currentComponentData.data.itemList) {
-            if(this.currentComponentData.data.itemList[k].title) {
+          if(Object.prototype.toString.call(this.currentComponentData.data.itemList) === '[object Object]') {
+            this.currentComponentData.data.itemList = [...this.currentComponentData.data.itemList];
+          }
+          for(let item of this.currentComponentData.data.itemList) {
+            if(item.title) {
               value = true;
               break;
             }

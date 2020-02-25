@@ -5,7 +5,7 @@
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>页面广告</span>
       </div>
-      <div class="phone-body" :style="bodyHeight">
+      <div class="phone-body" v-calcHeight="146+20">
         <div class="img_wrapper">
           <img :src="ruleForm.imagePath" alt="">
           <i></i>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="module props" v-loading="loading">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" :style="propsHeight">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" v-calcHeight="190+20" >
         <div class="block header">
           <p class="title">启动广告设置</p>
           <p :class="{'state': ruleForm.status === 2 || ruleForm.status === 3}" v-if="ruleForm.status === 0">展示中</p>
@@ -40,7 +40,7 @@
             <div class="add_button" v-if="(showType !== 'view') && (!ruleForm.imagePath)" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
               <i class="inner"></i>
             </div>
-            <span class="upload_tips">建议尺寸:640 * 350 , 请将所有广告图片尺寸保持一致，图片只能选择一张</span>
+            <span class="upload_tips">建议尺寸:640 * 350 像素 , 请将所有广告图片尺寸保持一致，图片只能选择一张</span>
           </el-form-item>
           <el-form-item label="广告链接" prop="advertiseJump">
             <el-button v-if="ruleForm.advertiseJump" type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">{{ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name)}}</el-button>
@@ -128,8 +128,6 @@ export default {
           { required: true, message: "请设置展示时间", trigger: "change" },
         ]
       },
-      bodyHeight: {},
-      propsHeight: {},
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7
@@ -143,12 +141,6 @@ export default {
     }
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 146 - 20 + 'px'
-    },
-    this.propsHeight = {
-      height: document.body.clientHeight - 190 - 20 + 'px'
-    }
   },
   watch: {
     'ruleForm.advertiseJump': {

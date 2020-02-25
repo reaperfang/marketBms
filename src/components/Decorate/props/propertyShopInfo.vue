@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :style="bodyHeight">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="显示样式" prop="displayStyle">
         <el-radio-group v-model="ruleForm.displayStyle">
@@ -18,7 +18,7 @@
         <div class="add_button" v-if="!ruleForm.backgroundImage" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
         </div>
-        建议尺寸：750*370，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+        建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
       </el-form-item>
     </div>
 

@@ -1,230 +1,226 @@
 <template>
-  <div>
-
-    <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
-
-    <!-- 动态弹窗 预览 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :decorateData="decorateData"></component>
-  </div>
+    <div class="gbc_container">
+      <h2>新建资讯</h2>
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
+        <el-form-item label="资讯标题" prop="title">
+          <el-input v-model="ruleForm.title" placeholder="请勿超过64个字" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="资讯封面" prop="cover">
+          <div class="img_preview" v-if="ruleForm.cover">
+            <img :src="ruleForm.cover" alt="">
+            <span @click="currentImage= 'cover'; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+          </div>
+          <div class="add_button" v-if="!ruleForm.cover" @click="currentImage= 'cover'; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+            <i class="inner"></i>
+          </div>
+          建议尺寸：550*550像素
+        </el-form-item> <el-form-item label="作者名称" prop="author">
+          <el-input v-model="ruleForm.author" placeholder="请勿超过64个字" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="作者头像" prop="authorHeadPath">
+          <div class="img_preview" v-if="ruleForm.authorHeadPath">
+            <img :src="ruleForm.authorHeadPath" alt="">
+            <span @click="currentImage= 'authorHeadPath'; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+          </div>
+          <div class="add_button" v-if="!ruleForm.authorHeadPath" @click="currentImage= 'authorHeadPath'; dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+            <i class="inner"></i>
+          </div>
+          建议尺寸：50*50像素
+        </el-form-item>
+        <el-form-item label="资讯正文" prop="data">
+          <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig" :richValue="ruleForm.data"></RichEditor>
+        </el-form-item>
+      </el-form>
+      <div class="confirm_btn">
+        <el-button type="primary" @click="saveData" :loading="submitLoadinig">保存到草稿箱</el-button>
+        <el-button type="primary" @click="$router.go(-1)">返回</el-button>
+      </div>
+    
+      <!-- 动态弹窗 -->
+      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
+    </div>
 </template>
 
 <script>
-import Decorate from '@/components/Decorate';
 import utils from '@/utils';
-import dialogDecoratePreview from '@/views/shop/dialogs/decorateDialogs/dialogDecoratePreview';
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import RichEditor from '@/components/RichEditor';
 export default {
-  name: "shopEditor",
-  props: ["pageId"],
-  components: {Decorate, dialogDecoratePreview},
+  name: "createInfo",
+  components: {RichEditor, dialogSelectImageMaterial},
   data() {
+
+    var validateTextLength = (value) =>{
+      // 中文、中文标点、全角字符按1长度，英文、英文符号、数字按0.5长度计算
+      let cnReg = /([\u4e00-\u9fa5]|[\u3000-\u303F]|[\uFF00-\uFF60])/g
+      let mat = value.match(cnReg)
+      let length
+      if (mat) {
+        length = (mat.length + (value.length - mat.length) * 0.5)
+        return length
+      } else {
+        return value.length * 0.5
+      }
+    }
+
+    var validateTitle = (rule, value, callback) => {
+      if (value.trim().length === 0) {
+        callback(new Error('请输入资讯标题'));
+      } else {
+        if(validateTextLength(value) > 64) {
+          callback(new Error('长度不超过64个汉字/128个英文字符'));
+        }else{
+          callback();
+        }
+      }
+    };
+
+    var validateAuthor = (rule, value, callback) => {
+      if(value) {
+        if (value.trim().length === 0) {
+          callback(new Error('请输入作者名称'));
+        } else {
+          if(validateTextLength(value) > 64) {
+            callback(new Error('长度不超过64个汉字/128个英文字符'));
+          }else{
+            callback();
+          }
+        }
+      }else{
+        callback();
+      }
+    };
+
     return {
       loading: false,
-      id: this.pageId || this.$route.query.pageId,
       dialogVisible: false,
       currentDialog: '',
-      saveType: 'save',  //保存类型  save:保存到草稿箱   saveAndApply:保存并应用
-
-      
-      /* 装修编辑器配置 */
-      config: {
-        pageBase: {  //装修页面基础信息
-          type: 'pageInfo',
-          isBase: true,
-          hidden: true,
-          title: '页面信息'
-        },
-        buttons: {  //按钮组
-          saveData: {
-            title: '保存草稿',
-            function: this.saveData,
-            type: 'primary',
-            show: () => true,
-            loading: false
-          },
-          saveAndApplyData: {
-            title: '保存并生效',
-            function: this.saveAndApplyData,
-            type: 'primary',
-            show: () => !!this.id,
-            loading: false
-          },
-          resetData: {
-            title: '重   置',
-            function: this.resetData,
-            type: '',
-            show: () => true,
-            loading: false
-          },
-          preview: {
-            title: '预览',
-            function: this.preview,
-            type: '',
-            show: () => !!this.id,
-            loading: false
-          }
-        },
-        callbacks: {  //对外开放的函数接口
-          setBaseInfo: this.setBaseInfo
-        },
-        showWidget: true,  //是否显示左侧控件面板
-        showProp: true,  //是否显示右侧属性面板
-        dragable: true   //是否可拖拽排序
+      currentImage: 'cover',  //图片弹窗类型
+      myConfig: {
+        // 编辑器不自动被内容撑高
+        autoHeightEnabled: false,
+        // 初始容器高度
+        initialFrameHeight: 526,
+        // 初始容器宽度
+        initialFrameWidth: 765
       },
-      decorateData: null
+      ruleForm: {
+        title: '',//显示样式
+        cover: '',//背景图片
+        author: '',//作者
+        authorHeadPath: '',//作者头像
+        data: ''
+      },
+      rules: {
+        title: [
+          { required: true, message: "请输入资讯标题", trigger: "blur" },
+          {validator: validateTitle, trigger: "blur"}
+        ], 
+        author: [
+          { required: false, message: "请输入作者名称", trigger: "blur" },
+          {validator: validateAuthor, trigger: "blur"}
+        ], 
+        data: [
+          { required: true, message: "请输入资讯正文", trigger: "change" }
+        ]
+      },
+      submitLoadinig: false
     };
   },
-  watch: {
-    pageId(newValue) {
-      if (newValue) {
-        this.id = newValue;
-      }
-      this.$store.commit("clearAllData");
-      this.fetch();
-    }
-  },
   created() {
-    this.$store.commit("clearAllData");
     this.fetch();
-  },
-  computed: {
-    baseInfo() {
-      return this.$store.getters.baseInfo;
-    },
-    componentDataIds() {
-      return this.$store.getters.componentDataIds;
-    },
-    componentDataMap() {
-      return this.$store.getters.componentDataMap;
-    },
-    basePropertyId() {
-      return this.$store.getters.basePropertyId;
-    }
   },
   methods: {
 
     /* 获取店铺装修数据 */
     fetch() {
-      if(!this.id) {
+      if(!this.$route.query.id) {
         return;
       }
       this.loading = true;
-      this._apis.shop.getPageInfo({id: this.id}).then((response)=>{
+      this._apis.shop.getInfo({id: this.$route.query.id}).then((response)=>{
+        this.ruleForm = response;
+        if(response && response.data) {
+          const string = unescape(response.data);
+          if(string) {
+            this.ruleForm.data = string;
+          }
+        }
          this.loading = false;
-         this.decorateData = response;
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
       });
     },
 
-     /* 拼装基础数据 */
-    setBaseInfo(data) {
-      return {
-        name: data.name,
-        title: data.title,
-        explain: data.explain,
-        pageCategoryInfoId: data.pageCategoryInfoId,
-        colorStyle: data.colorStyle,
-        pageKey: data.pageKey
-      }
-    },
-
     /* 保存数据 */
     saveData() {
-      this.saveType = 'save';
-      let resultData = this.$refs.Decorate.collectData();
-      if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
-        this.id && (resultData['id'] = this.id);
-        resultData['status'] = '1';
-        if(this.checkInput(resultData)) {
-          this.setLoading(true);
-          if(this.id) {
-            this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          let result = {...this.ruleForm};
+          result['data'] = escape(this.ruleForm.data);
+          this.submitLoadinig = true;
+          if(!this.$route.query.id) {
+            this._apis.shop.createInfo(result).then((response)=>{
+              this.$notify({
+                title: '成功',
+                message: '创建成功！',
+                type: 'success'
+              });
+              this.submitLoadinig = false;
+              this._routeTo('p_infoManageIndex');
+            }).catch((error)=>{
+              this.$notify.error({
+                title: '错误',
+                message: error
+              });
+              this.submitLoadinig = false;
+            });
           }else{
-            this.sendRequest({methodName: 'createPage', resultData, tipWord: '创建成功!'});
+             this._apis.shop.modifyInfo(result).then((response)=>{
+              this.$notify({
+                title: '成功',
+                message: '修改成功!',
+                type: 'success'
+              });
+              this.submitLoadinig = false;
+              this._routeTo('p_infoManageIndex');
+            }).catch((error)=>{
+              this.$notify.error({
+                title: '错误',
+                message: error
+              });
+              this.submitLoadinig = false;
+            });
           }
-        };
-      }
-    },
-
-    /* 保存并生效数据 */
-    saveAndApplyData() {
-      this.saveType = 'saveAndApply';
-      let resultData = this.$refs.Decorate.collectData();
-      if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
-        this.id && (resultData['id'] = this.id);
-        resultData['status'] = '0';
-        if(this.checkInput(resultData)) {
-          this.setLoading(true);
-          if(this.id) {
-            this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
-          }else{
-            this.sendRequest({methodName: 'createPage', resultData, tipWord: '创建成功!'});
-          }
-        };
-      }
-    },
-
-    /* 检查输入正确性 */
-    checkInput(resultData) {
-      if (this.baseInfo.vError) {
-        this.$message({ message: '请填写正确信息', type: 'warning' });
-        return false;
-      }else{
-        if(!resultData.name || !resultData.title || !resultData.explain) {
-          this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-          return false;
-        }else{
-          return true;
+        } else {
+          this.$message({ message: '填写正确的信息', type: 'warning' });
         }
-      }
-      return true;
+      });
     },
 
-    /* 发起请求 */
-    sendRequest(params) {
-      this._apis.shop[params.methodName](params.resultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: params.tipWord,
-            type: 'success'
-          });
-          this.setLoading(false);
-          this._routeTo('p_infoManageIndex');
-        }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
-          this.setLoading(false);
-        });
+    /* 
+     * 富文本数据更新
+    */
+    editorValueUpdate(value) {
+      this.ruleForm.data = value;
     },
 
-    /* 设置loading */
-    setLoading(status) {
-      if(this.saveType === 'saveAndApply') {
-        this.config.buttons.saveAndApplyData.loading = status;
-      }else{
-        this.config.buttons.saveData.loading = status;
-      }
-    },
-
-    /* 打开预览 */
-    preview() {
-      this.dialogVisible=true;
-      this.currentDialog='dialogDecoratePreview';
+     /* 弹框选中图片 */
+    imageSelected(dialogData) {
+      this.ruleForm[this.currentImage] = dialogData.filePath;
     }
 
   },
 
 };
 </script>
+<style lang="scss" scoped>
+.confirm_btn{
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+</style>
 

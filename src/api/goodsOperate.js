@@ -51,3 +51,23 @@ export function fetchPublicSensitiveList(data) {
   })
 }
 
+  //获取会员协议
+  export function getProtocol(data) {
+      return request({
+        target: 'PUBLIC-MEMBER-REGISTRATION-PROTOCOL-FIND-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'goodsOperate'
+      })
+  }  
+  
+  //修改会员协议
+  export function setProtocol(data) {
+      return request({
+        target: 'PUBLIC-REGISTRATION-PROTOCOL-UPDATE-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'goodsOperate'
+      })
+  } 
+

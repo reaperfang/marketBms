@@ -87,7 +87,7 @@
                 <div class="add_button" v-if="!ruleFormH5.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
                   <i class="inner"></i>
                 </div>
-                建议尺寸：750*370，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+                建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmitH5" :loading="submitLoading">确定</el-button>
@@ -133,7 +133,7 @@
                 <div class="add_button" v-if="!ruleFormMini.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
                   <i class="inner"></i>
                 </div>
-                建议尺寸：750*370，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+                建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmitMini" :loading="submitLoading">确定</el-button>

@@ -405,7 +405,7 @@ export default {
       if (Number(res.data.width) >= 1000 && Number(res.data.height) >= 600) {
         this.$notify({
           title: "警告",
-          message: "尺寸应设置为宽1000象素以下，高600象素以下",
+          message: "尺寸应设置为宽1000像素以下，高600像素以下",
           type: "warning"
         });
       } else {

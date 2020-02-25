@@ -4,7 +4,7 @@ export default {
     revenueExpenditureTerms:[
         { value: 'tradeDetailSn', label: '交易流水号' },
         { value: 'relationSn', label: '关联单据编号' },
-        { value: 'wechatTradeSn', label: '微信流水号' },
+        { value: 'wechatTradeSn', label: '第三方流水号' },
     ],
     //收支明细---业务类型
     rebusinessTypes:[
@@ -21,7 +21,8 @@ export default {
         { value: 0, label: '微信支付' },
         { value: 1, label: '货到付款' },
         { value: 2, label: '余额支付' },
-        { value: 3, label: '红包支付' }
+        { value: 3, label: '红包支付' },
+        { value: 4, label: '支付宝支付' }
     ],
     //收支明细---收支类型
     tradeTypes:[

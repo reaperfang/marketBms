@@ -50,6 +50,13 @@ export default [
                 hidden: true
             },
             {
+                path: 'zfbSet',
+                component: () => import('@/views/set/zfbSet'),
+                name: 'zfbSet',
+                meta: { title: '设置支付信息', noCache: true, tabTitle: '资产设置' , navType:4},
+                hidden: true
+            },
+            {
                 path: 'withdrawSet',
                 component: () => import('@/views/set/withdrawSet'),
                 name: 'withdrawSet',

@@ -31,10 +31,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rich_wrapper{
-  line-height: initial;
-  p{
-    margin: 5px 0;
-  }
-}
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div class="preview_wrapper">
     <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config"></Decorate>
-    <div class="shop_info">
+    <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config" :height="175+7+64"></Decorate>
+    <div class="shop_info" v-calcHeight="175+10">
       <div class="shop_code">
         <h3>店铺手机预览</h3>
         <h4>使用微信扫描二维码，预览店铺效果</h4>
@@ -19,7 +19,7 @@
             <p>{{shopInfo.adOpenType === 1 ? '已开启' : '已关闭'}}</p>
           </li>
           <li>
-            <el-button type="primary" plain @click="_routeTo('m_wxShopIndex', {activeTab: 'shopNavIndex'})">店铺导航</el-button>
+            <el-button type="primary" plain @click="_routeTo('m_shopNavIndex')">店铺导航</el-button>
             <p>{{shopInfo.shopNavigation === 1 ? '已开启' : '已关闭'}}</p>
           </li>
           <li>
@@ -76,7 +76,6 @@ export default {
       utils,
       qrCode: '',
       miniAppcode: '',   //小程序码
-      height: 0,
       miniProgramStatus: null,
       openMiniAppcodeLoading: false,  //获取小程序码loading
       showCode: false,  //显示小程序码
@@ -127,7 +126,6 @@ export default {
     this.getMiniProgramStatus();
   },
   mounted() {
-    this.height = document.body.clientHeight - 238 - 20;
   },
   watch: {
     shopInfo: {
@@ -246,6 +244,7 @@ export default {
     .shop_info{
       width:336px;
       margin-left:40px;
+      overflow-y: auto;
       .shop_logo{
         height:100px;
         width:100%;

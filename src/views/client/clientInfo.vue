@@ -22,7 +22,7 @@
                 <div class="form_container">
                     <p>昵称：<span>{{clientInfoById.nickName}}</span></p>
                     <p>姓名：<span>{{clientInfoById.memberName}}</span></p>
-                    <p>性别：<span>{{clientInfoById.sex}}</span></p>
+                    <p>性别：<span>{{sexText}}</span></p>
                     <p>爱好：<span>{{clientInfoById.hobby}}</span></p>
                     <p>手机号：<span>{{clientInfoById.phone}}</span></p>
                     <p>邮箱：<span>{{clientInfoById.email}}</span></p>
@@ -33,7 +33,7 @@
             <p>标签信息：</p>
             <div class="labels">
                 <div class="label_list">
-                    <p v-for="item in clientInfoById.labelRecordViews" :key="item.id">
+                    <p v-for="item in clientInfoById.labelRecordViews" :key="item.id" v-if="item.memberLabelInfoName">
                         <span>{{item.memberLabelInfoName}}
                             <img src="../../assets/images/client/icon_manual.png" alt="" v-if="item.memberLabelInfoType == 0">
                             <img src="../../assets/images/client/icon_auto.png" alt="" v-if="item.memberLabelInfoType == 1">
@@ -157,7 +157,8 @@ export default {
             couponList: [],
             codeList: [],
             hackReset: true,
-            level: ""
+            level: "",
+            sexText: ""
         }
     },
     methods: {
@@ -334,7 +335,13 @@ export default {
         getMemberInfo() {
             this._apis.client.getMemberInfo({id: this.userId}).then((response) => {
                 this.clientInfoById = Object.assign({},response);
-                this.clientInfoById.sex = this.clientInfoById.sex.toString();
+                if(this.clientInfoById.sex == 1) {
+                    this.sexText = "男";
+                }else if(this.clientInfoById.sex == 2) {
+                    this.sexText = "女";
+                }else{
+                    this.sexText = "未知";
+                }
                 let selected = [];
                 selected[0] = this.clientInfoById.provinceCode;
                 selected[1] = this.clientInfoById.cityCode;
@@ -344,57 +351,57 @@ export default {
                 console.log(error);
             })
         },
-        saveInfo() {
-            let errFlag = false;
-            let formObj = {
-                id: this.clientInfoById.id, 
-                memberName: this.clientInfoById.memberName, 
-                sex: this.clientInfoById.sex, 
-                birthday: this.clientInfoById.birthday, 
-                //wechatSn: this.clientInfoById.wechatSn, 
-                email: this.clientInfoById.email, 
-                address: this.clientInfoById.address,
-                selected: this.clientInfoById.selected
-            }
-            Object.keys(formObj).forEach((key) => {
-                if(!formObj[key]) {
-                    errFlag = true
-                }
-            });
-            if(errFlag) {
-                this.$notify({
-                    title: '警告',
-                    message: '请输入完整信息',
-                    type: 'warning'
-                });
-            }else{
-                let codeArr = [];
-                let nameArr = [];
-                formObj.selected.map((v) => {
-                    for(let key in v) {
-                        codeArr.push(key);
-                        nameArr.push(v[key]);
-                    }
-                });
-                formObj.provinceCode = codeArr[0];
-                formObj.provinceName = nameArr[0];
-                formObj.cityCode = codeArr[1];
-                formObj.cityName = nameArr[1];
-                formObj.areaCode = codeArr[2];
-                formObj.areaName = nameArr[2];
-                delete formObj.selected;
-                formObj.id = this.userId;
-                this._apis.client.saveMemberInfo(formObj).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: "保存成功",
-                        type: 'success'
-                    });
-                }).catch((error) => {
-                    console.log(error);
-                })
-            }
-        },
+        // saveInfo() {
+        //     let errFlag = false;
+        //     let formObj = {
+        //         id: this.clientInfoById.id, 
+        //         memberName: this.clientInfoById.memberName, 
+        //         sex: this.clientInfoById.sex, 
+        //         birthday: this.clientInfoById.birthday, 
+        //         //wechatSn: this.clientInfoById.wechatSn, 
+        //         email: this.clientInfoById.email, 
+        //         address: this.clientInfoById.address,
+        //         selected: this.clientInfoById.selected
+        //     }
+        //     Object.keys(formObj).forEach((key) => {
+        //         if(!formObj[key]) {
+        //             errFlag = true
+        //         }
+        //     });
+        //     if(errFlag) {
+        //         this.$notify({
+        //             title: '警告',
+        //             message: '请输入完整信息',
+        //             type: 'warning'
+        //         });
+        //     }else{
+        //         let codeArr = [];
+        //         let nameArr = [];
+        //         formObj.selected.map((v) => {
+        //             for(let key in v) {
+        //                 codeArr.push(key);
+        //                 nameArr.push(v[key]);
+        //             }
+        //         });
+        //         formObj.provinceCode = codeArr[0];
+        //         formObj.provinceName = nameArr[0];
+        //         formObj.cityCode = codeArr[1];
+        //         formObj.cityName = nameArr[1];
+        //         formObj.areaCode = codeArr[2];
+        //         formObj.areaName = nameArr[2];
+        //         delete formObj.selected;
+        //         formObj.id = this.userId;
+        //         this._apis.client.saveMemberInfo(formObj).then((response) => {
+        //             this.$notify({
+        //                 title: '成功',
+        //                 message: "保存成功",
+        //                 type: 'success'
+        //             });
+        //         }).catch((error) => {
+        //             console.log(error);
+        //         })
+        //     }
+        // },
         getUsedCoupon() {
             let params = {usedType:"1", couponType: "0", memberId: this.userId};
             this._apis.client.getUsedCoupon(params).then((response) => {
@@ -520,7 +527,6 @@ export default {
         }
         .c_top_r{
             width:415px;
-            padding-bottom: 17px;
             box-shadow:0px 0px 14px 0px rgba(208,214,228,1);
             border-radius:10px;
             border:1px solid rgba(204,204,204,1);

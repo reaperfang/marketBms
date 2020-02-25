@@ -56,7 +56,7 @@
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费金额满') !== -1">
             <el-radio v-model="condition2" label="消费金额满" @change="handleCheck1">消费金额满：</el-radio>
             <div class="input_wrap2">
-              <el-input placeholder="请输入数字" v-model="xfjem" @keyup.native="checkZero($event, xfjem,'xfjem')" ></el-input>
+              <el-input placeholder="请输入数字" v-model="xfjem" @keyup.native="checkZero1($event, xfjem,'xfjem')" ></el-input>
             </div>
             <span>元</span>
             <span>即可升级</span>
@@ -64,7 +64,7 @@
           <div class="radio_line" v-if="getIndex(this.conditionList,'消费次数满') !== -1">
             <el-radio v-model="condition2" label="消费次数满" @change="handleCheck2">消费次数满：</el-radio>
             <div class="input_wrap2">
-              <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZero($event, xfcsm,'xfcsm')"></el-input>
+              <el-input placeholder="请输入数字" v-model="xfcsm" @keyup.native="checkZero1($event, xfcsm,'xfcsm')"></el-input>
             </div>
             <span>次</span>
             <span>即可升级</span>
@@ -247,6 +247,16 @@ export default {
       val = val.replace(/[^\d]/g,'');
       val = val.replace(/^0/g,'');
       this[ele] = val;
+    },
+    checkZero1(event,val,ele) {
+      if(this.$route.query.level == "1") {
+        val = val.replace(/[^\d]/g,'');
+        this[ele] = val;
+      }else{
+        val = val.replace(/[^\d]/g,'');
+        val = val.replace(/^0/g,'');
+        this[ele] = val;
+      }
     },
     handleBlur(event,val,ele) {
       val = val.replace(/[^\d.]/g,'');

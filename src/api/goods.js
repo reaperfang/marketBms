@@ -1,5 +1,7 @@
 import request from '@/system/request'
 
+let token = '09255c7724fe9b8df952aa2f7e3ec7189f2a9d376c5ae50fc5676c5dd898ffa7'
+
 
 // 获取标签列表
 export function fetchTagsList(data) {
@@ -7,7 +9,8 @@ export function fetchTagsList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-LABEL-PAGE-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -17,7 +20,8 @@ export function fetchAllTagsList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-LABEL-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -27,7 +31,8 @@ export function addTag(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-LABEL-NEW-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -37,7 +42,8 @@ export function deleteTag(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-LABEL-DELETE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -47,7 +53,8 @@ export function enableTag(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-LABEL-ENABLE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -58,7 +65,8 @@ export function editorTag(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-LABEL-UPDATE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -68,7 +76,8 @@ export function fetchCategoryList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -78,7 +87,8 @@ export function getCategoryDetail(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-DETAIL-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -88,7 +98,8 @@ export function addCategory(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-NEW-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -98,7 +109,8 @@ export function editorCategory(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-EDIT-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -108,7 +120,8 @@ export function deleteCategory(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-DELETE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -118,7 +131,8 @@ export function enableCategory(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-ENABLE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -128,7 +142,19 @@ export function fetchGoodsList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-SKU-PAGE-LIST-PROCESSOR',
-    data
+    data,
+    token
+  })
+}
+
+// sku商品分页列表(无分页)
+export function fetchGoodsSKUList(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SKU-LIST-PROCESSOR',
+    data,
+    token
   })
 }
 
@@ -138,7 +164,8 @@ export function addGoods(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-NEW-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -148,7 +175,8 @@ export function getGoodsDetail(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-DETAIL-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -158,7 +186,8 @@ export function editorGoods(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-EDIT-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -168,7 +197,8 @@ export function changePrice(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CHANGE-PRICE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -178,7 +208,8 @@ export function updateStock(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-UPDATE-STOCK-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -188,7 +219,8 @@ export function upperOrLower(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-UPPER-OR-LOWER-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -198,7 +230,8 @@ export function allDelete(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-DELETE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -208,7 +241,8 @@ export function allUpdatePrice(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-BATCH-CHANGE-PRICE-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -218,7 +252,8 @@ export function getImportPageList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-IMPORT-PAGE-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -228,7 +263,8 @@ export function fetchSpuGoodsList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-SPU-PAGE-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -238,7 +274,8 @@ export function fetchAllSpuGoodsList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-SPU-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -249,7 +286,8 @@ export function importGoods(data) {
     method: 'post',
     timeout: 100000,
     target: 'PRODUCT-IMPORT-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -259,7 +297,8 @@ export function getSPUGoodsList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-SPU-PAGE-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -269,7 +308,8 @@ export function transferGoods(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-TRANSFER-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 
@@ -279,9 +319,22 @@ export function fetchTreeCategoryList(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-TREE-LIST-PROCESSOR',
-    data
+    data,
+    token
   })
 }
+
+// 商品分类推荐或取消
+export function recommend(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-CATALOG-ISRECOMMEND-PROCESSOR',
+    data,
+    token
+  })
+}
+
 
 
 

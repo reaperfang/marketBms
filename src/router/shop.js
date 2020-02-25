@@ -24,6 +24,14 @@ export default [
 				name: "m_wxShopIndex",
 				meta: { title: "微信店铺", noCache: true, tabTitle: '移动店铺',navType:2}
 			},
+			{
+				path: "m_shopNavIndex",
+				component: () => import("@/views/shop/mobileShop/wxShop/shopNavIndex"),
+				name: "m_shopNavIndex",
+				meta: { title: "店铺导航", noCache: true, tabTitle: '移动店铺',navType:2},
+				hidden:true
+			},
+			
 
 			//移动装修模板相关
 			{
@@ -46,7 +54,7 @@ export default [
 				path: "m_pageManageIndex",
 				component: () => import("@/views/shop/mobileDecorate/pages/pageManageIndex"),
 				name: "m_pageManageIndex",
-				meta: { title: "自定义页面", noCache: true, tabTitle: '移动装修',navType:2 }
+				meta: { title: "创意设计", noCache: true, tabTitle: '移动装修',navType:2 }
 			},
 			{
 				path: "m_classifyEditor",
@@ -116,30 +124,72 @@ export default [
 			},				
 
 			//PC模板管理相关
-			// {
-			// 	path: "p_templateManageIndex",
-			// 	component: () => import("@/views/shop/PCshop/template/templateManageIndex"),
-			// 	name: "p_templateManageIndex",
-			// 	meta: { title: "页面模板", noCache: true, tabTitle: 'PC店铺',navType:2 }
-			// },
+			{
+				path: "p_templateManageIndex",
+				component: () => import("@/views/shop/PCshop/template/templateManageIndex"),
+				name: "p_templateManageIndex",
+				meta: { title: "页面模板", noCache: true, tabTitle: 'PC店铺',navType:2 }
+			},
 
-			// //PC栏目内容相关
-			// {
-			// 	path: "p_columnIndex",
-			// 	component: () => import("@/views/shop/PCshop/column/columnIndex"),
-			// 	name: "p_columnIndex",
-			// 	meta: { title: "栏目内容", noCache: true, tabTitle: 'PC店铺',navType:2 }
-			// },
+			//PC栏目内容相关
+			{
+				path: "p_columnIndex",
+				component: () => import("@/views/shop/PCshop/column/columnIndex"),
+				name: "p_columnIndex",
+				meta: { title: "栏目内容", noCache: true, tabTitle: 'PC店铺',navType:2 }
+			},
+			{
+				path: "1picText",
+				component: () => import("@/views/shop/PCshop/column/1picText"),
+				name: "1picText",
+				meta: { title: "图文广告", noCache: true, tabTitle: 'PC店铺',navType:2 },
+				hidden: true
+			},
+			{
+				path: "2goodsSet",
+				component: () => import("@/views/shop/PCshop/column/2goodsSet"),
+				name: "2goodsSet",
+				meta: { title: "商品橱窗", noCache: true, tabTitle: 'PC店铺',navType:2 },
+				hidden: true
+			},
+			{
+				path: "3picText",
+				component: () => import("@/views/shop/PCshop/column/3picText"),
+				name: "3picText",
+				meta: { title: "图文广告", noCache: true, tabTitle: 'PC店铺',navType:2 },
+				hidden: true
+			},
+			{
+				path: "4goodsSet",
+				component: () => import("@/views/shop/PCshop/column/4goodsSet"),
+				name: "4goodsSet",
+				meta: { title: "商品橱窗", noCache: true, tabTitle: 'PC店铺',navType:2 },
+				hidden: true
+			},
+			{
+				path: "5picText",
+				component: () => import("@/views/shop/PCshop/column/5picText"),
+				name: "5picText",
+				meta: { title: "图文广告", noCache: true, tabTitle: 'PC店铺',navType:2 },
+				hidden: true
+			},
+			{
+				path: "6infoSet",
+				component: () => import("@/views/shop/PCshop/column/6infoSet"),
+				name: "6infoSet",
+				meta: { title: "资讯设置", noCache: true, tabTitle: 'PC店铺',navType:2 },
+				hidden: true
+			},
 
-			// //PC协议编辑相关
-			// {
-			// 	path: "p_protocolEdit",
-			// 	component: () => import("@/views/shop/PCshop/protocolEdit"),
-			// 	name: "p_protocolEdit",
-			// 	meta: { title: "会员注册协议", noCache: true, tabTitle: 'PC店铺',navType:2 }
-			// },
+			//PC协议编辑相关
+			{
+				path: "p_protocolEdit",
+				component: () => import("@/views/shop/PCshop/protocolEdit"),
+				name: "p_protocolEdit",
+				meta: { title: "注册协议", noCache: true, tabTitle: 'PC店铺',navType:2 }
+			},
 
-			// //PC绑定域名相关
+			//PC绑定域名相关
 			// {
 			// 	path: "p_bindDomain",
 			// 	component: () => import("@/views/shop/PCshop/bindDomain"),
@@ -147,27 +197,27 @@ export default [
 			// 	meta: { title: "绑定域名", noCache: true, tabTitle: 'PC店铺',navType:2 }
 			// },
 
-			// //PC资讯管理相关
-			// {
-			// 	path: "p_infoManageIndex",
-			// 	component: () => import("@/views/shop/infoManage/infoManageIndex"),
-			// 	name: "p_infoManageIndex",
-			// 	meta: { title: "资讯", noCache: true, tabTitle: '资讯管理',navType:2 }
-			// },
-			// {
-			// 	path: "p_createInfo",
-			// 	component: () => import("@/views/shop/infoManage/createInfo"),
-			// 	name: "p_createInfo",
-			// 	meta: { title: "新建资讯", noCache: true, tabTitle: '资讯管理',navType:2 },
-			// 	hidden: true
-			// },
-			// {
-			// 	path: "p_previewInfo",
-			// 	component: () => import("@/views/shop/infoManage/previewInfo"),
-			// 	name: "p_previewInfo",
-			// 	meta: { title: "查看资讯", noCache: true, tabTitle: '资讯管理',navType:2 },
-			// 	hidden: true
-			// },
+			//PC资讯管理相关
+			{
+				path: "p_infoManageIndex",
+				component: () => import("@/views/shop/infoManage/infoManageIndex"),
+				name: "p_infoManageIndex",
+				meta: { title: "资讯", noCache: true, tabTitle: '资讯管理',navType:2 }
+			},
+			{
+				path: "p_createInfo",
+				component: () => import("@/views/shop/infoManage/createInfo"),
+				name: "p_createInfo",
+				meta: { title: "新建资讯", noCache: true, tabTitle: '资讯管理',navType:2 },
+				hidden: true
+			},
+			{
+				path: "p_previewInfo",
+				component: () => import("@/views/shop/infoManage/previewInfo"),
+				name: "p_previewInfo",
+				meta: { title: "查看资讯", noCache: true, tabTitle: '资讯管理',navType:2 },
+				hidden: true
+			},
 		]
 	}
 ];

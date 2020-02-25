@@ -183,10 +183,10 @@ export default {
     },
     //保存
     onSubmit(formName){
-      this.loading = true
       this.$refs[formName].validate((valid) => {
         if (valid) {
         let id = this.accountInfo && this.accountInfo.id
+        this.loading = true
         if(id){//修改子账号
            let query = {
                id:id,
@@ -198,7 +198,7 @@ export default {
                mcOrganizationId:0,
                roleName:this.form.roleName,
                shopInfoIds:this.form.shopInfoIds
-           } 
+           }
            this._apis.set.editSubAccount(query).then(response =>{
               this.loading = false
               this.$notify.success({

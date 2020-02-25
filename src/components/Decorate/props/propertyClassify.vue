@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" :style="bodyHeight">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="分类名称" prop="name">
         <el-input placeholder="请勿超过10个字" v-model="ruleForm.name" @blur="changeValidate"></el-input>

@@ -1,5 +1,5 @@
 <template>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" :style="bodyHeight">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-calcHeight="190+20">
         <div class="block header">
           <p class="title">商品分类页设置</p>
           <p class="state" :class="{'normal': ruleForm.status === 0}">{{ruleForm.status === 0 ? '生效中' : '未生效'}}</p>
@@ -86,7 +86,6 @@ export default {
         searchStyle: 2  //搜索框样式  1方形  2圆形
       },
       rules: {},
-      bodyHeight: {},  //装修区高度
       showCode: false,   //是否显示二维码
       qrCode: ''
     }
@@ -137,9 +136,6 @@ export default {
     this.$emit('goodsGroupPageDataChanged', this.ruleForm);
   },
   mounted() {
-    this.bodyHeight = {
-      height: document.body.clientHeight - 190 - 20 + 'px'
-    }
   },
   computed: {
       shopInfo() {

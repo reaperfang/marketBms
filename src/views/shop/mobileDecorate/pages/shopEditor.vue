@@ -2,7 +2,7 @@
   <div>
 
     <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
+    <Decorate ref="Decorate" :decorateData="decorateData" :config="config" :height="146+10"></Decorate>
 
     <!-- 动态弹窗 预览 -->
     <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :decorateData="decorateData"></component>

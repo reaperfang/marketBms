@@ -5,7 +5,7 @@
 <script>
 
 export default {
-  name: '1picText',
+  name: 'bindDomain',
   data() {
     return {
     }

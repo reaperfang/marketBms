@@ -28,7 +28,7 @@
               :on-success="handleAvatarSuccess"
               :show-file-list="false">
               <el-button size="small" type="primary">点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb，建议尺寸900*500</div>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb，建议尺寸900*500像素</div>
             </el-upload>
             <el-button type="primary" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" class="imgSource">图片素材</el-button>
           </p>
@@ -116,14 +116,14 @@ export default {
     save(){
       if(!this.isSave){
         let id = this.$route.query.id
+        let query = {
+          id:id || '',
+          title: this.ruleForm.title,
+          fileCover: this.ruleForm.fileCover,
+          isCover: this.ruleForm.isCover,
+          sourceMaterial:escape(this.ruleForm.sourceMaterial)
+        }
         if(id){
-          let query = {
-            id:id,
-            title: this.ruleForm.title,
-            fileCover: this.ruleForm.fileCover,
-            isCover: this.ruleForm.isCover,
-            sourceMaterial:this.ruleForm.sourceMaterial
-          }
           this._apis.file.editArticle(query).then((response)=>{
             this.$notify.success({
               title: '成功',
@@ -140,7 +140,7 @@ export default {
             });
           })
         }else{
-          this._apis.file.saveArticle(this.ruleForm).then((response)=>{
+          this._apis.file.saveArticle(query).then((response)=>{
             this.$notify.success({
               title: '成功',
               message: '创建图文成功！'
