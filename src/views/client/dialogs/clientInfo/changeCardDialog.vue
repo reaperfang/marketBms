@@ -73,9 +73,12 @@ export default {
         getLevelList() {
             this._apis.client.getCardList({}).then((response) => {
                 let list = response.list.filter((v) => {
-                    return v.enable == 0
+                    return v.enable == 0 && v.level > this.data.oldLevel
                 })
                 this.levelList = [].concat(list);
+                this.levelList.map((item) => {
+                    this.$set(item, 'alias', `${item.alias} ${item.name}`);
+                })
             }).catch((error) => {
                 console.log(error);
             })
