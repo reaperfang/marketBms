@@ -222,7 +222,15 @@ export default {
       },
       disabled1: false,
       conInfos: [],
-      canSubmit: true,
+      canSubmit1: true,
+      canSubmit2: true,
+      canSubmit3: true,
+      canSubmit4: true,
+      canSubmit5: true,
+      canSubmit6: true,
+      canSubmit7: true,
+      canSubmit8: true,
+      canSubmit9: true,
       mapCondition: {
         "birthday": "生日", "area": "地区", "gender": "性别", "name": "姓名", "email": "邮箱", "hobby": "爱好", "phone":"绑定手机号"
       }
@@ -623,7 +631,15 @@ export default {
           type: "warning"
         });
       } else {
-        this.canSubmit = true;
+        this.canSubmit1 = true;
+        this.canSubmit2 = true;
+        this.canSubmit3 = true;
+        this.canSubmit4 = true;
+        this.canSubmit5 = true;
+        this.canSubmit6 = true;
+        this.canSubmit7 = true;
+        this.canSubmit8 = true;
+        this.canSubmit9 = true;
         let formObj = {};
         let levelConditionList = [];
         if (!this.right1 && !this.right2) {
@@ -663,9 +679,9 @@ export default {
                     message: '请输入消费金额',
                     type: 'warning'
                   });
-                  this.canSubmit = false;
+                  this.canSubmit1 = false;
                 }else{
-                  this.canSubmit = true;
+                  this.canSubmit1 = true;
                   params2.conditionValue = this.xfjem;
                   params2.label = "消费金额满";
                 }
@@ -681,9 +697,9 @@ export default {
                     message: '请输入消费次数',
                     type: 'warning'
                   });
-                  this.canSubmit = false;
+                  this.canSubmit2 = false;
                 }else{
-                  this.canSubmit = true;
+                  this.canSubmit2 = true;
                   params2.conditionValue = this.xfcsm;
                   params2.label = "消费次数满";
                 }
@@ -699,9 +715,9 @@ export default {
                     message: '请输入积分获得',
                     type: 'warning'
                   });
-                  this.canSubmit = false;
+                  this.canSubmit3 = false;
                 }else{
-                  this.canSubmit = true;
+                  this.canSubmit3 = true;
                   params2.conditionValue = this.jfhdm;
                   params2.label = "积分获得满";
                 } 
@@ -737,9 +753,9 @@ export default {
                 message: "请输入满包邮数",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit4 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit4 = true;
               let params3 = {};
               params3.rightsInfoId = this.getId(this.rightsList, "满包邮");
               params3.rightsValue = this.mby;
@@ -754,9 +770,9 @@ export default {
                 message: "请输入会员折扣数",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit5 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit5 = true;
               let params4 = {};
               params4.rightsInfoId = this.getId(this.rightsList, "会员折扣");
               params4.rightsValue = this.hyzk;
@@ -787,9 +803,9 @@ export default {
                 message: "请输入赠送积分数",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit6 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit6 = true;
               let params5 = {};
               params5.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -809,9 +825,9 @@ export default {
                 message: "请输入赠送红包金额",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit7 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit7 = true;
               let params6 = {};
               params6.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -822,23 +838,6 @@ export default {
               params6.giftName = "赠送红包";
               upgradeRewardList.push(params6);
               upgradePackage = upgradePackage + "赠送" + this.zshb + "元红包,";
-              // this.selectedReds.map(v => {
-              //   let obj = {};
-              //   obj.upgradeRewardInfoId = this.getId(
-              //     this.rewardList,
-              //     "赠送红包"
-              //   );
-              //   obj.giftProduct = v.id;
-              //   obj.giftName = v.name;
-              //   obj.giftNumber = 1;
-              //   obj.label = "赠送红包";
-              //   upgradeRewardList.push(obj);
-              //   if(!!v.hongbaoTotalMoney) {
-              //     upgradePackage = upgradePackage + "赠送" + v.hongbaoTotalMoney + "元红包,";
-              //   }else{
-              //     upgradePackage = upgradePackage + "赠送红包,";
-              //   }
-              // });
             }
           }
           if (this.upgrade3) {
@@ -849,9 +848,9 @@ export default {
                 message: "请选择赠品",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit8 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit8 = true;
               this.selectedGifts.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
@@ -876,9 +875,9 @@ export default {
                 message: "请选择优惠券",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit9 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit9 = true;
               this.selectedCoupons.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
@@ -915,7 +914,7 @@ export default {
                     type: "warning"
                   });
                 }else{
-                  if(!!this.canSubmit) {
+                  if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8 && this.canSubmit9) {
                     formObj.levelConditionList = [].concat(levelConditionList);
                     formObj.rightsList = [].concat(rightsList);
                     formObj.upgradeRewardList = [].concat(upgradeRewardList);
@@ -960,7 +959,7 @@ export default {
                     type: "warning"
                   });
                 }else{
-                  if(!!this.canSubmit) {
+                  if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8 && this.canSubmit9) {
                     formObj.levelConditionList = [].concat(levelConditionList);
                     formObj.rightsList = [].concat(rightsList);
                     formObj.upgradeRewardList = [].concat(upgradeRewardList);
@@ -991,7 +990,7 @@ export default {
                 console.log(error);
               })
           }else{
-            if(!!canSubmit) {
+            if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8 && this.canSubmit9) {
               formObj.levelConditionList = [].concat(levelConditionList);
               formObj.rightsList = [].concat(rightsList);
               formObj.upgradeRewardList = [].concat(upgradeRewardList);
