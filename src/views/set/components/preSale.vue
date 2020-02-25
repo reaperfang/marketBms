@@ -4,23 +4,32 @@
     <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <div class="item">
             <h2>自动关闭未付款订单：</h2>
-            <el-form-item label="拍下未付款:" prop="autoCancelUnpayOrder">
+               <el-form-item label="拍下未付款:" prop="autoCancelUnpayOrder" style="marginLeft:36px;">
+               <el-switch
+                v-model="autoOrder"
+                active-color="#13ce66"
+                inactive-color="#cacfcb"
+                class="item-switch1"
+                >
+              </el-switch>
                 <el-input-number 
                 v-model="form.autoCancelUnpayOrder" 
                 controls-position="right" 
                 style="width:260px;" 
-                placeholder="当前未启动该功能，输入数值即生效"
+                placeholder="请输入整数"
                 :min="1" 
                 :precision="0"
+                :disabled="!autoOrder"
                 v-if="form.acuoType == 1">
                 </el-input-number>
                 <el-input-number 
                 v-model="form.autoCancelUnpayOrder" 
                 controls-position="right" 
                 style="width:260px;" 
-                placeholder="当前未启动该功能，输入数值即生效"
+                placeholder="请输入整数"
                 :min="1" 
                 :precision="0"
+                :disabled="!autoOrder"
                 v-else>
                 </el-input-number>
                 <el-select 
@@ -90,22 +99,31 @@
         <div class="item">
             <h2>自动发货：<span>开启后立即对所有订单生效，若需要关闭该功能则清空输入框数值</span></h2>
             <el-form-item  prop="orderAutoSend" label="下单">
+              <el-switch
+                v-model="sendOrder"
+                active-color="#13ce66"
+                inactive-color="#cacfcb"
+                class="item-switch2"
+                >
+              </el-switch>
                 <el-input-number 
                 v-model="form.orderAutoSend" 
                 controls-position="right" 
                 style="width:260px;" 
-                placeholder="当前未启动该功能，输入数值即生效"
+                placeholder="请输入整数"
                 :min="1" 
                 :precision="0"
+                :disabled="!sendOrder"
                 v-if="form.oasType == 1">
                 </el-input-number>
                 <el-input-number 
                 v-model="form.orderAutoSend" 
                 controls-position="right" 
                 style="width:260px;" 
-                placeholder="当前未启动该功能，输入数值即生效"
+                placeholder="请输入整数"
                 :min="1" 
                 :precision="0"
+                :disabled="!sendOrder"
                 v-else>
                 </el-input-number>
                 <el-select 
@@ -133,18 +151,42 @@
 export default {
   name: 'preSale',
   data() {
+    var checkCancelOrder = (rule,value,callback)=>{
+      if(this.autoOrder && !value){
+        return callback(new Error('输入框不能为空'))
+      }else{
+        callback()
+      }
+    }
+    var checkOrderAutoSend = (rule,value,callback)=>{
+      if(this.sendOrder && !value){
+          return callback(new Error('输入框不能为空'))
+      }else{
+        callback()
+      }
+    }
     return {
       loading:false,
       currentTab: 'preSale',
+      autoOrder:true,
+      sendOrder:true,
       form: {
             autoCancelUnpayOrder: '',
             acuoType: 1,
             deliverGoodsType:1,
             transportationExpenseType: 1,
             orderAutoSend: '',
-            oasType: ''
+            oasType: '',
+
         },
-     rules: { },
+     rules: {
+       autoCancelUnpayOrder:[
+        { validator: checkCancelOrder }
+       ],
+       orderAutoSend:[
+         {validator:checkOrderAutoSend}
+       ],
+      },
      options: [
         {
           value: 1,
@@ -159,6 +201,12 @@ export default {
   },
   components: {},
   watch: {
+    // autoOrder(after,before){
+    //   console.log(after,before)
+    //   if(after == true){
+      
+    //   }
+    // }
   },
   computed:{
       deliverGoodsTypeCheckout:{
@@ -184,6 +232,7 @@ export default {
     getShopInfo(){
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
+        console.log(response,"222")
         this.form = response
       }).catch(error =>{
         this.$notify.error({
@@ -220,6 +269,12 @@ export default {
                 message: error
               });
             })
+          }else{
+            this.loading = false
+            this.$notify.error({
+                title: '输入框不能为空',
+                message: '保存失败'
+              });
           }
       })
     },
@@ -236,6 +291,7 @@ export default {
     border-bottom: 1px dashed #D3D3D3;
     padding-bottom: 20px;
     margin-bottom: 20px;
+    position: relative;
     h2{
         font-size: 14px;
         color: #3D434A;
@@ -244,6 +300,16 @@ export default {
             font-size: 12px;
             color: #92929B;
         }
+    }
+    .item-switch1{
+      position: absolute;
+      left:-135px;
+      top:6px;
+    }
+    .item-switch2{
+      position: absolute;
+      left:-99px;
+      top:6px;
     }
 }
 .data_note{
