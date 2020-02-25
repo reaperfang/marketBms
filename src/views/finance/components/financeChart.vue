@@ -22,7 +22,7 @@ export default {
     makeOption(){    
       this.option = {
         title: {
-            text: '金额（元）'
+            // text: '金额（元）'
         },
         tooltip: {
             trigger: 'axis'
@@ -39,10 +39,18 @@ export default {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: this.dataList && this.dataList.dates && this.dataList.dates.reverse()
+            name:'日期',
+            data: this.dataList && this.dataList.dates && this.dataList.dates.reverse(),
+            axisLine:{
+              symbol:['none','arrow'], 
+            }
         },
         yAxis: {
-            type: 'value'
+            name:'金额（元）',
+            type: 'value',
+            axisLine:{
+              symbol:['none','arrow'], 
+            }
         },
         series: [
             {

@@ -24,21 +24,21 @@
       </div>
       <div class="data_statistics">
         <div class="item">
-          <span class="money">总收入（元）</span>
+          <span class="money">总收入（{{ surveyDay.income | displayMoney}}）</span>
           <span class="num">
-            <em>{{surveyDay.income ? surveyDay.income.toFixed(2) : 0}}</em>
+            <em>{{ surveyDay.income.toFixed(2) | money }}</em>
           </span>
         </div>
         <div class="item">
-          <span class="money">总支出（元）</span>
+          <span class="money">总支出（{{surveyDay.expend | displayMoney}}）</span>
           <span class="num">
-            <em>{{surveyDay.expend ? surveyDay.expend.toFixed(2) : 0}}</em>
+            <em>{{surveyDay.expend.toFixed(2) | money}}</em>
           </span>
         </div>
         <div class="item">
-          <span class="money">实际收入（元）</span>
+          <span class="money">实际收入（{{surveyDay.realIncome | displayMoney}}）</span>
           <span class="num">
-            <em>{{surveyDay.realIncome ? surveyDay.realIncome.toFixed(2) : 0}}</em>
+            <em>{{surveyDay.realIncome.toFixed(2) | money}}</em>
           </span>
         </div>
         <span 
@@ -62,10 +62,11 @@
           请选择时间段：
           <el-date-picker
             v-model="timeValue"
-            type="daterange"
+            type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+           :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
           <el-button type="primary" @click="getDataDateRs">确定</el-button>
@@ -74,9 +75,9 @@
       <div class="data_statistics">
         该时间段内
         <div class="item">
-          <span class="money">总收入（元）</span>
+          <span class="money">总收入（{{survey.income | displayMoney}}）</span>
           <span class="num">
-            <em>{{survey.income}}</em>
+            <em>{{survey.income | money}}</em>
             <span v-if="survey.chainRatioIncome != null">
                <el-popover v-if="survey.chainRatioIncome >= 0" placement="top-start" title="" width="130" trigger="hover">
                 <p>环比上升{{survey.chainRatioIncome}}%</p>
@@ -94,9 +95,9 @@
           </span>
         </div>
         <div class="item">
-          <span class="money">总支出（元）</span>
+          <span class="money">总支出（{{survey.expend | displayMoney}}）</span>
           <span class="num">
-            <em>{{survey.expend}}</em>
+            <em>{{survey.expend | money}}</em>
             <span v-if="survey.chainRatioExpend != null">
               <el-popover v-if="survey.chainRatioExpend >= 0" placement="top-start" title="" width="130" trigger="hover">
                 <p>环比上升{{survey.chainRatioExpend}}%</p>
@@ -114,9 +115,9 @@
           </span>
         </div>
         <div class="item">
-          <span class="money">实际收入（元）</span>
+          <span class="money">实际收入（{{ survey.realIncome | displayMoney}}）</span>
           <span class="num">
-            <em>{{survey.realIncome}}</em>
+            <em>{{ survey.realIncome | money}}</em>
             <span v-if="survey.chainRatioRealIncome != null">
               <el-popover v-if="survey.chainRatioRealIncome >= 0" placement="top-start" title="" width="130" trigger="hover">
                 <p>环比上升{{survey.chainRatioRealIncome}}%</p>
@@ -193,6 +194,23 @@ export default {
       this.chartData = dataObj
     }
   },
+  filters:{
+      money(options){
+        if(Math.abs(Math.round(options))>9999){
+          return (Math.round(options)/10000).toFixed(2)
+        }else{
+            return options
+        }
+      },
+      displayMoney(options){
+        if(Math.abs(Math.round(options))>9999){
+          return "万元"
+        }else{
+            return "元"
+        }
+      }
+
+  },
   created() {
     this.init(7);
     this.getDataDateRs()
@@ -202,13 +220,14 @@ export default {
     //初始化数据
     init(day){
       let date = new Date()
-      let endDate = utils.formatDate(date, "yyyy-MM-dd")
-      let startDate = utils.countDate(-day)
+      let endDate = utils.formatDate(date, "yyyy-MM-dd")+" 23:59:59"
+      let startDate = utils.countDate(-day)+" 00:00:00"
       this.timeValue = [startDate,endDate]
     },
     //概况
     getSurveyDay(){
       this._apis.finance.getSurveyDayRs({}).then((response)=>{
+        // console.log(response,"今日概况")
         this.surveyDay = response
       }).catch((error)=>{
         this.$notify.error({
@@ -224,6 +243,7 @@ export default {
         accountDateEnd:this.timeValue[1]
       }
       this._apis.finance.getDataDateRs(queryDate).then((response)=>{
+        // console.log(response,"时间段")
         if(response){
           this.survey = response   
           this.dataList = response.accountList
