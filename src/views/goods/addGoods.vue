@@ -1,9 +1,3 @@
-87
-2688
-2689
-2690
-2691
-2692
 <template>
 <div class="app-container add-goods">
     <!-- <header class="header">
