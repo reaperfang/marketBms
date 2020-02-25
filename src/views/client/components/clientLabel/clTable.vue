@@ -1,4 +1,4 @@
-/* 客户标签列表 */
+/* 用户标签列表 */
 <template>
   <div>
     <el-table
@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <span class="edit_span" @click="edit(scope.row)" v-permission="['客户', '客户标签', '默认页面', '查看标签']">
+            <span class="edit_span" @click="edit(scope.row)" v-permission="['客户', '用户标签', '默认页面', '查看标签']">
                 <!-- <i class="edit_i"></i> -->
                 编辑
             </span>

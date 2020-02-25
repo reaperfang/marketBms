@@ -2,7 +2,7 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="变更会员卡" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{data.memberSn}}</p>
-            <p class="user_id">当前会员卡等级：{{data.level}}</p>
+            <p class="user_id">当前会员卡等级：{{`LV${data.oldLevel} ${data.level}`}}</p>
             <div class="s_cont">
                 <span>变更会员卡：</span>
                 <el-select v-model="selectLevel" style="margin-bottom: 10px" @change="handleChange">
