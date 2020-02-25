@@ -1,6 +1,6 @@
 <template>
     <div class="c_container">
-        <p class="c_title">客户标签：</p>
+        <p class="c_title">用户标签：</p>
         <div class="form_container">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
                 <el-form-item label="标签名称：" prop="tagName">
@@ -14,8 +14,8 @@
                         <el-radio v-model="ruleForm.tagType" label="1">自动</el-radio>
                     </div>
                     <p class="label_warn">
-                        手动标签：无筛选条件给客户定义标签<br>
-                        自动标签：按照筛选条件自动为客户打标签，条件不符合自动删除和添加
+                        手动标签：无筛选条件给用户定义标签<br>
+                        自动标签：按照筛选条件自动为用户打标签，条件不符合自动删除和添加
                     </p>
                 </el-form-item>
                 <div v-if="ruleForm.tagType == '1'">
@@ -108,7 +108,7 @@
             </el-form>
         </div>
         <div class="btn_cont">
-            <el-button type="primary" @click="doubleCheck" v-permission="['客户', '客户标签', '默认页面', '保存']">保 存</el-button>
+            <el-button type="primary" @click="doubleCheck" v-permission="['客户', '用户标签', '默认页面', '保存']">保 存</el-button>
             <el-button @click="_routeTo('clientLabel')">取 消</el-button>
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @getSelected="getSelected"></component>

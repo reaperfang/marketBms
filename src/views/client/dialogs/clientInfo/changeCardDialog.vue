@@ -2,7 +2,7 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="变更会员卡" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{data.memberSn}}</p>
-            <p class="user_id">当前会员卡等级：{{data.level}}</p>
+            <p class="user_id">当前会员卡等级：{{`LV${data.oldLevel} ${data.level}`}}</p>
             <div class="s_cont">
                 <span>变更会员卡：</span>
                 <el-select v-model="selectLevel" style="margin-bottom: 10px" @change="handleChange">
@@ -73,9 +73,12 @@ export default {
         getLevelList() {
             this._apis.client.getCardList({}).then((response) => {
                 let list = response.list.filter((v) => {
-                    return v.enable == 0
+                    return v.enable == 0 && v.level > this.data.oldLevel
                 })
                 this.levelList = [].concat(list);
+                this.levelList.map((item) => {
+                    this.$set(item, 'alias', `${item.alias} ${item.name}`);
+                })
             }).catch((error) => {
                 console.log(error);
             })

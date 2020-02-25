@@ -339,9 +339,13 @@ export default {
    
   //导出
     exportToExcel(){
+      this.loading = true;
       let query = this.init();
+      console.log(query,"query");
       this._apis.finance.exportRe(query).then((response)=>{
+        console.log(response,"导出")
         window.location.href = response
+        this.loading = false;
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',

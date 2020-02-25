@@ -19,7 +19,7 @@
             <el-button type="primary" @click="getLabelList" :loading="btnloading">查 询</el-button>
             <el-button @click="reset">重 置</el-button>
         </div>
-        <el-button type="primary" @click="_routeTo('batchImport')" v-permission="['客户', '客户标签', '默认页面', '添加标签']">添加标签</el-button>
+        <el-button type="primary" @click="_routeTo('batchImport')" v-permission="['客户', '用户标签', '默认页面', '添加标签']">添加标签</el-button>
         <clTable style="margin-top: 30px" :params="params" @stopLoading="stopLoading"></clTable>
     </div>
 </template>

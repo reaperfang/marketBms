@@ -255,7 +255,14 @@ export default {
       selectedReds: [],
       levelConditionValueDto: {},
       colors: [],
-      canSubmit: true
+      canSubmit1: true,
+      canSubmit2: true,
+      canSubmit3: true,
+      canSubmit4: true,
+      canSubmit5: true,
+      canSubmit6: true,
+      canSubmit7: true,
+      canSubmit8: true
     };
   },
   computed: {
@@ -616,16 +623,16 @@ export default {
                 message: "请选择特定条件",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit1 = false;
             }else{
               if(this.levelConditionValueDto.label == "消费金额满") {
-                this.canSubmit = true;
+                this.canSubmit1 = true;
                 formObj.receiveConditionsRemarks =
                 "" +
                 this.levelConditionValueDto.label +
                 this.levelConditionValueDto.conditionValue + '元';
               }else if(this.levelConditionValueDto.label == "消费次数满"){
-                this.canSubmit = true;
+                this.canSubmit1 = true;
                 formObj.receiveConditionsRemarks =
                 "" +
                 this.levelConditionValueDto.label +
@@ -649,13 +656,13 @@ export default {
                 message: "请选择背景色",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit2 = false;
             }else{
-              this.canSubmit = true;
+              this.canSubmit2 = true;
             }
           } else if (this.ruleForm.backgroundType == "1") {
             if (this.imageUrl) {
-              this.canSubmit = true;
+              this.canSubmit3 = true;
               formObj.background = this.imageUrl;
             } else {
               this.$notify({
@@ -663,7 +670,7 @@ export default {
                 message: "请上传背景图片",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit3 = false;
             }
           }
           let rightsDtoList = [];
@@ -681,9 +688,9 @@ export default {
                 message: "请输入积分回馈倍率数",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit4 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit4 = true;
               let rightParam2 = {};
               rightParam2.rightsInfoId = this.getId(
                 this.rightsList,
@@ -713,9 +720,9 @@ export default {
                 message: "请输入赠送积分数",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit5 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit5 = true;
               let upgradeParams1 = {};
               upgradeParams1.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -736,9 +743,9 @@ export default {
                 message: "请输入赠送红包金额",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit6 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit6 = true;
               let upgradeParams2 = {};
               upgradeParams2.upgradeRewardInfoId = this.getId(
                 this.rewardList,
@@ -759,9 +766,9 @@ export default {
                 message: "请选择赠品",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit7 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit7 = true;
               this.selectedGifts.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
@@ -787,9 +794,9 @@ export default {
                 message: "请选择优惠券",
                 type: "warning"
               });
-              this.canSubmit = false;
+              this.canSubmit8 = false;
             } else {
-              this.canSubmit = true;
+              this.canSubmit8 = true;
               this.selectedCoupons.map(v => {
                 let obj = {};
                 obj.upgradeRewardInfoId = this.getId(
@@ -825,7 +832,7 @@ export default {
           if(formObj.receiveSetting == '0') {
             this._apis.client.checkCardValue({level: formObj.level, levelConditionValueDto: null}).then((response) => {
               if(response) {
-                if(!!this.canSubmit) {
+                if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8) {
                   this._apis.client
                     .editCard(formObj)
                     .then(response => {
@@ -840,7 +847,7 @@ export default {
                       console.log(error);
                     });
                 }else{
-                  console.log('error222');
+                  
                 }
               }else{
                 this.$notify({
@@ -853,7 +860,7 @@ export default {
               console.log(error);
             })
           }else{
-            if(!!this.canSubmit) {
+            if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8) {
               this._apis.client
                 .editCard(formObj)
                 .then(response => {

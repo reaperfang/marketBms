@@ -6,25 +6,43 @@
             <h2>自动收货： <span>说明：仅对有物流信息的订单生效，对没有物流信息的订单需要手动确认</span></h2>
             <el-form-item label="买家自动确认收货时间："></el-form-item>
             <el-form-item label="买家物流签收" prop="memberAutoConfirmReceive">
+              <el-switch
+                v-model="memberAutoReceive"
+                active-color="#13ce66"
+                inactive-color="#cacfcb"
+                class="item-switch1"
+                >
+              </el-switch>
                 <el-input-number 
                 v-model="form.memberAutoConfirmReceive" 
                 controls-position="right" 
                 style="width:260px;" 
-                placeholder="请输入整数，清空数值则关闭该功能"
+                placeholder="请输入整数"
                 :min="1" 
-                :max="30">
+                :max="30"
+                :disabled="!memberAutoReceive"
+                >
                 </el-input-number>
                 天后，自动确认收货
             </el-form-item>
             <el-form-item label="卖家自动确认收货时间："></el-form-item>
             <el-form-item label="卖家物流签收" prop="shopAutoConfirmReceive">
+              <el-switch
+                v-model="shopAutoReceive"
+                active-color="#13ce66"
+                inactive-color="#cacfcb"
+                class="item-switch1"
+                >
+              </el-switch>
                 <el-input-number 
                 v-model="form.shopAutoConfirmReceive" 
                 controls-position="right" 
                 style="width:260px;" 
-                placeholder="请输入整数，清空数值则关闭该功能"
+                placeholder="请输入整数"
                 :min="1" 
-                :max="30">
+                :max="30"
+                :disabled="!shopAutoReceive"
+                >
                 </el-input-number>
                 天后，自动确认收货
             </el-form-item>
@@ -32,13 +50,22 @@
         <div class="item">
             <h2>售后自动关闭时间：</h2>
             <el-form-item label="订单完成" prop="orderAutoFinished">
+              <el-switch
+                v-model="autoFinished"
+                active-color="#13ce66"
+                inactive-color="#cacfcb"
+                class="item-switch1"
+                >
+              </el-switch>
                 <el-input-number 
                 v-model="form.orderAutoFinished" 
                 controls-position="right" 
                 style="width:260px;" 
-                placeholder="请输入整数，清空数值则关闭该功能"
+                placeholder="请输入整数"
                 :min="1" 
-                :max="30">
+                :max="30"
+                :disabled="!autoFinished"
+                >
                 </el-input-number>
                 天后，售后自动关闭
             </el-form-item>
@@ -67,15 +94,20 @@
             </el-form-item>
         </div> -->
         <div class="item">
-            <h2>资产相关：</h2>
+            <h2>资产相关：
+              <span class="note">
+                  说明：启用后买家可以申请开发票。
+              </span>
+            </h2>
+            
             <el-form-item label="发票功能开启" prop="invoiceOpen">
                 <el-radio-group v-model="form.invoiceOpen">
                     <el-radio :label="1" class="mr10">是</el-radio>
                     <el-radio :label="2">否</el-radio>
                 </el-radio-group>
-                <span class="note">
+                <!-- <span class="note">
                   说明：启用后买家可以申请开发票。
-                </span>
+                </span> -->
             </el-form-item>
             <!-- <el-form-item label="整笔订单退款"></el-form-item>
             <el-form-item label="是否退回优惠券" prop="name7">
@@ -120,9 +152,34 @@
 export default {
   name: 'afterSale',
   data() {
+    var checkShopAutoReceive = (rule,value,callback)=>{
+      if(this.shopAutoReceive && !value){
+        return callback(new Error('输入框不能为空'))  
+      }else{
+       callback()
+      }
+    }
+    var checkMemberAutoReceive = (rule,value,callback)=>{
+      if(this.memberAutoReceive && !value){
+        return callback(new Error('输入框不能为空'))  
+      }else{
+       callback()
+      }
+    }
+    var checkAutoFinished = (rule,value,callback)=>{
+      if(this.autoFinished && !value){
+        return callback(new Error('输入框不能为空'))  
+      }else{
+       callback()
+      }
+    }
     return {
       loading:false,
       currentTab: 'afterSale',
+      shopAutoReceive:true,
+      memberAutoReceive:true,
+      autoFinished:true,
+
       form: {
             memberAutoConfirmReceive: '',
             shopAutoConfirmReceive: '',
@@ -139,6 +196,15 @@ export default {
           // { required: true, message: '请输入活动名称', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
           ],
+          shopAutoConfirmReceive:[
+            { validator: checkShopAutoReceive }
+          ],
+          memberAutoConfirmReceive:[
+            { validator: checkMemberAutoReceive }
+          ],
+          orderAutoFinished:[
+            { validator: checkAutoFinished }
+          ]
       },
      options: [
         {
@@ -198,6 +264,8 @@ export default {
       this.$refs[formName].validate((valid) => {
           if (valid) {
             this.afterSale()
+          }else{
+            this.loading = false
           }
       })
     },
@@ -252,6 +320,12 @@ export default {
     border-bottom: 1px dashed #D3D3D3;
     padding-bottom: 20px;
     margin-bottom: 20px;
+    position:relative;
+    .item-switch1{
+      position: absolute;
+      left:-145px;
+      top:5px;
+    }
     h2{
         font-size: 14px;
         color: #3D434A;
