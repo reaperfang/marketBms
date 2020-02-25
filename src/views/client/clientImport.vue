@@ -36,7 +36,7 @@
                                 :data="{json: JSON.stringify({cid: cid})}"
                                 :file-list="fileList">
                                 <el-button size="small" type="primary">点击上传</el-button>
-                                <div slot="tip" class="el-upload__tip">导入规则：请先下载导入模板，在模板中按要求填写客户信息，然后上传该文件</div>
+                                <div slot="tip" class="el-upload__tip">导入规则：请先下载导入模板，在模板中按要求填写用户信息，然后上传该文件</div>
                             </el-upload>
                             <el-button class="download_btn" @click="handleDownload">下载导入模板</el-button>
                         </div>
@@ -120,7 +120,7 @@ export default {
             this.channelId2 = "";
         }, 
         handleDownload() {
-            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/客户.xlsx`;
+            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/用户.xlsx`;
         },
         refreshPage() {
             this.getChannels();

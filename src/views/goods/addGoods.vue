@@ -569,9 +569,6 @@ import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
-
-
-
 export default {
     name: 'addGoods',
     data() {
@@ -777,13 +774,11 @@ export default {
         //     }
         // })
         var that = this
-
         Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
         })
-
         document.querySelector('body').addEventListener('click', function(e) {
             e.stopPropagation()
             if(e.target.parentNode.parentNode.className != 'add-specs') {
@@ -809,11 +804,9 @@ export default {
         },
         imagesLength() {
             let images = this.ruleForm.images
-
             if(images && images.split(',').length) {
                 return images.split(',').length
             }
-
             return 0
         }
     },
@@ -850,14 +843,12 @@ export default {
                     }
                 }
             } catch(e) {
-
             }
         });
     },
     methods: {
         batchFilling() {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
             goodsInfos.forEach((val, index) => {
                 val.costPrice = goodsInfos[0].costPrice
                 val.salePrice = goodsInfos[0].salePrice
@@ -868,22 +859,18 @@ export default {
                 val.image = goodsInfos[0].image
                 val.fileList = goodsInfos[0].fileList
             })
-
             this.ruleForm.goodsInfos = goodsInfos
         },
         deleteSpecValue(index, e) {
             e.stopPropagation()
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-
             addedSpecs[addedSpecs.length - 1].list.splice(index, 1)
-
             this.addedSpecs = addedSpecs
             this.specsValues.splice(index, 1)
         },
         addNewSpecValue() {
             let value = this.newSpecValue
             let lastAddedSpecs = this.addedSpecs[this.addedSpecs.length - 1]
-
             if(value == "") {
                 this.$message({
                     message: '规格值不能为空',
@@ -891,7 +878,6 @@ export default {
                 });
                 return
             }
-
             if(/\s+/.test(value)) {
                 this.$message({
                     message: '规格值不能为空',
@@ -918,7 +904,6 @@ export default {
                 this.$set(lastAddedSpecs, 'list', []);
             }
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-
             addedSpecs[addedSpecs.length - 1].list = addedSpecs[addedSpecs.length - 1].list || []
             addedSpecs[addedSpecs.length - 1].list.push(newChild)
             
@@ -950,7 +935,6 @@ export default {
                 level: '1', 
                 parentId: '0' 
             }
-
             this.specsList = [...this.specsList, newChild]
             this.flatSpecsList.push({...newChild})
             this.newSpec = ''
@@ -958,12 +942,10 @@ export default {
         selectSpecs(arr) {
             let results = [];
             let result = [];
-
             if(typeof arr[0] != 'object') {
                 this.ruleForm.goodsInfos = []
                 return
             }
-
             function doExchange(arr, index){
                 for (var i = 0; i<arr[index].length; i++) {
                     result[index] = arr[index][i];
@@ -974,36 +956,26 @@ export default {
                     }
                 }
             }
-
             doExchange(arr, 0);
-
             let _results = results.map((val, index) => {
                 let valArr = []
                 let pId = []
                 let names = []
-
                 val.split(',').forEach(id => {
                     let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                     valArr.push(item.name)
                     pId.push(item.parentId)
                 })
-
                 pId.forEach(id => {
                     console.log(this.flatSpecsList)
                     let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                     names.push(item.name)
                 })
-
                 this.specsLabel = names.join(',')
-
                 let _specs = {} //{"尺寸": "XL", "颜色": "黑色" }
-
                 valArr.forEach((val, index) => {
                     _specs[names[index]] = val
                 })
-
                 return {
                     label: valArr.join(','),
                     costPrice: '',
@@ -1019,29 +991,24 @@ export default {
             })
             this.ruleForm.goodsInfos.forEach((val, index) => {
                 let label = val.label
-
                 if(_results.find(spec => spec.label == label)) {
                     let specIndex = _results.findIndex(val => val.label == label)
                     
                     _results.splice(specIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[index]))
                 }
             })
-
             this.ruleForm.goodsInfos = _results
         },
         deleteAddedSpec(index) {
             this.addedSpecs.splice(index, 1)
-
             this.getSpecs()
         },
         getSpecs(open) {
             this.callObjectSpanMethod = true
             let arr = []
-
             // this.addedSpecs.forEach(val => {
             //     val.valueList.forEach(value => {
             //         let _arr = []
-
             //         _arr.push(val.id)
             //         _arr.push(value.id)
             //         arr.push(_arr)
@@ -1049,15 +1016,15 @@ export default {
             // })
             this.addedSpecs.forEach(val => {
                 let _arr = []
-
                 val.valueList.forEach(item => {
                     _arr.push(item.id)
                 })
                 arr.push(_arr)
             })
-            this.specIds = arr
-            this.selectSpecs(arr)
+            this.specIds = arr
+            this.selectSpecs(arr)
             this.deleteStyle()
+            this.deleteSpecArr = []
             if(open && typeof open == 'boolean') {
                 this.visible = true
             } else {
@@ -1067,7 +1034,6 @@ export default {
         selectSpecValue(index) {
             let specsValues = JSON.parse(JSON.stringify(this.specsValues))
             let id = specsValues[index].id
-
             specsValues[index].active = !specsValues[index].active
             this.specsValues = specsValues
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
@@ -1080,12 +1046,10 @@ export default {
             } else {
                 if(this.addedSpecs[this.addedSpecs.length - 1].valueList.find(val => val.id == id)) {
                     let index = this.addedSpecs[this.addedSpecs.length - 1].valueList.findIndex(val => val.id == id)
-
                     addedSpecs[this.addedSpecs.length - 1].valueList.splice(index, 1)
                     this.addedSpecs = addedSpecs
                 }
             }
-
             this.getSpecs(true)
         },
         addSpecValue(open) {
@@ -1103,7 +1067,6 @@ export default {
             if(!open) {
                 this.visible = !this.visible
             }
-
             console.log('addSpecValue', item)
         },
         addSpecClick(item) {
@@ -1115,7 +1078,6 @@ export default {
                 return
             }
             let _item = JSON.parse(JSON.stringify(item))
-
             _item.valueList = []
             this.addedSpecs = Object.assign([], [...this.addedSpecs, _item])
             this.showSpecsList = false
@@ -1128,7 +1090,7 @@ export default {
             this.showSpecsList = false
         },
         addSpecs() {
-            this.callObjectSpanMethod = false
+            this.callObjectSpanMethod = false
             if(this.addedSpecs.find(val => !val.valueList.length)) {
                 this.$message({
                     message: '请添加规格值',
@@ -1142,21 +1104,17 @@ export default {
             if(!this.callObjectSpanMethod) return
             let length = this.addedSpecs.length
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-
             if(length) {
                 var index = columnIndex
                 var val = addedSpecs[index]
                 var number = 1
-
                 if(columnIndex > length - 2) {
                     if(column.property == 'image') {
                         if(length > 1) {
                             let arr = addedSpecs.slice(1)
-
                             number = arr.reduce((prev, cur) => {
                                 return prev*cur.valueList.length
                             }, 1)
-
                             if(number != 1) {
                                 if(rowIndex % number === 0) {
                                     if((rowIndex == this.ruleForm.goodsInfos.length - 1) && (columnIndex == this.addedSpecs.length + 9 - 1)) {
@@ -1182,12 +1140,10 @@ export default {
                 }
                 if(index + 1 < length) {
                     let arr = addedSpecs.slice(index + 1)
-
                     number = arr.reduce((prev, cur) => {
                         return prev*cur.valueList.length
                     }, 1)
                 }
-
                 if(number != 1) {
                     if(rowIndex % number === 0) {
                         return {
@@ -1213,13 +1169,11 @@ export default {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
             //this.$router.push('/goods/classify')
             let routeData = this.$router.resolve({ path: '/goods/classify' });
-
             window.open(routeData.href, '_blank');
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
             let routeData = this.$router.resolve({ path: '/order/newTemplate?mode=new' });
-
             window.open(routeData.href, '_blank');
         },
         getTemplateList() {
@@ -1230,7 +1184,6 @@ export default {
                         name: '请选择'
                     })
                     this.shippingTemplates = res.list
-
                     resolve()
                 }).catch(error => {
                     this.visible = false
@@ -1246,7 +1199,6 @@ export default {
             this.$nextTick(() => {
                 try {
                     let trs = document.querySelectorAll('.el-table.spec-information .el-table__body tbody tr')
-
                     trs.forEach(tr => {
                         let elem = tr
                         
@@ -1342,7 +1294,6 @@ export default {
         deleteSpec(index) {
             //this.ruleForm.goodsInfos.splice(index, 1)
             
-
             this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                 this.deleteSpecArr.push(index)
                 this.addStyle(index)
@@ -1369,10 +1320,8 @@ export default {
         },
         specHandleRemove(index) {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
             if(this.ruleForm.goodsInfos[index].label.split(',') && this.ruleForm.goodsInfos[index].label.split(',').length > 1) {
                 let spec = this.ruleForm.goodsInfos[index].label.split(',')[0]
-
                 goodsInfos.forEach(val => {
                     if(val.label.split(',')[0] == spec) {
                         val.image = '',
@@ -1394,10 +1343,8 @@ export default {
                 //this.ruleForm.goodsInfos[index].image = response.data.url
                 if(!this.editor) {
                     let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
                     if(row.label && row.label.split(',') && row.label.split(',').length > 1) {
                         let spec = row.label.split(',')[0]
-
                         goodsInfos.forEach(val => {
                             if(val.label.split(',')[0] == spec) {
                                 val.image = response.data.url
@@ -1424,9 +1371,7 @@ export default {
         getCategoryIds(arr, id) {
             try {
                 let parentId = this.flatCategoryList.find(val => val.id == id).parentId
-
                 arr.unshift(id)
-
                 if(parentId && parentId != 0) {
                     this.getCategoryIds(arr, parentId)
                 }
@@ -1438,9 +1383,7 @@ export default {
         getCategoryInfoIds(arr, id) {
             try {
                 let parentId = this.operateCategoryList.find(val => val.id == id).parentId
-
                 arr.unshift(id)
-
                 if(parentId && parentId != 0) {
                     this.getCategoryInfoIds(arr, parentId)
                 }
@@ -1451,38 +1394,29 @@ export default {
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
-
             this._apis.goods.getGoodsDetail({id, goodsInfoId}).then(res => {
                 console.log(res)
                 let arr = []
                 let itemCatAr = []
-
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
-
                     this.getCategoryIds(_arr, id)
                     arr.push(_arr)
                 })
                 this.getCategoryInfoIds(itemCatAr, res.productCategoryInfoId)
-
                 let _arr = itemCatAr.map(id => {
                     return this.operateCategoryList.find(val => val.id == id)
                 })
-
                 this.itemCatText = _arr.map(val => val.name).join(' > ')
-
                 let specs = JSON.parse(res.goodsInfo.specs)
-
                 let specsLabelArr = []
                 let labelArr = []
-
                 for(let i in specs) {
                     if(specs.hasOwnProperty(i)) {
                         specsLabelArr.push(i)
                         labelArr.push(specs[i])
                     }
                 }
-
                 this.specsLabel = specsLabelArr.join(',')
                 res.goodsInfo.label = labelArr.join(',')
                 
@@ -1497,12 +1431,10 @@ export default {
                         name: '', 
                         url: val
                     })) : []
-
                     console.log(this.fileList)
                 }
                 if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.length) {
                     let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
                     goodsInfos.forEach(val => {
                         val.fileList = [{
                             name: '',
@@ -1532,31 +1464,25 @@ export default {
                 }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
-
                 if(!this.itemCatText) {
                     this.leimuMessage = true
                     this.ruleForm.productCategoryInfoId = ''
                 }
-
                 // if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
                 //     this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
                 //     this.ruleForm.productBrandInfoId = ''
                 //     this.pinpaiMessage = true
                 // }
-
                 if(this.ruleForm.productDetail) {
                     //this.ruleForm.productDetail = window.decodeURIComponent(window.atob(this.ruleForm.productDetail))
                     this.ruleForm.productDetail = window.unescape(this.ruleForm.productDetail)
                 }
-
                 // if(this.ruleForm.productDetail) {
                 //     let _productDetail = ''
-
                 //     _productDetail = decodeURIComponent(escape(window.atob(this.ruleForm.productDetail)))
                 //     this.ruleForm.productDetail = _productDetail
                 // }
             }).catch(error => {
-
             }) 
         },
         flatTreeArray(array = [], childrenKey = 'childrenList') {
@@ -1570,7 +1496,6 @@ export default {
                     parentId: item.parentId,
                 }
                 result.push(dataItem);
-
                 let childrenArr;
                 if (item.hasOwnProperty(childrenKey)) {
                     childrenArr = item[childrenKey];
@@ -1587,20 +1512,16 @@ export default {
         getRootId(id) {
             let rootId = ''
             let that = this
-
             var getId = function(id) {
                 let category = that.operateCategoryList.find(val => val.id == id)
                 let parentId = category.parentId
-
                 if(parentId != 0) {
                     getId(parentId)
                 } else {
                     rootId = id
                 }
             }
-
             getId(id)
-
             return rootId
         },
         // 获取商品规格列表
@@ -1671,9 +1592,7 @@ export default {
                         isShowStock: this.ruleForm.isShowStock ? 1 : 0,
                         productUnit: this.ruleForm.other ? this.ruleForm.otherUnit : this.ruleForm.productUnit,
                     }
-
                     let calculationWay
-
                     try {
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             this.ruleForm.goodsInfos[i].fileList = null
@@ -1737,7 +1656,6 @@ export default {
                     } catch(e) {
                         console.error(e)
                     }
-
                     if(/^\s+$/.test(this.ruleForm.name)) {
                         this.$message({
                             message: '商品名称不能为空',
@@ -1748,9 +1666,7 @@ export default {
                     
                     if(this.ruleForm.isFreeFreight == 0) {
                         let id = this.ruleForm.freightTemplateId
-
                         calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
-
                         if(calculationWay == 3) {
                             if(this.ruleForm.goodsInfos.some(val => val.volume == '')) {
                                 this.$message({
@@ -1769,90 +1685,125 @@ export default {
                             }
                         }
                     }
-
-                    if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
-                        this.$message({
-                            message: '规格信息中成本价不能为空',
-                            type: 'warning'
-                        });
-                        return
+                    if(this.editor) {
+                        if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
+                            this.$message({
+                                message: '规格信息中成本价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
+                            this.$message({
+                                message: '规格信息中售卖价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
+                            this.$message({
+                                message: '规格信息中库存不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
+                            this.$message({
+                                message: '规格信息中库存不能小于0',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
+                            this.$message({
+                                message: '规格信息中库存预警不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
+                            this.$message({
+                                message: '规格信息中图片不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
                     }
-                    if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
-                        this.$message({
-                            message: '规格信息中售卖价不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
-                        this.$message({
-                            message: '规格信息中库存不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
-                        this.$message({
-                            message: '规格信息中库存不能小于0',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
-                        this.$message({
-                            message: '规格信息中库存预警不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
-                        this.$message({
-                            message: '规格信息中图片不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-
+                    
                     // if(this.ruleForm.productDetail) {
                     //     let _productDetail = ''
-
                     //     _productDetail = btoa(unescape(encodeURIComponent(this.ruleForm.productDetail)));
                     //     obj.productDetail = _productDetail
                     // }
-
                     if(this.categoryValue) {
                         let categoryValue = JSON.parse(JSON.stringify(this.categoryValue))
                         let arr = []
-
                         categoryValue.forEach(val => {
                             arr.push(val.pop())
                         })
                         
                         this.ruleForm.productCatalogInfoIds = arr
                     }
-
                     if(!this.editor) {
                         let __goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
                         let _deleteSpecArr = Array.from(new Set(this.deleteSpecArr))
-
                         if(_deleteSpecArr.length) {
                             for(let i=0; i<_deleteSpecArr.length; i++) {
                                 __goodsInfos.splice(_deleteSpecArr[i], 1)
                             }
                         }
+
+                        if(__goodsInfos.some(val => val.costPrice == '')) {
+                            this.$message({
+                                message: '规格信息中成本价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && __goodsInfos.some(val => val.salePrice == '')) {
+                            this.$message({
+                                message: '规格信息中售卖价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && __goodsInfos.some(val => val.stock == '')) {
+                            this.$message({
+                                message: '规格信息中库存不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && __goodsInfos.some(val => +val.stock < 0)) {
+                            this.$message({
+                                message: '规格信息中库存不能小于0',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(__goodsInfos.some(val => !val.warningStock)) {
+                            this.$message({
+                                message: '规格信息中库存预警不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(__goodsInfos.some(val => val.image == '')) {
+                            this.$message({
+                                message: '规格信息中图片不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         _goodsInfos = __goodsInfos.map(val => {
                             let _specs = {}
-
                             val.label.split(',').forEach((spec, index) => {
                                 _specs[this.specsLabel.split(',')[index]] = spec
                             })
-
                             val.specs = _specs
                             val.fileList = []
-
                             return val
                         })
-
                         obj.goodsInfos = _goodsInfos
                     } else {
                         obj.goodsInfos = this.ruleForm.goodsInfos
@@ -1885,7 +1836,6 @@ export default {
                         name: '请选择'
                     })
                     this.brandList = res
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -1901,7 +1851,6 @@ export default {
                         name: '请选择'
                     })
                     this.unitList = res
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -1913,10 +1862,8 @@ export default {
             let arr = this.ruleForm.itemCat.map(id => {
                 return this.operateCategoryList.find(val => val.id == id)
             })
-
             this.itemCatText = arr.map(val => val.name).join(' > ')
             this.ruleForm.productCategoryInfoId = _value.pop()
-
             this.getSpecsList()
         },
         // 获取商品类目列表
@@ -1926,7 +1873,6 @@ export default {
                     // let arr = this.transTreeData(res.list, 0)
                     // this.operateCategoryList = res.list
                     // this.itemCatList = arr
-
                     let arr = this.transTreeData(res, 0)
                     this.operateCategoryList = res
                     this.itemCatList = arr
@@ -1944,7 +1890,6 @@ export default {
                         name: '请选择'
                     })
                     this.productLabelList = res
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -1978,16 +1923,13 @@ export default {
                         return -1
                     }
                 })
-
                 sortArr.forEach(val => {
                     if(val.children) {
                         sortFunction(val.children)
                     }
                 })
             }
-
             sortFunction(arr)
-
             return arr
         },
         getCategoryList() {
@@ -1998,7 +1940,6 @@ export default {
                     let _arr = this.sort(arr)
                     
                     this.categoryOptions = _arr
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -2025,7 +1966,6 @@ export default {
         selectSpecificationsHandler(value) {
             let results = [];
             let result = [];
-
             var doExchange = function(arr, index) {
                 for (var i = 0; i<arr[index].length; i++) {
                     result[index] = arr[index][i];
@@ -2036,11 +1976,9 @@ export default {
                     }
                 } 
             }
-
             if(value.length) {
                 let _arr = []
                 let obj = {}
-
                 value.forEach(val => {
                     if(!obj[val[0]]) {
                         obj[val[0]] = []
@@ -2049,39 +1987,29 @@ export default {
                         obj[val[0]].push(val[1])
                     }
                 })
-
                 for(let i in obj) {
                     _arr.push(obj[i])
                 }
-
                 doExchange(_arr, 0);
                 let _results = results.map((val, index) => {
                     let valArr = []
                     let pId = []
                     let names = []
-
                     val.split(',').forEach(id => {
                         let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                         valArr.push(item.name)
                         pId.push(item.parentId)
                     })
-
                     pId.forEach(id => {
                         console.log(this.flatSpecsList)
                         let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                         names.push(item.name)
                     })
-
                     this.specsLabel = names.join(',')
-
                     let _specs = {} //{"尺寸": "XL", "颜色": "黑色" }
-
                     valArr.forEach((val, index) => {
                         _specs[names[index]] = val
                     })
-
                     return {
                         label: valArr.join(','),
                         costPrice: '',
@@ -2097,16 +2025,13 @@ export default {
                 })
                 this.ruleForm.goodsInfos.forEach((val, index) => {
                     let label = val.label
-
                     if(_results.find(spec => spec.label == label)) {
                         let specIndex = _results.findIndex(val => val.label == label)
                         
                         _results.splice(specIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[index]))
                     }
                 })
-
                 this.ruleForm.goodsInfos = _results
-
                 console.log(_results)
             } else {
                 this.ruleForm.goodsInfos = []
@@ -2127,21 +2052,16 @@ export default {
             } else if(this.currentDialog == 'AddSpecifications') {
                 let arr = []
                 let _arr= []
-
                 value.forEach(val => {
                     arr = arr.concat(val)
                 })
-
                 _arr = Array.from(new Set(arr))
-
                 _arr.forEach(id => {
                     if(!this.flatSpecsList.find(val => val.id == id)) {
                         this.flatSpecsList.push({id: id, name: id, parentId: value[0][0]})
                     }
                 })
-
                 this.specIds = [...this.specIds, ...value]
-
                 this.selectSpecificationsHandler(this.specIds)
             } else if(this.currentDialog == 'AddTagDialog') {
                 this.getProductLabelList()
@@ -2157,7 +2077,6 @@ export default {
         handleRemove(file, fileList) {
             console.log(file, fileList);
             let url = file.url
-
             this.fileList.splice(this.fileList.findIndex(val => val.url == url), 1)
             this.ruleForm.images = fileList.map(val => {
                 if(val.response) {
@@ -2195,7 +2114,6 @@ export default {
             } else {
                 document.querySelector('.add-goods .header').style.position = 'static'
             }
-
             if(scrollTop < 385) {
                 this.index = 0
             } else if(scrollTop >= 385 && scrollTop < 811) {
@@ -2221,7 +2139,6 @@ export default {
                 this.index = 3
             }
         },
-
         imageSelected(image) {
             if(this.material) {
                 this.ruleForm.goodsInfos.splice(this.materialIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[this.materialIndex], {
@@ -2239,13 +2156,11 @@ export default {
                     name: image.fileName,
                     url: image.filePath
                 }))
-
                 if(this.ruleForm.images != '') {
                     this.ruleForm.images += ',' + image.filePath
                 } else {
                     this.ruleForm.images = image.filePath
                 }
-
                 this.hideUpload = this.imagesLength >= 6
             }
         }
@@ -2688,5 +2603,3 @@ $blue: #655EFF;
 //     }
 // }
 </style>
-
-

@@ -9,7 +9,7 @@
                     <span class="d_span">{{item.disableItemText}}</span>
                 </div>
             </div>
-            <p class="red">确定将该客户冻结权限全部解冻吗？</p>
+            <p class="red">确定将该用户冻结权限全部解冻吗？</p>
         </div>
     </DialogBase>
 </template>

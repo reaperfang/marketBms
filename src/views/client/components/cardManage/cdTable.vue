@@ -44,7 +44,7 @@
       <el-table-column
         label="状态">
         <template slot-scope="scope">
-          <!-- <el-switch v-model="scope.row.enable" @change="changeSwitch(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '启用/禁用']"></el-switch> -->
+          <!-- <el-switch v-model="scope.row.enable" @change="changeSwitch(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '启用/禁用']"></el-switch> -->
           <span class="edit_span" v-if="scope.row.enable == 0" v-permission="['客户', '会员卡', '会员卡管理', '启用/禁用']">启用</span>
           <span class="edit_span" v-if="scope.row.enable == 1" v-permission="['客户', '会员卡', '会员卡管理', '启用/禁用']">未启用</span>
         </template>

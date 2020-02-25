@@ -8,12 +8,14 @@
                 <img :src="clientInfoById.headIcon" alt="">
             </div>
             <div class="c_top_m fl">
-                <p style="margin-top: 0">客户ID: <span>{{clientInfoById.memberSn}}</span></p>
+                <p style="margin-top: 0">用户ID: <span>{{clientInfoById.memberSn}}</span></p>
                 <p>微信公众号关注状态: <span>已关注</span></p>
-                <p>客户渠道: <span>{{clientInfoById.channelName}}</span></p>
-                <p>成为客户时间: <span>{{clientInfoById.becameCustomerTime}}</span></p>
+                <!-- <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p>
+                <p>手机号: <span>{{clientInfoById.phone}}</span></p> -->
+                <p>用户渠道: <span>{{clientInfoById.channelName}}</span></p>
+                <p>成为用户时间: <span>{{clientInfoById.becameCustomerTime}}</span></p>
                 <p>成为会员时间: <span>{{clientInfoById.becameMemberTime}}</span></p>
-                <p>客户身份: {{clientInfoById.levelName}}<span class="addMainColor pointer marR20" @click="changeIdentity">&nbsp;&nbsp;&nbsp;&nbsp;变更</span></p>
+                <p>用户身份: {{clientInfoById.levelName}}<span class="addMainColor pointer marR20" @click="changeIdentity">&nbsp;&nbsp;&nbsp;&nbsp;变更</span></p>
             </div>
             <div class="c_top_r fl">
                 <div class="c_title">
@@ -168,17 +170,27 @@ export default {
             this.getUsedCode();
         },
         changeIdentity() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
-            this.dialogVisible = true;
-            this.currentDialog = "changeIdentityDialog";
-            this.currentData.id = this.userId;
-            this.currentData.oldLevelId = this.clientInfoById.levelInfoId;
-            this.currentData.identity = this.clientInfoById.levelName;
-            this.currentData.memberSn = this.clientInfoById.memberSn;
-            this.currentData.oldLevel = this.clientInfoById.level;
+            if(this.clientInfoById.level !== 9) {
+                this.hackReset = false;
+                this.$nextTick(() => {
+                    this.hackReset = true;
+                })
+                this.dialogVisible = true;
+                this.currentDialog = "changeIdentityDialog";
+                this.currentData.id = this.userId;
+                this.currentData.oldLevelId = this.clientInfoById.levelInfoId;
+                this.currentData.identity = this.clientInfoById.levelName;
+                this.currentData.memberSn = this.clientInfoById.memberSn;
+                this.currentData.oldLevel = this.clientInfoById.level;
+                this.currentData.memberType = this.clientInfoById.memberType;
+                this.currentData.level = this.clientInfoById.level;
+            }else{
+                this.$notify({
+                    title: '提示',
+                    message: "已是最高等级无法变更",
+                    type: 'warning'
+                });
+            }
         },
         deleteTag(id) {
             this._apis.client.removeLabel({id:id}).then((response) => {
@@ -522,7 +534,7 @@ export default {
             width: 240px;
             margin-left: 26px;
             p{
-                margin-top: 22px;
+                margin-top: 33px;
             }
         }
         .c_top_r{
