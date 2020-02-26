@@ -6,11 +6,11 @@
         <el-form-item label="日期" style="margin-bottom:0px;">
           <el-date-picker
             v-model="ruleForm.timeValue"
-            type="daterange"
+            type="datetimerange"
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -33,11 +33,13 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'accountDate', order: 'descending'}"
+        @sort-change="changeSort"
+
         >
         <el-table-column
           prop="accountDate"
           label="日期"
-          sortable>
+          sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
@@ -117,6 +119,7 @@ export default {
       let query = this.init();
       this._apis.finance.getListDr(query).then((response)=>{
         this.dataList = []
+        console.log(response,"2222")
         response.list.map(item =>{
           item.accountDate = item.accountDate.substring(0,item.accountDate.length-8)
           this.dataList.push(item)
@@ -144,6 +147,7 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
+      console.log(query,"555")
       this._apis.finance.exportDr(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
@@ -153,6 +157,9 @@ export default {
         });
       })
     },
+    changeSort(val){
+      console.log(val,"nihao ")
+    }
   }
 }
 </script>

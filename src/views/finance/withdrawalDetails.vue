@@ -66,6 +66,7 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'applyTime', order: 'descending'}"
         @selection-change="handleSelectionChange"
+        ref="multipleTable"
         >
         <el-table-column
         type="selection"
@@ -108,8 +109,11 @@
         </el-table-column>
       </el-table>
       <div class="page_styles">
-        <el-checkbox  @selection-change="handleSelectionChange">全选</el-checkbox>
-        <el-button class="checkAudit"  type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+      <div class="checkAudit">
+        <el-checkbox class="selectAll" @change="selectAll">全选</el-checkbox>
+        <el-button   type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+      </div>
+        
          <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -137,10 +141,11 @@ import auditingDialog from './dialogs/auditingDialog'//审核
 import handleAuditDialog from './dialogs/handleAuditDialog'//提现详情  处理中
 import failAuditDialog from './dialogs/failAuditDialog'//提现详情  失败
 import successAuditDialog from './dialogs/successAuditDialog'//提现详情  成功
+import exportTipDialog from './dialogs/exportTipDialog' //导出提示框 
 export default {
   name: 'revenueSituation',
   extends: TableBase,
-  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog },
+  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog ,exportTipDialog},
   data() {
     return {
       pickerNowDateBefore: {
@@ -235,12 +240,19 @@ export default {
     },
     //导出
     exportToExcel() {
-      if(this.total >= 1000 ){
-        this.currentData.text = "导出数据量过大，建议分时间段导出。";
+      console.log(this.currentData,"99999")
+      if(this.total >=1000 ){
+        // this.currentData.text = "导出数据量过大，建议分时间段导出。";
+        // this.dialogVisible = true
+        // this.currentDialog = auditingDialog
         this.dialogVisible = true
-        this.currentDialog = auditingDialog
+        this.currentDialog = exportTipDialog
+        this.currentData.query = this.init()
+        this.currentData.api = "exportWd"
+        // console.log(12345)
       }else{
         let query = this.init();
+        // console.log(query,"导出发送的数据")
         this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
@@ -250,6 +262,16 @@ export default {
           });
         })
       }      
+    },
+    // 全选
+    selectAll(val){
+      console.log(val,5555)
+      // if(val){
+      //   this.multipleSelection.forEach((row)=>{
+      //      this.$refs.multipleTable.toggleRowSelection(row,true);
+      //   })
+       
+      // }
     },
     handleSelectionChange(val){
       console.log(val)
@@ -374,6 +396,10 @@ export default {
   .checkAudit{
     // margin-right:220px;
     float:left;
+    .selectAll{
+      margin-left:14px;
+      margin-right:8px;
+    }
   }
 }
 </style>
