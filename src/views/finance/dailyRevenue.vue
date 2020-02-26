@@ -22,10 +22,10 @@
     </div>
     <div class="under_part">
       <div class="total">
-        <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '每日营收', '默认页面', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '每日营收', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
+        <span>全部 <em>{{total}}</em> 项</span>
       </div>
       <el-table
         v-loading="loading"
@@ -174,11 +174,13 @@ export default {
   margin-top: 20px;
   padding: 15px 20px;
   .total{
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display: block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;

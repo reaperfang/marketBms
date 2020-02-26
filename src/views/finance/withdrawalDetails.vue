@@ -2,7 +2,9 @@
 <template>
   <div>
     <div class="top_part">
+      <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
+        
         <el-form-item>
           <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;">
             <el-option
@@ -48,14 +50,14 @@
     </div>
     <div class="under_part">
       <div class="total">
-        <span>全部 <em>{{total}}</em> 项</span>
         <span>
-         <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button>
-          <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+         <!-- <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button> -->
+          <!-- <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button> -->
           <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-            <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
+            <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
           </el-tooltip>
-        </span>
+        </span> 
+        <span>全部 <em>{{total}}</em> 项</span>
       </div>
       <el-table
         v-loading="loading"
@@ -106,6 +108,8 @@
         </el-table-column>
       </el-table>
       <div class="page_styles">
+        <el-checkbox  @selection-change="handleSelectionChange">全选</el-checkbox>
+        <el-button class="checkAudit"  type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
          <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -248,6 +252,7 @@ export default {
       }      
     },
     handleSelectionChange(val){
+      console.log(val)
       this.multipleSelection = val;
     },
     //批量审核
@@ -332,6 +337,13 @@ export default {
   background: #fff;
   border-radius: 3px;
   padding: 15px 20px;
+  .withdraw{
+    text-align: right;
+    display: block;
+    color:#655EFF;
+    font-size:14px;
+    margin-bottom:15px;
+  }
 }
 .under_part{
   width: 100%;
@@ -339,11 +351,13 @@ export default {
   margin-top: 20px;
   padding: 15px 20px;
   .total{
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display: block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -354,5 +368,12 @@ export default {
 .table{
   width: 100%; 
   margin-top:20px;
+}
+.page_styles{
+  // display: flex;
+  .checkAudit{
+    // margin-right:220px;
+    float:left;
+  }
 }
 </style>
