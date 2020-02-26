@@ -146,8 +146,8 @@ export default {
                             { h('span', {
                                 style: {
                                     backgroundImage: `url(${data.image})`,
-                                    height: '25px',
-                                    width: '25px',
+                                    height: '32px',
+                                    width: '32px',
                                     display: 'inline-block'
                                 }
                             })}
@@ -186,8 +186,8 @@ export default {
                             { h('span', {
                                 style: {
                                     backgroundImage: `url(${data.image})`,
-                                    height: '25px',
-                                    width: '25px',
+                                    height: '32px',
+                                    width: '32px',
                                     display: 'inline-block'
                                 }
                             })}
@@ -357,7 +357,8 @@ export default {
 .th .td:first-child{padding-left:10px;}
 .treeRow{
 	overflow:hidden;
-	width:100%
+	width:100%;
+    padding: 12px 0;
 }
 .treeRow .td{
 	line-height:36px;
@@ -393,6 +394,7 @@ export default {
 }
 }
 .operate {
+    font-size: 12px;
     span {
         margin-right: 6px;
     }
