@@ -9,7 +9,7 @@
             </div>
             <div class="c_top_m fl">
                 <p style="margin-top: 0">用户ID: <span>{{clientInfoById.memberSn}}</span></p>
-                <p>微信公众号关注状态: <span>已关注</span></p>
+                <!-- <p>微信公众号关注状态: <span>已关注</span></p> -->
                 <!-- <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p>
                 <p>手机号: <span>{{clientInfoById.phone}}</span></p> -->
                 <p>用户渠道: <span>{{clientInfoById.channelName}}</span></p>
@@ -262,12 +262,12 @@ export default {
             this.currentData.couponList = [].concat(this.couponList);
             this.currentData.codeList = [].concat(this.codeList);
         },
-        sendDiscount() {
+        sendDiscount(val) {
             this.hackReset = false;
             this.$nextTick(() => {
                 this.hackReset = true;
             })
-            if(this.currentData.couponType == '0') {
+            if(val == 'first') {
                 this.dialogVisible = true;
                 this.currentDialog = "issueCouponDialog";
                 this.currentData.allCoupons = [].concat(this.allCoupons);
@@ -333,6 +333,9 @@ export default {
         getAllCoupons() {
             this._apis.client.getAllCoupons({couponType: 0}).then((response) => {
                 this.allCoupons = [].concat(response.list);
+                this.allCoupons.map((item) => {
+                    this.$set(item, 'frozenNum',1);
+                })
             }).catch((error) => {
                 console.log(error);
             })
@@ -340,6 +343,9 @@ export default {
         getAllCodes() {
             this._apis.client.getAllCoupons({couponType: 1}).then((response) => {
                 this.allCodes = [].concat(response.list);
+                this.allCodes.map((item) => {
+                    this.$set(item, 'frozenNum',1);
+                })
             }).catch((error) => {
                 console.log(error);
             })
@@ -441,6 +447,7 @@ export default {
             this.currentDialog = "issueCouponDialog";
             this.currentData.id = this.userId;
             this.currentData.memberSn = this.clientInfoById.memberSn;
+            this.currentData.weChartNickname = this.clientInfoById.nickName;
             this.currentData.allCoupons = [].concat(this.allCoupons);
         },
         sendCode() {
