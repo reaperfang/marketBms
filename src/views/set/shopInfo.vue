@@ -5,9 +5,18 @@
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <el-form-item label="商户名称:" prop="shopName">
                 <el-input v-model.trim="form.shopName" style="width:200px;"></el-input>
+                <p class="shopInfo-show">用于展示给消费者的品牌形象<span>查看样例</span></p>
             </el-form-item>
-            <el-form-item label="主营类目:">
-              {{form.business}}
+            <el-form-item label="主营类目:" prop="business">
+              <!-- {{form.business}} -->
+              <el-cascader
+                  :options="itemCatList"
+                  v-model="form.business"
+                  @change="itemCatHandleChange"
+                  :props="{ multiple: false, checkStrictly: true }"
+                  clearable
+                  filterable>
+              </el-cascader>
             </el-form-item>
             <el-form-item label="创建日期:">
               {{new Date(form.createTime*1) | formatDate('yyyy-MM-dd hh:mm:ss')}}
@@ -29,10 +38,16 @@
                 </el-upload>
                 <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p>
             </el-form-item>
+            <el-form-item label="公司名称:" prop="name">
+                <el-input maxlength="30" show-word-limit v-model="form.name" placeholder="如输入公司名称" style="width:200px;"></el-input>
+            </el-form-item>
             <el-form-item label="客服电话:" prop="phone">
                 <!-- <el-input v-model="form.phone" placeholder="区号" style="width:70px;"></el-input>
                 —— -->
                 <el-input v-model="form.phone" placeholder="如输入手机号，不填区号" style="width:200px;"></el-input>
+            </el-form-item>
+            <el-form-item label="公司邮箱:" prop="email">
+                <el-input v-model="form.email" placeholder="如输入公司邮箱" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="联系地址:" prop="address">
                 <area-cascader 
@@ -77,6 +92,8 @@ export default {
       }
     };
     return {
+      itemCatList: [],
+      operateCategoryList: [],
       form: {
           shopName: '',
           logo:'',
@@ -84,7 +101,11 @@ export default {
           phone:'',
           addressCode:[],
           address:'',
-          shopIntroduce:''
+          shopIntroduce:'',
+          business: '',
+          itemCat: '',
+          name: '',
+          email: ''
       },
       rules: {
         shopName: [
@@ -103,6 +124,9 @@ export default {
         ],
         shopIntroduce:[
           {min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur'}
+        ],
+        business:[
+          { required: true, message: '请选择主营类目', trigger: 'blur' }
         ]
       },
       imageUrl: '',
@@ -131,12 +155,69 @@ export default {
     }
   },
   created() {
-    this.getShopInfo()
+    Promise.all([this.getOperateCategoryList()]).then(() => {
+        this.getShopInfo()
+    })
   },
   mounted() {
     
   },
   methods: {
+    itemCatHandleChange(value) {
+        let _value = [...value]
+        let arr = this.form.business.map(id => {
+            return this.operateCategoryList.find(val => val.id == id)
+        })
+
+        this.form.business = _value.pop()
+    },
+    // 获取商品类目列表
+    getOperateCategoryList() {
+        return new Promise((resolve, reject) => {
+            this._apis.goodsOperate.fetchCategoryList({enable: 1}).then(res => {
+                let arr = this.transTreeData(res, 0)
+                this.operateCategoryList = res
+                this.itemCatList = arr
+                resolve(res.list)
+            }).catch(error => {
+                this.$notify.error({
+                  title: '错误',
+                  message: error
+                });
+                reject(error)
+            })
+        })
+    },
+    transTreeData(data, pid) {
+        var result = [], temp;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].parentId == pid) {
+                var obj = {"categoryName": data[i].name,"id": data[i].id, 
+                    parentId: data[i].parentId, level: data[i].level, sort: data[i].sort, 
+                    image: data[i].image, enable: data[i].enable, label: data[i].name, value: data[i].id};
+                temp = this.transTreeData(data, data[i].id);
+                if (temp.length > 0) {
+                    obj.children = temp;
+                }
+                result.push(obj);
+            }
+        }
+        return result;
+    },
+    // 获取类目
+    getCategoryInfoIds(arr, id) {
+        try {
+            let parentId = this.operateCategoryList.find(val => val.id == id).parentId
+
+            arr.unshift(id)
+
+            if(parentId && parentId != 0) {
+                this.getCategoryInfoIds(arr, parentId)
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    },
     handleChange(){
       this.province = this.$pcaa[86][this.form.addressCode[0]]
       this.city = this.$pcaa[this.form.addressCode[0]][this.form.addressCode[1]]
@@ -146,7 +227,12 @@ export default {
     getShopInfo(){
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
-        this.form = response
+        let itemCatAr = []
+
+        this.getCategoryInfoIds(itemCatAr, response.business)
+        this.form = Object.assign({}, response, {
+          business: itemCatAr
+        })
         if(response.provinceCode){
           let arr = []
           arr.push(response.provinceCode)
@@ -329,6 +415,13 @@ export default {
       height: 80px;
       object-fit:fill;
       display: inline-block;
+    }
+  }
+  .shopInfo-show {
+    font-size: 12px;
+    color: rgba(146,146,155,1);
+    span {
+      color: rgba(101,94,255,1);
     }
   }
 </style>
