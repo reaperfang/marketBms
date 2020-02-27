@@ -82,15 +82,17 @@ export default {
   name: 'dailyRevenue',
   extends: TableBase,
   data() {
-    return {
+    return {    
       pickerNowDateBefore: {
         disabledDate: (time) => {
-          return time.getTime() > new Date();
+           const end = new Date(new Date().toLocaleDateString()).getTime()-1;
+          return time.getTime() > end;
         }
       },
       inline:true,
       ruleForm:{
-        timeValue:''
+        timeValue:'',
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -105,7 +107,8 @@ export default {
         accountDateStart:'',
         accountDateEnd:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:this.ruleForm.sort
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
@@ -119,7 +122,6 @@ export default {
       let query = this.init();
       this._apis.finance.getListDr(query).then((response)=>{
         this.dataList = []
-        console.log(response,"2222")
         response.list.map(item =>{
           item.accountDate = item.accountDate.substring(0,item.accountDate.length-8)
           this.dataList.push(item)
@@ -147,7 +149,7 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      console.log(query,"555")
+      // console.log(query,"555")
       this._apis.finance.exportDr(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
@@ -158,7 +160,14 @@ export default {
       })
     },
     changeSort(val){
-      console.log(val,"nihao ")
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     }
   }
 }

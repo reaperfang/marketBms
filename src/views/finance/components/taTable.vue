@@ -3,8 +3,11 @@
   <div>
     <div class="top_part">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="客户ID">
+        <el-form-item label="用户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
+        </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input  placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <!-- <el-form-item label="订单编号">
           <el-input v-model="ruleForm.value2" placeholder="请输入" style="width:226px;"></el-input>
@@ -26,7 +29,7 @@
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -54,8 +57,13 @@
         <!-- :default-sort = "{prop: 'createTime', order: 'descending'}" -->
         <el-table-column
           prop="memberSn"
-          label="客户ID"
+          label="用户ID"
           :render-header="renderMemberId">
+        </el-table-column>
+        <el-table-column
+          
+          label="用户昵称"
+          >
         </el-table-column>
         <el-table-column
           prop="presentType"
@@ -130,17 +138,34 @@ export default {
     }
   },
   created() {},
+   filters:{
+      money(options){
+        if(Math.abs(Math.round(options))>9999){
+          return (Math.round(options)/10000).toFixed(2)
+        }else{
+            return options
+        }
+      },
+      displayMoney(options){
+        if(Math.abs(Math.round(options))>9999){
+          return "万元"
+        }else{
+            return "元"
+        }
+      }
+
+  },
   methods: {
     renderMemberId(){
       return(
         <div style="height:49px;line-height:49px;">
-          <span style="font-weight:bold;vertical-align:middle;">客户ID</span>
+          <span style="font-weight:bold;vertical-align:middle;">用户ID</span>
           <el-popover
             placement="top-start"
             title=""
             width="160"
             trigger="hover"
-            content="所有参与超级海报获得奖励的客户ID">
+            content="所有参与超级海报获得奖励的用户ID">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
         </div>
