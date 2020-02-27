@@ -349,15 +349,7 @@
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                            prop="code"
-                            label="SKU编码"
-                            class-name="code">
-                            <template slot-scope="scope">
-                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
-                            </template>
-                        </el-table-column>
+                        
                         <el-table-column
                             prop="image"
                             label="图片"
@@ -387,6 +379,15 @@
                                     </p>
                                 </el-upload>
                                 <div v-if="!scope.row.image && ruleForm.productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = scope.$index; dialogVisible = true">素材库</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            prop="code"
+                            label="SKU编码"
+                            class-name="code">
+                            <template slot-scope="scope">
+                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
                             </template>
                         </el-table-column>
                     </el-table>
