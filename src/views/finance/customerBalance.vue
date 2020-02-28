@@ -109,7 +109,7 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
-import exportTipDialog from './dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'customerBalance',
   extends: TableBase,
@@ -205,7 +205,7 @@ export default {
        if(this.total >1000 ){
          this.dialogVisible = true;
          this.currentData.query = this.init()
-         this.currentData.api = "exportCb"
+         this.currentData.api = "finance.exportCb"
        }else{
          this._apis.finance.exportCb(query).then((response)=>{
           window.location.href = response

@@ -93,10 +93,13 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
-import exportTipDialog from '../dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'logisticsInquiry',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
     return {
       pickerNowDateBefore: {
@@ -200,9 +203,9 @@ export default {
       if(this.total >1000){
          this.dialogVisible = true;
          this.currentData.query = this.init()
-         this.currentData.api = "exportFs"
-      }
-      this._apis.finance.exportFs(query).then((response)=>{
+         this.currentData.api = "finance.exportFs"
+      }else{
+        this._apis.finance.exportFs(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
         this.$notify.error({
@@ -210,6 +213,7 @@ export default {
           message: error
         });
       })
+      }
     },
   }
 }

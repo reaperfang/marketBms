@@ -162,7 +162,7 @@ import utils from "@/utils";
 import financeCons from '@/system/constant/finance'
 import TableBase from "@/components/TableBase";
 import exportTipDialog from './dialogs/exportTipDialog' //导出提示框 
-import exportTipDialogVue from './dialogs/exportTipDialog.vue';
+import exportTipDialogVue from '@/components/dialogs/exportTipDialog';
 export default {
   name: 'revenueExpenditureDetails',
   extends: TableBase,
@@ -349,7 +349,7 @@ export default {
       if(this.total > 1000){
         this.currentDialog = exportTipDialogVue;
         this.dialogVisible = true;
-        this.currentData.api = 'exportRe';
+        this.currentData.api = 'finance.exportRe';
         this.currentData.query = this.init();
       }else{
         let query = this.init();

@@ -99,7 +99,7 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance';
-import exportTipDialog from '../dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: "taTable",
   extends: TableBase,
@@ -204,7 +204,7 @@ export default {
     exportToExcel(){
       if(this.total >1000){
         this.dialogVisible = true;
-        this.currentData.api = 'exportTa';
+        this.currentData.api = 'finance.exportTa';
         this.currentData.query =this.ruleForm;
       }else{
         this._apis.finance.exportTa(this.ruleForm).then((response)=>{

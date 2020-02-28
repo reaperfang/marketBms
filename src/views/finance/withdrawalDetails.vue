@@ -148,7 +148,7 @@ import auditingDialog from './dialogs/auditingDialog'//审核
 import handleAuditDialog from './dialogs/handleAuditDialog'//提现详情  处理中
 import failAuditDialog from './dialogs/failAuditDialog'//提现详情  失败
 import successAuditDialog from './dialogs/successAuditDialog'//提现详情  成功
-import exportTipDialog from './dialogs/exportTipDialog' //导出提示框 
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
   name: 'revenueSituation',
   extends: TableBase,
@@ -248,14 +248,14 @@ export default {
     },
     //导出
     exportToExcel() {
-      if(this.total >1000 ){
+      if(this.total >10 ){
         // this.currentData.text = "导出数据量过大，建议分时间段导出。";
         // this.dialogVisible = true
         // this.currentDialog = auditingDialog
         this.dialogVisible = true
         this.currentDialog = exportTipDialog
         this.currentData.query = this.init()
-        this.currentData.api = "exportWd"
+        this.currentData.api = "finance.exportWd"
       }else{
         let query = this.init();
         this._apis.finance.exportWd(query).then((response)=>{

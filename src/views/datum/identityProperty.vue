@@ -16,7 +16,7 @@
           <ip1Chart :title="'测试图表'" ref="ip1"></ip1Chart>
         </div>
         <div class="chart1_info">
-          <p>累计客户数：{{grandTotal}}</p>
+          <p>累计用户数：{{grandTotal}}</p>
           <p>非会员：占比 {{(data1.customerRatio*100).toFixed(2)}}% 人数 {{data1.customerNum}}</p>
           <p>
             会员：占比 {{(data1.memberRatio*100).toFixed(2)}}% 人数 {{data1.memberNum}}

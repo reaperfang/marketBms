@@ -201,9 +201,6 @@ export default {
       })
       this.chartData = dataObj
     },
-    defaultTime(a,b){
-      console.log(a,"22222222");
-    }
   },
   filters:{
       money(options){

@@ -113,7 +113,7 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
-import exportTipDialog from './dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'integralDetails',
   extends: TableBase,
@@ -193,7 +193,7 @@ export default {
       let query = this.init();
       if(this.total >1000){
         this.dialogVisible = true;
-        this.currentData.api = 'exportId';
+        this.currentData.api = 'finance.exportId';
         this.currentData.query =query;
       }else{
         this._apis.finance.exportId(query).then((response)=>{

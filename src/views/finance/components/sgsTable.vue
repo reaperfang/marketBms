@@ -99,7 +99,7 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
-import exportTipDialog from '../dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: "reTable",
   extends: TableBase,
@@ -182,7 +182,7 @@ export default {
       }
       if(this.total > 1000){
         this.dialogVisible = true;
-        this.currentData.api = 'smsExport';
+        this.currentData.api = 'finance.smsExport';
         this.currentData.query =query;
       }else{
         this._apis.finance.smsExport(query).then((response)=>{

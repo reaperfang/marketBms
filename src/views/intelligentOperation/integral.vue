@@ -222,7 +222,7 @@ export default {
             data.memberType = this.form.memberType            
             data.timeType = this.form.timeType
             this._apis.data.integralConsumptionExport(data)
-            .then(res => {
+            .then(res => {z
                 window.open(res);
             })
             .catch(err=>{

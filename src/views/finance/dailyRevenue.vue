@@ -79,7 +79,7 @@
 <script>
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
-import exportTipDialog from './dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'dailyRevenue',
   extends: TableBase,
@@ -158,7 +158,7 @@ export default {
       let query = this.init();
       if(this.total >1000){
         this.dialogVisible = true;
-        this.currentData.api = 'exportDr';
+        this.currentData.api = 'finance.exportDr';
         this.currentData.query =query;
       }else{
         this._apis.finance.exportDr(query).then((response)=>{
