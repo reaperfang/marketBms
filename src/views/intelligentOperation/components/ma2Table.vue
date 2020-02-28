@@ -8,12 +8,16 @@
       :default-sort = "{prop: 'date', order: 'descending'}"
       >
       <el-table-column
+        type="index"
+        label="排序">
+      </el-table-column>
+      <el-table-column
         prop="orderNumber"
         label="订单号">
       </el-table-column>
       <el-table-column
         prop="id"
-        label="ID">
+        label="用户ID">
         <template slot-scope="scope">
           <span>{{ scope.row.id ? scope.row.id : '-'}}</span>
         </template>
