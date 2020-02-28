@@ -6,9 +6,9 @@
                         <el-form-item label="交易时间">
                             <div class="p_line">
                     <el-radio-group v-model="form.timeType">
-                        <el-radio-button class="btn_bor" label="1">7天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="2">15天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="3">30天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
                         <el-radio-button class="btn_bor" label="5">最近一季度</el-radio-button>
                         <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
                         </el-radio-group>
@@ -38,7 +38,7 @@
                                   <el-option v-for="item in badreviews" :label="item.name" :value="item.value" :key="item.id"></el-option>
                                 </el-select>
                             </div>
-                            <span class="span_label">客户类型</span>
+                            <span class="span_label">用户类型</span>
                             <div class="input_wrap2 marR20">
                                 <el-select v-model="form.memberType">
                                     <el-option label="全部" value="null"></el-option>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="m_line clearfix">
                         <div class="fr marT20">
-                            <el-button class="minor_btn" @click="rescreen()">重新筛选</el-button>
+                            <!-- <el-button class="minor_btn" @click="rescreen()">重新筛选</el-button> -->
                             <el-tooltip content="当前最多支持导出1000条数据" placement="top">
                             <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
                             </el-tooltip>
