@@ -146,7 +146,7 @@
                                 <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
                             </el-popover>
                         </div>
-                        <div v-show="!showAddSpecsInput" class="add-specs-button">
+                        <div style="margin-left: 20px;" v-show="!showAddSpecsInput" class="add-specs-button">
                             <el-button class="spec-button" @click="addSpecs" type="primary">选择规格</el-button>
                             <p style="margin-top: 10px;">请先选择颜色主规格</p>
                         </div>
@@ -2607,6 +2607,7 @@ $blue: #655EFF;
 }
 /deep/ .batch-filling {
     margin-bottom: 10px;
+    margin-top: 20px;
 }
 .spec-information {
     ::-webkit-scrollbar-thumb {
@@ -2684,9 +2685,9 @@ $blue: #655EFF;
     }
     .add-specs-button-box {
         display: flex;
-        .add-specs-button {
+        >.add-specs-button {
             &:first-child {
-                margin-right: 20px;
+                // margin-right: 20px;
             }
         }
     }
