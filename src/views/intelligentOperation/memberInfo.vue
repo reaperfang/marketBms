@@ -5,9 +5,9 @@
                 <el-form-item label="交易时间">
                     <div class="p_line">
                         <el-radio-group v-model="form.timeType" @change="changeDay">
-                            <el-radio-button class="btn_bor" label="1">7天</el-radio-button>
-                            <el-radio-button class="btn_bor" label="2">15天</el-radio-button>
-                            <el-radio-button class="btn_bor" label="3">30天</el-radio-button>
+                            <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
+                            <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
+                            <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
                             <el-radio-button class="btn_bor" label="5">本季度</el-radio-button>
                             <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
                         </el-radio-group>
@@ -26,7 +26,7 @@
                     </div>
                     
                 </el-form-item>
-                <el-form-item label="客户类型">
+                <el-form-item label="用户类型">
                     <div class="input_wrap2">
                         <el-select v-model="form.memberType"  @change="getData">
                             <el-option v-for="item in customType" :label="item.name" :value="item.id" :key="item.id"></el-option>
@@ -85,7 +85,7 @@
                     <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span></i>。
                 </p>
                 <div class="fr marT20">
-                    <el-button class="minor_btn" @click="reScreening">重新筛选</el-button>
+                    <!-- <el-button class="minor_btn" @click="reScreening">重新筛选</el-button> -->
                     <el-button class="yellow_btn" icon="el-icon-share" @click="mIexport">导出</el-button>
                 </div>
             </div>
