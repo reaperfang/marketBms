@@ -68,8 +68,9 @@
                     </el-cascader>
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
-                    <span @click="addCategory">新增分类</span>
-                    <el-button type="primary" @click="getCategoryList">刷新</el-button>
+                    <span style="margin-right: 61px; margin-left: -5px;" @click="addCategory">新增分类</span>
+                    <!-- <el-button type="primary" @click="getCategoryList">刷新</el-button> -->
+                    <span @click="getCategoryList">刷新</span>
                 </div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
@@ -86,7 +87,7 @@
                         </el-select>
                     </div>
                     <div v-if="ruleForm.productCategoryInfoId" @click="currentDialog = 'AddTagDialog'; dialogVisible = true" class="item tag">新增标签</div>
-                    <div @mouseenter="imageVisible = true" @mouseleave="imageVisible = false" class="item example">
+                    <div style="margin-left: -8px;" @mouseenter="imageVisible = true" @mouseleave="imageVisible = false" class="item example">
                         查看样例
                         <div v-show="imageVisible" class="item images images-example">
                             <img src="../../assets/images/goods/example.png" alt="">
@@ -98,9 +99,12 @@
                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
         </section>
-        <section class="form-section">
+        <section class="form-section spec-form-section">
             <h2>销售信息</h2>
             <el-form-item label="规格信息" prop="goodsInfos">
+                
+            </el-form-item>
+            <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
                 <div v-if="!editor">
                     <ul class="added-specs">
@@ -109,48 +113,50 @@
                                 <span>{{item.name}}</span>
                                 <el-button @click="deleteAddedSpec(index)">移除</el-button>
                             </div>
-                            <ul>
+                            <ul class="spec-value-ul">
                                 <li v-for="(spec, index) in item.valueList" :key="index">{{spec.name}}</li>
                             </ul>
                         </li>
                     </ul>
-                    <div class="add-specs-button">
-                        <el-popover
-                            placement="bottom"
-                            width="430"
-                            trigger="manual"
-                            v-model="visible">
-                            <div class="add-specs-value">
-                                <div class="add-specs-value-input">
-                                    <input v-model="newSpecValue" type="text" placeholder="选择或录入规格值">
-                                    <el-button @click="addNewSpecValue">新增</el-button>
+                    <div class="add-specs-button-box">
+                        <div class="add-specs-button">
+                            <el-popover
+                                placement="bottom"
+                                width="430"
+                                trigger="manual"
+                                v-model="visible">
+                                <div class="add-specs-value">
+                                    <div class="add-specs-value-input">
+                                        <input v-model="newSpecValue" type="text" placeholder="选择或录入规格值">
+                                        <el-button @click="addNewSpecValue">新增</el-button>
+                                    </div>
+                                    <ul class="add-spec-value-ul">
+                                        <li @click="selectSpecValue(index)" :class="{active: item.active}" v-for="(item, index) in specsValues" :key="index">
+                                            {{item.name}}
+                                            <i v-if="item.type == 'new'" @click="(e) => {
+                                                deleteSpecValue(index, e)
+                                            }" class="icon-circle-close"></i>
+                                        </li>
+                                        <div class="clear"></div>
+                                    </ul>
+                                    <div class="add-specs-value-footer">
+                                        <el-button @click="getSpecs" type="primary">确定</el-button>
+                                    </div>
                                 </div>
-                                <ul>
-                                    <li @click="selectSpecValue(index)" :class="{active: item.active}" v-for="(item, index) in specsValues" :key="index">
-                                        {{item.name}}
-                                        <i v-if="item.type == 'new'" @click="(e) => {
-                                            deleteSpecValue(index, e)
-                                        }" class="el-icon-circle-close"></i>
-                                    </li>
-                                    <div class="clear"></div>
-                                </ul>
-                                <div class="add-specs-value-footer">
-                                    <el-button @click="getSpecs" type="primary">确定</el-button>
-                                </div>
-                            </div>
-                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
-                        </el-popover>
-                    </div>
-                    <div v-show="!showAddSpecsInput" class="add-specs-button">
-                        <el-button @click="addSpecs" type="primary">添加规格</el-button>
-                        <p>请先选择颜色主规格</p>
+                                <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
+                            </el-popover>
+                        </div>
+                        <div v-show="!showAddSpecsInput" class="add-specs-button">
+                            <el-button class="spec-button" @click="addSpecs" type="primary">选择规格</el-button>
+                            <p style="margin-top: 10px;">请先选择颜色主规格</p>
+                        </div>
                     </div>
                     <div v-show="showAddSpecsInput" class="add-specs">
-                        <div class="add-specs-input">
+                        <div style="position: relative; top: 23px;" class="add-specs-input">
                             <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
-                        <ul v-show="showSpecsList">
+                        <ul class="spec-list" style="top: 57px;" v-show="showSpecsList">
                             <li @click="addSpecClick(item)" v-for="item in specsList" :key="item.id">{{item.name}}</li>
                         </ul>
                     </div>
@@ -160,7 +166,7 @@
                     <el-table
                     class="spec-information"
                     :data="ruleForm.goodsInfos"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                    :header-cell-style="{background:'#f2ecff', color:'#655EFF'}"
                     style="width: 100%"
                     :span-method="objectSpanMethod"
                     border>
@@ -397,7 +403,7 @@
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
                 </div>
                 <!-- <el-button v-if="!editor" class="border-button" @click="currentDialog = 'AddSpecifications'; selectSpecificationsCurrentDialog = ''; dialogVisible = true">新增规格</el-button> -->
-            </el-form-item>
+            </div>
             <!-- <el-form-item label="起售数量" prop="number">
                 <div class="input-number">
                     <span style="user-select: none;" class="pointer" @click="reduce">-</span>
@@ -492,8 +498,8 @@
                         </el-option>
                     </el-select>
                     <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
-                        <span @click="addTemplate">新增模板</span>
-                        <el-button type="primary" @click="getTemplateList">刷新</el-button>
+                        <el-button type="primary" @click="addTemplate">新增模板</el-button>
+                        <el-button class="shuaxin-template" @click="getTemplateList">刷新</el-button>
                     </div>
                 </div>
                 <div>
@@ -679,9 +685,9 @@ export default {
                 productCatalogInfoIds: [
                     { required: true, message: '请选择商品分类', trigger: 'blur' },
                 ],
-                // goodsInfos: [
-                //     { required: true, message: '请输入规格信息', trigger: 'blur' },
-                // ],
+                goodsInfos: [
+                    { required: true, message: '请输入规格信息', trigger: 'blur' },
+                ],
                 // selfSaleCount: [
                 //     { required: true, message: '请输入已售出数量', trigger: 'blur' },
                 // ],
@@ -2235,7 +2241,7 @@ $blue: #655EFF;
     .material {
         color: $globalMainColor;
         cursor: pointer;
-        margin-left: -53px;
+        margin-left: -69px;
         position: relative;
         top: -54px;
     }
@@ -2432,7 +2438,7 @@ $blue: #655EFF;
     margin-right: 30px;
 }
 /deep/ .spec-information .el-input__inner {
-    width: 92px;
+    width: 120px;
 }
 /deep/ .spec-information-editor .el-input {
     width: auto;
@@ -2477,17 +2483,22 @@ $blue: #655EFF;
         display: flex;
         input {
             &:first-child {
-                width: 182px;
-                height: 42px;
-                padding-left: 2px;
+                width: 251px;
+                height: 34px;
+                padding-left: 9px;
+                &:focus {
+                    border-color: #655EFF;
+                }
             }
             &:nth-child(2) {
-                width: 72px;
-                height: 42px;
+                width: 49px;
+                height: 34px;
                 background-color: #fff;
                 outline: none;
-                border: 1px solid #ddd;
+                border: 1px solid #D0D6E4;
+                border-left: none;
                 margin-left: -5px;
+                color: #655EFF;
             }
         }
     }
@@ -2495,15 +2506,11 @@ $blue: #655EFF;
         position: absolute;
         z-index: 1000;
         background-color: #fff;
-        width: 182px;
-        border: 1px solid #ddd;
+        width: 251px;
+        box-shadow:0px -2px 10px 0px rgba(204,204,204,0.5);
         li {
-            border-bottom: 1px solid #ddd;
-            text-align: center;
+          text-align: left;
             cursor: pointer;
-            &:last-child {
-                border: none;
-            }
         }
     }
 }
@@ -2535,16 +2542,19 @@ $blue: #655EFF;
             float: left;
             margin-right: 10px;
             border: 1px solid #ddd;
-            padding: 2px 5px;
+            padding: 7px 12px;
+            border-radius:4px;
             cursor: pointer;
             position: relative;
             &.active {
                 border: 1px solid rgba(22, 155, 213, 1);
             }
             i {
-                position: absolute;
-                top: -5px;
-                background-color: #fff;
+                display: inline-block;
+                vertical-align: middle;
+                width: 14px;
+                height: 14px;
+                background: url('../../assets/images/goods/icon_close.png') no-repeat;
             }
         }
         .clear {
@@ -2555,18 +2565,26 @@ $blue: #655EFF;
         display: flex;
         input {
             &:first-child {
-                width: 182px;
-                height: 42px;
-                padding-left: 2px;
+                width: 251px;
+                height: 34px;
+                padding-left: 9px;
+                &:focus {
+                    border-color: #655EFF;
+                }
             }
             &:nth-child(2) {
-                width: 72px;
-                height: 42px;
+                width: 49px;
+                height: 34px;
                 background-color: #fff;
                 outline: none;
-                border: 1px solid #ddd;
+                border: 1px solid #D0D6E4;
+                border-left: none;
                 margin-left: -5px;
+                color: #655EFF;
             }
+        }
+        button {
+            color: #655EFF;
         }
     }
     .add-specs-value-footer {
@@ -2575,17 +2593,19 @@ $blue: #655EFF;
 }
 /deep/ .add-specs {
     button {
-        height: 42px;
+        height: 34px;
+        border: 1px solid #D0D6E4;
+        border-left: none;
+        color: #655EFF;
     }
 }
 /deep/ .add-specs-input input {
-    border: 1px solid #DCDFE6;
+    border: 1px solid #D0D6E4;
 }
 /deep/ .add-specs-value-input input {
-    border: 1px solid #DCDFE6;
+    border: 1px solid #D0D6E4;
 }
 /deep/ .batch-filling {
-    float: right;
     margin-bottom: 10px;
 }
 .spec-information {
@@ -2603,4 +2623,84 @@ $blue: #655EFF;
 //         display: none;
 //     }
 // }
+/deep/ .form-section.spec-form-section {
+    .el-form-item {
+        .el-form-item__content {
+            margin-left: 80px!important;
+        }
+    }
+}
+.spec-list {
+    color: #44434B;
+    width: 251px;
+    li {
+        text-align: left;
+        padding-left: 20px;
+        height: 34px;
+        line-height: 34px;
+        &:hover {
+            background:#ebeafa;
+        }
+    }
+}
+.goods-infos {
+    margin-left: 77px;
+    .added-specs {
+        .added-specs-header {
+            background: #fff;
+            height: 60px;
+            line-height: 60px;
+            padding: 0 20px;
+            border-top: 1px solid #CACFCB;
+            border-bottom: 1px solid #CACFCB;
+            .el-button {
+                width: 80px;
+                height: 34px;
+                color: #F55858;
+                margin-top: 11px;
+            }
+        }
+    }
+    .spec-value-ul {
+        margin-top: 10px;
+        margin-bottom: 14px;
+        padding-left: 20px;
+    }
+    .add-spec-value-ul {
+        li {
+            padding: 7px 12px;
+            margin-right: 15px;
+            margin-bottom: 10px;
+            border-radius:4px;
+            i {
+                margin-left: 15px;
+                display: inline-block;
+                vertical-align: middle;
+                width: 14px;
+                height: 14px;
+                background: url('../../assets/images/goods/icon_close.png') no-repeat;
+            }
+        }
+    }
+    .add-specs-button-box {
+        display: flex;
+        .add-specs-button {
+            &:first-child {
+                margin-right: 20px;
+            }
+        }
+    }
+    .el-table.spec-information .el-table__header-wrapper .el-table__header {
+        border-top: 1px solid #CACFCB;
+        border-bottom: 1px solid #CACFCB;
+        thead tr {
+            height: 46px;
+        }
+    }
+}
+.shuaxin-template {
+    border: 1px solid #92929B;
+    color: #44434B;
+    margin-left: 28px;
+}
 </style>
