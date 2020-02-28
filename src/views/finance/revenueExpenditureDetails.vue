@@ -346,16 +346,14 @@ export default {
    
   //导出
     exportToExcel(){
-      if(this.total >=1000){
+      if(this.total > 1000){
         this.currentDialog = exportTipDialogVue;
         this.dialogVisible = true;
         this.currentData.api = 'exportRe';
         this.currentData.query = this.init();
       }else{
         let query = this.init();
-        console.log(query,"query");
         this._apis.finance.exportRe(query).then((response)=>{
-          console.log(response,"导出")
           window.location.href = response
         }).catch((error)=>{
           this.$notify.error({

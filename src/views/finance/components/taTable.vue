@@ -90,6 +90,7 @@
           :total="total*1">
         </el-pagination>
       </div>
+    <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" />
     </div>
   </div>
 </template>
@@ -97,10 +98,14 @@
 <script type='es6'>
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
-import financeCons from '@/system/constant/finance'
+import financeCons from '@/system/constant/finance';
+import exportTipDialog from '../dialogs/exportTipDialog'
 export default {
   name: "taTable",
   extends: TableBase,
+   components:{
+     exportTipDialog
+    },
   data() {
     return {
       pickerNowDateBefore: {
@@ -121,7 +126,9 @@ export default {
         pageSize:10,
         pageNum:1
       },
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     };
   },
   watch: {
@@ -138,23 +145,6 @@ export default {
     }
   },
   created() {},
-   filters:{
-      money(options){
-        if(Math.abs(Math.round(options))>9999){
-          return (Math.round(options)/10000).toFixed(2)
-        }else{
-            return options
-        }
-      },
-      displayMoney(options){
-        if(Math.abs(Math.round(options))>9999){
-          return "万元"
-        }else{
-            return "元"
-        }
-      }
-
-  },
   methods: {
     renderMemberId(){
       return(
@@ -212,7 +202,12 @@ export default {
     },
 //导出
     exportToExcel(){
-      this._apis.finance.exportTa(this.ruleForm).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'exportTa';
+        this.currentData.query =this.ruleForm;
+      }else{
+        this._apis.finance.exportTa(this.ruleForm).then((response)=>{
         window.location.href = response.url
       }).catch((error)=>{
         this.$notify.error({
@@ -220,6 +215,7 @@ export default {
           message: error
         });
       })
+      }
     },
   },
 };

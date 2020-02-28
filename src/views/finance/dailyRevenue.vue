@@ -70,7 +70,8 @@
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
-      </div>      
+      </div> 
+      <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" />
     </div>
   </div>
 </template>
@@ -78,9 +79,13 @@
 <script>
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
+import exportTipDialog from './dialogs/exportTipDialog'
 export default {
   name: 'dailyRevenue',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
     return {    
       pickerNowDateBefore: {
@@ -96,7 +101,9 @@ export default {
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     }
   },
   watch: { },
@@ -149,8 +156,12 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      // console.log(query,"555")
-      this._apis.finance.exportDr(query).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'exportDr';
+        this.currentData.query =query;
+      }else{
+        this._apis.finance.exportDr(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
         this.$notify.error({
@@ -158,6 +169,8 @@ export default {
           message: error
         });
       })
+      }
+      
     },
     changeSort(val){
       if(val && val.order == 'ascending') {

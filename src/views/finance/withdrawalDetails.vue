@@ -248,8 +248,7 @@ export default {
     },
     //导出
     exportToExcel() {
-      // console.log(this.currentData,"99999")
-      if(this.total >=1000 ){
+      if(this.total >1000 ){
         // this.currentData.text = "导出数据量过大，建议分时间段导出。";
         // this.dialogVisible = true
         // this.currentDialog = auditingDialog
@@ -257,10 +256,8 @@ export default {
         this.currentDialog = exportTipDialog
         this.currentData.query = this.init()
         this.currentData.api = "exportWd"
-        // console.log(12345)
       }else{
         let query = this.init();
-        // console.log(query,"导出发送的数据")
         this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{

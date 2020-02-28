@@ -24,9 +24,13 @@ export default {
         submit() {
         let exportApi = this.data.api;
         let query = this.data.query;
-
         this._apis.finance[exportApi](query).then((response)=>{
-          window.location.href = response
+            if(exportApi == 'smsExport' || exportApi == 'exportTa'){
+                window.location.href = response.url
+            }else{
+                window.location.href = response
+            }
+          
         }).catch((error)=>{
           this.$notify.error({
             title: '错误',

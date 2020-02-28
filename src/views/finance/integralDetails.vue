@@ -104,6 +104,7 @@
           :total="total*1">
         </el-pagination>
       </div>
+      <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" />
     </div>
   </div>
 </template>
@@ -112,9 +113,13 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
+import exportTipDialog from './dialogs/exportTipDialog'
 export default {
   name: 'integralDetails',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
     return {
       pickerNowDateBefore: {
@@ -130,7 +135,9 @@ export default {
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     }
   },
   watch: { },
@@ -184,7 +191,12 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      this._apis.finance.exportId(query).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'exportId';
+        this.currentData.query =query;
+      }else{
+        this._apis.finance.exportId(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
         this.$notify.error({
@@ -192,6 +204,7 @@ export default {
           message: error
         });
       })
+      }
     },
   }
 }
