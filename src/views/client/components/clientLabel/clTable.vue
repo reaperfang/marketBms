@@ -38,10 +38,11 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <span class="edit_span" @click="edit(scope.row)" v-permission="['客户', '用户标签', '默认页面', '查看标签']">
+            <span class="edit_span" @click="edit(scope.row)" v-permission="['客户', '客户标签', '默认页面', '查看标签']">
                 <!-- <i class="edit_i"></i> -->
                 编辑
             </span>
+            <span class="edit_span" @click="deleteRow(scope.row)" style="color: #FD4C2B">删除</span>
         </template>
       </el-table-column>
     </el-table>
@@ -85,6 +86,26 @@ export default {
 
   },
   methods: {
+    deleteRow(row) {
+      if(row.labelContains == 0) {
+        this._apis.client.batchDeleteTag({ labelIds: row.id }).then((response) => {
+          this.$notify({
+            title: '成功',
+            message: "删除标签成功",
+            type: 'success'
+          });
+          this.getLabelList(this.startIndex, this.pageSize);
+        }).catch((error) => {
+          console.log(error);
+        })
+      }else{
+        this.$notify({
+          title: '警告',
+          message: '有包含人数的标签不能删除',
+          type: 'warning'
+        });
+      }
+    },
     checkSelectable(row,index) {
       if(row.labelContains==0) {
         return 1;
@@ -120,6 +141,7 @@ export default {
       })
     },
     edit(row) {
+      console.log(row);
       this._routeTo('batchImport',{id: row.id});
     },
     batchDelete() {
@@ -183,6 +205,7 @@ export default {
 }
 .edit_span{
     color: #655EFF;
+    margin-right: 10px;
     cursor: pointer;
     .edit_i{
         display: inline-block;

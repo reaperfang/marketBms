@@ -28,13 +28,13 @@ export default [
         path: 'identityProperty',
         component: () => import('@/views/datum/identityProperty'),
         name: 'identityProperty',
-        meta: { title: '身份属性', noCache: true, tabTitle: '客户', navType:2}
+        meta: { title: '身份属性', noCache: true, tabTitle: '用户', navType:2}
       },
       {
         path: 'memberConsumption',
         component: () => import('@/views/datum/memberConsumption'),
         name: 'memberConsumption',
-        meta: { title: '会员消费', noCache: true, tabTitle: '客户', navType:2}
+        meta: { title: '会员消费', noCache: true, tabTitle: '用户', navType:2}
       },
       {
         path: 'commodityTransaction',

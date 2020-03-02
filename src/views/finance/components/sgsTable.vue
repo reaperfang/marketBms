@@ -20,7 +20,7 @@
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -32,10 +32,10 @@
     </div>
     <div class="under_part">
       <div class="total">
-        <span>全部 <em>{{total*1}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()'  v-permission="['财务', '短信成本', '默认页面', '导出']">导出</el-button>
+          <el-button class="border_btn"   @click='exportToExcel()'  v-permission="['财务', '短信成本', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
+        <span>全部 <em>{{total*1}}</em> 项</span>
       </div>
       <el-table
       v-loading="loading"
@@ -90,7 +90,8 @@
           :total="total*1">
         </el-pagination>
       </div>
-    </div>   
+    </div> 
+        <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible"/>  
   </div>
 </template>
 
@@ -98,9 +99,13 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: "reTable",
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
     return {
       pickerNowDateBefore: {
@@ -120,7 +125,9 @@ export default {
         orderBy:'send_time desc'
       },
       timeValue:[],
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false,
     };
   },
   watch: {
@@ -173,7 +180,12 @@ export default {
         endTime:this.ruleForm.endTime,
         orderBy:'send_time desc'
       }
-      this._apis.finance.smsExport(query).then((response)=>{
+      if(this.total > 1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.smsExport';
+        this.currentData.query =query;
+      }else{
+        this._apis.finance.smsExport(query).then((response)=>{
         window.location.href = response.url
       }).catch((error)=>{
         this.$notify.error({
@@ -181,6 +193,8 @@ export default {
           message: error
         });
       })
+      }
+      
     },
   },
   computed:{
@@ -208,11 +222,13 @@ export default {
   margin-top: 20px;
   padding: 15px 20px;
   .total{
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display:block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;
