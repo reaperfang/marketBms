@@ -49,9 +49,6 @@
             <el-form-item label="公司邮箱:" prop="companyEmail">
                 <el-input v-model="form.companyEmail" placeholder="请输入公司邮箱" style="width:200px;"></el-input>
             </el-form-item>
-            <el-form-item label="公司邮箱:" prop="email">
-                <el-input v-model="form.email" placeholder="如输入公司邮箱" style="width:200px;"></el-input>
-            </el-form-item>
             <el-form-item label="联系地址:" prop="address">
                 <area-cascader 
                   :level="1" 
