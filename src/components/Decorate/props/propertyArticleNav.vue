@@ -26,14 +26,14 @@
           <el-radio :label="2">横向滑动</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="背景颜色" prop="backgroundColor">
+      <el-form-item label="背景颜色" prop="backgroundColor" v-if="hasContent">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
           <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#fff"></colorPicker >
           <!-- <el-button type="text">重置</el-button> -->
         </div>
       </el-form-item>
-      <el-form-item label="文字颜色" prop="fontColor">
+      <el-form-item label="文字颜色" prop="fontColor" v-if="hasContent">
         <div class="color_block">
           <el-input v-model="ruleForm.fontColor" :disabled="true"></el-input>
           <colorPicker  v-model="ruleForm.fontColor" defaultColor="#000"></colorPicker >
@@ -48,6 +48,7 @@
           <div class="left" v-if="ruleForm.templateType === 1">
             <div v-if="item.url" class="img_preview">
               <img :src="item.url" alt="">
+              <i class="delete_btn" @click.stop="deleteImage(item)"></i>
               <span @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
             </div>
             <div v-else class="add_button" @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">
@@ -73,7 +74,7 @@
         </li>
       </ul>
       <el-button type="info" plain style="width:100%" @click="addNav">添加一个图文</el-button>
-      <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航</p>
+      <p style="margin-top:10px;color:rgb(211,211,211)">{{suggestSize}}</p>
       <!-- <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航，拖动选中的导航可对其排序小程序 v2.3.1 及以上版本支持</p> -->
     </div>
 
@@ -86,6 +87,7 @@
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import uuid from 'uuid/v4';
 export default {
   name: 'propertyArticleNav',
   mixins: [propertyMixin],
@@ -98,29 +100,61 @@ export default {
         backgroundColor: '#fff',//背景颜色
         fontColor: '#000',//文字颜色
         itemList: [{//图文列表
-          title: '导航',
+          title: '',
           url: '',
-          linkTo: null
+          linkTo: null,
+          id: uuid()
         }],
       },
       rules: {},
       currentNav: null,  //当前操作的图文导航
       dialogVisible: false,
       currentDialog: '',
+      suggestSize: '建议尺寸：宽高1比1'
+    }
+  },
+  computed: {
+    /* 检测是否有数据 */
+    hasContent() {
+        let value = false;
+        if(this.ruleForm.itemList) {
+          if(Object.prototype.toString.call(this.ruleForm.itemList) === '[object Object]') {
+            this.ruleForm.itemList = [...this.ruleForm.itemList];
+          }
+          for(let item of this.ruleForm.itemList) {
+            if(this.ruleForm.templateType===1 && item.url) {
+              value = true;
+              break;
+            }else if(this.ruleForm.templateType===2 && item.title){
+              value = true;
+              break;
+            }
+          }
+        }
+        return value;
     }
   },
   methods: {
     selectTemplate(templateType) {
       this.ruleForm.templateType = templateType;
       this.blockType = 1;
+      switch(Number(templateType)) {
+        case 1:
+          this.suggestSize = '建议尺寸：宽高1比1';
+          break; 
+        case 2:
+          this.suggestSize = '建议：不超过5个汉字';
+          break; 
+      }
     },
 
     addNav() {
       if(this.ruleForm.itemList.length <10) {
         this.ruleForm.itemList.push({
-          title: '导航',
+          title: '',
           url: '',
-          linkTo: null
+          linkTo: null,
+          id: uuid()
         });
         this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
         // this.dialogVisible=true; 
@@ -160,6 +194,18 @@ export default {
         }
         this.ruleForm.itemList = tempItems;
       })
+    },
+
+    /* 清除某一个图片 */
+    deleteImage(item) {
+      const tempList = [...this.ruleForm.itemList];
+      for(let item2 of tempList) {
+        if(item.id === item2.id) {
+          item2.url = '';
+          break;
+        }
+      }
+      this.ruleForm.itemList = tempList;
     }
   }
 }

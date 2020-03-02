@@ -13,6 +13,7 @@
       <el-form-item label="背景图片" prop="backgroundImage">
         <div class="img_preview" v-if="ruleForm.backgroundImage">
           <img :src="ruleForm.backgroundImage" alt="">
+          <i class="delete_btn" @click.stop="deleteImage()"></i>
           <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
         </div>
         <div class="add_button" v-if="!ruleForm.backgroundImage" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
@@ -53,6 +54,11 @@ export default {
     /* 弹框选中图片 */
     imageSelected(dialogData) {
       this.ruleForm.backgroundImage = dialogData.filePath;
+    },
+
+     /* 清除背景图片 */
+    deleteImage() {
+      this.ruleForm.backgroundImage = ''
     }
   }
 }

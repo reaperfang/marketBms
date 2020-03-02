@@ -1,10 +1,17 @@
 /* 选择商品弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="categoryName ? '选择 ['+categoryName+'] 分类下的已上架商品' : '选择已上架商品'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+  <DialogBase :visible.sync="visible" width="1000px" :title="categoryName ? '选择 ['+categoryName+'] 分类下的商品' : '选择商品'" @submit="submit">
+    <el-form ref="ruleForm" :model="ruleForm" :rules="rules"  :inline="true">
       <div class="inline-head">
-        <el-form-item label prop="name">
+        <el-form-item label="商品名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
+        </el-form-item> 
+        <el-form-item label="商品状态" prop="status">
+          <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
+            <el-option label="全部" :value="null"></el-option>
+            <el-option label="售罄" :value="-1"></el-option>
+            <el-option label="上架" :value="1"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label prop="name">
           <el-button type="primary" @click="fetch">搜 索</el-button>
@@ -20,7 +27,7 @@
       v-loading="loading"
     >
       <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-      <el-table-column prop="title" label="商品名称" :width="500">
+      <el-table-column prop="title" label="商品名称" :width="300">
         <template slot-scope="scope">
           <div class="name_wrapper">
             <img :src="scope.row.mainImage" alt="加载错误" />
@@ -28,7 +35,29 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间"></el-table-column>
+      <el-table-column prop="productCatalogInfoName" label="商品分类">
+        <template slot-scope="scope">
+          <span>{{scope.row.productCatalogInfoName || '--'}}</span>
+        </template>
+      </el-table-column> 
+      <el-table-column prop="productSpecs" label="商品规格">
+        <template slot-scope="scope">
+          <span>{{scope.row.productSpecs || '--'}}</span>
+        </template>
+      </el-table-column> 
+      <el-table-column prop="status" label="商品状态">
+         <template slot-scope="scope">
+            <span v-if="scope.row.status == -1">售罄</span>
+            <span v-else-if="scope.row.status === 0">下架</span>
+            <span v-else-if="scope.row.status === 1">上架</span>
+          </template>
+      </el-table-column> 
+      <el-table-column prop="stock" label="库存数量">
+         <template slot-scope="scope">
+           <span>{{scope.row.stock || '--'}}</span>
+         </template>
+      </el-table-column>
+      <!-- <el-table-column prop="createTime" label="创建时间"></el-table-column> -->
     </el-table>
     <div class="pagination">
       <el-pagination
@@ -77,7 +106,7 @@ export default {
       multipleSelection: [],
       ruleForm: {
         name: "",
-        status: '1',
+        status: null,
         productCatalogInfoId: this.categoryId || ''
       },
       rules: {}
@@ -124,7 +153,11 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.goods.fetchSpuGoodsList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        if(response.list && Array.isArray(response.list) && response.list.length) {
+          this.tableList = response.list.filter((item)=>{
+            return item.status == -1 || item.status == 1;
+          });
+        }
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
