@@ -121,7 +121,6 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid && !this.loading) {
-          this.loading = true
           this.$store.dispatch('login', this.loginForm).then((response) => {
             this.loading = false
             this.shopList = []

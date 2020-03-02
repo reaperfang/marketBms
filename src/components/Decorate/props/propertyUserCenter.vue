@@ -13,7 +13,7 @@
             <div class="add_button" v-if="!ruleForm.backgroundImage" @click="changeBackground">
               <i class="inner"></i>
             </div>
-            <span style="color:rgba(182,181,200,1);">建议尺寸 750*426 像素</span>
+            <span style="color:rgba(182,181,200,1);">建议尺寸 750*400 像素</span>
           </el-form-item>
           <el-form-item label="背景渐变" prop="backgroundGradients">
             <el-radio-group v-model="ruleForm.backgroundGradients">

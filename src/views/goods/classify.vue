@@ -146,18 +146,15 @@ export default {
                             { h('span', {
                                 style: {
                                     backgroundImage: `url(${data.image})`,
-                                    height: '25px',
-                                    width: '25px',
+                                    height: '32px',
+                                    width: '32px',
                                     display: 'inline-block'
                                 }
                             })}
                             <span>{data.name}</span>
                         </span>
                         <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
-                        <span class="td operate">
-                            {
-                                <span class="blue" on-click={() => this.change(node, data)}>修改</span>
-                            }
+                        <div class="td operate">
                             {
                                 <span v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="blue" on-click={() => this.addCategory(node, data)}>{
                                     node.level == 2 ? '新建三级分类' : (node.level == 1 ? '新建二级分类' : '新建一级分类')
@@ -169,14 +166,20 @@ export default {
                                 }</span>
                             }
                             {
+                                <br />
+                            }
+                            {
                                 <span v-permission="['商品', '商品分类', '默认页面', '隐藏']" class="blue" on-click={() => this.forbidden(node, data)}>{
                                     node.data.enable === 1 ? '禁用' : '启用'
                                 }</span>
                             }
                             {
+                                <span class="blue" on-click={() => this.change(node, data)}>编辑</span>
+                            }
+                            {
                                 <span v-permission="['商品', '商品分类', '默认页面', '删除']" class="deleteColor" on-click={() => this.delete(node, data)}>删除</span>
                             }
-                        </span>
+                        </div>
                     </div>
                 )
             } else {
@@ -186,22 +189,22 @@ export default {
                             { h('span', {
                                 style: {
                                     backgroundImage: `url(${data.image})`,
-                                    height: '25px',
-                                    width: '25px',
+                                    height: '32px',
+                                    width: '32px',
                                     display: 'inline-block'
                                 }
                             })}
                             <span>{data.name}</span>
                         </span>
                         <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
-                        <span class="td operate">
-                            {
-                                <span class="blue" on-click={() => this.change(node, data)}>修改</span>
-                            }
+                        <div class="td operate">
                             {
                                 <span class="blue" on-click={() => this.recommend(node, data)}>{
                                     node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'
                                 }</span>
+                            }
+                            {
+                                <br />
                             }
                             {
                                 <span class="blue" on-click={() => this.forbidden(node, data)}>{
@@ -209,9 +212,12 @@ export default {
                                 }</span>
                             }
                             {
+                                <span class="blue" on-click={() => this.change(node, data)}>编辑</span>
+                            }
+                            {
                                 <span class="deleteColor" on-click={() => this.delete(node, data)}>删除</span>
                             }
-                        </span>
+                        </div>
                     </div>
                 )
             }
@@ -238,7 +244,7 @@ export default {
             if(node.data.enable === 1) {
                 _enable = 0
                 if(data.isRecommend == 1) {
-                    this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert'}).then(() => {
+                    this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert', confirmText: '我知道了'}).then(() => {
 
                     })
                     return
@@ -268,7 +274,7 @@ export default {
         },
         delete(node, data) {
             if(data.isRecommend == 1) {
-                this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert'}).then(() => {
+                this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert', confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -357,11 +363,12 @@ export default {
 .th .td:first-child{padding-left:10px;}
 .treeRow{
 	overflow:hidden;
-	width:100%
+	width:100%;
+    padding: 12px 0;
 }
 .treeRow .td{
-	line-height:36px;
-	height: 36px;
+	line-height:60px;
+	height: 60px;
 	display:inline-block;
 	width:33%;
 	float:left;
@@ -391,8 +398,28 @@ export default {
 /deep/ .el-tree-node__expand-icon.expanded {
     transform: rotate(0deg);
 }
+.treeRow.th {
+    .td {
+        height: 26px;
+        line-height: 26px;
+    }
 }
 .operate {
+    line-height: 21px!important;
+    font-size: 14px;
+    padding-top: 12px;
+    span {
+        margin-right: 30px;
+        margin-bottom: 10px;
+    }
+}
+.categoryTh {
+    border-top: 1px solid #CACFCB;
+    border-bottom: 1px solid #CACFCB;
+}
+}
+.operate {
+    line-height: 21px;
     span {
         margin-right: 6px;
     }

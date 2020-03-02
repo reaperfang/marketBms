@@ -145,9 +145,9 @@ class Ajax {
     //拼接全部参数
     if (config.method == "post") {
       if (config.noCid) {
-        config.data = `json=${encodeURI(JSON.stringify({ head, data: config.data }))}`;
+        config.data = `json=${encodeURI(JSON.stringify({ head, data: config.data })).replace(/\+/g,'%2B')}`;
       } else {
-        config.data = `json=${encodeURI(JSON.stringify({ head, data: { cid, ...config.data } }))}`;
+        config.data = `json=${encodeURI(JSON.stringify({ head, data: { cid, ...config.data } })).replace(/\+/g,'%2B')}`;
       }
     } else if (config.method == "get") {
       if (config.noCid) {

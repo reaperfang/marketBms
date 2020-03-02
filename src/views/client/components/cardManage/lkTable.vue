@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column
         prop="memberSn"
-        label="客户ID"
+        label="用户ID"
       >
       </el-table-column>
       <el-table-column

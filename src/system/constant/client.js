@@ -1,27 +1,9 @@
 /* 客户模块常量 */
 export default {
     //客户身份
-    clientStatusOps: ['非会员客户','会员'],
-    //客户渠道
-    clientChannelOps: [
-        {
-            id:'0001',
-            cid: "2",
-            channerlName:"渠道一"
-        },
-        {
-            id:'0002',
-            cid: "2",
-            channerlName:"渠道二"
-        },
-        {
-            id:'0003',
-            cid: "3",
-            channerlName:"渠道三"
-        }
-    ],
+    clientStatusOps: ['不限','非会员客户','会员'],
     //客户状态
-    clientStateOps: ['正常','黑名单'],
+    clientStateOps: ['正常','黑名单','全部客户'],
     //clientInfo 标签信息
     memberLabels: [
         {

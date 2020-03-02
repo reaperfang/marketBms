@@ -68,8 +68,9 @@
                     </el-cascader>
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
-                    <span @click="addCategory">新增分类</span>
-                    <el-button type="primary" @click="getCategoryList">刷新</el-button>
+                    <span style="margin-right: 61px; margin-left: -5px;" @click="addCategory">新增分类</span>
+                    <!-- <el-button type="primary" @click="getCategoryList">刷新</el-button> -->
+                    <span @click="getCategoryList">刷新</span>
                 </div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
@@ -86,7 +87,7 @@
                         </el-select>
                     </div>
                     <div v-if="ruleForm.productCategoryInfoId" @click="currentDialog = 'AddTagDialog'; dialogVisible = true" class="item tag">新增标签</div>
-                    <div @mouseenter="imageVisible = true" @mouseleave="imageVisible = false" class="item example">
+                    <div style="margin-left: -8px;" @mouseenter="imageVisible = true" @mouseleave="imageVisible = false" class="item example">
                         查看样例
                         <div v-show="imageVisible" class="item images images-example">
                             <img src="../../assets/images/goods/example.png" alt="">
@@ -98,9 +99,12 @@
                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
         </section>
-        <section class="form-section">
+        <section class="form-section spec-form-section">
             <h2>销售信息</h2>
             <el-form-item label="规格信息" prop="goodsInfos">
+                
+            </el-form-item>
+            <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
                 <div v-if="!editor">
                     <ul class="added-specs">
@@ -109,48 +113,50 @@
                                 <span>{{item.name}}</span>
                                 <el-button @click="deleteAddedSpec(index)">移除</el-button>
                             </div>
-                            <ul>
+                            <ul class="spec-value-ul">
                                 <li v-for="(spec, index) in item.valueList" :key="index">{{spec.name}}</li>
                             </ul>
                         </li>
                     </ul>
-                    <div class="add-specs-button">
-                        <el-popover
-                            placement="bottom"
-                            width="430"
-                            trigger="manual"
-                            v-model="visible">
-                            <div class="add-specs-value">
-                                <div class="add-specs-value-input">
-                                    <input v-model="newSpecValue" type="text" placeholder="选择或录入规格值">
-                                    <el-button @click="addNewSpecValue">新增</el-button>
+                    <div class="add-specs-button-box">
+                        <div class="add-specs-button">
+                            <el-popover
+                                placement="bottom"
+                                width="430"
+                                trigger="manual"
+                                v-model="visible">
+                                <div class="add-specs-value">
+                                    <div class="add-specs-value-input">
+                                        <input v-model="newSpecValue" type="text" placeholder="选择或录入规格值">
+                                        <el-button @click="addNewSpecValue">新增</el-button>
+                                    </div>
+                                    <ul class="add-spec-value-ul">
+                                        <li @click="selectSpecValue(index)" :class="{active: item.active}" v-for="(item, index) in specsValues" :key="index">
+                                            {{item.name}}
+                                            <i v-if="item.type == 'new'" @click="(e) => {
+                                                deleteSpecValue(index, e)
+                                            }" class="icon-circle-close"></i>
+                                        </li>
+                                        <div class="clear"></div>
+                                    </ul>
+                                    <div class="add-specs-value-footer">
+                                        <el-button @click="getSpecs" type="primary">确定</el-button>
+                                    </div>
                                 </div>
-                                <ul>
-                                    <li @click="selectSpecValue(index)" :class="{active: item.active}" v-for="(item, index) in specsValues" :key="index">
-                                        {{item.name}}
-                                        <i v-if="item.type == 'new'" @click="(e) => {
-                                            deleteSpecValue(index, e)
-                                        }" class="el-icon-circle-close"></i>
-                                    </li>
-                                    <div class="clear"></div>
-                                </ul>
-                                <div class="add-specs-value-footer">
-                                    <el-button @click="getSpecs" type="primary">确定</el-button>
-                                </div>
-                            </div>
-                            <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
-                        </el-popover>
-                    </div>
-                    <div v-show="!showAddSpecsInput" class="add-specs-button">
-                        <el-button @click="addSpecs" type="primary">添加规格</el-button>
-                        <p>请先选择颜色主规格</p>
+                                <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
+                            </el-popover>
+                        </div>
+                        <div style="margin-left: 20px;" v-show="!showAddSpecsInput" class="add-specs-button">
+                            <el-button class="spec-button" @click="addSpecs" type="primary">选择规格</el-button>
+                            <p style="margin-top: 10px;">请先选择颜色主规格</p>
+                        </div>
                     </div>
                     <div v-show="showAddSpecsInput" class="add-specs">
-                        <div class="add-specs-input">
+                        <div style="position: relative; top: 23px;" class="add-specs-input">
                             <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
-                        <ul v-show="showSpecsList">
+                        <ul class="spec-list" style="top: 57px;" v-show="showSpecsList">
                             <li @click="addSpecClick(item)" v-for="item in specsList" :key="item.id">{{item.name}}</li>
                         </ul>
                     </div>
@@ -160,7 +166,7 @@
                     <el-table
                     class="spec-information"
                     :data="ruleForm.goodsInfos"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                    :header-cell-style="{background:'#f2ecff', color:'#655EFF'}"
                     style="width: 100%"
                     :span-method="objectSpanMethod"
                     border>
@@ -349,15 +355,7 @@
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                            prop="code"
-                            label="SKU编码"
-                            class-name="code">
-                            <template slot-scope="scope">
-                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
-                            </template>
-                        </el-table-column>
+                        
                         <el-table-column
                             prop="image"
                             label="图片"
@@ -389,6 +387,15 @@
                                 <div v-if="!scope.row.image && ruleForm.productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = scope.$index; dialogVisible = true">素材库</div>
                             </template>
                         </el-table-column>
+                        <el-table-column
+                            prop="code"
+                            label="SKU编码"
+                            class-name="code">
+                            <template slot-scope="scope">
+                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
+                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </template>
                 <div>
@@ -396,7 +403,7 @@
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
                 </div>
                 <!-- <el-button v-if="!editor" class="border-button" @click="currentDialog = 'AddSpecifications'; selectSpecificationsCurrentDialog = ''; dialogVisible = true">新增规格</el-button> -->
-            </el-form-item>
+            </div>
             <!-- <el-form-item label="起售数量" prop="number">
                 <div class="input-number">
                     <span style="user-select: none;" class="pointer" @click="reduce">-</span>
@@ -491,8 +498,8 @@
                         </el-option>
                     </el-select>
                     <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
-                        <span @click="addTemplate">新增模板</span>
-                        <el-button type="primary" @click="getTemplateList">刷新</el-button>
+                        <el-button type="primary" @click="addTemplate">新增模板</el-button>
+                        <el-button class="shuaxin-template" @click="getTemplateList">刷新</el-button>
                     </div>
                 </div>
                 <div>
@@ -569,9 +576,6 @@ import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
-
-
-
 export default {
     name: 'addGoods',
     data() {
@@ -681,9 +685,9 @@ export default {
                 productCatalogInfoIds: [
                     { required: true, message: '请选择商品分类', trigger: 'blur' },
                 ],
-                // goodsInfos: [
-                //     { required: true, message: '请输入规格信息', trigger: 'blur' },
-                // ],
+                goodsInfos: [
+                    { required: true, message: '请输入规格信息', trigger: 'blur' },
+                ],
                 // selfSaleCount: [
                 //     { required: true, message: '请输入已售出数量', trigger: 'blur' },
                 // ],
@@ -777,13 +781,11 @@ export default {
         //     }
         // })
         var that = this
-
         Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
         })
-
         document.querySelector('body').addEventListener('click', function(e) {
             e.stopPropagation()
             if(e.target.parentNode.parentNode.className != 'add-specs') {
@@ -809,11 +811,9 @@ export default {
         },
         imagesLength() {
             let images = this.ruleForm.images
-
             if(images && images.split(',').length) {
                 return images.split(',').length
             }
-
             return 0
         }
     },
@@ -850,14 +850,12 @@ export default {
                     }
                 }
             } catch(e) {
-
             }
         });
     },
     methods: {
         batchFilling() {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
             goodsInfos.forEach((val, index) => {
                 val.costPrice = goodsInfos[0].costPrice
                 val.salePrice = goodsInfos[0].salePrice
@@ -868,22 +866,18 @@ export default {
                 val.image = goodsInfos[0].image
                 val.fileList = goodsInfos[0].fileList
             })
-
             this.ruleForm.goodsInfos = goodsInfos
         },
         deleteSpecValue(index, e) {
             e.stopPropagation()
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-
             addedSpecs[addedSpecs.length - 1].list.splice(index, 1)
-
             this.addedSpecs = addedSpecs
             this.specsValues.splice(index, 1)
         },
         addNewSpecValue() {
             let value = this.newSpecValue
             let lastAddedSpecs = this.addedSpecs[this.addedSpecs.length - 1]
-
             if(value == "") {
                 this.$message({
                     message: '规格值不能为空',
@@ -891,7 +885,6 @@ export default {
                 });
                 return
             }
-
             if(/\s+/.test(value)) {
                 this.$message({
                     message: '规格值不能为空',
@@ -918,7 +911,6 @@ export default {
                 this.$set(lastAddedSpecs, 'list', []);
             }
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-
             addedSpecs[addedSpecs.length - 1].list = addedSpecs[addedSpecs.length - 1].list || []
             addedSpecs[addedSpecs.length - 1].list.push(newChild)
             
@@ -950,7 +942,6 @@ export default {
                 level: '1', 
                 parentId: '0' 
             }
-
             this.specsList = [...this.specsList, newChild]
             this.flatSpecsList.push({...newChild})
             this.newSpec = ''
@@ -958,12 +949,10 @@ export default {
         selectSpecs(arr) {
             let results = [];
             let result = [];
-
             if(typeof arr[0] != 'object') {
                 this.ruleForm.goodsInfos = []
                 return
             }
-
             function doExchange(arr, index){
                 for (var i = 0; i<arr[index].length; i++) {
                     result[index] = arr[index][i];
@@ -974,36 +963,26 @@ export default {
                     }
                 }
             }
-
             doExchange(arr, 0);
-
             let _results = results.map((val, index) => {
                 let valArr = []
                 let pId = []
                 let names = []
-
                 val.split(',').forEach(id => {
                     let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                     valArr.push(item.name)
                     pId.push(item.parentId)
                 })
-
                 pId.forEach(id => {
                     console.log(this.flatSpecsList)
                     let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                     names.push(item.name)
                 })
-
                 this.specsLabel = names.join(',')
-
                 let _specs = {} //{"尺寸": "XL", "颜色": "黑色" }
-
                 valArr.forEach((val, index) => {
                     _specs[names[index]] = val
                 })
-
                 return {
                     label: valArr.join(','),
                     costPrice: '',
@@ -1019,29 +998,24 @@ export default {
             })
             this.ruleForm.goodsInfos.forEach((val, index) => {
                 let label = val.label
-
                 if(_results.find(spec => spec.label == label)) {
                     let specIndex = _results.findIndex(val => val.label == label)
                     
                     _results.splice(specIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[index]))
                 }
             })
-
             this.ruleForm.goodsInfos = _results
         },
         deleteAddedSpec(index) {
             this.addedSpecs.splice(index, 1)
-
             this.getSpecs()
         },
         getSpecs(open) {
             this.callObjectSpanMethod = true
             let arr = []
-
             // this.addedSpecs.forEach(val => {
             //     val.valueList.forEach(value => {
             //         let _arr = []
-
             //         _arr.push(val.id)
             //         _arr.push(value.id)
             //         arr.push(_arr)
@@ -1049,15 +1023,15 @@ export default {
             // })
             this.addedSpecs.forEach(val => {
                 let _arr = []
-
                 val.valueList.forEach(item => {
                     _arr.push(item.id)
                 })
                 arr.push(_arr)
             })
-            this.specIds = arr
-            this.selectSpecs(arr)
+            this.specIds = arr
+            this.selectSpecs(arr)
             this.deleteStyle()
+            this.deleteSpecArr = []
             if(open && typeof open == 'boolean') {
                 this.visible = true
             } else {
@@ -1067,7 +1041,6 @@ export default {
         selectSpecValue(index) {
             let specsValues = JSON.parse(JSON.stringify(this.specsValues))
             let id = specsValues[index].id
-
             specsValues[index].active = !specsValues[index].active
             this.specsValues = specsValues
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
@@ -1080,12 +1053,10 @@ export default {
             } else {
                 if(this.addedSpecs[this.addedSpecs.length - 1].valueList.find(val => val.id == id)) {
                     let index = this.addedSpecs[this.addedSpecs.length - 1].valueList.findIndex(val => val.id == id)
-
                     addedSpecs[this.addedSpecs.length - 1].valueList.splice(index, 1)
                     this.addedSpecs = addedSpecs
                 }
             }
-
             this.getSpecs(true)
         },
         addSpecValue(open) {
@@ -1103,7 +1074,6 @@ export default {
             if(!open) {
                 this.visible = !this.visible
             }
-
             console.log('addSpecValue', item)
         },
         addSpecClick(item) {
@@ -1115,7 +1085,6 @@ export default {
                 return
             }
             let _item = JSON.parse(JSON.stringify(item))
-
             _item.valueList = []
             this.addedSpecs = Object.assign([], [...this.addedSpecs, _item])
             this.showSpecsList = false
@@ -1128,7 +1097,7 @@ export default {
             this.showSpecsList = false
         },
         addSpecs() {
-            this.callObjectSpanMethod = false
+            this.callObjectSpanMethod = false
             if(this.addedSpecs.find(val => !val.valueList.length)) {
                 this.$message({
                     message: '请添加规格值',
@@ -1142,21 +1111,17 @@ export default {
             if(!this.callObjectSpanMethod) return
             let length = this.addedSpecs.length
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-
             if(length) {
                 var index = columnIndex
                 var val = addedSpecs[index]
                 var number = 1
-
                 if(columnIndex > length - 2) {
                     if(column.property == 'image') {
                         if(length > 1) {
                             let arr = addedSpecs.slice(1)
-
                             number = arr.reduce((prev, cur) => {
                                 return prev*cur.valueList.length
                             }, 1)
-
                             if(number != 1) {
                                 if(rowIndex % number === 0) {
                                     if((rowIndex == this.ruleForm.goodsInfos.length - 1) && (columnIndex == this.addedSpecs.length + 9 - 1)) {
@@ -1182,12 +1147,10 @@ export default {
                 }
                 if(index + 1 < length) {
                     let arr = addedSpecs.slice(index + 1)
-
                     number = arr.reduce((prev, cur) => {
                         return prev*cur.valueList.length
                     }, 1)
                 }
-
                 if(number != 1) {
                     if(rowIndex % number === 0) {
                         return {
@@ -1213,13 +1176,11 @@ export default {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
             //this.$router.push('/goods/classify')
             let routeData = this.$router.resolve({ path: '/goods/classify' });
-
             window.open(routeData.href, '_blank');
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
             let routeData = this.$router.resolve({ path: '/order/newTemplate?mode=new' });
-
             window.open(routeData.href, '_blank');
         },
         getTemplateList() {
@@ -1230,7 +1191,6 @@ export default {
                         name: '请选择'
                     })
                     this.shippingTemplates = res.list
-
                     resolve()
                 }).catch(error => {
                     this.visible = false
@@ -1246,7 +1206,6 @@ export default {
             this.$nextTick(() => {
                 try {
                     let trs = document.querySelectorAll('.el-table.spec-information .el-table__body tbody tr')
-
                     trs.forEach(tr => {
                         let elem = tr
                         
@@ -1342,7 +1301,6 @@ export default {
         deleteSpec(index) {
             //this.ruleForm.goodsInfos.splice(index, 1)
             
-
             this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                 this.deleteSpecArr.push(index)
                 this.addStyle(index)
@@ -1369,10 +1327,8 @@ export default {
         },
         specHandleRemove(index) {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
             if(this.ruleForm.goodsInfos[index].label.split(',') && this.ruleForm.goodsInfos[index].label.split(',').length > 1) {
                 let spec = this.ruleForm.goodsInfos[index].label.split(',')[0]
-
                 goodsInfos.forEach(val => {
                     if(val.label.split(',')[0] == spec) {
                         val.image = '',
@@ -1394,10 +1350,8 @@ export default {
                 //this.ruleForm.goodsInfos[index].image = response.data.url
                 if(!this.editor) {
                     let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
                     if(row.label && row.label.split(',') && row.label.split(',').length > 1) {
                         let spec = row.label.split(',')[0]
-
                         goodsInfos.forEach(val => {
                             if(val.label.split(',')[0] == spec) {
                                 val.image = response.data.url
@@ -1424,9 +1378,7 @@ export default {
         getCategoryIds(arr, id) {
             try {
                 let parentId = this.flatCategoryList.find(val => val.id == id).parentId
-
                 arr.unshift(id)
-
                 if(parentId && parentId != 0) {
                     this.getCategoryIds(arr, parentId)
                 }
@@ -1438,9 +1390,7 @@ export default {
         getCategoryInfoIds(arr, id) {
             try {
                 let parentId = this.operateCategoryList.find(val => val.id == id).parentId
-
                 arr.unshift(id)
-
                 if(parentId && parentId != 0) {
                     this.getCategoryInfoIds(arr, parentId)
                 }
@@ -1451,38 +1401,29 @@ export default {
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
-
             this._apis.goods.getGoodsDetail({id, goodsInfoId}).then(res => {
                 console.log(res)
                 let arr = []
                 let itemCatAr = []
-
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
-
                     this.getCategoryIds(_arr, id)
                     arr.push(_arr)
                 })
                 this.getCategoryInfoIds(itemCatAr, res.productCategoryInfoId)
-
                 let _arr = itemCatAr.map(id => {
                     return this.operateCategoryList.find(val => val.id == id)
                 })
-
                 this.itemCatText = _arr.map(val => val.name).join(' > ')
-
                 let specs = JSON.parse(res.goodsInfo.specs)
-
                 let specsLabelArr = []
                 let labelArr = []
-
                 for(let i in specs) {
                     if(specs.hasOwnProperty(i)) {
                         specsLabelArr.push(i)
                         labelArr.push(specs[i])
                     }
                 }
-
                 this.specsLabel = specsLabelArr.join(',')
                 res.goodsInfo.label = labelArr.join(',')
                 
@@ -1497,12 +1438,10 @@ export default {
                         name: '', 
                         url: val
                     })) : []
-
                     console.log(this.fileList)
                 }
                 if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.length) {
                     let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-
                     goodsInfos.forEach(val => {
                         val.fileList = [{
                             name: '',
@@ -1532,31 +1471,25 @@ export default {
                 }
                 this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                 this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
-
                 if(!this.itemCatText) {
                     this.leimuMessage = true
                     this.ruleForm.productCategoryInfoId = ''
                 }
-
                 // if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
                 //     this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
                 //     this.ruleForm.productBrandInfoId = ''
                 //     this.pinpaiMessage = true
                 // }
-
                 if(this.ruleForm.productDetail) {
                     //this.ruleForm.productDetail = window.decodeURIComponent(window.atob(this.ruleForm.productDetail))
                     this.ruleForm.productDetail = window.unescape(this.ruleForm.productDetail)
                 }
-
                 // if(this.ruleForm.productDetail) {
                 //     let _productDetail = ''
-
                 //     _productDetail = decodeURIComponent(escape(window.atob(this.ruleForm.productDetail)))
                 //     this.ruleForm.productDetail = _productDetail
                 // }
             }).catch(error => {
-
             }) 
         },
         flatTreeArray(array = [], childrenKey = 'childrenList') {
@@ -1570,7 +1503,6 @@ export default {
                     parentId: item.parentId,
                 }
                 result.push(dataItem);
-
                 let childrenArr;
                 if (item.hasOwnProperty(childrenKey)) {
                     childrenArr = item[childrenKey];
@@ -1587,20 +1519,16 @@ export default {
         getRootId(id) {
             let rootId = ''
             let that = this
-
             var getId = function(id) {
                 let category = that.operateCategoryList.find(val => val.id == id)
                 let parentId = category.parentId
-
                 if(parentId != 0) {
                     getId(parentId)
                 } else {
                     rootId = id
                 }
             }
-
             getId(id)
-
             return rootId
         },
         // 获取商品规格列表
@@ -1671,9 +1599,7 @@ export default {
                         isShowStock: this.ruleForm.isShowStock ? 1 : 0,
                         productUnit: this.ruleForm.other ? this.ruleForm.otherUnit : this.ruleForm.productUnit,
                     }
-
                     let calculationWay
-
                     try {
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             this.ruleForm.goodsInfos[i].fileList = null
@@ -1737,7 +1663,6 @@ export default {
                     } catch(e) {
                         console.error(e)
                     }
-
                     if(/^\s+$/.test(this.ruleForm.name)) {
                         this.$message({
                             message: '商品名称不能为空',
@@ -1748,9 +1673,7 @@ export default {
                     
                     if(this.ruleForm.isFreeFreight == 0) {
                         let id = this.ruleForm.freightTemplateId
-
                         calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
-
                         if(calculationWay == 3) {
                             if(this.ruleForm.goodsInfos.some(val => val.volume == '')) {
                                 this.$message({
@@ -1769,90 +1692,125 @@ export default {
                             }
                         }
                     }
-
-                    if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
-                        this.$message({
-                            message: '规格信息中成本价不能为空',
-                            type: 'warning'
-                        });
-                        return
+                    if(this.editor) {
+                        if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
+                            this.$message({
+                                message: '规格信息中成本价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
+                            this.$message({
+                                message: '规格信息中售卖价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
+                            this.$message({
+                                message: '规格信息中库存不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
+                            this.$message({
+                                message: '规格信息中库存不能小于0',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
+                            this.$message({
+                                message: '规格信息中库存预警不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
+                            this.$message({
+                                message: '规格信息中图片不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
                     }
-                    if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
-                        this.$message({
-                            message: '规格信息中售卖价不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
-                        this.$message({
-                            message: '规格信息中库存不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
-                        this.$message({
-                            message: '规格信息中库存不能小于0',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
-                        this.$message({
-                            message: '规格信息中库存预警不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-                    if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
-                        this.$message({
-                            message: '规格信息中图片不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
-
+                    
                     // if(this.ruleForm.productDetail) {
                     //     let _productDetail = ''
-
                     //     _productDetail = btoa(unescape(encodeURIComponent(this.ruleForm.productDetail)));
                     //     obj.productDetail = _productDetail
                     // }
-
                     if(this.categoryValue) {
                         let categoryValue = JSON.parse(JSON.stringify(this.categoryValue))
                         let arr = []
-
                         categoryValue.forEach(val => {
                             arr.push(val.pop())
                         })
                         
                         this.ruleForm.productCatalogInfoIds = arr
                     }
-
                     if(!this.editor) {
                         let __goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
                         let _deleteSpecArr = Array.from(new Set(this.deleteSpecArr))
-
                         if(_deleteSpecArr.length) {
                             for(let i=0; i<_deleteSpecArr.length; i++) {
                                 __goodsInfos.splice(_deleteSpecArr[i], 1)
                             }
                         }
+
+                        if(__goodsInfos.some(val => val.costPrice == '')) {
+                            this.$message({
+                                message: '规格信息中成本价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && __goodsInfos.some(val => val.salePrice == '')) {
+                            this.$message({
+                                message: '规格信息中售卖价不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && __goodsInfos.some(val => val.stock == '')) {
+                            this.$message({
+                                message: '规格信息中库存不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!this.editor && __goodsInfos.some(val => +val.stock < 0)) {
+                            this.$message({
+                                message: '规格信息中库存不能小于0',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(__goodsInfos.some(val => !val.warningStock)) {
+                            this.$message({
+                                message: '规格信息中库存预警不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(__goodsInfos.some(val => val.image == '')) {
+                            this.$message({
+                                message: '规格信息中图片不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         _goodsInfos = __goodsInfos.map(val => {
                             let _specs = {}
-
                             val.label.split(',').forEach((spec, index) => {
                                 _specs[this.specsLabel.split(',')[index]] = spec
                             })
-
                             val.specs = _specs
                             val.fileList = []
-
                             return val
                         })
-
                         obj.goodsInfos = _goodsInfos
                     } else {
                         obj.goodsInfos = this.ruleForm.goodsInfos
@@ -1885,7 +1843,6 @@ export default {
                         name: '请选择'
                     })
                     this.brandList = res
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -1901,7 +1858,6 @@ export default {
                         name: '请选择'
                     })
                     this.unitList = res
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -1913,10 +1869,8 @@ export default {
             let arr = this.ruleForm.itemCat.map(id => {
                 return this.operateCategoryList.find(val => val.id == id)
             })
-
             this.itemCatText = arr.map(val => val.name).join(' > ')
             this.ruleForm.productCategoryInfoId = _value.pop()
-
             this.getSpecsList()
         },
         // 获取商品类目列表
@@ -1926,7 +1880,6 @@ export default {
                     // let arr = this.transTreeData(res.list, 0)
                     // this.operateCategoryList = res.list
                     // this.itemCatList = arr
-
                     let arr = this.transTreeData(res, 0)
                     this.operateCategoryList = res
                     this.itemCatList = arr
@@ -1944,7 +1897,6 @@ export default {
                         name: '请选择'
                     })
                     this.productLabelList = res
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -1978,16 +1930,13 @@ export default {
                         return -1
                     }
                 })
-
                 sortArr.forEach(val => {
                     if(val.children) {
                         sortFunction(val.children)
                     }
                 })
             }
-
             sortFunction(arr)
-
             return arr
         },
         getCategoryList() {
@@ -1998,7 +1947,6 @@ export default {
                     let _arr = this.sort(arr)
                     
                     this.categoryOptions = _arr
-
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -2025,7 +1973,6 @@ export default {
         selectSpecificationsHandler(value) {
             let results = [];
             let result = [];
-
             var doExchange = function(arr, index) {
                 for (var i = 0; i<arr[index].length; i++) {
                     result[index] = arr[index][i];
@@ -2036,11 +1983,9 @@ export default {
                     }
                 } 
             }
-
             if(value.length) {
                 let _arr = []
                 let obj = {}
-
                 value.forEach(val => {
                     if(!obj[val[0]]) {
                         obj[val[0]] = []
@@ -2049,39 +1994,29 @@ export default {
                         obj[val[0]].push(val[1])
                     }
                 })
-
                 for(let i in obj) {
                     _arr.push(obj[i])
                 }
-
                 doExchange(_arr, 0);
                 let _results = results.map((val, index) => {
                     let valArr = []
                     let pId = []
                     let names = []
-
                     val.split(',').forEach(id => {
                         let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                         valArr.push(item.name)
                         pId.push(item.parentId)
                     })
-
                     pId.forEach(id => {
                         console.log(this.flatSpecsList)
                         let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
-
                         names.push(item.name)
                     })
-
                     this.specsLabel = names.join(',')
-
                     let _specs = {} //{"尺寸": "XL", "颜色": "黑色" }
-
                     valArr.forEach((val, index) => {
                         _specs[names[index]] = val
                     })
-
                     return {
                         label: valArr.join(','),
                         costPrice: '',
@@ -2097,16 +2032,13 @@ export default {
                 })
                 this.ruleForm.goodsInfos.forEach((val, index) => {
                     let label = val.label
-
                     if(_results.find(spec => spec.label == label)) {
                         let specIndex = _results.findIndex(val => val.label == label)
                         
                         _results.splice(specIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[index]))
                     }
                 })
-
                 this.ruleForm.goodsInfos = _results
-
                 console.log(_results)
             } else {
                 this.ruleForm.goodsInfos = []
@@ -2127,21 +2059,16 @@ export default {
             } else if(this.currentDialog == 'AddSpecifications') {
                 let arr = []
                 let _arr= []
-
                 value.forEach(val => {
                     arr = arr.concat(val)
                 })
-
                 _arr = Array.from(new Set(arr))
-
                 _arr.forEach(id => {
                     if(!this.flatSpecsList.find(val => val.id == id)) {
                         this.flatSpecsList.push({id: id, name: id, parentId: value[0][0]})
                     }
                 })
-
                 this.specIds = [...this.specIds, ...value]
-
                 this.selectSpecificationsHandler(this.specIds)
             } else if(this.currentDialog == 'AddTagDialog') {
                 this.getProductLabelList()
@@ -2157,7 +2084,6 @@ export default {
         handleRemove(file, fileList) {
             console.log(file, fileList);
             let url = file.url
-
             this.fileList.splice(this.fileList.findIndex(val => val.url == url), 1)
             this.ruleForm.images = fileList.map(val => {
                 if(val.response) {
@@ -2195,7 +2121,6 @@ export default {
             } else {
                 document.querySelector('.add-goods .header').style.position = 'static'
             }
-
             if(scrollTop < 385) {
                 this.index = 0
             } else if(scrollTop >= 385 && scrollTop < 811) {
@@ -2221,7 +2146,6 @@ export default {
                 this.index = 3
             }
         },
-
         imageSelected(image) {
             if(this.material) {
                 this.ruleForm.goodsInfos.splice(this.materialIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[this.materialIndex], {
@@ -2239,13 +2163,11 @@ export default {
                     name: image.fileName,
                     url: image.filePath
                 }))
-
                 if(this.ruleForm.images != '') {
                     this.ruleForm.images += ',' + image.filePath
                 } else {
                     this.ruleForm.images = image.filePath
                 }
-
                 this.hideUpload = this.imagesLength >= 6
             }
         }
@@ -2319,7 +2241,7 @@ $blue: #655EFF;
     .material {
         color: $globalMainColor;
         cursor: pointer;
-        margin-left: -53px;
+        margin-left: -69px;
         position: relative;
         top: -54px;
     }
@@ -2516,7 +2438,7 @@ $blue: #655EFF;
     margin-right: 30px;
 }
 /deep/ .spec-information .el-input__inner {
-    width: 92px;
+    width: 120px;
 }
 /deep/ .spec-information-editor .el-input {
     width: auto;
@@ -2561,17 +2483,22 @@ $blue: #655EFF;
         display: flex;
         input {
             &:first-child {
-                width: 182px;
-                height: 42px;
-                padding-left: 2px;
+                width: 251px;
+                height: 34px;
+                padding-left: 9px;
+                &:focus {
+                    border-color: #655EFF;
+                }
             }
             &:nth-child(2) {
-                width: 72px;
-                height: 42px;
+                width: 49px;
+                height: 34px;
                 background-color: #fff;
                 outline: none;
-                border: 1px solid #ddd;
+                border: 1px solid #D0D6E4;
+                border-left: none;
                 margin-left: -5px;
+                color: #655EFF;
             }
         }
     }
@@ -2579,15 +2506,11 @@ $blue: #655EFF;
         position: absolute;
         z-index: 1000;
         background-color: #fff;
-        width: 182px;
-        border: 1px solid #ddd;
+        width: 251px;
+        box-shadow:0px -2px 10px 0px rgba(204,204,204,0.5);
         li {
-            border-bottom: 1px solid #ddd;
-            text-align: center;
+          text-align: left;
             cursor: pointer;
-            &:last-child {
-                border: none;
-            }
         }
     }
 }
@@ -2619,16 +2542,19 @@ $blue: #655EFF;
             float: left;
             margin-right: 10px;
             border: 1px solid #ddd;
-            padding: 2px 5px;
+            padding: 7px 12px;
+            border-radius:4px;
             cursor: pointer;
             position: relative;
             &.active {
                 border: 1px solid rgba(22, 155, 213, 1);
             }
             i {
-                position: absolute;
-                top: -5px;
-                background-color: #fff;
+                display: inline-block;
+                vertical-align: middle;
+                width: 14px;
+                height: 14px;
+                background: url('../../assets/images/goods/icon_close.png') no-repeat;
             }
         }
         .clear {
@@ -2639,18 +2565,26 @@ $blue: #655EFF;
         display: flex;
         input {
             &:first-child {
-                width: 182px;
-                height: 42px;
-                padding-left: 2px;
+                width: 251px;
+                height: 34px;
+                padding-left: 9px;
+                &:focus {
+                    border-color: #655EFF;
+                }
             }
             &:nth-child(2) {
-                width: 72px;
-                height: 42px;
+                width: 49px;
+                height: 34px;
                 background-color: #fff;
                 outline: none;
-                border: 1px solid #ddd;
+                border: 1px solid #D0D6E4;
+                border-left: none;
                 margin-left: -5px;
+                color: #655EFF;
             }
+        }
+        button {
+            color: #655EFF;
         }
     }
     .add-specs-value-footer {
@@ -2659,18 +2593,21 @@ $blue: #655EFF;
 }
 /deep/ .add-specs {
     button {
-        height: 42px;
+        height: 34px;
+        border: 1px solid #D0D6E4;
+        border-left: none;
+        color: #655EFF;
     }
 }
 /deep/ .add-specs-input input {
-    border: 1px solid #DCDFE6;
+    border: 1px solid #D0D6E4;
 }
 /deep/ .add-specs-value-input input {
-    border: 1px solid #DCDFE6;
+    border: 1px solid #D0D6E4;
 }
 /deep/ .batch-filling {
-    float: right;
     margin-bottom: 10px;
+    margin-top: 20px;
 }
 .spec-information {
     ::-webkit-scrollbar-thumb {
@@ -2687,6 +2624,84 @@ $blue: #655EFF;
 //         display: none;
 //     }
 // }
+/deep/ .form-section.spec-form-section {
+    .el-form-item {
+        .el-form-item__content {
+            margin-left: 80px!important;
+        }
+    }
+}
+.spec-list {
+    color: #44434B;
+    width: 251px;
+    li {
+        text-align: left;
+        padding-left: 20px;
+        height: 34px;
+        line-height: 34px;
+        &:hover {
+            background:#ebeafa;
+        }
+    }
+}
+.goods-infos {
+    margin-left: 77px;
+    .added-specs {
+        .added-specs-header {
+            background: #fff;
+            height: 60px;
+            line-height: 60px;
+            padding: 0 20px;
+            border-top: 1px solid #CACFCB;
+            border-bottom: 1px solid #CACFCB;
+            .el-button {
+                width: 80px;
+                height: 34px;
+                color: #F55858;
+                margin-top: 11px;
+            }
+        }
+    }
+    .spec-value-ul {
+        margin-top: 10px;
+        margin-bottom: 14px;
+        padding-left: 20px;
+    }
+    .add-spec-value-ul {
+        li {
+            padding: 7px 12px;
+            margin-right: 15px;
+            margin-bottom: 10px;
+            border-radius:4px;
+            i {
+                margin-left: 15px;
+                display: inline-block;
+                vertical-align: middle;
+                width: 14px;
+                height: 14px;
+                background: url('../../assets/images/goods/icon_close.png') no-repeat;
+            }
+        }
+    }
+    .add-specs-button-box {
+        display: flex;
+        >.add-specs-button {
+            &:first-child {
+                // margin-right: 20px;
+            }
+        }
+    }
+    .el-table.spec-information .el-table__header-wrapper .el-table__header {
+        border-top: 1px solid #CACFCB;
+        border-bottom: 1px solid #CACFCB;
+        thead tr {
+            height: 46px;
+        }
+    }
+}
+.shuaxin-template {
+    border: 1px solid #92929B;
+    color: #44434B;
+    margin-left: 28px;
+}
 </style>
-
-
