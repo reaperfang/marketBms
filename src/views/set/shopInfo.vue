@@ -5,9 +5,18 @@
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <el-form-item label="商户名称:" prop="shopName">
                 <el-input v-model.trim="form.shopName" style="width:200px;"></el-input>
+                <p class="shopInfo-show">用于展示给消费者的品牌形象<span @click="showShop = true">查看样例</span></p>
             </el-form-item>
-            <el-form-item label="主营类目:">
-              {{form.business}}
+            <el-form-item label="主营类目:" prop="business">
+              <!-- {{form.business}} -->
+              <el-cascader
+                  :options="itemCatList"
+                  v-model="form.business"
+                  @change="itemCatHandleChange"
+                  :props="{ multiple: false, checkStrictly: true }"
+                  clearable
+                  filterable>
+              </el-cascader>
             </el-form-item>
             <el-form-item label="创建日期:">
               {{new Date(form.createTime*1) | formatDate('yyyy-MM-dd hh:mm:ss')}}
@@ -29,10 +38,16 @@
                 </el-upload>
                 <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p>
             </el-form-item>
+            <el-form-item label="公司名称:" prop="companyName">
+                <el-input maxlength="30" show-word-limit v-model="form.companyName" placeholder="请输入公司名称" style="width:200px;"></el-input>
+            </el-form-item>
             <el-form-item label="客服电话:" prop="phone">
                 <!-- <el-input v-model="form.phone" placeholder="区号" style="width:70px;"></el-input>
                 —— -->
-                <el-input v-model="form.phone" placeholder="如输入手机号，不填区号" style="width:200px;"></el-input>
+                <el-input v-model="form.phone" placeholder="请输入手机号，不填区号" style="width:200px;"></el-input>
+            </el-form-item>
+            <el-form-item label="公司邮箱:" prop="companyEmail">
+                <el-input v-model="form.companyEmail" placeholder="请输入公司邮箱" style="width:200px;"></el-input>
             </el-form-item>
             <el-form-item label="联系地址:" prop="address">
                 <area-cascader 
@@ -58,6 +73,10 @@
             <el-form-item>
                 <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '店铺信息', '默认页面', '保存']" v-loading="loading">保存</el-button>
             </el-form-item>
+            <div v-if="showShop" class="shop-set">
+              <div class="top">{{form.shopName}}</div>
+              <div class="center">{{form.shopName}}</div>
+            </div>
         </el-form>
     </div>    
 </template>
@@ -77,6 +96,9 @@ export default {
       }
     };
     return {
+      itemCatList: [],
+      operateCategoryList: [],
+      showShop: false,
       form: {
           shopName: '',
           logo:'',
@@ -84,7 +106,13 @@ export default {
           phone:'',
           addressCode:[],
           address:'',
-          shopIntroduce:''
+          shopIntroduce:'',
+          business: '',
+          itemCat: '',
+          sellCategoryId: '',
+          sellCategory: '',
+          companyName: '',
+          companyEmail: '',
       },
       rules: {
         shopName: [
@@ -103,6 +131,9 @@ export default {
         ],
         shopIntroduce:[
           {min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur'}
+        ],
+        business:[
+          { required: true, message: '请选择主营类目', trigger: 'blur' }
         ]
       },
       imageUrl: '',
@@ -131,12 +162,70 @@ export default {
     }
   },
   created() {
-    this.getShopInfo()
+    Promise.all([this.getOperateCategoryList()]).then(() => {
+        this.getShopInfo()
+    })
   },
   mounted() {
     
   },
   methods: {
+    itemCatHandleChange(value) {
+        let _value = [...value]
+        let arr = this.form.business.map(id => {
+            return this.operateCategoryList.find(val => val.id == id)
+        })
+
+        this.form.sellCategoryId = _value.pop()
+        this.form.sellCategory = arr[arr.length - 1].name
+    },
+    // 获取商品类目列表
+    getOperateCategoryList() {
+        return new Promise((resolve, reject) => {
+            this._apis.goodsOperate.fetchCategoryList({enable: 1}).then(res => {
+                let arr = this.transTreeData(res, 0)
+                this.operateCategoryList = res
+                this.itemCatList = arr
+                resolve(res.list)
+            }).catch(error => {
+                this.$notify.error({
+                  title: '错误',
+                  message: error
+                });
+                reject(error)
+            })
+        })
+    },
+    transTreeData(data, pid) {
+        var result = [], temp;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].parentId == pid) {
+                var obj = {"categoryName": data[i].name,"id": data[i].id, 
+                    parentId: data[i].parentId, level: data[i].level, sort: data[i].sort, 
+                    image: data[i].image, enable: data[i].enable, label: data[i].name, value: data[i].id};
+                temp = this.transTreeData(data, data[i].id);
+                if (temp.length > 0) {
+                    obj.children = temp;
+                }
+                result.push(obj);
+            }
+        }
+        return result;
+    },
+    // 获取类目
+    getCategoryInfoIds(arr, id) {
+        try {
+            let parentId = this.operateCategoryList.find(val => val.id == id).parentId
+
+            arr.unshift(id + '')
+
+            if(parentId && parentId != 0) {
+                this.getCategoryInfoIds(arr, parentId)
+            }
+        } catch(e) {
+            console.error(e)
+        }
+    },
     handleChange(){
       this.province = this.$pcaa[86][this.form.addressCode[0]]
       this.city = this.$pcaa[this.form.addressCode[0]][this.form.addressCode[1]]
@@ -146,7 +235,12 @@ export default {
     getShopInfo(){
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
-        this.form = response
+        let itemCatAr = []
+
+        this.getCategoryInfoIds(itemCatAr, response.sellCategoryId)
+        this.form = Object.assign({}, response, {
+          business: itemCatAr
+        })
         if(response.provinceCode){
           let arr = []
           arr.push(response.provinceCode)
@@ -180,7 +274,11 @@ export default {
               cityCode:this.form.addressCode[1],
               areaCode:this.form.addressCode[2],
               address:this.form.address,
-              shopIntroduce:this.form.shopIntroduce
+              shopIntroduce:this.form.shopIntroduce,
+              sellCategoryId: this.form.sellCategoryId,
+              sellCategory: this.form.sellCategory,
+              companyName: this.form.companyName,
+              companyEmail: this.form.companyEmail
             }
             this._apis.set.updateShopInfo(data).then(response =>{
               this.setShopName()              
@@ -283,6 +381,7 @@ export default {
 }
 .note{
   color: #92929B;
+  font-size: 12px;
 }
 /deep/ .avatar-uploader{
   width: 80px;
@@ -329,6 +428,45 @@ export default {
       height: 80px;
       object-fit:fill;
       display: inline-block;
+    }
+  }
+  .shopInfo-show {
+    font-size: 12px;
+    color: rgba(146,146,155,1);
+    span {
+      color: rgba(101,94,255,1);
+      font-size: 14px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
+  /deep/ .el-form {
+    position: relative;
+    .shop-set {
+      position: absolute;
+      width: 300px;
+      height: 534px;
+      background: url(../../assets/images/set/shop-set.jpg) no-repeat;
+      background-size: 100% 100%;
+      right: 60px;
+      top: 0;
+      .top {
+        position: absolute;
+        left: 50%;
+        top: 24px;
+        font-size: 16px;
+        color: #000000;
+        transform: translateX(-50%);
+        font-weight:400;
+      }
+      .center {
+        position: absolute;
+        left: 69px;
+        top: 148px;
+        font-size: 16px;
+        color: #fff;
+        font-weight:600;
+      }
     }
   }
 </style>
