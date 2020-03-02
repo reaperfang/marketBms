@@ -141,7 +141,6 @@ export default {
       })
     },
     edit(row) {
-      console.log(row);
       this._routeTo('batchImport',{id: row.id});
     },
     batchDelete() {

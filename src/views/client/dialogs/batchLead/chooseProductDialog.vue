@@ -54,9 +54,6 @@
         :visible.sync="dialogVisible2"
         width="45%"
     >
-        <!-- <div v-if="selectedList.length == 0">
-          <img src="../../../../assets/images/no_data.png" alt="" class="no_data">
-        </div> -->
         <div>
             <el-button class="clearBtn" @click="clearList">清 空</el-button>
             <el-table
@@ -144,16 +141,13 @@ export default {
     },
     submit2() {
       if(this.selectedList.length > 0) {
-        this.dialogVisible = false;
-        this.dialogVisible2 = false;
-        let selectedIds = [];
-        this.selectedList.map((v) => {
-            selectedIds.push(v.goodsInfo.id);
-        });
-        selectedIds = selectedIds.join(',');
-        this.$emit('getSelected', selectedIds);
+        this.$nextTick(() => {
+          this.visible = false;
+          this.dialogVisible2 = false;
+        }); 
+        this.$emit('getSelected', this.selectedList);
       }else{
-        this.dialogVisible = false;
+        this.visible = false;
         this.dialogVisible2 = false;
       }
     },
