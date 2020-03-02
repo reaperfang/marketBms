@@ -7,7 +7,7 @@
                 <el-input v-model.trim="form.shopName" style="width:200px;"></el-input>
                 <p class="shopInfo-show">用于展示给消费者的品牌形象<span @click="showShop = true">查看样例</span></p>
             </el-form-item>
-            <el-form-item label="主营类目:" prop="business">
+            <el-form-item label="主营类目:" prop="sellCategoryId">
               <!-- {{form.business}} -->
               <el-cascader
                   :options="itemCatList"
@@ -132,8 +132,14 @@ export default {
         shopIntroduce:[
           {min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur'}
         ],
-        business:[
+        sellCategoryId:[
           { required: true, message: '请选择主营类目', trigger: 'blur' }
+        ],
+        companyName:[
+          { required: true, message: '请输入公司名称', trigger: 'blur' }
+        ],
+        companyEmail:[
+          { required: true, message: '请输入公司邮箱', trigger: 'blur' }
         ]
       },
       imageUrl: '',
