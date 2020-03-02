@@ -28,7 +28,8 @@
           <span style="color:red">*</span>变更原因：
         </span>
         <div class="input_wrap2 fl">
-          <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50"></el-input>
+          <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50" resize="none"></el-input>
+          <span class="font_num">{{remark.length}}/50</span>
         </div>
       </div>
     </div>
@@ -160,9 +161,18 @@ export default {
     width: 188px;
     display: inline-block;
   }
-  .input_wrap2 {
-    width: 500px;
-    display: inline-block;
+  .input_wrap2{
+      position: relative;
+      width: 500px;
+      display: inline-block;
+      .font_num{
+        position: absolute;
+        display: block;
+        width: 38px;
+        color: #B5BDCA;
+        right: 0;
+        top: 33px;  
+      }
   }
   .dialog-footer {
     margin-top: 20px;
