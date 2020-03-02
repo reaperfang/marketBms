@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="用户昵称">
-          <el-input  placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model='ruleForm.nickName' placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <!-- <el-form-item label="订单编号">
           <el-input v-model="ruleForm.value2" placeholder="请输入" style="width:226px;"></el-input>
@@ -61,7 +61,7 @@
           :render-header="renderMemberId">
         </el-table-column>
         <el-table-column
-          
+          prop='nickName'
           label="用户昵称"
           >
         </el-table-column>
@@ -119,6 +119,7 @@ export default {
       times:[],
       ruleForm:{
         memberSn:'',
+        nickName:'',
         presentType:0,
         startTime:'',
         stopTime:'',
@@ -184,6 +185,7 @@ export default {
     resetForm(){
       this.ruleForm = {
         memberSn:'',
+        nickName:'',
         presentType:0,
         startTime:'',
         stopTime:'',

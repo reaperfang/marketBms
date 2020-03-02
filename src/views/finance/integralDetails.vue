@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="用户昵称">
-          <el-input  placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.nickName" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
           <el-select v-model="ruleForm.businessTypeId" style="width:100px;" placeholder="全部">
@@ -60,7 +60,7 @@
           label="用户ID">
         </el-table-column>
         <el-table-column
-          
+          prop='nickName'
           label="用户昵称">
         </el-table-column>
         <el-table-column
@@ -131,7 +131,8 @@ export default {
       ruleForm:{
         memberSn:'',
         businessTypeId:-1,
-        timeValue:''
+        timeValue:'',
+        nickName:''
       },
       dataList:[ ],
       total:0,
@@ -155,7 +156,8 @@ export default {
         startTime:'',
         endTime:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        nickName:this.ruleForm.nickName
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
