@@ -152,6 +152,7 @@
           :total="total*1">
         </el-pagination>
       </div>
+      <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component> 
     </div>
   </div>
 </template>
@@ -160,9 +161,12 @@
 import utils from "@/utils";
 import financeCons from '@/system/constant/finance'
 import TableBase from "@/components/TableBase";
+import exportTipDialog from './dialogs/exportTipDialog' //导出提示框 
+import exportTipDialogVue from '@/components/dialogs/exportTipDialog';
 export default {
   name: 'revenueExpenditureDetails',
   extends: TableBase,
+  components:{exportTipDialog},
   data() {
     return {
       pickerNowDateBefore: {
@@ -170,6 +174,9 @@ export default {
           return time.getTime() > new Date();
         }
       },
+      currentData:{},
+      dialogVisible: false,
+      currentDialog:"",
       inline:true,
       ruleForm:{
         searchType:'tradeDetailSn',
@@ -339,19 +346,22 @@ export default {
    
   //导出
     exportToExcel(){
-      this.loading = true;
-      let query = this.init();
-      console.log(query,"query");
-      this._apis.finance.exportRe(query).then((response)=>{
-        console.log(response,"导出")
-        window.location.href = response
-        this.loading = false;
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
+      if(this.total > 1000){
+        this.currentDialog = exportTipDialogVue;
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.exportRe';
+        this.currentData.query = this.init();
+      }else{
+        let query = this.init();
+        this._apis.finance.exportRe(query).then((response)=>{
+          window.location.href = response
+        }).catch((error)=>{
+          this.$notify.error({
+            title: '错误',
+            message: error
+          });
+        })
+      }
     },
   }
 }

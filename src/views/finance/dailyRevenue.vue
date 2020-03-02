@@ -6,11 +6,11 @@
         <el-form-item label="日期" style="margin-bottom:0px;">
           <el-date-picker
             v-model="ruleForm.timeValue"
-            type="daterange"
+            type="datetimerange"
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -33,11 +33,13 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'accountDate', order: 'descending'}"
+        @sort-change="changeSort"
+
         >
         <el-table-column
           prop="accountDate"
           label="日期"
-          sortable>
+          sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
@@ -68,7 +70,8 @@
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
-      </div>      
+      </div> 
+      <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" />
     </div>
   </div>
 </template>
@@ -76,23 +79,31 @@
 <script>
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'dailyRevenue',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
-    return {
+    return {    
       pickerNowDateBefore: {
         disabledDate: (time) => {
-          return time.getTime() > new Date();
+           const end = new Date(new Date().toLocaleDateString()).getTime()-1;
+          return time.getTime() > end;
         }
       },
       inline:true,
       ruleForm:{
-        timeValue:''
+        timeValue:'',
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     }
   },
   watch: { },
@@ -103,7 +114,8 @@ export default {
         accountDateStart:'',
         accountDateEnd:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:this.ruleForm.sort
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
@@ -144,7 +156,12 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      this._apis.finance.exportDr(query).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.exportDr';
+        this.currentData.query =query;
+      }else{
+        this._apis.finance.exportDr(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
         this.$notify.error({
@@ -152,7 +169,19 @@ export default {
           message: error
         });
       })
+      }
+      
     },
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
+    }
   }
 }
 </script>

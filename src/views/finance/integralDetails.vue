@@ -3,8 +3,11 @@
   <div>
     <div class="top_part">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="客户ID">
+        <el-form-item label="用户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
+        </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input  placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
           <el-select v-model="ruleForm.businessTypeId" style="width:100px;" placeholder="全部">
@@ -16,14 +19,14 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="获取时间" style="margin-left:25px;">
+        <el-form-item label="获取时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -54,7 +57,11 @@
         </el-table-column>
         <el-table-column
           prop="memberSn"
-          label="客户ID">
+          label="用户ID">
+        </el-table-column>
+        <el-table-column
+          
+          label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="businessTypeId"
@@ -97,6 +104,7 @@
           :total="total*1">
         </el-pagination>
       </div>
+      <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" />
     </div>
   </div>
 </template>
@@ -105,9 +113,13 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'integralDetails',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
     return {
       pickerNowDateBefore: {
@@ -123,7 +135,9 @@ export default {
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     }
   },
   watch: { },
@@ -177,7 +191,12 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      this._apis.finance.exportId(query).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.exportId';
+        this.currentData.query =query;
+      }else{
+        this._apis.finance.exportId(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
         this.$notify.error({
@@ -185,6 +204,7 @@ export default {
           message: error
         });
       })
+      }
     },
   }
 }

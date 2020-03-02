@@ -42,6 +42,9 @@
         <el-form-item label="客户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
           <el-button type="primary" @click="onSubmit" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
@@ -66,6 +69,7 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'applyTime', order: 'descending'}"
         @selection-change="handleSelectionChange"
+        ref="multipleTable"
         >
         <el-table-column
         type="selection"
@@ -74,6 +78,10 @@
         <el-table-column
           prop="cashoutSn"
           label="提现编号">
+        </el-table-column>
+         <el-table-column
+          prop="memberSn"
+          label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="memberSn"
@@ -108,8 +116,11 @@
         </el-table-column>
       </el-table>
       <div class="page_styles">
-        <el-checkbox  @selection-change="handleSelectionChange">全选</el-checkbox>
-        <el-button class="checkAudit"  type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+      <div class="checkAudit">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button   type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+      </div>
+        
          <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -137,10 +148,11 @@ import auditingDialog from './dialogs/auditingDialog'//审核
 import handleAuditDialog from './dialogs/handleAuditDialog'//提现详情  处理中
 import failAuditDialog from './dialogs/failAuditDialog'//提现详情  失败
 import successAuditDialog from './dialogs/successAuditDialog'//提现详情  成功
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
   name: 'revenueSituation',
   extends: TableBase,
-  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog },
+  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog ,exportTipDialog},
   data() {
     return {
       pickerNowDateBefore: {
@@ -157,6 +169,7 @@ export default {
         memberSn:''
       },
       dataList:[ ],
+      selectStatus:false,
       total:0,
       currentDialog:"",
       dialogVisible: false,
@@ -235,10 +248,14 @@ export default {
     },
     //导出
     exportToExcel() {
-      if(this.total >= 1000 ){
-        this.currentData.text = "导出数据量过大，建议分时间段导出。";
+      if(this.total >10 ){
+        // this.currentData.text = "导出数据量过大，建议分时间段导出。";
+        // this.dialogVisible = true
+        // this.currentDialog = auditingDialog
         this.dialogVisible = true
-        this.currentDialog = auditingDialog
+        this.currentDialog = exportTipDialog
+        this.currentData.query = this.init()
+        this.currentData.api = "finance.exportWd"
       }else{
         let query = this.init();
         this._apis.finance.exportWd(query).then((response)=>{
@@ -251,9 +268,25 @@ export default {
         })
       }      
     },
+    // 全选
+    selectAll(val){
+      // console.log(val,5555)
+      // console.log(this.dataList,0)
+      if(val && this.dataList.length > 0){
+        this.dataList.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
     handleSelectionChange(val){
-      console.log(val)
       this.multipleSelection = val;
+      if(val.length !=0 && val.length == this.dataList.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
     //批量审核
     batchCheck() {
@@ -291,6 +324,7 @@ export default {
     //查看
     handleClick(row){
       this.currentData = row
+      // console.log(this.currentData,"this.currentData")
       this.dialogVisible = true
       switch(row.status) {
           case 0:  //待审核
@@ -315,6 +349,7 @@ export default {
     },
     handleSubmit(datas){
       this._apis.finance.examineWd(datas).then((response)=>{
+          // console.log(response,"response");
           this.fetch()
       }).catch((error)=>{
           this.$notify.error({
@@ -374,6 +409,10 @@ export default {
   .checkAudit{
     // margin-right:220px;
     float:left;
+    .selectAll{
+      margin-left:14px;
+      margin-right:8px;
+    }
   }
 }
 </style>

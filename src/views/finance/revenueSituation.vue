@@ -66,8 +66,9 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-           :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+           :default-time="defaultTime"
+            :picker-options="pickerNowDateBefore"
+            >
           </el-date-picker>
           <el-button type="primary" @click="getDataDateRs">确定</el-button>
         </div>
@@ -149,6 +150,12 @@ export default {
     return {
       pickerNowDateBefore: {
         disabledDate: (time) => {
+          
+          // var date = new Date();
+          // if(utils.formatDate(date, "yyyy-MM-dd") == utils.formatDate(time, "yyyy-MM-dd") ){
+          //   this.defaultTime[1] = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss").substring(11)
+          //   console.log(utils.formatDate(date, "yyyy-MM-dd hh:mm:ss").substring(11));
+          // }
           return time.getTime() > new Date();
         }
       },
@@ -166,6 +173,7 @@ export default {
         chainRatioIncome:0,
         chainRatioRealIncome:0 
       },
+      defaultTime:['00:00:00', '23:59:59'],
       dataList:[],
       days:7,
       chartData:{}
@@ -192,7 +200,7 @@ export default {
         dataObj.realIncomes.push(item.realIncome)
       })
       this.chartData = dataObj
-    }
+    },
   },
   filters:{
       money(options){
@@ -220,14 +228,13 @@ export default {
     //初始化数据
     init(day){
       let date = new Date()
-      let endDate = utils.formatDate(date, "yyyy-MM-dd")+" 23:59:59"
+      let endDate = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss")
       let startDate = utils.countDate(-day)+" 00:00:00"
       this.timeValue = [startDate,endDate]
     },
     //概况
     getSurveyDay(){
       this._apis.finance.getSurveyDayRs({}).then((response)=>{
-        // console.log(response,"今日概况")
         this.surveyDay = response
       }).catch((error)=>{
         this.$notify.error({
@@ -243,7 +250,6 @@ export default {
         accountDateEnd:this.timeValue[1]
       }
       this._apis.finance.getDataDateRs(queryDate).then((response)=>{
-        // console.log(response,"时间段")
         if(response){
           this.survey = response   
           this.dataList = response.accountList
