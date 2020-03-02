@@ -10,18 +10,20 @@
                                 <br>
                                 <el-radio v-model="ruleForm.scoreToCash" label="0" @change="closeScoreToCash">不开启</el-radio><span class="c_warn">&nbsp;&nbsp;&nbsp;&nbsp;说明：开启用用户可以使用积分抵现（但不支持积分商城订单）</span><br>
                                 <el-radio v-model="ruleForm.scoreToCash" label="1" @change="openScoreToCash">开启</el-radio><br>
-                                <span>抵现比例：</span>
-                                <div style="width: 140px; display: inline-block">
-                                    <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
+                                <div v-if="ruleForm.scoreToCash == '1'">
+                                    <span>抵现比例：</span>
+                                    <div style="width: 140px; display: inline-block">
+                                        <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
+                                    </div>
+                                    <span>积分</span>
+                                    <div style="width: 54px; display: inline-block">
+                                        <el-input v-model="ruleForm.scorePercentageMoney" :disabled="true"></el-input>
+                                    </div>
+                                    <span>元</span>
                                 </div>
-                                <span>积分</span>
-                                <div style="width: 54px; display: inline-block">
-                                    <el-input v-model="ruleForm.scorePercentageMoney" :disabled="true"></el-input>
-                                </div>
-                                <span>元</span>
                             </div>
                         </el-form-item>
-                        <el-form-item label="积分抵现条件：">
+                        <el-form-item label="积分抵现条件：" v-if="ruleForm.scoreToCash == '1'">
                             <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash" @change="handleCheck2"></el-checkbox>
                             <span class="marR50">订单满</span>
                             <div style="width: 222px; display: inline-block">
@@ -29,7 +31,7 @@
                             </div>
                             <span>元</span>
                         </el-form-item>
-                        <el-form-item>
+                        <el-form-item v-if="ruleForm.scoreToCash == '1'">
                             <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px" @change="handleCheck"></el-checkbox>
                             <span class="marL105">最高可抵现订单金额的</span>
                             <div style="width: 222px; display: inline-block; margin-left: 20px">

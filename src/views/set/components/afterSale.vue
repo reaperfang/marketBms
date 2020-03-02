@@ -176,9 +176,9 @@ export default {
     return {
       loading:false,
       currentTab: 'afterSale',
-      shopAutoReceive:true,
-      memberAutoReceive:true,
-      autoFinished:true,
+      shopAutoReceive:'',
+      memberAutoReceive:'',
+      autoFinished:'',
 
       form: {
             memberAutoConfirmReceive: '',
@@ -189,7 +189,10 @@ export default {
             invoiceOpen:'1',
             isTrace:'0',
             apiKey:'',
-            kdBusinessId:''
+            kdBusinessId:'',
+            isMemberAutoConfirmReceive:0,
+            isShopAutoConfirmReceive:0,
+            isOrderAutoFinished:0
         },
       rules: {
           name1: [
@@ -220,7 +223,16 @@ export default {
   },
   components: {},
   watch: {
-    
+    shopAutoReceive(a,b){
+      this.form.isShopAutoConfirmReceive  = Number(a)
+    },
+    memberAutoReceive(a,b){
+      this.form.isMemberAutoConfirmReceive  = Number(a)
+      },
+    autoFinished(a,b){
+      this.form.isOrderAutoFinished = Number(a)
+
+      },
   },
   computed:{
       cid(){
@@ -242,7 +254,14 @@ export default {
         this.form.orderAutoFinished = response.orderAutoFinished,
         this.form.orderComment = response.orderComment,
         this.form.orderCommentGood = response.orderCommentGood,
-        this.form.invoiceOpen = response.invoiceOpen
+        this.form.invoiceOpen = response.invoiceOpen,
+        this.form.isMemberAutoConfirmReceive = response.isMemberAutoConfirmReceive,
+        this.form.isShopAutoConfirmReceive = response.isShopAutoConfirmReceive,
+        this.form.isOrderAutoFinished = response.isOrderAutoFinished,
+        this.shopAutoReceive = Boolean(response.isShopAutoConfirmReceive),
+        this.memberAutoReceive = Boolean(response.isMemberAutoConfirmReceive),
+        this.autoFinished = Boolean(response.isOrderAutoFinished)
+        console.log(this.form,555);
       }).catch(error =>{
         console.log(error)
       })
@@ -279,6 +298,9 @@ export default {
           orderComment:this.form.orderComment,
           orderCommentGood:this.form.orderCommentGood,
           invoiceOpen:this.form.invoiceOpen,
+          isMemberAutoConfirmReceive : this.form.isMemberAutoConfirmReceive ,
+          isShopAutoConfirmReceive : this.form.isShopAutoConfirmReceive ,
+          isOrderAutoFinished : this.form.isOrderAutoFinished 
         }
         this._apis.set.updateShopInfo(data).then(response =>{
           this.loading = false

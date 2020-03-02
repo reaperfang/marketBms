@@ -121,7 +121,7 @@ export default {
   methods: {
     submit() {},
     sendDiscount() {
-      this.$emit("sendDiscount");
+      this.$emit("sendDiscount", this.activeName);
     },
     getUsedCoupon(type) {
       let params;

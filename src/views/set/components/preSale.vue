@@ -152,7 +152,7 @@ export default {
   name: 'preSale',
   data() {
     var checkCancelOrder = (rule,value,callback)=>{
-      if(this.autoOrder && !value){
+      if(this.isAutoCancelUnpayOrder == 1 && !value){
         return callback(new Error('输入框不能为空'))
       }else{
         callback()
@@ -168,8 +168,8 @@ export default {
     return {
       loading:false,
       currentTab: 'preSale',
-      autoOrder:true,
-      sendOrder:true,
+      autoOrder:"",
+      sendOrder:"",
       form: {
             autoCancelUnpayOrder: '',
             acuoType: 1,
@@ -177,6 +177,8 @@ export default {
             transportationExpenseType: 1,
             orderAutoSend: '',
             oasType: '',
+            isAutoCancelUnpayOrder:0,
+            isOrderAutoSend:0
 
         },
      rules: {
@@ -201,12 +203,12 @@ export default {
   },
   components: {},
   watch: {
-    // autoOrder(after,before){
-    //   console.log(after,before)
-    //   if(after == true){
-      
-    //   }
-    // }
+    autoOrder(after,before){
+      this.form.isAutoCancelUnpayOrder  =Number(after)
+    },
+    sendOrder(after,before){
+      this.form.isOrderAutoSend  =Number(after)
+    }
   },
   computed:{
       deliverGoodsTypeCheckout:{
@@ -222,6 +224,10 @@ export default {
           return shopInfo.id
       }
    },
+  mounted(){
+
+   
+  },
   created() {
       this.getShopInfo()
   },
@@ -232,8 +238,9 @@ export default {
     getShopInfo(){
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
-        console.log(response,"222")
         this.form = response
+        this.autoOrder = Boolean(response.isAutoCancelUnpayOrder)
+        this.sendOrder = Boolean(response.isOrderAutoSend)
       }).catch(error =>{
         this.$notify.error({
           title: '错误',
@@ -254,7 +261,9 @@ export default {
               deliverGoodsType:this.form.deliverGoodsType,
               transportationExpenseType:this.form.transportationExpenseType,
               orderAutoSend:this.form.orderAutoSend,
-              oasType:this.form.oasType
+              oasType:this.form.oasType,
+              isAutoCancelUnpayOrder:this.form.isAutoCancelUnpayOrder,
+              isOrderAutoSend:this.form.isOrderAutoSend
             }
             this._apis.set.updateShopInfo(data).then(response =>{
               this.loading = false

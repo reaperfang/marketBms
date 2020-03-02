@@ -1,4 +1,5 @@
 <template>
+<div>
   <DialogBase :visible.sync="visible" @submit="submit" title="发放优惠券" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
       <p class="marB20">用户ID: {{data.memberSn}}</p>
@@ -7,11 +8,9 @@
           选择优惠券：
         </div>
         <div class="fl r_block">
-          <div class="sel_cont" v-for="(i,index) in selectList" :key="index">
-            <el-select v-model="i.appCouponId" style="margin-bottom: 10px" @change="handleChange">
-              <el-option v-for="item in data.allCoupons" :key="item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-            <el-input-number v-model="i.couponNum" :min="1" :max="10"></el-input-number>
+          <div class="sel_cont" v-for="(i,index) in selectedCoupons" :key="index">
+            <span class="sel_cont_name">{{i.name}}</span>
+            <el-input-number v-model="i.frozenNum" :min="1" :max="10"></el-input-number>
             <span class="addMainColor pointer" @click="handleDelete(index)" style="margin-left: 20px">删除</span>
           </div>
           <span class="add pointer" @click="handleAdd">添加</span>
@@ -19,12 +18,81 @@
       </div>
     </div>
     <div>
-            <span slot="footer" class="dialog-footer fcc">
-                <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
-                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
-            </span>
-        </div>
+      <span slot="footer" class="dialog-footer fcc">
+          <el-button type="primary" @click="submit" :loading="btnLoading">确 认</el-button>
+          <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+      </span>
+    </div>
   </DialogBase>
+  <el-dialog
+        title="选择优惠券"
+        :visible.sync="dialogVisible2"
+        width="40%"
+    >
+        <div>
+            <p class="user_id2">用户ID: {{ data.memberSn }}</p>
+            <el-table
+                :data="data.allCoupons"
+                style="width: 100%"
+                ref="couponListTable"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                :default-sort="{prop: 'date', order: 'descending'}"
+                v-loading="loading"
+            >
+                <el-table-column
+                    type="selection"
+                    width="55">
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    label="优惠券名称">
+                </el-table-column>
+                <el-table-column
+                    label="优惠方式">
+                    <template slot-scope="scope">
+                        {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="使用门槛">
+                    <template slot-scope="scope">
+                        {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="状态"
+                    width="80"
+                >
+                    有效
+                </el-table-column>
+                <el-table-column
+                    prop="ownNum"
+                    label="数量"
+                    width="80"
+                >
+                </el-table-column>
+                <el-table-column
+                    label="冻结数量">
+                    <template slot-scope="scope">
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum > 10 ? 10:scope.row.ownNum"></el-input-number>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="a_line">
+                <div class="fl">
+                    <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
+                </div>
+                <div class="fr">
+                    共条数据
+                </div>
+            </div>
+        </div>
+        <span slot="footer" class="dialog-footer fcc">
+            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="couponSubmit">确 定</el-button>
+        </span>
+    </el-dialog>
+</div>
 </template>
 <script>
 import clientApi from "@/api/client";
@@ -36,23 +104,53 @@ export default {
     return {
       hasCancel: true,
       coupon:"",
-      selectList: [
-        {couponNum: 1,appCouponId:"",memberId:this.data.id,receiveType:"1",receiveActivityId:"1"}
-      ],
-      btnLoading: false
+      btnLoading: false,
+      dialogVisible2: false,
+      loading: false,
+      checkAll: false,
+      selectedCoupons: []
     };
   },
   methods: {
+    couponSubmit() {
+      this.dialogVisible2 = false;
+      if(this.$refs.couponListTable.selection.length == 0) {
+        this.$notify({
+          title: '提示',
+          message: "请选择要发放的优惠券",
+          type: 'warning'
+        });
+      }else if(this.$refs.couponListTable.selection.length <= 10) {
+        this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
+      }else{
+        this.$notify({
+          title: '提示',
+          message: "最多只能选择10张优惠券",
+          type: 'warning'
+        });
+      }
+    },
+    handleChangeAll(val) {
+      this.data.allCoupons.forEach(row => {
+          this.$refs.couponListTable.toggleRowSelection(row,val);
+      });
+    },
     submit() {
       this.btnLoading = true;
-      let canSubmit = true;
-      this.selectList.map((v) => {
-        if(v.appCouponId == "") {
-          canSubmit = false;
+      let arr = [];
+      this.selectedCoupons.map((item) => {
+        let obj = {
+          couponNum: item.frozenNum,
+          appCouponId: item.id,
+          memberId:this.data.id,
+          receiveType:"1",
+          receiveActivityId:"1",
+          weChartNickname: this.data.weChartNickname
         }
-      })
-      if(this.selectList[0].appCouponId.length > 0 && !!canSubmit) {
-        this._apis.client.distributeCoupon(this.selectList).then((response) => {
+        arr.push(obj);
+      });
+      if(this.selectedCoupons.length > 0) {
+        this._apis.client.distributeCoupon(arr).then((response) => {
         response.map((v) => {
           if(!!v.receiveDesc) {
             this.visible = false;
@@ -82,41 +180,16 @@ export default {
         this.btnLoading = false;
         this.$notify({
             title: '警告',
-            message: '请正确选择优惠券',
+            message: '请选择优惠券',
             type: 'warning'
           });
       }
     },
     handleAdd() {
-      if(this.selectList.length > 9) {
-        this.$notify({
-            title: '警告',
-            message: '发放优惠券不能超过10种',
-            type: 'warning'
-          });
-      }else{
-        this.selectList.push({couponNum: 1,appCouponId:"",memberId:this.data.id,receiveType:"1",receiveActivityId:"1",weChartNickname: this.data.weChartNickname});
-      } 
+      this.dialogVisible2 = true;
     },
     handleDelete(index) {
-      this.selectList.splice(index, 1);
-    },
-    handleChange(val) {
-      let i = 0;
-      if(this.selectList.length > 1) {
-        this.selectList.map((v) => {
-          if(v.appCouponId == val) {
-            i++;
-          }
-        });
-        if(i == 2) {
-          this.$notify({
-            title: '警告',
-            message: '不能选择重复的优惠券',
-            type: 'warning'
-          });
-        }
-      }
+      this.selectedCoupons.splice(index, 1);
     }
   },
   computed: {
@@ -152,6 +225,42 @@ export default {
 /deep/ .el-input-number--small{
   width: 110px;
 }
+/deep/ .el-dialog__header{
+    background: #f1f0ff;
+    border-radius: 10px 10px 0 0;
+}
+/deep/ .el-input-number--small .el-input-number__decrease{
+    width: 18px;
+    font-size: 13px;
+    height: 18px;
+    background-color: #655EFF;
+    color: #fff;
+    border-radius: 50%;
+    line-height: 18px;
+    margin-top: 5px;
+}
+/deep/ .el-input-number--small .el-input-number__increase{
+    width: 18px;
+    font-size: 13px;
+    height: 18px;
+    background-color: #655EFF;
+    color: #fff;
+    border-radius: 50%;
+    line-height: 18px;
+    margin-top: 5px;
+}
+/deep/ .el-input-number--small{
+    width: 94px;
+}
+/deep/ .el-input-number--small .el-input__inner{
+    padding-left: 21px;
+    padding-right: 21px;
+    border: 0;
+    background: none;
+}
+/deep/ .el-dialog{
+    border-radius: 10px;
+}
 .c_container {
     text-align: left;
     .l_block{
@@ -161,10 +270,17 @@ export default {
     .r_block{
       position: relative;
       .add{
-        position: absolute;
-        right: -44px;
-        top: 8px;
+        margin-top: 11px;
         color: #655EFF;
+        display: block;
+      }
+      .sel_cont{
+        .sel_cont_name{
+          display: inline-block;
+          width: 80px;
+          margin-right: 20px;
+          overflow: hidden;
+        }
       }
     }
     .marB20{
@@ -173,6 +289,19 @@ export default {
 }
 .dialog-footer{
     margin-top: 20px;
+}
+.a_line{
+    margin: 24px 46px 0 15px;
+    overflow: hidden;
+}
+.user_id{
+    text-align: left;
+    padding: 0 0 10px 15px;
+}
+.user_id2{
+    text-align: left;
+    padding: 0 0 10px 15px;
+    font-weight: bold;
 }
 </style>
 

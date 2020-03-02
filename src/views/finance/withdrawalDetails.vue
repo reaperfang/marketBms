@@ -2,7 +2,9 @@
 <template>
   <div>
     <div class="top_part">
+      <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
+        
         <el-form-item>
           <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;">
             <el-option
@@ -40,6 +42,9 @@
         <el-form-item label="客户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
           <el-button type="primary" @click="onSubmit" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
@@ -48,14 +53,14 @@
     </div>
     <div class="under_part">
       <div class="total">
-        <span>全部 <em>{{total}}</em> 项</span>
         <span>
-         <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button>
-          <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+         <!-- <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button> -->
+          <!-- <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button> -->
           <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-            <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
+            <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
           </el-tooltip>
-        </span>
+        </span> 
+        <span>全部 <em>{{total}}</em> 项</span>
       </div>
       <el-table
         v-loading="loading"
@@ -64,6 +69,7 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'applyTime', order: 'descending'}"
         @selection-change="handleSelectionChange"
+        ref="multipleTable"
         >
         <el-table-column
         type="selection"
@@ -72,6 +78,10 @@
         <el-table-column
           prop="cashoutSn"
           label="提现编号">
+        </el-table-column>
+         <el-table-column
+          prop="memberSn"
+          label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="memberSn"
@@ -106,6 +116,11 @@
         </el-table-column>
       </el-table>
       <div class="page_styles">
+      <div class="checkAudit">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button   type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+      </div>
+        
          <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -133,10 +148,11 @@ import auditingDialog from './dialogs/auditingDialog'//审核
 import handleAuditDialog from './dialogs/handleAuditDialog'//提现详情  处理中
 import failAuditDialog from './dialogs/failAuditDialog'//提现详情  失败
 import successAuditDialog from './dialogs/successAuditDialog'//提现详情  成功
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
   name: 'revenueSituation',
   extends: TableBase,
-  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog },
+  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog ,exportTipDialog},
   data() {
     return {
       pickerNowDateBefore: {
@@ -153,6 +169,7 @@ export default {
         memberSn:''
       },
       dataList:[ ],
+      selectStatus:false,
       total:0,
       currentDialog:"",
       dialogVisible: false,
@@ -231,10 +248,14 @@ export default {
     },
     //导出
     exportToExcel() {
-      if(this.total >= 1000 ){
-        this.currentData.text = "导出数据量过大，建议分时间段导出。";
+      if(this.total >10 ){
+        // this.currentData.text = "导出数据量过大，建议分时间段导出。";
+        // this.dialogVisible = true
+        // this.currentDialog = auditingDialog
         this.dialogVisible = true
-        this.currentDialog = auditingDialog
+        this.currentDialog = exportTipDialog
+        this.currentData.query = this.init()
+        this.currentData.api = "finance.exportWd"
       }else{
         let query = this.init();
         this._apis.finance.exportWd(query).then((response)=>{
@@ -247,8 +268,25 @@ export default {
         })
       }      
     },
+    // 全选
+    selectAll(val){
+      // console.log(val,5555)
+      // console.log(this.dataList,0)
+      if(val && this.dataList.length > 0){
+        this.dataList.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
     handleSelectionChange(val){
       this.multipleSelection = val;
+      if(val.length !=0 && val.length == this.dataList.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
     //批量审核
     batchCheck() {
@@ -286,6 +324,7 @@ export default {
     //查看
     handleClick(row){
       this.currentData = row
+      // console.log(this.currentData,"this.currentData")
       this.dialogVisible = true
       switch(row.status) {
           case 0:  //待审核
@@ -310,6 +349,7 @@ export default {
     },
     handleSubmit(datas){
       this._apis.finance.examineWd(datas).then((response)=>{
+          // console.log(response,"response");
           this.fetch()
       }).catch((error)=>{
           this.$notify.error({
@@ -332,6 +372,13 @@ export default {
   background: #fff;
   border-radius: 3px;
   padding: 15px 20px;
+  .withdraw{
+    text-align: right;
+    display: block;
+    color:#655EFF;
+    font-size:14px;
+    margin-bottom:15px;
+  }
 }
 .under_part{
   width: 100%;
@@ -339,11 +386,13 @@ export default {
   margin-top: 20px;
   padding: 15px 20px;
   .total{
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display: block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -354,5 +403,16 @@ export default {
 .table{
   width: 100%; 
   margin-top:20px;
+}
+.page_styles{
+  // display: flex;
+  .checkAudit{
+    // margin-right:220px;
+    float:left;
+    .selectAll{
+      margin-left:14px;
+      margin-right:8px;
+    }
+  }
 }
 </style>
