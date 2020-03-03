@@ -51,7 +51,12 @@
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >像素大小控制在1000象素*600象素以下</span>
           <img v-if="imageUrl" :src="imageUrl" class="avatar cardImg" />
-          <img v-else src="../../assets/images/client/card.png" alt class="cardImg" />
+          <div v-else class="cardImg2" :style="{backgroundColor: currentColor}">
+            <p class="c_bh">3363197129819XXXXX</p>
+            <p class="c_name">{{ ruleForm.name }}</p>
+            <p class="c_level">{{ ruleForm.alias }}</p>
+          </div>
+          <!-- <img v-else src="../../assets/images/client/card.png" alt class="cardImg" /> -->
         </el-form-item>
         <el-form-item label="领取条件：" prop="receiveSetting">
           <el-radio v-model="ruleForm.receiveSetting" label="0">可直接领取</el-radio>
@@ -255,6 +260,7 @@ export default {
       selectedReds: [],
       levelConditionValueDto: {},
       colors: [],
+      currentColor: "",
       canSubmit1: true,
       canSubmit2: true,
       canSubmit3: true,
@@ -378,15 +384,15 @@ export default {
           }
           this.currentData.redArr = [].concat(redArr);
           //用于回显背景
-          let imgType = "0"; //设置图片类型初始为背景图
-          this.colors.map(v => {
-            if (v.imgUrl == this.ruleForm.background) {
-              v.active = "1";
-              imgType = "1";
-            }
-          });
-          if (imgType == "1") {
-            this.imageUrl = "";
+          if(this.ruleForm.backgroundType == "0") {
+            this.colors.map(v => {
+              if (v.imgUrl == this.ruleForm.background) {
+                v.active = "1";
+                this.currentColor = v.imgKey
+              }
+            });
+          }else{
+            this.imageUrl = this.ruleForm.background;
           }
         })
         .catch(error => {
@@ -554,6 +560,7 @@ export default {
         this.$set(v, "active", "0");
       });
       this.$set(item, "active", "1");
+      this.currentColor = item.imgKey;
     },
     chooseImg(val) {
       if (val == 1) {
@@ -957,6 +964,29 @@ export default {
     position: absolute;
     right: 20px;
     top: 40px;
+  }
+  .cardImg2 {
+    width: 323px;
+    height: 140px;
+    position: absolute;
+    right: 20px;
+    top: 40px;
+    border-radius: 8px;
+    background: url('../../assets/images/client/bg_card.png') 0 0 no-repeat;
+    .c_bh{
+      font-size: 12px;
+      margin: 4px 0 0 13px;
+    }
+    .c_name{
+      font-size: 20px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .c_level{
+      margin: 20px 0 0 15px;
+      font-size: 16px;
+    }
   }
   .level_order {
     color: #3d434a;
