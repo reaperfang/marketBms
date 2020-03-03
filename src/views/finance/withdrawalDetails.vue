@@ -39,7 +39,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="客户ID">
+        <el-form-item label="用户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="用户昵称">
@@ -251,7 +251,7 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      if(this.multipleSelection.length > 0 && this.total <=1000 ){
+      if(this.multipleSelection.length > 0){
          let ids = this.multipleSelection.map((item)=> item.id)
          query.ids = ids;
          this._apis.finance.exportWd(query).then((response)=>{

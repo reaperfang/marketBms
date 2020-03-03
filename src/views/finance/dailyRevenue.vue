@@ -70,8 +70,8 @@
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
-      </div> 
-      <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" />
+      </div>
+		<exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
     </div>
   </div>
 </template>
