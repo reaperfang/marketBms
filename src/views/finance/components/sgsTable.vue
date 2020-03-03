@@ -90,8 +90,8 @@
           :total="total*1">
         </el-pagination>
       </div>
-    </div> 
-        <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible"/>  
+    </div>
+	  <exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
   </div>
 </template>
 

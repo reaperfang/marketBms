@@ -216,9 +216,7 @@ export default {
         name: true,
         gender: false,
         birthday: false,
-        email: false,
-        area: false,
-        hobby: false
+        email: false
       },
       disabled1: false,
       conInfos: [],

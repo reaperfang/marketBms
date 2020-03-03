@@ -7,7 +7,7 @@
         <span class="fl c_label">提现申请</span>
         <div class="fl">
           <div class="c_top">
-            <p>用户昵称：{{}}</p>
+            <p>用户昵称：{{info.nickName}}</p>
             <p>用户ID：{{info.memberSn}}</p>
             <p>
               提现金额：

@@ -48,7 +48,10 @@
                 <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占客户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>
                 <div class="fr marT20">
                     <!-- <el-button class="minor_btn" @click="reScreening()">重新筛选</el-button> -->
-                    <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出</el-button>
+                    <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+                        <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出</el-button>
+                    </el-tooltip>
+                    
                 </div>
             </div>
             <ma3Table 
@@ -71,13 +74,15 @@
         </div>
         <div class="contents"></div>
         <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
 <script>
 import ma3Table from './components/ma3Table';
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
     name: 'integral',
-    components: { ma3Table },
+    components: { ma3Table ,exportTipDialog },
     data() {
         return {
             pickerOptions: {
@@ -133,7 +138,10 @@ export default {
                     name: "老会员"
                 }
             ],
-            note:''
+            note:'',
+            currentDialog:"",
+            dialogVisible: false,
+            currentData:{},
         }
     },
     created(){
@@ -221,13 +229,20 @@ export default {
             data.scorePaymentCountRange = this.form.scorePaymentCountRange
             data.memberType = this.form.memberType            
             data.timeType = this.form.timeType
-            this._apis.data.integralConsumptionExport(data)
-            .then(res => {z
-                window.open(res);
-            })
-            .catch(err=>{
-                this.$message.error(err);
-            })
+            if(this.memberCount && this.memberCount > 1000 ){
+                this.dialogVisible = true
+                this.currentDialog = exportTipDialog
+                this.currentData.query = data
+                this.currentData.api = "data.integralConsumptionExport"
+            }else{
+                this._apis.data.integralConsumptionExport(data)
+                .then(res => {
+                    window.open(res);
+                })
+                .catch(err=>{
+                    this.$message.error(err);
+                })
+            }    
         },
         sizeChange(val){
             this.form.pageSize = val;

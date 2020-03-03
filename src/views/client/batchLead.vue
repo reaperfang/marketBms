@@ -102,13 +102,16 @@
                     <el-form-item label="商品条件：">
                         <el-checkbox v-model="ruleForm.isProduct" @change="handleCheck7">购买以下任意商品</el-checkbox>
                         <span class="addMainColor marL20 pointer" @click="chooseProduct">选择商品</span>
+                        <ul v-if="selectedList.length !== 0">
+                            <li v-for="item in selectedList" :key="item.goodsInfo.id" class="proList"><span>{{item.goodsInfo.name}}</span><span>{{item.goodsInfo.specs}}</span><span>{{item.goodsInfo.stock}}</span><span class="pointer" style="color: #FD4C2B;" @click="handleClick(item)">删除</span></li>
+                        </ul>
                     </el-form-item>
                 </div>
                 </div>
             </el-form>
         </div>
         <div class="btn_cont">
-            <el-button type="primary" @click="doubleCheck" v-permission="['客户', '用户标签', '默认页面', '保存']">保 存</el-button>
+            <el-button type="primary" @click="doubleCheck" v-permission="['客户', '客户标签', '默认页面', '保存']">保 存</el-button>
             <el-button @click="_routeTo('clientLabel')">取 消</el-button>
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @getSelected="getSelected"></component>
@@ -123,6 +126,7 @@ export default {
     data() {
         return {
             consumeTime:"",
+            selectedList: [],
             ruleForm: {
                 tagName: "",
                 tagType: "0",
@@ -173,6 +177,9 @@ export default {
         }
     },
     methods: {
+        handleClick(item) {
+            this.selectedList.splice(item, 1);
+        },
         checkZero(event,val,ele) {
             val = val.replace(/[^\d.]/g,'');
             val = val.replace(/\.{2,}/g,'.');
@@ -261,7 +268,8 @@ export default {
             }
         },
         getSelected(val) {
-            this.selectedIds = val;
+            this.selectedList = [].concat(val);
+            //this.selectedIds = val;
         },
         isInteger(val) {
             let v = Number(val);
@@ -276,6 +284,11 @@ export default {
                 });
             }else{
                 this.canSubmit = true;
+                let selectedIds = [];
+                this.selectedList.map((v) => {
+                    selectedIds.push(v.goodsInfo.id);
+                });
+                this.selectedIds = selectedIds.join(',');
                 if(this.ruleForm.consumeTimeType == "0") {
                     if(!this.isInteger(this.ruleForm.consumeTimeValue)) {
                         this.$notify({
@@ -473,7 +486,16 @@ export default {
                     this.ruleForm.isTotalScore = Boolean(this.ruleForm.isTotalScore);
                     this.ruleForm.isProduct = Boolean(this.ruleForm.isProduct);
                     this.ruleForm.consumeTimeUnit = this.ruleForm.consumeTimeUnit.toString();
-                    this.selectedIds = this.ruleForm.productInfoIds;   
+                    this.selectedIds = this.ruleForm.productInfoIds;
+                    //根据selectedIds查询商品
+                    this._apis.client.getSkuList({ids: this.selectedIds.split(','), startIndex: 1,pageSize: 99}).then((response) => {
+                        this.selectedList = [].concat(response.list);
+                        this.selectedList.map((item) => {
+                            item.goodsInfo.specs = item.goodsInfo.specs.replace(/"|{|}/g, "");
+                        })
+                    }).catch((error) => {
+                        console.log(error);
+                    }) 
                     if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
                         this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
                     }
@@ -525,6 +547,12 @@ export default {
     .btn_cont{
         text-align: center;
         margin: 20px 0 30px 0;
+    }
+    .proList{
+        margin-top: 10px;
+        span{
+            margin-right: 20px;
+        }
     }
 }
 </style>
