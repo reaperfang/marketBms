@@ -124,7 +124,7 @@ export default {
       currentDialog: '',
       ruleForm: {
         templateType: 1,  //模板类型
-        pageMargin: 10,  //页面边距
+        pageMargin: 0,  //页面边距
         imgMargin: 10,  //图片间距
         imgStyle: 1,  //图片样式
         imgChamfer: 1,  //图片倒角

@@ -336,7 +336,7 @@ ul.cube.template_type{
        height:54px;
     }
     &.active{
-      border:2px dashed $globalMainColor;
+      border:1px solid $globalMainColor;
     }
     p{
       margin-top:6px;

@@ -150,8 +150,13 @@ export default {
 
     addNav() {
       if(this.ruleForm.itemList.length <10) {
+        if(!this.ruleForm.itemList[0].title) {
+          const tempList = [...this.ruleForm.itemList];
+          tempList[0].title = '导航';
+          this.ruleForm.itemList = tempList;
+        }
         this.ruleForm.itemList.push({
-          title: '',
+          title: '导航',
           url: '',
           linkTo: null,
           id: uuid()
