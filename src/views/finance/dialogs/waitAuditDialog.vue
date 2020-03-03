@@ -3,7 +3,7 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
         <div class="c_container clearfix">
             <div class="c_top">
-                <p>用户昵称：{{}}</p>
+                <p>用户昵称：{{info.nickName}}</p>
                 <p>用户ID：{{info.memberSn}}</p>
                 <p>提现金额：<span>￥{{info.amount}}</span></p>
                 <p>提现编号：{{info.cashoutSn}}</p>
