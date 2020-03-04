@@ -9,7 +9,8 @@
             </div>
             <div class="righter">
                 <i class="memberLevelImg" :style="{background: `url(${orderDetail.memberLevelImg})`}"></i>
-                <span class="member-sn">客户ID：{{orderDetail.orderInfo.memberSn}}</span>
+                <span class="member-name">用户昵称：{{orderDetail.orderInfo.memberName}}</span>
+                <span class="member-sn">用户ID：{{orderDetail.orderInfo.memberSn}}</span>
             </div>
         </div>
         <orderState :orderInfo="orderDetail.orderInfo" :orderState="orderDetail.orderInfo.orderStatus" :payWay="orderDetail.orderInfo.payWay" :closeReaosn="orderDetail.orderInfo.closeReaosn" @orderStatusSuccess="getDetail" class="order-state"></orderState>
@@ -414,6 +415,10 @@ export default {
         margin-right: 5px;
     }
     .member-sn {
+        color: #b6b6b9;
+    }
+    .member-name {
+        margin-right: 20px;
         color: #b6b6b9;
     }
 </style>

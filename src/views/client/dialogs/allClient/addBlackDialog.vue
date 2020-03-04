@@ -39,7 +39,7 @@
     <el-dialog
         title="选择优惠券"
         :visible.sync="dialogVisible2"
-        width="40%"
+        width="45%"
     >
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
@@ -342,7 +342,7 @@ export default {
                         obj.couponNum = item.frozenNum;
                         arr.push(obj);
                     });
-                    this._apis.client.frozenCoupons({couponIdList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
+                    this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
                         console.log(error);
@@ -357,7 +357,7 @@ export default {
                         obj.couponNum = item.frozenNum;
                         arr.push(obj);
                     });
-                    this._apis.client.frozenCoupons({couponIdList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
+                    this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
                         console.log(error);
@@ -404,7 +404,7 @@ export default {
             this.selectedCodes.splice(index, 1);
         },
         getAllCoupons() {
-            this._apis.client.getAllCoupons({couponType: 0}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 0, memberId: this.data.id, frozenType: 1}).then((response) => {
                 this.couponList = [].concat(response.list);
                 this.couponList.map((item) => {
                     this.$set(item, 'frozenNum',1);
@@ -414,7 +414,7 @@ export default {
             })
         },
         getAllCodes() {
-            this._apis.client.getAllCoupons({couponType: 1}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 1, memberId: this.data.id, frozenType: 1}).then((response) => {
                 this.codeList = [].concat(response.list);
                 this.codeList.map((item) => {
                     this.$set(item, 'frozenNum', 1);
@@ -522,7 +522,7 @@ export default {
         .a_d_name{
             display: inline-block;
             color:#B5BDCA;
-            width: 100px;
+            width: 125px;
             overflow: hidden;
             margin-right: 5px;
         }

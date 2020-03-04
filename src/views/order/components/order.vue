@@ -7,7 +7,7 @@
                     <div class="col">数量</div>
                 </div>
             </div>
-            <div class="item" style="width: 120px;">订单金额</div>
+            <div class="item" style="width: 120px;">应收金额</div>
             <div class="item" style="width: 120px;">收货人及联系方式</div>
             <div class="item">配送方式</div>
             <div class="item">状态</div>
@@ -17,7 +17,7 @@
             <div class="container-item" v-for="(order, index) in list" :key="index">
                 <div class="container-item-header">
                     <div class="item">
-                        <el-checkbox :disabled="order.orderStatus == 2" @change="checkedChange" v-model="order.checked"></el-checkbox>
+                        <el-checkbox :disabled="order.orderStatus == 2 || order.orderStatus == 6" @change="checkedChange" v-model="order.checked"></el-checkbox>
                         <span class="order-code">
                             <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="light">
                                 <i class="auto"></i>
@@ -30,7 +30,7 @@
                     </div>
                     <div class="item righter">
                         <span>订单类型：{{order.orderType | orderTypeFilter}}</span>
-                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>客户ID：{{order.memberSn}}</span>
+                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：{{order.memberName}}</span>
                         <span>订单来源：{{order.channelName}}</span>
                         <!-- <i v-permission="['订单', '订单查询', '商城订单', '删除订单']" @click="closeOrder(order.id)" v-if="order.orderStatus == 2" class="el-icon-delete"></i> -->
                     </div>
@@ -61,7 +61,7 @@
                     <div class="item" style="width: 120px;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
-                        <p>¥{{order | netReceiptsFilter}}</p>
+                        <p>¥{{order | yingshowFilter}}</p>
                         <!-- <p>{{order.channelName}}支付</p> -->
                     </div>
                     <div class="item" style="width: 120px;">
@@ -188,6 +188,37 @@ export default {
             total = total.toFixed(2)
 
             return total
+        },
+        yingshowFilter(orderInfo) {
+            let consumeBalanceMoney
+            let consumeScoreConvertMoney
+            let actualMoney
+            let receivableMoney
+            let total
+            let yingshow
+
+            consumeBalanceMoney = typeof orderInfo.consumeBalanceMoney == 'string' ? parseFloat(orderInfo.consumeBalanceMoney) : orderInfo.consumeBalanceMoney
+            consumeScoreConvertMoney = typeof orderInfo.consumeScoreConvertMoney == 'string' ? parseFloat(orderInfo.consumeScoreConvertMoney) : orderInfo.consumeScoreConvertMoney
+            actualMoney = typeof orderInfo.actualMoney == 'string' ? parseFloat(orderInfo.actualMoney) : orderInfo.actualMoney
+            receivableMoney = typeof orderInfo.receivableMoney == 'string' ? parseFloat(orderInfo.receivableMoney) : orderInfo.receivableMoney
+
+            if(orderInfo.orderStatus == 3) {
+                if(orderInfo.payWay == 2) {
+                    total = consumeBalanceMoney + consumeScoreConvertMoney + receivableMoney
+                    total = total.toFixed(2)
+                    yingshow = total
+                } else {
+                    total = consumeBalanceMoney + consumeScoreConvertMoney + actualMoney
+                    total = total.toFixed(2)
+                    yingshow = total
+                }
+            } else {
+                total = consumeBalanceMoney + consumeScoreConvertMoney + receivableMoney
+                total = total.toFixed(2)
+                yingshow = total
+            }
+
+            return yingshow
         }
     },
     methods: {
@@ -243,8 +274,10 @@ export default {
         },
         checkedChange() {
             let len = this.list.filter(val => val.checked).length
+            let list = this.list.filter(val => val.checked)
 
             this._globalEvent.$emit('checkedLength', len)
+            this._globalEvent.$emit('checkedList', list)
         }
     },
     props: {
