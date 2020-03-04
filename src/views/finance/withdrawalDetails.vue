@@ -39,11 +39,11 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="客户ID">
+        <el-form-item label="用户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="用户昵称">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.nickName" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
@@ -80,12 +80,12 @@
           label="提现编号">
         </el-table-column>
          <el-table-column
-          prop="memberSn"
+          prop="nickName"
           label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="memberSn"
-          label="客户ID">
+          label="用户ID">
         </el-table-column>
         <el-table-column
           prop="amount"
@@ -166,7 +166,8 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        memberSn:''
+        memberSn:'',
+        nickName:''
       },
       dataList:[ ],
       selectStatus:false,
@@ -194,6 +195,7 @@ export default {
     init(){
       let query = {
         memberSn:'',
+        nickName:'',
         tradeDetailSn:'',
         cashoutSn:'',
         applyTimeStart:'',
@@ -248,16 +250,24 @@ export default {
     },
     //导出
     exportToExcel() {
-      if(this.total >10 ){
-        // this.currentData.text = "导出数据量过大，建议分时间段导出。";
-        // this.dialogVisible = true
-        // this.currentDialog = auditingDialog
+      let query = this.init();
+      if(this.multipleSelection.length > 0){
+         let ids = this.multipleSelection.map((item)=> item.id)
+         query.ids = ids;
+         this._apis.finance.exportWd(query).then((response)=>{
+          window.location.href = response
+        }).catch((error)=>{
+          this.$notify.error({
+            title: '错误',
+            message: error
+          });
+        })
+      }else if(this.total >1000 && this.multipleSelection.length == 0 ){
         this.dialogVisible = true
         this.currentDialog = exportTipDialog
-        this.currentData.query = this.init()
+        this.currentData.query = query
         this.currentData.api = "finance.exportWd"
-      }else{
-        let query = this.init();
+      }else if(this.multipleSelection.length == 0 && this.total<=1000){
         this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
@@ -270,8 +280,6 @@ export default {
     },
     // 全选
     selectAll(val){
-      // console.log(val,5555)
-      // console.log(this.dataList,0)
       if(val && this.dataList.length > 0){
         this.dataList.forEach((row)=>{
            this.$refs.multipleTable.toggleRowSelection(row,true);
@@ -324,7 +332,6 @@ export default {
     //查看
     handleClick(row){
       this.currentData = row
-      // console.log(this.currentData,"this.currentData")
       this.dialogVisible = true
       switch(row.status) {
           case 0:  //待审核
@@ -349,8 +356,9 @@ export default {
     },
     handleSubmit(datas){
       this._apis.finance.examineWd(datas).then((response)=>{
-          // console.log(response,"response");
           this.fetch()
+           this.dialogVisible = true
+           this.currentDialog = auditSuccessDialog
       }).catch((error)=>{
           this.$notify.error({
           title: '错误',
@@ -363,10 +371,16 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
+.el-table__header-wrapper  {
+    .el-checkbox{
+      display:none;
+    }
+	
+}
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+
 .top_part{
   width: 100%;
   background: #fff;
@@ -385,6 +399,7 @@ export default {
   background: #fff;
   margin-top: 20px;
   padding: 15px 20px;
+  
   .total{
     // display: flex;
     // justify-content: space-between;
@@ -415,4 +430,5 @@ export default {
     }
   }
 }
+  
 </style>

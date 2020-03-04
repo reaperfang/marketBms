@@ -47,6 +47,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+            <span class="edit_span" @click="handleOpen(scope.row)" v-if="scope.row.enableShow == true" v-permission="['客户', '会员等级', '默认页面', '查看']">启用</span>
+            <span class="edit_span" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['客户', '会员等级', '默认页面', '查看']">禁用</span>
             <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['客户', '会员等级', '默认页面', '查看']">编辑</span>
             <span class="edit_span" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['客户', '会员等级', '默认页面', '待配置']">待配置</span>
         </template>
@@ -79,6 +81,34 @@ export default {
 
   },
   methods: {
+    handleOpen(row) {
+      this._apis.client.levelEnable({id: row.id, status: 1}).then((response) => {
+        if(response == 1) {
+          this.getLevelsList();
+          this.$notify({
+            title: '成功',
+            message: "启动成功",
+            type: 'success'
+          });
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+    handleClose(row) {
+      this._apis.client.levelDisable({level: row.level, id: row.id, status: 0}).then((response) => {
+        if(response == 1) {
+          this.getLevelsList();
+          this.$notify({
+            title: '成功',
+            message: "禁用成功",
+            type: 'success'
+          });
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
     getLevelsList() {
       this.loading = true;
       this._apis.client.getLevelsList(this.params).then((response) => {
@@ -161,6 +191,7 @@ export default {
 .edit_span{
     color: #655EFF;
     cursor: pointer;
+    margin-right: 10px;
     .edit_i{
         display: inline-block;
         width: 14px;

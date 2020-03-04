@@ -39,12 +39,12 @@
                     <el-switch v-model="info.area" active-color="#66CCAC" @change="handleSwitch('area',info.area)"></el-switch>
                 </span>
             </p> -->
-            <p>
+            <!-- <p>
                 <span>爱好</span>
                 <span>
                     <el-switch v-model="info.hobby" active-color="#66CCAC" @change="handleSwitch('hobby',info.hobby)"></el-switch>
                 </span>
-            </p>
+            </p> -->
         </div>
     </DialogBase>
 </template>
@@ -61,8 +61,7 @@ export default {
                 name: true,
                 gender: false,
                 birthday: false,
-                email: false,
-                hobby: false
+                email: false
             },
         }
     },

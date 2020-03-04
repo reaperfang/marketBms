@@ -35,14 +35,13 @@ export default {
             flag = 1;
             break;
         }
-
         this._apis[apiModule][apiName](query).then((response)=>{
             if(flag == 1 && apiModule == 'finance'){
                 window.location.href = response.url
             }else if(flag == 0 && apiModule == 'finance'){
                 window.location.href = response
-            }else{
-
+            }else if(flag == 0 && apiModule == 'data'){
+                window.location.href = response
             }
           
         }).catch((error)=>{

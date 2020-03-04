@@ -86,7 +86,9 @@
                 </p>
                 <div class="fr marT20">
                     <!-- <el-button class="minor_btn" @click="reScreening">重新筛选</el-button> -->
-                    <el-button class="yellow_btn" icon="el-icon-share" @click="mIexport">导出</el-button>
+                    <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+                        <el-button class="yellow_btn" icon="el-icon-share" @click="mIexport">导出</el-button>
+                    </el-tooltip>
                 </div>
             </div>
             <maTable class="marT20s" 
@@ -106,13 +108,15 @@
         </div>
             <div class="contents"></div>
             <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
         </div>
 </template>
 <script>
 import maTable from './components/maTable';
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
     name: 'memberInfo',
-    components: { maTable },
+    components: { maTable ,exportTipDialog },
     data() {
         return {
             pickerOptions: {
@@ -179,7 +183,10 @@ export default {
             newMemberRatio:'',
             oldMemberCount:'',
             oldMemberRatio:'',
-            note:''
+            note:'',
+            currentDialog:"",
+            dialogVisible: false,
+            currentData:{},
         }
     },
     computed:{
@@ -315,14 +322,20 @@ export default {
             data.MoneyRange = this.form.MoneyRange
             data.timeType = this.form.timeType
 
-            console.log(data)
-            this._apis.data.memberInformationExport(data)
-            .then(res => {
-                window.open(res);
-            })
-            .catch(err=>{
-                this.$message.error(err);
-            })
+            if(((this.newMemberCount ||  0) + (this.oldMemberCount || 0)) > 1000){
+                this.dialogVisible = true
+                this.currentDialog = exportTipDialog
+                this.currentData.query = data
+                this.currentData.api = "data.memberInformationExport"
+            }else{
+                this._apis.data.memberInformationExport(data)
+                .then(res => {
+                    window.open(res);
+                })
+                .catch(err=>{
+                    this.$message.error(err);
+                })
+            }    
         },
         sizeChange(val){
             this.form.pageSize = val;

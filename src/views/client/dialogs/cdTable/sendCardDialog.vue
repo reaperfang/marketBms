@@ -3,13 +3,14 @@
         <div class="c_container">
             <p class="user_id">会员卡：{{data.name}}</p>
             <div class="clearfix">
-                <p class="c_label fl">发放人群：</p>
+                <p class="c_label fl">选择标签：</p>
                 <div class="fl tags_container">
                     <el-checkbox-group v-model="checkList" @change="handleChange">
                         <el-checkbox v-for="item in tags" :key="item.id" :label="item.tagName"></el-checkbox>
                     </el-checkbox-group>
                 </div>
             </div> 
+            <el-checkbox v-model="checkAll" @change="handleCheckAll" style="margin-left: 71px">全部</el-checkbox>
             <p class="red">确定给{{this.labels || '  '}}发放会员卡：{{data.name}}吗？</p>
         </div>
         <div>
@@ -32,10 +33,14 @@ export default {
             tags: [],
             checkList: [],
             labels: "",
-            btnLoading: false
+            btnLoading: false,
+            checkAll: false
         }
     },
     methods: {
+        handleCheckAll(val) {
+            this.checkList = val?this.tags:[];
+        },
         submit() {
             this.btnLoading = true;
             let tagIds = [];

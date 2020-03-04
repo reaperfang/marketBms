@@ -34,7 +34,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="balance" label="余额" sortable></el-table-column>
+      <el-table-column prop="balance" label="余额" sortable :sort-method="sortMethod"></el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
       <el-table-column prop="totalDealMoney" label="累计消费金额" sortable></el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
@@ -121,6 +121,9 @@ export default {
     //this.getMembers(1, this.pageSize);
   },
   methods: {
+    sortMethod(a,b) {
+      console.log(1)
+    },
     getRowKeys(row) {
       return row.id
     },

@@ -88,13 +88,15 @@
                 </div>
                 <div class="contents"></div>
                 <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
 <script>
 import ma4Table from './components/ma4Table';
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
     name: 'rightsProtection',
-    components: { ma4Table },
+    components: { ma4Table ,exportTipDialog },
     data() {
         return {
             form: {
@@ -136,7 +138,10 @@ export default {
                 }
             },
             note:'',
-            note1:''
+            note1:'',
+            currentDialog:"",
+            dialogVisible: false,
+            currentData:{}
         }
     },
     methods: {
@@ -217,9 +222,16 @@ export default {
         },
         // 导出
         exportExl(){
-            this._apis.data.evaluationExport(this.form).then(response => {
-                window.open(response);
-            })
+            if(this.listObj.memberCount && this.listObj.memberCount > 1000 ){
+                this.dialogVisible = true
+                this.currentDialog = exportTipDialog
+                this.currentData.query = this.form
+                this.currentData.api = "data.evaluationExport"
+            }else{
+                this._apis.data.evaluationExport(this.form).then(response => {
+                    window.open(response);
+                })
+            } 
         },
          getDay(day){
         　　var today = new Date();  

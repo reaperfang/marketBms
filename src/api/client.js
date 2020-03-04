@@ -639,3 +639,21 @@ export function batchFrozenCoupons(data) {
         data
     })
 }
+//等级启用
+export function levelEnable(data) {
+    return request({
+        target:'LEVEL-ENABEL-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//等级禁用
+export function levelDisable(data) {
+    return request({
+        target:'LEVEL-DISABLE-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}

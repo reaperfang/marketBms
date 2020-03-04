@@ -54,6 +54,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .c_container{
+    text-align: center;
     span{
         display: block;
         font-size: 18px;
