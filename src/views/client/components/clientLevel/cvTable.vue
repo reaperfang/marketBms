@@ -96,18 +96,24 @@ export default {
       })
     },
     handleClose(row) {
-      this._apis.client.levelDisable({level: row.level, id: row.id, status: 0}).then((response) => {
-        if(response == 1) {
-          this.getLevelsList();
-          this.$notify({
-            title: '成功',
-            message: "禁用成功",
-            type: 'success'
-          });
-        }
-      }).catch((error) => {
-        console.log(error);
-      })
+      this.$confirm('确认禁用该等级？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this._apis.client.levelDisable({level: row.level, id: row.id, status: 0}).then((response) => {
+            if(response == 1) {
+              this.getLevelsList();
+              this.$notify({
+                title: '成功',
+                message: "禁用成功",
+                type: 'success'
+              });
+            }
+          }).catch((error) => {
+            console.log(error);
+          })        
+        })
     },
     getLevelsList() {
       this.loading = true;

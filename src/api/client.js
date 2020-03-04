@@ -288,6 +288,15 @@ export function getAllCoupons(data) {
         params:data
     })
 }
+//获取优惠券下拉
+export function getAllCouponsOther(data) {
+    return request({
+        url: '/activity/page-list',
+        method: 'get',
+        baseURL: process.env.SALE_API,
+        params:data
+    })
+}
 //优惠券/码发放
 export function distributeCoupon(data) {
     return request({

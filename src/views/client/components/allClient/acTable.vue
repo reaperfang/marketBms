@@ -8,8 +8,8 @@
       ref="allClientTable"
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-      :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
+      @sort-change="changeSort"
     >
       <el-table-column type="selection" :reserve-selection="true"></el-table-column>
       <el-table-column prop="memberSn" label="客户ID"></el-table-column>
@@ -34,7 +34,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="balance" label="余额" sortable :sort-method="sortMethod"></el-table-column>
+      <el-table-column prop="balance" label="余额" sortable="custom"></el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
       <el-table-column prop="totalDealMoney" label="累计消费金额" sortable></el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
@@ -121,8 +121,29 @@ export default {
     //this.getMembers(1, this.pageSize);
   },
   methods: {
-    sortMethod(a,b) {
-      console.log(1)
+    changeSort(val) {
+      let tOrder = null;
+      switch(val.prop) {
+        case "balance":
+          tOrder = val.order == "ascending" ? 0:1
+          break;
+        case "score":
+          tOrder = val.order == "ascending" ? 2:3
+          break;
+        case "totalDealMoney":
+          tOrder = val.order == "ascending" ? 4:5
+          break;
+        case "dealTimes":
+          tOrder = val.order == "ascending" ? 6:7
+          break;
+        case "perUnitPrice":
+          tOrder = val.order == "ascending" ? 8:9
+          break;
+        default:
+          break;
+      }
+      this.$set(this.newForm,'orderByCondition', tOrder);
+      this.getMembers(1, this.pageSize);
     },
     getRowKeys(row) {
       return row.id
@@ -306,8 +327,8 @@ export default {
   position: relative;
   .export_btn{
     position: absolute;
-    top: -62px;
-    left: 73px;
+    top: 18px;
+    right: 40px;
   }
 }
 .a_line {
