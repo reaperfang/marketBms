@@ -56,10 +56,15 @@
                 <div class="item">
                     <div class="label">发票信息</div>
                     <div class="value">
-                        <p>发票类型 {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
-                        <p>发票抬头 {{orderInfo.invoiceTitle}}</p>
-                        <p>发票内容 商品明细</p>
-                        <!-- <p>电子发票将在订单完成后1-2天内开具</p> -->
+                        <template v-if="orderInfo.isInvoice == 1">
+                            <p>发票类型 {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
+                            <p>发票抬头 {{orderInfo.invoiceTitle}}</p>
+                            <p>发票内容 商品明细</p>
+                            <!-- <p>电子发票将在订单完成后1-2天内开具</p> -->
+                        </template>
+                        <template v-else>
+                            <p>不开发票</p>
+                        </template>
                     </div>
                 </div>
                 <div class="item">
