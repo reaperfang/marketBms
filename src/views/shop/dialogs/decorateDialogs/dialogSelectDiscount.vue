@@ -8,6 +8,7 @@
         </el-form-item>
         <el-form-item label="" prop="">
           <el-button type="primary" @click="fetch">搜  索</el-button>
+          <el-button type="primary" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -49,6 +50,10 @@
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
         </el-table-column>
+        <div slot="empty" class="table_empty">
+          <img src="../../../../assets/images/table_empty.png" alt="">
+          <div class="tips">暂无数据<span @click="addNewApply('/application/promotion/addTime')">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
+        </div>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -70,6 +75,7 @@ import DialogBase from "@/components/DialogBase";
 import tableBase from '@/components/TableBase';
 import utils from "@/utils";
 import uuid from 'uuid/v4';
+import { getToken } from '@/system/auth'
 export default {
   name: "dialogSelectDiscount",
   extends: tableBase,
@@ -126,9 +132,14 @@ export default {
     })
   },
   methods: {
-    fetch() {
+    fetch(ev, loadAll) {
       this.loading = true;
-      this._apis.shop.getDiscountList(this.ruleForm).then((response)=>{
+      let tempForm = {};
+      if(loadAll) {
+        tempForm = {...this.ruleForm};
+        tempForm.activityName = '';
+      }
+      this._apis.shop.getDiscountList(loadAll? tempForm: this.ruleForm).then((response)=>{
         this.tableList = response.list;
         this.total = response.total;
         this.loading = false;
@@ -165,6 +176,20 @@ export default {
     },
     getRowKey(row) {
       return row.activityId
+    },
+
+    /* 添加新营销活动 */
+    addNewApply(path) {
+      let token = getToken('authToken')
+      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
+      let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
+      let cid = shopInfo && shopInfo.id || ''
+      let newUrl = `${process.env.DATA_API}/vue/marketing${path}?access=1&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+      // let newUrl = `http://test-omo.aiyouyi.cn/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+
+      let newWindow = window.open("about:blank");
+      newWindow.location.href = newUrl;
     }
   }
 };
