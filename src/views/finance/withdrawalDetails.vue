@@ -53,14 +53,12 @@
     </div>
     <div class="under_part">
       <div class="total">
-        <span>
          <!-- <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button> -->
           <!-- <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button> -->
+          <span>全部 <em>{{total}}</em> 项</span>
           <el-tooltip content="当前最多支持导出1000条数据" placement="top">
             <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
           </el-tooltip>
-        </span> 
-        <span>全部 <em>{{total}}</em> 项</span>
       </div>
       <el-table
         v-loading="loading"
@@ -401,8 +399,8 @@ export default {
   padding: 15px 20px;
   
   .total{
-    // display: flex;
-    // justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
     span{
       font-size: 16px;
       color: #B6B5C8;
