@@ -9,37 +9,37 @@
                     <div class="p_p_l">
                         <span>
                             <div>支付金额</div>
-                            <div>¥550.00</div>    
+                            <div>{{profileData.payMoneyAmount ? '¥'+ profileData.payMoneyAmount : '--' }}</div>    
                         </span>
                         <span>
                             <div>支付订单数</div>
-                            <div>5</div>    
+                            <div>{{profileData.payNum ? profileData.payNum : '--' }}</div>    
                         </span>
                         <span>
                             <div>支付用户数</div>
-                            <div>4</div>    
+                            <div>{{profileData.customPayerNum ? profileData.customPayerNum : '--' }}</div>    
                         </span>
                         <span>
                             <div>客单价</div>
-                            <div>¥40.00</div>    
+                            <div>{{profileData.averageMoney ? '¥'+ profileData.averageMoney : '--' }}</div>    
                         </span>
                     </div>
                      <div class="p_p_r">
                          <span>
                             <div>累计总收入</div>
-                            <div>¥550.00</div>    
+                            <div>{{profileData.income ? '¥'+ profileData.income : '--' }}</div>    
                         </span>
                         <span>
                             <div>累计实际总收入</div>
-                            <div>¥5</div>    
+                            <div>{{profileData.realIncome ? '¥'+ profileData.realIncome : '--' }}</div>    
                         </span>
                         <span>
                             <div>累计售后单数</div>
-                            <div>4</div>    
+                            <div>{{profileData.protectCount ? profileData.protectCount : '--' }}</div>    
                         </span>
                         <span>
                             <div>累计售后单金额</div>
-                            <div>¥40.00</div>    
+                            <div>{{profileData.refundMoneyAmount ? '¥'+ profileData.refundMoneyAmount : '--' }}</div>    
                         </span>
                      </div>
                 </div>
@@ -150,8 +150,8 @@
                     <span ref="linkH5">http://omo.aiyouyi.cn/bh</span>
                     <img :src="require('@/assets/images/profile/icon_05.png')" alt="" v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">
                 </p>
+                <img :src="qrCode" alt="">
                 <p class="erweima">
-
                     扫描二维码，随时随地做生意
                 </p>
             </div>
@@ -168,26 +168,16 @@ export default {
     components: {flowPath},
     data() {
         return {
-            realTimeData:[],
+            profileData:'',
             toBeSoldOut:'',
             stayProcessedCount:'',
             staySendCount:'',
             stayAuthCount:'',
-            activeData:[],
-            selectList:{merchantId:'2',tenantId:1,loginUserId:'1',businessId:'2'},
-            pageLink:'http://omo.aiyouyi.cn/bh'
+            pageLink:'http://omo.aiyouyi.cn/bh',
+            qrCode:'',
         }
     },
     computed: {
-        commonData() {
-            return profileCont.commonData
-        },
-        realTimeDataNull(){
-            return profileCont.realTimeData
-        },
-        activeDataNull(){
-            return profileCont.activeData
-        },
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             return shopInfo.id
@@ -196,7 +186,7 @@ export default {
     created(){
         this.$message.closeAll();
         this.init()
-        this.getMarketing()
+        this.getQrcode()
         this.getOverviewDetails()
         this.getOerviewRemind()
         this.getOverviewSelling()
@@ -217,28 +207,26 @@ export default {
                 console.log('error',error)
             })
         },
-        // 概况详情
+
+        //获取二维码
+        getQrcode(){
+            this._apis.shop.getQrcode({
+                url: this.pageLink,
+                width: '80',
+                height: '80'
+            }).then((response)=>{
+                this.qrCode = `data:image/png;base64,${response}`;
+            }).catch((error)=>{
+                console.error(error);
+            });
+        },
+
+        // 实时概况
         getOverviewDetails(){ 
          this._apis.overview.overviewDetails({}).then(response => {
-           profileCont.realTimeData.forEach(e => {
-                    switch (e.id){
-                        case '001': e.price = response.payMoneyAmount
-                         break;
-                        case '002': e.price = response.payNum
-                         break;
-                        case '003': e.price = response.refundMoneyAmount
-                         break;
-                        case '004': e.price = response.refundNum
-                         break;
-                        case '005': e.price = response.customPayerNum
-                         break;
-                        case '006': e.price = response.averageMoney
-                         break;
-                        case '007': e.price = response.memberPayerNum
-                         break;
-                         }
-             this.realTimeData = profileCont.realTimeData
-         })
+           this.profileData = response
+         }).catch(error =>{
+             console.log('error',error)
          })
         },
         //刷新
@@ -258,12 +246,6 @@ export default {
         getOverviewSelling(){
               this._apis.overview.overviewSelling({}).then(response => {
                   this.toBeSoldOut = response
-         })
-        },
-        // 营销活动 
-        getMarketing(){
-             this._apis.overview.getMarketing(this.selectList).then(response => {
-                 this.activeData = response.slice(0,10)
          })
         },
         //常用功能跳转
@@ -288,13 +270,6 @@ export default {
                 this.SETCURRENT(8)
             }else{
                 this.$router.push({path:item.url})
-            }
-        },
-        //营销活动跳转
-        linkToApply(item){
-            if(item.url){
-                this.$router.push({path:'/apply',query:{paths:item.url}})
-                this.SETCURRENT(8)
             }
         },
 
