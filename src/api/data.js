@@ -351,7 +351,7 @@ export function memberInforNum(data) {
   return request({
     target:'FILTER-SET-DATA-PROCESSOR',
     method: 'post',
-    apiType: 'matrix',
+    apiType: 'manager',
     data
   })
 }
@@ -363,7 +363,7 @@ export function openPcWap(data) {
   return request({
     target:'TC-PCWAP-APPLY-INFO-PROCESSOR',
     method: 'post',
-    apiType: 'matrix',
+    apiType: 'manager',
     data
   })
 }

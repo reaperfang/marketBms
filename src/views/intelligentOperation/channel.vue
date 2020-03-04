@@ -54,7 +54,9 @@
                     <div class="fr marT20">
                         <el-button class="border_btn" @click="showDetails">查看详情</el-button>
                         <!-- <el-button class="minor_btn" @click="reScreening">重新筛选</el-button> -->
-                        <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出</el-button>
+                        <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+                            <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出</el-button>
+                        </el-tooltip>   
                     </div>
                 </div>
                 
@@ -77,13 +79,15 @@
             </div>
             <div class="contents"></div>
            <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
 <script>
 import channelTable from './components/channelTable';
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
     name: 'channel',
-    components: { channelTable },
+    components: { channelTable ,exportTipDialog },
     data() {
         return {
             pickerOptions: {
@@ -124,7 +128,11 @@ export default {
             totalCount:0,//总页数
             pickerMinDate: '',
             dateRange: [],
-            note:''
+            note:'',
+            currentDialog:"",
+            dialogVisible: false,
+            currentData:{},
+            totalNum:0,
         }
     },
     mounted(){
@@ -144,6 +152,7 @@ export default {
             this.form.changeRatioRange == 'null' && (this.form.changeRatioRange = null)
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
+                this.totalNum = response.totalSize || 0;
                 // console.log(response)
                  this.form.loads = false
                  this.note = this.form.changeRatioRange
@@ -179,13 +188,20 @@ export default {
             }
             data.changeRatioRange = this.form.changeRatioRange     
             data.timeType = this.form.timeType
-            this._apis.data.channelConversionExport(data)
-            .then(res => {
-                window.open(res);
-            })
-            .catch(err=>{
-                this.$message.error(err);
-            })
+            if(this.totalNum > 1000 ){
+                this.dialogVisible = true
+                this.currentDialog = exportTipDialog
+                this.currentData.query = data
+                this.currentData.api = "data.channelConversionExport"
+            }else{
+                this._apis.data.channelConversionExport(data)
+                .then(res => {
+                    window.open(res);
+                })
+                .catch(err=>{
+                    this.$message.error(err);
+                })
+            } 
         },
          //获取会员直接购买转化率
         memberInforNum(){
