@@ -81,20 +81,20 @@ const user = {
     //     })
     //   })
     // },
-
+    
     //退出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        // logout(state.token).then(() => {
+        this._apis.login.logout({}).then(response => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()
           localStorage.removeItem('userInfo')
           localStorage.removeItem('shopInfos')
           resolve()
-        // }).catch(error => {
-        //   reject(error)
-        // })
+        }).catch(error => {
+          reject(error)
+        })
       })
     },
 

@@ -72,4 +72,28 @@ export default {
 }
 </script>
 <style lang="scss">
+.table_empty{
+  height: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin:20px auto;
+  img{
+    width:50px;
+    height:63px;
+    object-fit: contain;
+    margin-bottom:22px;
+  }
+  .tips{
+    font-size:14px;
+    color:rgba(182,181,200,1);
+    line-height: 1;
+    span{
+      margin-left:5px;
+      color:rgba(101,94,255,1);
+      cursor: pointer;
+    }
+  }
+}
 </style>
