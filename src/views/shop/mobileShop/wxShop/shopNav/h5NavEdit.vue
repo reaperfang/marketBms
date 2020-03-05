@@ -96,7 +96,7 @@
                   </div>
                 </div>
               </div>
-              建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+              <p class="nav_tips">建议尺寸：40*40像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
             </el-form-item>
             <!-- <el-form-item label="导航链接" prop="navLinkType" v-if="navigation_type === '0'">
               <el-radio-group v-model="currentNav.navLinkType">
@@ -829,5 +829,9 @@ export default {
   .el-checkbox{
     margin-right: 10px;
   }
+}
+//导航装修tips样式
+.nav_tips{
+  color:rgba(211,216,223,1);line-height:20px;margin-top:10px;
 }
 </style>
