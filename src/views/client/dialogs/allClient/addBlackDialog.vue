@@ -72,12 +72,6 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="状态"
-                    width="80"
-                >
-                    有效
-                </el-table-column>
-                <el-table-column
                     prop="ownNum"
                     label="数量"
                     width="80"
@@ -138,12 +132,6 @@
                     <template slot-scope="scope">
                         {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
                     </template>
-                </el-table-column>
-                <el-table-column
-                    label="状态"
-                    width="80"
-                >
-                    有效
                 </el-table-column>
                 <el-table-column
                     prop="ownNum"
