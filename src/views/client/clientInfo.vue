@@ -331,7 +331,7 @@ export default {
             this.currentData.id = this.userId;
         },
         getAllCoupons() {
-            this._apis.client.getAllCoupons({couponType: 0}).then((response) => {
+            this._apis.client.getDistributeCouponList({memberId:this.userId, couponType: 0}).then((response) => {
                 this.allCoupons = [].concat(response.list);
                 this.allCoupons.map((item) => {
                     this.$set(item, 'frozenNum',1);
@@ -341,7 +341,7 @@ export default {
             })
         },
         getAllCodes() {
-            this._apis.client.getAllCoupons({couponType: 1}).then((response) => {
+            this._apis.client.getDistributeCouponList({memberId:this.userId, couponType: 1}).then((response) => {
                 this.allCodes = [].concat(response.list);
                 this.allCodes.map((item) => {
                     this.$set(item, 'frozenNum',1);
