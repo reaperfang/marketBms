@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 import utils from '@/utils';
+const aaa = encodeURIComponent(utils.aesEncryption('jhs__045_d78234nsad90kas-0w3-02uisio', JSON.stringify({name:'admin-mdl', password:'123456',origin:300})))
+console.log('测试自动登录', aaa)
 import Cookies from 'js-cookie'
 Object.keys(utils).forEach(key => {
   Vue.filter(key, utils[key])
