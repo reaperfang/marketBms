@@ -638,31 +638,33 @@ export default {
               line-height:17px;
             }
             .label{
-              position:absolute;
-              width:30px;
-              height:12px;
-              text-align:center;
-              line-height:12px;
-              color:#fff;
-              background:#999999;
-              font-size:9px;
-              left:50%;
-              margin-left:-15px;
-              bottom:-17px;
+              position: absolute;
+              /* width: 30px; */
+              /* height: 12px; */
+              text-align: center;
+              line-height: 12px;
+              color: #fff;
+              background: #999999;
+              font-size: 9px;
+              left: 50%;
+              margin-left: -20px;
+              bottom: -17px;
+              padding: 2px 2px;
             }
           }
         }
         .qdLabel{
-          line-height:12px;
-          color:#fff;
-          border-radius:25px;
-          text-align:center;
-          width:30px;
-          background:#00555D;
-          font-size:9px;
-          position:absolute;
-          top:8px;
-          right:6.5px;
+          line-height: 12px;
+          color: #fff;
+          border-radius: 25px;
+          text-align: center;
+          /* width: 30px; */
+          background: #00555D;
+          font-size: 9px;
+          position: absolute;
+          top: 4px;
+          right: 6.5px;
+          padding: 2px 5px;
         }
       }
 

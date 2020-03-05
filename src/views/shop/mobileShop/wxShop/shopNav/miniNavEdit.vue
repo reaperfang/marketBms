@@ -66,7 +66,7 @@
                   </div>
                 </div>
               </div>
-              建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+              <p class="nav_tips">建议尺寸：40*40像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
             </el-form-item>
           </div>
 
@@ -546,5 +546,9 @@ export default {
 }
 /deep/.m-colorPicker .box.open {
     z-index: 10!important;
+}
+//导航装修tips样式
+.nav_tips{
+  color:rgba(211,216,223,1);line-height:20px;margin-top:10px;
 }
 </style>
