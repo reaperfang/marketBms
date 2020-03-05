@@ -5,7 +5,7 @@
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <el-form-item label="商户名称:" prop="shopName">
                 <el-input v-model.trim="form.shopName" style="width:200px;"></el-input>
-                <p class="shopInfo-show">用于展示给消费者的品牌形象<span @click="showShop = true">查看样例</span></p>
+                <p class="shopInfo-show">用于展示给消费者的品牌形象<span @mouseover="showShop = true" @mouseout="showShop = false">查看样例</span></p>
             </el-form-item>
             <el-form-item label="主营类目:" prop="sellCategoryId">
               <!-- {{form.business}} -->
@@ -17,6 +17,7 @@
                   clearable
                   filterable>
               </el-cascader>
+              <span class="category-display">您当前的选择是：{{itemCatText}}</span>
             </el-form-item>
             <el-form-item label="创建日期:">
               {{new Date(form.createTime*1) | formatDate('yyyy-MM-dd hh:mm:ss')}}
@@ -95,7 +96,17 @@ export default {
         callback();
       }
     };
+    var emailValidatePass = (rule, value, callback) => {
+      var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+
+      if (!reg.test(value)){
+          return callback(new Error('邮箱格式不正确'));
+      } else {
+        callback();
+      }
+    };
     return {
+      itemCatText: '',
       itemCatList: [],
       operateCategoryList: [],
       showShop: false,
@@ -139,7 +150,8 @@ export default {
           { required: true, message: '请输入公司名称', trigger: 'blur' }
         ],
         companyEmail:[
-          { required: true, message: '请输入公司邮箱', trigger: 'blur' }
+          { required: true, message: '请输入公司邮箱', trigger: 'blur' },
+          { validator: emailValidatePass, trigger: 'blur' }
         ]
       },
       imageUrl: '',
@@ -182,6 +194,7 @@ export default {
             return this.operateCategoryList.find(val => val.id == id)
         })
 
+        this.itemCatText = arr.map(val => val.name).join(' > ')
         this.form.sellCategoryId = _value.pop()
         this.form.sellCategory = arr[arr.length - 1].name
     },
@@ -244,6 +257,11 @@ export default {
         let itemCatAr = []
 
         this.getCategoryInfoIds(itemCatAr, response.sellCategoryId)
+        let _arr = itemCatAr.map(id => {
+            return this.operateCategoryList.find(val => val.id == id)
+        })
+        this.itemCatText = _arr.map(val => val.name).join(' > ')
+
         this.form = Object.assign({}, response, {
           business: itemCatAr
         })
@@ -263,9 +281,9 @@ export default {
     },
 
     onSubmit(formName){
-      this.loading = true
       this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.loading = true
             let id = this.cid
             let data = {
               id:id,
@@ -372,7 +390,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .shopInfo{
    width: 100%;
-   height: 100%;
    background: #fff; 
    padding: 20px;
    h1{
@@ -474,5 +491,9 @@ export default {
         font-weight:600;
       }
     }
+  }
+  .category-display {
+      margin-left: 10px;
+      font-size: 12px;
   }
 </style>
