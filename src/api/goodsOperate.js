@@ -69,5 +69,25 @@ export function fetchPublicSensitiveList(data) {
         data,
         apiType: 'goodsOperate'
       })
+  }  
+  
+  //获取系统内置图库组
+  export function getSystemIconGroup(data) {
+      return request({
+        target: 'PUBLIC-SYSTEM-ICON-GROUP-GET-ALL-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'goodsOperate'
+      })
+  }  
+  
+  //根据分组ID获取系统内置图片
+  export function getSystemIconByGroupId(data) {
+      return request({
+        target: 'PUBLIC-SYSTEM-ICON-BY-GROUPID-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'goodsOperate'
+      })
   } 
 

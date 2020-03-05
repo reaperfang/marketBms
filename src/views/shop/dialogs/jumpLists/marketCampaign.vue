@@ -74,6 +74,9 @@ export default {
       this._apis.shop.getActivitiesList({}).then((response)=>{
         const list = [];
         for(let item of response) {
+          if(item[0].includes('405')) {
+            continue;
+          }
           list.push({
             code: item[0].split(',')[0],
             name: item[0].split(',')[1]
