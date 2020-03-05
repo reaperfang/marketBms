@@ -489,7 +489,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/app-group-buy/listGoods',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        noToken: true
       })
   }
 
@@ -499,7 +500,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/seckill/get-activity-goods',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        noToken: true
       })
   }
 
@@ -509,7 +511,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/limit-discount/get-activity-goods',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        noToken: true
       })
   }
 
@@ -519,7 +522,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/package-buy/get-package-buy-list',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        noToken: true
       })
   }
 
@@ -529,7 +533,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/app-reward',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        noToken: true
       })
   }
 
@@ -539,7 +544,8 @@ export function changeSwitchStatus(data) {
         url: `/v1/c/goodsbale/list/${data.baleIds}`,
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        noToken: true
       })
   }
 

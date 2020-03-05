@@ -74,7 +74,7 @@
       <el-form-item label="布局" prop="layout">
       </el-form-item>
       <div class="layout">
-        <ul class="layout_cube_wrapper">
+        <ul class="cube layout_wrapper">
           <li v-if="ruleForm.templateType === 1">
             <div class="type type1">
               <div class="fill_block fill_block1"  @click="selectLayout(1,1)" :class="{'active': ruleForm.templateType === 1 && blockType === 1}">
@@ -149,13 +149,15 @@
                 <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
                 <span v-else class="default_tips">375*750像素<br/>或比例1:2</span>
               </div>
-              <div class="fill_block fill_block2"  @click="selectLayout(5,2)" :class="{'active': ruleForm.templateType === 5 && blockType === 2}">
-                <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
-                <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
-              </div>
-              <div class="fill_block fill_block3"  @click="selectLayout(5,3)" :class="{'active': ruleForm.templateType === 5 && blockType === 3}">
-                <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
-                <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
+              <div class="fill_block fill_block2">
+                <div class="fill_block fill_block3"  @click="selectLayout(5,2)" :class="{'active': ruleForm.templateType === 5 && blockType === 2}">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
+                </div>
+                <div class="fill_block fill_block4"  @click="selectLayout(5,3)" :class="{'active': ruleForm.templateType === 5 && blockType === 3}">
+                  <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
+                </div>
               </div>
             </div>
           </li>
@@ -165,13 +167,15 @@
                 <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
                 <span v-else class="default_tips">750*350像素<br/>或比例2:1</span>
               </div>
-              <div class="fill_block fill_block2"  @click="selectLayout(6,2)" :class="{'active': ruleForm.templateType === 6 && blockType === 2}">
-                <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
-                <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
-              </div>
-              <div class="fill_block fill_block3"  @click="selectLayout(6,3)" :class="{'active': ruleForm.templateType === 6 && blockType === 3}">
-                <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
-                <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
+              <div class="fill_block fill_block2">
+                <div class="fill_block fill_block3"  @click="selectLayout(6,2)" :class="{'active': ruleForm.templateType === 6 && blockType === 2}">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
+                </div>
+                <div class="fill_block fill_block4"  @click="selectLayout(6,3)" :class="{'active': ruleForm.templateType === 6 && blockType === 3}">
+                  <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
+                </div>
               </div>
             </div>
           </li>
@@ -181,17 +185,21 @@
                 <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
                 <span v-else class="default_tips">375*750像素<br/>或比例1:2</span>
               </div>
-              <div class="fill_block fill_block2"  @click="selectLayout(7,2)" :class="{'active': ruleForm.templateType === 7 && blockType === 2}">
-                <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
-                <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
-              </div>
-              <div class="fill_block fill_block3"  @click="selectLayout(7,3)" :class="{'active': ruleForm.templateType === 7 && blockType === 3}">
-                <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
-                <span v-else class="default_tips">188*375像素<br/>或比例1:2</span>
-              </div>
-              <div class="fill_block fill_block4"  @click="selectLayout(7,4)" :class="{'active': ruleForm.templateType === 7 && blockType === 4}">
-                <img v-if="ruleForm.list['4'] && ruleForm.list['4'].url" :src="ruleForm.list['4'].url" alt="">
-                <span v-else class="default_tips">188*375像素<br/>或比例2:1</span>
+              <div class="fill_block fill_block2">
+                <div class="fill_block fill_block3"  @click="selectLayout(7,2)" :class="{'active': ruleForm.templateType === 7 && blockType === 2}">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
+                </div>
+                <div class="fill_block fill_block4">
+                  <div class="fill_block fill_block5"  @click="selectLayout(7,3)" :class="{'active': ruleForm.templateType === 7 && blockType === 3}">
+                    <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                    <span v-else class="default_tips">188*375像<br/>素或比例1:2</span>
+                  </div>
+                  <div class="fill_block fill_block6"  @click="selectLayout(7,4)" :class="{'active': ruleForm.templateType === 7 && blockType === 4}">
+                    <img v-if="ruleForm.list['4'] && ruleForm.list['4'].url" :src="ruleForm.list['4'].url" alt="">
+                    <span v-else class="default_tips">188*375像<br/>素或比例1:2</span>
+                  </div>
+                </div>
               </div>
             </div>
           </li>
@@ -347,163 +355,17 @@ ul.cube.template_type{
   }
 }
 .layout{
-  ul.layout_cube_wrapper{
+   ul.cube.layout_wrapper{
     li{
-      box-sizing: border-box;
       .type{
+          height:150px;
+      }
+      .fill_block{
+        cursor:pointer;
+        border:1px solid #fff;
         position:relative;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        .fill_block{
-          position:absolute;
-          background: rgb(230, 228, 255);
-          margin-right: 1px;
-          cursor: pointer;
-          border:1px solid #B3CAFF;
-          &.active{
-            &::after{
-              content: "";
-              width: calc(100% + 2px);
-              height: calc(100% + 2px);
-              position: absolute;
-              left: -1px;
-              top: -1px;
-              border: 1px solid $globalMainColor;
-              z-index: 3;
-            }
-          }
-          &:last-child {
-              margin-right: 0;
-          }
-          img{
-            width:100%;
-            height:100%;
-            vertical-align: baseline;
-            object-fit: cover;
-          }
-          span{
-
-          }
-        }
-        &.type1{
-          width:308px;
-          height:154px;
-          .fill_block1{
-            height:100%;
-            width:50%;
-            left:0%;
-          } 
-          .fill_block2{
-            height:100%;
-            width:50%;
-            left:50%;
-            border-left:0;
-          }
-        }
-        &.type2{
-          width:308px;
-          height:102.67px;
-          .fill_block1{
-            height:100%;
-            width:33.3333%;
-            left:0%;
-          } 
-          .fill_block2{
-            height:100%;
-            width:33.3333%;
-            left:33.3333%;
-            border-left:0;
-          }
-          .fill_block3{
-            height:100%;
-            width:33.3333%;
-            left:66.6666%;
-            border-left:0;
-          }
-        }
-        &.type3{
-          width:308px;
-          height:77px;
-          .fill_block1{
-            height:100%;width:25%;left:0%;
-          } 
-          .fill_block2{
-            height:100%;width:25%;left:25%;
-            border-left:0;
-          }
-          .fill_block3{
-            height:100%;width:25%;left:50%;
-            border-left:0;
-          }
-          .fill_block4{
-            height:100%;width:25%;left:75%;
-            border-left:0;
-          }
-        }
-        &.type4{
-          width:308px;
-          height:308px;
-          // .fill_block{
-          //   margin-bottom: 2px;
-          //   &:nth-child(2n) {
-          //         margin-right: 0;
-          //   }
-          // }
-          .fill_block1{
-            height:50%;width:50%;left:0%;top:0%;
-          } 
-          .fill_block2{
-            height:50%;width:50%;left:50%;top:0%;border-left:0;
-          }
-          .fill_block3{
-            height:50%;width:50%;left:0%;top:50%;border-top:0;
-          }
-          .fill_block4{
-            height:50%;width:50%;left:50%;top:50%;border-left:0;border-top:0;
-          }
-        }
-        &.type5{
-          width:308px;
-          height:308px;
-          .fill_block1{
-            height:100%;width:50%;left:0%;top:0%;
-          } 
-          .fill_block2{
-            height:50%;width:50%;left:50%;top:0%;border-left:0;
-          }
-          .fill_block3{
-          height:50%;width:50%;left:50%;top:50%;border-left:0;border-top:0;
-          }
-        }
-        &.type6{
-          width:308px;
-          height:308px;
-          .fill_block1{
-            height:50%;width:100%;left:0%;top:0%;
-          } 
-          .fill_block2{
-            height:50%;width:50%;left:0%;top:50%;border-top:0;
-          }
-          .fill_block3{
-            height:50%;width:50%;left:50%;top:50%;border-left:0;border-top:0;
-          }
-        }
-        &.type7{
-          width:308px;
-          height:308px;
-          .fill_block1{
-            height:100%;width:50%;left:0%;top:0%;
-          } 
-          .fill_block2{
-            height:50%;width:50%;left:50%;top:0%;border-left:0;
-          }
-          .fill_block3{
-            height:50%;width:25%;left:50%;top:50%;border-left:0;border-top:0;
-          } 
-          .fill_block4{
-            height:50%;width:25%;left:75%;top:50%;border-left:0;border-top:0;
-          }
+        &.active{
+          border:1px solid $globalMainColor;
         }
       }
       p{
@@ -528,7 +390,6 @@ ul.cube.template_type{
   left:50%;
   display:block;
   transform: translate(-50%, -50%);
-  padding:0 2px;
   box-sizing: border-box;
   width:100%;
 }

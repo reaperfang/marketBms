@@ -146,7 +146,7 @@ export default {
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6'],//显示内容
         buttonStyle: 1,//购买按钮样式
-        hideSaledGoods: true,// 隐藏已售罄套餐
+        hideSaledGoods: false,// 隐藏已售罄套餐
         hideEndGoods: false,//隐藏活动结束套餐
         hideType: 2,//隐藏类型
         ids: [],//优惠套装id列表

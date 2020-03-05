@@ -76,10 +76,14 @@
                   <div class="img_preview" v-if="currentNav.navIconActive">
                     <img :src="currentNav.navIconActive" alt="">
                     <span @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">修改</span>
+                    <!-- <span @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectSystemIcon'">修改</span> -->
                   </div>
                   <div class="add_button" v-if="!currentNav.navIconActive" @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
                     <i class="inner"></i>
-                  </div>
+                  </div> 
+                  <!-- <div class="add_button" v-if="!currentNav.navIconActive" @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectSystemIcon'">
+                    <i class="inner"></i>
+                  </div> -->
                 </div>
                 <div class="img_block">
                   <p>未选中</p>
@@ -173,6 +177,7 @@
 
 <script>
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectSystemIcon from '@/views/shop/dialogs/dialogSelectSystemIcon';
 import dialogSelectNavTemplate from '@/views/shop/dialogs/decorateDialogs/dialogSelectNavTemplate';
 
 import DialogBase from "@/components/DialogBase";
@@ -186,7 +191,7 @@ import utils from "@/utils";
 import uuid from 'uuid/v4';
 export default {
   name: 'shopNav',
-  components: {dialogSelectImageMaterial, dialogSelectNavTemplate, DialogBase, microPage, microPageClassify, marketCampaign, goods, goodsGroup},
+  components: {dialogSelectImageMaterial, dialogSelectNavTemplate, DialogBase, microPage, microPageClassify, marketCampaign, goods, goodsGroup, dialogSelectSystemIcon},
   data () {
     let validLength = (RULE, value, callback) => {
       let regExp = /^([A-z]{1,8}|[\u4e00-\u9fa5]{1,4})$/;
