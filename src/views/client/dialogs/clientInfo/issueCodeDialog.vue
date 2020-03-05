@@ -77,7 +77,9 @@
                 >
                 </el-table-column>
                 <el-table-column
-                    label="发放数量">
+                    label="发放数量"
+                    width="150"
+                    >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum > 10 ? 10:scope.row.ownNum"></el-input-number>
                     </template>
