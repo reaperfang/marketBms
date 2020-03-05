@@ -111,6 +111,14 @@
         </el-radio-group>
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
       </el-form-item>
+      <el-form-item label="更多设置">
+        <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
+          <el-radio :label="1">24小时后隐藏</el-radio>
+          <el-radio :label="2">立即隐藏</el-radio>
+        </el-radio-group>
+      </el-form-item>
     </div>
 
      <!-- 动态弹窗 -->
@@ -141,7 +149,10 @@ export default {
         showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
         buttonStyle: 1,//购买按钮样式
         ids: [],//折扣商品id列表
-        buttonText: '加入购物车'//按钮文字
+        buttonText: '加入购物车',//按钮文字
+        hideSaledGoods: false,
+        hideEndGoods: false,
+        hideType: 2
       },
       rules: {
 

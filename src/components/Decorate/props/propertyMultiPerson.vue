@@ -145,7 +145,11 @@
       </el-form-item>
       <el-form-item label="更多设置" prop="hideSaledGoods">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <!-- 只展示活动进行中的拼团商品 -->
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
+          <el-radio :label="1">24小时后隐藏</el-radio>
+          <el-radio :label="2">立即隐藏</el-radio>
+        </el-radio-group>
       </el-form-item>
     </div>
 
@@ -180,7 +184,9 @@ export default {
         textStyle: 1,//文本样式
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
-        hideSaledGoods: true,//隐藏已售罄拼团商品
+        hideSaledGoods: false,//隐藏已售罄拼团商品
+        hideEndGoods: false,
+        hideType: 2,
         buttonStyle: 3,// 购买按钮样式
         ids: [],//商品id列表 
         buttonText: '拼团',// 次要按钮文字

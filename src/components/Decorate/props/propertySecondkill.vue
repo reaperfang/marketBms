@@ -113,11 +113,11 @@
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox>
-        <el-radio-group v-model="ruleForm.hideType">
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <el-radio :label="1">24小时后隐藏</el-radio>
           <el-radio :label="2">立即隐藏</el-radio>
-        </el-radio-group> -->
+        </el-radio-group>
       </el-form-item>
     </div>
 
@@ -148,9 +148,9 @@ export default {
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
         buttonStyle: 1,//购买按钮样式
-        hideSaledGoods: true,//隐藏已售罄活动
+        hideSaledGoods: false,//隐藏已售罄活动
         hideEndGoods: false,//隐藏活动结束活动
-        hideType: 1,//隐藏类型
+        hideType: 2,//隐藏类型
         ids: [],//商品id列表
         buttonText: '立即抢购'//按钮文字
       },

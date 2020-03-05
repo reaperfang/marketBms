@@ -15,6 +15,7 @@
             class="video"
             :poster="ruleForm.videoUrl"
           >您的浏览器不支持 video 标签。</video>
+          <i class="delete_btn" @click.stop="deleteVideoUrl()"></i>
           <span @click="dialogVisible=true; currentDialog='dialogSelectVideo'">选择视频</span>
         </div>
         <div class="add_button" v-else @click="dialogVisible=true; currentDialog='dialogSelectVideo'">
@@ -26,15 +27,16 @@
         <el-input  v-model="ruleForm.videoUrl" placeholder="此处粘贴视频播放地址"></el-input>
         仅支持.mp4格式的播放地址
       </el-form-item>
-      <el-form-item label="封面图">
+      <el-form-item label="封面图" v-if="ruleForm.videoUrl">
         <el-radio-group v-model="coverType">
           <el-radio :label="1" :disabled="!originAble">原视频封面</el-radio>
           <el-radio :label="2">自定义封面</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="" prop="coverUrl">
+      <el-form-item label="" prop="coverUrl" v-if="ruleForm.videoUrl">
         <div v-if="ruleForm.coverUrl" class="img_preview">
           <img :src="ruleForm.coverUrl" alt="">
+          <i class="delete_btn" @click.stop="deleteCoverUrl()" v-if="coverType === 2"></i>
           <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" v-if="coverType === 2">更换图片</span>
         </div>
         <div v-else-if="coverType === 2" class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
@@ -91,6 +93,13 @@ export default {
         this.coverType = 2;
         this.$set(this.ruleForm, 'coverUrl', this.customCoverUrl);
       }
+    },
+    'ruleForm.videoUrl'(newValue) {
+      if(!newValue) {
+        this.$set(this.ruleForm, 'coverUrl', '');
+        this.customCoverUrl = '';
+        this.originCoverUrl = '';
+      }
     }
   },
   methods: {
@@ -103,9 +112,21 @@ export default {
 
     /* 弹框选中视频 */
     videoSelected(dialogData) {
+      this.coverType = 1;
       this.ruleForm.videoUrl= dialogData.filePath;
       this.originCoverUrl= dialogData.fileCover;
-       this.$set(this.ruleForm, 'coverUrl', dialogData.fileCover);
+      this.$set(this.ruleForm, 'coverUrl', dialogData.fileCover);
+    },
+
+    /* 清除视频链接 */
+    deleteVideoUrl() {
+      this.$set(this.ruleForm, 'videoUrl', '');
+    },
+    
+    /* 清除视频封面 */
+    deleteCoverUrl() {
+      this.customCoverUrl = '';
+      this.$set(this.ruleForm, 'coverUrl', '');
     }
   }
 }
