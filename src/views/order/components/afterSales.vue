@@ -9,7 +9,7 @@
                         <el-option label="售后单编号" value="orderAfterSaleCode"></el-option>
                         <el-option label="收货人联系电话" value="receivedPhone"></el-option>
                         <el-option label="快递单号" value="expressNos"></el-option>
-                        <el-option label="客户ID" value="memberSn"></el-option>
+                        <el-option label="用户昵称" value="memberName"></el-option>
                         </el-select>
                     </el-input>
                 </el-form-item>
@@ -81,8 +81,8 @@
                     width="120">
                 </el-table-column>
                 <el-table-column
-                    prop="memberSn"
-                    label="客户ID"
+                    prop="memberName"
+                    label="用户昵称"
                     width="120">
                 </el-table-column>
                 <el-table-column
