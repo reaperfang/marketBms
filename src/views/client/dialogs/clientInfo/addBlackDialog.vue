@@ -78,7 +78,9 @@
                 >
                 </el-table-column>
                 <el-table-column
-                    label="冻结数量">
+                    label="冻结数量"
+                    width="150"
+                    >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
                     </template>
@@ -140,7 +142,9 @@
                 >
                 </el-table-column>
                 <el-table-column
-                    label="冻结数量">
+                    label="冻结数量"
+                    width="150"
+                    >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
                     </template>

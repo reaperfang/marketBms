@@ -66,12 +66,12 @@
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_coupon.png" alt="" @click="sendCoupon" class="pointer">
-                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{couponList.length}}</span>张</p>
+                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{allCoupons.length !== 0 ? allCoupons[0].ownNum:0}}</span>张</p>
                     <span @click="sendCoupon">发放</span>
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_code.png" alt="" @click="sendCode" class="pointer">
-                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{codeList.length}}</span>个</p>
+                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{allCodes.length !== 0 ? allCodes[0].ownNum : 0}}</span>个</p>
                     <span @click="sendCode">发放</span>
                 </div>
                 <div class="assets_item rb">
@@ -420,28 +420,28 @@ export default {
         //         })
         //     }
         // },
-        getUsedCoupon() {
-            let params = {usedType:"1", couponType: "0", memberId: this.userId};
-            this._apis.client.getUsedCoupon(params).then((response) => {
-                this.couponList = [];
-                response.map((v) => {
-                    this.couponList.push(v.appCoupon);
-                })
-            }).catch((error) => {
-                console.log(error);
-            })
-        },
-        getUsedCode() {
-            let params = {usedType:"1", couponType: "1", memberId: this.userId};
-            this._apis.client.getUsedCoupon(params).then((response) => {
-                this.codeList = [];
-                response.map((v) => {
-                    this.codeList.push(v.appCoupon);
-                })
-            }).catch((error) => {
-                console.log(error);
-            })
-        },
+        // getUsedCoupon() {
+        //     let params = {usedType:"1", couponType: "0", memberId: this.userId};
+        //     this._apis.client.getUsedCoupon(params).then((response) => {
+        //         this.couponList = [];
+        //         response.map((v) => {
+        //             this.couponList.push(v.appCoupon);
+        //         })
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     })
+        // },
+        // getUsedCode() {
+        //     let params = {usedType:"1", couponType: "1", memberId: this.userId};
+        //     this._apis.client.getUsedCoupon(params).then((response) => {
+        //         this.codeList = [];
+        //         response.map((v) => {
+        //             this.codeList.push(v.appCoupon);
+        //         })
+        //     }).catch((error) => {
+        //         console.log(error);
+        //     })
+        // },
         sendCoupon() {
             this.dialogVisible = true;
             this.currentDialog = "issueCouponDialog";
@@ -469,8 +469,8 @@ export default {
         })
         this.getAllCoupons();
         this.getAllCodes();
-        this.getUsedCoupon();
-        this.getUsedCode();
+        // this.getUsedCoupon();
+        // this.getUsedCode();
     }
 }
 </script>
