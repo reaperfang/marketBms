@@ -212,6 +212,10 @@ export default {
                         return;
                     }
                 }else if(componentData.source === 2){
+                    if(!componentData.currentCatagoryId) {
+                        this.list = [];
+                        return;
+                    }
                     params = {
                         status: '1',
                         productCatalogInfoId: componentData.currentCatagoryId
