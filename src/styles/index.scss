@@ -454,6 +454,9 @@ table.yuan-table{
   &.align-center {
       align-items: center;
   }
+  &.align-stretch {
+      align-items: stretch;
+  }
   .col {
       &.flex1 {
           flex: 1;

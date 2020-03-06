@@ -33,7 +33,7 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <div @click="dialogVisible = true; bigMessage.image = true; bigMessage.url = item.image;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
+                                        <div @click="dialogVisible = true; bigMessage.image = true; bigMessage.url = item.image; bigMessage.descriptionImages = orderAfterSale.descriptionImages; bigMessage.imageIndex = index;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
                                             <img
                                                 width="51"
                                                 :src="item.image"
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="col righter-col">
-                    <div class="row">
+                    <div v-if="orderAfterSale.type != 2" class="row">
                         <div class="col list-lefter">
                             退款方式
                         </div>
@@ -106,7 +106,7 @@
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div class="col">
+                                    <div style="margin-right: 5px;" class="col">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
@@ -126,10 +126,12 @@
                             label="数量">
                         </el-table-column>
                         <el-table-column
+                            v-if="orderAfterSale.type != 2"
                             prop="goodsPrice"
                             label="商品单价">
                         </el-table-column>
                         <el-table-column
+                            v-if="orderAfterSale.type != 2"
                             prop="subtotalMoney"
                             label="小计">
                         </el-table-column>
@@ -210,10 +212,10 @@
             </div> -->
         <!-- </section> -->
         <section class="drawback" v-if="orderAfterSale.type != 2">
-            <p class="section-header">卖家退款合计</p>
-            <div class="row justity-between align-center">
+            <p class="section-header">商户退款合计</p>
+            <div class="row justify-center align-stretch">
                 <div class="col" style="margin-right: 50px;">
-                    <div class="row">
+                    <div v-if="orderAfterSale.shouldReturnScore" class="row">
                         <div class="col">
                             应退还积分：
                         </div>
@@ -352,18 +354,26 @@
         <el-dialog
             title=""
             :visible.sync="dialogVisible"
-            width="540px"
+            width="800px"
             :close-on-click-modal="false"
             :close-on-press-escape="false">
             <template v-if="bigMessage.image">
-                <img width="500" :src="bigMessage.url" />
+                <div class="images-box">
+                    <div @click="goImage('left')" class="lefter"></div>
+                    <div class="image">
+                        <img width="500" :src="bigMessage.url" />
+                    </div>
+                    <div @click="goImage('right')" class="righter"></div>
+                </div>
             </template>
             <template v-else>
-                <video width="500" controls="controls">
-                <source :src="bigMessage.url" type="video/ogg">
-                <source :src="bigMessage.url" type="video/mp4">
-                Your browser does not support the video tag.
-                </video>
+                <div class="video-box">
+                    <video width="500" controls="controls">
+                    <source :src="bigMessage.url" type="video/ogg">
+                    <source :src="bigMessage.url" type="video/mp4">
+                    Your browser does not support the video tag.
+                    </video>
+                </div>
             </template>
             <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -377,7 +387,7 @@ export default {
     data() {
         return {
             tableData: [
-                {}
+                
             ],
             data: {
                 price: '500',
@@ -459,6 +469,22 @@ export default {
         }
     },
     methods: {
+        goImage(flag) {
+            let index = this.bigMessage.imageIndex
+            let list = this.bigMessage.descriptionImages
+
+            if(flag == 'left') {
+                index = index - 1
+                if(index >=0) {
+                    this.bigMessage.url = this.bigMessage.descriptionImages[index].image
+                }
+            } else {
+                index = index + 1
+                if(index <= this.bigMessage.descriptionImages.length - 1) {
+                    this.bigMessage.url = this.bigMessage.descriptionImages[index].image
+                }
+            }
+        },
         realReturnMoneyHandler() {
             // realReturnWalletMoney 剩余退还余额
             // realReturnMoney 实退金额
@@ -602,6 +628,32 @@ export default {
     }
     /deep/ .el-dialog__body {
         text-align: center;
+    }
+    /deep/ .el-dialog__body {
+        padding: 10px;
+        padding-bottom: 60px;
+    }
+    .images-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .lefter {
+            width: 48px;
+            height: 48px;
+            background: url(../../../assets/images/order/left-icon.png) no-repeat;
+            cursor: pointer;
+        }
+        .righter {
+            width: 48px;
+            height: 48px;
+            background: url(../../../assets/images/order/right-icon.png) no-repeat;
+            cursor: pointer;
+        }
+    }
+    .video-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
 
