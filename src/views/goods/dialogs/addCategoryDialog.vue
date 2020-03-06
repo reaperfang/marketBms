@@ -345,6 +345,9 @@ export default {
         &:nth-child(3) {
             float: left;
         }
+        &:nth-child(4) {
+            clear: both;
+        }
     }
 </style>
 
