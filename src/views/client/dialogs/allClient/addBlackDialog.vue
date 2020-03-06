@@ -91,7 +91,7 @@
                     <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{data.couponList.length}}条数据
+                    共{{!!data.couponList ? data.couponList.length:0}}条数据
                 </div>
             </div>
         </div>
@@ -155,7 +155,7 @@
                     <el-checkbox v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{data.codeList.length}}条数据
+                    共{{!!data.codeList ? data.codeList.length:0}}条数据
                 </div>
             </div>
         </div>

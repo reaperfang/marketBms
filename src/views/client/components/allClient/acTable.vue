@@ -218,6 +218,10 @@ export default {
       this.currentDialog = "addBlackDialog";
       this.currentData.memberSn = row.memberSn;
       this.currentData.id = row.id;
+      setTimeout(() => {
+        this.currentData.couponList = this.couponList;
+        this.currentData.codeList = this.codeList;
+      },200);
     },
     removeBlack(row) {
       this.dialogVisible = true;
