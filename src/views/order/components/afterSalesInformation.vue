@@ -214,7 +214,7 @@
         <section class="drawback" v-if="orderAfterSale.type != 2">
             <p class="section-header">商户退款合计</p>
             <div class="row justify-center align-stretch">
-                <div class="col" style="margin-right: 50px;">
+                <div class="col return-money-left" style="margin-right: 50px;">
                     <div v-if="orderAfterSale.shouldReturnScore" class="row">
                         <div class="col">
                             应退还积分：
@@ -654,6 +654,9 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    .return-money-left {
+        border-right: 1px solid #D3D3D3;
     }
 </style>
 
