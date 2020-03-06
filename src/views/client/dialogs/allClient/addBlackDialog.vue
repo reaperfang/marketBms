@@ -406,8 +406,6 @@ export default {
     },
     created() {
         this.getBlackChecks();
-        // this.getAllCoupons();
-        // this.getAllCodes();
     },
     props: {
         data: {

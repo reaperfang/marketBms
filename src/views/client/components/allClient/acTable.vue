@@ -218,8 +218,6 @@ export default {
       this.currentDialog = "addBlackDialog";
       this.currentData.memberSn = row.memberSn;
       this.currentData.id = row.id;
-      this.currentData.couponList = this.couponList;
-      this.currentData.codeList = this.codeList;
     },
     removeBlack(row) {
       this.dialogVisible = true;
@@ -288,6 +286,7 @@ export default {
           this.couponList.map((item) => {
               this.$set(item, 'frozenNum',1);
           })
+          this.currentData.couponList = this.couponList;
       }).catch((error) => {
           console.log(error);
       })
@@ -297,7 +296,8 @@ export default {
             this.codeList = [].concat(response.list);
             this.codeList.map((item) => {
                 this.$set(item, 'frozenNum', 1);
-            })
+            });
+            this.currentData.codeList = this.codeList;
         }).catch((error) => {
             console.log(error);
         })
