@@ -328,7 +328,7 @@
             </div>
         </section>
         <section class="record">
-            <p class="section-header">操作记录</p>
+            <p class="section-header">操作记录</p> 
             <el-table
                 :data="recordList"
                 style="width: 100%">
