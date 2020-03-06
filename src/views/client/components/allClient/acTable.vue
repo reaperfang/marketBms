@@ -109,7 +109,9 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      loading: false
+      loading: false,
+      couponList:[],
+      codeList:[]
     };
   },
   computed: {
@@ -210,10 +212,14 @@ export default {
       this.currentData.id = id;
     },
     addBlackList(row) {
+      this.getAllCoupons(row.id);
+      this.getAllCodes(row.id);
       this.dialogVisible = true;
       this.currentDialog = "addBlackDialog";
       this.currentData.memberSn = row.memberSn;
       this.currentData.id = row.id;
+      this.currentData.couponList = this.couponList;
+      this.currentData.codeList = this.codeList;
     },
     removeBlack(row) {
       this.dialogVisible = true;
@@ -275,6 +281,26 @@ export default {
     freshTable() {
       this.checkAll = false;
       this.getMembers(1, this.pageSize);
+    },
+    getAllCoupons(id) {
+      this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {
+          this.couponList = [].concat(response.list);
+          this.couponList.map((item) => {
+              this.$set(item, 'frozenNum',1);
+          })
+      }).catch((error) => {
+          console.log(error);
+      })
+    },
+    getAllCodes(id) {
+        this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1}).then((response) => {
+            this.codeList = [].concat(response.list);
+            this.codeList.map((item) => {
+                this.$set(item, 'frozenNum', 1);
+            })
+        }).catch((error) => {
+            console.log(error);
+        })
     }
   },
   watch: {

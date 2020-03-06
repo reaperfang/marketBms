@@ -8,7 +8,7 @@
         </el-form-item>
         <el-form-item label="" prop="">
           <el-button type="primary" @click="fetch">搜  索</el-button>
-          <el-button type="primary" @click="fetch($event, true)">刷 新</el-button>
+          <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
       </div>
     </el-form>

@@ -22,16 +22,27 @@ class Ajax {
   requestGlobal(config) {
     let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
     let cid = shopInfo && shopInfo.id || ''
-    config.headers = Object.assign(
-      {
-        businessId: 1,
-        tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
-        merchantId: cid,
-        loginUserId: 1,
-        token: store.getters.token || getToken('authToken')
-      },
-      config.headers
+    if(config.noToken) {  //对于c端营销接口处理
+      config.headers = Object.assign({
+          businessId: 1,
+          tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
+          merchantId: cid,
+          loginUserId: 1,
+          isDev: 'zhongqi'
+        },
+        config.headers
     ) 
+    }else{
+      config.headers = Object.assign({
+          businessId: 1,
+          tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
+          merchantId: cid,
+          loginUserId: 1,
+          token: store.getters.token || getToken('authToken')
+        },
+        config.headers
+      ) 
+    }
   }
 
   // respone拦截器

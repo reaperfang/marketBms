@@ -44,7 +44,7 @@
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
             <el-table
-                :data="couponList"
+                :data="data.couponList"
                 style="width: 100%"
                 ref="couponListTable"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -91,7 +91,7 @@
                     <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{couponList.length}}条数据
+                    共{{data.couponList.length}}条数据
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
             <el-table
-                :data="codeList"
+                :data="data.codeList"
                 style="width: 100%"
                 ref="codeListTable"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -155,7 +155,7 @@
                     <el-checkbox v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{codeList.length}}条数据
+                    共{{data.codeList.length}}条数据
                 </div>
             </div>
         </div>
@@ -188,8 +188,6 @@ export default {
             btnLoading: false,
             dialogVisible2: false,
             dialogVisible3: false,
-            couponList:[],
-            codeList: [],
             loading: false,
             checkAll: false,
             checkAll2: false,
@@ -207,12 +205,12 @@ export default {
             this.selectedCodes = [].concat(this.$refs.codeListTable.selection);
         },
         handleChangeAll(val) {
-            this.couponList.forEach(row => {
+            this.data.couponList.forEach(row => {
                 this.$refs.couponListTable.toggleRowSelection(row,val);
             });
         },
         handleChangeAll2(val) {
-            this.codeList.forEach(row => {
+            this.data.codeList.forEach(row => {
                 this.$refs.codeListTable.toggleRowSelection(row,val);
             });
         },
@@ -394,27 +392,7 @@ export default {
         },
         deleteCode(index) {
             this.selectedCodes.splice(index, 1);
-        },
-        getAllCoupons() {
-            this._apis.client.getAllCoupons({couponType: 0, memberId: this.data.id, frozenType: 1}).then((response) => {
-                this.couponList = [].concat(response.list);
-                this.couponList.map((item) => {
-                    this.$set(item, 'frozenNum',1);
-                })
-            }).catch((error) => {
-                console.log(error);
-            })
-        },
-        getAllCodes() {
-            this._apis.client.getAllCoupons({couponType: 1, memberId: this.data.id, frozenType: 1}).then((response) => {
-                this.codeList = [].concat(response.list);
-                this.codeList.map((item) => {
-                    this.$set(item, 'frozenNum', 1);
-                })
-            }).catch((error) => {
-                console.log(error);
-            })
-        },
+        }
     },
     computed: {
         visible: {
@@ -428,8 +406,8 @@ export default {
     },
     created() {
         this.getBlackChecks();
-        this.getAllCoupons();
-        this.getAllCodes();
+        // this.getAllCoupons();
+        // this.getAllCodes();
     },
     props: {
         data: {
