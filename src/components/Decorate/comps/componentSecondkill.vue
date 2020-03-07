@@ -156,7 +156,8 @@ export default {
                     this.loading = true;
                     this._apis.shop.getSecondkillListByIds({
                         rightsDiscount: 1, 
-                        activityIds: ids.join(',')
+                        activityIds: ids.join(','),
+                        hideStatus: 0
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;

@@ -138,8 +138,8 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="footer">
-                <el-checkbox v-model="checkedAll">全选</el-checkbox>
+            <div v-show="!loading" class="footer">
+                <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
@@ -159,7 +159,7 @@ export default {
         return {
             multipleSelection: [],
             multipleTable: [
-                {}
+                
             ],
             total: 0,
             listQuery: {
@@ -184,7 +184,8 @@ export default {
             tableData: [],
             loading: false,
             express: false,
-            checkedAll: false
+            checkedAll: false,
+            isIndeterminate: false
         }
     },
     filters: {
@@ -228,6 +229,15 @@ export default {
         }
     },
     methods: {
+        checkedAllChange() {
+            if(this.checkedAll) {
+                this.$refs.multipleTable.clearSelection();
+                this.$refs.multipleTable.toggleAllSelection();
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+            this.isIndeterminate = false;
+        },
         checkExpress() {
         this._apis.order
             .checkExpress()
@@ -331,6 +341,9 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            let checkedCount = val.length;
+            this.checkedAll = checkedCount === this.tableData.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList() {
             let params = {}

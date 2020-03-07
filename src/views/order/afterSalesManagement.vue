@@ -7,7 +7,7 @@
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
                             <el-option label="售后单编号" value="code"></el-option>
                             <el-option label="订单编号" value="orderCode"></el-option>
-                            <el-option label="客户ID" value="memberSn"></el-option>
+                            <el-option label="用户昵称" value="memberName"></el-option>
                         </el-select>
                     </el-input>
                 </el-form-item>
@@ -40,21 +40,26 @@
                         <el-option label="已关闭" value="5"></el-option>
                     </el-select>
                 </el-form-item>
-                <div class="buttons">
-                    <div class="lefter">
+                <div class="buttons" style="display: inline-block; float: right;">
+                    <!-- <div class="lefter">
                         <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
                         <el-button v-permission="['订单', '售后管理', '默认页', '批量审核']" class="border-button" @click="batchUpdateStatus">批量审核</el-button>
-                    </div>
+                    </div> -->
                     <div class="righter">
-                        <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">查询</el-button>
+                        <el-button @click="getList" type="primary">搜索</el-button>
+                        <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
                 </div>
             </el-form>
         </div>
         <div class="line"></div>
         <div class="content">
-            <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
+            <div class="export-header">
+                <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
+                <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">
+                <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
+                </el-tooltip>
+            </div>
             <el-table
                 v-loading="loading"
                 ref="multipleTable"
@@ -85,8 +90,8 @@
                     width="120">
                 </el-table-column>
                 <el-table-column
-                    prop="memberSn"
-                    label="客户ID"
+                    prop="memberName"
+                    label="用户昵称"
                     width="120">
                 </el-table-column>
                 <el-table-column
@@ -112,6 +117,10 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div v-show="!loading" class="footer">
+                <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+                <el-button v-permission="['订单', '售后管理', '默认页', '批量审核']" class="border-button" @click="batchUpdateStatus">批量审核</el-button>
+            </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
@@ -184,7 +193,9 @@ export default {
             dialogVisible: false,
             title: '',
             currentData: '',
-            loading: false
+            loading: false,
+            checkedAll: false,
+            isIndeterminate: false
         }
     },
     created() {
@@ -223,6 +234,15 @@ export default {
         }
     },
     methods: {
+        checkedAllChange() {
+            if(this.checkedAll) {
+                this.$refs.multipleTable.clearSelection();
+                this.$refs.multipleTable.toggleAllSelection();
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+            this.isIndeterminate = false;
+        },
         confirmReceived(row) {
             this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
                 this.$notify({
@@ -278,16 +298,46 @@ export default {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
                 createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[0], "yyyy-MM-dd hh:mm:ss") : '',
                 createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[1], "yyyy-MM-dd hh:mm:ss") : '',
-                ids: this.multipleSelection.map(val => val.id)
+                //ids: this.multipleSelection.map(val => val.id),
+                isExport: 0
             })
+            if(this.multipleSelection.length) {
+              _params = Object.assign({}, _params, {
+                ids: this.multipleSelection.map(val => val.id)
+              })
+            }
            this._apis.order.orderAfterSaleExport(_param).then((res) => {
                 console.log(res)
-                window.location.href = res
-                this.$notify({
-                    title: '成功',
-                    message: '导出成功！',
-                    type: 'success'
-                });
+                if(res > 1000) {
+                    this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
+                        _params = Object.assign({}, _params, {
+                        isExport: 1
+                        })
+                        this._apis.order
+                        .orderAfterSaleExport(_params)
+                        .then(res => {
+                            window.location.href = res
+                            this.$notify({
+                                title: '成功',
+                                message: '导出成功！',
+                                type: 'success'
+                            });
+                        })
+                        .catch(error => {
+                            this.$notify.error({
+                                title: '错误',
+                                message: error
+                            });
+                        });
+                    })
+                } else {
+                    window.location.href = res
+                    this.$notify({
+                        title: '成功',
+                        message: '导出成功！',
+                        type: 'success'
+                    });
+                }
             }).catch(error => {
                 this.$notify.error({
                     title: '错误',
@@ -424,6 +474,9 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            let checkedCount = val.length;
+            this.checkedAll = checkedCount === this.tableData.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList(param) {
             this.loading = true
@@ -464,7 +517,7 @@ export default {
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             .resetting {
                 color: #FD932B;
                 margin-right: 40px;
@@ -488,6 +541,10 @@ export default {
                 color: #45444c;
             }
         }
+        .footer {
+            padding: 20px;
+            padding-left: 15px;
+        }
     }
 }
 /deep/ .el-input {
@@ -495,6 +552,18 @@ export default {
 }
 /deep/ .input-with-select .el-input__inner {
   width: 139px;
+}
+.export-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/deep/ .el-checkbox__label {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.el-button+.el-button {
+    margin-left: 12px;
 }
 </style>
 

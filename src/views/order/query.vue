@@ -75,8 +75,8 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item style="float: right;">
-          <span @click="resetForm('formInline')" class="resetting pointer">重置</span>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
         </el-form-item>
       </el-form>
       <div>
