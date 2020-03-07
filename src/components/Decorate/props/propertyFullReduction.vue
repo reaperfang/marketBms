@@ -19,7 +19,6 @@
             {{tag.name}}
           </el-tag>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加5个活动</p>
       </el-form-item>
       <el-form-item label="展示样式" prop="displayStyle">
         <el-radio-group v-model="ruleForm.displayStyle">
