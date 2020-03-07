@@ -1,6 +1,6 @@
 // 店铺相关接口
 import request from '@/system/request'
-import Qs from 'Qs';
+import Qs from 'query-string';
 
 
 // 页面管理&草稿箱列表(分页)
