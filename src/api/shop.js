@@ -1,5 +1,6 @@
 // 店铺相关接口
 import request from '@/system/request'
+import Qs from 'Qs';
 
 
 // 页面管理&草稿箱列表(分页)
@@ -509,9 +510,14 @@ export function changeSwitchStatus(data) {
   export function getDiscountListByIds(data) {
       return request({
         url: '/v1/c/limit-discount/get-activity-goods',
-        method: 'get',
+        method: 'post',
         baseURL: process.env.SALE_API,
-        params:data,
+        transformRequest: [function (data) {
+          // 这里可以在发送请求之前对请求数据做处理，比如form-data格式化等，这里可以使用开头引入的Qs（这个模块在安装axios的时候就已经安装了，不需要另外安装）
+          data = Qs.stringify(data)
+          return data
+        }],
+        data,
         noToken: true
       })
   }
