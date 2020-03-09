@@ -228,7 +228,7 @@
                             应退金额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnMoney || '0.00'}}
+                            ￥{{orderAfterSale.shouldReturnMoney || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
@@ -236,7 +236,7 @@
                             应退还余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnBalance || '0.00'}}
+                            ￥{{orderAfterSale.shouldReturnBalance || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
@@ -244,7 +244,7 @@
                             应退还第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnWalletMoney || '0.00'}}
+                            ￥{{orderAfterSale.shouldReturnWalletMoney || '0.00'}}
                         </div>
                     </div>
                     <!-- <div class="row">
@@ -289,23 +289,39 @@
                         </div>
                     </div> -->
                 </div>
-                <div class="col">
+                <div class="col return-money-right">
                     <div class="row align-center">
                         <div class="col">
                             实退积分：
                         </div>
-                        <div class="col">
-                            <el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnScore || 0}}</span>
+                        <div class="col change-box">
+                            <!-- <el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
+                            <span style="font-weight:600;" v-else>{{orderAfterSale.realReturnScore || 0}}</span> -->
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && !showScoreInput">
+                                <span class="show-span">{{orderAfterSale.realReturnScore || 0}}</span>
+                                <span class="operate-span" @click="showScoreInput = true">修改</span>
+                            </template>
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && showScoreInput">
+                                ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
+                                <span class="operate-span" @click="showScoreInput = false">确定</span>
+                            </template>
                         </div>
                     </div>
                     <div class="row align-center">
                         <div class="col">
                             实退金额：
                         </div>
-                        <div class="col">
-                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnMoney || 0}}</span>
+                        <div class="col change-box">
+                            <!-- <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
+                            <span style="font-weight:600;" v-else>￥{{orderAfterSale.realReturnMoney || 0}}</span> -->
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2 && !showMoneyInput">
+                                <span class="show-span">￥{{orderAfterSale.realReturnMoney || 0}}</span>
+                                <span class="operate-span" @click="showMoneyInput = true">修改</span>
+                            </template>
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2 && showMoneyInput">
+                                ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
+                                <span class="operate-span" @click="showMoneyInput = false">确定</span>
+                            </template>
                         </div>
                     </div>
                     <div class="row align-center">
@@ -313,7 +329,7 @@
                             实退余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnBalance || '0.00'}}
+                            ￥{{orderAfterSale.realReturnBalance || '0.00'}}
                         </div>
                     </div>
                     <div class="row align-center">
@@ -321,7 +337,7 @@
                             实退第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnWalletMoney || '0.00'}}
+                            ￥{{orderAfterSale.realReturnWalletMoney || '0.00'}}
                         </div>
                     </div>
                 </div>
@@ -396,7 +412,9 @@ export default {
                 code: '1'
             },
             dialogVisible: false,
-            bigMessage: {}
+            bigMessage: {},
+            showScoreInput: false,
+            showMoneyInput: false
         }
     },
     filters: {
@@ -656,7 +674,47 @@ export default {
         align-items: center;
     }
     .return-money-left {
-        border-right: 1px solid #D3D3D3;
+        padding-right: 100px;
+    }
+    .return-money-right {
+        border-left: 1px solid #D3D3D3;
+        padding-left: 40px;
+    }
+    .drawback .row {
+        margin-bottom: 17px;
+        color: #44434B;
+        .col {
+            &:first-child {
+                margin-right: 20px;
+                color: #92929B;
+                text-align: right;
+                flex-shrink: 0;
+                flex-basis: 126px;
+            }
+            &:last-child {
+                font-weight:600;
+            }
+        }
+    }
+    .change-box {
+        display: flex; 
+        justify-content: flex-start; 
+        align-items: center;
+        /deep/ .el-input {
+            width: 100px;
+        }
+        span {
+            &.operate-span {
+                color: #655EFF;
+                margin-left: 5px;
+                flex-shrink: 0;
+                cursor: pointer;
+            }
+            &.show-span {
+                font-weight:600; 
+                width: 100px;
+            }
+        }
     }
 </style>
 

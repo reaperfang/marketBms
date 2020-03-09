@@ -13,8 +13,8 @@
                             <div class="item">发货日期：{{item.orderAfterSaleSendInfo.sendTime}}</div>
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
-                            <div class="item" style="width: 280px;">客户ID：{{item.orderAfterSaleSendInfo.memberSn}}</div>
-                            <div class="item">客户昵称：{{item.orderAfterSaleSendInfo.nickName}}</div>
+                            <div class="item" style="width: 280px;">用户ID：{{item.orderAfterSaleSendInfo.memberSn}}</div>
+                            <div class="item">用户昵称：{{item.orderAfterSaleSendInfo.nickName}}</div>
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.orderAfterSaleSendInfo.receivedName}}</div>
@@ -29,8 +29,8 @@
                             <div class="item">发货日期：{{item.updateTime}}</div>
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
-                            <div class="item" style="width: 280px;">客户ID：{{item.memberSn}}</div>
-                            <div class="item">客户昵称：{{item.memberName}}</div>
+                            <div class="item" style="width: 280px;">用户ID：{{item.memberSn}}</div>
+                            <div class="item">用户昵称：{{item.memberName}}</div>
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.receivedName}}</div>

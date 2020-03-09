@@ -14,7 +14,7 @@
           <template>
             <template v-for="(item, key) of list">
               <li :key="key" v-if="item.status !== 2" :title="item.activeName">
-                <img :src="item.image" alt="">
+                <img :src="item.mainImage" alt="">
                 <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
               </li>
             </template>
@@ -209,7 +209,10 @@ export default {
       handler(newValue) {
         this.ruleForm.ids = [];
         for(let item of newValue) {
-          this.ruleForm.ids.push(item.spuId);
+          this.ruleForm.ids.push({
+            spuId: item.spuId,
+            activityId: item.activeId
+          });
         }
         this.fetch();
         this._globalEvent.$emit('fetchMultiPerson', this.ruleForm, this.$parent.currentComponentId);
@@ -249,19 +252,31 @@ export default {
     fetch(componentData = this.ruleForm) {
         if(componentData) {
             let params = {};
+
+            //兼容老数据
+            let newParams = [];
+            if(typeof componentData.ids[0] === 'string') {
+              for(let item of componentData.ids){
+                newParams.push({spuId: item, activityId: ''})
+              }
+            }else{
+              newParams = componentData.ids;
+            }
+
             if(componentData.addType == 2) {
                 params = {
                     num: componentData.showNumber,
                     order: componentData.sortRule,
-                    status: 5
+                    activityList: newParams,
+                    hideStatus: 0
                 };
             }else{
                 const ids = componentData.ids;
                 if(Array.isArray(ids) && ids.length){
                     params = {
-                        spuIds: ids.join(','),
                         order: componentData.sortRule,
-                        status: 5
+                        activityList: newParams,
+                        hideStatus: 0
                     };
                 }else{
                     this.list = [];
@@ -287,21 +302,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      if(datas.length > this.showNumber){
-        datas = datas.slice(0,this.showNumber);
-      }
-      this.list = [];
-      if(this.hideSaledGoods==true){
-        var goods = datas;
-        for(var i in datas){
-          if(goods[i].soldOut!=1){
-            this.list.push(datas[i]);
-          }
-        }
-      }
-      else{
         this.list = datas;
-      }
     },
   }
 }
