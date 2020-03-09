@@ -154,10 +154,22 @@ export default {
         fetch(componentData = this.currentComponentData.data) {
             if(componentData) {
                 if(Array.isArray(componentData.ids) && componentData.ids.length){
+                    
+                    //兼容老数据
+                    let newParams = [];
+                    if(typeof componentData.ids[0] === 'string') {
+                        for(let item of componentData.ids){
+                        newParams.push({spuId: item, activityId: ''})
+                        }
+                    }else{
+                        newParams = componentData.ids;
+                    }
+
                     this.loading = true;
                     this._apis.shop.getDiscountListByIds({
                         rightsDiscount: 1, 
-                        spuIds: componentData.ids.join(',')
+                        spuInfoJson: JSON.stringify(componentData.ids),
+                        hideStatus: 0
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;

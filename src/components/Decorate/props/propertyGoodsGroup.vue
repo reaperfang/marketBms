@@ -12,6 +12,7 @@
             {{tag.catagoryData.name}}
           </el-tag>
         </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加15个分类</p>
       </el-form-item>
       <el-form-item label="全部分类" prop="showAllGroup">
         全部分类为商品的集合分类，增加消费者逛的体验

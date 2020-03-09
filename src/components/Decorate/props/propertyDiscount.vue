@@ -171,7 +171,10 @@ export default {
       handler(newValue) {
         this.ruleForm.ids = [];
         for(let item of newValue) {
-          this.ruleForm.ids.push(item.spuId);
+          this.ruleForm.ids.push({
+            spuId: item.spuId,
+            activityId: item.activityId
+          });
         }
         this.fetch();
         this._globalEvent.$emit('fetchDiscount', this.ruleForm, this.$parent.currentComponentId);
@@ -191,10 +194,22 @@ export default {
       fetch(componentData = this.ruleForm) {
           if(componentData) {
               if(Array.isArray(componentData.ids) && componentData.ids.length){
+
+                  //兼容老数据
+                  let newParams = [];
+                  if(typeof componentData.ids[0] === 'string') {
+                    for(let item of componentData.ids){
+                      newParams.push({spuId: item, activityId: ''})
+                    }
+                  }else{
+                    newParams = componentData.ids;
+                  }
+
                   this.loading = true;
                   this._apis.shop.getDiscountListByIds({
                       rightsDiscount: 1, 
-                      spuIds: componentData.ids.join(',')
+                      spuInfoJson: JSON.stringify(newParams),
+                      hideStatus: 0
                   }).then((response)=>{
                       this.createList(response);
                       this.loading = false;

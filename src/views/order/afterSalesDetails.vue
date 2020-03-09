@@ -7,7 +7,8 @@
                     <span>【{{orderAfterSale.type | typeFilter}}】</span>
                 </el-col>
                 <el-col class="header-righter" :span="12">
-                    <span>客户ID：{{orderAfterSale.memberSn}}</span>
+                    <span>用户昵称：{{orderAfterSale.memberName}}</span>
+                    <span>用户ID：{{orderAfterSale.memberSn}}</span>
                 </el-col>
             </el-row>
         </div>
@@ -192,6 +193,11 @@ export default {
             .header-righter {
                 text-align: right;
                 color: #b8b8bb;
+                span {
+                    &:first-child {
+                        margin-right: 20px;
+                    }
+                }
             }
         }
 

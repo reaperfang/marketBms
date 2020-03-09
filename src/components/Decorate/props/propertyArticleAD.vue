@@ -137,7 +137,7 @@ export default {
       },
       rules: {},
       currentAD: null,  //当前操作的图文导航 
-      suggestSize: '建议尺寸：宽度750像素，高度360像素。' //推荐尺寸文本
+      suggestSize: '最多添加10个广告。建议尺寸：宽度750像素，高度360像素。' //推荐尺寸文本
     }
   },
   computed: {
@@ -166,19 +166,19 @@ export default {
       this.ruleForm.templateType = templateType;
       switch(Number(templateType)) {
         case 1:
-          this.suggestSize = '建议尺寸：宽度750像素，高度360像素。';
+          this.suggestSize = '最多添加10个广告。建议尺寸：宽度750像素，高度360像素。';
           break; 
         case 2:
-          this.suggestSize = '建议尺寸：宽度750像素，高度320像素。';
+          this.suggestSize = '最多添加10个广告。建议尺寸：宽度750像素，高度320像素。';
           break; 
         case 3:
-          this.suggestSize = '建议尺寸：宽度750像素，高度430像素。';
+          this.suggestSize = '最多添加10个广告。建议尺寸：宽度750像素，高度430像素。';
           break; 
         case 4:
-          this.suggestSize = '建议尺寸：宽高1比1';
+          this.suggestSize = '最多添加10个广告。建议尺寸：宽高1比1';
           break; 
         case 5:
-          this.suggestSize = '建议尺寸：宽高1比1';
+          this.suggestSize = '最多添加10个广告。建议尺寸：宽高1比1';
           break;
       }
     },

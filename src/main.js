@@ -31,7 +31,7 @@ import vueJsonp from 'vue-jsonp';  //使用jsonp
 Vue.use(vueJsonp);
 import '@/components/static/index.js';
 
-Vue.prototype.confirm = function({title, icon, text, cancel, width, confirmText, customClass}) {
+Vue.prototype.confirm = function({title, icon, text, cancel, width, confirmText, customClass, showCancelButton, showConfirmButton}) {
   return new Promise((resolve, reject) => {
     let str = ''
 
@@ -41,6 +41,8 @@ Vue.prototype.confirm = function({title, icon, text, cancel, width, confirmText,
     str += `<p class="content-text">${text}</p>`
 
     this.$confirm(str, title, {
+      showCancelButton: showCancelButton != undefined ? showCancelButton : true,
+      showConfirmButton: showConfirmButton != undefined ? showConfirmButton : true,
       confirmButtonText: confirmText || '确认',
       cancelButtonText: '取消',
       dangerouslyUseHTMLString: true,
