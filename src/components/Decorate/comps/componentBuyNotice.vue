@@ -3,13 +3,12 @@
   <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
     <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}">
       <li>
-        <!-- <img src="http://35.201.165.105:8000/storage/image/20190809/1565333783849805.png" alt /> -->
         <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
       </li>
       <li class="ellipsis">
         <div class="nwwest-roll" id="nwwest-roll">
           <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
-            <li ref="rollul" v-for="item in list" class="ellipsis" :class="{anim:animate===true}">
+            <li ref="rollul" v-for="(item, key) in list" :key="key" class="ellipsis" :class="{anim:animate===true}">
               <img :src="item.member" alt="">
               <span class="name">{{item.content}}</span>
             </li>

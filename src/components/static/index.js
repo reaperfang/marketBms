@@ -35,3 +35,6 @@ Vue.use(Swipe).use(SwipeItem);
 
 import { NoticeBar } from 'vant';
 Vue.use(NoticeBar);
+
+import { CountDown } from 'vant';
+Vue.use(CountDown);

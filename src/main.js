@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 Object.keys(utils).forEach(key => {
   Vue.filter(key, utils[key])
 })
+Vue.prototype.utils = utils;
 Vue.config.productionTip = false
 
 
