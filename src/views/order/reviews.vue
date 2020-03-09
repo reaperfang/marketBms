@@ -44,6 +44,7 @@
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
                 </div>
+                <div style="clear: both;"></div>
             </el-form>
         </div>
         <div class="content">
