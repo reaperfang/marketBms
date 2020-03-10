@@ -429,6 +429,14 @@ export default {
         top: 3px;
         margin-right: 5px;
     }
+    @media (max-width: 1440px) {
+    .container-item {
+        min-width: auto!important;
+    }
+    .goods-box .col:first-child {
+        width: 100%!important;
+    }
+    }
 </style>
 
 
