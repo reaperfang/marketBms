@@ -85,7 +85,7 @@
     </div>    
 </template>
 <script>
-import dialogSelectImageMaterial from '../shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import axios from "axios";
 export default {
   name: 'shopInfo',
