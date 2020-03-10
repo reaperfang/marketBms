@@ -99,6 +99,7 @@ export default {
     methods: {
         imageSelected(item) {
             this.imgUrl = item.filePath;
+            this.addCardBg();
         },
         handleAvatarSuccess(res, file) {
             this.imgUrl = res.data.url;
@@ -151,6 +152,7 @@ export default {
                 console.log(error);
             })
         },
+        //检测是否有背景图片
         checkCardBg() {
             this._apis.client.checkCardBg({}).then((response) => {
                 if(response) {
