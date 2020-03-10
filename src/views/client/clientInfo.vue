@@ -166,8 +166,8 @@ export default {
     methods: {
         refreshPage() {
             this.getMemberInfo();
-            this.getUsedCoupon();
-            this.getUsedCode();
+            //this.getUsedCoupon();
+            //this.getUsedCode();
         },
         changeIdentity() {
             if(this.clientInfoById.level !== 9) {
