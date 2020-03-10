@@ -161,6 +161,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-date-editor .el-range-separator{
+    width: 10%;
+}
 /deep/ .el-button--mini{
     padding: 5px 10px;
 }

@@ -26,9 +26,9 @@ export default [
         meta: { title: '查看详情', noCache: true, tabTitle: '客户管理' ,navType:5}
       },
       {
-        path: 'clientImport',
+        path: 'importClient',
         component: () => import('@/views/client/clientImport'),
-        name: 'clientImport',
+        name: 'importClient',
         hidden: true, 
         meta: { title: '客户导入', noCache: true, tabTitle: '客户管理' ,navType:5}
       },
