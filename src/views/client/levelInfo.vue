@@ -6,7 +6,7 @@
       <span class="icon_title">等级图标：</span>
       <img v-if="ruleForm.levelImageUrl" :src="ruleForm.levelImageUrl" alt class="level_icon" />
       <img v-else src="../../assets/images/client/icon_level.png" alt class="level_icon" />
-      <el-upload
+      <!-- <el-upload
         class="avatar-uploader"
         :action="uploadUrl"
         :show-file-list="false"
@@ -16,8 +16,9 @@
         :before-upload="beforeAvatarUpload"
       >
         <el-button size="small" class="border_btn upload_btn">上传图片</el-button>
-      </el-upload>
-      <span class="l_warn fl" style="margin: 16px 0 0 32px">建议尺寸52*52像素</span>
+      </el-upload> -->
+      <el-button size="small" class="border_btn upload_btn" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">上传图片</el-button>
+      <span class="l_warn fl" style="margin: 25px 0px 0px 17px">建议尺寸52*52像素</span>
     </div>
     <div class="level_order">
       <span class="red">*</span>
@@ -157,6 +158,7 @@
       @getSelectedCoupon="getSelectedCoupon"
       @getSelectedInfo="getSelectedInfo"
       @changeSwitch="changeSwitch"
+      @imageSelected="imageSelected"
     ></component>
   </div>
 </template>
@@ -165,13 +167,15 @@ import levelInfoDialog from "./dialogs/levelInfo/levelInfoDialog";
 import giftListDialog from "./dialogs/levelInfo/giftListDialog";
 import couponListDialog from "./dialogs/levelInfo/couponListDialog";
 import redListDialog from "./dialogs/levelInfo/redListDialog";
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: "levelInfo",
   components: {
     levelInfoDialog,
     giftListDialog,
     couponListDialog,
-    redListDialog
+    redListDialog,
+    dialogSelectImageMaterial
   },
   data() {
     return {
@@ -241,6 +245,9 @@ export default {
     }
   },
   methods: {
+    imageSelected(item) {
+      this.ruleForm.levelImageUrl = item.filePath;
+    },
     checkZero(event,val,ele) {
       val = val.replace(/[^\d]/g,'');
       val = val.replace(/^0/g,'');
@@ -1068,6 +1075,7 @@ export default {
   }
   .upload_btn {
     float: left;
+    display: block;
     margin: 8px 0 0 30px;
   }
   .l_warn {

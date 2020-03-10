@@ -5,7 +5,7 @@
         <div class="form_container">
             <el-form ref="form" :model="form">
                 <el-row>
-                    <el-col :span="4">
+                    <el-col :span="6">
                         <el-form-item label="查询条件：" prop="labelName">
                             <el-select v-model="form.labelName" placeholder="请选择" clearable>
                                 <el-option label="昵称" value="nickName"></el-option>
@@ -14,7 +14,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" :offset="1">
+                    <el-col :span="6">
                         <el-form-item prop="labelValue">
                             <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20">
                                 <el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button>
@@ -153,8 +153,8 @@
             </el-form>
         </div>
         <div>
-            <div class="btn_container" style="float: right; margin-right: 118px">
-                <el-button type="primary" @click="_routeTo('clientImport')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
+            <div class="btn_container" style="float: right; margin: -31px 118px 24px 0px">
+                <el-button type="primary" @click="_routeTo('importClient')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
             <acTable :newForm="newForm" @stopLoading="stopLoading"></acTable>

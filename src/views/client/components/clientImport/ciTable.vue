@@ -123,6 +123,12 @@ export default {
         this.currentDialog = "batchAddTagDialog";
         this.currentData.successNum = row.successNum;
         this.currentData.id = row.id;
+      }else{
+        this.$notify({
+          title: '警告',
+          message: '无导入成功数不能添加标签',
+          type: 'warning'
+        });
       }
     },
     modify(row) {
