@@ -81,7 +81,7 @@
             </div>
         </el-form>
         <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
     </div>    
 </template>
 <script>
@@ -193,6 +193,9 @@ export default {
     
   },
   methods: {
+    imageSelected(item) {
+      console.log('item',item);
+    },
     itemCatHandleChange(value) {
         let _value = [...value]
         let arr = this.form.business.map(id => {
