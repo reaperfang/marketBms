@@ -154,7 +154,7 @@ export default {
       },
       multipleUpload: {
           type: Boolean,
-          required: true
+          required: false
       },
   },
   data() {

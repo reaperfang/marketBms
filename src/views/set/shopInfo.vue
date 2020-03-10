@@ -194,7 +194,7 @@ export default {
   },
   methods: {
     imageSelected(item) {
-      console.log('item',item);
+      this.form.logo = item.filePath;
     },
     itemCatHandleChange(value) {
         let _value = [...value]
