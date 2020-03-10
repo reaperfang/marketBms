@@ -170,7 +170,7 @@ export default {
                     message: '请选择渠道',
                     type: 'warning'
                 });
-            }else if(this.importUrl == ""){
+            }else if(!this.importUrl){
                 this.$notify({
                     title: '警告',
                     message: '请上传文件',

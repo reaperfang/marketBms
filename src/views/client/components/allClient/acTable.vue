@@ -355,9 +355,10 @@ export default {
 }
 .acTable_container{
   position: relative;
+  margin-top: 60px;
   .export_btn{
     position: absolute;
-    top: 18px;
+    top: -31px;
     right: 40px;
   }
 }

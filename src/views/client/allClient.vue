@@ -153,8 +153,8 @@
             </el-form>
         </div>
         <div>
-            <div class="btn_container" style="float: right; margin-right: 118px">
-                <el-button type="primary" @click="_routeTo('clientImport')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
+            <div class="btn_container" style="float: right; margin: -31px 118px 24px 0px">
+                <el-button type="primary" @click="_routeTo('importClient')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
             <acTable :newForm="newForm" @stopLoading="stopLoading"></acTable>
