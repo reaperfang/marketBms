@@ -25,7 +25,7 @@
                 <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" >
                   <template >
                     <div class="cell-item" v-for="(item,key) in materialResultList" :key="key" @click="selectImg($event, item)">
-                      <img :src="item.filePath" :lazy-src="item.filePath" alt="加载错误" @load="loadImg($event, item)" @error="loadError($event, item)"/> 
+                      <img :src="item.filePath" :lazy-src="item.filePath" alt="加载错误"/> 
                       <div class="item-body">
                           <div class="item-desc">{{item.fileName}}</div>
                       </div>
@@ -68,7 +68,7 @@
         <div class="icon_wrapper" ref="systemWrapper" v-loading="loading">
             <ul>
               <li class="cell-item" v-for="(item,key) in systemResultList" :key="key" @click="selectImg($event, item)">
-                <img :src="item.address" alt="加载错误" @load="loadImg($event, item)" @error="loadError($event, item)"/> 
+                <img :src="item.address" alt="加载错误"/> 
                 <!-- <p class="item-desc">{{item.id}}</p> -->
               </li>
             </ul>
@@ -94,26 +94,27 @@
                 <ul>
                   <li>
                     <el-upload
+                      v-if="uploadAble"
                       :multiple="multipleUpload"
                       class="avatar-uploader"
                       v-loading="uploadLoading"
                       :action="uploadUrl"
                       :show-file-list="false"
                       :data="{json: JSON.stringify({cid: cid})}"
-                      @on-error="uploadLoading = false"
-                      :before-upload="beforeAvatarUpload" 
+                      :on-error="handleError"
+                      :before-upload="beforeUpload" 
                       :on-success="handleSuccess"
-                      :on-progress="handleProgress">
+                      :on-change="handleChange">
                       <i class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                   </li>
                   <li class="cell-item" v-for="(item,key) in fileList" :key="key" @click="selectImg($event, item)">
-                    <img :src="item.url" alt="加载错误" @load="loadImg($event, item)" @error="loadError($event, item)"/> 
+                    <img :src="item.url" alt="加载错误"/> 
                     <!-- <p class="item-desc">{{item.id}}</p> -->
                   </li>
                 </ul>
             </div>
-            <p class="note">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
+            <p class="note" style="color: #d3d8df;margin-top:20px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
           </el-form-item>
           <!-- <el-form-item label="分组">
             <el-select v-model="form.groupValue" placeholder="请选择">
@@ -150,11 +151,13 @@ export default {
       },
       showSystemIcon: {
           type: Boolean,
+          default: false,
           required: false
       },
       multipleUpload: {
           type: Boolean,
-          required: true
+          default: true,
+          required: false
       },
   },
   data() {
@@ -162,10 +165,14 @@ export default {
       loading: true,
       currentTab: 'material',  //  material:素材库 / local:本地上传  /  system:系统图片
       selectedItem: null,
+      uploadAble: true,
 
       /* 本地上传 */
       uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
       fileList: [],  //用来显示进度条的列表
+      addList: [],  //添加的文件列表（上传前）
+      successList: [],  //成功的文件列表
+      failedList: [],  //失败的文件列表
       uploadState: [],
       form:{
         imageUrl:'',
@@ -339,45 +346,27 @@ export default {
 
     /**************************** 上传相关  开始 *******************************/
 
-    /* 移除上传队列中的某一条钩子 */
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-
-    /* 上传预览钩子 */
-    handlePreview(file) {
-      console.log(file);
-    },
-
-    /* 上传执行钩子 */
-    handleExceed(files, fileList) {
-      // this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-
-    /* 移除上传队列中的某一条前的钩子 */
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
-    },
-
-    /* 上传按钮改变钩子 */
-    handleChange(file, fileList) {
-      if(file.status === 'ready' && !this.uploadState.includes(file)) {
-        this.uploadState.push(file);
-      }
-    },
-
     /* 上传前钩子 */
     beforeUpload(file) {
-      if(!file) {
-        this.loading = false;
-      }else{
-        this.loading = true;
+      const isJPG = file.type === 'image/jpg';
+      const isJPEG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 / 1024 < 3;
+      if (!(isJPG || isJPEG || isPNG)) {
+        this.$message.error('上传图片支持jpg,jpeg,png格式!');
       }
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 3MB!');
+      }
+      return isJPG || isJPEG || isPNG && isLt2M;
     },
 
     /* 上传成功钩子 */
     handleSuccess(response, file, fileList) {
-      console.log(arguments)
+      this.uploadAble = false;
+      this.$nextTick(()=>{
+        this.uploadAble = true;
+      })
       let list = [];
       for(let item of fileList) {
         if(item.status == 'success') {
@@ -386,49 +375,41 @@ export default {
       }
       this.fileList = list;
       localStorage.setItem('localUploadFile', JSON.stringify(this.fileList));
-      this.uploadLoading = false
-    },  
-    
-    /* 上传进度钩子 */
-    handleProgress(event, file, fileList) {
-      console.log(arguments)
-      
     },
 
-    /* 上传失败钩子 */
-    handleError(error, file, fileList) {
-      this.allImgUploaded();
-      this.imgsArr.push({
-        loaded: false,
-        href: '',
-        title: file.name,
-        src: ``
-      })
-    },
-
-     /* 检测全部图片上传结束 */
-    allImgUploaded() {
-      let bAllUploaded = true;
-      for(let item of this.uploadState){
-        if(item.status !== 'success'){
-          bAllUploaded = false;
-          break;
-        }
+    /* 上传失败 */
+    handleError(err, file, fileList) {
+      this.uploadLoading = true;
+      if(file.status === 'fail') {
+        this.failedList.push(file);
       }
 
-      if(bAllUploaded) {
-        this.clearUploadFiles();
+      if(this.successList.length + this.failedList.length === this.addList.length) {
+        this.uploadLoading = false;
       }
     },
 
-    /* 清除上传进度条 */
-    clearUploadFiles() {
-      this.uploadState = [];
-      const allProgress = document.querySelectorAll('.el-upload-list__item');
-      for(let item of allProgress) {
-        item.parentNode.removeChild(item);
+    /* 上传文件改变 */
+    handleChange(file, fileList) {
+      this.uploadLoading = true;
+      if(file.status === 'ready') {
+        this.addList.push(file);
+      }
+      if(file.status === 'success') {
+        this.successList.push(file);
+      }
+
+      if(this.successList.length + this.failedList.length === this.addList.length) {
+        this.uploadLoading = false;
       }
     },
+
+      /* 清除缓存 */
+    clearTempSave() {
+      sessionStorage.removeItem('localUploadFile');
+      this.fileList = [];
+    },
+
     /**************************** 上传相关  结束 *******************************/
 
 
@@ -454,43 +435,6 @@ export default {
       event.currentTarget.className = 'cell-item img_active';
     },
 
-
-    /* 成功加载图片 */
-    loadImg(event, item) {
-      // this.$set(item, 'loaded', true);
-      // this.allImgLoaded();
-    },
-
-    /* 图片加载失败 */
-    loadError(event, item) {
-      // this.$set(item, 'loaded', true);  //只要加载了都算成功，用来后面统计
-      // this.allImgLoaded();
-    },
-
-    /* 检测全部图片加载结束 */
-    allImgLoaded() {
-      // let loadedLength = 0;
-      // for(let item of this.materialResultList){
-      //   if(item.loaded){
-      //     loadedLength ++;
-      //   }
-      // }
-
-      // if(loadedLength === this.materialResultList.length - 1) {
-      //   this.loading = false;
-      // }
-    },
-
-    scroll(scrollData){
-        // console.log(scrollData)
-    },
-    switchCol(col){
-        // this.col = col
-        // console.log(this.col)
-    },
-    loadmore(index){
-        // this.data = this.data.concat(this.data)
-    },
 
     /**************************** 瀑布流相关  结束 *******************************/
 
@@ -546,33 +490,6 @@ export default {
       }else if(this.currentTab === 'local') {
         //TODO
       }
-    },
-
-    handleAvatarSuccess(res, file) {
-      this.uploadLoading = false
-      this.fileData = res.data
-      this.form.imageUrl = res.data.url
-    },
-
-    beforeAvatarUpload(file) {
-      this.uploadLoading = true
-      const isJPG = file.type === 'image/jpg';
-      const isJPEG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 3;
-      if (!(isJPG || isJPEG || isPNG)) {
-        this.$message.error('上传图片支持jpg,jpeg,png格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 3MB!');
-      }
-      return isJPG || isJPEG || isPNG && isLt2M;
-    },
-
-    /* 清除缓存 */
-    clearTempSave() {
-      sessionStorage.removeItem('localUploadFile');
-      this.fileList = [];
     }
 
   }
