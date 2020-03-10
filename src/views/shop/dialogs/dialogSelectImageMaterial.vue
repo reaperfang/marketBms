@@ -1,6 +1,6 @@
 /* 选择图片素材弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'图片素材'" @submit="submit" :showFooter="false">
+  <DialogBase :visible.sync="visible" width="816px" :title="'图片素材'" @submit="submit" @close="close" :showFooter="false">
 
      <el-tabs v-model="currentTab">
 
@@ -49,7 +49,7 @@
 
 
       <!-- 系统素材 -->
-      <el-tab-pane label="系统素材" name="system" v-if="showSystemIcon">
+      <el-tab-pane label="系统图标" name="system" v-if="showSystemIcon">
         <div class="icon_head">
           <span class="title">ICON分组</span>
           <div class="select">
@@ -92,26 +92,28 @@
           <el-form-item label="">
              <div class="icon_wrapper icon_wrapper_2" ref="localWrapper" v-loading="loading">
                 <ul>
+                  <li>
+                    <el-upload
+                      :multiple="multipleUpload"
+                      class="avatar-uploader"
+                      v-loading="uploadLoading"
+                      :action="uploadUrl"
+                      :show-file-list="false"
+                      :data="{json: JSON.stringify({cid: cid})}"
+                      @on-error="uploadLoading = false"
+                      :before-upload="beforeAvatarUpload" 
+                      :on-success="handleSuccess"
+                      :on-progress="handleProgress">
+                      <i class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                  </li>
                   <li class="cell-item" v-for="(item,key) in fileList" :key="key" @click="selectImg($event, item)">
                     <img :src="item.url" alt="加载错误" @load="loadImg($event, item)" @error="loadError($event, item)"/> 
                     <!-- <p class="item-desc">{{item.id}}</p> -->
                   </li>
                 </ul>
             </div>
-            <el-upload
-              :multiple="true"
-              class="avatar-uploader"
-              v-loading="uploadLoading"
-              :action="uploadUrl"
-              :show-file-list="false"
-              :data="{json: JSON.stringify({cid: cid})}"
-              @on-error="uploadLoading = false"
-              :before-upload="beforeAvatarUpload" 
-              :on-success="handleSuccess"
-              :on-progress="handleProgress">
-              <i class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-            <p class="note">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除缓存</el-button></p>
+            <p class="note">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
           </el-form-item>
           <!-- <el-form-item label="分组">
             <el-select v-model="form.groupValue" placeholder="请选择">
@@ -149,6 +151,10 @@ export default {
       showSystemIcon: {
           type: Boolean,
           required: false
+      },
+      multipleUpload: {
+          type: Boolean,
+          required: true
       },
   },
   data() {
@@ -241,7 +247,7 @@ export default {
       }
     })
 
-    const tempSaveFile = sessionStorage.getItem('localUploadFile');
+    const tempSaveFile = localStorage.getItem('localUploadFile');
     if(tempSaveFile) {
       this.fileList = JSON.parse(tempSaveFile);
     }
@@ -379,7 +385,7 @@ export default {
         }
       }
       this.fileList = list;
-      sessionStorage.setItem('localUploadFile', JSON.stringify(this.fileList));
+      localStorage.setItem('localUploadFile', JSON.stringify(this.fileList));
       this.uploadLoading = false
     },  
     
@@ -508,6 +514,11 @@ export default {
         copyItem['filePath'] = copyItem.url;
       }
       this.$emit('imageSelected',  copyItem);
+      this.dialogVisible = false;
+      this.visible = false;
+    },
+
+    close() {
       this.dialogVisible = false;
       this.visible = false;
     },
@@ -705,7 +716,7 @@ export default {
   height: 80px;
   display: inline-block;
   vertical-align: middle;
-  margin-top:20px;
+  // margin-top:20px;
 }
 /deep/ .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
