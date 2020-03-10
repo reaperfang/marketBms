@@ -653,6 +653,7 @@ export default {
   font-size: 12px;
   line-height: 1;
   padding-top: 2px;
+  margin-bottom: 0;
 }
 </style>
 

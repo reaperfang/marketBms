@@ -390,3 +390,34 @@ export function GetQueryString(name) {
 	if (r != null) return unescape(r[2]);
 	return null;
 }
+
+// 计算日期时间差 计算毫秒
+export function dateDifference(endTime){
+	var endTimeYear = parseInt(endTime.split(" ")[0].split("-")[0]);
+	var endTimeMonth = parseInt(endTime.split(" ")[0].split("-")[1]);
+	var endTimeDay = parseInt(endTime.split(" ")[0].split("-")[2]);
+	var endTimeHour = parseInt(endTime.split(" ")[1].split(":")[0]);
+	var endTimeMinute = parseInt(endTime.split(" ")[1].split(":")[1]);
+	var endTimeSecond = parseInt(endTime.split(" ")[1].split(":")[2]);
+	var cks = Date.UTC(endTimeYear,endTimeMonth-1,endTimeDay,endTimeHour,endTimeMinute,endTimeSecond) - new Date().getTime()+new Date().getTimezoneOffset() * 60000;
+	if(!(cks>0)){
+		cks=0;
+	}
+	return cks;
+}
+
+/* 添加0 */
+export function addZero(num) {
+  if(!num) {
+    return '00'
+  }
+  if(Number(num) >= 10) {
+    return num;
+  }else {
+    if(Number(num) > 0) {
+      return '0' + Number(num);
+    }else{
+      return '00'
+    }
+  }
+}

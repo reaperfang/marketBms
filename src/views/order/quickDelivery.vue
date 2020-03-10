@@ -16,11 +16,11 @@
           class="blue pointer"
         >计费规则说明</span>
       </div>
-      <el-button
+      <!-- <el-button
         v-permission="['订单', '快递发货', '默认页面', '新建模板']"
         @click="$router.push('/order/newTemplate?mode=new')"
         class="border-button new-template"
-      >新建模板</el-button>
+      >新建模板</el-button> -->
     </section>
     <section class="search">
       <el-form ref="inline" :inline="true" :model="listQuery" class="form-inline">
@@ -42,17 +42,24 @@
           </div>
           <div class="col">
             <el-form-item>
-              <span @click="resetForm('inline')" class="orange resetting pointer">重置</span>
-              <el-button type="primary" @click="getList">查询</el-button>
+              <el-button type="primary" @click="getList">搜索</el-button>
+              <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
             </el-form-item>
           </div>
         </div>
       </el-form>
     </section>
     <section class="table-box">
-      <div class="table-title">
-        全部
-        <span>{{total}}</span>项
+      <div class="content-header">
+          <div class="table-title">
+            全部
+            <span>{{total}}</span>项
+          </div>
+          <el-button
+            v-permission="['订单', '快递发货', '默认页面', '新建模板']"
+            @click="$router.push('/order/newTemplate?mode=new')"
+            class="border-button new-template"
+          >新建模板</el-button>
       </div>
       <div class="table">
         <el-table
@@ -84,7 +91,7 @@
                 <span
                   v-permission="['订单', '快递发货', '默认页面', '修改']"
                   @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)"
-                >修改</span>
+                >编辑</span>
                 <span
                   v-if="!scope.row.productCount"
                   v-permission="['订单', '快递发货', '默认页面', '删除']"
@@ -253,6 +260,21 @@ export default {
       }
     }
   }
+}
+.table-box .table {
+    margin-left: 0;
+}
+/deep/ .el-radio__input.is-checked+.el-radio__label {
+    color: #44434B;
+}
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.table-box .table-title {
+    margin-bottom: 0;
 }
 </style>
 
