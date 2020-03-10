@@ -5,7 +5,7 @@
         <div class="form_container">
             <el-form ref="form" :model="form">
                 <el-row>
-                    <el-col :span="4">
+                    <el-col :span="6">
                         <el-form-item label="查询条件：" prop="labelName">
                             <el-select v-model="form.labelName" placeholder="请选择" clearable>
                                 <el-option label="昵称" value="nickName"></el-option>
@@ -14,7 +14,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" :offset="1">
+                    <el-col :span="6">
                         <el-form-item prop="labelValue">
                             <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20">
                                 <el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button>
