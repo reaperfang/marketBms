@@ -106,13 +106,6 @@ export default {
         });
       }
     },
-    checkSelectable(row,index) {
-      if(row.labelContains==0) {
-        return 1;
-      }else{
-        return 0;
-      }
-    },
     handleSizeChange(val) {
       this.getLabelList(1, val);
       this.pageSize = val;
@@ -204,7 +197,7 @@ export default {
 }
 .edit_span{
     color: #655EFF;
-    margin-right: 10px;
+    margin-right: 20px;
     cursor: pointer;
     .edit_i{
         display: inline-block;

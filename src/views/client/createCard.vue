@@ -29,7 +29,7 @@
             style="margin-left: 93px"
             @change="chooseImg"
           >背景图：</el-radio>
-          <el-upload
+          <!-- <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
             :show-file-list="false"
@@ -38,19 +38,21 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
-            <el-button
+            
+          </el-upload> -->
+          <el-button
               size="small"
               type="primary"
               class="upload_btn"
               v-permission="['客户', '会员卡', '会员卡管理', '上传']"
               v-if="ruleForm.backgroundType == '1'"
+              @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
             >点击上传</el-button>
-          </el-upload>
           <span
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >像素大小控制在1000象素*600象素以下</span>
-          <img v-if="imageUrl" :src="imageUrl" class="avatar cardImg" />
+          <img v-if="imgUrl" :src="imgUrl" class="avatar cardImg" />
           <div v-else class="cardImg2" :style="{backgroundColor: currentColor}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
@@ -182,6 +184,7 @@
       @getCondition="getCondition"
       @getSelectedCoupon="getSelectedCoupon"
       @getSelection="getSelection"
+      @imageSelected="imageSelected"
     ></component>
   </div>
 </template>
@@ -190,18 +193,20 @@ import createCardDialog from "./dialogs/createCard/createCardDialog";
 import redListDialog from "./dialogs/levelInfo/redListDialog";
 import giftListDialog from "./dialogs/levelInfo/giftListDialog";
 import couponListDialog from "./dialogs/levelInfo/couponListDialog";
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: "createCard",
   components: {
     createCardDialog,
     redListDialog,
     giftListDialog,
-    couponListDialog
+    couponListDialog,
+    dialogSelectImageMaterial
   },
   data() {
     return {
       uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
-      imageUrl: "",
+      imgUrl: "",
       ruleForm: {
         name: "",
         backgroundType: "0",
@@ -278,6 +283,9 @@ export default {
     }
   },
   methods: {
+    imageSelected(item) {
+      this.imgUrl = item.filePath;
+    },
     checkZero(event,val,ele) {
       val = val.replace(/[^\d]/g,'');
       val = val.replace(/^0/g,'');
@@ -392,7 +400,7 @@ export default {
               }
             });
           }else{
-            this.imageUrl = this.ruleForm.background;
+            this.imgUrl = this.ruleForm.background;
           }
         })
         .catch(error => {
@@ -422,7 +430,7 @@ export default {
           type: "warning"
         });
       } else {
-        this.imageUrl = res.data.url;
+        this.imgUrl = res.data.url;
       }
     },
     beforeAvatarUpload(file) {
@@ -668,9 +676,9 @@ export default {
               this.canSubmit2 = true;
             }
           } else if (this.ruleForm.backgroundType == "1") {
-            if (this.imageUrl) {
+            if (this.imgUrl) {
               this.canSubmit3 = true;
-              formObj.background = this.imageUrl;
+              formObj.background = this.imgUrl;
             } else {
               this.$notify({
                 title: "警告",
@@ -963,14 +971,15 @@ export default {
     height: 140px;
     position: absolute;
     right: 20px;
-    top: 40px;
+    top: -86px;
+    border-radius: 8px;
   }
   .cardImg2 {
     width: 323px;
     height: 140px;
     position: absolute;
     right: 20px;
-    top: 40px;
+    top: -86px;
     border-radius: 8px;
     background: url('../../assets/images/client/bg_card.png') 0 0 no-repeat;
     .c_bh{
@@ -999,10 +1008,6 @@ export default {
     float: left;
     margin: 17px 0 0 30px;
     color: #44434b;
-  }
-  .upload_btn {
-    float: left;
-    margin: 8px 0 0 13px;
   }
   .l_warn {
     color: #92929b;
@@ -1065,6 +1070,7 @@ export default {
       display: inline-block;
     }
     .upload_btn {
+      display: block;
       margin-left: 90px;
     }
   }
