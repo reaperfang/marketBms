@@ -110,7 +110,7 @@
         </el-form>
       </div>
       <!-- 动态弹窗 -->
-      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
+      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" :showSystemIcon="true"></component>
     </div>
 </template>
 
