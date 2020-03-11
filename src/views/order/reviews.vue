@@ -312,7 +312,7 @@ export default {
                 //     type: 'success'
                 // });
                 this.getList()
-                this.confirm({title: '提示', icon: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
+                this.confirm({title: '提示', iconSuccess: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
             }).catch(error => {
                 this.$notify.error({
                     title: '错误',

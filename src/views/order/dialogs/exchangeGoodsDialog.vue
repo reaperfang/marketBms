@@ -41,7 +41,8 @@ export default {
             
             this._apis.order.orderAfterSaleUpdateStatus({id: this.data.id, orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1, exchangeConfirmation: this.exchangeConfirmation}).then((res) => {
                 console.log(res)
-                this.$parent.getList();
+                this.$parent.getList && this.$parent.getList();
+                this.$parent.getDetail && this.$parent.getDetail();
                 // this.confirm({title: '换货确认', icon: true, text: `是否确认${_title}？`}).then(() => {
                     
                 // })

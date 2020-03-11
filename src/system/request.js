@@ -155,6 +155,8 @@ class Ajax {
       } else {
         config.data = `json=${encodeURI(JSON.stringify({ head, data: { cid, ...config.data } }))}`;
       }
+      config.data = config.data.replace(/\+/g, "%2B");
+      config.data = config.data.replace(/\&/g, "%26");
     } else if (config.method == "get") {
       if (config.noCid) {
         config.params = { json: { head, data: config.params } };
