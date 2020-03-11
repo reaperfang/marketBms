@@ -33,7 +33,6 @@
                     </span>
                   </p>
                 </div>
-                <p class="img_name">{{item.fileName}}</p>
                 <div class="operate" ref="operate">
                   <el-button type="primary" plain class="block mt10 ml10" @click="moveGroup(item.id)">分组</el-button>
                   <el-button type="primary" plain class="block mt10" v-if="!item.isSyncWechat" @click="imageTailor(item)">剪裁</el-button>
@@ -62,17 +61,23 @@
         </div>
         <div class="groups">
           <p class="groups_head">全部图片</p>
-          <groups :typeName="typeName"  @submit="handleSubmit"></groups>
+          <p class="item" v-for="item in groupList" :key="item.id">
+            <span @click="getList(item.id)" class="group_name">{{item.name}}</span>
+            <span v-if="item.id != -1">
+              <i class="el-icon-edit" @click="newGroup(item.id,item.name,'edit')"></i>
+              <i class="el-icon-delete" @click="deleteImage(item.id,'groupId')"></i>
+            </span>
+          </p>
+          <span class="newClass" @click="newGroup('','','new')">+ 新建分组</span>
         </div>
       </div>
     </div>
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" :typeName="typeName" @submit="handleSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" @submit="handleSubmit"></component>
   </div>
 </template>
 
 <script>
-import groups from './groups'
 import dialogCutImage from '@/views/shop/dialogs/materialDialogs/dialogCutImage';
 import dialogUploadImage from '@/views/shop/dialogs/materialDialogs/dialogUploadImage';
 import dialogSyncImage from '@/views/shop/dialogs/materialDialogs/dialogSyncImage';
@@ -84,7 +89,7 @@ import dialogImageTailor from '@/views/shop/dialogs/materialDialogs/dialogImageT
 
 export default {
   name: 'imageMaterial',
-  components: { groups, dialogCutImage, dialogUploadImage,dialogSyncImage,dialogDelete,dialogGroups,dialogGroupsMove,dialogCopyLink,dialogImageTailor},
+  components: {dialogCutImage, dialogUploadImage,dialogSyncImage,dialogDelete,dialogGroups,dialogGroupsMove,dialogCopyLink,dialogImageTailor},
   data () {
     return {
       searchWord:'',
@@ -97,15 +102,16 @@ export default {
       loading:false,
       checked:false,
       list:[],
+      groupList:[],
       currentPage:1,
       pageSize:10,
       total:0,
-      groupId:'',
-      typeName:'image'
+      groupId:''
     }
   },
   created() {
     this.getList()
+    this.getGroups()
   },
   methods: {
     //获取图片列表
@@ -180,14 +186,94 @@ export default {
       this.dialogVisible = true
       this.currentDialog = 'dialogCopyLink'
       this.data = link
-    },    
+    },
+  /**********************************        分组相关      **********************/
+    //查询分组
+    getGroups(){
+      let query ={
+        type:'0'
+      }
+      this._apis.file.getGroup(query).then((response)=>{
+        this.groupList = response
+      }).catch((error)=>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })
+    },
+    //添加分组
+    addGroup(groupName){
+      let query ={
+        name:groupName,
+        parentId:'0',
+        type:'0'
+      }
+      this._apis.file.newGroup(query).then((response)=>{
+        this.$notify.success({
+          title: '成功',
+          message: '添加成功！'
+        });
+        this.getGroups()
+      }).catch((error)=>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })      
+    },
+    //编辑分组
+    editGroup(groupId,groupName){
+      let query ={
+        id:groupId,
+        name:groupName,
+        type:'0'
+      }
+      this._apis.file.editGroup(query).then((response)=>{
+        this.$notify.success({
+          title: '成功',
+          message: '操作成功！'
+        });
+        this.getGroups()
+      }).catch((error)=>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })      
+    },
+    //删除分组
+    deleteGroup(id){
+      let query ={
+        id:id,
+        type:0
+      }
+      this._apis.file.deleteGroup(query).then((response)=>{
+        this.$notify.success({
+          title: '成功',
+          message: '操作成功！'
+        });
+        this.getGroups()
+      }).catch((error)=>{
+        this.$notify.error({
+          title: '错误',
+          message: error
+        });
+      })
+    },
    /**********************************        弹窗相关      **********************/
     //弹窗反馈
     handleSubmit(data){
       for(let key in data){
         switch (key) {
-          case 'getGroupImage':
-            this.getList(data.getGroupImage.groupId)
+          case 'add':  
+            this.addGroup(data.add.groupName) 
+          break;
+          case 'edit':
+            this.editGroup(data.edit.groupId,data.edit.groupName)
+          break;
+          case 'deleteGroup':
+            this.deleteGroup(data.deleteGroup.groupId)
           break;
           case 'moveGroup':
             this.handleMoveGroup(data.moveGroup.imageId,data.moveGroup.groupId)
@@ -209,7 +295,16 @@ export default {
         }
       }
     },
-    
+    //新建分组
+    newGroup(id,name,type){
+      this.dialogVisible = true;
+      this.currentDialog = 'dialogGroups'
+      this.data = {
+        type:type,
+        id:id || '',
+        name:name || ''
+      }
+    },
     //删除图片或是分组
     deleteImage(id,type){
       this.dialogVisible = true;
@@ -415,7 +510,7 @@ export default {
       flex-flow: row wrap;
       .item_img{
         border: 1px solid #e6e6e6;
-        margin:0px 30px 70px 0px;
+        margin:0px 30px 50px 0px;
         .img_info{
           width: 240px;
           height:150px;
@@ -446,13 +541,6 @@ export default {
               }
             }
           }
-          .img_name{
-            position: absolute;
-            left:0px;
-            bottom:-50px;
-            width: 100%;
-            overflow: hidden;
-          }
           .operate{
             width: 100%;
             height: 150px;
@@ -469,7 +557,7 @@ export default {
     }
   }
   .groups{
-    width: 350px;
+    width: 300px;
     border: 1px solid #e6e6e6;
     font-size: 14px;
     color: #44434B;
