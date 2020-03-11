@@ -150,16 +150,17 @@ export default {
   
   },
   methods: {
-   //上传图片
+   //上传视频
     submit(formName){
       this.$refs[formName].validate((valid) => {
           if (valid && this.videoData.url !=undefined) {
+            let leg = this.form.groupValue.length
             let query ={
-              fileGroupInfoId:this.form.groupValue,
-              fileName:this.videoData.original,
+              fileGroupInfoId:this.form.groupValue[leg-1],
+              fileName:this.form.name,
               filePath:this.videoData.url,
               fileSize:this.videoData.size,
-              name:this.form.name,
+              name:this.videoData.original,
               fileCover:this.form.imageUrls,
               sign:'',
             }
