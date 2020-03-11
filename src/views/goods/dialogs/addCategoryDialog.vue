@@ -25,10 +25,18 @@
                         <span style="margin-left: 20px;">第二级：{{data.name}}</span>
                     </el-form-item>
                 </template>
-                <el-form-item label="分类名称：" prop="name">
-                    <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name"></el-input>
-                    <span class="description">仅支持展示最多5个字的文本标签</span>
-                </el-form-item>
+                <template v-if="data.level == 1">
+                    <el-form-item label="分类名称：" prop="name">
+                        <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name"></el-input>
+                        <span class="description">仅支持展示最多5个字的文本标签</span>
+                    </el-form-item>
+                </template>
+                <template v-else>
+                    <el-form-item label="分类名称：" prop="name23">
+                        <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name23"></el-input>
+                        <span class="description">仅支持展示最多10个字的文本标签</span>
+                    </el-form-item>
+                </template>
                 <el-form-item label="状态：" prop="enable">
                     <el-radio v-model="basicForm.enable" :label="1">启用</el-radio>
                     <el-radio v-model="basicForm.enable" :label="0">禁用</el-radio>
@@ -78,6 +86,7 @@ export default {
             showFooter: false,
             basicForm: {
                 name:'',  // 分类名称
+                name23: '',
                 level: 1, // 分类级别
                 enable: 1, // 状态
                 sort: 0, // 分类顺序
@@ -90,6 +99,10 @@ export default {
                 name: [
                     { required: true, message: '请输入分类名称', trigger: 'blur' },
                     { max: 5, message: '最多支持5个字符', trigger: 'blur' }
+                ],
+                name23: [
+                    { required: true, message: '请输入分类名称', trigger: 'blur' },
+                    { max: 10, message: '最多支持10个字符', trigger: 'blur' }
                 ],
                 enable: [
                     { required: true, message: '请选择状态', trigger: 'blur' },
@@ -112,7 +125,11 @@ export default {
         if(this.data.editor) {
             this.getCategoryDetail(this.data.id).then(res => {
                 console.log(res)
-                this.basicForm.name = res.name
+                if(this.data.level == 1) {
+                    this.basicForm.name = res.name
+                } else {
+                    this.basicForm.name23 = res.name23
+                }
                 this.basicForm.enable = res.enable
                 this.basicForm.sort = res.sort
                 this.basicForm.image = res.image
@@ -126,7 +143,7 @@ export default {
         if(this.data.add) {
             if(this.data.level == 2) {
                 this.getCategoryDetail(this.data.parentId).then(res => {
-                    this.level1Title = res.name
+                    this.level1Title = res.name23
                 })
             }
         }
@@ -152,12 +169,22 @@ export default {
                     }
                     let param = Object.assign({}, this.basicForm)
 
-                    if(/\s+/.test(this.basicForm.name)) {
-                        this.$message({
-                            message: '分类名称不能为空',
-                            type: 'warning'
-                        });
-                        return
+                    if(this.data.level == 1) {
+                        if(/\s+/.test(this.basicForm.name)) {
+                            this.$message({
+                                message: '分类名称不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    } else {
+                        if(/\s+/.test(this.basicForm.name23)) {
+                            this.$message({
+                                message: '分类名称不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
                     }
 
                     if(this.data.add) {

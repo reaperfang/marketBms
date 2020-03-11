@@ -5,7 +5,7 @@
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <el-form-item label="商户名称:" prop="shopName">
                 <el-input v-model.trim="form.shopName" style="width:200px;"></el-input>
-                <p class="shopInfo-show">用于展示给消费者的品牌形象<span @click="showShop = true">查看样例</span></p>
+                <p class="shopInfo-show">用于展示给消费者的品牌形象<span @mouseover="showShop = true" @mouseout="showShop = false">查看样例</span></p>
             </el-form-item>
             <el-form-item label="主营类目:" prop="sellCategoryId">
               <!-- {{form.business}} -->
@@ -17,6 +17,7 @@
                   clearable
                   filterable>
               </el-cascader>
+              <span class="category-display">您当前的选择是：{{itemCatText}}</span>
             </el-form-item>
             <el-form-item label="创建日期:">
               {{new Date(form.createTime*1) | formatDate('yyyy-MM-dd hh:mm:ss')}}
@@ -25,8 +26,9 @@
                 <span v-if="form.logo" class="avatar">
                   <img :src="form.logo" class="logo_img">
                   <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
+                  <span class="uploadFont" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">上传</span>
                 </span>
-                <el-upload
+                <!-- <el-upload
                 class="avatar-uploader"
                 :action="uploadUrl"
                 :data="{json: JSON.stringify({cid: cid})}"
@@ -34,9 +36,9 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus avatar-uploader-icon"></i>
-                <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-                </el-upload>
-                <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p>
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>-->
+                <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p> 
             </el-form-item>
             <el-form-item label="公司名称:" prop="companyName">
                 <el-input maxlength="30" show-word-limit v-model="form.companyName" placeholder="请输入公司名称" style="width:200px;"></el-input>
@@ -78,10 +80,12 @@
               <div class="center">{{form.shopName}}</div>
             </div>
         </el-form>
+        <!-- 动态弹窗 -->
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
     </div>    
 </template>
 <script>
-
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import axios from "axios";
 export default {
   name: 'shopInfo',
@@ -95,10 +99,22 @@ export default {
         callback();
       }
     };
+    var emailValidatePass = (rule, value, callback) => {
+      var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+
+      if (!reg.test(value)){
+          return callback(new Error('邮箱格式不正确'));
+      } else {
+        callback();
+      }
+    };
     return {
+      itemCatText: '',
       itemCatList: [],
       operateCategoryList: [],
       showShop: false,
+      dialogVisible: false,
+      currentDialog: '',
       form: {
           shopName: '',
           logo:'',
@@ -139,7 +155,8 @@ export default {
           { required: true, message: '请输入公司名称', trigger: 'blur' }
         ],
         companyEmail:[
-          { required: true, message: '请输入公司邮箱', trigger: 'blur' }
+          { required: true, message: '请输入公司邮箱', trigger: 'blur' },
+          { validator: emailValidatePass, trigger: 'blur' }
         ]
       },
       imageUrl: '',
@@ -154,7 +171,7 @@ export default {
       //canvas:{}
     }
   },
-  components: {},
+  components: {dialogSelectImageMaterial},
   watch: {
     
   },
@@ -176,12 +193,16 @@ export default {
     
   },
   methods: {
+    imageSelected(item) {
+      this.form.logo = item.filePath;
+    },
     itemCatHandleChange(value) {
         let _value = [...value]
         let arr = this.form.business.map(id => {
             return this.operateCategoryList.find(val => val.id == id)
         })
 
+        this.itemCatText = arr.map(val => val.name).join(' > ')
         this.form.sellCategoryId = _value.pop()
         this.form.sellCategory = arr[arr.length - 1].name
     },
@@ -244,6 +265,11 @@ export default {
         let itemCatAr = []
 
         this.getCategoryInfoIds(itemCatAr, response.sellCategoryId)
+        let _arr = itemCatAr.map(id => {
+            return this.operateCategoryList.find(val => val.id == id)
+        })
+        this.itemCatText = _arr.map(val => val.name).join(' > ')
+
         this.form = Object.assign({}, response, {
           business: itemCatAr
         })
@@ -263,9 +289,9 @@ export default {
     },
 
     onSubmit(formName){
-      this.loading = true
       this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.loading = true
             let id = this.cid
             let data = {
               id:id,
@@ -372,7 +398,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .shopInfo{
    width: 100%;
-   height: 100%;
    background: #fff; 
    padding: 20px;
    h1{
@@ -423,6 +448,7 @@ export default {
     height: 80px;
     display: inline-block;
     vertical-align: middle;
+    position: relative;
 /deep/ img{
       width: 80px;
       height: 80px;
@@ -435,7 +461,17 @@ export default {
       object-fit:fill;
       display: inline-block;
     }
+    .uploadFont{
+      position: absolute;
+      color: #655EFF;
+      font-size: 14px;
+      display: block;
+      right: -58px;
+      bottom: -8px;
+      cursor: pointer;
+    }
   }
+  
   .shopInfo-show {
     font-size: 12px;
     color: rgba(146,146,155,1);
@@ -474,5 +510,9 @@ export default {
         font-weight:600;
       }
     }
+  }
+  .category-display {
+      margin-left: 10px;
+      font-size: 12px;
   }
 </style>

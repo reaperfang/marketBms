@@ -94,6 +94,10 @@ export default {
       color:rgba(101,94,255,1);
       cursor: pointer;
     }
+    i{
+      font-style: initial;
+      font-size:12px;
+    }
   }
 }
 </style>

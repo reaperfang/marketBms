@@ -132,7 +132,7 @@ export default {
 }
 .user_id{
     text-align: left;
-    padding: 0 0 10px 15px;
+    padding: 0 0 14px 15px;
 }
 .c_label{
     width: 70px;

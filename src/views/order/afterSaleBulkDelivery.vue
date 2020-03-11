@@ -11,14 +11,14 @@
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
-              <div class="col" style="width: 660px;">
+              <div class="col table-title-left" style="width: 660px;">
                 <div class="row align-center row-margin">
                   <div class="col">
                     <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked}"></i>
                   </div>
-                  <div class="col" style="width: 380px;">商品</div>
-                  <div class="col" style="width: 60px;">应发数量</div>
-                  <div class="col">本次发货数量</div>
+                  <div class="col table-title-left-goods" style="width: 380px;">商品</div>
+                  <div class="col table-title-left-yingfa" style="width: 60px;">应发数量</div>
+                  <div class="col table-title-left-benci">本次发货数量</div>
                 </div>
               </div>
               <div class="col">
@@ -29,16 +29,16 @@
               </div>
             </div>
             <div class="row align-center table-container">
-              <div class="col" style="width: 660px; flex-shrink: 0;">
+              <div class="col table-container-left" style="width: 660px; flex-shrink: 0;">
                 <div
-                  class="row align-center row-margin"
+                  class="row align-center row-margin goodsItem"
                   v-for="(goods, i) in item.itemList"
                   :key="i"
                 >
                   <div class="col">
                     <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked}"></i>
                   </div>
-                  <div class="col" style="width: 380px;">
+                  <div class="col goodsItem-left" style="width: 380px;">
                     <div class="row align-center">
                       <div class="col">
                         <img width="66" :src="goods.goodsImage" alt />
@@ -502,4 +502,30 @@ export default {
     }
   }
 }
+.goodsItem-left .row .col:first-child {
+  margin-right: 10px;
+}
+@media (max-width: 1440px) {
+  .table-title-left {
+    width: 443px!important;
+    .table-title-left-goods {
+        width: 290px!important;
+    }
+    .table-title-left-yingfa {
+        width: 91px!important;
+    }
+    .table-title-left-benci {
+      width: 134px!important;
+    }
+  }
+  .table-container-left {
+    width: 443px!important;
+  }
+  .goodsItem-left {
+      width: 215px!important;
+  }
+  .table-title-left-goods {
+      width: 290px!important;
+  }
+} 
 </style>

@@ -1,79 +1,123 @@
 <template>
   <!-- 图片广告 -->
   <div class="componentArticleAD" v-if="currentComponentData && currentComponentData.data">
-    <template v-if="hasContent">
-
       <!-- 1、一行一个 -->
       <div v-if="currentComponentData.data.templateType==1" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <div class="article_first">
+        <template v-if="hasContent">
+          <div class="article_first">
+              <img
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                v-for="(item, key) of currentComponentData.data.itemList"
+                :key="key"
+                :src="item.url"
+                :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
+                alt
+              />
+          </div>
+        </template>
+        <template v-else>
           <img
+            class="default_image"
             :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-            v-for="(item, key) of currentComponentData.data.itemList"
-            :key="key"
-            :src="item.url"
-            :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
+            src="../../../assets/images/shop/defaultImage/ad1.png"
             alt
           />
-        </div>
+        </template>
       </div>
       <!-- 2、轮播海报 -->
       <div v-if="currentComponentData.data.templateType==2" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <van-swipe :autoplay="3000" indicator-color="white">
-          <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
-            <img
-              :src="item.url"
+        <template v-if="hasContent">
+          <van-swipe :autoplay="3000" indicator-color="white">
+            <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
+              <img
+                :src="item.url"
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                alt
+              />
+            </van-swipe-item>
+          </van-swipe>
+        </template>
+        <template v-else>
+           <img
+              class="default_image"
               :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+              src="../../../assets/images/shop/defaultImage/ad2.png"
               alt
             />
-          </van-swipe-item>
-        </van-swipe>
+        </template>
       </div>
       <!-- 3、大图横向滑动 -->
       <div v-if="currentComponentData.data.templateType==3" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="340 + currentComponentData.data.imgMargin" :height="'auto'" class="big_image">
-          <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
-            <img
-              :src="item.url"
+        <template v-if="hasContent">
+          <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="340 + currentComponentData.data.imgMargin" :height="'auto'" class="big_image">
+            <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
+              <img
+                :src="item.url"
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
+                alt
+              />
+            </van-swipe-item>
+          </van-swipe>
+          <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
+        </template>
+        <template v-else>
+           <img
+              class="default_image"
               :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-              :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
+              src="../../../assets/images/shop/defaultImage/ad3.png"
               alt
             />
-          </van-swipe-item>
-        </van-swipe>
-        <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
+        </template>
       </div>
       <!-- 4、小图横向滑动 -->
       <div v-if="currentComponentData.data.templateType==4" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="118 + currentComponentData.data.imgMargin" :height="110">
-          <van-swipe-item class="pdr_16" v-for="(item, key) of currentComponentData.data.itemList" :key="key">
-            <img
-              :src="item.url"
+        <template v-if="hasContent">
+          <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="118 + currentComponentData.data.imgMargin" :height="110">
+            <van-swipe-item class="pdr_16" v-for="(item, key) of currentComponentData.data.itemList" :key="key">
+              <img
+                :src="item.url"
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
+                alt
+              />
+            </van-swipe-item>
+          </van-swipe>
+          <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
+        </template>
+        <template v-else>
+           <img
+              class="default_image"
               :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-              :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
+              src="../../../assets/images/shop/defaultImage/ad4.png"
               alt
             />
-          </van-swipe-item>
-        </van-swipe>
-        <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
+        </template>
       </div>
       <!-- 5、导航横向滑动 -->
       <div v-if="currentComponentData.data.templateType==5" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
-        <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="93 + currentComponentData.data.imgMargin" :height="93">
-          <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
-            <img
-              :src="item.url"
+        <template v-if="hasContent">
+          <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="93 + currentComponentData.data.imgMargin" :height="93">
+            <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
+              <img
+                :src="item.url"
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
+                alt
+              />
+            </van-swipe-item>
+          </van-swipe>
+          <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
+        </template>
+        <template v-else>
+           <img
+              class="default_image"
               :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-              :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
+              src="../../../assets/images/shop/defaultImage/ad5.png"
               alt
             />
-          </van-swipe-item>
-        </van-swipe>
-        <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
+        </template>
       </div>
-    </template>
-    <div v-else class="temp_block">
-       <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
-    </div>
   </div>
 </template>
 
@@ -126,6 +170,10 @@ export default {
 
 <style lang="scss" scoped>
 .componentArticleAD {
+  .default_image{
+    object-fit: none;
+    width:100%;
+  }
 
   .article_first {
     width: 100%;

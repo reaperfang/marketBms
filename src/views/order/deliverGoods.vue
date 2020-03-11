@@ -59,10 +59,13 @@
                   <el-input
                     :disabled="scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
+                    step="1"
                     :max="scope.row.goodsCount - scope.row.cacheSendCount"
                     min="1"
+                    @input="inputHandler(scope.$index)"
                     v-model="scope.row.sendCount"
                   ></el-input>
+                  <p v-if="scope.row.showError" class="error-message">{{scope.row.errorMessage}}</p>
                 </template>
               </el-table-column>
             </el-table>
@@ -140,7 +143,7 @@
               <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
             </el-form-item>
             <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
-              <el-input :disabled="!express" v-model="ruleForm.expressNos"></el-input>
+              <el-input :disabled="!express" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
             </el-form-item>
             <el-form-item label="物流备注" prop="sendRemark">
               <el-input
@@ -218,7 +221,9 @@ export default {
       sendGoods: "",
       title: "",
       express: true,
-      sending: false
+      sending: false,
+      errorMessage: '',
+      showError: false
     };
   },
   created() {
@@ -257,6 +262,30 @@ export default {
     }
   },
   methods: {
+    inputHandler(index) {
+      let reg = /^[1-9]\d*$/
+
+      if(this.tableData[index].sendCount == '') {
+        this.tableData.splice(index, 1, Object.assign({}, this.tableData[index], {
+          errorMessage:  '请输入本次发货数量',
+          showError: true
+        }))
+        return
+      }
+
+      setTimeout(() => {
+        if(+this.tableData[index].sendCount <= 0 || !reg.test(this.tableData[index].sendCount)) {
+          this.tableData.splice(index, 1, Object.assign({}, this.tableData[index], {
+            sendCount: '',
+          }))
+        }
+
+        this.tableData.splice(index, 1, Object.assign({}, this.tableData[index], {
+          errorMessage: +this.tableData[index].sendCount <= 0 || !reg.test(this.tableData[index].sendCount) ? '仅支持输入非负的正整数' : '',
+          showError: +this.tableData[index].sendCount <= 0 || !reg.test(this.tableData[index].sendCount) ? true : false
+        }))
+      }, 500)
+    },
     selectable(row, index) {
       if(row.goodsCount - row.cacheSendCount == 0) {
         return false
@@ -350,6 +379,8 @@ export default {
     // 电子面单 orderId
     // 配送单 id
     sendGoodsHandler(formName) {
+      let reg = /^[1-9]\d*$/
+
       if (!this.multipleSelection.length) {
         this.confirm({
           title: "提示",
@@ -373,6 +404,14 @@ export default {
           title: "提示",
           icon: true,
           text: "本次发货数量不能大于应发数量"
+        });
+        return;
+      }
+      if (this.multipleSelection.some(val => +val.sendCount <= 0 || !reg.test(val.sendCount))) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: "仅支持输入非负的正整数"
         });
         return;
       }
@@ -498,6 +537,10 @@ export default {
             val.cacheSendCount = val.sendCount;
             val.sendCount = val.goodsCount - val.sendCount;
           });
+          res[0].orderItemList.forEach(val => {
+            val.showError = false
+            val.errorMessage = ''
+          })
           this.tableData = res[0].orderItemList;
           this.orderInfo = res[0];
 
@@ -604,6 +647,13 @@ export default {
   .el-input__inner {
     border: 1px solid #DCDFE6;
   }
+}
+.error-message {
+  color: #FD4C2B;
+  font-size: 12px;
+  line-height: 1;
+  padding-top: 2px;
+  margin-bottom: 0;
 }
 </style>
 

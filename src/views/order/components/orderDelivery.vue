@@ -9,7 +9,7 @@
                         <el-option label="订单编号" value="orderCode"></el-option>
                         <el-option label="收货人联系电话" value="receivedPhone"></el-option>
                         <el-option label="快递单号" value="expressNos"></el-option>
-                        <el-option label="客户ID" value="memberSn"></el-option>
+                        <el-option label="用户昵称" value="memberName"></el-option>
                         </el-select>
                     </el-input>
                 </el-form-item>
@@ -55,15 +55,15 @@
                     ></el-date-picker>
                 </el-form-item>
                 <div class="buttons">
-                    <div class="lefter">
+                    <!-- <div class="lefter">
                         <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
                         <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
                         <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
                         <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
-                    </div>
+                    </div> -->
                     <div class="righter">
-                        <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">查询</el-button>
+                        <el-button @click="getList" type="primary">搜索</el-button>
+                        <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
                 </div>
             </el-form>
@@ -99,8 +99,8 @@
                     width="120">
                 </el-table-column>
                 <el-table-column
-                    prop="memberSn"
-                    label="客户ID"
+                    prop="memberName"
+                    label="用户昵称"
                     width="120">
                 </el-table-column>
                 <el-table-column
@@ -138,6 +138,13 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div v-show="!loading" class="footer">
+                <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
+            </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
     </div>
@@ -152,7 +159,7 @@ export default {
         return {
             multipleSelection: [],
             multipleTable: [
-                {}
+                
             ],
             total: 0,
             listQuery: {
@@ -176,7 +183,9 @@ export default {
             },
             tableData: [],
             loading: false,
-            express: false
+            express: false,
+            checkedAll: false,
+            isIndeterminate: false
         }
     },
     filters: {
@@ -220,6 +229,15 @@ export default {
         }
     },
     methods: {
+        checkedAllChange() {
+            if(this.checkedAll) {
+                this.$refs.multipleTable.clearSelection();
+                this.$refs.multipleTable.toggleAllSelection();
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+            this.isIndeterminate = false;
+        },
         checkExpress() {
         this._apis.order
             .checkExpress()
@@ -323,6 +341,9 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            let checkedCount = val.length;
+            this.checkedAll = checkedCount === this.tableData.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList() {
             let params = {}
@@ -366,7 +387,7 @@ export default {
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             .resetting {
                 color: #FD932B;
                 margin-right: 40px;
@@ -389,6 +410,10 @@ export default {
             span {
                 color: #45444c;
             }
+        }
+        .footer {
+            padding: 20px;
+            padding-left: 15px;
         }
     }
 }
@@ -422,6 +447,13 @@ export default {
     }
     /deep/ .searchTimeType .el-form-item__content {
         display: flex;
+    }
+    /deep/ .el-checkbox__label {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+    .el-button+.el-button {
+        margin-left: 12px;
     }
 </style>
 

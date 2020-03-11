@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 Object.keys(utils).forEach(key => {
   Vue.filter(key, utils[key])
 })
+Vue.prototype.utils = utils;
 Vue.config.productionTip = false
 
 
@@ -31,16 +32,21 @@ import vueJsonp from 'vue-jsonp';  //使用jsonp
 Vue.use(vueJsonp);
 import '@/components/static/index.js';
 
-Vue.prototype.confirm = function({title, icon, text, cancel, width, confirmText, customClass}) {
+Vue.prototype.confirm = function({title, icon, iconSuccess, text, cancel, width, confirmText, customClass, showCancelButton, showConfirmButton}) {
   return new Promise((resolve, reject) => {
     let str = ''
 
     if(icon) {
       str += '<i class="el-icon-warning"></i>'
     }
+    if(iconSuccess) {
+      str += '<i class="el-icon-success"></i>'
+    }
     str += `<p class="content-text">${text}</p>`
 
     this.$confirm(str, title, {
+      showCancelButton: showCancelButton != undefined ? showCancelButton : true,
+      showConfirmButton: showConfirmButton != undefined ? showConfirmButton : true,
       confirmButtonText: confirmText || '确认',
       cancelButtonText: '取消',
       dangerouslyUseHTMLString: true,

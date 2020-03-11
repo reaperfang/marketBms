@@ -6,7 +6,7 @@
                     <div class="c_card">
                         <img v-if="imgUrl" :src="imgUrl" class="cardImg" />
                         <img v-else src="../../assets/images/client/card.png" alt class="cardImg" />
-                        <el-upload
+                        <!-- <el-upload
                             class="avatar-uploader"
                             :action="uploadUrl"
                             :show-file-list="false"
@@ -15,9 +15,9 @@
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload"
                         >
-                            <el-button v-if="!imgUrl" size="small" type="primary" class="upload_btn mini_1">待上传</el-button>
-                            <el-button v-else size="small" type="primary" class="upload_btn mini_2">更改</el-button>
-                        </el-upload>
+                        </el-upload> -->
+                        <el-button v-if="!imgUrl" size="small" type="primary" class="upload_btn mini_1" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">待上传</el-button>
+                        <el-button v-else size="small" type="primary" class="upload_btn mini_2" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更改</el-button>
                         <el-popover
                             ref="popover"
                             placement="right"
@@ -61,15 +61,18 @@
                 <lkTable style="margin-top: 39px" :lkParams="lkParams"></lkTable>
             </el-tab-pane>
         </el-tabs>
+        <!-- 动态弹窗 -->
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
     </div>
 </template>
 <script type="es6">
 import utils from "@/utils";
 import cdTable from './components/cardManage/cdTable';
 import lkTable from './components/cardManage/lkTable';
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
     name: "cardManage",
-    components: { cdTable, lkTable },
+    components: { cdTable, lkTable, dialogSelectImageMaterial },
     data() {
         return {
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
@@ -82,7 +85,9 @@ export default {
             cardNames: [],
             lkParams: {},
             isLoading: true,
-            loading: false
+            loading: false,
+            dialogVisible: false,
+            currentDialog:""
         }
     },
     computed:{
@@ -92,6 +97,10 @@ export default {
         }
     },
     methods: {
+        imageSelected(item) {
+            this.imgUrl = item.filePath;
+            this.addCardBg();
+        },
         handleAvatarSuccess(res, file) {
             this.imgUrl = res.data.url;
             this.addCardBg();
@@ -143,6 +152,7 @@ export default {
                 console.log(error);
             })
         },
+        //检测是否有背景图片
         checkCardBg() {
             this._apis.client.checkCardBg({}).then((response) => {
                 if(response) {
@@ -161,6 +171,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-date-editor .el-range-separator{
+    width: 10%;
+}
 /deep/ .el-button--mini{
     padding: 5px 10px;
 }

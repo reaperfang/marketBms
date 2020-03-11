@@ -8,7 +8,7 @@
         </el-form-item>
         <el-form-item label>
           <el-button type="primary" @click="fetch">搜 索</el-button>
-          <el-button type="primary" @click="fetch($event, true)">刷 新</el-button>
+          <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item> 
       </div>
     </el-form>
@@ -40,7 +40,7 @@
         </el-table-column>
       <div slot="empty" class="table_empty">
         <img src="../../../../assets/images/table_empty.png" alt="">
-        <div class="tips">暂无数据<span @click="addNewApply('/application/feature/addGroup')">去创建？</span></div>
+        <div class="tips">暂无数据<span @click="addNewApply('/application/feature/addGroup')">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
       </div>
     </el-table>
     <div class="pagination">
@@ -166,8 +166,8 @@ export default {
       let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
       let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
       let cid = shopInfo && shopInfo.id || ''
-      // let newUrl = `${process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
-      let newUrl = `http://test-omo.aiyouyi.cn/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+      let newUrl = `${process.env.DATA_API}/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+      // let newUrl = `http://test-omo.aiyouyi.cn/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
 
       let newWindow = window.open("about:blank");
       newWindow.location.href = newUrl;

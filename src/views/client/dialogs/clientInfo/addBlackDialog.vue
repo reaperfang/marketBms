@@ -39,7 +39,7 @@
     <el-dialog
         title="选择优惠券"
         :visible.sync="dialogVisible2"
-        width="40%"
+        width="45%"
     >
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
@@ -72,19 +72,15 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="状态"
-                    width="80"
-                >
-                    有效
-                </el-table-column>
-                <el-table-column
                     prop="ownNum"
                     label="数量"
                     width="80"
                 >
                 </el-table-column>
                 <el-table-column
-                    label="冻结数量">
+                    label="冻结数量"
+                    width="150"
+                    >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
                     </template>
@@ -140,19 +136,15 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="状态"
-                    width="80"
-                >
-                    有效
-                </el-table-column>
-                <el-table-column
                     prop="ownNum"
                     label="数量"
                     width="80"
                 >
                 </el-table-column>
                 <el-table-column
-                    label="冻结数量">
+                    label="冻结数量"
+                    width="150"
+                    >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
                     </template>
@@ -342,7 +334,7 @@ export default {
                         obj.couponNum = item.frozenNum;
                         arr.push(obj);
                     });
-                    this._apis.client.frozenCoupons({couponIdList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
+                    this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
                         console.log(error);
@@ -357,7 +349,7 @@ export default {
                         obj.couponNum = item.frozenNum;
                         arr.push(obj);
                     });
-                    this._apis.client.frozenCoupons({couponIdList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
+                    this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
                         console.log(error);
@@ -522,7 +514,7 @@ export default {
         .a_d_name{
             display: inline-block;
             color:#B5BDCA;
-            width: 100px;
+            width: 125px;
             overflow: hidden;
             margin-right: 5px;
         }

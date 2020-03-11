@@ -1,3 +1,4 @@
+import CryptoJS from 'crypto-js';
 
 /**
  * 合并对象
@@ -340,4 +341,83 @@ export function buildTree(data) {
   }
   translator(parents, children)
   return parents
+}
+
+/**
+ * AES加密
+ *
+ * @export
+ * @param {*} string
+ * @returns
+ */
+export function aesEncryption(key= '', string=''){
+      var key = CryptoJS.enc.Utf8.parse(key);
+      // ECB加密
+      var options={
+          mode: CryptoJS.mode.ECB,
+          padding: CryptoJS.pad.Pkcs7
+      }
+      var encryptedData = CryptoJS.AES.encrypt(string, key, options);
+      var encryptedBase64Str = encryptedData.toString();
+      return encryptedBase64Str;
+}
+
+/**
+ * AES解密
+ *
+ * @export
+ * @param {*} string
+ * @returns
+ */
+export function aesDecryption(key= '', string=''){
+    var encryptedBase64Str = string;
+    var options = {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    };
+    var key = CryptoJS.enc.Utf8.parse(key);
+    // 解密
+    var decryptedData = CryptoJS.AES.decrypt(encryptedBase64Str, key, options);
+    // 解密后，需要按照Utf8的方式将明文转位字符串
+    var decryptedStr = decryptedData.toString(CryptoJS.enc.Utf8);
+    return decryptedStr;
+}
+
+// 获取url中的参数
+export function GetQueryString(name) {
+	var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]);
+	return null;
+}
+
+// 计算日期时间差 计算毫秒
+export function dateDifference(endTime){
+	var endTimeYear = parseInt(endTime.split(" ")[0].split("-")[0]);
+	var endTimeMonth = parseInt(endTime.split(" ")[0].split("-")[1]);
+	var endTimeDay = parseInt(endTime.split(" ")[0].split("-")[2]);
+	var endTimeHour = parseInt(endTime.split(" ")[1].split(":")[0]);
+	var endTimeMinute = parseInt(endTime.split(" ")[1].split(":")[1]);
+	var endTimeSecond = parseInt(endTime.split(" ")[1].split(":")[2]);
+	var cks = Date.UTC(endTimeYear,endTimeMonth-1,endTimeDay,endTimeHour,endTimeMinute,endTimeSecond) - new Date().getTime()+new Date().getTimezoneOffset() * 60000;
+	if(!(cks>0)){
+		cks=0;
+	}
+	return cks;
+}
+
+/* 添加0 */
+export function addZero(num) {
+  if(!num) {
+    return '00'
+  }
+  if(Number(num) >= 10) {
+    return num;
+  }else {
+    if(Number(num) > 0) {
+      return '0' + Number(num);
+    }else{
+      return '00'
+    }
+  }
 }

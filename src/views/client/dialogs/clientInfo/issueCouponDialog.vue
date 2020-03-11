@@ -27,7 +27,7 @@
   <el-dialog
         title="选择优惠券"
         :visible.sync="dialogVisible2"
-        width="40%"
+        width="45%"
     >
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
@@ -48,7 +48,8 @@
                     label="优惠券名称">
                 </el-table-column>
                 <el-table-column
-                    label="优惠方式">
+                    label="优惠方式"
+                    >
                     <template slot-scope="scope">
                         {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
                     </template>
@@ -60,19 +61,26 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="状态"
-                    width="80"
-                >
-                    有效
-                </el-table-column>
-                <el-table-column
-                    prop="ownNum"
-                    label="数量"
-                    width="80"
+                    prop="remainStock"
+                    label="库存数量"
                 >
                 </el-table-column>
                 <el-table-column
-                    label="冻结数量">
+                    label="限领数量"
+                >
+                  <template slot-scope="scope">
+                    <span>{{scope.row.receiveLimitCount == -1?'不限制': scope.row.receiveLimitCount}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                    prop="receivedNum"
+                    label="已领数量"
+                >
+                </el-table-column>
+                <el-table-column
+                    label="发放数量"
+                    width="150"
+                    >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum > 10 ? 10:scope.row.ownNum"></el-input-number>
                     </template>
@@ -83,7 +91,7 @@
                     <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共条数据
+                    共{{data.allCoupons.length}}条数据
                 </div>
             </div>
         </div>
@@ -269,8 +277,9 @@ export default {
     }
     .r_block{
       position: relative;
+      margin-top: 3px;
       .add{
-        margin-top: 11px;
+        margin-top: 5px;
         color: #655EFF;
         display: block;
       }

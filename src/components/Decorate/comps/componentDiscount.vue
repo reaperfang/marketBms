@@ -8,7 +8,6 @@
                         <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
                     </div>
                     <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                        <!-- <h1 class="title">{{item.activityName || '限时折扣'}}</h1> -->
                         <h1 class="title">限时折扣</h1>
                         <div class="countdown">
                             <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
@@ -16,6 +15,16 @@
                                 <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
                                 <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                                 <!-- <p class="time">{{item.endTime}}</p> -->
+                                <!-- <van-count-down :time="
+                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                " class="time">
+                                    <template v-slot="timeData">
+                                         <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                    </template>
+                                </van-count-down> -->
                             </div>
                         </div>
                     </div>
@@ -29,20 +38,20 @@
                                 </template>
                                 <template v-else>不限制</template>
                             </p>
-                            <div class="remainder_box">
+                           <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
                                 <div class="jd_line">
-                                    <div class="current_line"></div>
+                                    <div class="current_line" :style="{width:(item.stock - item.remainStock) / item.stock * 100 + '%'}"></div>
                                 </div>
-                                <p>已抢<font>{{(item.stock - item.remainStock) > -1 ? (item.stock - item.remainStock) : 0}}</font>件</p>
+                                <p>剩余<font>{{item.remainStock}}</font>件</p>
                             </div>
                         </div>
                         <div class="price_line">
                             <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice}}</font></p>
                             <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice}}</p>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1 && listStyle != 3 && listStyle != 6"></componentButton>
-                        <p class="activity_end" v-if="false">已售罄</p>
-                        <p class="activity_end" v-if="false">活动结束</p>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button s1" v-if="showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6 &&(item.remainStock>0&&utils.dateDifference(item.endTime)>0&&item.status==1)||showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6&&item.status==0"></componentButton>
+
+                        <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1||item.remainStock<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
                     </div>
                 </li>
             </ul>
@@ -154,10 +163,22 @@ export default {
         fetch(componentData = this.currentComponentData.data) {
             if(componentData) {
                 if(Array.isArray(componentData.ids) && componentData.ids.length){
+                    
+                    //兼容老数据
+                    let newParams = [];
+                    if(typeof componentData.ids[0] === 'string') {
+                        for(let item of componentData.ids){
+                        newParams.push({spuId: item, activityId: ''})
+                        }
+                    }else{
+                        newParams = componentData.ids;
+                    }
+
                     this.loading = true;
                     this._apis.shop.getDiscountListByIds({
                         rightsDiscount: 1, 
-                        spuIds: componentData.ids.join(',')
+                        spuInfoJson: JSON.stringify(componentData.ids),
+                        hideStatus: 0
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;
@@ -224,6 +245,14 @@ export default {
                             color:#fff;
                             margin:0 4px;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
+
                     }
                 }
             }
@@ -334,6 +363,14 @@ export default {
                                 margin:0 2px;
                                 text-align:center;
                             }
+                            .item {
+                                background:#333;
+                                width:58px;
+                                height:32px;
+                                color:#fff;
+                                padding:0 8px;
+                            }
+
                         }
                     }
                 }
@@ -531,6 +568,14 @@ export default {
                             margin:0 2px;
                             text-align:center;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
+
                     }
                 }
             }
@@ -803,6 +848,14 @@ export default {
                                     margin:0 2px;
                                     text-align:center;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
+
                             }
                         }
                     }
@@ -914,6 +967,14 @@ export default {
                                     margin:0 2px;
                                     text-align:center;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
+
                             }
                         }
                     }

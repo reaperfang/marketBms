@@ -16,6 +16,16 @@
                                 <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
                                 <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                                 <!-- <p class="time">{{item.endTime}}</p> -->
+                                <!-- <van-count-down :time="
+                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                " class="time">
+                                    <template v-slot="timeData">
+                                         <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                    </template>
+                                </van-count-down> -->
                             </div>
                         </div>
                     </div>
@@ -33,9 +43,15 @@
                         <div class="price_line">
                             <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{item.setMealPrice}}</font></p>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
-                        <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
-                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p>
+                        <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton> -->
+
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.status==1&&utils.dateDifference(item.endTime)>0&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
+
+                        <!-- <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
+                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p> -->
+
+                        <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                        <p class="activity_end" v-if="item.status==0">活动未开始</p>
                     </div>
                 </li>
             </ul>
@@ -177,30 +193,7 @@ export default {
 
         /* 创建数据 */
         createList(datas) {
-            this.list = [];
-            if(this.hideSaledGoods==true){
-                for(var i in datas){
-                    if(datas[i].soldOut!=1){
-                        this.list.push(datas[i]);
-                    }
-                }
-            }
-            else{
-                this.list = datas;
-            }
-            var list = this.list;
-            this.list = [];
-            if(this.hideEndGoods==true){
-                for(var i in list){
-                    if(list[i].activityEnd!=1){
-                        this.list.push(list[i]);
-                    }
-                }
-            }
-            else{
-                this.list = list;
-            }
-
+            this.list = datas;
             this.allLoaded = true;
         },
 
@@ -245,6 +238,13 @@ export default {
                             height:16px;
                             color:#fff;
                             margin:0 4px;
+                        }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
                         }
                     }
                 }
@@ -330,6 +330,13 @@ export default {
                                 top:-2.5px;
                                 margin:0 2px;
                                 text-align:center;
+                            }
+                            .item {
+                                background:#333;
+                                width:58px;
+                                height:32px;
+                                color:#fff;
+                                padding:0 8px;
                             }
                         }
                     }
@@ -508,6 +515,13 @@ export default {
                             margin:0 2px;
                             text-align:center;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -671,6 +685,13 @@ export default {
                                     color:#fff;
                                     margin:0 4px;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -741,6 +762,13 @@ export default {
                                     top:-2.5px;
                                     margin:0 2px;
                                     text-align:center;
+                                }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
                                 }
                             }
                         }
@@ -835,6 +863,13 @@ export default {
                                     top:-2.5px;
                                     margin:0 2px;
                                     text-align:center;
+                                }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
                                 }
                             }
                         }
@@ -1022,6 +1057,13 @@ export default {
                         font{
                             display:inline-block;
                             @include borderRadius(2px);
+                        }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
                         }
                     }
                 }

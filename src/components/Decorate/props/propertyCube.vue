@@ -77,70 +77,86 @@
         <ul class="cube layout_wrapper">
           <li v-if="ruleForm.templateType === 1">
             <div class="type type1">
-              <div class="fill_block"  @click="selectLayout(1,1)" :class="{'active': ruleForm.templateType === 1 && blockType === 1}">
-                <img v-if="ruleForm.list['1']" :src="ruleForm.list['1'].url" alt="">
+              <div class="fill_block fill_block1"  @click="selectLayout(1,1)" :class="{'active': ruleForm.templateType === 1 && blockType === 1}">
+                <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
+                <span v-else class="default_tips">宽度375像素</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(1,2)" :class="{'active': ruleForm.templateType === 1 && blockType === 2}">
-                  <img v-if="ruleForm.list['2']" :src="ruleForm.list['2'].url" alt="">
+              <div class="fill_block fill_block2"  @click="selectLayout(1,2)" :class="{'active': ruleForm.templateType === 1 && blockType === 2}">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">宽度375像素</span>
               </div>
             </div>
           </li>
           <li v-if="ruleForm.templateType === 2">
             <div class="type type2">
-              <div class="fill_block"  @click="selectLayout(2,1)" :class="{'active': ruleForm.templateType === 2 && blockType === 1}">
-                  <img v-if="ruleForm.list['1']" :src="ruleForm.list['1'].url" alt="">
+              <div class="fill_block fill_block1"  @click="selectLayout(2,1)" :class="{'active': ruleForm.templateType === 2 && blockType === 1}">
+                  <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
+                  <span v-else class="default_tips">宽度250像素</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(2,2)" :class="{'active': ruleForm.templateType === 2 && blockType === 2}">
-                  <img v-if="ruleForm.list['2']" :src="ruleForm.list['2'].url" alt="">
+              <div class="fill_block fill_block2"  @click="selectLayout(2,2)" :class="{'active': ruleForm.templateType === 2 && blockType === 2}">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">宽度250像素</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(2,3)" :class="{'active': ruleForm.templateType === 2 && blockType === 3}">
-                  <img v-if="ruleForm.list['3']" :src="ruleForm.list['3'].url" alt="">
+              <div class="fill_block fill_block3"  @click="selectLayout(2,3)" :class="{'active': ruleForm.templateType === 2 && blockType === 3}">
+                  <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                  <span v-else class="default_tips">宽度250像素</span>
               </div>
             </div>
           </li>
           <li v-if="ruleForm.templateType === 3">
             <div class="type type3">
-              <div class="fill_block"  @click="selectLayout(3,1)" :class="{'active': ruleForm.templateType === 3 && blockType === 1}">
-                  <img v-if="ruleForm.list['1']" :src="ruleForm.list['1'].url" alt="">
+              <div class="fill_block fill_block1"  @click="selectLayout(3,1)" :class="{'active': ruleForm.templateType === 3 && blockType === 1}">
+                  <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
+                  <span v-else class="default_tips">宽度188像素</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(3,2)" :class="{'active': ruleForm.templateType === 3 && blockType === 2}">
-                  <img v-if="ruleForm.list['2']" :src="ruleForm.list['2'].url" alt="">
+              <div class="fill_block fill_block2"  @click="selectLayout(3,2)" :class="{'active': ruleForm.templateType === 3 && blockType === 2}">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">宽度188像素</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(3,3)" :class="{'active': ruleForm.templateType === 3 && blockType === 3}">
-                  <img v-if="ruleForm.list['3']" :src="ruleForm.list['3'].url" alt="">
+              <div class="fill_block fill_block3"  @click="selectLayout(3,3)" :class="{'active': ruleForm.templateType === 3 && blockType === 3}">
+                  <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                  <span v-else class="default_tips">宽度188像素</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(3,4)" :class="{'active': ruleForm.templateType === 3 && blockType === 4}">
-                  <img v-if="ruleForm.list['4']" :src="ruleForm.list['4'].url" alt="">
+              <div class="fill_block fill_block4"  @click="selectLayout(3,4)" :class="{'active': ruleForm.templateType === 3 && blockType === 4}">
+                  <img v-if="ruleForm.list['4'] && ruleForm.list['4'].url" :src="ruleForm.list['4'].url" alt="">
+                  <span v-else class="default_tips">宽度188像素</span>
               </div>
             </div>
           </li>
           <li v-if="ruleForm.templateType === 4">
             <div class="type type4">
-              <div class="fill_block"  @click="selectLayout(4,1)" :class="{'active': ruleForm.templateType === 4 && blockType === 1}">
-                  <img v-if="ruleForm.list['1']" :src="ruleForm.list['1'].url" alt="">
+              <div class="fill_block fill_block1"  @click="selectLayout(4,1)" :class="{'active': ruleForm.templateType === 4 && blockType === 1}">
+                  <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(4,2)" :class="{'active': ruleForm.templateType === 4 && blockType === 2}">
-                  <img v-if="ruleForm.list['2']" :src="ruleForm.list['2'].url" alt="">
+              <div class="fill_block fill_block2"  @click="selectLayout(4,2)" :class="{'active': ruleForm.templateType === 4 && blockType === 2}">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(4,3)" :class="{'active': ruleForm.templateType === 4 && blockType === 3}">
-                  <img v-if="ruleForm.list['3']" :src="ruleForm.list['3'].url" alt="">
+              <div class="fill_block fill_block3"  @click="selectLayout(4,3)" :class="{'active': ruleForm.templateType === 4 && blockType === 3}">
+                  <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
               </div>
-              <div class="fill_block"  @click="selectLayout(4,4)" :class="{'active': ruleForm.templateType === 4 && blockType === 4}">
-                  <img v-if="ruleForm.list['4']" :src="ruleForm.list['4'].url" alt="">
+              <div class="fill_block fill_block4"  @click="selectLayout(4,4)" :class="{'active': ruleForm.templateType === 4 && blockType === 4}">
+                  <img v-if="ruleForm.list['4'] && ruleForm.list['4'].url" :src="ruleForm.list['4'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
               </div>
             </div>
           </li>
           <li v-if="ruleForm.templateType === 5">
             <div class="type type5">
               <div class="fill_block fill_block1"  @click="selectLayout(5,1)" :class="{'active': ruleForm.templateType === 5 && blockType === 1}">
-                <img v-if="ruleForm.list['1']" :src="ruleForm.list['1'].url" alt="">
+                <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
+                <span v-else class="default_tips">375*750像素<br/>或比例1:2</span>
               </div>
               <div class="fill_block fill_block2">
                 <div class="fill_block fill_block3"  @click="selectLayout(5,2)" :class="{'active': ruleForm.templateType === 5 && blockType === 2}">
-                  <img v-if="ruleForm.list['2']" :src="ruleForm.list['2'].url" alt="">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
                 </div>
                 <div class="fill_block fill_block4"  @click="selectLayout(5,3)" :class="{'active': ruleForm.templateType === 5 && blockType === 3}">
-                  <img v-if="ruleForm.list['3']" :src="ruleForm.list['3'].url" alt="">
+                  <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
                 </div>
               </div>
             </div>
@@ -148,14 +164,17 @@
           <li v-if="ruleForm.templateType === 6">
             <div class="type type6">
               <div class="fill_block fill_block1"  @click="selectLayout(6,1)" :class="{'active': ruleForm.templateType === 6 && blockType === 1}">
-                <img v-if="ruleForm.list['1']" :src="ruleForm.list['1'].url" alt="">
+                <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
+                <span v-else class="default_tips">750*350像素<br/>或比例2:1</span>
               </div>
               <div class="fill_block fill_block2">
                 <div class="fill_block fill_block3"  @click="selectLayout(6,2)" :class="{'active': ruleForm.templateType === 6 && blockType === 2}">
-                  <img v-if="ruleForm.list['2']" :src="ruleForm.list['2'].url" alt="">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
                 </div>
                 <div class="fill_block fill_block4"  @click="selectLayout(6,3)" :class="{'active': ruleForm.templateType === 6 && blockType === 3}">
-                  <img v-if="ruleForm.list['3']" :src="ruleForm.list['3'].url" alt="">
+                  <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
                 </div>
               </div>
             </div>
@@ -163,27 +182,31 @@
           <li v-if="ruleForm.templateType === 7">
             <div class="type type7">
               <div class="fill_block fill_block1"  @click="selectLayout(7,1)" :class="{'active': ruleForm.templateType === 7 && blockType === 1}">
-                <img v-if="ruleForm.list['1']" :src="ruleForm.list['1'].url" alt="">
+                <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
+                <span v-else class="default_tips">375*750像素<br/>或比例1:2</span>
               </div>
               <div class="fill_block fill_block2">
                 <div class="fill_block fill_block3"  @click="selectLayout(7,2)" :class="{'active': ruleForm.templateType === 7 && blockType === 2}">
-                  <img v-if="ruleForm.list['2']" :src="ruleForm.list['2'].url" alt="">
+                  <img v-if="ruleForm.list['2'] && ruleForm.list['2'].url" :src="ruleForm.list['2'].url" alt="">
+                  <span v-else class="default_tips">375*375像素<br/>或比例1:1</span>
                 </div>
                 <div class="fill_block fill_block4">
                   <div class="fill_block fill_block5"  @click="selectLayout(7,3)" :class="{'active': ruleForm.templateType === 7 && blockType === 3}">
-                    <img v-if="ruleForm.list['3']" :src="ruleForm.list['3'].url" alt="">
+                    <img v-if="ruleForm.list['3'] && ruleForm.list['3'].url" :src="ruleForm.list['3'].url" alt="">
+                    <span v-else class="default_tips">188*375像<br/>素或比例1:2</span>
                   </div>
                   <div class="fill_block fill_block6"  @click="selectLayout(7,4)" :class="{'active': ruleForm.templateType === 7 && blockType === 4}">
-                    <img v-if="ruleForm.list['4']" :src="ruleForm.list['4'].url" alt="">
+                    <img v-if="ruleForm.list['4'] && ruleForm.list['4'].url" :src="ruleForm.list['4'].url" alt="">
+                    <span v-else class="default_tips">188*375像<br/>素或比例1:2</span>
                   </div>
                 </div>
               </div>
             </div>
           </li>
         </ul>
-        <p>选定布局区域，在下方添加图片，建议添加比例一致的图片</p>
+        <p>选定布局并在下方添加图片，建议图片比例一致</p>
       </div>
-      <el-form-item label="图片间隙" prop="imgMargin">
+      <el-form-item label="图片间隙" prop="imgMargin" v-if="hasContent">
         <div class="slider-wrapper">
           <el-slider v-model="ruleForm.imgMargin" :min="0" :max="30"></el-slider>
           <span>{{ruleForm.imgMargin}}像素</span>
@@ -196,20 +219,21 @@
         </div>
       </el-form-item>
       <el-form-item label="添加图片" prop="">
-        <div v-if="ruleForm.list[this.blockType] && ruleForm.list[this.blockType].url" class="img_preview">
-          <img :src="ruleForm.list[this.blockType].url" alt="">
+        <div v-if="ruleForm.list[blockType] && ruleForm.list[blockType].url" class="img_preview">
+          <img :src="ruleForm.list[blockType].url" alt="">
+          <i class="delete_btn" @click.stop="deleteImage(blockType)"></i>
           <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
         </div>
         <div v-else class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
         </div>
       </el-form-item>
-      <el-form-item label="跳转链接" prop="pageLink">
+      <el-form-item label="跳转链接" prop="pageLink" v-if="hasContent">
         <el-button 
         type="text" 
         @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" 
-        :title="ruleForm.list[this.blockType] && ruleForm.list[this.blockType].linkTo ? ruleForm.list[this.blockType].linkTo.typeName + '-' + (ruleForm.list[this.blockType].linkTo.data.title || ruleForm.list[this.blockType].linkTo.data.name) : '选择跳转到的页面'">
-        {{ruleForm.list[this.blockType] && ruleForm.list[this.blockType].linkTo ? ruleForm.list[this.blockType].linkTo.typeName + '-' + (ruleForm.list[this.blockType].linkTo.data.title || ruleForm.list[this.blockType].linkTo.data.name) : '选择跳转到的页面'}}
+        :title="ruleForm.list[blockType] && ruleForm.list[blockType].linkTo ? ruleForm.list[blockType].linkTo.typeName + '-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name) : '选择跳转到的页面'">
+        {{ruleForm.list[blockType] && ruleForm.list[blockType].linkTo ? ruleForm.list[blockType].linkTo.typeName + '-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name) : '选择跳转到的页面'}}
         </el-button>
       </el-form-item>
     </div>
@@ -239,6 +263,22 @@ export default {
       dialogVisible: false,
       currentDialog: '',
       blockType: 1 //块类型
+    }
+  },
+   computed: {
+
+    /* 检测是否数据 */
+    hasContent() {
+      let value = false;
+      if(this.ruleForm.list) {
+        for(let k in this.ruleForm.list) {
+          if(this.ruleForm.list[k].url) {
+            value = true;
+            break;
+          }
+        }
+      }
+      return value;
     }
   },
   methods: {
@@ -274,6 +314,13 @@ export default {
       const tempRuleForm = {...this.ruleForm};
       this.ruleForm = tempRuleForm;
     },
+
+    /* 清除某个块的图片 */
+    deleteImage(blockType) {
+      let tempList = {...this.ruleForm.list};
+      tempList[this.blockType].url = '';
+      this.ruleForm.list = tempList;
+    }
   }
 }
 </script>
@@ -297,7 +344,7 @@ ul.cube.template_type{
        height:54px;
     }
     &.active{
-      border:2px dashed $globalMainColor;
+      border:1px solid $globalMainColor;
     }
     p{
       margin-top:6px;
@@ -308,15 +355,17 @@ ul.cube.template_type{
   }
 }
 .layout{
-  ul.cube.layout_wrapper{
+   ul.cube.layout_wrapper{
     li{
       .type{
           height:150px;
       }
       .fill_block{
         cursor:pointer;
+        border:1px solid #fff;
+        position:relative;
         &.active{
-          border:2px dashed $globalMainColor;
+          border:1px solid $globalMainColor;
         }
       }
       p{
@@ -330,6 +379,19 @@ ul.cube.template_type{
     margin-top:5px;
     margin-bottom: 20px;
   }
+}
+.default_tips{
+  text-align:center;
+  font-size:12px;
+  font-family:MicrosoftYaHei;
+  color:rgba(101,94,255,1);
+  position:absolute;
+  top:50%;
+  left:50%;
+  display:block;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  width:100%;
 }
 
 </style>
