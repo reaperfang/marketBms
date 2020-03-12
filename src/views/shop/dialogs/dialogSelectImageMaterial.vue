@@ -1,11 +1,11 @@
 /* 选择图片素材弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'图片素材'" @submit="submit" @close="close" :showFooter="false">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
 
      <el-tabs v-model="currentTab">
 
       <!-- 图片素材 -->
-      <el-tab-pane label="图片素材" name="material">
+      <el-tab-pane label="素材图片" name="material">
             <div class="material_head">
               <div class="select">
                 <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="全部"></el-cascader>
@@ -43,7 +43,7 @@
       <!-- 系统素材 -->
       <el-tab-pane label="系统图标" name="system" v-if="showSystemIcon">
         <div class="icon_head">
-          <span class="title">ICON分组</span>
+          <span class="title">图标分组</span>
           <div class="select">
             <el-select v-model="systemGroupId" placeholder="全部">
               <el-option value="">全部</el-option>
@@ -93,7 +93,9 @@
                   :on-error="handleError"
                   :before-upload="beforeUpload" 
                   :on-success="handleSuccess"
-                  :on-change="handleChange">
+                  :on-change="handleChange"
+                  :limit="6"
+                  :on-exceed="uploadLimit">
                   <i class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <div v-loading="uploadLoading">
@@ -256,7 +258,7 @@ export default {
       this.materialLoading = true;
       this.imgNow = 0;
       this._apis.file.getMaterialList({
-        fileGroupInfoId:this.materialGroupId || '',
+        fileGroupInfoId:this.materialGroupId || '0',
         startIndex:this.materialCurrentPage,
         pageSize:this.materialPageSize,
         sourceMaterialType:"0",
@@ -326,15 +328,24 @@ export default {
 
     /* 上传前钩子 */
     beforeUpload(file) {
+
       const isJPG = file.type === 'image/jpg';
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
       if (!(isJPG || isJPEG || isPNG)) {
         this.$message.error('上传图片支持jpg,jpeg,png格式!');
+        this.failedList.push(file);
       }
       if (!isLt2M) {
         this.$message.error('上传图片大小不能超过 3MB!');
+        this.failedList.push(file);
+      }
+      if(this.successList.length + this.failedList.length === this.addList.length) {
+        this.preload(this.fileList, 'url');
+        this.addList = [];
+        this.successList = [];
+        this.failedList = [];
       }
       return isJPG || isJPEG || isPNG && isLt2M;
     },
@@ -385,12 +396,24 @@ export default {
 
       if(this.successList.length + this.failedList.length === this.addList.length) {
         this.preload(this.fileList, 'url');
+        this.addList = [];
+        this.successList = [];
+        this.failedList = [];
       }
+    },
+
+    /* 上传超过个数的处理 */
+    uploadLimit() {
+      this.$notify({
+        title: '提示',
+        message: '最多支持上传6张！',
+        type: 'warning'
+      });
     },
 
       /* 清除缓存 */
     clearTempSave() {
-      sessionStorage.removeItem('localUploadFile');
+      localStorage.removeItem('localUploadFile');
       this.fileList = [];
       this.imgNow = 0;
     },
@@ -530,7 +553,7 @@ export default {
       const { level } = node;
       const { data } = node;
       let parentId = data ? data.value : '0';
-      this.materialGroupId = parentId;
+      this.materialGroupId = data ? data.value: '0';
       this.getMaterialGroups(parentId, (response)=>{
         let nodes = level === 0 ?[{
           value: '0',
