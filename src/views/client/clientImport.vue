@@ -120,7 +120,7 @@ export default {
             this.channelId2 = "";
         }, 
         handleDownload() {
-            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/用户.xlsx`;
+            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/客户.xlsx`;
         },
         refreshPage() {
             this.getChannels();
