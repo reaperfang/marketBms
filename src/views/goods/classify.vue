@@ -159,7 +159,7 @@ export default {
                                 <span class="blue" on-click={() => this.change(node, data)}>修改</span>
                             }
                             {
-                                <span v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="blue" on-click={() => this.addCategory(node, data)}>{
+                                <span v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="blue fenleiIcon" on-click={() => this.addCategory(node, data)}>{
                                     node.level == 2 ? '新建三级分类' : (node.level == 1 ? '新建二级分类' : '新建一级分类')
                                 }</span>
                             }

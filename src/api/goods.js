@@ -391,6 +391,39 @@ export function productUpdateStockSpu(data) {
   })
 }
 
+// 批量改价SPU商品
+export function allUpdatePriceSpu(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SPU-BATCH-CHANGE-PRICE-PROCESSOR',
+    data,
+    token
+  })
+}
+
+// 商品是否在参加营销活动
+export function getMarketActivity(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-MARKET-ACTIVITY-LIST-PROCESSOR',
+    data,
+    token
+  })
+}
+
+// 商品推广 单个
+export function shareOne(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-EXTEND-PROCESSOR',
+    data,
+    token
+  })
+}
+
 
 
 

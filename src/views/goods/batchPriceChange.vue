@@ -258,10 +258,10 @@ export default {
       if (this.operateType == 2) {
         _param.productCatalogInfoId = this.productCatalogInfoId;
       } else if (this.operateType == 1) {
-        _param.ids = this.multipleSelection.map(val => val.goodsInfo.id);
+        _param.ids = this.multipleSelection.map(val => val.id);
       }
       this._apis.goods
-        .allUpdatePrice(_param)
+        .allUpdatePriceSpu(_param)
         .then(res => {
           if (this.operateType == 1) {
             this.getList();

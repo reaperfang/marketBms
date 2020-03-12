@@ -29,19 +29,19 @@
                         </el-cascader>
                     </el-form-item>
                     <el-form-item label class="search-code">
-                        <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
+                        <el-input :placeholder="listQuery.searchType == 'code' ? '请输入SPU编码' : '请输入SKU编码'" v-model="listQuery.searchValue" class="input-with-select">
                             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
-                                <el-option label="商品sku编码" value="skuCode"></el-option>
-                                <el-option label="商品spu编码" value="code"></el-option>
+                                <el-option label="商品SKU编码" value="goodsInfoCode"></el-option>
+                                <el-option label="商品SPU编码" value="code"></el-option>
                             </el-select>
                         </el-input>
+                    </el-form-item>
+                    <el-form-item label="商品名称" prop="name">
+                        <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                     </el-form-item>
                     <el-form-item style="float: right;">
                         <el-button @click="getList" type="primary">搜索</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
-                    </el-form-item>
-                    <el-form-item label="商品名称" prop="name">
-                        <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                     </el-form-item>
                     </el-form>
             </div>
@@ -59,7 +59,6 @@
                     :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                     @selection-change="handleSelectionChange">
                     <el-table-column
-                        v-if="showTableCheck"
                         type="selection"
                         width="55">
                     </el-table-column>
@@ -68,7 +67,7 @@
                     label="商品名称"
                     width="380">
                         <template slot-scope="scope">
-                            <div class="ellipsis" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.status == 1" class="sale-bg"></i></div>
+                            <div class="ellipsis" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
                         </template>
                     </el-table-column>
@@ -106,16 +105,16 @@
                     <el-table-column
                         label="总销量">
                         <template slot-scope="scope">
-                            <span class="store">{{scope.row.saleCount}}<i class="i-bg pointer"></i></span>
+                            <span class="store">{{scope.row.saleCount}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" width="140">
                         <template slot-scope="scope">
                             <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="编辑" placement="bottom">
-                                <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.goodsInfo.id)" class="operate-editor pointer"><i class="i-bg"></i></span>
+                                <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="operate-editor pointer"><i class="i-bg"></i></span>
                             </el-tooltip>
                             <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="分享" placement="bottom">
-                                <span class="operate-share pointer"><i class="i-bg"></i></span>
+                                <span @click="shareHandler(scope.row)" class="operate-share pointer"><i class="i-bg"></i></span>
                             </el-tooltip>
                             <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="删除" placement="bottom">
                                 <span v-permission="['商品', '商品列表', '默认页面', '删除商品']" @click="deleleHandler(scope.row)" class="operate-delete pointer"><i class="i-bg"></i></span>
@@ -145,7 +144,7 @@
                     <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allUpper" class="border-button">批量上架</el-button>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
-                    <el-button class="border-button">批量改价</el-button>
+                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button"  @click="$router.push('/goods/batchPriceChange')">批量改价</el-button>
                     <el-button class="border-button">批量推广</el-button>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="border-button">批量删除</el-button>
                 </div>
@@ -159,7 +158,7 @@
             <div v-if="!loading" class="goods-list-empty-content">
                 <div class="image"></div>
                 <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
-                <el-button class="add-goods" type="primary">新建商品</el-button>
+                <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
             </div>
         </div>
     </div>
@@ -357,6 +356,7 @@ import EditorStock from '@/views/goods/dialogs/editorStock'
 import EditorStockSpu from '@/views/goods/dialogs/editorStockSpuDialog'
 import EditorPriceSpu from '@/views/goods/dialogs/editorPriceSpuDialog'
 import EditorUpperAndLowerRacksSpu from '@/views/goods/dialogs/editorUpperAndLowerRacksSpuDialog'
+import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
 
 export default {
     data() {
@@ -438,6 +438,53 @@ export default {
         }
     },
     methods: {
+        getMarketActivity(list) {
+            // var that = this
+            // let getActivityList = function(spuId, obj) {
+            //     return new Promise((resolve, reject) => {
+            //         that._apis.goods.getMarketActivity({ids: [spuId]}).then((res) => {
+            //             obj.activityList = res
+            //             resolve()
+            //         }).catch(error => {
+            //             that.$notify.error({
+            //                 title: '错误',
+            //                 message: error
+            //             });
+            //             reject(error)
+            //         })
+            //     })
+            // }
+
+            // let arr = []
+
+            // list.forEach(val => {
+            //     let id = val.id
+
+            //     arr.push(getActivityList(id, val))
+            // })
+
+            // return Promise.all(arr).then(val => {
+                
+            // })
+             return new Promise((resolve, reject) => {
+                this._apis.goods.getMarketActivity({ids: list.map(val => val.id)}).then((res) => {
+                    //obj.activityList = res
+                    console.log(res)
+                    resolve(res)
+                }).catch(error => {
+                    that.$notify.error({
+                        title: '错误',
+                        message: error
+                    });
+                    reject(error)
+                })
+            })
+        },
+        shareHandler(row) {
+            this.currentDialog = 'ShareSelect'
+            this.dialogVisible = true
+            this.currentData = row
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
             this.categoryValue = ''
@@ -445,6 +492,13 @@ export default {
         },
         allDelete() {
             let ids = this.multipleSelection.map(val => val.id)
+
+            if(this.multipleSelection.some(val => val.activity)) {
+                this.confirm({title: '批量删除', icon: true, text: '当前商品中“XXXXXXX（商品名称）参与的营销活动未结束，无法进行批量删除操作！', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
 
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量删除的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
@@ -495,6 +549,12 @@ export default {
             })
         },
         allUpper() {
+            if(this.multipleSelection.some(val => val.stock == 0)) {
+                this.confirm({title: '批量上架', icon: true, text: '当前商品中“XXXXXXX（商品名称）的库存为“0”，无法进行批量上架操作！', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量上架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
@@ -504,6 +564,12 @@ export default {
             this.upperOrLower(1)
         },
         allLower() {
+            if(this.multipleSelection.some(val => val.activity)) {
+                this.confirm({title: '批量下架', icon: true, text: '当前商品中“XXXXXXX”参与的营销活动未结束， 无法进行批量下架操作！', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量下架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
@@ -636,10 +702,25 @@ export default {
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
-                this.total = +res.total
-                //this.getCategoryName(res.list)
-                this.list = res.list
-                this.loading = false
+                this.getMarketActivity(res.list).then((activityRes) => {
+                    activityRes.forEach((val, index) => {
+                        let id = val.id
+                        let goods = res.list.find(val => val.id == id)
+
+                        goods.activity = true
+                        if(val.goodsInfos) {
+                            val.goodsInfos.forEach(skuVal => {
+                                let skuid = skuVal.id
+
+                                goods.goodsInfos.find(val => val.id == skuid).activity = true
+                            })
+                        }
+                    })
+                    this.total = +res.total
+                    //this.getCategoryName(res.list)
+                    this.list = res.list
+                    this.loading = false
+                })
             }).catch(error => {
                 //this.loading = false
             })
@@ -706,7 +787,8 @@ export default {
         EditorStock,
         EditorStockSpu,
         EditorPriceSpu,
-        EditorUpperAndLowerRacksSpu
+        EditorUpperAndLowerRacksSpu,
+        ShareSelect
     }
 }
 </script>
