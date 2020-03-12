@@ -153,13 +153,14 @@ export default {
       preLoadObj: null,  //预加载对象
 
       /* 本地上传 */
-      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload1.do`,
+      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
       fileList: [],  //最终用来显示的文件列表
       addList: [],  //添加的文件列表（上传前）
       successList: [],  //上传成功的文件列表(上传后)
       failedList: [],  //上传失败的文件列表（上传后）
       uploadLoading: false,  //上传时的loading
       localTabInited: false,  //本地上传点击tab初始化
+      localSelectedItem: null, //本地上传选中的图片对象（最终发送给调用页面的结果）
 
       /* 素材库 */
       materialLoading: true,  //获取图片列表的loading
@@ -175,6 +176,7 @@ export default {
         lazyLoad: this.cascaderLazyload
       },
       materialTabInited: true,  //素材库点击tab初始化
+      materialSelectedItem: null, //素材库选中的图片对象（最终发送给调用页面的结果）
 
       /* 系统图库 */
       localLoading: true, //系统图库loading
@@ -185,6 +187,7 @@ export default {
       systemGroupId:'',  //系统图库分组id
       systemGroupList:[],  //系统图库分组列表
       systemTabInited: false,  //系统图标点击tab初始化
+      systemSelectedItem: null, //系统图标选中的图片对象（最终发送给调用页面的结果）
     };
   },
   computed: {
@@ -359,9 +362,14 @@ export default {
         this.failedList.push(file);
       }
 
-      if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.preload(this.fileList, 'url');
+      let list = [];
+      for(let item of fileList) {
+        if(item.status == 'success') {
+          list.push(item.response.data);
+        }
       }
+      this.fileList = list;
+      localStorage.setItem('localUploadFile', JSON.stringify(this.fileList));
     },
 
     /* 上传文件改变 */
@@ -392,13 +400,15 @@ export default {
 
     /* 选中图片 */
     selectImg(event, item) {
-      this.selectedItem = item;
       let ref = '';
       if(this.currentTab == 'material') {
+       this.materialSelectedItem = item;
         ref = 'materialWrapper';
       }else if(this.currentTab == 'system') {
+        this.systemSelectedItem = item;
         ref = 'systemWrapper';
       }else if(this.currentTab === 'local') {
+        this.localSelectedItem = item;
         ref = 'localWrapper';
       }
 
@@ -412,6 +422,13 @@ export default {
     /* 预加载 */
     preload(data, name) {
       const _self = this;
+      if(!data.length) {
+        //全部加载失败 
+        _self.materialLoading = false;
+        _self.uploadLoading = false;
+        _self.localLoading = false;
+        return;
+      }
       this.preLoadObj.src = data[this.imgNow][name];
       this.preLoadObj.onerror = function () {
           console.log("加载失败");
@@ -421,7 +438,7 @@ export default {
             if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
                 _self.preload(data, name);          //  递归调用自己
             } else {                            //  已经加载到最后一张
-                //此处写当全部加载完成之后发生的逻辑 
+                //全部加载完成 
                 _self.materialLoading = false;
                 _self.uploadLoading = false;
                 _self.localLoading = false;
@@ -436,7 +453,7 @@ export default {
 
     /* 向父组件提交选中的数据 */
     submit() {
-      if(!this.selectedItem) {
+      if(!this.materialSelectedItem && this.systemSelectedItem && this.localSelectedItem) {
         this.$notify({
           title: '提示',
           message: '请选择图片后重试！',
@@ -444,13 +461,16 @@ export default {
         });
         return;
       };
-      const copyItem = {...this.selectedItem};
+      let copyItem = {};
 
       if(this.currentTab == 'material') {
+        copyItem = {...this.materialSelectedItem};
         copyItem['filePath'] = copyItem.filePath;
       }else if(this.currentTab == 'system') {
+        copyItem = {...this.systemSelectedItem};
         copyItem['filePath'] = copyItem.address;
       }else if(this.currentTab === 'local') {
+        copyItem = {...this.localSelectedItem};
         copyItem['filePath'] = copyItem.url;
       }
       this.$emit('imageSelected',  copyItem);
