@@ -1,14 +1,14 @@
 /* 选择图片素材弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'图片素材'" @submit="submit" @close="close" :showFooter="false">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
 
      <el-tabs v-model="currentTab">
 
       <!-- 图片素材 -->
-      <el-tab-pane label="图片素材" name="material">
+      <el-tab-pane label="素材图片" name="material">
             <div class="material_head">
               <div class="select">
-                <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="未分组"></el-cascader>
+                <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="全部"></el-cascader>
               </div>
               <el-input v-model="materialName" placeholder="请输入图片名称" clearable></el-input>
               <el-button type="primary" @click="fetchMaterial">搜 索</el-button>
@@ -43,7 +43,7 @@
       <!-- 系统素材 -->
       <el-tab-pane label="系统图标" name="system" v-if="showSystemIcon">
         <div class="icon_head">
-          <span class="title">ICON分组</span>
+          <span class="title">图标分组</span>
           <div class="select">
             <el-select v-model="systemGroupId" placeholder="全部">
               <el-option value="">全部</el-option>
@@ -93,7 +93,9 @@
                   :on-error="handleError"
                   :before-upload="beforeUpload" 
                   :on-success="handleSuccess"
-                  :on-change="handleChange">
+                  :on-change="handleChange"
+                  :limit="6"
+                  :on-exceed="uploadLimit">
                   <i class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <div v-loading="uploadLoading">
@@ -144,22 +146,21 @@ export default {
       },
   },
   data() {
-    let id = 0;
     return {
       currentTab: 'material',  //来源类型 =>  material:素材库 / local:本地上传  /  system:系统图片
-      selectedItem: null,  //选中的图片对象（最终发送给调用页面的结果）
       uploadAble: true,  //上传是否可用(用来清上传器缓存)
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
 
       /* 本地上传 */
-      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload1.do`,
+      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
       fileList: [],  //最终用来显示的文件列表
       addList: [],  //添加的文件列表（上传前）
       successList: [],  //上传成功的文件列表(上传后)
       failedList: [],  //上传失败的文件列表（上传后）
       uploadLoading: false,  //上传时的loading
       localTabInited: false,  //本地上传点击tab初始化
+      localSelectedItem: null, //本地上传选中的图片对象（最终发送给调用页面的结果）
 
       /* 素材库 */
       materialLoading: true,  //获取图片列表的loading
@@ -168,13 +169,14 @@ export default {
       materialPageSize:10,   //素材库一页条数
       materialTotal:0,  //素材库总条数
       materialName: '',  //素材库文件名称，用于检索
-      materialGroupId:'-1',  //素材库分组id
+      materialGroupId:'0',  //素材库分组id
       cascaderProps: {  //级联选择器属性
         lazy: true,  //是否懒加载
         checkStrictly: true,  //是否严格的遵守父子节点不互相关联
         lazyLoad: this.cascaderLazyload
       },
       materialTabInited: true,  //素材库点击tab初始化
+      materialSelectedItem: null, //素材库选中的图片对象（最终发送给调用页面的结果）
 
       /* 系统图库 */
       localLoading: true, //系统图库loading
@@ -185,6 +187,7 @@ export default {
       systemGroupId:'',  //系统图库分组id
       systemGroupList:[],  //系统图库分组列表
       systemTabInited: false,  //系统图标点击tab初始化
+      systemSelectedItem: null, //系统图标选中的图片对象（最终发送给调用页面的结果）
     };
   },
   computed: {
@@ -226,8 +229,8 @@ export default {
           const tempSaveFile = localStorage.getItem('localUploadFile');
           if(tempSaveFile) {
             this.fileList = JSON.parse(tempSaveFile);
-            this.preload(this.fileList, 'url');
           }
+          this.preload(this.fileList, 'url');
         }
       }
     }
@@ -253,8 +256,9 @@ export default {
     /* 查询素材库图片 */
     fetchMaterial() {
       this.materialLoading = true;
+      this.imgNow = 0;
       this._apis.file.getMaterialList({
-        fileGroupInfoId:this.materialGroupId || '',
+        fileGroupInfoId:this.materialGroupId || '0',
         startIndex:this.materialCurrentPage,
         pageSize:this.materialPageSize,
         sourceMaterialType:"0",
@@ -275,6 +279,7 @@ export default {
     /* 查询系统图库 */
     fetchSystemIcon() {
       this.localLoading = true;
+      this.imgNow = 0;
       this._apis.goodsOperate.getSystemIconByGroupId({
         groupId:this.systemGroupId || '',
         startIndex:this.systemCurrentPage,
@@ -323,15 +328,24 @@ export default {
 
     /* 上传前钩子 */
     beforeUpload(file) {
+
       const isJPG = file.type === 'image/jpg';
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
       if (!(isJPG || isJPEG || isPNG)) {
         this.$message.error('上传图片支持jpg,jpeg,png格式!');
+        this.failedList.push(file);
       }
       if (!isLt2M) {
         this.$message.error('上传图片大小不能超过 3MB!');
+        this.failedList.push(file);
+      }
+      if(this.successList.length + this.failedList.length === this.addList.length) {
+        this.preload(this.fileList, 'url');
+        this.addList = [];
+        this.successList = [];
+        this.failedList = [];
       }
       return isJPG || isJPEG || isPNG && isLt2M;
     },
@@ -359,9 +373,14 @@ export default {
         this.failedList.push(file);
       }
 
-      if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.preload(this.fileList, 'url');
+      let list = [];
+      for(let item of fileList) {
+        if(item.status == 'success') {
+          list.push(item.response.data);
+        }
       }
+      this.fileList = list;
+      localStorage.setItem('localUploadFile', JSON.stringify(this.fileList));
     },
 
     /* 上传文件改变 */
@@ -377,12 +396,24 @@ export default {
 
       if(this.successList.length + this.failedList.length === this.addList.length) {
         this.preload(this.fileList, 'url');
+        this.addList = [];
+        this.successList = [];
+        this.failedList = [];
       }
+    },
+
+    /* 上传超过个数的处理 */
+    uploadLimit() {
+      this.$notify({
+        title: '提示',
+        message: '最多支持上传6张！',
+        type: 'warning'
+      });
     },
 
       /* 清除缓存 */
     clearTempSave() {
-      sessionStorage.removeItem('localUploadFile');
+      localStorage.removeItem('localUploadFile');
       this.fileList = [];
       this.imgNow = 0;
     },
@@ -392,13 +423,15 @@ export default {
 
     /* 选中图片 */
     selectImg(event, item) {
-      this.selectedItem = item;
       let ref = '';
       if(this.currentTab == 'material') {
+       this.materialSelectedItem = item;
         ref = 'materialWrapper';
       }else if(this.currentTab == 'system') {
+        this.systemSelectedItem = item;
         ref = 'systemWrapper';
       }else if(this.currentTab === 'local') {
+        this.localSelectedItem = item;
         ref = 'localWrapper';
       }
 
@@ -412,16 +445,33 @@ export default {
     /* 预加载 */
     preload(data, name) {
       const _self = this;
+      if(!data.length) {
+        //全部加载失败 
+        _self.materialLoading = false;
+        _self.uploadLoading = false;
+        _self.localLoading = false;
+        return;
+      }
       this.preLoadObj.src = data[this.imgNow][name];
       this.preLoadObj.onerror = function () {
-          console.log("加载失败");
+          console.log("图片加载失败");
+          _self.imgNow++;              
+            if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
+                _self.preload(data, name);          //  递归调用自己
+            } else {                            //  已经加载到最后一张
+                //全部加载完成 
+                _self.materialLoading = false;
+                _self.uploadLoading = false;
+                _self.localLoading = false;
+                return;
+            }
       }
       this.preLoadObj.onload = function () { 
             _self.imgNow++;              
             if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
                 _self.preload(data, name);          //  递归调用自己
             } else {                            //  已经加载到最后一张
-                //此处写当全部加载完成之后发生的逻辑 
+                //全部加载完成 
                 _self.materialLoading = false;
                 _self.uploadLoading = false;
                 _self.localLoading = false;
@@ -436,7 +486,7 @@ export default {
 
     /* 向父组件提交选中的数据 */
     submit() {
-      if(!this.selectedItem) {
+      if(!this.materialSelectedItem && !this.systemSelectedItem && !this.localSelectedItem) {
         this.$notify({
           title: '提示',
           message: '请选择图片后重试！',
@@ -444,13 +494,16 @@ export default {
         });
         return;
       };
-      const copyItem = {...this.selectedItem};
+      let copyItem = {};
 
       if(this.currentTab == 'material') {
+        copyItem = {...this.materialSelectedItem};
         copyItem['filePath'] = copyItem.filePath;
       }else if(this.currentTab == 'system') {
+        copyItem = {...this.systemSelectedItem};
         copyItem['filePath'] = copyItem.address;
       }else if(this.currentTab === 'local') {
+        copyItem = {...this.localSelectedItem};
         copyItem['filePath'] = copyItem.url;
       }
       this.$emit('imageSelected',  copyItem);
@@ -491,7 +544,8 @@ export default {
 
     /* 级联选择器选中改变，赋值给分组id，用于获取图片列表 */
     cascaderChange(value) {
-      this.materialGroupId = value[0];
+      let val=value.length-1;
+      this.materialGroupId = value[val];
     },
 
     /* 级联选择器懒加载回调 */
@@ -499,9 +553,13 @@ export default {
       const { level } = node;
       const { data } = node;
       let parentId = data ? data.value : '0';
-      this.materialGroupId = parentId;
+      this.materialGroupId = data ? data.value: '0';
       this.getMaterialGroups(parentId, (response)=>{
-        let nodes = [];
+        let nodes = level === 0 ?[{
+          value: '0',
+          label: '全部',
+          leaf: true
+        }] : [];
         if(response && Array.isArray(response)) {
           for(let item of response) {
             nodes.push({
