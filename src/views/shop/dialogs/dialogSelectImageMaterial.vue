@@ -144,10 +144,8 @@ export default {
       },
   },
   data() {
-    let id = 0;
     return {
       currentTab: 'material',  //来源类型 =>  material:素材库 / local:本地上传  /  system:系统图片
-      selectedItem: null,  //选中的图片对象（最终发送给调用页面的结果）
       uploadAble: true,  //上传是否可用(用来清上传器缓存)
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
@@ -229,8 +227,8 @@ export default {
           const tempSaveFile = localStorage.getItem('localUploadFile');
           if(tempSaveFile) {
             this.fileList = JSON.parse(tempSaveFile);
-            this.preload(this.fileList, 'url');
           }
+          this.preload(this.fileList, 'url');
         }
       }
     }
@@ -431,7 +429,17 @@ export default {
       }
       this.preLoadObj.src = data[this.imgNow][name];
       this.preLoadObj.onerror = function () {
-          console.log("加载失败");
+          console.log("图片加载失败");
+          _self.imgNow++;              
+            if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
+                _self.preload(data, name);          //  递归调用自己
+            } else {                            //  已经加载到最后一张
+                //全部加载完成 
+                _self.materialLoading = false;
+                _self.uploadLoading = false;
+                _self.localLoading = false;
+                return;
+            }
       }
       this.preLoadObj.onload = function () { 
             _self.imgNow++;              
@@ -453,7 +461,7 @@ export default {
 
     /* 向父组件提交选中的数据 */
     submit() {
-      if(!this.materialSelectedItem && this.systemSelectedItem && this.localSelectedItem) {
+      if(!this.materialSelectedItem && !this.systemSelectedItem && !this.localSelectedItem) {
         this.$notify({
           title: '提示',
           message: '请选择图片后重试！',
