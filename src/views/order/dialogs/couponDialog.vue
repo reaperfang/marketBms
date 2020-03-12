@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="346px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" :title="data.title" width="346px" :showFooter="showFooter">
         <div class="coupon-box">
             <template v-if="data.coupon">
                 <div class="coupon" v-for="(item, index) in data.usedCouponList" :key="index">

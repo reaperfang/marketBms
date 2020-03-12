@@ -170,14 +170,14 @@
                     <div class="row">
                         <div class="col">优惠券金额:</div>
                         <div class="col">
-                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true}; dialogVisible = true" class="coupon-img"></i>
+                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true, title: '使用的优惠券'}; dialogVisible = true" class="coupon-img"></i>
                             -¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">优惠码金额:</div>
                         <div class="col">
-                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false}; dialogVisible = true" class="coupon-img"></i>
+                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false, title: '使用的优惠码'}; dialogVisible = true" class="coupon-img"></i>
                             -¥{{orderDetail.orderInfo.consumeCouponCodeMoney || '0.00'}}
                         </div>
                     </div>
@@ -897,6 +897,9 @@ export default {
 .yingshow-right-box {
     display: flex;
     align-items: center;
+    >span:first-child {
+        font-weight: 600;
+    }
     .yingshou-change {
         flex-shrink: 0;
     }

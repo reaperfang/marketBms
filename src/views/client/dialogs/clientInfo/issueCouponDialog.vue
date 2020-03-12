@@ -91,7 +91,7 @@
                     <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共条数据
+                    共{{data.allCoupons.length}}条数据
                 </div>
             </div>
         </div>
@@ -268,6 +268,10 @@ export default {
 }
 /deep/ .el-dialog{
     border-radius: 10px;
+}
+/deep/ .el-table{
+  height: 591px;
+  overflow-y: auto;
 }
 .c_container {
     text-align: left;

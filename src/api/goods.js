@@ -147,6 +147,7 @@ export function fetchGoodsList(data) {
   })
 }
 
+
 // sku商品分页列表(无分页)
 export function fetchGoodsSKUList(data) {
   return request({
@@ -224,12 +225,34 @@ export function upperOrLower(data) {
   })
 }
 
+// 商品上下架(批量)Spu
+export function upperOrLowerSpu(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SPU-BATCH-UP-OR-LOWER-PROCESSOR',
+    data,
+    token
+  })
+}
+
 // 商品删除(批量)
 export function allDelete(data) {
   return request({
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-DELETE-PROCESSOR',
+    data,
+    token
+  })
+}
+
+// 商品删除spu(批量)
+export function allDeleteSpu(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SPU-DELETE-PROCESSOR',
     data,
     token
   })
@@ -330,6 +353,39 @@ export function recommend(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-CATALOG-ISRECOMMEND-PROCESSOR',
+    data,
+    token
+  })
+}
+
+// 编辑SPU商品售卖价
+export function changePriceSpu(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SPU-CHANGE-PRICE-PROCESSOR',
+    data,
+    token
+  })
+}
+
+// 编辑SPU商品上下架
+export function productUpperOrLowerSpu(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SPU-UPPER-OR-LOWER-PROCESSOR',
+    data,
+    token
+  })
+}
+
+// 编辑SPU商品库存
+export function productUpdateStockSpu(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SPU-UPDATE-STOCK-PROCESSOR',
     data,
     token
   })
