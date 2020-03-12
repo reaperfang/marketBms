@@ -8,7 +8,7 @@
       <el-tab-pane label="图片素材" name="material">
             <div class="material_head">
               <div class="select">
-                <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="未分组"></el-cascader>
+                <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="全部"></el-cascader>
               </div>
               <el-input v-model="materialName" placeholder="请输入图片名称" clearable></el-input>
               <el-button type="primary" @click="fetchMaterial">搜 索</el-button>
@@ -167,7 +167,7 @@ export default {
       materialPageSize:10,   //素材库一页条数
       materialTotal:0,  //素材库总条数
       materialName: '',  //素材库文件名称，用于检索
-      materialGroupId:'-1',  //素材库分组id
+      materialGroupId:'0',  //素材库分组id
       cascaderProps: {  //级联选择器属性
         lazy: true,  //是否懒加载
         checkStrictly: true,  //是否严格的遵守父子节点不互相关联
@@ -254,6 +254,7 @@ export default {
     /* 查询素材库图片 */
     fetchMaterial() {
       this.materialLoading = true;
+      this.imgNow = 0;
       this._apis.file.getMaterialList({
         fileGroupInfoId:this.materialGroupId || '',
         startIndex:this.materialCurrentPage,
@@ -276,6 +277,7 @@ export default {
     /* 查询系统图库 */
     fetchSystemIcon() {
       this.localLoading = true;
+      this.imgNow = 0;
       this._apis.goodsOperate.getSystemIconByGroupId({
         groupId:this.systemGroupId || '',
         startIndex:this.systemCurrentPage,
@@ -519,7 +521,8 @@ export default {
 
     /* 级联选择器选中改变，赋值给分组id，用于获取图片列表 */
     cascaderChange(value) {
-      this.materialGroupId = value[0];
+      let val=value.length-1;
+      this.materialGroupId = value[val];
     },
 
     /* 级联选择器懒加载回调 */
@@ -529,7 +532,11 @@ export default {
       let parentId = data ? data.value : '0';
       this.materialGroupId = parentId;
       this.getMaterialGroups(parentId, (response)=>{
-        let nodes = [];
+        let nodes = level === 0 ?[{
+          value: '0',
+          label: '全部',
+          leaf: true
+        }] : [];
         if(response && Array.isArray(response)) {
           for(let item of response) {
             nodes.push({
