@@ -65,7 +65,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="积分：" prop="scoreMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 27px;">
                                     <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number2($event,form.scoreMin,'scoreMin')"></el-input>
                                 </div>
                                 <span>分</span>
@@ -106,7 +106,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="客单价：" prop="perUnitPriceMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 13px;">
                                     <el-input v-model="form.perUnitPriceMin" placeholder="最小值" @keyup.native="number3($event,form.perUnitPriceMin,'perUnitPriceMin')"></el-input>
                                 </div>
                                 <span>元</span>
@@ -152,14 +152,14 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div>
-            <div class="btn_container" style="float: right; margin: -31px 118px 24px 0px">
+        </div>
+        <div class="all_container2">
+            <div class="btn_container" style="float: right; margin: 9px 118px 24px 0px">
                 <el-button type="primary" @click="_routeTo('importClient')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
             <acTable :newForm="newForm" @stopLoading="stopLoading"></acTable>
         </div>
-    </div>
   </div>
 </template>
 <script>
@@ -502,13 +502,17 @@ export default {
 /deep/.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
     margin-bottom: 10px;
 }
+/deep/.el-date-editor .el-range-separator{
+    width: 9%;
+}
 .el-input-group__append button.el-button{
     color: #5D78FF;
 }
 .all_container{
-    padding: 19px;
+    padding: 20px;
     background-color: #fff;
     font-size: 14px;
+    border-radius: 4px;
     .form_container{
         .relaPosition{
             .absoPosition{
@@ -523,8 +527,8 @@ export default {
                 cursor: pointer;
                 color: #5B54E6;
                 position: absolute;
-                right: 40px;
-                top: 0;
+                left: 81px;
+                top: 43px;
                 i{
                     margin-left: 10px;
                 }
@@ -557,6 +561,13 @@ export default {
             cursor: pointer;
         }
     }
+}
+.all_container2{
+    padding: 20px;
+    background-color: #fff;
+    font-size: 14px;
+    margin-top: 20px;
+    border-radius: 4px;
 }
 .p_title{
     height: 40px;
