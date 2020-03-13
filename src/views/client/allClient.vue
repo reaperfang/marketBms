@@ -509,6 +509,7 @@ export default {
     padding: 20px;
     background-color: #fff;
     font-size: 14px;
+    border-radius: 4px;
     .form_container{
         .relaPosition{
             .absoPosition{
@@ -563,6 +564,7 @@ export default {
     background-color: #fff;
     font-size: 14px;
     margin-top: 20px;
+    border-radius: 4px;
 }
 .p_title{
     height: 40px;
