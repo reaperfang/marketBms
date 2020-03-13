@@ -65,7 +65,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="积分：" prop="scoreMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 27px;">
                                     <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number2($event,form.scoreMin,'scoreMin')"></el-input>
                                 </div>
                                 <span>分</span>
@@ -106,7 +106,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="客单价：" prop="perUnitPriceMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 13px;">
                                     <el-input v-model="form.perUnitPriceMin" placeholder="最小值" @keyup.native="number3($event,form.perUnitPriceMin,'perUnitPriceMin')"></el-input>
                                 </div>
                                 <span>元</span>
@@ -502,6 +502,9 @@ export default {
 /deep/.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
     margin-bottom: 10px;
 }
+/deep/.el-date-editor .el-range-separator{
+    width: 9%;
+}
 .el-input-group__append button.el-button{
     color: #5D78FF;
 }
@@ -524,8 +527,8 @@ export default {
                 cursor: pointer;
                 color: #5B54E6;
                 position: absolute;
-                right: 40px;
-                top: 0;
+                left: 81px;
+                top: 43px;
                 i{
                     margin-left: 10px;
                 }
