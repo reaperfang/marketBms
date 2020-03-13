@@ -15,7 +15,7 @@
                 </el-form-item> -->
                 <el-form-item>
                     <el-button type="primary" @click="getTreeList">查询</el-button>
-                    <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -62,12 +62,14 @@ export default {
             dialogVisible: false,
             add: true,
             flatArr: [],
-            currentData: ''
+            currentData: '',
+            onoff: 0
         }
     },
     created() {
         //this.getList()
         this.getTreeList()
+        this.getApplyInfo()
     },
     computed: {
         cid(){
@@ -76,6 +78,15 @@ export default {
         },
     },
     methods: {
+        getApplyInfo() {
+            this._apis.goods.getApplyInfo({
+                cid: this.cid,
+            }).then((res) => {
+                this.onoff = res.onoff
+            }).catch(error => {
+                
+            })
+        },
         resetForm(formName) {
             this.formInline.name = ''
             this.getTreeList()
@@ -146,8 +157,8 @@ export default {
                             { h('span', {
                                 style: {
                                     backgroundImage: `url(${data.image})`,
-                                    height: '25px',
-                                    width: '25px',
+                                    height: '32px',
+                                    width: '32px',
                                     display: 'inline-block'
                                 }
                             })}
@@ -156,25 +167,51 @@ export default {
                         <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
                         <span class="td operate">
                             {
-                                <span class="blue" on-click={() => this.change(node, data)}>修改</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">
+                                        {node.level == 2 ? '新建三级分类' : (node.level == 1 ? '新建二级分类' : '新建一级分类')}
+                                    </div>
+                                    <i v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="fenleiIcon" on-click={() => this.addCategory(node, data)}></i>
+                                </el-tooltip>
                             }
                             {
-                                <span v-permission="['商品', '商品分类', '默认页面', '新建分类']" class="blue" on-click={() => this.addCategory(node, data)}>{
-                                    node.level == 2 ? '新建三级分类' : (node.level == 1 ? '新建二级分类' : '新建一级分类')
-                                }</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">
+                                        {node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'}
+                                    </div>
+                                    { h('i', {
+                                        class: node.data.isRecommend != 1 ? 'share' : 'shareCancel',
+                                        on: {
+                                            click: () => this.recommend(node, data)
+                                        }
+                                    })}
+                                </el-tooltip>
                             }
                             {
-                                <span class="blue" on-click={() => this.recommend(node, data)}>{
-                                    node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'
-                                }</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">
+                                        {node.data.enable === 1 ? '禁用' : '启用'}
+                                    </div>
+                                    { h('i', {
+                                        'v-permission': "['商品', '商品分类', '默认页面', '隐藏']",
+                                        class: node.data.enable === 1 ? 'jinyong' : 'qiyong',
+                                        on: {
+                                            click: () => this.forbidden(node, data)
+                                        }
+                                    })}
+                                </el-tooltip>
                             }
                             {
-                                <span v-permission="['商品', '商品分类', '默认页面', '隐藏']" class="blue" on-click={() => this.forbidden(node, data)}>{
-                                    node.data.enable === 1 ? '禁用' : '启用'
-                                }</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">修改</div>
+                                    <i class="editor" on-click={() => this.change(node, data)}></i>
+                                </el-tooltip>
                             }
                             {
-                                <span v-permission="['商品', '商品分类', '默认页面', '删除']" class="deleteColor" on-click={() => this.delete(node, data)}>删除</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">删除</div>
+                                    <i v-permission="['商品', '商品分类', '默认页面', '删除']" class="delete" on-click={() => this.delete(node, data)}></i>
+                                </el-tooltip>
                             }
                         </span>
                     </div>
@@ -186,8 +223,8 @@ export default {
                             { h('span', {
                                 style: {
                                     backgroundImage: `url(${data.image})`,
-                                    height: '25px',
-                                    width: '25px',
+                                    height: '32px',
+                                    width: '32px',
                                     display: 'inline-block'
                                 }
                             })}
@@ -196,20 +233,43 @@ export default {
                         <span class="td state">{data.enable === 1 ? '启用' : '禁用' }</span>
                         <span class="td operate">
                             {
-                                <span class="blue" on-click={() => this.change(node, data)}>修改</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">
+                                        {node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'}
+                                    </div>
+                                    { h('i', {
+                                        class: node.data.isRecommend != 1 ? 'share' : 'shareCancel',
+                                        on: {
+                                            click: () => this.recommend(node, data)
+                                        }
+                                    })}
+                                </el-tooltip>
                             }
                             {
-                                <span class="blue" on-click={() => this.recommend(node, data)}>{
-                                    node.data.isRecommend != 1 ? '一键推荐' : '取消推荐'
-                                }</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">
+                                        {node.data.enable === 1 ? '禁用' : '启用'}
+                                    </div>
+                                    { h('i', {
+                                        'v-permission': "['商品', '商品分类', '默认页面', '隐藏']",
+                                        class: node.data.enable === 1 ? 'jinyong' : 'qiyong',
+                                        on: {
+                                            click: () => this.forbidden(node, data)
+                                        }
+                                    })}
+                                </el-tooltip>
                             }
                             {
-                                <span class="blue" on-click={() => this.forbidden(node, data)}>{
-                                    node.data.enable === 1 ? '禁用' : '启用'
-                                }</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">修改</div>
+                                    <i class="editor" on-click={() => this.change(node, data)}></i>
+                                </el-tooltip>
                             }
                             {
-                                <span class="deleteColor" on-click={() => this.delete(node, data)}>删除</span>
+                                <el-tooltip class="item" effect="dark" placement="bottom">
+                                    <div slot="content">删除</div>
+                                    <i v-permission="['商品', '商品分类', '默认页面', '删除']" class="delete" on-click={() => this.delete(node, data)}></i>
+                                </el-tooltip>
                             }
                         </span>
                     </div>
@@ -328,6 +388,11 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+    /deep/ .el-tree-node__content {
+        padding: 14px 0;
+    }
+</style>
 <style lang="scss">
 .content-main-classify {
     overflow-x: hidden!important;
@@ -395,6 +460,40 @@ export default {
 .operate {
     span {
         margin-right: 6px;
+    }
+    i {
+        display: inline-block;
+        width: 13px;
+        height: 13px;
+        margin-right: 14px;
+        &.fenleiIcon {
+            background: url('../../assets/images/goods/fenleiIcon.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        &.editor {
+            background: url('../../assets/images/goods/editor.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        &.jinyong {
+            background: url('../../assets/images/goods/jinyong.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        &.qiyong {
+            background: url('../../assets/images/goods/qiyong.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        &.delete {
+            background: url('../../assets/images/goods/delete.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        &.share {
+            background: url('../../assets/images/goods/share.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        &.shareCancel {
+            background: url('../../assets/images/goods/shareCancel.png') no-repeat;
+            background-size: 100% 100%;
+        }
     }
 }
 .treeRow {

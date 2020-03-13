@@ -4,15 +4,16 @@
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
                 <div v-for="(item, index) in data.goodsInfos" class="item">
-                    <div class="item-title">{{index + 1}}：规格属性：{{item.productSpecs | productSpecsFilter}}</div>
+                    <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">{{item.status | statusFilter}}</span>
                         <el-switch
+                            :disabled="item.activity"
                             v-model="item.status"
                             active-color="#13ce66"
                             inactive-color="#ff4949">
                         </el-switch>
-                        <span class="message">该商品正在参加XXX活动活动结束/失效才可下架</span>
+                        <span v-if="item.activity" class="message">该商品正在参加XXX活动活动结束/失效才可下架</span>
                     </div>
                 </div>
             </div>
@@ -48,9 +49,9 @@ export default {
         submit() {
             this._apis.goods.productUpperOrLowerSpu({
                 id: this.data.id,
-                goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, status: val.status}))
+                goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, status: val.status ? 1 : 0}))
             }).then((res) => {
-                this.getList()
+                this.$emit('submit')
                 this.visible = false
                 this.$notify({
                     title: '成功',

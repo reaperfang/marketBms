@@ -4,7 +4,7 @@
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
                 <div v-for="(item, index) in data.goodsInfos" class="item">
-                    <div class="item-title">{{index + 1}}：规格属性：{{item.productSpecs | productSpecsFilter}}</div>
+                    <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">库存：</span>
                         <el-input v-model="item.stock" placeholder="请输入库存"></el-input>
@@ -38,7 +38,7 @@ export default {
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, stock: val.stock}))
             }).then((res) => {
-                this.getList()
+                this.$emit('submit')
                 this.visible = false
                 this.$notify({
                     title: '成功',
