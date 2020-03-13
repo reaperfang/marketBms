@@ -1,5 +1,5 @@
 <template>
-    <div class="c_container">
+    <div class="c_container clearfix">
         <div class="c_line">
             <span>标签名称：</span>
             <div class="input_wrap">
