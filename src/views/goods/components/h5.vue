@@ -20,7 +20,7 @@
         </div>
         <div class="h5-content">
             <h2>一键复制公众号商品详情页地址</h2>
-            <el-input id="address" v-model="address">
+            <el-input id="address" v-model="productUrl">
                 <template slot="append"><span @click="copy">复制</span></template>
             </el-input>
             <div class="qrcode-box">
@@ -40,7 +40,9 @@ export default {
         return {
             address: '',
             url: '',
-            content: ''
+            content: '',
+            name: '',
+            productUrl: ''
         }
     },
     mounted () {
@@ -51,6 +53,8 @@ export default {
             this._apis.goods.shareOne({id: this.spuid, channelInfoId: 2}).then((res) => {
                 console.log(res)
                 this.content = res.content
+                this.name = res.name
+                this.productUrl = res.productUrl
                 //this.qrcode();
             }).catch(error => {
                 this.visible = false
@@ -64,7 +68,7 @@ export default {
             let qrcode = new QRCode('qrcode', {
                 width: 136,  
                 height: 136,
-                text: this.shareData.url || 'https://www.baidu.com', 
+                text: this.shareData.url, 
                 colorDark : "#000",
                 colorLight : "#fff",
             })
@@ -74,7 +78,8 @@ export default {
             let a = document.createElement('a')
 
             a.href = canvas[0].toDataURL('image/png')
-            a.download = this.shareData.chanel + this.shareData.name + this.shareData.sku + '...'
+            //a.download = this.shareData.chanel + this.shareData.name + this.shareData.sku + '...'
+            a.download = this.name
             a.click()
         },
         copy() {

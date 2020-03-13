@@ -25,12 +25,29 @@ export default {
         }
     },
     methods: {
+        shareMore(ids) {
+            this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
+                window.location.href = res
+                this.visible = false
+            }).catch(error => {
+                this.visible = false
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
+            })
+        },
         submit() {
             let obj = {}
             
-            this.currentDialog = 'Share'
-            this.shareDialogVisible = true
-            obj.id = this.data.id
+            if(this.data.shareMore) {
+                this.shareMore(this.data.shareMore.map(val => val.id))
+                return
+            } else {
+                this.currentDialog = 'Share'
+                this.shareDialogVisible = true
+                obj.id = this.data.id
+            }
             if(this.h5Checked) obj.h5 = true
             if(this.miniCodeChecked) obj.miniCode = true
             this.currentData = obj

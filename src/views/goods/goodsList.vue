@@ -40,7 +40,7 @@
                         <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                     </el-form-item>
                     <el-form-item style="float: right;">
-                        <el-button @click="getList" type="primary">搜索</el-button>
+                        <el-button @click="getList" type="primary">查询</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </el-form-item>
                     </el-form>
@@ -144,15 +144,15 @@
                     <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allUpper" class="border-button">批量上架</el-button>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button"  @click="$router.push('/goods/batchPriceChange')">批量改价</el-button>
-                    <el-button class="border-button">批量推广</el-button>
+                    <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
+                    <el-button @click="shareMore" class="border-button">批量推广</el-button>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="border-button">批量删除</el-button>
                 </div>
             </div>
             <div class="footer">
                 <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
             </div>
-            <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit"></component>
+            <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
         <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
@@ -357,6 +357,7 @@ import EditorStockSpu from '@/views/goods/dialogs/editorStockSpuDialog'
 import EditorPriceSpu from '@/views/goods/dialogs/editorPriceSpuDialog'
 import EditorUpperAndLowerRacksSpu from '@/views/goods/dialogs/editorUpperAndLowerRacksSpuDialog'
 import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
+import PriceChangeDialog from "@/views/goods/dialogs/priceChangeDialog";
 
 export default {
     data() {
@@ -389,7 +390,8 @@ export default {
             dialogVisible: false,
             currentData: '',
             state: '',
-            showTableCheck: true
+            showTableCheck: true,
+            operateType: "",
         }
     },
     created() {
@@ -438,6 +440,53 @@ export default {
         }
     },
     methods: {
+        changePriceMore() {
+            this.currentDialog = 'PriceChangeDialog'
+            this.dialogVisible = true
+        },
+        changePriceSubmit(value) {
+            this.allUpdatePrice(value);
+        },
+        allUpdatePrice(params) {
+            let _param = {
+                operateType: 1,
+                changeType: params.changeType,
+                markupPrice: params.price
+            };
+
+            _param.ids = this.multipleSelection.map(val => val.id);
+            this._apis.goods
+                .allUpdatePriceSpu(_param)
+                .then(res => {
+                this.getList();
+                this.visible = false;
+                this.$notify({
+                    title: "成功",
+                    message: "改价成功！",
+                    type: "success"
+                });
+                })
+                .catch(error => {
+                this.visible = false;
+                this.$notify.error({
+                    title: "错误",
+                    message: error
+                });
+                });
+            },
+        shareMore() {
+            let obj = {}
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
+            this.currentDialog = 'ShareSelect'
+            this.dialogVisible = true
+            obj.shareMore = [...this.multipleSelection]
+            this.currentData = obj
+        },
         getMarketActivity(list) {
             // var that = this
             // let getActivityList = function(spuId, obj) {
@@ -788,7 +837,8 @@ export default {
         EditorStockSpu,
         EditorPriceSpu,
         EditorUpperAndLowerRacksSpu,
-        ShareSelect
+        ShareSelect,
+        PriceChangeDialog
     }
 }
 </script>
