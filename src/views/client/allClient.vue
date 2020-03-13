@@ -152,14 +152,14 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div>
-            <div class="btn_container" style="float: right; margin: -31px 118px 24px 0px">
+        </div>
+        <div class="all_container2">
+            <div class="btn_container" style="float: right; margin: 9px 118px 24px 0px">
                 <el-button type="primary" @click="_routeTo('importClient')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
             <acTable :newForm="newForm" @stopLoading="stopLoading"></acTable>
         </div>
-    </div>
   </div>
 </template>
 <script>
@@ -506,7 +506,7 @@ export default {
     color: #5D78FF;
 }
 .all_container{
-    padding: 19px;
+    padding: 20px;
     background-color: #fff;
     font-size: 14px;
     .form_container{
@@ -557,6 +557,12 @@ export default {
             cursor: pointer;
         }
     }
+}
+.all_container2{
+    padding: 20px;
+    background-color: #fff;
+    font-size: 14px;
+    margin-top: 20px;
 }
 .p_title{
     height: 40px;
