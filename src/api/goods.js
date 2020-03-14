@@ -424,6 +424,28 @@ export function shareOne(data) {
   })
 }
 
+// 商品推广 批量
+export function shareMore(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-BATCH-EXTEND-PROCESSOR',
+    data,
+    token
+  })
+}
+
+// 获取申请信息
+export function getApplyInfo(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-PCWAP-APPLY-INFO-PROCESSOR',
+    data,
+    token
+  })
+}
+
 
 
 

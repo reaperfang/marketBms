@@ -60,7 +60,7 @@ export default {
             let qrcode = new QRCode('qrcode', {
                 width: 136,  
                 height: 136,
-                text: this.shareData.url || 'https://www.baidu.com', 
+                text: this.shareData.url, 
                 colorDark : "#000",
                 colorLight : "#fff",
             })
