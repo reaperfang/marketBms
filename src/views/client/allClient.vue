@@ -125,7 +125,8 @@
                                         type="daterange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
-                                        end-placeholder="结束日期">
+                                        end-placeholder="结束日期"
+                                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -138,7 +139,8 @@
                                         type="daterange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
-                                        end-placeholder="结束日期">
+                                        end-placeholder="结束日期"
+                                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -400,9 +402,9 @@ export default {
         if(!!canSubmit) {
             this.btnloading = true;
             this.form.becameCustomerTimeStart = this.becameCustomerTime ? utils.formatDate(new Date(this.becameCustomerTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(new Date(this.becameCustomerTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(utils.endTimeHandle(this.becameCustomerTime[1], false),"yyyy-MM-dd hh:mm:ss"):'';
             this.form.lastPayTimeStart = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(utils.endTimeHandle(this.lastPayTime[1], false),"yyyy-MM-dd hh:mm:ss"):'';
             let oForm = Object.assign({},this.form);
             let labelNames = oForm.memberLabels;
             let channelNames = oForm.channelId;

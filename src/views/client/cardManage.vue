@@ -53,7 +53,8 @@
                         v-model="getTime"
                         range-separator="至"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
                     </el-date-picker>
                     <el-button type="primary" class="marL20" @click="handleFind">查 询</el-button>
                     <el-button class="border_btn" @click="reset">重 置</el-button>
@@ -116,7 +117,7 @@ export default {
             let obj = {
                 name: this.selected == "" || this.selected == "全部"? null : this.selected,
                 startTime: this.getTime == "" || this.getTime == null ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
-                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
+                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(utils.endTimeHandle(this.getTime[1], false),"yyyy-MM-dd hh:mm:ss"),
             }
             this.lkParams = Object.assign({},obj);
         },

@@ -421,3 +421,46 @@ export function addZero(num) {
     }
   }
 }
+
+/* 
+*时间选择器结束时间处理 
+* endTime  结束时间对象
+* canSelectFuture  是否可选择未来
+*/
+export function endTimeHandle(endTime, canSelectFuture = true) {
+  if(endTime) {
+    if(endTime.getTime() >= new Date().getTime()) {  //如果结束时间大于或等于当前时间
+      if(!canSelectFuture) {  //如果不允许选择未来
+        return new Date();  //返回当前时间
+      }else {
+        return endTime;
+      }
+    }else { //如果结束时间小于当前时间
+      if(endTime.getFullYear() === new Date().getFullYear() && endTime.getMonth() === new Date().getMonth() && endTime.getDate() === new Date().getDate()) {  //如果是当天
+        return new Date();  //返回当前时间
+      }else {  //如果是今天以前，则返回那一天的23:59:59
+        return endTime.getTime() + 24 * 60 * 60 * 1000 - 1;
+      }
+    }
+  }else {
+    return new Date();
+  }
+}
+
+/* 
+*日期选择器配置项 
+* canSelectFuture  是否可选择未来
+*/
+export function pickerOptions(params) {
+    return {
+      disabledDate(time) {
+        if(!params.canSelectFuture) { 
+          return time.getTime() > Date.now();//如果没有后面的-8.64e7就是不可以选择今天的 
+        }else {
+          return false;
+        }
+      }
+    }
+}
+
+

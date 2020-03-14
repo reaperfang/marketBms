@@ -51,7 +51,8 @@
                                 type="daterange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
-                                end-placeholder="结束日期">
+                                end-placeholder="结束日期"
+                                :picker-options="utils.pickerOptions({canSelectFuture: false})">
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -397,7 +398,7 @@ export default {
                 if(!!this.canSubmit) {
                     let formObj = Object.assign({}, this.ruleForm);
                     formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
-                    formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"):"";
+                    formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(utils.endTimeHandle(this.consumeTime[1], false),"yyyy-MM-dd hh:mm:ss"):"";
                     formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || 0;
                     formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || 0;
                     formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || 0;

@@ -57,7 +57,8 @@
                     type="daterange"
                     range-separator="至"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                    end-placeholder="结束日期"
+                    :picker-options="utils.pickerOptions({canSelectFuture: false})">
                 </el-date-picker>
                 <span class="marL20">渠道：</span>
                 <el-select v-model="channelId2" placeholder="选择渠道" clearable>
@@ -146,7 +147,7 @@ export default {
         handleCheck() {
             let params = {
                 importTimeStart: !!this.importTime ? utils.formatDate(new Date(this.importTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'',
-                importTimeEnd: !!this.importTime ? utils.formatDate(new Date(this.importTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):"",
+                importTimeEnd: !!this.importTime ? utils.formatDate(utils.endTimeHandle(this.importTime[1], false),"yyyy-MM-dd hh:mm:ss"):"",
                 channelId: this.channelId2
             }
             this.params = Object.assign({}, params);
