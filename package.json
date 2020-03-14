@@ -6,7 +6,7 @@
   "license": "",
   "private": true,
   "scripts": {
-    "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "cross-env BABEL_ENV=development webpack-dev-server --max_old_space_size=4096 --inline --progress --config build/webpack.dev.conf.js",
     "build:dev": "cross-env NODE_ENV=development env_config=dev node build/build.js",
     "build:test": "cross-env NODE_ENV=testing env_config=test node build/build.js",
     "build:pre": "cross-env NODE_ENV=pre env_config=pre node build/build.js",
@@ -47,7 +47,7 @@
     "vue-jsonp": "^0.1.8",
     "vue-router": "^3.0.6",
     "vue-ueditor-wrap": "^2.4.1",
-    "vue-waterfall2": "^1.8.20",
+    "vue-waterfall2": "^1.9.6",
     "vuedraggable": "^2.23.0",
     "vuex": "^3.1.1",
     "xlsx": "^0.14.4"
