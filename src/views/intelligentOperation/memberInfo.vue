@@ -114,6 +114,7 @@
 <script>
 import maTable from './components/maTable';
 import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
+import utils from '@/utils'
 export default {
     name: 'memberInfo',
     components: { maTable ,exportTipDialog },
@@ -211,8 +212,8 @@ export default {
             if(this.form.daterange){
                 this.form.timeType = 4;
                 Object.assign(this.form,{
-                    startTime:this.form.daterange[0],
-                    endTime:this.form.daterange[1]
+                    startTime:this.getDate(utils.dayStart(this.form.daterange[0])),
+                    endTime:this.getDate(utils.dayEnd(this.form.daterange[1]))
                 });
             }else{
                 Object.assign(this.form,{
@@ -220,6 +221,10 @@ export default {
                     endTime:null
                 });
             }
+        },
+
+        getDate(date) {
+            return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
         },
 
         //获取交易次数

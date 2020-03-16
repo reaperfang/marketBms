@@ -214,8 +214,8 @@ export default {
         });
     },
     changeTime(val) {
-      this.startTime = this.getDate(val[0])
-      this.endTime = this.getDate(val[1])
+      this.startTime = this.getDate(utils.dayStart(val[0]))
+      this.endTime = this.getDate(utils.dayEnd(val[1]))
       this.nearDay = "";
       this.getPathConversion();
     },

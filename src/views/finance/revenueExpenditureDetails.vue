@@ -62,7 +62,7 @@
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>

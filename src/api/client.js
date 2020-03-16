@@ -291,7 +291,7 @@ export function getAllCoupons(data) {
 //获取优惠券发放列表
 export function getDistributeCouponList(data) {
     return request({
-        url: '/v1/b/app-coupon/activity/page-distributeList',
+        url: '/v1/b/app-coupon/activity/distributeList',
         method: 'post',
         baseURL: process.env.SALE_API,
         data

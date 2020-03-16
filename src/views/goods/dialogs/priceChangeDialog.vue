@@ -39,7 +39,7 @@ export default {
         submit(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                this.$emit('submit', this.ruleForm)
+                this.$emit('changePriceSubmit', this.ruleForm)
                 this.visible = false
             } else {
                 this.visible = false

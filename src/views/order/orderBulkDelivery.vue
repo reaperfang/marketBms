@@ -12,14 +12,14 @@
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
-              <div class="col" style="width: 590px; margin-right: 40px;">
+              <div class="col table-title-left" style="width: 590px; margin-right: 40px;">
                 <div class="row align-center row-margin">
                   <div class="col">
                     <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked}"></i>
                   </div>
-                  <div class="col" style="width: 310px;">商品</div>
-                  <div class="col" style="width: 60px;">应发数量</div>
-                  <div class="col">本次发货数量</div>
+                  <div class="col table-title-left-goods" style="width: 310px;">商品</div>
+                  <div class="col table-title-left-yingfa" style="width: 60px;">应发数量</div>
+                  <div class="col table-title-left-benci">本次发货数量</div>
                 </div>
               </div>
               <div class="col">
@@ -30,7 +30,7 @@
               </div>
             </div>
             <div class="row align-center table-container">
-              <div class="col" style="width: 590px; flex-shrink: 0;">
+              <div class="col table-container-left" style="width: 590px; flex-shrink: 0;">
                 <div
                   class="row align-center row-margin goodsItem"
                   v-for="(goods, i) in item.orderItemList"
@@ -39,7 +39,7 @@
                   <div class="col">
                     <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked}"></i>
                   </div>
-                  <div class="col" style="width: 310px;">
+                  <div class="col goodsItem-left" style="width: 310px;">
                     <div class="row align-center">
                       <div class="col">
                         <img width="66" :src="goods.goodsImage" alt />
@@ -84,12 +84,13 @@
                         <el-input
                           style="margin-top: 5px;"
                           v-if="item.expressCompanyCodes == 'other'"
+                          @change="otherInputChange(index)"
                           v-model="item.other"
                           placeholder="请输入快递公司名称"
                         ></el-input>
                       </el-form-item>
                       <el-form-item label="快递单号" prop="expressNos">
-                        <el-input :disabled="!item.express" v-model="item.expressNos"></el-input>
+                        <el-input :disabled="!item.express" v-model="item.expressNos" :placeholder="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
                       </el-form-item>
                     </el-form>
                   </div>
@@ -189,6 +190,18 @@ export default {
     }
   },
   methods: {
+    otherInputChange(index) {
+      if(index != 0) return
+
+      let list = JSON.parse(JSON.stringify(this.list))
+      let other = list[0].other
+
+      list.forEach((val, index) => {
+        if(index != 0) {
+          val.other = other
+        }
+      })
+    },
     checkExpress(index) {
       let expressCompanyCodes
       let expressName
@@ -207,6 +220,22 @@ export default {
           this.list.splice(index, 1, Object.assign({}, this.list[index], {
             express: res
           }))
+
+          // 批量填充
+          if(index == 0) {
+            let list = JSON.parse(JSON.stringify(this.list))
+            let expressCompanyCodes = list[0].expressCompanyCodes
+            let express = list[0].express
+
+            list.forEach((val, index) => {
+              if(index != 0) {
+                val.expressCompanyCodes = expressCompanyCodes
+                val.express = express
+              }
+            })
+
+            this.list = list
+          }
         })
         .catch(error => {
           this.visible = false;
@@ -676,4 +705,27 @@ export default {
   float: right;
   cursor: pointer;
 }
+@media (max-width: 1440px) {
+  .table-title-left {
+    width: 443px!important;
+    .table-title-left-goods {
+        width: 290px!important;
+    }
+    .table-title-left-yingfa {
+        width: 91px!important;
+    }
+    .table-title-left-benci {
+      width: 134px!important;
+    }
+  }
+  .table-container-left {
+    width: 443px!important;
+  }
+  .goodsItem-left {
+      width: 215px!important;
+  }
+  .table-title-left-goods {
+      width: 290px!important;
+  }
+} 
 </style>

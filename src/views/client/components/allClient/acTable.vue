@@ -358,7 +358,7 @@ export default {
   margin-top: 60px;
   .export_btn{
     position: absolute;
-    top: -31px;
+    top: -52px;
     right: 40px;
   }
 }

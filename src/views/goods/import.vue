@@ -22,7 +22,7 @@
             </el-steps>
         </section>
         <section class="importing">
-            <p>用Excel表格快速导入商品数据</p>
+            <p class="title">用Excel表格快速导入商品数据</p>
             <p>说明：</p>
             <ol class="step">
                 <li>导入功能必须使用指定模板；</li>
@@ -261,6 +261,11 @@ export default {
         .importing {
             color: rgb(93, 93, 99);
             margin-top: 15px;
+            p.title {
+                font-size:14px;
+                color:rgba(101,94,255,1);
+                padding-bottom: 10px;
+            }
             p:nth-child(2) {
                 margin-top: 5px;
             }

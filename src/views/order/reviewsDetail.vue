@@ -211,7 +211,10 @@ export default {
         // 初始容器高度
         initialFrameHeight: 400,
         // 初始容器宽度
-        initialFrameWidth: 500
+        initialFrameWidth: 500,
+        toolbars: [
+            ['emotion']
+        ],
       },
       orderProductComment: {},
       recordList: [],
@@ -559,6 +562,13 @@ export default {
         justify-content: center;
         align-items: center;
     }
+</style>
+<style lang="scss">
+  .reviews-detail {
+    .edui-for-xiumi-connect, .edui-for-seletedImage, .edui-for-seletedVideo {
+        display: none!important;
+    }
+  }
 </style>
 
 

@@ -66,12 +66,12 @@
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_coupon.png" alt="" @click="sendCoupon" class="pointer">
-                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{allCoupons.length !== 0 ? allCoupons[0].ownNum:0}}</span>张</p>
+                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{allCoupons.length !== 0 ? allCoupons[0].ownNum || 0:0}}</span>张</p>
                     <span @click="sendCoupon">发放</span>
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_code.png" alt="" @click="sendCode" class="pointer">
-                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{allCodes.length !== 0 ? allCodes[0].ownNum : 0}}</span>个</p>
+                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{allCodes.length !== 0 ? allCodes[0].ownNum || 0 : 0}}</span>个</p>
                     <span @click="sendCode">发放</span>
                 </div>
                 <div class="assets_item rb">
@@ -332,7 +332,7 @@ export default {
         },
         getAllCoupons() {
             this._apis.client.getDistributeCouponList({memberId:this.userId, couponType: 0}).then((response) => {
-                this.allCoupons = [].concat(response.list);
+                this.allCoupons = [].concat(response);
                 this.allCoupons.map((item) => {
                     this.$set(item, 'frozenNum',1);
                 })
@@ -342,7 +342,7 @@ export default {
         },
         getAllCodes() {
             this._apis.client.getDistributeCouponList({memberId:this.userId, couponType: 1}).then((response) => {
-                this.allCodes = [].concat(response.list);
+                this.allCodes = [].concat(response);
                 this.allCodes.map((item) => {
                     this.$set(item, 'frozenNum',1);
                 })

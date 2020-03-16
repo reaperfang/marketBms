@@ -80,6 +80,7 @@
 <script>
 import ma3Table from './components/ma3Table';
 import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
+import utils from '@/utils'
 export default {
     name: 'integral',
     components: { ma3Table ,exportTipDialog },
@@ -156,8 +157,8 @@ export default {
             if(this.daterange){
                 this.form.timeType = 4;
                 Object.assign(this.form,{
-                    startTime:this.daterange[0],
-                    endTime:this.daterange[1]
+                    startTime:this.getDate(utils.dayStart(this.daterange[0])),
+                    endTime:this.getDate(utils.dayEnd(this.daterange[1]))
                 });
             }else{
                 Object.assign(this.form,{
@@ -166,6 +167,10 @@ export default {
                 });
             }
             // console.log(this.form)
+        },
+
+        getDate(date) {
+            return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
         },
         //
         //查询

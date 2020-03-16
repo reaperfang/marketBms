@@ -54,6 +54,7 @@
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
                 :picker-options="pickerOptions" 
+                :default-time="'00:00:00'"
                 :disabled="showType === 'view'">
               </el-date-picker>
             </div>
@@ -65,6 +66,7 @@
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
                 :picker-options="pickerOptions" 
+                :default-time="'23:59:59'"
                 :disabled="showType === 'view'">
               </el-date-picker>
             </div>
