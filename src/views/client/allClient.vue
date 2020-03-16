@@ -528,9 +528,7 @@ export default {
             .more{
                 cursor: pointer;
                 color: #5B54E6;
-                position: absolute;
-                left: 81px;
-                top: 43px;
+                margin-left: 81px;
                 i{
                     margin-left: 10px;
                 }
