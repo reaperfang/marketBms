@@ -1,10 +1,10 @@
 <template>
   <div class="errPage-container">
-        <h2>你没有权限去该页面</h2>
-        <h6>如有不满请联系你领导</h6>
-        <p>或者你可以去:</p>
+        <h2>抱歉！您没有权限去该页面</h2>
+        <!-- <h6>如有不满请联系你领导</h6> -->
+        <p>您可以:</p>
         <p class="link-type">
-          <router-link to="/profile/profile">回首页</router-link>
+          <router-link to="/profile/profile">点击回到首页</router-link>
         </p>
   </div>
 </template>
