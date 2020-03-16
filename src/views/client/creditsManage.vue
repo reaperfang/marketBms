@@ -15,21 +15,21 @@
                                     <div style="width: 140px; display: inline-block">
                                         <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
                                     </div>
-                                    <span>积分</span>
-                                    <div style="width: 54px; display: inline-block">
+                                    <span class="marL20">积分</span>
+                                    <div style="width: 54px; display: inline-block" class="marL20">
                                         <el-input v-model="ruleForm.scorePercentageMoney" :disabled="true"></el-input>
                                     </div>
-                                    <span>元</span>
+                                    <span class="marL20">元</span>
                                 </div>
                             </div>
                         </el-form-item>
                         <el-form-item label="积分抵现条件：" v-if="ruleForm.scoreToCash == '1'">
                             <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash" @change="handleCheck2"></el-checkbox>
                             <span class="marR50">订单满</span>
-                            <div style="width: 222px; display: inline-block">
+                            <div style="width: 222px; display: inline-block" class="marL20">
                                 <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderMoney" @keyup.native="checkZero2($event,ruleForm.scoreToCashOrderMoney,'scoreToCashOrderMoney')"></el-input>
                             </div>
-                            <span>元</span>
+                            <span class="marL20">元</span>
                         </el-form-item>
                         <el-form-item v-if="ruleForm.scoreToCash == '1'">
                             <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px" @change="handleCheck"></el-checkbox>
@@ -66,7 +66,7 @@
                     <div class="input_wrap">
                         <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch" @keyup.native="checkZero2($event,ruleForm.scoreUpperCount,'scoreUpperCount')"></el-input>
                     </div>
-                    <span>积分</span>
+                    <span class="marL20">积分</span>
                     <el-button type="primary" class="marL20" v-if="isSwitch" @click="save2">保存</el-button>
                     <span style="margin-left: 10px">(积分上限只限制登录、购买、复购以及评价场景，其他场景获得的积分不在限制以内)</span>
                 </div>
@@ -229,6 +229,9 @@ export default {
 .c_container{
     padding: 19px 20px 100px 20px;
     background-color: #fff;
+    .marL20{
+        margin-left: 20px;
+    }
     span{
         color: #3D434A;
     }

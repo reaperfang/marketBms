@@ -5,8 +5,8 @@
             <div class="input_wrap">
                 <el-input v-model="tagName" placeholder="请输入标签名称"></el-input>
             </div>
-            <span class="marL20">标签类型：</span>
-            <div class="input_wrap marR100">
+            <span class="marL30">标签类型：</span>
+            <div class="input_wrap marR30">
                 <el-select v-model="tagType" clearable>
                     <el-option
                         v-for="item in options"
@@ -69,11 +69,14 @@ export default {
 .c_container{
     padding: 32px 36px;
     background-color: #fff;
-    .marL20{
-        margin-left: 20px;
+    .marL30{
+        margin-left: 30px;
     }
     .marR100{
         margin-right: 100px;
+    }
+    .marR30{
+        margin-right: 30px;
     }
     .c_line{
         margin-bottom: 30px;
