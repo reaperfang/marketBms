@@ -17,30 +17,11 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('m_templateManageIndex')">新建页面</el-button>
-        <el-popover
-          ref="popover4"
-          placement="right"
-          width="400"
-          title="修改分类"
-          v-model="visible"
-          trigger="click">
-          <el-radio-group v-model="seletedClassify">
-            <div v-for="(item, key) of classifyList" :key="key">
-              <el-radio :label="item.id">{{item.name}}</el-radio>
-            </div>
-          </el-radio-group>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false; modifyClassify()">确定</el-button>
-          </div>
-        </el-popover>
-        <el-button type="primary" plain v-popover:popover4  :disabled="!this.multipleSelection.length">批量改分类</el-button>
-        <el-button type="warning" plain @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
     <div class="table" v-calcHeight="300">
       <p>草稿（共{{total || 0}}个）</p>
-      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"  
           width="30">
@@ -71,6 +52,28 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button type="primary" plain v-popover:popover4  :disabled="!this.multipleSelection.length">批量改分类</el-button>
+        <el-button type="warning" plain @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+        <el-popover
+          ref="popover4"
+          placement="right"
+          width="400"
+          title="修改分类"
+          v-model="visible"
+          trigger="click">
+          <el-radio-group v-model="seletedClassify">
+            <div v-for="(item, key) of classifyList" :key="key">
+              <el-radio :label="item.id">{{item.name}}</el-radio>
+            </div>
+          </el-radio-group>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="visible = false; modifyClassify()">确定</el-button>
+          </div>
+        </el-popover>
+      </div>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -96,7 +99,7 @@ export default {
   components: {},
   data () {
     return {
-      tableList:[],
+      tableData:[],
       classifyList: [],
        ruleForm: {
         status: '1',
@@ -251,7 +254,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getPageList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -301,7 +304,18 @@ export default {
           message: error
         });
       });
-    }
+    },
+
+      // 全选
+    selectAll(val){
+      if(val && this.tableData.length > 0){
+        this.tableData.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
   }
 }
 </script>

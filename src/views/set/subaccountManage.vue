@@ -27,6 +27,7 @@
       </div>
       <div class="bottom_part">
         <el-table
+        ref="multipleTable"
         v-loading="loading"
         :data="dataList"
         style="width: 100%"
@@ -70,7 +71,10 @@
           </template>
         </el-table-column>
       </el-table>
+       <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button style="margin-top:10px;" @click="deleteAccount()">批量删除</el-button>
+      </div>
         <div class="page_styles">
           <el-pagination
             @size-change="handleSizeChange"
@@ -104,7 +108,8 @@ export default {
       dataList: [],
       total:0,
       multipleSelection:[],
-      loading:true
+      loading:true,
+      selectStatus: false
     }
   },
   watch: {
@@ -196,6 +201,11 @@ export default {
       val.map(item =>{
         this.multipleSelection.push(item.id)
       })
+      if(val.length !=0 && val.length == this.dataList.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
     //编辑
     handleClick(row){
@@ -209,6 +219,17 @@ export default {
     handleCurrentChange(val){
       this.form.startIndex = val
       this.getSubAccount()
+    },
+
+     // 全选
+    selectAll(val){
+      if(val && this.dataList.length > 0){
+        this.dataList.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
     },
   }
 }
