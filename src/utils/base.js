@@ -452,6 +452,9 @@ export function endTimeHandle(endTime, canSelectFuture = true) {
 * canSelectFuture  是否可选择未来
 */
 export function pickerOptions(params) {
+    if(params.canSelectFuture == undefined || params.canSelectFuture == null) {
+      params.canSelectFuture = true;
+    }
     return {
       disabledDate(time) {
         if(!params.canSelectFuture) { 
