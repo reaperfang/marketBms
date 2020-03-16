@@ -463,4 +463,35 @@ export function pickerOptions(params) {
     }
 }
 
+/* 
+*获取某一天的00:00:00时间对象
+*/
+export function dayStart(startTime) {
+  let time = new Date(startTime);
+  let firstDay = new Date(startTime);
+  time.setFullYear(firstDay.getFullYear());
+  time.setMonth(firstDay.getMonth());
+  time.setDate(firstDay.getDate());
+  time.setHours(0);
+  time.setMinutes(0);
+  time.setSeconds(0);
+  return time;
+}
+
+/* 
+*获取某一天的23:59:59时间对象
+*/
+export function dayEnd(endTime) {
+  let time = new Date(endTime);
+  let lastDay = new Date(endTime);
+  time.setFullYear(lastDay.getFullYear());
+  time.setMonth(lastDay.getMonth());
+  time.setDate(lastDay.getDate());
+  time.setHours(23);
+  time.setMinutes(59);
+  time.setSeconds(59);
+  return time;
+}
+
+
 
