@@ -522,7 +522,7 @@ export default {
             }
             .down_img{
                 position: absolute;
-                left: 569px;
+                left: 562px;
                 top: 5px;
             }
             .more{
