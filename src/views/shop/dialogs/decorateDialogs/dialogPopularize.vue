@@ -59,8 +59,8 @@
               <el-form-item label="分享样式" prop="shareStyle">
                 <el-radio-group v-model="shareStyle">
                   <el-radio :label="1">海报</el-radio>
-                  <el-radio :label="2">微信好友</el-radio>
-                  <el-radio :label="3">微信朋友圈</el-radio>
+                  <!-- <el-radio :label="2">微信好友</el-radio>
+                  <el-radio :label="3">微信朋友圈</el-radio> -->
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="分享标题" prop="title">
