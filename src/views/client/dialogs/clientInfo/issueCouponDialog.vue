@@ -269,6 +269,10 @@ export default {
 /deep/ .el-dialog{
     border-radius: 10px;
 }
+/deep/ .el-table{
+  height: 591px;
+  overflow-y: auto;
+}
 .c_container {
     text-align: left;
     .l_block{

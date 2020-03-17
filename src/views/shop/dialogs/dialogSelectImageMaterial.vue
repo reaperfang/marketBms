@@ -1,31 +1,23 @@
 /* 选择图片素材弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'图片素材'" @submit="submit" @close="close" :showFooter="false">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
 
      <el-tabs v-model="currentTab">
 
       <!-- 图片素材 -->
-      <el-tab-pane label="图片素材" name="material">
-          <div class="material_head">
-            <div class="select">
-              <el-select v-model="materialGroupId" placeholder="全部">
-                <el-option value="">全部</el-option>
-                <el-option
-                    v-for="item in materialGroupList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id">
-                  </el-option>
-              </el-select>
+      <el-tab-pane label="素材图片" name="material">
+            <div class="material_head">
+              <div class="select">
+                <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="全部"></el-cascader>
               </div>
               <el-input v-model="materialName" placeholder="请输入图片名称" clearable></el-input>
               <el-button type="primary" @click="fetchMaterial">搜 索</el-button>
             </div>
-            <div class="material_wrapper" ref="materialWrapper" v-loading="loading" :style="{'overflow-y': loading ? 'hidden' : 'auto'}">
-                <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" >
+            <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
+                <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
                   <template >
                     <div class="cell-item" v-for="(item,key) in materialResultList" :key="key" @click="selectImg($event, item)">
-                      <img :src="item.filePath" :lazy-src="item.filePath" alt="加载错误"/> 
+                      <img :src="item.filePath" alt="加载错误"/> 
                       <div class="item-body">
                           <div class="item-desc">{{item.fileName}}</div>
                       </div>
@@ -38,7 +30,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="materialCurrentPage"
-                :page-sizes="[40, 60, 100, 200]"
+                :page-sizes="[10, 20, 30, 50, 100]"
                 :page-size="materialPageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="materialTotal*1"
@@ -51,7 +43,7 @@
       <!-- 系统素材 -->
       <el-tab-pane label="系统图标" name="system" v-if="showSystemIcon">
         <div class="icon_head">
-          <span class="title">ICON分组</span>
+          <span class="title">图标分组</span>
           <div class="select">
             <el-select v-model="systemGroupId" placeholder="全部">
               <el-option value="">全部</el-option>
@@ -65,8 +57,8 @@
           </div>
           <el-button type="primary" @click="fetchSystemIcon">搜 索</el-button>
         </div>
-        <div class="icon_wrapper" ref="systemWrapper" v-loading="loading">
-            <ul>
+        <div class="icon_wrapper" ref="systemWrapper" v-loading="localLoading">
+            <ul v-if="!localLoading">
               <li class="cell-item" v-for="(item,key) in systemResultList" :key="key" @click="selectImg($event, item)">
                 <img :src="item.address" alt="加载错误"/> 
                 <!-- <p class="item-desc">{{item.id}}</p> -->
@@ -78,7 +70,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="systemCurrentPage"
-            :page-sizes="[40, 60, 100, 200]"
+            :page-sizes="[10, 20, 30, 50, 100]"
             :page-size="systemPageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="systemTotal*1"
@@ -88,45 +80,38 @@
       </el-tab-pane>
       <!-- 本地上传 -->
       <el-tab-pane label="本地上传" name="local">
-        <el-form :model="form" class="demo-form-inline" label-width="0px">
-          <el-form-item label="">
-             <div class="icon_wrapper icon_wrapper_2" ref="localWrapper" v-loading="loading">
-                <ul>
-                  <li>
-                    <el-upload
-                      v-if="uploadAble"
-                      :multiple="multipleUpload"
-                      class="avatar-uploader"
-                      v-loading="uploadLoading"
-                      :action="uploadUrl"
-                      :show-file-list="false"
-                      :data="{json: JSON.stringify({cid: cid})}"
-                      :on-error="handleError"
-                      :before-upload="beforeUpload" 
-                      :on-success="handleSuccess"
-                      :on-change="handleChange">
-                      <i class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                  </li>
-                  <li class="cell-item" v-for="(item,key) in fileList" :key="key" @click="selectImg($event, item)">
-                    <img :src="item.url" alt="加载错误"/> 
-                    <!-- <p class="item-desc">{{item.id}}</p> -->
-                  </li>
-                </ul>
+             <div class="material_wrapper material_wrapper_2" ref="localWrapper" :style="{'overflow-y': uploadLoading ? 'hidden' : 'auto'}">
+                <el-upload
+                  v-if="uploadAble"
+                  :multiple="multipleUpload"
+                  class="avatar-uploader"
+                  :title="uploadLoading ? '请加载完成后重试' : '点击上传'"
+                  :disabled="uploadLoading"
+                  :action="uploadUrl"
+                  :show-file-list="false"
+                  :data="{json: JSON.stringify({cid: cid})}"
+                  :on-error="handleError"
+                  :before-upload="beforeUpload" 
+                  :on-success="handleSuccess"
+                  :on-change="handleChange"
+                  :limit="6"
+                  :on-exceed="uploadLimit">
+                  <i class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <div v-loading="uploadLoading">
+                  <waterfall :col='3' :width="250" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
+                    <template >
+                      <div class="cell-item" v-for="(item,key) in fileList" :key="key" @click="selectImg($event, item)">
+                        <img :src="item.url" alt="加载错误"/> 
+                        <div class="item-body">
+                            <div class="item-desc">{{item.original}}</div>
+                        </div>
+                      </div>
+                    </template>
+                  </waterfall>
+                </div>
             </div>
             <p class="note" style="color: #d3d8df;margin-top:20px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
-          </el-form-item>
-          <!-- <el-form-item label="分组">
-            <el-select v-model="form.groupValue" placeholder="请选择">
-              <el-option
-                v-for="item in groupList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </el-form-item> -->
-        </el-form>
       </el-tab-pane>
     </el-tabs>
 
@@ -162,43 +147,47 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      currentTab: 'material',  //  material:素材库 / local:本地上传  /  system:系统图片
-      selectedItem: null,
-      uploadAble: true,
+      currentTab: 'material',  //来源类型 =>  material:素材库 / local:本地上传  /  system:系统图片
+      uploadAble: true,  //上传是否可用(用来清上传器缓存)
+      imgNow: 0,  //当前预加载的第几张
+      preLoadObj: null,  //预加载对象
 
       /* 本地上传 */
       uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
-      fileList: [],  //用来显示进度条的列表
+      fileList: [],  //最终用来显示的文件列表
       addList: [],  //添加的文件列表（上传前）
-      successList: [],  //成功的文件列表
-      failedList: [],  //失败的文件列表
-      uploadState: [],
-      form:{
-        imageUrl:'',
-        name:'',
-        groupValue:'-1',
-        imageUrls:''
-      },
-      groupList:[],
-      uploadLoading: false,
+      successList: [],  //上传成功的文件列表(上传后)
+      failedList: [],  //上传失败的文件列表（上传后）
+      uploadLoading: false,  //上传时的loading
+      localTabInited: false,  //本地上传点击tab初始化
+      localSelectedItem: null, //本地上传选中的图片对象（最终发送给调用页面的结果）
 
       /* 素材库 */
+      materialLoading: true,  //获取图片列表的loading
       materialResultList: [], //素材库列表数据
       materialCurrentPage:1,  //素材库当前页
-      materialPageSize:40,   //素材库一页条数
+      materialPageSize:10,   //素材库一页条数
       materialTotal:0,  //素材库总条数
       materialName: '',  //素材库文件名称，用于检索
-      materialGroupId:'',  //素材库分组id
-      materialGroupList:[],  //素材库分组列表
+      materialGroupId:'0',  //素材库分组id
+      cascaderProps: {  //级联选择器属性
+        lazy: true,  //是否懒加载
+        checkStrictly: true,  //是否严格的遵守父子节点不互相关联
+        lazyLoad: this.cascaderLazyload
+      },
+      materialTabInited: true,  //素材库点击tab初始化
+      materialSelectedItem: null, //素材库选中的图片对象（最终发送给调用页面的结果）
 
       /* 系统图库 */
+      localLoading: true, //系统图库loading
       systemResultList: [], //系统图库列表图片数据
       systemPageSize:40,    //系统图库一页条数
       systemCurrentPage:1,   //系统图库当前页
       systemTotal:0,  //系统图库总条数
       systemGroupId:'',  //系统图库分组id
       systemGroupList:[],  //系统图库分组列表
+      systemTabInited: false,  //系统图标点击tab初始化
+      systemSelectedItem: null, //系统图标选中的图片对象（最终发送给调用页面的结果）
     };
   },
   computed: {
@@ -218,34 +207,40 @@ export default {
   },
   watch:{
 
-    /* 素材库分组id变化 */
-    materialGroupId(){
-      this.fetchMaterial()
-    },
-
-    /* 系统图库分组id变化 */
-    systemGroupId() {
-      this.getSystemIconGroups();
-    },
-
     /* 当前tab类型变化 */
     currentTab(newValue) {
+      this.imgNow = 0;
       if(newValue == 'material') {
-        this.getMaterialGroups();
-        this.fetchMaterial();
+        if(!this.materialTabInited) {
+          this.materialTabInited = true;
+          this.materialGroupId = '0';
+          this.fetchMaterial();
+        }
       }else if(newValue == 'system') {
-        this.getSystemIconGroups();
-        this.fetchSystemIcon();
+        if(!this.systemTabInited) {
+          this.systemTabInited = true;
+          this.getSystemIconGroups();
+          this.fetchSystemIcon();
+        }
       }else if(newValue === 'local') {
-        // this.fileList = [];
+        if(!this.localTabInited) {
+          this.localTabInited = true;
+          this.uploadLoading = true;
+          const tempSaveFile = localStorage.getItem('localUploadFile');
+          if(tempSaveFile) {
+            this.fileList = JSON.parse(tempSaveFile);
+          }
+          this.preload(this.fileList, 'url');
+        }
       }
     }
   },
   created() {
-    this.getMaterialGroups();
     this.fetchMaterial();
   },
   mounted() {
+    const _self = this;
+    this.preLoadObj = new Image();
     this.$nextTick(() => {
       if(this.$parent.$refs.dialog) {
         let zIndex = this.$el.style.zIndex;
@@ -253,46 +248,38 @@ export default {
         this.$parent.$el.style.zIndex = zIndex + '';
       }
     })
-
-    const tempSaveFile = localStorage.getItem('localUploadFile');
-    if(tempSaveFile) {
-      this.fileList = JSON.parse(tempSaveFile);
-    }
   },
   methods: {
 
+    /**************************** 列表数据拉取相关 *******************************/
+
     /* 查询素材库图片 */
     fetchMaterial() {
-      this.loading = true;
+      this.materialLoading = true;
+      this.imgNow = 0;
       this._apis.file.getMaterialList({
-        fileGroupInfoId:this.materialGroupId || '',
+        fileGroupInfoId:this.materialGroupId || '0',
         startIndex:this.materialCurrentPage,
         pageSize:this.materialPageSize,
         sourceMaterialType:"0",
-        materialName: ''
+        fileName: this.materialName
       }).then((response)=>{
-        this.materialResultList = response.list
-        this.materialTotal = response.total
-        const container = document.querySelector('.material_wrapper');
-        if(container) {
-          container.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
-        }
-        this.loading = false
+        this.materialResultList = response.list;
+        this.preload(response.list, 'filePath');
+        this.materialTotal = response.total;
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',
           message: error
         });
-        this.loading = false;
+        this.materialLoading = false;
       });
     },
 
     /* 查询系统图库 */
     fetchSystemIcon() {
-      this.loading = true;
+      this.localLoading = true;
+      this.imgNow = 0;
       this._apis.goodsOperate.getSystemIconByGroupId({
         groupId:this.systemGroupId || '',
         startIndex:this.systemCurrentPage,
@@ -300,30 +287,23 @@ export default {
       }).then((response)=>{
         this.systemResultList = response.list
         this.systemTotal = response.total
-        const container = document.querySelector('.icon_wrapper');
-        if(container) {
-          container.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
-        }
-        this.loading = false
+        this.preload(this.systemResultList, 'address');
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',
           message: error
         });
-        this.loading = false;
+        this.localLoading = false;
       });
     },
 
     //查询素材库分组
-    getMaterialGroups(){
+    getMaterialGroups(parentId, callback){
       this._apis.file.getGroup({
         type:'0',
-        parentId: '1'
+        parentId
       }).then((response)=>{
-        this.materialGroupList = response
+        callback && callback(response);
       }).catch((error)=>{
         this.$notify.error({
           title: '错误',
@@ -344,19 +324,28 @@ export default {
       })
     },
 
-    /**************************** 上传相关  开始 *******************************/
+    /**************************** 上传相关 *******************************/
 
     /* 上传前钩子 */
     beforeUpload(file) {
+
       const isJPG = file.type === 'image/jpg';
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
       if (!(isJPG || isJPEG || isPNG)) {
         this.$message.error('上传图片支持jpg,jpeg,png格式!');
+        this.failedList.push(file);
       }
       if (!isLt2M) {
         this.$message.error('上传图片大小不能超过 3MB!');
+        this.failedList.push(file);
+      }
+      if(this.successList.length + this.failedList.length === this.addList.length) {
+        this.preload(this.fileList, 'url');
+        this.addList = [];
+        this.successList = [];
+        this.failedList = [];
       }
       return isJPG || isJPEG || isPNG && isLt2M;
     },
@@ -384,14 +373,20 @@ export default {
         this.failedList.push(file);
       }
 
-      if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.uploadLoading = false;
+      let list = [];
+      for(let item of fileList) {
+        if(item.status == 'success') {
+          list.push(item.response.data);
+        }
       }
+      this.fileList = list;
+      localStorage.setItem('localUploadFile', JSON.stringify(this.fileList));
     },
 
     /* 上传文件改变 */
     handleChange(file, fileList) {
       this.uploadLoading = true;
+      this.imgNow = 0;
       if(file.status === 'ready') {
         this.addList.push(file);
       }
@@ -400,31 +395,43 @@ export default {
       }
 
       if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.uploadLoading = false;
+        this.preload(this.fileList, 'url');
+        this.addList = [];
+        this.successList = [];
+        this.failedList = [];
       }
+    },
+
+    /* 上传超过个数的处理 */
+    uploadLimit() {
+      this.$notify({
+        title: '提示',
+        message: '最多支持上传6张！',
+        type: 'warning'
+      });
     },
 
       /* 清除缓存 */
     clearTempSave() {
-      sessionStorage.removeItem('localUploadFile');
+      localStorage.removeItem('localUploadFile');
       this.fileList = [];
+      this.imgNow = 0;
     },
 
-    /**************************** 上传相关  结束 *******************************/
 
-
-
-    /**************************** 瀑布流相关  开始 *******************************/
+    /**************************** 瀑布流相关 *******************************/
 
     /* 选中图片 */
     selectImg(event, item) {
-      this.selectedItem = item;
       let ref = '';
       if(this.currentTab == 'material') {
+       this.materialSelectedItem = item;
         ref = 'materialWrapper';
       }else if(this.currentTab == 'system') {
+        this.systemSelectedItem = item;
         ref = 'systemWrapper';
       }else if(this.currentTab === 'local') {
+        this.localSelectedItem = item;
         ref = 'localWrapper';
       }
 
@@ -435,12 +442,51 @@ export default {
       event.currentTarget.className = 'cell-item img_active';
     },
 
+    /* 预加载 */
+    preload(data, name) {
+      const _self = this;
+      if(!data.length) {
+        //全部加载失败 
+        _self.materialLoading = false;
+        _self.uploadLoading = false;
+        _self.localLoading = false;
+        return;
+      }
+      this.preLoadObj.src = data[this.imgNow][name];
+      this.preLoadObj.onerror = function () {
+          console.log("图片加载失败");
+          _self.imgNow++;              
+            if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
+                _self.preload(data, name);          //  递归调用自己
+            } else {                            //  已经加载到最后一张
+                //全部加载完成 
+                _self.materialLoading = false;
+                _self.uploadLoading = false;
+                _self.localLoading = false;
+                return;
+            }
+      }
+      this.preLoadObj.onload = function () { 
+            _self.imgNow++;              
+            if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
+                _self.preload(data, name);          //  递归调用自己
+            } else {                            //  已经加载到最后一张
+                //全部加载完成 
+                _self.materialLoading = false;
+                _self.uploadLoading = false;
+                _self.localLoading = false;
+                return;
+            }
+        };
 
-    /**************************** 瀑布流相关  结束 *******************************/
+    },
+
+
+    /**************************** 弹窗相关 *******************************/
 
     /* 向父组件提交选中的数据 */
     submit() {
-      if(!this.selectedItem) {
+      if(!this.materialSelectedItem && !this.systemSelectedItem && !this.localSelectedItem) {
         this.$notify({
           title: '提示',
           message: '请选择图片后重试！',
@@ -448,26 +494,31 @@ export default {
         });
         return;
       };
-      const copyItem = {...this.selectedItem};
+      let copyItem = {};
 
       if(this.currentTab == 'material') {
+        copyItem = {...this.materialSelectedItem};
         copyItem['filePath'] = copyItem.filePath;
       }else if(this.currentTab == 'system') {
+        copyItem = {...this.systemSelectedItem};
         copyItem['filePath'] = copyItem.address;
       }else if(this.currentTab === 'local') {
+        copyItem = {...this.localSelectedItem};
         copyItem['filePath'] = copyItem.url;
       }
       this.$emit('imageSelected',  copyItem);
-      this.dialogVisible = false;
-      this.visible = false;
+      this.close();
     },
 
+    /* 关闭弹窗 */
     close() {
       this.dialogVisible = false;
       this.visible = false;
     },
 
-    /**********************************        分页相关      **********************/
+    /*************************** 分页相关  ****************************/
+
+    /* 分页大小改变 */
     handleSizeChange(val){
       if(this.currentTab == 'material') {
         this.materialPageSize = val || this.materialPageSize;
@@ -475,11 +526,10 @@ export default {
       }else if(this.currentTab == 'system') {
         this.systemPageSize = val || this.systemPageSize;
         this.fetchSystemIcon();
-      }else if(this.currentTab === 'local') {
-        //TODO
       }
     },
 
+    /* 当前页改变 */
     handleCurrentChange(pIndex){
       if(this.currentTab == 'material') {
         this.materialCurrentPage = pIndex || this.materialCurrentPage;
@@ -487,9 +537,40 @@ export default {
       }else if(this.currentTab == 'system') {
         this.systemCurrentPage = pIndex || this.systemCurrentPage;
         this.fetchSystemIcon();
-      }else if(this.currentTab === 'local') {
-        //TODO
       }
+    },
+
+    /************************ 素材库分组，级联选择器分相关   **********************/
+
+    /* 级联选择器选中改变，赋值给分组id，用于获取图片列表 */
+    cascaderChange(value) {
+      let val=value.length-1;
+      this.materialGroupId = value[val];
+    },
+
+    /* 级联选择器懒加载回调 */
+    cascaderLazyload(node, resolve) {
+      const { level } = node;
+      const { data } = node;
+      let parentId = data ? data.value : '0';
+      this.materialGroupId = data ? data.value: '0';
+      this.getMaterialGroups(parentId, (response)=>{
+        let nodes = level === 0 ?[{
+          value: '0',
+          label: '全部',
+          leaf: true
+        }] : [];
+        if(response && Array.isArray(response)) {
+          for(let item of response) {
+            nodes.push({
+              value: item.id,
+              label: item.name
+            })
+          }
+        }
+        // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+        resolve(nodes);
+      });
     }
 
   }
@@ -584,10 +665,6 @@ export default {
 .icon_wrapper{
   height:390px;
   overflow-y: auto;
-  &.icon_wrapper_2{
-    max-height:390px;
-    height:auto;
-  }
   ul{
     display: grid;
     grid-template-columns: repeat(8,1fr);
@@ -633,6 +710,7 @@ export default {
   height: 80px;
   display: inline-block;
   vertical-align: middle;
+  margin-bottom:20px;
   // margin-top:20px;
 }
 /deep/ .avatar-uploader .el-upload {

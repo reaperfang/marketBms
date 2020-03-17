@@ -29,12 +29,11 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('m_createAD')">新建广告</el-button>
-        <el-button type="warning" plain @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
     <div class="table" v-calcHeight="300">
       <p>广告（{{total || 0}}个）</p>
-      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"  
           width="30">
@@ -80,6 +79,10 @@
           </template>
         </el-table-column>
       </el-table>
+       <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button type="warning" plain @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+      </div>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -105,7 +108,7 @@ export default {
   components: {},
   data () {
     return {
-      tableList:[],
+      tableData:[],
       openAD: true,
       ruleForm: {
         status: '',
@@ -236,7 +239,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getADList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -264,7 +267,18 @@ export default {
           message: error
         });
       });
-    }
+    },
+
+     // 全选
+    selectAll(val){
+      if(val && this.tableData.length > 0){
+        this.tableData.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
 
   }
 }
