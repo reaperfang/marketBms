@@ -74,7 +74,7 @@ export default {
         },
         {   
             id: "04",
-            url:' /shop/m_templateManageIndex',
+            url:'/shop/m_templateManageIndex',
             img: require("@/assets/images/profile/l_04.png"),
             text: "店铺模板"
         },
