@@ -124,10 +124,7 @@ export default {
                     let obj = {shopId:item,functions:functions}
                     this.form.shops.push(obj)
                 }).catch(error =>{
-                    this.$notify.error({
-                    title: '错误',
-                    message: error
-                    });
+                    this.$message.error(error);
                 }) 
             } 
         })
@@ -171,24 +168,15 @@ export default {
             if(this.form.shops.length){
                 this._apis.set.newRole(this.form).then(response =>{
                     this.loading = false
-                    this.$notify.success({
-                        title: '成功',
-                        message: msg
-                    });
+                    this.$message.success(msg);
                     this.$router.push({path:'roleManage'})
                 }).catch(error =>{
                     this.loading = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }else{
                 this.loading = false
-                this.$notify.warning({
-                    title: '提示',
-                    message: '创建没有店铺权限的角色无效！'
-                });
+                this.$message.warning('创建没有店铺权限的角色无效！')
             }
         }
       })

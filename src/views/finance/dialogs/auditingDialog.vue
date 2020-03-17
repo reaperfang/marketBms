@@ -151,10 +151,7 @@ export default {
       this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
           this.info = response[0]
       }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: error
-          });
+          this.$message.error(error);
       })
     },
   },  

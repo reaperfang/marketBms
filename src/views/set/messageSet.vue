@@ -177,10 +177,7 @@ export default {
           });
           this.getShopMessage()
         }).catch(error =>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error);
           this.getShopMessage()
         })        
       }).catch(() =>{

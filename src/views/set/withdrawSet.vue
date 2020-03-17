@@ -93,10 +93,7 @@ export default {
         this.form.cashOutTimes != null  && (this.cashOutTimesChecked = true)
         this.form.cashOutMoney != null  && (this.cashOutMoneyChecked = true)
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -154,16 +151,10 @@ export default {
                 let data = Object.assign({id:id},this.form)
                 this._apis.set.updateShopInfo(data).then(response =>{
                   this.loading = false
-                  this.$notify.success({
-                    title: '成功',
-                    message: '保存成功！'
-                  });
+                  this.$message.success('保存成功！');
                 }).catch(error =>{
                   this.loading = false
-                  this.$notify.error({
-                    title: '错误',
-                    message: error
-                  });
+                  this.$message.error(error);
                 })
               }
             }

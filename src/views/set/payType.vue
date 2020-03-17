@@ -127,10 +127,7 @@ export default {
         this.wechatBinding = response.wechatBinding
         this.alipayBinding = response.alipayBinding
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //微信支付开关
@@ -217,16 +214,10 @@ export default {
       let id = this.cid
       let query = Object.assign({id:id},data)
       this._apis.set.updateShopInfo(query).then(response =>{
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.getShopInfo()
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 

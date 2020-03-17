@@ -56,10 +56,7 @@ export default {
             this.handleClose()
             this.$router.push({ path: '/profile/profile' })
           }).catch(error => {
-            this.$notify.error({
-              title: '失败',
-              message: error
-            })
+            this.$message.error(error);
           })
       }).catch(error => {
         console.log(error)

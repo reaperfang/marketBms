@@ -146,18 +146,10 @@ export default {
     /* 发起请求 */
     sendRequest(params) {
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: params.tipWord,
-            type: 'success'
-          });
+          this.$message.success(params.tipWord);
           this.setLoading(false);
           this._routeTo('m_pageManageIndex');
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
           this.setLoading(false);
         });
     },

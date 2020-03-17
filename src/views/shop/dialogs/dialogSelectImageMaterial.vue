@@ -268,10 +268,7 @@ export default {
         this.preload(response.list, 'filePath');
         this.materialTotal = response.total;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
         this.materialLoading = false;
       });
     },
@@ -289,10 +286,7 @@ export default {
         this.systemTotal = response.total
         this.preload(this.systemResultList, 'address');
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
         this.localLoading = false;
       });
     },
@@ -305,10 +299,7 @@ export default {
       }).then((response)=>{
         callback && callback(response);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -317,10 +308,7 @@ export default {
       this._apis.goodsOperate.getSystemIconGroup({}).then((response)=>{
         this.systemGroupList = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -404,11 +392,7 @@ export default {
 
     /* 上传超过个数的处理 */
     uploadLimit() {
-      this.$notify({
-        title: '提示',
-        message: '最多支持上传6张！',
-        type: 'warning'
-      });
+      this.$message.warning('最多支持上传6张！');
     },
 
       /* 清除缓存 */
@@ -487,11 +471,7 @@ export default {
     /* 向父组件提交选中的数据 */
     submit() {
       if(!this.materialSelectedItem && !this.systemSelectedItem && !this.localSelectedItem) {
-        this.$notify({
-          title: '提示',
-          message: '请选择图片后重试！',
-          type: 'warning'
-        });
+        this.$message.warning('请选择图片后重试！');
         return;
       };
       let copyItem = {};

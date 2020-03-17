@@ -98,10 +98,7 @@ export default {
                 resolve(nodes)
               }
             }).catch((error)=>{
-              self.$notify.error({
-                title: '错误',
-                message: error
-              });
+              self.$message.error(error);
             })
           }, 500);
         }
@@ -152,10 +149,7 @@ export default {
         this.fileData = res.data
         this.form.imageUrls.push(res.data.url)
       }else{
-        this.$notify.error({
-          title: '错误',
-          message: res.msg
-        });
+        this.$message.error(res.msg);
       }
     },
 

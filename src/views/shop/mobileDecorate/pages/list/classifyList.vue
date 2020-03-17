@@ -90,17 +90,10 @@ export default {
         text: `确定删除 [ ${item.name} ] 吗？`
       }).then(() => {
           this._apis.shop.deleteClassifys({id: item.id}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -117,10 +110,6 @@ export default {
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });

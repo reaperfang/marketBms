@@ -170,10 +170,7 @@ export default {
             this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
               this.$router.push({ path: '/profile/profile' })
             }).catch(error => {
-              this.$notify.error({
-                title: '失败',
-                message: error
-              })
+              this.$message.error(error);
             })
           }else{//多个店铺时，展示店铺列表弹窗
             this.showShopsDialog = true
@@ -192,10 +189,7 @@ export default {
     //     this.loading = false
     //     this.$router.push({ path: '/profile/profile' })
     //   }).catch(error => {
-    //     this.$notify.error({
-    //       title: '失败',
-    //       message: error
-    //     })
+        // this.$message.error(error);
     //     this.loading = false
     //   })
     // },

@@ -98,15 +98,9 @@ export default {
         password:this.form.password
       }
       this._apis.login.updatePass(query).then(response =>{
-        this.$notify.success({
-          title: '成功',
-          message: '更新成功！'
-        });
+        this.$message.success('更新成功！');
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
   }

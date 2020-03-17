@@ -174,17 +174,10 @@ export default {
     /* 启停广告 */
     startStopAD(params) {
       this._apis.shop.stopAndStopAD(params).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '操作成功！',
-          type: 'success'
-        });
+        this.$message.success('操作成功！')
         this.fetch();
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       });
     },
 
@@ -197,17 +190,10 @@ export default {
         text: '确定删除此启动广告吗？'
       }).then(() => {
           this._apis.shop.deleteADs({advertiseIds: [item.id]}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！')
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -225,17 +211,10 @@ export default {
             ids.push(item.id);
           }
           this._apis.shop.deleteADs({advertiseIds: ids}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！')
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -247,10 +226,6 @@ export default {
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -260,16 +235,9 @@ export default {
     switchStatusChange(value) {
       this._apis.shop.changeSwitchStatus({id:this.cid, adOpenType: value === true ? 1 : 0})
       .then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '修改成功！',
-          type: 'success'
-        });
+        this.$message.success('修改成功！')
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       });
     },
 

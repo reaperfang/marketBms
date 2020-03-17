@@ -164,10 +164,7 @@ export default {
         this._apis.finance.exportDr(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
       }
       

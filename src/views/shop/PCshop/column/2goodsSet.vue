@@ -133,18 +133,11 @@ export default {
         if (valid) {
           this.submitLoadinig = true;
           this._apis.shop.modifyWindow(this.ruleForm).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '修改成功！',
-              type: 'success'
-            });
+            this.$message.success('修改成功！')
             this.submitLoadinig = false;
             this._routeTo('p_columnIndex');
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
             this.submitLoadinig = false;
           });
         } else {

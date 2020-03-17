@@ -323,10 +323,6 @@ export default {
         }
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -349,7 +345,7 @@ export default {
             this.submitLoading = false;
             this.openSetting = false;
           }).catch((error)=>{
-            this.$notify.error({ title: '错误', message: error });
+            this.$message.error(error);
             this.submitLoading = false;
             this.openSetting = false;
           });
@@ -376,7 +372,7 @@ export default {
             this.submitLoading = false;
             this.openSetting = false;
           }).catch((error)=>{
-            this.$notify.error({ title: '错误', message: error });
+            this.$message.error(error);
             this.submitLoading = false;
             this.openSetting = false;
           });
@@ -396,10 +392,6 @@ export default {
       }).then((response)=>{
        this.download(response, '分享');
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.downloadPosterLoading = false;
       });

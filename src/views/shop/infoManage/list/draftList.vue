@@ -163,17 +163,10 @@ export default {
         text: `确定删除 [ ${item.title} ] 吗？`
       }).then(() => {
           this._apis.shop.deleteInfos({ids: [item.id], status: 1}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -187,17 +180,10 @@ export default {
         text: `确定发布 [ ${item.title} ] 吗？`
       }).then(() => {
            this._apis.shop.modifyInfoType({id: item.id, type: 1}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '发布成功！',
-              type: 'success'
-            });
+            this.$message.success('发布成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -215,17 +201,10 @@ export default {
             ids.push(item.id);
           }
           this._apis.shop.deleteInfos({ids, status: 1}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -245,10 +224,6 @@ export default {
           }
         }
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });

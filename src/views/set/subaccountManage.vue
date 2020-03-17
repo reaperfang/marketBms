@@ -179,16 +179,10 @@ export default {
         text: '此操作将永久删除该子账号, 是否继续?'
       }).then(() => {
           this._apis.set.deleteAccount({userIds:ids}).then(response =>{
-            this.$notify.success({
-              title: '成功',
-              message: '删除成功！'
-            });
+            this.$message.success('删除成功！');
             this.getSubAccount()
           }).catch(error =>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           })   
         }).catch(() => {
           this.$message({

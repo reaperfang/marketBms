@@ -237,10 +237,7 @@ export default {
       this._apis.finance.getSurveyDayRs({}).then((response)=>{
         this.surveyDay = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
     //时间段趋势
@@ -261,10 +258,7 @@ export default {
           this.init(this.days)
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
     //最近天数趋势
@@ -282,10 +276,7 @@ export default {
           return
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
   }
