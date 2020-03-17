@@ -19,6 +19,8 @@
 
           <el-upload
             :action="uploadUrl"
+            :data="{json: JSON.stringify({cid: cid})}"
+            :limit="6"
             list-type="picture-card"
             :before-upload="beforeAvatarUpload"
             :on-success="handleAvatarSuccess"
@@ -28,7 +30,7 @@
             <i class="el-icon-plus"></i>
           </el-upload>
          
-          <p class="note">仅支持jpg,jpeg,png格式，大小不超过3.0MB</p>
+          <p class="note">一次最多上传6张图片，仅支持jpg,jpeg,png格式，大小不超过3.0MB</p>
         </el-form-item>
         <el-form-item label="分组名称：">
           <el-cascader
@@ -165,8 +167,7 @@ export default {
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
-      console.log('leng111111111',this.form.imageUrls.length)
-      const isLt6 = this.form.imageUrls.length <= 6
+      const isLt6 = this.form.imageUrls.length < 6
 
       if (!(isJPG || isJPEG || isPNG)) {
         this.$message.error('上传图片支持jpg,jpeg,png格式!');
