@@ -150,6 +150,7 @@ export default {
 }
 .page_name{
   cursor: pointer;
+  text-decoration:underline;
   &:hover{
     color: $globalMainColor;
   }
