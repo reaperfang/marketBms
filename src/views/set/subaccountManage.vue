@@ -172,11 +172,12 @@ export default {
     deleteAccount(id){
       let ids = []
       id ? ids.push(id) : ids = this.multipleSelection
-      this.$confirm('此操作将永久删除该子账号, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '此操作将永久删除该子账号, 是否继续?'
+      }).then(() => {
           this._apis.set.deleteAccount({userIds:ids}).then(response =>{
             this.$notify.success({
               title: '成功',

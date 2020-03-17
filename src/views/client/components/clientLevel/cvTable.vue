@@ -96,11 +96,12 @@ export default {
       })
     },
     handleClose(row) {
-      this.$confirm('确认禁用该等级？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+       this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确认禁用该等级？'
+      }).then(() => {
           this._apis.client.levelDisable({level: row.level, id: row.id, status: 0}).then((response) => {
             if(response == 1) {
               this.getLevelsList();

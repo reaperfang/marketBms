@@ -160,11 +160,12 @@ export default {
     deleteRole(roleName){
       let roleNames = []
       roleName ? roleNames.push(roleName) : roleNames = this.multipleSelection
-      this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '此操作将永久删除该角色, 是否继续?'
+      }).then(() => {
           this._apis.set.deleteRole({roleNames:roleNames}).then(response =>{
             this.$notify.success({
               title: '成功',
