@@ -205,10 +205,11 @@ export default {
     },
 
     tabClick(event, item) {
-      this.$confirm(`是否要离开当前页面，离开将不会保存。`, '提示', {
-        confirmButtonText: '离开',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '是否要离开当前页面？离开将不会保存。'
       }).then(() => {
         const tempItems = [...this.pageList];
         for(let i=0;i<tempItems.length;i++) {

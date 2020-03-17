@@ -83,11 +83,12 @@ export default {
     /* 删除分类 */
     deleteClassify(item) {
       this.currentItem = item;
-      this.$confirm(`确定删除 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除 [ ${item.name} ] 吗？`
+      }).then(() => {
           this._apis.shop.deleteClassifys({id: item.id}).then((response)=>{
             this.$notify({
               title: '成功',

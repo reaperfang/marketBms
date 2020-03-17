@@ -156,11 +156,12 @@ export default {
 
     /* 删除 */
     deleteInfo(item) {
-       this.$confirm(`确定删除 [ ${item.title} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除 [ ${item.title} ] 吗？`
+      }).then(() => {
           this._apis.shop.deleteInfos({ids: [item.id], status: 1}).then((response)=>{
             this.$notify({
               title: '成功',
@@ -179,11 +180,12 @@ export default {
     
     /* 发布 */
     release(item) {
-       this.$confirm(`确定发布 [ ${item.title} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定发布 [ ${item.title} ] 吗？`
+      }).then(() => {
            this._apis.shop.modifyInfoType({id: item.id, type: 1}).then((response)=>{
             this.$notify({
               title: '成功',
@@ -202,11 +204,12 @@ export default {
 
     /* 批量删除 */
     batchDeleteInfo(item) {
-       this.$confirm(`确定删除吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除吗？`
+      }).then(() => {
           const ids = [];
           for(let item of this.multipleSelection) {
             ids.push(item.id);

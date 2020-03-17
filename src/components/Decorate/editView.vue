@@ -151,10 +151,12 @@ export default {
 
     //删除组件
     deleteComponent(id) {
-      this.$confirm(`确定删除此组件吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定删除此组件吗？'
       }).then(() => {
         this.$store.commit('deleteComponent', id)
       })
