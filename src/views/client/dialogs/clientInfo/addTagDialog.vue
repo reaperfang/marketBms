@@ -57,6 +57,7 @@ export default {
                     });
                     this.$emit('refreshPage');
                 }).catch((error) => {
+                    console.log(error);
                     this.btnLoading = false;
                     this.visible = false;
                 }) 

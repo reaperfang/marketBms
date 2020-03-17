@@ -362,6 +362,7 @@ export default {
                     });
                     this.$emit('freshTable');
                 }).catch((error) => {
+                    console.log(error);
                     this.btnLoading = false;
                     this.visible = false;
                 })
