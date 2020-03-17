@@ -43,9 +43,7 @@ export default {
      /* 删除数据项 */
     deleteItem(item) {
       if(item.fakeData) {  //如果是假数据
-        this.$alert('示例数据不支持删除操作，请在右侧替换真实数据后重试!', '警告', {
-          confirmButtonText: '确定'
-        })
+        this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
         return;
       }
       const tempItems = [...this.list];

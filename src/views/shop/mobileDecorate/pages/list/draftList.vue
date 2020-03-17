@@ -119,11 +119,12 @@ export default {
     /* 复制页面 */
     copyPage(item) {
       this.currentItem = item;
-      this.$confirm(`确定复制 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定复制 [ ${item.name} ] 吗？`
+      }).then(() => {
           this._apis.shop.copyPage({id: item.id}).then((response)=>{
             this.$notify({
               title: '成功',
@@ -143,11 +144,12 @@ export default {
     /* 删除页面 */
     deletePage(item) {
       this.currentItem = item;
-       this.$confirm(`确定删除 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除 [ ${item.name} ] 吗？`
+      }).then(() => {
           this._apis.shop.deletePages({ids: [item.id]}).then((response)=>{
             this.$notify({
               title: '成功',
@@ -167,11 +169,12 @@ export default {
     /* 上架页面 */
     apply(item) {
       this.currentItem = item;
-       this.$confirm(`确定上架 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定上架 [ ${item.name} ] 吗？`
+      }).then(() => {
           const resultData = {
             colorStyle: item.colorStyle,
             explain: item.explain,
@@ -202,11 +205,12 @@ export default {
 
      /* 批量删除页面 */
     batchDeletePage(item) {
-       this.$confirm(`确定删除吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除吗？`
+      }).then(() => {
           const ids = [];
           for(let item of this.multipleSelection) {
             ids.push(item.id);
@@ -230,11 +234,12 @@ export default {
     /* 设为首页 */
     setIndex(item) {
       this.currentItem = item;
-       this.$confirm(`确定将 [ ${item.name} ] 设为首页吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定将 [ ${item.name} ] 设为首页吗？`
+      }).then(() => {
           this._apis.shop.setIndex({id: item.id}).then((response)=>{
             this.$notify({
               title: '成功',

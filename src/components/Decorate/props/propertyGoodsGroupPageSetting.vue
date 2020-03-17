@@ -157,10 +157,6 @@ export default {
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
       });
     }

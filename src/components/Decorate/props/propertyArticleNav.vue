@@ -73,7 +73,7 @@
           <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
         </li>
       </ul>
-      <el-button type="info" plain style="width:100%" @click="addNav">添加一个图文</el-button>
+      <el-button type="info" plain style="width:100%" @click="addNav">添加一个图文导航</el-button>
       <p style="margin-top:10px;color:rgb(211,211,211)">{{suggestSize}}</p>
       <!-- <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航，拖动选中的导航可对其排序小程序 v2.3.1 及以上版本支持</p> -->
     </div>
@@ -180,16 +180,14 @@ export default {
 
     deleteItem(item) {
       if(this.ruleForm.itemList.length < 2) {
-        this.$notify.warning({
-            title: '警告',
-            message: '最后一个不允许删除'
-        });
+        this.$message.warning('最后一个不允许删除')
         return;           
       }
-      this.$confirm(`确定删除此图片广告吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定删除此图文导航吗？'
       }).then(() => {
         const tempItems = [...this.ruleForm.itemList];
         for(let i=0;i<tempItems.length;i++) {
