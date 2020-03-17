@@ -85,9 +85,8 @@ export default {
       this._apis.client.levelEnable({id: row.id, status: 1}).then((response) => {
         if(response == 1) {
           this.getLevelsList();
-          this.$notify({
-            title: '成功',
-            message: "启动成功",
+          this.$message({
+            message: '启动成功',
             type: 'success'
           });
         }
@@ -105,9 +104,8 @@ export default {
           this._apis.client.levelDisable({level: row.level, id: row.id, status: 0}).then((response) => {
             if(response == 1) {
               this.getLevelsList();
-              this.$notify({
-                title: '成功',
-                message: "禁用成功",
+              this.$message({
+                message: '禁用成功',
                 type: 'success'
               });
             }
@@ -146,9 +144,8 @@ export default {
     handleSwitch(row) {
       let status = row.status ? "1":"0";
       this._apis.client.enableLevel({id:row.id, status: status}).then((response) => {
-        this.$notify({
-          title: '成功',
-          message: "切换成功",
+        this.$message({
+          message: '切换成功',
           type: 'success'
         });
       }).catch((error) => {
@@ -163,8 +160,7 @@ export default {
     batchDisable() {
       let rows = this.$refs.levelTable.selection;
       if(rows.length == 0) {
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请选择要禁用的等级',
           type: 'warning'
         });
@@ -172,9 +168,8 @@ export default {
         let arr = [];
         rows.map((v) => {arr.push(v.id);});
         this._apis.client.batchEnableLevel({levelIds: arr, status: '0'}).then((response) => {
-          this.$notify({
-            title: '成功',
-            message: "批量禁用成功",
+          this.$message({
+            message: '批量禁用成功',
             type: 'success'
           });
           this.getLevelsList();

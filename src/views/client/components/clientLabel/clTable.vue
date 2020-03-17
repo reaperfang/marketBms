@@ -89,9 +89,8 @@ export default {
     deleteRow(row) {
       if(row.labelContains == 0) {
         this._apis.client.batchDeleteTag({ labelIds: row.id }).then((response) => {
-          this.$notify({
-            title: '成功',
-            message: "删除标签成功",
+          this.$message({
+            message: '删除标签成功',
             type: 'success'
           });
           this.getLabelList(this.startIndex, this.pageSize);
@@ -99,8 +98,7 @@ export default {
           console.log(error);
         })
       }else{
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '有包含人数的标签不能删除',
           type: 'warning'
         });
@@ -148,15 +146,13 @@ export default {
         }
       })
       if(!this.canDelete) {
-        this.$notify({
-            title: '警告',
-            message: '有包含人数的标签不能删除',
-            type: 'warning'
-          });
+        this.$message({
+          message: '有包含人数的标签不能删除',
+          type: 'warning'
+        });
       }
       if(rows.length == 0) {
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请选择要删除的标签',
           type: 'warning'
         });
@@ -167,9 +163,8 @@ export default {
         });
         if(arr.length > 0) {
           this._apis.client.batchDeleteTag({ labelIds: arr }).then((response) => {
-            this.$notify({
-              title: '成功',
-              message: "批量删除标签成功",
+            this.$message({
+              message: '批量删除标签成功',
               type: 'success'
             });
             this.getLabelList(this.startIndex, this.pageSize);

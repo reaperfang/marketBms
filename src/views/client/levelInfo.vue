@@ -269,17 +269,15 @@ export default {
       val = val.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
       val = val.replace(/^0/g,'');
       if(val >= 10) {
-        this.$notify({
-          title: "警告",
-          message: "只能输入10以内数字",
-          type: "warning"
+        this.$message({
+          message: '只能输入10以内数字',
+          type: 'warning'
         });
         val = "";
       }else if(val <= 0) {
-        this.$notify({
-          title: "警告",
-          message: "不能输入小于0数字",
-          type: "warning"
+        this.$message({
+          message: '不能输入小于0数字',
+          type: 'warning'
         });
         val = "";
       }
@@ -331,10 +329,9 @@ export default {
         this.currentDialog = "levelInfoDialog";
         this.dialogVisible = true;
       }else{
-        this.$notify({
-          title: "警告",
-          message: "请选择完善信息",
-          type: "warning"
+        this.$message({
+          message: '请选择完善信息',
+          type: 'warning'
         });
       }
     },
@@ -640,10 +637,9 @@ export default {
     },
     save() {
       if (this.ruleForm.name == "") {
-        this.$notify({
-          title: "警告",
-          message: "等级称谓不能为空",
-          type: "warning"
+        this.$message({
+          message: '等级称谓不能为空',
+          type: 'warning'
         });
       } else {
         this.canSubmit1 = true;
@@ -658,16 +654,14 @@ export default {
         let formObj = {};
         let levelConditionList = [];
         if (!this.right1 && !this.right2) {
-          this.$notify({
-            title: "警告",
-            message: "请选择一项等级权益",
-            type: "warning"
+          this.$message({
+            message: '请选择一项等级权益',
+            type: 'warning'
           });
         }else if(this.$route.query.level !== 1 && this.condition2 == "") {
-          this.$notify({
-            title: "警告",
-            message: "请选择升级条件",
-            type: "warning"
+          this.$message({
+            message: '请选择升级条件',
+            type: 'warning'
           });
         } else {
           if (this.condition1) {
@@ -689,8 +683,7 @@ export default {
                   "消费金额满"
                 );
                 if(this.xfjem == "") {
-                  this.$notify({
-                    title: '警告',
+                  this.$message({
                     message: '请输入消费金额',
                     type: 'warning'
                   });
@@ -707,8 +700,7 @@ export default {
                   "消费次数满"
                 );
                 if(this.xfcsm == "") {
-                  this.$notify({
-                    title: '警告',
+                  this.$message({
                     message: '请输入消费次数',
                     type: 'warning'
                   });
@@ -725,8 +717,7 @@ export default {
                   "积分获得满"
                 );
                 if(this.jfhdm == "") {
-                  this.$notify({
-                    title: '警告',
+                  this.$message({
                     message: '请输入积分获得',
                     type: 'warning'
                   });
@@ -763,10 +754,9 @@ export default {
           let rightsList = [];
           if (this.right1) {
             if (this.mby == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入满包邮数",
-                type: "warning"
+              this.$message({
+                message: '请输入满包邮数',
+                type: 'warning'
               });
               this.canSubmit4 = false;
             } else {
@@ -780,10 +770,9 @@ export default {
           }
           if (this.right2) {
             if (this.hyzk == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入会员折扣数",
-                type: "warning"
+              this.$message({
+                message: '请输入会员折扣数',
+                type: 'warning'
               });
               this.canSubmit5 = false;
             } else {
@@ -813,10 +802,9 @@ export default {
           let upgradePackage = "";
           if (this.upgrade1) {
             if (this.zsjf == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入赠送积分数",
-                type: "warning"
+              this.$message({
+                message: '请输入赠送积分数',
+                type: 'warning'
               });
               this.canSubmit6 = false;
             } else {
@@ -835,10 +823,9 @@ export default {
           }
           if (this.upgrade2) {
             if (this.zshb == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入赠送红包金额",
-                type: "warning"
+              this.$message({
+                message: '请输入赠送红包金额',
+                type: 'warning'
               });
               this.canSubmit7 = false;
             } else {
@@ -858,10 +845,9 @@ export default {
           if (this.upgrade3) {
             let zpNum = 0;
             if (this.selectedGifts.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择赠品",
-                type: "warning"
+              this.$message({
+                message: '请选择赠品',
+                type: 'warning'
               });
               this.canSubmit8 = false;
             } else {
@@ -885,10 +871,9 @@ export default {
           if (this.upgrade4) {
             var yhzNum = 0;
             if (this.selectedCoupons.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择优惠券",
-                type: "warning"
+              this.$message({
+                message: '请选择优惠券',
+                type: 'warning'
               });
               this.canSubmit9 = false;
             } else {
@@ -923,10 +908,9 @@ export default {
             }
             this._apis.client.checkLevelValue(params).then((response) => {
                 if(response == "no") {
-                  this.$notify({
-                    title: "警告",
-                    message: "高等级条件数值要大于低等级的条件数值",
-                    type: "warning"
+                  this.$message({
+                    message: '高等级条件数值要大于低等级的条件数值',
+                    type: 'warning'
                   });
                 }else{
                   if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8 && this.canSubmit9) {
@@ -944,10 +928,9 @@ export default {
                     this._apis.client
                       .editLevel(formObj)
                       .then(response => {
-                        this.$notify({
-                          title: "成功",
-                          message: "等级编辑成功",
-                          type: "success"
+                        this.$message({
+                          message: '等级编辑成功',
+                          type: 'success'
                         });
                         this._routeTo("clientLevel");
                       })
@@ -968,10 +951,9 @@ export default {
             }
             this._apis.client.checkLevelValue(params).then((response) => {
                 if(response == "no") {
-                  this.$notify({
-                    title: "警告",
-                    message: "高会员卡等级条件数值要大于低会员卡等级的条件数值",
-                    type: "warning"
+                  this.$message({
+                    message: '高会员卡等级条件数值要大于低会员卡等级的条件数值',
+                    type: 'warning'
                   });
                 }else{
                   if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8 && this.canSubmit9) {
@@ -989,10 +971,9 @@ export default {
                     this._apis.client
                       .editLevel(formObj)
                       .then(response => {
-                        this.$notify({
-                          title: "成功",
-                          message: "等级编辑成功",
-                          type: "success"
+                        this.$message({
+                          message: '等级编辑成功',
+                          type: 'success'
                         });
                         this._routeTo("clientLevel");
                       })
@@ -1020,10 +1001,9 @@ export default {
               this._apis.client
                 .editLevel(formObj)
                 .then(response => {
-                  this.$notify({
-                    title: "成功",
-                    message: "等级编辑成功",
-                    type: "success"
+                  this.$message({
+                    message: '等级编辑成功',
+                    type: 'success'
                   });
                   this._routeTo("clientLevel");
                 })
