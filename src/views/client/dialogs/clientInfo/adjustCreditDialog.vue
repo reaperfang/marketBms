@@ -65,27 +65,24 @@ export default {
       this.btnLoading = true;
       if (this.adjustmentScore == null) {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "请输入调整数值",
-          type: "warning"
+        this.$message({
+          message: '请输入调整数值',
+          type: 'warning'
         });
       } else if (
         Number(this.data.score) == 0 &&
         Number(this.adjustmentScore) < 0
       ) {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "当前积分为0时不能输入负数",
-          type: "warning"
+        this.$message({
+          message: '当前积分为0时不能输入负数',
+          type: 'warning'
         });
       } else if (this.remark == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "请输入变更原因",
-          type: "warning"
+        this.$message({
+          message: '请输入变更原因',
+          type: 'warning'
         });
       } else {
         let params = {
@@ -100,10 +97,9 @@ export default {
           .then(response => {
             this.btnLoading = false;
             this.visible = false;
-            this.$notify({
-              title: "成功",
-              message: "调整积分成功",
-              type: "success"
+            this.$message({
+              message: '调整积分成功',
+              type: 'success'
             });
             this.$emit("refreshPage");
           })
@@ -116,10 +112,9 @@ export default {
     },
     handleBlur() {
       if (Number(this.data.score) == 0 && Number(this.adjustmentScore) < 0) {
-        this.$notify({
-          title: "警告",
-          message: "当前积分为0时不能输入负数",
-          type: "warning"
+        this.$message({
+          message: '当前积分为0时不能输入负数',
+          type: 'warning'
         });
       }
     }

@@ -48,20 +48,17 @@ export default {
                 this._apis.client.addImportLabel({importRecordId: this.data.id, memberLabelInfoIds}).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '添加标签成功',
                         type: 'success'
                     });
                 }).catch((error) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择标签',
                     type: 'warning'
                 });

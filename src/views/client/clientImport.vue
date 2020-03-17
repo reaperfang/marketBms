@@ -166,14 +166,12 @@ export default {
         },
         importMemberFile() {
             if(this.ruleForm.channelId == "") {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择渠道',
                     type: 'warning'
                 });
             }else if(!this.importUrl){
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请上传文件',
                     type: 'warning'
                 });
@@ -191,16 +189,12 @@ export default {
                 }
                 this._apis.client.importMemberFile(params).then((response) => {
                     this.handleCheck();
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '导入成功',
                         type: 'success'
                     });
                 }).catch((error) => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }
         },

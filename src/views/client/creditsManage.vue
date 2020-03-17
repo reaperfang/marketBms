@@ -147,9 +147,8 @@ export default {
         save() {
             let formObj = this.ruleForm;
             if(formObj.scoreToCash == '1' && formObj.scorePercentage == "" && formObj.scorePercentage == "") {
-                this.$notify({
-                    title: '警告',
-                    message: '开启积分抵现则抵现比例为必填',
+                this.$message({
+                    message: "开启积分抵现则抵现比例为必填",
                     type: 'warning'
                 });
             }else{
@@ -159,9 +158,8 @@ export default {
                 formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
                 formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
                 this._apis.client.saveCreditRule(formObj).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: '保存积分规则成功',
+                    this.$message({
+                        message: "保存积分规则成功",
                         type: 'success'
                     });
                     this.checkCreditRule();
@@ -172,16 +170,14 @@ export default {
         },
         save2() {
             if(this.ruleForm.scoreUpperCount=='') {
-                this.$notify({
-                    title: '警告',
-                    message: '每日最高获得积分数不能为空',
+                this.$message({
+                    message: "每日最高获得积分数不能为空",
                     type: 'warning'
                 });
             }else{
-                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: '每日最高获得积分数保存成功',
+                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {                 
+                    this.$message({
+                        message: "每日最高获得积分数保存成功",
                         type: 'success'
                     });
                 }).catch((error) => {
@@ -193,9 +189,8 @@ export default {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
                 this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: '关闭成功',
+                    this.$message({
+                        message: "关闭成功",
                         type: 'success'
                     });
                 }).catch((error) => {

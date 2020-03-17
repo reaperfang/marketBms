@@ -185,18 +185,16 @@ export default {
                 this.currentData.memberType = this.clientInfoById.memberType;
                 this.currentData.level = this.clientInfoById.level;
             }else{
-                this.$notify({
-                    title: '提示',
-                    message: "已是最高等级无法变更",
+                this.$message({
+                    message: '已是最高等级无法变更',
                     type: 'warning'
                 });
             }
         },
         deleteTag(id) {
             this._apis.client.removeLabel({id:id}).then((response) => {
-                this.$notify({
-                    title: '成功',
-                    message: "移除标签成功",
+                this.$message({
+                    message: '移除标签成功',
                     type: 'success'
                 });
                 this.getMemberInfo();

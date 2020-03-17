@@ -47,20 +47,17 @@ export default {
                 this._apis.client.modifyImportIdentity(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "批量变更身份成功",
+                    this.$message({
+                        message: '批量变更身份成功',
                         type: 'success'
                     });
                 }).catch((error) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择用户等级',
                     type: 'warning'
                 });

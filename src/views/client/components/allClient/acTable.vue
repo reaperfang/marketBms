@@ -163,8 +163,7 @@ export default {
           console.log(error);
         })
       }else{
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请选择要导出的数据',
           type: 'warning'
         });
@@ -188,10 +187,7 @@ export default {
         this.currentDialog = "batchDeleteUserDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择客户');
       }
     },
     batchAddTag() {
@@ -200,10 +196,7 @@ export default {
         this.currentDialog = "batchAddTagDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择客户');
       }
     },
     addTag(id) {
@@ -235,10 +228,7 @@ export default {
         this.currentDialog = "batchAddBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择客户');
       }
     },
     batchRemoveBlack() {
@@ -247,10 +237,7 @@ export default {
         this.currentDialog = "batchRemoveBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择客户');
       }
     },
     handleChange(val) {

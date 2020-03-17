@@ -51,20 +51,17 @@ export default {
                 this._apis.client.markLabel(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '打标签成功',
                         type: 'success'
                     });
                 }).catch((error) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
                 }) 
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择要添加的标签',
                     type: 'warning'
                 });
