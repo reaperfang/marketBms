@@ -15,7 +15,7 @@
     </div>
     <div class="table" v-calcHeight="300">
       <p>微页面分类（共{{total || 0}}个）</p>
-      <el-table :data="tableList" stripe v-loading="loading">
+      <el-table :data="tableData" stripe v-loading="loading">
         <el-table-column prop="name" label="分类名称">
            <template slot-scope="scope">
             <span class="page_name" @click="_routeTo('m_decorateClassifyPreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
@@ -67,7 +67,7 @@ export default {
   components: {},
   data () {
     return {
-      tableList:[],
+      tableData:[],
       currentItem: {},
       ruleForm: {
         status: '1',
@@ -83,11 +83,12 @@ export default {
     /* 删除分类 */
     deleteClassify(item) {
       this.currentItem = item;
-      this.$confirm(`确定删除 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除 [ ${item.name} ] 吗？`
+      }).then(() => {
           this._apis.shop.deleteClassifys({id: item.id}).then((response)=>{
             this.$notify({
               title: '成功',
@@ -112,7 +113,7 @@ export default {
     fetch() {
        this.loading = true;
        this._apis.shop.getClassifyList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{

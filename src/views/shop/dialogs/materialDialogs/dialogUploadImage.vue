@@ -2,19 +2,35 @@
   <DialogBase :visible.sync="visible" width="600px" title="上传图片" :showFooter="false">
     <el-form :model="form" class="demo-form-inline" label-width="90px">
         <el-form-item label="本地上传">
-          <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
-          <el-upload
+          <!-- <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar"> -->
+          <!-- <el-upload
             class="avatar-uploader"
             v-loading="loading"
             :action="uploadUrl"
-            :show-file-list="false"
+            list-type="picture-card"
+            :show-file-list="true"
             :data="{json: JSON.stringify({cid: cid})}"
             :on-success="handleAvatarSuccess"
             @on-error="loading = false"
+            :on-remove="handleRemove"
             :before-upload="beforeAvatarUpload">
             <i class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload> -->
+
+          <el-upload
+            :action="uploadUrl"
+            :data="{json: JSON.stringify({cid: cid})}"
+            :limit="6"
+            list-type="picture-card"
+            :before-upload="beforeAvatarUpload"
+            :on-success="handleAvatarSuccess"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            v-model="form.imageUrls">
+            <i class="el-icon-plus"></i>
           </el-upload>
-          <p class="note">仅支持jpg,jpeg,png格式，大小不超过3.0MB</p>
+         
+          <p class="note">一次最多上传6张图片，仅支持jpg,jpeg,png格式，大小不超过3.0MB</p>
         </el-form-item>
         <el-form-item label="分组名称：">
           <el-cascader
@@ -52,7 +68,7 @@ export default {
         imageUrl:'',
         name:'',
         groupValue:["-1"],
-        imageUrls:''
+        imageUrls:[]
       },
       fileData:{},
       videoData:{},
@@ -122,7 +138,7 @@ export default {
               fileName:this.fileData.original,
               filePath:this.fileData.url,
               imgPixelWidth:this.fileData.width,
-              imgPixelHeight:this.fileData.height,
+              imgPixelHeight:this.fileData.height,  
               fileSize:this.fileData.size,
               sign:this.fileData.sign
             }
@@ -133,9 +149,16 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      this.loading = false
-      this.fileData = res.data
-      this.form.imageUrl = res.data.url
+      if(res.status == 'success'){
+        this.loading = false
+        this.fileData = res.data
+        this.form.imageUrls.push(res.data.url)
+      }else{
+        this.$notify.error({
+          title: '错误',
+          message: res.msg
+        });
+      }
     },
 
     beforeAvatarUpload(file) {
@@ -144,13 +167,33 @@ export default {
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
+      const isLt6 = this.form.imageUrls.length < 6
+
       if (!(isJPG || isJPEG || isPNG)) {
         this.$message.error('上传图片支持jpg,jpeg,png格式!');
       }
       if (!isLt2M) {
         this.$message.error('上传图片大小不能超过 3MB!');
       }
-      return isJPG || isJPEG || isPNG && isLt2M;
+      if (!isLt6) {
+        this.$message.error('上传图片不能超过6张！');
+      }
+      
+      return isJPG || isJPEG || isPNG && isLt2M && isLt6;
+    },    
+
+    handlePictureCardPreview(file){
+      console.log('22222222220',file)
+    },
+
+    handleRemove(file, fileList) {
+      this.form.imageUrls.map((item,index) =>{
+        if(item.url == file.url){
+          this.form.imageUrls.splice(index,1)
+        }
+      })
+      console.log('remove11111111',file)
+      console.log('remove22222222', fileList);
     },
   }
 }
@@ -160,6 +203,9 @@ export default {
 .note{
   font-size: 14px;
   color: #D3D8DF;
+}
+/deep/ .el-upload{
+  display: inline-block;
 }
 /deep/ .avatar-uploader{
   width: 80px;

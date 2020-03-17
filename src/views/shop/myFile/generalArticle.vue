@@ -14,13 +14,12 @@
           <img :src="ruleForm.fileCover" class="coverImage" v-if="ruleForm.fileCover">
           <p class="uploadImage">
             <el-upload
+              v-if="uploadAble"
               class="upload-demo"
               v-loading="loading"
               :action="uploadUrl"
               :data="{json: JSON.stringify({cid: cid})}"
               :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
               multiple
               :limit="1"
               :on-exceed="handleExceed"
@@ -76,7 +75,8 @@ export default {
         // 初始容器宽度
         initialFrameWidth: 700
       },
-      isSave:false
+      isSave:false,
+      uploadAble: true
     }
   },
   created() {
@@ -165,6 +165,10 @@ export default {
     },
     //图片上传成功
     handleAvatarSuccess(res, file) {
+      this.uploadAble = false;
+      this.$nextTick(()=>{
+        this.uploadAble = true;
+      })
       this.loading = false
       this.fileData = res.data
       this.ruleForm.fileCover = res.data.url
@@ -186,10 +190,7 @@ export default {
       console.log(file);
     },
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${ file.name }？`);
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
     }
   }
 }

@@ -29,12 +29,11 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('m_createAD')">新建广告</el-button>
-        <el-button type="warning" plain @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
     <div class="table" v-calcHeight="300">
       <p>广告（{{total || 0}}个）</p>
-      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"  
           width="30">
@@ -80,6 +79,10 @@
           </template>
         </el-table-column>
       </el-table>
+       <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button type="warning" plain @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+      </div>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -105,7 +108,7 @@ export default {
   components: {},
   data () {
     return {
-      tableList:[],
+      tableData:[],
       openAD: true,
       ruleForm: {
         status: '',
@@ -140,30 +143,32 @@ export default {
 
     /* 启用广告 */
     startAD(item) {
-      this.$confirm('确定启用此广告吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.startStopAD({
-            id: item.id,
-            status: '1'
-          });
-        })
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定启用此广告吗？'
+      }).then(() => {
+        this.startStopAD({
+          id: item.id,
+          status: '1'
+        });
+      })
     },
 
     /* 停用广告 */
     stopAD(item) {
-      this.$confirm('确定停用此广告吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.startStopAD({
-            id: item.id,
-            status: '3'
-          });
-        })
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定停用此广告吗？'
+      }).then(() => {
+        this.startStopAD({
+          id: item.id,
+          status: '3'
+        });
+      })
     },
 
     /* 启停广告 */
@@ -185,11 +190,12 @@ export default {
 
     /* 删除广告 */
     deleteAD(item) {
-       this.$confirm('确定删除此启动广告吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定删除此启动广告吗？'
+      }).then(() => {
           this._apis.shop.deleteADs({advertiseIds: [item.id]}).then((response)=>{
             this.$notify({
               title: '成功',
@@ -208,11 +214,12 @@ export default {
 
      /* 批量删除广告 */
     batchDeleteAD(item) {
-       this.$confirm(`确定删除吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定删除吗？'
+      }).then(() => {
           const ids = [];
           for(let item of this.multipleSelection) {
             ids.push(item.id);
@@ -236,7 +243,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getADList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -264,7 +271,18 @@ export default {
           message: error
         });
       });
-    }
+    },
+
+     // 全选
+    selectAll(val){
+      if(val && this.tableData.length > 0){
+        this.tableData.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
 
   }
 }
