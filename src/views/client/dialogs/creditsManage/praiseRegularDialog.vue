@@ -144,8 +144,7 @@ export default {
       val = val.replace(/^0/g,'');
       if(Number(val) <= Number(this.fullWord1)) {
         val = "";
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '条件2文字个数需大于条件1的',
           type: 'warning'
         });
@@ -210,10 +209,9 @@ export default {
       this._apis.client
         .editCreditRegular(params)
         .then(response => {
-          this.$notify({
-            title: "成功",
-            message: "保存成功",
-            type: "success"
+          this.$message({
+            message: '保存成功',
+            type: 'success'
           });
           this.$emit('refreshPage');
         })

@@ -126,17 +126,10 @@ export default {
         text: `确定复制 [ ${item.name} ] 吗？`
       }).then(() => {
           this._apis.shop.copyPage({id: item.id}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '复制成功！',
-              type: 'success'
-            });
+            this.$message.success('复制成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -151,17 +144,10 @@ export default {
         text: `确定删除 [ ${item.name} ] 吗？`
       }).then(() => {
           this._apis.shop.deletePages({ids: [item.id]}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -188,17 +174,10 @@ export default {
           }
             
           this._apis.shop.editPageInfo(resultData).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '上架成功！',
-              type: 'success'
-            });
+            this.$message.success('上架成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -216,17 +195,10 @@ export default {
             ids.push(item.id);
           }
           this._apis.shop.deletePages({ids}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -241,17 +213,10 @@ export default {
         text: `确定将 [ ${item.name} ] 设为首页吗？`
       }).then(() => {
           this._apis.shop.setIndex({id: item.id}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '设置成功！',
-              type: 'success'
-            });
+            this.$message.success('设置成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -263,10 +228,6 @@ export default {
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -278,10 +239,6 @@ export default {
       this._apis.shop.selectAllClassify({}).then((response)=>{
         this.classifyList = response;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
       });
     },
@@ -297,17 +254,10 @@ export default {
         ids,
         pageCategoryInfoId: this.seletedClassify
       }).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '修改成功！',
-          type: 'success'
-        });
+        this.$message.success('修改成功！');
         this.fetch();
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       });
     },
 
@@ -346,6 +296,7 @@ export default {
 }
 .page_name{
   cursor: pointer;
+  text-decoration:underline;
   &:hover{
     color: $globalMainColor;
   }

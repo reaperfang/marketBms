@@ -123,10 +123,7 @@ export default {
                 resolve(nodes)
               }
             }).catch((error)=>{
-              self.$notify.error({
-                title: '错误',
-                message: error
-              });
+              self.$message.error(error);
             })
           }, 500);
         }
@@ -168,10 +165,7 @@ export default {
             this.$emit('submit',{uploadVideo:{query:query}})
             this.visible = false
           }else{
-            this.$notify.warning({
-              title: '提示',
-              message: '请上传视频或等待视频上传完成后保存'
-            });
+            this.$message.warning('请上传视频或等待视频上传完成后保存')
           }
       })
     },

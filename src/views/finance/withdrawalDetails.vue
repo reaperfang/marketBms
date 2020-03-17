@@ -255,10 +255,7 @@ export default {
          this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error)
         })
       }else if(this.total >1000 && this.multipleSelection.length == 0 ){
         this.dialogVisible = true
@@ -269,10 +266,7 @@ export default {
         this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error)
         })
       }      
     },
@@ -358,10 +352,7 @@ export default {
            this.dialogVisible = true
            this.currentDialog = auditSuccessDialog
       }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: '网络原因,审核失败！'
-          });
+          this.$message.error('网络原因,审核失败！')
       })
     }
   }

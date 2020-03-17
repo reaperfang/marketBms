@@ -217,10 +217,7 @@ export default {
         this.materialTotal = response.total;
         this.materialLoading = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
         this.materialLoading = false;
       });
     },
@@ -233,10 +230,7 @@ export default {
       }).then((response)=>{
         callback && callback(response);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -311,11 +305,7 @@ export default {
 
      /* 上传超过个数的处理 */
     uploadLimit() {
-      this.$notify({
-        title: '提示',
-        message: '最多支持上传6个视频！',
-        type: 'warning'
-      });
+      this.$message.warning('最多支持上传6个视频！');
     },
 
      //进度条
@@ -353,11 +343,7 @@ export default {
     /* 向父组件提交选中的数据 */
     submit() {
       if(!this.materialSelectedItem && !this.localSelectedItem) {
-        this.$notify({
-          title: '提示',
-          message: '请选择视频后重试！',
-          type: 'warning'
-        });
+        this.$message.warning('请选择视频后重试！');
         return;
       };
       let copyItem = {};

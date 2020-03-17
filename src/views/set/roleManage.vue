@@ -138,10 +138,7 @@ export default {
         this.loading = false
       }).catch(error =>{
         this.loading = false
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
+        // this.$message.error(error);
       })
     },
     //查询
@@ -167,16 +164,10 @@ export default {
         text: '此操作将永久删除该角色, 是否继续?'
       }).then(() => {
           this._apis.set.deleteRole({roleNames:roleNames}).then(response =>{
-            this.$notify.success({
-              title: '成功',
-              message: '删除成功！'
-            });
+            this.$message.success('删除成功！');
             this.getRoleList()
           }).catch(error =>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           })          
         }).catch(() => {
           this.$message({

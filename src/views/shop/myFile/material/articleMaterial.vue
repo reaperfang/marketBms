@@ -141,10 +141,7 @@ export default {
         this.list = response.list
         this.total = response.total
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //弹窗反馈
@@ -169,16 +166,10 @@ export default {
 
     handleSyncImage(query){
       this._apis.file.syncMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '同步微信图文成功！'
-        });
+        this.$message.success('同步微信图文成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -198,16 +189,10 @@ export default {
         ids:id,
       }
       this._apis.file.deleteMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '删除成功！'
-        });
+        this.$message.success('删除成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     onMouseOver(index,isSyncWechat){

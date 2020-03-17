@@ -144,8 +144,7 @@ export default {
                 params = Object.assign(params,{id: this.imgId})
             }
             this._apis.client.addCardBg(params).then((response) => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '上传会员卡宣传图片成功',
                     type: 'success'
                 });

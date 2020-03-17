@@ -45,15 +45,13 @@ export default {
       this.btnLoading = true;
       if(Number(this.adjustmentBalance) <= 0 || this.adjustmentBalance == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请输入增加余额, 且不能为0或负数',
           type: 'warning'
         });
       }else if(this.remark == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请输入变更原因',
           type: 'warning'
         });
@@ -68,9 +66,8 @@ export default {
         this._apis.client.manualChangeBalance(params).then((response) => {
           this.btnLoading = false;
           this.visible = false;
-          this.$notify({
-            title: '成功',
-            message: "调整余额成功",
+          this.$message({
+            message: '调整余额成功',
             type: 'success'
           });
           this.$emit('refreshPage');
@@ -83,8 +80,7 @@ export default {
     },
     handleBlur() {
       if(Number(this.adjustmentBalance) < 0) {
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '增加余额不能为负数',
           type: 'warning'
         });

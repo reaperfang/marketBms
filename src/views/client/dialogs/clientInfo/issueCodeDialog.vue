@@ -125,17 +125,15 @@ export default {
     couponSubmit() {
       this.dialogVisible2 = false;
       if(this.$refs.couponListTable.selection.length == 0) {
-        this.$notify({
-          title: '提示',
-          message: "请选择要发放的优惠码",
+        this.$message({
+          message: '请选择要发放的优惠码',
           type: 'warning'
         });
       }else if(this.$refs.couponListTable.selection.length <= 10) {
         this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
       }else{
-        this.$notify({
-          title: '提示',
-          message: "最多只能选择10张优惠码",
+        this.$message({
+          message: '最多只能选择10张优惠码',
           type: 'warning'
         });
       }
@@ -166,16 +164,14 @@ export default {
               this.btnLoading = false;
               this.visible = false;
               let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
-              this.$notify({
-                title: '提示',
+              this.$message({
                 message: errMsg,
                 type: 'warning'
               });
             }else{
               this.btnLoading = false;
               this.visible = false;
-              this.$notify({
-                title: '成功',
+              this.$message({
                 message: "发放成功",
                 type: 'success'
               });
@@ -189,11 +185,10 @@ export default {
         })
       }else{
         this.btnLoading = false;
-        this.$notify({
-            title: '警告',
-            message: '请选择优惠码',
-            type: 'warning'
-          });
+        this.$message({
+          message: "请选择优惠码",
+          type: 'warning'
+        });
       }
     },
     handleAdd() {
@@ -211,9 +206,8 @@ export default {
           }
         });
         if(i == 2) {
-          this.$notify({
-            title: '警告',
-            message: '不能选择重复的优惠券',
+          this.$message({
+            message: "不能选择重复的优惠券",
             type: 'warning'
           });
         }

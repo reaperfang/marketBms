@@ -106,10 +106,7 @@ export default {
           sourceMaterial:response.sourceMaterial
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //保存
@@ -125,35 +122,23 @@ export default {
         }
         if(id){
           this._apis.file.editArticle(query).then((response)=>{
-            this.$notify.success({
-              title: '成功',
-              message: '修改图文成功！'
-            });
+            this.$message.success('修改图文成功！');
             this.$router.push({
               name: 'fileManageIndex',
               query:{active:'articleMaterial'}
             })
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           })
         }else{
           this._apis.file.saveArticle(query).then((response)=>{
-            this.$notify.success({
-              title: '成功',
-              message: '创建图文成功！'
-            });
+            this.$message.success('创建图文成功！');
             this.$router.push({
               name: 'fileManageIndex',
               query:{active:'articleMaterial'}
             })
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           })
         }
       }else{

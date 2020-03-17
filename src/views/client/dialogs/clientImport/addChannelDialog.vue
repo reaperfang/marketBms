@@ -32,8 +32,7 @@ export default {
             this.btnLoading = true;
             if(this.channerlName == "") {
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请输入渠道名称',
                     type: 'warning'
                 });
@@ -41,9 +40,8 @@ export default {
                 this._apis.client.addChannel({channerlName: this.channerlName}).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "添加渠道成功",
+                    this.$message({
+                        message: '添加渠道成功',
                         type: 'success'
                     });
                     this.$emit('refreshPage')
@@ -51,10 +49,7 @@ export default {
                     //为了验证渠道重名的情况，打开此错误提示
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })   
             }
         }

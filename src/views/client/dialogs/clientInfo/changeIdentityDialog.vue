@@ -46,9 +46,8 @@ export default {
                 this._apis.client.identityChange(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "变更身份成功",
+                    this.$message({
+                        message: '变更身份成功',
                         type: 'success'
                     });
                     this.$emit('refreshPage');
@@ -59,8 +58,7 @@ export default {
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确选择用户等级',
                     type: 'warning'
                 });

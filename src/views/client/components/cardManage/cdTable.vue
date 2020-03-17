@@ -85,17 +85,12 @@ export default {
     handleAble(ele, row, num) {
       this._apis.client.toggleStatus({id:row.id, enable: num}).then((response) => {
         this.getCardList();
-        this.$notify({
-          title: '成功',
-          message: "切换成功",
+        this.$message({
+          message: '切换成功',
           type: 'success'
         });
       }).catch((error) => {
-        console.log(error)
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     getCardList() {

@@ -75,11 +75,7 @@ export default {
         if(valid) {
           this.submitLoadinig = true;
           this._apis.goodsOperate.setProtocol({memberRegistrationProtocol: escape(this.ruleForm.richValue)}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '修改成功！',
-              type: 'success'
-            });
+            this.$message.success('修改成功！')
             this.submitLoadinig = false;
           }).catch((error)=>{
             console.error(error);
