@@ -22,6 +22,7 @@
       </div>
       <div class="bottom_part">
         <el-table
+        ref="multipleTable"
         v-loading="loading"
         :data="dataList"
         style="width: 100%"
@@ -61,7 +62,10 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button style="margin-top:10px;" @click="deleteRole()">批量删除</el-button>
+      <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button style="margin-top:10px;" @click="deleteRole()">批量删除</el-button>
+      </div>
       <div class="page_styles">
         <el-pagination
           @size-change="handleSizeChange"
@@ -93,7 +97,8 @@ export default {
       shops:[ ],
       multipleSelection:[],
       total:0,
-      loading:true
+      loading:true,
+      selectStatus: false
     }
   },
   watch: {
@@ -185,6 +190,11 @@ export default {
       val.map(item =>{
         this.multipleSelection.push(item.roleName)
       })
+      if(val.length !=0 && val.length == this.dataList.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
     handleClick(row){
       this.$router.push({name:'createRole',params:{data:row}})
@@ -197,6 +207,17 @@ export default {
     handleCurrentChange(pIndex){
       this.form.startIndex = pIndex || this.form.startIndex
       this.getRoleList()
+    },
+
+     // 全选
+    selectAll(val){
+      if(val && this.dataList.length > 0){
+        this.dataList.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
     },
   }
 }

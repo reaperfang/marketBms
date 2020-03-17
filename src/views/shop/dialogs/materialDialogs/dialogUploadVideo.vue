@@ -28,7 +28,8 @@
                 v-if="isShowUploadVideo"
                 type="primary">选取文件</el-button> -->
           </el-upload>
-          <p v-if="isShowUploadVideo">视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p>
+          <p>视频大小不超过10mb，支持mp4格式</p> 
+          <!-- <p>视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p> -->
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请勿超过20字" style="width:195px"></el-input>
