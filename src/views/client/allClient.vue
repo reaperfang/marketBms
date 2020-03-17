@@ -6,7 +6,7 @@
             <el-form ref="form" :model="form">
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="查询条件：" prop="labelName">
+                        <el-form-item prop="labelName">
                             <el-select v-model="form.labelName" placeholder="请选择" clearable>
                                 <el-option label="昵称" value="nickName"></el-option>
                                 <el-option label="用户ID" value="memberSn"></el-option>
@@ -22,7 +22,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="用户身份：" class="relaPosition" prop="memberType">
+                <el-form-item label="客户身份：" class="relaPosition" prop="memberType">
                     <el-checkbox-group v-model="form.memberType" :max="1">
                         <el-checkbox v-for="item in clientStatusOps" :label="item" :key="item" border>{{item}}</el-checkbox>
                     </el-checkbox-group>
@@ -33,13 +33,13 @@
                         v-model="popVisible"
                         trigger="hover"
                     >
-                        <p class="p_title">用户身份说明</p>
-                        <p class="p_over1">用户身份包括：非会员、会员，其中会员包括新会员和老会员。成为老会员条件可进行配置。</p>
+                        <p class="p_title">客户身份说明</p>
+                        <p class="p_over1">客户身份包括：非会员、会员，其中会员包括新会员和老会员。成为老会员条件可进行配置。</p>
                         <p class="p_over2" @click="goToSet">【查看/配置会员身份规则】</p>
                     </el-popover>
                     <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                 </el-form-item>
-                <el-form-item label="用户标签：" class="relaPosition clearfix" prop="memberLabels">
+                <el-form-item label="客户标签：" class="relaPosition clearfix" prop="memberLabels">
                     <div class="group_container fl">
                         <el-checkbox-group v-model="form.memberLabels" :style="{width: labels.length > 5 ?'506px':'',height: showMoreTag ?'':'37px', overflow: showMoreTag ? 'block':'hidden'}">
                             <el-checkbox v-for="item in labels" :label="item" :key="item" border>{{item}}</el-checkbox>
@@ -48,7 +48,7 @@
                     <el-button type="primary" class="fl" @click="_routeTo('batchImport')" :style="{'margin-left': labels.length == 0?'0':'15px'}">添 加</el-button>
                     <img src="../../assets/images/client/icon_down.png" alt="" class="down_img fl" @click="extendTag" v-if="labels.length > 5" :style="{transform: showMoreTag ? 'rotate(180deg)':''}">
                 </el-form-item>
-                <el-form-item label="用户渠道：" class="relaPosition" prop="channelId">
+                <el-form-item label="客户渠道：" class="relaPosition" prop="channelId">
                     <div style="max-width: 80%; overflow: auto;">
                         <el-checkbox-group v-model="form.channelId" >
                             <el-checkbox v-for="item in channels" :label="item" :key="item" border>{{item}}</el-checkbox>
@@ -57,7 +57,7 @@
                     <div class="more font12" @click="handleMore" v-if="!showFold">更多查询条件<i class="el-icon-arrow-down"></i></div>
                 </el-form-item>
                 <div class="fold_part" v-if="showFold">
-                    <el-form-item label="用户状态：" prop="status">
+                    <el-form-item label="客户状态：" prop="status">
                         <el-checkbox-group v-model="form.status" :max="1">
                             <el-checkbox v-for="item in clientStateOps" :label="item" :key="item" border>{{item}}</el-checkbox>
                         </el-checkbox-group>
@@ -273,7 +273,6 @@ export default {
             response.map((v) => {
                 this.labels.push(v.tagName);
             })
-            this.labels = ['不限', ...this.labels];
         }).catch((error) => {
             console.log(error);
         })
@@ -282,7 +281,6 @@ export default {
         this._apis.client.getChannels({}).then((response) => {
             this.channelsList = [].concat(response);
             response.map((v) => {this.channels.push(v.channerlName)});
-            this.channels = ['不限', ...this.channels];
             if(!this.isPc) {
                 this.channels.splice(this.channels.indexOf('PC端'),1);
                 this.channels.splice(this.channels.indexOf('wap端'),1);

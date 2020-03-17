@@ -2,8 +2,8 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="批量解除黑名单" :hasCancel="hasCancel">
         <div class="c_container">
             <img src="../../../../assets/images/client/icon_cuowu.png" alt="" class="warn_img">
-            <p>满足以上搜索条件共{{ data.checkedItem.length }}个用户</p>
-            <p>确定将以上用户冻结权限全部解冻吗？</p>
+            <p>满足以上搜索条件共{{ data.checkedItem.length }}个客户</p>
+            <p>确定将以上客户冻结权限全部解冻吗？</p>
         </div>
     </DialogBase>
 </template>

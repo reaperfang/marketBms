@@ -7,7 +7,7 @@
     :showFooter="false"
   >
     <div class="c_container">
-      <p class="marB20">用户ID: {{ data.memberSn }}</p>
+      <p class="marB20">客户ID: {{ data.memberSn }}</p>
       <p class="marB20">当前积分: {{ data.score }}</p>
       <div class="marB20">
         <span>

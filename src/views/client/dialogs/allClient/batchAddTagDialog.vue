@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="批量加标签" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
-            <p class="c_info">当前选中共{{data.checkedItem.length}}个用户，批量添加以下标签：</p>
+            <p class="c_info">当前选中共{{data.checkedItem.length}}个客户，批量添加以下标签：</p>
             <el-checkbox-group
                 v-model="checkedItems"
                 :max="5">

@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" @submit="submit" title="手动调整余额" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
-      <p class="marB20">用户ID: {{ data.memberSn }}</p>
+      <p class="marB20">客户ID: {{ data.memberSn }}</p>
       <p class="marB20">当前余额: {{ data.balance }}</p>
       <div class="marB20">
           <span><span style="color:red">*</span>增加余额：</span>

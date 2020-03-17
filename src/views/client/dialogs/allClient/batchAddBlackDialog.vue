@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="批量加入黑名单" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
-            <p class="user_id">满足以上搜索条件共{{data.checkedItem.length}}个用户</p>
+            <p class="user_id">满足以上搜索条件共{{data.checkedItem.length}}个客户</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
                 <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10"></el-checkbox>

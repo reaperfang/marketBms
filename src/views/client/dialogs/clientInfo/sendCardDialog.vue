@@ -64,9 +64,6 @@ export default {
                     return v.enable == 0
                 })
                 this.levelList = [].concat(list);
-                this.levelList.map((item) => {
-                    this.$set(item, 'alias', `${item.alias} ${item.name}`);
-                })
             }).catch((error) => {
                 console.log(error);
                 // this.$notify.error({

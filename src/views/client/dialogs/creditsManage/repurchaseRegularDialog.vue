@@ -18,7 +18,7 @@
             </div>
             <div v-if="distinguish == '1'">
                 <div class="marB10">
-                    <span>用户获得</span>
+                    <span>客户获得</span>
                     <div class="input_wrap" style="margin-left:14px">
                         <el-input placeholder="请输入整数" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
                     </div>
