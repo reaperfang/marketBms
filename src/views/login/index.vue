@@ -45,7 +45,7 @@
         <el-button @click="dialogVisible = false">暂不创建</el-button>
       </span>
     </el-dialog>
-    <shopsDialog :showShopsDialog="showShopsDialog" @handleClose="handleClose" :shopList="shopList" :route="route"></shopsDialog>
+    <shopsDialog :showShopsDialog="showShopsDialog" @handleClose="handleClose" :shopList="shopList" :route="route" :show-close="showClose"></shopsDialog>
     <div class="auto_login_mask" v-if="autoLoginLoading">
       <div class="progress" v-loading="autoLoginLoading"
       element-loading-text="正在授权登录中"
@@ -98,7 +98,8 @@ export default {
       shopList:[],
       errorMsg:'',
       route:'login',
-      autoLoginLoading: false  //自动登录中
+      autoLoginLoading: false,  //自动登录中
+      showClose: true  //是否显示店铺弹窗的关闭按钮
     }
   },
   components: {
@@ -143,10 +144,13 @@ export default {
       const convertData = urlAccountData ? utils.aesDecryption(key, urlAccountData) : '';
       const parsedData = convertData ? JSON.parse(utils.aesDecryption(key, urlAccountData)) : {};
       if(parsedData && parsedData.origin == 300 && parsedData.name && parsedData.password){
+        this.showClose = false;
         this.loginForm.userName = parsedData.name;
         this.loginForm.password = parsedData.password;
         this.autoLoginLoading = true;
         this.login();
+      }else{
+        this.showClose = true;
       }
     },
 
@@ -207,6 +211,9 @@ export default {
       this.showShopsDialog = false
       this.loginForm.userName = ''
       this.loginForm.password = ''
+      // if(this.showClose) {  //自动登录模式
+      //   removeToken();
+      // }
     }
   },
 }
