@@ -211,7 +211,9 @@ export default {
       this.showShopsDialog = false
       this.loginForm.userName = ''
       this.loginForm.password = ''
-      removeToken();
+      // if(this.showClose) {  //自动登录模式
+      //   removeToken();
+      // }
     }
   },
 }
