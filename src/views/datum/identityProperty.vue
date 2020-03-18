@@ -218,8 +218,8 @@ export default {
 
     changeDate1(val) {
       if(val){
-        this.startTime1 = this.getDate(val[0])
-        this.endTime1 = this.getDate(val[1])
+        this.startTime1 = this.getDate(utils.dayStart(val[0]))
+        this.endTime1 = this.getDate(utils.dayEnd(val[1]))
         this.nearDay1 = "";
         this.date1 = ''
         this.getMemberTrend();

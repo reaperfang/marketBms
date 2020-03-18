@@ -47,15 +47,16 @@
                             ></el-option>
                         </el-select>
                     </div>
-                    <span style="margin-left: 200px;">领取时间：</span>
+                    <span style="margin-left: 30px;">领取时间：</span>
                     <el-date-picker
                         type="daterange"
                         v-model="getTime"
                         range-separator="至"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
                     </el-date-picker>
-                    <el-button type="primary" class="marL20" @click="handleFind">查 询</el-button>
+                    <el-button type="primary" class="marL30" @click="handleFind">查 询</el-button>
                     <el-button class="border_btn" @click="reset">重 置</el-button>
                 </div>
                 <lkTable style="margin-top: 39px" :lkParams="lkParams"></lkTable>
@@ -116,7 +117,7 @@ export default {
             let obj = {
                 name: this.selected == "" || this.selected == "全部"? null : this.selected,
                 startTime: this.getTime == "" || this.getTime == null ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
-                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
+                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(utils.endTimeHandle(this.getTime[1], false),"yyyy-MM-dd hh:mm:ss"),
             }
             this.lkParams = Object.assign({},obj);
         },
@@ -143,8 +144,7 @@ export default {
                 params = Object.assign(params,{id: this.imgId})
             }
             this._apis.client.addCardBg(params).then((response) => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '上传会员卡宣传图片成功',
                     type: 'success'
                 });
@@ -181,8 +181,8 @@ export default {
     padding: 20px;
     background-color: #fff;
 }
-.marL20{
-    margin-left: 20px;
+.marL30{
+    margin-left: 30px;
 }
 .pane_container{
     padding: 12px 20px;

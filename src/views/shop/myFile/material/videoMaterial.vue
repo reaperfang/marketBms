@@ -162,10 +162,7 @@ export default {
         })
         this.total = response.total
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //下载视频
@@ -265,16 +262,10 @@ export default {
 
     handleSyncImage(query){
       this._apis.file.syncMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '同步微信视频成功！'
-        });
+        this.$message.success('同步微信视频成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     /**********************************        单个视频      **********************/
@@ -286,15 +277,9 @@ export default {
         toFileGroupInfoId:groupId
       }
       this._apis.file.moveGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '移动分组成功！'
-        });
+        this.$message.success('移动分组成功！');
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //删除视频
@@ -303,31 +288,19 @@ export default {
         ids:id,
       }
       this._apis.file.deleteMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '删除成功！'
-        });
+        this.$message.success('删除成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //上传视频
     uploadVideo(query){
       this._apis.file.uploadVideo(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '上传视频成功！'
-        });
+        this.$message.success('上传视频成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     /**********************************        分页相关      **********************/

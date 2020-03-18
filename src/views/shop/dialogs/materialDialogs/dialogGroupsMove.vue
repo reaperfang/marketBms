@@ -57,10 +57,7 @@ export default {
                 resolve(nodes)
               }
             }).catch((error)=>{
-              self.$notify.error({
-                title: '错误',
-                message: error
-              });
+              self.$message.error(error);
             })
           }, 500);
         }

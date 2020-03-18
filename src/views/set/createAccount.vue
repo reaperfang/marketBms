@@ -149,10 +149,7 @@ export default {
           this.handleShop(roleName)
         }
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     handleShop(roleName){
@@ -175,10 +172,7 @@ export default {
         })
         this.shops = JSON.parse(JSON.stringify(newShops)) 
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //保存
@@ -201,17 +195,11 @@ export default {
            }
            this._apis.set.editSubAccount(query).then(response =>{
               this.loading = false
-              this.$notify.success({
-                  title: '成功',
-                  message: '修改成功！'
-              });
+              this.$message.success('修改成功！');
               this.$router.push({path:'subaccountManage'})
             }).catch(error =>{
               this.loading = false
-              this.$notify.error({
-                  title: '错误',
-                  message: error
-              });
+              this.$message.error(error);
             }) 
         }else{//新建子账号
             let query = {
@@ -225,17 +213,11 @@ export default {
            } 
             this._apis.set.newSubAccount(query).then(response =>{
               this.loading = false
-              this.$notify.success({
-                  title: '成功',
-                  message: '添加成功！'
-              });
+              this.$message.success('添加成功！');
               this.$router.push({path:'subaccountManage'})
             }).catch(error =>{
               this.loading = false
-              this.$notify.error({
-                  title: '错误',
-                  message: error
-              });
+              this.$message.error(error);
             })
         }
         }

@@ -25,7 +25,7 @@
             align="right"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']"
+            :default-time="['00:00:00', '23:59:59']"
             :picker-options="pickerNowDateBefore">
           </el-date-picker>
         </el-form-item>
@@ -255,10 +255,7 @@ export default {
          this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error)
         })
       }else if(this.total >1000 && this.multipleSelection.length == 0 ){
         this.dialogVisible = true
@@ -269,10 +266,7 @@ export default {
         this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error)
         })
       }      
     },
@@ -358,10 +352,7 @@ export default {
            this.dialogVisible = true
            this.currentDialog = auditSuccessDialog
       }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: '网络原因,审核失败！'
-          });
+          this.$message.error('网络原因,审核失败！')
       })
     }
   }

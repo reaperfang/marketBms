@@ -152,8 +152,8 @@ export default {
                     value: '快递单号'
                 },
                 {
-                    label: '客户ID',
-                    value: '客户ID'
+                    label: '用户ID',
+                    value: '用户ID'
                 },
             ],
             afterSalesTypeList: [

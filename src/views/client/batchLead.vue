@@ -51,7 +51,8 @@
                                 type="daterange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
-                                end-placeholder="结束日期">
+                                end-placeholder="结束日期"
+                                :picker-options="utils.pickerOptions({canSelectFuture: true})">
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -248,8 +249,7 @@ export default {
                     console.log(error);
                 })
             }else{
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '标签名称不能为空',
                     type: 'warning'
                 });
@@ -277,8 +277,7 @@ export default {
         },
         saveLabel(isRepeat) {
             if(!isRepeat && !this.$route.query.id) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '标签名不能重复',
                     type: 'warning'
                 });
@@ -291,15 +290,13 @@ export default {
                 this.selectedIds = selectedIds.join(',');
                 if(this.ruleForm.consumeTimeType == "0") {
                     if(!this.isInteger(this.ruleForm.consumeTimeValue)) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请输入日期数',
                             type: 'warning'
                         });
                         this.canSubmit = false;
                     }else if(this.ruleForm.consumeTimeUnit == "") {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请输入日期单位',
                             type: 'warning'
                         });
@@ -308,8 +305,7 @@ export default {
                 }
                 if(this.ruleForm.consumeTimeType == "1") {
                     if(this.consumeTime == "") {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请选择自定义日期',
                             type: 'warning'
                         });
@@ -318,8 +314,7 @@ export default {
                 }
                 if(this.ruleForm.isTotalConsumeTimes == true) {
                     if(!this.isInteger(this.ruleForm.consumeTimesMin) || !this.isInteger(this.ruleForm.consumeTimesMax)) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请正确输入累计消费次数区间',
                             type: 'warning'
                         });
@@ -328,8 +323,7 @@ export default {
                 }
                 if(this.ruleForm.isTotalConsumeMoney == true) {
                     if(!this.isInteger(this.ruleForm.consumeMoneyMin) || !this.isInteger(this.ruleForm.consumeMoneyMax)) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请正确输入累计消费金额区间',
                             type: 'warning'
                         });
@@ -338,8 +332,7 @@ export default {
                 }
                 if(this.ruleForm.isPreUnitPrice == true) {
                     if(!this.isInteger(this.ruleForm.preUnitPriceMin)|| !this.isInteger(this.ruleForm.preUnitPriceMax)) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请正确输入客单价区间',
                             type: 'warning'
                         });
@@ -348,8 +341,7 @@ export default {
                 }
                 if(this.ruleForm.isTotalScore == true) {
                     if(!this.isInteger(this.ruleForm.totalScoreMin)|| !this.isInteger(this.ruleForm.totalScoreMax)) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请正确输入累计获得积分区间',
                             type: 'warning'
                         });
@@ -358,8 +350,7 @@ export default {
                 }
                 if(this.ruleForm.isProduct == true) {
                     if(this.selectedIds.length == 0) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '请选择商品',
                             type: 'warning'
                         });
@@ -371,8 +362,7 @@ export default {
                         let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
                         let isSelect = arr.some(ele => ele == true)
                         if(!isSelect) {
-                            this.$notify({
-                                title: '警告',
+                            this.$message({
                                 message: '请选择任意一个交易条件',
                                 type: 'warning'
                             });
@@ -385,8 +375,7 @@ export default {
                         let arr = [this.ruleForm.isLastConsumeTime, this.ruleForm.isTotalConsumeTimes, this.ruleForm.isTotalConsumeMoney,this.ruleForm.isPreUnitPrice,this.ruleForm.isTotalScore,this.ruleForm.isProduct];
                         let isSelect = arr.every(ele => ele == true)
                         if(!isSelect) {
-                            this.$notify({
-                                title: '警告',
+                            this.$message({
                                 message: '请选择所有交易条件',
                                 type: 'warning'
                             });
@@ -397,7 +386,7 @@ export default {
                 if(!!this.canSubmit) {
                     let formObj = Object.assign({}, this.ruleForm);
                     formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
-                    formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"):"";
+                    formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(utils.endTimeHandle(this.consumeTime[1], true),"yyyy-MM-dd hh:mm:ss"):"";
                     formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || 0;
                     formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || 0;
                     formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || 0;
@@ -417,22 +406,20 @@ export default {
                         if(formObj.tagType == '0') {
                             this._apis.client.updateTag({tagType: formObj.tagType, tagName: formObj.tagName, id: this.$route.query.id}).then((response) => {
                                 this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "标签编辑成功",
+                                this.$message({
+                                    message: '标签编辑成功',
                                     type: 'success'
-                                });                      
+                                });                     
                             }).catch((error) => {
                                 console.log(error);
                             })
                         }else{
                             this._apis.client.updateTag(formObj).then((response) => {
                                 this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "标签编辑成功",
+                                this.$message({
+                                    message: '标签编辑成功',
                                     type: 'success'
-                                });
+                                }); 
                             }).catch((error) => {
                                 console.log(error);
                             })
@@ -441,9 +428,8 @@ export default {
                         if(formObj.tagType == '0') {
                             this._apis.client.addTag({tagType: formObj.tagType, tagName: formObj.tagName}).then((response) => {
                                 this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "添加标签成功",
+                                this.$message({
+                                    message: '添加标签成功',
                                     type: 'success'
                                 });
                             }).catch((error) => {
@@ -452,12 +438,10 @@ export default {
                         }else{
                             this._apis.client.addTag(formObj).then((response) => {
                                 this._routeTo('clientLabel');
-                                this.$notify({
-                                    title: '成功',
-                                    message: "添加标签成功",
+                                this.$message({
+                                    message: '添加标签成功',
                                     type: 'success'
                                 });
-                                
                             }).catch((error) => {
                                 console.log(error);
                             })

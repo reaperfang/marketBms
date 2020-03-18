@@ -27,6 +27,7 @@
       </div>
       <div class="bottom_part">
         <el-table
+        ref="multipleTable"
         v-loading="loading"
         :data="dataList"
         style="width: 100%"
@@ -70,7 +71,10 @@
           </template>
         </el-table-column>
       </el-table>
+       <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button style="margin-top:10px;" @click="deleteAccount()">批量删除</el-button>
+      </div>
         <div class="page_styles">
           <el-pagination
             @size-change="handleSizeChange"
@@ -104,7 +108,8 @@ export default {
       dataList: [],
       total:0,
       multipleSelection:[],
-      loading:true
+      loading:true,
+      selectStatus: false
     }
   },
   watch: {
@@ -167,22 +172,17 @@ export default {
     deleteAccount(id){
       let ids = []
       id ? ids.push(id) : ids = this.multipleSelection
-      this.$confirm('此操作将永久删除该子账号, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '此操作将永久删除该子账号, 是否继续?'
+      }).then(() => {
           this._apis.set.deleteAccount({userIds:ids}).then(response =>{
-            this.$notify.success({
-              title: '成功',
-              message: '删除成功！'
-            });
+            this.$message.success('删除成功！');
             this.getSubAccount()
           }).catch(error =>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           })   
         }).catch(() => {
           this.$message({
@@ -196,6 +196,11 @@ export default {
       val.map(item =>{
         this.multipleSelection.push(item.id)
       })
+      if(val.length !=0 && val.length == this.dataList.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
     //编辑
     handleClick(row){
@@ -209,6 +214,17 @@ export default {
     handleCurrentChange(val){
       this.form.startIndex = val
       this.getSubAccount()
+    },
+
+     // 全选
+    selectAll(val){
+      if(val && this.dataList.length > 0){
+        this.dataList.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
     },
   }
 }

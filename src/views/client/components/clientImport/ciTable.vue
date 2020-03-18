@@ -124,8 +124,7 @@ export default {
         this.currentData.successNum = row.successNum;
         this.currentData.id = row.id;
       }else{
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '无导入成功数不能添加标签',
           type: 'warning'
         });

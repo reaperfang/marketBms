@@ -318,15 +318,9 @@ export default {
           kdBusinessId:this.form.kdBusinessId
       }
       this._apis.set.updateShopLogistics(data).then(response =>{
-          this.$notify.success({
-            title: '成功',
-            message: '保存成功！'
-          });
+          this.$message.success('保存成功！');
         }).catch(error =>{
-          this.$notify.error({
-            title: '失败',
-            message: '保存失败！'
-          });
+          this.$message.error('保存失败 '+ error);
       })
     },
   }

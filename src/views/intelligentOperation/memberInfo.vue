@@ -68,19 +68,19 @@
                 <p class="fl">该筛选条件下：
                     <i v-if="form.memberType== null" style="font-style:normal">
                         全部会员共计<span>{{newMemberCount + oldMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{allRatio}}%</span>;    
+                        占用户总数的<span>{{allRatio}}%</span>;    
                     </i>
                     <i v-if="form.memberType==0" style="font-style:normal">
                         非会员共计<span>{{customerCount || 0}}</span>人；
-                        占客户总数的<span>{{customerRatio != 0 ? (customerRatio*100).toFixed(2) : 0}}%</span>;    
+                        占用户总数的<span>{{customerRatio != 0 ? (customerRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
                     <i v-if="form.memberType==1" style="font-style:normal">
                         新会员共计<span>{{newMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{newMemberRatio != 0 ? (newMemberRatio*100).toFixed(2) : 0}}%</span>;
+                        占用户总数的<span>{{newMemberRatio != 0 ? (newMemberRatio*100).toFixed(2) : 0}}%</span>;
                     </i>
                     <i v-if="form.memberType==2" style="font-style:normal">
                         老会员共计<span>{{oldMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{oldMemberRatio != 0 ? (oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
+                        占用户总数的<span>{{oldMemberRatio != 0 ? (oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
                     <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span></i>。
                 </p>
@@ -114,6 +114,7 @@
 <script>
 import maTable from './components/maTable';
 import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
+import utils from '@/utils'
 export default {
     name: 'memberInfo',
     components: { maTable ,exportTipDialog },
@@ -211,8 +212,8 @@ export default {
             if(this.form.daterange){
                 this.form.timeType = 4;
                 Object.assign(this.form,{
-                    startTime:this.form.daterange[0],
-                    endTime:this.form.daterange[1]
+                    startTime:this.getDate(utils.dayStart(this.form.daterange[0])),
+                    endTime:this.getDate(utils.dayEnd(this.form.daterange[1]))
                 });
             }else{
                 Object.assign(this.form,{
@@ -220,6 +221,10 @@ export default {
                     endTime:null
                 });
             }
+        },
+
+        getDate(date) {
+            return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
         },
 
         //获取交易次数

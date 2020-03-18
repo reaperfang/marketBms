@@ -6,7 +6,7 @@ export default [
     component: Layout,
     name: 'client',
     meta: {
-      title: '客户',
+      title: '用户',
       icon: 'icon_client',
       activeIcon:'icon_clients',
       navType:1
@@ -16,40 +16,40 @@ export default [
         path: 'allClient',
         component: () => import('@/views/client/allClient'),
         name: 'allClient',
-        meta: { title: '全部客户', noCache: true, tabTitle: '客户管理' ,navType:2}
+        meta: { title: '全部用户', noCache: true, tabTitle: '用户管理' ,navType:2}
       },
       {
         path: 'clientInfo',
         component: () => import('@/views/client/clientInfo'),
         name: 'clientInfo',
         hidden: true, 
-        meta: { title: '查看详情', noCache: true, tabTitle: '客户管理' ,navType:5}
+        meta: { title: '查看详情', noCache: true, tabTitle: '用户管理' ,navType:5}
       },
       {
         path: 'importClient',
         component: () => import('@/views/client/clientImport'),
         name: 'importClient',
         hidden: true, 
-        meta: { title: '客户导入', noCache: true, tabTitle: '客户管理' ,navType:5}
+        meta: { title: '用户导入', noCache: true, tabTitle: '用户管理' ,navType:5}
       },
       {
         path: 'clientLabel',
         component: () => import('@/views/client/clientLabel'),
         name: 'clientLabel',
-        meta: { title: '客户标签', noCache: true, tabTitle: '客户管理',navType:2 }
+        meta: { title: '用户标签', noCache: true, tabTitle: '用户管理',navType:2 }
       },
       {
         path: 'batchImport',
         component: () => import('@/views/client/batchLead'),
         name: 'batchImport',
         hidden: true,
-        meta: { title: '添加标签', noCache: true, tabTitle: '客户管理' ,navType:5}
+        meta: { title: '添加标签', noCache: true, tabTitle: '用户管理' ,navType:5}
       },
       {
         path: 'creditsManage',
         component: () => import('@/views/client/creditsManage'),
         name: 'creditsManage',
-        meta: { title: '积分管理', noCache: true, tabTitle: '客户管理' , navType:2 }
+        meta: { title: '积分管理', noCache: true, tabTitle: '用户管理' , navType:2 }
       },
       {
         path: 'clientLevel',

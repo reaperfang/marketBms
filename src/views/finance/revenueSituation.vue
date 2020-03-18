@@ -11,7 +11,7 @@
           trigger="hover">
           <div>
             <p>1、总收入即所有线上订单支付的总金额，含所有线上支付和线下支付的所有订单，支付完成后计入；</p>
-            <p>2、总支出即所有线上支出的总金额，含订单退款、客户ID提现的金额，退款成功或提现成功后计入；</p>
+            <p>2、总支出即所有线上支出的总金额，含订单退款、用户ID提现的金额，退款成功或提现成功后计入；</p>
             <p>3、实际收入 = 总收入 - 总支出；</p>
             <p>4、每日数据为当日0时0分0秒到23时59分59秒的数据，今日数据为当日0点后的实时数据；</p>
             <p>5、最近一周，最近一个月等数据中包含今日数据；</p>
@@ -237,10 +237,7 @@ export default {
       this._apis.finance.getSurveyDayRs({}).then((response)=>{
         this.surveyDay = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
     //时间段趋势
@@ -261,10 +258,7 @@ export default {
           this.init(this.days)
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
     //最近天数趋势
@@ -282,10 +276,7 @@ export default {
           return
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
   }

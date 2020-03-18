@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
-            客户发货
+            用户发货
         </div>
         <div class="container">
             <div v-if="orderAfterSale.returnExpressNo" class="item" :class="{close: !showCustomerContent}">
@@ -187,16 +187,16 @@ export default {
             if(value.receiveGoodsTime) {
                 return '【商户签收】'
             } else if(value.returnExpressNo) {
-                return '【客户发货】'
+                return '【用户发货】'
             } else {
                 return ''
             }
         },
         businessFilter(value, expressNos) {
             if(value.memberReceiveGoodsTime) {
-                return '【客户签收】'
+                return '【用户签收】'
             } else if(expressNos) {
-                return '【商户发货】'
+                return '【用户发货】'
             } else {
                 return ''
             }

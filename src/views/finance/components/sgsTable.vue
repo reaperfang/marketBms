@@ -188,10 +188,7 @@ export default {
         this._apis.finance.smsExport(query).then((response)=>{
         window.location.href = response.url
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
       }
       

@@ -164,10 +164,14 @@ export default {
         }
     },
     methods: {
-        refreshPage() {
-            this.getMemberInfo();
-            //this.getUsedCoupon();
-            //this.getUsedCode();
+        refreshPage(num) {
+            if(num == 1) {
+                this.getAllCoupons();
+            }else if(num == 2) {
+                this.getAllCodes();
+            }else{
+                this.getMemberInfo();
+            }
         },
         changeIdentity() {
             if(this.clientInfoById.level !== 9) {
@@ -185,18 +189,16 @@ export default {
                 this.currentData.memberType = this.clientInfoById.memberType;
                 this.currentData.level = this.clientInfoById.level;
             }else{
-                this.$notify({
-                    title: '提示',
-                    message: "已是最高等级无法变更",
+                this.$message({
+                    message: '已是最高等级无法变更',
                     type: 'warning'
                 });
             }
         },
         deleteTag(id) {
             this._apis.client.removeLabel({id:id}).then((response) => {
-                this.$notify({
-                    title: '成功',
-                    message: "移除标签成功",
+                this.$message({
+                    message: '移除标签成功',
                     type: 'success'
                 });
                 this.getMemberInfo();

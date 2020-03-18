@@ -57,7 +57,8 @@
                     type="daterange"
                     range-separator="至"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                    end-placeholder="结束日期"
+                    :picker-options="utils.pickerOptions({canSelectFuture: false})">
                 </el-date-picker>
                 <span class="marL20">渠道：</span>
                 <el-select v-model="channelId2" placeholder="选择渠道" clearable>
@@ -78,8 +79,8 @@
 </template>
 <script type="es6">
 import utils from "@/utils";
-import Blob from '@/excel/Blob'
-import Export2Excel from '@/excel/Export2Excel.js'
+import Blob from '@/assets/js/excel/Blob'
+import Export2Excel from '@/assets/js/excel/Export2Excel.js'
 import ciTable from './components/clientImport/ciTable';
 import addChannelDialog from './dialogs/clientImport/addChannelDialog';
 export default {
@@ -146,7 +147,7 @@ export default {
         handleCheck() {
             let params = {
                 importTimeStart: !!this.importTime ? utils.formatDate(new Date(this.importTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'',
-                importTimeEnd: !!this.importTime ? utils.formatDate(new Date(this.importTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):"",
+                importTimeEnd: !!this.importTime ? utils.formatDate(utils.endTimeHandle(this.importTime[1], false),"yyyy-MM-dd hh:mm:ss"):"",
                 channelId: this.channelId2
             }
             this.params = Object.assign({}, params);
@@ -165,14 +166,12 @@ export default {
         },
         importMemberFile() {
             if(this.ruleForm.channelId == "") {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择渠道',
                     type: 'warning'
                 });
             }else if(!this.importUrl){
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请上传文件',
                     type: 'warning'
                 });
@@ -190,16 +189,12 @@ export default {
                 }
                 this._apis.client.importMemberFile(params).then((response) => {
                     this.handleCheck();
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '导入成功',
                         type: 'success'
                     });
                 }).catch((error) => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }
         },
@@ -257,7 +252,7 @@ export default {
                 }
                 .download_btn{
                     position: absolute;
-                    right: 0;
+                    right: -9px;
                     top: 0;
                 }
             }

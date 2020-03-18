@@ -1,8 +1,8 @@
 /* 身份属性属性比例图表 */
 <script type='es6'>
 import chartBase from "@/components/ChartBase";
-// import chinaMap from "@/assets/js/chinaMap.js";
-// import worldMap from "@/assets/js/worldMap.js";
+// import chinaMap from "@/assets/js/maps/chinaMap.js";
+// import worldMap from "@/assets/js/maps/worldMap.js";
 export default {
   name: "pp1Chart",
   extends: chartBase,

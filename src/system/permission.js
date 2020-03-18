@@ -25,16 +25,25 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   //  if (true) { // determine if there has token  
   if(store.getters.token){
-    const msfList = JSON.parse(localStorage.getItem('shopInfos')).data.msfList
+    const localMsfList = localStorage.getItem('shopInfos');
+    let msfList = [];
+    if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
+      msfList = JSON.parse(localMsfList).data.msfList
+    }
     /* has token*/
     if (to.path === '/login') {
-      next({ path: '/' })
-      NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      if(msfList.length) {
+        next({ path: '/' })
+        NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      }else {
+        next()
+        NProgress.done() //
+      }
     } else {
         if(flag == 0){
           store.dispatch('GenerateRoutes', msfList).then(() => { // 根据roles权限生成可访问的路由表
             if(store.getters.addRouters.length != 0){
-              router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+              router.selfAddRoutes(store.getters.addRouters) // 动态添加可访问路由表
               next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
             }else{
               next({ path: '/401'})

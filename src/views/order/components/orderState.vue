@@ -6,7 +6,7 @@
                 <!-- 待付款 -->
                 <div class="item lefter">
                     <el-steps active="1">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
                         <el-step title="客戶收货" description=""></el-step>
@@ -24,10 +24,10 @@
                 <!-- 待成团 -->
                 <div class="item lefter">
                     <el-steps active="3">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="客户付款" description=""></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -39,16 +39,16 @@
                 <!-- 待发货 -->
                 <div class="item lefter">
                     <el-steps active="3">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
                     <p>待发货</p>
-                    <p>客户选择货到付款，您需要自行安排配送和收款。</p>
+                    <p>用户选择货到付款，您需要自行安排配送和收款。</p>
                     <div class="button-box">
                         <el-button @click="closeOrder">关闭订单</el-button>
                         <el-button type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
@@ -59,10 +59,10 @@
                 <!-- 部分发货 -->
                 <div class="item lefter">
                     <el-steps active="3">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -78,10 +78,10 @@
                 <!-- 待收货 -->
                 <div class="item lefter">
                     <el-steps active="4">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -93,10 +93,10 @@
                 <!-- 完成 -->
                 <div class="item lefter">
                     <el-steps active="5">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" :description="orderInfo.createTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="客户收货" :description="orderInfo.complateTime"></el-step>
+                        <el-step title="用户收货" :description="orderInfo.complateTime"></el-step>
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
@@ -108,7 +108,7 @@
                 <!-- 关闭 -->
                 <div class="item lefter">
                     <el-steps :active="active">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="订单关闭" :description="orderInfo.closeTime"></el-step>
                         <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                     </el-steps>
@@ -125,10 +125,10 @@
                 <!-- 待付款 -->
                 <div class="item lefter">
                     <el-steps :active="active">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="客户付款" description=""></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户付款" description=""></el-step>
                         <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -143,10 +143,10 @@
                 <!-- 待成团 -->
                 <div class="item lefter">
                     <el-steps :active="active">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -158,10 +158,10 @@
                 <!-- 待发货 -->
                 <div class="item lefter">
                     <el-steps :active="active">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <el-step title="商户发货" description="客户已完成付款，请尽快完成发货"></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
+                        <el-step title="商户发货" description="用户已完成付款，请尽快完成发货"></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -177,10 +177,10 @@
                 <!-- 部分发货 -->
                 <div class="item lefter">
                     <el-steps active="3">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <el-step title="商户发货" description="客户已完成付款，请尽快完成剩余发货"></el-step>
-                        <el-step title="客户收货" description=""></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
+                        <el-step title="商户发货" description="用户已完成付款，请尽快完成剩余发货"></el-step>
+                        <el-step title="用户收货" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -196,10 +196,10 @@
                 <!-- 待收货 -->
                 <div class="item lefter">
                     <el-steps :active="active">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="客户收货" description="等待签收"></el-step>
+                        <el-step title="用户收货" description="等待签收"></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -211,10 +211,10 @@
                 <!-- 完成 -->
                 <div class="item lefter">
                     <el-steps :active="active">
-                        <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                        <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
+                        <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                        <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                         <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="客户收货" :description="orderInfo.complateTime"></el-step>
+                        <el-step title="用户收货" :description="orderInfo.complateTime"></el-step>
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
@@ -227,7 +227,7 @@
                     <!-- 超时取消 -->
                     <div class="item lefter">
                         <el-steps active="3">
-                            <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                            <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="orderInfo.closeTime"></el-step>
                             <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
@@ -243,9 +243,9 @@
                         <!-- 客户付款 -->
                         <div class="item lefter">
                             <el-steps active="4">
-                                <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                                <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
-                                <el-step title="订单关闭" :description="`客户取消订单${orderInfo.closeTime}`"></el-step>
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
+                                <el-step title="订单关闭" :description="`用户取消订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
                         </div>
@@ -258,8 +258,8 @@
                         <!-- 客户未付款 -->
                         <div class="item lefter">
                             <el-steps active="3">
-                                <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                                <el-step title="订单关闭" :description="`客户取消订单${orderInfo.closeTime}`"></el-step>
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="订单关闭" :description="`用户取消订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
                         </div>
@@ -275,8 +275,8 @@
                         <!-- 客户付款 -->
                         <div class="item lefter">
                             <el-steps active="4">
-                                <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                                <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
@@ -290,7 +290,7 @@
                         <!-- 客户未付款 -->
                         <div class="item lefter">
                             <el-steps active="3">
-                                <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                             </el-steps>
@@ -305,7 +305,7 @@
                     <!-- 拼团失败 -->
                     <div class="item lefter">
                         <el-steps active="3">
-                            <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                            <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="`拼团活动关闭${orderInfo.closeTime}`"></el-step>
                             <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
@@ -319,7 +319,7 @@
                     <!-- 商户关闭拼团 -->
                     <div class="item lefter">
                         <el-steps active="3">
-                            <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
+                            <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="`商户关闭拼团${orderInfo.closeTime}`"></el-step>
                             <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
@@ -333,10 +333,10 @@
                     <!-- 客户拒收 -->
                     <div class="item lefter">
                         <el-steps active="5">
-                            <el-step title="客户下单" :description="orderInfo.createTime"></el-step>
-                            <el-step title="客户付款" :description="orderInfo.payComplateTime"></el-step>
+                            <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                            <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                             <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                            <el-step title="客户收货" description="客户拒绝签收"></el-step>
+                            <el-step title="用户收货" description="用户拒绝签收"></el-step>
                             <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
                         </el-steps>
                     </div>
@@ -409,7 +409,7 @@ export default {
                 case 0:
                     return '超时取消'
                 case 1:
-                    return '客户取消'
+                    return '用户取消'
                 case 2:
                     return '商户关闭'
                 case 3:
@@ -417,7 +417,7 @@ export default {
                 case 4:
                     return '商户关闭拼团'
                 case 5:
-                    return '客户拒收'
+                    return '用户拒收'
             }
         }
     },

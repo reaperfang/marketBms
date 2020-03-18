@@ -214,10 +214,6 @@ export default {
                       this.createList(response);
                       this.loading = false;
                   }).catch((error)=>{
-                      // this.$notify.error({
-                      //     title: '错误',
-                      //     message: error
-                      // });
                       console.error(error);
                       this.list = [];
                       this.loading = false;

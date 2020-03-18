@@ -14,7 +14,7 @@
                 :close-on-click-modal="false"
                 :close-on-press-escape="false">
                 <div>
-                    <p style="margin-bottom: 10px;">拒绝申请可能会受到客户差评，如果确定拒绝售后，请选择拒绝原因：</p>
+                    <p style="margin-bottom: 10px;">拒绝申请可能会受到用户差评，如果确定拒绝售后，请选择拒绝原因：</p>
                     <el-radio v-model="refuseReasonLabel" :label="1">人为破坏拒绝售后</el-radio>
                     <el-radio v-model="refuseReasonLabel" :label="2">其他</el-radio>
                     <el-input

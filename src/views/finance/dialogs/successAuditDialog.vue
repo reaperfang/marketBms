@@ -102,10 +102,7 @@ export default {
                this.info1 = response[1]
                this.info2 = response[2]
             }).catch((error)=>{
-                this.$notify.error({
-                title: '错误',
-                message: error
-                });
+                this.$message.error(error);
             })
         },
     },

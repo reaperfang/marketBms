@@ -7,7 +7,7 @@
                 <el-option label="禁用" value="0"></el-option>
                 <el-option label="启用" value="1"></el-option>
             </el-select>
-            <el-button type="primary" class="marL20" @click="checkLevel">查 询</el-button>
+            <el-button type="primary" class="marL30" @click="checkLevel">查 询</el-button>
         </div>
         <cvTable style="margin-top: 36px" :params="params"></cvTable>
     </div>
@@ -45,8 +45,8 @@ export default {
     .marR10{
         margin-right: 10px;
     }
-    .marL20{
-        margin-left: 20px;
+    .marL30{
+        margin-left: 30px;
     }
 }
 </style>

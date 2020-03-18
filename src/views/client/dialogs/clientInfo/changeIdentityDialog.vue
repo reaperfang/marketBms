@@ -2,7 +2,7 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="变更用户身份" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
-            <p class="user_id">当前身份：{{ data.memberType == 0? '非会员客户':`VIP${data.level} ${data.identity}`}}</p>
+            <p class="user_id">当前身份：{{ data.memberType == 0? '非会员用户':`VIP${data.level} ${data.identity}`}}</p>
             <div class="s_cont">
                 <span>变更为：</span>
                 <el-select v-model="selectLevel" style="margin-bottom: 10px">
@@ -46,9 +46,8 @@ export default {
                 this._apis.client.identityChange(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "变更身份成功",
+                    this.$message({
+                        message: '变更身份成功',
                         type: 'success'
                     });
                     this.$emit('refreshPage');
@@ -59,8 +58,7 @@ export default {
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确选择用户等级',
                     type: 'warning'
                 });

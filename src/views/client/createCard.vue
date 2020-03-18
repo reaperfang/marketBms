@@ -424,10 +424,9 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       if (Number(res.data.width) >= 1000 && Number(res.data.height) >= 600) {
-        this.$notify({
-          title: "警告",
-          message: "尺寸应设置为宽1000像素以下，高600像素以下",
-          type: "warning"
+        this.$message({
+          message: '尺寸应设置为宽1000像素以下，高600像素以下',
+          type: 'warning'
         });
       } else {
         this.imgUrl = res.data.url;
@@ -579,36 +578,31 @@ export default {
     },
     save() {
       if(this.ruleForm.name == "") {
-        this.$notify({
-          title: "警告",
-          message: "请输入会员卡名称",
-          type: "warning"
+        this.$message({
+          message: '请输入会员卡名称',
+          type: 'warning'
         });
       }else if (!this.right1 && !this.right2) {
-        this.$notify({
-          title: "警告",
-          message: "请选择一项等级权益",
-          type: "warning"
+        this.$message({
+          message: '请选择一项等级权益',
+          type: 'warning'
         });
       }else if(this.ruleForm.explain == "") {
-        this.$notify({
-          title: "警告",
-          message: "请输入特权说明",
-          type: "warning"
+        this.$message({
+          message: '请输入特权说明',
+          type: 'warning'
         });
       }else if(this.ruleForm.isSyncWechat == "1") {
         if(this.ruleForm.notice == "") {
-          this.$notify({
-            title: "警告",
-            message: "请输入使用须知",
-            type: "warning"
-          });
+          this.$message({
+            message: '请输入使用须知',
+            type: 'warning'
+          });
         }else if(this.ruleForm.phone == ""){
-          this.$notify({
-            title: "警告",
-            message: "请输入客服电话",
-            type: "warning"
-          });
+          this.$message({
+            message: '请输入客服电话',
+            type: 'warning'
+          });
         }else{
           this.excuteSave();
         }
@@ -633,10 +627,9 @@ export default {
             formObj.receiveConditionsRemarks = '可直接领取';
           }else{
             if(JSON.stringify(this.levelConditionValueDto) == '{}') {
-              this.$notify({
-                title: "警告",
-                message: "请选择特定条件",
-                type: "warning"
+              this.$message({
+                message: '请选择特定条件',
+                type: 'warning'
               });
               this.canSubmit1 = false;
             }else{
@@ -666,10 +659,9 @@ export default {
               }
             });
             if(colorArr.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择背景色",
-                type: "warning"
+              this.$message({
+                message: '请选择背景色',
+                type: 'warning'
               });
               this.canSubmit2 = false;
             }else{
@@ -680,10 +672,9 @@ export default {
               this.canSubmit3 = true;
               formObj.background = this.imgUrl;
             } else {
-              this.$notify({
-                title: "警告",
-                message: "请上传背景图片",
-                type: "warning"
+              this.$message({
+                message: '请上传背景图片',
+                type: 'warning'
               });
               this.canSubmit3 = false;
             }
@@ -698,10 +689,9 @@ export default {
           }
           if (this.right2) {
             if (this.jfhkbl == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入积分回馈倍率数",
-                type: "warning"
+              this.$message({
+                message: '请输入积分回馈倍率数',
+                type: 'warning'
               });
               this.canSubmit4 = false;
             } else {
@@ -730,10 +720,9 @@ export default {
           let upgradePackage = "";
           if (this.upgrade1) {
             if (this.zsjf == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入赠送积分数",
-                type: "warning"
+              this.$message({
+                message: '请输入赠送积分数',
+                type: 'warning'
               });
               this.canSubmit5 = false;
             } else {
@@ -753,10 +742,9 @@ export default {
           }
           if (this.upgrade2) {
             if (this.zshb == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入赠送红包金额",
-                type: "warning"
+              this.$message({
+                message: '请输入赠送红包金额',
+                type: 'warning'
               });
               this.canSubmit6 = false;
             } else {
@@ -776,10 +764,9 @@ export default {
           if (this.upgrade3) {
             let zpNum = 0;
             if (this.selectedGifts.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择赠品",
-                type: "warning"
+              this.$message({
+                message: '请选择赠品',
+                type: 'warning'
               });
               this.canSubmit7 = false;
             } else {
@@ -804,10 +791,9 @@ export default {
           if (this.upgrade4) {
             var yhzNum = 0;
             if (this.selectedCoupons.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择优惠券",
-                type: "warning"
+              this.$message({
+                message: '请选择优惠券',
+                type: 'warning'
               });
               this.canSubmit8 = false;
             } else {
@@ -852,10 +838,9 @@ export default {
                     .editCard(formObj)
                     .then(response => {
                       this._routeTo('cardManage');
-                      this.$notify({
-                        title: "成功",
+                      this.$message({
                         message: response,
-                        type: "success"
+                        type: 'success'
                       });
                     })
                     .catch(error => {
@@ -865,9 +850,8 @@ export default {
                   
                 }
               }else{
-                this.$notify({
-                  title: '警告',
-                  message: "高等级条件数值要大于低等级的条件数值",
+                this.$message({
+                  message: '高等级条件数值要大于低等级的条件数值',
                   type: 'warning'
                 });
               }
@@ -880,10 +864,9 @@ export default {
                 .editCard(formObj)
                 .then(response => {
                   this._routeTo('cardManage');
-                  this.$notify({
-                    title: "成功",
+                  this.$message({
                     message: response,
-                    type: "success"
+                    type: 'success'
                   });
                 })
                 .catch(error => {

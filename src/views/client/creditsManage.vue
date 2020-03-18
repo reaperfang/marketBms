@@ -15,21 +15,21 @@
                                     <div style="width: 140px; display: inline-block">
                                         <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
                                     </div>
-                                    <span>积分</span>
-                                    <div style="width: 54px; display: inline-block">
+                                    <span class="marL20">积分</span>
+                                    <div style="width: 54px; display: inline-block" class="marL20">
                                         <el-input v-model="ruleForm.scorePercentageMoney" :disabled="true"></el-input>
                                     </div>
-                                    <span>元</span>
+                                    <span class="marL20">元</span>
                                 </div>
                             </div>
                         </el-form-item>
                         <el-form-item label="积分抵现条件：" v-if="ruleForm.scoreToCash == '1'">
                             <el-checkbox v-model="ruleForm.scoreEnableOrderAchieveCash" @change="handleCheck2"></el-checkbox>
                             <span class="marR50">订单满</span>
-                            <div style="width: 222px; display: inline-block">
+                            <div style="width: 222px; display: inline-block" class="marL20">
                                 <el-input placeholder="请输入整数，不填则不生效" v-model="ruleForm.scoreToCashOrderMoney" @keyup.native="checkZero2($event,ruleForm.scoreToCashOrderMoney,'scoreToCashOrderMoney')"></el-input>
                             </div>
-                            <span>元</span>
+                            <span class="marL20">元</span>
                         </el-form-item>
                         <el-form-item v-if="ruleForm.scoreToCash == '1'">
                             <el-checkbox v-model="ruleForm.scoreEnableOrderHighCash" style="margin-left: 110px" @change="handleCheck"></el-checkbox>
@@ -66,7 +66,7 @@
                     <div class="input_wrap">
                         <el-input placeholder="请输入整数" v-model="ruleForm.scoreUpperCount" :disabled="!isSwitch" @keyup.native="checkZero2($event,ruleForm.scoreUpperCount,'scoreUpperCount')"></el-input>
                     </div>
-                    <span>积分</span>
+                    <span class="marL20">积分</span>
                     <el-button type="primary" class="marL20" v-if="isSwitch" @click="save2">保存</el-button>
                     <span style="margin-left: 10px">(积分上限只限制登录、购买、复购以及评价场景，其他场景获得的积分不在限制以内)</span>
                 </div>
@@ -147,9 +147,8 @@ export default {
         save() {
             let formObj = this.ruleForm;
             if(formObj.scoreToCash == '1' && formObj.scorePercentage == "" && formObj.scorePercentage == "") {
-                this.$notify({
-                    title: '警告',
-                    message: '开启积分抵现则抵现比例为必填',
+                this.$message({
+                    message: "开启积分抵现则抵现比例为必填",
                     type: 'warning'
                 });
             }else{
@@ -159,9 +158,8 @@ export default {
                 formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
                 formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
                 this._apis.client.saveCreditRule(formObj).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: '保存积分规则成功',
+                    this.$message({
+                        message: "保存积分规则成功",
                         type: 'success'
                     });
                     this.checkCreditRule();
@@ -172,16 +170,14 @@ export default {
         },
         save2() {
             if(this.ruleForm.scoreUpperCount=='') {
-                this.$notify({
-                    title: '警告',
-                    message: '每日最高获得积分数不能为空',
+                this.$message({
+                    message: "每日最高获得积分数不能为空",
                     type: 'warning'
                 });
             }else{
-                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: '每日最高获得积分数保存成功',
+                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {                 
+                    this.$message({
+                        message: "每日最高获得积分数保存成功",
                         type: 'success'
                     });
                 }).catch((error) => {
@@ -193,9 +189,8 @@ export default {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
                 this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: '关闭成功',
+                    this.$message({
+                        message: "关闭成功",
                         type: 'success'
                     });
                 }).catch((error) => {
@@ -229,6 +224,9 @@ export default {
 .c_container{
     padding: 19px 20px 100px 20px;
     background-color: #fff;
+    .marL20{
+        margin-left: 20px;
+    }
     span{
         color: #3D434A;
     }

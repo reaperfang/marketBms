@@ -208,16 +208,14 @@ export default {
 
     deleteItem(item) {
       if(this.ruleForm.itemList.length < 2) {
-        this.$notify.warning({
-            title: '警告',
-            message: '最后一个不允许删除'
-        });
+        this.$message.warning('最后一个不允许删除');
         return;           
       }
-      this.$confirm(`确定删除此图片广告吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定删除此图片广告吗？'
       }).then(() => {
         const tempItems = [...this.ruleForm.itemList];
         for(let i=0;i<tempItems.length;i++) {

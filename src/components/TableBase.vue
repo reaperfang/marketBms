@@ -19,6 +19,7 @@ export default {
       multipleSelection: [],
       currentPage: null,
       date: [utils.calcDate(new Date(), '-', 30), new Date()],
+      selectStatus: false
     }
   },
 
@@ -62,6 +63,11 @@ export default {
     //选择改变
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      if(val.length !=0 && val.length == this.tableData.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
 
     //检查当前列是否可以多选

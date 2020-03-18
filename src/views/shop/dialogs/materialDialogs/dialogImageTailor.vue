@@ -152,23 +152,13 @@ export default {
             imgPixelHeight: response.data.data.height
           }
           this._apis.file.editArticle(params).then((response) => {
-            this.$notify({
-              title: '成功',
-              message: '图片裁剪成功',
-              type: 'success'
-            });
+            this.$message.success('图片剪裁成功！');
           }).catch((error) => {
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           })
           // this.$emit('submit',{imageTailor:{}})
         }).catch((error) => {
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error);
         })
       })
     },    

@@ -252,10 +252,9 @@ export default {
       }
       if (this.enable && !params.sceneRule.isAllProduct && this.selectedList.length == 0) {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "请选择指定产品",
-          type: "warning"
+        this.$message({
+          message: '请选择指定产品',
+          type: 'warning'
         });
       } else {
         this._apis.client
@@ -263,10 +262,9 @@ export default {
           .then(response => {
             this.btnLoading = false;
             this.visible = false;
-            this.$notify({
-              title: "成功",
-              message: "保存成功",
-              type: "success"
+            this.$message({
+              message: '保存成功',
+              type: 'success'
             });
             this.$emit('refreshPage')
           })

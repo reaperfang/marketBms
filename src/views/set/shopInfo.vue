@@ -215,10 +215,7 @@ export default {
                 this.itemCatList = arr
                 resolve(res.list)
             }).catch(error => {
-                this.$notify.error({
-                  title: '错误',
-                  message: error
-                });
+                this.$message.error(error);
                 reject(error)
             })
         })
@@ -281,10 +278,7 @@ export default {
           this.form.addressCode = arr
         }
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -315,10 +309,7 @@ export default {
             this._apis.set.updateShopInfo(data).then(response =>{
               this.setShopName()              
             }).catch(error =>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
               this.loading = false
             })
           }
@@ -332,10 +323,7 @@ export default {
         shopInfo.shopName = this.form.shopName
       }
       this.$store.dispatch('setShopInfos',shopInfo).then(() => {
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.loading = false
       }).catch(error=>{ })
     },
