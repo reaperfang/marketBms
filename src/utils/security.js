@@ -1,4 +1,5 @@
 /* 安全相关工具，比如加解密转码等 */
+import CryptoJS from 'crypto-js';
 
 
 //对字符串进行加密(偏移加密)     

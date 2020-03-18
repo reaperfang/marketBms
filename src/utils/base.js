@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js';
 
 /**
  * 合并对象
