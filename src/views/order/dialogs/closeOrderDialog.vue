@@ -2,10 +2,10 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="关闭订单提示" width="500px" :showFooter="showFooter">
         <div class="container">
             <p>关闭订单后不可撤销，且系统将发起未发货商品的自动退款，您确定关闭订单吗？</p>
-            <p>建议与客户沟通后再关闭订单，并选择关闭原因：</p>
+            <p>建议与用户沟通后再关闭订单，并选择关闭原因：</p>
             <div>
                 <span @click="showTextarea = false">
-                    <el-radio v-model="operationType" label="6">客户申请关闭</el-radio>
+                    <el-radio v-model="operationType" label="6">用户申请关闭</el-radio>
                 </span>
                 <span @click="showTextarea = false">
                     <el-radio v-model="operationType" label="7">库存不足</el-radio>
@@ -46,7 +46,7 @@ export default {
             let operationRemark = ''
 
             if(this.operationType == 6) {
-                operationRemark = '客户申请关闭'
+                operationRemark = '用户申请关闭'
             } else if(this.operationType == 7) {
                 operationRemark = '库存不足'
             } else if(this.operationType == 9) {

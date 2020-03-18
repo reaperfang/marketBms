@@ -118,7 +118,7 @@ import Shop from "./components/shop";
 import IntegralShop from "./components/integralShop";
 import { fetchOrderList } from "@/api/order";
 import appConfig from '@/system/appConfig';
-import { search } from '@/mixins/orderMixin'
+import { search } from './mixins/orderMixin'
 import utils from "@/utils";
 
 export default {

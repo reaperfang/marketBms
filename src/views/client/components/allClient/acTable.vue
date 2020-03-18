@@ -12,8 +12,8 @@
       @sort-change="changeSort"
     >
       <el-table-column type="selection" :reserve-selection="true"></el-table-column>
-      <el-table-column prop="memberSn" label="客户ID"></el-table-column>
-      <el-table-column label="客户信息">
+      <el-table-column prop="memberSn" label="用户ID"></el-table-column>
+      <el-table-column label="用户信息">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
             <img v-if="scope.row.headIcon" :src="scope.row.headIcon" alt="" class="headIcon fl">
@@ -171,6 +171,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getMembers(val, this.pageSize);
+      this.startIndex = val;
     },
     handleSizeChange(val) {
       this.getMembers(1, val);
@@ -187,7 +188,7 @@ export default {
         this.currentDialog = "batchDeleteUserDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$message('请选择客户');
+        this.$message('请选择用户');
       }
     },
     batchAddTag() {
@@ -196,7 +197,7 @@ export default {
         this.currentDialog = "batchAddTagDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$message('请选择客户');
+        this.$message('请选择用户');
       }
     },
     addTag(id) {
@@ -228,7 +229,7 @@ export default {
         this.currentDialog = "batchAddBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$message('请选择客户');
+        this.$message('请选择用户');
       }
     },
     batchRemoveBlack() {
@@ -237,7 +238,7 @@ export default {
         this.currentDialog = "batchRemoveBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$message('请选择客户');
+        this.$message('请选择用户');
       }
     },
     handleChange(val) {
@@ -269,7 +270,7 @@ export default {
     },
     freshTable() {
       this.checkAll = false;
-      this.getMembers(1, this.pageSize);
+      this.getMembers(this.startIndex, this.pageSize);
     },
     getAllCoupons(id) {
       this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {

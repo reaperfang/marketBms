@@ -79,8 +79,8 @@
 </template>
 <script type="es6">
 import utils from "@/utils";
-import Blob from '@/excel/Blob'
-import Export2Excel from '@/excel/Export2Excel.js'
+import Blob from '@/assets/js/excel/Blob'
+import Export2Excel from '@/assets/js/excel/Export2Excel.js'
 import ciTable from './components/clientImport/ciTable';
 import addChannelDialog from './dialogs/clientImport/addChannelDialog';
 export default {

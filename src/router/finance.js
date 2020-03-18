@@ -40,7 +40,7 @@ export default [
         path: 'customerBalance',
         component: () => import('@/views/finance/customerBalance'),
         name: 'customerBalance',
-        meta: { title: '客户余额', noCache: true, tabTitle: '成本核算', navType:2 }
+        meta: { title: '用户余额', noCache: true, tabTitle: '成本核算', navType:2 }
       },
       {
         path: 'integralDetails',

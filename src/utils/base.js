@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js';
 
 /**
  * 合并对象
@@ -43,97 +42,6 @@ export function deepClone(source) {
   return targetObj
 }
 
-
-
-/**
- * rgb转16进制
- *
- * @export
- * @param {*} color
- * @returns
- */
-export function colorRGB2Hex(color) {
-  if (!color) {
-    return ''
-  };
-  var rgb = color.split(',');
-  var r = parseInt(rgb[0].split('(')[1]);
-  var g = parseInt(rgb[1]);
-  var b = parseInt(rgb[2].split(')')[0]);
-
-  var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  return hex;
-}
-
-
-/* 格式化数字*/
-export function formatNumber(num, digits) {
-  const si = [
-    { value: 1E18, symbol: 'E' },
-    { value: 1E15, symbol: 'P' },
-    { value: 1E12, symbol: 'T' },
-    { value: 1E9, symbol: 'G' },
-    { value: 1E6, symbol: 'M' },
-    { value: 1E3, symbol: 'k' }
-  ]
-  for (let i = 0; i < si.length; i++) {
-    if (num >= si[i].value) {
-      return (num / si[i].value + 0.1).toFixed(digits).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, '$1') + si[i].symbol
-    }
-  }
-  return num.toString()
-}
-
-
-/**
- *格式化日期和时间
- *
- * @export
- * @param {*} value
- * @param {*} fmt
- * @returns
- */
-export function formatDate(value, fmt) {
-  if (!(value instanceof Date)) {
-    value = new Date(value);
-  }
-  var o = {
-    "M+": value.getMonth() + 1,                 //月份   
-    "d+": value.getDate(),                    //日   
-    "h+": value.getHours(),                   //小时   
-    "m+": value.getMinutes(),                 //分   
-    "s+": value.getSeconds(),                 //秒   
-    "q+": Math.floor((value.getMonth() + 3) / 3), //季度   
-    "S": value.getMilliseconds()             //毫秒   
-  };
-  if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (value.getFullYear() + "").substr(4 - RegExp.$1.length));
-  }
-  for (var k in o) {
-    if (new RegExp("(" + k + ")").test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    }
-  }
-  return fmt;
-}
-
-/**
- *计算日期
- *
- * @export
- * @param {*} value
- * @param {*} fmt
- * @returns
- */
-export function countDate(num) {
-  let date1 = new Date();
-  let date2 = new Date(date1);
-  date2.setDate(date1.getDate() + num);
-  // let time2 = date2.getFullYear()+"-"+(date2.getMonth()+1)+"-"+date2.getDate();
-  let time2 = this.formatDate(date2, "yyyy-MM-dd")
-  return time2;
-}
-
 /**
 *系统内部跳转
 *
@@ -145,36 +53,6 @@ export function routeTo(pathName, query = {}) {
     name: pathName,
     query
   })
-}
-
-/**
- * 数值百分比转换
- * @param value 
- * @param fmt string , 转换格式
- * demo ->  {{data | percent(2)}}
- */
-export function percent(value, fmt) {
-  return `${((value || 0) * 100).toFixed(fmt || 2)}%`;
-}
-
-/**
- * 推算日期
- *
- * @export
- * @param {*} dateObj      日期对象 
- * @param {*} range        推算范围  默认7天
- * @param {*} calcType     推算类型  +或者-
- * @returns
- */
-export function calcDate(dateObj, calcType, range) {
-  range = range === 1 ? 2 : range;
-  let tempDateObj = new Date();
-  if (calcType === '+') {
-    tempDateObj.setTime(dateObj.getTime() + 3600 * 1000 * 24 * (range - 1));
-  } else if (calcType === '-') {
-    tempDateObj.setTime(dateObj.getTime() - 3600 * 1000 * 24 * (range - 1));
-  }
-  return tempDateObj
 }
 
 
@@ -223,19 +101,6 @@ export function asyncLoadJs(doc, path) {
 }
 
 /**
- * 首字母大写
- *
- * @export
- * @param {*} name
- */
-export function titleCase(name) {
-  let str = name.replace(/\b\w+\b/g, function (word) {
-    return word.substring(0, 1).toUpperCase() + word.substring(1);
-  });
-  return str;
-}
-
-/**
  * 根据value值获取label
  *
  * @export
@@ -258,34 +123,6 @@ export function getDictLabel(obj, group, value) {
   return rst
 }
 
-//对字符串进行加密(偏移加密)     
-export function compileStr1(code) {
-  var c = String.fromCharCode(code.charCodeAt(0) + code.length);
-  for (var i = 1; i < code.length; i++) {
-    c += String.fromCharCode(code.charCodeAt(i) + code.charCodeAt(i - 1));
-  }
-  return escape(c);
-}
-
-//对字符串进行解密(偏移解密)     
-export function uncompileStr1(code) {
-  code = unescape(code);
-  var c = String.fromCharCode(code.charCodeAt(0) - code.length);
-  for (var i = 1; i < code.length; i++) {
-    c += String.fromCharCode(code.charCodeAt(i) - c.charCodeAt(i - 1));
-  }
-  return c;
-}
-//对字符串进行加密(无偏移)     
-export function compileStr(code) {
-  return escape(code);
-}
-
-//对字符串进行解密(无偏移)     
-export function uncompileStr(code) {
-  return unescape(code);
-}
-
 //订单状态过滤器   
 export function orderStatusFilter(status) {
   switch (status) {
@@ -306,6 +143,7 @@ export function orderStatusFilter(status) {
   }
 }
 
+//商品规格过滤器
 export function goodsSpecsFilter(value) {
   let _value
   if(!value) return ''
@@ -323,65 +161,9 @@ export function goodsSpecsFilter(value) {
   return str
 }
 
-//扁平数据解析成为树形结构
-export function buildTree(data) {
-  let parents = data.filter(value => value.navType == 0)
-  let children = data.filter(value => value.navType !== 0)
-  let translator = (parents, children) => {
-      parents.forEach((parent) => {
-          children.forEach((current, index) => {
-              if (current.parentId*1 === parent.id) {
-                  let temp = JSON.parse(JSON.stringify(children))
-                  temp.splice(index, 1)
-                  translator([current], temp)
-                  typeof parent.children !== 'undefined' ? parent.children.push(current) : parent.children = [current]
-              }
-          })
-      })
-  }
-  translator(parents, children)
-  return parents
-}
 
-/**
- * AES加密
- *
- * @export
- * @param {*} string
- * @returns
- */
-export function aesEncryption(key= '', string=''){
-      var key = CryptoJS.enc.Utf8.parse(key);
-      // ECB加密
-      var options={
-          mode: CryptoJS.mode.ECB,
-          padding: CryptoJS.pad.Pkcs7
-      }
-      var encryptedData = CryptoJS.AES.encrypt(string, key, options);
-      var encryptedBase64Str = encryptedData.toString();
-      return encryptedBase64Str;
-}
 
-/**
- * AES解密
- *
- * @export
- * @param {*} string
- * @returns
- */
-export function aesDecryption(key= '', string=''){
-    var encryptedBase64Str = string;
-    var options = {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.Pkcs7
-    };
-    var key = CryptoJS.enc.Utf8.parse(key);
-    // 解密
-    var decryptedData = CryptoJS.AES.decrypt(encryptedBase64Str, key, options);
-    // 解密后，需要按照Utf8的方式将明文转位字符串
-    var decryptedStr = decryptedData.toString(CryptoJS.enc.Utf8);
-    return decryptedStr;
-}
+
 
 // 获取url中的参数
 export function GetQueryString(name) {
@@ -391,110 +173,7 @@ export function GetQueryString(name) {
 	return null;
 }
 
-// 计算日期时间差 计算毫秒
-export function dateDifference(endTime){
-	var endTimeYear = parseInt(endTime.split(" ")[0].split("-")[0]);
-	var endTimeMonth = parseInt(endTime.split(" ")[0].split("-")[1]);
-	var endTimeDay = parseInt(endTime.split(" ")[0].split("-")[2]);
-	var endTimeHour = parseInt(endTime.split(" ")[1].split(":")[0]);
-	var endTimeMinute = parseInt(endTime.split(" ")[1].split(":")[1]);
-	var endTimeSecond = parseInt(endTime.split(" ")[1].split(":")[2]);
-	var cks = Date.UTC(endTimeYear,endTimeMonth-1,endTimeDay,endTimeHour,endTimeMinute,endTimeSecond) - new Date().getTime()+new Date().getTimezoneOffset() * 60000;
-	if(!(cks>0)){
-		cks=0;
-	}
-	return cks;
-}
 
-/* 添加0 */
-export function addZero(num) {
-  if(!num) {
-    return '00'
-  }
-  if(Number(num) >= 10) {
-    return num;
-  }else {
-    if(Number(num) > 0) {
-      return '0' + Number(num);
-    }else{
-      return '00'
-    }
-  }
-}
-
-/* 
-*时间选择器结束时间处理 
-* endTime  结束时间对象
-* canSelectFuture  是否可选择未来
-*/
-export function endTimeHandle(endTime, canSelectFuture = true) {
-  if(endTime) {
-    if(endTime.getTime() >= new Date().getTime()) {  //如果结束时间大于或等于当前时间
-      if(!canSelectFuture) {  //如果不允许选择未来
-        return new Date();  //返回当前时间
-      }else {
-        return endTime;
-      }
-    }else { //如果结束时间小于当前时间
-      if(endTime.getFullYear() === new Date().getFullYear() && endTime.getMonth() === new Date().getMonth() && endTime.getDate() === new Date().getDate()) {  //如果是当天
-        return new Date();  //返回当前时间
-      }else {  //如果是今天以前，则返回那一天的23:59:59
-        return endTime.getTime() + 24 * 60 * 60 * 1000 - 1;
-      }
-    }
-  }else {
-    return new Date();
-  }
-}
-
-/* 
-*日期选择器配置项 
-* canSelectFuture  是否可选择未来
-*/
-export function pickerOptions(params) {
-    if(params.canSelectFuture == undefined || params.canSelectFuture == null) {
-      params.canSelectFuture = true;
-    }
-    return {
-      disabledDate(time) {
-        if(!params.canSelectFuture) { 
-          return time.getTime() > Date.now();//如果没有后面的-8.64e7就是不可以选择今天的 
-        }else {
-          return false;
-        }
-      }
-    }
-}
-
-/* 
-*获取某一天的00:00:00时间对象
-*/
-export function dayStart(startTime) {
-  let time = new Date(startTime);
-  let firstDay = new Date(startTime);
-  time.setFullYear(firstDay.getFullYear());
-  time.setMonth(firstDay.getMonth());
-  time.setDate(firstDay.getDate());
-  time.setHours(0);
-  time.setMinutes(0);
-  time.setSeconds(0);
-  return time;
-}
-
-/* 
-*获取某一天的23:59:59时间对象
-*/
-export function dayEnd(endTime) {
-  let time = new Date(endTime);
-  let lastDay = new Date(endTime);
-  time.setFullYear(lastDay.getFullYear());
-  time.setMonth(lastDay.getMonth());
-  time.setDate(lastDay.getDate());
-  time.setHours(23);
-  time.setMinutes(59);
-  time.setSeconds(59);
-  return time;
-}
 
 
 

@@ -175,7 +175,7 @@ export default {
                 message: "发放成功",
                 type: 'success'
               });
-              this.$emit('refreshPage');
+              this.$emit('refreshPage',2);
             }
           })
         }).catch((error) => {
