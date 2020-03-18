@@ -68,8 +68,9 @@
                     </el-cascader>
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
-                    <span @click="addCategory">新增分类</span>
-                    <el-button type="primary" @click="getCategoryList">刷新</el-button>
+                    <span style="margin-right: 61px; margin-left: -5px;" @click="addCategory">新增分类</span>
+                    <!-- <el-button type="primary" @click="getCategoryList">刷新</el-button> -->
+                    <span @click="getCategoryList">刷新</span>
                 </div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
@@ -86,7 +87,7 @@
                         </el-select>
                     </div>
                     <div v-if="ruleForm.productCategoryInfoId" @click="currentDialog = 'AddTagDialog'; dialogVisible = true" class="item tag">新增标签</div>
-                    <div @mouseenter="imageVisible = true" @mouseleave="imageVisible = false" class="item example">
+                    <div style="margin-left: -8px;" @mouseenter="imageVisible = true" @mouseleave="imageVisible = false" class="item example">
                         查看样例
                         <div v-show="imageVisible" class="item images images-example">
                             <img src="../../assets/images/goods/example.png" alt="">
@@ -113,60 +114,56 @@
                                 <el-button @click="deleteAddedSpec(index)">移除</el-button>
                             </div>
                             <ul class="spec-value-ul">
-                                <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
-                                    {{spec.name}}
-                                    <i @click="deleteAddedSpecValue(index, specValueIndex)" data-v-03229368="" class="icon-circle-close"></i>
-                                </li>
+                                <li v-for="(spec, index) in item.valueList" :key="index">{{spec.name}}</li>
                             </ul>
-                            <div class="add-specs-button">
-                                <el-popover
-                                    placement="bottom"
-                                    width="430"
-                                    trigger="manual"
-                                    v-model="item.visible">
-                                    <div class="add-specs-value">
-                                        <div class="add-specs-value-input">
-                                            <input @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
-                                            <el-button @click="addNewSpecValue(item, index)">新增</el-button>
-                                        </div>
-                                        <ul class="add-spec-value-ul">
-                                            <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
-                                                {{ValueItem.name}}
-                                                <i v-if="ValueItem.type == 'new'" @click="(e) => {
-                                                    deleteSpecValue(valueIndex, e)
-                                                }" class="icon-circle-close"></i>
-                                            </li>
-                                            <div class="clear"></div>
-                                        </ul>
-                                        <p class="spec-message" v-if="item.focus && !item.list || (item.focus && item.list && !item.list.length)">暂无匹配项，您可新增规格值到列表</p>
-                                        <div class="add-specs-value-footer">
-                                            <el-button v-if="item.list && item.list.length" @click="getSpecs(false, index)" type="primary">确定</el-button>
-                                        </div>
-                                    </div>
-                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)">添加规格值</el-button>
-                                </el-popover>
-                            </div>
                         </li>
                     </ul>
                     <div class="add-specs-button-box">
-                        <div style="margin-right: 20px;" v-show="!showAddSpecsInput" class="add-specs-button">
+                        <div class="add-specs-button">
+                            <el-popover
+                                placement="bottom"
+                                width="430"
+                                trigger="manual"
+                                v-model="visible">
+                                <div class="add-specs-value">
+                                    <div class="add-specs-value-input">
+                                        <input v-model="newSpecValue" type="text" placeholder="选择或录入规格值">
+                                        <el-button @click="addNewSpecValue">新增</el-button>
+                                    </div>
+                                    <ul class="add-spec-value-ul">
+                                        <li @click="selectSpecValue(index)" :class="{active: item.active}" v-for="(item, index) in specsValues" :key="index">
+                                            {{item.name}}
+                                            <i v-if="item.type == 'new'" @click="(e) => {
+                                                deleteSpecValue(index, e)
+                                            }" class="icon-circle-close"></i>
+                                        </li>
+                                        <div class="clear"></div>
+                                    </ul>
+                                    <div class="add-specs-value-footer">
+                                        <el-button @click="getSpecs" type="primary">确定</el-button>
+                                    </div>
+                                </div>
+                                <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false)">添加规格值</el-button>
+                            </el-popover>
+                        </div>
+                        <div style="margin-left: 20px;" v-show="!showAddSpecsInput" class="add-specs-button">
                             <el-button class="spec-button" @click="addSpecs" type="primary">选择规格</el-button>
+                            <p style="margin-top: 10px;">请先选择颜色主规格</p>
                         </div>
                     </div>
                     <div v-show="showAddSpecsInput" class="add-specs">
-                        <div style="position: relative;" class="add-specs-input">
+                        <div style="position: relative; top: 23px;" class="add-specs-input">
                             <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
-                        <ul class="spec-list" style="top: 35px;" v-show="showSpecsList">
-                            <li v-if="!specsList || (specsList && !specsList.length)">暂无匹配项，您可新增自定义规格到列表</li>
+                        <ul class="spec-list" style="top: 57px;" v-show="showSpecsList">
                             <li @click="addSpecClick(item)" v-for="item in specsList" :key="item.id">{{item.name}}</li>
                         </ul>
                     </div>
                 </div>
                 <template v-if="!editor">
-                    <el-button v-if="ruleForm.goodsInfos && ruleForm.goodsInfos.length" @click="batchFilling" class="batch-filling" type="primary">批量填充</el-button>
-                    <!-- <el-table
+                    <el-button @click="batchFilling" class="batch-filling" type="primary">批量填充</el-button>
+                    <el-table
                     class="spec-information"
                     :data="ruleForm.goodsInfos"
                     :header-cell-style="{background:'#f2ecff', color:'#655EFF'}"
@@ -184,6 +181,11 @@
                             {{scope.row.label.split(',') && scope.row.label.split(',')[index]}}
                         </template>
                     </el-table-column>
+                    <!-- <el-table-column
+                        prop="label"
+                        :label="specsLabel"
+                        width="120">
+                    </el-table-column> -->
                     <el-table-column
                         prop="costPrice"
                         label="成本价"
@@ -253,6 +255,7 @@
                         class-name="image"
                         width="152">
                         <template slot-scope="scope">
+                            <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}" style="margin-top:10px"></div> -->
                             <el-upload
                                 :disabled="!ruleForm.productCategoryInfoId"
                                 class="upload-spec"
@@ -289,23 +292,14 @@
                             </div>
                         </template>
                     </el-table-column>
-                    </el-table> -->
-                    <Specs :list.sync="ruleForm.goodsInfos" 
-                        :specsLabel="specsLabel"
-                        :productCategoryInfoId="ruleForm.productCategoryInfoId"
-                        :uploadUrl="uploadUrl"
-                        @handlePictureCardPreview="handlePictureCardPreview"
-                        @specHandleRemove="specHandleRemove"
-                        @specUploadSuccess="specUploadSuccess"
-                        @emptySpec="emptySpec"
-                        @deleteSpec="deleteSpec"></Specs>
+                    </el-table>
                 </template>
                 <template v-else>
-                    <!-- <el-table
-                        class="spec-information-editor"
-                        :data="ruleForm.goodsInfos"
-                        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-                        style="width: 100%">
+                    <el-table
+                    class="spec-information-editor"
+                    :data="ruleForm.goodsInfos"
+                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                    style="width: 100%">
                         <el-table-column
                             prop="label"
                             :label="specsLabel"
@@ -317,6 +311,7 @@
                             width="180"
                             class-name="costPrice">
                             <template slot-scope="scope">
+                                <!-- <span>¥{{scope.row.costPrice}}</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
                             </template>
                         </el-table-column>
@@ -338,6 +333,7 @@
                             label="库存预警"
                             class-name="warningStock">
                             <template slot-scope="scope">
+                                <!-- <span>¥{{scope.row.costPrice}}</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
                             </template>
                         </el-table-column>
@@ -346,6 +342,7 @@
                             label="重量(kg)"
                             class-name="weight">
                             <template slot-scope="scope">
+                                <!-- <span>{{scope.row.weight}}(kg)</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.weight" placeholder="请输入重量"></el-input>
                             </template>
                         </el-table-column>
@@ -354,14 +351,18 @@
                             label="体积(m³)"
                             class-name="volume">
                             <template slot-scope="scope">
+                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
                             </template>
                         </el-table-column>
+                        
                         <el-table-column
                             prop="image"
                             label="图片"
                             class-name="image">
                             <template slot-scope="scope">
+                                <!-- <img width="66" :src="scope.row.image" alt=""> -->
+                                <!-- <div v-if="scope.row.image" class="image" :style="{backgroundImage: `url(${scope.row.image})`}"></div> -->
                                 <el-upload
                                     :disabled="!ruleForm.productCategoryInfoId"
                                     class="upload-spec"
@@ -391,19 +392,11 @@
                             label="SKU编码"
                             class-name="code">
                             <template slot-scope="scope">
+                                <!-- <span>{{scope.row.volume}}(m³)</span> -->
                                 <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
                             </template>
                         </el-table-column>
-                    </el-table> -->
-                    <Specs :list.sync="ruleForm.goodsInfos" 
-                        :specsLabel="Object.keys(JSON.parse(ruleForm.productSpecs)).join(',')"
-                        :productCategoryInfoId="ruleForm.productCategoryInfoId"
-                        :uploadUrl="uploadUrl"
-                        @handlePictureCardPreview="handlePictureCardPreview"
-                        @specHandleRemove="specHandleRemove"
-                        @specUploadSuccess="specUploadSuccess"
-                        @emptySpec="emptySpec"
-                        @deleteSpec="deleteSpec"></Specs>
+                    </el-table>
                 </template>
                 <div>
                     <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowStock">商品详情显示剩余库存</el-checkbox>
@@ -505,8 +498,8 @@
                         </el-option>
                     </el-select>
                     <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
-                        <span @click="addTemplate">新增模板</span>
-                        <el-button type="primary" @click="getTemplateList">刷新</el-button>
+                        <el-button type="primary" @click="addTemplate">新增模板</el-button>
+                        <el-button class="shuaxin-template" @click="getTemplateList">刷新</el-button>
                     </div>
                 </div>
                 <div>
@@ -583,7 +576,6 @@ import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
-import Specs from '@/views/goods/components/specs'
 export default {
     name: 'addGoods',
     data() {
@@ -801,13 +793,7 @@ export default {
             }
             let parentNode = e.target.parentNode.parentNode.parentNode || e.target.parentNode.parentNode || e.target.parentNode
             if(parentNode.className != 'add-specs-button') {
-                //that.visible = false
-                let addedSpecs = JSON.parse(JSON.stringify(that.addedSpecs))
-
-                addedSpecs.forEach(val => {
-                    val.visible = false
-                })
-                that.addedSpecs = addedSpecs
+                that.visible = false
             }
         })
     },
@@ -868,30 +854,6 @@ export default {
         });
     },
     methods: {
-        specsValueFocus(index) {
-            this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                focus: true
-            }))
-        },
-        specsValueBlur(index) {
-            this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                focus: false
-            }))
-        },
-        deleteAddedSpecValue(index, specValueIndex) {
-            let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-            let id
-
-            id = addedSpecs[index].valueList[specValueIndex].id
-            addedSpecs[index].valueList.splice(specValueIndex, 1)
-            addedSpecs[index].list.forEach(val => {
-                if(val.id == id) {
-                    val.active = false
-                }
-            })
-            this.addedSpecs = addedSpecs
-            this.getSpecs(false, index)
-        },
         batchFilling() {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
             goodsInfos.forEach((val, index) => {
@@ -913,9 +875,9 @@ export default {
             this.addedSpecs = addedSpecs
             this.specsValues.splice(index, 1)
         },
-        addNewSpecValue(item, index) {
-            let value = item.newSpecValue
-            let lastAddedSpecs = this.addedSpecs[index]
+        addNewSpecValue() {
+            let value = this.newSpecValue
+            let lastAddedSpecs = this.addedSpecs[this.addedSpecs.length - 1]
             if(value == "") {
                 this.$message({
                     message: '规格值不能为空',
@@ -943,28 +905,19 @@ export default {
                 list: [], 
                 type: 'new', 
                 level: '2', 
-                parentId: lastAddedSpecs.id,
-                active: false
+                parentId: lastAddedSpecs.id 
             };
             if (!lastAddedSpecs.list) {
                 this.$set(lastAddedSpecs, 'list', []);
             }
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-            addedSpecs[index].list = addedSpecs[index].list || []
-            addedSpecs[index].list.push(newChild)
-            addedSpecs[index].newSpecValue = ''
+            addedSpecs[addedSpecs.length - 1].list = addedSpecs[addedSpecs.length - 1].list || []
+            addedSpecs[addedSpecs.length - 1].list.push(newChild)
             
             this.addedSpecs = addedSpecs
             this.flatSpecsList = [...this.flatSpecsList, newChild]
             this.addSpecValue(true)
             this.newSpecValue = ''
-
-            let valueIndex = this.addedSpecs[index].list.findIndex(val => val.id == newChild.id)
-
-            this.selectSpecValue(index, valueIndex)
-            this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                visible: false
-            }))
         },
         addNewSpec() {
             if(/\s+/.test(this.newSpec)) {
@@ -987,14 +940,11 @@ export default {
                 list: [], 
                 type: 'new', 
                 level: '1', 
-                parentId: '0',
-                newSpecValue: '' 
+                parentId: '0' 
             }
             this.specsList = [...this.specsList, newChild]
             this.flatSpecsList.push({...newChild})
             this.newSpec = ''
-
-            this.addSpecClick(newChild)
         },
         selectSpecs(arr) {
             let results = [];
@@ -1054,100 +1004,13 @@ export default {
                     _results.splice(specIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[index]))
                 }
             })
-            let ___results = this.computedList(_results)
-
-            this.ruleForm.goodsInfos = ___results
-        },
-        computedList(arr) {
-            let _list = JSON.parse(JSON.stringify(arr))
-
-            _list.forEach((val, index) => {
-                for(let i in val) {
-                    if(val.hasOwnProperty(i)) {
-                        if(/\_hide$/.test(i)) {
-                            //val[i] = false
-                            delete val[i]
-                        }
-                        if(/\_rowspan$/.test(i)) {
-                            //val[i] = 1
-                            delete val[i]
-                        }
-                    }
-                }
-            })
-
-            let computeRowspan = (prevSpecs, leftSpecs) => {
-                let prevSpecsStr = prevSpecs.join(',')
-                let number = 0
-                let indexArr = []
-
-                if(leftSpecs && leftSpecs.length) {
-                    _list.forEach((val, index) => {
-                        let label = val.label
-
-                        if(label.indexOf(prevSpecsStr + ',') != -1) {
-                            indexArr.push(index)
-                            number++
-                        }
-                    })
-
-                    indexArr.sort(function(a, b){return a - b})
-
-                    return {
-                        number,
-                        index: indexArr.shift()
-                    }
-                } else {
-                    return null
-                }
-            }
-
-            _list.forEach((val, index) => {
-                let label = val.label
-                let labelArr = label.split(',')
-
-                if(labelArr.length > 1) {
-                    labelArr.forEach((labelItem, labelIndex) => {
-                        let specValue = labelItem
-                        let prevSpecs = labelArr.slice(0, labelIndex + 1)
-                        let leftSpecs = labelArr.slice(labelIndex + 1)
-                        let specLable = ''
-
-                        for(let i in val.specs) {
-                            if(val.specs.hasOwnProperty(i)) {
-                                if(val.specs[i] == specValue) {
-                                    specLable = i
-                                }
-                            }
-                        }
-                        //val[specLable + '_rowspan'] = 1
-                        //val[specLable + '_hide'] = false
-
-                        let retObj = computeRowspan(prevSpecs, leftSpecs)
-
-                        if(retObj) {
-                            val[specLable + '_rowspan'] = retObj.number
-                            if(index != retObj.index) {
-                                val[specLable + '_hide'] = true
-                            }
-                        }
-                        if(labelIndex == labelArr.length - 2) {
-                            val['image_rowspan'] = retObj.number
-                            if(index != retObj.index) {
-                                val['image_hide'] = true
-                            }
-                        }
-                    })
-                }
-            })
-
-            return _list
+            this.ruleForm.goodsInfos = _results
         },
         deleteAddedSpec(index) {
             this.addedSpecs.splice(index, 1)
-            this.getSpecs(false, index)
+            this.getSpecs()
         },
-        getSpecs(open, index) {
+        getSpecs(open) {
             this.callObjectSpanMethod = true
             let arr = []
             // this.addedSpecs.forEach(val => {
@@ -1167,42 +1030,36 @@ export default {
             })
             this.specIds = arr
             this.selectSpecs(arr)
-            //this.deleteStyle()
+            this.deleteStyle()
             this.deleteSpecArr = []
             if(open && typeof open == 'boolean') {
-                //this.visible = true
-                this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                    visible: true
-                }))
+                this.visible = true
             } else {
-                //this.visible = false
-                this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                    visible: false
-                }))
+                this.visible = false
             }
         },
-        selectSpecValue(index, valueIndex) {
-            let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
-            let specsValues = addedSpecs[index].list
-            let id = specsValues[valueIndex].id
-            specsValues[valueIndex].active = !specsValues[valueIndex].active
+        selectSpecValue(index) {
+            let specsValues = JSON.parse(JSON.stringify(this.specsValues))
+            let id = specsValues[index].id
+            specsValues[index].active = !specsValues[index].active
             this.specsValues = specsValues
+            let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
             
-            if(specsValues[valueIndex].active) {
-                if(!this.addedSpecs[index].valueList.find(val => val.id == id)) {
-                    addedSpecs[index].valueList.push(specsValues[valueIndex])
+            if(specsValues[index].active) {
+                if(!this.addedSpecs[this.addedSpecs.length - 1].valueList.find(val => val.id == id)) {
+                    addedSpecs[this.addedSpecs.length - 1].valueList.push(specsValues[index])
                     this.addedSpecs = addedSpecs
                 }
             } else {
-                if(this.addedSpecs[index].valueList.find(val => val.id == id)) {
-                    let index = this.addedSpecs[index].valueList.findIndex(val => val.id == id)
-                    addedSpecs[index].valueList.splice(valueIndex, 1)
+                if(this.addedSpecs[this.addedSpecs.length - 1].valueList.find(val => val.id == id)) {
+                    let index = this.addedSpecs[this.addedSpecs.length - 1].valueList.findIndex(val => val.id == id)
+                    addedSpecs[this.addedSpecs.length - 1].valueList.splice(index, 1)
                     this.addedSpecs = addedSpecs
                 }
             }
-            this.getSpecs(true, index)
+            this.getSpecs(true)
         },
-        addSpecValue(open, index) {
+        addSpecValue(open) {
             let item = this.addedSpecs[this.addedSpecs.length - 1]
             let list = JSON.parse(JSON.stringify(item.list))
             
@@ -1215,10 +1072,7 @@ export default {
             })
             this.specsValues = list
             if(!open) {
-                //this.visible = !this.visible
-                this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                    visible: !this.addedSpecs[index].visible
-                }))
+                this.visible = !this.visible
             }
             console.log('addSpecValue', item)
         },
@@ -1253,26 +1107,6 @@ export default {
             }
             this.showAddSpecsInput = true
         },
-        getNumber(row, column, rowIndex, columnIndex) {
-            let goodsInfos = [...this.ruleForm.goodsInfos]
-            let label = row.label
-            let labbelArr = label.split(',')
-            let number = 0
-            let prevLabelArr = labbelArr.slice(0, columnIndex + 1)
-            let prevLabel = prevLabelArr.join(',')
-
-            if(columnIndex == labbelArr.length - 1) return number
-
-            goodsInfos.forEach((val, index) => {
-                let _label = val.label
-                let _labbelArr = _label.split(',')
-                let _prevLabelArr = _labbelArr.slice(0, columnIndex + 1)
-                let _prevLabel = _prevLabelArr.join(',')
-
-                if(_prevLabel == prevLabel) number++
-            })
-            return number
-        },
         objectSpanMethod({ row, column, rowIndex, columnIndex }) {
             if(!this.callObjectSpanMethod) return
             let length = this.addedSpecs.length
@@ -1282,13 +1116,12 @@ export default {
                 var val = addedSpecs[index]
                 var number = 1
                 if(columnIndex > length - 2) {
-                    if(column.property == 'image1') {
+                    if(column.property == 'image') {
                         if(length > 1) {
                             let arr = addedSpecs.slice(1)
                             number = arr.reduce((prev, cur) => {
                                 return prev*cur.valueList.length
                             }, 1)
-                            //number = this.getNumber(row, column, rowIndex, columnIndex)
                             if(number != 1) {
                                 if(rowIndex % number === 0) {
                                     if((rowIndex == this.ruleForm.goodsInfos.length - 1) && (columnIndex == this.addedSpecs.length + 9 - 1)) {
@@ -1314,10 +1147,9 @@ export default {
                 }
                 if(index + 1 < length) {
                     let arr = addedSpecs.slice(index + 1)
-                    // number = arr.reduce((prev, cur) => {
-                    //     return prev*cur.valueList.length
-                    // }, 1)
-                    number = this.getNumber(row, column, rowIndex, columnIndex)
+                    number = arr.reduce((prev, cur) => {
+                        return prev*cur.valueList.length
+                    }, 1)
                 }
                 if(number != 1) {
                     if(rowIndex % number === 0) {
@@ -1467,23 +1299,17 @@ export default {
             })
         },
         deleteSpec(index) {
-            console.log(index)
-            let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-            let __goodsInfos
-
-            _goodsInfos.splice(index, 1)
-            __goodsInfos = this.computedList(_goodsInfos)
-            this.ruleForm.goodsInfos = __goodsInfos
+            //this.ruleForm.goodsInfos.splice(index, 1)
             
-            // this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
-            //     this.deleteSpecArr.push(index)
-            //     this.addStyle(index)
-            // }).catch(() => {
-            //     this.$message({
-            //         type: 'info',
-            //         message: '已取消删除'
-            //     });
-            // })
+            this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
+                this.deleteSpecArr.push(index)
+                this.addStyle(index)
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            })
         },
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
@@ -1575,15 +1401,10 @@ export default {
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
-            this._apis.goods.getGoodsDetail({id}).then(res => {
+            this._apis.goods.getGoodsDetail({id, goodsInfoId}).then(res => {
                 console.log(res)
                 let arr = []
                 let itemCatAr = []
-                res.goodsInfos.forEach(val => {
-                    let label = Object.values(JSON.parse(val.specs)).join(',')
-
-                    val.label = label
-                })
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
                     this.getCategoryIds(_arr, id)
@@ -1594,7 +1415,7 @@ export default {
                     return this.operateCategoryList.find(val => val.id == id)
                 })
                 this.itemCatText = _arr.map(val => val.name).join(' > ')
-                let specs = JSON.parse(res.productSpecs)
+                let specs = JSON.parse(res.goodsInfo.specs)
                 let specsLabelArr = []
                 let labelArr = []
                 for(let i in specs) {
@@ -1604,10 +1425,10 @@ export default {
                     }
                 }
                 this.specsLabel = specsLabelArr.join(',')
-                //res.goodsInfo.label = labelArr.join(',')
+                res.goodsInfo.label = labelArr.join(',')
                 
                 this.ruleForm = Object.assign({}, this.ruleForm, res, {
-                    //goodsInfos: [res.goodsInfo]
+                    goodsInfos: [res.goodsInfo]
                 })
                 this.categoryValue = arr
                 this.ruleForm.itemCat = itemCatAr
@@ -1718,10 +1539,6 @@ export default {
                 console.log(res)
                 res.forEach(val => {
                     val.level = '1'
-                    val.newSpecValue = ''
-                    val.active = false
-                    val.visible = false
-                    val.focus = false
                 })
                 this.specsList = res
                 //this.specsLength = this.specsList.length
@@ -2368,8 +2185,7 @@ export default {
         AddCategoryDialog,
         AddTagDialog,
         dialogSelectImageMaterial,
-        RichEditor,
-        Specs
+        RichEditor
     }
 }
 </script>
@@ -2425,7 +2241,7 @@ $blue: #655EFF;
     .material {
         color: $globalMainColor;
         cursor: pointer;
-        margin-left: -53px;
+        margin-left: -69px;
         position: relative;
         top: -54px;
     }
@@ -2850,19 +2666,6 @@ $blue: #655EFF;
         margin-top: 10px;
         margin-bottom: 14px;
         padding-left: 20px;
-      li {
-            border: 1px solid #DCDFE6;
-            padding: 5px 10px;
-            i {
-                margin-left: 2px;
-                display: inline-block;
-                vertical-align: middle;
-                width: 14px;
-                height: 14px;
-                background: url('../../assets/images/goods/icon_close.png') no-repeat;
-                cursor: pointer;
-            }
-        }
     }
     .add-spec-value-ul {
         li {
@@ -2877,7 +2680,6 @@ $blue: #655EFF;
                 width: 14px;
                 height: 14px;
                 background: url('../../assets/images/goods/icon_close.png') no-repeat;
-                cursor: pointer;
             }
         }
     }
@@ -2901,9 +2703,5 @@ $blue: #655EFF;
     border: 1px solid #92929B;
     color: #44434B;
     margin-left: 28px;
-}
-.spec-message {
-    margin-bottom: 10px;
-    font-size: 12px;
 }
 </style>

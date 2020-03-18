@@ -33,17 +33,18 @@
                         <el-option label="否" :value="0"></el-option>
                     </el-select>
                 </el-form-item>
-                <div class="buttons" style="display: inline-block; float: right;">
+                <el-form-item>
+                    <el-button @click="getList" type="primary">搜索</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
+                </el-form-item>
+                <!-- <div class="buttons" style="display: inline-block; float: right;">
                     <div class="lefter">
-                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '批量审核']" @click="batchAudit" class="border-button">批量审核</el-button> -->
-                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '批量回复']" @click="batchReply" class="border-button">批量回复</el-button> -->
-                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '敏感词设置']" @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button> -->
                     </div>
                     <div class="righter">
                         <el-button @click="getList" type="primary">搜索</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
-                </div>
+                </div> -->
                 <div style="clear: both;"></div>
             </el-form>
         </div>
@@ -411,6 +412,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .reviews {
     .search {
         background-color: #fff;

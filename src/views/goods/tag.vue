@@ -3,13 +3,13 @@
     <div class="search">
       <div>
         <el-button v-permission="['商品', '商品标签', '默认页面', '新建标签']" @click="currentDialog = 'AddTagDialog'; dialogVisible = true" type="primary">新建标签</el-button>
-        <el-button class="border-button" @click="moreManageHandler">批量管理</el-button>
+        <!-- <el-button class="border-button" @click="moreManageHandler">批量管理</el-button> -->
       </div>
       <el-form :inline="true" :model="listQuery" ref="form" class="form-inline">
-        <el-form-item label="搜索标签：" prop="name">
+        <el-form-item label="搜索标签" prop="name">
           <el-input v-model="listQuery.name" placeholder="请输入标签名称..."></el-input>
         </el-form-item>
-        <el-form-item label="标签状态：" prop="enable">
+        <el-form-item label="标签状态" prop="enable">
           <el-select v-model="listQuery.enable" placeholder="请选择标签状态">
             <el-option
               :label="item.label"
@@ -33,7 +33,7 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column v-if="showTableCheck" type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="name" label="标签名称" width="180"></el-table-column>
       <el-table-column prop="productCount" label="绑定商品数量" width="180"></el-table-column>
       <el-table-column label="状态">
@@ -52,9 +52,10 @@
       </el-table-column>
     </el-table>
     <div class="table-footer">
-      <div class="row justify-between">
+      <!-- <div class="row justify-between">
         <div class="col">
           <el-button v-if="showTableCheck" @click="checkAllHandler">全选</el-button>
+          <el-button class="border-button" @click="moreManageHandler">批量管理</el-button>
         </div>
         <div class="col" v-if="showTableCheck">
           <el-button v-permission="['商品', '商品标签', '默认页面', '批量显示/隐藏']" @click="hideTags" class="border-button">隐 藏</el-button>
@@ -62,7 +63,13 @@
           <el-button v-permission="['商品', '商品标签', '默认页面', '批量删除']" @click="deleteTags" class="delete-button">删 除</el-button>
           <el-button @click="showTableCheck = false" type="primary">完 成</el-button>
         </div>
-      </div>
+      </div> -->
+      <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+      <el-button class="border-button" v-permission="['商品', '商品标签', '默认页面', '批量显示/隐藏']" @click="hideTags">隐 藏</el-button>
+      <el-button class="border-button" v-permission="['商品', '商品标签', '默认页面', '批量显示/隐藏']" @click="showTags">显 示</el-button>
+      <el-button class="border-button" v-permission="['商品', '商品标签', '默认页面', '批量删除']" @click="deleteTags">删 除</el-button>
+    </div>
+    <div class="footer">
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData"></component>
@@ -103,7 +110,9 @@ export default {
       currentData: {},
       dialogVisible: "",
       total: 0,
-      loading: false
+      loading: false,
+      checkedAll: false,
+      isIndeterminate: false,
     };
   },
   created() {
@@ -128,6 +137,15 @@ export default {
     }
   },
   methods: {
+    checkedAllChange() {
+        if(this.checkedAll) {
+            this.$refs.table.clearSelection();
+            this.$refs.table.toggleAllSelection();
+        } else {
+            this.$refs.table.clearSelection();
+        }
+        this.isIndeterminate = false;
+    },
     resetForm(formName) {
         this.$refs[formName].resetFields();
         this.getList()
@@ -219,6 +237,10 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+
+      if(this.list.length == this.multipleSelection.length) {
+          this.checkedAll = true
+      }
     },
     moreManageHandler() {
       this.showTableCheck = true;
@@ -273,6 +295,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .blue {
   color: $globalMainColor;
 }
@@ -293,14 +326,24 @@ export default {
   margin-top: 23px;
 }
 .table-footer {
-  margin-top: 35px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  padding-left: 15px;
   button {
     margin-left: 0;
-    margin-right: 28px;
+    //margin-right: 28px;
     &:last-child {
       margin-right: 65px;
     }
   }
+}
+/deep/ .el-checkbox__label {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.el-button+.el-button {
+    margin-left: 12px;
 }
 </style>
 <style lang="scss" scoped>
