@@ -34,9 +34,8 @@ export default {
                 console.log(error)
             });
             this._apis.client.removeFromBlack({memberInfoId: this.data.id}).then((response) => {
-                this.$notify({
-                    title: '成功',
-                    message: "解除黑名单成功",
+                this.$message({
+                    message: '解除黑名单成功',
                     type: 'success'
                 });
                 this.$emit('freshTable');

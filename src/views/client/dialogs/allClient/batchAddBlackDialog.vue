@@ -80,8 +80,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.couponIds.splice(this.couponIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠券',
                     type: 'warning'
                 });
@@ -93,8 +92,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.codeIds.splice(this.codeIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠码',
                     type: 'warning'
                 });
@@ -112,8 +110,7 @@ export default {
             if(!!this.checkCoupon) {
                 if(this.couponIds[0].id == "") {
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请选择优惠券',
                         type: 'warning'
                     });
@@ -135,8 +132,7 @@ export default {
             if(!!this.checkCode) {
                 if(this.codeIds[0].id == "") {
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请选择优惠码',
                         type: 'warning'
                     });
@@ -190,9 +186,8 @@ export default {
                 this._apis.client.batchToBlack(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "批量加入黑名单成功",
+                    this.$message({
+                        message: '批量加入黑名单成功',
                         type: 'success'
                     });
                     this.$emit('freshTable');
@@ -203,8 +198,7 @@ export default {
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择禁用选项',
                     type: 'warning'
                 });

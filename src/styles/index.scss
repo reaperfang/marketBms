@@ -1,3 +1,4 @@
+@import 'normalize.css/normalize.css'; // A modern alternative to CSS resets
 @import './variables.scss';
 @import './mixin.scss';
 @import './transition.scss';
@@ -7,6 +8,7 @@
 @import './decorate/publicStyle.scss';
 @import './decorate/iconfont.css';
 @import './animate.css';
+@import './shopStyle.scss';
 // @font-face {
 //   font-family: 'PingFangSC-Regular';
 //   src: url('../assets/font/PingFangSCRegular.ttf'); //你的资源目录

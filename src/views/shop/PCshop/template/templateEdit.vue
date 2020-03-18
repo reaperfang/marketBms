@@ -184,17 +184,10 @@ export default {
     /* 发起请求 */
     sendRequest(params) {
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: params.tipWord,
-            type: 'success'
-          });
+          this.$message.success(params.tipWord)
           this.setLoading(false);
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error);
           this.setLoading(false);
         });
     },
@@ -205,10 +198,11 @@ export default {
     },
 
     tabClick(event, item) {
-      this.$confirm(`是否要离开当前页面，离开将不会保存。`, '提示', {
-        confirmButtonText: '离开',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '是否要离开当前页面？离开将不会保存。'
       }).then(() => {
         const tempItems = [...this.pageList];
         for(let i=0;i<tempItems.length;i++) {

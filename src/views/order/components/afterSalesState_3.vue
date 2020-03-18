@@ -15,7 +15,7 @@
                 </div>
                 <div class="col righter">
                     <p>待审核</p>
-                    <p class="des">客户申请售后，待审核</p>
+                    <p class="des">用户申请售后，待审核</p>
                     <div class="button-box">
                         <el-button @click="reject">拒绝</el-button>
                         <el-button type="primary" @click="auth">同意</el-button>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col righter">
                     <p>已关闭</p>
-                    <p class="des">客户撤销申请或商户拒绝售后的</p>
+                    <p class="des">用户撤销申请或商户拒绝售后的</p>
                 </div>
             </div>
         </template>

@@ -124,18 +124,11 @@ export default {
         if (valid) {
           this.submitLoadinig = true;
           this._apis.shop.modifyWindow(this.ruleForm).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '修改成功！',
-              type: 'success'
-            });
+            this.$message.success('修改成功！')
             this.submitLoadinig = false;
             this._routeTo('p_columnIndex');
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
             this.submitLoadinig = false;
           });
         } else {
@@ -157,11 +150,7 @@ export default {
      /* 弹框选中资讯 */
     dialogDataSelected(dialogData) {
       if(this.ruleForm.informationId.includes(dialogData.id)) {
-        this.$notify({
-          title: '警告',
-          message: '已添加此资讯',
-          type: 'warning'
-        });
+        this.$message.warning('已添加此资讯！')
       }else{
         this.infos.push(dialogData);
       }
@@ -171,9 +160,7 @@ export default {
      /* 删除数据项 */
     deleteItem(item) {
       if(item.fakeData) {  //如果是假数据
-        this.$alert('示例数据不支持删除操作，请在右侧替换真实数据后重试!', '警告', {
-          confirmButtonText: '确定'
-        })
+        this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
         return;
       }
       const tempItems = [...this.infos];

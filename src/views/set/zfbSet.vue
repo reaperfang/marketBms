@@ -83,10 +83,7 @@ export default {
         this.form.private_key = param.private_key
         this.form.alipay_public_key = param.alipay_public_key
       }).catch(error =>{
-        this.$notify.info({
-          title: '提示',
-          message: '商户未设置支付信息'
-        });
+        this.$message.warning('商户未设置支付信息');
       })
     },
 
@@ -118,17 +115,11 @@ export default {
       this._apis.set.updateShopPayInfo(query).then(response =>{
         this.loading = false
         this.updateWechatBinding()
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.getShopPayInfo()
       }).catch(error =>{
         this.loading = false
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -153,17 +144,11 @@ export default {
       this._apis.set.addShopPayInfo(query).then(response =>{
         this.loading = false
         this.updateWechatBinding()
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.getShopPayInfo()
       }).catch(error =>{
         this.loading = false
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -176,10 +161,7 @@ export default {
       this._apis.set.updateShopInfo(query).then(response =>{
         
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
   }

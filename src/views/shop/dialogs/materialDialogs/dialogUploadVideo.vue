@@ -28,7 +28,8 @@
                 v-if="isShowUploadVideo"
                 type="primary">选取文件</el-button> -->
           </el-upload>
-          <p v-if="isShowUploadVideo">视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p>
+          <p>视频大小不超过10mb，支持mp4格式</p> 
+          <!-- <p>视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p> -->
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请勿超过20字" style="width:195px"></el-input>
@@ -122,10 +123,7 @@ export default {
                 resolve(nodes)
               }
             }).catch((error)=>{
-              self.$notify.error({
-                title: '错误',
-                message: error
-              });
+              self.$message.error(error);
             })
           }, 500);
         }
@@ -167,10 +165,7 @@ export default {
             this.$emit('submit',{uploadVideo:{query:query}})
             this.visible = false
           }else{
-            this.$notify.warning({
-              title: '提示',
-              message: '请上传视频或等待视频上传完成后保存'
-            });
+            this.$message.warning('请上传视频或等待视频上传完成后保存')
           }
       })
     },

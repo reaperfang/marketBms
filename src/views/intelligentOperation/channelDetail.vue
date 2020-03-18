@@ -25,7 +25,7 @@
             </el-table-column>
             <el-table-column
                 prop="customerId"
-                label="客户ID"
+                label="用户ID"
                 align="center"
             >
             </el-table-column>

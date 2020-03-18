@@ -150,10 +150,7 @@ export default {
         }
         this.total = response.total
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -196,10 +193,7 @@ export default {
       this._apis.file.getGroup(query).then((response)=>{
         this.groupList = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //添加分组
@@ -210,16 +204,10 @@ export default {
         type:'0'
       }
       this._apis.file.newGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '添加成功！'
-        });
+        this.$message.success('添加成功！');
         this.getGroups()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })      
     },
     //编辑分组
@@ -230,16 +218,10 @@ export default {
         type:'0'
       }
       this._apis.file.editGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '操作成功！'
-        });
+        this.$message.success('操作成功！');
         this.getGroups()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })      
     },
     //删除分组
@@ -249,16 +231,10 @@ export default {
         type:0
       }
       this._apis.file.deleteGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '操作成功！'
-        });
+        this.$message.success('操作成功！');
         this.getGroups()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
    /**********************************        弹窗相关      **********************/
@@ -385,16 +361,10 @@ export default {
         toFileGroupInfoId:groupId
       }
       this._apis.file.moveGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '移动分组成功！'
-        });
+        this.$message.success('移动分组成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //删除
@@ -403,48 +373,30 @@ export default {
         ids:id,
       }
       this._apis.file.deleteMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '删除成功！'
-        });
+        this.$message.success('删除成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
     //上传图片
     uploadImage(query){
       this._apis.file.uploadImage(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '上传图片成功！'
-        });
+        this.$message.success('上传图片成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
     //同步图片
     handleSyncImage(query){
       this._apis.file.syncMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '同步微信图片成功！'
-        });
+        this.$message.success('同步微信图片成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     /**********************************        分页相关      **********************/

@@ -80,19 +80,13 @@ methods: {
           }
         this._apis.file.getGroup(query).then((response)=>{
           if(response == null){
-            this.$notify.info({
-              title: '消息',
-              message: '该分组下无其他分组'
-            });
+            this.$message.warning('该分组下无其他分组')
             return resolve([ ]);
           }else{
             resolve(response)
           }
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error);
         })
       }, 500);
   },
@@ -142,10 +136,7 @@ methods: {
         let data = {id:response,name:name}
         this.$refs.tree.append(data,this.currentNode.parent)
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
   },
 
@@ -176,10 +167,7 @@ methods: {
       let data = {id:response,name:name}
       this.$refs.tree.append(data,this.currentNode)
     }).catch((error)=>{
-      this.$notify.error({
-        title: '错误',
-        message: error
-      });
+      this.$message.error(error);
     })
   },
 
@@ -201,10 +189,7 @@ methods: {
     this._apis.file.deleteGroup(query).then((response)=>{
         this.$refs.tree.remove(this.currentNode)
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
   },
 
@@ -231,10 +216,7 @@ methods: {
     this._apis.file.editGroup(query).then((response)=>{
         this.$set(this.currentData,'name',name)
     }).catch((error)=>{
-      this.$notify.error({
-        title: '错误',
-        message: error
-      });
+      this.$message.error(error);
     })
   },
 

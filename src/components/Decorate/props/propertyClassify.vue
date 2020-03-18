@@ -87,31 +87,25 @@ export default {
      /* 重置页面分类 */
     resetClassify(item) {
        this.currentItem = item;
-       this.$confirm(`确定移除 [ ${item.name} ] 吗？移除后会进入[未分类]`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+       this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定移除 [ ${item.name} ] 吗？移除后会进入[未分类]`
+      }).then(() => {
            this._apis.shop.modifyClassify({
             status: '0',
             ids: [item.id],
             pageCategoryInfoId: '-1'
           }).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '移除成功！',
-              type: 'success'
-            });
+            this.$message.success('移除成功！');
 
             const index = this.ruleForm.pageInfos.indexOf(item);
             if(index > -1) {
               this.ruleForm.pageInfos.splice(index, 1);
             }
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
