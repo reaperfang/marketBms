@@ -68,7 +68,7 @@
                     </div>
                     <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
                         <div class="col list-lefter">
-                            客户收货信息
+                            用户收货信息
                         </div>
                         <div class="col list-righter">
                             <p>{{orderSendInfo.receivedName}} {{orderSendInfo.receivedPhone}}</p>
@@ -429,13 +429,13 @@ export default {
                 case 4:
                     return '拒绝申请'
                 case 5:
-                    return '客户发货'//
+                    return '用户发货'//
                 case 6:
                     return '商家收货'
                 case 7:
                     return '商家发货'
                 case 8:
-                    return '客户收货'//
+                    return '用户收货'//
                 case 9:
                     return '退款'
             }

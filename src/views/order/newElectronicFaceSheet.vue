@@ -36,7 +36,7 @@
                     trigger="hover"
                 >
                     <p class="p_title">账号说明：</p>
-                    <p>快递公司账号即在已选择的快递公司申请的客户ID和密码。</p>
+                    <p>快递公司账号即在已选择的快递公司申请的用户ID和密码。</p>
                 </el-popover>
             </el-form-item>
             <el-form-item label="密码" prop="expressCompanyPassword">

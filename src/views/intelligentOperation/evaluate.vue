@@ -53,7 +53,7 @@
                     </el-form>
                     <div class="m_line clearfix" v-if="listObj">
                         <p style="line-height:40px;">该筛选条件下：会员共计<span>{{listObj.memberCount || 0}}</span>人，
-                        占客户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；</p>
+                        占用户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；</p>
                         <p style="line-height:40px;">其中订单总计<span>{{listObj.orderCount || 0}}</span>个，
                         商品总计<span>{{listObj.goodsCount || 0}}</span>个，
                         满意商品数共计<span>{{listObj.niceGoodsCount}}</span>个,

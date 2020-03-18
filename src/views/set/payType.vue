@@ -44,7 +44,7 @@
             <img src="@/assets/images/set/set-pay2.png"/>
             <div class="note">
               <h3>账户余额</h3>
-              <p>开启后，客户可以用账户余额在商城消费。</p>
+              <p>开启后，用户可以用账户余额在商城消费。</p>
             </div>
           </div>
           <div class="right_cont">

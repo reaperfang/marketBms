@@ -96,7 +96,7 @@ export default {
       let status = orderDetail.expressNoStatusMap[value]
 
       if(status == 3) {
-        return '【客户签收】'
+        return '【用户签收】'
       } else if(status == 0 || status == 1 || status == 2 || status == 4) {
         return '【商户发货】'
       } else {
@@ -116,7 +116,7 @@ export default {
   computed: {
     businessFilter(value) {
       if (value.memberTeceiveGoodsTime) {
-        return "【客户签收】";
+        return "【用户签收】";
       } else if (value.sendTime) {
         return "【商户发货】";
       } else {

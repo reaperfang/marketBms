@@ -4,7 +4,7 @@
       <img src="@/assets/images/chahua.png" alt="">
       <div class="main">
         <div class="title-container">
-          <h3 class="title">移动商城客户营销系统</h3>
+          <h3 class="title">移动商城用户营销系统</h3>
         </div>
         <el-form-item prop="userName">
           <span class="svg-container svg-container_login">

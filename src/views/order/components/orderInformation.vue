@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="item">
-                    <div class="label">客户备注</div>
+                    <div class="label">用户备注</div>
                     <div class="value">{{orderInfo.buyerRemark || '--'}}</div>
                 </div>
                 <div class="item remark-box">
