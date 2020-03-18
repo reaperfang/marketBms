@@ -501,6 +501,9 @@ export default {
 .el-input-group__append button.el-button{
     color: #5D78FF;
 }
+.marL20{
+    margin-left: 20px;
+}
 .all_container{
     padding: 20px;
     background-color: #fff;

@@ -164,10 +164,14 @@ export default {
         }
     },
     methods: {
-        refreshPage() {
-            this.getMemberInfo();
-            //this.getUsedCoupon();
-            //this.getUsedCode();
+        refreshPage(num) {
+            if(num == 1) {
+                this.getAllCoupons();
+            }else if(num == 2) {
+                this.getAllCodes();
+            }else{
+                this.getMemberInfo();
+            }
         },
         changeIdentity() {
             if(this.clientInfoById.level !== 9) {
