@@ -39,7 +39,7 @@
                     <el-form-item label="商品名称" prop="name">
                         <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                     </el-form-item>
-                    <el-form-item style="float: right;">
+                    <el-form-item>
                         <el-button @click="getList" type="primary">查询</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </el-form-item>
@@ -152,7 +152,7 @@
             <div class="footer">
                 <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
             </div>
-            <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
+            <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
         <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
@@ -219,6 +219,15 @@
     .search {
         margin-top: 26px;
         margin-bottom: 10px;
+        /deep/ .el-form-item__label {
+            padding-right: 8px;
+        }
+        /deep/ .el-form--inline .el-form-item {
+            margin-right: 26px;
+            .el-button+.el-button {
+                margin-left: 16px;
+            }
+        }
     }
     .i-bg {
         position: relative;
@@ -392,6 +401,7 @@ export default {
             state: '',
             showTableCheck: true,
             operateType: "",
+            currentStatus: ''
         }
     },
     created() {
@@ -400,6 +410,7 @@ export default {
         }
         this.getList()
         this.getCategoryList()
+        this.getMiniappInfo()
     },
     filters: {
         statusFilter(val) {
@@ -474,6 +485,16 @@ export default {
                 });
                 });
             },
+        getMiniappInfo() {
+            this._apis.goods.getMiniappInfo().then(res => {
+                this.currentStatus = res.data.current_status
+            }).catch(error => {
+                this.$notify.error({
+                    title: '错误',
+                    message: error
+                });
+            })
+        },
         shareMore() {
             let obj = {}
             if(!this.multipleSelection.length) {
@@ -482,10 +503,22 @@ export default {
                 })
                 return
             }
-            this.currentDialog = 'ShareSelect'
-            this.dialogVisible = true
-            obj.shareMore = [...this.multipleSelection]
-            this.currentData = obj
+            this.confirm({title: '提示', icon: true, text: '当前只支持批量下载微信公众号商品详情页二维码图片！', confirmText: '一键下载'}).then(() => {
+                let ids = this.multipleSelection.map(val => val.id)
+
+                this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
+                    window.location.href = res
+                }).catch(error => {
+                    this.$notify.error({
+                        title: '错误',
+                        message: error
+                    });
+                })
+            })
+            // this.currentDialog = 'ShareSelect'
+            // this.dialogVisible = true
+            // obj.shareMore = [...this.multipleSelection]
+            // this.currentData = obj
         },
         getMarketActivity(list) {
             // var that = this
@@ -530,9 +563,14 @@ export default {
             })
         },
         shareHandler(row) {
+            let _row
+
+            _row = Object.assign({}, row, {
+                currentStatus: this.currentStatus
+            })
             this.currentDialog = 'ShareSelect'
             this.dialogVisible = true
-            this.currentData = row
+            this.currentData = _row
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
@@ -543,7 +581,9 @@ export default {
             let ids = this.multipleSelection.map(val => val.id)
 
             if(this.multipleSelection.some(val => val.activity)) {
-                this.confirm({title: '批量删除', icon: true, text: '当前商品中“XXXXXXX（商品名称）参与的营销活动未结束，无法进行批量删除操作！', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                let name = this.multipleSelection.filter(val => val.activity)[0].name
+
+                this.confirm({title: '批量删除', icon: true, text: `当前商品中”${name}“参与的营销活动未结束，无法进行批量删除操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
                 })
                 return
@@ -599,7 +639,9 @@ export default {
         },
         allUpper() {
             if(this.multipleSelection.some(val => val.stock == 0)) {
-                this.confirm({title: '批量上架', icon: true, text: '当前商品中“XXXXXXX（商品名称）的库存为“0”，无法进行批量上架操作！', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                let name = this.multipleSelection.filter(val => val.stock == 0)[0].name
+
+                this.confirm({title: '批量上架', icon: true, text: `当前商品中”${name}“的库存为“0”，无法进行批量上架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
                 })
                 return
@@ -614,7 +656,9 @@ export default {
         },
         allLower() {
             if(this.multipleSelection.some(val => val.activity)) {
-                this.confirm({title: '批量下架', icon: true, text: '当前商品中“XXXXXXX”参与的营销活动未结束， 无法进行批量下架操作！', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                let name = this.multipleSelection.filter(val => val.activity)[0].name
+
+                this.confirm({title: '批量下架', icon: true, text: `当前商品中“${name}”参与的营销活动未结束， 无法进行批量下架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
                 })
                 return
@@ -797,7 +841,7 @@ export default {
         },
         deleleHandler(row) {
             if(row.activity) {
-                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。'}).then(() => {
+                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动，活动有效期内商品不得“删除”。`}).then(() => {
                     
                 })
             } else {
