@@ -122,11 +122,14 @@
                                 <div class="input_wrap3">
                                     <el-date-picker
                                         v-model="becameCustomerTime"
-                                        type="daterange"
+                                        type="datetimerange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
-                                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        :picker-options="pickerOptions"
+                                        @change="timeChange"
+                                        >
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -136,11 +139,14 @@
                                 <div class="input_wrap3">
                                     <el-date-picker
                                         v-model="lastPayTime"
-                                        type="daterange"
+                                        type="datetimerange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
-                                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        :picker-options="pickerOptions2"
+                                        @change="timeChange2"
+                                    >
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -201,7 +207,43 @@ export default {
         btnloading: false,
         becameCustomerTime:"",
         lastPayTime:"",
-        isPc: false
+        isPc: false,
+        pickerOptions: {
+            onPick: ({ maxDate, minDate }) => {
+                if (maxDate) {
+                    document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+                    if(new Date(maxDate).toDateString() == new Date().toDateString()) {
+                        let hours = this.prefixInteter(new Date().getHours());
+                        let minute = this.prefixInteter(new Date().getMinutes());
+                        let seconds = this.prefixInteter(new Date().getSeconds());
+                        document.getElementById('date1').value=`${hours}:${minute}:${seconds}`
+                    }else{
+                        document.getElementById('date1').value = "23:59:59";
+                    }
+                }
+            },
+            disabledDate: (time) => {
+                return time.getTime() >= Date.now()
+            }
+        },
+        pickerOptions2: {
+            onPick: ({ maxDate, minDate }) => {
+                if (maxDate) {
+                    document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[7].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date2');
+                    if(new Date(maxDate).toDateString() == new Date().toDateString()) {
+                        let hours = this.prefixInteter(new Date().getHours());
+                        let minute = this.prefixInteter(new Date().getMinutes());
+                        let seconds = this.prefixInteter(new Date().getSeconds());
+                        document.getElementById('date2').value=`${hours}:${minute}:${seconds}`
+                    }else{
+                        document.getElementById('date2').value = "23:59:59";
+                    }
+                }
+            },
+            disabledDate: (time) => {
+                return time.getTime() >= Date.now()
+            }
+        },
     }
   },
   watch: {
@@ -230,6 +272,22 @@ export default {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
+    timeChange(value) {
+        document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+        let date = document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[2].getElementsByClassName("el-input__inner")[0].value;
+        let time = document.getElementById('date1').value;
+        value[1] = `${date} ${time}`;
+    },
+    timeChange2(value) {
+        document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[7].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date2');
+        let date = document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[6].getElementsByClassName("el-input__inner")[0].value;
+        let time = document.getElementById('date2').value;
+        value[1] = `${date} ${time}`;
+    },
+    //缺0补位
+    prefixInteter(num) {
+        return (Array(2).join(0) + num).slice(-2);
+    },
     //匹配积分等的最大值
     number(event,val,ele) {
         val = val.replace(/[^\.\d]/g,'');
@@ -392,10 +450,10 @@ export default {
         }
         if(!!canSubmit) {
             this.btnloading = true;
-            this.form.becameCustomerTimeStart = this.becameCustomerTime ? utils.formatDate(new Date(this.becameCustomerTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(utils.endTimeHandle(this.becameCustomerTime[1], false),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.lastPayTimeStart = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(utils.endTimeHandle(this.lastPayTime[1], false),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.becameCustomerTimeStart = this.becameCustomerTime ? this.becameCustomerTime[0]:'';
+            this.form.becameCustomerTimeEnd = this.becameCustomerTime ? this.becameCustomerTime[1]:'';
+            this.form.lastPayTimeStart = this.lastPayTime ? this.lastPayTime[0]:'';
+            this.form.lastPayTimeEnd = this.lastPayTime ? this.lastPayTime[1]:'';
             let oForm = Object.assign({},this.form);
             let labelNames = oForm.memberLabels;
             let channelNames = oForm.channelId;
