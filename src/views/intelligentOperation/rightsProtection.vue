@@ -1,7 +1,7 @@
 /*维权 */
 <template>
     <div class="m_container">
-        <div class="pane_container">
+        <div class="pane_container head-wrapper">
             <el-form class="clearfix">
                 <el-form-item label="交易时间">
                     <div class="p_line">
@@ -42,7 +42,7 @@
                         </el-select>
                     </div>
                         <span class="span_label">用户类型</span>
-                    <div class="input_wrap2 marR20">
+                    <div class="input_wrap2">
                         <el-select v-model="form.memberType">
                             <el-option label="全部" value="null"></el-option>
                             <el-option label="非会员" value="0"></el-option>
@@ -50,8 +50,10 @@
                             <el-option label="老会员" value="2"></el-option>
                         </el-select>
                     </div>
-                    <el-button class="minor_btn" icon="el-icon-search" @click="getRightsProtection()">查询</el-button>
-                    <el-button class="border_btn" @click="resetAll()">重 置</el-button>
+                    <div class="marL26">
+                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getRightsProtection()">查询</el-button>
+                        <el-button type="primary" class="border_btn" @click="resetAll()" style="margin-left:16px;">重 置</el-button>
+                    </div>
                 </el-form-item>
             </el-form>
             <div class="m_line clearfix">
@@ -273,6 +275,10 @@ export default {
 .marT20s{
     // position: relative;
     margin-top:10px;
+}
+.marL26{
+    margin-left:26px;
+    display:inline-block;
 }
 .contents{
     width: 100%;

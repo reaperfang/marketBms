@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="head-wrapper">
       <el-form :inline="true" :model="form" class="demo-form-inline">
         <el-form-item label="创建时间">
           <el-date-picker

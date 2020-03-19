@@ -1,7 +1,7 @@
 /* 推客奖励列表 */
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="用户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>

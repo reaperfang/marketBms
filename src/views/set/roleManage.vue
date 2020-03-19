@@ -2,8 +2,8 @@
 <template>
      <div class="main">
       <div class="top_part">
-        <div class="search">
-          <el-form ref="form" :inline="true" :model="form" label-width="70px">
+        <div class="search head-wrapper">
+          <el-form ref="form" :inline="true" :model="form">
             <el-form-item label="店铺:" prop="shopInfoId">
               <el-select v-model="form.shopInfoId" placeholder="请选择">
                 <el-option

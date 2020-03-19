@@ -66,9 +66,9 @@ export default {
   created() {
     this._apis.data.openPcWap().then(response => {
       if(response == null){
-        this.isPc = false
+        this.isPc = true
       }else if(response.onoff == 0){
-        this.isPc = false
+        this.isPc = true
       }else{
         this.isPc = true
       }
