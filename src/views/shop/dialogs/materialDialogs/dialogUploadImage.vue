@@ -29,7 +29,7 @@
           :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
           :on-exceed="handleDelet"
-          v-model="form.imageUrls"
+          v-model="form.images"
         >
           <i class="el-icon-plus"></i>
         </el-upload>
@@ -67,7 +67,7 @@ export default {
         imageUrl: "",
         name: "",
         groupValue: ["-1"],
-        imageUrls: []
+        images: []
       },
       fileData: {},
       videoData: {},
@@ -130,16 +130,7 @@ export default {
       let leg = this.form.groupValue.length;
       let query = {
         fileGroupInfoId: this.form.groupValue[leg - 1],
-        data: [
-          {
-            fileName: this.fileData.original,
-            filePath: this.fileData.url,
-            imgPixelWidth: this.fileData.width,
-            imgPixelHeight: this.fileData.height,
-            fileSize: this.fileData.size,
-            sign: this.fileData.sign
-          }
-        ]
+        data: this.form.images
       };
       this.$emit("submit", { uploadImage: { query: query } });
       this.visible = false;
@@ -149,7 +140,15 @@ export default {
       if (res.status == "success") {
         this.loading = false;
         this.fileData = res.data;
-        this.form.imageUrls.push(res.data.url);
+        let imgObj = {
+            fileName: this.fileData.original,
+            filePath: this.fileData.url,
+            imgPixelWidth: this.fileData.width,
+            imgPixelHeight: this.fileData.height,
+            fileSize: this.fileData.size,
+            sign: this.fileData.sign
+          }
+        this.form.images.push(imgObj);
       } else {
         this.$message.error(res.msg);
       }
@@ -161,7 +160,6 @@ export default {
       const isJPEG = file.type === "image/jpeg";
       const isPNG = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 3;
-      // const isLt6 = this.form.imageUrls.length < 6;
       if (!(isJPG || isJPEG || isPNG)) {
         this.$message.error("上传图片支持jpg,jpeg,png格式!");
         return false;
@@ -170,9 +168,6 @@ export default {
         this.$message.error("上传图片大小不能超过 3MB!");
         return false
       }
-      // if (!isLt6) {
-      //   this.$message.error("上传图片不能超过6张！");
-      // }
       return true
     },
     /* 上传文件超出个数限制时的钩子 */

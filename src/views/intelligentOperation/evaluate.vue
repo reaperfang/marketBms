@@ -1,8 +1,8 @@
 /*评价 */
 <template>
     <div class="m_container">
-         <div class="pane_container">
-                    <el-form class="clearfix">
+         <div class="pane_container head-wrapper">
+                    <el-form class="clearfix" :inline="true">
                         <el-form-item label="交易时间">
                             <div class="p_line">
                     <el-radio-group v-model="form.timeType">
@@ -32,14 +32,16 @@
                                   <el-option v-for="item in satisfaction" :label="item.name" :value="item.value" :key="item.id"></el-option>
                                 </el-select>
                             </div>
-                            <span class="span_label">差评率</span>
-                            <div class="input_wrap2 marR20">
+                        </el-form-item>
+                        <el-form-item label="差评率">
+                            <div class="input_wrap2">
                                 <el-select v-model="form.badRatioRange" @change="changeTime">
                                   <el-option v-for="item in badreviews" :label="item.name" :value="item.value" :key="item.id"></el-option>
                                 </el-select>
                             </div>
-                            <span class="span_label">用户类型</span>
-                            <div class="input_wrap2 marR20">
+                        </el-form-item>
+                        <el-form-item label="用户类型">
+                            <div class="input_wrap2">
                                 <el-select v-model="form.memberType">
                                     <el-option label="全部" value="null"></el-option>
                                     <el-option label="非会员" value="0"></el-option>
@@ -47,8 +49,10 @@
                                     <el-option label="老会员" value="2"></el-option>
                                 </el-select>
                             </div>
-                            <el-button class="minor_btn" icon="el-icon-search" @click="getEvaluation()">查询</el-button>
-                            <el-button class="border_btn" @click="resetAll()">重 置</el-button>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getEvaluation()">查询</el-button>
+                            <el-button type="primary" class="border_btn" @click="resetAll()">重 置</el-button>
                         </el-form-item>
                     </el-form>
                     <div class="m_line clearfix" v-if="listObj">

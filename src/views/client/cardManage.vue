@@ -49,12 +49,15 @@
                     </div>
                     <span style="margin-left: 30px;">领取时间：</span>
                     <el-date-picker
-                        type="daterange"
+                        type="datetimerange"
                         v-model="getTime"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        :picker-options="pickerOptions"
+                        @change="timeChange"
+                    >
                     </el-date-picker>
                     <el-button type="primary" class="marL30" @click="handleFind">查 询</el-button>
                     <el-button class="border_btn" @click="reset">重 置</el-button>
@@ -88,7 +91,25 @@ export default {
             isLoading: true,
             loading: false,
             dialogVisible: false,
-            currentDialog:""
+            currentDialog:"",
+            pickerOptions: {
+            onPick: ({ maxDate, minDate }) => {
+                if (maxDate) {
+                    document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+                    if(new Date(maxDate).toDateString() == new Date().toDateString()) {
+                        let hours = this.prefixInteter(new Date().getHours());
+                        let minute = this.prefixInteter(new Date().getMinutes());
+                        let seconds = this.prefixInteter(new Date().getSeconds());
+                        document.getElementById('date1').value=`${hours}:${minute}:${seconds}`
+                    }else{
+                        document.getElementById('date1').value = "23:59:59";
+                    }
+                }
+            },
+            disabledDate: (time) => {
+                return time.getTime() >= Date.now()
+            }
+        },
         }
     },
     computed:{
@@ -98,6 +119,16 @@ export default {
         }
     },
     methods: {
+        timeChange(value) {
+            document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+            let date = document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[2].getElementsByClassName("el-input__inner")[0].value;
+            let time = document.getElementById('date1').value;
+            value[1] = `${date} ${time}`;
+        },
+        //缺0补位
+        prefixInteter(num) {
+            return (Array(2).join(0) + num).slice(-2);
+        },
         imageSelected(item) {
             this.imgUrl = item.filePath;
             this.addCardBg();
@@ -116,8 +147,8 @@ export default {
         handleFind() {
             let obj = {
                 name: this.selected == "" || this.selected == "全部"? null : this.selected,
-                startTime: this.getTime == "" || this.getTime == null ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
-                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(utils.endTimeHandle(this.getTime[1], false),"yyyy-MM-dd hh:mm:ss"),
+                startTime: !!this.getTime ? this.getTime[0] : '',
+                endTime: !!this.getTime ? this.getTime[1] : '',
             }
             this.lkParams = Object.assign({},obj);
         },

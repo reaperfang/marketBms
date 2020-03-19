@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" label-width="80px" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
         </el-form-item>

@@ -1,8 +1,8 @@
 <!--客户ID余额-->
 <template>
   <div>
-    <div class="top_part">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="inline" label-width="90px">
+    <div class="top_part head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="交易流水号">
           <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
@@ -16,7 +16,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="交易时间" style="margin-left:25px;">
+        <el-form-item label="交易时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"

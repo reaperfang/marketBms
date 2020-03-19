@@ -1,8 +1,8 @@
 /*积分消耗 */
 <template>
     <div class="m_container">
-         <div class="pane_container">
-            <el-form ref="form" :model="form" class="clearfix">
+         <div class="pane_container head-wrapper">
+            <el-form ref="form" :model="form" class="clearfix" :inline="true">
                 <el-form-item label="交易时间">
                     <div class="p_line">
                         <el-radio-group v-model="form.timeType">
@@ -39,10 +39,14 @@
                         </el-select>
                     </div>
                 </el-form-item>
-                <el-form-item class="fr marT20">
+                <el-form-item>
+                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                    <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
+                </el-form-item>
+                <!-- <el-form-item class="fr marT20">
                     <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
                     <el-button class="border_btn" @click="reSet">重 置</el-button>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <div class="m_line clearfix">
                 <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占用户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>
