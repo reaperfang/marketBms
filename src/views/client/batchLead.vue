@@ -48,11 +48,14 @@
                         <div class="input_wrap">
                             <el-date-picker
                                 v-model="consumeTime"
-                                type="daterange"
+                                type="datetimerange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
-                                :picker-options="utils.pickerOptions({canSelectFuture: true})">
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                :picker-options="pickerOptions"
+                                @change="timeChange"
+                                >
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -174,10 +177,38 @@ export default {
             currentData:{},
             selectedIds: "",
             canSubmit: true,
-            isRepeat: ""
+            isRepeat: "",
+            pickerOptions: {
+            onPick: ({ maxDate, minDate }) => {
+                if (maxDate) {
+                    document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+                    if(new Date(maxDate).toDateString() == new Date().toDateString()) {
+                        let hours = this.prefixInteter(new Date().getHours());
+                        let minute = this.prefixInteter(new Date().getMinutes());
+                        let seconds = this.prefixInteter(new Date().getSeconds());
+                        document.getElementById('date1').value=`${hours}:${minute}:${seconds}`
+                    }else{
+                        document.getElementById('date1').value = "23:59:59";
+                    }
+                }
+            },
+            disabledDate: (time) => {
+                return time.getTime() >= Date.now()
+            }
+            }
         }
     },
     methods: {
+        timeChange(value) {
+            document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+            let date = document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[2].getElementsByClassName("el-input__inner")[0].value;
+            let time = document.getElementById('date1').value;
+            value[1] = `${date} ${time}`;
+        },
+        //缺0补位
+        prefixInteter(num) {
+            return (Array(2).join(0) + num).slice(-2);
+        },
         handleClick(item) {
             this.selectedList.splice(item, 1);
         },
@@ -385,8 +416,8 @@ export default {
                 }
                 if(!!this.canSubmit) {
                     let formObj = Object.assign({}, this.ruleForm);
-                    formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
-                    formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(utils.endTimeHandle(this.consumeTime[1], true),"yyyy-MM-dd hh:mm:ss"):"";
+                    formObj.consumeTimeStart = this.consumeTime ? this.consumeTime[0]:"";
+                    formObj.consumeTimeEnd = this.consumeTime ? this.consumeTime[1]:"";
                     formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || 0;
                     formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || 0;
                     formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || 0;
@@ -498,6 +529,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/.el-date-editor .el-range-separator{
+    width: 6%;
+}
 .c_container{
     padding: 16px 0 30px 20px;
     background-color: #fff;

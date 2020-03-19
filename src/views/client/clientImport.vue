@@ -54,11 +54,14 @@
                 <span>导入时间：</span>
                 <el-date-picker
                     v-model="importTime"
-                    type="daterange"
+                    type="datetimerange"
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="utils.pickerOptions({canSelectFuture: false})">
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    :picker-options="pickerOptions"
+                    @change="timeChange"
+                >
                 </el-date-picker>
                 <span class="marL20">渠道：</span>
                 <el-select v-model="channelId2" placeholder="选择渠道" clearable>
@@ -112,10 +115,38 @@ export default {
             //dialog所需
             currentDialog: "",
             dialogVisible: false,
-            currentData: {}
+            currentData: {},
+            pickerOptions: {
+                onPick: ({ maxDate, minDate }) => {
+                    if (maxDate) {
+                        document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+                        if(new Date(maxDate).toDateString() == new Date().toDateString()) {
+                            let hours = this.prefixInteter(new Date().getHours());
+                            let minute = this.prefixInteter(new Date().getMinutes());
+                            let seconds = this.prefixInteter(new Date().getSeconds());
+                            document.getElementById('date1').value=`${hours}:${minute}:${seconds}`
+                        }else{
+                            document.getElementById('date1').value = "23:59:59";
+                        }
+                    }
+                },
+                disabledDate: (time) => {
+                    return time.getTime() >= Date.now()
+                }
+            }
         }
     },
     methods: {
+        //缺0补位
+        prefixInteter(num) {
+            return (Array(2).join(0) + num).slice(-2);
+        },
+        timeChange(value) {
+            document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
+            let date = document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[2].getElementsByClassName("el-input__inner")[0].value;
+            let time = document.getElementById('date1').value;
+            value[1] = `${date} ${time}`;
+        },
         handleReset() {
             this.importTime = "";
             this.channelId2 = "";
@@ -146,8 +177,8 @@ export default {
         },
         handleCheck() {
             let params = {
-                importTimeStart: !!this.importTime ? utils.formatDate(new Date(this.importTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'',
-                importTimeEnd: !!this.importTime ? utils.formatDate(utils.endTimeHandle(this.importTime[1], false),"yyyy-MM-dd hh:mm:ss"):"",
+                importTimeStart: !!this.importTime ? this.importTime[0] : "",
+                importTimeEnd: !!this.importTime ? this.importTime[1] : "",
                 channelId: this.channelId2
             }
             this.params = Object.assign({}, params);
@@ -228,6 +259,9 @@ export default {
 }
 /deep/ .el-upload-list__item{
     width: 300px !important;
+}
+/deep/.el-date-editor .el-range-separator{
+    width: 8%;
 }
 .marL20{
     margin-left: 20px;
