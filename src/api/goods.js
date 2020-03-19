@@ -446,6 +446,17 @@ export function getApplyInfo(data) {
   })
 }
 
+// 获取小程序审核状态
+export function getMiniappInfo(data) {
+  return request({
+    apiType: 'decorate',
+    method: 'post',
+    target: 'DECORATION-GET-MINI-APP-STATUS-PROCESSOR',
+    data,
+    token
+  })
+}
+
 
 
 

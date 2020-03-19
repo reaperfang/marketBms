@@ -1,6 +1,6 @@
 <template>
   <div class="query">
-    <section>
+    <section class="search">
       <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
         <el-form-item label>
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
@@ -74,8 +74,8 @@
             :default-time="['00:00:00', '23:59:59']"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item style="float: right;">
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -294,6 +294,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .query {
   section {
     background-color: #fff;

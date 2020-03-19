@@ -3,7 +3,7 @@
         <div class="search">
             <el-button v-permission="['商品', '商品分类', '默认页面', '新建分类']" @click="addLevel1Category" type="primary">新建一级分类</el-button>
             <el-form ref="form" :inline="true" :model="formInline" class="form-inline">
-                <el-form-item label="搜索分类：">
+                <el-form-item label="搜索分类">
                     <el-input v-model="formInline.name" placeholder="请输入分类名称..."></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="分类状态：">
@@ -391,6 +391,17 @@ export default {
 <style lang="scss" scoped>
     /deep/ .el-tree-node__content {
         padding: 14px 0;
+    }
+    .search {
+        /deep/ .el-form-item__label {
+            padding-right: 8px;
+        }
+        /deep/ .el-form--inline .el-form-item {
+            margin-right: 26px;
+            .el-button+.el-button {
+                margin-left: 16px;
+            }
+        }
     }
 </style>
 <style lang="scss">

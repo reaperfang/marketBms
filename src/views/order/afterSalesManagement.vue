@@ -40,16 +40,16 @@
                         <el-option label="已关闭" value="5"></el-option>
                     </el-select>
                 </el-form-item>
-                <div class="buttons" style="display: inline-block; float: right;">
-                    <!-- <div class="lefter">
-                        <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
-                        <el-button v-permission="['订单', '售后管理', '默认页', '批量审核']" class="border-button" @click="batchUpdateStatus">批量审核</el-button>
-                    </div> -->
+                <el-form-item>
+                    <el-button @click="getList" type="primary">搜索</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
+                </el-form-item>
+                <!-- <div class="buttons" style="display: inline-block; float: right;">
                     <div class="righter">
                         <el-button @click="getList" type="primary">搜索</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
-                </div>
+                </div> -->
             </el-form>
         </div>
         <div class="line"></div>
@@ -508,6 +508,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .after-sales {
     .search {
         background-color: #fff;
