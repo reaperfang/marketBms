@@ -81,3 +81,8 @@ export function buildTree(data) {
   translator(parents, children)
   return parents
 }
+
+//缺0补位
+export function prefixInteter(num) {
+    return (Array(2).join(0) + num).slice(-2);
+}
