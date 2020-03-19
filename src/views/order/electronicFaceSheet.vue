@@ -130,17 +130,10 @@ export default {
       this.confirm({title: '提示', text: '删除后无法撤销，确定删除吗？'}).then(() => {
           this._apis.order.deleteElectronicFaceSheet({id: row.id, expressCompanyCode: row.expressCompanyCode}).then((res) => {
               this.getList()
-              this.$notify({
-                  title: '成功',
-                  message: '删除成功！',
-                  type: 'success'
-              });
+              this.$message.success('删除成功！');
           }).catch(error => {
               this.visible = false
-              this.$notify.error({
-                  title: '错误',
-                  message: error
-              });
+              this.$message.error(error);
           })
       })
     },
@@ -167,10 +160,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          // this.$notify.error({
-          //   title: "错误",
-          //   message: error
-          // });
+          // this.$message.error(error);
           this.loading = false
         });
     }

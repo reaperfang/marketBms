@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             showFooter: false,
-            activeName: 'h5'
+            activeName: 'h5',
         }
     },
     methods: {

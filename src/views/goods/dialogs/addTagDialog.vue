@@ -64,8 +64,7 @@ export default {
       .then(response => {
         this.$emit("submit");
         this.visible = false;
-        this.$notify({
-            title: '成功',
+        this.$message({
             message: '新增成功！',
             type: 'success'
         });
@@ -73,9 +72,9 @@ export default {
       .catch(error => {
         this.visible = false;
         this.resetForm('ruleForm')
-        this.$notify.error({
-          title: "错误",
-          message: error
+        this.$message.error({
+            message: error,
+            type: 'error'
         });
       });
     },
@@ -85,8 +84,7 @@ export default {
       .then(response => {
         this.$emit("submit");
         this.visible = false;
-        this.$notify({
-            title: '成功',
+        this.$message({
             message: '修改成功！',
             type: 'success'
         });
@@ -94,9 +92,9 @@ export default {
       .catch(error => {
         this.visible = false;
         this.resetForm('ruleForm')
-        this.$notify.error({
-          title: "错误",
-          message: error
+        this.$message.error({
+            message: error,
+            type: 'error'
         });
       });
     },

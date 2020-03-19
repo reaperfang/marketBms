@@ -1,11 +1,15 @@
 <template>
     <div>
-        <DialogBase :visible.sync="visible" width="443px" @submit="submit" title="推广渠道" :hasCancel="hasCancel">
+        <DialogBase :visible.sync="visible" width="443px" title="推广渠道" :hasCancel="hasCancel" :showFooter="showFooter">
             <div class="content">
                 <el-checkbox v-model="h5Checked">公众号</el-checkbox>
                 <el-checkbox :disabled="data.currentStatus != 'published'" v-model="miniCodeChecked">小程序</el-checkbox>
             </div>
         </DialogBase>
+        <div class="footer">
+            <el-button @click="submit" type="primary">确 认</el-button>
+            <el-button @click="visible = false">取 消</el-button>
+        </div>
         <component :is="currentDialog" :dialogVisible.sync="shareDialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -16,6 +20,7 @@ import Share from '@/views/goods/dialogs/shareDialog'
 export default {
     data() {
         return {
+            showFooter: true,
             hasCancel: true,
             h5Checked: false,
             miniCodeChecked: false,
@@ -31,9 +36,9 @@ export default {
                 this.visible = false
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             })
         },
@@ -42,15 +47,16 @@ export default {
             
             if(this.data.shareMore) {
                 this.shareMore(this.data.shareMore.map(val => val.id))
+                this.visible = false
                 return
             } else {
+                if(this.h5Checked) obj.h5 = true
+                if(this.miniCodeChecked) obj.miniCode = true
+                obj.id = this.data.id
                 this.currentDialog = 'Share'
                 this.shareDialogVisible = true
-                obj.id = this.data.id
+                this.currentData = obj
             }
-            if(this.h5Checked) obj.h5 = true
-            if(this.miniCodeChecked) obj.miniCode = true
-            this.currentData = obj
         }
     },
     computed: {

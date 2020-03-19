@@ -207,9 +207,9 @@ export default {
             }).catch(error => {
                 //message.close()
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
                 this.active = 1
                 this.$refs.upload.clearFiles();

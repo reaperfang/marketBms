@@ -295,10 +295,7 @@ export default {
         this._apis.goodsOperate.fetchPublicSensitiveList().then((res) => {
             this.systomSensitiveList = res
         }).catch(error => {
-            this.$notify.error({
-                title: '错误',
-                message: error
-            });
+            this.$message.error(error);
         })
     },
     replyComment() {
@@ -362,17 +359,10 @@ export default {
       //   })
 
         this._apis.order.replyComment({id: this.$route.query.id, replyContent: _textarea}).then((res) => {
-            this.$notify({
-              title: "成功",
-              message: "回复成功！",
-              type: "success"
-            });
+            this.$message.success('回复成功！');
             this.showReplayBox = false
         }).catch(error => {
-            this.$notify.error({
-            title: "错误",
-            message: error
-          });
+            this.$message.error(error);
           this.showReplayBox = false
         })
     },

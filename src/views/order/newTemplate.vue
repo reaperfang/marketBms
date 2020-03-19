@@ -206,18 +206,11 @@ export default {
       this._apis.order
         .editorFreightTemplate(params)
         .then(res => {
-          this.$notify({
-            title: "成功",
-            message: "新建成功！",
-            type: "success"
-          });
+          this.$message.success('新建成功！');
           this.$router.push("/order/quickDelivery");
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     add() {
@@ -229,18 +222,11 @@ export default {
       this._apis.order
         .addFreightTemplate(params)
         .then(res => {
-          this.$notify({
-            title: "成功",
-            message: "新建成功！",
-            type: "success"
-          });
+          this.$message.success('新建成功！');
           this.$router.push("/order/quickDelivery");
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     submit(formName) {
@@ -382,10 +368,7 @@ export default {
           })
           .catch(error => {
             this.visible = false;
-            this.$notify.error({
-              title: "错误",
-              message: error
-            });
+            this.$message.error(error);
           });
       });
     },

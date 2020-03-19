@@ -110,19 +110,13 @@ export default {
                 this._apis.order.afterSalePrintSendInfo({ids: this.$route.query.ids.split(',')}).then((res) => {
                     this.tableData = res
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             } else {
                 this._apis.order.orderSendInfoPrint({ids: this.$route.query.ids.split(',')}).then((res) => {
                     this.tableData = res
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }
         },

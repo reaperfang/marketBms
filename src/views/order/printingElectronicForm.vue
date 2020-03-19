@@ -55,20 +55,14 @@ export default {
             this._apis.order.printElectronicForm({orderIds: this.$route.query.ids.split(',').map(val => val)}).then((res) => {
                 this.tableData = res
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         afterSalePrintInfo() {
             this._apis.order.afterSalePrintElectronicForm({orderAfterSaleIds: this.$route.query.ids.split(',')}).then((res) => {
                 this.tableData = res
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getPrintInfo() {
