@@ -1,7 +1,7 @@
 <!--每日营收-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="日期" style="margin-bottom:0px;">
           <el-date-picker

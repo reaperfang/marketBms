@@ -1,7 +1,7 @@
 <template>
     <div class="m_container">
-        <div class="pane_container">
-                <el-form>
+        <div class="pane_container head-wrapper">
+                <el-form  :inline="true">
                     <el-form-item label="交易时间">
                         <div class="p_line">
                             <el-radio-group v-model="form.timeType">
@@ -35,19 +35,23 @@
                             </el-select>
                         </div>
                         <span class="span_label">（成功）支付转化率</span>
-                        <div class="input_wrap2 marR20">
+                        <div class="input_wrap2">
                             <el-select v-model="form.changeRatioRange" @change="changeTime">
                                 <el-option v-for="item in productiveness" :label="item.name" :value="item.value" :key="item.id"></el-option>
                             </el-select>
                         </div>
                     </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                        <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
+                    </el-form-item>
 
-                    <el-form-item class="marT20">
+                    <!-- <el-form-item class="marT20">
                         <div class="buttonfl">
                             <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
                             <el-button class="border_btn" @click="reSet">重 置</el-button>
                         </div>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
 
                 <div class="m_line clearfix">

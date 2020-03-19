@@ -54,19 +54,21 @@
       <div class="title">
         <span class="name">趋势分析<em>（截止到昨日）</em></span>
         <div class="time">
-          <el-radio-group v-model="days" class="mr20">
+          <el-radio-group v-model="days" class="mr26">
             <el-radio-button label="7">最近7天</el-radio-button>
             <el-radio-button label="15">最近15天</el-radio-button>
             <el-radio-button label="30">最近30天</el-radio-button>
           </el-radio-group>
           请选择时间段：
           <el-date-picker
+            class="mr26"
             v-model="timeValue"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
            :default-time="defaultTime"
+           :editable="false"
             :picker-options="pickerNowDateBefore"
             >
           </el-date-picker>
@@ -432,8 +434,8 @@ export default {
 .financeChart{
   margin-top: 30px;
 }
-.mr20{
-  margin-right: 20px;
+.mr26{
+  margin-right: 26px;
 }
 
 </style>

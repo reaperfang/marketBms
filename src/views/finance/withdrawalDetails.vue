@@ -1,12 +1,12 @@
 <!--提现明细-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in presentations"
               :key="item.value"
@@ -14,11 +14,9 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="申请时间" style="margin-left:25px;">
+        <el-form-item label="申请时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"

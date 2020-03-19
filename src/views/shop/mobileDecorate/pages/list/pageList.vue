@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" label-width="80px" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
         <el-form-item label="" prop="pageCategoryInfoId">
           <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
             <el-option label="全部分类" value=""></el-option>

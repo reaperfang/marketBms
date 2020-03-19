@@ -1,7 +1,7 @@
-/* 物流查询列表 */
+/* 短信成本列表 */
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="状态">
           <el-select v-model="ruleForm.acceptStatus" style="width:200px;">
