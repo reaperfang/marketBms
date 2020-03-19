@@ -296,17 +296,10 @@ export default {
                             }).then(res => {
                                 this.$emit('submit', obj)
                                 this.visible = false
-                                this.$notify({
-                                    title: '成功',
-                                    message: '修改成功！',
-                                    type: 'success'
-                                });
+                                this.$message.success('修改成功！');
                             }).catch(error => {
                                 this.visible = false
-                                this.$notify.error({
-                                    title: '错误',
-                                    message: error
-                                });
+                                this.$message.error(error);
                             }) 
 
                             return
@@ -331,17 +324,10 @@ export default {
                     }).then(res => {
                         this.$emit('submit')
                         this.visible = false
-                        this.$notify({
-                            title: '成功',
-                            message: '修改成功！',
-                            type: 'success'
-                        });
+                        this.$message.success('修改成功！');
                     }).catch(error => {
                         this.visible = false
-                        this.$notify.error({
-                            title: '错误',
-                            message: error
-                        });
+                        this.$message.error(error);
                     }) 
                 } else {
                     console.log('error submit!!');

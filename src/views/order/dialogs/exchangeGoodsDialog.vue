@@ -25,17 +25,10 @@ export default {
     methods: {
         submit() {
             // this._apis.order.orderAfterSaleConfirmExchange({id: this.data.id, exchangeConfirmation: this.exchangeConfirmation }).then((res) => {
-            //     this.$notify({
-            //         title: '成功',
-            //         message: '换货确认成功',
-            //         type: 'success'
-            //     });
+            //     this.$message.success('换货确认成功');
             //     this.visible = false
             // }).catch(error => {
-            //     this.$notify.error({
-            //         title: '错误',
-            //         message: error
-            //     });
+            //     this.$message.error(error);
             //     this.visible = false
             // })
             
@@ -46,17 +39,10 @@ export default {
                 // this.confirm({title: '换货确认', icon: true, text: `是否确认${_title}？`}).then(() => {
                     
                 // })
-                this.$notify({
-                        title: '成功',
-                        message: '审核成功！',
-                        type: 'success'
-                    });
+                this.$message.success('审核成功！');
                 this.visible = false;
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         }
     },

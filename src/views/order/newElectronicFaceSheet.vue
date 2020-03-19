@@ -159,10 +159,7 @@ export default {
           this.expressCompanyList = res
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
       },
       editor() {
@@ -173,19 +170,12 @@ export default {
         this._apis.order
         .editorElectronicFaceSheet(this.ruleForm)
         .then(res => {
-          this.$notify({
-            title: "成功",
-            message: "编辑成功！",
-            type: "success"
-          });
+          this.$message.success('编辑成功！');
           this.$router.push('/order/electronicFaceSheet')
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
       },
       add() {
@@ -196,19 +186,12 @@ export default {
         this._apis.order
         .addElectronicFaceSheet(this.ruleForm)
         .then(res => {
-          this.$notify({
-            title: "成功",
-            message: "添加成功！",
-            type: "success"
-          });
+          this.$message.success('添加成功！');
           this.$router.push('/order/electronicFaceSheet')
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
       },
       submit(formName) {
@@ -234,10 +217,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
       }
     }

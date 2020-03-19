@@ -170,10 +170,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     changeAll(item) {
@@ -252,17 +249,10 @@ export default {
                 })
             }
             this._apis.order.orderAfterSaleSend(params).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '发货成功',
-                    type: 'success'
-                });
+                this.$message.success('发货成功');
                 this.$router.push('/order/deliverGoodsSuccess?ids=' + this.$route.query.ids + '&type=afterSaleBulkDelivery')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
           }catch(e) {
               console.error(e)
@@ -298,10 +288,7 @@ export default {
             this.expressCompanyList = res
         }).catch(error => {
             this.visible = false
-            this.$notify.error({
-                title: '错误',
-                message: error
-            });
+            this.$message.error(error);
         })
     },
       onSubmit(value) {
@@ -382,18 +369,12 @@ export default {
             })
             .catch(error => {
               this.visible = false;
-              this.$notify.error({
-                title: "错误",
-                message: error
-              });
+              this.$message.error(error);
             });
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     }
   },

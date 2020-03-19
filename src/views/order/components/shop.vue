@@ -107,10 +107,7 @@ export default {
                 //loading.close();
             }).catch(error => {
                 //loading.close();
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
+                // this.$message.error(error);
                 this.$refs['order'].loading = false
             })
         }

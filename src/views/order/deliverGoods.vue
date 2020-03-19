@@ -325,10 +325,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     fetchOrderAddress() {
@@ -347,10 +344,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     getExpressCompanyList() {
@@ -369,10 +363,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     // 订单详情 orderId
@@ -476,11 +467,7 @@ export default {
           this._apis.order
             .orderSendGoods(params)
             .then(res => {
-              this.$notify({
-                title: "成功",
-                message: "发货成功",
-                type: "success"
-              });
+              this.$message.success('发货成功');
               this.sending = false
               // this.$router.push(
               //   "/order/deliverGoodsSuccess?id=" +
@@ -498,10 +485,7 @@ export default {
               })
             })
             .catch(error => {
-              this.$notify.error({
-                title: "错误",
-                message: error
-              });
+              this.$message.error(error);
               this.sending = false
             });
         } else {

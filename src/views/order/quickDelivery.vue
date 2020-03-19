@@ -170,18 +170,11 @@ export default {
             deleteFlag: 0
           })
           .then(res => {
-            this.$notify({
-              title: "成功",
-              message: "删除成功！",
-              type: "success"
-            });
+            this.$message.success('删除成功！');
             this.getList();
           })
           .catch(error => {
-            this.$notify.error({
-              title: "错误",
-              message: error
-            });
+            this.$message.error(error);
           });
       });
     },
@@ -222,10 +215,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          // this.$notify.error({
-          //     title: '错误',
-          //     message: error
-          // });
+          // this.$message.error(error);
           this.loading = false;
         });
     }

@@ -269,17 +269,16 @@ export default {
             this.getList({ productCatalogInfoId: this.productCatalogInfoId });
           }
           this.visible = false;
-          this.$notify({
-            title: "成功",
-            message: "改价成功！",
-            type: "success"
+          this.$message({
+              message: '改价成功！',
+              type: 'success'
           });
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
+          this.$message.error({
+              message: error,
+              type: 'error'
           });
         });
     },

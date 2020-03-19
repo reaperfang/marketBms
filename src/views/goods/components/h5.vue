@@ -58,9 +58,9 @@ export default {
                 //this.qrcode();
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             })
         },
@@ -87,7 +87,11 @@ export default {
 
             input.select();
             document.execCommand("Copy");
-            alert("复制成功。");
+            //alert("复制成功。");
+            this.$message({
+                message: '复制成功。',
+                type: 'success'
+            });
         }
     },
     props: {

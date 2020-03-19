@@ -34,7 +34,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="getList" type="primary">搜索</el-button>
+                    <el-button @click="getList" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
                 <!-- <div class="buttons" style="display: inline-block; float: right;">
@@ -267,17 +267,10 @@ export default {
             this._apis.order.orderCommentAuth(params).then((res) => {
                 this.getList()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: `审核成功！`,
-                    type: 'success'
-                });
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         setChoiceness(row) {
@@ -291,34 +284,20 @@ export default {
                 }
                 this.getList()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: `${message}成功！`,
-                    type: 'success'
-                });
+                this.$message.success(`${message}成功！`);
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         onSubmit(value) {
             console.log(value)
             this._apis.order.replyComment({ids: this.multipleSelection.map(val => val.id), replyContent: value}).then((res) => {
-                // this.$notify({
-                //     title: '成功',
-                //     message: '批量回复成功！',
-                //     type: 'success'
-                // });
+                // this.$message.success('批量回复成功！');
                 this.getList()
                 this.confirm({title: '提示', iconSuccess: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         batchAudit() {
