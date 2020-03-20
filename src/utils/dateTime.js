@@ -178,13 +178,22 @@ export function dayEnd(endTime) {
 
 
 /* 全局时间选择器配置项逻辑 */
-export function globalTimePickerOption(editable) {
+export function globalTimePickerOption(editable = true) {
   const _self = this;
   const prefixInteter = require('./transform').prefixInteter;
+
+  var disableInput = function() {
+    this.$children[2].disabled = true;
+    this.$children[3].disabled = true;
+    this.$children[5].disabled = true;
+    this.$children[6].disabled = true;
+  }
   return {
     onPick: function ({ maxDate, minDate}) {
-      if (maxDate) {
+      const me = this;
 
+      // 区分修改结束时间
+      if (maxDate) {
         this.maxDate = maxDate;
         let date = new Date();
         let hours = date.getHours();
@@ -202,14 +211,40 @@ export function globalTimePickerOption(editable) {
             date.setSeconds(seconds);
         }
 
+        // 触发最大值选择器更新值
         this.handleMaxTimePick(date, true);
-        this.value = [minDate, date]
-        this.$children[7].visible = false;
-        this.$children[7].handleChange(date);
-        this.$children[6].disabled = !editable;
+
+        // 更新日期时间选择器实例的时间区间值
+        this.value = [minDate, date];
+
+        // 结束时间下拉选择器的值更新
         this.$children[6].value = `${prefixInteter(hours)}:${prefixInteter(minutes)}:${prefixInteter(seconds)}`;
+
+        //延时重渲染
         setTimeout(()=>{
+
+          //重新渲染整个控件
           this.resetView();
+
+          this.$nextTick(()=>{
+
+            //如果不允许编辑时分秒
+            if(!editable) {
+              disableInput.call(me);  //设置所有的时间输入框为不可用状态
+              this.$el.onclick = function(ev) {  //当面板被点击时重新设置所有的时间输入框为不可用状态
+                disableInput.call(me);
+              }
+            }else{
+              //如果允许编辑时分秒
+              this.$children[6].$el.onclick = function() {  //点击结束时间输入框时重新打开下拉框的可见状态
+                me.$refs.maxTimePicker.visible = true;
+              }
+            }
+
+            //初始化时，将左右的下拉选择器隐藏
+            this.$refs.minTimePicker.visible = false;
+            this.$refs.maxTimePicker.visible = false;
+          })
         },100)
       }
     },

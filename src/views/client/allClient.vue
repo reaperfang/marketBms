@@ -127,6 +127,7 @@
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         value-format="yyyy-MM-dd HH:mm:ss"
+                                        editable="false"
                                         :picker-options="utils.globalTimePickerOption.call(this)"
                                         >
                                     </el-date-picker>
@@ -143,6 +144,7 @@
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         value-format="yyyy-MM-dd HH:mm:ss"
+                                        editable="false"
                                         :picker-options="utils.globalTimePickerOption.call(this)"
                                     >
                                     </el-date-picker>
