@@ -127,8 +127,7 @@
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         value-format="yyyy-MM-dd HH:mm:ss"
-                                        :picker-options="utils.globalTimePickerOption.call(this, 'date1')"
-                                        @change="utils.timeChange($event, 'date1')"
+                                        :picker-options="utils.globalTimePickerOption.call(this)"
                                         >
                                     </el-date-picker>
                                 </div>
@@ -144,8 +143,7 @@
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         value-format="yyyy-MM-dd HH:mm:ss"
-                                        :picker-options="utils.globalTimePickerOption.call(this, 'date2')"
-                                        @change="utils.timeChange($event, 'date2')"
+                                        :picker-options="utils.globalTimePickerOption.call(this)"
                                     >
                                     </el-date-picker>
                                 </div>

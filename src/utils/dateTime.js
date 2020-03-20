@@ -176,47 +176,45 @@ export function dayEnd(endTime) {
   return time;
 }
 
-export function globalTimePickerOption(name, noEdit) {
+
+/* 全局时间选择器配置项逻辑 */
+export function globalTimePickerOption(editable) {
   const _self = this;
   const prefixInteter = require('./transform').prefixInteter;
   return {
     onPick: function ({ maxDate, minDate}) {
-      const wraps = this.$el.querySelectorAll('.el-date-range-picker__time-picker-wrap');
-      if(noEdit) {
-        // this.$el.querySelector('.el-time-panel').style.display = 'none!important';
-        if(wraps.length && wraps[3] && wraps[3].querySelector('.el-date-range-picker__editor')) {
-          let className = wraps[3].querySelector('.el-date-range-picker__editor').className;
-          if(!className.includes('is-disabled')) {
-            className += ' is-disabled';
-          }
-          wraps[3].querySelector('.el-date-range-picker__editor').className = className;
-          wraps[3].querySelector(".el-input__inner").style.pointerEvents = 'none!important';
+      if (maxDate) {
+
+        this.maxDate = maxDate;
+        let date = new Date();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let seconds = date.getSeconds();
+        if(new Date(maxDate).toDateString() != new Date().toDateString()) {
+            hours = 23;
+            minutes = 59;
+            seconds = 59;
+            date.setFullYear(maxDate.getFullYear());
+            date.setMonth(maxDate.getMonth());
+            date.setDate(maxDate.getDate());
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            date.setSeconds(seconds);
         }
 
-      }
-      if (maxDate) {
-        if(!wraps[3]) {
-          return;
-        }
-        wraps[3].querySelector(".el-input__inner").setAttribute('id', name);
-        if(new Date(maxDate).toDateString() == new Date().toDateString()) {
-            let hours = prefixInteter(new Date().getHours());
-            let minute = prefixInteter(new Date().getMinutes());
-            let seconds = prefixInteter(new Date().getSeconds());
-            document.getElementById(name).value=`${hours}:${minute}:${seconds}`
-        }else{
-            document.getElementById(name).value = "23:59:59";
-        }
+        this.handleMaxTimePick(date, true);
+        this.value = [minDate, date]
+        this.$children[7].visible = false;
+        this.$children[7].handleChange(date);
+        this.$children[6].disabled = !editable;
+        this.$children[6].value = `${prefixInteter(hours)}:${prefixInteter(minutes)}:${prefixInteter(seconds)}`;
+        setTimeout(()=>{
+          this.resetView();
+        },100)
       }
     },
     disabledDate: (time) => {
         return time.getTime() >= Date.now()
     }
   }
-}
-
-export function timeChange(value, name) {
-  let date = value[1].split(' ')[0];
-  let time = document.getElementById(name).value;
-  value[1] = `${date} ${time}`;
 }
