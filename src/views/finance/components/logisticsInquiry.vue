@@ -1,10 +1,10 @@
 <!--物流查询-->
 <template>
   <div>
-    <div class="top_part">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="inline" label-width="70px">
+    <div class="top_part head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;paddinig-right:4px;">
             <el-option
               v-for="item in fsTerms"
               :key="item.value"
@@ -12,11 +12,9 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="查询时间" style="margin-left:25px;">
+        <el-form-item label="查询时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"

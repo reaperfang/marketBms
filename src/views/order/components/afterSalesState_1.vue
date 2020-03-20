@@ -140,17 +140,10 @@ export default {
         },
         drawback(id) {
             this._apis.order.orderAfterSaleDrawback({id}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '已发起退款，系统处理中。',
-                    type: 'success'
-                });
+                this.$message.success('已发起退款，系统处理中。');
                 this.$emit('getDetail')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         }
     },

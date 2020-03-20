@@ -237,10 +237,7 @@ export default {
                       message.close()
                   })
                   .catch(error => {
-                    this.$notify.error({
-                      title: "错误",
-                      message: error
-                    });
+                    this.$message.error(error);
                     message && message.close()
                   });
             })
@@ -254,10 +251,7 @@ export default {
           }
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
           message.close()
         });
     },

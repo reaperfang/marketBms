@@ -140,7 +140,7 @@
                                         </ul>
                                         <p class="spec-message" v-if="item.focus && !item.list || (item.focus && item.list && !item.list.length)">暂无匹配项，您可新增规格值到列表</p>
                                         <div class="add-specs-value-footer">
-                                            <el-button v-if="item.list && item.list.length" @click="getSpecs(false, index)" type="primary">确定</el-button>
+                                            <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
                                         </div>
                                     </div>
                                     <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)">添加规格值</el-button>
@@ -159,7 +159,7 @@
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
                         <ul class="spec-list" style="top: 35px;" v-show="showSpecsList">
-                            <li v-if="!specsList || (specsList && !specsList.length)">暂无匹配项，您可新增自定义规格到列表</li>
+                            <li style="font-size: 12px;" v-if="!specsList || (specsList && !specsList.length)">暂无匹配项，您可新增自定义规格到列表</li>
                             <li @click="addSpecClick(item)" v-for="item in specsList" :key="item.id">{{item.name}}</li>
                         </ul>
                     </div>
@@ -395,7 +395,7 @@
                             </template>
                         </el-table-column>
                     </el-table> -->
-                    <Specs :list.sync="ruleForm.goodsInfos" 
+                    <Specs v-if="ruleForm.productSpecs" :list.sync="ruleForm.goodsInfos" 
                         :specsLabel="Object.keys(JSON.parse(ruleForm.productSpecs)).join(',')"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
@@ -868,6 +868,10 @@ export default {
         });
     },
     methods: {
+        specValueSubmit(close, index) {
+            this.getSpecs(close, index)
+            this.closeSpecsValue(true, index)
+        },
         specsValueFocus(index) {
             this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
                 focus: true
@@ -962,9 +966,9 @@ export default {
             let valueIndex = this.addedSpecs[index].list.findIndex(val => val.id == newChild.id)
 
             this.selectSpecValue(index, valueIndex)
-            this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                visible: false
-            }))
+            // this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
+            //     visible: false
+            // }))
         },
         addNewSpec() {
             if(/\s+/.test(this.newSpec)) {
@@ -1112,10 +1116,15 @@ export default {
                         let prevSpecs = labelArr.slice(0, labelIndex + 1)
                         let leftSpecs = labelArr.slice(labelIndex + 1)
                         let specLable = ''
+                        let specs = val.specs
 
-                        for(let i in val.specs) {
-                            if(val.specs.hasOwnProperty(i)) {
-                                if(val.specs[i] == specValue) {
+                        if(typeof specs == 'string') {
+                            specs = JSON.parse(specs)
+                        }
+
+                        for(let i in specs) {
+                            if(specs.hasOwnProperty(i)) {
+                                if(specs[i] == specValue) {
                                     specLable = i
                                 }
                             }
@@ -1147,6 +1156,17 @@ export default {
             this.addedSpecs.splice(index, 1)
             this.getSpecs(false, index)
         },
+        closeSpecsValue(close, index) {
+            if(close) {
+                this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
+                    visible: false
+                }))
+            } else {
+                this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
+                    visible: true
+                }))
+            }
+        },
         getSpecs(open, index) {
             this.callObjectSpanMethod = true
             let arr = []
@@ -1169,17 +1189,15 @@ export default {
             this.selectSpecs(arr)
             //this.deleteStyle()
             this.deleteSpecArr = []
-            if(open && typeof open == 'boolean') {
-                //this.visible = true
-                this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                    visible: true
-                }))
-            } else {
-                //this.visible = false
-                this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
-                    visible: false
-                }))
-            }
+            // if(open && typeof open == 'boolean') {
+            //     this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
+            //         visible: true
+            //     }))
+            // } else {
+            //     this.addedSpecs.splice(index, 1, Object.assign({}, this.addedSpecs[index], {
+            //         visible: false
+            //     }))
+            // }
         },
         selectSpecValue(index, valueIndex) {
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
@@ -1362,9 +1380,9 @@ export default {
                     resolve()
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
+                    this.$message.error({
+                        message: error,
+                        type: 'error'
                     });
                     reject(error)
                 })
@@ -1579,11 +1597,15 @@ export default {
                 console.log(res)
                 let arr = []
                 let itemCatAr = []
+                let __goodsInfos
+
                 res.goodsInfos.forEach(val => {
                     let label = Object.values(JSON.parse(val.specs)).join(',')
 
                     val.label = label
                 })
+                __goodsInfos = this.computedList(res.goodsInfos)
+                res.goodsInfos = __goodsInfos
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
                     this.getCategoryIds(_arr, id)
@@ -1633,9 +1655,9 @@ export default {
                     this._apis.goods.getSPUGoodsList({ids: this.ruleForm.relationProductInfoIds}).then((res) => {
                         this.tableData = res.list
                     }).catch(error => {
-                        this.$notify.error({
-                            title: '错误',
-                            message: error
+                        this.$message.error({
+                            message: error,
+                            type: 'error'
                         });
                     })
                 }
@@ -1727,39 +1749,37 @@ export default {
                 //this.specsLength = this.specsList.length
                 this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             }) 
         },
         addGoods(params) {
             this._apis.goods.addGoods(params).then(res => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '新增成功！',
                     type: 'success'
                 });
                 this.$router.push('/goods/goodsList')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             }) 
         },
         editorGoods(params) {
             this._apis.goods.editorGoods(params).then(res => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '编辑成功！',
                     type: 'success'
                 });
                 this.$router.push('/goods/goodsList')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             }) 
         },

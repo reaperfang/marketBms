@@ -239,10 +239,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
         fetchOrderAddress() {
@@ -258,10 +255,7 @@ export default {
                 this.orderInfo.sendDetail = res.address
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         printDistributionSheet() {
@@ -283,10 +277,7 @@ export default {
                 this.expressCompanyList = res
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         sendGoodsHandler(formName) {
@@ -341,18 +332,11 @@ export default {
                         ],
                     }
                     this._apis.order.orderSendGoods(params).then((res) => {
-                        this.$notify({
-                            title: '成功',
-                            message: '补填物流成功',
-                            type: 'success'
-                        });
+                        this.$message.success('补填物流成功');
                         this.sending = false
                         this.$router.push('/order/query')
                     }).catch(error => {
-                        this.$notify.error({
-                            title: '错误',
-                            message: error
-                        });
+                        this.$message.error(error);
                         this.sending = false
                     })
                 } else {

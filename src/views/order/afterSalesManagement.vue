@@ -41,7 +41,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="getList" type="primary">搜索</el-button>
+                    <el-button @click="getList" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
                 <!-- <div class="buttons" style="display: inline-block; float: right;">
@@ -245,17 +245,10 @@ export default {
         },
         confirmReceived(row) {
             this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
-                this.$notify({
-                    title: '成功',
-                    message: '确认收货成功',
-                    type: 'success'
-                });
+                this.$message.success('确认收货成功');
                 this.getList()
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         showLogistics(row) {
@@ -266,26 +259,16 @@ export default {
                 this.currentData = res.traces
                 this.dialogVisible = true
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         drawback(row) {
             this._apis.order.orderAfterSaleDrawback({id: row.id, memberInfoId: row.memberInfoId}).then((res) => {
                 console.log(res)
-                this.$notify({
-                    title: '成功',
-                    message: '已发起退款，系统处理中。',
-                    type: 'success'
-                });
+                this.$message.success('已发起退款，系统处理中。');
                 this.getList()
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
             // this.confirm({title: '提示', text: '微信账户余额不足，无法退款。'}).then(() => {
                 
@@ -317,32 +300,18 @@ export default {
                         .orderAfterSaleExport(_params)
                         .then(res => {
                             window.location.href = res
-                            this.$notify({
-                                title: '成功',
-                                message: '导出成功！',
-                                type: 'success'
-                            });
+                            this.$message.success('导出成功！');
                         })
                         .catch(error => {
-                            this.$notify.error({
-                                title: '错误',
-                                message: error
-                            });
+                            this.$message.error(error);
                         });
                     })
                 } else {
                     window.location.href = res
-                    this.$notify({
-                        title: '成功',
-                        message: '导出成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('导出成功！');
                 }
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         batchUpdateStatus() {
@@ -367,31 +336,17 @@ export default {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
                     console.log(res)
                     this.getList()
-                    this.$notify({
-                        title: '成功',
-                        message: '审核成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('审核成功！');
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             } else {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 5, refuseReason: value.refuseReason}).then((res) => {
                     console.log(res)
                     this.getList()
-                    this.$notify({
-                        title: '成功',
-                        message: '拒绝审核成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('拒绝审核成功！');
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }
         },
@@ -404,16 +359,9 @@ export default {
         rejectHandler(value) {
             this._apis.order.orderAfterSaleUpdateStatus({id: this.currentData.id, orderAfterSaleStatus: 5, refuseReason: value}).then((res) => {
                 this.getList()
-                this.$notify({
-                    title: '成功',
-                    message: '拒绝审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('拒绝审核成功！');
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         updateStatus(row) {
@@ -432,32 +380,18 @@ export default {
             }else{
                 this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
                     this.getList();
-                    this.$notify({
-                        title: '成功',
-                        message: '审核成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('审核成功！');
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }
         },
         // 换货确认
         confirmHandler(value) {
             this._apis.order.orderAfterSaleConfirmExchange({id: this.currentData.id, exchangeConfirmation: value.exchangeConfirmation}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '换货确认成功！',
-                    type: 'success'
-                });
+                this.$message.success('换货确认成功！');
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         resetForm(formName) {

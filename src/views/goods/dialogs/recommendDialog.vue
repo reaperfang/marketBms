@@ -157,17 +157,16 @@ export default {
                         }
 
                         this._apis.goods.addCategory(param).then(res => {
-                            this.$notify({
-                                title: '成功',
+                            this.$message({
                                 message: '新增成功！',
                                 type: 'success'
                             });
                             this.$emit('submit')
                             this.onSubmit()
                         }).catch(error => {
-                            this.$notify.error({
-                                title: '错误',
-                                message: error
+                            this.$message.error({
+                                message: error,
+                                type: 'error'
                             });
                         })
                     } else {
@@ -176,17 +175,16 @@ export default {
                         delete param.parentId
 
                         this._apis.goods.editorCategory(param).then(res => {
-                            this.$notify({
-                                title: '成功',
+                            this.$message({
                                 message: '修改成功！',
                                 type: 'success'
                             });
                             this.$emit('submit')
                             this.onSubmit()
                         }).catch(error => {
-                            this.$notify.error({
-                                title: '错误',
-                                message: error
+                            this.$message.error({
+                                message: error,
+                                type: 'error'
                             });
                         })
                     }

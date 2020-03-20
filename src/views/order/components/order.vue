@@ -224,33 +224,19 @@ export default {
     methods: {
         closeOrder(id) {
             this._apis.order.deleteOrder({id, deleteFlag: 0}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '删除成功！',
-                    type: 'success'
-                });
+                this.$message.success('删除成功！');
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         submit(value) {
             this._apis.order.orderClose({...value, id: this.currentData}).then((res) => {
                 this.$emit('getList')
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '关闭成功！',
-                    type: 'success'
-                });
+                this.$message.success('关闭成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         makeCollections(order) {
@@ -258,17 +244,10 @@ export default {
                 this._apis.order.makeCollections({id: order.id, payWay: 4}).then((res) => {
                     this.$emit('getList')
                     this.visible = false
-                    this.$notify({
-                        title: '成功',
-                        message: '收款成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('收款成功！');
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }) 
         },

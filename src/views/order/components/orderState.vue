@@ -424,17 +424,10 @@ export default {
     methods: {
         submit(value) {
             this._apis.order.orderClose({...value, id: this.orderInfo.id}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '关闭成功！',
-                    type: 'success'
-                });
+                this.$message.success('关闭成功！');
                 this.$emit('orderStatusSuccess')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         closeOrder() {

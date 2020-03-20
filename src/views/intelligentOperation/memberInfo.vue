@@ -1,6 +1,6 @@
 <template>
 <div class="m_container">
-        <div class="pane_container">
+        <div class="pane_container head-wrapper">
             <el-form ref="form" :model="form" class="clearfix">
                 <el-form-item label="交易时间">
                     <div class="p_line">
@@ -57,11 +57,15 @@
                     <div class="input_wrap2">
                         <el-input placeholder="最高金额（元）" v-model="highprice" type="number"></el-input>
                     </div>
+                    <div class="marL26">
+                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                        <el-button type="primary" class="border_btn" @click="reSet" style="margin-left:16px;">重 置</el-button>
+                    </div>
                 </el-form-item>
-                <el-form-item class="fr marT20">
-                    <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
-                    <el-button class="border_btn" @click="reSet">重 置</el-button>
-                </el-form-item>
+                <!-- <el-form-item class="marT20">
+                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                    <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
+                </el-form-item> -->
             </el-form>
 
             <div class="m_line clearfix">
@@ -413,6 +417,10 @@ export default {
 }
 .mr10{
     margin-right:10px;
+}
+.marL26{
+    margin-left:26px;
+    display:inline-block;
 }
 .contents{
     width: 100%;
