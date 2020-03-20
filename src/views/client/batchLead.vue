@@ -48,11 +48,14 @@
                         <div class="input_wrap">
                             <el-date-picker
                                 v-model="consumeTime"
-                                type="daterange"
+                                type="datetimerange"
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
-                                :picker-options="utils.pickerOptions({canSelectFuture: true})">
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                :picker-options="utils.globalTimePickerOption.call(this, 'date1')"
+                                @change="utils.timeChange($event, 'date1')"
+                                >
                             </el-date-picker>
                         </div>
                     </el-form-item>
@@ -385,8 +388,8 @@ export default {
                 }
                 if(!!this.canSubmit) {
                     let formObj = Object.assign({}, this.ruleForm);
-                    formObj.consumeTimeStart = this.consumeTime ? utils.formatDate(new Date(this.consumeTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"):"";
-                    formObj.consumeTimeEnd = this.consumeTime ? utils.formatDate(utils.endTimeHandle(this.consumeTime[1], true),"yyyy-MM-dd hh:mm:ss"):"";
+                    formObj.consumeTimeStart = this.consumeTime ? this.consumeTime[0]:"";
+                    formObj.consumeTimeEnd = this.consumeTime ? this.consumeTime[1]:"";
                     formObj.isLastConsumeTime = this.convertUnit(formObj.isLastConsumeTime) || 0;
                     formObj.isTotalConsumeTimes = this.convertUnit(formObj.isTotalConsumeTimes) || 0;
                     formObj.isTotalConsumeMoney = this.convertUnit(formObj.isTotalConsumeMoney) || 0;
@@ -498,6 +501,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/.el-date-editor .el-range-separator{
+    width: 6%;
+}
 .c_container{
     padding: 16px 0 30px 20px;
     background-color: #fff;

@@ -425,16 +425,9 @@ export default {
         //         let namesList = res.map(val => val.replacePayWechatName)
 
         //         namesL
-        //         this.$notify({
-        //             title: '成功',
-        //             message: '查询成功！',
-        //             type: 'success'
-        //         });
+        //         this.$message.success('查询成功！');
         //     }).catch(error => {
-        //         this.$notify.error({
-        //             title: '错误',
-        //             message: error
-        //         });
+        //         this.$message.error(error);
         //     }) 
         // },
         getGain() {
@@ -451,10 +444,7 @@ export default {
                 this.gainCouponList = res.couponList && res.couponList.map(val => val.appCoupon.name).join(',') || ''
                 this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getOrderAmount() {
@@ -514,20 +504,13 @@ export default {
         //     this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
         //     consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
         //         this.changePriceVisible = false
-        //         // this.$notify({
-        //         //     title: '成功',
-        //         //     message: '添加成功！',
-        //         //     type: 'success'
-        //         // });
+        //         // this.$message.success('添加成功！');
         //         this.currentDialog = 'ChangePriceDialog'
         //         this.dialogVisible = true
         //         this.getDetail()
         //     }).catch(error => {
         //         this.changePriceVisible = false
-        //         this.$notify.error({
-        //             title: '错误',
-        //             message: error
-        //         });
+        //         this.$message.error(error);
         //     }) 
         // },
         reducePriceHandler() {
@@ -543,20 +526,13 @@ export default {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                // this.$notify({
-                //     title: '成功',
-                //     message: '添加成功！',
-                //     type: 'success'
-                // });
+                // this.$message.success('添加成功！');
                 this.$emit('getDetail')
                 this.currentDialog = 'ChangePriceDialog'
                 this.dialogVisible = true
             }).catch(error => {
                 this.changePriceVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         yingshouSubmit() {
@@ -582,10 +558,7 @@ export default {
                     this.dialogVisible = true
                 }).catch(error => {
                     this.changePriceVisible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 }) 
         },
         submit() {
@@ -595,17 +568,10 @@ export default {
             this.remarkVisible = true
             this._apis.order.orderRemark({id: this.orderInfo.id, sellerRemark: this.orderInfo.sellerRemark}).then(res => {
                 this.remarkVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                this.$message.success('添加成功！');
             }).catch(error => {
                 this.remarkVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         }
     },

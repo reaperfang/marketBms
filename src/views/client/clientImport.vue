@@ -54,11 +54,14 @@
                 <span>导入时间：</span>
                 <el-date-picker
                     v-model="importTime"
-                    type="daterange"
+                    type="datetimerange"
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="utils.pickerOptions({canSelectFuture: false})">
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    :picker-options="utils.globalTimePickerOption.call(this, 'date1',true)"
+                    @change="utils.timeChange($event, 'date1')"
+                >
                 </el-date-picker>
                 <span class="marL20">渠道：</span>
                 <el-select v-model="channelId2" placeholder="选择渠道" clearable>
@@ -146,8 +149,8 @@ export default {
         },
         handleCheck() {
             let params = {
-                importTimeStart: !!this.importTime ? utils.formatDate(new Date(this.importTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'',
-                importTimeEnd: !!this.importTime ? utils.formatDate(utils.endTimeHandle(this.importTime[1], false),"yyyy-MM-dd hh:mm:ss"):"",
+                importTimeStart: !!this.importTime ? this.importTime[0] : "",
+                importTimeEnd: !!this.importTime ? this.importTime[1] : "",
                 channelId: this.channelId2
             }
             this.params = Object.assign({}, params);
@@ -228,6 +231,9 @@ export default {
 }
 /deep/ .el-upload-list__item{
     width: 300px !important;
+}
+/deep/.el-date-editor .el-range-separator{
+    width: 8%;
 }
 .marL20{
     margin-left: 20px;

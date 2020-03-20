@@ -239,10 +239,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     deleteOrder(index) {
@@ -400,11 +397,7 @@ export default {
         this._apis.order
           .orderSendGoods(params)
           .then(res => {
-            this.$notify({
-              title: "成功",
-              message: "发货成功",
-              type: "success"
-            });
+            this.$message.success('发货成功');
             this.sending = false
             // this.$router.push(
             //   "/order/deliverGoodsSuccess?ids=" +
@@ -434,10 +427,7 @@ export default {
             });
           })
           .catch(error => {
-            this.$notify.error({
-              title: "错误",
-              message: error
-            });
+            this.$message.error(error);
             this.sending = false
           });
       } catch (e) {
@@ -479,10 +469,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     onSubmit(value) {
@@ -544,18 +531,12 @@ export default {
             })
             .catch(error => {
               this.visible = false;
-              this.$notify.error({
-                title: "错误",
-                message: error
-              });
+              this.$message.error(error);
             });
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     }
   },

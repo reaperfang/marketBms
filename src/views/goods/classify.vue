@@ -342,18 +342,17 @@ export default {
                             this.dialogVisible = true
                         })
                     } else {
-                        this.$notify({
-                            title: '成功',
+                        this.$message({
                             message: '删除成功！',
                             type: 'success'
                         });
                         this.getTreeList()
                     }
                 }).catch(error => {
-                    this.$notify.error({
-                                title: '错误',
-                                message: error
-                            });
+                    this.$message.error({
+                        message: error,
+                        type: 'error'
+                    });
                 })
             })
         },

@@ -70,17 +70,10 @@ export default {
         },
         confirmTakeOver() {
             this._apis.order.orderConfirmReceived({id: this.orderAfterSale.id, isSellerReceived: 1}).then(res => {
-                this.$notify({
-                    title: '成功',
-                    message: '确认收货成功',
-                    type: 'success'
-                });
+                this.$message.success('确认收货成功');
                 this.getDetail()
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         reject() {
@@ -95,17 +88,10 @@ export default {
             }).then((res) => {
                 this.getDetail()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '拒绝审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('拒绝审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         auth() {
@@ -137,17 +123,10 @@ export default {
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                 this.getDetail()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getDetail() {
@@ -171,10 +150,7 @@ export default {
                 this.orderSendInfo = res.orderSendInfo
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         handleClick(tab, event) {

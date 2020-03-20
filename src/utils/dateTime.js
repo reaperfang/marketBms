@@ -1,4 +1,6 @@
 /* 日期和时间相关工具 */
+import uuid from 'uuid/v4';
+let timePickerId = '';
 
 /**
  *格式化日期和时间
@@ -172,4 +174,49 @@ export function dayEnd(endTime) {
   time.setMinutes(59);
   time.setSeconds(59);
   return time;
+}
+
+export function globalTimePickerOption(name, noEdit) {
+  const _self = this;
+  const prefixInteter = require('./transform').prefixInteter;
+  return {
+    onPick: function ({ maxDate, minDate}) {
+      const wraps = this.$el.querySelectorAll('.el-date-range-picker__time-picker-wrap');
+      if(noEdit) {
+        // this.$el.querySelector('.el-time-panel').style.display = 'none!important';
+        if(wraps.length && wraps[3] && wraps[3].querySelector('.el-date-range-picker__editor')) {
+          let className = wraps[3].querySelector('.el-date-range-picker__editor').className;
+          if(!className.includes('is-disabled')) {
+            className += ' is-disabled';
+          }
+          wraps[3].querySelector('.el-date-range-picker__editor').className = className;
+          wraps[3].querySelector(".el-input__inner").style.pointerEvents = 'none!important';
+        }
+
+      }
+      if (maxDate) {
+        if(!wraps[3]) {
+          return;
+        }
+        wraps[3].querySelector(".el-input__inner").setAttribute('id', name);
+        if(new Date(maxDate).toDateString() == new Date().toDateString()) {
+            let hours = prefixInteter(new Date().getHours());
+            let minute = prefixInteter(new Date().getMinutes());
+            let seconds = prefixInteter(new Date().getSeconds());
+            document.getElementById(name).value=`${hours}:${minute}:${seconds}`
+        }else{
+            document.getElementById(name).value = "23:59:59";
+        }
+      }
+    },
+    disabledDate: (time) => {
+        return time.getTime() >= Date.now()
+    }
+  }
+}
+
+export function timeChange(value, name) {
+  let date = value[1].split(' ')[0];
+  let time = document.getElementById(name).value;
+  value[1] = `${date} ${time}`;
 }

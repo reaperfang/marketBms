@@ -49,12 +49,15 @@
                     </div>
                     <span style="margin-left: 30px;">领取时间：</span>
                     <el-date-picker
-                        type="daterange"
+                        type="datetimerange"
                         v-model="getTime"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        :picker-options="utils.pickerOptions({canSelectFuture: false})">
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        :picker-options="utils.globalTimePickerOption.call(this, 'date1')"
+                        @change="utils.timeChange($event, 'date1')"
+                    >
                     </el-date-picker>
                     <el-button type="primary" class="marL30" @click="handleFind">查 询</el-button>
                     <el-button class="border_btn" @click="reset">重 置</el-button>
@@ -116,8 +119,8 @@ export default {
         handleFind() {
             let obj = {
                 name: this.selected == "" || this.selected == "全部"? null : this.selected,
-                startTime: this.getTime == "" || this.getTime == null ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
-                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(utils.endTimeHandle(this.getTime[1], false),"yyyy-MM-dd hh:mm:ss"),
+                startTime: !!this.getTime ? this.getTime[0] : '',
+                endTime: !!this.getTime ? this.getTime[1] : '',
             }
             this.lkParams = Object.assign({},obj);
         },

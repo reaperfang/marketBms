@@ -143,8 +143,9 @@ export default {
         color: #3D434A;
         .i_line{
             .input_wrap{
-                width: 320px;
+                // width: 320px;
                 display: inline-block;
+                margin-right: 26px;
             }
         }
     }
