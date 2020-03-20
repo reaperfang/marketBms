@@ -176,47 +176,80 @@ export function dayEnd(endTime) {
   return time;
 }
 
-export function globalTimePickerOption(name, noEdit) {
+
+/* 全局时间选择器配置项逻辑 */
+export function globalTimePickerOption(editable = true) {
   const _self = this;
   const prefixInteter = require('./transform').prefixInteter;
+
+  var disableInput = function() {
+    this.$children[2].disabled = true;
+    this.$children[3].disabled = true;
+    this.$children[5].disabled = true;
+    this.$children[6].disabled = true;
+  }
   return {
     onPick: function ({ maxDate, minDate}) {
-      const wraps = this.$el.querySelectorAll('.el-date-range-picker__time-picker-wrap');
-      if(noEdit) {
-        // this.$el.querySelector('.el-time-panel').style.display = 'none!important';
-        if(wraps.length && wraps[3] && wraps[3].querySelector('.el-date-range-picker__editor')) {
-          let className = wraps[3].querySelector('.el-date-range-picker__editor').className;
-          if(!className.includes('is-disabled')) {
-            className += ' is-disabled';
-          }
-          wraps[3].querySelector('.el-date-range-picker__editor').className = className;
-          wraps[3].querySelector(".el-input__inner").style.pointerEvents = 'none!important';
+      const me = this;
+
+      // 区分修改结束时间
+      if (maxDate) {
+        this.maxDate = maxDate;
+        let date = new Date();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let seconds = date.getSeconds();
+        if(new Date(maxDate).toDateString() != new Date().toDateString()) {
+            hours = 23;
+            minutes = 59;
+            seconds = 59;
+            date.setFullYear(maxDate.getFullYear());
+            date.setMonth(maxDate.getMonth());
+            date.setDate(maxDate.getDate());
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            date.setSeconds(seconds);
         }
 
-      }
-      if (maxDate) {
-        if(!wraps[3]) {
-          return;
-        }
-        wraps[3].querySelector(".el-input__inner").setAttribute('id', name);
-        if(new Date(maxDate).toDateString() == new Date().toDateString()) {
-            let hours = prefixInteter(new Date().getHours());
-            let minute = prefixInteter(new Date().getMinutes());
-            let seconds = prefixInteter(new Date().getSeconds());
-            document.getElementById(name).value=`${hours}:${minute}:${seconds}`
-        }else{
-            document.getElementById(name).value = "23:59:59";
-        }
+        // 触发最大值选择器更新值
+        this.handleMaxTimePick(date, true);
+
+        // 更新日期时间选择器实例的时间区间值
+        this.value = [minDate, date];
+
+        // 结束时间下拉选择器的值更新
+        this.$children[6].value = `${prefixInteter(hours)}:${prefixInteter(minutes)}:${prefixInteter(seconds)}`;
+
+        //延时重渲染
+        setTimeout(()=>{
+
+          //重新渲染整个控件
+          this.resetView();
+
+          this.$nextTick(()=>{
+
+            //如果不允许编辑时分秒
+            if(!editable) {
+              disableInput.call(me);  //设置所有的时间输入框为不可用状态
+              this.$el.onclick = function(ev) {  //当面板被点击时重新设置所有的时间输入框为不可用状态
+                disableInput.call(me);
+              }
+            }else{
+              //如果允许编辑时分秒
+              this.$children[6].$el.onclick = function() {  //点击结束时间输入框时重新打开下拉框的可见状态
+                me.$refs.maxTimePicker.visible = true;
+              }
+            }
+
+            //初始化时，将左右的下拉选择器隐藏
+            this.$refs.minTimePicker.visible = false;
+            this.$refs.maxTimePicker.visible = false;
+          })
+        },100)
       }
     },
     disabledDate: (time) => {
         return time.getTime() >= Date.now()
     }
   }
-}
-
-export function timeChange(value, name) {
-  let date = value[1].split(' ')[0];
-  let time = document.getElementById(name).value;
-  value[1] = `${date} ${time}`;
 }

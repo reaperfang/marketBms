@@ -37,13 +37,13 @@
         <div class="input_wrap" v-if="nearDay1 == 4">
           <el-date-picker
             v-model="date1"
-            type="daterange"
-            range-separator="—"
-            value-format="yyyy-MM-dd"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :picker-options="pickerOptions"
-            @change="changeDate1"
+            type="datetimerange"
+            align="right"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
+            @change="changeTime"
           ></el-date-picker>
           <!-- <el-date-picker v-model="date1" type="month" @change="changeDate1" placeholder="选择日期" :picker-options="pickerOptions"></el-date-picker> -->
         </div>
@@ -111,22 +111,19 @@ export default {
   data() {
     return {
       pickerOptions: {
-          onPick: ({ maxDate, minDate }) => {
-              this.pickerMinDate = minDate.getTime()
-              if (maxDate) {
-              this.pickerMinDate = ''
-              }
-          },
           disabledDate: (time) => {
-              if (this.pickerMinDate !== '') {
-              const day90 = (90 - 1) * 24 * 3600 * 1000
-              let maxTime = this.pickerMinDate + day90
-              if (maxTime > new Date()) {
-                  maxTime = new Date()- 8.64e7
-              }
-              return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-              }
-              return time.getTime() > Date.now() - 8.64e7
+              // if (_self.pickerMinDate !== '') {
+              // const day90 = (90 - 1) * 24 * 3600 * 1000
+              // let maxTime = _self.pickerMinDate + day90
+              // if (maxTime > new Date()) {
+              //     maxTime = new Date()- 8.64e7
+              // }
+              // return time.getTime() > maxTime || time.getTime() == _self.pickerMinDate
+              // }
+              let yesterday = new Date();
+              yesterday = yesterday.getTime()-24*60*60*1000;
+              yesterday = this.utils.dayEnd(yesterday);
+              return time.getTime() > yesterday.getTime();
           }
       },
       visitSourceType: "0",

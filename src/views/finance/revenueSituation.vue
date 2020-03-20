@@ -64,12 +64,12 @@
             class="mr26"
             v-model="timeValue"
             type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-           :default-time="defaultTime"
-           :editable="false"
-            :picker-options="pickerNowDateBefore"
+            align="right"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
+            @change="changeTime"
             >
           </el-date-picker>
           <el-button type="primary" @click="getDataDateRs">确定</el-button>
