@@ -55,8 +55,8 @@
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        :picker-options="pickerOptions"
-                        @change="timeChange"
+                        :picker-options="utils.globalTimePickerOption.call(this, 'date1')"
+                        @change="utils.timeChange($event, 'date1')"
                     >
                     </el-date-picker>
                     <el-button type="primary" class="marL30" @click="handleFind">查 询</el-button>
@@ -91,25 +91,7 @@ export default {
             isLoading: true,
             loading: false,
             dialogVisible: false,
-            currentDialog:"",
-            pickerOptions: {
-            onPick: ({ maxDate, minDate }) => {
-                if (maxDate) {
-                    document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
-                    if(new Date(maxDate).toDateString() == new Date().toDateString()) {
-                        let hours = this.prefixInteter(new Date().getHours());
-                        let minute = this.prefixInteter(new Date().getMinutes());
-                        let seconds = this.prefixInteter(new Date().getSeconds());
-                        document.getElementById('date1').value=`${hours}:${minute}:${seconds}`
-                    }else{
-                        document.getElementById('date1').value = "23:59:59";
-                    }
-                }
-            },
-            disabledDate: (time) => {
-                return time.getTime() >= Date.now()
-            }
-        },
+            currentDialog:""
         }
     },
     computed:{
@@ -119,16 +101,6 @@ export default {
         }
     },
     methods: {
-        timeChange(value) {
-            document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[3].getElementsByClassName("el-input__inner")[0].setAttribute('id', 'date1');
-            let date = document.getElementsByClassName('el-date-range-picker__time-picker-wrap')[2].getElementsByClassName("el-input__inner")[0].value;
-            let time = document.getElementById('date1').value;
-            value[1] = `${date} ${time}`;
-        },
-        //缺0补位
-        prefixInteter(num) {
-            return (Array(2).join(0) + num).slice(-2);
-        },
         imageSelected(item) {
             this.imgUrl = item.filePath;
             this.addCardBg();

@@ -26,7 +26,6 @@
           list-type="picture"
           :before-upload="beforeAvatarUpload"
           :on-success="handleAvatarSuccess"
-          :on-preview="handlePictureCardPreview"
           :on-remove="handleRemove"
           :on-exceed="handleDelet"
           v-model="form.images"
@@ -165,7 +164,7 @@ export default {
         return false;
       }
       if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 3MB!");
+        this.$message.error("上传图片大小不能超过3MB!");
         return false
       }
       return true
@@ -174,18 +173,13 @@ export default {
     handleDelet(files, fileList) {
       this.$message.error("最多支持上传6张！");
     },
-    handlePictureCardPreview(file) {
-      console.log("22222222220", file);
-    },
 
     handleRemove(file, fileList) {
-      this.form.imageUrls.map((item, index) => {
-        if (item.url == file.url) {
-          this.form.imageUrls.splice(index, 1);
+      this.form.images.map((item, index) => {
+        if (item.fileName == file.name) {
+          this.form.images.splice(index,1);
         }
       });
-      console.log("remove11111111", file);
-      console.log("remove22222222", fileList);
     }
   }
 };
