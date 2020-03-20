@@ -5,11 +5,11 @@
                 <el-checkbox v-model="h5Checked">公众号</el-checkbox>
                 <el-checkbox :disabled="data.currentStatus != 'published'" v-model="miniCodeChecked">小程序</el-checkbox>
             </div>
+            <div class="footer">
+                <el-button @click="submit" type="primary">确 认</el-button>
+                <el-button @click="visible = false">取 消</el-button>
+            </div>
         </DialogBase>
-        <div class="footer">
-            <el-button @click="submit" type="primary">确 认</el-button>
-            <el-button @click="visible = false">取 消</el-button>
-        </div>
         <component :is="currentDialog" :dialogVisible.sync="shareDialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -20,7 +20,7 @@ import Share from '@/views/goods/dialogs/shareDialog'
 export default {
     data() {
         return {
-            showFooter: true,
+            showFooter: false,
             hasCancel: true,
             h5Checked: false,
             miniCodeChecked: false,
@@ -105,6 +105,10 @@ export default {
         font-size:18px;
         font-weight:400;
         color:rgba(68,61,74,1);
+    }
+    .footer {
+        text-align: center;
+        margin-top: 28px;
     }
 </style>
 
