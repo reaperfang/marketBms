@@ -7,7 +7,8 @@
                     <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
-                        <el-input v-model="item.salePrice" placeholder="请输入价格"></el-input>
+                        <el-input :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
+                        <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可下架</p>
                     </div>
                 </div>
             </div>
@@ -122,6 +123,13 @@ export default {
     }
     /deep/ .el-input {
         width: auto;
+    }
+    .message {
+        font-size:12px;
+        font-weight:400;
+        color:rgba(245,88,88,1);
+        margin-left: 14px;
+        padding: 5px 0;
     }
 </style>
 

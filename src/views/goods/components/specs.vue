@@ -37,25 +37,25 @@
                     </td>
                 </template>
                 <td>
-                    <el-input v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input type="number" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input type="number" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <el-input type="number" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
+                    <el-input type="number" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
+                    <el-input type="number" v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
+                    <el-input type="number" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <el-input type="number" v-model="item.code" placeholder="请输入SKU编码"></el-input>
                 </td>
                 <td v-if="!item['image_hide']" :rowspan="item['image_rowspan']">
                     <el-upload

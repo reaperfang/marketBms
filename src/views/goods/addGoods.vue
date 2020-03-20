@@ -43,6 +43,7 @@
                     :on-remove="handleRemove"
                     :on-success="centerFileUrl"
                     :on-change="changeUpload"
+                    :before-upload="beforeUpload"
                     class="p_imgsCon">
                     <i class="el-icon-plus"></i>
                     <p style="line-height: 21px; margin-top: -39px; color: #92929B;">上传图片</p>
@@ -153,6 +154,65 @@
                             <el-button class="spec-button" @click="addSpecs" type="primary">选择规格</el-button>
                         </div>
                     </div>
+                    <div v-show="showAddSpecsInput" class="add-specs">
+                        <div style="position: relative;" class="add-specs-input">
+                            <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
+                            <el-button @click.native="addNewSpec">新增</el-button>
+                        </div>
+                        <ul class="spec-list" style="top: 35px;" v-show="showSpecsList">
+                            <li style="font-size: 12px;" v-if="!specsList || (specsList && !specsList.length)">暂无匹配项，您可新增自定义规格到列表</li>
+                            <li @click="addSpecClick(item)" v-for="item in specsList" :key="item.id">{{item.name}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div v-else>
+                    <ul class="added-specs">
+                        <li v-for="(item, index) in addedSpecs" :key="index">
+                            <div class="added-specs-header">
+                                <span>{{item.name}}</span>
+                                <el-button @click="deleteAddedSpec(index)">移除</el-button>
+                            </div>
+                            <ul class="spec-value-ul">
+                                <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
+                                    {{spec.name}}
+                                    <i @click="deleteAddedSpecValue(index, specValueIndex)" data-v-03229368="" class="icon-circle-close"></i>
+                                </li>
+                            </ul>
+                            <div class="add-specs-button">
+                                <el-popover
+                                    placement="bottom"
+                                    width="430"
+                                    trigger="manual"
+                                    v-model="item.visible">
+                                    <div class="add-specs-value">
+                                        <div class="add-specs-value-input">
+                                            <input @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
+                                            <el-button @click="addNewSpecValue(item, index)">新增</el-button>
+                                        </div>
+                                        <ul class="add-spec-value-ul">
+                                            <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
+                                                {{ValueItem.name}}
+                                                <i v-if="ValueItem.type == 'new'" @click="(e) => {
+                                                    deleteSpecValue(valueIndex, e)
+                                                }" class="icon-circle-close"></i>
+                                            </li>
+                                            <div class="clear"></div>
+                                        </ul>
+                                        <p class="spec-message" v-if="item.focus && !item.list || (item.focus && item.list && !item.list.length)">暂无匹配项，您可新增规格值到列表</p>
+                                        <div class="add-specs-value-footer">
+                                            <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
+                                        </div>
+                                    </div>
+                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)">添加规格值</el-button>
+                                </el-popover>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- <div class="add-specs-button-box">
+                        <div style="margin-right: 20px;" v-show="!showAddSpecsInput" class="add-specs-button">
+                            <el-button class="spec-button" @click="addSpecs" type="primary">选择规格</el-button>
+                        </div>
+                    </div> -->
                     <div v-show="showAddSpecsInput" class="add-specs">
                         <div style="position: relative;" class="add-specs-input">
                             <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
@@ -396,7 +456,7 @@
                         </el-table-column>
                     </el-table> -->
                     <Specs v-if="ruleForm.productSpecs" :list.sync="ruleForm.goodsInfos" 
-                        :specsLabel="Object.keys(JSON.parse(ruleForm.productSpecs)).join(',')"
+                        :specsLabel="specsLabel"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         @handlePictureCardPreview="handlePictureCardPreview"
@@ -868,6 +928,16 @@ export default {
         });
     },
     methods: {
+        beforeUpload(file) {
+            console.log(file)
+            if(file.size > 2097152) {
+                this.$message({
+                    message: '文件最大支持2M',
+                    type: 'warning'
+                });
+                return false
+            }
+        },
         specValueSubmit(close, index) {
             this.getSpecs(close, index)
             this.closeSpecsValue(true, index)
@@ -1154,6 +1224,7 @@ export default {
         },
         deleteAddedSpec(index) {
             this.addedSpecs.splice(index, 1)
+            this.specsLabel = this.specsLabel.split(',').splice(index, 1).join(',')
             this.getSpecs(false, index)
         },
         closeSpecsValue(close, index) {
@@ -1590,6 +1661,93 @@ export default {
                 console.error(e)
             }
         },
+        computedAddSpecs(specs) {
+            let _specs
+            let _addedSpecs = []
+
+            let computedSpecValue = (specValues, list, parentId) => {
+                specValues.forEach(specValue => {
+                    let flatSpecsValue = this.flatSpecsList.find(val => val.name == specValue)
+
+                    if(flatSpecsValue) {
+                        let _flatSpecsValue = JSON.parse(JSON.stringify(flatSpecsValue))
+
+                        _flatSpecsValue = Object.assign({}, _flatSpecsValue, {
+                            active: true
+                        })
+                        if(!list.list) {
+                            this.$set(list, 'list', []);
+                        }
+                        list.valueList.push(_flatSpecsValue)
+                        list.list.push(_flatSpecsValue)
+                    } else {
+                        let valueItem = {
+                            id: new Date().getTime() + '' + specValue,
+                            parentId: parentId || '0',
+                            name: specValue,
+                            active: true
+                        }
+
+                        this.flatSpecsList = [...this.flatSpecsList, Object.assign({}, valueItem, {
+                            active: false
+                        })]
+                        if(!list.list) {
+                            this.$set(list, 'list', []);
+                        }
+                        list.valueList.push(valueItem)
+                        list.list.push(valueItem)
+                    }
+                })
+            }
+
+            if(typeof specs == 'string') {
+                _specs = JSON.parse(specs)
+            }
+            //"{"网络":["移动","联通"],"质地":["细","粗"]}"
+            for(let i in _specs) {
+                if(_specs.hasOwnProperty(i)) {
+                    let obj = {}
+                    let specName = i
+                    let specValues = _specs[i]
+                    let flatSpecsItem = this.flatSpecsList.find(val => val.name == specName)
+
+                    if(flatSpecsItem) {
+                        let _flatSpecsItem = JSON.parse(JSON.stringify(flatSpecsItem))
+                        let flatSpecsItemId = _flatSpecsItem.id
+                        
+                        _flatSpecsItem = Object.assign({}, _flatSpecsItem, {
+                            newSpecValue: '',
+                            active: false,
+                            visible: false,
+                            focus: false,
+                            valueList: []
+                        })
+
+                        computedSpecValue(specValues, _flatSpecsItem, flatSpecsItemId)
+
+                        _addedSpecs.push(_flatSpecsItem)
+                    } else {
+                        let specItem = {
+                            id: new Date().getTime(),
+                            name: specName,
+                            parentId: '0',
+                            list: [],
+                            valueList: [],
+                            newSpecValue:"",
+                            active:false,
+                            visible:false,
+                            focus:false,
+                        }
+
+                        this.flatSpecsList = [...this.flatSpecsList, JSON.parse(JSON.stringify(specItem))]
+                        computedSpecValue(specValues, specItem, specItem.id)
+                        _addedSpecs.push(specItem)
+                    }
+                }
+            }
+
+            this.addedSpecs = _addedSpecs
+        },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
@@ -1599,10 +1757,13 @@ export default {
                 let itemCatAr = []
                 let __goodsInfos
 
+                this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
+                this.computedAddSpecs(res.productSpecs)
                 res.goodsInfos.forEach(val => {
                     let label = Object.values(JSON.parse(val.specs)).join(',')
 
                     val.label = label
+                    val.editorDisabled = true
                 })
                 __goodsInfos = this.computedList(res.goodsInfos)
                 res.goodsInfos = __goodsInfos
@@ -2297,16 +2458,31 @@ export default {
             this.hideUpload = this.imagesLength >= 6
         },
         centerFileUrl(response, file, fileList){
-            if(response.status == "success"){
+            console.log(response, file, fileList)
+            if(fileList.every(val => val.status == 'success')){
                 this.$message.success(response.msg);
-                this.fileList.push({
-                    name: '',
-                    url: response.data.url
-                })
-                if(this.ruleForm.images != '') {
-                    this.ruleForm.images += ',' + response.data.url;
+                if(fileList.length > 1 && fileList.every(val => val.status == 'success')) {
+                    fileList.forEach(item => {
+                        this.fileList.push({
+                            name: '',
+                            url: item.response.data.url
+                        })
+                        if(this.ruleForm.images != '') {
+                            this.ruleForm.images += ',' + item.response.data.url;
+                        } else {
+                            this.ruleForm.images += item.response.data.url;
+                        }
+                    })
                 } else {
-                    this.ruleForm.images = response.data.url;
+                    this.fileList.push({
+                        name: '',
+                        url: response.data.url
+                    })
+                    if(this.ruleForm.images != '') {
+                        this.ruleForm.images += ',' + response.data.url;
+                    } else {
+                        this.ruleForm.images = response.data.url;
+                    }
                 }
             }else{
                 this.$message.error(response.msg);
