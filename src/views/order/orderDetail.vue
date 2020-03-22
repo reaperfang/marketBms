@@ -281,18 +281,11 @@ export default {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                this.$message.success('添加成功！');
                 this.getDetail()
             }).catch(error => {
                 this.changePriceVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         getDetail() {
@@ -304,10 +297,7 @@ export default {
                     this.orderDetail = res
                     resolve(res)
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                     reject(error)
                 })
             })

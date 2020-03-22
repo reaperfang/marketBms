@@ -1,7 +1,7 @@
 /* 推客奖励列表 */
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="用户ID">
           <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
@@ -27,10 +27,11 @@
             v-model="times"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -108,11 +109,6 @@ export default {
     },
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       dataList:[],
       total:0,
       inline:true,
@@ -135,8 +131,8 @@ export default {
   watch: {
     times(){
       if(this.times.length != 0){
-        this.ruleForm.startTime = utils.formatDate(this.times[0], "yyyy-MM-dd hh:mm:ss")
-        this.ruleForm.stopTime = utils.formatDate(this.times[1], "yyyy-MM-dd hh:mm:ss")
+        this.ruleForm.startTime = this.times[0]
+        this.ruleForm.stopTime = this.times[1]
       }
     }
   },
@@ -212,10 +208,7 @@ export default {
         this._apis.finance.exportTa(this.ruleForm).then((response)=>{
         window.location.href = response.url
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
       }
     },

@@ -6,43 +6,35 @@
       style="width: 100%"
       ref="clientLabelTable"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-      :default-sort = "{prop: 'date', order: 'descending'}"
+      :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
-      >
-      <el-table-column
-        type="selection"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="tagName"
-        label="标签名称">
-      </el-table-column>
-      <el-table-column
-        prop="tagType"
-        label="标签类型">
-      </el-table-column>
+    >
+      <el-table-column type="selection"></el-table-column>
+      <el-table-column prop="tagName" label="标签名称"></el-table-column>
+      <el-table-column prop="tagType" label="标签类型"></el-table-column>
       <el-table-column label="包含人数">
         <template slot-scope="scope">
-            <span class="edit_span" @click="_routeTo('allClient', {memberLabels: scope.row.id})" v-if="scope.row.labelContains !== 0">{{scope.row.labelContains}}</span>
-            <span class="edit_span" v-else style="color:#000">{{scope.row.labelContains}}</span>
+          <span
+            class="edit_span"
+            @click="_routeTo('allClient', {memberLabels: scope.row.id})"
+            v-if="scope.row.labelContains !== 0"
+          >{{scope.row.labelContains}}</span>
+          <span class="edit_span" v-else style="color:#000">{{scope.row.labelContains}}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="labelCondition"
-        label="标签条件">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        label="创建时间"
-      >
-      </el-table-column>
+      <el-table-column prop="labelCondition" label="标签条件"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <span class="edit_span" @click="edit(scope.row)" v-permission="['客户', '客户标签', '默认页面', '查看标签']">
-                <!-- <i class="edit_i"></i> -->
-                编辑
-            </span>
-            <span class="edit_span" @click="deleteRow(scope.row)" style="color: #FD4C2B">删除</span>
+          <span
+            class="edit_span"
+            @click="edit(scope.row)"
+            v-permission="['客户', '客户标签', '默认页面', '查看标签']"
+          >
+            <!-- <i class="edit_i"></i> -->
+            编辑
+          </span>
+          <span class="edit_span" @click="deleteRow(scope.row)" style="color: #FD4C2B">删除</span>
         </template>
       </el-table-column>
     </el-table>
@@ -65,12 +57,12 @@
 </template>
 
 <script type='es6'>
-import clientApi from '@/api/client'
+import clientApi from "@/api/client";
 import TableBase from "@/components/TableBase";
 export default {
   name: "clTable",
   extends: TableBase,
-  props: ['params'],
+  props: ["params"],
   data() {
     return {
       checkAll: false,
@@ -79,39 +71,36 @@ export default {
       canDelete: true
     };
   },
-  computed: {
-  
-  },
-  created() {
-
-  },
+  computed: {},
+  created() {},
   methods: {
     deleteRow(row) {
-      if(row.labelContains == 0) {
-        this._apis.client.batchDeleteTag({ labelIds: row.id }).then((response) => {
-          this.$notify({
-            title: '成功',
-            message: "删除标签成功",
-            type: 'success'
+      this.confirm({
+        title: "提示",
+        customClass: "goods-custom",
+        icon: true,
+        text: "确认删除标签？"
+      }).then(() => {
+        if (row.labelContains == 0) {
+          this._apis.client
+            .batchDeleteTag({ labelIds: [row.id] })
+            .then(response => {
+              this.$message({
+                message: "删除标签成功",
+                type: "success"
+              });
+              this.getLabelList(this.startIndex, this.pageSize);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          this.$message({
+            message: "有包含人数的标签不能删除",
+            type: "warning"
           });
-          this.getLabelList(this.startIndex, this.pageSize);
-        }).catch((error) => {
-          console.log(error);
-        })
-      }else{
-        this.$notify({
-          title: '警告',
-          message: '有包含人数的标签不能删除',
-          type: 'warning'
-        });
-      }
-    },
-    checkSelectable(row,index) {
-      if(row.labelContains==0) {
-        return 1;
-      }else{
-        return 0;
-      }
+        }
+      });
     },
     handleSizeChange(val) {
       this.getLabelList(1, val);
@@ -122,68 +111,71 @@ export default {
     },
     handleChange(val) {
       this.tagList.forEach(row => {
-        this.$refs.clientLabelTable.toggleRowSelection(row,val)
+        this.$refs.clientLabelTable.toggleRowSelection(row, val);
       });
     },
     getLabelList(startIndex, pageSize) {
       this.loading = true;
-      this._apis.client.getLabelList(Object.assign(this.params, {startIndex, pageSize})).then((response) => {
-        this.loading = false;
-        this.$emit('stopLoading');
-        response.list.map((v) => {
-          v.tagType = v.tagType == 0 ? '手工':'自动';
+      this._apis.client
+        .getLabelList(Object.assign(this.params, { startIndex, pageSize }))
+        .then(response => {
+          this.loading = false;
+          this.$emit("stopLoading");
+          response.list.map(v => {
+            v.tagType = v.tagType == 0 ? "手工" : "自动";
+          });
+          this.tagList = [].concat(response.list);
+          this.total = response.total;
         })
-        this.tagList = [].concat(response.list);
-        this.total = response.total;
-      }).catch((error) => {
-        this.loading = false;
-        console.log(error);
-      })
+        .catch(error => {
+          this.loading = false;
+          console.log(error);
+        });
     },
     edit(row) {
-      this._routeTo('batchImport',{id: row.id});
+      this._routeTo("batchImport", { id: row.id });
     },
     batchDelete() {
       this.canDelete = true;
       let rows = this.$refs.clientLabelTable.selection;
       let removeArrs = [];
-      rows.map((v) => {
-        if(v.labelContains !== 0) {
+      rows.map(v => {
+        if (v.labelContains !== 0) {
           this.canDelete = false;
-        }else{
+        } else {
           removeArrs.push(v);
         }
-      })
-      if(!this.canDelete) {
-        this.$notify({
-            title: '警告',
-            message: '有包含人数的标签不能删除',
-            type: 'warning'
-          });
-      }
-      if(rows.length == 0) {
-        this.$notify({
-          title: '警告',
-          message: '请选择要删除的标签',
-          type: 'warning'
+      });
+      if (!this.canDelete) {
+        this.$message({
+          message: "有包含人数的标签不能删除",
+          type: "warning"
         });
-      }else{
+      }
+      if (rows.length == 0) {
+        this.$message({
+          message: "请选择要删除的标签",
+          type: "warning"
+        });
+      } else {
         let arr = [];
-        removeArrs.map((v) => {
+        removeArrs.map(v => {
           arr.push(v.id);
         });
-        if(arr.length > 0) {
-          this._apis.client.batchDeleteTag({ labelIds: arr }).then((response) => {
-            this.$notify({
-              title: '成功',
-              message: "批量删除标签成功",
-              type: 'success'
+        if (arr.length > 0) {
+          this._apis.client
+            .batchDeleteTag({ labelIds: arr })
+            .then(response => {
+              this.$message({
+                message: "批量删除标签成功",
+                type: "success"
+              });
+              this.getLabelList(this.startIndex, this.pageSize);
+              this.checkAll = false;
+            })
+            .catch(error => {
+              console.log(error);
             });
-            this.getLabelList(this.startIndex, this.pageSize);
-            this.checkAll = false;
-          }).catch((error) => {
-            console.log(error);
-          })
         }
       }
     }
@@ -195,26 +187,27 @@ export default {
   },
   mounted() {
     this.getLabelList(this.startIndex, this.pageSize);
-  } 
+  }
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-.marL20{
+.marL20 {
   margin-left: 20px;
 }
-.edit_span{
-    color: #655EFF;
-    margin-right: 10px;
-    cursor: pointer;
-    .edit_i{
-        display: inline-block;
-        width: 14px;
-        height: 14px;
-        margin-right: 8px;
-        background: url("../../../../assets/images/client/icon_edit.png") 0 0 no-repeat;
-    }
+.edit_span {
+  color: #655eff;
+  margin-right: 20px;
+  cursor: pointer;
+  .edit_i {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+    background: url("../../../../assets/images/client/icon_edit.png") 0 0
+      no-repeat;
+  }
 }
-.a_line{
+.a_line {
   padding-left: 17px;
 }
 </style>

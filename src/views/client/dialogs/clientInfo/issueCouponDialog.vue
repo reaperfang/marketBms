@@ -91,7 +91,7 @@
                     <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共条数据
+                    共{{data.allCoupons.length}}条数据
                 </div>
             </div>
         </div>
@@ -123,17 +123,15 @@ export default {
     couponSubmit() {
       this.dialogVisible2 = false;
       if(this.$refs.couponListTable.selection.length == 0) {
-        this.$notify({
-          title: '提示',
-          message: "请选择要发放的优惠券",
+        this.$message({
+          message: '请选择要发放的优惠券',
           type: 'warning'
         });
       }else if(this.$refs.couponListTable.selection.length <= 10) {
         this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
       }else{
-        this.$notify({
-          title: '提示',
-          message: "最多只能选择10张优惠券",
+        this.$message({
+          message: '最多只能选择10张优惠券',
           type: 'warning'
         });
       }
@@ -164,33 +162,31 @@ export default {
             this.visible = false;
             this.btnLoading = false;
             let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
-            this.$notify({
-              title: '提示',
+            this.$message({
               message: errMsg,
               type: 'warning'
             });
           }else{
             this.btnLoading = false;
             this.visible = false;
-            this.$notify({
-              title: '成功',
+            this.$message({
               message: "发放成功",
               type: 'success'
             });
-            this.$emit('refreshPage');
+            this.$emit('refreshPage',1);
           }
         })
         }).catch((error) => {
+          console.log(error);
           this.btnLoading = false;
           this.visible = false;
         })
       }else{
         this.btnLoading = false;
-        this.$notify({
-            title: '警告',
-            message: '请选择优惠券',
+        this.$message({
+            message: "请选择优惠券",
             type: 'warning'
-          });
+        });
       }
     },
     handleAdd() {
@@ -268,6 +264,10 @@ export default {
 }
 /deep/ .el-dialog{
     border-radius: 10px;
+}
+/deep/ .el-table{
+  height: 591px;
+  overflow-y: auto;
 }
 .c_container {
     text-align: left;

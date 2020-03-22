@@ -1,6 +1,6 @@
 <template>
   <div class="query">
-    <section>
+    <section class="search">
       <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
         <el-form-item label>
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
@@ -68,14 +68,14 @@
           <el-date-picker
             v-model="listQuery.orderTimeValue"
             type="datetimerange"
-            range-separator="-"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
+            :picker-options="utils.globalTimePickerOption.call(this)"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item style="float: right;">
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -118,7 +118,7 @@ import Shop from "./components/shop";
 import IntegralShop from "./components/integralShop";
 import { fetchOrderList } from "@/api/order";
 import appConfig from '@/system/appConfig';
-import { search } from '@/mixins/orderMixin'
+import { search } from './mixins/orderMixin'
 import utils from "@/utils";
 
 export default {
@@ -237,10 +237,7 @@ export default {
                       message.close()
                   })
                   .catch(error => {
-                    this.$notify.error({
-                      title: "错误",
-                      message: error
-                    });
+                    this.$message.error(error);
                     message && message.close()
                   });
             })
@@ -254,10 +251,7 @@ export default {
           }
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
           message.close()
         });
     },
@@ -294,6 +288,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .query {
   section {
     background-color: #fff;
@@ -344,5 +349,6 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 </style>
 

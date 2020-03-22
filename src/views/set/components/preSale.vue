@@ -242,10 +242,7 @@ export default {
         this.autoOrder = Boolean(response.isAutoCancelUnpayOrder)
         this.sendOrder = Boolean(response.isOrderAutoSend)
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -267,23 +264,14 @@ export default {
             }
             this._apis.set.updateShopInfo(data).then(response =>{
               this.loading = false
-              this.$notify.success({
-                title: '成功',
-                message: '保存成功！'
-              });
+              this.$message.success('保存成功！');
             }).catch(error =>{
               this.loading = false
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
             })
           }else{
             this.loading = false
-            this.$notify.error({
-                title: '输入框不能为空',
-                message: '保存失败'
-              });
+            this.$message.error('输入框不能为空，保存失败');
           }
       })
     },

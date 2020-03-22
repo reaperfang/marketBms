@@ -143,7 +143,7 @@
               <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
             </el-form-item>
             <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
-              <el-input :disabled="!express" v-model="ruleForm.expressNos"></el-input>
+              <el-input :disabled="!express" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
             </el-form-item>
             <el-form-item label="物流备注" prop="sendRemark">
               <el-input
@@ -325,10 +325,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     fetchOrderAddress() {
@@ -347,10 +344,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     getExpressCompanyList() {
@@ -369,10 +363,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     // 订单详情 orderId
@@ -476,11 +467,7 @@ export default {
           this._apis.order
             .orderSendGoods(params)
             .then(res => {
-              this.$notify({
-                title: "成功",
-                message: "发货成功",
-                type: "success"
-              });
+              this.$message.success('发货成功');
               this.sending = false
               // this.$router.push(
               //   "/order/deliverGoodsSuccess?id=" +
@@ -498,10 +485,7 @@ export default {
               })
             })
             .catch(error => {
-              this.$notify.error({
-                title: "错误",
-                message: error
-              });
+              this.$message.error(error);
               this.sending = false
             });
         } else {

@@ -1,7 +1,7 @@
 /*维权 */
 <template>
     <div class="m_container">
-        <div class="pane_container">
+        <div class="pane_container head-wrapper">
             <el-form class="clearfix">
                 <el-form-item label="交易时间">
                     <div class="p_line">
@@ -15,12 +15,13 @@
                         <div class="input_wrap" v-if="form.timeType == 4">
                         <el-date-picker
                             v-model="dateRange"
-                            type="daterange"
-                            :picker-options="pickerOptions"
-                            range-separator="—"
-                            value-format="yyyy-MM-dd"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
+                            type="datetimerange"
+                            align="right"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                             @change="changeTime"
                         ></el-date-picker>
                         </div>
@@ -42,7 +43,7 @@
                         </el-select>
                     </div>
                         <span class="span_label">用户类型</span>
-                    <div class="input_wrap2 marR20">
+                    <div class="input_wrap2">
                         <el-select v-model="form.memberType">
                             <el-option label="全部" value="null"></el-option>
                             <el-option label="非会员" value="0"></el-option>
@@ -50,14 +51,16 @@
                             <el-option label="老会员" value="2"></el-option>
                         </el-select>
                     </div>
-                    <el-button class="minor_btn" icon="el-icon-search" @click="getRightsProtection()">查询</el-button>
-                    <el-button class="border_btn" @click="resetAll()">重 置</el-button>
+                    <div class="marL26">
+                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getRightsProtection()">查询</el-button>
+                        <el-button type="primary" class="border_btn" @click="resetAll()" style="margin-left:16px;">重 置</el-button>
+                    </div>
                 </el-form-item>
             </el-form>
             <div class="m_line clearfix">
                 <p style="line-height:40px;" v-if="listObj">
                 该筛选条件下：会员共计<span>{{listObj.memberCount || 0}}</span>人，
-                占客户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；
+                占用户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；
                 订单共计<span>{{listObj.orderCount || 0}}</span>个、商品总数共计<span>{{listObj.goodsCount || 0}}</span>个；
                 维权次数共计<span>{{listObj.protectionCount || 0}}</span>次；
                 </p>
@@ -109,22 +112,11 @@ export default {
             dateRange: [],
             reasons:[],
             pickerOptions: {
-                onPick: ({ maxDate, minDate }) => {
-                    this.pickerMinDate = minDate.getTime()
-                    if (maxDate) {
-                    this.pickerMinDate = ''
-                    }
-                },
                 disabledDate: (time) => {
-                    if (this.pickerMinDate !== '') {
-                    const day30 = (90 - 1) * 24 * 3600 * 1000
-                    let maxTime = this.pickerMinDate + day30
-                    if (maxTime > new Date()) {
-                        maxTime = new Date() - 8.64e7
-                    }
-                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-                    }
-                    return time.getTime() > Date.now() - 8.64e7
+                    let yesterday = new Date();
+                    yesterday = yesterday.getTime()-24*60*60*1000;
+                    yesterday = this.utils.dayEnd(yesterday);
+                    return time.getTime() > yesterday.getTime();
                 }
             },
             note:'',
@@ -273,6 +265,10 @@ export default {
 .marT20s{
     // position: relative;
     margin-top:10px;
+}
+.marL26{
+    margin-left:26px;
+    display:inline-block;
 }
 .contents{
     width: 100%;

@@ -58,7 +58,7 @@
                     <div class="step">
                         <div class="step_t">
                             <h4>店铺装修</h4>
-                            <p>提高客户浏览、购物体验</p>
+                            <p>提高用户浏览、购物体验</p>
                             <img :src="require('@/assets/images/star.png')" alt="">
                             <span>2</span>
                         </div>
@@ -94,7 +94,7 @@
                     <div class="step">
                         <div class="step_t">
                             <h4>搭建会员体系或会员卡体系</h4>
-                            <p>让客户成为会员，通过会员权益提高会员粘性</p>
+                            <p>让用户成为会员，通过会员权益提高会员粘性</p>
                             <span>4</span>
                         </div>
                         <div class="step_b">

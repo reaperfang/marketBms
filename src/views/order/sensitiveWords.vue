@@ -61,17 +61,10 @@ export default {
                 this._apis.order.deleteSensitiveWord({id: item.id}).then((res) => {
                 this.getList()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '删除成功！',
-                    type: 'success'
-                });
+                this.$message.success('删除成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
             })
         },
@@ -83,24 +76,16 @@ export default {
                 this.getList()
                 this.visible = false
                 if(!res.length) {
-                    this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                    this.$message.success('添加成功！');
                 } else {
-                    this.$notify({
-                    title: '消息',
-                    message: '敏感词重复！',
-                    type: 'warning'
-                });
+                    this.$message({
+                        message: '敏感词重复！',
+                        type: 'warning'
+                    });
                 }
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getList(param) {
@@ -119,10 +104,7 @@ export default {
                 this.visible = false
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
     },

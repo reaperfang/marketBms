@@ -30,6 +30,7 @@ import AfterSalesInformation from './components/afterSalesInformation'
 import AftermarketDeliveryInformation from './components/aftermarketDeliveryInformation'
 import AfterSalesState from './components/afterSalesState'
 import RejectDialog from '@/views/order/dialogs/rejectDialog'
+import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 
 export default {
     data() {
@@ -69,17 +70,10 @@ export default {
         },
         confirmTakeOver() {
             this._apis.order.orderConfirmReceived({id: this.orderAfterSale.id, isSellerReceived: 1}).then(res => {
-                this.$notify({
-                    title: '成功',
-                    message: '确认收货成功',
-                    type: 'success'
-                });
+                this.$message.success('确认收货成功');
                 this.getDetail()
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         reject() {
@@ -94,17 +88,10 @@ export default {
             }).then((res) => {
                 this.getDetail()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '拒绝审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('拒绝审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         auth() {
@@ -112,6 +99,12 @@ export default {
 
             if(this.orderAfterSale.type == 3) {
                 orderAfterSaleStatus = 2
+            } else if(this.orderAfterSale.type == 2) {
+                this.currentDialog = 'ExchangeGoodsDialog'
+                this.currentData = Object.assgign({}, this.orderAfterSale);
+                this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
+                this.dialogVisible = true
+                return
             } else {
                 orderAfterSaleStatus = 1
             }
@@ -130,17 +123,10 @@ export default {
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                 this.getDetail()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getDetail() {
@@ -164,10 +150,7 @@ export default {
                 this.orderSendInfo = res.orderSendInfo
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         handleClick(tab, event) {
@@ -178,7 +161,8 @@ export default {
         AfterSalesInformation,
         AftermarketDeliveryInformation,
         AfterSalesState,
-        RejectDialog
+        RejectDialog,
+        ExchangeGoodsDialog
     }   
 }
 </script>

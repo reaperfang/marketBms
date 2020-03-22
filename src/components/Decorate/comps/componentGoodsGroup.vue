@@ -121,10 +121,6 @@ export default {
                     this.loading = false;
                     this.allLoaded = true;
                 }).catch((error)=>{
-                    // this.$notify.error({
-                    //   title: '错误',
-                    //   message: error
-                    // });
                     console.error(error);
                     this.list = [];
                     this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);

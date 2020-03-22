@@ -7,6 +7,7 @@
         :before-close="handleClose"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
+        :show-close="showClose"
         style="margin-top:20vh;">
         <span slot="title" class="dialog_title">
             <a>返回官网</a> | <a>创建店铺</a>
@@ -41,7 +42,7 @@ export default {
           shopLists:[]
       }
   },
-  props:['showShopsDialog','shopList','route'],
+  props:['showShopsDialog','shopList','route','showClose'],
   watch: {
       showShopsDialog(newValue,oldValue){
           this.showDialog = newValue
@@ -56,10 +57,7 @@ export default {
             this.handleClose()
             this.$router.push({ path: '/profile/profile' })
           }).catch(error => {
-            this.$notify.error({
-              title: '失败',
-              message: error
-            })
+            this.$message.error(error);
           })
       }).catch(error => {
         console.log(error)

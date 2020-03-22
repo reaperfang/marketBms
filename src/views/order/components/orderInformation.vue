@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="item">
-                    <div class="label">客户备注</div>
+                    <div class="label">用户备注</div>
                     <div class="value">{{orderInfo.buyerRemark || '--'}}</div>
                 </div>
                 <div class="item remark-box">
@@ -170,14 +170,14 @@
                     <div class="row">
                         <div class="col">优惠券金额:</div>
                         <div class="col">
-                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true}; dialogVisible = true" class="coupon-img"></i>
+                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true, title: '使用的优惠券'}; dialogVisible = true" class="coupon-img"></i>
                             -¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">优惠码金额:</div>
                         <div class="col">
-                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false}; dialogVisible = true" class="coupon-img"></i>
+                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false, title: '使用的优惠码'}; dialogVisible = true" class="coupon-img"></i>
                             -¥{{orderDetail.orderInfo.consumeCouponCodeMoney || '0.00'}}
                         </div>
                     </div>
@@ -425,16 +425,9 @@ export default {
         //         let namesList = res.map(val => val.replacePayWechatName)
 
         //         namesL
-        //         this.$notify({
-        //             title: '成功',
-        //             message: '查询成功！',
-        //             type: 'success'
-        //         });
+        //         this.$message.success('查询成功！');
         //     }).catch(error => {
-        //         this.$notify.error({
-        //             title: '错误',
-        //             message: error
-        //         });
+        //         this.$message.error(error);
         //     }) 
         // },
         getGain() {
@@ -451,10 +444,7 @@ export default {
                 this.gainCouponList = res.couponList && res.couponList.map(val => val.appCoupon.name).join(',') || ''
                 this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getOrderAmount() {
@@ -514,20 +504,13 @@ export default {
         //     this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
         //     consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
         //         this.changePriceVisible = false
-        //         // this.$notify({
-        //         //     title: '成功',
-        //         //     message: '添加成功！',
-        //         //     type: 'success'
-        //         // });
+        //         // this.$message.success('添加成功！');
         //         this.currentDialog = 'ChangePriceDialog'
         //         this.dialogVisible = true
         //         this.getDetail()
         //     }).catch(error => {
         //         this.changePriceVisible = false
-        //         this.$notify.error({
-        //             title: '错误',
-        //             message: error
-        //         });
+        //         this.$message.error(error);
         //     }) 
         // },
         reducePriceHandler() {
@@ -543,20 +526,13 @@ export default {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                // this.$notify({
-                //     title: '成功',
-                //     message: '添加成功！',
-                //     type: 'success'
-                // });
+                // this.$message.success('添加成功！');
                 this.$emit('getDetail')
                 this.currentDialog = 'ChangePriceDialog'
                 this.dialogVisible = true
             }).catch(error => {
                 this.changePriceVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         yingshouSubmit() {
@@ -582,10 +558,7 @@ export default {
                     this.dialogVisible = true
                 }).catch(error => {
                     this.changePriceVisible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 }) 
         },
         submit() {
@@ -595,17 +568,10 @@ export default {
             this.remarkVisible = true
             this._apis.order.orderRemark({id: this.orderInfo.id, sellerRemark: this.orderInfo.sellerRemark}).then(res => {
                 this.remarkVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                this.$message.success('添加成功！');
             }).catch(error => {
                 this.remarkVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         }
     },
@@ -897,6 +863,9 @@ export default {
 .yingshow-right-box {
     display: flex;
     align-items: center;
+    >span:first-child {
+        font-weight: 600;
+    }
     .yingshou-change {
         flex-shrink: 0;
     }

@@ -12,7 +12,8 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 function hasPermission(msfList, route) {
   if (route && route.path) {
-    return msfList.some(item => route.meta.title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo'
+    let title = route.meta.title == '全部用户' ? '全部客户' : route.meta.title;  //add_by fangyuan 对于客户改成用户的需求，后端返回的还是全部客户，所以需要特殊处理
+    return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo'
   } else {
     return true
   }
@@ -25,16 +26,25 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   //  if (true) { // determine if there has token  
   if(store.getters.token){
-    const msfList = JSON.parse(localStorage.getItem('shopInfos')).data.msfList
+    const localMsfList = localStorage.getItem('shopInfos');
+    let msfList = [];
+    if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
+      msfList = JSON.parse(localMsfList).data.msfList
+    }
     /* has token*/
     if (to.path === '/login') {
-      next({ path: '/' })
-      NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      if(msfList.length) {
+        next({ path: '/' })
+        NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+      }else {
+        next()
+        NProgress.done() //
+      }
     } else {
         if(flag == 0){
           store.dispatch('GenerateRoutes', msfList).then(() => { // 根据roles权限生成可访问的路由表
             if(store.getters.addRouters.length != 0){
-              router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+              router.selfAddRoutes(store.getters.addRouters) // 动态添加可访问路由表
               next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
             }else{
               next({ path: '/401'})

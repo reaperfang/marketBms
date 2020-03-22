@@ -46,26 +46,23 @@
                     </el-select>
                     <el-date-picker
                         v-model="listQuery.orderTimeValue"
-                        :picker-options="pickerBeginDateBefore"
                         type="datetimerange"
-                        range-separator="-"
+                        range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        :default-time="['00:00:00', '23:59:59']"
+                        :picker-options="utils.globalTimePickerOption.call(this)"
                     ></el-date-picker>
                 </el-form-item>
-                <div class="buttons">
-                    <!-- <div class="lefter">
-                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
-                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
-                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
-                        <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
-                    </div> -->
+                <el-form-item>
+                    <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
+                </el-form-item>
+                <!-- <div class="buttons">
                     <div class="righter">
                         <el-button @click="getList" type="primary">搜索</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
-                </div>
+                </div> -->
             </el-form>
         </div>
         <div class="line"></div>
@@ -246,10 +243,7 @@ export default {
             })
             .catch(error => {
             this.visible = false;
-            this.$notify.error({
-                title: "错误",
-                message: error
-            });
+            this.$message.error(error);
             });
         },
         pickerBeginDateBefore (time) {
@@ -371,6 +365,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .order-delivery {
     .search {
         background-color: #fff;

@@ -80,10 +80,6 @@ export default {
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -94,10 +90,6 @@ export default {
       this._apis.shop.selectAllClassify({}).then((response)=>{
         this.classifyList = response;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
       });
     },

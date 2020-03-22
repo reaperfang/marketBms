@@ -5,7 +5,7 @@
         <div class="form_container">
             <el-form ref="form" :model="form">
                 <el-row>
-                    <el-col :span="4">
+                    <el-col :span="6">
                         <el-form-item label="查询条件：" prop="labelName">
                             <el-select v-model="form.labelName" placeholder="请选择" clearable>
                                 <el-option label="昵称" value="nickName"></el-option>
@@ -14,7 +14,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6" :offset="1">
+                    <el-col :span="6">
                         <el-form-item prop="labelValue">
                             <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20">
                                 <el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button>
@@ -65,7 +65,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="积分：" prop="scoreMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 27px;">
                                     <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number2($event,form.scoreMin,'scoreMin')"></el-input>
                                 </div>
                                 <span>分</span>
@@ -106,7 +106,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="客单价：" prop="perUnitPriceMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 13px;">
                                     <el-input v-model="form.perUnitPriceMin" placeholder="最小值" @keyup.native="number3($event,form.perUnitPriceMin,'perUnitPriceMin')"></el-input>
                                 </div>
                                 <span>元</span>
@@ -122,10 +122,14 @@
                                 <div class="input_wrap3">
                                     <el-date-picker
                                         v-model="becameCustomerTime"
-                                        type="daterange"
+                                        type="datetimerange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
-                                        end-placeholder="结束日期">
+                                        end-placeholder="结束日期"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        editable="false"
+                                        :picker-options="utils.globalTimePickerOption.call(this)"
+                                        >
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -135,10 +139,14 @@
                                 <div class="input_wrap3">
                                     <el-date-picker
                                         v-model="lastPayTime"
-                                        type="daterange"
+                                        type="datetimerange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
-                                        end-placeholder="结束日期">
+                                        end-placeholder="结束日期"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        editable="false"
+                                        :picker-options="utils.globalTimePickerOption.call(this)"
+                                    >
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -152,14 +160,14 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div>
-            <div class="btn_container" style="float: right; margin-right: 118px">
-                <el-button type="primary" @click="_routeTo('clientImport')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
+        </div>
+        <div class="all_container2">
+            <div class="btn_container" style="float: right; margin: 9px 118px 24px 0px">
+                <el-button type="primary" @click="_routeTo('importClient')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
             <acTable :newForm="newForm" @stopLoading="stopLoading"></acTable>
         </div>
-    </div>
   </div>
 </template>
 <script>
@@ -318,8 +326,7 @@ export default {
         let canSubmit = true;
         if(!!this.isNumber(this.form.scoreMin)) {
             if(!this.isNumber(this.form.scoreMax) || Number(this.form.scoreMax) <= Number(this.form.scoreMin)) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入最大积分',
                     type: 'warning'
                 });
@@ -328,8 +335,7 @@ export default {
         }
         if(!!this.isNumber(this.form.scoreMax)) {
             if(!this.isNumber(this.form.scoreMin) || Number(this.form.scoreMin) >= Number(this.form.scoreMax)) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入最小积分',
                     type: 'warning'
                 });
@@ -338,8 +344,7 @@ export default {
         }
         if(!!this.isNumber(this.form.totalDealMoneyMin)) {
             if(!this.isNumber(this.form.totalDealMoneyMax) || Number(this.form.totalDealMoneyMax) <= Number(this.form.totalDealMoneyMin)) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入累计最大金额',
                     type: 'warning'
                 });
@@ -348,9 +353,7 @@ export default {
         }
         if(!!this.isNumber(this.form.totalDealMoneyMax)) {
             if(!this.isNumber(this.form.totalDealMoneyMin) || Number(this.form.totalDealMoneyMin) >= Number(this.form.totalDealMoneyMax)) {
-
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入累计最小金额',
                     type: 'warning'
                 });
@@ -359,8 +362,7 @@ export default {
         }
         if(!!this.isNumber(this.form.dealTimesMin)) {
             if(!this.isNumber(this.form.dealTimesMax) || Number(this.form.dealTimesMax) <= Number(this.form.dealTimesMin)) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入最大购买次数',
                     type: 'warning'
                 });
@@ -369,8 +371,7 @@ export default {
         }
         if(!!this.isNumber(this.form.dealTimesMax)) {
             if(!this.isNumber(this.form.dealTimesMin) || Number(this.form.dealTimesMin) >= Number(this.form.dealTimesMax)) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入最小购买次数',
                     type: 'warning'
                 });
@@ -379,8 +380,7 @@ export default {
         }
         if(!!this.isNumber(this.form.perUnitPriceMin)) {
             if(!this.isNumber(this.form.perUnitPriceMax) || Number(this.form.perUnitPriceMax) <= Number(this.form.perUnitPriceMin)) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入最大客单价',
                     type: 'warning'
                 });
@@ -389,8 +389,7 @@ export default {
         }
         if(!!this.isNumber(this.form.perUnitPriceMax)) {
             if(!this.isNumber(this.form.perUnitPriceMin) || Number(this.form.perUnitPriceMin) >= Number(this.form.perUnitPriceMax)) {
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请正确输入最小客单价',
                     type: 'warning'
                 });
@@ -399,10 +398,10 @@ export default {
         }
         if(!!canSubmit) {
             this.btnloading = true;
-            this.form.becameCustomerTimeStart = this.becameCustomerTime ? utils.formatDate(new Date(this.becameCustomerTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(new Date(this.becameCustomerTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.lastPayTimeStart = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.becameCustomerTimeStart = this.becameCustomerTime ? this.becameCustomerTime[0]:'';
+            this.form.becameCustomerTimeEnd = this.becameCustomerTime ? this.becameCustomerTime[1]:'';
+            this.form.lastPayTimeStart = this.lastPayTime ? this.lastPayTime[0]:'';
+            this.form.lastPayTimeEnd = this.lastPayTime ? this.lastPayTime[1]:'';
             let oForm = Object.assign({},this.form);
             let labelNames = oForm.memberLabels;
             let channelNames = oForm.channelId;
@@ -502,13 +501,20 @@ export default {
 /deep/.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
     margin-bottom: 10px;
 }
+/deep/.el-date-editor .el-range-separator{
+    width: 9%;
+}
 .el-input-group__append button.el-button{
     color: #5D78FF;
 }
+.marL20{
+    margin-left: 20px;
+}
 .all_container{
-    padding: 19px;
+    padding: 20px;
     background-color: #fff;
     font-size: 14px;
+    border-radius: 4px;
     .form_container{
         .relaPosition{
             .absoPosition{
@@ -516,15 +522,13 @@ export default {
             }
             .down_img{
                 position: absolute;
-                left: 569px;
+                left: 562px;
                 top: 5px;
             }
             .more{
                 cursor: pointer;
                 color: #5B54E6;
-                position: absolute;
-                right: 40px;
-                top: 0;
+                margin-left: 81px;
                 i{
                     margin-left: 10px;
                 }
@@ -557,6 +561,13 @@ export default {
             cursor: pointer;
         }
     }
+}
+.all_container2{
+    padding: 20px;
+    background-color: #fff;
+    font-size: 14px;
+    margin-top: 20px;
+    border-radius: 4px;
 }
 .p_title{
     height: 40px;

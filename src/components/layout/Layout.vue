@@ -148,10 +148,7 @@ export default {
       this._apis.set.getShopInfo({id:id}).then(response =>{
         this.logo = response.logo
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
   },
