@@ -56,6 +56,7 @@
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -291,8 +292,8 @@ export default {
       query.sort = orde || 'desc'
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.tradeTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.tradeTimeEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.tradeTimeStart = timeValue[0]
+        query.tradeTimeEnd = timeValue[1]
       }
       return query;
     },  

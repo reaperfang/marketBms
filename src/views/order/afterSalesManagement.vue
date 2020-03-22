@@ -15,7 +15,7 @@
                     <el-date-picker
                         v-model="listQuery.applicationDate"
                         type="datetimerange"
-                        range-separator="-"
+                        range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                         :picker-options="utils.globalTimePickerOption.call(this)">

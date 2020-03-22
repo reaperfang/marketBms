@@ -24,6 +24,7 @@
                   v-model="range"
                   type="datetimerange"
                   align="right"
+                  range-separator="至"
                   start-placeholder="开始时间"
                   end-placeholder="结束时间"
                   value-format="yyyy-MM-dd HH:mm:ss"
@@ -78,14 +79,6 @@ export default {
     return {
       pickerOptions: {
           disabledDate: (time) => {
-              // if (_self.pickerMinDate !== '') {
-              // const day90 = (90 - 1) * 24 * 3600 * 1000
-              // let maxTime = _self.pickerMinDate + day90
-              // if (maxTime > new Date()) {
-              //     maxTime = new Date()- 8.64e7
-              // }
-              // return time.getTime() > maxTime || time.getTime() == _self.pickerMinDate
-              // }
               let yesterday = new Date();
               yesterday = yesterday.getTime()-24*60*60*1000;
               yesterday = this.utils.dayEnd(yesterday);

@@ -24,6 +24,7 @@
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -156,8 +157,8 @@ export default {
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.startTime = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.endTime = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.startTime = timeValue[0]
+        query.endTime = timeValue[1]
       }
       return query;
     },

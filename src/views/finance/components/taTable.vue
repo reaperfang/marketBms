@@ -27,6 +27,7 @@
             v-model="times"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -130,8 +131,8 @@ export default {
   watch: {
     times(){
       if(this.times.length != 0){
-        this.ruleForm.startTime = utils.formatDate(this.times[0], "yyyy-MM-dd hh:mm:ss")
-        this.ruleForm.stopTime = utils.formatDate(this.times[1], "yyyy-MM-dd hh:mm:ss")
+        this.ruleForm.startTime = this.times[0]
+        this.ruleForm.stopTime = this.times[1]
       }
     }
   },
