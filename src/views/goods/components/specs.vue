@@ -17,6 +17,7 @@
                 <th width="50" v-for="(labelItem, labelIndex) in specsLabel.split(',')">
                     <span>{{labelItem}}</span>
                 </th>
+                <th class="image" width="150"><span>图片</span></th>
                 <th class="costPrice" width="150"><span>成本价</span></th>
                 <th class="salePrice" width="150"><span>售卖价</span></th>
                 <th class="stock" width="150"><span>库存</span></th>
@@ -24,7 +25,6 @@
                 <th width="150"><span>重量</span></th>
                 <th width="150"><span>体积</span></th>
                 <th width="150"><span>SKU编码</span></th>
-                <th class="image" width="150"><span>图片</span></th>
                 <th width="150"><span>操作</span></th>
             </tr>
             <tr v-for="(item, index) in list">
@@ -36,27 +36,6 @@
                         {{item.label.split(',') && item.label.split(',')[labelIndex]}}
                     </td>
                 </template>
-                <td>
-                    <el-input type="number" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
-                </td>
-                <td>
-                    <el-input type="number" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
-                </td>
-                <td>
-                    <el-input type="number" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
-                </td>
-                <td>
-                    <el-input type="number" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
-                </td>
-                <td>
-                    <el-input type="number" v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
-                </td>
-                <td>
-                    <el-input type="number" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
-                </td>
-                <td>
-                    <el-input type="number" v-model="item.code" placeholder="请输入SKU编码"></el-input>
-                </td>
                 <td v-if="!item['image_hide']" :rowspan="item['image_rowspan']">
                     <el-upload
                         :disabled="!productCategoryInfoId"
@@ -83,6 +62,27 @@
                         </p>
                     </el-upload>
                     <div class="upload-spec-ku" v-if="!item.image && productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = index; dialogVisible = true">素材库</div>
+                </td>
+                <td>
+                    <el-input type="number" min="0" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
+                </td>
+                <td>
+                    <el-input type="number" min="0" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                </td>
+                <td>
+                    <el-input type="number" min="0" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
+                </td>
+                <td>
+                    <el-input type="number" min="0" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
+                </td>
+                <td>
+                    <el-input type="number" min="0" v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
+                </td>
+                <td>
+                    <el-input type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
+                </td>
+                <td>
+                    <el-input v-model="item.code" placeholder="请输入SKU编码"></el-input>
                 </td>
                 <td>
                     <div class="spec-operate">
@@ -312,15 +312,22 @@ export default {
         overflow: scroll;
         padding-bottom: 10px;
     }
+    .specs::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .specs::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
     /deep/ .el-input {
         width: 120px!important;
-        margin-left: 12px;
+        margin-left: 5px;
     }
     /deep/ .el-input__inner {
         text-align: left!important;
     }
     /deep/ .el-input__inner {
-        width: 120px;
+        width: 135px;
     }
     td.spec {
         text-align: center;

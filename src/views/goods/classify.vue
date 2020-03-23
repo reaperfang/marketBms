@@ -183,6 +183,9 @@ export default {
                                         class: node.data.isRecommend != 1 ? 'share' : 'shareCancel',
                                         on: {
                                             click: () => this.recommend(node, data)
+                                        },
+                                        style: {
+                                            display: this.onoff ? 'block' : 'none'
                                         }
                                     })}
                                 </el-tooltip>
@@ -241,6 +244,9 @@ export default {
                                         class: node.data.isRecommend != 1 ? 'share' : 'shareCancel',
                                         on: {
                                             click: () => this.recommend(node, data)
+                                        },
+                                        style: {
+                                            display: this.onoff ? 'block' : 'none'
                                         }
                                     })}
                                 </el-tooltip>

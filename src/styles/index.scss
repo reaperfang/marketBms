@@ -546,8 +546,8 @@ table.yuan-table{
 
 // 按钮
 .border-button {
-  color: $globalMainColor;
-  border: 1px solid $globalMainColor;
+  color: $globalMainColor!important;
+  border: 1px solid $globalMainColor!important;
 }
 
 .orange {

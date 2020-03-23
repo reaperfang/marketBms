@@ -100,6 +100,12 @@ export default [
                 name: 'createRole',
                 meta: { title: '默认页面', noCache: true, tabTitle: '权限管理', navType:3  },
                 hidden: true
+            },
+            {
+                path: 'authorize',
+                component: () => import('@/views/set/authorize'),
+                name: 'authorize',
+                meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
             }
         ]
     }
