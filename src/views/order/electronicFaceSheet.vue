@@ -26,10 +26,10 @@
               <el-date-picker
                 v-model="listQuery.time"
                 type="datetimerange"
-                range-separator="-"
+                range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                :default-time="['00:00:00', '23:59:59']"
+                :picker-options="utils.globalTimePickerOption.call(this)"
               ></el-date-picker>
             </el-form-item>
             <el-form-item>

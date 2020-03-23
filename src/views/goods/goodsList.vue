@@ -52,7 +52,6 @@
                     <div :class="{active: listQuery.status === -1}" @click="stateHandler(-1)" class="item">已售罄</div>
                 </div> -->
                 <el-table
-                    v-loading="loading"
                     :data="list"
                     ref="table"
                     style="width: 100%"
@@ -324,7 +323,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 120px;
+  width: 124px;
 }
 .table-header {
     margin-bottom: 10px;
@@ -846,19 +845,18 @@ export default {
                 })
             } else {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
-                    this._apis.goods.allDelete({ids: [row.goodsInfo.id]}).then((res) => {
+                    this._apis.goods.allDelete({ids: [row.id]}).then((res) => {
                         this.getList()
                         this.visible = false
-                        this.$notify({
-                            title: '成功',
+                        this.$message({
                             message: '删除成功！',
                             type: 'success'
                         });
                     }).catch(error => {
                         this.visible = false
-                        this.$notify.error({
-                            title: '错误',
-                            message: error
+                        this.$message.error({
+                            message: error,
+                            type: 'error'
                         });
                     })
                 }).catch(() => {

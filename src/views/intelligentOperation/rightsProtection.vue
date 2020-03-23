@@ -15,12 +15,13 @@
                         <div class="input_wrap" v-if="form.timeType == 4">
                         <el-date-picker
                             v-model="dateRange"
-                            type="daterange"
-                            :picker-options="pickerOptions"
-                            range-separator="—"
-                            value-format="yyyy-MM-dd"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
+                            type="datetimerange"
+                            align="right"
+                            range-separator="至"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                             @change="changeTime"
                         ></el-date-picker>
                         </div>
@@ -111,22 +112,11 @@ export default {
             dateRange: [],
             reasons:[],
             pickerOptions: {
-                onPick: ({ maxDate, minDate }) => {
-                    this.pickerMinDate = minDate.getTime()
-                    if (maxDate) {
-                    this.pickerMinDate = ''
-                    }
-                },
                 disabledDate: (time) => {
-                    if (this.pickerMinDate !== '') {
-                    const day30 = (90 - 1) * 24 * 3600 * 1000
-                    let maxTime = this.pickerMinDate + day30
-                    if (maxTime > new Date()) {
-                        maxTime = new Date() - 8.64e7
-                    }
-                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-                    }
-                    return time.getTime() > Date.now() - 8.64e7
+                    let yesterday = new Date();
+                    yesterday = yesterday.getTime()-24*60*60*1000;
+                    yesterday = this.utils.dayEnd(yesterday);
+                    return time.getTime() > yesterday.getTime();
                 }
             },
             note:'',

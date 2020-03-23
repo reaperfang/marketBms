@@ -56,10 +56,11 @@
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -166,11 +167,6 @@ export default {
   components:{exportTipDialog},
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       currentData:{},
       dialogVisible: false,
       currentDialog:"",
@@ -296,8 +292,8 @@ export default {
       query.sort = orde || 'desc'
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.tradeTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.tradeTimeEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.tradeTimeStart = timeValue[0]
+        query.tradeTimeEnd = timeValue[1]
       }
       return query;
     },  

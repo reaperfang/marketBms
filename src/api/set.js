@@ -184,4 +184,14 @@ export function uploadImage(data) {
   })
 }
 
+/* 店铺授权分页列表 */
+export function getAuthPageList(data) {
+  return request({
+    target: 'SHOP-API-AUTH-PAGE-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'matrix',
+    data
+  })
+}
+
 
