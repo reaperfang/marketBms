@@ -52,7 +52,6 @@
                     <div :class="{active: listQuery.status === -1}" @click="stateHandler(-1)" class="item">已售罄</div>
                 </div> -->
                 <el-table
-                    v-loading="loading"
                     :data="list"
                     ref="table"
                     style="width: 100%"
@@ -324,7 +323,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 120px;
+  width: 124px;
 }
 .table-header {
     margin-bottom: 10px;

@@ -5,7 +5,7 @@
                 <span>{{ruleForm.name}}</span>
             </el-form-item>
             <el-form-item label="库存:" prop="stock">
-                <el-input v-model="ruleForm.stock"></el-input>
+                <el-input type="number" v-model="ruleForm.stock"></el-input>
             </el-form-item>
         </el-form>
         <div class="footer">

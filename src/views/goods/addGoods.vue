@@ -6,7 +6,7 @@
         <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
         <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
     </header> -->
-    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="148px" class="demo-ruleForm">
+    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="150px" class="demo-ruleForm">
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
@@ -465,7 +465,7 @@
                         @emptySpec="emptySpec"
                         @deleteSpec="deleteSpec"></Specs>
                 </template>
-                <div>
+                <div class="prompt-box">
                     <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowStock">商品详情显示剩余库存</el-checkbox>
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
                 </div>
@@ -1966,31 +1966,59 @@ export default {
                     let calculationWay
                     try {
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
-                            this.ruleForm.goodsInfos[i].fileList = null
-                        if(+this.ruleForm.goodsInfos[i].costPrice < 0) {
+                            //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
+                        if(this.ruleForm.goodsInfos[i].image == '') {
                             this.$message({
-                                message: '不能为负值',
+                                message: '请上传图片',
                                 type: 'warning'
                             });
                             return
                         }
-                        if(this.ruleForm.goodsInfos[i].costPrice.split(".")[1].length > 2) {
+                        if(this.ruleForm.goodsInfos[i].costPrice == '') {
+                            this.$message({
+                                message: '请输入成本价',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(+this.ruleForm.goodsInfos[i].costPrice <= 0) {
+                            this.$message({
+                                message: '成本价必须大于0',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(/\./.test(this.ruleForm.goodsInfos[i].costPrice) && this.ruleForm.goodsInfos[i].costPrice.split(".")[1].length > 2) {
                             this.$message({
                                 message: '只支持小数点后两位',
                                 type: 'warning'
                             });
                             return
                         }
-                        if(+this.ruleForm.goodsInfos[i].salePrice < 0) {
+                        if(this.ruleForm.goodsInfos[i].salePrice == '') {
                             this.$message({
-                                message: '不能为负值',
+                                message: '请输入售卖价',
                                 type: 'warning'
                             });
                             return
                         }
-                        if(this.ruleForm.goodsInfos[i].salePrice.split(".")[1].length > 2) {
+                        if(+this.ruleForm.goodsInfos[i].salePrice <= 0) {
+                            this.$message({
+                                message: '售卖价必须大于0',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(/\./.test(this.ruleForm.goodsInfos[i].salePrice) && this.ruleForm.goodsInfos[i].salePrice.split(".")[1].length > 2) {
                             this.$message({
                                 message: '只支持小数点后两位',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(this.ruleForm.goodsInfos[i].stock == '') {
+                            this.$message({
+                                message: '请输入库存',
                                 type: 'warning'
                             });
                             return
@@ -2002,6 +2030,13 @@ export default {
                             });
                             return
                         }
+                        if(this.ruleForm.goodsInfos[i].warningStock == '') {
+                            this.$message({
+                                message: '请输入库存预警',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(+this.ruleForm.goodsInfos[i].warningStock  < 0) {
                             this.$message({
                                 message: '不能为负值',
@@ -2009,16 +2044,16 @@ export default {
                             });
                             return
                         }
-                        if(+this.ruleForm.goodsInfos[i].weight  < 0) {
+                        if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
                             this.$message({
-                                message: '不能为负值',
+                                message: '重量必须大于0',
                                 type: 'warning'
                             });
                             return
                         }
-                        if(+this.ruleForm.goodsInfos[i].volume  < 0) {
+                        if(+this.ruleForm.goodsInfos[i].volume  <= 0) {
                             this.$message({
-                                message: '不能为负值',
+                                message: '体积必须大于0',
                                 type: 'warning'
                             });
                             return
@@ -2056,50 +2091,50 @@ export default {
                             }
                         }
                     }
-                    if(this.editor) {
-                        if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
-                            this.$message({
-                                message: '规格信息中成本价不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
-                            this.$message({
-                                message: '规格信息中售卖价不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
-                            this.$message({
-                                message: '规格信息中库存不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
-                            this.$message({
-                                message: '规格信息中库存不能小于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
-                            this.$message({
-                                message: '规格信息中库存预警不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
-                            this.$message({
-                                message: '规格信息中图片不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                    }
+                    // if(this.editor) {
+                    //     if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
+                    //         this.$message({
+                    //             message: '规格信息中成本价不能为空',
+                    //             type: 'warning'
+                    //         });
+                    //         return
+                    //     }
+                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
+                    //         this.$message({
+                    //             message: '规格信息中售卖价不能为空',
+                    //             type: 'warning'
+                    //         });
+                    //         return
+                    //     }
+                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
+                    //         this.$message({
+                    //             message: '规格信息中库存不能为空',
+                    //             type: 'warning'
+                    //         });
+                    //         return
+                    //     }
+                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
+                    //         this.$message({
+                    //             message: '规格信息中库存不能小于0',
+                    //             type: 'warning'
+                    //         });
+                    //         return
+                    //     }
+                    //     if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
+                    //         this.$message({
+                    //             message: '规格信息中库存预警不能为空',
+                    //             type: 'warning'
+                    //         });
+                    //         return
+                    //     }
+                    //     if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
+                    //         this.$message({
+                    //             message: '规格信息中图片不能为空',
+                    //             type: 'warning'
+                    //         });
+                    //         return
+                    //     }
+                    // }
                     
                     // if(this.ruleForm.productDetail) {
                     //     let _productDetail = ''
@@ -2115,57 +2150,61 @@ export default {
                         
                         this.ruleForm.productCatalogInfoIds = arr
                     }
-                    if(!this.editor) {
+                    //if(!this.editor) {
                         let __goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-                        let _deleteSpecArr = Array.from(new Set(this.deleteSpecArr))
-                        if(_deleteSpecArr.length) {
-                            for(let i=0; i<_deleteSpecArr.length; i++) {
-                                __goodsInfos.splice(_deleteSpecArr[i], 1)
-                            }
-                        }
 
-                        if(__goodsInfos.some(val => val.costPrice == '')) {
-                            this.$message({
-                                message: '规格信息中成本价不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.editor && __goodsInfos.some(val => val.salePrice == '')) {
-                            this.$message({
-                                message: '规格信息中售卖价不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.editor && __goodsInfos.some(val => val.stock == '')) {
-                            this.$message({
-                                message: '规格信息中库存不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.editor && __goodsInfos.some(val => +val.stock < 0)) {
-                            this.$message({
-                                message: '规格信息中库存不能小于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(__goodsInfos.some(val => !val.warningStock)) {
-                            this.$message({
-                                message: '规格信息中库存预警不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(__goodsInfos.some(val => val.image == '')) {
-                            this.$message({
-                                message: '规格信息中图片不能为空',
-                                type: 'warning'
-                            });
-                            return
-                        }
+                        __goodsInfos.forEach(val => {
+                            val.fileList = null
+                        })
+                        // let _deleteSpecArr = Array.from(new Set(this.deleteSpecArr))
+                        // if(_deleteSpecArr.length) {
+                        //     for(let i=0; i<_deleteSpecArr.length; i++) {
+                        //         __goodsInfos.splice(_deleteSpecArr[i], 1)
+                        //     }
+                        // }
+
+                        // if(__goodsInfos.some(val => val.costPrice == '')) {
+                        //     this.$message({
+                        //         message: '规格信息中成本价不能为空',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(!this.editor && __goodsInfos.some(val => val.salePrice == '')) {
+                        //     this.$message({
+                        //         message: '规格信息中售卖价不能为空',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(!this.editor && __goodsInfos.some(val => val.stock == '')) {
+                        //     this.$message({
+                        //         message: '规格信息中库存不能为空',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(!this.editor && __goodsInfos.some(val => +val.stock < 0)) {
+                        //     this.$message({
+                        //         message: '规格信息中库存不能小于0',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(__goodsInfos.some(val => !val.warningStock)) {
+                        //     this.$message({
+                        //         message: '规格信息中库存预警不能为空',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(__goodsInfos.some(val => val.image == '')) {
+                        //     this.$message({
+                        //         message: '规格信息中图片不能为空',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
                         _goodsInfos = __goodsInfos.map(val => {
                             let _specs = {}
                             val.label.split(',').forEach((spec, index) => {
@@ -2176,9 +2215,9 @@ export default {
                             return val
                         })
                         obj.goodsInfos = _goodsInfos
-                    } else {
-                        obj.goodsInfos = this.ruleForm.goodsInfos
-                    }
+                    // } else {
+                    //     obj.goodsInfos = this.ruleForm.goodsInfos
+                    // }
                     // console.log(this.ruleForm.productDetail)
                     // console.log(window.encodeURIComponent(this.ruleForm.productDetail))
                     // console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
@@ -2460,7 +2499,7 @@ export default {
         centerFileUrl(response, file, fileList){
             console.log(response, file, fileList)
             if(fileList.every(val => val.status == 'success')){
-                this.$message.success(response.msg);
+                this.$message.success('文件上传成功');
                 if(fileList.length > 1 && fileList.every(val => val.status == 'success')) {
                     fileList.forEach(item => {
                         this.fileList.push({
@@ -2485,7 +2524,9 @@ export default {
                     }
                 }
             }else{
-                this.$message.error(response.msg);
+                if(fileList.some(val => val.status == 'error')) {
+                    this.$message.error('文件上传失败');
+                }
             }
         },
         handleScroll() {
@@ -3026,6 +3067,7 @@ $blue: #655EFF;
 }
 .goods-infos {
     margin-left: 77px;
+    margin-bottom: 18px;
     .added-specs {
         .added-specs-header {
             background: #fff;
@@ -3101,5 +3143,8 @@ $blue: #655EFF;
 .spec-message {
     margin-bottom: 10px;
     font-size: 12px;
+}
+.prompt-box {
+    margin-top: 5px;
 }
 </style>
