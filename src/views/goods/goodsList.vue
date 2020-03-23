@@ -845,7 +845,7 @@ export default {
                 })
             } else {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
-                    this._apis.goods.allDelete({ids: [row.goodsInfo.id]}).then((res) => {
+                    this._apis.goods.allDelete({ids: [row.id]}).then((res) => {
                         this.getList()
                         this.visible = false
                         this.$message({

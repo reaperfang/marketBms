@@ -1748,6 +1748,45 @@ export default {
 
             this.addedSpecs = _addedSpecs
         },
+        sortGoodsInfos({productSpecs, goodsInfos}) {
+            let _productSpecs = JSON.parse(productSpecs)
+            let productSpecsArr = []
+            let results = [];
+            let result = [];
+
+            function doExchange(arr, index) {
+                for (let i = 0; i<arr[index].length; i++) {
+                    result[index] = arr[index][i];
+                    if (index != arr.length - 1) {
+                        doExchange(arr, index + 1)
+                    } else {
+                        results.push(result.join(','))
+                    }
+                }
+            }
+
+            
+
+            // {"版本类型":["中国大陆","日韩"],"颜色":["白色","灰色"],"存储容量":["256G","512G","1TB"]}
+            for(let i in _productSpecs) {
+                if(_productSpecs.hasOwnProperty(i)) {
+                    productSpecsArr.push(_productSpecs[i])
+                }
+            }
+
+            doExchange(productSpecsArr, 0)
+
+
+
+            goodsInfos.sort((a, b) => {
+                let aIndex = results.findIndex(val => val == a.label)
+                let bIndex = results.findIndex(val => val == b.label)
+
+                return aIndex - bIndex
+            })
+
+            return goodsInfos
+        },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
@@ -1758,13 +1797,16 @@ export default {
                 let __goodsInfos
 
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
-                this.computedAddSpecs(res.productSpecs)
+                
                 res.goodsInfos.forEach(val => {
                     let label = Object.values(JSON.parse(val.specs)).join(',')
 
                     val.label = label
                     val.editorDisabled = true
                 })
+                res.goodsInfos = this.sortGoodsInfos(res)
+                this.computedAddSpecs(res.productSpecs)
+
                 __goodsInfos = this.computedList(res.goodsInfos)
                 res.goodsInfos = __goodsInfos
                 res.productCatalogInfoIds.forEach((id, index) => {
@@ -2593,7 +2635,7 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('scroll', this.handleScroll)
+        //window.addEventListener('scroll', this.handleScroll)
     },
     components: {
         SelectSpecifications,
