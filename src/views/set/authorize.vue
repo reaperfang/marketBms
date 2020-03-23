@@ -17,7 +17,7 @@
             prop=""
             label="序号">
             <template slot-scope="scope">
-                
+                {{scope.$index + 1}}
             </template>
         </el-table-column>
         <el-table-column
@@ -30,6 +30,9 @@
         <el-table-column
             prop=""
             label="授权店铺">
+            <template slot-scope="scope">
+                {{scope.row.shopName}}
+            </template>
         </el-table-column>
         <el-table-column
             prop="authCode"
@@ -54,20 +57,38 @@
             </template>
         </el-table-column>
     </el-table>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </section>
   </div>
 </template>
 <script>
+import Pagination from '@/components/Pagination'
+
 export default {
   data() {
     return {
       loading: false,
+      total: 0,
+      listQuery: {
+          startIndex: 1,
+          pageSize: 20,
+      },
       list: [
         {
 
         }
-      ]
+      ],
+      shopName: ''
     }
+  },
+  computed: {
+    cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        return shopInfo.id
+    }
+  },
+  created() {
+    this.getShopInfo()
   },
   filters: {
     platformTypeFilter(code) {
@@ -84,6 +105,38 @@ export default {
         return '禁用'
       }
     }
+  },
+  methods: {
+    getList() {
+      this.loading = true
+      this._apis.set.getAuthPageList().then((res) => {
+        this.loading = false
+        this.total = +res.total
+        res.list.forEach(val => {
+          val.shopName = this.shopName
+        })
+        this.list = res.list
+          console.log(res)
+      }).catch(error => {
+          this.loading = false
+          this.$message.error({
+              message: error,
+              type: 'error'
+          });
+      })
+    },
+    getShopInfo(){
+      let id = this.cid
+      this._apis.set.getShopInfo({id:id}).then(response =>{
+        this.shopName = response.shopName
+        this.getList()
+      }).catch(error =>{
+        this.$message.error(error);
+      })
+    },
+  },
+  components: {
+    Pagination
   }
 }
 </script>

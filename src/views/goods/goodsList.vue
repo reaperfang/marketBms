@@ -848,16 +848,15 @@ export default {
                     this._apis.goods.allDelete({ids: [row.goodsInfo.id]}).then((res) => {
                         this.getList()
                         this.visible = false
-                        this.$notify({
-                            title: '成功',
+                        this.$message({
                             message: '删除成功！',
                             type: 'success'
                         });
                     }).catch(error => {
                         this.visible = false
-                        this.$notify.error({
-                            title: '错误',
-                            message: error
+                        this.$message.error({
+                            message: error,
+                            type: 'error'
                         });
                     })
                 }).catch(() => {
