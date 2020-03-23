@@ -234,8 +234,19 @@ export function globalTimePickerOption(editable = true) {
               this.$el.onclick = function(ev) {  //当面板被点击时重新设置所有的时间输入框为不可用状态
                 disableInput.call(me);
               }
+              console.log(this.$children)
+              //如果不允许编辑时分秒
+              this.$children[3].$el.onclick = function() {  //点击结束时间输入框时重新关闭下拉框的可见状态
+                me.$refs.minTimePicker.visible = false;
+              }
+              this.$children[6].$el.onclick = function() {  //点击结束时间输入框时重新关闭下拉框的可见状态
+                me.$refs.maxTimePicker.visible = false;
+              }
             }else{
               //如果允许编辑时分秒
+              this.$children[3].$el.onclick = function() {  //点击结束时间输入框时重新打开下拉框的可见状态
+                me.$refs.minTimePicker.visible = true;
+              }
               this.$children[6].$el.onclick = function() {  //点击结束时间输入框时重新打开下拉框的可见状态
                 me.$refs.maxTimePicker.visible = true;
               }

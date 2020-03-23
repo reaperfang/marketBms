@@ -14,12 +14,13 @@
                         <el-date-picker
                         v-if="form.timeType == 4"
                         v-model="form.daterange"
-                        type="daterange"
-                        value-format="yyyy-MM-dd hh:mm:ss"
+                        type="datetimerange"
+                        align="right"
                         range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions"
+                        start-placeholder="开始时间"
+                        end-placeholder="结束时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                         @change="getData"
                     >
                     </el-date-picker>
@@ -28,13 +29,13 @@
                 </el-form-item>
                 <el-form-item label="用户类型">
                     <div class="input_wrap2">
-                        <el-select v-model="form.memberType"  @change="getData">
+                        <el-select v-model="form.memberType">
                             <el-option v-for="item in customType" :label="item.name" :value="item.id" :key="item.id"></el-option>
                         </el-select>
                     </div>
                     <span class="span_label">交易次数</span>
                     <div class="input_wrap2 marR20">
-                        <el-select v-model="form.tradeCountRange"  @change="getData">
+                        <el-select v-model="form.tradeCountRange">
                             <el-option v-for="item in tradeCount" :label="item.name" :value="item.value" :key="item.id"></el-option>
                         </el-select>
                     </div>
@@ -125,22 +126,11 @@ export default {
     data() {
         return {
             pickerOptions: {
-                onPick: ({ maxDate, minDate }) => {
-                    this.pickerMinDate = minDate.getTime()
-                    if (maxDate) {
-                        this.pickerMinDate = ''
-                    }
-                },
                 disabledDate: (time) => {
-                    if (this.pickerMinDate !== '') {
-                        const day90 = (90 - 1) * 24 * 3600 * 1000
-                        let maxTime = this.pickerMinDate + day90
-                        if (maxTime > new Date()) {
-                            maxTime = new Date()- 8.64e7
-                        }
-                        return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-                    }
-                    return time.getTime() > Date.now() - 8.64e7
+                    let yesterday = new Date();
+                    yesterday = yesterday.getTime()-24*60*60*1000;
+                    yesterday = this.utils.dayEnd(yesterday);
+                    return time.getTime() > yesterday.getTime();
                 }
             },
             form: {
@@ -216,8 +206,8 @@ export default {
             if(this.form.daterange){
                 this.form.timeType = 4;
                 Object.assign(this.form,{
-                    startTime:this.getDate(utils.dayStart(this.form.daterange[0])),
-                    endTime:this.getDate(utils.dayEnd(this.form.daterange[1]))
+                    startTime:this.form.daterange[0],
+                    endTime:this.form.daterange[1]
                 });
             }else{
                 Object.assign(this.form,{

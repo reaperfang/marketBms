@@ -18,6 +18,7 @@
             v-model="timeValue"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -128,8 +129,8 @@ export default {
   watch: {
     timeValue(){
       if(this.timeValue.length != 0){
-        this.ruleForm.startTime = utils.formatDate(this.timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        this.ruleForm.endTime = utils.formatDate(this.timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        this.ruleForm.startTime = this.timeValue[0]
+        this.ruleForm.endTime = this.timeValue[1]
       }
     }
   },

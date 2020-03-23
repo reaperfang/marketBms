@@ -65,11 +65,11 @@
             v-model="timeValue"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
             value-format="yyyy-MM-dd HH:mm:ss"
             :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
-            @change="changeTime"
             >
           </el-date-picker>
           <el-button type="primary" @click="getDataDateRs">确定</el-button>
@@ -150,7 +150,7 @@ export default {
   name: 'revenueSituation',
   data() {
     return {
-      pickerNowDateBefore: {
+      pickerOptions: {
         disabledDate: (time) => {
           
           // var date = new Date();
@@ -158,10 +158,14 @@ export default {
           //   this.defaultTime[1] = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss").substring(11)
           //   console.log(utils.formatDate(date, "yyyy-MM-dd hh:mm:ss").substring(11));
           // }
-          return time.getTime() > new Date();
+          // return time.getTime() > new Date();
+          let yesterday = new Date();
+          yesterday = yesterday.getTime()-24*60*60*1000;
+          yesterday = this.utils.dayEnd(yesterday);
+          return time.getTime() > yesterday.getTime();
         }
       },
-      timeValue:['2019-06-05','2019-06-07'],
+      timeValue:[],
       surveyDay:{
         income:0,
         expend:0,
