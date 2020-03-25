@@ -23,6 +23,7 @@ import editView from "./editView";
 import propView from "./propView";
 import utils from "@/utils";
 import uuid from 'uuid/v4';
+import widget from './widgetConfig'
 export default {
   name: "decorate",
   components: { widgetView, editView, propView },
@@ -45,9 +46,26 @@ export default {
     };
   },
   created() {
+
+    //创建组件id
     const id = uuid();
+
+    //转换接口数据为可识别格式
     this.convertDecorateData(this.decoratePageData);
-    this.$store.commit('addComponent', Object.assign({id}, this.config.pageBase));
+
+    //创建基础组件-页面根组件
+    this.$store.commit('addComponent', {
+      component: Object.assign({id}, (()=>{
+        for(let item of widget.getWidgetList()) { 
+          if(item.type === this.config.pageBase.type) {
+            return Object.assign(item, this.config.pageBase);
+            break;
+          }
+        }
+      })())
+    });
+
+    //设置基础组件id
     this.$store.commit('setBasePropertyId', id);
   },
   computed: {
@@ -86,9 +104,7 @@ export default {
         return;
       }
       
-      //还原组件列表
-      let componentDataIds = [];
-      let componentDataMap = {};
+      //解析接口数据
       const string = utils.uncompileStr(data.pageData);
       if(string.indexOf('id') < 0) {
         return;
@@ -97,6 +113,17 @@ export default {
       if(!Array.isArray(pageData)) {
         return;
       }
+      this.init(pageData, data);
+      console.log('pageData', pageData);
+    },
+
+    //编辑器数据初始化
+    init(pageData, originData) {
+      let componentDataIds = [];
+      let componentDataMap = {};
+
+
+      //转换为组件顺序表和map数据结构
       for (let item of pageData) {
         componentDataIds.push(item.id);
         componentDataMap[item.id] = item;
@@ -104,14 +131,20 @@ export default {
           this.$store.commit('setBasePropertyId', item.id);
         }
       }
+
+      //设置组件顺序表
       this.$store.commit("setComponentDataIds", componentDataIds);
+
+      //设置组件数据映射表
       this.$store.commit("setComponentDataMap", componentDataMap);
 
-      //设置全局基础信息
+      //更新基础组件数据,用来回显页面信息
       this.$store.commit('updateComponent', {
         id: this.basePropertyId,
-        data: this.config.callbacks.setBaseInfo(data)
+        data: this.config.callbacks.setBaseInfo(originData)
       });
+
+      //设置选中高亮的组件id
       this.$store.commit('setCurrentComponentId', this.basePropertyId);
     },
 

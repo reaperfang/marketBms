@@ -30,10 +30,7 @@ export default {
        /* 装修编辑器配置 */
       config: {
         pageBase: {
-          type: 'pageInfo',
-          isBase: true,
-          hidden: true,
-          title: '页面信息'
+          type: 'pageInfo'
         },
         callbacks: {
           setBaseInfo: this.setBaseInfo
