@@ -29,10 +29,7 @@ export default {
       /* 装修编辑器配置 */
       config: {
         pageBase: {  //装修页面基础信息
-          type: 'pageInfo',
-          isBase: true,
-          hidden: true,
-          title: '页面信息'
+          type: 'pageInfo'
         },
         buttons: {  //按钮组
           saveData: {

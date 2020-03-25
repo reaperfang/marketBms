@@ -82,14 +82,14 @@
                     <el-input type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
                 </td>
                 <td>
-                    <el-input v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <el-input :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
                 </td>
                 <td>
                     <div class="spec-operate">
                         <span @click="function() {
                             $emit('emptySpec', index)
                         }">清空</span>
-                        <span class="deleteSpan" @click="() => {
+                        <span v-if="!hideDelete" class="deleteSpan" @click="() => {
                             $emit('deleteSpec', index)
                         }">删除</span>
                     </div>
@@ -300,6 +300,9 @@ export default {
         },
         uploadUrl: {
 
+        },
+        hideDelete: {
+            type: Boolean
         }
     },
     components: {

@@ -51,7 +51,7 @@
                     <p>用户选择货到付款，您需要自行安排配送和收款。</p>
                     <div class="button-box">
                         <el-button @click="closeOrder">关闭订单</el-button>
-                        <el-button type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -169,7 +169,7 @@
                     <p>待发货</p>
                     <div class="button-box">
                         <el-button @click="closeOrder">关闭订单</el-button>
-                        <el-button type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -356,8 +356,10 @@
 // orderStatus 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
 // 订单关闭原因: 0超时取消 1客户取消 2商户关闭 3拼团失败 4商户关闭拼团 5客户拒收
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             currentDialog: '',

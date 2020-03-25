@@ -28,6 +28,9 @@ router.beforeEach((to, from, next) => {
   if(store.getters.token){
     const localMsfList = localStorage.getItem('shopInfos');
     let msfList = [];
+    let enable = 0
+
+    enable = +localStorage.getItem('anotherAuthEnable')
     if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
       msfList = JSON.parse(localMsfList).data.msfList
     }
@@ -42,7 +45,7 @@ router.beforeEach((to, from, next) => {
       }
     } else {
         if(flag == 0){
-          store.dispatch('GenerateRoutes', msfList).then(() => { // 根据roles权限生成可访问的路由表
+          store.dispatch('GenerateRoutes', {data: msfList, enable}).then(() => { // 根据roles权限生成可访问的路由表
             if(store.getters.addRouters.length != 0){
               router.selfAddRoutes(store.getters.addRouters) // 动态添加可访问路由表
               next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
