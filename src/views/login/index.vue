@@ -172,6 +172,7 @@ export default {
           }
           if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
             this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
+              this.getShopAuthList()
               this.$router.push({ path: '/profile/profile' })
             }).catch(error => {
               this.$message.error(error);
@@ -184,6 +185,11 @@ export default {
         this.errorMsg = error
         this.loading = false
         this.autoLoginLoading = false
+      })
+    },
+    getShopAuthList() {
+      this.$store.dispatch('getShopAuthList').then(() => {
+        window.eventHub.$emit('onGetShopAuthList')
       })
     },
     // login(userName, password) {

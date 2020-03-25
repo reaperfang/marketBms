@@ -166,6 +166,8 @@ import Vue from 'vue'
 //     }
 // ]
 let msfList = []
+let enable = 0
+
 window.eventHub = new Vue()
 var shopInfos = function() {
     if(localStorage.getItem('shopInfos')) {
@@ -234,10 +236,46 @@ var shopInfos = function() {
         })
     }
 }
+let anotherAuth = () => {
+    if(localStorage.getItem('anotherAuthEnable')) {
+        enable = +localStorage.getItem('anotherAuthEnable')
+
+        Vue.directive('anotherauth', {
+            inserted: (el, binding, vnode) => {
+                if(binding.modifiers.disabled) {
+                    if(enable == 1) {
+                        if(binding.modifiers.button) {
+                            let elm = el.getElementsByTagName('button')[0]
+                            let className = el.className ? el.className + ' is-disabled' : 'is-disabled'
+
+                            elm.setAttribute('disabled', 'disabled')
+                            el.setAttribute('class', className)
+                        } else if(binding.modifiers.cascader) {
+                            let className = el.className ? el.className + ' is-disabled' : 'is-disabled'
+                            let elInputClassName = el.querySelector('.el-input').className ? el.querySelector('.el-input').className + ' is-disabled' : 'is-disabled'
+
+                            el.setAttribute('class', className)
+                            el.querySelector('.el-input').setAttribute('class', elInputClassName)
+                            el.querySelector('input').setAttribute('disabled', 'disabled')
+                        }
+                    }
+                } else {
+                    if(enable == 1) {
+                        el.parentNode && el.parentNode.removeChild(el)
+                    }
+                }
+            }
+        })
+    }
+}
 
 shopInfos()
+anotherAuth()
 window.eventHub.$on('onShopInfos', function() {
     shopInfos()
+})
+window.eventHub.$on('onGetShopAuthList', function() {
+    anotherAuth()
 })
 
 Vue.directive('calcHeight', {

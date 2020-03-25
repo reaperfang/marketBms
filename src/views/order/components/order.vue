@@ -17,7 +17,7 @@
             <div class="container-item" v-for="(order, index) in list" :key="index">
                 <div class="container-item-header">
                     <div class="item">
-                        <el-checkbox :disabled="order.orderStatus == 2 || order.orderStatus == 6" @change="checkedChange" v-model="order.checked"></el-checkbox>
+                        <el-checkbox v-if="!authHide" :disabled="order.orderStatus == 2 || order.orderStatus == 6" @change="checkedChange" v-model="order.checked"></el-checkbox>
                         <span class="order-code">
                             <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="light">
                                 <i class="auto"></i>
@@ -89,21 +89,21 @@
                         <template v-else-if="order.orderStatus == 3">
                             <!-- 待发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">发货</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
                         </template>
                         <template v-else-if="order.orderStatus == 4">
                             <!-- 部分发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">继续发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">继续发货</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p>
                         </template>
                         <template v-else-if="order.orderStatus == 5">
                             <!-- 待收货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
+                            <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
                             <!-- 完成 -->
@@ -119,8 +119,10 @@
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             orderList: [

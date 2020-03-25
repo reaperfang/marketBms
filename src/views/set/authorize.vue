@@ -2,7 +2,7 @@
   <div class="authorize">
     <section class="header">
       <h2>第三方平台授权</h2>
-      <el-button class="border-button">获取授权码</el-button>
+      <el-button @click="getCode" class="border-button">获取授权码</el-button>
     </section>
     <section class="container">
       <h2>授权记录</h2>
@@ -40,7 +40,8 @@
         </el-table-column>
         <el-table-column
             prop="createTime"
-            label="授权时间">
+            label="授权时间"
+            width="155">
         </el-table-column>
         <el-table-column
             prop="enable"
@@ -52,7 +53,7 @@
         <el-table-column label="操作">
             <template slot-scope="scope">
                 <div class="operate-box">
-                    <span>解除授权</span>
+                    <span v-if="scope.row.enable == 1" @click="cancelAuth(scope.row)">{{scope.row.enable == 1 ? '解除授权' : ''}}</span>
                 </div>
             </template>
         </el-table-column>
@@ -63,6 +64,8 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
+import store from '@/store'
+import router from '@/router'
 
 export default {
   data() {
@@ -78,7 +81,10 @@ export default {
 
         }
       ],
-      shopName: ''
+      shopName: '',
+      shopCode: '',
+      applyTime: '',
+      showCodeDialog: false
     }
   },
   computed: {
@@ -89,6 +95,7 @@ export default {
   },
   created() {
     this.getShopInfo()
+    //this.getShopAuthList()
   },
   filters: {
     platformTypeFilter(code) {
@@ -107,6 +114,137 @@ export default {
     }
   },
   methods: {
+    getShopAuthList() {
+      store.dispatch('getShopAuthList').then(() => {
+        const localMsfList = localStorage.getItem('shopInfos');
+        let msfList = [];
+        let enable = 0
+
+        enable = +localStorage.getItem('anotherAuthEnable')
+        if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
+          msfList = JSON.parse(localMsfList).data.msfList
+        }
+
+        store.dispatch('GenerateRoutes', {data: msfList, enable}).then(() => {
+          if(store.getters.addRouters.length != 0){
+            router.selfAddRoutes(store.getters.addRouters)
+          }
+        })
+      })
+      // const localMsfList = localStorage.getItem('shopInfos');
+      // let msfList = [];
+      // let enable = 0
+
+      // enable = +localStorage.getItem('anotherAuthEnable')
+      // if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
+      //   msfList = JSON.parse(localMsfList).data.msfList
+      // }
+
+      // store.dispatch('GenerateRoutes', {data: msfList, enable}).then(() => {
+      //   if(store.getters.addRouters.length != 0){
+      //     router.selfAddRoutes(store.getters.addRouters)
+      //   }
+      // })
+    },
+    throttle(fn, delay){
+        var timer = null;
+        return function(){
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+                fn.apply(context, args);
+            }, delay);
+        };
+    },
+    cancelAuth(row) {
+      let enable
+      let text = '确认解除第三方平台：数商中台的数据授权？'
+
+      if(row.enable == 1) {
+        enable = 0
+      } else if(row.enable == 0) {
+        enable = 1
+      }
+
+      this.confirm({title: '解除授权', icon: true, customClass: 'auth-manage cancel-auth', text, width: '500px'}).then(() => {
+        this._apis.set.cancelAuth({
+          id: row.id,
+          cid: this.cid,
+          enable
+        }).then((res) => {
+          this.getList()
+          this.getShopAuthList()
+        }).catch(error => {
+            this.loading = false
+            this.$message.error({
+                message: error,
+                type: 'error'
+            });
+        })
+      }).catch(() => {
+          
+      })
+    },
+    getCodeHandler() {
+      if(this.showCodeDialog) {
+        return
+      }
+      this.showCodeDialog = true
+      this._apis.set.getShopCode().then((res) => {
+          this.shopCode = res
+          let text = `<h2>${this.shopCode}</h2><p class="message">用户绑定授权平台、数据对接，一经授权不得修改</p>`
+          let beforeClose = (action, instance, done) => {
+            let code = this.shopCode;
+
+            if(action == 'confirm') {
+              if(window.clipboardData) {
+                window.clipboardData.setData("Text",code);
+                this.$message({
+                    message: '复制成功！',
+                    type: 'success'
+                });
+                done()
+              } else {
+                this.$message({
+                  message: '您的浏览器不支持一键复制，请手动复制',
+                  type: 'warning'
+                });
+              }
+            } else {
+              done()
+            }
+          }
+          
+          this.confirm({title: '授权码', customClass: 'auth-manage confirm-code', text, confirmText: '复制', width: '500px', beforeClose}).then(() => {
+            this.showCodeDialog = false     
+          }).catch(() => {
+            this.showCodeDialog = false
+          })
+      }).catch(error => {
+          this.$message.error({
+              message: error,
+              type: 'error'
+          });
+      })
+    },
+    getCode() {
+      this.throttle(this.getCodeHandler, 500)()
+      // let nowTime = Date.now()
+
+      // if(this.applyTime == '') {
+      //   this.getCodeHandler()
+      // } else {
+      //   if(((nowTime - this.applyTime)/1000) < 5) {
+      //     this.confirm({title: '授权码', icon: true, customClass: 'auth-manage', text: '当前操作过于频繁，请稍后再试', width: '500px', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+      //     }).catch(() => {
+              
+      //     })
+      //   } else {
+      //     this.getCodeHandler()
+      //   }
+      // }
+      // this.applyTime = Date.now()
+    },
     getList() {
       this.loading = true
       this._apis.set.getAuthPageList().then((res) => {
@@ -153,6 +291,29 @@ export default {
     }
     &.header {
       
+    }
+  }
+</style>
+<style lang="scss">
+  .auth-manage {
+    width: 500px;
+    .el-message-box__btns {
+      margin-bottom: 26px;
+    }
+    &.confirm-code {
+      .el-message-box__message{
+        h2 {
+          font-size:18px;
+          font-weight:500;
+          color:rgba(68,61,74,1);
+        }
+        .message {
+          font-size:14px;
+          font-weight:400;
+          color:rgba(68,67,75,1);
+          margin-top: 24px;
+        }
+      }
     }
   }
 </style>

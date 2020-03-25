@@ -7,11 +7,19 @@
       label-width="110px"
       class="demo-ruleForm"
     >
-      <el-form-item label="设定上架时间" prop="time">
+      <!-- <el-form-item label="设定上架时间" prop="time">
         <el-date-picker
           v-model="ruleForm.time"
           type="datetime"
           :picker-options="pickerBeginDateBefore"
+          placeholder="选择日期时间"
+        ></el-date-picker>
+      </el-form-item> -->
+      <el-form-item label="设定上架时间" prop="time">
+        <el-date-picker
+          v-model="ruleForm.time"
+          type="datetime"
+          :picker-options="utils.globalTimePickerOption.call(this)"
           placeholder="选择日期时间"
         ></el-date-picker>
       </el-form-item>

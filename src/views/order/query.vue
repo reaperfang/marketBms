@@ -120,8 +120,10 @@ import { fetchOrderList } from "@/api/order";
 import appConfig from '@/system/appConfig';
 import { search } from './mixins/orderMixin'
 import utils from "@/utils";
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+  mixins: [anotherAuth],
   data() {
     return {
       list: [

@@ -96,7 +96,7 @@
                 </el-checkbox>
             </el-form-item>
         </div>
-        <div class="item">
+        <div v-if="!authHide" class="item">
             <h2>自动发货：<span>开启后立即对所有订单生效，若需要关闭该功能则清空输入框数值</span></h2>
             <el-form-item  prop="orderAutoSend" label="下单">
               <el-switch
@@ -148,7 +148,10 @@
 </template>
 
 <script>
+import anotherAuth from '@/mixins/anotherAuth'
+
 export default {
+  mixins: [anotherAuth],
   name: 'preSale',
   data() {
     var checkCancelOrder = (rule,value,callback)=>{
