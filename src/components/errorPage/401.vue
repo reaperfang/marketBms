@@ -44,4 +44,7 @@ export default {
       line-height: 30px;
     }
   }
+  .link-type{
+    color:#655eff;
+  }
 </style>
