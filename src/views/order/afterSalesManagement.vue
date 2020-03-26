@@ -111,9 +111,9 @@
                         <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
                         <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
                         <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">查看物流</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">确认收货</span>
+                        <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">确认收货</span>
                         <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
-                        <span class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
+                        <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -134,8 +134,10 @@ import BatchUpdateStatusDialog from '@/views/order/dialogs/batchUpdateStatusDial
 import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 import LogisticsDialog from '@/views/order/dialogs/logisticsDialog'
 import utils from "@/utils";
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             orderNumberTypeList: [
