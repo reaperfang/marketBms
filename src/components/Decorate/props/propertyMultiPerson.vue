@@ -211,7 +211,7 @@ export default {
         for(let item of newValue) {
           this.ruleForm.ids.push({
             spuId: item.spuId,
-            activityId: item.activeId
+            activityId: item.activityId || item.activeId
           });
         }
         this.fetch();
@@ -267,7 +267,6 @@ export default {
                 params = {
                     num: componentData.showNumber,
                     order: componentData.sortRule,
-                    activityList: newParams,
                     hideStatus: 0
                 };
             }else{

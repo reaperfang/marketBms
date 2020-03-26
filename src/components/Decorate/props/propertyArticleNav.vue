@@ -42,37 +42,44 @@
       </el-form-item>
     </div>
     <div class="block form">
-      添加导航
-      <ul class="item_list">
-        <li v-for="(item, key) of ruleForm.itemList" :key="key">
-          <div class="left" v-if="ruleForm.templateType === 1">
-            <div v-if="item.url" class="img_preview">
-              <img :src="item.url" alt="">
-              <i class="delete_btn" @click.stop="deleteImage(item)"></i>
-              <span @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+      添加导航：
+      <p style="color:rgb(211, 211, 211);margin-top:5px;">最多添加10个导航，鼠标拖拽可调整导航顺序</p>
+      <!-- 可拖拽调整顺序 -->
+      <vuedraggable 
+      class="drag-wrap item_list"
+      :list='ruleForm.itemList'
+      v-bind="dragOptions"
+      @start="drag=true"
+      @end="drag=false">
+          <li v-for="(item, key) of ruleForm.itemList" :key="key">
+            <div class="left" v-if="ruleForm.templateType === 1">
+              <div v-if="item.url" class="img_preview">
+                <img :src="item.url" alt="">
+                <i class="delete_btn" @click.stop="deleteImage(item)"></i>
+                <span @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+              </div>
+              <div v-else class="add_button" @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">
+                <i class="inner"></i>
+              </div>
             </div>
-            <div v-else class="add_button" @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">
-              <i class="inner"></i>
+            <div class="right">
+              <p>
+                <span v-if="ruleForm.templateType === 1">图片标题</span>
+                <span v-else-if="ruleForm.templateType === 2">导航文字</span>
+                <el-input v-model="item.title"></el-input>
+              </p>
+              <p>
+                <el-button 
+                type="text" 
+                @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'" 
+                :title="item.linkTo ?  item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'">
+                {{item.linkTo ?  item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'}}
+                </el-button>
+              </p>
             </div>
-          </div>
-          <div class="right">
-            <p>
-              <span v-if="ruleForm.templateType === 1">图片标题</span>
-              <span v-else-if="ruleForm.templateType === 2">导航文字</span>
-              <el-input v-model="item.title"></el-input>
-            </p>
-            <p>
-              <el-button 
-              type="text" 
-              @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'" 
-              :title="item.linkTo ?  item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'">
-              {{item.linkTo ?  item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'}}
-              </el-button>
-            </p>
-          </div>
-          <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
-        </li>
-      </ul>
+            <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
+          </li>
+      </vuedraggable>
       <el-button type="info" plain style="width:100%" @click="addNav">添加一个图文导航</el-button>
       <p style="margin-top:10px;color:rgb(211,211,211)">{{suggestSize}}</p>
       <!-- <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航，拖动选中的导航可对其排序小程序 v2.3.1 及以上版本支持</p> -->
@@ -88,10 +95,11 @@ import propertyMixin from '../mixins/mixinProps';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import uuid from 'uuid/v4';
+import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleNav',
   mixins: [propertyMixin],
-  components: {dialogSelectJumpPage, dialogSelectImageMaterial},
+  components: {dialogSelectJumpPage, dialogSelectImageMaterial, vuedraggable},
   data () {
     return {
       ruleForm: {
@@ -110,7 +118,13 @@ export default {
       currentNav: null,  //当前操作的图文导航
       dialogVisible: false,
       currentDialog: '',
-      suggestSize: '最多添加10个导航。建议尺寸：宽高1比1'
+      suggestSize: '建议尺寸：宽高1比1',
+      dragOptions: {
+          animation: 300,
+          group: "description",
+          ghostClass: "ghost"
+      },
+      drag: false
     }
   },
   computed: {
@@ -140,10 +154,10 @@ export default {
       this.blockType = 1;
       switch(Number(templateType)) {
         case 1:
-          this.suggestSize = '最多添加10个导航。建议尺寸：宽高1比1';
+          this.suggestSize = '建议尺寸：宽高1比1';
           break; 
         case 2:
-          this.suggestSize = '最多添加10个导航。建议：不超过5个汉字';
+          this.suggestSize = '建议：不超过5个汉字';
           break; 
       }
     },
@@ -268,7 +282,7 @@ ul.template_type{
   }
 }
 
-ul.item_list{
+.item_list{
   margin-top:20px;
   li{
     display:flex;

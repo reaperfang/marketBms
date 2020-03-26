@@ -24,11 +24,7 @@ export default {
       /* 装修编辑器配置 */
       config: {
         pageBase: {
-          type: 'classify',
-          isBase: true,
-          hidden: false,
-          title: '微页面分类信息',
-          colorStyle: '#ffffff'
+          type: 'classify'
         },
         buttons: {
           saveData: {
@@ -168,3 +164,10 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+/deep/.view {
+    .phone-body {
+      background:#fff;
+    }
+}
+</style>

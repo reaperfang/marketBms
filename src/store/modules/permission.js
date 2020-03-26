@@ -37,6 +37,44 @@ function filterAsyncRouter(routes, msfList) {
   return routes
 }
 
+function filterAnotherAuthAsyncRouter(routes, enable) {
+  if(typeof enable == 'undefined') return routes
+
+  let hasPermission = (item) => {
+    if(!item.meta) {
+      return true
+    } else {
+      if(item.meta.anotherAuth) {
+        if(enable == 1) {
+          return false
+        } else if(enable == 0) {
+          return true
+        }
+      } else {
+        return true
+      }
+    }
+  }
+
+  for(let i=0; i<routes.length; i++) {
+    //const tmp = { ...routes[i] }
+    const tmp = routes[i]
+    if (!hasPermission(tmp)) {
+      // routes.splice(i,1)
+      // i--;
+      tmp.hidden = true
+    }else{
+      if(tmp.meta.anotherAuth) {
+        tmp.hidden = false
+      }
+      if (tmp.children) {
+        tmp.children = filterAnotherAuthAsyncRouter(tmp.children, enable)
+      }
+    }
+  }
+  return routes
+}
+
 
 const permission = {
   state: {
@@ -50,7 +88,7 @@ const permission = {
     }
   },
   actions: {
-    GenerateRoutes({ commit }, data) {
+    GenerateRoutes({ commit }, { data, enable }) {
       return new Promise(resolve => {
         const msfList = data
         const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -61,7 +99,26 @@ const permission = {
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, msfList)
         }
+
+        if(typeof enable != 'undefined') {
+          let _accessedRouters = [...accessedRouters]
+          //let _accessedRouters = JSON.parse(JSON.stringify(accessedRouters))
+
+          accessedRouters = filterAnotherAuthAsyncRouter(_accessedRouters, enable)
+        }
         commit('SET_ROUTERS', accessedRouters)
+        resolve()
+      })
+    },
+    GenerateAuthRouter({ commit }, enable) {
+      let _asyncRouterMap
+
+      return new Promise((resolve, reject) => {
+        console.log(asyncRouterMap)
+        _asyncRouterMap = filterAnotherAuthAsyncRouter(asyncRouterMap, enable)
+        console.log(_asyncRouterMap)
+
+        commit('SET_ROUTERS', _asyncRouterMap)
         resolve()
       })
     }

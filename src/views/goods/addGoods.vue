@@ -11,6 +11,7 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
+                    :disabled="ruleForm.isSyncProduct == 1 && authHide"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
@@ -96,7 +97,7 @@
                 </div>
             </el-form-item>
             <el-form-item label="商品编码" prop="code">
-                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
         </section>
         <section class="form-section spec-form-section">
@@ -106,7 +107,7 @@
             </el-form-item>
             <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
-                <div v-if="!editor">
+                <div v-if="!editor" v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
                     <ul class="added-specs">
                         <li v-for="(item, index) in addedSpecs" :key="index">
                             <div class="added-specs-header">
@@ -165,7 +166,7 @@
                         </ul>
                     </div>
                 </div>
-                <div v-else>
+                <div v-else v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
                     <ul class="added-specs">
                         <li v-for="(item, index) in addedSpecs" :key="index">
                             <div class="added-specs-header">
@@ -354,6 +355,7 @@
                         :specsLabel="specsLabel"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
+                        :hideDelete="hideDelete"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -459,6 +461,7 @@
                         :specsLabel="specsLabel"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
+                        :hideDelete="hideDelete"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -644,8 +647,10 @@ import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
 import Specs from '@/views/goods/components/specs'
+import anotherAuth from '@/mixins/anotherAuth'
 export default {
     name: 'addGoods',
+    mixins: [anotherAuth],
     data() {
         var productUnitValidator = (rule, value, callback) => {
             // if(value === '') {
@@ -889,6 +894,13 @@ export default {
                 return images.split(',').length
             }
             return 0
+        },
+        hideDelete() {
+            if(this.ruleForm.isSyncProduct == 1 && this.authHide) {
+                return true
+            } else {
+                return false
+            }
         }
     },
     watch: {
@@ -1748,6 +1760,45 @@ export default {
 
             this.addedSpecs = _addedSpecs
         },
+        sortGoodsInfos({productSpecs, goodsInfos}) {
+            let _productSpecs = JSON.parse(productSpecs)
+            let productSpecsArr = []
+            let results = [];
+            let result = [];
+
+            function doExchange(arr, index) {
+                for (let i = 0; i<arr[index].length; i++) {
+                    result[index] = arr[index][i];
+                    if (index != arr.length - 1) {
+                        doExchange(arr, index + 1)
+                    } else {
+                        results.push(result.join(','))
+                    }
+                }
+            }
+
+            
+
+            // {"版本类型":["中国大陆","日韩"],"颜色":["白色","灰色"],"存储容量":["256G","512G","1TB"]}
+            for(let i in _productSpecs) {
+                if(_productSpecs.hasOwnProperty(i)) {
+                    productSpecsArr.push(_productSpecs[i])
+                }
+            }
+
+            doExchange(productSpecsArr, 0)
+
+
+
+            goodsInfos.sort((a, b) => {
+                let aIndex = results.findIndex(val => val == a.label)
+                let bIndex = results.findIndex(val => val == b.label)
+
+                return aIndex - bIndex
+            })
+
+            return goodsInfos
+        },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
@@ -1758,13 +1809,16 @@ export default {
                 let __goodsInfos
 
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
-                this.computedAddSpecs(res.productSpecs)
+                
                 res.goodsInfos.forEach(val => {
                     let label = Object.values(JSON.parse(val.specs)).join(',')
 
                     val.label = label
                     val.editorDisabled = true
                 })
+                res.goodsInfos = this.sortGoodsInfos(res)
+                this.computedAddSpecs(res.productSpecs)
+
                 __goodsInfos = this.computedList(res.goodsInfos)
                 res.goodsInfos = __goodsInfos
                 res.productCatalogInfoIds.forEach((id, index) => {
@@ -2593,7 +2647,7 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('scroll', this.handleScroll)
+        //window.addEventListener('scroll', this.handleScroll)
     },
     components: {
         SelectSpecifications,

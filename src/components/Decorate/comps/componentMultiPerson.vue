@@ -209,7 +209,6 @@ export default {
                     params = {
                         num: componentData.showNumber,
                         order: componentData.sortRule,
-                        activityList: newParams,
                         hideStatus: 0
                     };
                 }else{
