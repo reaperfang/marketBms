@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="info_box" v-if="showContents.length > 0">
-                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{Math.abs(item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction)}}元</font>{{item.goodsName}}</p>
+                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{getReduce(item)}}元</font>{{item.goodsName}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
                         <div class="limit_line">
                             <p class="limit" v-if="showContents.indexOf('7')!=-1">
@@ -41,14 +41,14 @@
                                 <template v-else>不限制</template>
                             <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
                                 <div class="jd_line">
-                                    <div class="current_line" :style="{width:(item.stock - item.remainStock)/item.stock*100+'%'}"></div>
+                                    <div class="current_line" :style="{width:getProgress(item)}"></div>
                                 </div>
                                 <p>仅剩{{item.remainStock}}件</p>
                             </div>
                         </div>
                         <div class="price_line">
-                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice}}</font></p>
-                            <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice}}</p>
+                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{getReducePrice(item)}}</font></p>
+                            <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
                         </div>
                         <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton> -->
 
@@ -197,6 +197,38 @@ export default {
             this.list = datas;
             this.allLoaded = true;
         },
+
+         /* 获取减免数 */
+        getReduce(item) {
+            if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction;
+            };
+            return '';
+        },
+
+        /* 获取进度条宽度 */
+        getProgress(item) {
+            if(item.stock && item.remainStock && Number(item.stock) && Number(item.remainStock)) {
+                return (item.stock - item.remainStock) / item.stock * 100 + '%';
+            };
+            return '0%';
+        },
+
+        /* 获取优惠价 */
+        getReducePrice(item) {
+            if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice;
+            };
+            return '';
+        },
+
+        /* 获取原价 */
+        getYprice(item) {
+            if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice;
+            };
+            return '';
+        }
 
     },
     beforeDestroy() {
