@@ -470,6 +470,12 @@ export default {
     },
     methods: {
         changePriceMore() {
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
             this.currentDialog = 'PriceChangeDialog'
             this.dialogVisible = true
         },
