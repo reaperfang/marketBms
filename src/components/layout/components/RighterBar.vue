@@ -1,27 +1,29 @@
 <template>
   <div class="righter-bar" v-if="sidebarItems.length">
     <div class="righter-bar-content" v-calcHeight="60">
-      <div v-if="!item.hidden" v-for="item in sidebarItems" class="item">
-        <template v-if="item.children">
+      <div v-if="!item.hidden" v-for="item in sidebarItems">
+        <div v-if="item.children" class="item">
           <h2>{{item.name}}</h2>
           <div v-if="!child.hidden" v-for="child in item.children" class="item-child">
             <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path, child.path)">{{child.meta.title}}</router-link>
           </div>
-        </template>
-        <template v-else-if="item.tabTitle">
-          <template v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
-            <h2>{{item.tabTitle}}</h2>
-            <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
-              <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
-              <div>
-                <router-link class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+        </div>
+        <div v-else>
+          <div v-if="item.tabTitle">
+            <div class="item" v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
+              <h2>{{item.tabTitle}}</h2>
+              <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
+                <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
+                <div>
+                  <router-link class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+                </div>
               </div>
             </div>
-          </template>
-        </template>
-        <template v-else>
-          <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path)">{{item.meta.title}}</router-link>
-        </template>
+          </div>
+          <div v-else class="item">
+            <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path)">{{item.meta.title}}</router-link>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -182,7 +184,7 @@ export default {
     width: 122px;
     height: 100%;
     .item {
-      border-bottom: 1px solid #f2f2f5;
+      border-top: 1px solid #f2f2f5;
       padding-top: 23px;
       padding-bottom: 20px;
       a {
@@ -199,8 +201,11 @@ export default {
           margin-left: 5px;
         }
       }
-      &:last-child {
+      &:first-child {
         border: none;
+      }
+      &:last-child {
+        border-bottom: 1px solid #f2f2f5;
       }
       h2, .item-child {
         margin-bottom: 10px;
