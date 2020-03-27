@@ -25,7 +25,7 @@
                         <span style="margin-left: 20px;">第二级：{{data.name}}</span>
                     </el-form-item>
                 </template>
-                <template v-if="data.level == 1">
+                <template v-if="data.level == 0">
                     <el-form-item label="分类名称：" prop="name">
                         <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name"></el-input>
                         <span class="description">仅支持展示最多5个字的文本标签</span>
@@ -125,7 +125,7 @@ export default {
         if(this.data.editor) {
             this.getCategoryDetail(this.data.id).then(res => {
                 console.log(res)
-                if(this.data.level == 1) {
+                if(this.data.level == 0) {
                     this.basicForm.name = res.name
                 } else {
                     this.basicForm.name23 = res.name23
