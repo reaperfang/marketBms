@@ -139,44 +139,44 @@ export default [
 				meta: { title: "栏目内容", noCache: true, tabTitle: 'PC店铺',navType:2 }
 			},
 			{
-				path: "1picText",
-				component: () => import("@/views/shop/PCshop/column/1picText"),
-				name: "1picText",
+				path: "onePicText",
+				component: () => import("@/views/shop/PCshop/column/onePicText"),
+				name: "onePicText",
 				meta: { title: "图文广告", noCache: true, tabTitle: 'PC店铺',navType:2 },
 				hidden: true
 			},
 			{
-				path: "2goodsSet",
-				component: () => import("@/views/shop/PCshop/column/2goodsSet"),
-				name: "2goodsSet",
+				path: "twoGoodsSet",
+				component: () => import("@/views/shop/PCshop/column/twoGoodsSet"),
+				name: "twoGoodsSet",
 				meta: { title: "商品橱窗", noCache: true, tabTitle: 'PC店铺',navType:2 },
 				hidden: true
 			},
 			{
-				path: "3picText",
-				component: () => import("@/views/shop/PCshop/column/3picText"),
-				name: "3picText",
+				path: "threePicText",
+				component: () => import("@/views/shop/PCshop/column/threePicText"),
+				name: "threePicText",
 				meta: { title: "图文广告", noCache: true, tabTitle: 'PC店铺',navType:2 },
 				hidden: true
 			},
 			{
-				path: "4goodsSet",
-				component: () => import("@/views/shop/PCshop/column/4goodsSet"),
-				name: "4goodsSet",
+				path: "fourGoodsSet",
+				component: () => import("@/views/shop/PCshop/column/fourGoodsSet"),
+				name: "fourGoodsSet",
 				meta: { title: "商品橱窗", noCache: true, tabTitle: 'PC店铺',navType:2 },
 				hidden: true
 			},
 			{
-				path: "5picText",
-				component: () => import("@/views/shop/PCshop/column/5picText"),
-				name: "5picText",
+				path: "fivePicText",
+				component: () => import("@/views/shop/PCshop/column/fivePicText"),
+				name: "fivePicText",
 				meta: { title: "图文广告", noCache: true, tabTitle: 'PC店铺',navType:2 },
 				hidden: true
 			},
 			{
-				path: "6infoSet",
-				component: () => import("@/views/shop/PCshop/column/6infoSet"),
-				name: "6infoSet",
+				path: "sixInfoSet",
+				component: () => import("@/views/shop/PCshop/column/sixInfoSet"),
+				name: "sixInfoSet",
 				meta: { title: "资讯设置", noCache: true, tabTitle: 'PC店铺',navType:2 },
 				hidden: true
 			},

@@ -63,11 +63,11 @@
       ></el-pagination>
     </div>
     <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange"></el-checkbox>
+      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
-      <el-button class="border_btn" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
-      <el-button class="border_btn" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
-      <el-button class="border_btn" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
+      <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
     </div>
     <component
       :is="currentDialog"

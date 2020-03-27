@@ -14,7 +14,7 @@
     </el-form>
     <el-table
     stripe
-    :data="tableList"
+    :data="tableData"
     :row-key="getRowKey"
     ref="multipleTable"
     @selection-change="handleSelectionChange"
@@ -43,9 +43,12 @@
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <div slot="empty" class="table_empty">
           <img src="../../../../assets/images/table_empty.png" alt="">
-          <div class="tips">暂无数据<span @click="addNewApply('/application/promotion/addPackbuy')">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
+          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addPackbuy', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
         </div>
       </el-table>
+      <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+      </div>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -85,7 +88,7 @@ export default {
   data() {
     return {
       pageSize: 5,
-      tableList: [],
+      tableData: [],
       multipleSelection: [],
       pageNum: 1,
       ruleForm: {
@@ -133,7 +136,7 @@ export default {
         tempForm.name = '';
       }
       this._apis.shop.getNyuanList(loadAll? tempForm: this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -165,20 +168,6 @@ export default {
     },
     getRowKey(row) {
       return row.id
-    },
-
-    /* 添加新营销活动 */
-    addNewApply(path) {
-      let token = getToken('authToken')
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-      let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
-      let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
-      let cid = shopInfo && shopInfo.id || ''
-      let newUrl = `${process.env.DATA_API}/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
-      // let newUrl = `http://test-omo.aiyouyi.cn/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
-
-      let newWindow = window.open("about:blank");
-      newWindow.location.href = newUrl;
     }
   }
 };

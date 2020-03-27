@@ -269,15 +269,19 @@ export default {
     /* 拖拽添加组件 */
     dropAddComponent(ev) {
       ev.preventDefault();
+      let data= ev.dataTransfer.getData("dragAddComponent");
+
+      if(!data) {
+        return;
+      }
 
       //当目前选中的是基础组件的时候，先强行选中最后一个组件再执行下文
       if(this.currentComponentId === this.basePropertyId) {
         this.$store.commit('setCurrentComponentId', this.componentDataIds[this.componentDataIds.length - 1]);
       }
 
-      var data= JSON.parse(ev.dataTransfer.getData("dragAddComponent"));
       this.$store.commit('addComponent', {
-        component: data,
+        component: JSON.parse(data),
         targetId: this.currentComponentId,
         after: true
       });

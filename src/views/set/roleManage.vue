@@ -64,7 +64,7 @@
       </el-table>
       <div class="multiple_selection">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
-        <el-button style="margin-top:10px;" @click="deleteRole()">批量删除</el-button>
+        <el-button style="margin-top:10px;" class="border-button" @click="deleteRole()">批量删除</el-button>
       </div>
       <div class="page_styles">
         <el-pagination

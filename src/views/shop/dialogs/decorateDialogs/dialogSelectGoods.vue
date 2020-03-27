@@ -20,7 +20,7 @@
     </el-form>
     <el-table
       stripe
-      :data="tableList"
+      :data="tableData"
       :row-key="getRowKey"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
@@ -59,6 +59,9 @@
       </el-table-column>
       <!-- <el-table-column prop="createTime" label="创建时间"></el-table-column> -->
     </el-table>
+    <div class="multiple_selection">
+      <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+    </div>
     <div class="pagination">
       <el-pagination
         @size-change="handleSizeChange"
@@ -102,7 +105,7 @@ export default {
   data() {
     return {
       pageSize: 5,
-      tableList: [],
+      tableData: [],
       multipleSelection: [],
       ruleForm: {
         name: "",
@@ -154,7 +157,7 @@ export default {
       this.loading = true;
       this._apis.goods.fetchSpuGoodsList(this.ruleForm).then((response)=>{
         if(response.list && Array.isArray(response.list) && response.list.length) {
-          this.tableList = response.list.filter((item)=>{
+          this.tableData = response.list.filter((item)=>{
             return item.status == -1 || item.status == 1;
           });
         }

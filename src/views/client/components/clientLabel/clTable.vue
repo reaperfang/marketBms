@@ -50,8 +50,8 @@
       ></el-pagination>
     </div>
     <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange"></el-checkbox>
-      <el-button type="primary" @click="batchDelete" class="marL20">批量删除</el-button>
+      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
+      <el-button @click="batchDelete" class="marL20 border-button">批量删除</el-button>
     </div>
   </div>
 </template>

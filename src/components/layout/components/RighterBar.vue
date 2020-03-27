@@ -9,7 +9,7 @@
           </div>
         </template>
         <template v-else-if="item.tabTitle">
-          <template v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
+          <template >
             <h2>{{item.tabTitle}}</h2>
             <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
               <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->

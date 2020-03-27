@@ -98,7 +98,7 @@ import goods from "@/views/shop/dialogs/jumpLists/goods";
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
 import DialogBase from '@/components/DialogBase';
 export default {
-  name: "3picText",
+  name: "threePicText",
   components: {DialogBase, dialogSelectImageMaterial, goods, goodsGroup},
   data() {
 
