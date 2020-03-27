@@ -5,7 +5,7 @@
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
-                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon"></el-checkbox>
+                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon" v-if="couponList.length!==0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCoupons" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode"></el-checkbox>
+                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode" v-if="codeList.length!==0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCodes" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
