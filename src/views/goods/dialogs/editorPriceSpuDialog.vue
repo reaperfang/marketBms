@@ -7,8 +7,8 @@
                     <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
-                        <el-input type="number" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
-                        <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可下架</p>
+                        <el-input type="number" min="0" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
+                        <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可编辑售卖价</p>
                     </div>
                 </div>
             </div>
@@ -40,6 +40,9 @@ export default {
     },
     methods: {
         submit() {
+            if(this.data.goodsInfos.every(val => val.activity)) {
+                return
+            }
             this._apis.goods.changePriceSpu({
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, salePrice: val.salePrice}))
