@@ -152,7 +152,7 @@ export default {
       this.multipleSelection = val;
     },
     getRowKey(row) {
-      return row.activeId
+      return row.activityId || row.activeId
     },
 
     /* 添加新营销活动 */

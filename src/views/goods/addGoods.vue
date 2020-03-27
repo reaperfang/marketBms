@@ -11,6 +11,7 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
+                    :disabled="ruleForm.isSyncProduct == 1 && authHide"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
@@ -96,7 +97,7 @@
                 </div>
             </el-form-item>
             <el-form-item label="商品编码" prop="code">
-                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
         </section>
         <section class="form-section spec-form-section">
@@ -106,7 +107,7 @@
             </el-form-item>
             <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
-                <div v-if="!editor">
+                <div v-if="!editor" v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
                     <ul class="added-specs">
                         <li v-for="(item, index) in addedSpecs" :key="index">
                             <div class="added-specs-header">
@@ -165,7 +166,7 @@
                         </ul>
                     </div>
                 </div>
-                <div v-else>
+                <div v-else v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
                     <ul class="added-specs">
                         <li v-for="(item, index) in addedSpecs" :key="index">
                             <div class="added-specs-header">
@@ -354,6 +355,7 @@
                         :specsLabel="specsLabel"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
+                        :hideDelete="hideDelete"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -459,6 +461,7 @@
                         :specsLabel="specsLabel"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
+                        :hideDelete="hideDelete"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -644,8 +647,10 @@ import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
 import Specs from '@/views/goods/components/specs'
+import anotherAuth from '@/mixins/anotherAuth'
 export default {
     name: 'addGoods',
+    mixins: [anotherAuth],
     data() {
         var productUnitValidator = (rule, value, callback) => {
             // if(value === '') {
@@ -889,6 +894,13 @@ export default {
                 return images.split(',').length
             }
             return 0
+        },
+        hideDelete() {
+            if(this.ruleForm.isSyncProduct == 1 && this.authHide) {
+                return true
+            } else {
+                return false
+            }
         }
     },
     watch: {
@@ -2068,6 +2080,13 @@ export default {
                         if(+this.ruleForm.goodsInfos[i].stock  < 0) {
                             this.$message({
                                 message: '不能为负值',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(+this.ruleForm.goodsInfos[i].stock  > 10000000) {
+                            this.$message({
+                                message: '库存不能超过10000000',
                                 type: 'warning'
                             });
                             return

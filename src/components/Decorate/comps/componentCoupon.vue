@@ -9,8 +9,8 @@
           <template v-for="(item, key) in list">
             <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
               <div class="first_money">
-                <span :class="style1">{{item.useType==0?item.useTypeFullcut:(item.useTypeDiscount * 10).toFixed(1)}}</span>
-                <span :class="style1">{{item.useType==0?'元':'折'}}</span>
+                <span :class="style1">{{getTitle(item)}}</span>
+                <span :class="style1">{{getContent(item)}}</span>
               </div>
               <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
             </li>
@@ -159,6 +159,16 @@ export default {
        this.list = datas;
        this.allLoaded = true;
     },
+
+    /* 获取标题 */
+    getTitle(item) {
+      return item.useType==0?item.useTypeFullcut:(item.useTypeDiscount * 10).toFixed(1);
+    },
+
+    /* 获取内容 */
+    getContent(item) {
+      return item.useType==0?'元':'折';
+    }
   },
   beforeDestroy() {
       //组件销毁前需要解绑事件。否则会出现重复触发事件的问题

@@ -189,7 +189,37 @@ export function getAuthPageList(data) {
   return request({
     target: 'SHOP-API-AUTH-PAGE-LIST-PROCESSOR',
     method: 'post',
-    apiType: 'matrix',
+    apiType: 'manager',
+    data
+  })
+}
+
+/* 获取店铺授权码 */
+export function getShopCode(data) {
+  return request({
+    target: 'SHOP-API-GET-AUTH-CODE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+/* 解除店铺授权 */
+export function cancelAuth(data) {
+  return request({
+    target: 'SHOP-API-AUTH-ENABLE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+/* 店铺授权平台列表 */
+export function getShopAuthList(data) {
+  return request({
+    target: 'SHOP-API-AUTH-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
     data
   })
 }

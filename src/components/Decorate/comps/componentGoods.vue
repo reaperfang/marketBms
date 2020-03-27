@@ -13,7 +13,7 @@
                     <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
                     <p class="fTitle" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('3')!=-1">{{item.description}}</p>
                     <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
-                        <p class="price">￥<font>{{item.goodsInfos[0].salePrice}}</font></p>
+                        <p class="price">￥<font>{{getPrice(item)}}</font></p>
                     </div>
                     <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                 </div>
@@ -268,6 +268,13 @@ export default {
                 status: '1',
                 ids: ids,
             }
+        },
+
+        getPrice(item) {
+            if(item.goodsInfos && Array.isArray(item.goodsInfos) && item.goodsInfos.length) {
+                return item.goodsInfos[0].salePrice;    
+            };
+            return '';
         }
 
     },

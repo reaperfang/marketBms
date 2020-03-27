@@ -2,7 +2,7 @@
     <div style="min-height: 100vh;" v-loading="loading">
         <div v-if="list.length" class="goods-list">
             <header class="header">
-                <div v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
+                <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
                 </div>
                 <!-- <div v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="item pointer" @click="$router.push('/goods/batchPriceChange')">批量改价</div>
@@ -27,6 +27,14 @@
                         clearable
                         filterable>
                         </el-cascader>
+                        <!-- <el-cascader
+                            v-model="categoryValue"
+                            :props="optionProps"
+                            :options="categoryData"
+                            @change="handleChange"
+                        clearable
+                        filterable>
+                        </el-cascader> -->
                     </el-form-item>
                     <el-form-item label class="search-code">
                         <el-input :placeholder="listQuery.searchType == 'code' ? '请输入SPU编码' : '请输入SKU编码'" v-model="listQuery.searchValue" class="input-with-select">
@@ -366,8 +374,10 @@ import EditorPriceSpu from '@/views/goods/dialogs/editorPriceSpuDialog'
 import EditorUpperAndLowerRacksSpu from '@/views/goods/dialogs/editorUpperAndLowerRacksSpuDialog'
 import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
 import PriceChangeDialog from "@/views/goods/dialogs/priceChangeDialog";
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             checkedAll: false,
@@ -400,7 +410,15 @@ export default {
             state: '',
             showTableCheck: true,
             operateType: "",
-            currentStatus: ''
+            currentStatus: '',
+            categoryData: [],
+            optionProps: {
+                value: 'id',
+                label: 'name',
+                children: 'childrenCatalogs',
+                multiple: false, 
+                checkStrictly: true
+            }
         }
     },
     created() {
@@ -410,6 +428,7 @@ export default {
         this.getList()
         this.getCategoryList()
         this.getMiniappInfo()
+        this.getProductCatalogTreeList()
     },
     filters: {
         statusFilter(val) {
@@ -451,6 +470,12 @@ export default {
     },
     methods: {
         changePriceMore() {
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
             this.currentDialog = 'PriceChangeDialog'
             this.dialogVisible = true
         },
@@ -622,16 +647,15 @@ export default {
                 this._apis.goods.upperOrLowerSpu({ids, status}).then((res) => {
                     this.getList()
                     this.visible = false
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '修改成功！',
                         type: 'success'
                     });
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
+                    this.$message.error({
+                        message: error,
+                        type: 'error'
                     });
                 })
             })
@@ -695,6 +719,16 @@ export default {
 
             })
         },
+        getProductCatalogTreeList() {
+            this._apis.goods.fetchTreeCategoryList().then((res) => {
+                this.categoryData = res
+            }).catch(error => {
+                this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+            })
+        },
         handleChange(value) {
             let arr = [...value]
             this.listQuery.productCatalogInfoId = arr.pop()
@@ -732,6 +766,7 @@ export default {
         upperAndLowerRacksSpu(row) {
             let _title = ''
             let _status
+            let _row
 
             if(row.status == 1) {
                 _title = '下架'
@@ -743,6 +778,10 @@ export default {
 
             this.currentDialog = 'EditorUpperAndLowerRacksSpu'
             this.dialogVisible = true
+            _row = JSON.parse(JSON.stringify(row))
+            _row.goodsInfos.forEach(val => {
+                val.status = val.status == 1 ? true : false
+            })
             this.currentData = row
         },
         moreManageHandler() {

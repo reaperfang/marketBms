@@ -19,7 +19,7 @@
         <!-- 手机底部 H5-->
         <div class="phone-footer">
           <ul class="navs type1" v-if="ruleForm.navStyle.id == 1">
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <img src="" alt="" class="empty_img" v-else>
               <span>{{ruleForm.navMap[item].navName}}</span>
