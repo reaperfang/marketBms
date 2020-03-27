@@ -495,17 +495,17 @@ export default {
                 .then(res => {
                 this.getList();
                 this.visible = false;
-                this.$notify({
-                    title: "成功",
-                    message: "改价成功！",
-                    type: "success"
-                });
+                
+                this.$message({
+                            message: '改价成功！',
+                            type: 'success'
+                        });
                 })
                 .catch(error => {
                 this.visible = false;
-                this.$notify.error({
-                    title: "错误",
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
                 });
             },
@@ -513,9 +513,9 @@ export default {
             this._apis.goods.getMiniappInfo().then(res => {
                 this.currentStatus = res.data.current_status
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             })
         },
@@ -533,10 +533,10 @@ export default {
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                 })
             })
             // this.currentDialog = 'ShareSelect'
@@ -578,10 +578,10 @@ export default {
                     console.log(res)
                     resolve(res)
                 }).catch(error => {
-                    that.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                     reject(error)
                 })
             })
@@ -624,17 +624,16 @@ export default {
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
                     this.getList()
                     this.visible = false
-                    this.$notify({
-                        title: '成功',
-                        message: '删除成功！',
-                        type: 'success'
-                    });
+                    this.$message({
+                            message: '删除成功！',
+                            type: 'success'
+                        });
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                 })
             })
         },
@@ -749,17 +748,16 @@ export default {
                 this._apis.goods.upperOrLowerSpu({ids: [row.goodsInfo.id], status: _status}).then((res) => {
                     this.getList()
                     this.visible = false
-                    this.$notify({
-                        title: '成功',
-                        message: '修改成功！',
-                        type: 'success'
-                    });
+                    this.$message({
+                            message: '修改成功！',
+                            type: 'success'
+                        });
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                 })
             })
         },

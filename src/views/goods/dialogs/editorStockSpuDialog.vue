@@ -7,7 +7,7 @@
                     <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">库存：</span>
-                        <el-input type="number" v-model="item.stock" placeholder="请输入库存"></el-input>
+                        <el-input type="number" min="0" v-model="item.stock" placeholder="请输入库存"></el-input>
                     </div>
                 </div>
             </div>
