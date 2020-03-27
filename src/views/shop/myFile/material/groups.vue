@@ -17,7 +17,7 @@
     </el-tree>
     <span class="newClass" @click="addSameLevelNode()">+ 新建分组</span>
     <el-card class="box-card" ref="card" v-show="menuVisible">
-      <img src="@/assets/images/shop/group_add.png" @click="addChildNode()">
+      <img src="@/assets/images/shop/group_add.png" @click="addChildNode()" v-if="currentNode.level<3">
       <img src="@/assets/images/shop/group_edit.png" @click="editNode()">
       <img src="@/assets/images/shop/group_del.png" @click="deleteNode()">
     </el-card>
@@ -233,7 +233,7 @@ methods: {
       this.menuVisible =true
     // /* 菜单定位基于鼠标点击位置 */
       document.addEventListener('click',this.foo)
-      this.$refs.card.$el.style.left =event.clientX - 60 +'px'
+      this.$refs.card.$el.style.left =event.clientX - 50 +'px'
       this.$refs.card.$el.style.top =event.clientY - 90 +'px'
     }
   },

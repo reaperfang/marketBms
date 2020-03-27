@@ -33,7 +33,7 @@ export default {
       rules:{
         groupName:[
           { required: true, message: '请输入分组名称', trigger: 'blur' },
-          { min: 1, max: 20, message: '长度在1到20个字符', trigger: 'blur' }
+          { min: 1, max:12, message: '长度在1到12个字符', trigger: 'blur' }
         ]
       }
     };
