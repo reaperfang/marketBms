@@ -303,7 +303,7 @@
                             </template>
                             <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && showScoreInput">
                                 ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
-                                <span class="operate-span" @click="showScoreInput = false">确定</span>
+                                <span class="operate-span" @click="changeScoreHandler">确定</span>
                             </template>
                         </div>
                     </div>
@@ -320,7 +320,7 @@
                             </template>
                             <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2 && showMoneyInput">
                                 ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
-                                <span class="operate-span" @click="showMoneyInput = false">确定</span>
+                                <span class="operate-span" @click="changeAmountHandler">确定</span>
                             </template>
                         </div>
                     </div>
@@ -487,6 +487,40 @@ export default {
         }
     },
     methods: {
+        changeScoreHandler() {
+            this.showScoreInput = false
+            this._apis.order.editorScoreAmount({
+                id: this.$route.query.id,
+                realReturnScore: this.orderAfterSale.realReturnScore
+            }).then(res => {
+                this.$message({
+                            message: '修改成功！',
+                            type: 'success'
+                        });
+            }).catch(error => {
+                this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+            })
+        },
+        changeAmountHandler() {
+            this.showMoneyInput = false
+            this._apis.order.editorScoreAmount({
+                id: this.$route.query.id,
+                realReturnMoney: this.orderAfterSale.realReturnMoney
+            }).then(res => {
+                this.$message({
+                            message: '修改成功！',
+                            type: 'success'
+                        });
+            }).catch(error => {
+                this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+            })
+        },
         goImage(flag) {
             let index = this.bigMessage.imageIndex
             let list = this.bigMessage.descriptionImages
@@ -495,11 +529,13 @@ export default {
                 index = index - 1
                 if(index >=0) {
                     this.bigMessage.url = this.bigMessage.descriptionImages[index].image
+                    this.$forceUpdate()
                 }
             } else {
                 index = index + 1
                 if(index <= this.bigMessage.descriptionImages.length - 1) {
                     this.bigMessage.url = this.bigMessage.descriptionImages[index].image
+                    this.$forceUpdate()
                 }
             }
         },

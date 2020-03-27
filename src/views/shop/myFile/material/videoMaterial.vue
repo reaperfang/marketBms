@@ -2,7 +2,7 @@
   <div>
     <div class="head">
       <div class="head-wrapper">
-        <el-input v-model="searchWord" placeholder="请输入图片名称" class="search_w inline"></el-input>
+        <el-input v-model="searchWord" placeholder="请输入视频名称" class="search_w inline"></el-input>
         <el-button type="primary" @click="search">查询</el-button>
       </div>
       <div>

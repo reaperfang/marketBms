@@ -100,7 +100,7 @@
                         width="120"
                         class-name="salePrice">
                         <template slot-scope="scope">
-                            <span class="price">{{scope.row.salePrice}}<i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = scope.row; currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i></span>
+                            <span class="price">{{scope.row.goodsInfos[0].salePrice}}<i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = scope.row; currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -331,7 +331,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 124px;
+  width: 128px;
 }
 .table-header {
     margin-bottom: 10px;
@@ -470,6 +470,12 @@ export default {
     },
     methods: {
         changePriceMore() {
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
             this.currentDialog = 'PriceChangeDialog'
             this.dialogVisible = true
         },
@@ -489,17 +495,17 @@ export default {
                 .then(res => {
                 this.getList();
                 this.visible = false;
-                this.$notify({
-                    title: "成功",
-                    message: "改价成功！",
-                    type: "success"
-                });
+                
+                this.$message({
+                            message: '改价成功！',
+                            type: 'success'
+                        });
                 })
                 .catch(error => {
                 this.visible = false;
-                this.$notify.error({
-                    title: "错误",
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
                 });
             },
@@ -507,16 +513,16 @@ export default {
             this._apis.goods.getMiniappInfo().then(res => {
                 this.currentStatus = res.data.current_status
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             })
         },
         shareMore() {
             let obj = {}
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
                 })
                 return
@@ -527,10 +533,10 @@ export default {
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                 })
             })
             // this.currentDialog = 'ShareSelect'
@@ -572,10 +578,10 @@ export default {
                     console.log(res)
                     resolve(res)
                 }).catch(error => {
-                    that.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                     reject(error)
                 })
             })
@@ -618,17 +624,16 @@ export default {
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
                     this.getList()
                     this.visible = false
-                    this.$notify({
-                        title: '成功',
-                        message: '删除成功！',
-                        type: 'success'
-                    });
+                    this.$message({
+                            message: '删除成功！',
+                            type: 'success'
+                        });
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                 })
             })
         },
@@ -743,23 +748,23 @@ export default {
                 this._apis.goods.upperOrLowerSpu({ids: [row.goodsInfo.id], status: _status}).then((res) => {
                     this.getList()
                     this.visible = false
-                    this.$notify({
-                        title: '成功',
-                        message: '修改成功！',
-                        type: 'success'
-                    });
+                    this.$message({
+                            message: '修改成功！',
+                            type: 'success'
+                        });
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
                 })
             })
         },
         upperAndLowerRacksSpu(row) {
             let _title = ''
             let _status
+            let _row
 
             if(row.status == 1) {
                 _title = '下架'
@@ -771,6 +776,10 @@ export default {
 
             this.currentDialog = 'EditorUpperAndLowerRacksSpu'
             this.dialogVisible = true
+            _row = JSON.parse(JSON.stringify(row))
+            _row.goodsInfos.forEach(val => {
+                val.status = val.status == 1 ? true : false
+            })
             this.currentData = row
         },
         moreManageHandler() {

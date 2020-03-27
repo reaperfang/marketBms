@@ -43,6 +43,13 @@ export default {
             })
         },
         submit() {
+            if(!this.h5Checked && !this.miniCodeChecked) {
+                this.$message({
+                message: '请选择',
+                type: 'warning'
+                });
+                return
+            }
             let obj = {}
             
             if(this.data.shareMore) {

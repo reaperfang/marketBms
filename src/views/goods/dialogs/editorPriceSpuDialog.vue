@@ -1,5 +1,5 @@
 <template>
-    <DialogBase width="500px" :visible.sync="visible" @submit="submit" title="编辑售卖价" :hasCancel="hasCancel">
+    <DialogBase width="500px" :visible.sync="visible" @submit="submit" title="编辑售卖价" :hasCancel="hasCancel" :showFooter="showFooter">
         <div class="content-box">
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
@@ -7,11 +7,15 @@
                     <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
-                        <el-input type="number" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
-                        <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可下架</p>
+                        <el-input type="number" min="0" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
+                        <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可编辑售卖价</p>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="footer">
+            <el-button @click="submit" type="primary">确定</el-button>
+            <el-button @click="visible = false">取消</el-button>
         </div>
     </DialogBase>
 </template>
@@ -22,7 +26,8 @@ export default {
     data() {
         return {
             hasCancel: true,
-            list: [{spec: '银色', stock: 1}, {spec: '银色', stock: 1}, {spec: '银色', stock: 1}]
+            list: [{spec: '银色', stock: 1}, {spec: '银色', stock: 1}, {spec: '银色', stock: 1}],
+            showFooter: false
         }
     },
     filters: {
@@ -35,6 +40,9 @@ export default {
     },
     methods: {
         submit() {
+            if(this.data.goodsInfos.every(val => val.activity)) {
+                return
+            }
             this._apis.goods.changePriceSpu({
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, salePrice: val.salePrice}))
@@ -130,6 +138,9 @@ export default {
         color:rgba(245,88,88,1);
         margin-left: 14px;
         padding: 5px 0;
+    }
+    .footer {
+        text-align: center;
     }
 </style>
 
