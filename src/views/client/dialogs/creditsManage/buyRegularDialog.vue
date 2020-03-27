@@ -325,7 +325,8 @@ export default {
         productCatalogInfoId: this.categoryValue[2],
         startIndex: startIndex,
         pageSize: pageSize,
-        productLabelName: this.productLabelName
+        productLabelName: this.productLabelName,
+        status: 1
       };
       this._apis.client
         .getSkuList(params)
