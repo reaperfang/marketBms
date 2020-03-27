@@ -360,7 +360,7 @@ export default {
                         message: '加入黑名单成功',
                         type: 'success'
                     });
-                    this.$emit('freshTable');
+                    this.$emit('refreshPage');
                 }).catch((error) => {
                     console.log(error);
                     this.btnLoading = false;
