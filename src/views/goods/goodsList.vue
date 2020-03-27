@@ -100,7 +100,7 @@
                         width="120"
                         class-name="salePrice">
                         <template slot-scope="scope">
-                            <span class="price">{{scope.row.salePrice}}<i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = scope.row; currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i></span>
+                            <span class="price">{{scope.row.goodsInfos[0].salePrice}}<i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = scope.row; currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -331,7 +331,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 124px;
+  width: 128px;
 }
 .table-header {
     margin-bottom: 10px;
@@ -522,7 +522,7 @@ export default {
         shareMore() {
             let obj = {}
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
                 })
                 return
