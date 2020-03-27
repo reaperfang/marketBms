@@ -128,7 +128,7 @@ export default {
                 if(this.data.level == 0) {
                     this.basicForm.name = res.name
                 } else {
-                    this.basicForm.name23 = res.name23
+                    this.basicForm.name23 = res.name
                 }
                 this.basicForm.enable = res.enable
                 this.basicForm.sort = res.sort
@@ -143,7 +143,7 @@ export default {
         if(this.data.add) {
             if(this.data.level == 2) {
                 this.getCategoryDetail(this.data.parentId).then(res => {
-                    this.level1Title = res.name23
+                    this.level1Title = res.name
                 })
             }
         }
@@ -169,7 +169,7 @@ export default {
                     }
                     let param = Object.assign({}, this.basicForm)
 
-                    if(this.data.level == 1) {
+                    if(this.data.level == 0) {
                         if(/\s+/.test(this.basicForm.name)) {
                             this.$message({
                                 message: '分类名称不能为空',
@@ -199,7 +199,11 @@ export default {
                             // 新增三级分类
                             param = Object.assign(param, {level: 3, parentId: this.data.id})
                         }
-
+                        if(this.data.level != 0) {
+                            param = Object.assign(param, {
+                                name: param.name23
+                            })
+                        }
                         this._apis.goods.addCategory(param).then(res => {
                             this.$message({
                                 message: '新增成功！',
@@ -215,6 +219,11 @@ export default {
                         })
                     } else {
                         let param = Object.assign({}, this.basicForm, {id: this.data.id, parentId: this.data.parentId})
+                        if(this.data.level != 0) {
+                            param = Object.assign(param, {
+                                name: param.name23
+                            })
+                        }
 
                         delete param.parentId
 
