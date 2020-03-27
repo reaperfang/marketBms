@@ -2084,6 +2084,13 @@ export default {
                             });
                             return
                         }
+                        if(+this.ruleForm.goodsInfos[i].stock  > 10000000) {
+                            this.$message({
+                                message: '库存不能超过10000000',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(this.ruleForm.goodsInfos[i].warningStock == '') {
                             this.$message({
                                 message: '请输入库存预警',

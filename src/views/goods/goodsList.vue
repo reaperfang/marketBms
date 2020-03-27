@@ -766,6 +766,7 @@ export default {
         upperAndLowerRacksSpu(row) {
             let _title = ''
             let _status
+            let _row
 
             if(row.status == 1) {
                 _title = '下架'
@@ -777,6 +778,10 @@ export default {
 
             this.currentDialog = 'EditorUpperAndLowerRacksSpu'
             this.dialogVisible = true
+            _row = JSON.parse(JSON.stringify(row))
+            _row.goodsInfos.forEach(val => {
+                val.status = val.status == 1 ? true : false
+            })
             this.currentData = row
         },
         moreManageHandler() {
