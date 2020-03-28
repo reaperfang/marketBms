@@ -71,27 +71,27 @@
             </el-form-item>
         </div>
         <!-- <div class="item">
-            <h2>评价相关：</h2>
-            <el-form-item label="评价功能开启" prop="orderComment">
-                <el-radio-group v-model="form.orderComment">
-                    <el-radio :label="1" class="mr10">是</el-radio>
-                    <el-radio :label="2">否</el-radio>
-                </el-radio-group>
-                <span class="note">
-                  说明：启用后买家可以对购买商品进行评论，您可以根据评论内容进行回复。
-                </span>
-            </el-form-item>
-            <el-form-item label="订单完成" prop="orderCommentGood">
-                <el-input-number 
-                v-model="form.orderCommentGood" 
-                controls-position="right" 
-                style="width:96px;" 
-                placeholder="请输入整数，清空数值则关闭该功能"
-                :min="1" 
-                :max="30">
-                </el-input-number>
-                天后,自动评价为好评
-            </el-form-item>
+          <h2>评价相关：</h2>
+          <el-form-item label="评价功能开启" prop="orderComment">
+              <el-radio-group v-model="form.orderComment">
+                  <el-radio :label="1" class="mr10">是</el-radio>
+                  <el-radio :label="2">否</el-radio>
+              </el-radio-group>
+              <span class="note">
+                说明：启用后买家可以对购买商品进行评论，您可以根据评论内容进行回复。
+              </span>
+          </el-form-item>
+          <el-form-item label="订单完成" prop="orderCommentGood">
+              <el-input-number 
+              v-model="form.orderCommentGood" 
+              controls-position="right" 
+              style="width:96px;" 
+              placeholder="请输入整数，清空数值则关闭该功能"
+              :min="1" 
+              :max="30">
+              </el-input-number>
+              天后,自动评价为好评
+          </el-form-item>
         </div> -->
         <div class="item">
             <h2>资产相关：
@@ -105,23 +105,23 @@
                     <el-radio :label="1" class="mr10">是</el-radio>
                     <el-radio :label="2">否</el-radio>
                 </el-radio-group>
-                <!-- <span class="note">
+                <span class="note">
                   说明：启用后买家可以申请开发票。
-                </span> -->
+                </span>
             </el-form-item>
             <!-- <el-form-item label="整笔订单退款"></el-form-item>
-            <el-form-item label="是否退回优惠券" prop="name7">
+            <el-form-item label="是否退回优惠券" prop="name7" class="ml50">
                 <el-radio-group v-model="form.name7">
                     <el-radio :label="3">是</el-radio>
                     <el-radio :label="6">否</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="是否退回优惠码" prop="name8">
+            <el-form-item label="是否退回优惠码" prop="name8" class="ml50">
                 <el-radio-group v-model="form.name8">
                     <el-radio :label="3">是</el-radio>
                     <el-radio :label="6">否</el-radio>
-                </el-radio-group>
-            </el-form-item> -->
+                </el-radio-group> 
+            </el-form-item>-->
         </div>
         <div class="item">
             <h2>
@@ -184,10 +184,10 @@ export default {
             memberAutoConfirmReceive: '',
             shopAutoConfirmReceive: '',
             orderAutoFinished: '',
-            orderComment:'1',
+            orderComment:1,
             orderCommentGood: '',
-            invoiceOpen:'1',
-            isTrace:'0',
+            invoiceOpen:1,
+            isTrace:0,
             apiKey:'',
             kdBusinessId:'',
             isMemberAutoConfirmReceive:0,
@@ -261,7 +261,6 @@ export default {
         this.shopAutoReceive = Boolean(response.isShopAutoConfirmReceive),
         this.memberAutoReceive = Boolean(response.isMemberAutoConfirmReceive),
         this.autoFinished = Boolean(response.isOrderAutoFinished)
-        console.log(this.form,555);
       }).catch(error =>{
         console.log(error)
       })
@@ -358,5 +357,8 @@ export default {
 }
 .mr10{
   margin-right:10px;
+}
+.ml50{
+  margin-left:50px;
 }
 </style>
