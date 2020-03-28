@@ -106,7 +106,12 @@
                         <el-checkbox v-model="ruleForm.isProduct" @change="handleCheck7">购买以下任意商品</el-checkbox>
                         <span class="addMainColor marL20 pointer" @click="chooseProduct">选择商品</span>
                         <ul v-if="selectedList.length !== 0">
-                            <li v-for="item in selectedList" :key="item.goodsInfo.id" class="proList"><span>{{item.goodsInfo.name}}</span><span>{{item.goodsInfo.specs}}</span><span>{{item.goodsInfo.stock}}</span><span class="pointer" style="color: #FD4C2B;" @click="handleClick(item)">删除</span></li>
+                            <li v-for="item in selectedList" :key="item.goodsInfo.id" class="proList">
+                                <span>{{item.goodsInfo.name}}</span>
+                                <span>{{item.goodsInfo.specs}}</span>
+                                <span>{{item.goodsInfo.stock}}</span>
+                                <span class="pointer" style="color: #FD4C2B;" @click="handleClick(item)">删除</span>
+                            </li>
                         </ul>
                     </el-form-item>
                 </div>
@@ -181,6 +186,7 @@ export default {
     },
     methods: {
         handleClick(item) {
+            this.currentData.delItem = Object.assign({},item);
             this.selectedList.splice(item, 1);
         },
         checkZero(event,val,ele) {

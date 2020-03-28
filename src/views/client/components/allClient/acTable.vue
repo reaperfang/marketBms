@@ -34,7 +34,11 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="balance" label="余额" sortable="custom"></el-table-column>
+      <el-table-column label="余额" sortable="custom">
+        <template slot-scope="scope">
+          ¥{{scope.row.balance}}
+        </template>
+      </el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
       <el-table-column prop="totalDealMoney" label="累计消费金额" sortable></el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
