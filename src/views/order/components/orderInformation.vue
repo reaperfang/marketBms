@@ -688,7 +688,7 @@ export default {
                 } else if(row.orderStatus == 1) {
                     return '待成团'
                 } else if(row.orderStatus == 2) {
-                    return '关闭'
+                    return '交易关闭'
                 } else if(row.orderStatus == 3) {
                     return '待发货'
                 } else if(row.orderStatus == 4) {

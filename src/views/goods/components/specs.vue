@@ -82,8 +82,8 @@
                     <el-input type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
                 </td>
                 <td>
-                    <el-input @blur="codeBlur(item.code)" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
-                    <span></span>
+                    <el-input @blur="codeBlur(item.code, index)" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <!-- <p class="error-message" v-if="item.showCodeSpan">输入格式有误</p> -->
                 </td>
                 <td>
                     <div class="spec-operate">
@@ -286,8 +286,16 @@ export default {
         
     },
     methods: {
-        codeBlur(code) {
-            
+        codeBlur(code, index) {
+            if(!/^[a-zA-Z0-9_]{6,}$/.test(code)) {
+                this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                    showCodeSpan: true
+                }))
+            } else {
+                this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                    showCodeSpan: false
+                }))
+            }
         },
         costPriceChange(value) {
             console.log(value)
@@ -410,6 +418,12 @@ export default {
     .specs ::-webkit-scrollbar-thumb {
         background-color: #bbb;
         height: 10px;
+    }
+    .error-message {
+        font-size: 12px;
+        color: #FD4C2B;
+        margin-left: 5px;
+        margin-top: 2px;
     }
 </style>
 
