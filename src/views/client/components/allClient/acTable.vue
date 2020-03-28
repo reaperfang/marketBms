@@ -150,6 +150,7 @@ export default {
       }
       this.$set(this.newForm,'orderByCondition', tOrder);
       this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
     },
     getRowKeys(row) {
       return row.id
