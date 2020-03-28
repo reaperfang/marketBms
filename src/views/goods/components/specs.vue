@@ -82,7 +82,7 @@
                     <el-input type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
                 </td>
                 <td>
-                    <el-input :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <el-input @blur="codeBlur(item.code)" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
                 </td>
                 <td>
                     <div class="spec-operate">
@@ -284,6 +284,9 @@ export default {
         
     },
     methods: {
+        codeBlur(code) {
+            
+        },
         costPriceChange(value) {
             console.log(value)
         }
