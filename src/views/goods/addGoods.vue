@@ -3017,6 +3017,7 @@ $blue: #655EFF;
         }
         ul {
             display: flex;
+            flex-wrap: wrap;
             li {
                 margin-right: 5px;
             }
@@ -3178,6 +3179,7 @@ $blue: #655EFF;
             margin-right: 15px;
             margin-bottom: 10px;
             border-radius:4px;
+            margin-bottom: 5px;
             i {
                 margin-left: 15px;
                 display: inline-block;
