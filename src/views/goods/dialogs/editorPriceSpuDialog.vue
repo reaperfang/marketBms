@@ -41,6 +41,7 @@ export default {
     methods: {
         submit() {
             if(this.data.goodsInfos.every(val => val.activity)) {
+                this.visible = false
                 return
             }
             if(this.data.goodsInfos.some(val => val.salePrice < 0)) {
