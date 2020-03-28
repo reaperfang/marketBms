@@ -1,7 +1,8 @@
 <template>
     <div class="order">
-        <order ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
-        <el-checkbox @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+        <order v-if="list.length" ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
+        <Empty v-else></Empty>
+        <el-checkbox v-if="!authHide" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
         <el-button v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="wad">批量补填物流</el-button>
         <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
@@ -11,6 +12,7 @@ import Order from './order'
 import Pagination from '@/components/Pagination'
 import utils from "@/utils";
 import anotherAuth from '@/mixins/anotherAuth'
+import Empty from '@/components/Empty'
 
 export default {
     mixins: [anotherAuth],
@@ -121,7 +123,8 @@ export default {
     },
     components: {
         Order,
-        Pagination
+        Pagination,
+        Empty
     }
 }
 </script>

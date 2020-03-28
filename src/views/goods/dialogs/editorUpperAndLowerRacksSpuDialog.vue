@@ -1,5 +1,5 @@
 <template>
-    <DialogBase width="500px" :visible.sync="visible" @submit="submit" title="编辑上下架" :hasCancel="hasCancel" :showFooter="showFooter">
+    <DialogBase width="500px" :visible.sync="visible" title="编辑上下架" :hasCancel="hasCancel" :showFooter="showFooter">
         <div class="content-box">
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
