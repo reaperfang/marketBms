@@ -425,6 +425,8 @@ export default {
             bottom:-50px;
             width: 100%;
             overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
           }
           .operate{
             width: 100%;

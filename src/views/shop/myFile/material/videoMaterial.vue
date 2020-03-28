@@ -434,6 +434,9 @@ export default {
         }
         .img_name{
           padding: 5px 0px;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
         }
       }
     }
