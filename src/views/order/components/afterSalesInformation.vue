@@ -297,6 +297,7 @@
                         <div class="col change-box">
                             <!-- <el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
                             <span style="font-weight:600;" v-else>{{orderAfterSale.realReturnScore || 0}}</span> -->
+                            <span v-if="orderAfterSale.orderAfterSaleStatus != 0" class="show-span">{{orderAfterSale.realReturnScore || 0}}</span>
                             <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && !showScoreInput">
                                 <span class="show-span">{{orderAfterSale.realReturnScore || 0}}</span>
                                 <span class="operate-span" @click="showScoreInput = true">修改</span>
@@ -314,6 +315,7 @@
                         <div class="col change-box">
                             <!-- <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
                             <span style="font-weight:600;" v-else>￥{{orderAfterSale.realReturnMoney || 0}}</span> -->
+                            <span v-if="orderAfterSale.orderAfterSaleStatus != 0 && orderAfterSale.type != 2" class="show-span">￥{{orderAfterSale.realReturnMoney || 0}}</span>
                             <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2 && !showMoneyInput">
                                 <span class="show-span">￥{{orderAfterSale.realReturnMoney || 0}}</span>
                                 <span class="operate-span" @click="showMoneyInput = true">修改</span>
