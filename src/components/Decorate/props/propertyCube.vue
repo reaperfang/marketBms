@@ -165,7 +165,7 @@
             <div class="type type6">
               <div class="fill_block fill_block1"  @click="selectLayout(6,1)" :class="{'active': ruleForm.templateType === 6 && blockType === 1}">
                 <img v-if="ruleForm.list['1'] && ruleForm.list['1'].url" :src="ruleForm.list['1'].url" alt="">
-                <span v-else class="default_tips">750*350像素<br/>或比例2:1</span>
+                <span v-else class="default_tips">750*375像素<br/>或比例2:1</span>
               </div>
               <div class="fill_block fill_block2">
                 <div class="fill_block fill_block3"  @click="selectLayout(6,2)" :class="{'active': ruleForm.templateType === 6 && blockType === 2}">

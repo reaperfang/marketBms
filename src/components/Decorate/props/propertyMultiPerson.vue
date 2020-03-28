@@ -145,6 +145,7 @@
       </el-form-item>
       <el-form-item label="更多设置" prop="hideSaledGoods">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
+        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
         <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <el-radio :label="1">24小时后隐藏</el-radio>
