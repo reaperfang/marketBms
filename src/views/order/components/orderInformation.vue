@@ -144,7 +144,7 @@
                     label="商品状态"
                     class-name="goods-status">
                     <template slot-scope="scope">
-                        <template v-if="scope.row.orderAfterStatus">
+                        <template v-if="scope.row.afterSaleStatus">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
                         </template>
                         <template v-else>
@@ -668,19 +668,19 @@ export default {
             }
         },
         orderStatusFilter(row) {
-            if(row.orderAfterStatus) {
-                if(row.orderAfterStatus == 0) {
-                    return '提交申请'
-                } else if(row.orderAfterStatus == 1) {
-                    return '待退货'
+            if(row.afterSaleStatus== 1 || row.afterSaleStatus== 2) {
+                if(row.orderAfterStatus == 1) {
+                    return '换货中'
                 } else if(row.orderAfterStatus == 2) {
-                    return '待处理'
-                } else if(row.orderAfterStatus == 3) {
-                    return '待收货'
-                } else if(row.orderAfterStatus == 4) {
-                    return '已完成'
-                } else if(row.orderAfterStatus == 5) {
-                    return '已关闭'
+                    return '退款中'
+                }else if(row.orderAfterStatus == 3) {
+                    return '退货中'
+                }else if(row.orderAfterStatus == 4) {
+                    return '退款完成'
+                }else if(row.orderAfterStatus == 5) {
+                    return '换货完成'
+                }else if(row.orderAfterStatus == 6) {
+                    return '退货完成'
                 }
             } else {
                 if(row.orderStatus == 0) {
@@ -688,7 +688,7 @@ export default {
                 } else if(row.orderStatus == 1) {
                     return '待成团'
                 } else if(row.orderStatus == 2) {
-                    return '关闭'
+                    return '交易关闭'
                 } else if(row.orderStatus == 3) {
                     return '待发货'
                 } else if(row.orderStatus == 4) {

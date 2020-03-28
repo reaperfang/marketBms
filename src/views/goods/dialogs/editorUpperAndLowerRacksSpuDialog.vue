@@ -1,5 +1,5 @@
 <template>
-    <DialogBase width="500px" :visible.sync="visible" @submit="submit" title="编辑上下架" :hasCancel="hasCancel" :showFooter="showFooter">
+    <DialogBase width="500px" :visible.sync="visible" title="编辑上下架" :hasCancel="hasCancel" :showFooter="showFooter">
         <div class="content-box">
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
@@ -52,6 +52,10 @@ export default {
     },
     methods: {
         submit() {
+            if(this.data.goodsInfos.every(val => val.activity)) {
+                this.visible = false
+                return
+            }
             this._apis.goods.productUpperOrLowerSpu({
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, status: val.status ? 1 : 0}))

@@ -82,7 +82,8 @@
                     <el-input type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
                 </td>
                 <td>
-                    <el-input :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <el-input @blur="codeBlur(item.code, index)" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <!-- <p class="error-message" v-if="item.showCodeSpan">输入格式有误</p> -->
                 </td>
                 <td>
                     <div class="spec-operate">
@@ -96,6 +97,7 @@
                 </td>
             </tr>
         </table>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
     </div>
 </template>
 <script>
@@ -197,7 +199,7 @@ export default {
             materialIndex: 0,
             material: false,
             currentDialog: '',
-            dialogVisible: true,
+            dialogVisible: false,
         }
     },
     computed: {
@@ -284,8 +286,44 @@ export default {
         
     },
     methods: {
+        codeBlur(code, index) {
+            if(!/^[a-zA-Z0-9_]{6,}$/.test(code)) {
+                this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                    showCodeSpan: true
+                }))
+            } else {
+                this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                    showCodeSpan: false
+                }))
+            }
+        },
         costPriceChange(value) {
             console.log(value)
+        },
+        imageSelected(image) {
+            if(this.material) {
+                this.list.splice(this.materialIndex, 1, Object.assign({}, this.list[this.materialIndex], {
+                    image: image.filePath,
+                    fileList: [
+                        {
+                            name: '',
+                            url: image.filePath
+                        }
+                    ]
+                }))
+                this.material = false
+            } else {
+                this.fileList.push(Object.assign({}, image, {
+                    name: image.fileName,
+                    url: image.filePath
+                }))
+                if(this.ruleForm.images != '') {
+                    this.ruleForm.images += ',' + image.filePath
+                } else {
+                    this.ruleForm.images = image.filePath
+                }
+                this.hideUpload = this.imagesLength >= 6
+            }
         }
     },
     props: {
@@ -380,6 +418,12 @@ export default {
     .specs ::-webkit-scrollbar-thumb {
         background-color: #bbb;
         height: 10px;
+    }
+    .error-message {
+        font-size: 12px;
+        color: #FD4C2B;
+        margin-left: 5px;
+        margin-top: 2px;
     }
 </style>
 

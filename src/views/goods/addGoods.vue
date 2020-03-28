@@ -1129,7 +1129,8 @@ export default {
                     volume: '',
                     specs: _specs,
                     image: '',
-                    fileList: []
+                    fileList: [],
+                    showCodeSpan: false
                 }
             })
             this.ruleForm.goodsInfos.forEach((val, index) => {
@@ -1815,6 +1816,7 @@ export default {
 
                     val.label = label
                     val.editorDisabled = true
+                    val.showCodeSpan = false
                 })
                 res.goodsInfos = this.sortGoodsInfos(res)
                 this.computedAddSpecs(res.productSpecs)
@@ -2021,6 +2023,13 @@ export default {
                     try {
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
+                        if(/!^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
+                            this.$message({
+                                message: 'SKU编码格式有误',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(this.ruleForm.goodsInfos[i].image == '') {
                             this.$message({
                                 message: '请上传图片',
@@ -3008,6 +3017,7 @@ $blue: #655EFF;
         }
         ul {
             display: flex;
+            flex-wrap: wrap;
             li {
                 margin-right: 5px;
             }
@@ -3169,6 +3179,7 @@ $blue: #655EFF;
             margin-right: 15px;
             margin-bottom: 10px;
             border-radius:4px;
+            margin-bottom: 5px;
             i {
                 margin-left: 15px;
                 display: inline-block;
