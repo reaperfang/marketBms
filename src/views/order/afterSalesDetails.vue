@@ -21,7 +21,7 @@
                 <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
+        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
@@ -65,6 +65,9 @@ export default {
         }
     },
     methods: {
+        onSubmit() {
+            this.getDetail()
+        },
         onGetDetail() {
             this.getDetail()
         },
@@ -146,7 +149,7 @@ export default {
                 this.orderType = res.orderType
                 this.catchRealReturnWalletMoney = this.orderAfterSale.realReturnWalletMoney
                 this.catchRealReturnBalance = this.orderAfterSale.realReturnBalance
-                this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
+                //this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
                 this.orderSendInfo = res.orderSendInfo
             }).catch(error => {
                 this.visible = false

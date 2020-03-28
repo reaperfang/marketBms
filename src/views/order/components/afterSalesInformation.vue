@@ -375,7 +375,7 @@
             width="800px"
             :close-on-click-modal="false"
             :close-on-press-escape="false">
-            <template v-if="bigMessage.image">
+            <template v-if="!/\.mp4|\.ogg$/.test(bigMessage.url)">
                 <div class="images-box">
                     <div @click="goImage('left')" class="lefter"></div>
                     <div class="image">
@@ -440,6 +440,14 @@ export default {
                     return '用户收货'//
                 case 9:
                     return '退款'
+                case 10:
+                    return '修改退还积分'
+                case 11:
+                    return '修改退还金额'
+                case 12:
+                    return '无需用户退货'
+                case 13:
+                    return '需要用户退货'
             }
         },
         refundwayFilter(code) {// 1线上 2线下
@@ -499,6 +507,7 @@ export default {
                             message: '修改成功！',
                             type: 'success'
                         });
+                this.$emit('submit')
             }).catch(error => {
                 this.$message.error({
                     message: error,
@@ -516,6 +525,7 @@ export default {
                             message: '修改成功！',
                             type: 'success'
                         });
+                this.$emit('submit')
             }).catch(error => {
                 this.$message.error({
                     message: error,
@@ -526,17 +536,20 @@ export default {
         goImage(flag) {
             let index = this.bigMessage.imageIndex
             let list = this.bigMessage.descriptionImages
-
+            
             if(flag == 'left') {
                 index = index - 1
+                this.bigMessage.imageIndex = index
+
                 if(index >=0) {
-                    this.bigMessage.url = this.bigMessage.descriptionImages[index].image
+                    this.bigMessage.url = list[index].image
                     this.$forceUpdate()
                 }
             } else {
                 index = index + 1
-                if(index <= this.bigMessage.descriptionImages.length - 1) {
-                    this.bigMessage.url = this.bigMessage.descriptionImages[index].image
+                this.bigMessage.imageIndex = index
+                if(index <= list.length - 1) {
+                    this.bigMessage.url = list[index].image
                     this.$forceUpdate()
                 }
             }
