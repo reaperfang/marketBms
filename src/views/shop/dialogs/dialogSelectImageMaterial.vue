@@ -16,7 +16,7 @@
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
                 <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
                   <template >
-                    <div class="cell-item" v-for="(item,key) in materialResultList" :key="key" @click="selectImg($event, item)">
+                    <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
                       <img :src="item.filePath" alt="加载错误"/> 
                       <div class="item-body">
                           <div class="item-desc">{{item.fileName}}</div>
@@ -58,8 +58,9 @@
           <el-button type="primary" @click="fetchSystemIcon">搜 索</el-button>
         </div>
         <div class="icon_wrapper" ref="systemWrapper" v-loading="localLoading">
+          <div style="display:none">{{systemSelectedItem}}</div>
             <ul v-if="!localLoading">
-              <li class="cell-item" v-for="(item,key) in systemResultList" :key="key" @click="selectImg($event, item)">
+              <li class="cell-item" :class="{'img_active': systemGroupId === systemLoadedGroupId ?  (systemRecordMap[systemGroupId] && systemRecordMap[systemGroupId].id === item.id) : (systemRecordMap[''] && systemRecordMap[''].id === item.id)}" v-for="(item,key) in systemResultList" :key="key" @click="selectImg(item)">
                 <img :src="item.address" alt="加载错误"/> 
                 <!-- <p class="item-desc">{{item.id}}</p> -->
               </li>
@@ -70,7 +71,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="systemCurrentPage"
-            :page-sizes="[50, 100, 150, 200, 300]"
+            :page-sizes="[48, 96, 144, 240, 480]"
             :page-size="systemPageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="systemTotal*1"
@@ -101,7 +102,7 @@
                 <div v-loading="uploadLoading">
                   <waterfall :col='3' :width="250" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
                     <template >
-                      <div class="cell-item" v-for="(item,key) in fileList" :key="key" @click="selectImg($event, item)">
+                      <div class="cell-item" :class="{'img_active': localSelectedItem && localSelectedItem.id === item.id}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
                         <img :src="item.url" alt="加载错误"/> 
                         <div class="item-body">
                             <div class="item-desc">{{item.original}}</div>
@@ -181,13 +182,15 @@ export default {
       /* 系统图库 */
       localLoading: true, //系统图库loading
       systemResultList: [], //系统图库列表图片数据
-      systemPageSize:50,    //系统图库一页条数
+      systemPageSize:48,    //系统图库一页条数
       systemCurrentPage:1,   //系统图库当前页
       systemTotal:0,  //系统图库总条数
       systemGroupId:'',  //系统图库分组id
       systemGroupList:[],  //系统图库分组列表
       systemTabInited: false,  //系统图标点击tab初始化
       systemSelectedItem: null, //系统图标选中的图片对象（最终发送给调用页面的结果）
+      systemRecordMap: {},  //系统图标库选中记录表,
+      systemLoadedGroupId: ''  //加载后确认的系统图标分组Id
     };
   },
   computed: {
@@ -233,7 +236,14 @@ export default {
           this.preload(this.fileList, 'url');
         }
       }
+    },
+
+    //切换系统图标分组分页重置
+    systemGroupId(newValue) {
+      this.systemCurrentPage = 1;
+      this.systemTotal = 0;
     }
+
   },
   created() {
     this.fetchMaterial();
@@ -264,6 +274,7 @@ export default {
         sourceMaterialType:"0",
         fileName: this.materialName
       }).then((response)=>{
+        this.materialSelectedItem = null;
         this.materialResultList = response.list;
         this.preload(response.list, 'filePath');
         this.materialTotal = response.total;
@@ -284,6 +295,8 @@ export default {
       }).then((response)=>{
         this.systemResultList = response.list
         this.systemTotal = response.total
+        this.systemLoadedGroupId = this.systemGroupId;
+        this.systemSelectedItem = this.systemRecordMap[this.systemGroupId];
         this.preload(this.systemResultList, 'address');
       }).catch((error)=>{
         this.$message.error(error);
@@ -406,24 +419,16 @@ export default {
     /**************************** 瀑布流相关 *******************************/
 
     /* 选中图片 */
-    selectImg(event, item) {
-      let ref = '';
+    selectImg(item) {
       if(this.currentTab == 'material') {
        this.materialSelectedItem = item;
-        ref = 'materialWrapper';
       }else if(this.currentTab == 'system') {
         this.systemSelectedItem = item;
-        ref = 'systemWrapper';
+        this.systemRecordMap[''] = item; 
+        this.systemRecordMap[item.groupId] = item;
       }else if(this.currentTab === 'local') {
         this.localSelectedItem = item;
-        ref = 'localWrapper';
       }
-
-      const imgs = this.$refs[ref].querySelectorAll('.cell-item');
-      for(let item of imgs) {
-        item.className = 'cell-item';
-      };
-      event.currentTarget.className = 'cell-item img_active';
     },
 
     /* 预加载 */
