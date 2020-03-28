@@ -52,6 +52,10 @@ export default {
     },
     methods: {
         submit() {
+            if(this.data.goodsInfos.every(val => val.activity)) {
+                this.visible = false
+                return
+            }
             this._apis.goods.productUpperOrLowerSpu({
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, status: val.status ? 1 : 0}))
