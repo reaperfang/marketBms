@@ -73,7 +73,18 @@ export default {
     //检查当前列是否可以多选
     checkSelection(row, index) {
       return true;
-    }
+    },
+
+     // 全选
+    selectAll(val){
+      if(val && this.tableData.length > 0){
+        this.tableData.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
   }
 }
 </script>

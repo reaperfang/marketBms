@@ -49,7 +49,7 @@
 import utils from '@/utils';
 import dialogSelectInfo from '@/views/shop/dialogs/decorateDialogs/dialogSelectInfo';
 export default {
-  name: "6infoSet",
+  name: "sixInfoSet",
   components: {dialogSelectInfo},
   data() {
 
