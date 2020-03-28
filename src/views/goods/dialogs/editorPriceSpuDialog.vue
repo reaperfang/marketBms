@@ -1,5 +1,5 @@
 <template>
-    <DialogBase width="500px" :visible.sync="visible" @submit="submit" title="编辑售卖价" :hasCancel="hasCancel" :showFooter="showFooter">
+    <DialogBase width="500px" :visible.sync="visible" title="编辑售卖价" :hasCancel="hasCancel" :showFooter="showFooter">
         <div class="content-box">
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
@@ -41,6 +41,14 @@ export default {
     methods: {
         submit() {
             if(this.data.goodsInfos.every(val => val.activity)) {
+                this.visible = false
+                return
+            }
+            if(this.data.goodsInfos.some(val => val.salePrice < 0)) {
+                this.$message({
+                message: '售卖价不可以小于0',
+                type: 'warning'
+                });
                 return
             }
             this._apis.goods.changePriceSpu({

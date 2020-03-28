@@ -70,7 +70,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="systemCurrentPage"
-            :page-sizes="[10, 20, 30, 50, 100]"
+            :page-sizes="[50, 100, 150, 200, 300]"
             :page-size="systemPageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="systemTotal*1"
@@ -181,7 +181,7 @@ export default {
       /* 系统图库 */
       localLoading: true, //系统图库loading
       systemResultList: [], //系统图库列表图片数据
-      systemPageSize:40,    //系统图库一页条数
+      systemPageSize:50,    //系统图库一页条数
       systemCurrentPage:1,   //系统图库当前页
       systemTotal:0,  //系统图库总条数
       systemGroupId:'',  //系统图库分组id

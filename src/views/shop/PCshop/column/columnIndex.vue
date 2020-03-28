@@ -1,7 +1,7 @@
 <template>
   <div class="gbc_container">
     <h2>栏目内容</h2>
-    <el-table :data="tableList" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+    <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
       <el-table-column
       type="index"
       label="序号"
@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       loading: true,
-      tableList:[]
+      tableData:[]
     }
   },
   created() {
@@ -38,7 +38,7 @@ export default {
       this.loading = true;
       this._apis.shop.getWindowList().then((response)=>{
          this.loading = false;
-         this.tableList = response;
+         this.tableData = response;
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
@@ -49,22 +49,22 @@ export default {
       let pageName = '';
       switch(Number(row.type)) {
         case 1:
-          pageName = '1picText';
+          pageName = 'onePicText';
           break;
         case 2:
-          pageName = '2goodsSet';
+          pageName = 'twoGoodsSet';
           break;
         case 3:
-          pageName = '3picText';
+          pageName = 'threePicText';
           break;
         case 4:
-          pageName = '4goodsSet';
+          pageName = 'fourGoodsSet';
           break;
         case 5:
-          pageName = '5picText';
+          pageName = 'fivePicText';
           break;
         case 6:
-          pageName = '6infoSet';
+          pageName = 'sixInfoSet';
           break;
       }
       this._routeTo(pageName, {type: row.type});

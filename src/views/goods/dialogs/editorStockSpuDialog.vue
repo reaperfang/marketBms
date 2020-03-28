@@ -1,5 +1,5 @@
 <template>
-    <DialogBase width="500px" :visible.sync="visible" @submit="submit" title="编辑库存" :hasCancel="hasCancel" :showFooter="showFooter">
+    <DialogBase width="500px" :visible.sync="visible" title="编辑库存" :hasCancel="hasCancel" :showFooter="showFooter">
         <div class="content-box">
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
@@ -39,6 +39,13 @@ export default {
     },
     methods: {
         submit() {
+            if(this.data.goodsInfos.some(val => val.stock < 0)) {
+                this.$message({
+                message: '库存不能小于0',
+                type: 'warning'
+                });
+                return
+            }
             this._apis.goods.productUpdateStockSpu({
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, stock: val.stock}))

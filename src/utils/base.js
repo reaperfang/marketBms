@@ -1,4 +1,4 @@
-
+import { getToken } from '@/system/auth'
 /**
  * 合并对象
  * 
@@ -171,6 +171,18 @@ export function GetQueryString(name) {
 	var r = window.location.search.substr(1).match(reg);
 	if (r != null) return unescape(r[2]);
 	return null;
+}
+
+/* 添加新营销活动 */
+export function addNewApply(path, access) {
+  let token = getToken('authToken')
+  let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+  let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
+  let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
+  let cid = shopInfo && shopInfo.id || ''
+  let newUrl = `${process.env.DATA_API}/vue/marketing${path}?access=${access}&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+  let newWindow = window.open("about:blank");
+  newWindow.location.href = newUrl;
 }
 
 

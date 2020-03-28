@@ -1,5 +1,5 @@
 <template>
-    <div class="order">
+    <div v-if="list.length" class="order">
         <div class="order-header">
             <div class="item goods">
                 <div class="row justify-between">
@@ -116,10 +116,12 @@
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
     </div>
+    <Empty v-else></Empty>
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
 import anotherAuth from '@/mixins/anotherAuth'
+import Empty from '@/components/Empty'
 
 export default {
     mixins: [anotherAuth],
@@ -267,7 +269,8 @@ export default {
         },
     },
     components: {
-        CloseOrderDialog
+        CloseOrderDialog,
+        Empty
     }
 }
 </script>

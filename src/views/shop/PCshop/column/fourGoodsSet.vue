@@ -1,6 +1,6 @@
 <template>
     <div class="gbc_container">
-      <h2>图文广告编辑</h2>
+      <h2>商品橱窗编辑</h2>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入标题" type="textarea" clearable autosize></el-input>
@@ -16,7 +16,7 @@
           <div class="add_button" v-if="!ruleForm.photo" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
             <i class="inner"></i>
           </div>
-          建议尺寸：583*748像素
+          建议尺寸：633*908像素
         </el-form-item>
         <el-form-item label="按钮使用" prop="buttonType">
           <el-radio-group v-model="ruleForm.buttonType">
@@ -27,29 +27,33 @@
         <el-form-item label="按钮名称" prop="buttonName" v-if="ruleForm.buttonType == 1">
           <el-input v-model="ruleForm.buttonName" placeholder="请输入按钮名称" clearable></el-input>
         </el-form-item>
-        <el-form-item label="数据来源" prop="sourceType">
-          <el-radio-group v-model="ruleForm.sourceType">
-            <el-radio :label="1">商品</el-radio>
-            <el-radio :label="2">商品分类</el-radio>
-          </el-radio-group>
+        <el-form-item label="商品分类" prop="source">
+          <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{selectedGroup && selectedGroup.name || '从商品分类中选择'}}</el-button>
         </el-form-item>
-        <el-form-item label="商品" v-if="ruleForm.sourceType === 1" prop="source">
-          <div class="img_preview" v-if="ruleForm.sourceType === 1" v-loading="loading">
+        <el-form-item label="选择货品(2个)" prop="commodity">
+          <div class="goods_list" v-loading="loading">
             <ul>
-              <li v-if="selectedGoods" :title="selectedGoods.name">
-                <img :src="selectedGoods.mainImage" alt="">
-                <span @click="pageDialogVisible=true; currentPageDialog='goods'">更换商品</span>
-                <i class="delete_btn" @click.stop="deleteItem()"></i>
-              </li>
-              <li v-else class="add_button" @click="pageDialogVisible=true; currentPageDialog='goods'">
-                <i class="inner"></i>
-              </li>
+              <template>
+                <li v-if="selectedGoods[0] && selectedGoods[0].goodsInfo" class="img_preview">
+                  <img :src="selectedGoods[0].goodsInfo.image" alt="">
+                  <span @click="currentSelectedGoods = 0;dialogVisible=true; currentDialog='dialogSelectGoodsSKU'">更换货品</span>
+                </li>
+                <li v-else class="add_button" @click="currentSelectedGoods = 0;dialogVisible=true; currentDialog='dialogSelectGoodsSKU'">
+                  <i class="inner"></i>
+                </li>
+              </template>
+              
+              <template>
+                <li v-if="selectedGoods[1] && selectedGoods[1].goodsInfo" class="img_preview">
+                  <img :src="selectedGoods[1].goodsInfo.image" alt="">
+                  <span @click="currentSelectedGoods = 1;dialogVisible=true; currentDialog='dialogSelectGoodsSKU'">更换货品</span>
+                </li>
+                <li v-else class="add_button" @click="currentSelectedGoods = 1;dialogVisible=true; currentDialog='dialogSelectGoodsSKU'">
+                  <i class="inner"></i>
+                </li>
+              </template>
             </ul>
           </div>
-        </el-form-item>
-        <el-form-item label="商品分类" v-if="ruleForm.sourceType === 2" prop="source">
-          <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{selectedGroup && selectedGroup.name || '从商品分类中选择'}}</el-button>
-          <span v-if="selectedGroup && selectedGroup.name" @click="deleteItem()" style="cursor:pointer;">删除</span>
         </el-form-item>
       </el-form>
       <div class="confirm_btn">
@@ -58,7 +62,7 @@
       </div>
     
        <!-- 动态弹窗 -->
-      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
+      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" :goodsEcho.sync="selectedGoods" @dialogDataSelected="goodsSKUSelected" :multiple="false"></component>
 
       <!-- 商品分类选择弹框 -->
       <DialogBase :visible.sync="pageDialogVisible" width="816px" :title="ruleForm.sourceType === 2 ? '选择商品': '选择商品分类'" @submit="itemSelected">
@@ -70,17 +74,38 @@
 <script>
 import utils from '@/utils';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
-import goods from "@/views/shop/dialogs/jumpLists/goods";
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
+import dialogSelectGoodsSKU from "@/views/shop/dialogs/decorateDialogs/dialogSelectGoodsSKU";
 import DialogBase from '@/components/DialogBase';
 export default {
-  name: "1picText",
-  components: {DialogBase, dialogSelectImageMaterial, goods, goodsGroup},
+  name: "fourGoodsSet",
+  components: {DialogBase, dialogSelectImageMaterial, goodsGroup, dialogSelectGoodsSKU},
   data() {
 
     var validateBlank = (rule, value, callback) => {
       if (value.trim().length === 0) {
         callback(new Error('请输入内容'));
+      } else {
+        callback();
+      }
+    };
+
+     var validateCommodity = (rule, value, callback) => {
+      let result = true;
+      if(value.length !== 2) {
+        result = false;
+      }else{
+        if(Array.isArray(value)) {
+          for(let item of value) {
+            if(item == '') {
+              result = false;
+              break;
+            }
+          }
+        }
+      }
+      if (!result) {
+        callback(new Error('请选择2个货品'));
       } else {
         callback();
       }
@@ -98,7 +123,7 @@ export default {
       pageDialogVisible: false,
 
       //数据选中相关
-      selectedGoods: null,  //选中的商品
+      selectedGoods: [{}, {}],  //选中的货品
       selectedGroup: null,  //选中的分类
       tempItem: null,   //临时选中的项
 
@@ -109,8 +134,8 @@ export default {
         photo: '',//图片
         buttonType: 1, //按钮类型 1:显示 2:隐藏
         buttonName: '立即购买', //按钮名称
-        sourceType: 1, //跳转类型：1商品，2商品分类
-        source: ''  //跳转目的地，商品id or 商品分类id
+        source: '',  //跳转目的地，商品分类id
+        commodity: [] //货品集合
       },
       rules: {
         title: [
@@ -126,12 +151,19 @@ export default {
         details: [
           { required: true, message: "请输入详情", trigger: "blur" },
           {validator: validateBlank, trigger: "blur"}
+        ], 
+        commodity: [
+          { required: true, message: "请选择2个货品", trigger: "blur" },
+          {validator: validateCommodity, trigger: "blur"}
         ],
         photo: [
           { required: true, message: "请添加图片", trigger: "change" }
         ],
         buttonType: [
           { required: true, message: "请选择按钮使用", trigger: "change" }
+        ],  
+        source: [
+          { required: true, message: "请选择商品分类", trigger: "change" }
         ], 
         buttonName: [
           { required: true, message: "请输入按钮名称", trigger: "blur" },
@@ -143,12 +175,6 @@ export default {
           },
           {validator: validateBlank, trigger: "blur"}
         ],
-        sourceType: [
-          { required: true, message: "请选择数据来源", trigger: "change" }
-        ],
-        source: [
-          { required: true, message: "请选择商品或商品分类", trigger: "change" }
-        ],
       }
     };
   },
@@ -156,10 +182,11 @@ export default {
     this.fetch();
   },
   watch: {
-    'ruleForm.sourceType': {
+    selectedGoods: {
       handler(newValue) {
-        this.deleteItem();
-      }
+        this.ruleForm.commodity = newValue.map(item => item.goodsInfo.id);
+      },
+      deep: true
     }
   },
   methods: {
@@ -171,13 +198,10 @@ export default {
       }
       this.loading = true;
       this._apis.shop.getWindow({type: this.ruleForm.type}).then((response)=>{
-         this.loading = false;
-         this.ruleForm = response;
-         if(response.sourceType == 1) {
-          this.fetchGoodsData();
-         }else if(response.sourceType == 2) {
-          this.fetchGoodsGroupData();
-         }
+        this.loading = false;
+        this.ruleForm = response;
+        this.getSkuList();
+        this.fetchGoodsGroupData();
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
@@ -203,10 +227,14 @@ export default {
       });
     },
 
-    //根据id拉取商品详情
-    fetchGoodsData() {
-        this._apis.goods.getGoodsDetail({id: this.ruleForm.source}).then((response)=>{
-          this.selectedGoods = response;
+    //根据id拉取货品列表
+    getSkuList() {
+        if(!this.ruleForm.commodity || !this.ruleForm.commodity.length) {
+          this.selectedGoods = [{}, {}]
+          return;
+        }
+        this._apis.goods.fetchGoodsList({ids: this.ruleForm.commodity, startIndex: 1, pageSize: 100}).then((response)=>{
+          this.selectedGoods = response.list;
         }).catch((error)=>{
           console.error(error);
         });
@@ -226,30 +254,22 @@ export default {
       this.ruleForm.photo = dialogData.filePath;
     },
 
+     /* 弹窗选中货品 */
+    goodsSKUSelected(dialogData) {
+      this.selectedGoods[this.currentSelectedGoods] = dialogData;
+      this.ruleForm.commodity = this.selectedGoods.map(item => item.goodsInfo.id);
+    },
+
     /* 商品分类弹窗临时选中 */
     tempSelected(row) {
       this.tempItem = row;
     },
 
-     /* 弹窗选中商品/分类 */
+     /* 弹窗选中商品分类 */
     itemSelected() {
       this.ruleForm.source = this.tempItem.data.id;
-      if(this.ruleForm.sourceType == 1) {
-        this.selectedGoods = this.tempItem.data;
-      }else if(this.ruleForm.sourceType == 2){
-        this.selectedGroup = this.tempItem.data;
-      }
+      this.selectedGroup = this.tempItem.data;
     },
-
-    /* 删除 */
-    deleteItem() {
-      this.ruleForm.source = '';
-       if(this.ruleForm.sourceType == 1) {
-        this.selectedGoods = null;
-      }else if(this.ruleForm.sourceType == 2){
-        this.selectedGroup = null;
-      }
-    }
 
   },
 
@@ -261,9 +281,6 @@ export default {
   flex-direction: row;
   justify-content: center;
   padding-bottom: 30px;
-}
-/deep/textarea{
-  resize: none;
 }
 </style>
 

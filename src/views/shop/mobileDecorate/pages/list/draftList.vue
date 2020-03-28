@@ -54,8 +54,8 @@
       </el-table>
       <div class="multiple_selection">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
-        <el-button type="primary" plain v-popover:popover4  :disabled="!this.multipleSelection.length">批量改分类</el-button>
-        <el-button type="warning" plain @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+        <el-button class="border-button" v-popover:popover4  :disabled="!this.multipleSelection.length">批量改分类</el-button>
+        <el-button class="border-button" @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
         <el-popover
           ref="popover4"
           placement="right"
@@ -259,18 +259,7 @@ export default {
       }).catch((error)=>{
         this.$message.error(error);
       });
-    },
-
-      // 全选
-    selectAll(val){
-      if(val && this.tableData.length > 0){
-        this.tableData.forEach((row)=>{
-           this.$refs.multipleTable.toggleRowSelection(row,true);
-        })
-      }else{
-        this.$refs.multipleTable.clearSelection();
-      }
-    },
+    }
   }
 }
 </script>
