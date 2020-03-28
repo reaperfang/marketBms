@@ -102,14 +102,14 @@
                         <template slot-scope="scope">
                             <span class="price">
                                 {{Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice))}}
-                                <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = scope.row; currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
+                                <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
                             </span>
                         </template>
                     </el-table-column>
                     <el-table-column
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{red: scope.row.warningStock && (scope.row.stock <= scope.row.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = scope.row)" class="i-bg pointer"></i></span>
+                            <span :class="{red: scope.row.warningStock && (scope.row.stock <= scope.row.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
