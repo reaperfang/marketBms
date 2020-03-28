@@ -12,7 +12,7 @@
         </el-form-item>
       </div>
     </el-form>
-    <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :row-key="getRowKey">
+    <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :row-key="getRowKey">
         <el-table-column
           type="selection"
           :selectable="itemSelectable"
@@ -47,9 +47,12 @@
         </el-table-column>
         <div slot="empty" class="table_empty">
           <img src="../../../../assets/images/table_empty.png" alt="">
-          <div class="tips">暂无数据<span @click="addNewApply('/application/promotion/addCoupon')">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
+          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addCoupon', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
         </div>
       </el-table>
+      <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+      </div>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -70,7 +73,6 @@ import DialogBase from "@/components/DialogBase";
 import tableBase from '@/components/TableBase';
 import utils from "@/utils";
 import uuid from 'uuid/v4';
-import { getToken } from '@/system/auth'
 export default {
   name: "dialogSelectCoupon",
   extends: tableBase,
@@ -89,9 +91,6 @@ export default {
   data() {
     return {
       pageSize: 5,
-      tableList: [],
-      multipleSelection: [],
-      pageNum: 1,
       ruleForm: {
         pageNum: 1,
         name: '',
@@ -136,7 +135,7 @@ export default {
         tempForm.name = '';
       }
       this._apis.shop.getCouponList(loadAll? tempForm: this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -166,20 +165,6 @@ export default {
 
     getRowKey(row) {
       return row.id
-    },
-
-    /* 添加新营销活动 */
-    addNewApply(path) {
-      let token = getToken('authToken')
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-      let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
-      let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
-      let cid = shopInfo && shopInfo.id || ''
-      let newUrl = `${process.env.DATA_API}/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
-      // let newUrl = `http://test-omo.aiyouyi.cn/vue/marketing${path}?access=3&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
-
-      let newWindow = window.open("about:blank");
-      newWindow.location.href = newUrl;
     }
   }
 };

@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="table">
-      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <!-- <el-table-column
           type="selection"
           :selectable='selectInit'
@@ -107,7 +107,7 @@ export default {
   extends: tableBase,
   data () {
     return {
-      tableList:[],
+      tableData:[],
       ruleForm: {
         title: '',
         type: '',
@@ -180,7 +180,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getInfoList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
 

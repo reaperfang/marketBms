@@ -18,11 +18,10 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('p_createInfo')">新建资讯</el-button>
-        <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
     <div class="table">
-      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"
           :selectable='selectInit'
@@ -90,6 +89,10 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+      </div>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -114,7 +117,7 @@ export default {
   extends: tableBase,
   data () {
     return {
-      tableList:[
+      tableData:[
         {
           name: '表格适合各项字段长度',
           coverStatus: 1,
@@ -146,7 +149,7 @@ export default {
         status: 1
       },
       visible: false,  //是否显示批量该分类浮层
-      isFindPrev: false  //是否向上查询了一页
+      isFindPrev: false//是否向上查询了一页
     }
   },
   created() {
@@ -212,7 +215,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getInfoList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
 

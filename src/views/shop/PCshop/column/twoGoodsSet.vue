@@ -39,7 +39,7 @@
 import utils from '@/utils';
 import dialogSelectGoodsSKU from "@/views/shop/dialogs/decorateDialogs/dialogSelectGoodsSKU";
 export default {
-  name: "3picText",
+  name: "twoGoodsSet",
   components: {dialogSelectGoodsSKU},
   data() {
 
