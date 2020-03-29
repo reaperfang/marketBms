@@ -19,7 +19,7 @@
                 <el-tab-pane label="订单信息" name="order">
                     <orderInformation :orderInfo="orderDetail.orderInfo" :orderDetail="orderDetail" @getDetail="getDetail"></orderInformation>
                 </el-tab-pane>
-                <el-tab-pane v-if="orderDetail.orderSendItemMap && orderDetail.orderSendItemMap.length" label="发货信息" name="delivery">
+                <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
             </el-tabs>
