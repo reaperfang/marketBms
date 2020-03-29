@@ -644,6 +644,8 @@ export default {
                     return '商户备注'
                 case 10:
                     return '修改收货信息'
+                case 11:
+                    return '自动发货'
             }
         },
         yingshouFilter(val) {
