@@ -139,6 +139,13 @@ export default {
             this.$emit('reject')
         },
         drawback(id) {
+            if(this.orderAfterSale.isSellerReceived == 0) {
+                this.$message({
+                message: '请先确认收货',
+                type: 'warning'
+                });
+                return
+            }
             this._apis.order.orderAfterSaleDrawback({id}).then((res) => {
                 this.$message.success('已发起退款，系统处理中。');
                 this.$emit('getDetail')
