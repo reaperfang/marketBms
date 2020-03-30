@@ -138,6 +138,7 @@ export default {
       this.getSkuList(val, this.pageSize);
     },
     submit() {
+        console.log(this.delItem);
         let selectedRows = this.$refs.skuTable.selection;
         if(selectedRows.length !== 0) {
           this.selectedList = this.selectedList.concat(selectedRows);
@@ -233,6 +234,25 @@ export default {
           })
           this.skuList = [].concat(response.list);
           this.total = response.total;
+          // let productInfoIds;
+          // if(!!this.data.productInfoIds) {
+          //   if(this.data.productInfoIds.indexOf(',') !== -1) {
+          //     productInfoIds = this.data.productInfoIds.split(',');
+          //   }else{
+          //     productInfoIds = [this.data.productInfoIds]
+          //   }
+          // }
+          // if(productInfoIds && productInfoIds.length > 0) {
+          //   productInfoIds.map((v) => {
+          //       this.skuList.forEach(row => {
+          //           if(row.goodsInfo.id == v) {
+          //             this.$nextTick(() => {
+          //               this.$refs.skuTable.toggleRowSelection(row);
+          //             })
+          //           }
+          //       })
+          //   })
+          // }
         })
         .catch(error => {
           console.log(error);

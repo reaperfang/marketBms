@@ -186,8 +186,7 @@ export default {
     },
     methods: {
         handleClick(item) {
-            let productInfoIds = this.currentData.productInfoIds;
-            this.currentData = {delItem:item, productInfoIds: productInfoIds};
+            this.currentData.delItem = Object.assign({},item);
             this.selectedList.splice(item, 1);
         },
         checkZero(event,val,ele) {
