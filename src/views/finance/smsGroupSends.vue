@@ -48,7 +48,7 @@
         <div class="item">
           <span class="money">当前短信余额</span>
           <span class="num">
-            <em>{{survey.accountBalance | quantity}}{{survey.accountBalance | displayCount}}</em>
+            <em>{{survey.accountBalance | quantity}}{{survey.accountBalance | displayMoney}}</em>
           </span>
         </div>
         <div class="item">
