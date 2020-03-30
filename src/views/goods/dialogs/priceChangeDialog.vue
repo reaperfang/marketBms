@@ -98,6 +98,12 @@ export default {
     .first {
         margin-top: 10px;
     }
+    /deep/ .el-form .el-form-item:nth-child(2) {
+        margin-left: 112px!important;
+    }
+    /deep/ .el-form-item__content p {
+        margin-left: -109px;
+    }
 </style>
 
 
