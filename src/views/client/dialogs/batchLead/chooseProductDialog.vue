@@ -85,6 +85,7 @@
 <script>
 import DialogBase from "@/components/DialogBase";
 export default {
+  props: ["data"],
   name: "chooseProductDialog",
   data() {
     return {
@@ -104,13 +105,8 @@ export default {
   },
   watch: {
     data(newValue, oldValue) {
-      this.delItem = newValue.delItem;
-      //设为可选
-      this.skuList.map((item) => {
-        if(item.goodsInfo.id == this.delItem.goodsInfo.id) {
-          this.$set(item, 'noselected', false);
-        }
-      });
+      console.log(1);
+      this.delItem = newValue
     }
   },
   methods: {

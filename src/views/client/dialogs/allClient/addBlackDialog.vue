@@ -5,28 +5,24 @@
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
-                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10"></el-checkbox>
+                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon"></el-checkbox>
                 <div class="form_container fl">
-                    <div class="a_d" v-for="(i,index) in couponIds" :key="index">
-                        <el-select v-model="i.id" style="margin-bottom: 10px" clearable @change="handleChange">
-                            <el-option v-for="item in allCoupons" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                        </el-select>
-                        <span class="marL20 addMainColor pointer" @click="deleteCoupon(index)">删除</span>
+                    <div class="a_d" v-for="(item,index) in selectedCoupons" :key="index">
+                        <span class="a_d_name">{{item.name}}</span>
+                        <el-input-number v-model="item.frozenNum" :min="1"></el-input-number>
+                        <span class="marL20 pointer a_d_delete" @click="deleteCoupon(index)">删除</span>
                     </div>
                 </div>
-                <span class="add" @click="addCouponSel">添加</span>
             </div>
             <div class="clearfix">
-                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT10" style="margin-left: 86px"></el-checkbox>
+                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode"></el-checkbox>
                 <div class="form_container fl">
-                    <div class="a_d" v-for="(i,index) in codeIds" :key="index">
-                        <el-select v-model="i.id" style="margin-bottom: 10px" clearable @change="handleChange2">
-                            <el-option v-for="item in allCodes" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                        </el-select>
-                        <span class="marL20 addMainColor pointer" @click="deleteCode(index)">删除</span>
+                    <div class="a_d" v-for="(item,index) in selectedCodes" :key="index">
+                        <span class="a_d_name">{{item.name}}</span>
+                        <el-input-number v-model="item.frozenNum" :min="1"></el-input-number>
+                        <span class="marL20 a_d_delete pointer" @click="deleteCode(index)">删除</span>
                     </div>
                 </div>
-                <span class="add" @click="addCodeSel">添加</span>
             </div>
             <div class="check_container">
                 <el-checkbox v-for="item in checks.slice(2,checks.length)" :key="item.id" v-model="item.checked" :label="item.name" class="check_item"></el-checkbox><br>
@@ -268,73 +264,42 @@ export default {
         },
         submit() {
             this.btnLoading = true;
-            this.canSubmit = true;
             let params = {};
             let couponParams = {};
             let couponIdList = [];
             let couponIdList2 = [];
             let blackListMapDtos = [];
             if(this.checkCoupon) {
-                if(this.couponIds[0].id.length == 0) {
-                    this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
-                        message: '请选择优惠券',
-                        type: 'warning'
-                    });
-                    this.canSubmit = false;
-                }else{
-                    this.canSubmit = true;
-                    let arr = [];
-                    this.couponIds.map((item) => {
-                        this.allCoupons.map((i) => {
-                            let obj = {};
-                            if(item.id == i.id) {
-                                obj.id = item.id;
-                                obj.name = i.name
-                                arr.push(obj);
-                                couponIdList.push(item.id);
-                            }
-                        })
-                    })
-                    let obj = {
-                        blackInfoId: this.couponId,
-                        blackInfoName: "优惠券",
-                        disableItemValue: arr
-                    }
-                    blackListMapDtos.push(obj);
+                let arr = [];
+                this.selectedCoupons.map((item) => {
+                    let obj = {};
+                    obj.name = item.name;
+                    obj.id = item.id;
+                    obj.forzenNum = item.frozenNum;
+                    arr.push(obj);
+                })
+                let obj = {
+                    blackInfoId: this.couponId,
+                    blackInfoName: "优惠券",
+                    disableItemValue: arr
                 }
+                blackListMapDtos.push(obj);
             }
             if(this.checkCode) {
-                if(this.codeIds[0].id.length == 0) {
-                    this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
-                        message: '请选择优惠码',
-                        type: 'warning'
-                    });
-                    this.canSubmit = false;
-                }else{
-                    this.canSubmit = true;
-                    let arr = [];
-                    this.codeIds.map((item) => {
-                        this.allCodes.map((i) => {
-                            let obj = {};
-                            if(item.id == i.id) {
-                                obj.name = i.name;
-                                obj.id = i.id;
-                                arr.push(obj);
-                                couponIdList2.push(i.id);
-                            }
-                        })
-                    })
-                    let obj = {
-                        blackInfoId: this.codeId,
-                        blackInfoName: "优惠码",
-                        disableItemValue: arr
-                    }
-                    blackListMapDtos.push(obj);
+                let arr = [];
+                this.selectedCodes.map((item) => {
+                    let obj = {};
+                    obj.name = item.name;
+                    obj.id = item.id;
+                    obj.forzenNum = item.frozenNum;
+                    arr.push(obj);
+                })
+                let obj = {
+                    blackInfoId: this.codeId,
+                    blackInfoName: "优惠码",
+                    disableItemValue: arr
                 }
+                blackListMapDtos.push(obj);
             }
             this.checks.map((v) => {
                 if(v.checked) {
@@ -348,7 +313,7 @@ export default {
             });
             params.memberInfoId = this.data.id;
             params.blackListMapDtos = [].concat(blackListMapDtos);
-            if(!this.canSubmit || params.blackListMapDtos.length == 0) {
+            if(params.blackListMapDtos.length == 0) {
                 this.btnLoading = false;
                 this.$message({
                     message: '请选择禁用选项',
@@ -398,7 +363,6 @@ export default {
                     console.log(error);
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
                 })
             } 
         },
@@ -421,7 +385,7 @@ export default {
             this.codeIds.push({id: ""});
         },
         deleteCoupon(index) {
-            this.couponIds.splice(index, 1);
+            this.selectedCoupons.splice(index, 1);
         },
         deleteCode(index) {
             this.selectedCodes.splice(index, 1);
@@ -455,15 +419,63 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/deep/ .el-dialog__header{
+    background: #f1f0ff;
+    border-radius: 10px 10px 0 0;
+}
+/deep/ .el-input-number--small .el-input-number__decrease{
+    width: 18px;
+    font-size: 13px;
+    height: 18px;
+    background-color: #655EFF;
+    color: #fff;
+    border-radius: 50%;
+    line-height: 18px;
+    margin-top: 5px;
+}
+/deep/ .el-input-number--small .el-input-number__increase{
+    width: 18px;
+    font-size: 13px;
+    height: 18px;
+    background-color: #655EFF;
+    color: #fff;
+    border-radius: 50%;
+    line-height: 18px;
+    margin-top: 5px;
+}
+/deep/ .el-input-number--small{
+    width: 94px;
+}
+/deep/ .el-input-number--small .el-input__inner{
+    padding-left: 21px;
+    padding-right: 21px;
+    border: 0;
+    background: none;
+}
+/deep/ .el-dialog{
+    border-radius: 10px;
+}
+.a_line{
+    margin: 24px 46px 0 15px;
+    overflow: hidden;
+}
 .user_id{
     text-align: left;
     padding: 0 0 10px 15px;
+}
+.user_id2{
+    text-align: left;
+    padding: 0 0 10px 15px;
+    font-weight: bold;
 }
 .marL20{
     margin-left: 20px;
 }
 .marT10{
-    margin: 4px 10px 0 0;
+    margin: 4px 10px 12px 0;
+}
+.marT11{
+    margin: 4px 10px 2px 0;
 }
 .c_label{
     margin: 5px 0 0 15px;
@@ -506,3 +518,5 @@ export default {
     margin-top: 20px;
 }
 </style>
+
+
