@@ -63,7 +63,7 @@
                         </el-checkbox-group>
                     </el-form-item>
                     <el-row>
-                        <el-col :span="wWidth < 1500 ? 12:8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="积分：" prop="scoreMin">
                                 <div class="input_wrap" style="margin-left: 27px;">
                                     <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number2($event,form.scoreMin,'scoreMin')"></el-input>
@@ -76,7 +76,7 @@
                                 <span>分</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="wWidth < 1500 ? 12:8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="累计消费金额：" prop="totalDealMoneyMin">
                                 <div class="input_wrap">
                                     <el-input v-model="form.totalDealMoneyMin" placeholder="最小值" @keyup.native="number3($event,form.totalDealMoneyMin,'totalDealMoneyMin')"></el-input>
@@ -89,7 +89,7 @@
                                 <span>元</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="wWidth < 1500 ? 12:8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="购买次数：" prop="dealTimesMin">
                                 <div class="input_wrap">
                                     <el-input v-model="form.dealTimesMin" placeholder="最小值" @keyup.native="number2($event,form.dealTimesMin,'dealTimesMin')"></el-input>
@@ -104,7 +104,7 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="wWidth < 1500 ? 12:8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="客单价：" prop="perUnitPriceMin">
                                 <div class="input_wrap" style="margin-left: 13px;">
                                     <el-input v-model="form.perUnitPriceMin" placeholder="最小值" @keyup.native="number3($event,form.perUnitPriceMin,'perUnitPriceMin')"></el-input>
@@ -117,7 +117,7 @@
                                 <span>元</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="wWidth < 1500 ? 12:8" :style="{marginTop: wWidth < 1500 ? '-42px':''}">
+                        <el-col :span="wWidth < 1800 ? 12:8" :style="{marginTop: wWidth < 1800 ? '-42px':''}">
                             <el-form-item label="注册时间：">
                                 <div class="input_wrap3">
                                     <el-date-picker
@@ -134,7 +134,7 @@
                                 </div>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="wWidth < 1500 ? 12:8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="上次消费：" prop="lastPayTimeStart">
                                 <div class="input_wrap3">
                                     <el-date-picker
@@ -212,7 +212,9 @@ export default {
     }
   },
   watch: {
-
+      wWidth() {
+          return document.body.clientWidth
+      }
   },
   computed:{
     clientStatusOps() {
@@ -477,6 +479,7 @@ export default {
     }
   },
   mounted() {
+      console.log(this.wWidth);
       this.getLabels();
       this.showPc();
       if(this.$route.query.memberLabels) {
