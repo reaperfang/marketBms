@@ -104,7 +104,7 @@ export default {
                 orderAfterSaleStatus = 2
             } else if(this.orderAfterSale.type == 2) {
                 this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = Object.assgign({}, this.orderAfterSale);
+                this.currentData = Object.assign({}, this.orderAfterSale);
                 this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
                 this.dialogVisible = true
                 return
