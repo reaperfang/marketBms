@@ -105,11 +105,12 @@ export default {
   watch: {
     data(newValue, oldValue) {
       this.delItem = newValue.delItem;
+      //设为可选
       this.skuList.map((item) => {
         if(item.goodsInfo.id == this.delItem.goodsInfo.id) {
           this.$set(item, 'noselected', false);
         }
-      })
+      });
     }
   },
   methods: {
@@ -137,7 +138,6 @@ export default {
       this.getSkuList(val, this.pageSize);
     },
     submit() {
-        console.log(this.delItem);
         let selectedRows = this.$refs.skuTable.selection;
         if(selectedRows.length !== 0) {
           this.selectedList = this.selectedList.concat(selectedRows);
