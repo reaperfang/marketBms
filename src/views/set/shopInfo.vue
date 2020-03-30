@@ -43,9 +43,6 @@
             <el-form-item label="公司名称:" prop="companyName">
                 <el-input maxlength="30" show-word-limit v-model="form.companyName" placeholder="请输入公司名称" style="width:200px;"></el-input>
             </el-form-item>
-            <el-form-item label="公司名称:" prop="companyName">
-                <el-input maxlength="30" show-word-limit v-model="form.companyName" placeholder="请输入公司名称" style="width:200px;"></el-input>
-            </el-form-item>
             <el-form-item label="客服电话:" prop="phone">
                 <!-- <el-input v-model="form.phone" placeholder="区号" style="width:70px;"></el-input>
                 —— -->

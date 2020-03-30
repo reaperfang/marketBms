@@ -368,7 +368,7 @@ export default {
         text-align: left!important;
     }
     /deep/ .el-input__inner {
-        width: 135px;
+        width: 120px;
     }
     td.spec {
         text-align: center;

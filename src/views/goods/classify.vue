@@ -304,7 +304,7 @@ export default {
             if(node.data.enable === 1) {
                 _enable = 0
                 if(data.isRecommend == 1) {
-                    this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert', confirmText: '我知道了'}).then(() => {
+                    this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert'}).then(() => {
 
                     })
                     return
@@ -334,7 +334,7 @@ export default {
         },
         delete(node, data) {
             if(data.isRecommend == 1) {
-                this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert', confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert'}).then(() => {
 
                 })
                 return
@@ -438,12 +438,11 @@ export default {
 .th .td:first-child{padding-left:10px;}
 .treeRow{
 	overflow:hidden;
-	width:100%;
-    padding: 12px 0;
+	width:100%
 }
 .treeRow .td{
-	line-height:60px;
-	height: 60px;
+	line-height:36px;
+	height: 36px;
 	display:inline-block;
 	width:33%;
 	float:left;
@@ -473,28 +472,8 @@ export default {
 /deep/ .el-tree-node__expand-icon.expanded {
     transform: rotate(0deg);
 }
-.treeRow.th {
-    .td {
-        height: 26px;
-        line-height: 26px;
-    }
 }
 .operate {
-    line-height: 21px!important;
-    font-size: 14px;
-    padding-top: 12px;
-    span {
-        margin-right: 30px;
-        margin-bottom: 10px;
-    }
-}
-.categoryTh {
-    border-top: 1px solid #CACFCB;
-    border-bottom: 1px solid #CACFCB;
-}
-}
-.operate {
-    line-height: 21px;
     span {
         margin-right: 6px;
     }

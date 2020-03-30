@@ -177,6 +177,7 @@ export default {
 <style lang="scss">
     .share-popper {
         width: 370px;
+        background-color: #505c74!important;
     }
 </style>
 

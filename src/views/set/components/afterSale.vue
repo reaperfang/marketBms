@@ -6,14 +6,13 @@
             <h2>自动收货： <span>说明：仅对有物流信息的订单生效，对没有物流信息的订单需要手动确认</span></h2>
             <el-form-item label="买家自动确认收货时间："></el-form-item>
             <el-form-item label="买家物流签收" prop="memberAutoConfirmReceive">
-              <!-- 临时撤回v1.3的功能展示  fang_y -->
-              <!-- <el-switch
+              <el-switch
                 v-model="memberAutoReceive"
                 active-color="#13ce66"
                 inactive-color="#cacfcb"
                 class="item-switch1"
                 >
-              </el-switch> -->
+              </el-switch>
                 <el-input-number 
                 v-model="form.memberAutoConfirmReceive" 
                 controls-position="right" 
@@ -28,14 +27,13 @@
             </el-form-item>
             <el-form-item label="卖家自动确认收货时间："></el-form-item>
             <el-form-item label="卖家物流签收" prop="shopAutoConfirmReceive">
-              <!-- 临时撤回v1.3的功能展示  fang_y -->
-              <!-- <el-switch
+              <el-switch
                 v-model="shopAutoReceive"
                 active-color="#13ce66"
                 inactive-color="#cacfcb"
                 class="item-switch1"
                 >
-              </el-switch> -->
+              </el-switch>
                 <el-input-number 
                 v-model="form.shopAutoConfirmReceive" 
                 controls-position="right" 
@@ -52,14 +50,13 @@
         <div class="item">
             <h2>售后自动关闭时间：</h2>
             <el-form-item label="订单完成" prop="orderAutoFinished">
-              <!-- 临时撤回v1.3的功能展示  fang_y -->
-              <!-- <el-switch
+              <el-switch
                 v-model="autoFinished"
                 active-color="#13ce66"
                 inactive-color="#cacfcb"
                 class="item-switch1"
                 >
-              </el-switch> -->
+              </el-switch>
                 <el-input-number 
                 v-model="form.orderAutoFinished" 
                 controls-position="right" 
