@@ -19,7 +19,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="获取时间">
+        <el-form-item label="交易时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"

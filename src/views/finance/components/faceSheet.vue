@@ -27,7 +27,7 @@
         <el-form-item label="快递公司">
           <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:120px;"></el-input>
         </el-form-item>
-        <el-form-item label="发货时间">
+        <el-form-item label="操作时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"

@@ -14,7 +14,7 @@
           </div>
         </el-form-item>
         <el-form-item label="背景设置：" prop="backgroundType">
-          <el-radio v-model="ruleForm.backgroundType" label="0">背景色：</el-radio>
+          <el-radio v-model="ruleForm.backgroundType" label="0" @change="chooseColor">背景色：</el-radio>
           <span
             :class="[item.active == '1'?'active':'','color_picker']"
             v-for="item in colors"
@@ -576,6 +576,18 @@ export default {
         });
       }
     },
+    chooseColor(val) {
+      if(val == 0) {
+        this.imgUrl = "";
+        if(this.currentColor) {
+          this.colors.map(v => {
+            if(v.imgKey == this.currentColor) {
+              this.$set(v, 'active',"1");
+            }
+          })
+        }
+      }
+    },
     save() {
       if(this.ruleForm.name == "") {
         this.$message({
@@ -912,10 +924,7 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-upload {
-  height: 30px !important;
-  line-height: 30px !important;
-}
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;

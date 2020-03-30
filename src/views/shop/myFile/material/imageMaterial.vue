@@ -289,6 +289,7 @@ export default {
       this._apis.file.moveGroup(query).then((response)=>{
         this.$message.success('移动分组成功！');
         this.getList()
+        this.checkedAll = false
       }).catch((error)=>{
         this.$message.error(error);
       })
@@ -301,6 +302,7 @@ export default {
       this._apis.file.deleteMaterial(query).then((response)=>{
         this.$message.success('删除成功！');
         this.getList()
+        this.checkedAll = false
       }).catch((error)=>{
         this.$message.error(error);
       })
@@ -448,8 +450,8 @@ export default {
     border: 1px solid #e6e6e6;
     font-size: 14px;
     color: #44434B;
-    margin-left: 30px;
     padding-bottom:20px;
+    margin-left: 30px;
     .groups_head{
       height: 30px;
       line-height: 30px;

@@ -85,7 +85,6 @@
 <script>
 import DialogBase from "@/components/DialogBase";
 export default {
-  props: ["data"],
   name: "chooseProductDialog",
   data() {
     return {
@@ -105,8 +104,13 @@ export default {
   },
   watch: {
     data(newValue, oldValue) {
-      console.log(1);
-      this.delItem = newValue
+      this.delItem = newValue.delItem;
+      //设为可选
+      this.skuList.map((item) => {
+        if(item.goodsInfo.id == this.delItem.goodsInfo.id) {
+          this.$set(item, 'noselected', false);
+        }
+      });
     }
   },
   methods: {
@@ -134,7 +138,6 @@ export default {
       this.getSkuList(val, this.pageSize);
     },
     submit() {
-        console.log(this.delItem);
         let selectedRows = this.$refs.skuTable.selection;
         if(selectedRows.length !== 0) {
           this.selectedList = this.selectedList.concat(selectedRows);
@@ -230,25 +233,6 @@ export default {
           })
           this.skuList = [].concat(response.list);
           this.total = response.total;
-          // let productInfoIds;
-          // if(!!this.data.productInfoIds) {
-          //   if(this.data.productInfoIds.indexOf(',') !== -1) {
-          //     productInfoIds = this.data.productInfoIds.split(',');
-          //   }else{
-          //     productInfoIds = [this.data.productInfoIds]
-          //   }
-          // }
-          // if(productInfoIds && productInfoIds.length > 0) {
-          //   productInfoIds.map((v) => {
-          //       this.skuList.forEach(row => {
-          //           if(row.goodsInfo.id == v) {
-          //             this.$nextTick(() => {
-          //               this.$refs.skuTable.toggleRowSelection(row);
-          //             })
-          //           }
-          //       })
-          //   })
-          // }
         })
         .catch(error => {
           console.log(error);

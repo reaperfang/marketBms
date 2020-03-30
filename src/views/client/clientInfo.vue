@@ -25,6 +25,7 @@
                     <p>昵称：<span>{{clientInfoById.nickName}}</span></p>
                     <p>姓名：<span>{{clientInfoById.memberName}}</span></p>
                     <p>性别：<span>{{sexText}}</span></p>
+                    <p>生日：<span>{{clientInfoById.birthday}}</span></p>
                     <p>爱好：<span>{{clientInfoById.hobby}}</span></p>
                     <p>手机号：<span>{{clientInfoById.phone}}</span></p>
                     <p>邮箱：<span>{{clientInfoById.email}}</span></p>
@@ -98,7 +99,7 @@
                 </div>
                 <div class="assets_item rb">
                     <p>累计消费订单数</p>
-                    <p class="pointer p_style" @click="_routeTo('query',{id: userId, orderStatus: 6})">{{clientInfoById.dealTimes || 0}}</p>
+                    <p class="pointer p_style" @click="_routeTo('query',{id: userId, orderStatus: 6})" style="color: #655EFF; text-decoration: none">{{clientInfoById.dealTimes || 0}}</p>
                 </div>
             </div>
         </div>
@@ -653,6 +654,7 @@ export default {
                 font-size: 18px;
                 color: #FD4C2B;
                 cursor: pointer;
+                text-decoration: underline;
             }
         }
     }
