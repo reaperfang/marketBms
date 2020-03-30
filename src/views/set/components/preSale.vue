@@ -20,6 +20,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!autoOrder"
+                :step="1" 
+                step-strictly
                 v-if="form.acuoType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -29,6 +31,8 @@
                 placeholder="请输入整数"
                 :min="1" 
                 :precision="0"
+                :step="1" 
+                step-strictly
                 :disabled="!autoOrder"
                 v-else>
                 </el-input-number>
@@ -114,6 +118,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!sendOrder"
+                :step="1" 
+                step-strictly
                 v-if="form.oasType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -124,6 +130,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!sendOrder"
+                :step="1" 
+                step-strictly
                 v-else>
                 </el-input-number>
                 <el-select 
@@ -155,15 +163,19 @@ export default {
   name: 'preSale',
   data() {
     var checkCancelOrder = (rule,value,callback)=>{
-      if(this.isAutoCancelUnpayOrder == 1 && !value){
+      if(this.autoOrder == 1 && !value){
         return callback(new Error('输入框不能为空'))
+      }else if(this.form.autoCancelUnpayOrder.toString().length > 9){
+        return callback(new Error('输入10位以内有效数字'))
       }else{
         callback()
       }
     }
     var checkOrderAutoSend = (rule,value,callback)=>{
       if(this.sendOrder && !value){
-          return callback(new Error('输入框不能为空'))
+        return callback(new Error('输入框不能为空'))
+      }else if(this.form.orderAutoSend.toString().length > 9){
+        return callback(new Error('输入10位以内有效数字'))
       }else{
         callback()
       }
