@@ -289,6 +289,7 @@ export default {
       this._apis.file.moveGroup(query).then((response)=>{
         this.$message.success('移动分组成功！');
         this.getList()
+        this.checkedAll = false
       }).catch((error)=>{
         this.$message.error(error);
       })
@@ -301,6 +302,7 @@ export default {
       this._apis.file.deleteMaterial(query).then((response)=>{
         this.$message.success('删除成功！');
         this.getList()
+        this.checkedAll = false
       }).catch((error)=>{
         this.$message.error(error);
       })
