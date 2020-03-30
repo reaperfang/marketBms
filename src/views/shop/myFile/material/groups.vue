@@ -12,7 +12,7 @@
       lazy
       ref="tree">
         <span class="slot-t-node" slot-scope="{ node, data }">
-          <span>{{data.name}}</span>
+          <span ref="treeName">{{data.name}}</span>
         </span>
     </el-tree>
     <span class="newClass" @click="addSameLevelNode()">+ 新建分组</span>

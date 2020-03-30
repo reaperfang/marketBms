@@ -118,7 +118,7 @@ export default {
       currentNav: null,  //当前操作的图文导航
       dialogVisible: false,
       currentDialog: '',
-      suggestSize: '建议尺寸：宽高1比1',
+      suggestSize: '建议尺寸：宽高1：1',
       dragOptions: {
           animation: 300,
           group: "description",
@@ -154,7 +154,7 @@ export default {
       this.blockType = 1;
       switch(Number(templateType)) {
         case 1:
-          this.suggestSize = '建议尺寸：宽高1比1';
+          this.suggestSize = '建议尺寸：宽高1：1';
           break; 
         case 2:
           this.suggestSize = '建议：不超过5个汉字';
