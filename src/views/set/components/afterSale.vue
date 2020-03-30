@@ -95,9 +95,9 @@
         </div> -->
         <div class="item">
             <h2>资产相关：
-              <span class="note">
+              <!-- <span class="note">
                   说明：启用后买家可以申请开发票。
-              </span>
+              </span> -->
             </h2>
             
             <el-form-item label="发票功能开启" prop="invoiceOpen">
@@ -126,7 +126,7 @@
         <div class="item">
             <h2>
                 物流查询：
-                <span class="note">电子面单和物流轨迹查询服务是与第三方快递鸟合作，开启服务需注册快递鸟会员，相关费用直接与快递鸟结算</span>    
+                <span class="note">电子面单和物流轨迹查询服务是与第三方快递鸟合作，开启服务需注册<a href="http://www.kdniao.com/reg" target="_blank" style="color:blue;">快递鸟</a>会员，相关费用直接与快递鸟结算</span>    
             </h2>
             <el-form-item label="是否开启物流轨迹查询服务：" prop="isTrace">
                 <el-radio-group v-model="form.isTrace">
