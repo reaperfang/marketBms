@@ -7,7 +7,7 @@
                     <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">库存：</span>
-                        <el-input type="number" min="0" v-model="item.stock" placeholder="请输入库存"></el-input>
+                        <el-input type="number" min="0" max="10000000" v-model="item.stock" placeholder="请输入库存"></el-input>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@ export default {
                 this.$emit('submit')
                 this.visible = false
                 this.$message({
-                    message: '编辑成功！',
+                    message: '库存编辑成功',
                     type: 'success'
                 });
             }).catch(error => {
@@ -109,9 +109,18 @@ export default {
     .content-box {
         padding-left: 62px;
         padding-top: 20px;
+        max-height: 400px;
+        overflow-y: scroll;
         .title {
             padding-bottom: 20px;
         }
+    }
+    .content-box::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .content-box::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
     }
     .content {
         .item {
