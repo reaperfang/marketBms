@@ -74,7 +74,7 @@
                     label="商品名称"
                     width="380">
                         <template slot-scope="scope">
-                            <div class="ellipsis" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
+                            <div class="ellipsis2" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
                         </template>
                     </el-table-column>
@@ -109,7 +109,7 @@
                     <el-table-column
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{red: scope.row.warningStock && (scope.row.stock <= scope.row.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
+                            <span :class="{red: scope.row.warningStock && (Math.min.apply(null, scope.row.goodsInfos.map(val => val.stock)) <= scope.row.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -167,7 +167,7 @@
         <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
                 <div class="image"></div>
-                <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
+                <p>没有找到相关商品，换个搜索词试试吧</p>
                 <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
             </div>
         </div>
@@ -356,6 +356,15 @@
 .el-button+.el-button {
     margin-left: 12px;
 }
+.ellipsis2 {
+    width: 350px;
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
 </style>
 <style lang="scss">
     .operate-popper {
@@ -475,6 +484,14 @@ export default {
         changePriceMore() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
+                return
+            }
+            if(this.multipleSelection.some(val => val.activity)) {
+                let name = this.multipleSelection.filter(val => val.activity)[0].name
+
+                this.confirm({title: '批量改价', icon: true, text: `所选商品“${name}”正在参加营销活动，活动结束/失效才可修改价格。`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
                 })
                 return
@@ -610,7 +627,7 @@ export default {
             if(this.multipleSelection.some(val => val.activity)) {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
-                this.confirm({title: '批量删除', icon: true, text: `当前商品中”${name}“参与的营销活动未结束，无法进行批量删除操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '批量删除', icon: true, text: `当前商品中“${name}”参与的营销活动未结束，无法进行批量删除操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
                     
                 })
                 return
@@ -909,6 +926,7 @@ export default {
         },
         onSubmit() {
             this.getList()
+            this.checkedAll = false
         }
     },
     components: {

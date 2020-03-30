@@ -7,7 +7,7 @@
                     <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
-                        <el-input type="number" min="0" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
+                        <el-input type="number" :min="item.costPrice" max="10000000" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
                         <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可编辑售卖价</p>
                     </div>
                 </div>
@@ -44,6 +44,13 @@ export default {
                 this.visible = false
                 return
             }
+            if(this.data.goodsInfos.some(val => val.salePrice < val.costPrice)) {
+                this.$message({
+                message: '售卖价不得低于成本价！请重新输入',
+                type: 'warning'
+                });
+                return
+            }
             if(this.data.goodsInfos.some(val => val.salePrice < 0)) {
                 this.$message({
                 message: '售卖价不可以小于0',
@@ -53,12 +60,12 @@ export default {
             }
             this._apis.goods.changePriceSpu({
                 id: this.data.id,
-                goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, salePrice: val.salePrice}))
+                goodsInfos: this.data.goodsInfos.filter(val => !val.activity).map(val => ({id: val.id, salePrice: val.salePrice}))
             }).then((res) => {
                 this.$emit('submit')
                 this.visible = false
                 this.$message({
-                    message: '编辑成功！',
+                    message: '价格编辑成功',
                     type: 'success'
                 });
             }).catch(error => {
@@ -114,9 +121,18 @@ export default {
     .content-box {
         padding-left: 62px;
         padding-top: 20px;
+        max-height: 400px;
+        overflow-y: scroll;
         .title {
             padding-bottom: 20px;
         }
+    }
+    .content-box::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .content-box::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
     }
     .content {
         .item {

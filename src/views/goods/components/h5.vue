@@ -182,10 +182,14 @@ export default {
             border-left: none;
         }
     }
+    .miniCode-header-right {
+        color: #578EFA;
+    }
 </style>
 <style lang="scss">
     .share-popper {
         width: 370px;
+        background-color: #505c74!important;
     }
 </style>
 
