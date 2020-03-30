@@ -194,7 +194,8 @@ export default {
             checkAll: false,
             checkAll2: false,
             selectedCoupons: [],
-            selectedCodes: []
+            selectedCodes: [],
+            canSubmit: true
         }
     },
     methods: {
@@ -288,36 +289,52 @@ export default {
             let couponIdList2 = [];
             let blackListMapDtos = [];
             if(this.checkCoupon) {
-                let arr = [];
-                this.selectedCoupons.map((item) => {
-                    let obj = {};
-                    obj.name = item.name;
-                    obj.id = item.id;
-                    obj.forzenNum = item.frozenNum;
-                    arr.push(obj);
-                })
-                let obj = {
-                    blackInfoId: this.couponId,
-                    blackInfoName: "优惠券",
-                    disableItemValue: arr
+                if(this.selectedCoupons.length !== 0) {
+                    let arr = [];
+                    this.selectedCoupons.map((item) => {
+                        let obj = {};
+                        obj.name = item.name;
+                        obj.id = item.id;
+                        obj.forzenNum = item.frozenNum;
+                        arr.push(obj);
+                    })
+                    let obj = {
+                        blackInfoId: this.couponId,
+                        blackInfoName: "优惠券",
+                        disableItemValue: arr
+                    }
+                    blackListMapDtos.push(obj);
+                }else{
+                    this.$message({
+                        message: '请选择禁用优惠券',
+                        type: 'warning'
+                    });
+                    this.canSubmit = false;
                 }
-                blackListMapDtos.push(obj);
             }
             if(this.checkCode) {
-                let arr = [];
-                this.selectedCodes.map((item) => {
-                    let obj = {};
-                    obj.name = item.name;
-                    obj.id = item.id;
-                    obj.forzenNum = item.frozenNum;
-                    arr.push(obj);
-                })
-                let obj = {
-                    blackInfoId: this.codeId,
-                    blackInfoName: "优惠码",
-                    disableItemValue: arr
+                if(this.selectedCodes.length !== 0) {
+                    let arr = [];
+                    this.selectedCodes.map((item) => {
+                        let obj = {};
+                        obj.name = item.name;
+                        obj.id = item.id;
+                        obj.forzenNum = item.frozenNum;
+                        arr.push(obj);
+                    })
+                    let obj = {
+                        blackInfoId: this.codeId,
+                        blackInfoName: "优惠码",
+                        disableItemValue: arr
+                    }
+                    blackListMapDtos.push(obj);
+                }else{
+                    this.$message({
+                        message: '请选择禁用优惠码',
+                        type: 'warning'
+                    });
+                    this.canSubmit = false;
                 }
-                blackListMapDtos.push(obj);
             }
             this.checks.map((v) => {
                 if(v.checked) {
@@ -337,7 +354,7 @@ export default {
                     message: '请选择禁用选项',
                     type: 'warning'
                 });
-            }else{
+            }else if(this.canSubmit){
                 //营销优惠券加入黑名单
                 if(this.selectedCoupons.length > 0) {
                     let arr = [];
