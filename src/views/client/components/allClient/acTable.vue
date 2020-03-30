@@ -40,9 +40,17 @@
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
-      <el-table-column prop="totalDealMoney" label="累计消费金额" sortable></el-table-column>
+      <el-table-column label="累计消费金额" sortable>
+        <template slot-scope="scope">
+          ¥{{scope.row.totalDealMoney}}
+        </template>
+      </el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
-      <el-table-column prop="perUnitPrice" label="客单价（元）" sortable></el-table-column>
+      <el-table-column label="客单价（元）" sortable>
+        <template slot-scope="scope">
+          ¥{{scope.row.perUnitPrice}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <div class="btns clearfix">
