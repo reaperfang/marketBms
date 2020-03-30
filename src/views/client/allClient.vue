@@ -41,7 +41,7 @@
                 </el-form-item>
                 <el-form-item label="用户标签：" class="relaPosition clearfix" prop="memberLabels">
                     <div class="group_container fl">
-                        <el-checkbox-group v-model="form.memberLabels" :max="textMax" :style="{width: labels.length > 5 ?'506px':'',height: showMoreTag ?'':'37px', overflow: showMoreTag ? 'block':'hidden'}">
+                        <el-checkbox-group v-model="form.memberLabels" :style="{width: labels.length > 5 ?'506px':'',height: showMoreTag ?'':'37px', overflow: showMoreTag ? 'block':'hidden'}">
                             <el-checkbox v-for="item in labels" :label="item" :key="item" border>{{item}}</el-checkbox>
                         </el-checkbox-group>
                     </div>
@@ -233,16 +233,11 @@ export default {
   }, 
   created() {
     // window.addEventListener('hashchange', this.afterQRScan)
-    console.log(this.wWidth);
-
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
-    textMax() {
-        return 2
-    },
     //匹配积分等的最大值
     number(event,val,ele) {
         val = val.replace(/[^\.\d]/g,'');

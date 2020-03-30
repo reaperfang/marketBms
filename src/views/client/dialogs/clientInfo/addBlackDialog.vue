@@ -5,7 +5,7 @@
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
-                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon" v-if="couponList.length!==0"></el-checkbox>
+                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon" v-if="couponList && couponList.length!==0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCoupons" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode" v-if="codeList.length!==0"></el-checkbox>
+                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode" v-if="codeList && codeList.length!==0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCodes" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -82,7 +82,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
@@ -146,7 +146,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
@@ -200,11 +200,27 @@ export default {
     methods: {
         couponSubmit() {
             this.dialogVisible2 = false;
-            this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
+            let sel = this.$refs.couponListTable.selection;
+            if(sel.length !== 0) {
+                this.selectedCoupons = [].concat(sel);
+            }else{
+                this.$message({
+                    message: '请选择优惠券',
+                    type: 'warning'
+                });
+            }
         },
         codeSubmit() {
             this.dialogVisible3 = false;
-            this.selectedCodes = [].concat(this.$refs.codeListTable.selection);
+            let sel = this.$refs.codeListTable.selection;
+            if(sel.length !== 0) {
+                this.selectedCodes = [].concat(sel);
+            }else{
+                this.$message({
+                    message: '请选择优惠码',
+                    type: 'warning'
+                });
+            }
         },
         handleChangeAll(val) {
             this.couponList.forEach(row => {
@@ -388,9 +404,31 @@ export default {
         },
         deleteCoupon(index) {
             this.selectedCoupons.splice(index, 1);
+            this.couponList.forEach((row,i) => {
+                if(i == index) {
+                    this.$refs.couponListTable.toggleRowSelection(row, false);
+                }
+            })
+            if(this.selectedCoupons.length == 0) {
+                this.checkCoupon = false;
+                this.couponList.forEach((row) => {
+                    this.$refs.couponListTable.toggleRowSelection(row, false);
+                })
+            }
         },
         deleteCode(index) {
             this.selectedCodes.splice(index, 1);
+            this.codeList.forEach((row,i) => {
+                if(i == index) {
+                    this.$refs.codeListTable.toggleRowSelection(row, false);
+                }
+            })
+            if(this.selectedCodes.length == 0) {
+                this.checkCode = false;
+                this.codeList.forEach((row) => {
+                    this.$refs.codeListTable.toggleRowSelection(row, false);
+                })
+            }
         },
         getAllCoupons() {
             this._apis.client.getAllCoupons({couponType: 0, memberId: this.data.id, frozenType: 1}).then((response) => {
