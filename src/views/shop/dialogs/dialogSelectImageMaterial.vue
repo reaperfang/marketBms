@@ -102,7 +102,7 @@
                 <div v-loading="uploadLoading">
                   <waterfall :col='3' :width="250" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
                     <template >
-                      <div class="cell-item" :class="{'img_active': localSelectedItem && localSelectedItem.id === item.id}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
+                      <div class="cell-item" :class="{'img_active': localSelectedItem && localSelectedItem.title === item.title}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
                         <img :src="item.url" alt="加载错误"/> 
                         <div class="item-body">
                             <div class="item-desc">{{item.original}}</div>
