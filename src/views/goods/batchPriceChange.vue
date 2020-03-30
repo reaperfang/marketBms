@@ -258,10 +258,10 @@ export default {
       if (this.operateType == 2) {
         _param.productCatalogInfoId = this.productCatalogInfoId;
       } else if (this.operateType == 1) {
-        _param.ids = this.multipleSelection.map(val => val.goodsInfo.id);
+        _param.ids = this.multipleSelection.map(val => val.id);
       }
       this._apis.goods
-        .allUpdatePrice(_param)
+        .allUpdatePriceSpu(_param)
         .then(res => {
           if (this.operateType == 1) {
             this.getList();
@@ -269,17 +269,16 @@ export default {
             this.getList({ productCatalogInfoId: this.productCatalogInfoId });
           }
           this.visible = false;
-          this.$notify({
-            title: "成功",
-            message: "改价成功！",
-            type: "success"
+          this.$message({
+              message: '改价成功！',
+              type: 'success'
           });
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
+          this.$message.error({
+              message: error,
+              type: 'error'
           });
         });
     },

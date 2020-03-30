@@ -113,11 +113,12 @@
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox>
-        <el-radio-group v-model="ruleForm.hideType">
+        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <el-radio :label="1">24小时后隐藏</el-radio>
           <el-radio :label="2">立即隐藏</el-radio>
-        </el-radio-group> -->
+        </el-radio-group>
       </el-form-item>
     </div>
 
@@ -148,9 +149,9 @@ export default {
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
         buttonStyle: 1,//购买按钮样式
-        hideSaledGoods: true,//隐藏已售罄活动
+        hideSaledGoods: false,//隐藏已售罄活动
         hideEndGoods: false,//隐藏活动结束活动
-        hideType: 1,//隐藏类型
+        hideType: 2,//隐藏类型
         ids: [],//商品id列表
         buttonText: '立即抢购'//按钮文字
       },
@@ -195,15 +196,12 @@ export default {
                 this.loading = true;
                 this._apis.shop.getSecondkillListByIds({
                     rightsDiscount: 1, 
-                    activityIds: ids.join(',')
+                    activityIds: ids.join(','),
+                    hideStatus: 0
                 }).then((response)=>{
                     this.createList(response);
                     this.loading = false;
                 }).catch((error)=>{
-                    // this.$notify.error({
-                    //     title: '错误',
-                    //     message: error
-                    // });
                     console.error(error);
                     this.list = [];
                     this.loading = false;
@@ -216,29 +214,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      this.list = [];
-            if(this.hideSaledGoods==true){
-                for(var i in datas){
-                    if(datas[i].soldOut!=1){
-                        this.list.push(datas[i]);
-                    }
-                }
-            }
-            else{
-                this.list = datas;
-            }
-            var list = this.list;
-            this.list = [];
-            if(this.hideEndGoods==true){
-                for(var i in list){
-                    if(list[i].activityEnd!=1){
-                        this.list.push(list[i]);
-                    }
-                }
-            }
-            else{
-                this.list = list;
-            }
+        this.list = datas;
     },
   }
 }

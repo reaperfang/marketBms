@@ -24,11 +24,7 @@ export default {
       /* 装修编辑器配置 */
       config: {
         pageBase: {
-          type: 'classify',
-          isBase: true,
-          hidden: false,
-          title: '微页面分类信息',
-          colorStyle: '#ffffff'
+          type: 'classify'
         },
         buttons: {
           saveData: {
@@ -146,18 +142,10 @@ export default {
     /* 发起请求 */
     sendRequest(params) {
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: params.tipWord,
-            type: 'success'
-          });
+          this.$message.success(params.tipWord);
           this.setLoading(false);
           this._routeTo('m_pageManageIndex');
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
           this.setLoading(false);
         });
     },
@@ -176,3 +164,10 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+/deep/.view {
+    .phone-body {
+      background:#fff;
+    }
+}
+</style>

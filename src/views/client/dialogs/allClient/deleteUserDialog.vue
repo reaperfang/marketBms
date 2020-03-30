@@ -20,8 +20,7 @@ export default {
     methods: {
         submit() {
             this._apis.client.deleteMember({id: this.data.userId}).then((response) => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '删除成功',
                     type: 'success'
                 });

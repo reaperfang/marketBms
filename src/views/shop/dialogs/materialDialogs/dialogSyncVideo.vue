@@ -99,10 +99,7 @@ export default {
         })
         this.total = response.total
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     submit() {

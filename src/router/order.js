@@ -43,7 +43,7 @@ export default [
         path: 'deliveryManagement',
         component: () => import('@/views/order/deliveryManagement'),
         name: 'deliveryManagement',
-        meta: { title: '发货管理', noCache: true, tabTitle: '订单处理' ,navType:2},
+        meta: { title: '发货管理', noCache: true, tabTitle: '订单处理' ,navType:2, anotherAuth: true},
       },
       {
         path: 'afterSalesManagement',
@@ -165,7 +165,8 @@ export default [
         path: 'electronicFaceSheet',
         component: () => import('@/views/order/electronicFaceSheet'),
         name: 'electronicFaceSheet',
-        meta: { title: '电子面单', noCache: true, tabTitle: '物流配送' ,navType:2},
+        hidden: false,
+        meta: { title: '电子面单', noCache: true, tabTitle: '物流配送' ,navType:2, anotherAuth: true},
       },
       {
         path: 'newElectronicFaceSheet',

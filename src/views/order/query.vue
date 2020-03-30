@@ -1,13 +1,13 @@
 <template>
   <div class="query">
-    <section>
+    <section class="search">
       <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
         <el-form-item label>
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
               <el-option label="订单编号" value="code"></el-option>
               <el-option label="商品名称" value="goodsName"></el-option>
-              <el-option label="客户ID" value="memberSn"></el-option>
+              <el-option label="用户昵称" value="memberName"></el-option>
               <el-option label="收货人联系电话" value="receivedPhone"></el-option>
               <el-option label="收货人" value="receivedName"></el-option>
             </el-select>
@@ -68,38 +68,43 @@
           <el-date-picker
             v-model="listQuery.orderTimeValue"
             type="datetimerange"
-            range-separator="-"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
+            :picker-options="utils.globalTimePickerOption.call(this)"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item style="float: right;">
-          <span @click="resetForm('formInline')" class="resetting pointer">重置</span>
+        <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
         </el-form-item>
       </el-form>
       <div>
-        <el-button v-permission="['订单', '订单查询', '商城订单', '导出订单']" @click="exportOrders" class="border-button">导出订单</el-button>
-        <el-button
+        <!-- <el-button v-permission="['订单', '订单查询', '商城订单', '导出订单']" @click="exportOrders" class="border-button">导出订单</el-button> -->
+        <!-- <el-button
            v-permission="['订单', '订单查询', '商城订单', '批量导入发货']"
           class="border-button"
           @click="$router.push('/order/batchImportAndDelivery')"
         >批量导入发货</el-button>
-        <el-button v-permission="['订单', '订单查询', '商城订单', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
-        <el-button v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="batchSupplementaryLogistics">批量补填物流</el-button>
-        <p class="explain">当前最多只支持导出1000条数据</p>
+        <el-button v-permission="['订单', '订单查询', '商城订单', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button> -->
+        <!-- <el-button v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="batchSupplementaryLogistics">批量补填物流</el-button> -->
+        <!-- <p class="explain">当前最多只支持导出1000条数据</p> -->
       </div>
     </section>
     <section>
-      <p class="statistics">
-        已选择
-        <span>{{checkedLength}}</span>项，全部
-        <span>{{total}}</span>项
-      </p>
+      <div class="export-header">
+        <p class="statistics">
+          已选择
+          <span>{{checkedLength}}</span>项，全部
+          <span>{{total}}</span>项
+        </p>
+        <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">
+          <el-button v-permission="['订单', '订单查询', '商城订单', '导出订单']" @click="exportOrders" class="border-button">导出数据</el-button>
+        </el-tooltip>
+      </div>
       <el-tabs class="tabs" v-model="activeName">
         <el-tab-pane v-permission="['订单', '订单查询', '商城订单']" label="商城订单" name="shop">
-          <shop ref="shop" :params="listQuery"></shop>
+          <shop ref="shop" :params="listQuery" @batchSupplementaryLogistics="batchSupplementaryLogistics"></shop>
         </el-tab-pane>
         <!-- <el-tab-pane label="积分商城订单" name="integralShop">
           <integralShop></integralShop>
@@ -113,23 +118,26 @@ import Shop from "./components/shop";
 import IntegralShop from "./components/integralShop";
 import { fetchOrderList } from "@/api/order";
 import appConfig from '@/system/appConfig';
-import { search } from '@/mixins/orderMixin'
+import { search } from './mixins/orderMixin'
 import utils from "@/utils";
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+  mixins: [anotherAuth],
   data() {
     return {
       list: [
         
       ],
       checkedLength: 0,
+      checkedList: [],
       total: 0,
       listQuery: {
         searchType: "code",
         searchValue: "",
         code: "", // 订单编号
         goodsName: "", // 商品名称
-        memberSn: "", // 客户ID
+        memberName: "", // 用户昵称
         receivedPhone: "", // 收货人手机号
         receivedName: "", // 收货人姓名
         channelInfoId: "", // 订单来源
@@ -138,7 +146,7 @@ export default {
         sendType: "", // 发货类型:1正常发货,2自动发货,3优先发货
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
-        orderTimeValue: ""
+        orderTimeValue: "",
       },
       activeName: "shop"
     };
@@ -147,6 +155,9 @@ export default {
     console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
+    });
+    this._globalEvent.$on("checkedList", list => {
+      this.checkedList = list;
     });
     this._globalEvent.$on("total", number => {
       this.total = number;
@@ -184,10 +195,6 @@ export default {
       this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))
     },
     exportOrders() {
-      let message = this.$message({
-          showClose: true,
-          message: '导出中...'
-        });
         let _params
 
         if(this.listQuery.orderTimeValue && this.listQuery.orderTimeValue.length) {
@@ -202,19 +209,51 @@ export default {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
                 [`${this.listQuery.searchTimeType}Start`]: this.listQuery.orderTimeValue ? searchTimeTypeStart : '',
                 [`${this.listQuery.searchTimeType}End`]: this.listQuery.orderTimeValue ? searchTimeTypeEnd : '',
+                isExport: 0
             })
+
+            if(this.checkedList.length) {
+              _params = Object.assign({}, _params, {
+                orderIds: this.checkedList.map(val => val.id)
+              })
+            }
 
       this._apis.order
         .exportOrders(_params)
         .then(res => {
-          window.location.href = res
-          message.close()
+          let message
+
+          if(res > 1000) {
+            this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
+                _params = Object.assign({}, _params, {
+                  isExport: 1
+                })
+                this._apis.order
+                  .exportOrders(_params)
+                  .then(res => {
+                    message = this.$message({
+                        showClose: true,
+                        message: '导出中...'
+                      });
+                      window.location.href = res
+                      message.close()
+                  })
+                  .catch(error => {
+                    this.$message.error(error);
+                    message && message.close()
+                  });
+            })
+          } else {
+            message = this.$message({
+              showClose: true,
+              message: '导出中...'
+            });
+            window.location.href = res
+            message && message.close()
+          }
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
           message.close()
         });
     },
@@ -251,6 +290,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .query {
   section {
     background-color: #fff;
@@ -296,5 +346,11 @@ export default {
       color: #F55858;
       font-size: 12px;
     }
+.export-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 </style>
 

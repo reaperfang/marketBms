@@ -113,7 +113,7 @@
             </div>
             <div class="container-item">
                 <p>3.填写物流信息</p>
-                <div class="logistics">
+                <div class="logistics deliver-goods-logistics">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="快递公司" prop="expressCompanyCode">
                             <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
@@ -122,7 +122,7 @@
                             <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="!express" v-model="ruleForm.expressNos"></el-input>
+                            <el-input :disabled="!express" v-model="ruleForm.expressNos" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
                         </el-form-item>
                         <el-form-item label="物流备注" prop="remark">
                             <el-input
@@ -232,10 +232,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
         checkExpress() {
@@ -264,10 +261,7 @@ export default {
             })
             .catch(error => {
             this.visible = false;
-            this.$notify.error({
-                title: "错误",
-                message: error
-            });
+            this.$message.error(error);
             });
         },
         getExpressCompanyList() {
@@ -283,10 +277,7 @@ export default {
                 this.expressCompanyList = res
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         sendGoodsHandler(formName) {
@@ -344,11 +335,7 @@ export default {
                         ],
                     }
                     this._apis.order.orderAfterSaleSend(params).then((res) => {
-                        this.$notify({
-                            title: '成功',
-                            message: '发货成功',
-                            type: 'success'
-                        });
+                        this.$message.success('发货成功');
                         this.sending = false
                         this.$router.push({
                             path: '/order/deliverGoodsSuccess',
@@ -359,10 +346,7 @@ export default {
                             }
                         })
                     }).catch(error => {
-                        this.$notify.error({
-                            title: '错误',
-                            message: error
-                        });
+                        this.$message.error(error);
                         this.sending = false
                     })
                 } else {
@@ -396,10 +380,7 @@ export default {
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 this.fetchOrderAddress();
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         handleSelectionChange(val) {
@@ -500,5 +481,9 @@ export default {
     color: #f56c6c;
     margin-right: 4px;
 }
+.goods-detail-item {
+    margin-right: 10px;
+}
+
 </style>
 

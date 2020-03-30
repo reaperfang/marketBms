@@ -1,10 +1,11 @@
+
 <!--收支明细-->
 <template>
   <div>
-    <div class="top_part">
-      <el-form :model="ruleForm" ref="ruleForm" :inline="inline" label-width="70px">
+    <div class="top_part head-wrapper">
+      <el-form :model="ruleForm" ref="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in revenueExpenditureTerms"
               :key="item.value"
@@ -12,8 +13,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
@@ -50,19 +49,18 @@
         <el-form-item label="交易金额">
           <el-input-number v-model="ruleForm.amountMin" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
           -
-        </el-form-item>
-        <el-form-item>
           <el-input-number v-model="ruleForm.amountMax" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
         </el-form-item>
-        <el-form-item label="交易时间" style="margin-left:25px;">
+        <el-form-item label="交易时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
-            :picker-options="pickerNowDateBefore">
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -75,7 +73,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-        <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '收支明细', '默认页面', '导出']">导出</el-button>
+          <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '收支明细', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <el-table
@@ -152,6 +150,7 @@
           :total="total*1">
         </el-pagination>
       </div>
+      <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component> 
     </div>
   </div>
 </template>
@@ -160,16 +159,17 @@
 import utils from "@/utils";
 import financeCons from '@/system/constant/finance'
 import TableBase from "@/components/TableBase";
+import exportTipDialog from './dialogs/exportTipDialog' //导出提示框 
+import exportTipDialogVue from '@/components/dialogs/exportTipDialog';
 export default {
   name: 'revenueExpenditureDetails',
   extends: TableBase,
+  components:{exportTipDialog},
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
+      currentData:{},
+      dialogVisible: false,
+      currentDialog:"",
       inline:true,
       ruleForm:{
         searchType:'tradeDetailSn',
@@ -292,8 +292,8 @@ export default {
       query.sort = orde || 'desc'
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.tradeTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.tradeTimeEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.tradeTimeStart = timeValue[0]
+        query.tradeTimeEnd = timeValue[1]
       }
       return query;
     },  
@@ -339,19 +339,19 @@ export default {
    
   //导出
     exportToExcel(){
-      this.loading = true;
-      let query = this.init();
-      console.log(query,"query");
-      this._apis.finance.exportRe(query).then((response)=>{
-        console.log(response,"导出")
-        window.location.href = response
-        this.loading = false;
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
+      if(this.total > 1000){
+        this.currentDialog = exportTipDialogVue;
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.exportRe';
+        this.currentData.query = this.init();
+      }else{
+        let query = this.init();
+        this._apis.finance.exportRe(query).then((response)=>{
+          window.location.href = response
+        }).catch((error)=>{
+         this.$message.error(error)
+        })
+      }
     },
   }
 }
@@ -379,6 +379,8 @@ export default {
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display: block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;

@@ -19,6 +19,7 @@ export default {
       multipleSelection: [],
       currentPage: null,
       date: [utils.calcDate(new Date(), '-', 30), new Date()],
+      selectStatus: false
     }
   },
 
@@ -62,14 +63,58 @@ export default {
     //选择改变
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      if(val.length !=0 && val.length == this.tableData.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
 
     //检查当前列是否可以多选
     checkSelection(row, index) {
       return true;
-    }
+    },
+
+     // 全选
+    selectAll(val){
+      if(val && this.tableData.length > 0){
+        this.tableData.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
   }
 }
 </script>
 <style lang="scss">
+.table_empty{
+  height: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin:20px auto;
+  img{
+    width:50px;
+    height:63px;
+    object-fit: contain;
+    margin-bottom:22px;
+  }
+  .tips{
+    font-size:14px;
+    color:rgba(182,181,200,1);
+    line-height: 1;
+    span{
+      margin-left:5px;
+      color:rgba(101,94,255,1);
+      cursor: pointer;
+    }
+    i{
+      font-style: initial;
+      font-size:12px;
+    }
+  }
+}
 </style>

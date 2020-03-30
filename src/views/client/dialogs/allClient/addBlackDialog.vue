@@ -40,6 +40,134 @@
             </span>
         </div>
     </DialogBase>
+    <el-dialog
+        title="选择优惠券"
+        :visible.sync="dialogVisible2"
+        width="45%"
+    >
+        <div>
+            <p class="user_id2">用户ID: {{ data.memberSn }}</p>
+            <el-table
+                :data="data.couponList"
+                style="width: 100%"
+                ref="couponListTable"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                :default-sort="{prop: 'date', order: 'descending'}"
+                v-loading="loading"
+            >
+                <el-table-column
+                    type="selection"
+                    width="55">
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    label="优惠券名称">
+                </el-table-column>
+                <el-table-column
+                    label="优惠方式">
+                    <template slot-scope="scope">
+                        {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="使用门槛">
+                    <template slot-scope="scope">
+                        {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="ownNum"
+                    label="数量"
+                    width="80"
+                >
+                </el-table-column>
+                <el-table-column
+                    label="冻结数量"
+                    width="150"
+                    >
+                    <template slot-scope="scope">
+                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="a_line">
+                <div class="fl">
+                    <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
+                </div>
+                <div class="fr">
+                    共{{!!data.couponList ? data.couponList.length:0}}条数据
+                </div>
+            </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="couponSubmit">确 定</el-button>
+        </span>
+    </el-dialog>
+    <el-dialog
+        title="选择优惠码"
+        :visible.sync="dialogVisible3"
+        width="40%"
+    >
+        <div>
+            <p class="user_id2">用户ID: {{ data.memberSn }}</p>
+            <el-table
+                :data="data.codeList"
+                style="width: 100%"
+                ref="codeListTable"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                :default-sort="{prop: 'date', order: 'descending'}"
+                v-loading="loading"
+            >
+                <el-table-column
+                    type="selection"
+                    width="55">
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    label="优惠券名称">
+                </el-table-column>
+                <el-table-column
+                    label="优惠方式">
+                    <template slot-scope="scope">
+                        {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="使用门槛">
+                    <template slot-scope="scope">
+                        {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="ownNum"
+                    label="数量"
+                    width="80"
+                >
+                </el-table-column>
+                <el-table-column
+                    label="冻结数量"
+                    width="150"
+                    >
+                    <template slot-scope="scope">
+                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="a_line">
+                <div class="fl">
+                    <el-checkbox v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
+                </div>
+                <div class="fr">
+                    共{{!!data.codeList ? data.codeList.length:0}}条数据
+                </div>
+            </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible3 = false">取 消</el-button>
+            <el-button type="primary" @click="codeSubmit">确 定</el-button>
+        </span>
+    </el-dialog>
 </div> 
 </template>
 <script>
@@ -61,11 +189,49 @@ export default {
             codeId: "",
             allCoupons: [],
             allCodes: [],
-            canSubmit: true,
-            btnLoading: false
+            btnLoading: false,
+            dialogVisible2: false,
+            dialogVisible3: false,
+            loading: false,
+            checkAll: false,
+            checkAll2: false,
+            selectedCoupons: [],
+            selectedCodes: []
         }
     },
     methods: {
+        couponSubmit() {
+            this.dialogVisible2 = false;
+            this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
+        },
+        codeSubmit() {
+            this.dialogVisible3 = false;
+            this.selectedCodes = [].concat(this.$refs.codeListTable.selection);
+        },
+        handleChangeAll(val) {
+            this.data.couponList.forEach(row => {
+                this.$refs.couponListTable.toggleRowSelection(row,val);
+            });
+        },
+        handleChangeAll2(val) {
+            this.data.codeList.forEach(row => {
+                this.$refs.codeListTable.toggleRowSelection(row,val);
+            });
+        },
+        changeCoupon(val) {
+            if(val) {
+                this.dialogVisible2 = true;
+            }else{
+                this.selectedCoupons = [];
+            }
+        },
+        changeCode(val) {
+            if(val) {
+                this.dialogVisible3 = true;
+            }else{
+                this.selectedCodes = [];
+            }
+        },
         isRepeat(arr) {
             let hash = {};
             for(let i in arr) {
@@ -82,8 +248,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.couponIds.splice(this.couponIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠券',
                     type: 'warning'
                 });
@@ -95,8 +260,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.codeIds.splice(this.codeIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠码',
                     type: 'warning'
                 });
@@ -186,23 +350,36 @@ export default {
             params.blackListMapDtos = [].concat(blackListMapDtos);
             if(!this.canSubmit || params.blackListMapDtos.length == 0) {
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择禁用选项',
-                    type: 'warning'
+                    type: 'success'
                 });
             }else{
                 //营销优惠券加入黑名单
-                if(couponIdList.length > 0) {
-                    this._apis.client.frozenCoupons({couponIdList: couponIdList, memberId:this.data.id, frozenType: 1}).then((response) => {
+                if(this.selectedCoupons.length > 0) {
+                    let arr = [];
+                    this.selectedCoupons.map((item) => {
+                        let obj = {};
+                        obj.id = item.id;
+                        obj.couponNum = item.frozenNum;
+                        arr.push(obj);
+                    });
+                    this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
                         console.log(error);
                     });
                 }
                 //优惠码加入黑名单
-                if(couponIdList2.length > 0) {
-                    this._apis.client.frozenCoupons({couponIdList: couponIdList2, memberId:this.data.id, frozenType: 1}).then((response) => {
+                if(this.selectedCodes.length > 0) {
+                    let arr = [];
+                    this.selectedCodes.map((item) => {
+                        let obj = {};
+                        obj.id = item.id;
+                        obj.couponNum = item.frozenNum;
+                        arr.push(obj);
+                    });
+                    this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
                         console.log(error);
@@ -212,13 +389,13 @@ export default {
                 this._apis.client.addToBlack(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "加入黑名单成功",
+                    this.$message({
+                        message: '加入黑名单成功',
                         type: 'success'
                     });
                     this.$emit('freshTable');
                 }).catch((error) => {
+                    console.log(error);
                     this.btnLoading = false;
                     this.visible = false;
                     console.log(error);
@@ -247,22 +424,8 @@ export default {
             this.couponIds.splice(index, 1);
         },
         deleteCode(index) {
-            this.codeIds.splice(index, 1);
-        },
-        getAllCoupons() {
-            this._apis.client.getAllCoupons({couponType: 0}).then((response) => {
-                this.allCoupons = [].concat(response.list);
-            }).catch((error) => {
-                console.log(error);
-            })
-        },
-        getAllCodes() {
-            this._apis.client.getAllCoupons({couponType: 1}).then((response) => {
-                this.allCodes = [].concat(response.list);
-            }).catch((error) => {
-                console.log(error);
-            })
-        },
+            this.selectedCodes.splice(index, 1);
+        }
     },
     computed: {
         visible: {
@@ -276,8 +439,6 @@ export default {
     },
     created() {
         this.getBlackChecks();
-        this.getAllCoupons();
-        this.getAllCodes();
     },
     props: {
         data: {
@@ -311,6 +472,16 @@ export default {
     width: 290px;
     .a_d{
         text-align: left;
+        .a_d_name{
+            display: inline-block;
+            color:#B5BDCA;
+            width: 125px;
+            overflow: hidden;
+            margin-right: 5px;
+        }
+        .a_d_delete{
+            color: #FD4C2B;
+        }
     }
 }
 .add{

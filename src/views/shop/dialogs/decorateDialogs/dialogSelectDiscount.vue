@@ -8,12 +8,13 @@
         </el-form-item>
         <el-form-item label="" prop="">
           <el-button type="primary" @click="fetch">搜  索</el-button>
+          <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
       </div>
     </el-form>
     <el-table
       stripe
-      :data="tableList"
+      :data="tableData"
       :row-key="getRowKey"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
@@ -49,7 +50,14 @@
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
         </el-table-column>
+        <div slot="empty" class="table_empty">
+          <img src="../../../../assets/images/table_empty.png" alt="">
+          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addTime', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
+        </div>
       </el-table>
+      <div class="multiple_selection">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+      </div>
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"
@@ -70,6 +78,7 @@ import DialogBase from "@/components/DialogBase";
 import tableBase from '@/components/TableBase';
 import utils from "@/utils";
 import uuid from 'uuid/v4';
+import { getToken } from '@/system/auth'
 export default {
   name: "dialogSelectDiscount",
   extends: tableBase,
@@ -88,7 +97,7 @@ export default {
   data() {
     return {
       pageSize: 5,
-      tableList: [],
+      tableData: [],
       multipleSelection: [],
       pageNum: 1,
       ruleForm: {
@@ -126,17 +135,18 @@ export default {
     })
   },
   methods: {
-    fetch() {
+    fetch(ev, loadAll) {
       this.loading = true;
-      this._apis.shop.getDiscountList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+      let tempForm = {};
+      if(loadAll) {
+        tempForm = {...this.ruleForm};
+        tempForm.activityName = '';
+      }
+      this._apis.shop.getDiscountList(loadAll? tempForm: this.ruleForm).then((response)=>{
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });

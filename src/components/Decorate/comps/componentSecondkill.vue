@@ -17,11 +17,21 @@
                                 <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
                                 <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                                 <!-- <p class="time">{{item.endTime}}</p> -->
+                                <!-- <van-count-down :time="
+                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                " class="time">
+                                    <template v-slot="timeData">
+                                         <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                    </template>
+                                </van-count-down> -->
                             </div>
                         </div>
                     </div>
                     <div class="info_box" v-if="showContents.length > 0">
-                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction}}元</font>{{item.goodsName}}</p>
+                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{getReduce(item)}}元</font>{{item.goodsName}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
                         <div class="limit_line">
                             <p class="limit" v-if="showContents.indexOf('7')!=-1">
@@ -29,15 +39,25 @@
                                     限 {{item.activityJoinLimit}}件/人
                                 </template>
                                 <template v-else>不限制</template>
-                            <p class="remainder" v-if="showContents.indexOf('6')!=-1">仅剩{{item.remainStock}}件</p>
+                            <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
+                                <div class="jd_line">
+                                    <div class="current_line" :style="{width:getProgress(item)}"></div>
+                                </div>
+                                <p>仅剩{{item.remainStock}}件</p>
+                            </div>
                         </div>
                         <div class="price_line">
-                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice}}</font></p>
-                            <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice}}</p>
+                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{getReducePrice(item)}}</font></p>
+                            <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
-                        <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
-                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p>
+                        <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton> -->
+
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&(item.remainStock>0&&utils.dateDifference(item.endTime)>0&&item.status==1)"></componentButton>
+                        <!-- <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
+                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p> -->
+
+                        <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1||item.remainStock<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                        <p class="activity_end" v-if="item.status==0">活动未开始</p>
                     </div>
                 </li>
             </ul>
@@ -156,15 +176,12 @@ export default {
                     this.loading = true;
                     this._apis.shop.getSecondkillListByIds({
                         rightsDiscount: 1, 
-                        activityIds: ids.join(',')
+                        activityIds: ids.join(','),
+                        hideStatus: 0
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;
                     }).catch((error)=>{
-                        // this.$notify.error({
-                        //     title: '错误',
-                        //     message: error
-                        // });
                         console.error(error);
                         this.list = [];
                         this.loading = false;
@@ -177,32 +194,41 @@ export default {
 
         /* 创建数据 */
         createList(datas) {
-            this.list = [];
-            if(this.hideSaledGoods==true){
-                for(var i in datas){
-                    if(datas[i].soldOut!=1){
-                        this.list.push(datas[i]);
-                    }
-                }
-            }
-            else{
-                this.list = datas;
-            }
-            var list = this.list;
-            this.list = [];
-            if(this.hideEndGoods==true){
-                for(var i in list){
-                    if(list[i].activityEnd!=1){
-                        this.list.push(list[i]);
-                    }
-                }
-            }
-            else{
-                this.list = list;
-            }
-
+            this.list = datas;
             this.allLoaded = true;
         },
+
+         /* 获取减免数 */
+        getReduce(item) {
+            if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction;
+            };
+            return '';
+        },
+
+        /* 获取进度条宽度 */
+        getProgress(item) {
+            if(item.stock && item.remainStock && Number(item.stock) && Number(item.remainStock)) {
+                return (item.stock - item.remainStock) / item.stock * 100 + '%';
+            };
+            return '0%';
+        },
+
+        /* 获取优惠价 */
+        getReducePrice(item) {
+            if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice;
+            };
+            return '';
+        },
+
+        /* 获取原价 */
+        getYprice(item) {
+            if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice;
+            };
+            return '';
+        }
 
     },
     beforeDestroy() {
@@ -246,6 +272,13 @@ export default {
                             color:#fff;
                             margin:0 4px;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -269,6 +302,18 @@ export default {
                     position:relative;
                     top:-1.5px;
                     margin-right:7.5px;
+                }
+            }
+             .remainder_box{
+                float:right;
+                margin-top:4px;
+                .jd_line{
+                    width:100px;
+                    height:6px;
+                }
+                p{
+                    font-size:11px;
+                    margin-left:9px;
                 }
             }
             .button{
@@ -340,6 +385,13 @@ export default {
                                 margin:0 2px;
                                 text-align:center;
                             }
+                            .item {
+                                background:#333;
+                                width:58px;
+                                height:32px;
+                                color:#fff;
+                                padding:0 8px;
+                            }
                         }
                     }
                 }
@@ -364,6 +416,17 @@ export default {
                     height:44px;
                     font-size:14px;
                     @include lineClamp(2);
+                }
+                 .remainder_box{
+                    display:flex;
+                    .jd_line{
+                        height:6px;
+                        flex:1;
+                    }
+                    p{
+                        font-size:11px;
+                        margin-left:9px;
+                    }
                 }
                 .caption{
                     display:none;
@@ -433,6 +496,10 @@ export default {
                         display:none;
                     }
                 }
+                .remainder_box{
+                    display:none;
+                }
+
                 .caption{
                     display:none;
                 }
@@ -520,6 +587,13 @@ export default {
                             margin:0 2px;
                             text-align:center;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -543,6 +617,17 @@ export default {
                     position:relative;
                     top:-1.5px;
                     margin-right:7.5px;
+                }
+            }
+            .remainder_box{
+                float:left;
+                .jd_line{
+                    width:100px;
+                    height:6px;
+                }
+                p{
+                    font-size:11px;
+                    margin-left:9px;
                 }
             }
             .limit_line{
@@ -585,6 +670,9 @@ export default {
             .price_line{
                 margin-top:12.5px;
             }
+            .remainder_box{
+                margin-top:10px;
+            }
         }
     }
     li.goodsRatio2{
@@ -594,6 +682,9 @@ export default {
         .info_box{
             .price_line{
                 margin-top:27px;
+            }
+            .remainder_box{
+                margin-top:10px;
             }
         }
     }
@@ -605,6 +696,9 @@ export default {
             .price_line{
                 margin-top:67.5px;
             }
+            .remainder_box{
+                margin-top:10px;
+            }
         }
     }
     li.goodsRatio4{
@@ -615,6 +709,9 @@ export default {
             .name{
                 @include lineClamp(1);
                 height:22px;
+            }
+            .remainder_box{
+                margin-top:5px;
             }
             .caption{
                 height:13px;
@@ -672,6 +769,13 @@ export default {
                                     color:#fff;
                                     margin:0 4px;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -695,6 +799,18 @@ export default {
                             position:relative;
                             top:-1.5px;
                             margin-right:7.5px;
+                        }
+                    }
+                     .remainder_box{
+                        float:right;
+                        margin-top:4px;
+                        .jd_line{
+                            width:100px;
+                            height:6px;
+                        }
+                        p{
+                            font-size:11px;
+                            margin-left:9px;
                         }
                     }
                     .activity_end{
@@ -743,6 +859,13 @@ export default {
                                     margin:0 2px;
                                     text-align:center;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -767,6 +890,17 @@ export default {
                         height:44px;
                         font-size:14px;
                         @include lineClamp(2);
+                    }
+                     .remainder_box{
+                        display:flex;
+                        .jd_line{
+                            height:6px;
+                            flex:1;
+                        }
+                        p{
+                            font-size:11px;
+                            margin-left:9px;
+                        }
                     }
                     .caption{
                         display:none;
@@ -840,6 +974,13 @@ export default {
                                     margin:0 2px;
                                     text-align:center;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -864,6 +1005,17 @@ export default {
                         height:44px;
                         font-size:14px;
                         @include lineClamp(2);
+                    }
+                     .remainder_box{
+                        display:flex;
+                        .jd_line{
+                            height:6px;
+                            flex:1;
+                        }
+                        p{
+                            font-size:11px;
+                            margin-left:9px;
+                        }
                     }
                     .caption{
                         display:none;
@@ -926,6 +1078,9 @@ export default {
                     .label{
                         display:none;
                     }
+                }
+                .remainder_box{
+                    display:none;
                 }
                 .caption{
                     display:none;
@@ -1030,6 +1185,13 @@ export default {
                             display:inline-block;
                             @include borderRadius(2px);
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -1043,6 +1205,35 @@ export default {
                 color:#333;
                 .label{
                     font-weight:normal;
+                }
+            }
+             .remainder_box{
+                overflow:hidden;
+                .jd_line{
+                    overflow:hidden;
+                    background:#FFC9CA;
+                    position:relative;
+                    overflow:hidden;
+                    float:left;
+                    margin-top:1px;
+                    @include borderRadius(25px);
+                    .current_line{
+                        position:absolute;
+                        top:0;
+                        left:0;
+                        height:100%;
+                        background:#FC3D42;
+                        width:50%;
+                        @include borderRadius(25px);
+                    }
+                }
+                p{
+                    float:left;
+                    color:#7c7c7c;
+                    line-height:1;
+                    font{
+                        color:#FC3D42;
+                    }
                 }
             }
             .name.textStyle{

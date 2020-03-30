@@ -5,6 +5,7 @@ import permission from './modules/permission'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
 import menu from './modules/menu'
+import set from './modules/set'
 import decorate from './modules/decorate'
 import data from './modules/data'
 import shop from './modules/shop'
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
     tagsView,
     user,
     menu,
+    set,
     decorate,
     data,
     shop,

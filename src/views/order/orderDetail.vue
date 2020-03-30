@@ -9,7 +9,8 @@
             </div>
             <div class="righter">
                 <i class="memberLevelImg" :style="{background: `url(${orderDetail.memberLevelImg})`}"></i>
-                <span class="member-sn">客户ID：{{orderDetail.orderInfo.memberSn}}</span>
+                <span class="member-name">用户昵称：{{orderDetail.orderInfo.memberName}}</span>
+                <span class="member-sn">用户ID：{{orderDetail.orderInfo.memberSn}}</span>
             </div>
         </div>
         <orderState :orderInfo="orderDetail.orderInfo" :orderState="orderDetail.orderInfo.orderStatus" :payWay="orderDetail.orderInfo.payWay" :closeReaosn="orderDetail.orderInfo.closeReaosn" @orderStatusSuccess="getDetail" class="order-state"></orderState>
@@ -18,7 +19,7 @@
                 <el-tab-pane label="订单信息" name="order">
                     <orderInformation :orderInfo="orderDetail.orderInfo" :orderDetail="orderDetail" @getDetail="getDetail"></orderInformation>
                 </el-tab-pane>
-                <el-tab-pane label="发货信息" name="delivery">
+                <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
             </el-tabs>
@@ -280,18 +281,11 @@ export default {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                this.$message.success('添加成功！');
                 this.getDetail()
             }).catch(error => {
                 this.changePriceVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         getDetail() {
@@ -303,10 +297,7 @@ export default {
                     this.orderDetail = res
                     resolve(res)
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                     reject(error)
                 })
             })
@@ -414,6 +405,10 @@ export default {
         margin-right: 5px;
     }
     .member-sn {
+        color: #b6b6b9;
+    }
+    .member-name {
+        margin-right: 20px;
         color: #b6b6b9;
     }
 </style>

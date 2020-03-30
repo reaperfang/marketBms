@@ -8,12 +8,12 @@
       ref="allClientTable"
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-      :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
+      @sort-change="changeSort"
     >
       <el-table-column type="selection" :reserve-selection="true"></el-table-column>
-      <el-table-column prop="memberSn" label="客户ID"></el-table-column>
-      <el-table-column label="客户信息">
+      <el-table-column prop="memberSn" label="用户ID"></el-table-column>
+      <el-table-column label="用户信息">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
             <img v-if="scope.row.headIcon" :src="scope.row.headIcon" alt="" class="headIcon fl">
@@ -32,6 +32,11 @@
               <span>{{scope.row?scope.row.cardLevelName:""}}</span>
             </div>
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="余额" sortable="custom">
+        <template slot-scope="scope">
+          ¥{{scope.row.balance}}
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
@@ -62,11 +67,11 @@
       ></el-pagination>
     </div>
     <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange"></el-checkbox>
+      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
-      <el-button class="border_btn" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
-      <el-button class="border_btn" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
-      <el-button class="border_btn" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
+      <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
     </div>
     <component
       :is="currentDialog"
@@ -108,7 +113,9 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      loading: false
+      loading: false,
+      couponList:[],
+      codeList:[]
     };
   },
   computed: {
@@ -120,6 +127,31 @@ export default {
     //this.getMembers(1, this.pageSize);
   },
   methods: {
+    changeSort(val) {
+      let tOrder = null;
+      switch(val.prop) {
+        case "balance":
+          tOrder = val.order == "ascending" ? 0:1
+          break;
+        case "score":
+          tOrder = val.order == "ascending" ? 2:3
+          break;
+        case "totalDealMoney":
+          tOrder = val.order == "ascending" ? 4:5
+          break;
+        case "dealTimes":
+          tOrder = val.order == "ascending" ? 6:7
+          break;
+        case "perUnitPrice":
+          tOrder = val.order == "ascending" ? 8:9
+          break;
+        default:
+          break;
+      }
+      this.$set(this.newForm,'orderByCondition', tOrder);
+      this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
+    },
     getRowKeys(row) {
       return row.id
     },
@@ -136,8 +168,7 @@ export default {
           console.log(error);
         })
       }else{
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请选择要导出的数据',
           type: 'warning'
         });
@@ -145,6 +176,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getMembers(val, this.pageSize);
+      this.startIndex = val;
     },
     handleSizeChange(val) {
       this.getMembers(1, val);
@@ -161,10 +193,7 @@ export default {
         this.currentDialog = "batchDeleteUserDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
     batchAddTag() {
@@ -173,10 +202,7 @@ export default {
         this.currentDialog = "batchAddTagDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
     addTag(id) {
@@ -185,10 +211,16 @@ export default {
       this.currentData.id = id;
     },
     addBlackList(row) {
+      this.getAllCoupons(row.id);
+      this.getAllCodes(row.id);
       this.dialogVisible = true;
       this.currentDialog = "addBlackDialog";
       this.currentData.memberSn = row.memberSn;
       this.currentData.id = row.id;
+      setTimeout(() => {
+        this.currentData.couponList = this.couponList;
+        this.currentData.codeList = this.codeList;
+      },200);
     },
     removeBlack(row) {
       this.dialogVisible = true;
@@ -202,10 +234,7 @@ export default {
         this.currentDialog = "batchAddBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
     batchRemoveBlack() {
@@ -214,10 +243,7 @@ export default {
         this.currentDialog = "batchRemoveBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
     handleChange(val) {
@@ -249,7 +275,29 @@ export default {
     },
     freshTable() {
       this.checkAll = false;
-      this.getMembers(1, this.pageSize);
+      this.getMembers(this.startIndex, this.pageSize);
+    },
+    getAllCoupons(id) {
+      this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {
+          this.couponList = [].concat(response.list);
+          this.couponList.map((item) => {
+              this.$set(item, 'frozenNum',1);
+          })
+          this.currentData.couponList = this.couponList;
+      }).catch((error) => {
+          console.log(error);
+      })
+    },
+    getAllCodes(id) {
+        this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1}).then((response) => {
+            this.codeList = [].concat(response.list);
+            this.codeList.map((item) => {
+                this.$set(item, 'frozenNum', 1);
+            });
+            this.currentData.codeList = this.codeList;
+        }).catch((error) => {
+            console.log(error);
+        })
     }
   },
   watch: {
@@ -316,10 +364,11 @@ export default {
 }
 .acTable_container{
   position: relative;
+  margin-top: 60px;
   .export_btn{
     position: absolute;
-    top: -62px;
-    left: 73px;
+    top: -52px;
+    right: 40px;
   }
 }
 .a_line {

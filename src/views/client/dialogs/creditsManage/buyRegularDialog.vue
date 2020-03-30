@@ -12,7 +12,13 @@
             <span>赠送积分的商品：</span>
             <el-radio v-model="isAllProduct" label="0">全部商品</el-radio>
             <el-radio v-model="isAllProduct" label="1" @change="showDialog">指定商品</el-radio>
+            <el-button style="margin-left: 10px" @click="dialogVisible2 = true" v-if="selectedList.length !== 0">查看已选商品</el-button>
           </div>
+          <!-- <div class="proList">
+            <ul v-if="selectedList.length !== 0">
+              <li v-for="item in selectedList" :key="item.goodsInfo.id" class="proList"><span>{{item.goodsInfo.name}}</span><span>{{item.goodsInfo.specs}}</span><span>{{item.goodsInfo.stock}}</span><span class="pointer" style="color: #FD4C2B;" @click="handleClick(item)">删除</span></li>
+            </ul>
+          </div> -->
           <div>
             <span>是否区分人群发放：</span>
             <el-radio v-model="distinguish" label="0">不区分</el-radio>
@@ -75,9 +81,9 @@
             <div class="input_wrap">
               <el-cascader :options="categoryOptions" v-model="categoryValue" clearable></el-cascader>
             </div>
-            <div class="input_wrap">
+            <!-- <div class="input_wrap">
               <el-input placeholder="输入商品标签" v-model="productLabelName"></el-input>
-            </div>
+            </div> -->
             <div class="input_wrap2">
               <el-input placeholder="输入商品名称" v-model="name"></el-input>
             </div>
@@ -93,7 +99,7 @@
             :row-key="getRowKeys"
           >
             <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true"></el-table-column>
-            <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column>
+            <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
             <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
             <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
             <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
@@ -116,6 +122,37 @@
         <el-button type="primary" @click="submit2">确 认</el-button>
         <el-button @click="otherVisible = false">取 消</el-button>
       </span>
+    </el-dialog>
+    <el-dialog
+        title="已选商品"
+        :visible.sync="dialogVisible2"
+        width="45%"
+    >
+        <div>
+            <el-button class="clearBtn" @click="clearList">清 空</el-button>
+            <el-table
+                :data="selectedList"
+                style="width: 100%"
+                ref="selectedTable"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                :default-sort="{prop: 'date', order: 'descending'}"
+            >
+                <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
+                <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
+                <el-table-column prop="goodsInfo.specs" label="规格" width="300"></el-table-column>
+                <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
+                <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
+                <el-table-column label="操作" width="80">
+                  <template slot-scope="scope">
+                      <span class="edit_span pointer" @click="deleteRow(scope.row)">删除</span>
+                  </template>
+              </el-table-column>
+            </el-table>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="submit3">确 定</el-button>
+        </span>
     </el-dialog>
   </div>
 </template>
@@ -148,10 +185,16 @@ export default {
       total: 0,
       pageSize: 10,
       startIndex: 1,
-      btnLoading: false
+      btnLoading: false,
+      dialogVisible2: false,
+      selectedList: []
     };
   },
   methods: {
+    deleteRow(row) {
+      this.selectedList.splice(row, 1);
+      this.skuList.push(row);
+    },
     checkZero(event,val,ele) {
       val = val.replace(/[^\d]/g,'');
       val = val.replace(/^0/g,'');
@@ -174,6 +217,14 @@ export default {
       this.btnLoading = true;
       let params;
       if (this.enable) {
+        if(this.selectedList.length > 0) {
+          this.selectedList.map(v => {
+            let obj = {};
+            obj.id = v.goodsInfo.id;
+            obj.name = v.goodsInfo.name;
+            this.selectProducts.push(obj);
+          });
+        }
         params = { 
             id: this.data.row.id,
             enable: this.enable,
@@ -199,12 +250,11 @@ export default {
           enable: this.enable,
         }
       }
-      if (this.enable && !params.sceneRule.isAllProduct && this.selectProducts.length == 0) {
+      if (this.enable && !params.sceneRule.isAllProduct && this.selectedList.length == 0) {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "请选择指定产品",
-          type: "warning"
+        this.$message({
+          message: '请选择指定产品',
+          type: 'warning'
         });
       } else {
         this._apis.client
@@ -212,10 +262,9 @@ export default {
           .then(response => {
             this.btnLoading = false;
             this.visible = false;
-            this.$notify({
-              title: "成功",
-              message: "保存成功",
-              type: "success"
+            this.$message({
+              message: '保存成功',
+              type: 'success'
             });
             this.$emit('refreshPage')
           })
@@ -276,7 +325,8 @@ export default {
         productCatalogInfoId: this.categoryValue[2],
         startIndex: startIndex,
         pageSize: pageSize,
-        productLabelName: this.productLabelName
+        productLabelName: this.productLabelName,
+        status: 1
       };
       this._apis.client
         .getSkuList(params)
@@ -286,16 +336,6 @@ export default {
           });
           this.skuList = [].concat(response.list);
           this.total = response.total;
-          let selectProducts = JSON.parse(this.data.row.sceneRule).selectProducts;
-          selectProducts.map(v => {
-              this.skuList.forEach(row => {
-                if (row.goodsInfo.id == v.id) {
-                  this.$nextTick(() => {
-                    this.$refs.skuTable.toggleRowSelection(row);
-                  });
-                }
-              });
-            });
         })
         .catch(error => {
           console.log(error);
@@ -311,16 +351,24 @@ export default {
       this.getSkuList(this.startIndex, this.pageSize);
     },
     submit2() {
-      this.otherVisible = false;
+      //this.otherVisible = false;
+      this.dialogVisible2 = true;
       let selections = this.$refs.skuTable.selection;
+      this.selectedList = this.selectedList.concat(selections);
       if(selections.length > 0) {
-        selections.map(v => {
-          let obj = {};
-          obj.id = v.goodsInfo.id;
-          obj.name = v.goodsInfo.name;
-          this.selectProducts.push(obj);
-        });
-      }
+          this.skuList.map((item) => {
+            selections.map((i) => {
+              if(item.goodsInfo.id == i.goodsInfo.id) {
+                this.skuList.splice(item, 1);
+              }
+            })
+          })
+        }
+        this.$nextTick(() => {
+          this.skuList.forEach(row => {
+            this.$refs.skuTable.toggleRowSelection(row,false);
+          });
+        })
     },
     getInfo() {
       let row = this.data.row;
@@ -336,6 +384,15 @@ export default {
         this.noMember = sceneRule.yesDistinguish.noMember || 0;
         //this.payAmount = sceneRule.yesDistinguish.payAmount;
       }
+    },
+    clearList() {
+      this.selectedList = [];
+    },
+    submit3() {
+      this.$nextTick(() => {
+        this.otherVisible = false;
+        this.dialogVisible2 = false;
+      }); 
     }
   },
   computed: {
@@ -410,6 +467,18 @@ export default {
   .page_styles {
     overflow-x: auto;
     text-align: center;
+  }
+  .clearBtn{
+    float: right;
+    margin-bottom: 20px;
+  }
+  .proList{
+    ul li{
+      margin-bottom: 10px;
+      span{
+        margin-right: 20px;
+      }
+    }
   }
 }
 .dialog-footer{

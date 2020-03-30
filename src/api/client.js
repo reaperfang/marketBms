@@ -288,6 +288,24 @@ export function getAllCoupons(data) {
         params:data
     })
 }
+//获取优惠券发放列表
+export function getDistributeCouponList(data) {
+    return request({
+        url: '/v1/b/app-coupon/activity/distributeList',
+        method: 'post',
+        baseURL: process.env.SALE_API,
+        data
+    })
+}
+//获取优惠券下拉
+export function getAllCouponsOther(data) {
+    return request({
+        url: '/activity/page-list',
+        method: 'get',
+        baseURL: process.env.SALE_API,
+        params:data
+    })
+}
 //优惠券/码发放
 export function distributeCoupon(data) {
     return request({
@@ -636,6 +654,24 @@ export function batchFrozenCoupons(data) {
         url: '/v1/b/app-coupon-member-get/activity/batch-frozen',
         method: 'post',
         baseURL: process.env.SALE_API,
+        data
+    })
+}
+//等级启用
+export function levelEnable(data) {
+    return request({
+        target:'LEVEL-ENABEL-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//等级禁用
+export function levelDisable(data) {
+    return request({
+        target:'LEVEL-DISABLE-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
         data
     })
 }

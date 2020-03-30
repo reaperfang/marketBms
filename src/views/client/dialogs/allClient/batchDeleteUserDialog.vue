@@ -25,8 +25,7 @@ export default {
             });
             arr = arr.join(',');
             this._apis.client.batchDeleteMember({ids:arr}).then((response) => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '批量删除成功',
                     type: 'success'
                 });

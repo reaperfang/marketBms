@@ -1,5 +1,6 @@
 // 店铺相关接口
 import request from '@/system/request'
+import Qs from 'query-string';
 
 
 // 页面管理&草稿箱列表(分页)
@@ -487,9 +488,10 @@ export function changeSwitchStatus(data) {
   export function getMultiPersonListByIds(data) {
       return request({
         url: '/v1/c/app-group-buy/listGoods',
-        method: 'get',
+        method: 'post',
         baseURL: process.env.SALE_API,
-        params:data
+        data,
+        isDev: true
       })
   }
 
@@ -499,7 +501,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/seckill/get-activity-goods',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        isDev: true
       })
   }
 
@@ -507,9 +510,15 @@ export function changeSwitchStatus(data) {
   export function getDiscountListByIds(data) {
       return request({
         url: '/v1/c/limit-discount/get-activity-goods',
-        method: 'get',
+        method: 'post',
         baseURL: process.env.SALE_API,
-        params:data
+        transformRequest: [function (data) {
+          // 这里可以在发送请求之前对请求数据做处理，比如form-data格式化等，这里可以使用开头引入的Qs（这个模块在安装axios的时候就已经安装了，不需要另外安装）
+          data = Qs.stringify(data)
+          return data
+        }],
+        data,
+        isDev: true
       })
   }
 
@@ -519,7 +528,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/package-buy/get-package-buy-list',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        isDev: true
       })
   }
 
@@ -529,7 +539,8 @@ export function changeSwitchStatus(data) {
         url: '/v1/c/app-reward',
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        isDev: true
       })
   }
 
@@ -539,7 +550,8 @@ export function changeSwitchStatus(data) {
         url: `/v1/c/goodsbale/list/${data.baleIds}`,
         method: 'get',
         baseURL: process.env.SALE_API,
-        params:data
+        params:data,
+        isDev: true
       })
   }
 

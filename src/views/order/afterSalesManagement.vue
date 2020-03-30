@@ -7,7 +7,7 @@
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
                             <el-option label="售后单编号" value="code"></el-option>
                             <el-option label="订单编号" value="orderCode"></el-option>
-                            <el-option label="客户ID" value="memberSn"></el-option>
+                            <el-option label="用户昵称" value="memberName"></el-option>
                         </el-select>
                     </el-input>
                 </el-form-item>
@@ -15,10 +15,10 @@
                     <el-date-picker
                         v-model="listQuery.applicationDate"
                         type="datetimerange"
-                        range-separator="-"
+                        range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        :default-time="['00:00:00', '23:59:59']">
+                        :picker-options="utils.globalTimePickerOption.call(this)">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="售后类型">
@@ -40,21 +40,26 @@
                         <el-option label="已关闭" value="5"></el-option>
                     </el-select>
                 </el-form-item>
-                <div class="buttons">
-                    <div class="lefter">
-                        <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
-                        <el-button v-permission="['订单', '售后管理', '默认页', '批量审核']" class="border-button" @click="batchUpdateStatus">批量审核</el-button>
-                    </div>
+                <el-form-item>
+                    <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
+                </el-form-item>
+                <!-- <div class="buttons" style="display: inline-block; float: right;">
                     <div class="righter">
-                        <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">查询</el-button>
+                        <el-button @click="getList" type="primary">搜索</el-button>
+                        <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
-                </div>
+                </div> -->
             </el-form>
         </div>
         <div class="line"></div>
         <div class="content">
-            <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
+            <div class="export-header">
+                <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
+                <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">
+                <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
+                </el-tooltip>
+            </div>
             <el-table
                 v-loading="loading"
                 ref="multipleTable"
@@ -85,8 +90,8 @@
                     width="120">
                 </el-table-column>
                 <el-table-column
-                    prop="memberSn"
-                    label="客户ID"
+                    prop="memberName"
+                    label="用户昵称"
                     width="120">
                 </el-table-column>
                 <el-table-column
@@ -106,12 +111,16 @@
                         <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
                         <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
                         <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">查看物流</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">确认收货</span>
+                        <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">确认收货</span>
                         <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
-                        <span class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
+                        <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
                     </template>
                 </el-table-column>
             </el-table>
+            <div v-show="!loading" class="footer">
+                <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+                <el-button v-permission="['订单', '售后管理', '默认页', '批量审核']" class="border-button" @click="batchUpdateStatus">批量审核</el-button>
+            </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
@@ -125,8 +134,10 @@ import BatchUpdateStatusDialog from '@/views/order/dialogs/batchUpdateStatusDial
 import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 import LogisticsDialog from '@/views/order/dialogs/logisticsDialog'
 import utils from "@/utils";
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             orderNumberTypeList: [
@@ -143,8 +154,8 @@ export default {
                     value: '快递单号'
                 },
                 {
-                    label: '客户ID',
-                    value: '客户ID'
+                    label: '用户ID',
+                    value: '用户ID'
                 },
             ],
             afterSalesTypeList: [
@@ -184,7 +195,9 @@ export default {
             dialogVisible: false,
             title: '',
             currentData: '',
-            loading: false
+            loading: false,
+            checkedAll: false,
+            isIndeterminate: false
         }
     },
     created() {
@@ -223,19 +236,21 @@ export default {
         }
     },
     methods: {
+        checkedAllChange() {
+            if(this.checkedAll) {
+                this.$refs.multipleTable.clearSelection();
+                this.$refs.multipleTable.toggleAllSelection();
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+            this.isIndeterminate = false;
+        },
         confirmReceived(row) {
             this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
-                this.$notify({
-                    title: '成功',
-                    message: '确认收货成功',
-                    type: 'success'
-                });
+                this.$message.success('确认收货成功');
                 this.getList()
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         showLogistics(row) {
@@ -246,26 +261,16 @@ export default {
                 this.currentData = res.traces
                 this.dialogVisible = true
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         drawback(row) {
             this._apis.order.orderAfterSaleDrawback({id: row.id, memberInfoId: row.memberInfoId}).then((res) => {
                 console.log(res)
-                this.$notify({
-                    title: '成功',
-                    message: '已发起退款，系统处理中。',
-                    type: 'success'
-                });
+                this.$message.success('已发起退款，系统处理中。');
                 this.getList()
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
             // this.confirm({title: '提示', text: '微信账户余额不足，无法退款。'}).then(() => {
                 
@@ -278,21 +283,37 @@ export default {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
                 createTimeStart: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[0], "yyyy-MM-dd hh:mm:ss") : '',
                 createTimeEnd: this.listQuery.applicationDate && this.listQuery.applicationDate.length ? utils.formatDate(this.listQuery.applicationDate[1], "yyyy-MM-dd hh:mm:ss") : '',
-                ids: this.multipleSelection.map(val => val.id)
+                //ids: this.multipleSelection.map(val => val.id),
+                isExport: 0
             })
+            if(this.multipleSelection.length) {
+              _params = Object.assign({}, _params, {
+                ids: this.multipleSelection.map(val => val.id)
+              })
+            }
            this._apis.order.orderAfterSaleExport(_param).then((res) => {
                 console.log(res)
-                window.location.href = res
-                this.$notify({
-                    title: '成功',
-                    message: '导出成功！',
-                    type: 'success'
-                });
+                if(res > 1000) {
+                    this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
+                        _params = Object.assign({}, _params, {
+                        isExport: 1
+                        })
+                        this._apis.order
+                        .orderAfterSaleExport(_params)
+                        .then(res => {
+                            window.location.href = res
+                            this.$message.success('导出成功！');
+                        })
+                        .catch(error => {
+                            this.$message.error(error);
+                        });
+                    })
+                } else {
+                    window.location.href = res
+                    this.$message.success('导出成功！');
+                }
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         batchUpdateStatus() {
@@ -317,31 +338,17 @@ export default {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
                     console.log(res)
                     this.getList()
-                    this.$notify({
-                        title: '成功',
-                        message: '审核成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('审核成功！');
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             } else {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 5, refuseReason: value.refuseReason}).then((res) => {
                     console.log(res)
                     this.getList()
-                    this.$notify({
-                        title: '成功',
-                        message: '拒绝审核成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('拒绝审核成功！');
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }
         },
@@ -354,16 +361,9 @@ export default {
         rejectHandler(value) {
             this._apis.order.orderAfterSaleUpdateStatus({id: this.currentData.id, orderAfterSaleStatus: 5, refuseReason: value}).then((res) => {
                 this.getList()
-                this.$notify({
-                    title: '成功',
-                    message: '拒绝审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('拒绝审核成功！');
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         updateStatus(row) {
@@ -382,32 +382,18 @@ export default {
             }else{
                 this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
                     this.getList();
-                    this.$notify({
-                        title: '成功',
-                        message: '审核成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('审核成功！');
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }
         },
         // 换货确认
         confirmHandler(value) {
             this._apis.order.orderAfterSaleConfirmExchange({id: this.currentData.id, exchangeConfirmation: value.exchangeConfirmation}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '换货确认成功！',
-                    type: 'success'
-                });
+                this.$message.success('换货确认成功！');
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         resetForm(formName) {
@@ -424,6 +410,9 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            let checkedCount = val.length;
+            this.checkedAll = checkedCount === this.tableData.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList(param) {
             this.loading = true
@@ -455,6 +444,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .after-sales {
     .search {
         background-color: #fff;
@@ -464,7 +464,7 @@ export default {
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             .resetting {
                 color: #FD932B;
                 margin-right: 40px;
@@ -488,6 +488,10 @@ export default {
                 color: #45444c;
             }
         }
+        .footer {
+            padding: 20px;
+            padding-left: 15px;
+        }
     }
 }
 /deep/ .el-input {
@@ -495,6 +499,18 @@ export default {
 }
 /deep/ .input-with-select .el-input__inner {
   width: 139px;
+}
+.export-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/deep/ .el-checkbox__label {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.el-button+.el-button {
+    margin-left: 12px;
 }
 </style>
 

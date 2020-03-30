@@ -1,9 +1,9 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="换货确认" width="500px" :showFooter="showFooter">
         <div class="container">
-            <p>是否需要客户发货：</p>
-            <el-radio v-model="exchangeConfirmation" :label="1">是</el-radio>
-            <el-radio v-model="exchangeConfirmation" :label="0">否</el-radio>
+            <p>是否需要用户退回商品：</p>
+            <el-radio v-model="exchangeConfirmation" :label="1">需要退货</el-radio>
+            <el-radio v-model="exchangeConfirmation" :label="0">无需退货</el-radio>
             <div class="footer">
                 <!-- <el-button @click="visible = false">取消</el-button> -->
                 <el-button @click="submit" type="primary">确定</el-button>
@@ -25,37 +25,24 @@ export default {
     methods: {
         submit() {
             // this._apis.order.orderAfterSaleConfirmExchange({id: this.data.id, exchangeConfirmation: this.exchangeConfirmation }).then((res) => {
-            //     this.$notify({
-            //         title: '成功',
-            //         message: '换货确认成功',
-            //         type: 'success'
-            //     });
+            //     this.$message.success('换货确认成功');
             //     this.visible = false
             // }).catch(error => {
-            //     this.$notify.error({
-            //         title: '错误',
-            //         message: error
-            //     });
+            //     this.$message.error(error);
             //     this.visible = false
             // })
             
             this._apis.order.orderAfterSaleUpdateStatus({id: this.data.id, orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1, exchangeConfirmation: this.exchangeConfirmation}).then((res) => {
                 console.log(res)
-                this.$parent.getList();
+                this.$parent.getList && this.$parent.getList();
+                this.$parent.getDetail && this.$parent.getDetail();
                 // this.confirm({title: '换货确认', icon: true, text: `是否确认${_title}？`}).then(() => {
                     
                 // })
-                this.$notify({
-                        title: '成功',
-                        message: '审核成功！',
-                        type: 'success'
-                    });
+                this.$message.success('审核成功！');
                 this.visible = false;
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         }
     },

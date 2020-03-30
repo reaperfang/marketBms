@@ -24,9 +24,9 @@
                 <div class="fl gflex">
                     <p >按时间筛选</p>
                      <el-radio-group v-model="timeType" @change="changeDay">
-                        <el-radio-button class="btn_bor" label="1">7天前</el-radio-button>
-                        <el-radio-button class="btn_bor" label="2">15天前</el-radio-button>
-                        <el-radio-button class="btn_bor" label="3">30天前</el-radio-button>
+                        <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
+                        <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
                      </el-radio-group>
                 </div>
                 <div class="fr">
@@ -43,8 +43,10 @@
                     </el-radio-group>
                 </div>
                 <div class="fr">
-                    <el-button class="export_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
-                    <el-button class="minor_btn fr" @click="getHistoryRecord()">重新筛选</el-button>
+                    <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+                        <el-button class="export_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
+                    </el-tooltip>
+                    <!-- <el-button class="minor_btn fr" @click="getHistoryRecord()">重新筛选</el-button> -->
                 </div> 
             </div>
             <div>
@@ -88,14 +90,16 @@
           </el-pagination>
     </div>
         </div>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>   
     </div>
 </template>
 <script>
 import pp1Chart from './components/pp1Chart';
 import pp2Chart from './components/pp2Chart';
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
     name: 'perPrice',
-    components: { pp1Chart, pp2Chart },
+    components: { pp1Chart, pp2Chart, exportTipDialog },
     data() {
         return {
             listObj:{},
@@ -113,7 +117,11 @@ export default {
             tableCopyTableList: [],
             index: 1,
             size: 5,
-            perPrice:''
+            perPrice:'',
+            currentDialog:"",
+            dialogVisible: false,
+            currentData:{},
+            totalNum:0,
         }
     },
     methods: {
@@ -144,6 +152,7 @@ export default {
                 pageSize:this.pageSize
             }
             this._apis.data.historyRecord(data).then(response => {
+                this.totalNum = response.totalSize || 0;
                 this.listObj = response;
                 let arrList = response.list;
                 this.tableData = response.list.reverse();
@@ -198,9 +207,16 @@ export default {
                 endTime: this.endTime,
                 timeType:this.timeType,
             }
-            this._apis.data.historyExport(data).then(response => {
-                window.open(response);
-            })
+            if(this.totalNum > 1000){
+                this.dialogVisible = true
+                this.currentDialog = exportTipDialog
+                this.currentData.query = data
+                this.currentData.api = "data.historyExport"
+            }else{
+                this._apis.data.historyExport(data).then(response => {
+                    window.open(response);
+                })
+            }    
         },
         changeDay(val){
             if(val == 1){

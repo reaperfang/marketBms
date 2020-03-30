@@ -87,9 +87,8 @@ export default {
                 }
             }
             this._apis.client.editCreditRegular(params).then((response) => {
-                this.$notify({
-                    title: '成功',
-                    message: "保存成功",
+                this.$message({
+                    message: '保存成功',
                     type: 'success'
                 });
                 this.$emit('refreshPage');

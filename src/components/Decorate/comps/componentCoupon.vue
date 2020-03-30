@@ -9,73 +9,12 @@
           <template v-for="(item, key) in list">
             <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
               <div class="first_money">
-                <span :class="style1">{{item.useType==0?item.useTypeFullcut:(item.useTypeDiscount * 10).toFixed(1)}}</span>
-                <span :class="style1">{{item.useType==0?'元':'折'}}</span>
+                <span :class="style1">{{getTitle(item)}}</span>
+                <span :class="style1">{{getContent(item)}}</span>
               </div>
               <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
             </li>
-            <!-- <li v-else-if="item.status=='false'" :style="item.status=='true'?imgs1:imgs " :key="key">
-              <div class="first_money">
-                <span :class="style1">{{item.useType==0?item.useTypeFullcut:item.useTypeDiscount * 10}}</span>
-                <span :class="style1">{{item.useType==0?'元':'折'}}</span>
-              </div>
-              <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
-            </li> -->
           </template>
-          <!-- <template  v-for="(item, key) in list">
-            <li
-              v-if="currentComponentData.data.hideScrambled===false"
-              :style="item.status===2?imgs1:imgs "
-              :key="key"
-              >
-              <div class="first_money">
-                <span :class="style1">{{item.useType === 0 ? Number(item.useTypeFullcut).toFixed(2) : ( Number(item.useTypeDiscount)  * 10).toFixed(1)}}
-                  {{item.useType === 0 ? '元' : '折'}}</span>
-                <span :class="style1"></span>
-              </div>
-              <div :class="style2" class="first_present">
-                <span v-if="item.useCondition > -1">
-                  满{{ Number(item.useCondition).toFixed(2)}},减{{ Number(item.useTypeFullcut).toFixed(2)}}
-                </span>
-                <span v-else>
-                  减{{ Number(item.useTypeFullcut).toFixed(2)}}
-                </span>
-              </div>
-            </li>
-            <li
-              v-else-if="currentComponentData.data.hideScrambled===true && (item.status=== 0 || item.status=== 1)"
-              :style="item.status===2?imgs1:imgs "
-              :key="key"
-              >
-              <div class="first_money">
-                <span :class="style1">{{item.useType === 0 ?  Number(item.useTypeFullcut).toFixed(2) : ( Number(item.useTypeDiscount)  * 10).toFixed(1)}}
-                  {{item.useType === 0 ? '元' : '折'}}</span>
-                <span :class="style1"></span>
-              </div>
-              <div :class="style2" class="first_present">
-                <span v-if="item.useCondition > -1">
-                  满{{ Number(item.useCondition).toFixed(2)}},减{{ Number(item.useTypeFullcut).toFixed(2)}}
-                </span>
-                <span v-else>
-                  减{{ Number(item.useTypeFullcut).toFixed(2)}}
-                </span>
-              </div>
-            </li> -->
-            <!-- <li :style="imgs">
-              <div class="first_money">
-                <span
-                  :class="[currentComponentData.data.couponStyle===3?'col_'+currentComponentData.data.couponColor:'',currentComponentData.data.couponColor===3?'col_1':'']"
-                >100.01</span>
-                <span
-                  :class="[currentComponentData.data.couponStyle===3?'col_'+currentComponentData.data.couponColor:'',currentComponentData.data.couponColor===3?'col_1':'']"
-                >元</span>
-              </div>
-              <div
-                :class="[currentComponentData.data.couponStyle===3?'col_'+currentComponentData.data.couponColor:'',currentComponentData.data.couponColor===3?'col_6':'']"
-                class="first_present"
-              >无门开使用</div>
-            </li>-->
-          <!-- </template> -->
         </ul>
       </div>
     </template>
@@ -208,10 +147,6 @@ export default {
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
                 console.error(error);
                 this.list = [];
                 this.loading = false;
@@ -224,6 +159,16 @@ export default {
        this.list = datas;
        this.allLoaded = true;
     },
+
+    /* 获取标题 */
+    getTitle(item) {
+      return item.useType==0?item.useTypeFullcut:(item.useTypeDiscount * 10).toFixed(1);
+    },
+
+    /* 获取内容 */
+    getContent(item) {
+      return item.useType==0?'元':'折';
+    }
   },
   beforeDestroy() {
       //组件销毁前需要解绑事件。否则会出现重复触发事件的问题

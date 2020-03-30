@@ -70,16 +70,9 @@ export default {
         id:this.cid, 
         shopNavigation: value === true ? 1 : 0
       }).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '修改成功！',
-          type: 'success'
-        });
+        this.$message.success('修改成功！')
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       });
     },
 
@@ -106,10 +99,6 @@ export default {
         }
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -117,17 +106,10 @@ export default {
 
     submit(params, callback) {
       this._apis.shop.editShopNav(params).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '编辑成功！',
-          type: 'success'
-        });
+        this.$message.success('编辑成功！')
         callback && callback(true);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
         callback && callback(false)
       });
     },
@@ -136,11 +118,7 @@ export default {
     resetData(params, callback) {
       this._apis.shop.resetShopNav(params).then((response)=>{
         if(response !== null) {
-          this.$notify({
-            title: '成功',
-            message: '重置成功！',
-            type: 'success'
-          });
+          this.$message.success('重置成功！')
           if(!response || !response.navigationJson) {
             return;
           }
@@ -162,10 +140,7 @@ export default {
           callback && callback(true);
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
         callback && callback(false);
       });
     },

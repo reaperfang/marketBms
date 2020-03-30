@@ -1,7 +1,8 @@
 <template>
     <div class="order">
         <order ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
-        <el-checkbox @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+        <el-checkbox v-if="!authHide" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+        <el-button v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="wad">批量补填物流</el-button>
         <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
 </template>
@@ -9,8 +10,10 @@
 import Order from './order'
 import Pagination from '@/components/Pagination'
 import utils from "@/utils";
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             total: 0,
@@ -33,12 +36,15 @@ export default {
         
     },
     methods: {
+        wad() {
+            this.$emit('batchSupplementaryLogistics')
+        },
         checkedAllChange() {
             let arr = [...this.list]
 
             if(this.checkedAll) {
                 arr.forEach(val => {
-                    if(val.orderStatus != 2) {
+                    if(val.orderStatus != 2 && val.orderStatus != 6) {
                         val.checked = true
                     }
                 })
@@ -46,7 +52,7 @@ export default {
                 this.list = arr
             } else {
                 arr.forEach(val => {
-                    if(val.orderStatus != 2) {
+                    if(val.orderStatus != 2 && val.orderStatus != 6) {
                         val.checked = false
                     }
                 })
@@ -55,8 +61,10 @@ export default {
             }
 
             let number = this.list.filter(val => val.checked).length
+            let list = this.list.filter(val => val.checked)
 
             this._globalEvent.$emit('checkedLength', number)
+            this._globalEvent.$emit('checkedList', list)
         },
         getList(obj) {
             let _params
@@ -101,10 +109,7 @@ export default {
                 //loading.close();
             }).catch(error => {
                 //loading.close();
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
+                // this.$message.error(error);
                 this.$refs['order'].loading = false
             })
         }
@@ -123,6 +128,9 @@ export default {
 <style lang="scss" scoped>
     .order-list {
         padding-bottom: 10px;
+    }
+    /deep/ .el-checkbox {
+        margin-right: 8px;
     }
 </style>
 

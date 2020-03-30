@@ -31,9 +31,8 @@ export default {
             });
             let params = {memberInfoIds: memberInfoIds.join(',')}
             this._apis.client.batchRemoveFromBlack(params).then((response) => {
-                this.$notify({
-                    title: '成功',
-                    message: "批量解除黑名单成功",
+                this.$message({
+                    message: '批量解除黑名单成功',
                     type: 'success'
                 });
                 this.$emit('freshTable');

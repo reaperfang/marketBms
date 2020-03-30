@@ -74,27 +74,27 @@
             </el-form-item>
         </div>
         <!-- <div class="item">
-            <h2>评价相关：</h2>
-            <el-form-item label="评价功能开启" prop="orderComment">
-                <el-radio-group v-model="form.orderComment">
-                    <el-radio :label="1" class="mr10">是</el-radio>
-                    <el-radio :label="2">否</el-radio>
-                </el-radio-group>
-                <span class="note">
-                  说明：启用后买家可以对购买商品进行评论，您可以根据评论内容进行回复。
-                </span>
-            </el-form-item>
-            <el-form-item label="订单完成" prop="orderCommentGood">
-                <el-input-number 
-                v-model="form.orderCommentGood" 
-                controls-position="right" 
-                style="width:96px;" 
-                placeholder="请输入整数，清空数值则关闭该功能"
-                :min="1" 
-                :max="30">
-                </el-input-number>
-                天后,自动评价为好评
-            </el-form-item>
+          <h2>评价相关：</h2>
+          <el-form-item label="评价功能开启" prop="orderComment">
+              <el-radio-group v-model="form.orderComment">
+                  <el-radio :label="1" class="mr10">是</el-radio>
+                  <el-radio :label="2">否</el-radio>
+              </el-radio-group>
+              <span class="note">
+                说明：启用后买家可以对购买商品进行评论，您可以根据评论内容进行回复。
+              </span>
+          </el-form-item>
+          <el-form-item label="订单完成" prop="orderCommentGood">
+              <el-input-number 
+              v-model="form.orderCommentGood" 
+              controls-position="right" 
+              style="width:96px;" 
+              placeholder="请输入整数，清空数值则关闭该功能"
+              :min="1" 
+              :max="30">
+              </el-input-number>
+              天后,自动评价为好评
+          </el-form-item>
         </div> -->
         <div class="item">
             <h2>资产相关：
@@ -108,23 +108,23 @@
                     <el-radio :label="1" class="mr10">是</el-radio>
                     <el-radio :label="2">否</el-radio>
                 </el-radio-group>
-                <!-- <span class="note">
+                <span class="note">
                   说明：启用后买家可以申请开发票。
-                </span> -->
+                </span>
             </el-form-item>
             <!-- <el-form-item label="整笔订单退款"></el-form-item>
-            <el-form-item label="是否退回优惠券" prop="name7">
+            <el-form-item label="是否退回优惠券" prop="name7" class="ml50">
                 <el-radio-group v-model="form.name7">
                     <el-radio :label="3">是</el-radio>
                     <el-radio :label="6">否</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="是否退回优惠码" prop="name8">
+            <el-form-item label="是否退回优惠码" prop="name8" class="ml50">
                 <el-radio-group v-model="form.name8">
                     <el-radio :label="3">是</el-radio>
                     <el-radio :label="6">否</el-radio>
-                </el-radio-group>
-            </el-form-item> -->
+                </el-radio-group> 
+            </el-form-item>-->
         </div>
         <div class="item">
             <h2>
@@ -179,20 +179,23 @@ export default {
     return {
       loading:false,
       currentTab: 'afterSale',
-      shopAutoReceive:true,
-      memberAutoReceive:true,
-      autoFinished:true,
+      shopAutoReceive:'',
+      memberAutoReceive:'',
+      autoFinished:'',
 
       form: {
             memberAutoConfirmReceive: '',
             shopAutoConfirmReceive: '',
             orderAutoFinished: '',
-            orderComment:'1',
+            orderComment:1,
             orderCommentGood: '',
-            invoiceOpen:'1',
-            isTrace:'0',
+            invoiceOpen:1,
+            isTrace:0,
             apiKey:'',
-            kdBusinessId:''
+            kdBusinessId:'',
+            isMemberAutoConfirmReceive:0,
+            isShopAutoConfirmReceive:0,
+            isOrderAutoFinished:0
         },
       rules: {
           name1: [
@@ -223,7 +226,16 @@ export default {
   },
   components: {},
   watch: {
-    
+    shopAutoReceive(a,b){
+      this.form.isShopAutoConfirmReceive  = Number(a)
+    },
+    memberAutoReceive(a,b){
+      this.form.isMemberAutoConfirmReceive  = Number(a)
+      },
+    autoFinished(a,b){
+      this.form.isOrderAutoFinished = Number(a)
+
+      },
   },
   computed:{
       cid(){
@@ -245,7 +257,13 @@ export default {
         this.form.orderAutoFinished = response.orderAutoFinished,
         this.form.orderComment = response.orderComment,
         this.form.orderCommentGood = response.orderCommentGood,
-        this.form.invoiceOpen = response.invoiceOpen
+        this.form.invoiceOpen = response.invoiceOpen,
+        this.form.isMemberAutoConfirmReceive = response.isMemberAutoConfirmReceive,
+        this.form.isShopAutoConfirmReceive = response.isShopAutoConfirmReceive,
+        this.form.isOrderAutoFinished = response.isOrderAutoFinished,
+        this.shopAutoReceive = Boolean(response.isShopAutoConfirmReceive),
+        this.memberAutoReceive = Boolean(response.isMemberAutoConfirmReceive),
+        this.autoFinished = Boolean(response.isOrderAutoFinished)
       }).catch(error =>{
         console.log(error)
       })
@@ -282,6 +300,9 @@ export default {
           orderComment:this.form.orderComment,
           orderCommentGood:this.form.orderCommentGood,
           invoiceOpen:this.form.invoiceOpen,
+          isMemberAutoConfirmReceive : this.form.isMemberAutoConfirmReceive ,
+          isShopAutoConfirmReceive : this.form.isShopAutoConfirmReceive ,
+          isOrderAutoFinished : this.form.isOrderAutoFinished 
         }
         this._apis.set.updateShopInfo(data).then(response =>{
           this.loading = false
@@ -299,15 +320,9 @@ export default {
           kdBusinessId:this.form.kdBusinessId
       }
       this._apis.set.updateShopLogistics(data).then(response =>{
-          this.$notify.success({
-            title: '成功',
-            message: '保存成功！'
-          });
+          this.$message.success('保存成功！');
         }).catch(error =>{
-          this.$notify.error({
-            title: '失败',
-            message: '保存失败！'
-          });
+          this.$message.error('保存失败 '+ error);
       })
     },
   }
@@ -345,5 +360,8 @@ export default {
 }
 .mr10{
   margin-right:10px;
+}
+.ml50{
+  margin-left:50px;
 }
 </style>

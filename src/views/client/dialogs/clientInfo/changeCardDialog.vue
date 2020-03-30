@@ -50,9 +50,8 @@ export default {
                         this.btnLoading = false;
                         this.$emit('refreshPage');
                         this.visible = false;
-                        this.$notify({
-                            title: '成功',
-                            message: "变更会员成功",
+                        this.$message({
+                            message: '变更会员成功',
                             type: 'success'
                         });
                     }).catch((error) => {
@@ -62,8 +61,7 @@ export default {
                     })
                 }else{
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请选择用户等级',
                         type: 'warning'
                     });
@@ -84,8 +82,7 @@ export default {
             this.levelList.map((v) => {
                 if(v.id == this.selectLevel) {
                     if(v.level <= this.data.oldLevel) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '只能选择高于现在等级的会员卡',
                             type: 'warning'
                         });

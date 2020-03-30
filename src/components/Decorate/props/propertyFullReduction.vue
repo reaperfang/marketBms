@@ -49,8 +49,8 @@ export default {
         title: '满减/满折',//显示标题
         displayStyle: 1,//展示样式
         ids: [],//满减满折活动id列表
-        loading: false
       },
+      loading: false,
       rules: {
 
       },
@@ -87,10 +87,6 @@ export default {
                   this.createList(response);
                   this.loading = false;
               }).catch((error)=>{
-                  // this.$notify.error({
-                  //     title: '错误',
-                  //     message: error
-                  // });
                   console.error(error);
                   this.list = [];
                   this.loading = false;

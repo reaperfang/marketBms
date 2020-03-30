@@ -28,7 +28,8 @@
           <span style="color:red">*</span>变更原因：
         </span>
         <div class="input_wrap2 fl">
-          <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50"></el-input>
+          <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50" resize="none"></el-input>
+          <span class="font_num">{{remark.length}}/50</span>
         </div>
       </div>
     </div>
@@ -64,27 +65,24 @@ export default {
       this.btnLoading = true;
       if (this.adjustmentScore == null) {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "请输入调整数值",
-          type: "warning"
+        this.$message({
+          message: '请输入调整数值',
+          type: 'warning'
         });
       } else if (
         Number(this.data.score) == 0 &&
         Number(this.adjustmentScore) < 0
       ) {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "当前积分为0时不能输入负数",
-          type: "warning"
+        this.$message({
+          message: '当前积分为0时不能输入负数',
+          type: 'warning'
         });
       } else if (this.remark == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: "警告",
-          message: "请输入变更原因",
-          type: "warning"
+        this.$message({
+          message: '请输入变更原因',
+          type: 'warning'
         });
       } else {
         let params = {
@@ -99,10 +97,9 @@ export default {
           .then(response => {
             this.btnLoading = false;
             this.visible = false;
-            this.$notify({
-              title: "成功",
-              message: "调整积分成功",
-              type: "success"
+            this.$message({
+              message: '调整积分成功',
+              type: 'success'
             });
             this.$emit("refreshPage");
           })
@@ -115,10 +112,9 @@ export default {
     },
     handleBlur() {
       if (Number(this.data.score) == 0 && Number(this.adjustmentScore) < 0) {
-        this.$notify({
-          title: "警告",
-          message: "当前积分为0时不能输入负数",
-          type: "warning"
+        this.$message({
+          message: '当前积分为0时不能输入负数',
+          type: 'warning'
         });
       }
     }
@@ -160,9 +156,18 @@ export default {
     width: 188px;
     display: inline-block;
   }
-  .input_wrap2 {
-    width: 500px;
-    display: inline-block;
+  .input_wrap2{
+      position: relative;
+      width: 500px;
+      display: inline-block;
+      .font_num{
+        position: absolute;
+        display: block;
+        width: 38px;
+        color: #B5BDCA;
+        right: 0;
+        top: 33px;  
+      }
   }
   .dialog-footer {
     margin-top: 20px;

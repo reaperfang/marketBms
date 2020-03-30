@@ -13,7 +13,8 @@
       <div class="marB20 clearfix">
           <span class="fl"><span style="color:red">*</span>变更原因：</span>
           <div class="input_wrap2 fl">
-              <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50"></el-input>
+              <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50" resize="none"></el-input>
+              <span class="font_num">{{remark.length}}/50</span>
           </div>
       </div>
     </div>
@@ -44,15 +45,13 @@ export default {
       this.btnLoading = true;
       if(Number(this.adjustmentBalance) <= 0 || this.adjustmentBalance == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请输入增加余额, 且不能为0或负数',
           type: 'warning'
         });
       }else if(this.remark == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请输入变更原因',
           type: 'warning'
         });
@@ -67,9 +66,8 @@ export default {
         this._apis.client.manualChangeBalance(params).then((response) => {
           this.btnLoading = false;
           this.visible = false;
-          this.$notify({
-            title: '成功',
-            message: "调整余额成功",
+          this.$message({
+            message: '调整余额成功',
             type: 'success'
           });
           this.$emit('refreshPage');
@@ -82,8 +80,7 @@ export default {
     },
     handleBlur() {
       if(Number(this.adjustmentBalance) < 0) {
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '增加余额不能为负数',
           type: 'warning'
         });
@@ -129,8 +126,17 @@ export default {
       display: inline-block;
   }
   .input_wrap2{
+      position: relative;
       width: 500px;
       display: inline-block;
+      .font_num{
+        position: absolute;
+        display: block;
+        width: 38px;
+        color: #B5BDCA;
+        right: 0;
+        top: 33px;  
+      }
   }
 }
 </style>

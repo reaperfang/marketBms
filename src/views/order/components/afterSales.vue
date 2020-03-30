@@ -9,7 +9,7 @@
                         <el-option label="售后单编号" value="orderAfterSaleCode"></el-option>
                         <el-option label="收货人联系电话" value="receivedPhone"></el-option>
                         <el-option label="快递单号" value="expressNos"></el-option>
-                        <el-option label="客户ID" value="memberSn"></el-option>
+                        <el-option label="用户昵称" value="memberName"></el-option>
                         </el-select>
                     </el-input>
                 </el-form-item>
@@ -41,24 +41,22 @@
                     <el-date-picker
                         v-model="listQuery.orderTimeValue"
                         type="datetimerange"
-                        range-separator="-"
+                        range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        :default-time="['00:00:00', '23:59:59']"
+                        :picker-options="utils.globalTimePickerOption.call(this)"
                     ></el-date-picker>
                 </el-form-item>
-                <div class="buttons">
-                    <div class="lefter">
-                        <el-button v-permission="['订单', '发货管理', '售后发货', '批量导入发货']" @click="$router.push('/order/batchImportAndDelivery?afterSale=true')" class="border-button">批量导入发货</el-button>
-                        <el-button v-permission="['订单', '发货管理', '售后发货', '批量发货']" @click="batchSendGoods" class="border-button">批量发货</el-button>
-                        <el-button v-permission="['订单', '发货管理', '售后发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
-                        <el-button v-permission="['订单', '发货管理', '售后发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
-                    </div>
+                <el-form-item>
+                    <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
+                </el-form-item>
+                <!-- <div class="buttons">
                     <div class="righter">
-                        <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">查询</el-button>
+                        <el-button @click="getList" type="primary">搜索</el-button>
+                        <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
-                </div>
+                </div> -->
             </el-form>
         </div>
         <div class="line"></div>
@@ -81,8 +79,8 @@
                     width="120">
                 </el-table-column>
                 <el-table-column
-                    prop="memberSn"
-                    label="客户ID"
+                    prop="memberName"
+                    label="用户昵称"
                     width="120">
                 </el-table-column>
                 <el-table-column
@@ -113,6 +111,13 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div v-show="!loading" class="footer">
+                <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+                <el-button v-permission="['订单', '发货管理', '售后发货', '批量导入发货']" @click="$router.push('/order/batchImportAndDelivery?afterSale=true')" class="border-button">批量导入发货</el-button>
+                <el-button v-permission="['订单', '发货管理', '售后发货', '批量发货']" @click="batchSendGoods" class="border-button">批量发货</el-button>
+                <el-button v-permission="['订单', '发货管理', '售后发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
+                <el-button v-permission="['订单', '发货管理', '售后发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
+            </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
     </div>
@@ -149,7 +154,9 @@ export default {
                 expressCompanys: '',
             },
             tableData: [],
-            loading: false
+            loading: false,
+            checkedAll: false,
+            isIndeterminate: false
         }
     },
     created() {
@@ -180,6 +187,15 @@ export default {
         },
     },
     methods: {
+        checkedAllChange() {
+            if(this.checkedAll) {
+                this.$refs.multipleTable.clearSelection();
+                this.$refs.multipleTable.toggleAllSelection();
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+            this.isIndeterminate = false;
+        },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
@@ -236,6 +252,9 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            let checkedCount = val.length;
+            this.checkedAll = checkedCount === this.tableData.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList() {
             let params = {}
@@ -269,6 +288,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .after-sales {
     .search {
         background-color: #fff;
@@ -285,7 +315,7 @@ export default {
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             .resetting {
                 color: #FD932B;
                 margin-right: 40px;
@@ -308,6 +338,10 @@ export default {
             span {
                 color: #45444c;
             }
+        }
+        .footer {
+            padding: 20px;
+            padding-left: 15px;
         }
     }
 }
@@ -332,6 +366,13 @@ export default {
     }
     /deep/ .searchTimeType .el-form-item__content {
         display: flex;
+    }
+    /deep/ .el-checkbox__label {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+    .el-button+.el-button {
+        margin-left: 12px;
     }
 </style>
 

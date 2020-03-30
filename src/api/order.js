@@ -603,6 +603,16 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
   })
 }
 
+//售后单修改退还积分、金额
+export function editorScoreAmount(data) {
+  return request({
+    target: 'ORDER-AFTER-SALE-EDIT-SCORE-AMOUNT-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+
 
 
 

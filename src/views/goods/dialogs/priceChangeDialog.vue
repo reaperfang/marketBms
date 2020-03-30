@@ -11,7 +11,7 @@
                 <p>正数代表在原价基础上相加，负数代表相减</p>
             </el-form-item>
             <el-form-item style="margin-left: 45px;" v-if="ruleForm.changeType == '2'" label="批量修改价格：" prop="price">
-                <el-input type="number" v-model="ruleForm.price"></el-input> %
+                <el-input type="number" min="0" v-model="ruleForm.price"></el-input> %
                 <p class="first">当输入80，那么就按照原始价格的80%（8折）计算</p>
                 <p>输入百分比就是折扣 直接乘以那个折扣数字</p>
             </el-form-item>
@@ -39,7 +39,16 @@ export default {
         submit(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                this.$emit('submit', this.ruleForm)
+                if(this.ruleForm.changeType == 2) {
+                    if(this.ruleForm.price < 0) {
+                        this.$message({
+                        message: '折扣不能为负值',
+                        type: 'warning'
+                        });
+                        return
+                    }
+                }
+                this.$emit('changePriceSubmit', this.ruleForm)
                 this.visible = false
             } else {
                 this.visible = false

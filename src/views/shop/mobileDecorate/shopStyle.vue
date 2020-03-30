@@ -145,17 +145,9 @@ export default {
     submit() {
       this.submitLoadinig = true;
       this._apis.shop.setShopStyle({colorStyle: utils.compileStr(JSON.stringify(this.selectedItem))}).then((response)=>{
-         this.$notify({
-          title: '成功',
-          message: '设置成功！',
-          type: 'success'
-        });
+        this.$message.success('设置成功！');
         this.submitLoadinig = false;
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
         this.submitLoadinig = false;
       });
     }

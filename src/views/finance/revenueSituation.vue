@@ -11,7 +11,7 @@
           trigger="hover">
           <div>
             <p>1、总收入即所有线上订单支付的总金额，含所有线上支付和线下支付的所有订单，支付完成后计入；</p>
-            <p>2、总支出即所有线上支出的总金额，含订单退款、客户ID提现的金额，退款成功或提现成功后计入；</p>
+            <p>2、总支出即所有线上支出的总金额，含订单退款、用户ID提现的金额，退款成功或提现成功后计入；</p>
             <p>3、实际收入 = 总收入 - 总支出；</p>
             <p>4、每日数据为当日0时0分0秒到23时59分59秒的数据，今日数据为当日0点后的实时数据；</p>
             <p>5、最近一周，最近一个月等数据中包含今日数据；</p>
@@ -54,20 +54,23 @@
       <div class="title">
         <span class="name">趋势分析<em>（截止到昨日）</em></span>
         <div class="time">
-          <el-radio-group v-model="days" class="mr20">
+          <el-radio-group v-model="days" class="mr26">
             <el-radio-button label="7">最近7天</el-radio-button>
             <el-radio-button label="15">最近15天</el-radio-button>
             <el-radio-button label="30">最近30天</el-radio-button>
           </el-radio-group>
           请选择时间段：
           <el-date-picker
+            class="mr26"
             v-model="timeValue"
             type="datetimerange"
+            align="right"
             range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-           :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
+            >
           </el-date-picker>
           <el-button type="primary" @click="getDataDateRs">确定</el-button>
         </div>
@@ -147,12 +150,22 @@ export default {
   name: 'revenueSituation',
   data() {
     return {
-      pickerNowDateBefore: {
+      pickerOptions: {
         disabledDate: (time) => {
-          return time.getTime() > new Date();
+          
+          // var date = new Date();
+          // if(utils.formatDate(date, "yyyy-MM-dd") == utils.formatDate(time, "yyyy-MM-dd") ){
+          //   this.defaultTime[1] = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss").substring(11)
+          //   console.log(utils.formatDate(date, "yyyy-MM-dd hh:mm:ss").substring(11));
+          // }
+          // return time.getTime() > new Date();
+          let yesterday = new Date();
+          yesterday = yesterday.getTime()-24*60*60*1000;
+          yesterday = this.utils.dayEnd(yesterday);
+          return time.getTime() > yesterday.getTime();
         }
       },
-      timeValue:['2019-06-05','2019-06-07'],
+      timeValue:[],
       surveyDay:{
         income:0,
         expend:0,
@@ -166,6 +179,7 @@ export default {
         chainRatioIncome:0,
         chainRatioRealIncome:0 
       },
+      defaultTime:['00:00:00', '23:59:59'],
       dataList:[],
       days:7,
       chartData:{}
@@ -192,7 +206,7 @@ export default {
         dataObj.realIncomes.push(item.realIncome)
       })
       this.chartData = dataObj
-    }
+    },
   },
   filters:{
       money(options){
@@ -220,20 +234,16 @@ export default {
     //初始化数据
     init(day){
       let date = new Date()
-      let endDate = utils.formatDate(date, "yyyy-MM-dd")+" 23:59:59"
+      let endDate = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss")
       let startDate = utils.countDate(-day)+" 00:00:00"
       this.timeValue = [startDate,endDate]
     },
     //概况
     getSurveyDay(){
       this._apis.finance.getSurveyDayRs({}).then((response)=>{
-        // console.log(response,"今日概况")
         this.surveyDay = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
     //时间段趋势
@@ -243,7 +253,6 @@ export default {
         accountDateEnd:this.timeValue[1]
       }
       this._apis.finance.getDataDateRs(queryDate).then((response)=>{
-        // console.log(response,"时间段")
         if(response){
           this.survey = response   
           this.dataList = response.accountList
@@ -255,10 +264,7 @@ export default {
           this.init(this.days)
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
     //最近天数趋势
@@ -276,10 +282,7 @@ export default {
           return
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
     },
   }
@@ -435,8 +438,8 @@ export default {
 .financeChart{
   margin-top: 30px;
 }
-.mr20{
-  margin-right: 20px;
+.mr26{
+  margin-right: 26px;
 }
 
 </style>
