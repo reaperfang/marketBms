@@ -12,10 +12,10 @@
                 <!-- <p>微信公众号关注状态: <span>已关注</span></p> -->
                 <!-- <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p>
                 <p>手机号: <span>{{clientInfoById.phone}}</span></p> -->
-                <p>客户渠道: <span>{{clientInfoById.channelName}}</span></p>
-                <p>成为客户时间: <span>{{clientInfoById.becameCustomerTime}}</span></p>
+                <p>用户渠道: <span>{{clientInfoById.channelName}}</span></p>
+                <p>成为用户时间: <span>{{clientInfoById.becameCustomerTime}}</span></p>
                 <p>成为会员时间: <span>{{clientInfoById.becameMemberTime}}</span></p>
-                <p>客户身份: {{clientInfoById.levelName}}<span class="addMainColor pointer marR20" @click="changeIdentity">&nbsp;&nbsp;&nbsp;&nbsp;变更</span></p>
+                <p>用户身份: {{clientInfoById.levelName}}<span class="addMainColor pointer marR20" @click="changeIdentity">&nbsp;&nbsp;&nbsp;&nbsp;变更</span></p>
             </div>
             <div class="c_top_r fl">
                 <div class="c_title">

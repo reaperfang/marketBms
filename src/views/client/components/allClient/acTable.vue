@@ -47,10 +47,10 @@
         <template slot-scope="scope">
           <div class="btns clearfix">
             <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['客户', '全部客户', '默认页面', '查看详情']">详情</span>
-            <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['客户', '全部客户', '默认页面', '删除']">删除</span> -->
-            <span class="s3" @click="addTag(scope.row.id)">标签</span>
-            <span class="s4" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
-            <span class="s5" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
+            <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['用户', '全部客户', '默认页面', '删除']">删除</span> -->
+            <span class="s2" @click="addTag(scope.row.id)">标签</span>
+            <span class="s3" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
+            <span class="s3" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
           </div>
         </template>
       </el-table-column>
@@ -261,7 +261,7 @@ export default {
           let list = response.list;
           if(list.length > 0) {
             list.map((v) => {
-              v.memberType = v.memberType == 0 ? '客户':'会员'
+              v.memberType = v.memberType == 0 ? '用户':'会员'
             })
           }
           this.memberList = [].concat(list);
@@ -330,34 +330,18 @@ export default {
       float: left;
       height: 41px;
       font-size: 12px;
-      padding-top: 22px;
+      padding-top: 10px;
       text-align: center;
       margin-right: 5px;
       cursor: pointer;
       &.s1 {
         color: #655eff;
-        background: url("../../../../assets/images/client/icon_info.png") 0 0
-          no-repeat;
       }
       &.s2 {
-        color: #f55858;
-        background: url("../../../../assets/images/client/icon_delete.png") 0 0
-          no-repeat;
+        color: #655eff;
       }
       &.s3 {
         color: #fd932b;
-        background: url("../../../../assets/images/client/icon_tag.png") 0 0
-          no-repeat;
-      }
-      &.s4 {
-        color: #578efa;
-        background: url("../../../../assets/images/client/icon_addblack.png")
-          17px 0 no-repeat;
-      }
-      &.s5 {
-        color: #578efa;
-        background: url("../../../../assets/images/client/icon_relieve.png")
-          17px 0 no-repeat;
       }
     }
   }
