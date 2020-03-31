@@ -425,7 +425,7 @@ export default {
     openQrCodeInNewWindow(url) {
       const img = new Image();
       img.style.cssText = 'margin:200px auto 0;display: block;';
-      if(url.includes(location.protocol + '//')) {
+      if(url.substr(0,4) === 'http') {
          img.src = url;
       }else{
          img.src = `data:image/png;base64,${url}`;
