@@ -425,6 +425,9 @@ export default {
         margin-left: 5px;
         margin-top: 2px;
     }
+    table tr td {
+        min-width: 147px;
+    }
 </style>
 
 

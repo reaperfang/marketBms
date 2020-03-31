@@ -25,11 +25,11 @@
             <p class="title">用Excel表格快速导入商品数据</p>
             <p>说明：</p>
             <ol class="step">
-                <li>1、导入功能必须使用指定模板；</li>
-                <li>2、在【商品导入模板】按规则添加商品数据信息；</li>
-                <li>3、导入结果会在导入完成后提示，并在导入记录中展示； </li>
-                <li>4、一次最多导入1000个SKU商品；</li>
-                <li>5、模板中商品图片的链接需要先将所需推按上传至“我的文件-素材库”中，然后复制其图片地址链接；</li>
+                <li>导入功能必须使用指定模板；</li>
+                <li>在【商品导入模板】按规则添加商品数据信息；</li>
+                <li>导入结果会在导入完成后提示，并在导入记录中展示； </li>
+                <li>一次最多导入1000个SKU商品；</li>
+                <li>模板中商品图片的链接需要先将所需推按上传至“我的文件-素材库”中，然后复制其图片地址链接；</li>
             </ol>
             <p class="import-box tc">
                 <el-upload
@@ -193,13 +193,13 @@ export default {
                 if(res.importFailCount == 0) {
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
 
-                    this.confirm({title: '数据导入成功', text: _text})
+                    this.confirm({title: '数据导入成功', text: _text, customClass: 'import-confirm'})
                     this.active = 3
                 } else {
                     _text = ''
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
                     _text += '<br>' + res.failureMsg
-                    this.confirm({title: '数据导入失败', text: _text, showCancelButton: false})
+                    this.confirm({title: '数据导入失败', icon: true, text: _text, showCancelButton: false, customClass: 'import-confirm'})
                     this.active = 1
                 }
                 this.$refs.upload.clearFiles();
@@ -208,10 +208,11 @@ export default {
             }).catch(error => {
                 //message.close()
                 this.visible = false
-                this.$message.error({
-                    message: error,
-                    type: 'error'
-                });
+                // this.$message.error({
+                //     message: error,
+                //     type: 'error'
+                // });
+                this.confirm({title: '数据导入失败', text: error, showCancelButton: false})
                 this.active = 1
                 this.$refs.upload.clearFiles();
                 this.showImport = true
@@ -231,6 +232,8 @@ export default {
     .import {
         background-color: #fff;
         padding: 32px 63px;
+        padding-top: 10px;
+        padding-left: 38px;
         font-size: 14px;
         section {
             border-bottom: 1px dashed #d3d3d3;
@@ -256,7 +259,7 @@ export default {
                 }
             }
             .steps {
-                margin-top: 32px;
+                margin-top: 36px;
             }
         }
         .importing {
@@ -343,6 +346,30 @@ export default {
     }
     /deep/ .el-button--primary {
         background-color: #655eff;
+    }
+    /deep/ .el-message-box__message {
+        max-height: 400px!important;
+        overflow-y: scroll!important;
+    }
+    /deep/ .el-message-box__message::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    /deep/ .el-message-box__message::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+</style>
+<style lang="scss">
+    .import-confirm .el-message-box__message {
+        max-height: 400px!important;
+        overflow-y: scroll!important;
+    }
+    .import-confirm .el-message-box__message::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .import-confirm .el-message-box__message::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
     }
 </style>
 
