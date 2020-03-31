@@ -70,6 +70,11 @@
                         width="55">
                     </el-table-column>
                     <el-table-column
+                    prop="code"
+                    label="SPU编码"
+                    width="124">
+                    </el-table-column>
+                    <el-table-column
                     prop="name"
                     label="商品名称"
                     width="380">
@@ -860,8 +865,11 @@ export default {
                         if(val.goodsInfos) {
                             val.goodsInfos.forEach(skuVal => {
                                 let skuid = skuVal.id
-
-                                goods.goodsInfos.find(val => val.id == skuid).activity = true
+                                let item = goods.goodsInfos.find(val => val.id == skuid)
+                                
+                                if(item) {
+                                    item.activity = true
+                                }
                             })
                         }
                     })
