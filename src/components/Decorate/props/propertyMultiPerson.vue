@@ -144,7 +144,7 @@
         <!-- <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input> -->
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonTextPrimary"></el-input>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideSaledGoods">
+      <el-form-item label="更多设置" prop="hideSaledGoods" v-if="ruleForm.addType == 1">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
         <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
@@ -230,7 +230,8 @@ export default {
     },
     'ruleForm.addType'(newValue) {
         if(newValue == 2) {
-            this.fetch();
+          this.ruleForm.hideSaledGoods = false;
+          this.fetch();
         }else{
           this.list = [];
           this.fetch();
