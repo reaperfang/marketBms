@@ -4,7 +4,6 @@
     <div class="top_part head-wrapper">
       <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        
         <el-form-item>
           <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;padding-right:4px;">
             <el-option
@@ -38,11 +37,16 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model="ruleForm.nickName" placeholder="请输入" style="width:226px;"></el-input>
+         <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
@@ -153,11 +157,23 @@ export default {
   data() {
     return {
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       ruleForm:{
         searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
         status:-1,
+        userType:'memberSn',
+        userValue:'',
         memberSn:'',
         nickName:''
       },
@@ -205,6 +221,13 @@ export default {
             query[key] = this.ruleForm[item]
           }
         }
+        if(this.ruleForm.userType == 'memberSn'){
+          query.memberSn = this.ruleForm.userValue || ''
+          query.nickName = ''
+        }else{
+          query.nickName = this.ruleForm.userValue || ''
+          query.memberSn = ''
+        }
       }
       query.status = this.ruleForm.status == -1 ? null : this.ruleForm.status
       let timeValue = this.ruleForm.timeValue
@@ -236,7 +259,10 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        memberSn:''
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:'',
       }
       this.fetch()
     },
