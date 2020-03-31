@@ -3,6 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+import { preLocation } from '@/system/appConfig'
 
 
 module.exports = {
@@ -37,7 +38,7 @@ module.exports = {
         // target: 'http://172.22.146.133:8081',  // 店铺 李玟霆
         // target: 'http://172.22.146.117:80',// 许涛
         // target: 'http://172.22.146.111:8080',//
-        target:'https://test-omo.aiyouyi.cn',
+        target: preLocation,
 
         changeOrigin: true,
         pathRewrite: {
@@ -54,7 +55,7 @@ module.exports = {
         }
       },
       '/upload_server/**': {
-        target: 'https://test-omo.aiyouyi.cn/',
+        target: preLocation,
         changeOrigin: true,
         pathRewrite: {
           '^/upload_server': ''
