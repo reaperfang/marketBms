@@ -3,11 +3,16 @@
   <div>
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model="ruleForm.nickName" placeholder="请输入" style="width:226px;"></el-input>
+        <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
           <el-select v-model="ruleForm.businessTypeId" style="width:100px;" placeholder="全部">
@@ -124,11 +129,23 @@ export default {
   data() {
     return {
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       ruleForm:{
         memberSn:'',
         businessTypeId:-1,
         timeValue:'',
-        nickName:''
+        nickName:'',
+        userType:'memberSn',
+        userValue:'',
       },
       dataList:[ ],
       total:0,
@@ -155,6 +172,13 @@ export default {
         pageSize:this.ruleForm.pageSize,
         nickName:this.ruleForm.nickName
       }
+      if(this.ruleForm.userType == 'memberSn'){
+        query.memberSn = this.ruleForm.userValue || ''
+        query.nickName = ''
+      }else{
+        query.nickName = this.ruleForm.userValue || ''
+        query.memberSn = ''
+      }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.startTime = timeValue[0]
@@ -180,9 +204,12 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        memberSn:'',
         businessTypeId:'',
-        timeValue:''
+        timeValue:'',
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:'',
       }
       this.fetch()
     },
