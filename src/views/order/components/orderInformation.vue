@@ -14,8 +14,8 @@
                             <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
-                    <p v-if="orderInfo.orderStatus != 2 && orderInfo.orderStatus <= 3" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
-                </div> 
+                    <p v-if="orderInfo.orderStatus != 5" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
+                </div>
             </el-col>
             <el-col :span="8"><div class="grid-content center">
                 <div class="item">
