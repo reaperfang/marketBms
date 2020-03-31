@@ -240,7 +240,7 @@
                         <div :style="{width: changePriceVisible ? '209px' : '199px'}" class="col">应收金额:</div>
                         <div class="col">
                             <div class="yingshow-right-box">
-                                <span>¥{{yingshow}}</span>
+                                <span>¥{{orderDetail.orderInfo.receivableMoney}}</span>
                                 <span v-if="this.orderDetail.orderInfo.orderStatus == 0" @click="changePriceVisible = true" class="yingshou-change">改价</span>
                                 <el-input v-if="changePriceVisible" style="width: 112px; margin-right: 6px; margin-left: 6px;" type="number" v-model="yingshouChangeMoney" placeholder="请输入金额"></el-input>
                                 <el-button v-if="changePriceVisible" @click="yingshouSubmit" type="primary">确定</el-button>
@@ -253,7 +253,7 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.actualMoney && (orderDetail.orderInfo.actualMoney != '0.00') ? orderDetail.orderInfo.actualMoney : ''}}</div>
+                        <div class="col">{{orderDetail.orderInfo.actualMoney && (orderDetail.orderInfo.actualMoney != '0.00') ? '¥' + orderDetail.orderInfo.actualMoney : ''}}</div>
                     </div>
                 </section>
             </div>
@@ -700,7 +700,7 @@ export default {
                 } else if(row.orderStatus == 5) {
                     return '待收货'
                 } else if(row.orderStatus == 6) {
-                    return '完成'
+                    return '交易成功'
                 }
                     }
         }

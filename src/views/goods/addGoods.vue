@@ -1577,6 +1577,13 @@ export default {
             })
         },
         deleteSpec(index) {
+            if(this.ruleForm.goodsInfos[index].activity) {
+                this.$message({
+                message: '商品正在参加营销活动，不可删除',
+                type: 'warning'
+                });
+                return
+            }
             console.log(index)
             let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
             let __goodsInfos
@@ -2031,7 +2038,7 @@ export default {
                     try {
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
-                        if(/!^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
+                        if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
                             this.$message({
                                 message: '当前SKU编码输入有误，请您重新输入',
                                 type: 'warning'
@@ -2087,7 +2094,7 @@ export default {
                             });
                             return
                         }
-                        if(this.ruleForm.goodsInfos[i].stock == '') {
+                        if(this.ruleForm.goodsInfos[i].stock === '') {
                             this.$message({
                                 message: '请输入库存',
                                 type: 'warning'

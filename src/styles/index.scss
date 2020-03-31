@@ -597,6 +597,8 @@ table.yuan-table{
   padding-right: 10px;
   .el-message-box__message {
       text-align: center;
+      max-height: 400px!important;
+      overflow-y: scroll!important;
       .el-icon-warning {
           font-size: 60px;
           color: rgb(245, 88, 88);
@@ -610,6 +612,13 @@ table.yuan-table{
           margin-top: 20px;
       }
   }
+}
+.confirm .el-message-box__message::-webkit-scrollbar-thumb {
+  background: rgba(101,94,255,0.4) !important;
+}
+.confirm .el-message-box__message::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 .confirm .el-message-box__btns {
   display: flex;
