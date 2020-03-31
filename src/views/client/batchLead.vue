@@ -245,6 +245,7 @@ export default {
             if(val) {
                 this.ruleForm.consumeTimeType = "0";
             }else{
+                this.ruleForm.consumeTimeType = "";
                 this.ruleForm.consumeTimeValue = "";
                 this.ruleForm.consumeTimeUnit = "";
                 this.consumeTime = "";
@@ -277,7 +278,7 @@ export default {
             }
         },
         getSelected(val) {
-            this.selectedList = [].concat(val);
+            this.selectedList = this.selectedList.concat(val);
             //this.selectedIds = val;
         },
         isInteger(val) {

@@ -140,7 +140,7 @@ export default {
     submit() {
         let selectedRows = this.$refs.skuTable.selection;
         if(selectedRows.length !== 0) {
-          this.selectedList = this.selectedList.concat(selectedRows);
+          this.selectedList = [].concat(selectedRows);
           this.dialogVisible2 = true;
           this.$nextTick(() => {
             this.skuList.forEach(row => {
