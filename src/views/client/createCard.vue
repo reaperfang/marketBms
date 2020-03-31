@@ -638,7 +638,7 @@ export default {
           if(formObj.receiveSetting == '0') {
             formObj.receiveConditionsRemarks = '可直接领取';
           }else{
-            if(JSON.stringify(this.levelConditionValueDto) == '{}') {
+            if(JSON.stringify(this.levelConditionValueDto) == '{}' || !this.levelConditionValueDto.conditionValue || !this.levelConditionValueDto.levelConditionId) {
               this.$message({
                 message: '请选择特定条件',
                 type: 'warning'
