@@ -161,10 +161,18 @@ export default {
             codeList: [],
             hackReset: true,
             level: "",
-            sexText: ""
+            sexText: "",
+            topLevel: 0
         }
     },
     methods: {
+        getLevelMax() {
+            this._apis.client.getLevelMax({}).then(response => {
+                this.topLevel = response;
+            }).catch(error => {
+                console.log(error)
+            })
+        },
         refreshPage(num) {
             if(num == 1) {
                 this.getAllCoupons();
@@ -175,7 +183,8 @@ export default {
             }
         },
         changeIdentity() {
-            if(this.clientInfoById.level !== 9) {
+            let tl = this.topLevel == 9 ? 9:this.topLevel;
+            if(this.clientInfoById.level !== tl) {
                 this.hackReset = false;
                 this.$nextTick(() => {
                     this.hackReset = true;
@@ -372,79 +381,6 @@ export default {
                 console.log(error);
             })
         },
-        // saveInfo() {
-        //     let errFlag = false;
-        //     let formObj = {
-        //         id: this.clientInfoById.id, 
-        //         memberName: this.clientInfoById.memberName, 
-        //         sex: this.clientInfoById.sex, 
-        //         birthday: this.clientInfoById.birthday, 
-        //         //wechatSn: this.clientInfoById.wechatSn, 
-        //         email: this.clientInfoById.email, 
-        //         address: this.clientInfoById.address,
-        //         selected: this.clientInfoById.selected
-        //     }
-        //     Object.keys(formObj).forEach((key) => {
-        //         if(!formObj[key]) {
-        //             errFlag = true
-        //         }
-        //     });
-        //     if(errFlag) {
-        //         this.$notify({
-        //             title: '警告',
-        //             message: '请输入完整信息',
-        //             type: 'warning'
-        //         });
-        //     }else{
-        //         let codeArr = [];
-        //         let nameArr = [];
-        //         formObj.selected.map((v) => {
-        //             for(let key in v) {
-        //                 codeArr.push(key);
-        //                 nameArr.push(v[key]);
-        //             }
-        //         });
-        //         formObj.provinceCode = codeArr[0];
-        //         formObj.provinceName = nameArr[0];
-        //         formObj.cityCode = codeArr[1];
-        //         formObj.cityName = nameArr[1];
-        //         formObj.areaCode = codeArr[2];
-        //         formObj.areaName = nameArr[2];
-        //         delete formObj.selected;
-        //         formObj.id = this.userId;
-        //         this._apis.client.saveMemberInfo(formObj).then((response) => {
-        //             this.$notify({
-        //                 title: '成功',
-        //                 message: "保存成功",
-        //                 type: 'success'
-        //             });
-        //         }).catch((error) => {
-        //             console.log(error);
-        //         })
-        //     }
-        // },
-        // getUsedCoupon() {
-        //     let params = {usedType:"1", couponType: "0", memberId: this.userId};
-        //     this._apis.client.getUsedCoupon(params).then((response) => {
-        //         this.couponList = [];
-        //         response.map((v) => {
-        //             this.couponList.push(v.appCoupon);
-        //         })
-        //     }).catch((error) => {
-        //         console.log(error);
-        //     })
-        // },
-        // getUsedCode() {
-        //     let params = {usedType:"1", couponType: "1", memberId: this.userId};
-        //     this._apis.client.getUsedCoupon(params).then((response) => {
-        //         this.codeList = [];
-        //         response.map((v) => {
-        //             this.codeList.push(v.appCoupon);
-        //         })
-        //     }).catch((error) => {
-        //         console.log(error);
-        //     })
-        // },
         sendCoupon() {
             this.dialogVisible = true;
             this.currentDialog = "issueCouponDialog";
@@ -469,11 +405,10 @@ export default {
             if(this.$route.query.id) {
                 this.getMemberInfo();
             }
-        })
+        });
+        this.getLevelMax();
         this.getAllCoupons();
         this.getAllCodes();
-        // this.getUsedCoupon();
-        // this.getUsedCode();
     }
 }
 </script>

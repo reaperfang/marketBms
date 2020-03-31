@@ -52,8 +52,12 @@
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >像素大小控制在1000象素*600象素以下</span>
-          <img v-if="imgUrl" :src="imgUrl" class="avatar cardImg" />
-          <div v-else class="cardImg2" :style="{backgroundColor: currentColor}">
+          <div v-if="imgUrl" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`, backgroundSize: '100% 100%'}">
+            <p class="c_bh">3363197129819XXXXX</p>
+            <p class="c_name">{{ ruleForm.name }}</p>
+            <p class="c_level">{{ ruleForm.alias }}</p>
+          </div>
+          <div v-if="!imgUrl" class="cardImg2" :style="{backgroundColor: currentColor}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
             <p class="c_level">{{ ruleForm.alias }}</p>
@@ -638,7 +642,7 @@ export default {
           if(formObj.receiveSetting == '0') {
             formObj.receiveConditionsRemarks = '可直接领取';
           }else{
-            if(JSON.stringify(this.levelConditionValueDto) == '{}') {
+            if(JSON.stringify(this.levelConditionValueDto) == '{}' || !this.levelConditionValueDto.conditionValue || !this.levelConditionValueDto.levelConditionId) {
               this.$message({
                 message: '请选择特定条件',
                 type: 'warning'
@@ -965,6 +969,20 @@ export default {
     right: 20px;
     top: -86px;
     border-radius: 8px;
+    .c_bh{
+      font-size: 12px;
+      margin: 4px 0 0 13px;
+    }
+    .c_name{
+      font-size: 20px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .c_level{
+      margin: 20px 0 0 15px;
+      font-size: 16px;
+    }
   }
   .cardImg2 {
     width: 323px;
