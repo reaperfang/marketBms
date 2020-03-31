@@ -69,11 +69,11 @@
                         type="selection"
                         width="55">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                     prop="code"
                     label="SPU编码"
                     width="124">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                     prop="name"
                     label="商品名称"
