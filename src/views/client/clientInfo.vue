@@ -162,13 +162,21 @@ export default {
             hackReset: true,
             level: "",
             sexText: "",
-            topLevel: 0
+            topLevel: 0,
+            topCard: 0
         }
     },
     methods: {
         getLevelMax() {
             this._apis.client.getLevelMax({}).then(response => {
                 this.topLevel = response;
+            }).catch(error => {
+                console.log(error)
+            })
+        },
+        getCardMax() {
+            this._apis.client.getCardMax({}).then(response => {
+                this.topCard = response;
             }).catch(error => {
                 console.log(error)
             })
@@ -320,16 +328,25 @@ export default {
             this.currentData.memberSn = this.clientInfoById.memberSn;
         },
         showChangeCard() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
-            this.dialogVisible = true;
-            this.currentDialog = "changeCardDialog";
-            this.currentData.id = this.userId;
-            this.currentData.memberSn = this.clientInfoById.memberSn;
-            this.currentData.level = this.clientInfoById.cardLevelName;
-            this.currentData.oldLevel = this.clientInfoById.cardLevel;
+            let tl = this.topCard == 5?5:this.topCard;
+            if(this.clientInfoById.cardLevel !== tl) {
+                this.hackReset = false;
+                this.$nextTick(() => {
+                    this.hackReset = true;
+                })
+                this.dialogVisible = true;
+                this.currentDialog = "changeCardDialog";
+                this.currentData.id = this.userId;
+                this.currentData.memberSn = this.clientInfoById.memberSn;
+                this.currentData.level = this.clientInfoById.cardLevelName;
+                this.currentData.oldLevel = this.clientInfoById.cardLevel;
+            }else{
+                this.$message({
+                    message: '已是最高等级无法变更',
+                    type: 'warning'
+                })
+            }
+            
         },
         showScoreList() {
             this.hackReset = false;
@@ -407,6 +424,7 @@ export default {
             }
         });
         this.getLevelMax();
+        this.getCardMax();
         this.getAllCoupons();
         this.getAllCodes();
     }
