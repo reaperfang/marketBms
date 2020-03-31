@@ -474,7 +474,6 @@ export default {
     }
   },
   mounted() {
-      console.log(this.wWidth);
       this.getLabels();
       this.showPc();
       if(this.$route.query.memberLabels) {
