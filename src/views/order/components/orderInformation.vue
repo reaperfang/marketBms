@@ -74,7 +74,7 @@
                 </div>
                 <div class="item">
                     <div class="label">用户备注</div>
-                    <div class="value">{{orderInfo.buyerRemark || '--'}}</div>
+                    <div class="value">{{orderInfo.buyerRemark || '无备注'}}</div>
                 </div>
                 <div class="item remark-box">
                     <div class="label">商户备注</div>
@@ -253,7 +253,7 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.actualMoney || 0}}</div>
+                        <div class="col">¥{{orderDetail.orderInfo.actualMoney && (orderDetail.orderInfo.actualMoney != '0.00') ? orderDetail.orderInfo.actualMoney : ''}}</div>
                     </div>
                 </section>
             </div>
