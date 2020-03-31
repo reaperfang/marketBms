@@ -675,3 +675,12 @@ export function levelDisable(data) {
         data
     })
 }
+//用户最大启用等级
+export function getLevelMax(data) {
+    return request({
+        target:'LEVEL-MAX-PROCESSER',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
