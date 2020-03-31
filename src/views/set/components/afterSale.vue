@@ -126,7 +126,7 @@
         <div class="item">
             <h2>
                 物流查询：
-                <span class="note">电子面单和物流轨迹查询服务是与第三方快递鸟合作，开启服务需注册<a href="http://www.kdniao.com/reg" target="_blank" style="color:blue;">快递鸟</a>会员，相关费用直接与快递鸟结算</span>    
+                <span class="note">电子面单和物流轨迹查询服务是与第三方快递鸟合作，开启服务需注册<a href="//www.kdniao.com/reg" target="_blank" style="color:blue;">快递鸟</a>会员，相关费用直接与快递鸟结算</span>    
             </h2>
             <el-form-item label="是否开启物流轨迹查询服务：" prop="isTrace">
                 <el-radio-group v-model="form.isTrace">
