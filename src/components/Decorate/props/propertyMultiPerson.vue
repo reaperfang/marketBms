@@ -30,9 +30,10 @@
           </li>
         </ul>
       </div>
+      <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
       <el-form-item label="显示个数" v-if="ruleForm.addType === 2" prop="showNumber">
         <el-input  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
-        最多显示30个  
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最大设置为30个</p>  
       </el-form-item>
       <el-form-item label="" v-if="ruleForm.addType === 2" prop="showAllBtns">
         <el-checkbox v-model="ruleForm.showAllBtns">查看全部按钮</el-checkbox>

@@ -58,12 +58,12 @@ export default {
             }
             this._apis.goods.productUpperOrLowerSpu({
                 id: this.data.id,
-                goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, status: val.status ? 1 : 0}))
+                goodsInfos: this.data.goodsInfos.filter(val => !val.activity).map(val => ({id: val.id, status: val.status ? 1 : 0}))
             }).then((res) => {
                 this.$emit('submit')
                 this.visible = false
                 this.$message({
-                    message: '编辑成功！',
+                    message: '编辑上下架成功！',
                     type: 'success'
                 });
             }).catch(error => {
@@ -119,9 +119,18 @@ export default {
     .content-box {
         padding-left: 62px;
         padding-top: 20px;
+        max-height: 400px;
+        overflow-y: scroll;
         .title {
             padding-bottom: 20px;
         }
+    }
+    .content-box::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .content-box::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
     }
     .content {
         .item {

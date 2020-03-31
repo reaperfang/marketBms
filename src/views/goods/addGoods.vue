@@ -34,6 +34,7 @@
                 <el-upload
                     :disabled="!ruleForm.productCategoryInfoId"
                     :action="uploadUrl"
+                    accept=".jpg,.jpeg,.png,.gif,.JPG,.JPEG,.GIF"
                     multiple
                     :class="{hide:hideUpload}"
                     :file-list="fileList"
@@ -129,7 +130,7 @@
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
                                             <input @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
-                                            <el-button @click="addNewSpecValue(item, index)">新增</el-button>
+                                            <el-button maxlength="50" @click="addNewSpecValue(item, index)">新增</el-button>
                                         </div>
                                         <ul class="add-spec-value-ul">
                                             <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
@@ -1004,21 +1005,28 @@ export default {
             let lastAddedSpecs = this.addedSpecs[index]
             if(value == "") {
                 this.$message({
-                    message: '规格值不能为空',
+                    message: '当前输入有误，请您重新输入',
+                    type: 'warning'
+                });
+                return
+            }
+            if(!/[1-9a-zA-Z_]+/.test(value)) {
+                this.$message({
+                    message: '当前输入有误，请您重新输入',
                     type: 'warning'
                 });
                 return
             }
             if(/\s+/.test(value)) {
                 this.$message({
-                    message: '规格值不能为空',
+                    message: '当前输入有误，请您重新输入',
                     type: 'warning'
                 });
                 return
             }
             if(lastAddedSpecs.list.find(val => val.name == value)) {
                 this.$message({
-                message: '规格值重复',
+                message: '规格值不能与已有规格名重复，请您重新选择',
                 type: 'warning'
                 });
               return
@@ -2025,7 +2033,7 @@ export default {
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
                         if(/!^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
                             this.$message({
-                                message: 'SKU编码格式有误',
+                                message: '当前SKU编码输入有误，请您重新输入',
                                 type: 'warning'
                             });
                             return
