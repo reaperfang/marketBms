@@ -81,7 +81,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.remainStock || 10"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.remainStock > 10 ? 10:scope.row.remainStock"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
