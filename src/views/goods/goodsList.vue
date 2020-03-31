@@ -519,6 +519,7 @@ export default {
                 .allUpdatePriceSpu(_param)
                 .then(res => {
                 this.getList();
+                this.checkedAll = false
                 this.visible = false;
                 
                 this.$message({
@@ -557,6 +558,7 @@ export default {
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
+                    this.checkedAll = false
                 }).catch(error => {
                     this.$message.error({
                     message: error,
@@ -648,6 +650,7 @@ export default {
             this.confirm({title: '批量删除', icon: true, text: '是否确认批量删除？'}).then(() => {
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
                     this.getList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                             message: '删除成功！',
@@ -670,6 +673,7 @@ export default {
             this.confirm({title: `批量${statusStr}`, icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids, status}).then((res) => {
                     this.getList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                         message: '修改成功！',

@@ -46,6 +46,13 @@ export default {
                 });
                 return
             }
+            if(this.data.goodsInfos.some(val => +val.stock > 10000000)) {
+                this.$message({
+                message: '库存不得高于10000000',
+                type: 'warning'
+                });
+                return
+            }
             this._apis.goods.productUpdateStockSpu({
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, stock: val.stock}))
