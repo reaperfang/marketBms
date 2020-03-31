@@ -1010,7 +1010,7 @@ export default {
                 });
                 return
             }
-            if(!/[1-9a-zA-Z_]+/.test(value)) {
+            if(!/[1-9a-zA-Z_\u4e00-\u9fa5]+/.test(value)) {
                 this.$message({
                     message: '当前输入有误，请您重新输入',
                     type: 'warning'
