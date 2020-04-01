@@ -24,7 +24,7 @@
           <el-checkbox v-model="distinguish1">区分人群奖励</el-checkbox>
         </div>
         <div v-if="distinguish1 == true">
-          <span>用户</span>
+          <span>客户</span>
           <div class="input_wrap">
             <el-input v-model="noMember1" @keyup.native="checkZero($event,noMember1,'noMember1')"></el-input>
           </div>
@@ -54,7 +54,7 @@
           <el-checkbox v-model="distinguish2">区分人群奖励</el-checkbox>
         </div>
         <div v-if="distinguish2 == true">
-          <span>用户</span>
+          <span>客户</span>
           <div class="input_wrap">
             <el-input v-model="noMember2" @keyup.native="checkZero($event,noMember2,'noMember2')"></el-input>
           </div>
@@ -84,7 +84,7 @@
           <el-checkbox v-model="distinguish3" @keyup.native="checkZero($event,distinguish3,'distinguish3')">区分人群奖励</el-checkbox>
         </div>
         <div v-if="distinguish3 == true">
-          <span>用户</span>
+          <span>客户</span>
           <div class="input_wrap">
             <el-input v-model="noMember3" @keyup.native="checkZero($event,noMember3,'noMember3')"></el-input>
           </div>

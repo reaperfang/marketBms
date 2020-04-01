@@ -1,11 +1,11 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="变更用户身份" :hasCancel="hasCancel" :showFooter="false">
+    <DialogBase :visible.sync="visible" @submit="submit" title="变更客户身份" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
-            <p class="user_id">当前身份：{{ data.memberType == 0? '非会员客户':`VIP${data.level} ${data.identity}`}}</p>
+            <p class="user_id">当前身份：{{ data.identity }}</p>
             <div class="s_cont">
                 <span>变更为：</span>
-                <el-select v-model="selectLevel" style="margin-bottom: 10px">
+                <el-select v-model="selectLevel" style="margin-bottom: 10px" @change="handleChange">
                     <el-option v-for="item in levelList" :label="item.alias" :value="item.id" :key="item.id"></el-option>
                 </el-select>
             </div>
@@ -29,13 +29,14 @@ export default {
             hasCancel: true,
             selectLevel:"",
             levelList: [],
+            flag: false,
             btnLoading: false
         }
     },
     methods: {
         submit() {
             this.btnLoading = true;
-            if(this.selectLevel.length > 0) {
+            if(this.selectLevel.length > 0 && this.flag) {
                 let id;
                 this.levelList.map((v) => {
                     if(v.id == this.selectLevel) {
@@ -68,13 +69,27 @@ export default {
         },
         getLevelList() {
             this._apis.client.getLevelList({}).then((response) => {
-                this.levelList = response.filter(item => item.level > this.data.level);
-                this.levelList.map((item) => {
-                    this.$set(item, 'alias', `${item.alias} ${item.name}`)
-                });
+                this.levelList = [].concat(response);
             }).catch((error) => {
                 console.log(error);
             })
+        },
+        handleChange(val) {
+            let currentLevel = null;
+            this.levelList.map((v) => {
+                if(v.id == val) {
+                    currentLevel = v.level;
+                }
+            });
+            if(currentLevel <= this.data.oldLevel) {
+                this.$notify({
+                    title: '警告',
+                    message: '只能高于当前身份等级',
+                    type: 'warning'
+                });
+            }else{
+                this.flag = true;
+            }
         }
     },
     computed: {

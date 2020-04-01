@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" @submit="submit" title="发放优惠券" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
-      <p class="marB20">用户ID: {{data.memberSn}}</p>
+      <p class="marB20">客户ID: {{data.memberSn}}</p>
       <div class="clearfix">
         <div class="fl l_block">
           选择优惠券：

@@ -38,7 +38,7 @@
               <span>元 获得</span>
             </div>
             <div class="marB10">
-              <span>用户获得</span>
+              <span>客户获得</span>
               <div class="input_wrap2" style="margin-left:14px">
                 <el-input placeholder="请输入整数，不输入则不发放" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
               </div>

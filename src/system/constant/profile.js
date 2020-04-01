@@ -74,13 +74,13 @@ export default {
         },
         {   
             id: "04",
-            url:'/shop/templateManageIndex',
+            url:'/shop/m_templateManageIndex',
             img: require("@/assets/images/profile/l_04.png"),
             text: "店铺模板"
         },
         {   
             id: "05",
-            url:'/shop/shopNav',
+            url:'/shop/m_shopNavIndex',
             img: require("@/assets/images/profile/l_05.png"),
             text: "店铺导航"
         },
