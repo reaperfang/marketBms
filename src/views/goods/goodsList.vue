@@ -169,13 +169,20 @@
             </div>
             <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
-        <div v-else class="goods-list-empty">
+        <div v-else-if="!allTotal" class="goods-list-empty">
+            <div v-if="!loading" class="goods-list-empty-content">
+                <div class="image"></div>
+                <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
+                <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
+            </div>
+        </div>
+        <!-- <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
                 <div class="image"></div>
                 <p>没有找到相关商品，换个搜索词试试吧</p>
                 <el-button @click="$router.push('/goods/goodsList')" class="add-goods" type="primary">返回列表页</el-button>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <style lang="scss" scoped>
@@ -411,6 +418,7 @@ export default {
             ],
             list: [],
             total: 0,
+            allTotal: 0,
             loading: false,
             listQuery: {
                 startIndex: 1,
@@ -442,6 +450,7 @@ export default {
         if(typeof this.$route.query.status != 'undefined') {
             this.listQuery = Object.assign({}, this.listQuery, {status: +this.$route.query.status})
         }
+        this.getAllList()
         this.getList()
         this.getCategoryList()
         this.getMiniappInfo()
@@ -851,6 +860,13 @@ export default {
 
             this.getList(param)
         },
+        getAllList() {
+            this._apis.goods.fetchSpuGoodsList().then((res) => {
+                this.allTotal = +res.total
+            }).catch(error => {
+                //this.loading = false
+            })
+        },
         getList(param) {
             this.loading = true
             let _param
@@ -882,6 +898,9 @@ export default {
                     //this.getCategoryName(res.list)
                     this.list = res.list
                     this.loading = false
+                    if(this.allTotal && !this.total) {
+                        this.$router.push('/goods/goodsListEmpty')
+                    }
                 })
             }).catch(error => {
                 //this.loading = false
@@ -915,7 +934,7 @@ export default {
                 })
             } else {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
-                    this._apis.goods.allDelete({ids: [row.id]}).then((res) => {
+                    this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
                         this.visible = false
                         this.$message({
