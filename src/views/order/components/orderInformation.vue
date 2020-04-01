@@ -58,7 +58,7 @@
                 </div>
             </div></el-col>
             <el-col :span="8"><div class="grid-content righter">
-                <div class="item">
+                <div v-if="orderInfo.isInvoice == 1"  class="item">
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
@@ -253,7 +253,8 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div class="col">{{orderDetail.orderInfo.actualMoney && (orderDetail.orderInfo.actualMoney != '0.00') ? '¥' + orderDetail.orderInfo.actualMoney : ''}}</div>
+                        <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney}}</div>
+                        <div v-else class="col"></div>
                     </div>
                 </section>
             </div>
