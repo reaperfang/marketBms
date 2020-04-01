@@ -13,7 +13,8 @@ export default {
         { value: 2, label: '售后退款' },
         { value: 3, label: '退还奖励' },
         { value: 4, label: '提现成功' },
-        { value: 5, label: '红包发放' }
+        { value: 5, label: '红包发放' },
+        { value: 6, label: '分佣结算' }
     ],
     //收支明细---支付方式
     payTypes:[
