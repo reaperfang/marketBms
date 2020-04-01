@@ -88,7 +88,7 @@
           prop="tradeDetailSn"
           label="交易流水号"
           :render-header="renderTradeDetailSn"
-          width="130px">
+          >
         </el-table-column>
         <el-table-column
           prop="tradeType"
@@ -130,7 +130,7 @@
           prop="isInvoice"
           label="开票">
           <template slot-scope="scope">
-            {{scope.row.isInvoice ? '开票' : '未开票' }}
+            {{scope.row.isInvoice ? '是' : '否' }}
           </template>
         </el-table-column>
         <el-table-column
