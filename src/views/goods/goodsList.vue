@@ -88,7 +88,7 @@
                         width="100">
                         <template slot-scope="scope">
                             <span class="goods-state">
-                                <span :class="{red: scope.row.status == -1}">{{scope.row.goodsInfos[0].status | statusFilter}}</span>
+                                <span :class="{red: scope.row.status == -1}">{{scope.row.goodsInfos | statusFilter}}</span>
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>
                             </span>
                         </template>
@@ -173,7 +173,7 @@
             <div v-if="!loading" class="goods-list-empty-content">
                 <div class="image"></div>
                 <p>没有找到相关商品，换个搜索词试试吧</p>
-                <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
+                <el-button @click="$router.push('/goods/goodsList')" class="add-goods" type="primary">返回列表页</el-button>
             </div>
         </div>
     </div>
@@ -448,13 +448,14 @@ export default {
         this.getProductCatalogTreeList()
     },
     filters: {
-        statusFilter(val) {
-            if(val == 1) {
+        statusFilter(goodsInfos) {
+            let item = goodsInfos[0]
+            if(item.status == 1) {
                 return '上架'
-            } else if(val == 0) {
-                return '下架'
-            } else if(val == -1) {
+            } else if(goodsInfos.every(val => val.status == 0)) {
                 return '已售馨'
+            } else if(item.status == 0) {
+                return '下架'
             }
         },
         async productCatalogFilter(id) {
@@ -519,6 +520,7 @@ export default {
                 .allUpdatePriceSpu(_param)
                 .then(res => {
                 this.getList();
+                this.checkedAll = false
                 this.visible = false;
                 
                 this.$message({
@@ -557,6 +559,7 @@ export default {
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
+                    this.checkedAll = false
                 }).catch(error => {
                     this.$message.error({
                     message: error,
@@ -648,6 +651,7 @@ export default {
             this.confirm({title: '批量删除', icon: true, text: '是否确认批量删除？'}).then(() => {
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
                     this.getList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                             message: '删除成功！',
@@ -670,6 +674,7 @@ export default {
             this.confirm({title: `批量${statusStr}`, icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids, status}).then((res) => {
                     this.getList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                         message: '修改成功！',

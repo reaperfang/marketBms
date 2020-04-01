@@ -357,7 +357,7 @@ export default {
       axios.post(
         this.uploadUrlBase64,
         "json={\"cid\":\""+this.cid+"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",
-        {headers: {'Origin':'http'}}
+        {headers: {'Origin':location.protocol.split(':')[0]}}
       ).then((response) => {
         this.form.logoCircle = response.data.data.url
       }).catch((error) => {

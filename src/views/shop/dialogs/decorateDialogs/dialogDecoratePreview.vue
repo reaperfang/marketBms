@@ -79,7 +79,7 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: this.decorateData.shareUrl.replace("&","[^]"),
+        url: location.protocol + this.decorateData.shareUrl.split(':')[1].replace("&","[^]"),
         width: '250',
         height: '250',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
