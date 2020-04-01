@@ -7,7 +7,7 @@
                     <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
-                        <el-input type="number" :min="item.costPrice" :max="max" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
+                        <el-input max-length="11" type="number" :min="item.costPrice" :max="max" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
                         <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可编辑售卖价</p>
                     </div>
                 </div>
@@ -54,7 +54,7 @@ export default {
             }
             if(this.data.goodsInfos.some(val => +val.salePrice > 10000000)) {
                 this.$message({
-                message: '售卖价不得高于10000000',
+                message: '当前售卖价最大限制为10000000，请您重新输入',
                 type: 'warning'
                 });
                 return

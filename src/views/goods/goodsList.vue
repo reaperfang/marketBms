@@ -459,12 +459,15 @@ export default {
     filters: {
         statusFilter(goodsInfos) {
             let item = goodsInfos[0]
-            if(item.status == 1) {
-                return '上架'
-            } else if(goodsInfos.every(val => val.status == 0)) {
+
+            if(goodsInfos.reduce((total, current) => total + current.stock, 0) == 0) {
                 return '已售馨'
-            } else if(item.status == 0) {
-                return '下架'
+            } else {
+                if(item.status == 1) {
+                    return '上架'
+                } else if(item.status == 0) {
+                    return '下架'
+                }
             }
         },
         async productCatalogFilter(id) {
