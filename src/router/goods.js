@@ -19,6 +19,13 @@ export default [
         meta: { title: '商品列表', noCache: true, tabTitle: '商品管理',navType:2 },
       },
       {
+        path: 'goodsListEmpty',
+        component: () => import('@/views/goods/goodsListEmpty'),
+        name: 'goodsListEmpty',
+        hidden: true,
+        meta: { title: '商品列表空白', noCache: true, tabTitle: '商品管理',navType:2 },
+      },
+      {
         path: 'classify',
         component: () => import('@/views/goods/classify'),
         name: 'classify',
