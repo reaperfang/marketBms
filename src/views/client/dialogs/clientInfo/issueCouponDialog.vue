@@ -10,7 +10,7 @@
         <div class="fl r_block">
           <div class="sel_cont" v-for="(i,index) in selectedCoupons" :key="index">
             <span class="sel_cont_name">{{i.name}}</span>
-            <el-input-number v-model="i.frozenNum" :max="10" @change="(e) => changeNum(e, i)"></el-input-number>
+            <el-input-number v-model="i.frozenNum" :max="10" @change="(e) => changeNum(e, index)"></el-input-number>
             <span class="addMainColor pointer" @click="handleDelete(index)" style="margin-left: 20px">删除</span>
           </div>
           <span class="add pointer" @click="handleAdd">添加</span>
@@ -120,13 +120,9 @@ export default {
     };
   },
   methods: {
-    changeNum(e,i) {
+    changeNum(e,index) {
       if(e == 0) {
-        this.selectedCoupons.map(item => {
-          if(item.id == i.id) {
-            this.selectedCoupons.splice(item, 1);
-          }
-        })
+        this.selectedCoupons.splice(index, 1);
       }
     },
     couponSubmit() {
@@ -296,7 +292,7 @@ export default {
       .sel_cont{
         .sel_cont_name{
           display: inline-block;
-          width: 80px;
+          width: 100px;
           margin-right: 20px;
           overflow: hidden;
         }
