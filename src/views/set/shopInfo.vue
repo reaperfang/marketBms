@@ -195,6 +195,7 @@ export default {
   methods: {
     imageSelected(item) {
       this.form.logo = item.filePath;
+      this.handleAvatarSuccess(item.filePath);
     },
     itemCatHandleChange(value) {
         let _value = [...value]
@@ -328,8 +329,7 @@ export default {
       }).catch(error=>{ })
     },
 
-    handleAvatarSuccess(res, file) {
-      this.form.logo = res.data.url;
+    handleAvatarSuccess(res) {
       //圆形图片处理
       var ctx = this.canvas.getContext('2d'); 
       let _self = this
@@ -350,7 +350,7 @@ export default {
           let urlData = base64.substring(22, base64.length);          
           _self.uploadCircle(urlData)
       }
-      img.src = res.data.url;
+      img.src = res;
     },
 
     uploadCircle(urlData){
