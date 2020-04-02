@@ -54,7 +54,7 @@
             <div class="btns clearfix">
                 <span v-if="!!scope.row.name" @click="goToEdit(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '查看']">编辑</span>
                 <span v-if="scope.row.enableShow == true" @click="handleAble($event, scope.row, 0)">启用</span>
-                <span v-if="scope.row.disableShow == true" @click="handleAble($event, scope.row, 1)">禁用</span>
+                <span v-if="scope.row.disableShow == true" @click="handleAble($event, scope.row, 1)" style="color:#FD4C2B">禁用</span>
                 <span v-if="!!scope.row.name" @click="sendCard(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '发卡']">发卡</span>
                 <span v-if="!scope.row.name" :style="{color: scope.row.isGray ? '#eee':'#655EFF'}" @click="handleConfig(scope.row)" v-permission="['客户', '会员卡', '会员卡管理', '待配置']">待配置</span>
             </div>

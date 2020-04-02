@@ -48,7 +48,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
             <span class="edit_span" @click="handleOpen(scope.row)" v-if="scope.row.enableShow == true && scope.row.name" v-permission="['客户', '会员等级', '默认页面', '查看']">启用</span>
-            <span class="edit_span" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['客户', '会员等级', '默认页面', '查看']">禁用</span>
+            <span class="edit_span" style="color:#FD4C2B" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['客户', '会员等级', '默认页面', '查看']">禁用</span>
             <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['客户', '会员等级', '默认页面', '查看']">编辑</span>
             <span class="edit_span" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['客户', '会员等级', '默认页面', '待配置']">待配置</span>
         </template>
