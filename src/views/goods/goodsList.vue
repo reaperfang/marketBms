@@ -15,7 +15,7 @@
                             <el-option label="全部" value=""></el-option>
                         <el-option label="上架" :value="1"></el-option>
                         <el-option label="下架" :value="0"></el-option>
-                        <el-option label="售罄" :value="-1"></el-option>
+                        <el-option label="已售罄" :value="-1"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="商品分类" prop="productCatalogInfoId">
@@ -169,8 +169,8 @@
             </div>
             <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
-        <div v-else-if="!allTotal" class="goods-list-empty">
-            <div v-if="!loading" class="goods-list-empty-content">
+        <div v-if="!list.length && !allTotal" class="goods-list-empty">
+            <div class="goods-list-empty-content">
                 <div class="image"></div>
                 <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
                 <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
@@ -325,6 +325,7 @@
     text-align: center;
     .goods-list-empty-content {
         padding-top: 155px;
+        padding-bottom: 20px;
         .image {
             width: 210px;
             height: 178px;
@@ -662,8 +663,23 @@ export default {
             }
 
             this.confirm({title: '批量删除', icon: true, text: '是否确认批量删除？'}).then(() => {
+                let isLast = false
+
+                if(this.listQuery.startIndex == 1) {
+                    isLast = true
+                } else {
+                    if((this.listQuery.startIndex - 1)*this.listQuery.pageSize + this.list.length == this.total) {
+                        isLast = true
+                    }
+                }
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
-                    this.getList()
+                    if(isLast) {
+                        this.listQuery.startIndex = 1
+                        this.getList()
+                    } else {
+                        this.getList()
+                    }
+                    this.getAllList()
                     this.checkedAll = false
                     this.visible = false
                     this.$message({
@@ -940,6 +956,7 @@ export default {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                     this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
+                        this.getAllList()
                         this.visible = false
                         this.$message({
                             message: '删除成功！',
