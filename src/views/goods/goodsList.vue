@@ -93,7 +93,7 @@
                         width="100">
                         <template slot-scope="scope">
                             <span class="goods-state">
-                                <span :class="{red: scope.row.status == -1}">{{scope.row.goodsInfos[0].status | statusFilter}}</span>
+                                <span :class="{red: scope.row.status == -1}">{{scope.row.goodsInfos | statusFilter}}</span>
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>
                             </span>
                         </template>
@@ -174,13 +174,20 @@
             </div>
             <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
-        <div v-else class="goods-list-empty">
+        <div v-else-if="!allTotal" class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
                 <div class="image"></div>
-                <p>没有找到相关商品，换个搜索词试试吧</p>
+                <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
                 <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
             </div>
         </div>
+        <!-- <div v-else class="goods-list-empty">
+            <div v-if="!loading" class="goods-list-empty-content">
+                <div class="image"></div>
+                <p>没有找到相关商品，换个搜索词试试吧</p>
+                <el-button @click="$router.push('/goods/goodsList')" class="add-goods" type="primary">返回列表页</el-button>
+            </div>
+        </div> -->
     </div>
 </template>
 <style lang="scss" scoped>
@@ -416,6 +423,7 @@ export default {
             ],
             list: [],
             total: 0,
+            allTotal: 0,
             loading: false,
             listQuery: {
                 startIndex: 1,
@@ -447,19 +455,24 @@ export default {
         if(typeof this.$route.query.status != 'undefined') {
             this.listQuery = Object.assign({}, this.listQuery, {status: +this.$route.query.status})
         }
+        this.getAllList()
         this.getList()
         this.getCategoryList()
         this.getMiniappInfo()
         this.getProductCatalogTreeList()
     },
     filters: {
-        statusFilter(val) {
-            if(val == 1) {
-                return '上架'
-            } else if(val == 0) {
-                return '下架'
-            } else if(val == -1) {
+        statusFilter(goodsInfos) {
+            let item = goodsInfos[0]
+
+            if(goodsInfos.reduce((total, current) => total + current.stock, 0) == 0) {
                 return '已售馨'
+            } else {
+                if(item.status == 1) {
+                    return '上架'
+                } else if(item.status == 0) {
+                    return '下架'
+                }
             }
         },
         async productCatalogFilter(id) {
@@ -524,6 +537,7 @@ export default {
                 .allUpdatePriceSpu(_param)
                 .then(res => {
                 this.getList();
+                this.checkedAll = false
                 this.visible = false;
                 
                 this.$message({
@@ -562,6 +576,7 @@ export default {
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
+                    this.checkedAll = false
                 }).catch(error => {
                     this.$message.error({
                     message: error,
@@ -653,6 +668,7 @@ export default {
             this.confirm({title: '批量删除', icon: true, text: '是否确认批量删除？'}).then(() => {
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
                     this.getList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                             message: '删除成功！',
@@ -675,6 +691,7 @@ export default {
             this.confirm({title: `批量${statusStr}`, icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids, status}).then((res) => {
                     this.getList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                         message: '修改成功！',
@@ -851,6 +868,13 @@ export default {
 
             this.getList(param)
         },
+        getAllList() {
+            this._apis.goods.fetchSpuGoodsList().then((res) => {
+                this.allTotal = +res.total
+            }).catch(error => {
+                //this.loading = false
+            })
+        },
         getList(param) {
             this.loading = true
             let _param
@@ -882,6 +906,9 @@ export default {
                     //this.getCategoryName(res.list)
                     this.list = res.list
                     this.loading = false
+                    if(this.allTotal && !this.total) {
+                        this.$router.push('/goods/goodsListEmpty')
+                    }
                 })
             }).catch(error => {
                 //this.loading = false
@@ -915,7 +942,7 @@ export default {
                 })
             } else {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
-                    this._apis.goods.allDelete({ids: [row.id]}).then((res) => {
+                    this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
                         this.visible = false
                         this.$message({

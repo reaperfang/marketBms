@@ -3,11 +3,16 @@
   <div>
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model='ruleForm.nickName' placeholder="请输入" style="width:226px;"></el-input>
+        <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <!-- <el-form-item label="订单编号">
           <el-input v-model="ruleForm.value2" placeholder="请输入" style="width:226px;"></el-input>
@@ -112,6 +117,16 @@ export default {
       dataList:[],
       total:0,
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       times:[],
       ruleForm:{
         memberSn:'',
@@ -121,7 +136,9 @@ export default {
         stopTime:'',
         sort:'desc',
         pageSize:10,
-        pageNum:1
+        pageNum:1,
+        userType:'memberSn',
+        userValue:'',
       },
       loading:true,
       currentData:{},
@@ -159,7 +176,24 @@ export default {
       )
     },
     fetch(){
-      this._apis.finance.getListTa(this.ruleForm).then((response)=>{
+      let query = {
+        memberSn:'',
+        nickName:'',
+        presentType:0,
+        startTime:'',
+        stopTime:'',
+        sort:'desc',
+        pageSize:10,
+        pageNum:1,
+      }
+      if(this.ruleForm.userType == 'memberSn'){
+        query.memberSn = this.ruleForm.userValue || ''
+        query.nickName = ''
+      }else{
+        query.nickName = this.ruleForm.userValue || ''
+        query.memberSn = ''
+      }
+      this._apis.finance.getListTa(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
         this.loading = false
@@ -188,6 +222,8 @@ export default {
         sort:'desc',
         pageNum:1,
         pageSize:10,
+        userType:'memberSn',
+        userValue:''
       }
       this.times= []
       this.fetch()

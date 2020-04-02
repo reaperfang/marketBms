@@ -684,3 +684,12 @@ export function getLevelMax(data) {
         data
     })
 }
+//用户最大启用卡等级
+export function getCardMax(data) {
+    return request({
+        target:'CARD-LEVEL-MAX-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}

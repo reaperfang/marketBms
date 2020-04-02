@@ -311,6 +311,7 @@ export default {
   watch: {
     newForm(val) {
       this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
     }
   },
 };

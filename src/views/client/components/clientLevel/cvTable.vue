@@ -110,7 +110,7 @@ export default {
               });
             }else if(response == 2){
               this.$message({
-                message: '当前等级或上一等级下有客户，不能禁用',
+                message: '该等级下有会员或即将有会员升至该等级，不可禁用',
                 type: 'warning'
               });
             }

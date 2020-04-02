@@ -58,7 +58,7 @@
                 </div>
             </div></el-col>
             <el-col :span="8"><div class="grid-content righter">
-                <div class="item">
+                <div v-if="orderInfo.isInvoice == 1"  class="item">
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="item">
                     <div class="label">用户备注</div>
-                    <div class="value">{{orderInfo.buyerRemark || '--'}}</div>
+                    <div class="value">{{orderInfo.buyerRemark || '无备注'}}</div>
                 </div>
                 <div class="item remark-box">
                     <div class="label">商户备注</div>
@@ -240,7 +240,7 @@
                         <div :style="{width: changePriceVisible ? '209px' : '199px'}" class="col">应收金额:</div>
                         <div class="col">
                             <div class="yingshow-right-box">
-                                <span>¥{{yingshow}}</span>
+                                <span>¥{{orderDetail.orderInfo.receivableMoney}}</span>
                                 <span v-if="this.orderDetail.orderInfo.orderStatus == 0" @click="changePriceVisible = true" class="yingshou-change">改价</span>
                                 <el-input v-if="changePriceVisible" style="width: 112px; margin-right: 6px; margin-left: 6px;" type="number" v-model="yingshouChangeMoney" placeholder="请输入金额"></el-input>
                                 <el-button v-if="changePriceVisible" @click="yingshouSubmit" type="primary">确定</el-button>
@@ -253,7 +253,8 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.actualMoney || 0}}</div>
+                        <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney}}</div>
+                        <div v-else class="col"></div>
                     </div>
                 </section>
             </div>
@@ -700,7 +701,7 @@ export default {
                 } else if(row.orderStatus == 5) {
                     return '待收货'
                 } else if(row.orderStatus == 6) {
-                    return '完成'
+                    return '交易成功'
                 }
                     }
         }

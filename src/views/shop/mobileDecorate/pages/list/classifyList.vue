@@ -34,8 +34,8 @@
               width="400"
               trigger="click">
               <div style="display:flex;">
-                <el-input v-model="scope.row.shareUrl" placeholder="请输入内容" style="margin-right:10px"></el-input>
-                <el-button type="primary" v-clipboard:copy="scope.row.shareUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
+                <el-input :value="getPageLink(scope.row)" style="margin-right:10px"></el-input>
+                <el-button type="primary" v-clipboard:copy="getPageLink(scope.row)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
               </div>
               <span class="table-btn" slot="reference" @click="link(scope.row)">链接</span>
             </el-popover>
@@ -124,6 +124,12 @@ export default {
     },
     onError () {
       this.$message.error(this.$t('prompt.copyFail'))
+    },
+
+    getPageLink(row) {
+      if(row.shareUrl) {
+        return location.protocol + row.shareUrl.split(':')[1]
+      }
     }
   }
 }

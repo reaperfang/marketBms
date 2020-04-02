@@ -41,7 +41,13 @@
                 <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p> 
             </el-form-item>
             <el-form-item label="公司名称:" prop="companyName">
-                <el-input maxlength="30" show-word-limit v-model="form.companyName" placeholder="请输入公司名称" style="width:200px;"></el-input>
+                <el-input 
+                  type="textarea"
+                  autosize
+                  v-model="form.companyName"
+                  placeholder="请输入公司名称"
+                  style="width:200px;">
+                </el-input>
             </el-form-item>
             <el-form-item label="客服电话:" prop="phone">
                 <!-- <el-input v-model="form.phone" placeholder="区号" style="width:70px;"></el-input>
@@ -152,7 +158,8 @@ export default {
           { required: true, message: '请选择主营类目', trigger: 'blur' }
         ],
         companyName:[
-          { required: true, message: '请输入公司名称', trigger: 'blur' }
+          { required: true, message: '请输入公司名称', trigger: 'blur' },
+          {min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur'}
         ],
         companyEmail:[
           { required: true, message: '请输入公司邮箱', trigger: 'blur' },
@@ -195,6 +202,7 @@ export default {
   methods: {
     imageSelected(item) {
       this.form.logo = item.filePath;
+      this.handleAvatarSuccess(item.filePath);
     },
     itemCatHandleChange(value) {
         let _value = [...value]
@@ -307,7 +315,8 @@ export default {
               companyEmail: this.form.companyEmail
             }
             this._apis.set.updateShopInfo(data).then(response =>{
-              this.setShopName()              
+              this.setShopName()    
+              this.$store.dispatch('getShopInfo');          
             }).catch(error =>{
               this.$message.error(error);
               this.loading = false
@@ -328,8 +337,7 @@ export default {
       }).catch(error=>{ })
     },
 
-    handleAvatarSuccess(res, file) {
-      this.form.logo = res.data.url;
+    handleAvatarSuccess(res) {
       //圆形图片处理
       var ctx = this.canvas.getContext('2d'); 
       let _self = this
@@ -350,14 +358,14 @@ export default {
           let urlData = base64.substring(22, base64.length);          
           _self.uploadCircle(urlData)
       }
-      img.src = res.data.url;
+      img.src = res;
     },
 
     uploadCircle(urlData){
       axios.post(
         this.uploadUrlBase64,
         "json={\"cid\":\""+this.cid+"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",
-        {headers: {'Origin':'http'}}
+        {headers: {'Origin':location.protocol.split(':')[0]}}
       ).then((response) => {
         this.form.logoCircle = response.data.data.url
       }).catch((error) => {

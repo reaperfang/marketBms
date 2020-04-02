@@ -140,7 +140,7 @@ export default {
     submit() {
         let selectedRows = this.$refs.skuTable.selection;
         if(selectedRows.length !== 0) {
-          this.selectedList = this.selectedList.concat(selectedRows);
+          this.selectedList = [].concat(selectedRows);
           this.dialogVisible2 = true;
           this.$nextTick(() => {
             this.skuList.forEach(row => {
@@ -219,7 +219,7 @@ export default {
     getSkuList(startIndex, pageSize) {
       let params = {
         name: this.name,
-        productCatalogInfoId: this.categoryValue[2],
+        productCatalogInfoId: this.categoryValue[this.categoryValue.length - 1],
         startIndex: startIndex,
         pageSize: pageSize,
         productLabelName: this.productLabelName,
