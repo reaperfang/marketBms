@@ -571,6 +571,7 @@ export default {
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
+                    this.$refs.table.clearSelection();
                     this.checkedAll = false
                 }).catch(error => {
                     this.$message.error({
