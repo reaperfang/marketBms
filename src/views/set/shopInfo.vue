@@ -315,7 +315,8 @@ export default {
               companyEmail: this.form.companyEmail
             }
             this._apis.set.updateShopInfo(data).then(response =>{
-              this.setShopName()              
+              this.setShopName()    
+              this.$store.dispatch('getShopInfo');          
             }).catch(error =>{
               this.$message.error(error);
               this.loading = false
