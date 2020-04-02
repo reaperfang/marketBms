@@ -2,7 +2,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="(baseInfo.name || '页面名称') + '预览'">
     <div class="preview_wrapper">
-      <editView :dragable="false" v-if="height > 0" :height="height"></editView>
+      <editView :dragable="false" :height="1000"></editView>
       <div class="shop_info">
         <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
         <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
@@ -36,8 +36,7 @@ export default {
   data() {
     return {
       utils,
-      qrCode: '',
-      height: 0
+      qrCode: ''
     };
   },
   computed: {
@@ -59,9 +58,6 @@ export default {
   created() {
     this.$store.dispatch('getShopInfo');
     this.getQrcode();
-  },
-  mounted() {
-    this.height = document.body.clientHeight - 290;
   },
   watch: {
     shopInfo:{
@@ -139,6 +135,7 @@ export default {
         img{
           width:100%;
           margin-top:40px;
+          object-fit: none;
         }
       }
     }
