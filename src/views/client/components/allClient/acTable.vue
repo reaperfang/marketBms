@@ -219,16 +219,10 @@ export default {
       this.currentData.id = id;
     },
     addBlackList(row) {
-      this.getAllCoupons(row.id);
-      this.getAllCodes(row.id);
       this.dialogVisible = true;
       this.currentDialog = "addBlackDialog";
       this.currentData.memberSn = row.memberSn;
       this.currentData.id = row.id;
-      setTimeout(() => {
-        this.currentData.couponList = this.couponList;
-        this.currentData.codeList = this.codeList;
-      },200);
     },
     removeBlack(row) {
       this.dialogVisible = true;
@@ -284,28 +278,6 @@ export default {
     freshTable() {
       this.checkAll = false;
       this.getMembers(this.startIndex, this.pageSize);
-    },
-    getAllCoupons(id) {
-      this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {
-          this.couponList = [].concat(response.list);
-          this.couponList.map((item) => {
-              this.$set(item, 'frozenNum',1);
-          })
-          this.currentData.couponList = this.couponList;
-      }).catch((error) => {
-          console.log(error);
-      })
-    },
-    getAllCodes(id) {
-        this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1}).then((response) => {
-            this.codeList = [].concat(response.list);
-            this.codeList.map((item) => {
-                this.$set(item, 'frozenNum', 1);
-            });
-            this.currentData.codeList = this.codeList;
-        }).catch((error) => {
-            console.log(error);
-        })
     }
   },
   watch: {
