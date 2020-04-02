@@ -74,10 +74,11 @@ export default {
             })
         },
         download() {
-            let canvas = document.getElementById('qrcode').getElementsByTagName('canvas')
+            //let canvas = document.getElementById('qrcode').getElementsByTagName('canvas')
             let a = document.createElement('a')
 
-            a.href = canvas[0].toDataURL('image/png')
+            //a.href = canvas[0].toDataURL('image/png')
+            a.href = this.content
             //a.download = this.shareData.chanel + this.shareData.name + this.shareData.sku + '...'
             a.download = this.name
             a.click()
