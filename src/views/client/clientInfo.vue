@@ -5,10 +5,9 @@
             <span class="removeBlack" @click="showRemoveBlack" v-else>移除黑名单</span>
             <div class="c_top_l fl">
                 <p>基本信息：</p>
-                <img :src="clientInfoById.headIcon" alt="">
             </div>
             <div class="c_top_m fl">
-                <p style="margin-top: 0">用户ID: <span>{{clientInfoById.memberSn}}</span></p>
+                <p style="margin-top: 57px">用户ID: <span>{{clientInfoById.memberSn}}</span></p>
                 <!-- <p>微信公众号关注状态: <span>已关注</span></p> -->
                 <!-- <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p>
                 <p>手机号: <span>{{clientInfoById.phone}}</span></p> -->
@@ -18,6 +17,7 @@
                 <p>用户身份: {{clientInfoById.levelName}}<span class="addMainColor pointer marR20" @click="changeIdentity">&nbsp;&nbsp;&nbsp;&nbsp;变更</span></p>
             </div>
             <div class="c_top_r fl">
+                <img :src="clientInfoById.headIcon" alt="">
                 <div class="c_title">
                     个人资料
                 </div>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="c_mid">
-            <p>标签信息：</p>
+            <p style="font-weight: bold">标签信息：</p>
             <div class="labels">
                 <div class="label_list">
                     <p v-for="item in clientInfoById.labelRecordViews" :key="item.id" v-if="item.memberLabelInfoName">
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="c_mid">
-            <p>资产信息：</p>
+            <p style="font-weight: bold">资产信息：</p>
             <div class="assets">
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_vip.png" alt="">
@@ -83,7 +83,7 @@
             </div>
         </div>
         <div class="c_mid" style="border-bottom: none">
-            <p>交易统计：<span style="color: #b9b9b9">（系统自动确认收货的货到付款订单不在统计范围内）</span></p>
+            <p style="font-weight: bold">交易统计：<span style="color: #b9b9b9">（系统自动确认收货的货到付款订单不在统计范围内）</span></p>
             <div class="assets">
                 <div class="assets_item">
                     <p>最近下单时间</p>
@@ -484,14 +484,6 @@ export default {
             p{
                 font-weight: bold;
             }
-            img{
-                display: block;
-                width: 52px;
-                height: 52px;
-                border-radius: 26px;
-                margin-top: 17px;
-                background-color: #eee;
-            }
         }
         .c_top_m{
             width: 240px;
@@ -506,6 +498,18 @@ export default {
             border-radius:10px;
             border:1px solid rgba(204,204,204,1);
             margin-left: 102px;
+            position: relative;
+            img{
+                position: absolute;
+                display: block;
+                width: 52px;
+                height: 52px;
+                border-radius: 26px;
+                margin-top: 17px;
+                background-color: #eee;
+                top: 36px;
+                right: 16px;
+            }
             .c_title{
                 height: 48px;
                 line-height: 48px;

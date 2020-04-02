@@ -15,7 +15,7 @@
                     </div>
                     <p class="label_warn">
                         手动标签：无筛选条件给用户定义标签<br>
-                        自动标签：按照筛选条件自动为用户打标签，条件不符合自动删除和添加
+                        自动标签：按照筛选条件自动为用户打标签
                     </p>
                 </el-form-item>
                 <div v-if="ruleForm.tagType == '1'">
@@ -527,7 +527,7 @@ export default {
             display: inline-block;
         }
         .label_warn{
-            width: 252px;
+            width: 255px;
             font-size: 12px;
             color: #92929B;
             line-height: 20px;
