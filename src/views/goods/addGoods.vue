@@ -6,7 +6,13 @@
         <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
         <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
     </header> -->
-    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="150px" class="demo-ruleForm">
+    <el-tabs v-model="activeName">
+        <el-tab-pane label="商品信息" name="first"></el-tab-pane>
+        <el-tab-pane label="分佣配置" name="second">
+            <CommisionSet v-if="goodsDetail" :detail="goodsDetail"></CommisionSet>
+        </el-tab-pane>
+    </el-tabs>
+    <el-form v-if="activeName == 'first'" :model="ruleForm" ref="ruleForm" :rules="rules" label-width="150px" class="demo-ruleForm">
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
@@ -649,6 +655,7 @@ import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
 import Specs from '@/views/goods/components/specs'
 import anotherAuth from '@/mixins/anotherAuth'
+import CommisionSet from './components/commisionSet'; // 分佣设置
 export default {
     name: 'addGoods',
     mixins: [anotherAuth],
@@ -697,6 +704,8 @@ export default {
             }
         };
         return {
+            goodsDetail: null,
+            activeName: 'first',
             itemCatText: '',
             categoryValue: [],
             categoryOptions: [],
@@ -834,7 +843,7 @@ export default {
             showSpecsList: false,
             addedSpecs: [],
             visible: false,
-            specsValues: [],
+            specsValues: [],    
             showAddSpecsValueButton: false,
             showAddSpecsInput: false,
             newSpec: '',
@@ -854,7 +863,8 @@ export default {
         //         this.getGoodsDetail()
         //     }
         // })
-        var that = this
+        var that = this;
+        if(this.editor) this.activeName = 'second';
         Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
@@ -1820,6 +1830,7 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 console.log(res)
+                that.goodsDetail = res;
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
@@ -2691,7 +2702,8 @@ export default {
         AddTagDialog,
         dialogSelectImageMaterial,
         RichEditor,
-        Specs
+        Specs,
+        CommisionSet
     }
 }
 </script>
