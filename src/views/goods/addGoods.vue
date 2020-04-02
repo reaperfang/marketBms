@@ -136,7 +136,7 @@
                                             <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
                                                 {{ValueItem.name}}
                                                 <i v-if="ValueItem.type == 'new'" @click="(e) => {
-                                                    deleteSpecValue(valueIndex, e)
+                                                    deleteSpecValue(valueIndex, e, ValueItem)
                                                 }" class="icon-circle-close"></i>
                                             </li>
                                             <div class="clear"></div>
@@ -195,7 +195,7 @@
                                             <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
                                                 {{ValueItem.name}}
                                                 <i v-if="ValueItem.type == 'new'" @click="(e) => {
-                                                    deleteSpecValue(valueIndex, e)
+                                                    deleteSpecValue(valueIndex, e, ValueItem)
                                                 }" class="icon-circle-close"></i>
                                             </li>
                                             <div class="clear"></div>
@@ -993,12 +993,16 @@ export default {
             })
             this.ruleForm.goodsInfos = goodsInfos
         },
-        deleteSpecValue(index, e) {
+        deleteSpecValue(index, e, item) {
             e.stopPropagation()
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
+            let name = item.name
+            let flatIndex = this.flatSpecsList.findIndex(val => val.name == name)
+
             addedSpecs[addedSpecs.length - 1].list.splice(index, 1)
             this.addedSpecs = addedSpecs
             this.specsValues.splice(index, 1)
+            this.flatSpecsList.splice(flatIndex, 1)
         },
         addNewSpecValue(item, index) {
             let value = item.newSpecValue
@@ -1070,7 +1074,7 @@ export default {
         addNewSpec() {
             if(/\s+/.test(this.newSpec)) {
                 this.$message({
-                    message: '规格名称不能为空',
+                    message: '当前输入有误，请您重新输入',
                     type: 'warning'
                 });
                 return
@@ -1770,7 +1774,7 @@ export default {
                         _addedSpecs.push(_flatSpecsItem)
                     } else {
                         let specItem = {
-                            id: new Date().getTime(),
+                            id: new Date().getTime() + specName,
                             name: specName,
                             parentId: '0',
                             list: [],
