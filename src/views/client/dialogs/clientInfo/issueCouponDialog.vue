@@ -1,6 +1,6 @@
 <template>
 <div>
-  <DialogBase :visible.sync="visible" @submit="submit" title="发放优惠券" :hasCancel="hasCancel" :showFooter="false">
+  <DialogBase :visible.sync="visible" @submit="submit" @close="close" title="发放优惠券" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
       <p class="marB20">用户ID: {{data.memberSn}}</p>
       <div class="clearfix">
@@ -14,6 +14,11 @@
             <span class="addMainColor pointer" @click="handleDelete(index)" style="margin-left: 20px">删除</span>
           </div>
           <span class="add pointer" @click="handleAdd">添加</span>
+        </div>
+        <div class="fl info_block">
+          <div v-for="(item,index) in infoArrs" :key="index">
+            {{item}}
+          </div>
         </div>
       </div>
     </div>
@@ -116,7 +121,8 @@ export default {
       dialogVisible2: false,
       loading: false,
       checkAll: false,
-      selectedCoupons: []
+      selectedCoupons: [],
+      infoArrs: []
     };
   },
   methods: {
@@ -165,27 +171,30 @@ export default {
           let flag = true;
           response.map((v) => {
             if(!!v.receiveDesc) {
-              this.visible = false;
+              //this.visible = false;
               this.btnLoading = false;
               let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
-              this.$message({
-                message: errMsg,
-                type: 'warning'
-              });
+              this.infoArrs.push(errMsg);
+              // this.$message({
+              //   message: errMsg,
+              //   type: 'warning'
+              // });
             }else{
               this.btnLoading = false;
-              this.visible = false;
-              this.$message({
-                message: "发放成功",
-                type: 'success'
-              });
+              //this.visible = false;
+              let successMsg = v.couponName + "发放成功";
+              this.infoArrs.push(successMsg);
+              // this.$message({
+              //   message: "发放成功",
+              //   type: 'success'
+              // });
               this.$emit('refreshPage',1);
             }
           })
         }).catch((error) => {
           console.log(error);
           this.btnLoading = false;
-          this.visible = false;
+          //this.visible = false;
         })
       }else{
         this.btnLoading = false;
@@ -200,6 +209,10 @@ export default {
     },
     handleDelete(index) {
       this.selectedCoupons.splice(index, 1);
+    },
+    close() {
+      this.selectedCoupons = [];
+      this.infoArrs = [];
     }
   },
   computed: {
@@ -288,6 +301,7 @@ export default {
         margin-top: 5px;
         color: #655EFF;
         display: block;
+        font-size: 16px;
       }
       .sel_cont{
         .sel_cont_name{
@@ -296,6 +310,13 @@ export default {
           margin-right: 20px;
           overflow: hidden;
         }
+      }
+    }
+    .info_block{
+      margin-top: 12px;
+      div{
+        margin: 0 0 14px 41px;
+        color: red;
       }
     }
     .marB20{
