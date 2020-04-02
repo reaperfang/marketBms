@@ -87,15 +87,12 @@ export default {
         this.list = []
         response.item.map(item => {
           let data = Object.assign({checked:false}, item)
-          data.thumb_url = "http://img01.store.sogou.com/net/a/04/link?appid=100520029&url=" + data.thumb_url;
+          data.thumb_url = "//img01.store.sogou.com/net/a/04/link?appid=100520029&url=" + data.thumb_url;
           this.list.push(data)
         })
         this.total = response.total
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     submit() {

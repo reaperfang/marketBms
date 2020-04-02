@@ -1,10 +1,10 @@
 <!--物流查询-->
 <template>
   <div>
-    <div class="top_part">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="inline" label-width="70px">
+    <div class="top_part head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;paddinig-right:4px;">
             <el-option
               v-for="item in fsTerms"
               :key="item.value"
@@ -12,19 +12,18 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="查询时间" style="margin-left:25px;">
+        <el-form-item label="查询时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="快递公司">
@@ -102,11 +101,6 @@ export default {
   },
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       inline:true,
       ruleForm:{
         searchType:'relationSn',
@@ -167,8 +161,8 @@ export default {
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.startTime = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.endTime = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.startTime = timeValue[0]
+        query.endTime = timeValue[1]
       }
       return query;
     },
@@ -208,10 +202,7 @@ export default {
         this._apis.finance.exportFs(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+         this.$message.error(error);
       })
       }
     },

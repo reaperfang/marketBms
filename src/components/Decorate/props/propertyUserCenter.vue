@@ -174,8 +174,8 @@ export default {
           },
           address: {
             name: 'address',
-            title: '地址管理',
-            titleValue: '地址管理',
+            title: '收货地址',
+            titleValue: '收货地址',
             icon: '',
             defaultIcon: 'userCenter18',
             color: '#000'
@@ -282,7 +282,7 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: this.ruleForm.shareUrl.replace("&","[^]"),
+        url: location.protocol + this.ruleForm.shareUrl.split(':')[1].replace("&","[^]"),
         width: '150',
         height: '150',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo

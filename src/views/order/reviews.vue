@@ -12,10 +12,10 @@
                     <el-date-picker
                         v-model="listQuery.orderDate"
                         type="datetimerange"
-                        range-separator="-"
+                        range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        :default-time="['00:00:00', '23:59:59']">
+                        :picker-options="utils.globalTimePickerOption.call(this)">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="状态">
@@ -33,17 +33,18 @@
                         <el-option label="否" :value="0"></el-option>
                     </el-select>
                 </el-form-item>
-                <div class="buttons" style="display: inline-block; float: right;">
+                <el-form-item>
+                    <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
+                </el-form-item>
+                <!-- <div class="buttons" style="display: inline-block; float: right;">
                     <div class="lefter">
-                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '批量审核']" @click="batchAudit" class="border-button">批量审核</el-button> -->
-                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '批量回复']" @click="batchReply" class="border-button">批量回复</el-button> -->
-                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '敏感词设置']" @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button> -->
                     </div>
                     <div class="righter">
                         <el-button @click="getList" type="primary">搜索</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
-                </div>
+                </div> -->
                 <div style="clear: both;"></div>
             </el-form>
         </div>
@@ -266,17 +267,10 @@ export default {
             this._apis.order.orderCommentAuth(params).then((res) => {
                 this.getList()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: `审核成功！`,
-                    type: 'success'
-                });
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         setChoiceness(row) {
@@ -290,34 +284,20 @@ export default {
                 }
                 this.getList()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: `${message}成功！`,
-                    type: 'success'
-                });
+                this.$message.success(`${message}成功！`);
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         onSubmit(value) {
             console.log(value)
             this._apis.order.replyComment({ids: this.multipleSelection.map(val => val.id), replyContent: value}).then((res) => {
-                // this.$notify({
-                //     title: '成功',
-                //     message: '批量回复成功！',
-                //     type: 'success'
-                // });
+                // this.$message.success('批量回复成功！');
                 this.getList()
-                this.confirm({title: '提示', icon: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
+                this.confirm({title: '提示', iconSuccess: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         batchAudit() {
@@ -411,6 +391,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .reviews {
     .search {
         background-color: #fff;

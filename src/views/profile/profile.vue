@@ -147,7 +147,7 @@
                     商户工作台H5
                 </p>
                 <p class="link_h5">
-                    <span ref="linkH5">http://omo.aiyouyi.cn/bh</span>
+                    <span ref="linkH5">{{protocol}}//omo.aiyouyi.cn/bh</span>
                     <img :src="require('@/assets/images/profile/icon_05.png')" alt="" v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">
                 </p>
                 <img :src="qrCode" alt="">
@@ -173,8 +173,9 @@ export default {
             stayProcessedCount:'',
             staySendCount:'',
             stayAuthCount:'',
-            pageLink:'http://omo.aiyouyi.cn/bh',
+            pageLink: location.protocol + '//omo.aiyouyi.cn/bh',
             qrCode:'',
+            protocol: location.protocol
         }
     },
     computed: {
@@ -251,16 +252,16 @@ export default {
         //常用功能跳转
         linkTo(item){
             if(item.text == '店铺促销'){
-                this.$router.push({path:'/apply',query:{paths:'/application/promotion'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/promotion', applyId:4}})
                 this.SETCURRENT(8)
             }else if(item.text == '特色玩法'){
-                this.$router.push({path:'/apply',query:{paths:'/application/feature'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/feature', applyId:5}})
                 this.SETCURRENT(8)
             }else if(item.text == '互动营销'){
-                this.$router.push({path:'/apply',query:{paths:'/application/interactmarket'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/interactmarket', applyId:7}})
                 this.SETCURRENT(8)
             }else if(item.text == '用户营销'){
-                this.$router.push({path:'/apply',query:{paths:'/application/customarket'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/customarket', applyId:6}})
                 this.SETCURRENT(8)
             }else if(item.text == '多人拼团'){
                 this.$router.push({path:'/apply',query:{paths:'/application/feature/group'}})

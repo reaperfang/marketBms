@@ -48,7 +48,7 @@
         <div class="item">
           <span class="money">当前短信余额</span>
           <span class="num">
-            <em>{{survey.accountBalance | quantity}}{{survey.accountBalance | displayCount}}</em>
+            <em>{{survey.accountBalance | quantity}}{{survey.accountBalance | displayMoney}}</em>
           </span>
         </div>
         <div class="item">
@@ -75,8 +75,8 @@
 
 <script>
 import utils from "@/utils";
-import Blob from '@/excel/Blob'
-import Export2Excel from '@/excel/Export2Excel.js'
+import Blob from '@/assets/js/excel/Blob'
+import Export2Excel from '@/assets/js/excel/Export2Excel.js'
 import sgsTable from './components/sgsTable'
 import financeCons from '@/system/constant/finance'
 import { mapMutations } from 'vuex'

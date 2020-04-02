@@ -16,11 +16,11 @@
           class="blue pointer"
         >计费规则说明</span>
       </div>
-      <el-button
+      <!-- <el-button
         v-permission="['订单', '快递发货', '默认页面', '新建模板']"
         @click="$router.push('/order/newTemplate?mode=new')"
         class="border-button new-template"
-      >新建模板</el-button>
+      >新建模板</el-button> -->
     </section>
     <section class="search">
       <el-form ref="inline" :inline="true" :model="listQuery" class="form-inline">
@@ -33,26 +33,37 @@
               <el-date-picker
                 v-model="listQuery.time"
                 type="datetimerange"
-                range-separator="-"
+                range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                :default-time="['00:00:00', '23:59:59']"
+                :picker-options="utils.globalTimePickerOption.call(this)"
               ></el-date-picker>
             </el-form-item>
-          </div>
-          <div class="col">
             <el-form-item>
-              <span @click="resetForm('inline')" class="orange resetting pointer">重置</span>
-              <el-button type="primary" @click="getList">查询</el-button>
+              <el-button type="primary" @click="getList">搜索</el-button>
+              <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
             </el-form-item>
           </div>
+          <!-- <div class="col">
+            <el-form-item>
+              <el-button type="primary" @click="getList">搜索</el-button>
+              <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
+            </el-form-item>
+          </div> -->
         </div>
       </el-form>
     </section>
     <section class="table-box">
-      <div class="table-title">
-        全部
-        <span>{{total}}</span>项
+      <div class="content-header">
+          <div class="table-title">
+            全部
+            <span>{{total}}</span>项
+          </div>
+          <el-button
+            v-permission="['订单', '快递发货', '默认页面', '新建模板']"
+            @click="$router.push('/order/newTemplate?mode=new')"
+            class="border-button new-template"
+          >新建模板</el-button>
       </div>
       <div class="table">
         <el-table
@@ -84,7 +95,7 @@
                 <span
                   v-permission="['订单', '快递发货', '默认页面', '修改']"
                   @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)"
-                >修改</span>
+                >编辑</span>
                 <span
                   v-if="!scope.row.productCount"
                   v-permission="['订单', '快递发货', '默认页面', '删除']"
@@ -163,18 +174,11 @@ export default {
             deleteFlag: 0
           })
           .then(res => {
-            this.$notify({
-              title: "成功",
-              message: "删除成功！",
-              type: "success"
-            });
+            this.$message.success('删除成功！');
             this.getList();
           })
           .catch(error => {
-            this.$notify.error({
-              title: "错误",
-              message: error
-            });
+            this.$message.error(error);
           });
       });
     },
@@ -215,10 +219,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          // this.$notify.error({
-          //     title: '错误',
-          //     message: error
-          // });
+          // this.$message.error(error);
           this.loading = false;
         });
     }
@@ -230,6 +231,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .quick-delivery {
   section {
     background-color: #fff;
@@ -253,6 +265,21 @@ export default {
       }
     }
   }
+}
+.table-box .table {
+    margin-left: 0;
+}
+/deep/ .el-radio__input.is-checked+.el-radio__label {
+    color: #44434B;
+}
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.table-box .table-title {
+    margin-bottom: 0;
 }
 </style>
 

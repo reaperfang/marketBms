@@ -5,17 +5,27 @@
             <ul>
                 <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
-                        <div class="label">已售{{item.participateActivityNum}}件</div>
+                        <div class="label">已售{{item.participateActivityNum}}套</div>
                         <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
                     </div>
                     <div class="countdown_Bar" v-if="showContents.indexOf('4')!=-1">
-                        <h1 class="title">{{item.activityTypeName || '优惠套装'}}</h1>
+                        <h1 class="title">优惠套装</h1>
                         <div class="countdown">
                             <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                             <div class="content">
                                 <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
                                 <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                                 <!-- <p class="time">{{item.endTime}}</p> -->
+                                <!-- <van-count-down :time="
+                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                " class="time">
+                                    <template v-slot="timeData">
+                                         <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                    </template>
+                                </van-count-down> -->
                             </div>
                         </div>
                     </div>
@@ -160,10 +170,6 @@ export default {
                         this.createList(response);
                         this.loading = false;
                     }).catch((error)=>{
-                        // this.$notify.error({
-                        //     title: '错误',
-                        //     message: error
-                        // });
                         console.error(error);
                         this.list = [];
                         this.loading = false;
@@ -176,30 +182,7 @@ export default {
 
         /* 创建数据 */
         createList(datas) {
-            this.list = [];
-            if(this.hideSaledGoods==true){
-                for(var i in datas){
-                    if(datas[i].soldOut!=1){
-                        this.list.push(datas[i]);
-                    }
-                }
-            }
-            else{
-                this.list = datas;
-            }
-            var list = this.list;
-            this.list = [];
-            if(this.hideEndGoods==true){
-                for(var i in list){
-                    if(list[i].activityEnd!=1){
-                        this.list.push(list[i]);
-                    }
-                }
-            }
-            else{
-                this.list = list;
-            }
-
+            this.list = datas;
             this.allLoaded = true;
         },
 
@@ -244,6 +227,13 @@ export default {
                             height:16px;
                             color:#fff;
                             margin:0 4px;
+                        }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
                         }
                     }
                 }
@@ -335,6 +325,13 @@ export default {
                                 top:-2.5px;
                                 margin:0 2px;
                                 text-align:center;
+                            }
+                            .item {
+                                background:#333;
+                                width:58px;
+                                height:32px;
+                                color:#fff;
+                                padding:0 8px;
                             }
                         }
                     }
@@ -514,6 +511,13 @@ export default {
                             margin:0 2px;
                             text-align:center;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -681,6 +685,13 @@ export default {
                                     color:#fff;
                                     margin:0 4px;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -757,6 +768,13 @@ export default {
                                     top:-2.5px;
                                     margin:0 2px;
                                     text-align:center;
+                                }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
                                 }
                             }
                         }
@@ -852,6 +870,13 @@ export default {
                                     top:-2.5px;
                                     margin:0 2px;
                                     text-align:center;
+                                }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
                                 }
                             }
                         }
@@ -1041,6 +1066,13 @@ export default {
                         font{
                             display:inline-block;
                             @include borderRadius(2px);
+                        }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
                         }
                     }
                 }

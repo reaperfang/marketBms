@@ -23,7 +23,7 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true"></el-table-column>
+        <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable"></el-table-column>
         <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
         <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
         <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
@@ -76,7 +76,7 @@
             </el-table>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button @click="cancel2">取 消</el-button>
             <el-button type="primary" @click="submit2">确 定</el-button>
         </span>
     </el-dialog>
@@ -85,7 +85,6 @@
 <script>
 import DialogBase from "@/components/DialogBase";
 export default {
-  props: ["data"],
   name: "chooseProductDialog",
   data() {
     return {
@@ -99,13 +98,31 @@ export default {
       pageSize: 10,
       startIndex: 1,
       dialogVisible2: false,
-      selectedList:[]
+      selectedList:[],
+      delItem: {}
     };
   },
+  watch: {
+    data(newValue, oldValue) {
+      this.delItem = newValue.delItem;
+      //设为可选
+      this.skuList.map((item) => {
+        if(item.goodsInfo.id == this.delItem.goodsInfo.id) {
+          this.$set(item, 'noselected', false);
+        }
+      });
+    }
+  },
   methods: {
+    selectable(row, index) {
+      if(row.noselected == true) {
+        return false
+      }else{
+        return true
+      }
+    },
     deleteRow(row) {
       this.selectedList.splice(row, 1);
-      this.skuList.push(row);
     },
     clearList() {
       this.selectedList = [];
@@ -122,34 +139,46 @@ export default {
     },
     submit() {
         let selectedRows = this.$refs.skuTable.selection;
-        this.selectedList = this.selectedList.concat(selectedRows);
-        this.dialogVisible2 = true;
-        if(selectedRows.length > 0) {
-          this.skuList.map((item) => {
-            selectedRows.map((i) => {
-              if(item.goodsInfo.id == i.goodsInfo.id) {
-                this.skuList.splice(item, 1);
-              }
-            })
+        if(selectedRows.length !== 0) {
+          this.selectedList = [].concat(selectedRows);
+          this.dialogVisible2 = true;
+          this.$nextTick(() => {
+            this.skuList.forEach(row => {
+              this.$refs.skuTable.toggleRowSelection(row,false);
+            });
           })
-        }
-        this.$nextTick(() => {
-          this.skuList.forEach(row => {
-            this.$refs.skuTable.toggleRowSelection(row,false);
+        }else{
+          this.$message({
+            message: '请选择商品',
+            type: 'warning'
           });
-        })
+        }
     },
     submit2() {
       if(this.selectedList.length > 0) {
         this.$nextTick(() => {
           this.visible = false;
           this.dialogVisible2 = false;
+          this.skuList.map((item) => {
+              this.selectedList.map((i) => {
+                if(i.goodsInfo.id == item.goodsInfo.id) {
+                  this.$set(item, 'noselected', true);
+                }
+              })
+            })
         }); 
         this.$emit('getSelected', this.selectedList);
       }else{
         this.visible = false;
         this.dialogVisible2 = false;
+        this.skuList.forEach(row => {
+          this.$refs.skuTable.toggleRowSelection(row,false);
+        });
       }
+    },
+    cancel2() {
+      this.dialogVisible2 = false;
+      this.selectedList = [];
     },
     transTreeData(data, pid) {
       var result = [],
@@ -190,10 +219,11 @@ export default {
     getSkuList(startIndex, pageSize) {
       let params = {
         name: this.name,
-        productCatalogInfoId: this.categoryValue[2],
+        productCatalogInfoId: this.categoryValue[this.categoryValue.length - 1],
         startIndex: startIndex,
         pageSize: pageSize,
-        productLabelName: this.productLabelName
+        productLabelName: this.productLabelName,
+        status: 1
       };
       this._apis.client
         .getSkuList(params)
@@ -203,25 +233,6 @@ export default {
           })
           this.skuList = [].concat(response.list);
           this.total = response.total;
-          // let productInfoIds;
-          // if(!!this.data.productInfoIds) {
-          //   if(this.data.productInfoIds.indexOf(',') !== -1) {
-          //     productInfoIds = this.data.productInfoIds.split(',');
-          //   }else{
-          //     productInfoIds = [this.data.productInfoIds]
-          //   }
-          // }
-          // if(productInfoIds && productInfoIds.length > 0) {
-          //   productInfoIds.map((v) => {
-          //       this.skuList.forEach(row => {
-          //           if(row.goodsInfo.id == v) {
-          //             this.$nextTick(() => {
-          //               this.$refs.skuTable.toggleRowSelection(row);
-          //             })
-          //           }
-          //       })
-          //   })
-          // }
         })
         .catch(error => {
           console.log(error);

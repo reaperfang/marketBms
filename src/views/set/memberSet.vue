@@ -52,10 +52,7 @@ export default {
       this._apis.set.getShopInfo({id:id}).then(response =>{
         this.form = response
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     onSubmit(formName){
@@ -69,16 +66,10 @@ export default {
             }
             this._apis.set.updateShopInfo(data).then(response =>{
               this.loading = false
-              this.$notify.success({
-                title: '成功',
-                message: '保存成功！'
-              });
+              this.$message.success('保存成功！');
             }).catch(error =>{
               this.loading = false
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
             })
           }
       })

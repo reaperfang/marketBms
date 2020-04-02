@@ -1,5 +1,5 @@
 <template>
-    <DialogBase class="freight-rules" :visible.sync="visible" title="计费规则说明" width="690px" :showFooter="showFooter">
+    <DialogBase class="freight-rules" :visible.sync="visible" title="计费规则说明" width="730px" :showFooter="showFooter">
         <pre>运费计算方式
 
 支持商家选择【按商品累加运费】和【组合运费】，默认使用组合运费。

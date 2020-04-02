@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div>
+    <div class="head-wrapper">
       <el-form :inline="true" :model="form" class="demo-form-inline">
         <el-form-item label="创建时间">
           <el-date-picker
             v-model="form.timeValue"
             type="datetimerange"
             range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -80,20 +80,6 @@ export default {
   components: {dialogSyncArticle,dialogDelete,dialogQRcode},
   data () {
     return {
-      pickerNowDateBefore: {
-        onPick: ({ maxDate, minDate }) => {
-              this.pickerMinDate = minDate.getTime()
-              if (maxDate) {
-                  this.pickerMinDate = ''
-              }
-          },
-        disabledDate: (time) => {
-          if (this.pickerMinDate !== '') {
-            return time.getTime() == this.pickerMinDate
-          }
-          return time.getTime() > Date.now() + 8.64e7
-        }
-      },
       form:{
         timeValue:'',
         name:''
@@ -141,10 +127,7 @@ export default {
         this.list = response.list
         this.total = response.total
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //弹窗反馈
@@ -169,16 +152,10 @@ export default {
 
     handleSyncImage(query){
       this._apis.file.syncMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '同步微信图文成功！'
-        });
+        this.$message.success('同步微信图文成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -198,16 +175,10 @@ export default {
         ids:id,
       }
       this._apis.file.deleteMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '删除成功！'
-        });
+        this.$message.success('删除成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     onMouseOver(index,isSyncWechat){

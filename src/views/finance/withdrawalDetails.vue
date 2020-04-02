@@ -1,12 +1,11 @@
 <!--提现明细-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in presentations"
               :key="item.value"
@@ -14,19 +13,18 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="申请时间" style="margin-left:25px;">
+        <el-form-item label="申请时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']"
-            :picker-options="pickerNowDateBefore">
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="状态">
@@ -39,11 +37,16 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model="ruleForm.nickName" placeholder="请输入" style="width:226px;"></el-input>
+         <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
@@ -116,7 +119,7 @@
       <div class="page_styles">
       <div class="checkAudit">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
-        <el-button   type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+        <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
       </div>
         
          <el-pagination
@@ -153,17 +156,24 @@ export default {
   components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog ,exportTipDialog},
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       ruleForm:{
         searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
         status:-1,
+        userType:'memberSn',
+        userValue:'',
         memberSn:'',
         nickName:''
       },
@@ -211,12 +221,19 @@ export default {
             query[key] = this.ruleForm[item]
           }
         }
+        if(this.ruleForm.userType == 'memberSn'){
+          query.memberSn = this.ruleForm.userValue || ''
+          query.nickName = ''
+        }else{
+          query.nickName = this.ruleForm.userValue || ''
+          query.memberSn = ''
+        }
       }
       query.status = this.ruleForm.status == -1 ? null : this.ruleForm.status
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.applyTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.applyTimeEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.applyTimeStart = timeValue[0]
+        query.applyTimeEnd = timeValue[1]
       }
       return query;
     },
@@ -242,7 +259,10 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        memberSn:''
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:'',
       }
       this.fetch()
     },
@@ -255,10 +275,7 @@ export default {
          this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error)
         })
       }else if(this.total >1000 && this.multipleSelection.length == 0 ){
         this.dialogVisible = true
@@ -269,10 +286,7 @@ export default {
         this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error)
         })
       }      
     },
@@ -358,10 +372,7 @@ export default {
            this.dialogVisible = true
            this.currentDialog = auditSuccessDialog
       }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: '网络原因,审核失败！'
-          });
+          this.$message.error('网络原因,审核失败！')
       })
     }
   }

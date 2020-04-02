@@ -6,7 +6,7 @@
             <img src="@/assets/images/set/set-pay1.png"/>
             <div class="note">
               <h3>微信支付</h3>
-              <p style="width:90%">如需正常使用微信支付，除需要“设置支付信息”中的内容外，还请在微信商户平台（<a href="pay.weixin.qq.com" target="_blank" class="links">pay.weixin.qq.com</a>）设置您的JSAPI支付支付目录,（设置路径：商户平台-->产品中心-->开发配置)中追加一条支付授权目录：<a href="http://omo.aiyouyi.cn/cp/" target="_blank" class="links">http://omo.aiyouyi.cn/cp/</a></p>
+              <p style="width:90%">如需正常使用微信支付，除需要“设置支付信息”中的内容外，还请在微信商户平台（<a href="pay.weixin.qq.com" target="_blank" class="links">pay.weixin.qq.com</a>）设置您的JSAPI支付支付目录,（设置路径：商户平台-->产品中心-->开发配置)中追加一条支付授权目录：<a href="//omo.aiyouyi.cn/cp/" target="_blank" class="links">{{protocol}}//omo.aiyouyi.cn/cp/</a></p>
             </div>
           </div>
           <div class="right_cont">
@@ -44,7 +44,7 @@
             <img src="@/assets/images/set/set-pay2.png"/>
             <div class="note">
               <h3>账户余额</h3>
-              <p>开启后，客户可以用账户余额在商城消费。</p>
+              <p>开启后，用户可以用账户余额在商城消费。</p>
             </div>
           </div>
           <div class="right_cont">
@@ -100,7 +100,8 @@ export default {
       wechatBinding:0,
       alipayBinding:0,
       dialogVisible:false,
-      pageName:''
+      pageName:'',
+      protocol: location.protocol
     }
   },
   components: {},
@@ -127,10 +128,7 @@ export default {
         this.wechatBinding = response.wechatBinding
         this.alipayBinding = response.alipayBinding
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //微信支付开关
@@ -141,10 +139,11 @@ export default {
         this.dialogVisible = true
         this.pageName = 'wxSet'
       }else{
-        this.$confirm('此操作将设置微信支付开关, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+        this.confirm({
+          title: '提示', 
+          customClass: 'goods-custom', 
+          icon: true, 
+          text: '此操作将设置微信支付开关, 是否继续?'
         }).then(() => {
           let data = {
             wechatPay:this.wechatPay == true ? 1 : 0,
@@ -163,10 +162,11 @@ export default {
         this.dialogVisible = true
         this.pageName = 'zfbSet'
       }else{
-        this.$confirm('此操作将设置支付宝支付开关, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+        this.confirm({
+          title: '提示', 
+          customClass: 'goods-custom', 
+          icon: true, 
+          text: '此操作将设置支付宝支付开关, 是否继续?'
         }).then(() => {
           let data = {
             alipayPay:this.aliPay == true ? 1 : 0,
@@ -180,11 +180,12 @@ export default {
 
     //账户余额支付开关 
     handleBalanceOfAccountPay(){
-        this.$confirm('此操作将设置余额支付开关, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+       this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '此操作将设置余额支付开关, 是否继续?'
+      }).then(() => {
           let data = {
             balanceOfAccountPay:this.balanceOfAccountPay == true ? 1 : 0,
           }
@@ -195,11 +196,12 @@ export default {
     },
     //货到付款开关
     handlePayOnDelivery(){
-      this.$confirm('此操作将设置货到付款开关, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+       this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '此操作将设置货到付款开关, 是否继续?'
+      }).then(() => {
           let data = {
             payOnDelivery:this.payOnDelivery == true ? 1 : 0,
           }
@@ -213,16 +215,10 @@ export default {
       let id = this.cid
       let query = Object.assign({id:id},data)
       this._apis.set.updateShopInfo(query).then(response =>{
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.getShopInfo()
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 

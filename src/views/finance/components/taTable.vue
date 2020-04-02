@@ -1,13 +1,18 @@
 /* 推客奖励列表 */
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model='ruleForm.nickName' placeholder="请输入" style="width:226px;"></el-input>
+        <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <!-- <el-form-item label="订单编号">
           <el-input v-model="ruleForm.value2" placeholder="请输入" style="width:226px;"></el-input>
@@ -27,10 +32,11 @@
             v-model="times"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -108,14 +114,19 @@ export default {
     },
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       dataList:[],
       total:0,
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       times:[],
       ruleForm:{
         memberSn:'',
@@ -125,7 +136,9 @@ export default {
         stopTime:'',
         sort:'desc',
         pageSize:10,
-        pageNum:1
+        pageNum:1,
+        userType:'memberSn',
+        userValue:'',
       },
       loading:true,
       currentData:{},
@@ -135,8 +148,8 @@ export default {
   watch: {
     times(){
       if(this.times.length != 0){
-        this.ruleForm.startTime = utils.formatDate(this.times[0], "yyyy-MM-dd hh:mm:ss")
-        this.ruleForm.stopTime = utils.formatDate(this.times[1], "yyyy-MM-dd hh:mm:ss")
+        this.ruleForm.startTime = this.times[0]
+        this.ruleForm.stopTime = this.times[1]
       }
     }
   },
@@ -163,7 +176,24 @@ export default {
       )
     },
     fetch(){
-      this._apis.finance.getListTa(this.ruleForm).then((response)=>{
+      let query = {
+        memberSn:'',
+        nickName:'',
+        presentType:0,
+        startTime:'',
+        stopTime:'',
+        sort:'desc',
+        pageSize:10,
+        pageNum:1,
+      }
+      if(this.ruleForm.userType == 'memberSn'){
+        query.memberSn = this.ruleForm.userValue || ''
+        query.nickName = ''
+      }else{
+        query.nickName = this.ruleForm.userValue || ''
+        query.memberSn = ''
+      }
+      this._apis.finance.getListTa(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
         this.loading = false
@@ -192,6 +222,8 @@ export default {
         sort:'desc',
         pageNum:1,
         pageSize:10,
+        userType:'memberSn',
+        userValue:''
       }
       this.times= []
       this.fetch()
@@ -212,10 +244,7 @@ export default {
         this._apis.finance.exportTa(this.ruleForm).then((response)=>{
         window.location.href = response.url
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
       }
     },

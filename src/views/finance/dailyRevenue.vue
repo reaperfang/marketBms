@@ -1,17 +1,18 @@
 <!--每日营收-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="日期" style="margin-bottom:0px;">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '23:59:59']"
-            :picker-options="pickerNowDateBefore">
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -88,12 +89,6 @@ export default {
   },
   data() {
     return {    
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-           const end = new Date(new Date().toLocaleDateString()).getTime()-1;
-          return time.getTime() > end;
-        }
-      },
       inline:true,
       ruleForm:{
         timeValue:'',
@@ -119,8 +114,8 @@ export default {
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.accountDateStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.accountDateEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.accountDateStart = timeValue[0]
+        query.accountDateEnd = timeValue[1]
       }
       return query;
     },
@@ -164,10 +159,7 @@ export default {
         this._apis.finance.exportDr(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
       }
       

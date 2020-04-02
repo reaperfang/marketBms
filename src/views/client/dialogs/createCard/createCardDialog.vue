@@ -72,9 +72,8 @@ export default {
                     }
                     this._apis.client.checkCardValue(params).then((response) => {
                         if(!response) {
-                            this.$notify({
-                                title: '警告',
-                                message: '高等级条件数值要大于低等级的条件数值',
+                            this.$message({
+                                message: "高等级条件数值要大于低等级的条件数值",
                                 type: 'warning'
                             });
                         }else{
@@ -89,8 +88,7 @@ export default {
                     })
                 }else{
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请输入消费金额',
                         type: 'warning'
                     });
@@ -106,8 +104,7 @@ export default {
                     }
                     this._apis.client.checkCardValue(params).then((response) => {
                         if(!response) {
-                            this.$notify({
-                                title: '警告',
+                            this.$message({
                                 message: '高等级条件数值要大于低等级的条件数值',
                                 type: 'warning'
                             });
@@ -123,16 +120,14 @@ export default {
                     })
                 }else{
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请输入消费次数',
                         type: 'warning'
                     });
                 }
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择领取条件',
                     type: 'warning'
                 });

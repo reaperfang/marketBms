@@ -21,8 +21,8 @@
                 <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
+        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
+        <component :is="currentDialog" :data="currentData" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
 <script>
@@ -30,6 +30,7 @@ import AfterSalesInformation from './components/afterSalesInformation'
 import AftermarketDeliveryInformation from './components/aftermarketDeliveryInformation'
 import AfterSalesState from './components/afterSalesState'
 import RejectDialog from '@/views/order/dialogs/rejectDialog'
+import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 
 export default {
     data() {
@@ -64,22 +65,18 @@ export default {
         }
     },
     methods: {
+        onSubmit() {
+            this.getDetail()
+        },
         onGetDetail() {
             this.getDetail()
         },
         confirmTakeOver() {
             this._apis.order.orderConfirmReceived({id: this.orderAfterSale.id, isSellerReceived: 1}).then(res => {
-                this.$notify({
-                    title: '成功',
-                    message: '确认收货成功',
-                    type: 'success'
-                });
+                this.$message.success('确认收货成功');
                 this.getDetail()
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         reject() {
@@ -94,17 +91,10 @@ export default {
             }).then((res) => {
                 this.getDetail()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '拒绝审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('拒绝审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         auth() {
@@ -112,6 +102,12 @@ export default {
 
             if(this.orderAfterSale.type == 3) {
                 orderAfterSaleStatus = 2
+            } else if(this.orderAfterSale.type == 2) {
+                this.currentDialog = 'ExchangeGoodsDialog'
+                this.currentData = Object.assign({}, this.orderAfterSale);
+                this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
+                this.dialogVisible = true
+                return
             } else {
                 orderAfterSaleStatus = 1
             }
@@ -130,17 +126,10 @@ export default {
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                 this.getDetail()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '审核成功！',
-                    type: 'success'
-                });
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getDetail() {
@@ -160,14 +149,11 @@ export default {
                 this.orderType = res.orderType
                 this.catchRealReturnWalletMoney = this.orderAfterSale.realReturnWalletMoney
                 this.catchRealReturnBalance = this.orderAfterSale.realReturnBalance
-                this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
+                //this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
                 this.orderSendInfo = res.orderSendInfo
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         handleClick(tab, event) {
@@ -178,7 +164,8 @@ export default {
         AfterSalesInformation,
         AftermarketDeliveryInformation,
         AfterSalesState,
-        RejectDialog
+        RejectDialog,
+        ExchangeGoodsDialog
     }   
 }
 </script>

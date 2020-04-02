@@ -177,10 +177,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     printingElectronicForm() {
@@ -257,18 +254,11 @@ export default {
                 })
             }
             this._apis.order.orderSendGoods(params).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '批量补填物流成功',
-                    type: 'success'
-                });
+                this.$message.success('批量补填物流成功');
                 this.sending = false
                 this.$router.push('/order/query')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
                 this.sending = false
             })
           }catch(e) {
@@ -299,10 +289,7 @@ export default {
             this.expressCompanyList = res
         }).catch(error => {
             this.visible = false
-            this.$notify.error({
-                title: '错误',
-                message: error
-            });
+            this.$message.error(error);
         })
     },
       onSubmit(value) {
@@ -387,18 +374,12 @@ export default {
             })
             .catch(error => {
               this.visible = false;
-              this.$notify.error({
-                title: "错误",
-                message: error
-              });
+              this.$message.error(error);
             });
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     }
   },

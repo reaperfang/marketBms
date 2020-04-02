@@ -45,16 +45,29 @@ const decorate = {
 
 
 		/* 添加组件 */
-		addComponent: (state, component) => {
+		addComponent: (state, params) => {
 
-			// 添加组件id到ids顺序表
-			state.componentDataIds.push(component.id);
+			if(params.targetId) {
+				let index = state.componentDataIds.indexOf(params.targetId);
+				if(index < 0) {
+					// 添加组件id到ids顺序表
+					state.componentDataIds.push(params.component.id);
+				}else {
+					if(params.after) {
+						index++;
+					}
+					state.componentDataIds.splice(index, 0, params.component.id)
+				}
+			}else {
+				// 添加组件id到ids顺序表
+				state.componentDataIds.push(params.component.id);
+			}
 
 			// 添加组件数据到数据映射表
-			state.componentDataMap[component.id] = Object.assign(component, {data: null});
+			state.componentDataMap[params.component.id] = Object.assign(params.component, {data: null});
 
 			// 设置当前组件id
-			state.currentComponentId = component.id;
+			state.currentComponentId = params.component.id;
 
 		},
 

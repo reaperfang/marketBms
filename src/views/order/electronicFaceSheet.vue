@@ -26,29 +26,36 @@
               <el-date-picker
                 v-model="listQuery.time"
                 type="datetimerange"
-                range-separator="-"
+                range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
-                :default-time="['00:00:00', '23:59:59']"
+                :picker-options="utils.globalTimePickerOption.call(this)"
               ></el-date-picker>
             </el-form-item>
-          </div>
-          <div class="col">
             <el-form-item>
-              <span @click="resetForm('formInline')" class="orange resetting pointer">重置</span>
               <el-button type="primary" @click="onSubmit">查询</el-button>
+              <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
             </el-form-item>
           </div>
+          <!-- <div class="col">
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">搜索</el-button>
+              <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
+            </el-form-item>
+          </div> -->
         </div>
-        <div>
+        <!-- <div>
           <el-button v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
-        </div>
+        </div> -->
       </el-form>
     </section>
     <section class="table-box">
-      <div class="table-title">
-        全部
-        <span>{{total}}</span>项
+      <div class="content-header">
+          <div class="table-title">
+            全部
+            <span>{{total}}</span>项
+          </div>
+          <el-button v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
       </div>
       <div class="table">
         <el-table
@@ -64,7 +71,7 @@
             <template slot-scope="scope">
               <div class="operate-box">
                 <span v-permission="['订单', '电子面单', '默认页', '查看']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
-                <span v-permission="['订单', '电子面单', '默认页', '修改']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">修改</span>
+                <span v-permission="['订单', '电子面单', '默认页', '修改']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
                 <span v-permission="['订单', '电子面单', '默认页', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
               </div>
             </template>
@@ -123,17 +130,10 @@ export default {
       this.confirm({title: '提示', text: '删除后无法撤销，确定删除吗？'}).then(() => {
           this._apis.order.deleteElectronicFaceSheet({id: row.id, expressCompanyCode: row.expressCompanyCode}).then((res) => {
               this.getList()
-              this.$notify({
-                  title: '成功',
-                  message: '删除成功！',
-                  type: 'success'
-              });
+              this.$message.success('删除成功！');
           }).catch(error => {
               this.visible = false
-              this.$notify.error({
-                  title: '错误',
-                  message: error
-              });
+              this.$message.error(error);
           })
       })
     },
@@ -160,10 +160,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          // this.$notify.error({
-          //   title: "错误",
-          //   message: error
-          // });
+          // this.$message.error(error);
           this.loading = false
         });
     }
@@ -174,6 +171,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .electronic-face-sheet {
   section {
     background-color: #fff;
@@ -192,6 +200,15 @@ export default {
 }
 /deep/ .el-icon-warning:before {
   color: $grayColor;
+}
+.table-box .table {
+    margin-left: 0;
+}
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 </style>
 

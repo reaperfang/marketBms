@@ -47,7 +47,7 @@
             <el-table-column prop="goodsUnit" label="单位" width="300"></el-table-column>
             <el-table-column prop="sendCount" label="本次发货数量"></el-table-column>
           </el-table>
-          <div class="remark">备注: {{orderDetail.orderSendInfo.sendRemark}}</div>
+          <div class="remark">备注: {{item.goodsList[0].sendRemark}}</div>
         </div>
       </div>
       <Empty v-show="!orderSendItems || (orderSendItems && !orderSendItems.length)"></Empty>
@@ -96,7 +96,7 @@ export default {
       let status = orderDetail.expressNoStatusMap[value]
 
       if(status == 3) {
-        return '【客户签收】'
+        return '【用户签收】'
       } else if(status == 0 || status == 1 || status == 2 || status == 4) {
         return '【商户发货】'
       } else {
@@ -116,7 +116,7 @@ export default {
   computed: {
     businessFilter(value) {
       if (value.memberTeceiveGoodsTime) {
-        return "【客户签收】";
+        return "【用户签收】";
       } else if (value.sendTime) {
         return "【商户发货】";
       } else {

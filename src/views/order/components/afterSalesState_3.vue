@@ -15,7 +15,7 @@
                 </div>
                 <div class="col righter">
                     <p>待审核</p>
-                    <p class="des">客户申请售后，待审核</p>
+                    <p class="des">用户申请售后，待审核</p>
                     <div class="button-box">
                         <el-button @click="reject">拒绝</el-button>
                         <el-button type="primary" @click="auth">同意</el-button>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col righter">
                     <p>已关闭</p>
-                    <p class="des">客户撤销申请或商户拒绝售后的</p>
+                    <p class="des">用户撤销申请或商户拒绝售后的</p>
                 </div>
             </div>
         </template>
@@ -116,17 +116,10 @@ export default {
     methods: {
         drawback(id) {
             this._apis.order.orderAfterSaleDrawback({id}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '已发起退款，系统处理中。',
-                    type: 'success'
-                });
+                this.$message.success('已发起退款，系统处理中。');
                 this.$emit('getDetail')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         sendGoods() {

@@ -20,6 +20,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!autoOrder"
+                :step="1" 
+                step-strictly
                 v-if="form.acuoType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -29,6 +31,8 @@
                 placeholder="请输入整数"
                 :min="1" 
                 :precision="0"
+                :step="1" 
+                step-strictly
                 :disabled="!autoOrder"
                 v-else>
                 </el-input-number>
@@ -96,7 +100,7 @@
                 </el-checkbox>
             </el-form-item>
         </div>
-        <div class="item">
+        <div v-if="!authHide" class="item">
             <h2>自动发货：<span>开启后立即对所有订单生效，若需要关闭该功能则清空输入框数值</span></h2>
             <el-form-item  prop="orderAutoSend" label="下单">
               <el-switch
@@ -114,6 +118,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!sendOrder"
+                :step="1" 
+                step-strictly
                 v-if="form.oasType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -124,6 +130,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!sendOrder"
+                :step="1" 
+                step-strictly
                 v-else>
                 </el-input-number>
                 <el-select 
@@ -148,19 +156,26 @@
 </template>
 
 <script>
+import anotherAuth from '@/mixins/anotherAuth'
+
 export default {
+  mixins: [anotherAuth],
   name: 'preSale',
   data() {
     var checkCancelOrder = (rule,value,callback)=>{
-      if(this.isAutoCancelUnpayOrder == 1 && !value){
+      if(this.autoOrder == 1 && !value){
         return callback(new Error('输入框不能为空'))
+      }else if(this.form.autoCancelUnpayOrder.toString().length > 9){
+        return callback(new Error('输入10位以内有效数字'))
       }else{
         callback()
       }
     }
     var checkOrderAutoSend = (rule,value,callback)=>{
       if(this.sendOrder && !value){
-          return callback(new Error('输入框不能为空'))
+        return callback(new Error('输入框不能为空'))
+      }else if(this.form.orderAutoSend.toString().length > 9){
+        return callback(new Error('输入10位以内有效数字'))
       }else{
         callback()
       }
@@ -242,10 +257,7 @@ export default {
         this.autoOrder = Boolean(response.isAutoCancelUnpayOrder)
         this.sendOrder = Boolean(response.isOrderAutoSend)
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -267,23 +279,14 @@ export default {
             }
             this._apis.set.updateShopInfo(data).then(response =>{
               this.loading = false
-              this.$notify.success({
-                title: '成功',
-                message: '保存成功！'
-              });
+              this.$message.success('保存成功！');
             }).catch(error =>{
               this.loading = false
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
             })
           }else{
             this.loading = false
-            this.$notify.error({
-                title: '输入框不能为空',
-                message: '保存失败'
-              });
+            this.$message.error('输入框不能为空，保存失败');
           }
       })
     },

@@ -56,14 +56,10 @@ export default {
         if(pageData && pageData.groupStyle) {
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
-          this.ruleForm['shareUrl'] = response.shareUrl;
+          this.ruleForm['shareUrl'] = location.protocol + response.shareUrl.split(':')[1];
         }
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -95,11 +91,7 @@ export default {
     /* 重置 */
     resetData() {
       this._apis.shop.resetGoodsGroup({}).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '重置成功！',
-          type: 'success'
-        });
+        this.$message.success('重置成功！')
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('groupStyle') < 0) {
           return;
@@ -111,35 +103,24 @@ export default {
         if(pageData && pageData.groupStyle) {
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
-          this.ruleForm['shareUrl'] = response.shareUrl;
+          this.ruleForm['shareUrl'] = location.protocol + response.shareUrl.split(':')[1];
         }
         this._globalEvent.$emit('goodsGroupPageSettingResetLoading', true);
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
         this._globalEvent.$emit('goodsGroupPageSettingResetLoading', false);
       });
     },
 
     submit(params, type) {
       this._apis.shop.editGoodsGroup(params).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '编辑成功！',
-          type: 'success'
-        });
+        this.$message.success('编辑成功！')
         if(type === 'saveAndApply') {
           this._globalEvent.$emit('goodsGroupPageSettingSaveAndApplyLoading', true);
         }else{
           this._globalEvent.$emit('goodsGroupPageSettingSaveLoading', true);
         }
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
         if(type === 'saveAndApply') {
           this._globalEvent.$emit('goodsGroupPageSettingSaveAndApplyLoading', false);
         }else{

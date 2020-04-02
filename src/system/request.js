@@ -22,18 +22,7 @@ class Ajax {
   requestGlobal(config) {
     let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
     let cid = shopInfo && shopInfo.id || ''
-    if(config.noToken) {  //对于c端营销接口处理
-      config.headers = Object.assign({
-          businessId: 1,
-          tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
-          merchantId: cid,
-          loginUserId: 1,
-          isDev: 'zhongqi'
-        },
-        config.headers
-    ) 
-    }else{
-      config.headers = Object.assign({
+    let headers = Object.assign({
           businessId: 1,
           tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
           merchantId: cid,
@@ -41,8 +30,14 @@ class Ajax {
           token: store.getters.token || getToken('authToken')
         },
         config.headers
-      ) 
+    );
+
+    //对于c端营销接口处理
+    if(config.isDev) {
+      headers = Object.assign(headers, {isDev: 'zhongqi',})
     }
+    
+    config.headers = headers;
   }
 
   // respone拦截器
@@ -160,6 +155,8 @@ class Ajax {
       } else {
         config.data = `json=${encodeURI(JSON.stringify({ head, data: { cid, ...config.data } }))}`;
       }
+      config.data = config.data.replace(/\+/g, "%2B");
+      config.data = config.data.replace(/\&/g, "%26");
     } else if (config.method == "get") {
       if (config.noCid) {
         config.params = { json: { head, data: config.params } };

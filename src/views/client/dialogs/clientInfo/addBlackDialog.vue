@@ -5,7 +5,7 @@
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
-                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon"></el-checkbox>
+                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon" v-if="couponList && couponList.length!==0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCoupons" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode"></el-checkbox>
+                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode" v-if="codeList && codeList.length!==0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCodes" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -82,7 +82,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
@@ -146,7 +146,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
@@ -194,17 +194,34 @@ export default {
             checkAll: false,
             checkAll2: false,
             selectedCoupons: [],
-            selectedCodes: []
+            selectedCodes: [],
+            canSubmit: true
         }
     },
     methods: {
         couponSubmit() {
             this.dialogVisible2 = false;
-            this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
+            let sel = this.$refs.couponListTable.selection;
+            if(sel.length !== 0) {
+                this.selectedCoupons = [].concat(sel);
+            }else{
+                this.$message({
+                    message: '请选择优惠券',
+                    type: 'warning'
+                });
+            }
         },
         codeSubmit() {
             this.dialogVisible3 = false;
-            this.selectedCodes = [].concat(this.$refs.codeListTable.selection);
+            let sel = this.$refs.codeListTable.selection;
+            if(sel.length !== 0) {
+                this.selectedCodes = [].concat(sel);
+            }else{
+                this.$message({
+                    message: '请选择优惠码',
+                    type: 'warning'
+                });
+            }
         },
         handleChangeAll(val) {
             this.couponList.forEach(row => {
@@ -246,8 +263,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.couponIds.splice(this.couponIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠券',
                     type: 'warning'
                 });
@@ -259,8 +275,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.codeIds.splice(this.codeIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠码',
                     type: 'warning'
                 });
@@ -274,36 +289,52 @@ export default {
             let couponIdList2 = [];
             let blackListMapDtos = [];
             if(this.checkCoupon) {
-                let arr = [];
-                this.selectedCoupons.map((item) => {
-                    let obj = {};
-                    obj.name = item.name;
-                    obj.id = item.id;
-                    obj.forzenNum = item.frozenNum;
-                    arr.push(obj);
-                })
-                let obj = {
-                    blackInfoId: this.couponId,
-                    blackInfoName: "优惠券",
-                    disableItemValue: arr
+                if(this.selectedCoupons.length !== 0) {
+                    let arr = [];
+                    this.selectedCoupons.map((item) => {
+                        let obj = {};
+                        obj.name = item.name;
+                        obj.id = item.id;
+                        obj.forzenNum = item.frozenNum;
+                        arr.push(obj);
+                    })
+                    let obj = {
+                        blackInfoId: this.couponId,
+                        blackInfoName: "优惠券",
+                        disableItemValue: arr
+                    }
+                    blackListMapDtos.push(obj);
+                }else{
+                    this.$message({
+                        message: '请选择禁用优惠券',
+                        type: 'warning'
+                    });
+                    this.canSubmit = false;
                 }
-                blackListMapDtos.push(obj);
             }
             if(this.checkCode) {
-                let arr = [];
-                this.selectedCodes.map((item) => {
-                    let obj = {};
-                    obj.name = item.name;
-                    obj.id = item.id;
-                    obj.forzenNum = item.frozenNum;
-                    arr.push(obj);
-                })
-                let obj = {
-                    blackInfoId: this.codeId,
-                    blackInfoName: "优惠码",
-                    disableItemValue: arr
+                if(this.selectedCodes.length !== 0) {
+                    let arr = [];
+                    this.selectedCodes.map((item) => {
+                        let obj = {};
+                        obj.name = item.name;
+                        obj.id = item.id;
+                        obj.forzenNum = item.frozenNum;
+                        arr.push(obj);
+                    })
+                    let obj = {
+                        blackInfoId: this.codeId,
+                        blackInfoName: "优惠码",
+                        disableItemValue: arr
+                    }
+                    blackListMapDtos.push(obj);
+                }else{
+                    this.$message({
+                        message: '请选择禁用优惠码',
+                        type: 'warning'
+                    });
+                    this.canSubmit = false;
                 }
-                blackListMapDtos.push(obj);
             }
             this.checks.map((v) => {
                 if(v.checked) {
@@ -319,12 +350,11 @@ export default {
             params.blackListMapDtos = [].concat(blackListMapDtos);
             if(params.blackListMapDtos.length == 0) {
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择禁用选项',
                     type: 'warning'
                 });
-            }else{
+            }else if(this.canSubmit){
                 //营销优惠券加入黑名单
                 if(this.selectedCoupons.length > 0) {
                     let arr = [];
@@ -359,13 +389,13 @@ export default {
                 this._apis.client.addToBlack(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "加入黑名单成功",
+                    this.$message({
+                        message: '加入黑名单成功',
                         type: 'success'
                     });
-                    this.$emit('freshTable');
+                    this.$emit('refreshPage');
                 }).catch((error) => {
+                    console.log(error);
                     this.btnLoading = false;
                     this.visible = false;
                 })
@@ -391,9 +421,31 @@ export default {
         },
         deleteCoupon(index) {
             this.selectedCoupons.splice(index, 1);
+            this.couponList.forEach((row,i) => {
+                if(i == index) {
+                    this.$refs.couponListTable.toggleRowSelection(row, false);
+                }
+            })
+            if(this.selectedCoupons.length == 0) {
+                this.checkCoupon = false;
+                this.couponList.forEach((row) => {
+                    this.$refs.couponListTable.toggleRowSelection(row, false);
+                })
+            }
         },
         deleteCode(index) {
             this.selectedCodes.splice(index, 1);
+            this.codeList.forEach((row,i) => {
+                if(i == index) {
+                    this.$refs.codeListTable.toggleRowSelection(row, false);
+                }
+            })
+            if(this.selectedCodes.length == 0) {
+                this.checkCode = false;
+                this.codeList.forEach((row) => {
+                    this.$refs.codeListTable.toggleRowSelection(row, false);
+                })
+            }
         },
         getAllCoupons() {
             this._apis.client.getAllCoupons({couponType: 0, memberId: this.data.id, frozenType: 1}).then((response) => {

@@ -211,7 +211,10 @@ export default {
         // 初始容器高度
         initialFrameHeight: 400,
         // 初始容器宽度
-        initialFrameWidth: 500
+        initialFrameWidth: 500,
+        toolbars: [
+            ['emotion']
+        ],
       },
       orderProductComment: {},
       recordList: [],
@@ -292,10 +295,7 @@ export default {
         this._apis.goodsOperate.fetchPublicSensitiveList().then((res) => {
             this.systomSensitiveList = res
         }).catch(error => {
-            this.$notify.error({
-                title: '错误',
-                message: error
-            });
+            this.$message.error(error);
         })
     },
     replyComment() {
@@ -359,17 +359,10 @@ export default {
       //   })
 
         this._apis.order.replyComment({id: this.$route.query.id, replyContent: _textarea}).then((res) => {
-            this.$notify({
-              title: "成功",
-              message: "回复成功！",
-              type: "success"
-            });
+            this.$message.success('回复成功！');
             this.showReplayBox = false
         }).catch(error => {
-            this.$notify.error({
-            title: "错误",
-            message: error
-          });
+            this.$message.error(error);
           this.showReplayBox = false
         })
     },
@@ -559,6 +552,13 @@ export default {
         justify-content: center;
         align-items: center;
     }
+</style>
+<style lang="scss">
+  .reviews-detail {
+    .edui-for-xiumi-connect, .edui-for-seletedImage, .edui-for-seletedVideo {
+        display: none!important;
+    }
+  }
 </style>
 
 

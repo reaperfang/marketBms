@@ -14,7 +14,7 @@
           </li>
         </ul>
       </div>
-      最多添加30个商品
+      <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -113,6 +113,7 @@
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
+        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
         <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <el-radio :label="1">24小时后隐藏</el-radio>
@@ -214,10 +215,6 @@ export default {
                       this.createList(response);
                       this.loading = false;
                   }).catch((error)=>{
-                      // this.$notify.error({
-                      //     title: '错误',
-                      //     message: error
-                      // });
                       console.error(error);
                       this.list = [];
                       this.loading = false;

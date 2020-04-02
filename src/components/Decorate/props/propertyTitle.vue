@@ -30,9 +30,11 @@
       <el-form-item label="日期" prop="date" v-if="ruleForm.titleTemplate === 2">
         <el-date-picker
           v-model="ruleForm.date"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择日期">
+          type="datetime"
+          placeholder="选择日期时间"
+          align="right"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          :picker-options="pickerOptions">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="作者" prop="author" v-if="ruleForm.titleTemplate === 2">
@@ -84,6 +86,18 @@ export default {
       },
       dialogVisible: false,
       currentDialog: '',
+      pickerOptions: {
+          disabledDate: (time) => {
+              return time.getTime() > Date.now();
+          }
+      }
+    }
+  },
+  watch: {
+    'ruleForm.date'(newValue) {
+      if(new Date(newValue) > Date.now()) {
+        this.ruleForm.date = this.utils.formatDate(Date.now(), "yyyy-MM-dd hh:mm:ss")
+      }
     }
   },
   methods: {

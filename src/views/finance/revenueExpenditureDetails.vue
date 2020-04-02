@@ -2,10 +2,10 @@
 <!--收支明细-->
 <template>
   <div>
-    <div class="top_part">
-      <el-form :model="ruleForm" ref="ruleForm" :inline="inline" label-width="70px">
+    <div class="top_part head-wrapper">
+      <el-form :model="ruleForm" ref="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in revenueExpenditureTerms"
               :key="item.value"
@@ -13,8 +13,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
@@ -51,19 +49,18 @@
         <el-form-item label="交易金额">
           <el-input-number v-model="ruleForm.amountMin" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
           -
-        </el-form-item>
-        <el-form-item>
           <el-input-number v-model="ruleForm.amountMax" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
         </el-form-item>
-        <el-form-item label="交易时间" style="margin-left:25px;">
+        <el-form-item label="交易时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
-            :picker-options="pickerNowDateBefore">
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -91,7 +88,7 @@
           prop="tradeDetailSn"
           label="交易流水号"
           :render-header="renderTradeDetailSn"
-          width="130px">
+          >
         </el-table-column>
         <el-table-column
           prop="tradeType"
@@ -133,7 +130,7 @@
           prop="isInvoice"
           label="开票">
           <template slot-scope="scope">
-            {{scope.row.isInvoice ? '开票' : '未开票' }}
+            {{scope.row.isInvoice ? '是' : '否' }}
           </template>
         </el-table-column>
         <el-table-column
@@ -170,11 +167,6 @@ export default {
   components:{exportTipDialog},
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       currentData:{},
       dialogVisible: false,
       currentDialog:"",
@@ -300,8 +292,8 @@ export default {
       query.sort = orde || 'desc'
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.tradeTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.tradeTimeEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.tradeTimeStart = timeValue[0]
+        query.tradeTimeEnd = timeValue[1]
       }
       return query;
     },  
@@ -357,10 +349,7 @@ export default {
         this._apis.finance.exportRe(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+         this.$message.error(error)
         })
       }
     },

@@ -20,16 +20,17 @@
               <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
             </el-radio-group>
             <div class="input_wrap" v-if="nearDay == 4">
-              <el-date-picker
-                v-model="range"
-                type="daterange"
-                range-separator="—"
-                value-format="yyyy-MM-dd"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :picker-options="pickerOptions"
-                @change="changeTime"
-              ></el-date-picker>
+               <el-date-picker
+                  v-model="range"
+                  type="datetimerange"
+                  align="right"
+                  range-separator="至"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
+                  @change="changeTime">
+                </el-date-picker>
             </div>
           </div>
           <div class="btn_tabs clearfix">
@@ -74,24 +75,14 @@ export default {
   name: "passengerFlow",
   components: { pfChart,durationChart },
   data() {
+    const _self = this;
     return {
       pickerOptions: {
-          onPick: ({ maxDate, minDate }) => {
-              this.pickerMinDate = minDate.getTime()
-              if (maxDate) {
-              this.pickerMinDate = ''
-              }
-          },
           disabledDate: (time) => {
-              if (this.pickerMinDate !== '') {
-              const day90 = (90 - 1) * 24 * 3600 * 1000
-              let maxTime = this.pickerMinDate + day90
-              if (maxTime > new Date()) {
-                  maxTime = new Date()- 8.64e7
-              }
-              return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-              }
-              return time.getTime() > Date.now()- 8.64e7
+              let yesterday = new Date();
+              yesterday = yesterday.getTime()-24*60*60*1000;
+              yesterday = this.utils.dayEnd(yesterday);
+              return time.getTime() > yesterday.getTime();
           }
       },
       activeName: "first",

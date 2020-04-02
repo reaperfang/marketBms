@@ -62,25 +62,18 @@ export default {
                 this._apis.client.sendCard(params).then((response) => {
                     this.visible = false;
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '发卡成功',
                         type: 'success'
                     });
                 }).catch((error) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify.info({
-                        title: '提示',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify.info({
-                    title: '提示',
-                    message: '请选择标签'
-                });
+                this.$message('请选择标签');
             }
         },
         getLabels() {
@@ -132,7 +125,7 @@ export default {
 }
 .user_id{
     text-align: left;
-    padding: 0 0 10px 15px;
+    padding: 0 0 14px 15px;
 }
 .c_label{
     width: 70px;

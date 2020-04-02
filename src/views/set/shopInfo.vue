@@ -26,8 +26,9 @@
                 <span v-if="form.logo" class="avatar">
                   <img :src="form.logo" class="logo_img">
                   <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
+                  <span class="uploadFont" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">上传</span>
                 </span>
-                <el-upload
+                <!-- <el-upload
                 class="avatar-uploader"
                 :action="uploadUrl"
                 :data="{json: JSON.stringify({cid: cid})}"
@@ -35,12 +36,18 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus avatar-uploader-icon"></i>
-                <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-                </el-upload>
-                <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p>
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>-->
+                <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p> 
             </el-form-item>
             <el-form-item label="公司名称:" prop="companyName">
-                <el-input maxlength="30" show-word-limit v-model="form.companyName" placeholder="请输入公司名称" style="width:200px;"></el-input>
+                <el-input 
+                  type="textarea"
+                  autosize
+                  v-model="form.companyName"
+                  placeholder="请输入公司名称"
+                  style="width:200px;">
+                </el-input>
             </el-form-item>
             <el-form-item label="客服电话:" prop="phone">
                 <!-- <el-input v-model="form.phone" placeholder="区号" style="width:70px;"></el-input>
@@ -79,10 +86,12 @@
               <div class="center">{{form.shopName}}</div>
             </div>
         </el-form>
+        <!-- 动态弹窗 -->
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
     </div>    
 </template>
 <script>
-
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import axios from "axios";
 export default {
   name: 'shopInfo',
@@ -110,6 +119,8 @@ export default {
       itemCatList: [],
       operateCategoryList: [],
       showShop: false,
+      dialogVisible: false,
+      currentDialog: '',
       form: {
           shopName: '',
           logo:'',
@@ -147,7 +158,8 @@ export default {
           { required: true, message: '请选择主营类目', trigger: 'blur' }
         ],
         companyName:[
-          { required: true, message: '请输入公司名称', trigger: 'blur' }
+          { required: true, message: '请输入公司名称', trigger: 'blur' },
+          {min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur'}
         ],
         companyEmail:[
           { required: true, message: '请输入公司邮箱', trigger: 'blur' },
@@ -166,7 +178,7 @@ export default {
       //canvas:{}
     }
   },
-  components: {},
+  components: {dialogSelectImageMaterial},
   watch: {
     
   },
@@ -188,6 +200,10 @@ export default {
     
   },
   methods: {
+    imageSelected(item) {
+      this.form.logo = item.filePath;
+      this.handleAvatarSuccess(item.filePath);
+    },
     itemCatHandleChange(value) {
         let _value = [...value]
         let arr = this.form.business.map(id => {
@@ -207,10 +223,7 @@ export default {
                 this.itemCatList = arr
                 resolve(res.list)
             }).catch(error => {
-                this.$notify.error({
-                  title: '错误',
-                  message: error
-                });
+                this.$message.error(error);
                 reject(error)
             })
         })
@@ -273,10 +286,7 @@ export default {
           this.form.addressCode = arr
         }
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -307,10 +317,7 @@ export default {
             this._apis.set.updateShopInfo(data).then(response =>{
               this.setShopName()              
             }).catch(error =>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
               this.loading = false
             })
           }
@@ -324,16 +331,12 @@ export default {
         shopInfo.shopName = this.form.shopName
       }
       this.$store.dispatch('setShopInfos',shopInfo).then(() => {
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.loading = false
       }).catch(error=>{ })
     },
 
-    handleAvatarSuccess(res, file) {
-      this.form.logo = res.data.url;
+    handleAvatarSuccess(res) {
       //圆形图片处理
       var ctx = this.canvas.getContext('2d'); 
       let _self = this
@@ -354,14 +357,14 @@ export default {
           let urlData = base64.substring(22, base64.length);          
           _self.uploadCircle(urlData)
       }
-      img.src = res.data.url;
+      img.src = res;
     },
 
     uploadCircle(urlData){
       axios.post(
         this.uploadUrlBase64,
         "json={\"cid\":\""+this.cid+"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",
-        {headers: {'Origin':'http'}}
+        {headers: {'Origin':location.protocol.split(':')[0]}}
       ).then((response) => {
         this.form.logoCircle = response.data.data.url
       }).catch((error) => {
@@ -440,6 +443,7 @@ export default {
     height: 80px;
     display: inline-block;
     vertical-align: middle;
+    position: relative;
 /deep/ img{
       width: 80px;
       height: 80px;
@@ -452,7 +456,17 @@ export default {
       object-fit:fill;
       display: inline-block;
     }
+    .uploadFont{
+      position: absolute;
+      color: #655EFF;
+      font-size: 14px;
+      display: block;
+      right: -58px;
+      bottom: -8px;
+      cursor: pointer;
+    }
   }
+  
   .shopInfo-show {
     font-size: 12px;
     color: rgba(146,146,155,1);

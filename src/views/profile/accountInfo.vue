@@ -71,10 +71,7 @@ export default {
             this.loading = false
         }).catch(error =>{
             this.loading = false
-            this.$notify.error({
-                title: '失败',
-                message: error
-            })
+            this.$message.error(error);
         })
     },
     // 修改账号信息
@@ -90,16 +87,10 @@ export default {
             mobile:this.form.mobile
         }
         this._apis.login.updateUserInfo(query).then(response =>{
-            this.$notify.success({
-                title: '成功',
-                message: '更新成功！'
-            });
+            this.$message.success('更新成功！');
             this.init()
         }).catch(error =>{
-            this.$notify.error({
-                title: '失败',
-                message: error
-            })
+            this.$message.error(error);
         })
     },
   }

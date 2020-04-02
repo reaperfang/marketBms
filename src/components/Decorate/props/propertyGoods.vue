@@ -176,6 +176,7 @@ export default {
     }
   },
   created() {
+    this.fetchCatagoryDetail();
     this.fetch();
   },
   watch: {
@@ -203,9 +204,15 @@ export default {
         this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
     },
     'ruleForm.currentCatagoryId'() {
+        this.fetchCatagoryDetail();
         this.fetch();
         this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
     },
+    'ruleForm.source'(newValue) {
+      this.fetchCatagoryDetail();
+      this.fetch();
+      this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+    }
   },
   methods: {
 
@@ -230,31 +237,40 @@ export default {
                         params = this.setGroupGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
                             this.list = [];
+                            this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                             return;
                         }
                     }else if(Array.isArray(ids) && ids.length){
                         params = this.setNormalGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
                             this.list = [];
+                            this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                             return;
                         }
                     }else{
                       if(this.$route.path.indexOf('templateEdit') < 0) {
                         this.list = [];
+                        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                       }
                         return;
                     }
                 }else{
                      if(this.$route.path.indexOf('templateEdit') < 0) {
                         this.list = [];
+                        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                       }
                     return;
                 }
             }else if(componentData.source === 2){
-                params = {
-                    status: '1',
-                    productCatalogInfoId: this.ruleForm.currentCatagoryId
-                };
+              if(!this.ruleForm.currentCatagoryId) {
+                this.list = [];
+                this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+                return;
+              }
+              params = {
+                  status: '1',
+                  productCatalogInfoId: this.ruleForm.currentCatagoryId
+              };
             }
 
             this.loading = true;
@@ -262,10 +278,6 @@ export default {
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
                 console.error(error);
                  if(this.$route.path.indexOf('templateEdit') < 0) {
                         this.list = [];
@@ -313,6 +325,31 @@ export default {
             status: '1',
             ids: ids,
         }
+    },
+
+    /* 获取分类详情 */
+    fetchCatagoryDetail() {
+      if(!this.ruleForm.currentCatagoryId) {
+        return;
+      }
+      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let cid = shopInfo && shopInfo.id || ''
+      this._apis.goods.getCategoryDetail({
+        id: this.ruleForm.currentCatagoryId
+      }).then((response)=>{
+        this.seletedGroup = {
+          pageType: 'goodsGroup',
+          typeName: '商品分类',
+          id: 4,
+          data: {
+            id: response.id,
+            name: response.name
+          },
+          cid
+        }
+      }).catch((error)=>{
+          console.error(error);
+      });
     }
   }
 }

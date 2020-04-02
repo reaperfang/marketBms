@@ -14,7 +14,7 @@
           </div>
         </el-form-item>
         <el-form-item label="背景设置：" prop="backgroundType">
-          <el-radio v-model="ruleForm.backgroundType" label="0">背景色：</el-radio>
+          <el-radio v-model="ruleForm.backgroundType" label="0" @change="chooseColor">背景色：</el-radio>
           <span
             :class="[item.active == '1'?'active':'','color_picker']"
             v-for="item in colors"
@@ -29,7 +29,7 @@
             style="margin-left: 93px"
             @change="chooseImg"
           >背景图：</el-radio>
-          <el-upload
+          <!-- <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
             :show-file-list="false"
@@ -38,20 +38,26 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
-            <el-button
+            
+          </el-upload> -->
+          <el-button
               size="small"
               type="primary"
               class="upload_btn"
               v-permission="['客户', '会员卡', '会员卡管理', '上传']"
               v-if="ruleForm.backgroundType == '1'"
+              @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
             >点击上传</el-button>
-          </el-upload>
           <span
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >像素大小控制在1000象素*600象素以下</span>
-          <img v-if="imageUrl" :src="imageUrl" class="avatar cardImg" />
-          <div v-else class="cardImg2" :style="{backgroundColor: currentColor}">
+          <div v-if="imgUrl" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`, backgroundSize: '100% 100%'}">
+            <p class="c_bh">3363197129819XXXXX</p>
+            <p class="c_name">{{ ruleForm.name }}</p>
+            <p class="c_level">{{ ruleForm.alias }}</p>
+          </div>
+          <div v-if="!imgUrl" class="cardImg2" :style="{backgroundColor: currentColor}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
             <p class="c_level">{{ ruleForm.alias }}</p>
@@ -182,6 +188,7 @@
       @getCondition="getCondition"
       @getSelectedCoupon="getSelectedCoupon"
       @getSelection="getSelection"
+      @imageSelected="imageSelected"
     ></component>
   </div>
 </template>
@@ -190,18 +197,20 @@ import createCardDialog from "./dialogs/createCard/createCardDialog";
 import redListDialog from "./dialogs/levelInfo/redListDialog";
 import giftListDialog from "./dialogs/levelInfo/giftListDialog";
 import couponListDialog from "./dialogs/levelInfo/couponListDialog";
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: "createCard",
   components: {
     createCardDialog,
     redListDialog,
     giftListDialog,
-    couponListDialog
+    couponListDialog,
+    dialogSelectImageMaterial
   },
   data() {
     return {
       uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
-      imageUrl: "",
+      imgUrl: "",
       ruleForm: {
         name: "",
         backgroundType: "0",
@@ -278,6 +287,9 @@ export default {
     }
   },
   methods: {
+    imageSelected(item) {
+      this.imgUrl = item.filePath;
+    },
     checkZero(event,val,ele) {
       val = val.replace(/[^\d]/g,'');
       val = val.replace(/^0/g,'');
@@ -392,7 +404,7 @@ export default {
               }
             });
           }else{
-            this.imageUrl = this.ruleForm.background;
+            this.imgUrl = this.ruleForm.background;
           }
         })
         .catch(error => {
@@ -416,13 +428,12 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       if (Number(res.data.width) >= 1000 && Number(res.data.height) >= 600) {
-        this.$notify({
-          title: "警告",
-          message: "尺寸应设置为宽1000像素以下，高600像素以下",
-          type: "warning"
+        this.$message({
+          message: '尺寸应设置为宽1000像素以下，高600像素以下',
+          type: 'warning'
         });
       } else {
-        this.imageUrl = res.data.url;
+        this.imgUrl = res.data.url;
       }
     },
     beforeAvatarUpload(file) {
@@ -569,38 +580,45 @@ export default {
         });
       }
     },
+    chooseColor(val) {
+      if(val == 0) {
+        this.imgUrl = "";
+        if(this.currentColor) {
+          this.colors.map(v => {
+            if(v.imgKey == this.currentColor) {
+              this.$set(v, 'active',"1");
+            }
+          })
+        }
+      }
+    },
     save() {
       if(this.ruleForm.name == "") {
-        this.$notify({
-          title: "警告",
-          message: "请输入会员卡名称",
-          type: "warning"
+        this.$message({
+          message: '请输入会员卡名称',
+          type: 'warning'
         });
       }else if (!this.right1 && !this.right2) {
-        this.$notify({
-          title: "警告",
-          message: "请选择一项等级权益",
-          type: "warning"
+        this.$message({
+          message: '请选择一项等级权益',
+          type: 'warning'
         });
       }else if(this.ruleForm.explain == "") {
-        this.$notify({
-          title: "警告",
-          message: "请输入特权说明",
-          type: "warning"
+        this.$message({
+          message: '请输入特权说明',
+          type: 'warning'
         });
       }else if(this.ruleForm.isSyncWechat == "1") {
         if(this.ruleForm.notice == "") {
-          this.$notify({
-            title: "警告",
-            message: "请输入使用须知",
-            type: "warning"
-          });
+          this.$message({
+            message: '请输入使用须知',
+            type: 'warning'
+          });
         }else if(this.ruleForm.phone == ""){
-          this.$notify({
-            title: "警告",
-            message: "请输入客服电话",
-            type: "warning"
-          });
+          this.$message({
+            message: '请输入客服电话',
+            type: 'warning'
+          });
         }else{
           this.excuteSave();
         }
@@ -624,11 +642,10 @@ export default {
           if(formObj.receiveSetting == '0') {
             formObj.receiveConditionsRemarks = '可直接领取';
           }else{
-            if(JSON.stringify(this.levelConditionValueDto) == '{}') {
-              this.$notify({
-                title: "警告",
-                message: "请选择特定条件",
-                type: "warning"
+            if(JSON.stringify(this.levelConditionValueDto) == '{}' || !this.levelConditionValueDto.conditionValue || !this.levelConditionValueDto.levelConditionId) {
+              this.$message({
+                message: '请选择特定条件',
+                type: 'warning'
               });
               this.canSubmit1 = false;
             }else{
@@ -658,24 +675,22 @@ export default {
               }
             });
             if(colorArr.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择背景色",
-                type: "warning"
+              this.$message({
+                message: '请选择背景色',
+                type: 'warning'
               });
               this.canSubmit2 = false;
             }else{
               this.canSubmit2 = true;
             }
           } else if (this.ruleForm.backgroundType == "1") {
-            if (this.imageUrl) {
+            if (this.imgUrl) {
               this.canSubmit3 = true;
-              formObj.background = this.imageUrl;
+              formObj.background = this.imgUrl;
             } else {
-              this.$notify({
-                title: "警告",
-                message: "请上传背景图片",
-                type: "warning"
+              this.$message({
+                message: '请上传背景图片',
+                type: 'warning'
               });
               this.canSubmit3 = false;
             }
@@ -690,10 +705,9 @@ export default {
           }
           if (this.right2) {
             if (this.jfhkbl == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入积分回馈倍率数",
-                type: "warning"
+              this.$message({
+                message: '请输入积分回馈倍率数',
+                type: 'warning'
               });
               this.canSubmit4 = false;
             } else {
@@ -722,10 +736,9 @@ export default {
           let upgradePackage = "";
           if (this.upgrade1) {
             if (this.zsjf == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入赠送积分数",
-                type: "warning"
+              this.$message({
+                message: '请输入赠送积分数',
+                type: 'warning'
               });
               this.canSubmit5 = false;
             } else {
@@ -745,10 +758,9 @@ export default {
           }
           if (this.upgrade2) {
             if (this.zshb == "") {
-              this.$notify({
-                title: "警告",
-                message: "请输入赠送红包金额",
-                type: "warning"
+              this.$message({
+                message: '请输入赠送红包金额',
+                type: 'warning'
               });
               this.canSubmit6 = false;
             } else {
@@ -768,10 +780,9 @@ export default {
           if (this.upgrade3) {
             let zpNum = 0;
             if (this.selectedGifts.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择赠品",
-                type: "warning"
+              this.$message({
+                message: '请选择赠品',
+                type: 'warning'
               });
               this.canSubmit7 = false;
             } else {
@@ -796,10 +807,9 @@ export default {
           if (this.upgrade4) {
             var yhzNum = 0;
             if (this.selectedCoupons.length == 0) {
-              this.$notify({
-                title: "警告",
-                message: "请选择优惠券",
-                type: "warning"
+              this.$message({
+                message: '请选择优惠券',
+                type: 'warning'
               });
               this.canSubmit8 = false;
             } else {
@@ -844,10 +854,9 @@ export default {
                     .editCard(formObj)
                     .then(response => {
                       this._routeTo('cardManage');
-                      this.$notify({
-                        title: "成功",
+                      this.$message({
                         message: response,
-                        type: "success"
+                        type: 'success'
                       });
                     })
                     .catch(error => {
@@ -857,9 +866,8 @@ export default {
                   
                 }
               }else{
-                this.$notify({
-                  title: '警告',
-                  message: "高等级条件数值要大于低等级的条件数值",
+                this.$message({
+                  message: '高等级条件数值要大于低等级的条件数值',
                   type: 'warning'
                 });
               }
@@ -872,10 +880,9 @@ export default {
                 .editCard(formObj)
                 .then(response => {
                   this._routeTo('cardManage');
-                  this.$notify({
-                    title: "成功",
+                  this.$message({
                     message: response,
-                    type: "success"
+                    type: 'success'
                   });
                 })
                 .catch(error => {
@@ -921,10 +928,7 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-upload {
-  height: 30px !important;
-  line-height: 30px !important;
-}
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -963,14 +967,29 @@ export default {
     height: 140px;
     position: absolute;
     right: 20px;
-    top: 40px;
+    top: -86px;
+    border-radius: 8px;
+    .c_bh{
+      font-size: 12px;
+      margin: 4px 0 0 13px;
+    }
+    .c_name{
+      font-size: 20px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .c_level{
+      margin: 20px 0 0 15px;
+      font-size: 16px;
+    }
   }
   .cardImg2 {
     width: 323px;
     height: 140px;
     position: absolute;
     right: 20px;
-    top: 40px;
+    top: -86px;
     border-radius: 8px;
     background: url('../../assets/images/client/bg_card.png') 0 0 no-repeat;
     .c_bh{
@@ -999,10 +1018,6 @@ export default {
     float: left;
     margin: 17px 0 0 30px;
     color: #44434b;
-  }
-  .upload_btn {
-    float: left;
-    margin: 8px 0 0 13px;
   }
   .l_warn {
     color: #92929b;
@@ -1065,6 +1080,7 @@ export default {
       display: inline-block;
     }
     .upload_btn {
+      display: block;
       margin-left: 90px;
     }
   }

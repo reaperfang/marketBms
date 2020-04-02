@@ -1,6 +1,6 @@
 <template>
 <div class="m_container">
-        <div class="pane_container">
+        <div class="pane_container head-wrapper">
             <el-form ref="form" :model="form" class="clearfix">
                 <el-form-item label="交易时间">
                     <div class="p_line">
@@ -14,12 +14,13 @@
                         <el-date-picker
                         v-if="form.timeType == 4"
                         v-model="form.daterange"
-                        type="daterange"
-                        value-format="yyyy-MM-dd hh:mm:ss"
+                        type="datetimerange"
+                        align="right"
                         range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions"
+                        start-placeholder="开始时间"
+                        end-placeholder="结束时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                         @change="getData"
                     >
                     </el-date-picker>
@@ -28,13 +29,13 @@
                 </el-form-item>
                 <el-form-item label="用户类型">
                     <div class="input_wrap2">
-                        <el-select v-model="form.memberType"  @change="getData">
+                        <el-select v-model="form.memberType">
                             <el-option v-for="item in customType" :label="item.name" :value="item.id" :key="item.id"></el-option>
                         </el-select>
                     </div>
                     <span class="span_label">交易次数</span>
                     <div class="input_wrap2 marR20">
-                        <el-select v-model="form.tradeCountRange"  @change="getData">
+                        <el-select v-model="form.tradeCountRange">
                             <el-option v-for="item in tradeCount" :label="item.name" :value="item.value" :key="item.id"></el-option>
                         </el-select>
                     </div>
@@ -57,30 +58,34 @@
                     <div class="input_wrap2">
                         <el-input placeholder="最高金额（元）" v-model="highprice" type="number"></el-input>
                     </div>
+                    <div class="marL26">
+                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                        <el-button type="primary" class="border_btn" @click="reSet" style="margin-left:16px;">重 置</el-button>
+                    </div>
                 </el-form-item>
-                <el-form-item class="fr marT20">
-                    <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
-                    <el-button class="border_btn" @click="reSet">重 置</el-button>
-                </el-form-item>
+                <!-- <el-form-item class="marT20">
+                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                    <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
+                </el-form-item> -->
             </el-form>
 
             <div class="m_line clearfix">
                 <p class="fl">该筛选条件下：
                     <i v-if="form.memberType== null" style="font-style:normal">
                         全部会员共计<span>{{newMemberCount + oldMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{allRatio}}%</span>;    
+                        占用户总数的<span>{{allRatio}}%</span>;    
                     </i>
                     <i v-if="form.memberType==0" style="font-style:normal">
                         非会员共计<span>{{customerCount || 0}}</span>人；
-                        占客户总数的<span>{{customerRatio != 0 ? (customerRatio*100).toFixed(2) : 0}}%</span>;    
+                        占用户总数的<span>{{customerRatio != 0 ? (customerRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
                     <i v-if="form.memberType==1" style="font-style:normal">
                         新会员共计<span>{{newMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{newMemberRatio != 0 ? (newMemberRatio*100).toFixed(2) : 0}}%</span>;
+                        占用户总数的<span>{{newMemberRatio != 0 ? (newMemberRatio*100).toFixed(2) : 0}}%</span>;
                     </i>
                     <i v-if="form.memberType==2" style="font-style:normal">
                         老会员共计<span>{{oldMemberCount || 0}}</span>人；
-                        占客户总数的<span>{{oldMemberRatio != 0 ? (oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
+                        占用户总数的<span>{{oldMemberRatio != 0 ? (oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
                     <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span></i>。
                 </p>
@@ -114,28 +119,18 @@
 <script>
 import maTable from './components/maTable';
 import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
+import utils from '@/utils'
 export default {
     name: 'memberInfo',
     components: { maTable ,exportTipDialog },
     data() {
         return {
             pickerOptions: {
-                onPick: ({ maxDate, minDate }) => {
-                    this.pickerMinDate = minDate.getTime()
-                    if (maxDate) {
-                        this.pickerMinDate = ''
-                    }
-                },
                 disabledDate: (time) => {
-                    if (this.pickerMinDate !== '') {
-                        const day90 = (90 - 1) * 24 * 3600 * 1000
-                        let maxTime = this.pickerMinDate + day90
-                        if (maxTime > new Date()) {
-                            maxTime = new Date()- 8.64e7
-                        }
-                        return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-                    }
-                    return time.getTime() > Date.now() - 8.64e7
+                    let yesterday = new Date();
+                    yesterday = yesterday.getTime()-24*60*60*1000;
+                    yesterday = this.utils.dayEnd(yesterday);
+                    return time.getTime() > yesterday.getTime();
                 }
             },
             form: {
@@ -220,6 +215,10 @@ export default {
                     endTime:null
                 });
             }
+        },
+
+        getDate(date) {
+            return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
         },
 
         //获取交易次数
@@ -408,6 +407,10 @@ export default {
 }
 .mr10{
     margin-right:10px;
+}
+.marL26{
+    margin-left:26px;
+    display:inline-block;
 }
 .contents{
     width: 100%;

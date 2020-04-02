@@ -1,5 +1,5 @@
 <template>
-    <div class="order">
+    <div v-if="list.length" class="order">
         <div class="order-header">
             <div class="item goods">
                 <div class="row justify-between">
@@ -17,7 +17,7 @@
             <div class="container-item" v-for="(order, index) in list" :key="index">
                 <div class="container-item-header">
                     <div class="item">
-                        <el-checkbox :disabled="order.orderStatus == 2 || order.orderStatus == 6" @change="checkedChange" v-model="order.checked"></el-checkbox>
+                        <el-checkbox v-if="!authHide" :disabled="order.orderStatus == 2 || order.orderStatus == 6" @change="checkedChange" v-model="order.checked"></el-checkbox>
                         <span class="order-code">
                             <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="light">
                                 <i class="auto"></i>
@@ -61,7 +61,8 @@
                     <div class="item" style="width: 120px;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
-                        <p>¥{{order | yingshowFilter}}</p>
+                        <!-- <p>¥{{order | yingshowFilter}}</p> -->
+                        <p>¥{{order.receivableMoney}}</p>
                         <!-- <p>{{order.channelName}}支付</p> -->
                     </div>
                     <div class="item" style="width: 120px;">
@@ -89,21 +90,21 @@
                         <template v-else-if="order.orderStatus == 3">
                             <!-- 待发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">发货</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
                         </template>
                         <template v-else-if="order.orderStatus == 4">
                             <!-- 部分发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">继续发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">继续发货</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p>
+                            <!-- <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p> -->
                         </template>
                         <template v-else-if="order.orderStatus == 5">
                             <!-- 待收货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
-                            <p v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
+                            <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
                             <!-- 完成 -->
@@ -116,11 +117,15 @@
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
     </div>
+    <Empty v-else></Empty>
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
+import anotherAuth from '@/mixins/anotherAuth'
+import Empty from '@/components/Empty'
 
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             orderList: [
@@ -224,33 +229,19 @@ export default {
     methods: {
         closeOrder(id) {
             this._apis.order.deleteOrder({id, deleteFlag: 0}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '删除成功！',
-                    type: 'success'
-                });
+                this.$message.success('删除成功！');
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         submit(value) {
             this._apis.order.orderClose({...value, id: this.currentData}).then((res) => {
                 this.$emit('getList')
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: '关闭成功！',
-                    type: 'success'
-                });
+                this.$message.success('关闭成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         makeCollections(order) {
@@ -258,17 +249,10 @@ export default {
                 this._apis.order.makeCollections({id: order.id, payWay: 4}).then((res) => {
                     this.$emit('getList')
                     this.visible = false
-                    this.$notify({
-                        title: '成功',
-                        message: '收款成功！',
-                        type: 'success'
-                    });
+                    this.$message.success('收款成功！');
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }) 
         },
@@ -286,7 +270,8 @@ export default {
         },
     },
     components: {
-        CloseOrderDialog
+        CloseOrderDialog,
+        Empty
     }
 }
 </script>
@@ -428,6 +413,14 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 5px;
+    }
+    @media (max-width: 1440px) {
+    .container-item {
+        min-width: auto!important;
+    }
+    .goods-box .col:first-child {
+        width: 100%!important;
+    }
     }
 </style>
 

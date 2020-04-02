@@ -5,7 +5,7 @@
                 <span>{{ruleForm.name}}</span>
             </el-form-item>
             <el-form-item label="库存:" prop="stock">
-                <el-input v-model="ruleForm.stock"></el-input>
+                <el-input type="number" v-model="ruleForm.stock"></el-input>
             </el-form-item>
         </el-form>
         <div class="footer">
@@ -62,16 +62,15 @@ export default {
                         }).then((res) => {
                             this.$emit('submit')
                             this.visible = false
-                            this.$notify({
-                                title: '成功',
+                            this.$message({
                                 message: '编辑成功！',
                                 type: 'success'
                             });
                 }).catch(error => {
                     this.visible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
+                    this.$message.error({
+                        message: error,
+                        type: 'error'
                     });
                 })
             } else {

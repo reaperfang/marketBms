@@ -1,6 +1,6 @@
 <template>
 <div>
-  <DialogBase :visible.sync="visible" @submit="submit" title="发放优惠码" :hasCancel="hasCancel" :showFooter="false">
+  <DialogBase :visible.sync="visible" @submit="submit" @close="close" title="发放优惠码" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
       <p class="marB20">用户ID: {{data.memberSn}}</p>
       <div class="clearfix">
@@ -10,10 +10,15 @@
         <div class="fl r_block">
           <div class="sel_cont" v-for="(i,index) in selectedCoupons" :key="index">
             <span class="sel_cont_name">{{i.name}}</span>
-            <el-input-number v-model="i.frozenNum" :min="1" :max="10"></el-input-number>
+            <el-input-number v-model="i.frozenNum" :max="10" @change="(e) => changeNum(e, i)"></el-input-number>
             <span class="addMainColor pointer" @click="handleDelete(index)" style="margin-left: 20px">删除</span>
           </div>
           <span class="add pointer" @click="handleAdd">添加</span>
+        </div>
+        <div class="fl info_block">
+          <div v-for="(item,index) in infoArrs" :key="index">
+            {{item}}
+          </div>
         </div>
       </div>
     </div>
@@ -81,7 +86,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum > 10 ? 10:scope.row.ownNum"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.remainStock > 10 ? 10:scope.row.remainStock"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
@@ -118,24 +123,32 @@ export default {
       dialogVisible2: false,
       loading: false,
       checkAll: false,
-      selectedCoupons: []
+      selectedCoupons: [],
+      infoArrs: []
     };
   },
   methods: {
+    changeNum(e,i) {
+      if(e == 0) {
+        this.selectedCoupons.map(item => {
+          if(item.id == i.id) {
+            this.selectedCoupons.splice(item, 1);
+          }
+        })
+      }
+    },
     couponSubmit() {
       this.dialogVisible2 = false;
       if(this.$refs.couponListTable.selection.length == 0) {
-        this.$notify({
-          title: '提示',
-          message: "请选择要发放的优惠码",
+        this.$message({
+          message: '请选择要发放的优惠码',
           type: 'warning'
         });
       }else if(this.$refs.couponListTable.selection.length <= 10) {
         this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
       }else{
-        this.$notify({
-          title: '提示',
-          message: "最多只能选择10张优惠码",
+        this.$message({
+          message: '最多只能选择10张优惠码',
           type: 'warning'
         });
       }
@@ -164,22 +177,23 @@ export default {
           response.map((v) => {
             if(!!v.receiveDesc) {
               this.btnLoading = false;
-              this.visible = false;
+              //this.visible = false;
               let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
-              this.$notify({
-                title: '提示',
-                message: errMsg,
-                type: 'warning'
-              });
+              this.infoArrs.push(errMsg);
+              // this.$message({
+              //   message: errMsg,
+              //   type: 'warning'
+              // });
             }else{
               this.btnLoading = false;
-              this.visible = false;
-              this.$notify({
-                title: '成功',
-                message: "发放成功",
-                type: 'success'
-              });
-              this.$emit('refreshPage');
+              //this.visible = false;
+              let successMsg = v.couponName + '发放成功';
+              this.infoArrs.push(successMsg);
+              // this.$message({
+              //   message: "发放成功",
+              //   type: 'success'
+              // });
+              this.$emit('refreshPage',2);
             }
           })
         }).catch((error) => {
@@ -189,11 +203,10 @@ export default {
         })
       }else{
         this.btnLoading = false;
-        this.$notify({
-            title: '警告',
-            message: '请选择优惠码',
-            type: 'warning'
-          });
+        this.$message({
+          message: "请选择优惠码",
+          type: 'warning'
+        });
       }
     },
     handleAdd() {
@@ -211,13 +224,16 @@ export default {
           }
         });
         if(i == 2) {
-          this.$notify({
-            title: '警告',
-            message: '不能选择重复的优惠券',
+          this.$message({
+            message: "不能选择重复的优惠券",
             type: 'warning'
           });
         }
       }
+    },
+    close() {
+      this.selectedCoupons = [];
+      this.infoArrs = [];
     }
   },
   computed: {
@@ -289,6 +305,10 @@ export default {
 /deep/ .el-dialog{
     border-radius: 10px;
 }
+/deep/ .el-table{
+  height: 591px;
+  overflow-y: auto;
+}
 .c_container {
     text-align: left;
     .l_block{
@@ -302,6 +322,7 @@ export default {
         margin-top: 5px;
         color: #655EFF;
         display: block;
+        font-size: 16px;
       }
       .sel_cont{
         .sel_cont_name{
@@ -310,6 +331,13 @@ export default {
           margin-right: 20px;
           overflow: hidden;
         }
+      }
+    }
+    .info_block{
+      margin-top: 12px;
+      div{
+        margin: 0 0 14px 41px;
+        color: red;
       }
     }
     .marB20{

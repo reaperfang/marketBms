@@ -14,7 +14,7 @@
                             <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
-                    <p @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
+                    <p v-if="orderInfo.orderStatus != 5" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
                 </div>
             </el-col>
             <el-col :span="8"><div class="grid-content center">
@@ -58,7 +58,7 @@
                 </div>
             </div></el-col>
             <el-col :span="8"><div class="grid-content righter">
-                <div class="item">
+                <div v-if="orderInfo.isInvoice == 1"  class="item">
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
@@ -73,8 +73,8 @@
                     </div>
                 </div>
                 <div class="item">
-                    <div class="label">客户备注</div>
-                    <div class="value">{{orderInfo.buyerRemark || '--'}}</div>
+                    <div class="label">用户备注</div>
+                    <div class="value">{{orderInfo.buyerRemark || '无备注'}}</div>
                 </div>
                 <div class="item remark-box">
                     <div class="label">商户备注</div>
@@ -144,7 +144,7 @@
                     label="商品状态"
                     class-name="goods-status">
                     <template slot-scope="scope">
-                        <template v-if="scope.row.orderAfterStatus">
+                        <template v-if="scope.row.afterSaleStatus">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
                         </template>
                         <template v-else>
@@ -170,14 +170,14 @@
                     <div class="row">
                         <div class="col">优惠券金额:</div>
                         <div class="col">
-                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true}; dialogVisible = true" class="coupon-img"></i>
+                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true, title: '使用的优惠券'}; dialogVisible = true" class="coupon-img"></i>
                             -¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">优惠码金额:</div>
                         <div class="col">
-                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false}; dialogVisible = true" class="coupon-img"></i>
+                            <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false, title: '使用的优惠码'}; dialogVisible = true" class="coupon-img"></i>
                             -¥{{orderDetail.orderInfo.consumeCouponCodeMoney || '0.00'}}
                         </div>
                     </div>
@@ -240,7 +240,7 @@
                         <div :style="{width: changePriceVisible ? '209px' : '199px'}" class="col">应收金额:</div>
                         <div class="col">
                             <div class="yingshow-right-box">
-                                <span>¥{{yingshow}}</span>
+                                <span>¥{{orderDetail.orderInfo.receivableMoney}}</span>
                                 <span v-if="this.orderDetail.orderInfo.orderStatus == 0" @click="changePriceVisible = true" class="yingshou-change">改价</span>
                                 <el-input v-if="changePriceVisible" style="width: 112px; margin-right: 6px; margin-left: 6px;" type="number" v-model="yingshouChangeMoney" placeholder="请输入金额"></el-input>
                                 <el-button v-if="changePriceVisible" @click="yingshouSubmit" type="primary">确定</el-button>
@@ -253,7 +253,8 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.actualMoney || 0}}</div>
+                        <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney}}</div>
+                        <div v-else class="col"></div>
                     </div>
                 </section>
             </div>
@@ -425,16 +426,9 @@ export default {
         //         let namesList = res.map(val => val.replacePayWechatName)
 
         //         namesL
-        //         this.$notify({
-        //             title: '成功',
-        //             message: '查询成功！',
-        //             type: 'success'
-        //         });
+        //         this.$message.success('查询成功！');
         //     }).catch(error => {
-        //         this.$notify.error({
-        //             title: '错误',
-        //             message: error
-        //         });
+        //         this.$message.error(error);
         //     }) 
         // },
         getGain() {
@@ -451,10 +445,7 @@ export default {
                 this.gainCouponList = res.couponList && res.couponList.map(val => val.appCoupon.name).join(',') || ''
                 this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         getOrderAmount() {
@@ -514,20 +505,13 @@ export default {
         //     this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
         //     consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
         //         this.changePriceVisible = false
-        //         // this.$notify({
-        //         //     title: '成功',
-        //         //     message: '添加成功！',
-        //         //     type: 'success'
-        //         // });
+        //         // this.$message.success('添加成功！');
         //         this.currentDialog = 'ChangePriceDialog'
         //         this.dialogVisible = true
         //         this.getDetail()
         //     }).catch(error => {
         //         this.changePriceVisible = false
-        //         this.$notify.error({
-        //             title: '错误',
-        //             message: error
-        //         });
+        //         this.$message.error(error);
         //     }) 
         // },
         reducePriceHandler() {
@@ -543,20 +527,13 @@ export default {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                // this.$notify({
-                //     title: '成功',
-                //     message: '添加成功！',
-                //     type: 'success'
-                // });
+                // this.$message.success('添加成功！');
                 this.$emit('getDetail')
                 this.currentDialog = 'ChangePriceDialog'
                 this.dialogVisible = true
             }).catch(error => {
                 this.changePriceVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         yingshouSubmit() {
@@ -582,10 +559,7 @@ export default {
                     this.dialogVisible = true
                 }).catch(error => {
                     this.changePriceVisible = false
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                 }) 
         },
         submit() {
@@ -595,17 +569,10 @@ export default {
             this.remarkVisible = true
             this._apis.order.orderRemark({id: this.orderInfo.id, sellerRemark: this.orderInfo.sellerRemark}).then(res => {
                 this.remarkVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                this.$message.success('添加成功！');
             }).catch(error => {
                 this.remarkVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         }
     },
@@ -678,6 +645,8 @@ export default {
                     return '商户备注'
                 case 10:
                     return '修改收货信息'
+                case 11:
+                    return '自动发货'
             }
         },
         yingshouFilter(val) {
@@ -702,22 +671,24 @@ export default {
             }
         },
         orderStatusFilter(row) {
-            if(row.orderAfterStatus) {
-                if(row.orderAfterStatus == 0) {
-                    return '提交申请'
-                } else if(row.orderAfterStatus == 1) {
-                    return '待退货'
-                } else if(row.orderAfterStatus == 2) {
-                    return '待处理'
-                } else if(row.orderAfterStatus == 3) {
-                    return '待收货'
-                } else if(row.orderAfterStatus == 4) {
-                    return '已完成'
-                } else if(row.orderAfterStatus == 5) {
-                    return '已关闭'
-                }
-            } else {
-                if(row.orderStatus == 0) {
+            if(row.afterSaleStatus== 1 || row.afterSaleStatus== 2 || row.orderAfterStatus == 0) {
+                if(row.orderAfterStatus == 0){
+            return '售后完成'
+            }else if(row.orderAfterStatus == 1) {
+                        return '换货中'
+                    } else if(row.orderAfterStatus == 2) {
+                        return '退款中'
+                    }else if(row.orderAfterStatus == 3) {
+                        return '退货中'
+                    }else if(row.orderAfterStatus == 4) {
+                        return '退款完成'
+                    }else if(row.orderAfterStatus == 5) {
+                        return '换货完成'
+                    }else if(row.orderAfterStatus == 6) {
+                        return '退货完成'
+                    }
+                } else {
+                    if(row.orderStatus == 0) {
                     return '待付款'
                 } else if(row.orderStatus == 1) {
                     return '待成团'
@@ -730,9 +701,9 @@ export default {
                 } else if(row.orderStatus == 5) {
                     return '待收货'
                 } else if(row.orderStatus == 6) {
-                    return '完成'
+                    return '交易成功'
                 }
-            }
+                    }
         }
     },
     props: {
@@ -897,6 +868,9 @@ export default {
 .yingshow-right-box {
     display: flex;
     align-items: center;
+    >span:first-child {
+        font-weight: 600;
+    }
     .yingshou-change {
         flex-shrink: 0;
     }
