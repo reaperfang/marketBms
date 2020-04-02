@@ -36,11 +36,11 @@
 export default {
     data() {
         return {
-            resellerInfoList: [
-                { resellerName: 123, resellerPhone: '13134478776', resellerLevel: 1, resellerSettlementScale: '8', resellerSettlementMoney: 12.34, status: 0 },
-                { resellerName: 1234, resellerPhone: '13134478777', resellerLevel: 2, resellerSettlementScale: '8', resellerSettlementMoney: 12.34, status: 1 },
-                { resellerName: 1235, resellerPhone: '13134478778', resellerLevel: 3, resellerSettlementScale: '8', resellerSettlementMoney: 12.34, status: 1 },
-            ]
+            // resellerInfoList: [
+            //     { resellerName: 123, resellerPhone: '13134478776', resellerLevel: 1, resellerSettlementScale: '8', resellerSettlementMoney: 12.34, status: 0 },
+            //     { resellerName: 1234, resellerPhone: '13134478777', resellerLevel: 2, resellerSettlementScale: '8', resellerSettlementMoney: 12.34, status: 1 },
+            //     { resellerName: 1235, resellerPhone: '13134478778', resellerLevel: 3, resellerSettlementScale: '8', resellerSettlementMoney: 12.34, status: 1 },
+            // ]
         }
     },
     props: {
