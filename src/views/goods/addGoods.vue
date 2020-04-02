@@ -129,8 +129,8 @@
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
-                                            <input @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
-                                            <el-button maxlength="50" @click="addNewSpecValue(item, index)">新增</el-button>
+                                            <input  maxlength="50" @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
+                                            <el-button @click="addNewSpecValue(item, index)">新增</el-button>
                                         </div>
                                         <ul class="add-spec-value-ul">
                                             <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
@@ -188,7 +188,7 @@
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
-                                            <input @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
+                                            <input maxlength="50" @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
                                             <el-button @click="addNewSpecValue(item, index)">新增</el-button>
                                         </div>
                                         <ul class="add-spec-value-ul">
@@ -217,7 +217,7 @@
                     </div> -->
                     <div v-show="showAddSpecsInput" class="add-specs">
                         <div style="position: relative;" class="add-specs-input">
-                            <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
+                            <input maxlength="50" v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
                         <ul class="spec-list" style="top: 35px;" v-show="showSpecsList">
@@ -516,7 +516,7 @@
         </section>
         <section class="form-section">
             <h2>物流/售后</h2>
-            <el-form-item label="上架时间" prop="status">
+            <el-form-item v-show="!editor" label="上架时间" prop="status">
                 <span>定时上架的商品在上架前请到“仓库中的宝贝”里编辑商品。</span>
                 <div>
                     <el-radio-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
@@ -1024,9 +1024,16 @@ export default {
                 });
                 return
             }
-            if(lastAddedSpecs.list.find(val => val.name == value)) {
+            // if(lastAddedSpecs.list.find(val => val.name == value)) {
+            //     this.$message({
+            //     message: '规格值不能与已有规格名重复，请您重新选择',
+            //     type: 'warning'
+            //     });
+            //   return
+            // }
+            if(this.flatSpecsList.find(val => val.name == value)) {
                 this.$message({
-                message: '规格值不能与已有规格名重复，请您重新选择',
+                message: '规格值不能与已有规格名或规格值重复，请您重新选择',
                 type: 'warning'
                 });
               return
@@ -1068,9 +1075,16 @@ export default {
                 });
                 return
             }
-            if(this.specsList.find(val => val.name == this.newSpec)) {
+            // if(this.specsList.find(val => val.name == this.newSpec)) {
+            //     this.$message({
+            //     message: '规格名称重复',
+            //     type: 'warning'
+            //     });
+            //   return
+            // }
+            if(this.flatSpecsList.find(val => val.name == this.newSpec)) {
                 this.$message({
-                message: '规格名称重复',
+                message: '规格名不能与已有规格名或规格值重复，请您重新选择',
                 type: 'warning'
                 });
               return
@@ -3051,6 +3065,7 @@ $blue: #655EFF;
             border: 1px solid #ddd;
             padding: 7px 12px;
             border-radius:4px;
+            margin-bottom: 5px;
             cursor: pointer;
             position: relative;
             &.active {

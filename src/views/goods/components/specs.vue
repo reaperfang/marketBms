@@ -427,6 +427,7 @@ export default {
     }
     table tr td {
         min-width: 147px;
+        padding: 0 2px;
     }
 </style>
 
