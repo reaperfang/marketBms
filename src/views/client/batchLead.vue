@@ -484,6 +484,7 @@ export default {
                     //根据selectedIds查询商品
                     this._apis.client.getSkuList({ids: this.selectedIds.split(','), startIndex: 1,pageSize: 99}).then((response) => {
                         this.selectedList = [].concat(response.list);
+                        this.currentData.selectedList = [].concat(response.list);
                         this.selectedList.map((item) => {
                             item.goodsInfo.specs = item.goodsInfo.specs.replace(/"|{|}/g, "");
                         })

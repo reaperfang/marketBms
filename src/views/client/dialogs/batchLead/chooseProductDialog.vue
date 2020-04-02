@@ -228,10 +228,17 @@ export default {
       this._apis.client
         .getSkuList(params)
         .then(response => {
-          response.list.map((v) => {
-              v.goodsInfo.specs = v.goodsInfo.specs.replace(/{|}|"|"/g,"");
-          })
           this.skuList = [].concat(response.list);
+          this.skuList.map((v) => {
+              v.goodsInfo.specs = v.goodsInfo.specs.replace(/{|}|"|"/g,"");
+              if(this.selectedList.length > 0) {
+                this.selectedList.map(i => {
+                  if(i.goodsInfo.id == v.goodsInfo.id) {
+                    this.$set(v, 'noselected', true);
+                  }
+                })
+              }
+          })
           this.total = response.total;
         })
         .catch(error => {
@@ -259,6 +266,10 @@ export default {
     }
   },
   mounted() {
+    //如果有已选的商品
+    if(this.data.selectedList) {
+      this.selectedList = [].concat(this.data.selectedList)
+    }
     this.getProductClass();
     this.getSkuList(1,10);
   },
