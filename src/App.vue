@@ -22,6 +22,16 @@ export default{
     window.onresize = function() {
       _self._globalEvent.$emit('resize')
     }
+
+    /* 接受来自应用系统的路由跳转 */
+    window.addEventListener('message', function (e) {
+      let data = e.data;
+      if(data.jumpPath) {
+        _self.$router.push({
+          name: data.jumpPath
+        })
+      }
+    });
   },
   methods: {
 
