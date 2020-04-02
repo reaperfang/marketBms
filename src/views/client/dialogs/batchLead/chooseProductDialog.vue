@@ -55,6 +55,7 @@
         width="45%"
     >
         <div>
+            <span class="clearFont">（清空全部已选商品）</span>
             <el-button class="clearBtn" @click="clearList">清 空</el-button>
             <el-table
                 :data="selectedList"
@@ -316,6 +317,12 @@ export default {
   .clearBtn{
     float: right;
     margin-bottom: 20px;
+  }
+  .clearFont{
+    float: right;
+    color: #9FA29F;
+    font-size: 14px;
+    margin-top: 9px;
   }
   .no_data{
     display: block;

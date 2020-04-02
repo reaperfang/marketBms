@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="选择需要完善的信息" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="选择需要完善的信息" :hasCancel="hasCancel" width="25%">
         <div class="table_container">
             <p class="head">
                 <span>信息</span>

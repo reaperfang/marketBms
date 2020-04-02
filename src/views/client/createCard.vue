@@ -52,12 +52,12 @@
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >像素大小控制在1000象素*600象素以下</span>
-          <div v-if="imgUrl" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`, backgroundSize: '100% 100%'}">
+          <div v-if="ruleForm.backgroundType == '1'" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
             <p class="c_level">{{ ruleForm.alias }}</p>
           </div>
-          <div v-if="!imgUrl" class="cardImg2" :style="{backgroundColor: currentColor}">
+          <div v-if="ruleForm.backgroundType == '0'" class="cardImg2" :style="{backgroundColor: currentColor}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
             <p class="c_level">{{ ruleForm.alias }}</p>
@@ -133,7 +133,7 @@
               <div v-for="(item, index) in selectedGifts" :key="item.id">
                 <span>{{ item.goodsName }}</span>
                 <el-input-number v-model="item.number" :max="10"></el-input-number>
-                <span style="margin-left:20px" class="pointer" @click="deleteGift(index)">删除</span>
+                <span style="margin-left:20px; color: #655eff" class="pointer" @click="deleteGift(index)">删除</span>
               </div>
             </div>
           </el-form-item>
@@ -143,7 +143,7 @@
               <div v-for="(item, index) in selectedCoupons" :key="item.id">
                 <span>{{ item.name }}</span>
                 <el-input-number v-model="item.number" :max="10"></el-input-number>
-                <span style="margin-left:20px" class="pointer" @click="deleteCoupon(index)">删除</span>
+                <span style="margin-left:20px; color: #655eff" class="pointer" @click="deleteCoupon(index)">删除</span>
               </div>
             </div>
           </el-form-item>
@@ -269,7 +269,7 @@ export default {
       selectedReds: [],
       levelConditionValueDto: {},
       colors: [],
-      currentColor: "",
+      currentColor: "#63b359",
       canSubmit1: true,
       canSubmit2: true,
       canSubmit3: true,
@@ -400,6 +400,7 @@ export default {
             this.colors.map(v => {
               if (v.imgUrl == this.ruleForm.background) {
                 v.active = "1";
+                console.log(v.imgKey)
                 this.currentColor = v.imgKey
               }
             });
@@ -582,7 +583,6 @@ export default {
     },
     chooseColor(val) {
       if(val == 0) {
-        this.imgUrl = "";
         if(this.currentColor) {
           this.colors.map(v => {
             if(v.imgKey == this.currentColor) {

@@ -322,7 +322,7 @@ export default {
         color: #655eff;
       }
       &.s3 {
-        color: #fd932b;
+        color: #fd4c2b;
       }
     }
   }
