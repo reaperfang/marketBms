@@ -33,6 +33,7 @@
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "promise-polyfill": "^8.1.0",
+    "qrcodejs2": "^0.0.2",
     "query-string": "^6.11.1",
     "reconnecting-websocket": "^4.1.10",
     "screenfull": "^4.2.0",
@@ -47,7 +48,7 @@
     "vue-jsonp": "^0.1.8",
     "vue-router": "^3.0.6",
     "vue-ueditor-wrap": "^2.4.1",
-    "vue-waterfall2": "^1.8.20",
+    "vue-waterfall2": "^1.9.6",
     "vuedraggable": "^2.23.0",
     "vuex": "^3.1.1",
     "xlsx": "^0.14.4"

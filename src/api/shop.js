@@ -488,10 +488,10 @@ export function changeSwitchStatus(data) {
   export function getMultiPersonListByIds(data) {
       return request({
         url: '/v1/c/app-group-buy/listGoods',
-        method: 'get',
+        method: 'post',
         baseURL: process.env.SALE_API,
-        params:data,
-        noToken: true
+        data,
+        isDev: true
       })
   }
 
@@ -502,7 +502,7 @@ export function changeSwitchStatus(data) {
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data,
-        noToken: true
+        isDev: true
       })
   }
 
@@ -518,7 +518,7 @@ export function changeSwitchStatus(data) {
           return data
         }],
         data,
-        noToken: true
+        isDev: true
       })
   }
 
@@ -529,7 +529,7 @@ export function changeSwitchStatus(data) {
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data,
-        noToken: true
+        isDev: true
       })
   }
 
@@ -540,7 +540,7 @@ export function changeSwitchStatus(data) {
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data,
-        noToken: true
+        isDev: true
       })
   }
 
@@ -551,7 +551,7 @@ export function changeSwitchStatus(data) {
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data,
-        noToken: true
+        isDev: true
       })
   }
 

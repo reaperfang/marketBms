@@ -12,8 +12,8 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    // host: '127.0.0.1',
-    host: '0.0.0.0',
+    host: '127.0.0.1',
+    // host: '0.0.0.0',
     port: 9001,
     autoOpenBrowser: true,
     errorOverlay: true,
@@ -37,7 +37,7 @@ module.exports = {
         // target: 'http://172.22.146.133:8081',  // 店铺 李玟霆
         // target: 'http://172.22.146.117:80',// 许涛
         // target: 'http://172.22.146.111:8080',//
-        target:'http://test-omo.aiyouyi.cn',
+        target: 'https://test-omo.aiyouyi.cn',
 
         changeOrigin: true,
         pathRewrite: {
@@ -47,14 +47,14 @@ module.exports = {
 
       /* 营销服务 */
       '/sale_server/**': {
-        target: 'http://test-mkt.xinmt.com/api/',
+        target: 'https://test-mkt.xinmt.com/api/',
         changeOrigin: true,
         pathRewrite: {
           '^/sale_server': ''
         }
       },
       '/upload_server/**': {
-        target: 'http://test-omo.aiyouyi.cn/',
+        target: 'https://test-omo.aiyouyi.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/upload_server': ''

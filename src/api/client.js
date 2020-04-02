@@ -291,7 +291,7 @@ export function getAllCoupons(data) {
 //获取优惠券发放列表
 export function getDistributeCouponList(data) {
     return request({
-        url: '/v1/b/app-coupon/activity/page-distributeList',
+        url: '/v1/b/app-coupon/activity/distributeList',
         method: 'post',
         baseURL: process.env.SALE_API,
         data
@@ -670,6 +670,24 @@ export function levelEnable(data) {
 export function levelDisable(data) {
     return request({
         target:'LEVEL-DISABLE-PROCESSOR',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//用户最大启用等级
+export function getLevelMax(data) {
+    return request({
+        target:'LEVEL-MAX-PROCESSER',
+        method: 'post',
+        apiType: 'member',
+        data
+    })
+}
+//用户最大启用卡等级
+export function getCardMax(data) {
+    return request({
+        target:'CARD-LEVEL-MAX-PROCESSOR',
         method: 'post',
         apiType: 'member',
         data
