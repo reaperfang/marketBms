@@ -445,13 +445,13 @@ export default {
     display: inline-block;
     vertical-align: middle;
     position: relative;
-/deep/ img{
+/deep/img,-moz-img{
       width: 80px;
       height: 80px;
       object-fit:fill;
       display: inline-block;
     }
-    .logo_img{
+    .-moz-logo_img, .logo_img{
       width: 80px;
       height: 80px;
       object-fit:fill;
