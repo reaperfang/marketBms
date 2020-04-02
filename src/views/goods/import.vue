@@ -92,6 +92,9 @@
             </el-table>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </section>
+        <div v-if="importing" class="loadding-box">
+            <div class="loadding-icon"></div>
+        </div>
     </div>
 </template>
 <script>
@@ -230,10 +233,10 @@ export default {
 </script>
 <style lang="scss" scoped>
     .import {
+        position: relative;
         background-color: #fff;
-        padding: 32px 63px;
+        padding: 32px 38px;
         padding-top: 10px;
-        padding-left: 38px;
         font-size: 14px;
         section {
             border-bottom: 1px dashed #d3d3d3;
@@ -306,6 +309,24 @@ export default {
                 .download {
                     color: rgb(119, 113, 255);
                 }
+            }
+        }
+        .loadding-box {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 400px;
+            background-color: rgba(255, 255, 255, 0.9);
+            .loadding-icon {
+                width: 100px;
+                height: 100px;
+                background: url('../../assets/images/goods/pastedImage.gif') no-repeat;
+                background-size: 100% 100%;
             }
         }
     }
