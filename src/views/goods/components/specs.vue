@@ -362,7 +362,7 @@ export default {
     }
     /deep/ .el-input {
         width: 120px!important;
-        margin-left: 5px;
+        margin-left: 11px;
     }
     /deep/ .el-input__inner {
         text-align: left!important;
@@ -428,6 +428,9 @@ export default {
     table tr td {
         min-width: 147px;
         padding: 0 2px;
+    }
+    /deep/ .el-input input {
+        padding-right: 0;
     }
 </style>
 
