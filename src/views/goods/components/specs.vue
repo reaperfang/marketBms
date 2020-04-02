@@ -70,7 +70,7 @@
                     <el-input type="number" min="0" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
                 </td>
                 <td>
-                    <el-input type="number" min="0" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <el-input type="number" min="0" :disabled="item.editorDisabled && item.stock != 0" v-model="item.stock" placeholder="请输入库存"></el-input>
                 </td>
                 <td>
                     <el-input type="number" min="0" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
