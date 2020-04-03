@@ -169,7 +169,7 @@
             </div>
             <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
-        <div v-if="!list.length && !allTotal" class="goods-list-empty">
+        <div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
             <div class="goods-list-empty-content">
                 <div class="image"></div>
                 <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
