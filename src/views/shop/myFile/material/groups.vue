@@ -109,7 +109,7 @@ methods: {
     this._apis.file.newGroup(query).then((response)=>{
         let obj = {
           id:response,
-          parentId:null,
+          parentId:'0',
           name:name
         }
         this.treeData.unshift(obj)
