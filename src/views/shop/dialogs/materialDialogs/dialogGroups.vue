@@ -60,7 +60,7 @@ export default {
             if(this.dialogTitle == '新建一级分组'){
               this.$emit('submit',{add:{groupLevel:'1',groupName:this.form.groupName}})
             }else{
-              this.$emit('submit',{add:{groupLevel:'2',groupName:this.form.groupName,currentData:this.typeData.currentData}})
+              this.$emit('submit',{add:{groupLevel:'2',groupName:this.form.groupName,currentData:this.typeData.currentData,node:this.typeData.node}})
             }
           }          
           this.visible = false

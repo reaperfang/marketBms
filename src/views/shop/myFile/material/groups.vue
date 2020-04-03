@@ -76,7 +76,7 @@ methods: {
       for(let key in data){
         switch (key) {
           case 'add':  
-            data.add.groupLevel == 1 ? this.handleAddSameLevelNode(data.add.groupName) : this.handleAddChildNode(data.add.groupName,data.add.currentData)
+            data.add.groupLevel == 1 ? this.handleAddSameLevelNode(data.add.groupName) : this.handleAddChildNode(data.add.groupName,data.add.currentData,data.add.node)
           break;
           case 'edit':
             this.handelEditNode(data.edit.groupName,data.edit.currentData)
@@ -125,12 +125,13 @@ methods: {
     this.dialogTitle = node.level == 1 ? '新建二级分组' : '新建三级分组'
     this.typeData = {
       type:'add',
-      currentData:data
+      currentData:data,
+      node:node
     }
   },
 
   // 增加子级节点事件
-  handleAddChildNode(name,currentData){
+  handleAddChildNode(name,currentData,node){
     let type =  this.typeName == 'image' ? '0' : '1'
     let query ={
       name:name,
@@ -138,11 +139,8 @@ methods: {
       parentId:currentData.id 
     }
     this._apis.file.newGroup(query).then((response)=>{
-      const newChild = { id:response, name:name, children: [] };
-      if (!currentData.children) {
-        this.$set(currentData, 'children', []);
-      }
-      currentData.children.push(newChild);
+      let data = {id:response,name:name}
+      this.$refs.tree.append(data,node)
     }).catch((error)=>{
       this.$message.error(error);
     })
