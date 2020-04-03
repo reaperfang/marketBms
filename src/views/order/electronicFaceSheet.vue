@@ -22,7 +22,7 @@
             <el-form-item label="电子面单名称">
               <el-input v-model="listQuery.name" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="创建时间">
+            <el-form-item label="编辑时间">
               <el-date-picker
                 v-model="listQuery.time"
                 type="datetimerange"
