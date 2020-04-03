@@ -63,6 +63,20 @@ export default {
                         return
                     }
                 }
+                if(/^\s*$/.test(this.ruleForm.price)) {
+                    let name
+
+                    if(this.ruleForm.changeType == 2) {
+                        name = '折扣'
+                    } else {
+                        name = '价格'
+                    }
+                    this.$message({
+                    message: `${name}不能为空`,
+                    type: 'warning'
+                    });
+                    return
+                }
                 this.$emit('changePriceSubmit', this.ruleForm)
                 this.visible = false
             } else {
