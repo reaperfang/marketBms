@@ -28,7 +28,8 @@ export default{
       let data = e.data;
       if(data.jumpPath) {
         _self.$router.push({
-          name: data.jumpPath
+          name: data.jumpPath,
+          query: data.query
         })
       }
     });
