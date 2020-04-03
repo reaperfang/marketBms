@@ -1,19 +1,19 @@
 <template>
-    <DialogBase class="price-change" :visible.sync="visible" title="一键改价" width="523px" :showFooter="showFooter">
+    <DialogBase class="price-change" :visible.sync="visible" title="批量改价" width="523px" :showFooter="showFooter">
         <el-form :model="ruleForm" ref="ruleForm" label-width="130px" class="demo-ruleForm">
             <el-form-item label="" prop="">
                 <el-radio v-model="ruleForm.changeType" label="1">价格</el-radio>
                 <el-radio v-model="ruleForm.changeType" label="2">折扣</el-radio>
             </el-form-item>
             <el-form-item style="margin-left: 45px;" v-if="ruleForm.changeType == '1'" label="批量修改价格：" prop="price">
-                <el-input type="number" v-model="ruleForm.price"></el-input> 元
-                <p class="first">支持正/负数值输入</p>
-                <p>正数代表在原价基础上相加，负数代表相减</p>
+                <el-input type="number" v-model="ruleForm.price" placeholder="请输入"></el-input> 元
+                <p class="first gray">输入正数代表在原价基础上相加，负数代表原价基础上相减。</p>
+                <p class="gray">输入百分比代表原价基础上直接乘以折扣率。</p>
             </el-form-item>
             <el-form-item style="margin-left: 45px;" v-if="ruleForm.changeType == '2'" label="批量修改价格：" prop="price">
                 <el-input type="number" min="0" v-model="ruleForm.price"></el-input> %
-                <p class="first">当输入80，那么就按照原始价格的80%（8折）计算</p>
-                <p>输入百分比就是折扣 直接乘以那个折扣数字</p>
+                <p class="first">输入正数代表在原价基础上相加，负数代表原价基础上相减。</p>
+                <p>输入百分比代表原价基础上直接乘以折扣率。</p>
             </el-form-item>
         </el-form>
         <div class="footer">
@@ -84,7 +84,8 @@ export default {
 </script>
 <style lang="scss" scoped>
     /deep/ .el-input {
-        width: auto;
+        width: 126px;
+        margin-right: 10px;
     }
     .footer {
         text-align: center;
@@ -99,10 +100,15 @@ export default {
         margin-top: 10px;
     }
     /deep/ .el-form .el-form-item:nth-child(2) {
-        margin-left: 112px!important;
+        margin-left: 93px!important;
     }
     /deep/ .el-form-item__content p {
         margin-left: -109px;
+    }
+    .gray {
+        font-size:12px;
+        font-weight:400;
+        color:rgba(181,189,202,1);
     }
 </style>
 
