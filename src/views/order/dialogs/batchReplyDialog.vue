@@ -1,14 +1,14 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="500px" :showFooter="showFooter">
         <div class="batch-reply-dialog">
-            <!-- <el-input
+            <el-input
                 type="textarea"
                 :rows="2"
                 placeholder="请输入回复内容，不超过200个字符"
                 v-model="replyContent"
                 maxlength="200">
-            </el-input> -->
-            <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig"></RichEditor>
+            </el-input>
+            <!-- <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig"></RichEditor> -->
             <div class="footer">
                 <el-button @click="visible = false">取消</el-button>
                 <el-button @click="submit" type="primary">确定</el-button>
@@ -41,6 +41,13 @@ export default {
     },
     methods: {
         submit() {
+            if(/^\s*$/.test(this.replyContent)) {
+                this.$message({
+                message: '请输入批量回复内容',
+                type: 'warning'
+                });
+                return
+            }
             this.$emit('submit', this.replyContent)
             this.visible = false
         },

@@ -232,6 +232,8 @@ export default {
           const tempSaveFile = localStorage.getItem('localUploadFile');
           if(tempSaveFile) {
             this.fileList = JSON.parse(tempSaveFile);
+          }else{
+            this.fileList = [];
           }
           this.preload(this.fileList, 'url');
         }
