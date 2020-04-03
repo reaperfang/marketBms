@@ -6,10 +6,21 @@
         <el-form-item label="交易流水号">
           <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="交易类型">
+        <el-form-item> 
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in commissionClerkStatus"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
+        </el-form-item>
+        <el-form-item label="业务类型">
           <el-select v-model="ruleForm.businessType" style="width:100px;" placeholder="全部">
             <el-option
-              v-for="item in transactionTypes"
+              v-for="item in businessTypeList"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -41,7 +52,6 @@
           <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '客户余额', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
       </div>
-      <!-- <cbTable style="margin-top:20px"></cbTable> -->
       <el-table
         v-loading="loading"
         :data="dataList"
@@ -59,30 +69,28 @@
           :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
-          prop="memberSn"
-          label="用户ID">
+          prop="resellerSn"
+          label="分佣ID">
         </el-table-column>
         <el-table-column
-          prop="nickName"
-          label="用户昵称">
+          prop="resellerName"
+          label="姓名">
+        </el-table-column>
+        <el-table-column
+          prop="resellerPhone"
+          label="手机号码">
         </el-table-column>
         <el-table-column
           prop="businessType"
-          label="交易类型">
-          <template slot-scope="scope">
-            {{transactionTypes[scope.row.businessType].label}}
-          </template>
+          label="业务类型">
         </el-table-column>
         <el-table-column
-          prop="changeAmount"
-          label="变动金额（元）">
-          <template slot-scope="scope">
-            {{scope.row.changeAmount > 0 ? '+'+scope.row.changeAmount : scope.row.changeAmount}}
-          </template>
+          prop="tradeAmount"
+          label="变动金额(元)">
         </el-table-column>
         <el-table-column
-          prop="surplusAmount"
-          label="剩余金额（元）">
+          prop="balance"
+          label="剩余金额(元)">
         </el-table-column>
         <el-table-column
           prop="tradeTime"
@@ -121,9 +129,11 @@ export default {
     return {
       inline:true,
       ruleForm:{
-        tradeDetailSn:'',
-        businessType:-1,
-        timeValue:''
+        userType:'resellerSn', // 分佣员类型
+        userValue:'', // 分佣员类型对应值
+        tradeDetailSn:'', // 交易流水号
+        businessType:'-1', // 业务类型
+        timeValue:'', // 交易时间
       },
       dataList:[ ],
       total:0,
@@ -134,9 +144,12 @@ export default {
   },
   watch: { },
   computed:{
-    transactionTypes(){
-      return financeCons.transactionTypes;
+    businessTypeList(){
+      return financeCons.businessTypeList;
     },
+    commissionClerkStatus(){
+      return financeCons.commissionClerkStatus;
+    }
   },
   created() { },
   methods: {
@@ -149,7 +162,7 @@ export default {
             title=""
             width="160"
             trigger="hover"
-            content="订单编号、售后单编号、提现编号">
+            content="订单编号或提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
         </div>
@@ -158,11 +171,19 @@ export default {
     init(){
       let query = {
         tradeDetailSn:this.ruleForm.tradeDetailSn,
-        businessType:this.ruleForm.businessType == -1 ? null : this.ruleForm.businessType,
+        businessType:this.ruleForm.businessType == '-1' ? null : this.ruleForm.businessType,
         startTime:'',
         endTime:'',
+        resellerSn: '',
+        resellerName: '',
+        resellerPhone: '',
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize
+      }
+      for(let key  in query){
+        if(this.ruleForm.userType == key){
+          query[key] = this.ruleForm.userValue
+        }
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
@@ -174,10 +195,10 @@ export default {
 
     fetch(){
       let query = this.init();
-      this._apis.finance.getListCb(query).then((response)=>{
-        this.dataList = response.list
-        this.total = response.total || 0
-        this.loading = false
+        this._apis.finance.getCommissionLIst(query).then((response)=>{
+          this.dataList = response.list
+          this.total = response.total || 0
+          this.loading = false
       }).catch((error)=>{
         this.loading = false
       })
@@ -189,27 +210,43 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        tradeDetailSn:'',
-        businessType:'',
-        timeValue:''
-      }
+        userType:'resellerSn', // 分佣员类型
+        userValue:'', // 分佣员类型对应值
+        tradeDetailSn:'', // 交易流水号
+        businessType:'-1', // 业务类型
+        timeValue:'', // 交易时间
+      },
       this.fetch()
     },
+    // 导出参数特殊处理
+    queryExport() {
+      let query = this.init();
+      query.exportType = 1
+      delete query.pageSize;
+      delete query.startIndex;
+      if (this.total > 1000) {
+        query.isExport = '1'
+      } else {
+        query.isExport = '0'
+      }
+      return query
+    },
     //导出
-    exportToExcel() {
-       let query = this.init();
-       if(this.total >1000 ){
-         this.dialogVisible = true;
-         this.currentData.query = this.init()
-         this.currentData.api = "finance.exportCb"
-       }else{
-         this._apis.finance.exportCb(query).then((response)=>{
+    exportToExcel(){
+      if(this.total > 1000){
+        this.currentDialog = exportTipDialog;
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.commissionExport';
+        let query = this.queryExport();
+        this.currentData.query = query
+      } else {
+        let query = this.queryExport();
+        this._apis.finance.commissionExport(query).then((response)=>{
           window.location.href = response
-      }).catch((error)=>{
-        this.$message.error(error)
-      })
-       }
-      
+        }).catch((error)=>{
+         this.$message.error(error)
+        })
+      }
     },
   }
 }
