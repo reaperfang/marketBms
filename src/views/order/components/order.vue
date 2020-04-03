@@ -1,5 +1,5 @@
 <template>
-    <div v-if="list.length" class="order">
+    <div class="order">
         <div class="order-header">
             <div class="item goods">
                 <div class="row justify-between">
@@ -13,7 +13,7 @@
             <div class="item">状态</div>
             <div class="item">操作</div>
         </div>
-        <div class="order-container" v-loading="loading">
+        <div v-if="list.length" class="order-container" v-loading="loading">
             <div class="container-item" v-for="(order, index) in list" :key="index">
                 <div class="container-item-header">
                     <div class="item">
@@ -115,9 +115,9 @@
                 </div>
             </div>
         </div>
+        <Empty v-else></Empty>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
     </div>
-    <Empty v-else></Empty>
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'

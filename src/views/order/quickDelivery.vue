@@ -29,7 +29,7 @@
             <el-form-item label="模板名称">
               <el-input v-model="listQuery.name" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="创建时间">
+            <el-form-item label="编辑时间">
               <el-date-picker
                 v-model="listQuery.time"
                 type="datetimerange"
@@ -208,8 +208,8 @@ export default {
       this._apis.order
         .fetchTemplatePageList(
           Object.assign({}, this.listQuery, {
-            startTime: this.listQuery.time ? utils.formatDate(this.listQuery.time[0], "yyyy-MM-dd hh:mm:ss") : "",
-            endTime: this.listQuery.time ? utils.formatDate(this.listQuery.time[1], "yyyy-MM-dd hh:mm:ss") : ""
+            updateTimeStart: this.listQuery.time ? utils.formatDate(this.listQuery.time[0], "yyyy-MM-dd hh:mm:ss") : "",
+            updateTimeEnd: this.listQuery.time ? utils.formatDate(this.listQuery.time[1], "yyyy-MM-dd hh:mm:ss") : ""
           })
         )
         .then(res => {

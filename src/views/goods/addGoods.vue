@@ -52,7 +52,7 @@
                 </el-upload> -->
                 <div class="upload-box">
                     <div class="image-list">
-                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in ruleForm.images.split(',')">
+                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in (ruleForm.images && ruleForm.images.split(',') || [])">
                             <label>
                                 <i class="el-icon-check"></i>
                             </label>
