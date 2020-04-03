@@ -55,12 +55,12 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if(this.typeData.type == 'edit'){
-            this.$emit('submit',{edit:{groupName:this.form.groupName}})
+            this.$emit('submit',{edit:{groupName:this.form.groupName,currentData:this.typeData.currentData}})
           }else{
             if(this.dialogTitle == '新建一级分组'){
               this.$emit('submit',{add:{groupLevel:'1',groupName:this.form.groupName}})
             }else{
-              this.$emit('submit',{add:{groupLevel:'2',groupName:this.form.groupName}})
+              this.$emit('submit',{add:{groupLevel:'2',groupName:this.form.groupName,currentData:this.typeData.currentData}})
             }
           }          
           this.visible = false
