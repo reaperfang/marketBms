@@ -375,7 +375,7 @@
             width="800px"
             :close-on-click-modal="false"
             :close-on-press-escape="false">
-            <template v-if="!/\.mp4|\.ogg$/.test(bigMessage.url)">
+            <template v-if="!/\.mp4|\.ogg|\.mov$/.test(bigMessage.url)">
                 <div class="images-box">
                     <div @click="goImage('left')" class="lefter"></div>
                     <div class="image">
