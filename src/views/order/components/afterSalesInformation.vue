@@ -499,6 +499,13 @@ export default {
     methods: {
         changeScoreHandler() {
             this.showScoreInput = false
+            if(this.orderAfterSale.realReturnScore < 0) {
+                this.$message({
+                message: '非法输入，仅支持输入非负数，请重新输入',
+                type: 'warning'
+                });
+                return
+            }
             this._apis.order.editorScoreAmount({
                 id: this.$route.query.id,
                 realReturnScore: this.orderAfterSale.realReturnScore
@@ -513,10 +520,18 @@ export default {
                     message: error,
                     type: 'error'
                 });
+                this.$emit('submit')
             })
         },
         changeAmountHandler() {
             this.showMoneyInput = false
+            if(this.orderAfterSale.realReturnMoney < 0) {
+                this.$message({
+                message: '非法输入，仅支持输入非负数，请重新输入',
+                type: 'warning'
+                });
+                return
+            }
             this._apis.order.editorScoreAmount({
                 id: this.$route.query.id,
                 realReturnMoney: this.orderAfterSale.realReturnMoney
@@ -531,6 +546,7 @@ export default {
                     message: error,
                     type: 'error'
                 });
+                this.$emit('submit')
             })
         },
         goImage(flag) {
