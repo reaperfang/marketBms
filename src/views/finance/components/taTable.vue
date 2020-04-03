@@ -179,12 +179,12 @@ export default {
       let query = {
         memberSn:'',
         nickName:'',
-        presentType:0,
-        startTime:'',
-        stopTime:'',
-        sort:'desc',
-        pageSize:10,
-        pageNum:1,
+        presentType:this.ruleForm.presentType,
+        startTime:this.ruleForm.startTime,
+        stopTime:this.ruleForm.stopTime,
+        sort:this.ruleForm.sort,
+        pageSize:this.ruleForm.pageSize,
+        pageNum:this.ruleForm.pageNum,
       }
       if(this.ruleForm.userType == 'memberSn'){
         query.memberSn = this.ruleForm.userValue || ''

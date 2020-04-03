@@ -36,7 +36,8 @@ export default {
         return {
             address: '',
             url: '',
-            content: ''
+            content: '',
+            name: '',
         }
     },
     mounted () {
@@ -47,6 +48,7 @@ export default {
             this._apis.goods.shareOne({id: this.spuid, channelInfoId: 1}).then((res) => {
                 console.log(res)
                 this.content = res.content
+                this.name = res.name
                 //this.qrcode();
             }).catch(error => {
                 this.visible = false
@@ -66,11 +68,13 @@ export default {
             })
         },
         download() {
-            let canvas = document.getElementById('qrcode').getElementsByTagName('canvas')
+            //let canvas = document.getElementById('qrcode').getElementsByTagName('canvas')
             let a = document.createElement('a')
 
-            a.href = canvas[0].toDataURL('image/png')
-            a.download = this.shareData.chanel + this.shareData.name + this.shareData.sku + '...'
+            //a.href = canvas[0].toDataURL('image/png')
+            a.href = this.content
+            //a.download = this.shareData.chanel + this.shareData.name + this.shareData.sku + '...'
+            a.download = this.name
             a.click()
         },
         copy() {

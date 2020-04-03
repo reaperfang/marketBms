@@ -36,7 +36,7 @@
         <div class="item">
           <span class="money">累计发放红包</span>
           <span class="num">
-            <em>{{survey.hongbao | money}}{{ survey.hongbao |displayMoney}}</em>
+            <em>{{survey.hongbao || 0 | money}}{{ survey.hongbao |displayMoney}}</em>
           </span>
         </div>
         <div class="item">

@@ -31,7 +31,7 @@
             </el-form-item>
             <el-form-item label="商品图片" prop="images">
                 <!-- <img v-for="(item, key) of imageList" :key="key" :src="item.src" alt="" style="width:100px;height:100px"> -->
-                <el-upload
+                <!-- <el-upload
                     :disabled="!ruleForm.productCategoryInfoId"
                     :action="uploadUrl"
                     accept=".jpg,.jpeg,.png,.gif,.JPG,.JPEG,.GIF"
@@ -49,14 +49,31 @@
                     class="p_imgsCon">
                     <i class="el-icon-plus"></i>
                     <p style="line-height: 21px; margin-top: -39px; color: #92929B;">上传图片</p>
-                </el-upload>
+                </el-upload> -->
+                <div class="upload-box">
+                    <div class="image-list">
+                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in ruleForm.images.split(',')">
+                            <label>
+                                <i class="el-icon-check"></i>
+                            </label>
+                            <span class="image-item-actions">
+                                <span @click="imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
+                                <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                            </span>
+                        </div>
+                        <div v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="upload-add">
+                            <i data-v-03229368="" class="el-icon-plus"></i>
+                            <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传图片</p>
+                        </div>
+                    </div>
+                </div>
                 <el-dialog :visible.sync="imageDialogVisible"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false">
                     <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
-                <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span>
-                <p class="description prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
+                <!-- <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span> -->
+                <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
             </el-form-item>
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" style="display: inline-block;">
@@ -941,6 +958,12 @@ export default {
         });
     },
     methods: {
+        deleteImage(index) {
+            let imagesArr = this.ruleForm.images.split(',')
+
+            imagesArr.splice(index, 1)
+            this.ruleForm.images = imagesArr.join(',')
+        },
         beforeUpload(file) {
             console.log(file)
             if(file.size > 2097152) {
@@ -3252,5 +3275,122 @@ $blue: #655EFF;
 }
 .prompt-box {
     margin-top: 5px;
+}
+.upload-box {
+    .image-list {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .upload-add {
+            &:hover {
+                border-color: #655EFF;
+                color: #655EFF;
+            }
+            &:focus {
+                border-color: #655EFF;
+                color: #655EFF;
+            }
+            .el-icon-plus {
+                font-size: 28px;
+                color: #8c939d;
+            }
+            width: 80px !important;
+            height: 80px !important;
+            line-height: 90px !important;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+            outline: 0;
+            background-color: #fbfdff;
+            border: 1px dashed #c0ccda;
+            border-radius: 6px;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 148px;
+            height: 148px;
+            line-height: 146px;
+            vertical-align: top;
+        }
+        .image-item {
+            &:hover {
+                label {
+                    display: none;
+                }
+            }
+            margin-right: 8px;
+            margin-bottom: 8px;
+            width: 80px;
+            height: 80px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            border: 1px solid #c0ccda;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+            label {
+                display: block;
+                position: absolute;
+                right: -15px;
+                top: -6px;
+                width: 40px;
+                height: 24px;
+                background: #13ce66;
+                text-align: center;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+                -webkit-box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+                box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+                .el-icon-check {
+                    color: #fff;
+                    -webkit-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
+                }
+            }
+            .image-item-actions {
+                &:hover {
+                    opacity: 1;
+                }
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                cursor: default;
+                text-align: center;
+                color: #fff;
+                opacity: 0;
+                font-size: 20px;
+                background-color: rgba(0,0,0,.5);
+                -webkit-transition: opacity .3s;
+                transition: opacity .3s;
+                i {
+                    font-family: element-icons!important;
+                    speak: none;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-variant: normal;
+                    text-transform: none;
+                    line-height: 1;
+                    vertical-align: baseline;
+                    display: inline-block;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+                .image-item-actions-delete {
+                    margin-left: 15px;
+                }
+            }
+        }
+    }
+}
+.upload-prompt {
+    margin-top: 12px;
+    font-size:12px;
+    font-weight:400;
+    color:rgba(146,146,155,1);
+    line-height:17px;
 }
 </style>

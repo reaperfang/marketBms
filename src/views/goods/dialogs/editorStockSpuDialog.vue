@@ -53,6 +53,13 @@ export default {
                 });
                 return
             }
+            if(this.data.goodsInfos.some(val => /\./.test(val.stock))) {
+                this.$message({
+                message: '请输入正确的数字',
+                type: 'warning'
+                });
+                return
+            }
             this._apis.goods.productUpdateStockSpu({
                 id: this.data.id,
                 goodsInfos: this.data.goodsInfos.map(val => ({id: val.id, stock: val.stock}))
