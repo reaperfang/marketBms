@@ -327,7 +327,6 @@ export default {
         });
     },
 
-<<<<<<< HEAD
     onSubmit(formName){
       this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -358,36 +357,6 @@ export default {
             }).catch(error =>{
               this.$message.error(error);
               this.loading = false
-=======
-    onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.loading = true;
-          let id = this.cid;
-          let data = {
-            id: id,
-            shopName: this.form.shopName,
-            logo: this.form.logo,
-            logoCircle: this.form.logoCircle,
-            phone: this.form.phone,
-            province: this.province,
-            city: this.city,
-            area: this.area,
-            provinceCode: this.form.addressCode[0],
-            cityCode: this.form.addressCode[1],
-            areaCode: this.form.addressCode[2],
-            address: this.form.address,
-            shopIntroduce: this.form.shopIntroduce,
-            sellCategoryId: this.form.sellCategoryId,
-            sellCategory: this.form.sellCategory,
-            companyName: this.form.companyName,
-            companyEmail: this.form.companyEmail
-          };
-          this._apis.set
-            .updateShopInfo(data)
-            .then(response => {
-              this.setShopName();
->>>>>>> dev
             })
             .catch(error => {
               this.$message.error(error);
