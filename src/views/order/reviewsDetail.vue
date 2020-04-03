@@ -48,7 +48,7 @@
                 <div class="row">
                   <div class="col images">
                     <template v-for="(item, index) in orderProductComment.images">
-                      <template v-if="/\.mp4|\.ogg$/.test(item.image)">
+                      <template v-if="/\.mp4|\.ogg|\.mov$/.test(item.image)">
                         <!-- <video width="66" controls="controls">
                           <source :src="item" type="video/ogg">
                           <source :src="item" type="video/mp4">
@@ -129,7 +129,14 @@
         </div>
       </div>
       <div v-if="showReplayBox" class="replay-box">
-        <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig"></RichEditor>
+        <!-- <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig"></RichEditor> -->
+        <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入回复内容，不超过200个字符"
+            v-model="textarea"
+            maxlength="200">
+        </el-input>
         <div class="footer">
           <el-button @click="showReplayBox = false; textarea = ''">取 消</el-button>
           <el-button @click="replyComment" type="primary">确 定</el-button>
@@ -160,7 +167,7 @@
       width="800px"
       :close-on-click-modal="false"
       :close-on-press-escape="false">
-      <template v-if="bigMessage.image">
+      <template v-if="!/\.mp4|\.ogg|\.mov$/.test(bigMessage.url)">
           <div class="images-box">
               <div @click="goImage('left')" class="lefter"></div>
               <div class="image">
@@ -275,22 +282,43 @@ export default {
     }
   },
   methods: {
-    goImage(flag) {
-        let index = this.bigMessage.imageIndex
-        let list = this.bigMessage.images
+    // goImage(flag) {
+    //     let index = this.bigMessage.imageIndex
+    //     let list = this.bigMessage.images
 
-        if(flag == 'left') {
-            index = index - 1
-            if(index >=0) {
-                this.bigMessage.url = this.bigMessage.images[index].image
+    //     if(flag == 'left') {
+    //         index = index - 1
+    //         if(index >=0) {
+    //             this.bigMessage.url = this.bigMessage.images[index].image
+    //         }
+    //     } else {
+    //         index = index + 1
+    //         if(index <= this.bigMessage.images.length - 1) {
+    //             this.bigMessage.url = this.bigMessage.images[index].image
+    //         }
+    //     }
+    // },
+    goImage(flag) {
+            let index = this.bigMessage.imageIndex
+            let list = this.bigMessage.images
+            
+            if(flag == 'left') {
+                index = index - 1
+                this.bigMessage.imageIndex = index
+
+                if(index >=0) {
+                    this.bigMessage.url = list[index].image
+                    this.$forceUpdate()
+                }
+            } else {
+                index = index + 1
+                this.bigMessage.imageIndex = index
+                if(index <= list.length - 1) {
+                    this.bigMessage.url = list[index].image
+                    this.$forceUpdate()
+                }
             }
-        } else {
-            index = index + 1
-            if(index <= this.bigMessage.images.length - 1) {
-                this.bigMessage.url = this.bigMessage.images[index].image
-            }
-        }
-    },
+        },
     getPublicList(param) {
         this._apis.goodsOperate.fetchPublicSensitiveList().then((res) => {
             this.systomSensitiveList = res
@@ -324,33 +352,33 @@ export default {
         }
         let _textarea = this.textarea
 
-        var  replaceContent = function(html,keywords,replacecontents){
-          //匹配html标签中间的内容
-          var patt1 = new RegExp(">(.*?)(?=<)","g");
-          //每个匹配结果会多一个>比如<p>哈哈</p>,匹配出来会是>哈哈,后面将>进行替换
-          var matchStrs = html.match(patt1);
-          var words = [];
-          //替换>
-          for(var i=0;i<matchStrs.length;i++){
-              var matchStr = matchStrs[i].substring(1,matchStrs[i].length);
-              for(var j=0;j<keywords.length;j++){
-                  var patt2 = new RegExp(keywords[j],"g");
-                  matchStr = matchStr.replace(patt2,replacecontents[j]);
-              }
-              words.push(matchStr);
-          }
-          // 将html中间的内容进行替换方便后面连接,如将<p>哈哈</p>替换成<p>%s</p>
-          var temp = html.replace(patt1,">%s");
-          //将拆分出来的标签按顺序和替换敏感字后的中间内容进行连接
-          var arr = temp.split("%s");
-          var finalStr = "";
-          for(var i=0;i<(arr.length-1);i++){
-              finalStr += arr[i] + words[i];
-          }
-          finalStr += arr[arr.length - 1]
+      //   var  replaceContent = function(html,keywords,replacecontents){
+      //     //匹配html标签中间的内容
+      //     var patt1 = new RegExp(">(.*?)(?=<)","g");
+      //     //每个匹配结果会多一个>比如<p>哈哈</p>,匹配出来会是>哈哈,后面将>进行替换
+      //     var matchStrs = html.match(patt1);
+      //     var words = [];
+      //     //替换>
+      //     for(var i=0;i<matchStrs.length;i++){
+      //         var matchStr = matchStrs[i].substring(1,matchStrs[i].length);
+      //         for(var j=0;j<keywords.length;j++){
+      //             var patt2 = new RegExp(keywords[j],"g");
+      //             matchStr = matchStr.replace(patt2,replacecontents[j]);
+      //         }
+      //         words.push(matchStr);
+      //     }
+      //     // 将html中间的内容进行替换方便后面连接,如将<p>哈哈</p>替换成<p>%s</p>
+      //     var temp = html.replace(patt1,">%s");
+      //     //将拆分出来的标签按顺序和替换敏感字后的中间内容进行连接
+      //     var arr = temp.split("%s");
+      //     var finalStr = "";
+      //     for(var i=0;i<(arr.length-1);i++){
+      //         finalStr += arr[i] + words[i];
+      //     }
+      //     finalStr += arr[arr.length - 1]
 
-          return finalStr;
-      }
+      //     return finalStr;
+      // }
 
       // this.systomSensitiveList.forEach(word => {
       //     let _word = word
@@ -361,6 +389,7 @@ export default {
         this._apis.order.replyComment({id: this.$route.query.id, replyContent: _textarea}).then((res) => {
             this.$message.success('回复成功！');
             this.showReplayBox = false
+            this.getDetail()
         }).catch(error => {
             this.$message.error(error);
           this.showReplayBox = false
@@ -450,7 +479,7 @@ export default {
           .row {
             margin-bottom: 10px;
             .reviews-label {
-              text-align: right;
+              text-align: left;
             }
           }
           .reviews-label {
