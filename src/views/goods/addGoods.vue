@@ -175,7 +175,7 @@
                     </div>
                     <div v-show="showAddSpecsInput" class="add-specs">
                         <div style="position: relative;" class="add-specs-input">
-                            <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
+                            <input maxlength="50" v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
                         <ul class="spec-list" style="top: 35px;" v-show="showSpecsList">
@@ -2693,6 +2693,20 @@ export default {
             }
         },
         imageSelected(image) {
+            if(!/\.jpg|\.jpeg|\.png|\.gif$/.test(image.fileName)) {
+                this.$message({
+                message: '上传的文件格式不正确，请重新上传',
+                type: 'warning'
+                });
+                return
+            }
+            if(image.fileSize > 1024*1024*2) {
+                this.$message({
+                message: '上传图片不能超过2M',
+                type: 'warning'
+                });
+                return
+            }
             if(this.material) {
                 this.ruleForm.goodsInfos.splice(this.materialIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[this.materialIndex], {
                     image: image.filePath,
