@@ -327,6 +327,7 @@ export default {
         });
     },
 
+
     onSubmit(formName){
       this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -358,10 +359,6 @@ export default {
               this.$message.error(error);
               this.loading = false
             })
-            .catch(error => {
-              this.$message.error(error);
-              this.loading = false;
-            });
         }
       });
     },
