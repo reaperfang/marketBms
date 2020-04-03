@@ -6,7 +6,7 @@
         <el-form-item>
           <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;padding-right:4px;">
             <el-option
-              v-for="item in revenueExpenditureTerms"
+              v-for="item in serialNumberType"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -15,9 +15,9 @@
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="分佣金额">
-          <el-input-number v-model="ruleForm.amountMin" :precision="2" :step="0.1" :min="0" placeholder="不限" style="width:120px;"></el-input-number>
+          <el-input-number v-model="ruleForm.minTradeAmount" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
           -
-          <el-input-number v-model="ruleForm.amountMax" :precision="2" :step="0.1" :min="0" placeholder="不限" style="width:120px;"></el-input-number>
+          <el-input-number v-model="ruleForm.maxTradeAmount" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
         </el-form-item>
         <el-form-item label="交易时间">
           <el-date-picker
@@ -31,10 +31,10 @@
             :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
-         <el-form-item>
+        <el-form-item>
           <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
             <el-option
-              v-for="item in userTypes"
+              v-for="item in commissionClerkStatus"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -50,8 +50,6 @@
     </div>
     <div class="under_part">
       <div class="total">
-         <!-- <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button> -->
-          <!-- <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button> -->
           <span>全部 <em>{{total}}</em> 项</span>
           <el-tooltip content="当前最多支持导出1000条数据" placement="top">
             <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
@@ -62,64 +60,48 @@
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-        :default-sort = "{prop: 'applyTime', order: 'descending'}"
-        @selection-change="handleSelectionChange"
-        ref="multipleTable"
+        :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         >
-        <el-table-column
-        type="selection"
-        width="55">
-        </el-table-column>
-        <el-table-column
-          prop="cashoutSn"
-          label="提现编号">
-        </el-table-column>
-         <el-table-column
-          prop="nickName"
-          label="用户昵称">
-        </el-table-column>
-        <el-table-column
-          prop="memberSn"
-          label="用户ID">
-        </el-table-column>
-        <el-table-column
-          prop="amount"
-          label="提现金额（元）">
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态">
-          <template slot-scope="scope">
-            {{statusToLabel(scope.row.status)}}
-          </template>
-        </el-table-column>
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号">
         </el-table-column>
-        <el-table-column
-          prop="applyTime"
-          label="申请时间"
-          sortable>
+         <el-table-column
+          prop="relationSn"
+          label="关联单据编号"
+          :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
-        label="操作">
-          <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button>
-            <el-button type="text" size="small" v-if="scope.row.status == 0" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
-          </template>
+          prop="resellerSn"
+          label="分佣员ID">
+        </el-table-column>
+        <el-table-column
+          prop="resellerName"
+          label="姓名">
+        </el-table-column>
+        <el-table-column
+          prop="resellerPhone"
+          label="手机号码">
+        </el-table-column>
+        <el-table-column
+          prop="thirdPartySn"
+          label="第三方流水号">
+        </el-table-column>
+        <el-table-column
+          prop="tradeAmount"
+          label="分佣金额（元）">
+        </el-table-column>
+        <el-table-column
+          prop="tradeTime"
+          label="交易时间"
+          sortable>
         </el-table-column>
       </el-table>
       <div class="page_styles">
-      <div class="checkAudit">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
-        <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
-      </div>
-        
          <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="Number(ruleForm.pageNum) || 1"
+          :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="pageSize*1"
           layout="sizes, prev, pager, next"
@@ -134,119 +116,96 @@
 <script>
 import utils from "@/utils";
 import financeCons from '@/system/constant/finance'
-
-import TableBase from "@/components/TableBase"
-import withdrawDialog from './dialogs/withdrawDialog'//批量审核
-import auditSuccessDialog from './dialogs/auditSuccessDialog'//审核成功提示
-import warnDialog from './dialogs/warnDialog'//批量审核选择数据提示
-import waitAuditDialog from './dialogs/waitAuditDialog'//提现详情 待审核
-import auditingDialog from './dialogs/auditingDialog'//审核
-import handleAuditDialog from './dialogs/handleAuditDialog'//提现详情  处理中
-import failAuditDialog from './dialogs/failAuditDialog'//提现详情  失败
-import successAuditDialog from './dialogs/successAuditDialog'//提现详情  成功
 import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
+import TableBase from "@/components/TableBase"
 export default {
   name: 'revenueSituation',
   extends: TableBase,
-  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog ,exportTipDialog},
+  components:{exportTipDialog},
   data() {
     return {
       inline:true,
-      userTypes:[
-        {
-          value:'memberSn',
-          label:'用户ID'
-        },
-        {
-          value:'nickName',
-          label:'用户昵称'
-        },
-      ],
       ruleForm:{
         searchType:'tradeDetailSn', //交易流水号
-        searchValue:'', 
-        amountMin: '', // 分佣金额上限
-        amountMax: '', // 分佣金额下限
+        searchValue:'', // 交易流水号对应值
+        minTradeAmount: '', // 分佣金额上限
+        maxTradeAmount: '', // 分佣金额下限
         timeValue:'', // 交易时间
-        status:-1,
-        userType:'memberSn',
-        userValue:'',
-        memberSn:'',
-        nickName:''
+        userType:'resellerSn', // 分佣员类型
+        userValue:'' // 分佣员类型对应值
       },
       dataList:[ ],
-      selectStatus:false,
       total:0,
+      loading:true,
+      selectStatus:false,
       currentDialog:"",
       dialogVisible: false,
       currentData:{},
-      multipleSelection:[],
-      loading:true
     }
   },
   watch: { },
   computed:{
-    revenueExpenditureTerms(){
-      return financeCons.revenueExpenditureTerms;
+    serialNumberType(){
+      return financeCons.serialNumberType;
     },
-    presentations(){
-      return financeCons.presentations;
-    },
-    presentationStatus(){
-      return financeCons.presentationStatus;
-    },
+    commissionClerkStatus(){
+      return financeCons.commissionClerkStatus;
+    }
   },
   created() {
-    // this.examine(1)
-   },
+  },
   methods: {
     init(){
       let query = {
-        memberSn:'',
-        nickName:'',
         tradeDetailSn:'',
-        cashoutSn:'',
-        applyTimeStart:'',
-        applyTimeEnd:'',
-        status:'',
-        startIndex:'',
-        pageSize:''
+        relationSn: '',
+        thirdPartySn: '',
+        minTradeAmount: '', 
+        maxTradeAmount: '',
+        startTradeTime: '',
+        endTradeTime: '',
+        resellerSn: '',
+        resellerName: '',
+        resellerPhone: '',
+        startIndex:this.ruleForm.startIndex,
+        pageSize:this.ruleForm.pageSize
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
           query[key] = this.ruleForm.searchValue
         }
-        for(let item in this.ruleForm){
+        if(this.ruleForm.userType == key){
+          query[key] = this.ruleForm.userValue
+        }
+        for(let item in this.ruleForm){ 
           if(item == key){
             query[key] = this.ruleForm[item]
           }
         }
-        if(this.ruleForm.userType == 'memberSn'){
-          query.memberSn = this.ruleForm.userValue || ''
-          query.nickName = ''
-        }else{
-          query.nickName = this.ruleForm.userValue || ''
-          query.memberSn = ''
-        }
       }
-      query.status = this.ruleForm.status == -1 ? null : this.ruleForm.status
+      query.minTradeAmount = this.ruleForm.minTradeAmount == 0 ? '' : this.ruleForm.minTradeAmount
+      query.maxTradeAmount = this.ruleForm.maxTradeAmount == 0 ? '' : this.ruleForm.maxTradeAmount
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.applyTimeStart = timeValue[0]
-        query.applyTimeEnd = timeValue[1]
+        query.startTradeTime = timeValue[0]
+        query.endTradeTime = timeValue[1]
       }
       return query;
     },
 
     fetch(){
-      let query = this.init();
-      this._apis.finance.getListWd(query).then((response)=>{
-        this.dataList = response.list
-        this.total = response.total || 0
-        this.loading = false
-      }).catch((error)=>{
-        this.loading = false
-      })
+      if(this.ruleForm.minTradeAmount > this.ruleForm.maxTradeAmount){
+        this.$message('分佣金额最小值应该小于最大值')
+      }else{
+        let query = this.init();
+        this._apis.finance.getCommissionLIst(query).then((response)=>{
+          this.dataList = response.list
+          this.total = response.total || 0
+          this.loading = false
+        }).catch((error)=>{
+          this.loading = false
+        })
+      }
     },
     //搜索
     onSubmit(){
@@ -255,120 +214,64 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        searchType:'cashoutSn',
-        searchValue:'',
-        timeValue:'',
-        status:-1,
-        userType:'memberSn',
-        userValue:'',
-        memberSn:'',
-        nickName:'',
+        searchType:'tradeDetailSn', //交易流水号
+        searchValue:'', // 交易流水号对应值
+        minTradeAmount: '', // 分佣金额上限
+        maxTradeAmount: '', // 分佣金额下限
+        timeValue:'', // 交易时间
+        userType:'resellerSn', // 分佣员类型
+        userValue:'' // 分佣员类型对应值
       }
       this.fetch()
     },
-    //导出
-    exportToExcel() {
+    // 导出参数特殊处理
+    queryExport() {
       let query = this.init();
-      if(this.multipleSelection.length > 0){
-         let ids = this.multipleSelection.map((item)=> item.id)
-         query.ids = ids;
-         this._apis.finance.exportWd(query).then((response)=>{
-          window.location.href = response
-        }).catch((error)=>{
-          this.$message.error(error)
-        })
-      }else if(this.total >1000 && this.multipleSelection.length == 0 ){
-        this.dialogVisible = true
-        this.currentDialog = exportTipDialog
-        this.currentData.query = query
-        this.currentData.api = "finance.exportWd"
-      }else if(this.multipleSelection.length == 0 && this.total<=1000){
-        this._apis.finance.exportWd(query).then((response)=>{
-          window.location.href = response
-        }).catch((error)=>{
-          this.$message.error(error)
-        })
-      }      
-    },
-    // 全选
-    selectAll(val){
-      if(val && this.dataList.length > 0){
-        this.dataList.forEach((row)=>{
-           this.$refs.multipleTable.toggleRowSelection(row,true);
-        })
-      }else{
-        this.$refs.multipleTable.clearSelection();
+      query.exportType = 1
+      delete query.pageSize;
+      delete query.startIndex;
+      if (this.total > 1000) {
+        query.isExport = '1'
+      } else {
+        query.isExport = '0'
       }
+      return query
     },
-    handleSelectionChange(val){
-      this.multipleSelection = val;
-      if(val.length !=0 && val.length == this.dataList.length ){
-        this.selectStatus = true; 
-      }else{
-        this.selectStatus = false;
-      }
-    },
-    //批量审核
-    batchCheck() {
-      let isCheck = true
-      let ids = []
-      if(this.multipleSelection.length == 0){
-        this.currentData.text = "请选择需要审核的数据 !";
+    //导出
+    exportToExcel(){
+      if(this.total > 1000){
+        this.currentDialog = exportTipDialog;
         this.dialogVisible = true;
-        this.currentDialog = "warnDialog";
-      }else{
-        this.multipleSelection.map((item)=>{
-          item.status!=0 && (isCheck = false)
-          ids.push(item.id)
+        this.currentData.api = 'finance.commissionExport';
+        let query = this.queryExport();
+        this.currentData.query = query
+      } else {
+        let query = this.queryExport();
+        this._apis.finance.commissionExport(query).then((response)=>{
+          window.location.href = response
+        }).catch((error)=>{
+         this.$message.error(error)
         })
-        if(isCheck == true){
-          this.currentData = ids
-          this.dialogVisible = true
-          this.currentDialog = withdrawDialog
-        }else{
-          this.currentData.text = "选择的数据中包含已经审核过的提现申请，无法批量审核，请重新选择。";
-          this.dialogVisible = true;
-          this.currentDialog = "warnDialog";          
-        }
-      }
-
-    },
-    statusToLabel(value){
-      let status = financeCons.presentationStatus
-      let statusLabel = ''
-      status.forEach(item =>{
-        item.value == value && (statusLabel = item.label)
-      })
-      return statusLabel;
-    },
-    //查看
-    handleClick(row){
-      this.currentData = row
-      this.dialogVisible = true
-      switch(row.status) {
-          case 0:  //待审核
-            this.currentDialog = waitAuditDialog
-          break;
-          case 1:  //处理中
-            this.currentDialog = handleAuditDialog
-          break;
-          case 2: //成功
-            this.currentDialog = successAuditDialog
-          break;
-          case 3: //失败
-            this.currentDialog = failAuditDialog
-          break;
       }
     },
-    //审核
-    examine(row){
-      this.currentData = row
-      this.dialogVisible = true
-      this.currentDialog = auditingDialog
+    renderRelationSn(){
+      return(
+        <div style="height:49px;line-height:49px;">
+          <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
+          <el-popover
+            placement="top-start"
+            title=""
+            width="160"
+            trigger="hover"
+            content="订单编号">
+            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
+          </el-popover>
+        </div>
+      )
     },
     handleSubmit(datas){
-      this._apis.finance.examineWd(datas).then((response)=>{
-          this.fetch()
+      this._apis.finance.commissionExport(datas).then((response)=>{
+           this.fetch()
            this.dialogVisible = true
            this.currentDialog = auditSuccessDialog
       }).catch((error)=>{
