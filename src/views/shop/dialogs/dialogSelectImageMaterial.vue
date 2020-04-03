@@ -230,8 +230,12 @@ export default {
           this.localTabInited = true;
           this.uploadLoading = true;
           const tempSaveFile = localStorage.getItem('localUploadFile');
-          if(tempSaveFile) {
-            this.fileList = JSON.parse(tempSaveFile);
+          if (tempSaveFile) {
+            if(tempSaveFile=="[null]"){
+              this.fileList = [];
+            }else{
+              this.fileList = JSON.parse(tempSaveFile);
+            }
           }else{
             this.fileList = [];
           }
