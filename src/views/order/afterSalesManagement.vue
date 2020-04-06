@@ -288,11 +288,11 @@ export default {
                 isExport: 0
             })
             if(this.multipleSelection.length) {
-              __param = Object.assign({}, _param, {
+              _param = Object.assign({}, _param, {
                 ids: this.multipleSelection.map(val => val.id)
               })
             }
-           this._apis.order.orderAfterSaleExport(__param).then((res) => {
+           this._apis.order.orderAfterSaleExport(_param).then((res) => {
                 console.log(res)
                 if(res > 1000) {
                     this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {

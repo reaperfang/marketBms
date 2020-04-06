@@ -137,8 +137,8 @@ export default {
         pageSize: 20,
         name: "",
         time: "",
-        startTime: "",
-        endTime: ""
+        updateTimeStart: "",
+        updateTimeEnd: ""
       },
       currentDialog: "",
       dialogVisible: false,
@@ -198,8 +198,8 @@ export default {
       this.listQuery = Object.assign({}, this.listQuery, {
         name: "",
         time: "",
-        startTime: "",
-        endTime: ""
+        updateTimeStart: "",
+        updateTimeEnd: ""
       });
       this.getList()
     },
