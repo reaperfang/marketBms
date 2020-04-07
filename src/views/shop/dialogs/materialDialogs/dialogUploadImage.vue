@@ -159,13 +159,13 @@ export default {
       const isJPG = file.type === "image/jpg";
       const isJPEG = file.type === "image/jpeg";
       const isPNG = file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const isLt2M = file.size / 1024 / 1024 < 3;
       if (!(isJPG || isJPEG || isPNG)) {
         this.$message.error("上传图片支持jpg,jpeg,png格式!");
         return false;
       }
       if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过2MB!");
+        this.$message.error("上传图片大小不能超过3MB!");
         return false
       }
       return true

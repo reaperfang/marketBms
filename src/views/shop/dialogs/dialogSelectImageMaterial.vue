@@ -112,7 +112,7 @@
                   </waterfall>
                 </div>
             </div>
-            <p class="note" style="color: #d3d8df;margin-top:20px;">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。 <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
+            <p class="note" style="color: #d3d8df;margin-top:20px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
       </el-tab-pane>
     </el-tabs>
 

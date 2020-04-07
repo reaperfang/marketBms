@@ -77,7 +77,8 @@
                     </el-table-column> -->
                     <el-table-column
                     prop="name"
-                    label="商品名称">
+                    label="商品名称"
+                    width="216">
                         <template slot-scope="scope">
                             <div class="ellipsis2" style="width: 196px;" :title="scope.row.name">{{scope.row.name | nameFilter}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
@@ -665,7 +666,14 @@ export default {
             this.currentData = _row
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
+            //this.$refs[formName].resetFields();
+            this.listQuery = Object.assign({}, this.listQuery, {
+                name: '',
+                status: '',
+                productCatalogInfoId: '',
+                searchType: 'code',
+                searchValue: ''
+            })
             this.categoryValue = ''
             this.getList()
         },
