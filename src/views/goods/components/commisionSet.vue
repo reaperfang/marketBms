@@ -113,7 +113,7 @@
     </div>
     <div class="btns">
         <el-button @click="submit" style="margin-right:50px;" type="primary">保存</el-button>
-        <el-button>返回</el-button>
+        <el-button @click="historyBack">返回</el-button>
     </div>
     <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
 </div>    
@@ -286,13 +286,19 @@ export default {
                 data.id = this.detail.id;
                 // todo 保存商品分佣设置
                 this._apis.goods.commisionGoodsSet(data).then(res => {
-                    this.historBack();
+                    this.historyBack();
                 }).catch((error) => { this.$message({ message: error.msg, type: 'warning' }); });
             }
         },
         // 返回
-        historBack() {
+        historyBack() {
             // TODO 返回
+            if(this.$route.query.commissionEdit) { // 分佣商品列表
+
+            } else { // bms 商品列表
+                console.log(2222);
+                window.location.href = '/bp/goods/goodsList';
+            }
         }
     },
     created() {
