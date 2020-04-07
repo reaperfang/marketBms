@@ -77,9 +77,9 @@
                     <el-table-column
                     prop="name"
                     label="商品名称"
-                    width="380">
+                    width="200">
                         <template slot-scope="scope">
-                            <div class="ellipsis2" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
+                            <div class="ellipsis2" style="width: 196px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
                         </template>
                     </el-table-column>
@@ -105,7 +105,7 @@
                         width="120"
                         class-name="salePrice">
                         <template slot-scope="scope">
-                            <span class="price" :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}">
+                            <span class="price">
                                 {{Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice))}}
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
                             </span>
@@ -114,7 +114,7 @@
                     <el-table-column
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{red: scope.row.warningStock && (Math.min.apply(null, scope.row.goodsInfos.map(val => val.stock)) <= scope.row.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
+                            <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -469,11 +469,15 @@ export default {
                 } else if(item.status == 0) {
                     return '下架'
                 } else if(item.status == -1) {
-                    if(goodsInfos[1]) {
-                        if(goodsInfos[1].status == 0) {
-                            return '下架'
-                        } else if(goodsInfos[1].status == 1) {
+                    let goodsInfosList = goodsInfos.filter(val => val.stock != -1)
+                    
+                    if(goodsInfosList.length) {
+                        let item = goodsInfosList[0]
+
+                        if(item.stock == 1) {
                             return '上架'
+                        } else if(item.stock == 0) {
+                            return '下架'
                         }
                     }
                 }

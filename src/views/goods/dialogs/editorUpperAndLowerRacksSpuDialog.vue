@@ -26,13 +26,15 @@
 </template>
 <script>
 import DialogBase from '@/components/DialogBase'
+import utils from '@/utils';
 
 export default {
     data() {
         return {
             hasCancel: true,
             list: [{spec: '银色', upper: 1}, {spec: '银色', upper: 1}, {spec: '银色', upper: 1}],
-            showFooter: false
+            showFooter: false,
+            oldData: null
         }
     },
     filters: {
@@ -50,8 +52,17 @@ export default {
             return str
         }
     },
+    created() {
+        this.oldData = JSON.parse(JSON.stringify(this.data.goodsInfos))
+    },
     methods: {
         submit() {
+            let newData = JSON.parse(JSON.stringify(this.data.goodsInfos))
+
+            if(utils.equalsObj(this.oldData, newData)) {
+                this.visible = false
+                return
+            }
             if(this.data.goodsInfos.every(val => val.activity)) {
                 this.visible = false
                 return

@@ -52,7 +52,7 @@
                 </el-upload> -->
                 <div class="upload-box">
                     <div class="image-list">
-                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in ruleForm.images.split(',')">
+                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in (ruleForm.images && ruleForm.images.split(',') || [])">
                             <label>
                                 <i class="el-icon-check"></i>
                             </label>
@@ -175,7 +175,7 @@
                     </div>
                     <div v-show="showAddSpecsInput" class="add-specs">
                         <div style="position: relative;" class="add-specs-input">
-                            <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
+                            <input maxlength="50" v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
                         <ul class="spec-list" style="top: 35px;" v-show="showSpecsList">
@@ -1856,6 +1856,19 @@ export default {
 
             return goodsInfos
         },
+        getMarketActivity(ids) {
+             return new Promise((resolve, reject) => {
+                this._apis.goods.getMarketActivity({ids}).then((res) => {
+                    resolve(res)
+                }).catch(error => {
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+                    reject(error)
+                })
+            })
+        },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
@@ -1864,6 +1877,8 @@ export default {
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
+
+                
 
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
                 
@@ -1900,6 +1915,26 @@ export default {
                 }
                 this.specsLabel = specsLabelArr.join(',')
                 //res.goodsInfo.label = labelArr.join(',')
+
+                
+                // try {
+                //     this.getMarketActivity([res.id]).then((activityRes) => {
+                //         activityRes.forEach((val, index) => {
+                //             if(val.goodsInfos) {
+                //                 val.goodsInfos.forEach(skuVal => {
+                //                     let skuid = skuVal.id
+                //                     let item = res.goodsInfos.find(val => val.id == skuid)
+                                    
+                //                     if(item) {
+                //                         item.activity = true
+                //                     }
+                //                 })
+                //             }
+                //         })
+                //     })
+                // } catch(e) {
+                //     console.error(e)
+                // }
                 
                 this.ruleForm = Object.assign({}, this.ruleForm, res, {
                     //goodsInfos: [res.goodsInfo]
@@ -2170,20 +2205,20 @@ export default {
                             });
                             return
                         }
-                        if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
-                            this.$message({
-                                message: '重量必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].volume  <= 0) {
-                            this.$message({
-                                message: '体积必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
+                        // if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
+                        //     this.$message({
+                        //         message: '重量必须大于0',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(+this.ruleForm.goodsInfos[i].volume  <= 0) {
+                        //     this.$message({
+                        //         message: '体积必须大于0',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
                     }
                     } catch(e) {
                         console.error(e)
@@ -2693,6 +2728,20 @@ export default {
             }
         },
         imageSelected(image) {
+            if(!/\.jpg|\.jpeg|\.png|\.gif$/.test(image.fileName)) {
+                this.$message({
+                message: '上传的文件格式不正确，请重新上传',
+                type: 'warning'
+                });
+                return
+            }
+            if(image.fileSize > 1024*1024*2) {
+                this.$message({
+                message: '上传图片不能超过2M',
+                type: 'warning'
+                });
+                return
+            }
             if(this.material) {
                 this.ruleForm.goodsInfos.splice(this.materialIndex, 1, Object.assign({}, this.ruleForm.goodsInfos[this.materialIndex], {
                     image: image.filePath,
