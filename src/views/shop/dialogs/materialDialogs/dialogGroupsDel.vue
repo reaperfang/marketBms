@@ -14,6 +14,7 @@ export default {
   name: "dialogGroupsDel",
   components: {DialogBase},
   props: {
+      typeData:{},
       dialogTitle:{},
       dialogVisible: {
           type: Boolean,
@@ -40,7 +41,7 @@ export default {
   methods: {
     submit() {
       this.visible = false
-      this.$emit('submit',{delete:{}})
+      this.$emit('submit',{delete:{node:this.typeData.node,currentData:this.typeData.currentData}})
     }
   }
 };

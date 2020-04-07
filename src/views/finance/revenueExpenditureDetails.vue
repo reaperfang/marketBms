@@ -392,4 +392,7 @@ export default {
   width: 100%; 
   margin-top:20px;
 }
+/deep/.el-table .cell{
+  text-align: center;
+}
 </style>

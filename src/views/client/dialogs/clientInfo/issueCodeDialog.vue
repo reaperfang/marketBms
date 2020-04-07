@@ -179,7 +179,7 @@ export default {
             if(!!v.receiveDesc) {
               this.btnLoading = false;
               let errMsg = v.couponName + "发放失败，" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
-              warnMsg = warnMsg + errMsg + '';
+              warnMsg = warnMsg + errMsg + ',';
             }else{
               this.$emit('refreshPage',2);
             }
