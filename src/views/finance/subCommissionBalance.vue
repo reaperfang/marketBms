@@ -61,12 +61,14 @@
         >
         <el-table-column
           prop="tradeDetailSn"
-          label="交易流水号">
+          label="交易流水号"
+          width="200">
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
-          :render-header="renderRelationSn">
+          :render-header="renderRelationSn"
+          width="200">
         </el-table-column>
         <el-table-column
           prop="resellerSn"
