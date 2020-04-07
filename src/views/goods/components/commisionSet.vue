@@ -120,6 +120,7 @@
 </template>
 <script>
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import { mapMutations } from 'vuex'
 export default {
     data() {
         return {
@@ -164,6 +165,7 @@ export default {
     },
     components: { dialogSelectImageMaterial },
     methods: {
+        ...mapMutations(['SETCURRENT']),
         // 选中商品图片
         changeImgCheck (key) {
             this.checkedImg = key;
@@ -294,10 +296,10 @@ export default {
         historyBack() {
             // TODO 返回
             if(this.$route.query.commissionEdit) { // 分佣商品列表
-
+                this.$router.push({path:'/apply',query:{paths:'/commission/commissionGoods/goods'}})
+                this.SETCURRENT(8)
             } else { // bms 商品列表
-                console.log(2222);
-                window.location.href = '/bp/goods/goodsList';
+                this.$router.push({name:'goodsList'})
             }
         }
     },
