@@ -236,7 +236,7 @@ export default {
                 this.confirm({title: '提示', icon: true, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
                 return
             }
-            this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.multipleSelection.map(val => val.id).join(','))
+            this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.multipleSelection.map(val => val.orderId + '').join(','))
         },
         checkedAllChange() {
             if(this.checkedAll) {
