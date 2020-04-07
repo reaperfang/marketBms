@@ -34,11 +34,23 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="balance" label="余额" sortable="custom"></el-table-column>
+      <el-table-column label="余额" sortable="custom">
+        <template slot-scope="scope">
+          ¥{{scope.row.balance}}
+        </template>
+      </el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
-      <el-table-column prop="totalDealMoney" label="累计消费金额" sortable></el-table-column>
+      <el-table-column label="累计消费金额" sortable>
+        <template slot-scope="scope">
+          ¥{{scope.row.totalDealMoney}}
+        </template>
+      </el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
-      <el-table-column prop="perUnitPrice" label="客单价（元）" sortable></el-table-column>
+      <el-table-column label="客单价（元）" sortable>
+        <template slot-scope="scope">
+          ¥{{scope.row.perUnitPrice}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <div class="btns clearfix">
@@ -146,6 +158,7 @@ export default {
       }
       this.$set(this.newForm,'orderByCondition', tOrder);
       this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
     },
     getRowKeys(row) {
       return row.id
@@ -206,16 +219,10 @@ export default {
       this.currentData.id = id;
     },
     addBlackList(row) {
-      this.getAllCoupons(row.id);
-      this.getAllCodes(row.id);
       this.dialogVisible = true;
       this.currentDialog = "addBlackDialog";
       this.currentData.memberSn = row.memberSn;
       this.currentData.id = row.id;
-      setTimeout(() => {
-        this.currentData.couponList = this.couponList;
-        this.currentData.codeList = this.codeList;
-      },200);
     },
     removeBlack(row) {
       this.dialogVisible = true;
@@ -271,33 +278,12 @@ export default {
     freshTable() {
       this.checkAll = false;
       this.getMembers(this.startIndex, this.pageSize);
-    },
-    getAllCoupons(id) {
-      this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {
-          this.couponList = [].concat(response.list);
-          this.couponList.map((item) => {
-              this.$set(item, 'frozenNum',1);
-          })
-          this.currentData.couponList = this.couponList;
-      }).catch((error) => {
-          console.log(error);
-      })
-    },
-    getAllCodes(id) {
-        this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1}).then((response) => {
-            this.codeList = [].concat(response.list);
-            this.codeList.map((item) => {
-                this.$set(item, 'frozenNum', 1);
-            });
-            this.currentData.codeList = this.codeList;
-        }).catch((error) => {
-            console.log(error);
-        })
     }
   },
   watch: {
     newForm(val) {
       this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
     }
   },
 };
@@ -336,7 +322,7 @@ export default {
         color: #655eff;
       }
       &.s3 {
-        color: #fd932b;
+        color: #fd4c2b;
       }
     }
   }

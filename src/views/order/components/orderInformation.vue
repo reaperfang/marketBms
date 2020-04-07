@@ -58,7 +58,7 @@
                 </div>
             </div></el-col>
             <el-col :span="8"><div class="grid-content righter">
-                <div v-if="orderInfo.isInvoice == 1"  class="item">
+                <div v-if="invoiceOpen == 1"  class="item">
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
@@ -201,7 +201,7 @@
                     </div>
                     <div class="row">
                         <div class="col">积分抵现:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
+                        <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
                     </div>
                     <!-- <div class="row align-center">
                         <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
@@ -253,12 +253,18 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney}}</div>
-                        <div v-else class="col"></div>
+                        <template v-if="orderDetail.orderInfo.payWay == 2">
+                            <div v-if="orderDetail.orderInfo.orderStatus == 6" class="col">¥{{orderDetail.orderInfo.actualMoney || '0.00'}}</div>
+                            <div v-else class="col"></div>
+                        </template>
+                        <template v-else>
+                            <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney || '0.00'}}</div>
+                            <div v-else class="col"></div>
+                        </template>
                     </div>
                 </section>
             </div>
-            <div class="operate-record">
+            <!-- <div class="operate-record">
                 <p class="header">操作记录</p>
                 <el-table
                     :data="orderDetail.orderOperationRecordList"
@@ -281,7 +287,7 @@
                         label="操作时间">
                     </el-table-column>
                 </el-table>
-            </div>
+            </div> -->
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :ajax="ajax" :sendGoods="sendGoods" @submit="submit"></component>
     </div>
@@ -334,12 +340,14 @@ export default {
             gainCouponList: '',
             gainCouponCodeList: '',
             //replacePayWechatNames: ''
-            yingshouChangeMoney: ''
+            yingshouChangeMoney: '',
+            invoiceOpen: 1,
         }
     },
     created() {
         //this.getOrderPayRecordList()
         this.getGain()
+        this.getShopInfo()
     },
     watch: {
         orderInfo: {
@@ -416,6 +424,10 @@ export default {
                 return this.orderDetail.orderPayRecordList.filter(val => val.transactionCode).length
             }
             return 0
+        },
+        cid(){
+          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          return shopInfo.id
         }
     },
     methods: {
@@ -431,6 +443,15 @@ export default {
         //         this.$message.error(error);
         //     }) 
         // },
+        getShopInfo(){
+          let id = this.cid
+
+          this._apis.set.getShopInfo({id:id}).then(response =>{
+            this.invoiceOpen = response.invoiceOpen
+          }).catch(error =>{
+            console.log(error)
+          })
+        },
         getGain() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
             console.log(this);
@@ -693,7 +714,7 @@ export default {
                 } else if(row.orderStatus == 1) {
                     return '待成团'
                 } else if(row.orderStatus == 2) {
-                    return '关闭'
+                    return '交易关闭'
                 } else if(row.orderStatus == 3) {
                     return '待发货'
                 } else if(row.orderStatus == 4) {

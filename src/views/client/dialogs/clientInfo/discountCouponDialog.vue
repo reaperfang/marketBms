@@ -1,10 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" @submit="submit" title="优惠券/码" :hasCancel="hasCancel">
     <div class="c_container" style="position: relative">
-      <el-button
-        class="border_btn send"
-        @click="sendDiscount"
-      >{{activeName == 'first' ? '发放优惠券':'发放优惠码'}}</el-button>
+      <el-button class="border_btn send" @click="sendDiscount">{{activeName == 'first' ? '发放优惠券':'发放优惠码'}}</el-button>
       <el-tabs v-model="activeName">
         <el-tab-pane label="优惠券" name="first">
           <div class="clearfix">
@@ -24,21 +21,11 @@
               :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
               :default-sort="{prop: 'date', order: 'descending'}"
             >
-              <el-table-column prop="name" label="优惠券名称"></el-table-column>
-              <el-table-column label="优惠方式" width="100">
-                <template
-                  slot-scope="scope"
-                >{{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}</template>
-              </el-table-column>
-              <el-table-column label="使用门槛" width="100">
-                <template
-                  slot-scope="scope"
-                >{{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}</template>
-              </el-table-column>
-              <el-table-column prop="receiveType" label="领取方式"></el-table-column>
-              <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
-              <el-table-column prop="usedType" label="状态"></el-table-column>
-            </el-table>
+            <el-table-column prop="name" label="优惠券名称"></el-table-column>
+            <el-table-column prop="receiveType" label="领取方式"></el-table-column>
+            <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
+            <el-table-column prop="usedType" label="状态"></el-table-column>
+          </el-table>
           </div>
         </el-tab-pane>
         <el-tab-pane label="优惠码" name="second">
@@ -58,17 +45,7 @@
             :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort="{prop: 'date', order: 'descending'}"
           >
-            <el-table-column prop="name" label="优惠码名称"></el-table-column>
-            <el-table-column label="优惠方式" width="100">
-              <template
-                slot-scope="scope"
-              >{{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}</template>
-            </el-table-column>
-            <el-table-column label="使用门槛" width="100">
-              <template
-                slot-scope="scope"
-              >{{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}</template>
-            </el-table-column>
+            <el-table-column prop="name" label="优惠券名称"></el-table-column>
             <el-table-column prop="receiveType" label="领取方式"></el-table-column>
             <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
             <el-table-column prop="usedType" label="状态"></el-table-column>
@@ -88,84 +65,81 @@ export default {
     return {
       hasCancel: true,
       activeName: "first",
-      couponType: "0",
+      couponType: '0',
       codeType: "0",
       couponList: [],
-      codeList: [],
-      reciveMap: {
-        0: "主动领取",
-        1: "后台派发",
-        101: "应用首页",
-        201: "一码多用",
-        301: "短信群发",
-        401: "限时折扣",
-        402: "N元N件",
-        403: "满减/满折",
-        404: "满包邮",
-        407: "优惠套装",
-        408: "赠品",
-        501: "特权价",
-        502: "积分商城",
-        503: "超级海报",
-        504: "支付推广",
-        505: "找人代付",
-        506: "限时秒杀",
-        507: "多人拼团",
-        601: "节日有礼",
-        602: "签到有礼",
-        1001: "升级礼包",
-        1002: "会员卡礼包"
-      }
+      codeList:[],
+      reciveMap: 
+        {
+          0: '主动领取',
+          1: '后台派发', 
+          101: '应用首页',
+          201: '一码多用',
+          301: '短信群发',
+          401: '限时折扣',
+          402: 'N元N件',
+          403: '满减/满折',
+          404: '满包邮',
+          407: '优惠套装',
+          408: '赠品',
+          501: '特权价',
+          502: '积分商城',
+          503: '超级海报',
+          504: '支付推广',
+          505: '找人代付',
+          506: '限时秒杀',
+          507: '多人拼团',
+          601: '节日有礼',
+          602: '签到有礼',
+          1001: '升级礼包',
+          1002: '会员卡礼包'
+        }
     };
   },
   methods: {
-    submit() {},
+    submit() {
+      
+    },
     sendDiscount() {
       this.$emit("sendDiscount", this.activeName);
     },
     getUsedCoupon(type) {
       let params;
-      if (type == "0") {
-        params = { couponType: "0", memberId: this.data.id };
-      } else {
-        params = { usedType: type, couponType: "0", memberId: this.data.id };
+      if(type == "0") {
+        params = {couponType: "0", memberId: this.data.id};
+      }else{
+        params = {usedType:type, couponType: "0", memberId: this.data.id};
       }
-      this._apis.client
-        .getUsedCoupon(params)
-        .then(response => {
+      this._apis.client.getUsedCoupon(params).then((response) => {
           this.couponList = [];
-          response.map(v => {
-            v.appCoupon.usedType = v.usedType == 1 ? "可使用" : "已失效";
-            v.appCoupon.receiveType = this.reciveMap[v.receiveType];
-            v.appCoupon.receiveTime = v.receiveTime;
-            this.couponList.push(v.appCoupon);
-          });
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          response.map((v) => {
+              v.appCoupon.usedType = v.usedType == 1?'可使用':'已失效';
+              v.appCoupon.receiveType = this.reciveMap[v.receiveType];
+              v.appCoupon.receiveTime = v.receiveTime;
+              this.couponList.push(v.appCoupon);
+          })
+      }).catch((error) => {
+        console.log(error);
+      })
     },
     getUsedCode(type) {
       let params;
-      if (type == "0") {
-        params = { couponType: "1", memberId: this.data.id };
-      } else {
-        params = { usedType: type, couponType: "1", memberId: this.data.id };
+      if(type == "0") {
+        params = {couponType: "1", memberId: this.data.id};
+      }else{
+        params = {usedType: type, couponType: "1", memberId: this.data.id};
       }
-      this._apis.client
-        .getUsedCoupon(params)
-        .then(response => {
+      this._apis.client.getUsedCoupon(params).then((response) => {
           this.codeList = [];
-          response.map(v => {
-            v.appCoupon.usedType = v.usedType == 1 ? "可使用" : "已失效";
+          response.map((v) => {
+            v.appCoupon.usedType = v.usedType == 1?'可使用':'已失效';
             v.appCoupon.receiveType = this.reciveMap[v.receiveType];
             v.appCoupon.receiveTime = v.receiveTime;
             this.codeList.push(v.appCoupon);
-          });
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          })
+      }).catch((error) => {
+        console.log(error);
+      })
     },
     getStatus(status) {
       this.getUsedCoupon(status);
@@ -185,10 +159,10 @@ export default {
     }
   },
   mounted() {
-    if (this.data.type == "0") {
-      this.activeName = "first";
-    } else {
-      this.activeName = "second";
+    if(this.data.type == '0') {
+      this.activeName = "first"
+    }else{
+      this.activeName = "second"
     }
     this.getUsedCoupon();
     this.getUsedCode();
@@ -209,7 +183,7 @@ export default {
 /deep/ .el-dialog__body {
   padding: 10px 20px 20px 20px;
 }
-/deep/ .el-table__body-wrapper {
+/deep/ .el-table__body-wrapper{
   height: 320px;
   overflow-y: auto;
 }
@@ -226,5 +200,3 @@ export default {
   }
 }
 </style>
-
-

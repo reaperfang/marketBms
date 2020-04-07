@@ -16,6 +16,7 @@
       stripe
       :data="tableData"
       ref="multipleTable"
+      :selectable="itemSelectable"
       :row-key="getRowKey"
       @selection-change="handleSelectionChange"
       v-loading="loading"
@@ -153,6 +154,11 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    itemSelectable(row, index) {
+      if(row.status !== 2) {
+        return true;
+      }
     },
     getRowKey(row) {
       return row.activityId || row.activeId

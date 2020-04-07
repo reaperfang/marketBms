@@ -147,7 +147,7 @@
                     商户工作台H5
                 </p>
                 <p class="link_h5">
-                    <span ref="linkH5">http://omo.aiyouyi.cn/bh</span>
+                    <span ref="linkH5">{{protocol}}//omo.aiyouyi.cn/bh</span>
                     <img :src="require('@/assets/images/profile/icon_05.png')" alt="" v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">
                 </p>
                 <img :src="qrCode" alt="">
@@ -173,8 +173,9 @@ export default {
             stayProcessedCount:'',
             staySendCount:'',
             stayAuthCount:'',
-            pageLink:'http://omo.aiyouyi.cn/bh',
+            pageLink: location.protocol + '//omo.aiyouyi.cn/bh',
             qrCode:'',
+            protocol: location.protocol
         }
     },
     computed: {

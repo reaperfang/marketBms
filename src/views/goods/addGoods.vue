@@ -1856,6 +1856,19 @@ export default {
 
             return goodsInfos
         },
+        getMarketActivity(ids) {
+             return new Promise((resolve, reject) => {
+                this._apis.goods.getMarketActivity({ids}).then((res) => {
+                    resolve(res)
+                }).catch(error => {
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+                    reject(error)
+                })
+            })
+        },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
@@ -1864,6 +1877,8 @@ export default {
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
+
+                
 
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
                 
@@ -1900,69 +1915,91 @@ export default {
                 }
                 this.specsLabel = specsLabelArr.join(',')
                 //res.goodsInfo.label = labelArr.join(',')
+
                 
-                this.ruleForm = Object.assign({}, this.ruleForm, res, {
-                    //goodsInfos: [res.goodsInfo]
-                })
-                this.categoryValue = arr
-                this.ruleForm.itemCat = itemCatAr
-                if(this.ruleForm.images) {
-                    console.log(this.ruleForm.images.split(','))
-                    this.fileList = this.ruleForm.images.split(',') && this.ruleForm.images.split(',').length ? this.ruleForm.images.split(',').map(val => ({
-                        name: '', 
-                        url: val
-                    })) : []
-                    console.log(this.fileList)
-                }
-                if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.length) {
-                    let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-                    goodsInfos.forEach(val => {
-                        val.fileList = [{
-                            name: '',
-                            url: val.image
-                        }]
+                try {
+                    this.getMarketActivity([res.id]).then((activityRes) => {
+                        activityRes.forEach((val, index) => {
+                            if(val.goodsInfos) {
+                                val.goodsInfos.forEach(skuVal => {
+                                    let skuid = skuVal.id
+                                    let item = res.goodsInfos.find(val => val.id == skuid)
+                                    
+                                    if(item) {
+                                        item.activity = true
+                                    }
+                                })
+                            }
+                        })
+
+                        this.ruleForm = Object.assign({}, this.ruleForm, res, {
+                            //goodsInfos: [res.goodsInfo]
+                        })
+                        this.categoryValue = arr
+                        this.ruleForm.itemCat = itemCatAr
+                        if(this.ruleForm.images) {
+                            console.log(this.ruleForm.images.split(','))
+                            this.fileList = this.ruleForm.images.split(',') && this.ruleForm.images.split(',').length ? this.ruleForm.images.split(',').map(val => ({
+                                name: '', 
+                                url: val
+                            })) : []
+                            console.log(this.fileList)
+                        }
+                        if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.length) {
+                            let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
+                            goodsInfos.forEach(val => {
+                                val.fileList = [{
+                                    name: '',
+                                    url: val.image
+                                }]
+                            })
+                            this.ruleForm.goodsInfos = goodsInfos
+                        }
+                        if(this.ruleForm.relationProductInfoIds && this.ruleForm.relationProductInfoIds.length) {
+                            this._apis.goods.getSPUGoodsList({ids: this.ruleForm.relationProductInfoIds}).then((res) => {
+                                this.tableData = res.list
+                            }).catch(error => {
+                                this.$message.error({
+                                    message: error,
+                                    type: 'error'
+                                });
+                            })
+                        }
+                        if(this.ruleForm.productUnit) {
+                            if(!this.unitList.find(val => val.name == this.ruleForm.productUnit)) {
+                                this.ruleForm.other = true
+                                this.ruleForm.otherUnit = this.ruleForm.productUnit
+                            }
+                        }
+                        if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
+                            this.ruleForm.productLabelId = '0'
+                        }
+                        this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
+                        this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
+                        if(!this.itemCatText) {
+                            this.leimuMessage = true
+                            this.ruleForm.productCategoryInfoId = ''
+                        }
+                        // if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
+                        //     this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
+                        //     this.ruleForm.productBrandInfoId = ''
+                        //     this.pinpaiMessage = true
+                        // }
+                        if(this.ruleForm.productDetail) {
+                            //this.ruleForm.productDetail = window.decodeURIComponent(window.atob(this.ruleForm.productDetail))
+                            this.ruleForm.productDetail = window.unescape(this.ruleForm.productDetail)
+                        }
+                        // if(this.ruleForm.productDetail) {
+                        //     let _productDetail = ''
+                        //     _productDetail = decodeURIComponent(escape(window.atob(this.ruleForm.productDetail)))
+                        //     this.ruleForm.productDetail = _productDetail
+                        // }
                     })
-                    this.ruleForm.goodsInfos = goodsInfos
+                } catch(e) {
+                    console.error(e)
                 }
-                if(this.ruleForm.relationProductInfoIds && this.ruleForm.relationProductInfoIds.length) {
-                    this._apis.goods.getSPUGoodsList({ids: this.ruleForm.relationProductInfoIds}).then((res) => {
-                        this.tableData = res.list
-                    }).catch(error => {
-                        this.$message.error({
-                            message: error,
-                            type: 'error'
-                        });
-                    })
-                }
-                if(this.ruleForm.productUnit) {
-                    if(!this.unitList.find(val => val.name == this.ruleForm.productUnit)) {
-                        this.ruleForm.other = true
-                        this.ruleForm.otherUnit = this.ruleForm.productUnit
-                    }
-                }
-                if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
-                    this.ruleForm.productLabelId = '0'
-                }
-                this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
-                this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
-                if(!this.itemCatText) {
-                    this.leimuMessage = true
-                    this.ruleForm.productCategoryInfoId = ''
-                }
-                // if(this.ruleForm.productBrandInfoId && !this.brandList.filter(val => val.enable == 1).find(val => val.id == this.ruleForm.productBrandInfoId)) {
-                //     this.catcheProductBrandInfoId = this.ruleForm.productBrandInfoId
-                //     this.ruleForm.productBrandInfoId = ''
-                //     this.pinpaiMessage = true
-                // }
-                if(this.ruleForm.productDetail) {
-                    //this.ruleForm.productDetail = window.decodeURIComponent(window.atob(this.ruleForm.productDetail))
-                    this.ruleForm.productDetail = window.unescape(this.ruleForm.productDetail)
-                }
-                // if(this.ruleForm.productDetail) {
-                //     let _productDetail = ''
-                //     _productDetail = decodeURIComponent(escape(window.atob(this.ruleForm.productDetail)))
-                //     this.ruleForm.productDetail = _productDetail
-                // }
+                
+                
             }).catch(error => {
             }) 
         },
@@ -2077,6 +2114,14 @@ export default {
                     }
                     let calculationWay
                     try {
+                        this.ruleForm.goodsInfos.forEach((val, index) => {
+                            if(val.image_hide) {
+                                let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
+
+                                val.image = image
+                            }
+                        })
+
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
                         if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
@@ -2170,20 +2215,20 @@ export default {
                             });
                             return
                         }
-                        if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
-                            this.$message({
-                                message: '重量必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].volume  <= 0) {
-                            this.$message({
-                                message: '体积必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
+                        // if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
+                        //     this.$message({
+                        //         message: '重量必须大于0',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(+this.ruleForm.goodsInfos[i].volume  <= 0) {
+                        //     this.$message({
+                        //         message: '体积必须大于0',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
                     }
                     } catch(e) {
                         console.error(e)
@@ -2693,7 +2738,7 @@ export default {
             }
         },
         imageSelected(image) {
-            if(!/\.jpg|\.jpeg|\.png|\.gif$/.test(image.fileName)) {
+            if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
                 type: 'warning'

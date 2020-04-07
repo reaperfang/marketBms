@@ -12,7 +12,7 @@
 
     <ul class="page_list paper_list" v-if="currentComponentData.data.showType === 2">
       <li v-for="(item, key) of currentComponentData.data.pageInfos" :key="key">
-        <img src="http://img11.360buyimg.com/n1/jfs/t1/72253/36/6701/86164/5d4d4484E47be505a/fa7ff166e9661ccf.jpg" alt="">
+        <img src="//img11.360buyimg.com/n1/jfs/t1/72253/36/6701/86164/5d4d4484E47be505a/fa7ff166e9661ccf.jpg" alt="">
         <p>{{item.name}}</p>
       </li>
     </ul>

@@ -219,6 +219,7 @@ export default {
   methods: {
     imageSelected(item) {
       this.form.logo = item.filePath;
+      this.handleAvatarSuccess(item.filePath);
     },
     itemCatHandleChange(value) {
       let _value = [...value];
@@ -326,39 +327,37 @@ export default {
         });
     },
 
-    onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.loading = true;
-          let id = this.cid;
-          let data = {
-            id: id,
-            shopName: this.form.shopName,
-            logo: this.form.logo,
-            logoCircle: this.form.logoCircle,
-            phone: this.form.phone,
-            province: this.province,
-            city: this.city,
-            area: this.area,
-            provinceCode: this.form.addressCode[0],
-            cityCode: this.form.addressCode[1],
-            areaCode: this.form.addressCode[2],
-            address: this.form.address,
-            shopIntroduce: this.form.shopIntroduce,
-            sellCategoryId: this.form.sellCategoryId,
-            sellCategory: this.form.sellCategory,
-            companyName: this.form.companyName,
-            companyEmail: this.form.companyEmail
-          };
-          this._apis.set
-            .updateShopInfo(data)
-            .then(response => {
-              this.setShopName();
-            })
-            .catch(error => {
+    onSubmit(formName){
+      this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.loading = true
+            let id = this.cid
+            let data = {
+              id:id,
+              shopName:this.form.shopName,
+              logo:this.form.logo,
+              logoCircle:this.form.logoCircle,
+              phone:this.form.phone,
+              province: this.province,
+              city: this.city,
+              area: this.area,
+              provinceCode:this.form.addressCode[0],
+              cityCode:this.form.addressCode[1],
+              areaCode:this.form.addressCode[2],
+              address:this.form.address,
+              shopIntroduce:this.form.shopIntroduce,
+              sellCategoryId: this.form.sellCategoryId,
+              sellCategory: this.form.sellCategory,
+              companyName: this.form.companyName,
+              companyEmail: this.form.companyEmail
+            }
+            this._apis.set.updateShopInfo(data).then(response =>{
+              this.setShopName()    
+              this.$store.dispatch('getShopInfo');          
+            }).catch(error =>{
               this.$message.error(error);
-              this.loading = false;
-            });
+              this.loading = false
+            })
         }
       });
     },
@@ -378,48 +377,40 @@ export default {
         .catch(error => {});
     },
 
-    handleAvatarSuccess(res, file) {
-      this.form.logo = res.data.url;
+    handleAvatarSuccess(res) {
       //圆形图片处理
       var ctx = this.canvas.getContext("2d");
       let _self = this;
       var img = new Image();
-      img.setAttribute("crossOrigin", "Anonymous");
-      img.onload = function() {
-        ctx.beginPath();
-        // 绘制圆，参数（x坐标，y坐标，圆半径，起始角度，终止角度）
-        ctx.arc(40, 40, 40, 0, 2 * Math.PI);
-        ctx.save();
-        // 剪切形状
-        ctx.clip();
-        // 绘制头像，参数（图片资源，x坐标，y坐标，宽度，高度）
-        ctx.drawImage(img, 0, 0, 80, 80);
-        ctx.restore();
-        ctx.closePath();
-        let base64 = _self.canvas.toDataURL("image/png");
-        let urlData = base64.substring(22, base64.length);
-        _self.uploadCircle(urlData);
-      };
-      img.src = res.data.url;
+      img.setAttribute("crossOrigin",'Anonymous')
+      img.onload = function () {
+          ctx.beginPath();
+          // 绘制圆，参数（x坐标，y坐标，圆半径，起始角度，终止角度）
+          ctx.arc(40, 40, 40, 0, 2*Math.PI);
+          ctx.save();
+          // 剪切形状
+          ctx.clip();
+          // 绘制头像，参数（图片资源，x坐标，y坐标，宽度，高度）
+          ctx.drawImage(img, 0, 0, 80, 80);
+          ctx.restore();
+          ctx.closePath();
+          let base64 = _self.canvas.toDataURL("image/png"); 
+          let urlData = base64.substring(22, base64.length);          
+          _self.uploadCircle(urlData)
+      }
+      img.src = res;
     },
 
-    uploadCircle(urlData) {
-      axios
-        .post(
-          this.uploadUrlBase64,
-          'json={"cid":"' +
-            this.cid +
-            '", "content":"' +
-            encodeURI(urlData).replace(/\+/g, "%2B") +
-            '"}',
-          { headers: { Origin: "http" } }
-        )
-        .then(response => {
-          this.form.logoCircle = response.data.data.url;
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    uploadCircle(urlData){
+      axios.post(
+        this.uploadUrlBase64,
+        "json={\"cid\":\""+this.cid+"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",
+        {headers: {'Origin':location.protocol.split(':')[0]}}
+      ).then((response) => {
+        this.form.logoCircle = response.data.data.url
+      }).catch((error) => {
+        console.log(error);
+      })
     },
 
     beforeAvatarUpload(file) {
