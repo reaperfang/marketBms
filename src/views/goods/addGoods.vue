@@ -2738,7 +2738,7 @@ export default {
             }
         },
         imageSelected(image) {
-            if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.fileName)) {
+            if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
                 type: 'warning'
