@@ -107,12 +107,8 @@ methods: {
         parentId:'0'  
       }
     this._apis.file.newGroup(query).then((response)=>{
-        let obj = {
-          id:response,
-          parentId:'0',
-          name:name
-        }
-        this.treeData.unshift(obj)
+        let data = {id:response,name:name}
+        this.$refs.tree.append(data)
       }).catch((error)=>{
         this.$message.error(error);
       })
