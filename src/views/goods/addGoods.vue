@@ -2114,6 +2114,14 @@ export default {
                     }
                     let calculationWay
                     try {
+                        this.ruleForm.goodsInfos.forEach((val, index) => {
+                            if(val.image_hide) {
+                                let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
+
+                                val.image = image
+                            }
+                        })
+
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
                         if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
