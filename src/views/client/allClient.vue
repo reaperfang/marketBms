@@ -328,73 +328,89 @@ export default {
         let canSubmit = true;
         if(!!this.isNumber(this.form.scoreMin)) {
             if(!this.isNumber(this.form.scoreMax) || Number(this.form.scoreMax) <= Number(this.form.scoreMin)) {
-                this.$message({
-                    message: '请正确输入最大积分',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最大积分',
+                        type: 'warning'
+                    });
+                },100)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.scoreMax)) {
             if(!this.isNumber(this.form.scoreMin) || Number(this.form.scoreMin) >= Number(this.form.scoreMax)) {
-                this.$message({
-                    message: '请正确输入最小积分',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最小积分',
+                        type: 'warning'
+                    });
+                },200)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.totalDealMoneyMin)) {
             if(!this.isNumber(this.form.totalDealMoneyMax) || Number(this.form.totalDealMoneyMax) <= Number(this.form.totalDealMoneyMin)) {
-                this.$message({
-                    message: '请正确输入累计最大金额',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入累计最大金额',
+                        type: 'warning'
+                    });
+                },300)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.totalDealMoneyMax)) {
             if(!this.isNumber(this.form.totalDealMoneyMin) || Number(this.form.totalDealMoneyMin) >= Number(this.form.totalDealMoneyMax)) {
-                this.$message({
-                    message: '请正确输入累计最小金额',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入累计最小金额',
+                        type: 'warning'
+                    });
+                },400)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.dealTimesMin)) {
             if(!this.isNumber(this.form.dealTimesMax) || Number(this.form.dealTimesMax) <= Number(this.form.dealTimesMin)) {
-                this.$message({
-                    message: '请正确输入最大购买次数',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最大购买次数',
+                        type: 'warning'
+                    });
+                },500)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.dealTimesMax)) {
             if(!this.isNumber(this.form.dealTimesMin) || Number(this.form.dealTimesMin) >= Number(this.form.dealTimesMax)) {
-                this.$message({
-                    message: '请正确输入最小购买次数',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最小购买次数',
+                        type: 'warning'
+                    });
+                },600)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.perUnitPriceMin)) {
             if(!this.isNumber(this.form.perUnitPriceMax) || Number(this.form.perUnitPriceMax) <= Number(this.form.perUnitPriceMin)) {
-                this.$message({
-                    message: '请正确输入最大客单价',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最大客单价',
+                        type: 'warning'
+                    });
+                },700)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.perUnitPriceMax)) {
             if(!this.isNumber(this.form.perUnitPriceMin) || Number(this.form.perUnitPriceMin) >= Number(this.form.perUnitPriceMax)) {
-                this.$message({
-                    message: '请正确输入最小客单价',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最小客单价',
+                        type: 'warning'
+                    });
+                },800)
                 canSubmit = false;
             }
         }

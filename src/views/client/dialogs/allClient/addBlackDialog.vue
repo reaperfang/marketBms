@@ -197,6 +197,12 @@ export default {
             couponList: []
         }
     },
+    watch: {
+        data(newValue, oldValue) {
+            this.getAllCoupons(newValue.id);
+            this.getAllCodes(newValue.id);
+        }
+    },
     methods: {
         couponCancel() {
             this.dialogVisible2 = false;
@@ -440,7 +446,7 @@ export default {
             }
         },
         getAllCoupons(id) {
-            this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1, startIndex: 1, pageSize: 999}).then((response) => {
                 this.couponList = [].concat(response.list);
                 this.couponList.map((item) => {
                     this.$set(item, 'frozenNum',1);
@@ -450,7 +456,7 @@ export default {
             })
             },
         getAllCodes(id) {
-            this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1,startIndex: 1, pageSize: 999}).then((response) => {
                 this.codeList = [].concat(response.list);
                 this.codeList.map((item) => {
                     this.$set(item, 'frozenNum', 1);
@@ -471,8 +477,6 @@ export default {
         }
     },
     created() {
-        this.getAllCoupons(this.data.id);
-        this.getAllCodes(this.data.id);
         this.getBlackChecks();
     },
     props: {
@@ -490,6 +494,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/deep/ .el-table__body-wrapper{
+    overflow: auto;
+    height: 502px;
+}
 /deep/ .el-dialog__header{
     background: #f1f0ff;
     border-radius: 10px 10px 0 0;

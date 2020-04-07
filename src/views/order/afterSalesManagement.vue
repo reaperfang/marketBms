@@ -278,6 +278,7 @@ export default {
         },
         exportOrder() {
             let _param
+            let __param
             
             _param = Object.assign({}, this.listQuery, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
@@ -287,7 +288,7 @@ export default {
                 isExport: 0
             })
             if(this.multipleSelection.length) {
-              _params = Object.assign({}, _params, {
+              _param = Object.assign({}, _param, {
                 ids: this.multipleSelection.map(val => val.id)
               })
             }
