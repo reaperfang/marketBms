@@ -42,7 +42,7 @@
                 <el-form-item class="searchTimeType">
                     <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
                         <el-option label="发货时间" value="send"></el-option>
-                        <el-option label="下单时间" value="order"></el-option>
+                        <el-option label="下单时间" value="create"></el-option>
                     </el-select>
                     <el-date-picker
                         v-model="listQuery.orderTimeValue"
@@ -141,6 +141,7 @@
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchSupplementaryLogistics">批量补填物流</el-button>
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
@@ -226,6 +227,17 @@ export default {
         }
     },
     methods: {
+        batchSupplementaryLogistics() {
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
+                return
+            }
+            if(this.multipleSelection.filter(val => val.isFillUp != 1).length) {
+                this.confirm({title: '提示', icon: true, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
+                return
+            }
+            this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.multipleSelection.map(val => val.id).join(','))
+        },
         checkedAllChange() {
             if(this.checkedAll) {
                 this.$refs.multipleTable.clearSelection();
