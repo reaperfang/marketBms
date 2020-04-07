@@ -42,7 +42,7 @@
                 <el-form-item class="searchTimeType">
                     <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
                         <el-option label="发货时间" value="send"></el-option>
-                        <el-option label="下单时间" value="order"></el-option>
+                        <el-option label="下单时间" value="create"></el-option>
                     </el-select>
                     <el-date-picker
                         v-model="listQuery.orderTimeValue"

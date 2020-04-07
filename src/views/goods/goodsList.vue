@@ -76,8 +76,7 @@
                     </el-table-column> -->
                     <el-table-column
                     prop="name"
-                    label="商品名称"
-                    width="200">
+                    label="商品名称">
                         <template slot-scope="scope">
                             <div class="ellipsis2" style="width: 196px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
