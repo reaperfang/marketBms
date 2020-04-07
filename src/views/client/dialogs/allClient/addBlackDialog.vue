@@ -197,6 +197,12 @@ export default {
             couponList: []
         }
     },
+    watch: {
+        data(newValue, oldValue) {
+            this.getAllCoupons(newValue.id);
+            this.getAllCodes(newValue.id);
+        }
+    },
     methods: {
         couponCancel() {
             this.dialogVisible2 = false;
@@ -471,8 +477,6 @@ export default {
         }
     },
     created() {
-        this.getAllCoupons(this.data.id);
-        this.getAllCodes(this.data.id);
         this.getBlackChecks();
     },
     props: {
