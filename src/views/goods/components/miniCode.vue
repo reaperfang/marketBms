@@ -182,6 +182,17 @@ export default {
     .share-popper {
         width: 370px;
         background-color: #505c74!important;
+        .popper__arrow {
+            top: -6px;
+            border-top-width: 0;
+            border-bottom-color: #505c74!important;
+        }
+    }
+    .share-popper[x-placement^=bottom] .popper__arrow::after {
+        top: 1px;
+        margin-left: -5px;
+        border-top-width: 0;
+        border-bottom-color: #505c74!important;
     }
 </style>
 
