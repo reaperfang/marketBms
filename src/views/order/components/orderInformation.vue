@@ -14,7 +14,7 @@
                             <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
-                    <p v-if="orderInfo.orderStatus != 5" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
+                    <p v-if="orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
                 </div>
             </el-col>
             <el-col :span="8"><div class="grid-content center">
@@ -537,14 +537,14 @@ export default {
             }) 
         },
         yingshouSubmit() {
-            if(this.yingshouChangeMoney < 0) {
+            if(+this.yingshouChangeMoney < 0) {
                 this.$message({
                     message: '非法输入，仅支持输入非负数，请重新输入',
                     type: 'warning'
                 });
                 return
             }
-            if(this.yingshouChangeMoney < this.orderDetail.orderInfo.consumeBalanceMoney) {
+            if(+this.yingshouChangeMoney < +this.orderDetail.orderInfo.consumeBalanceMoney) {
                 this.$message({
                     message: '改价金额不小于余额实付金额',
                     type: 'warning'
@@ -552,7 +552,7 @@ export default {
                 return
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-                 consultMoney: this.yingshouChangeMoney}).then(res => {
+                 consultMoney: +this.yingshouChangeMoney}).then(res => {
                     this.changePriceVisible = false
                     this.$emit('getDetail')
                     this.currentDialog = 'ChangePriceDialog'

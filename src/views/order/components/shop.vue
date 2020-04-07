@@ -33,7 +33,12 @@ export default {
         this.getList()
     },
     watch: {
-        
+        params: {
+            deep: true,
+            handler() {
+                this.getList()
+            }
+        }
     },
     methods: {
         wad() {

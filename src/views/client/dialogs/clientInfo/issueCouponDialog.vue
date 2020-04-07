@@ -168,33 +168,32 @@ export default {
       });
       if(this.selectedCoupons.length > 0) {
         this._apis.client.distributeCoupon(arr).then((response) => {
-          let flag = true;
+          let warnMsg = "";
           response.map((v) => {
             if(!!v.receiveDesc) {
-              //this.visible = false;
               this.btnLoading = false;
-              let errMsg = v.couponName + "发放失败，原因：" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
-              this.infoArrs.push(errMsg);
-              // this.$message({
-              //   message: errMsg,
-              //   type: 'warning'
-              // });
-            }else{
-              this.btnLoading = false;
-              //this.visible = false;
-              let successMsg = v.couponName + "发放成功";
-              this.infoArrs.push(successMsg);
-              // this.$message({
-              //   message: "发放成功",
-              //   type: 'success'
-              // });
-              this.$emit('refreshPage',1);
+              let errMsg = v.couponName + "发放失败，" + v.receiveDesc.substring(v.receiveDesc.indexOf('。') + 1,v.receiveDesc.length);
+              warnMsg = warnMsg + errMsg + '';
             }
           })
+          this.btnLoading = false;
+          this.visible = false;
+          if(!warnMsg) {
+            this.$message({
+              message: "发放成功",
+              type: 'success'
+            });
+          }else{
+            this.$message({
+              message: warnMsg,
+              type: 'warning'
+            });
+          }
+          this.$emit('refreshPage',1);
         }).catch((error) => {
           console.log(error);
           this.btnLoading = false;
-          //this.visible = false;
+          this.visible = false;
         })
       }else{
         this.btnLoading = false;

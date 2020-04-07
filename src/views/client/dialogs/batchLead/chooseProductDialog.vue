@@ -55,6 +55,7 @@
         width="45%"
     >
         <div>
+            <span class="clearFont">（清空全部已选商品）</span>
             <el-button class="clearBtn" @click="clearList">清 空</el-button>
             <el-table
                 :data="selectedList"
@@ -228,10 +229,17 @@ export default {
       this._apis.client
         .getSkuList(params)
         .then(response => {
-          response.list.map((v) => {
-              v.goodsInfo.specs = v.goodsInfo.specs.replace(/{|}|"|"/g,"");
-          })
           this.skuList = [].concat(response.list);
+          this.skuList.map((v) => {
+              v.goodsInfo.specs = v.goodsInfo.specs.replace(/{|}|"|"/g,"");
+              if(this.selectedList.length > 0) {
+                this.selectedList.map(i => {
+                  if(i.goodsInfo.id == v.goodsInfo.id) {
+                    this.$set(v, 'noselected', true);
+                  }
+                })
+              }
+          })
           this.total = response.total;
         })
         .catch(error => {
@@ -259,6 +267,10 @@ export default {
     }
   },
   mounted() {
+    //如果有已选的商品
+    if(this.data.selectedList) {
+      this.selectedList = [].concat(this.data.selectedList)
+    }
     this.getProductClass();
     this.getSkuList(1,10);
   },
@@ -305,6 +317,12 @@ export default {
   .clearBtn{
     float: right;
     margin-bottom: 20px;
+  }
+  .clearFont{
+    float: right;
+    color: #9FA29F;
+    font-size: 14px;
+    margin-top: 9px;
   }
   .no_data{
     display: block;

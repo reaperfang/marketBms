@@ -37,7 +37,7 @@
             </el-form-item>
             <el-form-item label="商品图片" prop="images">
                 <!-- <img v-for="(item, key) of imageList" :key="key" :src="item.src" alt="" style="width:100px;height:100px"> -->
-                <el-upload
+                <!-- <el-upload
                     :disabled="!ruleForm.productCategoryInfoId"
                     :action="uploadUrl"
                     accept=".jpg,.jpeg,.png,.gif,.JPG,.JPEG,.GIF"
@@ -55,14 +55,31 @@
                     class="p_imgsCon">
                     <i class="el-icon-plus"></i>
                     <p style="line-height: 21px; margin-top: -39px; color: #92929B;">上传图片</p>
-                </el-upload>
+                </el-upload> -->
+                <div class="upload-box">
+                    <div class="image-list">
+                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in ruleForm.images.split(',')">
+                            <label>
+                                <i class="el-icon-check"></i>
+                            </label>
+                            <span class="image-item-actions">
+                                <span @click="imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
+                                <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                            </span>
+                        </div>
+                        <div v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="upload-add">
+                            <i data-v-03229368="" class="el-icon-plus"></i>
+                            <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传图片</p>
+                        </div>
+                    </div>
+                </div>
                 <el-dialog :visible.sync="imageDialogVisible"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false">
                     <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
-                <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span>
-                <p class="description prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
+                <!-- <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span> -->
+                <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
             </el-form-item>
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" style="display: inline-block;">
@@ -135,14 +152,14 @@
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
-                                            <input @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
-                                            <el-button maxlength="50" @click="addNewSpecValue(item, index)">新增</el-button>
+                                            <input  maxlength="50" @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
+                                            <el-button @click="addNewSpecValue(item, index)">新增</el-button>
                                         </div>
                                         <ul class="add-spec-value-ul">
                                             <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
                                                 {{ValueItem.name}}
                                                 <i v-if="ValueItem.type == 'new'" @click="(e) => {
-                                                    deleteSpecValue(valueIndex, e)
+                                                    deleteSpecValue(valueIndex, e, ValueItem)
                                                 }" class="icon-circle-close"></i>
                                             </li>
                                             <div class="clear"></div>
@@ -194,14 +211,14 @@
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
-                                            <input @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
+                                            <input maxlength="50" @blur="specsValueBlur(index)" @focus="specsValueFocus(index)" v-model="item.newSpecValue" type="text" placeholder="选择或录入规格值">
                                             <el-button @click="addNewSpecValue(item, index)">新增</el-button>
                                         </div>
                                         <ul class="add-spec-value-ul">
                                             <li @click="selectSpecValue(index, valueIndex)" :class="{active: ValueItem.active}" v-for="(ValueItem, valueIndex) in item.list" :key="valueIndex">
                                                 {{ValueItem.name}}
                                                 <i v-if="ValueItem.type == 'new'" @click="(e) => {
-                                                    deleteSpecValue(valueIndex, e)
+                                                    deleteSpecValue(valueIndex, e, ValueItem)
                                                 }" class="icon-circle-close"></i>
                                             </li>
                                             <div class="clear"></div>
@@ -223,7 +240,7 @@
                     </div> -->
                     <div v-show="showAddSpecsInput" class="add-specs">
                         <div style="position: relative;" class="add-specs-input">
-                            <input v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
+                            <input maxlength="50" v-model="newSpec" @focus="inputFocus" type="text" placeholder="选择或录入规格">
                             <el-button @click.native="addNewSpec">新增</el-button>
                         </div>
                         <ul class="spec-list" style="top: 35px;" v-show="showSpecsList">
@@ -522,7 +539,7 @@
         </section>
         <section class="form-section">
             <h2>物流/售后</h2>
-            <el-form-item label="上架时间" prop="status">
+            <el-form-item v-show="!editor" label="上架时间" prop="status">
                 <span>定时上架的商品在上架前请到“仓库中的宝贝”里编辑商品。</span>
                 <div>
                     <el-radio-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
@@ -959,6 +976,12 @@ export default {
         });
     },
     methods: {
+        deleteImage(index) {
+            let imagesArr = this.ruleForm.images.split(',')
+
+            imagesArr.splice(index, 1)
+            this.ruleForm.images = imagesArr.join(',')
+        },
         beforeUpload(file) {
             console.log(file)
             if(file.size > 2097152) {
@@ -1011,12 +1034,16 @@ export default {
             })
             this.ruleForm.goodsInfos = goodsInfos
         },
-        deleteSpecValue(index, e) {
+        deleteSpecValue(index, e, item) {
             e.stopPropagation()
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
+            let name = item.name
+            let flatIndex = this.flatSpecsList.findIndex(val => val.name == name)
+
             addedSpecs[addedSpecs.length - 1].list.splice(index, 1)
             this.addedSpecs = addedSpecs
             this.specsValues.splice(index, 1)
+            this.flatSpecsList.splice(flatIndex, 1)
         },
         addNewSpecValue(item, index) {
             let value = item.newSpecValue
@@ -1042,9 +1069,16 @@ export default {
                 });
                 return
             }
-            if(lastAddedSpecs.list.find(val => val.name == value)) {
+            // if(lastAddedSpecs.list.find(val => val.name == value)) {
+            //     this.$message({
+            //     message: '规格值不能与已有规格名重复，请您重新选择',
+            //     type: 'warning'
+            //     });
+            //   return
+            // }
+            if(this.flatSpecsList.find(val => val.name == value)) {
                 this.$message({
-                message: '规格值不能与已有规格名重复，请您重新选择',
+                message: '规格值不能与已有规格名或规格值重复，请您重新选择',
                 type: 'warning'
                 });
               return
@@ -1081,14 +1115,21 @@ export default {
         addNewSpec() {
             if(/\s+/.test(this.newSpec)) {
                 this.$message({
-                    message: '规格名称不能为空',
+                    message: '当前输入有误，请您重新输入',
                     type: 'warning'
                 });
                 return
             }
-            if(this.specsList.find(val => val.name == this.newSpec)) {
+            // if(this.specsList.find(val => val.name == this.newSpec)) {
+            //     this.$message({
+            //     message: '规格名称重复',
+            //     type: 'warning'
+            //     });
+            //   return
+            // }
+            if(this.flatSpecsList.find(val => val.name == this.newSpec)) {
                 this.$message({
-                message: '规格名称重复',
+                message: '规格名不能与已有规格名或规格值重复，请您重新选择',
                 type: 'warning'
                 });
               return
@@ -1774,7 +1815,7 @@ export default {
                         _addedSpecs.push(_flatSpecsItem)
                     } else {
                         let specItem = {
-                            id: new Date().getTime(),
+                            id: new Date().getTime() + specName,
                             name: specName,
                             parentId: '0',
                             list: [],
@@ -3071,6 +3112,7 @@ $blue: #655EFF;
             border: 1px solid #ddd;
             padding: 7px 12px;
             border-radius:4px;
+            margin-bottom: 5px;
             cursor: pointer;
             position: relative;
             &.active {
@@ -3253,5 +3295,122 @@ $blue: #655EFF;
 }
 .prompt-box {
     margin-top: 5px;
+}
+.upload-box {
+    .image-list {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .upload-add {
+            &:hover {
+                border-color: #655EFF;
+                color: #655EFF;
+            }
+            &:focus {
+                border-color: #655EFF;
+                color: #655EFF;
+            }
+            .el-icon-plus {
+                font-size: 28px;
+                color: #8c939d;
+            }
+            width: 80px !important;
+            height: 80px !important;
+            line-height: 90px !important;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+            outline: 0;
+            background-color: #fbfdff;
+            border: 1px dashed #c0ccda;
+            border-radius: 6px;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 148px;
+            height: 148px;
+            line-height: 146px;
+            vertical-align: top;
+        }
+        .image-item {
+            &:hover {
+                label {
+                    display: none;
+                }
+            }
+            margin-right: 8px;
+            margin-bottom: 8px;
+            width: 80px;
+            height: 80px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            border: 1px solid #c0ccda;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+            label {
+                display: block;
+                position: absolute;
+                right: -15px;
+                top: -6px;
+                width: 40px;
+                height: 24px;
+                background: #13ce66;
+                text-align: center;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+                -webkit-box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+                box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+                .el-icon-check {
+                    color: #fff;
+                    -webkit-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
+                }
+            }
+            .image-item-actions {
+                &:hover {
+                    opacity: 1;
+                }
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                cursor: default;
+                text-align: center;
+                color: #fff;
+                opacity: 0;
+                font-size: 20px;
+                background-color: rgba(0,0,0,.5);
+                -webkit-transition: opacity .3s;
+                transition: opacity .3s;
+                i {
+                    font-family: element-icons!important;
+                    speak: none;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-variant: normal;
+                    text-transform: none;
+                    line-height: 1;
+                    vertical-align: baseline;
+                    display: inline-block;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+                .image-item-actions-delete {
+                    margin-left: 15px;
+                }
+            }
+        }
+    }
+}
+.upload-prompt {
+    margin-top: 12px;
+    font-size:12px;
+    font-weight:400;
+    color:rgba(146,146,155,1);
+    line-height:17px;
 }
 </style>

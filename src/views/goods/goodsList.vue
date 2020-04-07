@@ -15,7 +15,7 @@
                             <el-option label="全部" value=""></el-option>
                         <el-option label="上架" :value="1"></el-option>
                         <el-option label="下架" :value="0"></el-option>
-                        <el-option label="售罄" :value="-1"></el-option>
+                        <el-option label="已售罄" :value="-1"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="商品分类" prop="productCatalogInfoId">
@@ -110,7 +110,7 @@
                         width="120"
                         class-name="salePrice">
                         <template slot-scope="scope">
-                            <span class="price">
+                            <span class="price" :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}">
                                 {{Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice))}}
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
                             </span>
@@ -174,8 +174,8 @@
             </div>
             <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
-        <div v-else-if="!allTotal" class="goods-list-empty">
-            <div v-if="!loading" class="goods-list-empty-content">
+        <div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
+            <div class="goods-list-empty-content">
                 <div class="image"></div>
                 <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
                 <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
@@ -330,6 +330,7 @@
     text-align: center;
     .goods-list-empty-content {
         padding-top: 155px;
+        padding-bottom: 20px;
         .image {
             width: 210px;
             height: 178px;
@@ -356,7 +357,7 @@
 .table-header {
     margin-bottom: 10px;
 }
-/deep/ .salePrice {
+/deep/ .salePrice-red {
     color: #F66060;
 }
 .sale-bg {
@@ -374,7 +375,7 @@
     margin-left: 12px;
 }
 .ellipsis2 {
-    width: 350px;
+    width: 196px;
     text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -472,6 +473,14 @@ export default {
                     return '上架'
                 } else if(item.status == 0) {
                     return '下架'
+                } else if(item.status == -1) {
+                    if(goodsInfos[1]) {
+                        if(goodsInfos[1].status == 0) {
+                            return '下架'
+                        } else if(goodsInfos[1].status == 1) {
+                            return '上架'
+                        }
+                    }
                 }
             }
         },
@@ -576,6 +585,7 @@ export default {
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
+                    this.$refs.table.clearSelection();
                     this.checkedAll = false
                 }).catch(error => {
                     this.$message.error({
@@ -666,8 +676,23 @@ export default {
             }
 
             this.confirm({title: '批量删除', icon: true, text: '是否确认批量删除？'}).then(() => {
+                let isLast = false
+
+                if(this.listQuery.startIndex == 1) {
+                    isLast = true
+                } else {
+                    if((this.listQuery.startIndex - 1)*this.listQuery.pageSize + this.list.length == this.total) {
+                        isLast = true
+                    }
+                }
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
-                    this.getList()
+                    if(isLast) {
+                        this.listQuery.startIndex = 1
+                        this.getList()
+                    } else {
+                        this.getList()
+                    }
+                    this.getAllList()
                     this.checkedAll = false
                     this.visible = false
                     this.$message({
@@ -944,6 +969,7 @@ export default {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                     this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
+                        this.getAllList()
                         this.visible = false
                         this.$message({
                             message: '删除成功！',
