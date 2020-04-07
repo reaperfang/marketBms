@@ -14,7 +14,7 @@
           </div>
         </el-form-item>
         <el-form-item label="背景设置：" prop="backgroundType">
-          <el-radio v-model="ruleForm.backgroundType" label="0">背景色：</el-radio>
+          <el-radio v-model="ruleForm.backgroundType" label="0" @change="chooseColor">背景色：</el-radio>
           <span
             :class="[item.active == '1'?'active':'','color_picker']"
             v-for="item in colors"
@@ -52,8 +52,12 @@
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >像素大小控制在1000象素*600象素以下</span>
-          <img v-if="imgUrl" :src="imgUrl" class="avatar cardImg" />
-          <div v-else class="cardImg2" :style="{backgroundColor: currentColor}">
+          <div v-if="ruleForm.backgroundType == '1'" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`}">
+            <p class="c_bh">3363197129819XXXXX</p>
+            <p class="c_name">{{ ruleForm.name }}</p>
+            <p class="c_level">{{ ruleForm.alias }}</p>
+          </div>
+          <div v-if="ruleForm.backgroundType == '0'" class="cardImg2" :style="{backgroundColor: currentColor}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
             <p class="c_level">{{ ruleForm.alias }}</p>
@@ -81,7 +85,7 @@
             <el-form-item v-if="getIndex(this.rightsList,'积分回馈倍率') !== -1" style="margin-left: 94px">
               <el-checkbox v-model="right2" @change="handleCheck1">积分回馈倍率</el-checkbox>
               <div class="input_wrap3">
-                <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
+                <el-input placeholder="请输入数字" v-model="jfhkbl" @keyup.native="checkZero2($event, jfhkbl,'jfhkbl')" :max-length="10"></el-input>
               </div>
               <span>倍</span>
               <span>（仅对登录、购买、复购以及评价情景有效）</span>
@@ -129,7 +133,7 @@
               <div v-for="(item, index) in selectedGifts" :key="item.id">
                 <span>{{ item.goodsName }}</span>
                 <el-input-number v-model="item.number" :max="10"></el-input-number>
-                <span style="margin-left:20px" class="pointer" @click="deleteGift(index)">删除</span>
+                <span style="margin-left:20px; color: #655eff" class="pointer" @click="deleteGift(index)">删除</span>
               </div>
             </div>
           </el-form-item>
@@ -139,7 +143,7 @@
               <div v-for="(item, index) in selectedCoupons" :key="item.id">
                 <span>{{ item.name }}</span>
                 <el-input-number v-model="item.number" :max="10"></el-input-number>
-                <span style="margin-left:20px" class="pointer" @click="deleteCoupon(index)">删除</span>
+                <span style="margin-left:20px; color: #655eff" class="pointer" @click="deleteCoupon(index)">删除</span>
               </div>
             </div>
           </el-form-item>
@@ -265,7 +269,7 @@ export default {
       selectedReds: [],
       levelConditionValueDto: {},
       colors: [],
-      currentColor: "",
+      currentColor: "#63b359",
       canSubmit1: true,
       canSubmit2: true,
       canSubmit3: true,
@@ -288,6 +292,12 @@ export default {
     },
     checkZero(event,val,ele) {
       val = val.replace(/[^\d]/g,'');
+      val = val.replace(/^0/g,'');
+      this[ele] = val;
+    },
+    checkZero2(event,val,ele) {
+      val = val.replace(/[^\d]/g,'');
+      val = val.replace('.','');
       val = val.replace(/^0/g,'');
       this[ele] = val;
     },
@@ -396,6 +406,7 @@ export default {
             this.colors.map(v => {
               if (v.imgUrl == this.ruleForm.background) {
                 v.active = "1";
+                console.log(v.imgKey)
                 this.currentColor = v.imgKey
               }
             });
@@ -576,6 +587,17 @@ export default {
         });
       }
     },
+    chooseColor(val) {
+      if(val == 0) {
+        if(this.currentColor) {
+          this.colors.map(v => {
+            if(v.imgKey == this.currentColor) {
+              this.$set(v, 'active',"1");
+            }
+          })
+        }
+      }
+    },
     save() {
       if(this.ruleForm.name == "") {
         this.$message({
@@ -626,7 +648,7 @@ export default {
           if(formObj.receiveSetting == '0') {
             formObj.receiveConditionsRemarks = '可直接领取';
           }else{
-            if(JSON.stringify(this.levelConditionValueDto) == '{}') {
+            if(JSON.stringify(this.levelConditionValueDto) == '{}' || !this.levelConditionValueDto.conditionValue || !this.levelConditionValueDto.levelConditionId) {
               this.$message({
                 message: '请选择特定条件',
                 type: 'warning'
@@ -912,10 +934,7 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-upload {
-  height: 30px !important;
-  line-height: 30px !important;
-}
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -956,6 +975,20 @@ export default {
     right: 20px;
     top: -86px;
     border-radius: 8px;
+    .c_bh{
+      font-size: 12px;
+      margin: 4px 0 0 13px;
+    }
+    .c_name{
+      font-size: 20px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .c_level{
+      margin: 20px 0 0 15px;
+      font-size: 16px;
+    }
   }
   .cardImg2 {
     width: 323px;

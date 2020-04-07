@@ -91,7 +91,7 @@
       </div>
     </div>
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :pageId="currentItem.id" :pageLink="currentItem.shareUrl"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :pageId="currentItem.id" :pageLink="pageLink"></component>
   </div>
 </template>
 
@@ -116,11 +116,22 @@ export default {
         name: ''
       },
       seletedClassify: '',   //选中的分类
-      visible: false  //是否显示批量该分类浮层
+      visible: false,  //是否显示批量该分类浮层
+      pageLink: ''
     }
   },
   created() {
     this.getClassifyList();
+  },
+  watch: {
+    currentItem: {
+      handler(newValue) {
+        if(newValue && newValue.shareUrl) {
+          this.pageLink = location.protocol + newValue.shareUrl.split(':')[1]
+        }
+      },
+      deep: true
+    }
   },
   methods: {
 

@@ -5,7 +5,7 @@
         <div class="form_container">
             <el-form ref="form" :model="form">
                 <el-row>
-                    <el-col :span="6">
+                    <el-col :span="wWidth < 1500 ? 8:6">
                         <el-form-item label="查询条件：" prop="labelName">
                             <el-select v-model="form.labelName" placeholder="请选择" clearable>
                                 <el-option label="昵称" value="nickName"></el-option>
@@ -63,7 +63,7 @@
                         </el-checkbox-group>
                     </el-form-item>
                     <el-row>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="积分：" prop="scoreMin">
                                 <div class="input_wrap" style="margin-left: 27px;">
                                     <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number2($event,form.scoreMin,'scoreMin')"></el-input>
@@ -76,7 +76,7 @@
                                 <span>分</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="累计消费金额：" prop="totalDealMoneyMin">
                                 <div class="input_wrap">
                                     <el-input v-model="form.totalDealMoneyMin" placeholder="最小值" @keyup.native="number3($event,form.totalDealMoneyMin,'totalDealMoneyMin')"></el-input>
@@ -89,7 +89,7 @@
                                 <span>元</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="购买次数：" prop="dealTimesMin">
                                 <div class="input_wrap">
                                     <el-input v-model="form.dealTimesMin" placeholder="最小值" @keyup.native="number2($event,form.dealTimesMin,'dealTimesMin')"></el-input>
@@ -104,7 +104,7 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="客单价：" prop="perUnitPriceMin">
                                 <div class="input_wrap" style="margin-left: 13px;">
                                     <el-input v-model="form.perUnitPriceMin" placeholder="最小值" @keyup.native="number3($event,form.perUnitPriceMin,'perUnitPriceMin')"></el-input>
@@ -117,7 +117,7 @@
                                 <span>元</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8" :style="{marginTop: wWidth < 1800 ? '-42px':''}">
                             <el-form-item label="注册时间：">
                                 <div class="input_wrap3">
                                     <el-date-picker
@@ -127,14 +127,14 @@
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         value-format="yyyy-MM-dd HH:mm:ss"
-                                        editable="false"
+                                        :editable="false"
                                         :picker-options="utils.globalTimePickerOption.call(this)"
                                         >
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="上次消费：" prop="lastPayTimeStart">
                                 <div class="input_wrap3">
                                     <el-date-picker
@@ -144,7 +144,7 @@
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         value-format="yyyy-MM-dd HH:mm:ss"
-                                        editable="false"
+                                        :editable="false"
                                         :picker-options="utils.globalTimePickerOption.call(this)"
                                     >
                                     </el-date-picker>
@@ -154,7 +154,7 @@
                     </el-row>
                 </div>
                 <el-form-item class="padR40 marT20">
-                    <span class="shou" @click="handleMore" v-if="showFold">收起<i class="el-icon-arrow-up marL10"></i></span>
+                    <span class="shou" @click="handleMore" v-if="showFold">收起<i class="el-icon-arrow-up margetClientListL10"></i></span>
                     <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
                     <el-button type="primary" class="fr" @click="getClientList" :loading="btnloading">查询</el-button>
                 </el-form-item>
@@ -207,11 +207,14 @@ export default {
         btnloading: false,
         becameCustomerTime:"",
         lastPayTime:"",
-        isPc: false
+        isPc: false,
+        wWidth: document.body.clientWidth
     }
   },
   watch: {
-
+      wWidth() {
+          return document.body.clientWidth
+      }
   },
   computed:{
     clientStatusOps() {
@@ -230,7 +233,6 @@ export default {
   }, 
   created() {
     // window.addEventListener('hashchange', this.afterQRScan)
-    
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
@@ -409,16 +411,23 @@ export default {
             let channelIds = [];
             let newForm = {};
             if(labelNames.length > 0) {
-                this.labelsList.map((item) => {
-                    labelNames.map((v) => {
-                        if(v == item.tagName) {
-                            labelIds.push(item.id);
-                        }
-                    })
-                });
+                if(labelNames.indexOf('不限') !== -1) {
+                    labelIds = [];
+                }else{
+                    this.labelsList.map((item) => {
+                        labelNames.map((v) => {
+                            if(v == item.tagName) {
+                                labelIds.push(item.id);
+                            }
+                        })
+                    });
+                    labelIds = labelIds.join(',');
+                }
             }
-            labelIds = labelIds.join(',');
             if(channelNames.length > 0) {
+                if(channelNames.indexOf('不限') !== -1) {
+                    channelIds = [];
+                } 
                 this.channelsList.map((item) => {
                     channelNames.map((v) => {
                         if(v == item.channerlName) {
@@ -448,6 +457,7 @@ export default {
             delete newForm.labelValue;
             delete newForm.channelId;
             delete newForm.memberType;
+            
             this.newForm = Object.assign({},newForm);
         }
         

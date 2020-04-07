@@ -5,7 +5,7 @@
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
-                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon"></el-checkbox>
+                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon" v-if="couponList && couponList.length !== 0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCoupons" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode"></el-checkbox>
+                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode" v-if="codeList && codeList.length !== 0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCodes" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -44,7 +44,7 @@
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
             <el-table
-                :data="data.couponList"
+                :data="couponList"
                 style="width: 100%"
                 ref="couponListTable"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -82,7 +82,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
@@ -91,12 +91,12 @@
                     <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{!!data.couponList ? data.couponList.length:0}}条数据
+                    共{{!!couponList ? couponList.length:0}}条数据
                 </div>
             </div>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button @click="couponCancel">取 消</el-button>
             <el-button type="primary" @click="couponSubmit">确 定</el-button>
         </span>
     </el-dialog>
@@ -108,7 +108,7 @@
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
             <el-table
-                :data="data.codeList"
+                :data="codeList"
                 style="width: 100%"
                 ref="codeListTable"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -146,7 +146,7 @@
                     width="150"
                     >
                     <template slot-scope="scope">
-                        <el-input-number v-model="scope.row.frozenNum" :min="1"></el-input-number>
+                        <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
                     </template>
                 </el-table-column>
             </el-table>
@@ -155,7 +155,7 @@
                     <el-checkbox v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{!!data.codeList ? data.codeList.length:0}}条数据
+                    共{{!!codeList ? codeList.length:0}}条数据
                 </div>
             </div>
         </div>
@@ -192,31 +192,58 @@ export default {
             checkAll: false,
             checkAll2: false,
             selectedCoupons: [],
-            selectedCodes: []
+            selectedCodes: [],
+            codeList: [],
+            couponList: []
         }
     },
     methods: {
-        couponSubmit() {
+        couponCancel() {
             this.dialogVisible2 = false;
-            this.selectedCoupons = [].concat(this.$refs.couponListTable.selection);
+            this.checkCoupon = false;
+        },
+        couponSubmit() {
+            let sel = this.$refs.couponListTable.selection;
+            if(sel.length !== 0) {
+                this.dialogVisible2 = false;
+                this.selectedCoupons = [].concat(sel);
+            }else{
+                this.$message({
+                    message: '请选择优惠券',
+                    type: 'warning'
+                });
+            }
         },
         codeSubmit() {
-            this.dialogVisible3 = false;
-            this.selectedCodes = [].concat(this.$refs.codeListTable.selection);
+            let sel = this.$refs.codeListTable.selection;
+            if(sel.length !== 0) {
+                this.dialogVisible3 = false;
+                this.selectedCodes = [].concat(sel);
+            }else{
+                this.$message({
+                    message: '请选择优惠码',
+                    type: 'warning'
+                });
+            }
         },
         handleChangeAll(val) {
-            this.data.couponList.forEach(row => {
+            this.couponList.forEach(row => {
                 this.$refs.couponListTable.toggleRowSelection(row,val);
             });
         },
         handleChangeAll2(val) {
-            this.data.codeList.forEach(row => {
+            this.codeList.forEach(row => {
                 this.$refs.codeListTable.toggleRowSelection(row,val);
             });
         },
         changeCoupon(val) {
             if(val) {
                 this.dialogVisible2 = true;
+                // this.$nextTick(() => {
+                //     this.data.couponList.forEach(row => {
+                //         this.$refs.couponListTable.toggleRowSelection(row,false);
+                //     });
+                // })
             }else{
                 this.selectedCoupons = [];
             }
@@ -386,9 +413,51 @@ export default {
         },
         deleteCoupon(index) {
             this.selectedCoupons.splice(index, 1);
+            this.couponList.forEach((row,i) => {
+                if(i == index) {
+                    this.$refs.couponListTable.toggleRowSelection(row, false);
+                }
+            })
+            if(this.selectedCoupons.length == 0) {
+                this.checkCoupon = false;
+                this.couponList.forEach((row) => {
+                    this.$refs.couponListTable.toggleRowSelection(row, false);
+                })
+            }
         },
         deleteCode(index) {
             this.selectedCodes.splice(index, 1);
+            this.codeList.forEach((row,i) => {
+                if(i == index) {
+                    this.$refs.codeListTable.toggleRowSelection(row, false);
+                }
+            })
+            if(this.selectedCodes.length == 0) {
+                this.checkCode = false;
+                this.codeList.forEach((row) => {
+                    this.$refs.codeListTable.toggleRowSelection(row, false);
+                })
+            }
+        },
+        getAllCoupons(id) {
+            this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {
+                this.couponList = [].concat(response.list);
+                this.couponList.map((item) => {
+                    this.$set(item, 'frozenNum',1);
+                })
+            }).catch((error) => {
+                console.log(error);
+            })
+            },
+        getAllCodes(id) {
+            this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1}).then((response) => {
+                this.codeList = [].concat(response.list);
+                this.codeList.map((item) => {
+                    this.$set(item, 'frozenNum', 1);
+                });
+            }).catch((error) => {
+                console.log(error);
+            })
         }
     },
     computed: {
@@ -402,6 +471,8 @@ export default {
         }
     },
     created() {
+        this.getAllCoupons(this.data.id);
+        this.getAllCodes(this.data.id);
         this.getBlackChecks();
     },
     props: {

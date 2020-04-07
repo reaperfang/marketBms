@@ -66,6 +66,7 @@ export default {
         },
         getLevelList() {
             this._apis.client.getLevelList({}).then((response) => {
+                console.log(response);
                 this.levelList = response.filter(item => item.level > this.data.level);
                 this.levelList.map((item) => {
                     this.$set(item, 'alias', `${item.alias} ${item.name}`)

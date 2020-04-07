@@ -15,7 +15,7 @@
                     </div>
                     <p class="label_warn">
                         手动标签：无筛选条件给用户定义标签<br>
-                        自动标签：按照筛选条件自动为用户打标签，条件不符合自动删除和添加
+                        自动标签：按照筛选条件自动为用户打标签
                     </p>
                 </el-form-item>
                 <div v-if="ruleForm.tagType == '1'">
@@ -106,7 +106,12 @@
                         <el-checkbox v-model="ruleForm.isProduct" @change="handleCheck7">购买以下任意商品</el-checkbox>
                         <span class="addMainColor marL20 pointer" @click="chooseProduct">选择商品</span>
                         <ul v-if="selectedList.length !== 0">
-                            <li v-for="item in selectedList" :key="item.goodsInfo.id" class="proList"><span>{{item.goodsInfo.name}}</span><span>{{item.goodsInfo.specs}}</span><span>{{item.goodsInfo.stock}}</span><span class="pointer" style="color: #FD4C2B;" @click="handleClick(item)">删除</span></li>
+                            <li v-for="item in selectedList" :key="item.goodsInfo.id" class="proList">
+                                <span>{{item.goodsInfo.name}}</span>
+                                <span>{{item.goodsInfo.specs}}</span>
+                                <span>{{item.goodsInfo.stock}}</span>
+                                <span class="pointer" style="color: #FD4C2B;" @click="handleClick(item)">删除</span>
+                            </li>
                         </ul>
                     </el-form-item>
                 </div>
@@ -181,6 +186,8 @@ export default {
     },
     methods: {
         handleClick(item) {
+            let productInfoIds = this.currentData.productInfoIds;
+            this.currentData = {delItem:item, productInfoIds: productInfoIds};
             this.selectedList.splice(item, 1);
         },
         checkZero(event,val,ele) {
@@ -238,6 +245,7 @@ export default {
             if(val) {
                 this.ruleForm.consumeTimeType = "0";
             }else{
+                this.ruleForm.consumeTimeType = "";
                 this.ruleForm.consumeTimeValue = "";
                 this.ruleForm.consumeTimeUnit = "";
                 this.consumeTime = "";
@@ -270,7 +278,7 @@ export default {
             }
         },
         getSelected(val) {
-            this.selectedList = [].concat(val);
+            this.selectedList = this.selectedList.concat(val);
             //this.selectedIds = val;
         },
         isInteger(val) {
@@ -476,6 +484,7 @@ export default {
                     //根据selectedIds查询商品
                     this._apis.client.getSkuList({ids: this.selectedIds.split(','), startIndex: 1,pageSize: 99}).then((response) => {
                         this.selectedList = [].concat(response.list);
+                        this.currentData.selectedList = [].concat(response.list);
                         this.selectedList.map((item) => {
                             item.goodsInfo.specs = item.goodsInfo.specs.replace(/"|{|}/g, "");
                         })
@@ -519,7 +528,7 @@ export default {
             display: inline-block;
         }
         .label_warn{
-            width: 252px;
+            width: 255px;
             font-size: 12px;
             color: #92929B;
             line-height: 20px;
