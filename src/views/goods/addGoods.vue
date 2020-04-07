@@ -8,8 +8,8 @@
     </header> -->
     <el-tabs v-model="activeName">
         <el-tab-pane label="商品信息" name="first"></el-tab-pane>
-        <el-tab-pane label="分佣配置" name="second">
-            <CommisionSet v-if="goodsDetail" :detail="goodsDetail"></CommisionSet>
+        <el-tab-pane v-if="resellConfigInfo && editor" label="分佣配置" name="second">
+            <CommisionSet v-if="goodsDetail" :resellConfigInfo="resellConfigInfo" :detail="goodsDetail"></CommisionSet>
         </el-tab-pane>
     </el-tabs>
     <el-form v-if="activeName == 'first'" :model="ruleForm" ref="ruleForm" :rules="rules" label-width="150px" class="demo-ruleForm">
@@ -704,6 +704,7 @@ export default {
             }
         };
         return {
+            resellConfigInfo: null, // 分销设置
             goodsDetail: null,
             activeName: 'first',
             itemCatText: '',
@@ -864,7 +865,14 @@ export default {
         //     }
         // })
         var that = this;
-        if(this.editor) this.activeName = 'second';
+        if(this.$route.query.commissionEdit) this.activeName = 'second'; // 来自分佣
+        // 获取分销商设置
+        this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+            if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
+        }).catch((error) => {
+            console.error(error);
+        });
+
         Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
