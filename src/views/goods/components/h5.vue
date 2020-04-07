@@ -15,7 +15,7 @@
                     不变更：创建好的商品无论商品内容如何修改，二维码不会变更； <br />
                     商品删除即失效：如果你删除商品，该商品二维码将被一起删除，无法再找回。
                 </div>
-                <div class="miniCode-header-right">帮助</div>
+                <div @click="disabled = !disabled" class="miniCode-header-right">帮助</div>
             </el-tooltip>
         </div>
         <div class="h5-content">
@@ -42,7 +42,7 @@ export default {
             url: '',
             content: '',
             name: '',
-            productUrl: ''
+            productUrl: '',
         }
     },
     mounted () {
@@ -191,6 +191,17 @@ export default {
     .share-popper {
         width: 370px;
         background-color: #505c74!important;
+        .popper__arrow {
+            top: -6px;
+            border-top-width: 0;
+            border-bottom-color: #505c74!important;
+        }
+    }
+    .share-popper[x-placement^=bottom] .popper__arrow::after {
+        top: 1px;
+        margin-left: -5px;
+        border-top-width: 0;
+        border-bottom-color: #505c74!important;
     }
 </style>
 
