@@ -22,26 +22,26 @@ export default [
                 path: 'memberInfo',
                 component: () => import('@/views/intelligentOperation/memberInfo'),
                 name: 'memberInfo',
-                meta: { title: '用户信息', noCache: true, tabTitle: '会员分析', navType:2  }
+                meta: { title: '用户信息', noCache: true, tabTitle: '用户分析', navType:2  }
             },
             {
                 path: 'channel',
                 component: () => import('@/views/intelligentOperation/channel'),
                 name: 'channel',
-                meta: { title: '渠道转化', noCache: true, tabTitle: '会员分析' , navType:2 },
+                meta: { title: '渠道转化', noCache: true, tabTitle: '用户分析' , navType:2 },
             },
             {
                 path: 'channelDetail',
                 component: () => import('@/views/intelligentOperation/channelDetail'),
                 name: 'channelDetail',
-                meta: { title: '渠道转化详情', noCache: true, tabTitle: '会员分析', navType:2  },
+                meta: { title: '渠道转化详情', noCache: true, tabTitle: '用户分析', navType:2  },
                 hidden: true
             },
             {
                 path: 'integral',
                 component: () => import('@/views/intelligentOperation/integral'),
                 name: 'integral',
-                meta: { title: '积分消耗', noCache: true, tabTitle: '会员分析', navType:2  }
+                meta: { title: '积分消耗', noCache: true, tabTitle: '用户分析', navType:2  }
             },
             {
                 path: 'evaluate',
