@@ -179,7 +179,7 @@ export default {
           .orderLogistics({ expressNo })
           .then(res => {
             this.currentDialog = "LogisticsDialog";
-            this.currentData = res.traces;
+            this.currentData = res.traces || [];
             this.expressCompanys = res.shipperName
             this.dialogVisible = true;
           })
