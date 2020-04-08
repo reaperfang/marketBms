@@ -264,7 +264,7 @@
                     </div>
                 </section>
             </div>
-            <!-- <div class="operate-record">
+            <div class="operate-record">
                 <p class="header">操作记录</p>
                 <el-table
                     :data="orderDetail.orderOperationRecordList"
@@ -287,7 +287,7 @@
                         label="操作时间">
                     </el-table-column>
                 </el-table>
-            </div> -->
+            </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :ajax="ajax" :sendGoods="sendGoods" @submit="submit"></component>
     </div>
