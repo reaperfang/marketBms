@@ -194,8 +194,10 @@ export default {
         refreshPage(num) {
             if(num == 1) {
                 this.getAllCoupons();
+                this.getCouponNum();
             }else if(num == 2) {
                 this.getAllCodes();
+                this.getCouponNum();
             }else{
                 this.getMemberInfo();
             }
