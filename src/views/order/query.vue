@@ -29,6 +29,7 @@
             <el-option label="拼团订单" :value="1"></el-option>
             <el-option label="优惠套装订单" :value="2"></el-option>
             <el-option label="赠品订单" :value="4"></el-option>
+            <el-option v-if="resellConfigInfo" label="分佣订单" :value="5"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="支付方式">
@@ -148,7 +149,8 @@ export default {
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
         orderTimeValue: "",
       },
-      activeName: "shop"
+      activeName: "shop",
+      resellConfigInfo: null
     };
   },
   created() {
@@ -172,6 +174,15 @@ export default {
       }
   },
   methods: {
+    checkCreditRule() {
+      // 获取分销商设置
+      this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+
+          if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
+      }).catch((error) => {
+          console.error(error);
+      });
+    },
     batchSendGoods() {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
             this.confirm({title: '提示', icon: true, text: '请选择需要发货的订单'})
