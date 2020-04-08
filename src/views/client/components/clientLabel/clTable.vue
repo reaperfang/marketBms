@@ -108,6 +108,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getLabelList(val, this.pageSize);
+      this.startIndex = val;
     },
     handleChange(val) {
       this.tagList.forEach(row => {
@@ -182,12 +183,11 @@ export default {
   },
   watch: {
     params() {
-      this.startIndex = 1;
-      this.getLabelList(this.startIndex, this.pageSize);
+      this.getLabelList(1, this.pageSize);
     }
   },
   mounted() {
-    this.getLabelList(this.startIndex, this.pageSize);
+    this.getLabelList(1, this.pageSize);
   }
 };
 </script>

@@ -101,6 +101,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getImportList(val, this.pageSize);
+      this.startIndex = val;
     },
     getImportList(startIndex, pageSize) {
       this.loading = true;
