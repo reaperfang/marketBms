@@ -47,7 +47,7 @@ module.exports = {
 
       /* 营销服务 */
       '/sale_server/**': {
-        target: 'https://test-mkt.xinmt.com/api/',
+        target: 'https://test-omo.aiyouyi.cn/mkt-api/',
         changeOrigin: true,
         pathRewrite: {
           '^/sale_server': ''
