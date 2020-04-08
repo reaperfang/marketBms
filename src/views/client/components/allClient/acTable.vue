@@ -221,8 +221,7 @@ export default {
     addBlackList(row) {
       this.dialogVisible = true;
       this.currentDialog = "addBlackDialog";
-      this.currentData.memberSn = row.memberSn;
-      this.currentData.id = row.id;
+      this.currentData = {memberSn: row.memberSn, id: row.id};
     },
     removeBlack(row) {
       this.dialogVisible = true;
