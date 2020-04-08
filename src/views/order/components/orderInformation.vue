@@ -694,7 +694,7 @@ export default {
         orderStatusFilter(row) {
             if(row.afterSaleStatus== 1 || row.afterSaleStatus== 2 || row.orderAfterStatus == 0) {
                 if(row.orderAfterStatus == 0){
-            return '售后完成'
+            return '售后关闭'
             }else if(row.orderAfterStatus == 1) {
                         return '换货中'
                     } else if(row.orderAfterStatus == 2) {

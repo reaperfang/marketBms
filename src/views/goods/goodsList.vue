@@ -1,6 +1,6 @@
 <template>
     <div style="min-height: 100vh;" v-loading="loading">
-        <div v-if="list.length" class="goods-list">
+        <div class="goods-list">
             <header class="header">
                 <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
@@ -64,7 +64,8 @@
                     ref="table"
                     style="width: 100%"
                     :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-                    @selection-change="handleSelectionChange">
+                    @selection-change="handleSelectionChange"
+                    :empty-text="emptyText">
                     <el-table-column
                         type="selection"
                         width="55">
@@ -77,9 +78,9 @@
                     <el-table-column
                     prop="name"
                     label="商品名称"
-                    width="200">
+                    width="216">
                         <template slot-scope="scope">
-                            <div class="ellipsis2" style="width: 196px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
+                            <div class="ellipsis2" style="width: 196px;" :title="scope.row.name">{{scope.row.name | nameFilter}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
                         </template>
                     </el-table-column>
@@ -444,7 +445,8 @@ export default {
                 children: 'childrenCatalogs',
                 multiple: false, 
                 checkStrictly: true
-            }
+            },
+            emptyText: '没有找到相关商品，换个搜索词试试吧'
         }
     },
     created() {
@@ -509,6 +511,19 @@ export default {
             str = str.replace(/(^.*?)\,$/, '$1')
 
             return str
+        },
+        nameFilter(name) {
+            let str = ''
+
+            if(name.length > 14) {
+                str += name.substring(0, 14)
+                str += '\n'
+                str += name.substring(14)
+
+                return str
+            } else {
+                return name
+            }
         }
     },
     methods: {
@@ -651,7 +666,14 @@ export default {
             this.currentData = _row
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
+            //this.$refs[formName].resetFields();
+            this.listQuery = Object.assign({}, this.listQuery, {
+                name: '',
+                status: '',
+                productCatalogInfoId: '',
+                searchType: 'code',
+                searchValue: ''
+            })
             this.categoryValue = ''
             this.getList()
         },
@@ -930,9 +952,9 @@ export default {
                     //this.getCategoryName(res.list)
                     this.list = res.list
                     this.loading = false
-                    if(this.allTotal && !this.total) {
-                        this.$router.push('/goods/goodsListEmpty')
-                    }
+                    // if(this.allTotal && !this.total) {
+                    //     this.$router.push('/goods/goodsListEmpty')
+                    // }
                 })
             }).catch(error => {
                 //this.loading = false
