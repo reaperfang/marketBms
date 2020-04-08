@@ -224,13 +224,17 @@ export default {
     },
     //批量删除
     deleteImages(){
-      this.dialogVisible = true;
-      this.currentDialog = 'dialogDelete'
       this.data = {}
       this.arrayData=[]
       this.list.map(item =>{
         item.checked == true && this.arrayData.push(item.id)                
       })
+      if(this.arrayData.length == 0){
+        this.$message.warning('请选择图片后再进行批量操作！');
+      }else{
+        this.dialogVisible = true;
+        this.currentDialog = 'dialogDelete'
+      }
     },
 
     //上传图片
@@ -256,13 +260,17 @@ export default {
 
     //移动分组
     moveGroups(){
-      this.dialogVisible = true;
-      this.currentDialog = 'dialogGroupsMove'
       this.data = 'image'
       this.arrayData = []
       this.list.map(item =>{
         item.checked == true && this.arrayData.push(item.id)        
       })
+      if(this.arrayData.length == 0){
+        this.$message.warning('请选择图片后再进行批量操作！');
+      }else{
+        this.dialogVisible = true;
+        this.currentDialog = 'dialogGroupsMove'
+      }
     },
 
     //图片裁剪
