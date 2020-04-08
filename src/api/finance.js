@@ -223,25 +223,10 @@ export function smsExport(data) {
     params:data
   })
 }
-// 分佣账目列表接口
-export function getCommissionLIst(data) {
-  return request({
-    target: 'RESELLER-COMMISSION-PAGE-LIST-PROCESSOR',
-    method: 'post',
-    apiType: 'finance',
-    data
-  })
-}
 
-// 分佣账目导出接口
-export function commissionExport(data) {
-  return request({
-    target: 'RESELLER-COMMISSION-EXPORT-PROCESSOR',
-    method: 'post',
-    apiType: 'finance',
-    data
-  })
-}
+
+
+
 
 
 

@@ -43,6 +43,7 @@ export default {
             }else if(flag == 0 && apiModule == 'data'){
                 window.location.href = response
             }
+          
         }).catch((error)=>{
           this.$message.error(error);
         })

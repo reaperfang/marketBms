@@ -13,8 +13,7 @@ export default {
         { value: 2, label: '售后退款' },
         { value: 3, label: '退还奖励' },
         { value: 4, label: '提现成功' },
-        { value: 5, label: '红包发放' },
-        { value: 6, label: '分佣结算' }
+        { value: 5, label: '红包发放' }
     ],
     //收支明细---支付方式
     payTypes:[
@@ -113,23 +112,5 @@ export default {
         { value: 0, label: '全部' },
         { value: 1, label: '成功' },
         { value: 2, label: '失败' },
-    ],
-    //分佣明细 --- 分销员类型
-    commissionClerkStatus:[
-        { value: 'resellerSn', label: '分销员ID' },
-        { value: 'resellerName', label: '姓名' },
-        { value: 'resellerPhone', label: '手机号码' },
-    ],
-    //分佣明细---流水号类型-------------------------
-    serialNumberType:[
-        { value: 'tradeDetailSn', label: '交易流水号' },
-        { value: 'relationSn', label: '关联单据编号' },
-        { value: 'thirdPartySn', label: '第三方流水号' },
-    ],
-    //分佣明细---业务类型-------------------------
-    businessTypeList:[
-        { value: '-1', label: '全部' },
-        { value: '1', label: '分销结算' },
-        { value: '2', label: '分销体现' }
     ],
 }

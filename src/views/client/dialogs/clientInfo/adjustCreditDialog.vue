@@ -116,6 +116,12 @@ export default {
           message: '当前积分为0时不能输入负数',
           type: 'warning'
         });
+      }else if(Number(this.adjustmentScore) > 100000000) {
+        this.$message({
+          message: '增加积分不能超过1亿',
+          type: 'warning'
+        });
+        this.adjustmentScore = "";
       }
     }
   },
