@@ -261,7 +261,7 @@ export default {
                 case '4':
                     return '赠品订单'
                 case '5': 
-                    return '分销订单'
+                    return '分佣订单'
             }
         },
         goodsSpecsFilter(value) {
