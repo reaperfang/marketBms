@@ -22,8 +22,12 @@
                 <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
+                <el-tab-pane v-if="orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分佣信息" name="commision">
+                    <OrderCommision :orderDetail="orderDetail" @getDetail="getDetail"></OrderCommision>
+                </el-tab-pane>
             </el-tabs>
         </div>
+        <OrderOperate :orderInfo="orderDetail.orderInfo" :orderDetail="orderDetail" @getDetail="getDetail"></OrderOperate>
         <!-- <div class="goods-list">
             <p class="header">订单清单</p>
             <el-table
@@ -153,6 +157,8 @@
 <script>
 import OrderState from './components/orderState'
 import OrderInformation from './components/orderInformation'
+import OrderCommision from './components/orderCommision'
+import OrderOperate from './components/orderOperate'
 import DeliveryInformation from './components/deliveryInformation'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 
@@ -254,6 +260,8 @@ export default {
                     return '特权价'
                 case '4':
                     return '赠品订单'
+                case '5': 
+                    return '分佣订单'
             }
         },
         goodsSpecsFilter(value) {
@@ -307,7 +315,9 @@ export default {
         OrderState,
         OrderInformation,
         CouponDialog,
-        DeliveryInformation
+        DeliveryInformation,
+        OrderCommision,
+        OrderOperate
     }
 }
 </script>
