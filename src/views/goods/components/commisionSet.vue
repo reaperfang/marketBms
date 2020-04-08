@@ -350,7 +350,9 @@ export default {
         detail: {
             type: Object,
             default: function () {
-                return { }
+                return {
+                    goodsInfos: []
+                }
             }
         },
         resellConfigInfo: {
