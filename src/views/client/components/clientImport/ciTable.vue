@@ -143,7 +143,8 @@ export default {
   },
   watch: {
     params(val) {
-      this.getImportList(1, this.pageSize);
+      this.startIndex = 1;
+      this.getImportList(this.startIndex, this.pageSize);
     }
   },
 };

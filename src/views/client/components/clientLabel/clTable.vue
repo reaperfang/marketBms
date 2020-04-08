@@ -182,6 +182,7 @@ export default {
   },
   watch: {
     params() {
+      this.startIndex = 1;
       this.getLabelList(this.startIndex, this.pageSize);
     }
   },
