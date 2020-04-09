@@ -78,9 +78,17 @@
                     <el-table-column
                     prop="name"
                     label="商品名称"
-                    width="216">
+                    :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
                         <template slot-scope="scope">
-                            <div class="ellipsis2" style="width: 196px;" :title="scope.row.name">{{scope.row.name | nameFilter}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
+                            <div class="ellipsis2" style="width: 196px;" :style="{width: list.filter(val => val.activity) && list.filter(val => val.activity).length ? 239 : 196}" :title="scope.row.name">
+                                <template v-if="scope.row.name.length < 14">
+                                    {{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i>
+                                </template>
+                                <template v-else>
+                                    {{scope.row.name.substring(0, 14)}}<i v-if="scope.row.activity" class="sale-bg"></i><br />
+                                    {{scope.row.name.substring(14)}}
+                                </template>
+                            </div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
                         </template>
                     </el-table-column>
