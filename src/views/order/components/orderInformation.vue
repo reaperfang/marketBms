@@ -45,14 +45,11 @@
                 <div class="item">
                     <div class="label">本单获得</div>
                     <div class="value">
-                        <template v-if="rewardScore && gift && gainCouponList && gainCouponCodeList">
-                            <p>积分 {{rewardScore}}</p>
+                        <template>
+                            <p>积分 {{rewardScore || '--'}}</p>
                             <p style="word-break: break-all;">赠品 {{gift || '--'}}</p>
                             <p style="word-break: break-all;">优惠券 {{gainCouponList || '--'}}</p>
                             <p style="word-break: break-all;">优惠码 {{gainCouponCodeList || '--'}}</p>
-                        </template>
-                        <template v-else>
-                            无
                         </template>
                     </div>
                 </div>

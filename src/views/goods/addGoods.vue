@@ -11,7 +11,7 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
-                    :disabled="ruleForm.isSyncProduct == 1 && authHide"
+                    :disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
@@ -919,6 +919,14 @@ export default {
             } else {
                 return false
             }
+        },
+        hasLeiMu() {
+            if(this.ruleForm.productCategoryInfoId) {
+                if(this.operateCategoryList.find(val => val.id == this.ruleForm.productCategoryInfoId)) {
+                    return true
+                }
+            }
+            return false
         }
     },
     watch: {
@@ -1499,8 +1507,16 @@ export default {
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
-            let routeData = this.$router.resolve({ path: '/order/newTemplate?mode=new' });
-            window.open(routeData.href, '_blank');
+            // let routeData = this.$router.resolve({ path: '/order/newTemplate' });
+            // window.open(routeData.href, '_blank');
+            this.$nextTick(() => {
+                let a = document.createElement('a')
+
+                a.href = '/bp/order/newTemplate?mode=new'
+                a.target = '_blank'
+
+                a.click()
+            })
         },
         getTemplateList() {
             return new Promise((resolve, reject) => {
@@ -2201,7 +2217,7 @@ export default {
                             });
                             return
                         }
-                        if(this.ruleForm.goodsInfos[i].warningStock == '') {
+                        if(!this.ruleForm.goodsInfos[i].warningStock) {
                             this.$message({
                                 message: '请输入库存预警',
                                 type: 'warning'
