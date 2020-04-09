@@ -7,9 +7,8 @@
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
               <el-option label="订单编号" value="code"></el-option>
               <el-option label="商品名称" value="goodsName"></el-option>
-              <el-option label="用户昵称" value="memberName"></el-option>
-              <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-              <el-option label="收货人" value="receivedName"></el-option>
+              <!--<el-option label="商品SPU编码" value="code"></el-option>
+              <el-option label="商品SKU编码" value="goodsInfoCode"></el-option>-->
             </el-select>
           </el-input>
         </el-form-item>
@@ -21,6 +20,20 @@
             <el-option label="PC" :value="3"></el-option>
             <el-option label="WAP" :value="4"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label>
+          <el-input placeholder="请输入内容" v-model="listQuery.searchValue2" class="input-with-select">
+            <el-select v-model="listQuery.searchType2" slot="prepend" placeholder="请输入">
+              <el-option label="用户ID" value="memberSn"></el-option>
+              <el-option label="用户昵称" value="memberName"></el-option>
+              <el-option label="收货人姓名" value="receivedName"></el-option>
+              <el-option label="收货人联系电话" value="receivedPhone"></el-option>
+              <el-option v-if="resellConfigInfo" label="分佣员ID" value="resellerInfoId"></el-option>
+              <el-option v-if="resellConfigInfo" label="分佣员姓名" value="resellerName"></el-option>
+              <el-option v-if="resellConfigInfo" label="分佣员昵称" value="resellerNick"></el-option>
+              <el-option v-if="resellConfigInfo" label="分佣员手机号" value="resellerPhone"></el-option>
+            </el-select>
+          </el-input>
         </el-form-item>
         <el-form-item label="订单类型">
           <el-select v-model="listQuery.orderType" placeholder>
@@ -136,6 +149,8 @@ export default {
       listQuery: {
         searchType: "code",
         searchValue: "",
+        searchType2: "memberSn",
+        searchValue2: "",
         code: "", // 订单编号
         goodsName: "", // 商品名称
         memberName: "", // 用户昵称
@@ -154,6 +169,13 @@ export default {
     };
   },
   created() {
+    if(this.$route.query.orderType) {
+      let orderType = +this.$route.query.orderType
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          orderType
+      })
+    }
     console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;

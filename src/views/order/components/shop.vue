@@ -91,6 +91,7 @@ export default {
             }
             _params = Object.assign({}, this.params, {
                 [this.params.searchType]: this.params.searchValue,
+                [this.params.searchType2]: this.params.searchValue2,
                 [`${this.params.searchTimeType}Start`]: this.params.orderTimeValue ? searchTimeTypeStart : '',
                 [`${this.params.searchTimeType}End`]: this.params.orderTimeValue ? searchTimeTypeEnd : '',
                 memberInfoId: this.$route.query.id
