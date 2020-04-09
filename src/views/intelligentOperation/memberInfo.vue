@@ -59,7 +59,7 @@
                         <el-input placeholder="最高金额（元）" v-model="highprice" type="number"></el-input>
                     </div>
                     <div class="marL26">
-                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch(1)">查询</el-button>
                         <el-button type="primary" class="border_btn" @click="reSet" style="margin-left:16px;">重 置</el-button>
                     </div>
                 </el-form-item>
@@ -236,7 +236,7 @@ export default {
             })
         },
         //查询
-        goSearch(){ 
+        goSearch(num){ 
             this.form.loads = true
             //  this.form.tradeCountRange == 'null' && (this.form.tradeCountRange = null)
             if((this.lowprice != '' && this.highprice == '' ) || (this.lowprice == '' && this.highprice != '' )){
@@ -248,6 +248,7 @@ export default {
             }else if(this.lowprice&&this.highprice){
                 this.form.MoneyRange =  String(this.lowprice)+'-'+String(this.highprice);
             } 
+            this.form.startIndex = num || this.form.startIndex
             // let memberType = this.form.memberType;
             this._apis.data.memberInformation(this.form).then(res => {
                 this.repeatPaymentRatio = res.repeatPaymentRatio;

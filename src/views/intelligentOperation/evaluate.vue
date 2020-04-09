@@ -52,7 +52,7 @@
                             </div>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getEvaluation()">查询</el-button>
+                            <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getEvaluation(1,10)">查询</el-button>
                             <el-button type="primary" class="border_btn" @click="resetAll()">重 置</el-button>
                         </el-form-item>
                     </el-form>
