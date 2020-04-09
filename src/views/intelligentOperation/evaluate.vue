@@ -171,7 +171,8 @@ export default {
                     pleased.push({
                         id: item.id,
                         value: item.minNum+'-'+ item.maxNum,
-                        name: item.name
+                        name: item.name,
+                        suggest:item.suggest
                     })
                 }
                 this.satisfaction = pleased
@@ -187,7 +188,8 @@ export default {
                     differences.push({
                         id: item.id,
                         value: item.minNum+'-'+item.maxNum,
-                        name: item.name
+                        name: item.name,
+                        suggest:item.suggest
                     })
                 }
                 this.badreviews = differences

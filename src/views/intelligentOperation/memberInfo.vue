@@ -226,7 +226,8 @@ export default {
                     reviseitem.push({
                         id:item.id,
                         value:item.minNum+'-'+ item.maxNum,
-                        name:item.name
+                        name:item.name,
+                        suggest:item.suggest
                     })                  
                 }
                   this.tradeCount=reviseitem;
