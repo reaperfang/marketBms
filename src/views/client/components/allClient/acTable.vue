@@ -56,7 +56,7 @@
           <div class="btns clearfix">
             <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['客户', '全部客户', '默认页面', '查看详情']">详情</span>
             <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['用户', '全部客户', '默认页面', '删除']">删除</span> -->
-            <span class="s2" @click="addTag(scope.row.id)">标签</span>
+            <span class="s2" @click="addTag(scope.row)">标签</span>
             <span class="s3" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
             <span class="s3" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
           </div>
@@ -213,10 +213,11 @@ export default {
         this.$message('请选择用户');
       }
     },
-    addTag(id) {
+    addTag(row) {
       this.dialogVisible = true;
       this.currentDialog = "addTagDialog";
-      this.currentData.id = id;
+      this.currentData.id = row.id;
+      this.currentData.labelRecordViews = row.labelRecordViews;
     },
     addBlackList(row) {
       this.dialogVisible = true;
