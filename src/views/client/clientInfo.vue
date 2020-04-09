@@ -67,12 +67,12 @@
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_coupon.png" alt="" @click="sendCoupon" class="pointer">
-                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{allCoupons.length !== 0 ? allCoupons[0].ownNum || 0:0}}</span>张</p>
+                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{couponNum || 0}}</span>张</p>
                     <span @click="sendCoupon">发放</span>
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_code.png" alt="" @click="sendCode" class="pointer">
-                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{allCodes.length !== 0 ? allCodes[0].ownNum || 0 : 0}}</span>个</p>
+                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{codeNum || 0}}</span>个</p>
                     <span @click="sendCode">发放</span>
                 </div>
                 <div class="assets_item rb">
@@ -163,10 +163,20 @@ export default {
             level: "",
             sexText: "",
             topLevel: 0,
-            topCard: 0
+            topCard: 0,
+            couponNum: 0,
+            codeNum: 0
         }
     },
     methods: {
+        getCouponNum() {
+            this._apis.client.getCouponNum({memberId: this.userId}).then(response => {
+                this.couponNum = response.couponNum;
+                this.codeNum = response.couponCodeNum;
+            }).catch(error => {
+                console.log(error);
+            })
+        }, 
         getLevelMax() {
             this._apis.client.getLevelMax({}).then(response => {
                 this.topLevel = response;
@@ -184,8 +194,10 @@ export default {
         refreshPage(num) {
             if(num == 1) {
                 this.getAllCoupons();
+                this.getCouponNum();
             }else if(num == 2) {
                 this.getAllCodes();
+                this.getCouponNum();
             }else{
                 this.getMemberInfo();
             }
@@ -423,6 +435,7 @@ export default {
                 this.getMemberInfo();
             }
         });
+        this.getCouponNum();
         this.getLevelMax();
         this.getCardMax();
         this.getAllCoupons();

@@ -47,7 +47,7 @@
             <el-table-column prop="goodsUnit" label="单位" width="300"></el-table-column>
             <el-table-column prop="sendCount" label="本次发货数量"></el-table-column>
           </el-table>
-          <div class="remark">备注: {{item.goodsList[0].sendRemark}}</div>
+          <div class="remark">备注: {{item.sendRemark}}</div>
         </div>
       </div>
       <Empty v-show="!orderSendItems || (orderSendItems && !orderSendItems.length)"></Empty>
@@ -154,7 +154,8 @@ export default {
               goodsList: this.orderDetail.orderSendItemMap[i],
               expressNo: i,
               shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
-              showContent: true
+              showContent: true,
+              sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
             }
           );
 

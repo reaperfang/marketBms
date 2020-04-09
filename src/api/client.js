@@ -288,6 +288,15 @@ export function getAllCoupons(data) {
         params:data
     })
 }
+//获取优惠券及优惠码的数量
+export function getCouponNum(data) {
+    return request({
+        url: '/v1/b/app-coupon-member-get/activity/queryOwnNum',
+        method: 'get',
+        baseURL: process.env.SALE_API,
+        params:data
+    })
+}
 //获取优惠券发放列表
 export function getDistributeCouponList(data) {
     return request({
