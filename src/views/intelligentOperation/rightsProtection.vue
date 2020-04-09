@@ -52,7 +52,7 @@
                         </el-select>
                     </div>
                     <div class="marL26">
-                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getRightsProtection()">查询</el-button>
+                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getRightsProtection(1,10)">查询</el-button>
                         <el-button type="primary" class="border_btn" @click="resetAll()" style="margin-left:16px;">重 置</el-button>
                     </div>
                 </el-form-item>

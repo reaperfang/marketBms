@@ -41,7 +41,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch(1)">查询</el-button>
                     <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
                 </el-form-item>
                 <!-- <el-form-item class="fr marT20">
@@ -162,8 +162,9 @@ export default {
         },
         //
         //查询
-        goSearch(){
+        goSearch(num){
             this.form.loads = true
+            this.form.startIndex = num || this.form.startIndex
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
                 this.ratio = res.ratio;
