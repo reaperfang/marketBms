@@ -50,7 +50,6 @@
 import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from "./dialogSelectGoods";
 import utils from "@/utils";
-import uuid from "uuid/v4";
 export default {
   name: "dialogSelectGoodsGroup",
   components: { DialogBase, dialogSelectGoods },

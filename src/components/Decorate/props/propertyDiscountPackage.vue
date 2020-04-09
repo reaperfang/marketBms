@@ -128,7 +128,6 @@
 <script>
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectPackage from '@/views/shop/dialogs/decorateDialogs/dialogSelectPackage';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertyDiscountPackage',
   mixins: [propertyMixin],
