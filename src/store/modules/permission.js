@@ -100,7 +100,12 @@ const permission = {
           accessedRouters = filterAsyncRouter(asyncRouterMap, msfList)
         }
 
-        if(typeof enable != 'undefined') {
+        let flag = true
+
+        if(localStorage.getItem('authDebug')) {
+          flag = false
+        }
+        if(flag && (typeof enable != 'undefined')) {
           let _accessedRouters = [...accessedRouters]
           //let _accessedRouters = JSON.parse(JSON.stringify(accessedRouters))
 
