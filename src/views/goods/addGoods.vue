@@ -11,7 +11,7 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
-                    :disabled="ruleForm.isSyncProduct == 1 && authHide"
+                    :disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
@@ -919,6 +919,14 @@ export default {
             } else {
                 return false
             }
+        },
+        hasLeiMu() {
+            if(this.ruleForm.productCategoryInfoId) {
+                if(this.operateCategoryList.find(val => val.id == this.ruleForm.productCategoryInfoId)) {
+                    return true
+                }
+            }
+            return false
         }
     },
     watch: {

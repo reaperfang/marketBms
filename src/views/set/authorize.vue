@@ -107,9 +107,9 @@ export default {
     },
     enableFilter(code) {
       if(code == 1) {
-        return '启用'
+        return '授权中'
       } else if(code == 0) {
-        return '禁用'
+        return '已解绑'
       }
     }
   },
