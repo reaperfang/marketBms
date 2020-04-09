@@ -2209,7 +2209,7 @@ export default {
                             });
                             return
                         }
-                        if(this.ruleForm.goodsInfos[i].warningStock == '') {
+                        if(!this.ruleForm.goodsInfos[i].warningStock) {
                             this.$message({
                                 message: '请输入库存预警',
                                 type: 'warning'
