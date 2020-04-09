@@ -32,16 +32,19 @@ export default {
         }
     },
     created() {
-        if(this.$route.query.commissionEdit) this.activeName = 'subCommission'; // 来自分佣
+        // 商品详情
+        this.getGoodsDetail();
+         // 来自分佣
+        if(this.$route.query.commissionEdit) {
+            this.activeName = 'subCommission';
+            this.current = 'subCommission';
+        }    
         // 获取分销商设置
         this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
-
             if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
         }).catch((error) => {
             console.error(error);
         });
-
-        this.getGoodsDetail()
     },
     methods: {
         handleClick(tab, event) {
