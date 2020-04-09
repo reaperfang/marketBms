@@ -53,13 +53,13 @@
                         </div>
                         <div class="commision-cell-center">
                             <div v-if="resellConfigInfo.resellGrade >=1" class="commision-prent">
-                                <el-input type="number" v-model="resellRule.percentOfCommissionOne" placeholder="0.00"></el-input><span>%</span>
+                                <el-input type="number" v-model="resellRule.percentOfCommissionThree" placeholder="0.00"></el-input><span>%</span>
                             </div>
                             <div v-if="resellConfigInfo.resellGrade >=2" class="commision-prent">
                                 <el-input v-model="resellRule.percentOfCommissionTwo" placeholder="0.00"></el-input><span>%</span>
                             </div>
                             <div v-if="resellConfigInfo.resellGrade >=3" class="commision-prent">
-                                <el-input v-model="resellRule.percentOfCommissionThree" placeholder="0.00"></el-input><span>%</span>
+                                <el-input v-model="resellRule.percentOfCommissionOne" placeholder="0.00"></el-input><span>%</span>
                             </div>
                         </div>
                         <div class="commision-right">
@@ -149,8 +149,8 @@ export default {
                 ) {
                     let total;
                     if(this.resellConfigInfo.resellGrade == 3) total = (value.percentOfCommissionOne - 0) + (value.percentOfCommissionTwo - 0) + (value.percentOfCommissionThree - 0);
-                    if(this.resellConfigInfo.resellGrade == 2) total = (value.percentOfCommissionOne - 0) + (value.percentOfCommissionTwo - 0);
-                    if(this.resellConfigInfo.resellGrade == 1) total = (value.percentOfCommissionOne - 0);
+                    if(this.resellConfigInfo.resellGrade == 2) total = (value.percentOfCommissionThree - 0) + (value.percentOfCommissionTwo - 0);
+                    if(this.resellConfigInfo.resellGrade == 1) total = (value.percentOfCommissionThree - 0);
                     if(total <= 100) this.initResellGood();
                     else {
                         this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
@@ -196,9 +196,9 @@ export default {
                 tmp.salePrice = v.salePrice;
                 tmp.costPrice = v.costPrice;
                 tmp.profits = v.salePrice - v.costPrice;
-                tmp.one = (tmp.profits * (this.resellRule.percentOfCommissionOne - 0) / 100).toFixed(2);
+                tmp.one = (tmp.profits * (this.resellRule.percentOfCommissionThree - 0) / 100).toFixed(2);
                 tmp.two = (tmp.profits * (this.resellRule.percentOfCommissionTwo - 0) / 100).toFixed(2);
-                tmp.three = (tmp.profits * (this.resellRule.percentOfCommissionThree - 0) / 100).toFixed(2);
+                tmp.three = (tmp.profits * (this.resellRule.percentOfCommissionOne - 0) / 100).toFixed(2);
                 tmp.profitRate = ((tmp.profits / v.costPrice) * 100 ).toFixed(2) + '%';
                 resellGood.push(tmp);
             });
@@ -225,13 +225,13 @@ export default {
             // 开启了独立分佣
             if(this.status == 1 && this.enable) {
                 if(resellConfigInfo.resellGrade == 1) {
-                    resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
+                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                     resellRule.percentOfCommissionTwo = '';
-                    resellRule.percentOfCommissionThree = '';
+                    resellRule.percentOfCommissionOne = '';
                     if(
-                        (regPos.test(resellRule.percentOfCommissionOne))
+                        (regPos.test(resellRule.percentOfCommissionThree))
                     ) {
-                        let total = (resellRule.percentOfCommissionOne - 0);
+                        let total = (resellRule.percentOfCommissionThree - 0);
                         if(total > 100  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
@@ -241,14 +241,14 @@ export default {
                         return false;
                     } 
                 } else if (resellConfigInfo.resellGrade == 2) {
-                    resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
+                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                     resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
-                    resellRule.percentOfCommissionThree = '';
+                    resellRule.percentOfCommissionOne = '';
                     if(
-                        (regPos.test(resellRule.percentOfCommissionOne)) &&
+                        (regPos.test(resellRule.percentOfCommissionThree)) &&
                         (regPos.test(resellRule.percentOfCommissionTwo))
                     ) {
-                        let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0);
+                        let total = (resellRule.percentOfCommissionThree - 0) + (resellRule.percentOfCommissionTwo - 0);
                         if(total > 100  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
@@ -309,12 +309,13 @@ export default {
 
         if(detail.isAloneResellRule == 1){ // 是否独立分佣商品
             this.enable = true;
+            
             let resellRule = detail.resellRule ? JSON.parse(detail.resellRule) : null;
-            if(!resellRule) {
+            if(resellRule) {
                 resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne ? resellRule.percentOfCommissionOne * 100 : '';
                 resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo ? resellRule.percentOfCommissionTwo * 100 : '';
                 resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree ? resellRule.percentOfCommissionThree * 100 : '';
-                this.resellRule = resellRule;
+                this.resellRule = resellRule;           
             }
         } 
 
