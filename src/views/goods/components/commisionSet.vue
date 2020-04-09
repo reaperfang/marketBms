@@ -47,9 +47,9 @@
                     <!-- 分佣比例设置 -->
                     <div class="commision">
                         <div class="commision-cell-left">
-                            <div class="commision-title">分佣员本人（三级）佣金占分佣总佣金</div>
-                            <div class="commision-title">上级分佣员（二级）佣金占分佣总佣金</div>
-                            <div class="commision-title">上上级分佣员（一级）佣金占分佣总佣金分佣</div>
+                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分佣员本人（三级）佣金占分佣总佣金</div>
+                            <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分佣员（二级）佣金占分佣总佣金</div>
+                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分佣员（一级）佣金占分佣总佣金分佣</div>
                         </div>
                         <div class="commision-cell-center">
                             <div v-if="resellConfigInfo.resellGrade >=1" class="commision-prent">
@@ -336,7 +336,10 @@ export default {
             
             tmp.sku = v.id;
             tmp.specs = Object.values(JSON.parse(v.specs)).join(' ');
-            tmp.status = v.status;
+            tmp.status = '';
+            if(v.status == 1) tmp.status = '上架';
+            if(v.status == 0) tmp.status = '下架';
+            if(v.status == 1) tmp.status = '售罄';
             tmp.salePrice = v.salePrice;
             tmp.costPrice = v.costPrice;
             tmp.profits = v.salePrice - v.costPrice;
