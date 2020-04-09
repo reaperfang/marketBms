@@ -1499,8 +1499,16 @@ export default {
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
-            let routeData = this.$router.resolve({ path: '/order/newTemplate?mode=new' });
-            window.open(routeData.href, '_blank');
+            // let routeData = this.$router.resolve({ path: '/order/newTemplate' });
+            // window.open(routeData.href, '_blank');
+            this.$nextTick(() => {
+                let a = document.createElement('a')
+
+                a.href = '/bp/order/newTemplate?mode=new'
+                a.target = '_blank'
+
+                a.click()
+            })
         },
         getTemplateList() {
             return new Promise((resolve, reject) => {
