@@ -183,7 +183,6 @@ import goods from "@/views/shop/dialogs/jumpLists/goods";
 import goodsGroup from "@/views/shop/dialogs/jumpLists/goodsGroup";
 
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 export default {
   name: 'shopNav',
   components: {dialogSelectImageMaterial, dialogSelectNavTemplate, DialogBase, microPage, microPageClassify, marketCampaign, goods, goodsGroup},
@@ -367,7 +366,7 @@ export default {
     /* 创建导航 */
     createNav(params) {
       return {
-        id: uuid(),
+        id: uuidv4(),
         navName: params && params.navName || '导航',
         navIcon: params && params.navIcon || '',
         navIconActive: params && params.navIconActive || '',

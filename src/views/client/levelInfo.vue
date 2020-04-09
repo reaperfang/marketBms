@@ -1028,10 +1028,10 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-upload {
-  height: 30px !important;
-  line-height: 30px !important;
-}
+// /deep/ .el-upload {
+//   height: 30px !important;
+//   line-height: 30px !important;
+// }
 .l_container {
   padding: 20px;
   background-color: #fff;

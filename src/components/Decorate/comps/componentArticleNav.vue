@@ -210,6 +210,10 @@ export default {
   //   横向滑动
   .img_nav2 {
     display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -o-box;
+    display: box;
     overflow-x: scroll;
     & > li {
       width: 20%;
@@ -300,6 +304,10 @@ export default {
   // 文字导航横向滑动
   .img_nav5 {
     display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -o-box;
+    display: box;
     width: 100%;
     overflow-x: scroll;
     height: 42px;

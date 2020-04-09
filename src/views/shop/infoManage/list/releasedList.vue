@@ -101,7 +101,6 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 export default {
   name: 'pageList',
   extends: tableBase,

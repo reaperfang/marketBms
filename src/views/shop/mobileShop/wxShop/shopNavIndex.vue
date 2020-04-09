@@ -21,7 +21,6 @@
 import h5NavEdit from "./shopNav/h5NavEdit";
 import miniNavEdit from "./shopNav/miniNavEdit";
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 export default {
   name: "shopNavIndex",
   components: { h5NavEdit, miniNavEdit },
