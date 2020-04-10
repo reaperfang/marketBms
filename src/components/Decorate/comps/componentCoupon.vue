@@ -183,6 +183,10 @@ export default {
   .coupon_first {
     & > ul {
       display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -o-box;
+      display: box;
       overflow-x: scroll;
       padding: 10px 15px;
       border-radius: 5px;

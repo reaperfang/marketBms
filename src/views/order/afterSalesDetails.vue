@@ -73,7 +73,10 @@ export default {
         },
         confirmTakeOver() {
             this._apis.order.orderConfirmReceived({id: this.orderAfterSale.id, isSellerReceived: 1}).then(res => {
-                this.$message.success('确认收货成功');
+                //this.$message.success('确认收货成功');
+                this.confirm({title: '提示', iconSuccess: true, text: '确认收货成功', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
                 this.getDetail()
             }).catch(error => {
                 this.$message.error(error);

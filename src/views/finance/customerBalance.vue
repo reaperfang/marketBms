@@ -205,7 +205,7 @@ export default {
          this.currentData.api = "finance.exportCb"
        }else{
          this._apis.finance.exportCb(query).then((response)=>{
-          window.location.href = response
+         window.location.href = response
       }).catch((error)=>{
         this.$message.error(error)
       })

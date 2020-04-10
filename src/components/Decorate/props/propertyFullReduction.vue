@@ -38,7 +38,6 @@
 <script>
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectFullReduction from '@/views/shop/dialogs/decorateDialogs/dialogSelectFullReduction';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertyFullReduction',
   mixins: [propertyMixin],

@@ -117,7 +117,6 @@
 <script>
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 export default {
   name: 'apiNavData',
   props: ['apiNavData'],
@@ -240,7 +239,7 @@ export default {
     /* 创建导航 */
     createNav(params) {
       return {
-        id: uuid(),
+        id: uuidv4(),
         navName: params && params.navName || '导航',
         navIcon: params && params.navIcon || '',
         navIconActive: params && params.navIconActive || '',

@@ -101,6 +101,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getImportList(val, this.pageSize);
+      this.startIndex = val;
     },
     getImportList(startIndex, pageSize) {
       this.loading = true;
@@ -131,19 +132,27 @@ export default {
       }
     },
     modify(row) {
-      this.hackReset = false;
-      this.$nextTick(() => {
-        this.hackReset = true;
-      })
-      this.dialogVisible = true;
-      this.currentDialog = "changeIdentityDialog";
-      this.currentData.successNum = row.successNum;
-      this.currentData.id = row.id;
+      if(row.successNum == 0) {
+        this.$message({
+          message: '无导入成功数不能修改身份等级',
+          type: 'warning'
+        });
+      }else{
+        this.hackReset = false;
+        this.$nextTick(() => {
+          this.hackReset = true;
+        })
+        this.dialogVisible = true;
+        this.currentDialog = "changeIdentityDialog";
+        this.currentData.successNum = row.successNum;
+        this.currentData.id = row.id;
+      }
     }
   },
   watch: {
     params(val) {
-      this.getImportList(1, this.pageSize);
+      this.startIndex = 1;
+      this.getImportList(this.startIndex, this.pageSize);
     }
   },
 };

@@ -11,7 +11,7 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
-                    :disabled="ruleForm.isSyncProduct == 1 && authHide"
+                    :disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
@@ -919,6 +919,14 @@ export default {
             } else {
                 return false
             }
+        },
+        hasLeiMu() {
+            if(this.ruleForm.productCategoryInfoId) {
+                if(this.operateCategoryList.find(val => val.id == this.ruleForm.productCategoryInfoId)) {
+                    return true
+                }
+            }
+            return false
         }
     },
     watch: {
@@ -989,6 +997,15 @@ export default {
             }))
         },
         deleteAddedSpecValue(index, specValueIndex) {
+            if(this.$route.query.id) {
+                if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.some(val => val.activity)) {
+                    this.$message({
+                    message: '商品正在参加营销活动，不可删除',
+                    type: 'warning'
+                    });
+                    return
+                }
+            }
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
             let id
 
@@ -1285,6 +1302,15 @@ export default {
             return _list
         },
         deleteAddedSpec(index) {
+            if(this.$route.query.id) {
+                if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.some(val => val.activity)) {
+                    this.$message({
+                    message: '商品正在参加营销活动，不可删除',
+                    type: 'warning'
+                    });
+                    return
+                }
+            }
             this.addedSpecs.splice(index, 1)
             this.specsLabel = this.specsLabel.split(',').splice(index, 1).join(',')
             this.getSpecs(false, index)
@@ -1499,8 +1525,16 @@ export default {
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
-            let routeData = this.$router.resolve({ path: '/order/newTemplate?mode=new' });
+            let routeData = this.$router.resolve({ path: '/order/newTemplate', query: {mode: 'new'} });
             window.open(routeData.href, '_blank');
+            // this.$nextTick(() => {
+            //     let a = document.createElement('a')
+
+            //     a.href = '/bp/order/newTemplate?mode=new'
+            //     a.target = '_blank'
+
+            //     a.click()
+            // })
         },
         getTemplateList() {
             return new Promise((resolve, reject) => {
@@ -2201,7 +2235,7 @@ export default {
                             });
                             return
                         }
-                        if(this.ruleForm.goodsInfos[i].warningStock == '') {
+                        if(!this.ruleForm.goodsInfos[i].warningStock) {
                             this.$message({
                                 message: '请输入库存预警',
                                 type: 'warning'
@@ -2245,7 +2279,7 @@ export default {
                         let id = this.ruleForm.freightTemplateId
                         calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
                         if(calculationWay == 3) {
-                            if(this.ruleForm.goodsInfos.some(val => val.volume == '')) {
+                            if(this.ruleForm.goodsInfos.some(val => !val.volume)) {
                                 this.$message({
                                     message: '规格信息中体积不能为空',
                                     type: 'warning'
@@ -2253,7 +2287,7 @@ export default {
                                 return
                             }
                         } else if(calculationWay == 2) {
-                            if(this.ruleForm.goodsInfos.some(val => val.weight == '')) {
+                            if(this.ruleForm.goodsInfos.some(val => !val.weight)) {
                                 this.$message({
                                     message: '规格信息中重量不能为空',
                                     type: 'warning'
