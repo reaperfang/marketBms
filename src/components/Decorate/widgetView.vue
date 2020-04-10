@@ -19,7 +19,6 @@
 
 <script>
 import widget from './widgetConfig';
-import uuid from 'uuid/v4';
 export default {
   name: 'widgetView',
   components: {},
@@ -47,7 +46,7 @@ export default {
 
     /* 选中控件 */
     addComponent(item) {
-      const id = uuid();
+      const id = uuidv4();
 
       //当目前选中的是基础组件的时候，先强行选中最后一个组件再执行下文
       if(this.currentComponentId === this.basePropertyId) {
@@ -79,7 +78,7 @@ export default {
 
     /* 拖拽添加组件 */
     dragAddComponent(ev, item) {
-      const id = uuid();
+      const id = uuidv4();
       ev.dataTransfer.setData("dragAddComponent", JSON.stringify(Object.assign(item, {id})));
     }
   }

@@ -11,7 +11,7 @@
                 <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="全部"></el-cascader>
               </div>
               <el-input v-model="materialName" placeholder="请输入图片名称" clearable></el-input>
-              <el-button type="primary" @click="fetchMaterial">搜 索</el-button>
+              <el-button type="primary" @click="search">搜 索</el-button>
             </div>
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
                 <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
@@ -252,7 +252,7 @@ export default {
 
   },
   created() {
-    this.fetchMaterial();
+    this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
   },
   mounted() {
     const _self = this;
@@ -270,13 +270,13 @@ export default {
     /**************************** 列表数据拉取相关 *******************************/
 
     /* 查询素材库图片 */
-    fetchMaterial() {
+    fetchMaterial(startIndex, pageSize) {
       this.materialLoading = true;
       this.imgNow = 0;
       this._apis.file.getMaterialList({
         fileGroupInfoId:this.materialGroupId || '0',
-        startIndex:this.materialCurrentPage,
-        pageSize:this.materialPageSize,
+        startIndex: startIndex,
+        pageSize: pageSize,
         sourceMaterialType:"0",
         fileName: this.materialName
       }).then((response)=>{
@@ -513,7 +513,7 @@ export default {
     handleSizeChange(val){
       if(this.currentTab == 'material') {
         this.materialPageSize = val || this.materialPageSize;
-        this.fetchMaterial();
+        this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
       }else if(this.currentTab == 'system') {
         this.systemPageSize = val || this.systemPageSize;
         this.fetchSystemIcon();
@@ -524,7 +524,7 @@ export default {
     handleCurrentChange(pIndex){
       if(this.currentTab == 'material') {
         this.materialCurrentPage = pIndex || this.materialCurrentPage;
-        this.fetchMaterial();
+        this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
       }else if(this.currentTab == 'system') {
         this.systemCurrentPage = pIndex || this.systemCurrentPage;
         this.fetchSystemIcon();
@@ -562,8 +562,12 @@ export default {
         // 通过调用resolve将子节点数据返回，通知组件数据加载完成
         resolve(nodes);
       });
+    },
+    //搜索
+    search() {
+      this.materialCurrentPage = 1;
+      this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
     }
-
   }
 };
 </script>

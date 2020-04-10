@@ -47,6 +47,12 @@ export default {
       current: '0'
     }
   },
+  created() {
+    let path = '/' + this.$route.path.split('/')[1]
+    let index = this.permission_routers_tree.findIndex(val => val.path == path)
+
+    this.menuHandler(index)
+  },
   components: {
     Navbar,
     Sidebar,
@@ -55,11 +61,6 @@ export default {
   },
   mixins: [ResizeMixin],
   created() {
-    let path = '/' + this.$route.path.split('/')[1]
-    let index = this.permission_routers_tree.findIndex(val => val.path == path)
-
-    this.menuHandler(index)
-
     this.current = localStorage.getItem('siderBarCurrent') || '0'
 
     let name = this.$route.path.replace(/^(\/[^(?:\/|\?)]+)\/.*$/, '$1')

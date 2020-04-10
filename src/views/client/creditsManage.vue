@@ -130,7 +130,9 @@ export default {
         checkPersent(event,val,ele) {
             val = val.replace(/[^\d]/g,'');
             val = val.replace(/^0/g,'');
-            val = val.replace(/^100/g,'');
+            if(val > 100) {
+                val = ""
+            }
             this.ruleForm[ele] = val;
         },
         openScoreToCash(val) {

@@ -46,7 +46,6 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from "@/components/TableBase";
 import utils from "@/utils";
-import uuid from "uuid/v4";
 export default {
   name: "dialogSelectInfo",
   extends: tableBase,

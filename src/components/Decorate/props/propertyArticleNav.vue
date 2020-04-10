@@ -94,7 +94,6 @@
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
-import uuid from 'uuid/v4';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleNav',
@@ -111,7 +110,7 @@ export default {
           title: '',
           url: '',
           linkTo: null,
-          id: uuid()
+          id: uuidv4()
         }],
       },
       rules: {},
@@ -173,7 +172,7 @@ export default {
           title: '导航',
           url: '',
           linkTo: null,
-          id: uuid()
+          id: uuidv4()
         });
         this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
         // this.dialogVisible=true; 
