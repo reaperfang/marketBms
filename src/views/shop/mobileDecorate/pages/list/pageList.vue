@@ -97,7 +97,6 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 import dialogPopularize from '@/views/shop/dialogs/decorateDialogs/dialogPopularize';
 export default {
   name: 'pageList',

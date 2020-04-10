@@ -310,6 +310,11 @@ export default {
    position:relative;
     .phone-body {
       box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+      width: 375px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
       .component_wrapper{
         // min-height: 50px;
         &.actived{

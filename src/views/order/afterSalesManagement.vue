@@ -243,7 +243,7 @@ export default {
             } else {
                 this.$refs.multipleTable.clearSelection();
             }
-            this.isIndeterminate = false;
+            this.isIndeterminate = true;
         },
         confirmReceived(row) {
             this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {

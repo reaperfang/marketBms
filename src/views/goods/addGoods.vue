@@ -2261,7 +2261,7 @@ export default {
                         let id = this.ruleForm.freightTemplateId
                         calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
                         if(calculationWay == 3) {
-                            if(this.ruleForm.goodsInfos.some(val => val.volume == '')) {
+                            if(this.ruleForm.goodsInfos.some(val => !val.volume)) {
                                 this.$message({
                                     message: '规格信息中体积不能为空',
                                     type: 'warning'
@@ -2269,7 +2269,7 @@ export default {
                                 return
                             }
                         } else if(calculationWay == 2) {
-                            if(this.ruleForm.goodsInfos.some(val => val.weight == '')) {
+                            if(this.ruleForm.goodsInfos.some(val => !val.weight)) {
                                 this.$message({
                                     message: '规格信息中重量不能为空',
                                     type: 'warning'

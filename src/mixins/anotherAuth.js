@@ -1,6 +1,9 @@
 let mixin = {
     computed: {
         authHide() {
+            if(localStorage.getItem('authDebug')) {
+                return false
+            }
             let enable = +localStorage.getItem('anotherAuthEnable')
 
             if(enable == 1) {
