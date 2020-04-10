@@ -247,7 +247,10 @@ export default {
         },
         confirmReceived(row) {
             this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
-                this.$message.success('确认收货成功');
+                //this.$message.success('确认收货成功');
+                this.confirm({title: '提示', iconSuccess: true, text: '确认收货成功', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
                 this.getList()
             }).catch(error => {
                 this.$message.error(error);
@@ -278,6 +281,7 @@ export default {
         },
         exportOrder() {
             let _param
+            let __param
             
             _param = Object.assign({}, this.listQuery, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
@@ -287,7 +291,7 @@ export default {
                 isExport: 0
             })
             if(this.multipleSelection.length) {
-              _params = Object.assign({}, _params, {
+              _param = Object.assign({}, _param, {
                 ids: this.multipleSelection.map(val => val.id)
               })
             }
@@ -318,11 +322,11 @@ export default {
         },
         batchUpdateStatus() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请勾选需要批量审核的售后单', confirmText: '我知道了'})
+                this.confirm({title: '提示', icon: true, text: '请勾选需要批量审核的售后单', showCancelButton: false, confirmText: '我知道了'})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.orderAfterSaleStatus != 0).length) {
-                    this.confirm({title: '提示', icon: true, text: '选择的数据中包含已经审核过的售后单， 无法批量审核，请重新选择', confirmText: '我知道了'})
+                    this.confirm({title: '提示', icon: true, text: '选择的数据中包含已经审核过的售后单， 无法批量审核，请重新选择', showCancelButton: false, confirmText: '我知道了'})
                     return
                 }
             }

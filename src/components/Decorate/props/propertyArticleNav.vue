@@ -94,7 +94,6 @@
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
-import uuid from 'uuid/v4';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleNav',
@@ -111,14 +110,14 @@ export default {
           title: '',
           url: '',
           linkTo: null,
-          id: uuid()
+          id: uuidv4()
         }],
       },
       rules: {},
       currentNav: null,  //当前操作的图文导航
       dialogVisible: false,
       currentDialog: '',
-      suggestSize: '建议尺寸：宽高1：1',
+      suggestSize: '建议尺寸：宽高1:1',
       dragOptions: {
           animation: 300,
           group: "description",
@@ -154,7 +153,7 @@ export default {
       this.blockType = 1;
       switch(Number(templateType)) {
         case 1:
-          this.suggestSize = '建议尺寸：宽高1：1';
+          this.suggestSize = '建议尺寸：宽高1:1';
           break; 
         case 2:
           this.suggestSize = '建议：不超过5个汉字';
@@ -173,7 +172,7 @@ export default {
           title: '导航',
           url: '',
           linkTo: null,
-          id: uuid()
+          id: uuidv4()
         });
         this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
         // this.dialogVisible=true; 

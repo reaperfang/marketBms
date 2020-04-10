@@ -14,7 +14,7 @@
           </li>
         </ul>
       </div>
-      最多添加30个商品
+      <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -130,7 +130,6 @@
 <script>
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectSecondkill from '@/views/shop/dialogs/decorateDialogs/dialogSelectSecondkill';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertySecondkill',
   mixins: [propertyMixin],

@@ -68,7 +68,6 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from '@/components/TableBase';
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 import { getToken } from '@/system/auth'
 export default {
   name: "dialogSelectNyuan",

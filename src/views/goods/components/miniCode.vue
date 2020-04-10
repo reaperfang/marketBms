@@ -15,7 +15,7 @@
                     不变更：创建好的商品无论商品内容如何修改，二维码不会变更； <br />
                     商品删除即失效：如果你删除商品，该商品二维码将被一起删除，无法再找回。
                 </div>
-                <div class="miniCode-header-right">帮助</div>
+                <div class="miniCode-header-right pointer">帮助</div>
             </el-tooltip>
         </div>
         <div class="miniCode-content">
@@ -23,7 +23,7 @@
                 <!-- <div id="qrcode"></div> -->
                 <img width="136" :src="content" />
                 <p>扫码查看小程序商品详情页</p>
-                <div @click="download" class="download">下载到本地</div>
+                <div @click="download" class="download pointer">下载到本地</div>
             </div>
         </div>
     </div>
@@ -181,7 +181,23 @@ export default {
 <style lang="scss">
     .share-popper {
         width: 370px;
-        background-color: #505c74!important;
+        background:rgba(51,51,51,1)!important;
+        opacity:0.81!important;
+        font-size:12px;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:18px;
+        .popper__arrow {
+            top: -6px;
+            border-top-width: 0;
+            border-bottom-color: rgba(51,51,51,1)!important;
+        }
+    }
+    .share-popper[x-placement^=bottom] .popper__arrow::after {
+        top: 1px;
+        margin-left: -5px;
+        border-top-width: 0;
+        border-bottom-color: rgba(51,51,51,1)!important;
     }
 </style>
 

@@ -5,10 +5,9 @@
             <span class="removeBlack" @click="showRemoveBlack" v-else>移除黑名单</span>
             <div class="c_top_l fl">
                 <p>基本信息：</p>
-                <img :src="clientInfoById.headIcon" alt="">
             </div>
             <div class="c_top_m fl">
-                <p style="margin-top: 0">用户ID: <span>{{clientInfoById.memberSn}}</span></p>
+                <p style="margin-top: 57px">用户ID: <span>{{clientInfoById.memberSn}}</span></p>
                 <!-- <p>微信公众号关注状态: <span>已关注</span></p> -->
                 <!-- <p>微信昵称: <span>{{clientInfoById.nickName}}</span></p>
                 <p>手机号: <span>{{clientInfoById.phone}}</span></p> -->
@@ -18,6 +17,7 @@
                 <p>用户身份: {{clientInfoById.levelName}}<span class="addMainColor pointer marR20" @click="changeIdentity">&nbsp;&nbsp;&nbsp;&nbsp;变更</span></p>
             </div>
             <div class="c_top_r fl">
+                <img :src="clientInfoById.headIcon" alt="">
                 <div class="c_title">
                     个人资料
                 </div>
@@ -25,6 +25,7 @@
                     <p>昵称：<span>{{clientInfoById.nickName}}</span></p>
                     <p>姓名：<span>{{clientInfoById.memberName}}</span></p>
                     <p>性别：<span>{{sexText}}</span></p>
+                    <p>生日：<span>{{clientInfoById.birthday}}</span></p>
                     <p>爱好：<span>{{clientInfoById.hobby}}</span></p>
                     <p>手机号：<span>{{clientInfoById.phone}}</span></p>
                     <p>邮箱：<span>{{clientInfoById.email}}</span></p>
@@ -32,7 +33,7 @@
             </div>
         </div>
         <div class="c_mid">
-            <p>标签信息：</p>
+            <p style="font-weight: bold">标签信息：</p>
             <div class="labels">
                 <div class="label_list">
                     <p v-for="item in clientInfoById.labelRecordViews" :key="item.id" v-if="item.memberLabelInfoName">
@@ -48,7 +49,7 @@
             </div>
         </div>
         <div class="c_mid">
-            <p>资产信息：</p>
+            <p style="font-weight: bold">资产信息：</p>
             <div class="assets">
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_vip.png" alt="">
@@ -66,12 +67,12 @@
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_coupon.png" alt="" @click="sendCoupon" class="pointer">
-                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{allCoupons.length !== 0 ? allCoupons[0].ownNum || 0:0}}</span>张</p>
+                    <p>可用优惠券：<span @click="showDiscountCoupon('0')" class="p_style">{{couponNum || 0}}</span>张</p>
                     <span @click="sendCoupon">发放</span>
                 </div>
                 <div class="assets_item">
                     <img src="../../assets/images/client/icon_code.png" alt="" @click="sendCode" class="pointer">
-                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{allCodes.length !== 0 ? allCodes[0].ownNum || 0 : 0}}</span>个</p>
+                    <p>可用优惠码：<span @click="showDiscountCoupon('1')" class="p_style">{{codeNum || 0}}</span>个</p>
                     <span @click="sendCode">发放</span>
                 </div>
                 <div class="assets_item rb">
@@ -82,7 +83,7 @@
             </div>
         </div>
         <div class="c_mid" style="border-bottom: none">
-            <p>交易统计：<span style="color: #b9b9b9">（系统自动确认收货的货到付款订单不在统计范围内）</span></p>
+            <p style="font-weight: bold">交易统计：<span style="color: #b9b9b9">（系统自动确认收货的货到付款订单不在统计范围内）</span></p>
             <div class="assets">
                 <div class="assets_item">
                     <p>最近下单时间</p>
@@ -98,7 +99,7 @@
                 </div>
                 <div class="assets_item rb">
                     <p>累计消费订单数</p>
-                    <p class="pointer p_style" @click="_routeTo('query',{id: userId, orderStatus: 6})">{{clientInfoById.dealTimes || 0}}</p>
+                    <p class="pointer p_style" @click="_routeTo('query',{id: userId, orderStatus: 6})" style="color: #655EFF; text-decoration: none">{{clientInfoById.dealTimes || 0}}</p>
                 </div>
             </div>
         </div>
@@ -160,21 +161,50 @@ export default {
             codeList: [],
             hackReset: true,
             level: "",
-            sexText: ""
+            sexText: "",
+            topLevel: 0,
+            topCard: 0,
+            couponNum: 0,
+            codeNum: 0
         }
     },
     methods: {
+        getCouponNum() {
+            this._apis.client.getCouponNum({memberId: this.userId}).then(response => {
+                this.couponNum = response.couponNum;
+                this.codeNum = response.couponCodeNum;
+            }).catch(error => {
+                console.log(error);
+            })
+        }, 
+        getLevelMax() {
+            this._apis.client.getLevelMax({}).then(response => {
+                this.topLevel = response;
+            }).catch(error => {
+                console.log(error)
+            })
+        },
+        getCardMax() {
+            this._apis.client.getCardMax({}).then(response => {
+                this.topCard = response;
+            }).catch(error => {
+                console.log(error)
+            })
+        },
         refreshPage(num) {
             if(num == 1) {
                 this.getAllCoupons();
+                this.getCouponNum();
             }else if(num == 2) {
                 this.getAllCodes();
+                this.getCouponNum();
             }else{
                 this.getMemberInfo();
             }
         },
         changeIdentity() {
-            if(this.clientInfoById.level !== 9) {
+            let tl = this.topLevel == 9 ? 9:this.topLevel;
+            if(this.clientInfoById.level !== tl) {
                 this.hackReset = false;
                 this.$nextTick(() => {
                     this.hackReset = true;
@@ -310,16 +340,25 @@ export default {
             this.currentData.memberSn = this.clientInfoById.memberSn;
         },
         showChangeCard() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
-            this.dialogVisible = true;
-            this.currentDialog = "changeCardDialog";
-            this.currentData.id = this.userId;
-            this.currentData.memberSn = this.clientInfoById.memberSn;
-            this.currentData.level = this.clientInfoById.cardLevelName;
-            this.currentData.oldLevel = this.clientInfoById.cardLevel;
+            let tl = this.topCard == 5?5:this.topCard;
+            if(this.clientInfoById.cardLevel !== tl) {
+                this.hackReset = false;
+                this.$nextTick(() => {
+                    this.hackReset = true;
+                })
+                this.dialogVisible = true;
+                this.currentDialog = "changeCardDialog";
+                this.currentData.id = this.userId;
+                this.currentData.memberSn = this.clientInfoById.memberSn;
+                this.currentData.level = this.clientInfoById.cardLevelName;
+                this.currentData.oldLevel = this.clientInfoById.cardLevel;
+            }else{
+                this.$message({
+                    message: '已是最高等级无法变更',
+                    type: 'warning'
+                })
+            }
+            
         },
         showScoreList() {
             this.hackReset = false;
@@ -371,79 +410,6 @@ export default {
                 console.log(error);
             })
         },
-        // saveInfo() {
-        //     let errFlag = false;
-        //     let formObj = {
-        //         id: this.clientInfoById.id, 
-        //         memberName: this.clientInfoById.memberName, 
-        //         sex: this.clientInfoById.sex, 
-        //         birthday: this.clientInfoById.birthday, 
-        //         //wechatSn: this.clientInfoById.wechatSn, 
-        //         email: this.clientInfoById.email, 
-        //         address: this.clientInfoById.address,
-        //         selected: this.clientInfoById.selected
-        //     }
-        //     Object.keys(formObj).forEach((key) => {
-        //         if(!formObj[key]) {
-        //             errFlag = true
-        //         }
-        //     });
-        //     if(errFlag) {
-        //         this.$notify({
-        //             title: '警告',
-        //             message: '请输入完整信息',
-        //             type: 'warning'
-        //         });
-        //     }else{
-        //         let codeArr = [];
-        //         let nameArr = [];
-        //         formObj.selected.map((v) => {
-        //             for(let key in v) {
-        //                 codeArr.push(key);
-        //                 nameArr.push(v[key]);
-        //             }
-        //         });
-        //         formObj.provinceCode = codeArr[0];
-        //         formObj.provinceName = nameArr[0];
-        //         formObj.cityCode = codeArr[1];
-        //         formObj.cityName = nameArr[1];
-        //         formObj.areaCode = codeArr[2];
-        //         formObj.areaName = nameArr[2];
-        //         delete formObj.selected;
-        //         formObj.id = this.userId;
-        //         this._apis.client.saveMemberInfo(formObj).then((response) => {
-        //             this.$notify({
-        //                 title: '成功',
-        //                 message: "保存成功",
-        //                 type: 'success'
-        //             });
-        //         }).catch((error) => {
-        //             console.log(error);
-        //         })
-        //     }
-        // },
-        // getUsedCoupon() {
-        //     let params = {usedType:"1", couponType: "0", memberId: this.userId};
-        //     this._apis.client.getUsedCoupon(params).then((response) => {
-        //         this.couponList = [];
-        //         response.map((v) => {
-        //             this.couponList.push(v.appCoupon);
-        //         })
-        //     }).catch((error) => {
-        //         console.log(error);
-        //     })
-        // },
-        // getUsedCode() {
-        //     let params = {usedType:"1", couponType: "1", memberId: this.userId};
-        //     this._apis.client.getUsedCoupon(params).then((response) => {
-        //         this.codeList = [];
-        //         response.map((v) => {
-        //             this.codeList.push(v.appCoupon);
-        //         })
-        //     }).catch((error) => {
-        //         console.log(error);
-        //     })
-        // },
         sendCoupon() {
             this.dialogVisible = true;
             this.currentDialog = "issueCouponDialog";
@@ -468,11 +434,12 @@ export default {
             if(this.$route.query.id) {
                 this.getMemberInfo();
             }
-        })
+        });
+        this.getCouponNum();
+        this.getLevelMax();
+        this.getCardMax();
         this.getAllCoupons();
         this.getAllCodes();
-        // this.getUsedCoupon();
-        // this.getUsedCode();
     }
 }
 </script>
@@ -530,14 +497,6 @@ export default {
             p{
                 font-weight: bold;
             }
-            img{
-                display: block;
-                width: 52px;
-                height: 52px;
-                border-radius: 26px;
-                margin-top: 17px;
-                background-color: #eee;
-            }
         }
         .c_top_m{
             width: 240px;
@@ -552,6 +511,18 @@ export default {
             border-radius:10px;
             border:1px solid rgba(204,204,204,1);
             margin-left: 102px;
+            position: relative;
+            img{
+                position: absolute;
+                display: block;
+                width: 52px;
+                height: 52px;
+                border-radius: 26px;
+                margin-top: 17px;
+                background-color: #eee;
+                top: 36px;
+                right: 16px;
+            }
             .c_title{
                 height: 48px;
                 line-height: 48px;
@@ -653,6 +624,7 @@ export default {
                 font-size: 18px;
                 color: #FD4C2B;
                 cursor: pointer;
+                text-decoration: underline;
             }
         }
     }

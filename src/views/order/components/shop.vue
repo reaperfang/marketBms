@@ -36,7 +36,7 @@ export default {
         params: {
             deep: true,
             handler() {
-                this.getList()
+                //this.getList()
             }
         }
     },

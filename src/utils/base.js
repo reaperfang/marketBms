@@ -180,11 +180,52 @@ export function addNewApply(path, access) {
   let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
   let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
   let cid = shopInfo && shopInfo.id || ''
-  let newUrl = `${process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8080' : process.env.APPLY}/vue/marketing${path}?access=${access}&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+  let newUrl = `${process.env.NODE_ENV === 'development' ? '//127.0.0.1:8080' : process.env.APPLY}/vue/marketing${path}?access=${access}&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
   let newWindow = window.open("about:blank");
   newWindow.location.href = newUrl;
 }
 
+
+export function equalsObj(oldData,newData){
+  function  isObject(obj){
+      return Object.prototype.toString.call(obj)==='[object Object]';
+  };
+  /**
+   * 判断此类型是否是Array类型
+   * @param {Array} arr 
+   */
+  function isArray(arr){
+      return Object.prototype.toString.call(arr)==='[object Array]';
+  };
+  // 类型为基本类型时,如果相同,则返回true
+  if(oldData === newData) return true;
+  if(isObject(oldData)&&isObject(newData)&&Object.keys(oldData).length === Object.keys(newData).length){
+      // 类型为对象并且元素个数相同
+
+      // 遍历所有对象中所有属性,判断元素是否相同
+      for (const key in oldData) {
+          if (oldData.hasOwnProperty(key)) {
+              if(!equalsObj(oldData[key],newData[key]))
+                  // 对象中具有不相同属性 返回false
+                  return false;
+          }
+      }
+  }else if(isArray(oldData)&&isArray(oldData)&&oldData.length===newData.length){
+      // 类型为数组并且数组长度相同
+
+      for (let i = 0,length=oldData.length; i <length; i++) {
+          if(!equalsObj(oldData[i],newData[i]))
+          // 如果数组元素中具有不相同元素,返回false
+          return false;
+      }
+  }else{
+      // 其它类型,均返回false
+      return false;
+  }
+  
+  // 走到这里,说明数组或者对象中所有元素都相同,返回true
+  return true;
+};
 
 
 

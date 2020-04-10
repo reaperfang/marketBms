@@ -5,6 +5,7 @@
         :title="title"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
+        @close="close"
         v-bind="$attrs"
         v-on="$listeners">
         <div class="dialog-container">
@@ -39,6 +40,10 @@ export default {
     methods: {
         submit() {
             this.$emit('submit')
+            this.dialogVisible = false
+        },
+        close() {
+            this.$emit('close');
             this.dialogVisible = false
         }
     },

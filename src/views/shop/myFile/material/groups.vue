@@ -1,26 +1,23 @@
 <template>
 <div class="groups_cont">
-<!-- <el-input placeholder="输入关键字进行过滤" v-model="filterText" class="search"></el-input> -->
     <el-tree 
       :data="treeData"
       node-key="id"
       @node-click="handleLeftclick"
-      @node-contextmenu="rightClick"
-      :filter-node-method="filterNode"
       :expand-on-click-node="false"
       :load="loadNode"
       lazy
       ref="tree">
-        <span class="slot-t-node" slot-scope="{ node, data }">
-          <span ref="treeName">{{data.name}}</span>
+        <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span>{{ data.name }}</span>
+          <span>
+            <img src="@/assets/images/shop/group_add.png" @click="addChildNode(node,data)" v-if="node.level !== 3">
+            <img src="@/assets/images/shop/group_edit.png" @click="editNode(node,data)">
+            <img src="@/assets/images/shop/group_del.png" @click="deleteNode(node,data)">
+          </span>
         </span>
     </el-tree>
     <span class="newClass" @click="addSameLevelNode()">+ 新建分组</span>
-    <el-card class="box-card" ref="card" v-show="menuVisible">
-      <img src="@/assets/images/shop/group_add.png" @click="addChildNode()" v-if="currentNode.level<3">
-      <img src="@/assets/images/shop/group_edit.png" @click="editNode()">
-      <img src="@/assets/images/shop/group_del.png" @click="deleteNode()">
-    </el-card>
 <!-- 动态弹窗 -->
   <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :typeData="typeData" :dialogTitle="dialogTitle" @submit="handleSubmit"></component>
 </div>
@@ -33,20 +30,7 @@ export default {
 name:'processManagement',
 data () {
   return {
-    eleId:'',
-    isShow:false,
-    currentData:'',
-    currentNode:'',
-    menuVisible:false,
-    firstLevel:false,
-    // filterText:'',
-    maxexpandId:4,
-    loadData:[],
     treeData:[],
-    defaultProps: {
-      children:'children',
-      label:'label'
-    },
     dialogVisible: false,
     currentDialog: '',
     dialogTitle:'',
@@ -58,11 +42,7 @@ props:['typeName'],
 
 components:{dialogGroups,dialogGroupsDel},
 
-watch: {
-  // filterText (val) {
-  //   this.$refs.tree.filter(val)
-  // }
-},
+watch: { },
 
 mounted () {},
 
@@ -96,23 +76,17 @@ methods: {
       for(let key in data){
         switch (key) {
           case 'add':  
-            data.add.groupLevel == 1 ? this.handleAddSameLevelNode(data.add.groupName) : this.handleAddChildNode(data.add.groupName)
+            data.add.groupLevel == 1 ? this.handleAddSameLevelNode(data.add.groupName) : this.handleAddChildNode(data.add.groupName,data.add.currentData,data.add.node)
           break;
           case 'edit':
-            this.handelEditNode(data.edit.groupName)
+            this.handelEditNode(data.edit.groupName,data.edit.currentData)
           break;
           case 'delete':
-            this.handelDeleteNode()
+            this.handelDeleteNode(data.delete.node,data.delete.currentData)
           break;
         }
       }
   },
-
-  // 查询
-  filterNode (value, data) {
-    if (!value)return true
-      return data.label.indexOf(value) !== -1
-   },
 
   // 增加同级节点弹窗打开
   addSameLevelNode () {
@@ -134,108 +108,93 @@ methods: {
       }
     this._apis.file.newGroup(query).then((response)=>{
         let data = {id:response,name:name}
-        this.$refs.tree.append(data,this.currentNode.parent)
+        this.$refs.tree.append(data)
       }).catch((error)=>{
         this.$message.error(error);
       })
   },
 
   // 增加子级节点弹窗打开
-  addChildNode () {
-    if (this.currentNode.level >=3) {
-      this.$message.error('最多只支持三级！')
-      return false
-    }else{
-      this.dialogVisible = true
-      this.currentDialog = 'dialogGroups'
-      this.dialogTitle = this.currentNode.level == 1 ? '新建二级分组' : '新建三级分组'
-      this.typeData = {
-        type:'add'
-      }
+  addChildNode (node,data) {
+    this.dialogVisible = true
+    this.currentDialog = 'dialogGroups'
+    this.dialogTitle = node.level == 1 ? '新建二级分组' : '新建三级分组'
+    this.typeData = {
+      type:'add',
+      currentData:data,
+      node:node
     }
   },
 
   // 增加子级节点事件
-  handleAddChildNode(name){
+  handleAddChildNode(name,currentData,node){
     let type =  this.typeName == 'image' ? '0' : '1'
     let query ={
       name:name,
       type:type,
-      parentId:this.currentNode.data.id 
+      parentId:currentData.id 
     }
     this._apis.file.newGroup(query).then((response)=>{
       let data = {id:response,name:name}
-      this.$refs.tree.append(data,this.currentNode)
+      this.$refs.tree.append(data,node)
     }).catch((error)=>{
       this.$message.error(error);
     })
   },
 
   // 删除节点弹窗打开
-  deleteNode () {
+  deleteNode (node,data) {
     this.dialogVisible = true
     this.currentDialog = 'dialogGroupsDel'
     this.dialogTitle = '删除分组'
+    this.typeData = {
+      type:'del',
+      node:node,
+      currentData:data
+    }
   },
 
   // 删除节点事件
-  handelDeleteNode(){
+  handelDeleteNode(node,currentData){
     let type =  this.typeName == 'image' ? '0' : '1'
     let query ={
-      id:this.currentNode.data.id,
+      id:currentData.id,
       type:type,
-      parentId:this.currentNode.data.parentId
+      parentId:currentData.parentId
     }
     this._apis.file.deleteGroup(query).then((response)=>{
-        this.$refs.tree.remove(this.currentNode)
+        this.$refs.tree.remove(node)
       }).catch((error)=>{
         this.$message.error(error);
       })
   },
 
   // 编辑节点弹窗打开
-  editNode(){
+  editNode(node,data){
     this.dialogVisible = true
     this.currentDialog = 'dialogGroups'
     this.dialogTitle = '编辑分组'
     this.typeData = {
       type:'edit',
-      name:this.currentNode.data.name
+      currentData:data,
+      name:data.name
     }
   },
 
   // 编辑节点事件
-  handelEditNode (name) {
+  handelEditNode (name,currentData) {
     let type =  this.typeName == 'image' ? '0' : '1'
     let query ={
-      id:this.currentNode.data.id,
+      id:currentData.id,
       name:name,
       type:type,
-      parentId:this.currentNode.data.parentId
+      parentId:currentData.parentId
     }
     this._apis.file.editGroup(query).then((response)=>{
-        this.$set(this.currentData,'name',name)
+        this.$set(currentData,'name',name)
     }).catch((error)=>{
       this.$message.error(error);
     })
-  },
-
-  // 鼠标右击事件
-  rightClick (MouseEvent, object, Node, element) {
-    this.currentData = object
-    this.currentNode = Node
-    if(Node.data.id != '-1'){
-      if (Node.level ===1) {
-        this.firstLevel =true
-      }else {
-        this.firstLevel =false
-      }
-      this.menuVisible =true
-    // /* 菜单定位基于鼠标点击位置 */
-      document.addEventListener('click',this.foo)
-      this.$refs.card.$el.style.left =event.clientX - 50 +'px'
-      this.$refs.card.$el.style.top =event.clientY - 90 +'px'
-    }
   },
 
   // 鼠标左击事件
@@ -245,17 +204,8 @@ methods: {
     }else{
       this.$emit('submit',{getGroupVideo:{groupId:node.data.id}})
     }
-    this.foo()
-  },
-
-  //  取消鼠标监听事件 菜单栏
-  foo () {
-    this.menuVisible =false
-    //  要及时关掉监听，不关掉的是一个坑，不信你试试，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
-    document.removeEventListener('click',this.foo)
   },
 }
-
 }
 </script>
 
@@ -332,6 +282,14 @@ methods: {
     background:#DEE0FFFF !important;
     cursor: pointer;
   }
+}
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
 }
 </style>
 

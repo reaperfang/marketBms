@@ -43,22 +43,31 @@
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
                 <div class="item">
-                    <div class="label">本单获得</div>
-                    <div class="value">
-                        <template v-if="rewardScore && gift && gainCouponList && gainCouponCodeList">
-                            <p>积分 {{rewardScore}}</p>
-                            <p style="word-break: break-all;">赠品 {{gift || '--'}}</p>
-                            <p style="word-break: break-all;">优惠券 {{gainCouponList || '--'}}</p>
-                            <p style="word-break: break-all;">优惠码 {{gainCouponCodeList || '--'}}</p>
-                        </template>
-                        <template v-else>
-                            无
+                    <div class="label">本单奖励</div>
+                    <div class="value gain">
+                        <template>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">积分</div>
+                                <div class="gain-item-righter">{{rewardScore + ' 分' || '--'}}</div>
+                            </div>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">赠品</div>
+                                <div class="gain-item-righter">{{gift || '--'}}</div>
+                            </div>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">优惠券</div>
+                                <div class="gain-item-righter">{{gainCouponList || '--'}}</div>
+                            </div>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">优惠码</div>
+                                <div class="gain-item-righter">{{gainCouponCodeList || '--'}}</div>
+                            </div>
                         </template>
                     </div>
                 </div>
             </div></el-col>
             <el-col :span="8"><div class="grid-content righter">
-                <div v-if="orderInfo.isInvoice == 1"  class="item">
+                <div v-if="invoiceOpen == 1"  class="item">
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
@@ -201,7 +210,7 @@
                     </div>
                     <div class="row">
                         <div class="col">积分抵现:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
+                        <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
                     </div>
                     <!-- <div class="row align-center">
                         <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
@@ -253,8 +262,14 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney}}</div>
-                        <div v-else class="col"></div>
+                        <template v-if="orderDetail.orderInfo.payWay == 2">
+                            <div v-if="orderDetail.orderInfo.orderStatus == 6" class="col">¥{{orderDetail.orderInfo.actualMoney || '0.00'}}</div>
+                            <div v-else class="col"></div>
+                        </template>
+                        <template v-else>
+                            <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney || '0.00'}}</div>
+                            <div v-else class="col"></div>
+                        </template>
                     </div>
                 </section>
             </div>
@@ -334,12 +349,14 @@ export default {
             gainCouponList: '',
             gainCouponCodeList: '',
             //replacePayWechatNames: ''
-            yingshouChangeMoney: ''
+            yingshouChangeMoney: '',
+            invoiceOpen: 1,
         }
     },
     created() {
         //this.getOrderPayRecordList()
         this.getGain()
+        this.getShopInfo()
     },
     watch: {
         orderInfo: {
@@ -416,6 +433,10 @@ export default {
                 return this.orderDetail.orderPayRecordList.filter(val => val.transactionCode).length
             }
             return 0
+        },
+        cid(){
+          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          return shopInfo.id
         }
     },
     methods: {
@@ -431,6 +452,15 @@ export default {
         //         this.$message.error(error);
         //     }) 
         // },
+        getShopInfo(){
+          let id = this.cid
+
+          this._apis.set.getShopInfo({id:id}).then(response =>{
+            this.invoiceOpen = response.invoiceOpen
+          }).catch(error =>{
+            console.log(error)
+          })
+        },
         getGain() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
             console.log(this);
@@ -673,7 +703,7 @@ export default {
         orderStatusFilter(row) {
             if(row.afterSaleStatus== 1 || row.afterSaleStatus== 2 || row.orderAfterStatus == 0) {
                 if(row.orderAfterStatus == 0){
-            return '售后完成'
+            return '售后关闭'
             }else if(row.orderAfterStatus == 1) {
                         return '换货中'
                     } else if(row.orderAfterStatus == 2) {
@@ -693,7 +723,7 @@ export default {
                 } else if(row.orderStatus == 1) {
                     return '待成团'
                 } else if(row.orderStatus == 2) {
-                    return '关闭'
+                    return '交易关闭'
                 } else if(row.orderStatus == 3) {
                     return '待发货'
                 } else if(row.orderStatus == 4) {
@@ -724,6 +754,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+    .gain {
+        .gain-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            .gain-item-lefter {
+                width: 42px;
+                margin-right: 6px;
+            }
+        }
+    }
     .order-information {
         .blue {
             color: $globalMainColor;

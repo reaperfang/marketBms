@@ -16,6 +16,7 @@
       stripe
       :data="tableData"
       ref="multipleTable"
+      :selectable="itemSelectable"
       :row-key="getRowKey"
       @selection-change="handleSelectionChange"
       v-loading="loading"
@@ -64,7 +65,6 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from '@/components/TableBase';
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 import { getToken } from '@/system/auth'
 export default {
   name: "dialogSelectMultiPerson",
@@ -153,6 +153,11 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    itemSelectable(row, index) {
+      if(row.status !== 2) {
+        return true;
+      }
     },
     getRowKey(row) {
       return row.activityId || row.activeId

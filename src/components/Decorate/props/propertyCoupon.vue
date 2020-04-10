@@ -8,7 +8,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="" prop="addType">
-        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectCoupon'" v-if="ruleForm.addType === 1">添加优惠券(最多添加10张优惠券)</el-button>
+        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectCoupon'" v-if="ruleForm.addType === 1">添加优惠券</el-button>
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
             v-for="tag in list"
@@ -19,6 +19,7 @@
             {{tag.title}}
           </el-tag>
         </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加10张优惠券</p>  
       </el-form-item>
       <el-form-item label="券活动数" prop="couponNumberType" v-if="ruleForm.addType === 2">
         <el-radio-group v-model="ruleForm.couponNumberType">
@@ -31,6 +32,7 @@
             </el-input>
           </el-radio>
         </el-radio-group>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 2">建议最大设置为10个</p>  
       </el-form-item>
       <el-form-item label="样式" prop="couponStyle">
         <el-radio-group v-model="ruleForm.couponStyle">
@@ -50,7 +52,7 @@
         </el-radio-group> -->
         <wxColor v-model="ruleForm.couponColor" @input="yuan"></wxColor>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideScrambled">
+      <el-form-item label="更多设置" prop="hideScrambled" v-if="ruleForm.addType == 1">
         <el-checkbox v-model="ruleForm.hideScrambled">隐藏已抢完劵</el-checkbox>
       </el-form-item>
       <el-form-item label="">
@@ -109,6 +111,7 @@ export default {
     /* 监听添加类型，自动获取状态则拉取一下数据 */
     'ruleForm.addType'(newValue) {
       if(newValue == 2) {
+        this.ruleForm.hideScrambled = false;
         this.fetch();
       }else{
         this.list = [];

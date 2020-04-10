@@ -1,6 +1,6 @@
 <template>
     <div style="min-height: 100vh;" v-loading="loading">
-        <div v-if="list.length" class="goods-list">
+        <div class="goods-list">
             <header class="header">
                 <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
@@ -64,7 +64,8 @@
                     ref="table"
                     style="width: 100%"
                     :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-                    @selection-change="handleSelectionChange">
+                    @selection-change="handleSelectionChange"
+                    :empty-text="emptyText">
                     <el-table-column
                         type="selection"
                         width="55">
@@ -77,9 +78,17 @@
                     <el-table-column
                     prop="name"
                     label="商品名称"
-                    width="380">
+                    :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
                         <template slot-scope="scope">
-                            <div class="ellipsis2" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
+                            <div class="ellipsis2" :class="{'ellipsis2-big': list.filter(val => val.activity) && list.filter(val => val.activity).length}" style="width: 196px;" :style="{width: list.filter(val => val.activity) && list.filter(val => val.activity).length ? 239 : 196}" :title="scope.row.name">
+                                <template v-if="scope.row.name.length < 14">
+                                    {{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i>
+                                </template>
+                                <template v-else>
+                                    {{scope.row.name.substring(0, 14)}}<i v-if="scope.row.activity" class="sale-bg"></i><br />
+                                    {{scope.row.name.substring(14)}}
+                                </template>
+                            </div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
                         </template>
                     </el-table-column>
@@ -105,7 +114,7 @@
                         width="120"
                         class-name="salePrice">
                         <template slot-scope="scope">
-                            <span class="price" :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}">
+                            <span class="price">
                                 {{Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice))}}
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
                             </span>
@@ -114,7 +123,7 @@
                     <el-table-column
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{red: scope.row.warningStock && (Math.min.apply(null, scope.row.goodsInfos.map(val => val.stock)) <= scope.row.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
+                            <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -378,6 +387,9 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+.ellipsis2-big {
+    width: 239px;
+}
 </style>
 <style lang="scss">
     .operate-popper {
@@ -444,7 +456,8 @@ export default {
                 children: 'childrenCatalogs',
                 multiple: false, 
                 checkStrictly: true
-            }
+            },
+            emptyText: '没有找到相关商品，换个搜索词试试吧'
         }
     },
     created() {
@@ -469,11 +482,15 @@ export default {
                 } else if(item.status == 0) {
                     return '下架'
                 } else if(item.status == -1) {
-                    if(goodsInfos[1]) {
-                        if(goodsInfos[1].status == 0) {
-                            return '下架'
-                        } else if(goodsInfos[1].status == 1) {
+                    let goodsInfosList = goodsInfos.filter(val => val.stock != -1)
+                    
+                    if(goodsInfosList.length) {
+                        let item = goodsInfosList[0]
+
+                        if(item.stock == 1) {
                             return '上架'
+                        } else if(item.stock == 0) {
+                            return '下架'
                         }
                     }
                 }
@@ -505,6 +522,19 @@ export default {
             str = str.replace(/(^.*?)\,$/, '$1')
 
             return str
+        },
+        nameFilter(name) {
+            let str = ''
+
+            if(name.length > 14) {
+                str += name.substring(0, 14)
+                str += '\n'
+                str += name.substring(14)
+
+                return str
+            } else {
+                return name
+            }
         }
     },
     methods: {
@@ -647,7 +677,14 @@ export default {
             this.currentData = _row
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
+            //this.$refs[formName].resetFields();
+            this.listQuery = Object.assign({}, this.listQuery, {
+                name: '',
+                status: '',
+                productCatalogInfoId: '',
+                searchType: 'code',
+                searchValue: ''
+            })
             this.categoryValue = ''
             this.getList()
         },
@@ -926,9 +963,9 @@ export default {
                     //this.getCategoryName(res.list)
                     this.list = res.list
                     this.loading = false
-                    if(this.allTotal && !this.total) {
-                        this.$router.push('/goods/goodsListEmpty')
-                    }
+                    // if(this.allTotal && !this.total) {
+                    //     this.$router.push('/goods/goodsListEmpty')
+                    // }
                 })
             }).catch(error => {
                 //this.loading = false
