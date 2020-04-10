@@ -61,8 +61,8 @@ import vueJsonp from 'vue-jsonp';
 Vue.use(vueJsonp);
 
 // //注册取色器插件
-// import vcolorpicker from 'vcolorpicker'
-// Vue.use(vcolorpicker)
+require('@/assets/js/vcolorpicker.umd.js')
+Vue.use({...window.vcolorpicker.default})
 
 //注册拖拽插件
 import VueDND from 'awe-dnd';
