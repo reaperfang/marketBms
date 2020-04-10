@@ -43,13 +43,25 @@
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
                 <div class="item">
-                    <div class="label">本单获得</div>
-                    <div class="value">
+                    <div class="label">本单奖励</div>
+                    <div class="value gain">
                         <template>
-                            <p>积分 {{rewardScore || '--'}}</p>
-                            <p style="word-break: break-all;">赠品 {{gift || '--'}}</p>
-                            <p style="word-break: break-all;">优惠券 {{gainCouponList || '--'}}</p>
-                            <p style="word-break: break-all;">优惠码 {{gainCouponCodeList || '--'}}</p>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">积分</div>
+                                <div class="gain-item-righter">{{rewardScore + ' 分' || '--'}}</div>
+                            </div>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">赠品</div>
+                                <div class="gain-item-righter">{{gift || '--'}}</div>
+                            </div>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">优惠券</div>
+                                <div class="gain-item-righter">{{gainCouponList || '--'}}</div>
+                            </div>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">优惠码</div>
+                                <div class="gain-item-righter">{{gainCouponCodeList || '--'}}</div>
+                            </div>
                         </template>
                     </div>
                 </div>
@@ -742,6 +754,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+    .gain {
+        .gain-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            .gain-item-lefter {
+                width: 42px;
+                margin-right: 6px;
+            }
+        }
+    }
     .order-information {
         .blue {
             color: $globalMainColor;
