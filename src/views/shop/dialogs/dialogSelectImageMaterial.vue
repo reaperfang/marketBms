@@ -274,7 +274,7 @@ export default {
       this.materialLoading = true;
       this.imgNow = 0;
       this._apis.file.getMaterialList({
-        fileGroupInfoId:this.materialGroupId || '0',
+        fileGroupInfoId:this.materialGroupId == '0'?'':this.materialGroupId || '',
         startIndex: startIndex,
         pageSize: pageSize,
         sourceMaterialType:"0",
