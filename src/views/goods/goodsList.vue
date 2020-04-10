@@ -80,7 +80,7 @@
                     label="商品名称"
                     :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
                         <template slot-scope="scope">
-                            <div class="ellipsis2" style="width: 196px;" :style="{width: list.filter(val => val.activity) && list.filter(val => val.activity).length ? 239 : 196}" :title="scope.row.name">
+                            <div class="ellipsis2" :class="{'ellipsis2-big': list.filter(val => val.activity) && list.filter(val => val.activity).length}" style="width: 196px;" :style="{width: list.filter(val => val.activity) && list.filter(val => val.activity).length ? 239 : 196}" :title="scope.row.name">
                                 <template v-if="scope.row.name.length < 14">
                                     {{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i>
                                 </template>
@@ -386,6 +386,9 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+.ellipsis2-big {
+    width: 239px;
 }
 </style>
 <style lang="scss">
