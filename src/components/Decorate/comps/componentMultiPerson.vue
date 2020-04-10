@@ -132,6 +132,7 @@ export default {
         },
     },
     computed: {
+
          /* 检测是否有数据 */
         hasContent() {
             let value = false;
@@ -155,7 +156,7 @@ export default {
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
-            var bodyWidth = 370;
+            var bodyWidth = 375;
             if(this.listStyle==1){
                 this.goodMargin = {marginTop:this.goodsMargin+'px'};
                 this.goodWidth = "100%";
