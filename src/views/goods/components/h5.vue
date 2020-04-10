@@ -73,15 +73,32 @@ export default {
                 colorLight : "#fff",
             })
         },
+        isIE() {
+            if(!!window.ActiveXObject || "ActiveXObject" in window) 
+                return true; 
+            else 
+                return false; 
+        },
         download() {
-            //let canvas = document.getElementById('qrcode').getElementsByTagName('canvas')
-            let a = document.createElement('a')
+            if(this.isIE()) {
+                var bstr = atob(this.content.split(',')[1])
+                var n = bstr.length
+                var u8arr = new Uint8Array(n)
+                while (n--) {
+                u8arr[n] = bstr.charCodeAt(n)
+                }
+                var blob = new Blob([u8arr])
+                window.navigator.msSaveOrOpenBlob(blob, this.name + '.' + 'png')
+            } else {
+                //let canvas = document.getElementById('qrcode').getElementsByTagName('canvas')
+                let a = document.createElement('a')
 
-            //a.href = canvas[0].toDataURL('image/png')
-            a.href = this.content
-            //a.download = this.shareData.chanel + this.shareData.name + this.shareData.sku + '...'
-            a.download = this.name
-            a.click()
+                //a.href = canvas[0].toDataURL('image/png')
+                a.href = this.content
+                //a.download = this.shareData.chanel + this.shareData.name + this.shareData.sku + '...'
+                a.download = this.name
+                a.click()
+            }
         },
         copy() {
             let input = document.getElementById('address')
