@@ -67,11 +67,13 @@ export default {
     watch: {
       data: {
         handler(newValue) {
+          this.calcScroll();
           this.decoration();
         },
         deep: true
       },
       currentComponentData(){
+         this.calcScroll();
          this.decoration();
       }
     },
@@ -165,6 +167,8 @@ export default {
                 width += allPs[i].clientWidth;
               }
               this.$refs.scrollContent.style.width = width + 85 + "px";
+            }else{
+              this.$refs.scrollContent.style.width ='auto'
             }
           })
         }
