@@ -272,6 +272,10 @@ ul.template_type{
     box-sizing: border-box;
     margin-right: 18px;
     cursor: pointer;
+    @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+      /* 兼容IE10和IE11 */
+      width: 80px;
+    }
     &.active{
       border:1px solid $globalMainColor;
     }

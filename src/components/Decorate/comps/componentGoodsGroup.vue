@@ -3,9 +3,13 @@
     <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
       <template v-if="hasContent">
           <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
-              <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-              <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
-              @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
+            <div class="scroll_wrapper">
+              <div class="scroll_inner clearfix" ref="scrollContent">
+                <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+                <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
+                @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
+              </div>
+            </div>
           </div>
           <div class="componentGoodsGroup_content">
               <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : 'all'"></componentGoods>
@@ -117,6 +121,7 @@ export default {
                 this.loading = true;
                 this._apis.goods.fetchCategoryList({ids}).then((response)=>{
                     this.list = response;
+                    this.calcScroll();
                     this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                     this.loading = false;
                     this.allLoaded = true;
@@ -138,7 +143,7 @@ export default {
           else{
             this.allGoodClassId = this.allGoodClassId1;
           }
-        }
+        },
 
         // handleScroll(){
         //     let componentGoodsGroupHeight = document.getElementById("componentGoodsGroup").clientHeight;  
@@ -149,6 +154,20 @@ export default {
                 
         //     // }  
         // }
+
+        /* 计算横向滚动宽度 */
+        calcScroll() {
+          this.$nextTick(()=>{
+            if(this.$refs.scrollContent) {
+              let allPs = this.$refs.scrollContent.querySelectorAll('p');
+              let width = 0;
+              for(let i=0; i< allPs.length; i++) {
+                width += allPs[i].clientWidth;
+              }
+              this.$refs.scrollContent.style.width = width + 85 + "px";
+            }
+          })
+        }
 
     },
     beforeDestroy() {
@@ -272,6 +291,7 @@ export default {
             position: relative;
             margin: 0 5px;
             white-space:nowrap;
+            float:left;
         }
     }
     .componentGoodsGroup_tab.menuStyle1 {

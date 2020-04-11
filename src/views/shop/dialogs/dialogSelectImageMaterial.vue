@@ -14,10 +14,10 @@
               <el-button type="primary" @click="search">搜 索</el-button>
             </div>
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
-                <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
+                <waterfall :col='3' :width="245" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
                   <template >
                     <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
-                      <img :src="item.filePath" :style="imgStyle" alt="加载错误"/> 
+                      <img :src="item.filePath" alt="加载错误"/> 
                       <div class="item-body">
                           <div class="item-desc">{{item.fileName}}</div>
                       </div>
@@ -103,7 +103,7 @@
                   <waterfall :col='3' :width="250" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
                     <template >
                       <div class="cell-item" :class="{'img_active': localSelectedItem && localSelectedItem.title === item.title}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
-                        <img :src="item.url" :style="imgStyle" alt="加载错误"/> 
+                        <img :src="item.url" alt="加载错误"/> 
                         <div class="item-body">
                             <div class="item-desc">{{item.original}}</div>
                         </div>
@@ -207,16 +207,6 @@ export default {
     cid(){
         let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
         return shopInfo.id
-    },
-
-    imgStyle() {
-      if(this.isIE) {
-        return {
-          height: '100%'
-        }
-      }else{
-        return {}
-      }
     }
   },
   watch:{
@@ -267,7 +257,6 @@ export default {
   },
   mounted() {
     const _self = this;
-    this.isIE = this.utils.isIE();
     this.preLoadObj = new Image();
     this.$nextTick(() => {
       if(this.$parent.$refs.dialog) {
@@ -641,6 +630,10 @@ export default {
     align-items: center;
     img{
       max-width: 100%;
+      @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+        /* 兼容IE10和IE11 */
+        height:100%;
+      }
     }
     .item-body{
       padding:10px 0;
@@ -676,6 +669,12 @@ export default {
     display: grid;
     grid-template-columns: repeat(8,1fr);
     grid-gap: 10px;
+    @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+      /*兼容IE10和IE11*/
+      display:flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
     .cell-item {
       width: 100%;
       height: 80px;
@@ -687,6 +686,15 @@ export default {
       display:flex;
       flex-direction: row;
       justify-content: center;
+      @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+        /*兼容IE10和IE11*/
+        width: 80px;
+        margin-top:14px;
+        margin-left:14px;
+      }
+      &:nth-child(8n){
+        margin-right:0;
+      }
       img{
         width: 80px;
         height:100%;
