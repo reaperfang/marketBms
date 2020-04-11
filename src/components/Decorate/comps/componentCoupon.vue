@@ -4,7 +4,7 @@
     <template v-if="hasContent">
       <!-- 样式一 -->
       <div class="coupon_first">
-        <ul>
+        <ul ref="scrollContent" class="clearfix">
           <!-- status:true时候是已领取,hideScrambled:false, -->
           <template v-for="(item, key) in list">
             <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
@@ -158,6 +158,10 @@ export default {
     createList(datas) {
        this.list = datas;
        this.allLoaded = true;
+       this.$nextTick(()=>{
+          let width = (this.list.length + 1) * (128 + 10);
+          this.$refs.scrollContent.style.width = width + "px";
+       })
     },
 
     /* 获取标题 */
@@ -181,13 +185,14 @@ export default {
 .componentCoupon {
   // background: #f1f1f1;
   .coupon_first {
+    overflow-x: auto;
     & > ul {
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -o-box;
-      display: box;
-      overflow-x: scroll;
+      // display: -webkit-box;
+      // display: -moz-box;
+      // display: -ms-flexbox;
+      // display: -o-box;
+      // display: box;
+      // overflow-x: scroll;
       padding: 10px 15px;
       border-radius: 5px;
       margin-bottom: 10px;
@@ -198,6 +203,7 @@ export default {
         height: 92px;
         margin-right: 10px;
         text-align: center;
+        float:left;
         & > .first_money {
           padding-top: 17px;
           & > span:first-child {

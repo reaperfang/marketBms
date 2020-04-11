@@ -21,6 +21,7 @@
           <ul class="navs type1">
             <li
               v-for="(item, key) of ruleForm.navIds"
+              v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}"
               :class="{'active': ruleForm.navMap[item].active}"
               :key="key"
               @click="selectNav(item)">

@@ -26,7 +26,7 @@
             </li>
           </ul>
           <ul class="navs type2" v-if="ruleForm.navStyle.id == 2">
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <img src="" alt="" class="empty_img" v-else>
             </li>
@@ -35,7 +35,7 @@
             <div class="keyboard">
               <i class="el-icon-platform-eleme"></i>
             </div>
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <i class="el-icon-notebook-2"></i>
               <span>{{ruleForm.navMap[item].navName}}</span>
             </li>
@@ -46,7 +46,7 @@
                 <i class="el-icon-plus"></i>
               </span>
             </li>
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <img src="" alt="" class="empty_img" v-else>
             </li>
