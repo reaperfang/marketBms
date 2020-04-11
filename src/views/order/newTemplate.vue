@@ -56,7 +56,7 @@
                   <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
                 </template>
               </el-table-column>
-              <el-table-column label="运费（元）">
+              <el-table-column label="运费（元）" width="100">
                 <template slot-scope="scope">
                   <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.freight"></el-input>
                 </template>

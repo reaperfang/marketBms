@@ -135,7 +135,7 @@ export default {
         padding-left: 62px;
         padding-top: 20px;
         max-height: 400px;
-        overflow-y: scroll;
+        overflow-y: auto;
         .title {
             padding-bottom: 20px;
         }
