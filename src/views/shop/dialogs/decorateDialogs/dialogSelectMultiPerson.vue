@@ -15,13 +15,12 @@
     <el-table
       stripe
       :data="tableData"
-      ref="multipleTable"
-      :selectable="itemSelectable"
       :row-key="getRowKey"
+      ref="multipleTable"
       @selection-change="handleSelectionChange"
       v-loading="loading"
     >
-      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" :selectable="itemSelectable" width="55"></el-table-column>
       <el-table-column prop="activeName" label="活动标题">
         <template slot-scope="scope">
           <div class="name_wrapper">
@@ -91,7 +90,8 @@ export default {
         pageNum: 1,
         activeName: '',
       },
-      rules: {}
+      rules: {},
+      disableStatus: [2]  //不可选状态值
     };
   },
   computed: {
@@ -150,9 +150,6 @@ export default {
     /* 向父组件提交选中的数据 */
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
     },
     itemSelectable(row, index) {
       if(row.status !== 2) {

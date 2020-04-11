@@ -120,7 +120,7 @@
                     label="最新发货时间"
                     width="170">
                 </el-table-column>
-                <el-table-column label="操作" width="110">
+                <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>
@@ -377,6 +377,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.operate-box span {
+    margin-right: 0!important;
+}
 .search {
     /deep/ .el-form-item__label {
         padding-right: 8px;

@@ -16,7 +16,7 @@
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
                 <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
                   <template >
-                    <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">111-{{imgStyle}}
+                    <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
                       <img :src="item.filePath" :style="imgStyle" alt="加载错误"/> 
                       <div class="item-body">
                           <div class="item-desc">{{item.fileName}}</div>
@@ -103,7 +103,7 @@
                   <waterfall :col='3' :width="250" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
                     <template >
                       <div class="cell-item" :class="{'img_active': localSelectedItem && localSelectedItem.title === item.title}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
-                        <img :src="item.url" alt="加载错误"/> 
+                        <img :src="item.url" :style="imgStyle" alt="加载错误"/> 
                         <div class="item-body">
                             <div class="item-desc">{{item.original}}</div>
                         </div>
@@ -267,7 +267,7 @@ export default {
   },
   mounted() {
     const _self = this;
-    this.isIE = false;
+    this.isIE = this.utils.isIE();
     this.preLoadObj = new Image();
     this.$nextTick(() => {
       if(this.$parent.$refs.dialog) {

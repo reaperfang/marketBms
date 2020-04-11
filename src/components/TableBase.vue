@@ -79,7 +79,10 @@ export default {
     selectAll(val){
       if(val && this.tableData.length > 0){
         this.tableData.forEach((row)=>{
+          let key = this.disableKey || 'status'
+          if(!this.disableStatus || !this.disableStatus.includes(row[key])) {
            this.$refs.multipleTable.toggleRowSelection(row,true);
+          }
         })
       }else{
         this.$refs.multipleTable.clearSelection();
