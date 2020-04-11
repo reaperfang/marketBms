@@ -50,7 +50,7 @@
                 </el-form-item> -->
             </el-form>
             <div class="m_line clearfix">
-                <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占用户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>
+                <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占用户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>。</p>
                 <div class="fr marT20">
                     <!-- <el-button class="minor_btn" @click="reScreening()">重新筛选</el-button> -->
                     <el-tooltip content="当前最多支持导出1000条数据" placement="top">
