@@ -94,7 +94,8 @@ export default {
         pageNum: 1,
         name: '',
       },
-      rules: {}
+      rules: {},
+      disableStatus: [2]  //不可选状态值
     };
   },
   computed: {
@@ -157,9 +158,6 @@ export default {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
 
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
     itemSelectable(row, index) {
       if(row.status !== 2) {
         return true;

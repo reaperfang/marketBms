@@ -141,9 +141,6 @@ export default {
     submit() {
       this.$emit("dialogDataSelected", this.multipleSelection);
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
     getRowKey(row) {
       return row.goodsInfo.id
     },
