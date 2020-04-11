@@ -87,7 +87,7 @@
                         老会员共计<span>{{oldMemberCount || 0}}</span>人；
                         占用户总数的<span>{{oldMemberRatio != 0 ? (oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
-                    <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span></i>。
+                    <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span>。</i>
                 </p>
                 <div class="fr marT20">
                     <!-- <el-button class="minor_btn" @click="reScreening">重新筛选</el-button> -->
