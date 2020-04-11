@@ -281,6 +281,13 @@ export default {
             return str
         }
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+          vm.$nextTick(() => {
+            document.querySelector('.content-main').scrollTop = 0
+          })
+        });
+    },
     methods: {
         sendGoods() {
             console.log('sendGoods')

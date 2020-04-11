@@ -598,7 +598,7 @@ table.yuan-table{
   .el-message-box__message {
       text-align: center;
       max-height: 400px!important;
-      overflow-y: scroll!important;
+      overflow-y: auto!important;
       .el-icon-warning {
           font-size: 60px;
           color: rgb(245, 88, 88);
@@ -827,4 +827,7 @@ table.yuan-table{
     list-style: inherit!important;
   } 
 
+}
+input:-ms-input-placeholder{
+  color:#92929B;
 }

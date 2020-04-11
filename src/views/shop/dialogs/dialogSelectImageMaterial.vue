@@ -16,8 +16,8 @@
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
                 <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
                   <template >
-                    <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
-                      <img :src="item.filePath" alt="加载错误"/> 
+                    <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">111-{{imgStyle}}
+                      <img :src="item.filePath" :style="imgStyle" alt="加载错误"/> 
                       <div class="item-body">
                           <div class="item-desc">{{item.fileName}}</div>
                       </div>
@@ -152,6 +152,7 @@ export default {
       uploadAble: true,  //上传是否可用(用来清上传器缓存)
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
+      isIE: false,  //是否是IE
 
       /* 本地上传 */
       uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
@@ -206,6 +207,16 @@ export default {
     cid(){
         let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
         return shopInfo.id
+    },
+
+    imgStyle() {
+      if(this.isIE) {
+        return {
+          height: '100%'
+        }
+      }else{
+        return {}
+      }
     }
   },
   watch:{
@@ -256,6 +267,7 @@ export default {
   },
   mounted() {
     const _self = this;
+    this.isIE = false;
     this.preLoadObj = new Image();
     this.$nextTick(() => {
       if(this.$parent.$refs.dialog) {
@@ -274,7 +286,7 @@ export default {
       this.materialLoading = true;
       this.imgNow = 0;
       this._apis.file.getMaterialList({
-        fileGroupInfoId:this.materialGroupId || '0',
+        fileGroupInfoId:this.materialGroupId == '0'?'':this.materialGroupId || '',
         startIndex: startIndex,
         pageSize: pageSize,
         sourceMaterialType:"0",
