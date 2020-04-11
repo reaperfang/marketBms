@@ -187,10 +187,16 @@ export default {
       let _region = JSON.parse(JSON.stringify(this.region))
 
       _region.forEach(val => {
-        for(let i=0; i<val.checkList.length; i++) {
-          if(val.checkList[i] == tag) {
-            val.checkList.splice(i, 1)
-            i--
+        let arr = tag.split(',')
+
+        if(arr[0] == ' ' && arr[1] == ' ' && arr[2] == ' ') {
+          val.checkList = []
+        } else {
+          for(let i=0; i<val.checkList.length; i++) {
+            if(val.checkList[i] == tag) {
+              val.checkList.splice(i, 1)
+              i--
+            }
           }
         }
       })
