@@ -158,7 +158,7 @@ export default {
         /* 计算横向滚动宽度 */
         calcScroll() {
           this.$nextTick(()=>{
-            if(this.$refs.scrollContent) {
+            if(this.$refs.scrollContent && this.showTemplate == 1) {
               let allPs = this.$refs.scrollContent.querySelectorAll('p');
               let width = 0;
               for(let i=0; i< allPs.length; i++) {
