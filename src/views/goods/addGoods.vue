@@ -201,7 +201,7 @@
                                 <el-popover
                                     placement="bottom"
                                     width="430"
-                                    trigger="manual"
+                                    trigger="click"
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
@@ -1412,7 +1412,7 @@ export default {
                     visible: !this.addedSpecs[index].visible
                 }))
             }
-            console.log('addSpecValue', item)
+            console.log(this.addedSpecs)
         },
         addSpecClick(item) {
             if(this.addedSpecs.find(val => val.id == item.id)) {
@@ -2828,6 +2828,13 @@ export default {
     },
     mounted() {
         //window.addEventListener('scroll', this.handleScroll)
+        this.$nextTick(() => {
+            if(this.isIE) {
+                if(document.querySelector('.productCatalogInfoId .el-input').className.indexOf('is-focus') != -1) {
+                    document.querySelector('.productCatalogInfoId .el-form-item__label').click()
+                }
+            }
+        })
     },
     components: {
         SelectSpecifications,
