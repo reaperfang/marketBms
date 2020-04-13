@@ -34,19 +34,19 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="余额" sortable prop="balance">
+      <el-table-column label="余额" sortable="custom" prop="balance">
         <template slot-scope="scope">
           ¥{{scope.row.balance}}
         </template>
       </el-table-column>
-      <el-table-column prop="score" label="积分" sortable></el-table-column>
-      <el-table-column label="累计消费金额" sortable prop="totalDealMoney">
+      <el-table-column prop="score" label="积分" sortable="custom"></el-table-column>
+      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney">
         <template slot-scope="scope">
           ¥{{scope.row.totalDealMoney}}
         </template>
       </el-table-column>
-      <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
-      <el-table-column label="客单价（元）" sortable prop="perUnitPrice">
+      <el-table-column prop="dealTimes" label="购买次数" sortable="custom"></el-table-column>
+      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom">
         <template slot-scope="scope">
           ¥{{scope.row.perUnitPrice}}
         </template>
@@ -259,6 +259,7 @@ export default {
       this._apis.client
         .getMemberList(Object.assign(this.newForm,{startIndex, pageSize}))
         .then(response => {
+          console.log("response",response);
           this.loading = false;
           let list = response.list;
           if(list.length > 0) {
@@ -267,6 +268,7 @@ export default {
             })
           }
           this.memberList = [].concat(list);
+          console.log('memberList', this.memberList);
           this.total = response.total;
           this.$emit('stopLoading');
         })
