@@ -67,11 +67,13 @@ export default {
     watch: {
       data: {
         handler(newValue) {
+          this.calcScroll();
           this.decoration();
         },
         deep: true
       },
       currentComponentData(){
+         this.calcScroll();
          this.decoration();
       }
     },
@@ -158,13 +160,15 @@ export default {
         /* 计算横向滚动宽度 */
         calcScroll() {
           this.$nextTick(()=>{
-            if(this.$refs.scrollContent) {
+            if(this.$refs.scrollContent && this.showTemplate == 1) {
               let allPs = this.$refs.scrollContent.querySelectorAll('p');
               let width = 0;
               for(let i=0; i< allPs.length; i++) {
                 width += allPs[i].clientWidth;
               }
               this.$refs.scrollContent.style.width = width + 85 + "px";
+            }else{
+              this.$refs.scrollContent.style.width ='auto'
             }
           })
         }
