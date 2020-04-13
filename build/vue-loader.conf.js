@@ -9,6 +9,11 @@ switch(process.env.NODE_ENV) {
     extract = true
     usePostCSS =  true
     break;
+  case 'testing2':
+    sourceMap = config.test2.productionSourceMap
+    extract = true
+    usePostCSS =  true
+    break;
   case 'pre':
     sourceMap = config.pre.productionSourceMap
     extract = true
