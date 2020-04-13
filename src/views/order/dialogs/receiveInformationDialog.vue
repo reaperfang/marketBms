@@ -8,7 +8,7 @@
                 <el-form-item label="发货人电话" prop="sendPhone">
                     <el-input v-model="ruleForm.sendPhone" placeholder="请输入"></el-input>
                 </el-form-item>
-                <el-form-item label="发货地址" prop="deliveryAddress">
+                <el-form-item :class="{isIE: isIE}" label="发货地址" prop="deliveryAddress">
                     <area-cascader type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
                 </el-form-item>
@@ -35,7 +35,7 @@
                 <el-form-item label="收货人电话" prop="receivedPhone">
                     <el-input v-model="ruleForm.receivedPhone" placeholder="请输入"></el-input>
                 </el-form-item>
-                <el-form-item label="收货地址" prop="deliveryAddress">
+                <el-form-item :class="{isIE: isIE}" label="收货地址" prop="deliveryAddress">
                     <area-cascader type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
                 </el-form-item>
@@ -343,6 +343,21 @@ export default {
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             return shopInfo.id
+        },
+        isIE() {
+            var userAgent = navigator.userAgent;
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+            if(isIE) {
+                return true;   
+            } else if(isEdge) {
+                return true; 
+            } else if(isIE11) {
+                return true; 
+            }else{
+                return false
+            }
         }
     },
     props: {
@@ -406,6 +421,16 @@ export default {
         content: '*';
         color: #f56c6c;
         margin-right: 4px;
+    }
+    /deep/ .isIE {
+        .area-select {
+            .area-selected-trigger {
+                display: inline;
+            }
+        }
+        .area-select.large {
+            width: 100%;
+        }
     }
 </style>
 <style lang="scss">
