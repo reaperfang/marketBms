@@ -337,6 +337,10 @@ ul.cube.template_type{
     cursor:pointer;
     margin-right: 18px;
     width: 90px;
+    @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+      /* 兼容IE10和IE11 */
+      width: 80px;
+    }
     &:nth-child(3n){
       margin-right: 0;
     }

@@ -227,6 +227,14 @@ export function equalsObj(oldData,newData){
   return true;
 };
 
+export function isIE() {
+    if(!!window.ActiveXObject || "ActiveXObject" in window){
+      return true;
+    }else{
+      return false;
+　　 }
+}
+
 
 
 

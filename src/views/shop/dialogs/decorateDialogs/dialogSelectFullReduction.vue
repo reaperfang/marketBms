@@ -108,7 +108,8 @@ export default {
         name: '',
         selectStatus: '0,1'
       },
-      rules: {}
+      rules: {},
+      disableStatus: [2]  //不可选状态值
     };
   },
   computed: {

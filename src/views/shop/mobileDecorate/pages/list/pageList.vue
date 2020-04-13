@@ -116,7 +116,9 @@ export default {
       },
       seletedClassify: '',   //选中的分类
       visible: false,  //是否显示批量该分类浮层
-      pageLink: ''
+      pageLink: '',
+      disableStatus: [1],  //不可选状态值
+      disableKey: 'isHomePage'
     }
   },
   created() {

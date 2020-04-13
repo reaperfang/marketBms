@@ -198,7 +198,7 @@ export default {
 
     // 修改禁用
     selectInit(row, index){
-      return (row.isHomePage != 1)
+      // return (row.isHomePage != 1)
     }
   }
 }

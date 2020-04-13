@@ -6,7 +6,7 @@
         <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
         <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
     </header> -->
-    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="150px" class="demo-ruleForm">
+    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="152px" class="demo-ruleForm">
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
@@ -997,6 +997,15 @@ export default {
             }))
         },
         deleteAddedSpecValue(index, specValueIndex) {
+            if(this.$route.query.id) {
+                if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.some(val => val.activity)) {
+                    this.$message({
+                    message: '商品正在参加营销活动，不可删除',
+                    type: 'warning'
+                    });
+                    return
+                }
+            }
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
             let id
 
@@ -1293,6 +1302,15 @@ export default {
             return _list
         },
         deleteAddedSpec(index) {
+            if(this.$route.query.id) {
+                if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.some(val => val.activity)) {
+                    this.$message({
+                    message: '商品正在参加营销活动，不可删除',
+                    type: 'warning'
+                    });
+                    return
+                }
+            }
             this.addedSpecs.splice(index, 1)
             this.specsLabel = this.specsLabel.split(',').splice(index, 1).join(',')
             this.getSpecs(false, index)
@@ -1507,16 +1525,16 @@ export default {
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
-            // let routeData = this.$router.resolve({ path: '/order/newTemplate' });
-            // window.open(routeData.href, '_blank');
-            this.$nextTick(() => {
-                let a = document.createElement('a')
+            let routeData = this.$router.resolve({ path: '/order/newTemplate', query: {mode: 'new'} });
+            window.open(routeData.href, '_blank');
+            // this.$nextTick(() => {
+            //     let a = document.createElement('a')
 
-                a.href = '/bp/order/newTemplate?mode=new'
-                a.target = '_blank'
+            //     a.href = '/bp/order/newTemplate?mode=new'
+            //     a.target = '_blank'
 
-                a.click()
-            })
+            //     a.click()
+            // })
         },
         getTemplateList() {
             return new Promise((resolve, reject) => {
