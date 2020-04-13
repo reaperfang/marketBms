@@ -56,7 +56,22 @@
                             </div>
                             <div class="gain-item">
                                 <div class="gain-item-lefter">优惠券</div>
-                                <div class="gain-item-righter">{{gainCouponList || '--'}}</div>
+                                <div class="gain-item-righter">
+                                    {{gainCouponList || '--'}}
+                                    <!--<div class="coupon-box">
+                                        <div v-if="index == 0" class="coupon" v-for="(item, index) in couponList" :key="index">
+                                            <div class="item lefter">
+                                                <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                <p>元</p>
+                                            </div>
+                                            <div class="item righter">
+                                                <p>{{item.appCoupon.name}}</p>
+                                                <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="more"><span>查看更多</span></p>-->
+                                </div>
                             </div>
                             <div class="gain-item">
                                 <div class="gain-item-lefter">优惠码</div>
@@ -475,6 +490,8 @@ export default {
                 this.gift = res.giftList && res.giftList.map(val => val.appGift.goodsName).join(',') || ''
                 this.gainCouponList = res.couponList && res.couponList.map(val => val.appCoupon.name).join(',') || ''
                 this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
+                this.couponList = res.couponList || []
+                this.couponCodeList = res.couponCodeList || []
             }).catch(error => {
                 this.$message.error(error);
             })
@@ -735,6 +752,13 @@ export default {
                     return '交易成功'
                 }
                     }
+        },
+        timeFilter(value) {
+            if(value && value.split(/\s+/).length) {
+                return value.split(/\s+/)[0]
+            }
+
+            return value
         }
     },
     props: {
@@ -761,8 +785,14 @@ export default {
             align-items: center;
             margin-bottom: 10px;
             .gain-item-lefter {
-                width: 42px;
+                width: 49px;
                 margin-right: 6px;
+            }
+            .more {
+                font-size:14px;
+                font-weight:400;
+                color:rgba(101,94,255,1);
+                text-align: right;
             }
         }
     }
@@ -915,6 +945,17 @@ export default {
     }
     .yingshou-change {
         flex-shrink: 0;
+    }
+}
+.coupon {
+    .item.lefter {
+        flex-direction: column;
+    }
+    .item.righter {
+        flex-direction: column;
+    }
+    .limit {
+        font-size: 12px;
     }
 }
 </style>

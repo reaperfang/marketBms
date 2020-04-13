@@ -41,6 +41,16 @@ export function fetchSpecsList(data) {
     })
   }
 
+// 获取商品规格列表
+export function fetchSpecsList2(data) {
+  return request({
+    apiType: 'goodsOperate',
+    method: 'post',
+    target: 'PUBLIC-PRODUCT-CATEGORY-SPECS-LIST-V1-PROCESSOR',
+    data
+  })
+}
+
   // 获取敏感词列表
 export function fetchPublicSensitiveList(data) {
   return request({
