@@ -237,18 +237,20 @@ export default {
         },
         //查询
         goSearch(num){ 
-            this.form.loads = true
             //  this.form.tradeCountRange == 'null' && (this.form.tradeCountRange = null)
-            if((this.lowprice != '' && this.highprice == '' ) || (this.lowprice == '' && this.highprice != '' )){
-                this.$message.warning('最低金额于最高金额需要同时输入')
-                return
-            }else if(this.lowprice - this.highprice > 0){
-                this.$message.warning('最高金额不能低于最低金额')
-                return
-            }else if(this.lowprice&&this.highprice){
-                this.form.MoneyRange =  String(this.lowprice)+'-'+String(this.highprice);
-            } 
+            if(this.form.queryOrderMoneyType != null){
+                 if(this.lowprice == '' || this.highprice == '' ){
+                    this.$message.warning('当前金额不能为空、请您输入重新查询')
+                    return
+                }else if(this.lowprice - this.highprice > 0){
+                    this.$message.warning('最高金额不能低于最低金额')
+                    return
+                }else if(this.lowprice&&this.highprice){
+                    this.form.MoneyRange =  String(this.lowprice)+'-'+String(this.highprice);
+                } 
+            }
             this.form.startIndex = num || this.form.startIndex
+            this.form.loads = true
             // let memberType = this.form.memberType;
             this._apis.data.memberInformation(this.form).then(res => {
                 this.repeatPaymentRatio = res.repeatPaymentRatio;
@@ -275,6 +277,7 @@ export default {
                 }
 
             }).catch(error => {
+                this.form.loads = false
                 this.$message.error(error);
             });
         },
