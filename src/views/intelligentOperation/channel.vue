@@ -192,7 +192,7 @@ export default {
             }else{
                 this._apis.data.channelConversionExport(data)
                 .then(res => {
-                    window.open(res);
+                    window.location.href = res
                 })
                 .catch(err=>{
                     this.$message.error(err);

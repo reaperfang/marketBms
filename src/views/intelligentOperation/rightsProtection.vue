@@ -177,7 +177,7 @@ export default {
                 this.currentData.api = "data.exportOfrights"
             }else{
                 this._apis.data.exportOfrights(this.form).then(response => {
-                    window.open(response);
+                    window.location.href = response
                 })
             }
         },
