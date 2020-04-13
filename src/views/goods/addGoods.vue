@@ -76,7 +76,7 @@
                 <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
             </el-form-item>
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
-                <div class="block" style="display: inline-block;">
+                <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
                     <el-cascader
                         :disabled="!ruleForm.productCategoryInfoId"
                         :options="categoryOptions"
@@ -927,6 +927,21 @@ export default {
                 }
             }
             return false
+        },
+        isIE() {
+            var userAgent = navigator.userAgent;
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+            if(isIE) {
+                return true;   
+            } else if(isEdge) {
+                return true; 
+            } else if(isIE11) {
+                return true; 
+            }else{
+                return false
+            }
         }
     },
     watch: {
@@ -3485,5 +3500,18 @@ $blue: #655EFF;
     font-weight:400;
     color:rgba(146,146,155,1);
     line-height:17px;
+}
+/deep/ .isIE {
+    .el-tag__close.el-icon-close {
+        top: -6px;
+    }
+    .el-cascader__tags {
+        .el-tag {
+            display: inline-block;
+            span {
+                display: inline-block;
+            }
+        }
+    }
 }
 </style>
