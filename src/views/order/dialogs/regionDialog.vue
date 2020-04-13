@@ -190,7 +190,9 @@ export default {
         let arr = tag.split(',')
 
         if(arr[0] == ' ' && arr[1] == ' ' && arr[2] == ' ') {
-          val.checkList = []
+          if(val.name == arr[3]) {
+            val.checkList = []
+          }
         } else {
           for(let i=0; i<val.checkList.length; i++) {
             if(val.checkList[i] == tag) {

@@ -132,8 +132,9 @@ export default {
           }
         }
         return value;
-    },
-
+    }
+  },
+  methods: {
     /* 计算横向滚动宽度 */
     calcScroll() {
       this.$nextTick(()=>{
@@ -144,8 +145,7 @@ export default {
         }
       })
     }
-  },
-  methods: {}
+  }
 };
 </script>
 <style lang="scss" scoped>

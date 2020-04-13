@@ -117,7 +117,7 @@
         </el-table-column>
       </el-table>
       <div class="page_styles">
-      <div class="checkAudit">
+      <div class="checkAudit" v-if="dataList.length != 0">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
       </div>

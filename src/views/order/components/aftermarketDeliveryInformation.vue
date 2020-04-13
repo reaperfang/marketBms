@@ -13,7 +13,7 @@
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | customerFilter}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSale.memberSn}}</div>
+                        <div class="header-righter-item">发货人：{{orderAfterSale.memberName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.memberReturnGoodsTime}}</div>
                         <div @click="showCustomerContent = !showCustomerContent">
                             <i v-if="showCustomerContent" class="el-icon-caret-top pointer"></i>
@@ -157,7 +157,7 @@ export default {
             ],
             currentDialog: '',
             dialogVisible: false,
-            currentData: {},
+            currentData: [],
             showCustomerContent: true,
             showContent: true,
             expressNo: '',
@@ -244,7 +244,7 @@ export default {
                 .orderLogistics({ expressNo })
                 .then(res => {
                     this.currentDialog = "LogisticsDialog";
-                    this.currentData = res.traces;
+                    this.currentData = res.traces || [];
                     this.expressCompanys = this.expressCompanys
                     this.dialogVisible = true;
                 })

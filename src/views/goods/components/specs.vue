@@ -428,6 +428,10 @@ export default {
     table tr td {
         min-width: 147px;
         padding: 14px 2px;
+        border: 1px solid #DCDFE6;
+    }
+    table tr th {
+        border: 1px solid #DCDFE6;
     }
     /deep/ .el-input input {
         padding-right: 0;
