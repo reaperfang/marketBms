@@ -326,7 +326,7 @@ export default {
             }else{
                 this._apis.data.memberInformationExport(data)
                 .then(res => {
-                    window.open(res);
+                    window.location.href = res
                 })
                 .catch(err=>{
                     this.$message.error(err);

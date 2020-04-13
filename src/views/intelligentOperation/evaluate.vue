@@ -228,7 +228,7 @@ export default {
                 this.currentData.api = "data.evaluationExport"
             }else{
                 this._apis.data.evaluationExport(this.form).then(response => {
-                    window.open(response);
+                    window.location.href = response
                 })
             } 
         },
