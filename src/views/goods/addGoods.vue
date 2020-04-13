@@ -1112,7 +1112,7 @@ export default {
             // }))
         },
         addNewSpec() {
-            if(/\s+/.test(this.newSpec)) {
+            if(this.newSpec == '' || /\s+/.test(this.newSpec)) {
                 this.$message({
                     message: '当前输入有误，请您重新输入',
                     type: 'warning'
@@ -2267,7 +2267,7 @@ export default {
                     } catch(e) {
                         console.error(e)
                     }
-                    if(/^\s+$/.test(this.ruleForm.name)) {
+                    if(this.ruleForm.name == '' || /^\s+$/.test(this.ruleForm.name)) {
                         this.$message({
                             message: '商品名称不能为空',
                             type: 'warning'

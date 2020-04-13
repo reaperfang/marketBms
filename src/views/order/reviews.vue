@@ -204,7 +204,7 @@ export default {
                 creaTetimeEnd: '', // 评论查询结束时间
                 auditStatus: '', // 审核状态
                 starNum: '', // 星级数量
-                isChoiceness: 0
+                isChoiceness: ''
             },
             tableData: [
                 
