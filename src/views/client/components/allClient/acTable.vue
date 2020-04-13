@@ -34,19 +34,19 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="余额" sortable="custom">
+      <el-table-column label="余额" sortable prop="balance">
         <template slot-scope="scope">
           ¥{{scope.row.balance}}
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分" sortable></el-table-column>
-      <el-table-column label="累计消费金额" sortable>
+      <el-table-column label="累计消费金额" sortable prop="totalDealMoney">
         <template slot-scope="scope">
           ¥{{scope.row.totalDealMoney}}
         </template>
       </el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
-      <el-table-column label="客单价（元）" sortable>
+      <el-table-column label="客单价（元）" sortable prop="perUnitPrice">
         <template slot-scope="scope">
           ¥{{scope.row.perUnitPrice}}
         </template>

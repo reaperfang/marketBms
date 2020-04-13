@@ -9,8 +9,9 @@
         <el-form-item label="商品状态" prop="status">
           <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
             <el-option label="全部" :value="null"></el-option>
-            <el-option label="售罄" :value="-1"></el-option>
             <el-option label="上架" :value="1"></el-option>
+            <el-option label="下架" :value="0"></el-option>
+            <el-option label="售罄" :value="-1"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label prop="name">
@@ -26,7 +27,7 @@
       @selection-change="handleSelectionChange"
       v-loading="loading"
     >
-      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" :selectable="itemSelectable" width="55"></el-table-column>
       <el-table-column prop="title" label="商品名称" :width="300">
         <template slot-scope="scope">
           <div class="name_wrapper">
@@ -111,7 +112,8 @@ export default {
         status: null,
         productCatalogInfoId: this.categoryId || ''
       },
-      rules: {}
+      rules: {},
+      disableStatus: [0, -1]  //不可选状态值
     };
   },
   computed: {
@@ -155,11 +157,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.goods.fetchSpuGoodsList(this.ruleForm).then((response)=>{
-        if(response.list && Array.isArray(response.list) && response.list.length) {
-          this.tableData = response.list.filter((item)=>{
-            return item.status == -1 || item.status == 1;
-          });
-        }
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -172,12 +170,14 @@ export default {
     submit() {
       this.$emit("dialogDataSelected", this.multipleSelection);
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    itemSelectable(row, index) {
+      if(row.status !== 0 && row.status !== -1) {
+        return true;
+      }
     },
     getRowKey(row) {
       return row.id
-    }
+    },
   }
 };
 </script>

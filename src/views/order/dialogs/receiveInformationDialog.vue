@@ -270,39 +270,31 @@ export default {
                                 sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
                             }
 
-                            this._apis.order.orderUpdateAddress({
-                                id: this.cid, // 和cid相同
-                                cid: this.cid,
-                                // receivedProvinceCode: codes0,
-                                // receivedProvinceName: name0,
-                                // receivedCityCode: codes1,
-                                // receivedCityName: name1,
-                                // receivedAreaCode: codes2,
-                                // receivedAreaName: name2,
-                                // receivedDetail: this.ruleForm.receivedDetail,
-                                // receivedPhone: this.ruleForm.receivedPhone,
-                                // receivedName: this.ruleForm.receivedName,
+                            // this._apis.order.orderUpdateAddress({
+                            //     id: this.cid, // 和cid相同
+                            //     cid: this.cid,
+                                
 
-                                province: name0,
-                                provinceCode: codes0,
-                                city: name1,
-                                cityCode: codes1,
-                                area: name2,
-                                areaCode: codes2,
-                                address: this.ruleForm.sendDetail,
-                                senderPhone: this.ruleForm.sendPhone,
-                                senderName: this.ruleForm.sendName
+                            //     province: name0,
+                            //     provinceCode: codes0,
+                            //     city: name1,
+                            //     cityCode: codes1,
+                            //     area: name2,
+                            //     areaCode: codes2,
+                            //     address: this.ruleForm.sendDetail,
+                            //     senderPhone: this.ruleForm.sendPhone,
+                            //     senderName: this.ruleForm.sendName
 
-                            }).then(res => {
-                                this.$emit('submit', obj)
-                                this.visible = false
-                                this.$message.success('修改成功！');
-                            }).catch(error => {
-                                this.visible = false
-                                this.$message.error(error);
-                            }) 
+                            // }).then(res => {
+                            //     this.$emit('submit', obj)
+                            //     this.visible = false
+                            //     this.$message.success('修改成功！');
+                            // }).catch(error => {
+                            //     this.visible = false
+                            //     this.$message.error(error);
+                            // }) 
 
-                            return
+                            // return
                         }
                         this.$emit('submit', obj)
                         this.visible = false

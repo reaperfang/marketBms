@@ -14,7 +14,7 @@
               <el-button type="primary" @click="search">搜 索</el-button>
             </div>
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
-                <waterfall :col='3' :width="250" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
+                <waterfall :col='3' :width="245" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
                   <template >
                     <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
                       <img :src="item.filePath" alt="加载错误"/> 
@@ -152,6 +152,7 @@ export default {
       uploadAble: true,  //上传是否可用(用来清上传器缓存)
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
+      isIE: false,  //是否是IE
 
       /* 本地上传 */
       uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
@@ -629,6 +630,10 @@ export default {
     align-items: center;
     img{
       max-width: 100%;
+      @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+        /* 兼容IE10和IE11 */
+        height:100%;
+      }
     }
     .item-body{
       padding:10px 0;
@@ -664,6 +669,12 @@ export default {
     display: grid;
     grid-template-columns: repeat(8,1fr);
     grid-gap: 10px;
+    @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+      /*兼容IE10和IE11*/
+      display:flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
     .cell-item {
       width: 100%;
       height: 80px;
@@ -675,6 +686,15 @@ export default {
       display:flex;
       flex-direction: row;
       justify-content: center;
+      @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+        /*兼容IE10和IE11*/
+        width: 80px;
+        margin-top:14px;
+        margin-left:14px;
+      }
+      &:nth-child(8n){
+        margin-right:0;
+      }
       img{
         width: 80px;
         height:100%;

@@ -99,7 +99,8 @@ export default {
         pageNum: 1,
         name: '',
       },
-      rules: {}
+      rules: {},
+      disableStatus: [2]  //不可选状态值
     };
   },
   computed: {
@@ -161,9 +162,6 @@ export default {
     /* 向父组件提交选中的数据 */
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
     },
     itemSelectable(row, index) {
       if(row.status !== 2) {

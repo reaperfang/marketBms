@@ -95,7 +95,8 @@ export default {
         name: '',
         couponType: 0
       },
-      rules: {}
+      rules: {},
+      disableStatus: [2]  //不可选状态值
     };
   },
   computed: {
