@@ -47,7 +47,8 @@ export default {
             orderType: '',
             catchRealReturnWalletMoney: '',
             catchRealReturnBalance: '',
-            orderSendInfo: ''
+            orderSendInfo: '',
+            currentData: {}
         }
     },
     created() {

@@ -214,7 +214,7 @@ export default {
                 this.currentData.api = "data.historyExport"
             }else{
                 this._apis.data.historyExport(data).then(response => {
-                    window.open(response);
+                    window.location.href = response
                 })
             }    
         },
