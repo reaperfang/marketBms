@@ -74,6 +74,9 @@
         <el-table-column
           prop="presentType"
           label="奖励方式">
+          <template slot-scope="scope">
+            {{rewards[scope.row.presentType].label}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="presentContent"
