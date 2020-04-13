@@ -232,7 +232,7 @@ export default {
                         (regPos.test(resellRule.percentOfCommissionThree))
                     ) {
                         let total = (resellRule.percentOfCommissionThree - 0);
-                        if(total > 100  || total < 0) {
+                        if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
@@ -249,7 +249,7 @@ export default {
                         (regPos.test(resellRule.percentOfCommissionTwo))
                     ) {
                         let total = (resellRule.percentOfCommissionThree - 0) + (resellRule.percentOfCommissionTwo - 0);
-                        if(total > 100  || total < 0) {
+                        if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
@@ -267,7 +267,7 @@ export default {
                         (regPos.test(resellRule.percentOfCommissionThree)) 
                     ) {
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0) + (resellRule.percentOfCommissionThree - 0);
-                        if(total > 100  || total < 0) {
+                        if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
@@ -290,8 +290,7 @@ export default {
                 this._apis.goods.commisionGoodsSet(data).then(res => {
                     this.historyBack();
                 }).catch((error) => { 
-                    console.log(error, '======');
-                    this.$message({ message: error.msg, type: 'warning' }); 
+                    this.$message({ message: error, type: 'warning' }); 
                 });
             }
         },
