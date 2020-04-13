@@ -194,6 +194,7 @@ export default {
               orderStatus
           })
       }
+    this.checkCreditRule()
   },
   methods: {
     checkCreditRule() {
