@@ -92,6 +92,15 @@ export default {
                     if(obj.orderTimeValue[1]) {
                         var searchTimeTypeEnd = utils.formatDate(obj.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss")
                     }
+                } else {
+                    if(this.params.orderTimeValue && this.params.orderTimeValue.length) {
+                        if(this.params.orderTimeValue[0]) {
+                            var searchTimeTypeStart = utils.formatDate(this.params.orderTimeValue[0], "yyyy-MM-dd hh:mm:ss")
+                        }
+                        if(this.params.orderTimeValue[1]) {
+                            var searchTimeTypeEnd = utils.formatDate(this.params.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss")
+                        }
+                    }
                 }
             } else {
                 if(this.params.orderTimeValue && this.params.orderTimeValue.length) {
