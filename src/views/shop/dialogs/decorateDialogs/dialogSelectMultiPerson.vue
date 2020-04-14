@@ -43,10 +43,10 @@
         <div class="tips">暂无数据<span @click="utils.addNewApply('/application/feature/addGroup', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
       </div>
     </el-table>
-    <div class="multiple_selection">
+    <div class="multiple_selection" v-if="tableData.length">
       <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="tableData.length">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"

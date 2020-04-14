@@ -116,7 +116,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <span class="dialog-footer fcc">
+    <span class="dialog-footer fcc" style="margin-top:20px;">
             <el-button type="primary" @click="submit">确 认</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
         </span>
@@ -737,7 +737,7 @@ export default {
     display: inline-block;
   }
 /deep/ .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
+    border-color: #655EFF;
   }
 /deep/ .avatar-uploader-icon {
     font-size: 28px;

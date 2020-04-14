@@ -7,7 +7,7 @@
           <el-radio :label="2">自动获取</el-radio>
         </el-radio-group>
       </el-form-item>
-     <el-form-item label="选择活动" prop="goods">
+     <el-form-item label="选择活动" prop="goods" v-if="ruleForm.addType === 1">
       </el-form-item>
       <div class="goods_list" prop="goods" v-loading="loading">
         <ul>
