@@ -48,51 +48,71 @@
                         <template>
                             <div class="gain-item">
                                 <div class="gain-item-lefter">积分：</div>
-                                <div class="gain-item-righter">{{rewardScore + ' 分' || '--'}}</div>
+                                <div class="gain-item-righter">{{rewardScore + ' 分' || '无'}}</div>
                             </div>
                             <div class="gain-item">
                                 <div class="gain-item-lefter">赠品：</div>
-                                <div class="gain-item-righter">{{gift || '--'}}</div>
+                                <div class="gain-item-righter">{{gift || '无'}}</div>
                             </div>
                             <div class="gain-item coupon">
                                 <div class="gain-item-lefter">优惠券：</div>
                                 <div class="gain-item-righter">
-                                    <!--{{gainCouponList || '--'}}-->
-                                    <div class="coupon-box">
-                                        <div v-if="index == 0" class="coupon" v-for="(item, index) in couponList" :key="index">
-                                            <div class="item lefter">
-                                                <p>{{item.appCoupon.useTypeFullcut}}</p>
-                                                <p>元</p>
-                                            </div>
-                                            <div class="item righter">
-                                                <p>{{item.appCoupon.name}}</p>
-                                                <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p v-if="couponList && (couponList.length > 1)" class="more"><span @click="moreHandler(1)" class="pointer">查看更多</span></p>
-                                </div>
-                            </div>
-                            <div class="gain-item coupon-code">
-                                <div class="gain-item-lefter">优惠码：</div>
-                                <!--<div class="gain-item-righter">{{gainCouponCodeList || '--'}}</div>-->
-                                <div class="gain-item-righter">
-                                    <div class="coupon-box">
-                                        <div class="coupon-code" v-for="(item, index) in couponCodeList" :key="index">
-                                            <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
-                                            <div class="coupon">
-                                                <div class="item lefter coupon-code-list-lefter">
-                                                    <p>{{item.appCoupon.useTypeFullcut}}</p>
-                                                    <p>元</p>
+                                    <template v-if="couponList && couponList.length">
+                                        <div class="coupon-box">
+                                            <div v-if="index == 0" class="coupon" v-for="(item, index) in couponList" :key="index">
+                                                <div class="item lefter">
+                                                    <template v-if="item.appCoupon.useType == 0">
+                                                        <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                        <p>元</p>
+                                                    </template>
+                                                    <template v-else>
+                                                        <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                                        <p>折</p>
+                                                    </template>
                                                 </div>
-                                                <div class="item righter coupon-code-list-righter">
+                                                <div class="item righter">
                                                     <p>{{item.appCoupon.name}}</p>
                                                     <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <p v-if="couponCodeList && (couponCodeList.length)" class="more"><span @click="moreHandler(2)" class="pointer">查看更多</span></p>
+                                        <p v-if="couponList && (couponList.length > 1)" class="more"><span @click="moreHandler(1)" class="pointer">查看更多</span></p>
+                                    </template>
+                                    <template v-else>
+                                        无
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="gain-item coupon-code">
+                                <div class="gain-item-lefter">优惠码：</div>
+                                <div class="gain-item-righter">
+                                    <template v-if="couponCodeList && couponCodeList.length">
+                                        <div class="coupon-box">
+                                            <div class="coupon-code" v-for="(item, index) in couponCodeList" :key="index">
+                                                <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
+                                                <div class="coupon">
+                                                    <div class="item lefter coupon-code-list-lefter">
+                                                        <template v-if="item.appCoupon.useType == 0">
+                                                            <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                            <p>元</p>
+                                                        </template>
+                                                        <template v-else>
+                                                            <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                                            <p>折</p>
+                                                        </template>
+                                                    </div>
+                                                    <div class="item righter coupon-code-list-righter">
+                                                        <p>{{item.appCoupon.name}}</p>
+                                                        <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p v-if="couponCodeList && (couponCodeList.length > 1)" class="more"><span @click="moreHandler(2)" class="pointer">查看更多</span></p>
+                                    </template>
+                                    <template v-else>
+                                        无
+                                    </template>
                                 </div>
                             </div>
                         </template>
