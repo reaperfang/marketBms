@@ -142,7 +142,7 @@
                                 <el-popover
                                     placement="bottom"
                                     width="430"
-                                    trigger="manual"
+                                    :trigger="trigger"
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
@@ -201,7 +201,7 @@
                                 <el-popover
                                     placement="bottom"
                                     width="430"
-                                    trigger="click"
+                                    :trigger="trigger"
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
@@ -857,7 +857,7 @@ export default {
             newSpec: '',
             newSpecValue: '',
             callObjectSpanMethod: false,
-            deleteSpecArr: []
+            deleteSpecArr: [],
         }
     },
     created() {
@@ -872,7 +872,18 @@ export default {
         //     }
         // })
         var that = this
-        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
+        // Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
+        //     if(this.$route.query.id && this.$route.query.goodsInfoId) {
+        //         this.getGoodsDetail()
+        //     }
+        // })
+        this.getOperateCategoryList()
+        this.getCategoryList()
+        this.getProductLabelList()
+        this.getUnitList()
+        this.getBrandList()
+        this.getTemplateList()
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
@@ -941,6 +952,13 @@ export default {
                 return true; 
             }else{
                 return false
+            }
+        },
+        trigger() {
+            if(this.isIE) {
+                return 'click'
+            } else {
+                return 'manual'
             }
         }
     },
