@@ -33,7 +33,7 @@
                 </li>
               </ul>
             </div>
-            <p class="pages">
+            <p class="pages" v-if="materialResultList.length">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
