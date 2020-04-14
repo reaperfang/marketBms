@@ -91,7 +91,7 @@
                                 </template>
                                 <template v-else>
                                     {{scope.row.name.substring(0, 14)}}<i v-if="scope.row.activity" class="sale-bg"></i><br />
-                                    {{scope.row.name.substring(14)}}
+                                    {{scope.row.name.substring(14) | goodsNameFilter}}
                                 </template>
                             </div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
@@ -475,6 +475,23 @@ export default {
         this.getMiniappInfo()
         this.getProductCatalogTreeList()
     },
+    computed: {
+        isIE() {
+            var userAgent = navigator.userAgent;
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+            if(isIE) {
+                return true;   
+            } else if(isEdge) {
+                return true; 
+            } else if(isIE11) {
+                return true; 
+            }else{
+                return false
+            }
+        },
+    },
     filters: {
         statusFilter(goodsInfos) {
             let item = goodsInfos[0]
@@ -540,9 +557,71 @@ export default {
             } else {
                 return name
             }
+        },
+        goodsNameFilter(name) {
+            let isIE = () => {
+                var userAgent = navigator.userAgent;
+                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+                var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+                var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+                if(isIE) {
+                    return true;   
+                } else if(isEdge) {
+                    return true; 
+                } else if(isIE11) {
+                    return true; 
+                }else{
+                    return false
+                }
+            }
+
+            let gblen = (str) => {  
+                var len = 0;  
+                for (var i=0; i<str.length; i++) {  
+                    if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
+                    len += 2;  
+                    } else {  
+                    len ++;  
+                    }  
+                }  
+                return len;  
+            }
+
+            if(isIE) {
+                let str = ''
+
+                if(gblen(name) > 28) {
+                    for(let i=0; i<name.length; i++) {
+                        str += name[i]
+
+                        if(gblen(str) < 28) {
+                            continue
+                        } else {
+                            break
+                        }
+                    }
+
+                    return str + '...'
+                } else {
+                    return name
+                }
+            } else {
+                return name
+            }
         }
     },
     methods: {
+        gblen(str) {  
+            var len = 0;  
+            for (var i=0; i<str.length; i++) {  
+                if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
+                len += 2;  
+                } else {  
+                len ++;  
+                }  
+            }  
+            return len;  
+        },
         changePriceMore() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {

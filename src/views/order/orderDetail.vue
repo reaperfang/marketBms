@@ -27,7 +27,30 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <OrderOperate :orderInfo="orderDetail.orderInfo" :orderDetail="orderDetail" @getDetail="getDetail"></OrderOperate>
+        <div class="operate-record">
+            <p class="header">操作记录</p>
+            <el-table
+                :data="orderDetail.orderOperationRecordList"
+                style="width: 100%"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                <el-table-column
+                    label="操作"
+                    width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.operationType | operationTypeFilter}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="createUserName"
+                    label="操作人"
+                    width="180">
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    label="操作时间">
+                </el-table-column>
+            </el-table>
+        </div>
         <!-- <div class="goods-list">
             <p class="header">订单清单</p>
             <el-table

@@ -177,7 +177,7 @@ export default {
             let str = ''
             for(let i in _value) {
                 if(_value.hasOwnProperty(i)) {
-                    str += i + ':'
+                    str += i + '：'
                     str += _value[i] + '，'
                 }
             }

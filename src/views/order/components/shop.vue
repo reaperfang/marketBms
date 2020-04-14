@@ -3,7 +3,7 @@
         <order ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
         <el-checkbox v-if="!authHide" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
         <el-button v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="wad">批量补填物流</el-button>
-        <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
+        <pagination v-show="total>0" :total="total" :page.sync="params.startIndex" :limit.sync="params.pageSize" @pagination="getList" />
     </div>
 </template>
 <script>
@@ -17,10 +17,10 @@ export default {
     data() {
         return {
             total: 0,
-            listQuery: {
-                startIndex: 1,
-                pageSize: 20,
-            },
+            // listQuery: {
+            //     startIndex: 1,
+            //     pageSize: 20,
+            // },
             list: [],
             memberLevelImg: '',
             checkedAll: false
@@ -92,6 +92,15 @@ export default {
                     if(obj.orderTimeValue[1]) {
                         var searchTimeTypeEnd = utils.formatDate(obj.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss")
                     }
+                } else {
+                    if(this.params.orderTimeValue && this.params.orderTimeValue.length) {
+                        if(this.params.orderTimeValue[0]) {
+                            var searchTimeTypeStart = utils.formatDate(this.params.orderTimeValue[0], "yyyy-MM-dd hh:mm:ss")
+                        }
+                        if(this.params.orderTimeValue[1]) {
+                            var searchTimeTypeEnd = utils.formatDate(this.params.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss")
+                        }
+                    }
                 }
             } else {
                 if(this.params.orderTimeValue && this.params.orderTimeValue.length) {
@@ -110,6 +119,12 @@ export default {
                 [`${this.params.searchTimeType}End`]: this.params.orderTimeValue ? searchTimeTypeEnd : '',
                 memberInfoId: this.$route.query.id
             }, this.listQuery)
+            if(obj && (obj.startIndex != undefined)) {
+                _params.startIndex = obj.startIndex
+            }
+            if(obj && (obj.pageSize != undefined)) {
+                _params.pageSize = obj.pageSize
+            }
             if(obj && obj.type == 'resetForm') {
                _params = Object.assign({}, _params, {
                    [this.params.searchType]: obj.searchValue,
@@ -138,7 +153,11 @@ export default {
     },
     props: {
         params: {
-            type: Object
+            type: Object,
+            default: {
+                startIndex: 1,
+                pageSize: 20,
+            }
         }
     },
     components: {

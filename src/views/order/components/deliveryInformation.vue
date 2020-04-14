@@ -21,7 +21,7 @@
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
-            <div class="header-righter-item">发货人：{{orderDetail.orderSendInfo.sendName}}</div>
+            <div class="header-righter-item">发货人：{{item.sendName}}</div>
             <div class="header-righter-item">{{item.goodsList && item.goodsList[0] && item.goodsList[0].createTime && item.goodsList && item.goodsList[0] && item.goodsList[0].createTime}}</div>
             <div @click="showContent(index)">
               <i v-if="item.showContent" class="el-icon-caret-top pointer"></i>
@@ -39,7 +39,7 @@
                   </div>
                   <div class="goods-detail-item">
                     <p>{{scope.row.goodsName}}</p>
-                    <p>{{scope.row.goodsSpces}}</p>
+                    <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                   </div>
                 </div>
               </template>
@@ -102,7 +102,25 @@ export default {
       } else {
         return ''
       }
-    }
+    },
+    goodsSpecsFilter(value) {
+        let _value
+        if(!value) return ''
+        if(typeof value == 'string') {
+            _value = JSON.parse(value)
+        }
+        let str = ''
+        for(let i in _value) {
+            if(_value.hasOwnProperty(i)) {
+                str += i + '：'
+                str += _value[i] + '，'
+            }
+        }
+
+        str = str.replace(/^(.*)\，$/, '$1')
+
+        return str
+    },
   },
   watch: {
     orderDetail: {
@@ -156,6 +174,7 @@ export default {
               shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
               showContent: true,
               sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
+              sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendName || '',
             }
           );
 

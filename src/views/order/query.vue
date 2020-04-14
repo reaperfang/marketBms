@@ -292,7 +292,14 @@ export default {
         });
     },
     onSubmit() {
-      this.$refs["shop"].getList();
+      this.listQuery = Object.assign({}, this.listQuery, {
+        startIndex: 0,
+        pageSize: 20
+      })
+      this.$refs["shop"].getList({
+        startIndex: 1,
+        pageSize: 20
+      });
     },
     resetForm(formName) {
         this.listQuery = {
@@ -309,7 +316,9 @@ export default {
         sendType: "",
         orderStatus: "",
         searchTimeType: "createTime",
-        orderTimeValue: ""
+        orderTimeValue: "",
+        startIndex: 1,
+        pageSize: 20,
       }
 
       this.$refs["shop"].getList(Object.assign({}, this.listQuery, {
