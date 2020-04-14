@@ -57,6 +57,7 @@
               <el-table-column prop="sendCount" label="本次发货数量">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{'send-input': scope.row.errorMessage}"
                     :disabled="scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
                     step="1"
@@ -381,12 +382,16 @@ export default {
         return;
       }
 
-      if (this.multipleSelection.some(val => !val.sendCount)) {
-        this.confirm({
-          title: "提示",
-          icon: true,
-          text: "请填写发货商品数量"
-        });
+      if (this.multipleSelection.some(val => !val.sendCount)) {        
+        // this.confirm({
+        //   title: "提示",
+        //   icon: true,
+        //   text: "请填写发货商品数量"
+        // });
+        document.querySelector('.send-input').scrollIntoView()
+        let scrollTop = document.querySelector('.content-main').scrollTop
+
+        document.querySelector('.content-main').scrollTop = scrollTop - 8
         return;
       }
 
