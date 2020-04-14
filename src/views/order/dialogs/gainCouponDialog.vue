@@ -1,35 +1,37 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" :title="data.title" width="346px" :showFooter="showFooter">
-        <div class="coupon-box">
-            <template v-if="data.coupon">
-                <div class="coupon" v-for="(item, index) in data.couponList" :key="index">
-                    <div class="item lefter">
-                        <p>{{item.appCoupon.useTypeFullcut}}</p>
-                        <p>元</p>
-                    </div>
-                    <div class="item righter">
-                        <p>{{item.appCoupon.name}}</p>
-                        <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
-                    </div>
-                </div>
-                <Empty v-show="!data.usedCouponList.length"></Empty>
-            </template>
-            <template v-else>
-                <div class="coupon-code" v-for="(item, index) in data.usedPromotionList" :key="index">
-                    <div class="coupon-code-header">优惠码 {{item.promotionCodeId}}</div>
-                    <div class="coupon">
+        <div class="content-box">
+            <div class="coupon-box">
+                <template v-if="data.coupon">
+                    <div class="coupon" :class="{last: index == data.couponList.length - 1}" v-for="(item, index) in data.couponList" :key="index">
                         <div class="item lefter">
-                            <p>{{item.promotionCodeMoney}}</p>
+                            <p>{{item.appCoupon.useTypeFullcut}}</p>
                             <p>元</p>
                         </div>
                         <div class="item righter">
-                            <p>{{item.promotionCodeName}}</p>
-                            <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
+                            <p>{{item.appCoupon.name}}</p>
+                            <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
                         </div>
                     </div>
-                </div>
-                <Empty v-show="!data.usedPromotionList.length"></Empty>
-            </template>
+                    <Empty v-show="!data.couponList.length"></Empty>
+                </template>
+                <template v-else>
+                    <div class="coupon-code" :class="{last: index == data.couponCodeList.length - 1}" v-for="(item, index) in data.couponCodeList" :key="index">
+                        <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
+                        <div class="coupon">
+                            <div class="item lefter">
+                                <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                <p>元</p>
+                            </div>
+                            <div class="item righter">
+                                <p>{{item.appCoupon.name}}</p>
+                                <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <Empty v-show="!data.couponCodeList.length"></Empty>
+                </template>
+            </div>
         </div>
     </DialogBase>
 </template>
@@ -50,7 +52,7 @@ export default {
                 return value.split(/\s+/)[0]
             }
 
-            return value
+            return value || ''
         }
     },
     methods: {
@@ -94,6 +96,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+    .coupon-box .coupon, .coupon-box .coupon-code {
+        margin-bottom: 20px;
+        &.last {
+            margin-bottom: 0;
+        }
+    }
    .coupon-box .coupon .item  {
        .lefter {
            flex-shrink: 0;
@@ -121,6 +129,21 @@ export default {
    .limit {
        font-size: 12px;
    }
+   /deep/ .el-dialog__body {
+       padding: 20px 15px;
+   }
+   .content-box {
+       padding: 0 5px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .content-box::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .content-box::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
 </style>
 
 

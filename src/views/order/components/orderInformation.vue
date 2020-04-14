@@ -47,18 +47,18 @@
                     <div class="value gain">
                         <template>
                             <div class="gain-item">
-                                <div class="gain-item-lefter">积分</div>
+                                <div class="gain-item-lefter">积分：</div>
                                 <div class="gain-item-righter">{{rewardScore + ' 分' || '--'}}</div>
                             </div>
                             <div class="gain-item">
-                                <div class="gain-item-lefter">赠品</div>
+                                <div class="gain-item-lefter">赠品：</div>
                                 <div class="gain-item-righter">{{gift || '--'}}</div>
                             </div>
-                            <div class="gain-item">
-                                <div class="gain-item-lefter">优惠券</div>
+                            <div class="gain-item coupon">
+                                <div class="gain-item-lefter">优惠券：</div>
                                 <div class="gain-item-righter">
-                                    {{gainCouponList || '--'}}
-                                    <!--<div class="coupon-box">
+                                    <!--{{gainCouponList || '--'}}-->
+                                    <div class="coupon-box">
                                         <div v-if="index == 0" class="coupon" v-for="(item, index) in couponList" :key="index">
                                             <div class="item lefter">
                                                 <p>{{item.appCoupon.useTypeFullcut}}</p>
@@ -70,12 +70,30 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="more"><span>查看更多</span></p>-->
+                                    <p v-if="couponList && (couponList.length > 1)" class="more"><span @click="moreHandler(1)" class="pointer">查看更多</span></p>
                                 </div>
                             </div>
-                            <div class="gain-item">
-                                <div class="gain-item-lefter">优惠码</div>
-                                <div class="gain-item-righter">{{gainCouponCodeList || '--'}}</div>
+                            <div class="gain-item coupon-code">
+                                <div class="gain-item-lefter">优惠码：</div>
+                                <!--<div class="gain-item-righter">{{gainCouponCodeList || '--'}}</div>-->
+                                <div class="gain-item-righter">
+                                    <div class="coupon-box">
+                                        <div class="coupon-code" v-for="(item, index) in couponCodeList" :key="index">
+                                            <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
+                                            <div class="coupon">
+                                                <div class="item lefter coupon-code-list-lefter">
+                                                    <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                    <p>元</p>
+                                                </div>
+                                                <div class="item righter coupon-code-list-righter">
+                                                    <p>{{item.appCoupon.name}}</p>
+                                                    <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p v-if="couponCodeList && (couponCodeList.length)" class="more"><span @click="moreHandler(2)" class="pointer">查看更多</span></p>
+                                </div>
                             </div>
                         </template>
                     </div>
@@ -86,10 +104,10 @@
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
-                            <p>发票类型 {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
-                            <p>发票抬头 {{orderInfo.invoiceTitle}}</p>
-                            <p v-if="orderInfo.invoiceTaxpayerCode">纳税人识别号 {{orderInfo.invoiceTaxpayerCode}}</p>
-                            <p>发票内容 商品明细</p>
+                            <p>发票类型： {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
+                            <p>发票抬头： {{orderInfo.invoiceTitle}}</p>
+                            <p v-if="orderInfo.invoiceTaxpayerCode">纳税人识别号： {{orderInfo.invoiceTaxpayerCode}}</p>
+                            <p>发票内容： 商品明细</p>
                             <!-- <p>电子发票将在订单完成后1-2天内开具</p> -->
                         </template>
                         <template v-else>
@@ -321,6 +339,7 @@
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
+import gainCouponDialog from '@/views/order/dialogs/gainCouponDialog'
 //consultType 协商类型 1加价,2减价
 export default {
     data() {
@@ -367,6 +386,8 @@ export default {
             //replacePayWechatNames: ''
             yingshouChangeMoney: '',
             invoiceOpen: 1,
+            couponList: [],
+            couponCodeList: []
         }
     },
     created() {
@@ -468,6 +489,22 @@ export default {
         //         this.$message.error(error);
         //     }) 
         // },
+        moreHandler(code) {
+            let obj = {}
+
+            if(code == 1) {
+                obj.title = '优惠券'
+                obj.coupon = true
+                obj.couponList = this.couponList
+            } else {
+                obj.title = '优惠码'
+                obj.coupon = false
+                obj.couponCodeList = this.couponCodeList
+            }
+            this.currentData = obj
+            this.currentDialog = 'gainCouponDialog'
+            this.dialogVisible = true
+        },
         getShopInfo(){
           let id = this.cid
 
@@ -774,7 +811,8 @@ export default {
     components: {
         ReceiveInformationDialog,
         CouponDialog,
-        ChangePriceDialog
+        ChangePriceDialog,
+        gainCouponDialog
     }
 }
 </script>
@@ -785,7 +823,7 @@ export default {
             align-items: center;
             margin-bottom: 10px;
             .gain-item-lefter {
-                width: 49px;
+                width: 56px;
                 margin-right: 6px;
             }
             .more {
@@ -947,7 +985,7 @@ export default {
         flex-shrink: 0;
     }
 }
-.coupon {
+.coupon, .coupon-code {
     .item.lefter {
         flex-direction: column;
     }
@@ -957,6 +995,15 @@ export default {
     .limit {
         font-size: 12px;
     }
+}
+.coupon-code-list-lefter {
+    margin-top: 0!important;
+}
+.coupon-code-list-righter {
+    margin-top: 0!important;
+}
+.coupon-box {
+    min-width: 271px;
 }
 </style>
 
