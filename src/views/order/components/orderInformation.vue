@@ -88,7 +88,7 @@
                                 <div class="gain-item-righter">
                                     <template v-if="couponCodeList && couponCodeList.length">
                                         <div class="coupon-box">
-                                            <div class="coupon-code" v-for="(item, index) in couponCodeList" :key="index">
+                                            <div class="coupon-code" v-if="index == 0" v-for="(item, index) in couponCodeList" :key="index">
                                                 <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
                                                 <div class="coupon">
                                                     <div class="item lefter coupon-code-list-lefter">
