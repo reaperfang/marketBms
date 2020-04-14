@@ -156,7 +156,7 @@ export default {
                     return '特权价'
                 case 4:
                     return '赠品订单'
-                case 4:
+                case 5:
                     return '分佣订单'
             }
         },
