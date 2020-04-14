@@ -88,7 +88,7 @@
                                 <div class="gain-item-righter">
                                     <template v-if="couponCodeList && couponCodeList.length">
                                         <div class="coupon-box">
-                                            <div class="coupon-code" v-for="(item, index) in couponCodeList" :key="index">
+                                            <div class="coupon-code" v-if="index == 0" v-for="(item, index) in couponCodeList" :key="index">
                                                 <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
                                                 <div class="coupon">
                                                     <div class="item lefter coupon-code-list-lefter">
@@ -326,30 +326,6 @@
                         </template>
                     </div>
                 </section>
-            </div>
-            <div class="operate-record">
-                <p class="header">操作记录</p>
-                <el-table
-                    :data="orderDetail.orderOperationRecordList"
-                    style="width: 100%"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
-                    <el-table-column
-                        label="操作"
-                        width="180">
-                        <template slot-scope="scope">
-                            {{scope.row.operationType | operationTypeFilter}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="createUserName"
-                        label="操作人"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="createTime"
-                        label="操作时间">
-                    </el-table-column>
-                </el-table>
             </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :ajax="ajax" :sendGoods="sendGoods" @submit="submit"></component>
@@ -816,7 +792,25 @@ export default {
             }
 
             return value
-        }
+        },
+        goodsSpecsFilter(value) {
+            let _value
+            if(!value) return ''
+            if(typeof value == 'string') {
+                _value = JSON.parse(value)
+            }
+            let str = ''
+            for(let i in _value) {
+                if(_value.hasOwnProperty(i)) {
+                    str += i + '：'
+                    str += _value[i] + '，'
+                }
+            }
+
+            str = str.replace(/^(.*)\，$/, '$1')
+
+            return str
+        },
     },
     props: {
         orderInfo: {
@@ -903,7 +897,9 @@ export default {
     /deep/ .remark-box .el-textarea {
         width: 180px;
     }
-
+    .goods-list {
+        border-top: 1px solid #cacfcb;
+    }
     .goods-list, .operate-record {
             background-color: #fff;
             margin-top: 20px;
