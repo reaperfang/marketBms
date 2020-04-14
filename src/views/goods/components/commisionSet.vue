@@ -219,7 +219,7 @@ export default {
                 }
             }
             data.isAloneResellRule = this.enable ? 1 : 0;
-            let  resellRule = this.resellRule;
+            let  resellRule = Object.assign({}, this.resellRule);
             let  regPos = /^\d+(\.\d+)?$/;
 
             // 开启了独立分佣
@@ -232,10 +232,10 @@ export default {
                         (regPos.test(resellRule.percentOfCommissionThree))
                     ) {
                         let total = (resellRule.percentOfCommissionThree - 0);
-                        if(total > 100  || total < 0) {
+                        if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
-                        }
+                        } else data.resellRule = resellRule;
                     } else {
                         this.$message({ message: '分佣比例必须是数子', type: 'warning' });
                         return false;
@@ -249,10 +249,10 @@ export default {
                         (regPos.test(resellRule.percentOfCommissionTwo))
                     ) {
                         let total = (resellRule.percentOfCommissionThree - 0) + (resellRule.percentOfCommissionTwo - 0);
-                        if(total > 100  || total < 0) {
+                        if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
-                        }
+                        } else data.resellRule = resellRule;
                     } else {
                         this.$message({ message: '分佣比例必须是数子', type: 'warning' });
                         return false;
@@ -267,16 +267,16 @@ export default {
                         (regPos.test(resellRule.percentOfCommissionThree)) 
                     ) {
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0) + (resellRule.percentOfCommissionThree - 0);
-                        if(total > 100  || total < 0) {
+                        if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
-                        }
+                        } else data.resellRule = resellRule;
                     } else {
                         this.$message({ message: '分佣比例必须是数子', type: 'warning' });
                         return false;
                     }    
-                }
-                data.resellRule = resellRule;
+                } else return false;
+                // data.resellRule = resellRule;
             }
             
             return data;
@@ -289,7 +289,9 @@ export default {
                 // todo 保存商品分佣设置
                 this._apis.goods.commisionGoodsSet(data).then(res => {
                     this.historyBack();
-                }).catch((error) => { this.$message({ message: error.msg, type: 'warning' }); });
+                }).catch((error) => { 
+                    this.$message({ message: error, type: 'warning' }); 
+                });
             }
         },
         // 返回

@@ -5,7 +5,7 @@
                 <component :is="current"></component>
             </el-tab-pane>
             <el-tab-pane label="分佣设置" name="subCommission">
-                <component v-if="resellConfigInfo && editor" :is="current" :resellConfigInfo="resellConfigInfo" :detail="goodsDetail"></component>
+                <component v-if="resellConfigInfo && editor && goodsDetail" :is="current" :resellConfigInfo="resellConfigInfo" :detail="goodsDetail"></component>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -20,7 +20,7 @@ export default {
         activeName: 'goodsDetails',
         current: 'goodsDetails',
         resellConfigInfo: null, // 分销设置
-        goodsDetail: {},
+        goodsDetail: null,
       };
     },
     computed: {
