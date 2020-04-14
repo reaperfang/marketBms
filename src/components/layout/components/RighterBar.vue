@@ -178,7 +178,7 @@ export default {
     border-top: 1px solid #f2f2f9;
     position: fixed;
     left: 120px;
-    top: 60px;
+    top: 66px;
     z-index: 1000;
     background-color: #fff;
     width: 122px;

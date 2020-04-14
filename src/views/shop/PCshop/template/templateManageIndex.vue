@@ -84,8 +84,8 @@ export default {
   padding:20px;
   ul{
     li{
-      width:255px;
-      height:400px;
+      width:255px!important;
+      height:400px!important;
       padding: 15px;
       background: #fff;
       box-shadow: 6px 1px 30px rgba(0,0,0,0.2);
