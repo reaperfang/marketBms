@@ -792,7 +792,25 @@ export default {
             }
 
             return value
-        }
+        },
+        goodsSpecsFilter(value) {
+            let _value
+            if(!value) return ''
+            if(typeof value == 'string') {
+                _value = JSON.parse(value)
+            }
+            let str = ''
+            for(let i in _value) {
+                if(_value.hasOwnProperty(i)) {
+                    str += i + '：'
+                    str += _value[i] + '，'
+                }
+            }
+
+            str = str.replace(/^(.*)\，$/, '$1')
+
+            return str
+        },
     },
     props: {
         orderInfo: {

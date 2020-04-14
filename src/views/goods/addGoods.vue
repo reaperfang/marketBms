@@ -142,7 +142,7 @@
                                 <el-popover
                                     placement="bottom"
                                     width="430"
-                                    trigger="manual"
+                                    :trigger="trigger"
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
@@ -201,7 +201,7 @@
                                 <el-popover
                                     placement="bottom"
                                     width="430"
-                                    trigger="click"
+                                    :trigger="trigger"
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
@@ -857,7 +857,7 @@ export default {
             newSpec: '',
             newSpecValue: '',
             callObjectSpanMethod: false,
-            deleteSpecArr: []
+            deleteSpecArr: [],
         }
     },
     created() {
@@ -941,6 +941,13 @@ export default {
                 return true; 
             }else{
                 return false
+            }
+        },
+        trigger() {
+            if(this.isIE) {
+                return 'click'
+            } else {
+                return 'manual'
             }
         }
     },
