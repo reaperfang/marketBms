@@ -872,7 +872,18 @@ export default {
         //     }
         // })
         var that = this
-        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
+        // Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
+        //     if(this.$route.query.id && this.$route.query.goodsInfoId) {
+        //         this.getGoodsDetail()
+        //     }
+        // })
+        this.getOperateCategoryList()
+        this.getCategoryList()
+        this.getProductLabelList()
+        this.getUnitList()
+        this.getBrandList()
+        this.getTemplateList()
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
