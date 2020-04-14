@@ -5,12 +5,18 @@
                 <template v-if="data.coupon">
                     <div class="coupon" :class="{last: index == data.couponList.length - 1}" v-for="(item, index) in data.couponList" :key="index">
                         <div class="item lefter">
-                            <p>{{item.appCoupon.useTypeFullcut}}</p>
-                            <p>元</p>
+                            <template v-if="item.appCoupon.useType == 0">
+                                <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                <p>元</p>
+                            </template>
+                            <template v-else>
+                                <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                <p>折</p>
+                            </template>
                         </div>
                         <div class="item righter">
                             <p>{{item.appCoupon.name}}</p>
-                            <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                            <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
                         </div>
                     </div>
                     <Empty v-show="!data.couponList.length"></Empty>
@@ -20,12 +26,18 @@
                         <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
                         <div class="coupon">
                             <div class="item lefter">
-                                <p>{{item.appCoupon.useTypeFullcut}}</p>
-                                <p>元</p>
+                                <template v-if="item.appCoupon.useType == 0">
+                                    <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                    <p>元</p>
+                                </template>
+                                <template v-else>
+                                    <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                    <p>折</p>
+                                </template>
                             </div>
                             <div class="item righter">
                                 <p>{{item.appCoupon.name}}</p>
-                                <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
                             </div>
                         </div>
                     </div>
