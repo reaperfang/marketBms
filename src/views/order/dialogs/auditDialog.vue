@@ -5,7 +5,7 @@
             <el-radio v-model="auditStatus" label="2">不通过</el-radio>
             <div class="footer">
                 <el-button @click="visible = false">取消</el-button>
-                <el-button @click="submit" type="primary">确定</el-button>
+                <el-button @click="submit" :loading="submitLoading" type="primary">确定</el-button>
             </div>
         </div>
     </DialogBase>
@@ -18,6 +18,7 @@ export default {
         return {
             showFooter: false,
             auditStatus: '',
+            submitLoading: false
         }
     },
     methods: {
@@ -29,6 +30,7 @@ export default {
                 });
                 return
             }
+            this.submitLoading = true
             this.$emit('audit', this.auditStatus)
             this.visible = false
         }
