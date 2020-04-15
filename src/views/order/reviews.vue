@@ -34,7 +34,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button @click="search" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
                 <!-- <div class="buttons" style="display: inline-block; float: right;">
@@ -246,6 +246,14 @@ export default {
         }
     },
     methods: {
+        search() {
+            this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
+            })
+            
+            this.getList()
+        },
         checkedAllChange() {
             if(this.checkedAll) {
                 this.$refs.multipleTable.clearSelection();
@@ -335,6 +343,8 @@ export default {
         },
         resetForm(formName) {
             this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
                 orderCode: '',
                 goodsName: '',
                 orderDate: '',
@@ -365,8 +375,8 @@ export default {
             let _param
             
             _param = Object.assign({}, this.listQuery, param, {
-                createTimeStart: this.listQuery.orderDate[0] ? utils.formatDate(new Date(this.listQuery.orderDate[0] * 1), "yyyy-MM-dd hh:mm:ss") : '',
-                creaTetimeEnd: this.listQuery.orderDate[1] ? utils.formatDate(new Date(this.listQuery.orderDate[1] * 1), "yyyy-MM-dd hh:mm:ss") : ''
+                createTimeStart: this.listQuery.orderDate && this.listQuery.orderDate[0] ? utils.formatDate(new Date(this.listQuery.orderDate[0] * 1), "yyyy-MM-dd hh:mm:ss") : '',
+                creaTetimeEnd: this.listQuery.orderDate && this.listQuery.orderDate[1] ? utils.formatDate(new Date(this.listQuery.orderDate[1] * 1), "yyyy-MM-dd hh:mm:ss") : ''
             })
 
             this._apis.order.getCommentList(_param).then((res) => {

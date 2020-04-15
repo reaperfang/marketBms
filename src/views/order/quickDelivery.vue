@@ -40,7 +40,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="getList">搜索</el-button>
+              <el-button type="primary" @click="search">查询</el-button>
               <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
             </el-form-item>
           </div>
@@ -162,6 +162,14 @@ export default {
     }
   },
   methods: {
+    search() {
+        this.listQuery = Object.assign({}, this.listQuery, {
+            startIndex: 1,
+            pageSize: 20,
+        })
+        
+        this.getList()
+    },
     deletequickDelivery(id) {
       this.confirm({
         title: "提示",
@@ -196,6 +204,8 @@ export default {
     },
     resetForm(formName) {
       this.listQuery = Object.assign({}, this.listQuery, {
+        startIndex: 1,
+        pageSize: 20,
         name: "",
         time: "",
         updateTimeStart: "",

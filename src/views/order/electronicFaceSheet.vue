@@ -119,6 +119,8 @@ export default {
   methods: {
     resetForm(formName) {
           this.listQuery = Object.assign({}, this.listQuery, {
+            startIndex: 1,
+            pageSize: 20,
             time: '',
             name: '',
             startTime: '',
@@ -138,6 +140,10 @@ export default {
       })
     },
     onSubmit() {
+      this.listQuery = Object.assign({}, this.listQuery, {
+          startIndex: 1,
+          pageSize: 20,
+      })
       this.getList()
     },
     getList() {
