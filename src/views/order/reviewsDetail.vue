@@ -430,6 +430,7 @@ export default {
 .reviews-detail {
   .gray {
     color: #9fa29f;
+    font-size: 14px;
   }
   color: #333333;
   section {
