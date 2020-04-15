@@ -291,6 +291,9 @@ export default {
 .table-box .table-title {
     margin-bottom: 0;
 }
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
+}
 </style>
 
 

@@ -362,6 +362,8 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
+}
 </style>
 
