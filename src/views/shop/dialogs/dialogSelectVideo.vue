@@ -33,7 +33,7 @@
                 </li>
               </ul>
             </div>
-            <p class="pages" v-if="materialResultList.length">
+            <p class="pages">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -239,14 +239,10 @@ export default {
     /* 上传前钩子 */
     beforeUpload(file) {
       const isLt10M = file.size / 1024 / 1024 < 10;
-      if (!['video/mp4', 'video/mov', 'video/m4v', 'video/flv', 'video/x-flv', 'video/mkv', 'video/wmv', 'video/avi', 'video/rmvb', 'video/3gp'].includes(file.type)) {
-        this.$message.error('请上传正确的视频格式!');
+      if (!['video/mp4', 'video/mov', 'video/m4v', 'video/flv', 'video/x-flv', 'video/mkv', 'video/wmv', 'video/avi', 'video/rmvb', 'video/3gp'].includes(file.type) || !isLt10M) {
+        this.$message.error('请上传正确的视频格式! 且上传视频大小不能超过 10MB!');
         this.failedList.push(file);
-        return false;
-      }
-      if (!isLt10M) {
-        this.$message.error('上传图片大小不能超过 10MB!');
-        this.failedList.push(file);
+        this.uploadLoading = false;
         return false;
       }
       return true;
@@ -485,7 +481,7 @@ export default {
     display: inline-block;
   }
 /deep/ .avatar-uploader .el-upload:hover {
-    border-color: #655EFF;
+    border-color: #409EFF;
   }
 /deep/ .avatar-uploader-icon {
     font-size: 28px;

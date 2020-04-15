@@ -14,21 +14,18 @@
               <el-button type="primary" @click="search">搜 索</el-button>
             </div>
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
-                <template v-if="materialResultList.length">
-                  <waterfall :col='3' :width="245" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
-                    <template >
-                      <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
-                        <img :src="item.filePath" alt="加载错误"/> 
-                        <div class="item-body">
-                            <div class="item-desc">{{item.fileName}}</div>
-                        </div>
+                <waterfall :col='3' :width="245" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
+                  <template >
+                    <div class="cell-item" :class="{'img_active':  materialSelectedItem && materialSelectedItem.id === item.id}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
+                      <img :src="item.filePath" alt="加载错误"/> 
+                      <div class="item-body">
+                          <div class="item-desc">{{item.fileName}}</div>
                       </div>
-                    </template>
-                  </waterfall>
-                </template>
-                <p class="empty" v-else>暂无数据</p>
+                    </div>
+                  </template>
+                </waterfall>
             </div>
-            <p class="pages" v-if="materialResultList.length">
+            <p class="pages">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -61,18 +58,15 @@
           <el-button type="primary" @click="fetchSystemIcon">搜 索</el-button>
         </div>
         <div class="icon_wrapper" ref="systemWrapper" v-loading="localLoading">
-          <template v-if="systemResultList.length">
-              <div style="display:none">{{systemSelectedItem}}</div>
-              <ul v-if="!localLoading">
-                <li class="cell-item" :class="{'img_active': systemGroupId === systemLoadedGroupId ?  (systemRecordMap[systemGroupId] && systemRecordMap[systemGroupId].id === item.id) : (systemRecordMap[''] && systemRecordMap[''].id === item.id)}" v-for="(item,key) in systemResultList" :key="key" @click="selectImg(item)">
-                  <img :src="item.address" alt="加载错误"/> 
-                  <!-- <p class="item-desc">{{item.id}}</p> -->
-                </li>
-              </ul>
-          </template>
-          <p class="empty" v-else>暂无数据</p>
+          <div style="display:none">{{systemSelectedItem}}</div>
+            <ul v-if="!localLoading">
+              <li class="cell-item" :class="{'img_active': systemGroupId === systemLoadedGroupId ?  (systemRecordMap[systemGroupId] && systemRecordMap[systemGroupId].id === item.id) : (systemRecordMap[''] && systemRecordMap[''].id === item.id)}" v-for="(item,key) in systemResultList" :key="key" @click="selectImg(item)">
+                <img :src="item.address" alt="加载错误"/> 
+                <!-- <p class="item-desc">{{item.id}}</p> -->
+              </li>
+            </ul>
         </div>
-        <p class="pages" v-if="systemResultList.length">
+        <p class="pages">
             <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -106,7 +100,7 @@
                   <i class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <div v-loading="uploadLoading">
-                  <waterfall :col='3' :width="245" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
+                  <waterfall :col='3' :width="250" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
                     <template >
                       <div class="cell-item" :class="{'img_active': localSelectedItem && localSelectedItem.title === item.title}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
                         <img :src="item.url" alt="加载错误"/> 
@@ -122,7 +116,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <span class="dialog-footer fcc" style="margin-top:20px;">
+    <span class="dialog-footer fcc">
             <el-button type="primary" @click="submit">确 认</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
         </span>
@@ -347,13 +341,10 @@ export default {
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
-      if (!(isJPG || isJPEG || isPNG)) {
-        this.$message.error('上传图片支持jpg,jpeg,png格式!');
+      if (!(isJPG || isJPEG || isPNG) || !isLt2M) {
+        this.$message.error('上传图片仅支持jpg,jpeg,png格式! 且上传图片大小不能超过 3MB!');
         this.failedList.push(file);
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 3MB!');
-        this.failedList.push(file);
+        this.uploadLoading = false;
       }
       if(this.successList.length + this.failedList.length === this.addList.length) {
         this.preload(this.fileList, 'url');
@@ -585,11 +576,6 @@ export default {
   text-align: center;
   margin-top: 20px;
 }
-.empty{
-  text-align: center;
-  margin-top: 100px;
-  color: #b6b5c8;
-}
 
 /* *******************************素材库样式*********************************** */
 .material_head{
@@ -647,26 +633,7 @@ export default {
       }
     }
     .item-body{
-      padding: 10px 0;
-      position: relative;
-      width: 100%;
-      height: 34px;
-      background: rgba(0,0,0,0.3);
-      .item-desc{
-        width: 100%;
-        padding: 0 10px;
-        box-sizing: border-box;
-        height: 100%;
-        color: #fff;
-        text-align: center;
-        line-height: 34px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        overflow:hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+      padding:10px 0;
     }
   }
   .img_active{
@@ -693,8 +660,7 @@ export default {
     }
 }
 .icon_wrapper{
-  max-height:390px;
-  min-height:200px;
+  height:390px;
   overflow-y: auto;
   ul{
     display: grid;
@@ -734,7 +700,7 @@ export default {
       .item-desc{
         width: 100%;
         height:18px;
-        background:rgba(0,0,0,0.2);
+        background:rgba(0,0,0,0.39);
         color:#fff;
         text-align:center;
         line-height:18px;
@@ -768,7 +734,7 @@ export default {
     display: inline-block;
   }
 /deep/ .avatar-uploader .el-upload:hover {
-    border-color: #655EFF;
+    border-color: #409EFF;
   }
 /deep/ .avatar-uploader-icon {
     font-size: 28px;
