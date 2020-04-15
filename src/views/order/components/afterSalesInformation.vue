@@ -756,7 +756,7 @@ export default {
                 color: #92929B;
                 text-align: right;
                 flex-shrink: 0;
-                flex-basis: 126px;
+                flex-basis: 140px;
             }
             &:last-child {
                 font-weight:600;

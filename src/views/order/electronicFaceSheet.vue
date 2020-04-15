@@ -216,6 +216,9 @@ export default {
   align-items: center;
   margin-bottom: 30px;
 }
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
+}
 </style>
 
 

@@ -1071,7 +1071,16 @@ export default {
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
             let name = item.name
             let flatIndex = this.flatSpecsList.findIndex(val => val.name == name)
+            let copyAddedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
+            let flatCopyAddedSpecs = this.flatTreeArray(copyAddedSpecs, 'valueList')
 
+            if(flatCopyAddedSpecs.find(val => val.name == name)) {
+                this.$message({
+                    message: '此规格值正在使用，不可删除',
+                    type: 'warning'
+                });
+                return
+            }
             addedSpecs[addedSpecs.length - 1].list.splice(index, 1)
             this.addedSpecs = addedSpecs
             this.specsValues.splice(index, 1)
@@ -1404,9 +1413,11 @@ export default {
                     this.addedSpecs = addedSpecs
                 }
             } else {
+                let item = this.addedSpecs[index].valueList.find(val => val.id == id)
+                
                 if(this.addedSpecs[index].valueList.find(val => val.id == id)) {
-                    let index = this.addedSpecs[index].valueList.findIndex(val => val.id == id)
-                    addedSpecs[index].valueList.splice(valueIndex, 1)
+                    let _index = this.addedSpecs[index].valueList.findIndex(val => val.id == id)
+                    addedSpecs[index].valueList.splice(_index, 1)
                     this.addedSpecs = addedSpecs
                 }
             }

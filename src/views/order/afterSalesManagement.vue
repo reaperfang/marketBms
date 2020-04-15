@@ -524,6 +524,9 @@ export default {
 .el-button+.el-button {
     margin-left: 12px;
 }
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
+}
 </style>
 
 
