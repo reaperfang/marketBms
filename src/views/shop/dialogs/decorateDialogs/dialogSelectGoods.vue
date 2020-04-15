@@ -1,24 +1,24 @@
 /* 选择商品弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="1000px" :title="categoryName ? '选择 ['+categoryName+'] 分类下的商品' : '选择商品'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules"  :inline="true">
-      <div class="inline-head">
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
-        </el-form-item> 
-        <el-form-item label="商品状态" prop="status">
-          <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
-            <el-option label="全部" :value="null"></el-option>
-            <el-option label="上架" :value="1"></el-option>
-            <el-option label="下架" :value="0"></el-option>
-            <el-option label="售罄" :value="-1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
-        </el-form-item>
-      </div>
-    </el-form>
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules"  :inline="true">
+          <el-form-item label="商品名称" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
+          </el-form-item> 
+          <el-form-item label="商品状态" prop="status">
+            <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
+              <el-option label="全部" :value="null"></el-option>
+              <el-option label="上架" :value="1"></el-option>
+              <el-option label="下架" :value="0"></el-option>
+              <el-option label="售罄" :value="-1"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label prop="name">
+            <el-button type="primary" @click="fetch">搜 索</el-button>
+          </el-form-item>
+      </el-form>
+    </div>
     <el-table
       stripe
       :data="tableData"
@@ -31,7 +31,7 @@
       <el-table-column prop="title" label="商品名称" :width="300">
         <template slot-scope="scope">
           <div class="name_wrapper">
-            <img :src="scope.row.mainImage" alt="加载错误" />
+            <img :src="scope.row.mainImage" alt="失败" />
             <p>{{scope.row.name}}</p>
           </div>
         </template>

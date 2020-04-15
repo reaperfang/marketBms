@@ -1,8 +1,8 @@
 /* 选择限时折扣弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择折扣活动'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label="" prop="activityName">
           <el-input v-model="ruleForm.activityName" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
@@ -10,8 +10,8 @@
           <el-button type="primary" @click="fetch">搜  索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
     <el-table
       stripe
       :data="tableData"
@@ -28,7 +28,7 @@
         <el-table-column prop="activityName" label="活动标题" :width="300">
           <template slot-scope="scope">
             <div class="name_wrapper">
-              <img :src="scope.row.goodsImgUrl" alt="" />
+              <img :src="scope.row.goodsImgUrl" alt="失败" />
               <p>{{scope.row.activityName}}</p>
             </div>
           </template>

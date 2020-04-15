@@ -1,8 +1,8 @@
 /* 选择优惠券弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠券'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label="" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入优惠券名称" clearable></el-input>
         </el-form-item>
@@ -10,8 +10,8 @@
           <el-button type="primary" @click="fetch">搜  索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
     <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :row-key="getRowKey">
         <el-table-column
           type="selection"

@@ -127,7 +127,7 @@
               </el-form-item>
               <el-form-item label="分享图片" prop="picture">
                 <div class="img_preview" v-if="ruleFormMini.picture">
-                  <img :src="ruleFormMini.picture" alt="">
+                  <img :src="ruleFormMini.picture" alt="失败">
                   <span @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
                 </div>
                 <div class="add_button" v-if="!ruleFormMini.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">

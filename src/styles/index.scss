@@ -638,9 +638,12 @@ table.yuan-table{
 }
 
 .goods-custom .el-message-box__btns {
+  .el-button{
+      padding: 9px 20px;
+  }
   .el-button:first-child {
       display: block;
-      margin-left: 50px;
+      margin-left: 30px;
   }
 }
 
