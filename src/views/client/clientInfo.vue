@@ -170,7 +170,7 @@ export default {
     },
     methods: {
         getCouponNum() {
-            this._apis.client.getCouponNum({memberId: this.userId}).then(response => {
+            this._apis.client.getCouponNum({memberId: this.userId, t: Date.parse(new Date()) / 1000}).then(response => {
                 this.couponNum = response.couponNum;
                 this.codeNum = response.couponCodeNum;
             }).catch(error => {
