@@ -147,7 +147,7 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" @audit="auditSubmit" :title="title"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" @audit="auditSubmit" :title="title"></component>
     </div>
 </template>
 <script>
@@ -302,7 +302,7 @@ export default {
         },
         batchAudit() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了'})
+                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了', showCancelButton: false})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.auditStatus != 0).length) {
