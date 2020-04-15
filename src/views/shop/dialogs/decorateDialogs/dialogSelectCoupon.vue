@@ -171,5 +171,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
+}
 </style>
