@@ -338,13 +338,6 @@ export default {
     }
   }
 
-.el-radio-group{
-  margin-top: 9px;
-  .el-radio {
-      margin-bottom: 10px;
-      margin-right: 10px;
-  }
-}
 .el-checkbox-group{
   .el-checkbox{
     margin-right: 10px;

@@ -112,7 +112,7 @@
                   </waterfall>
                 </div>
             </div>
-            <p class="note" style="color: #d3d8df;margin-top:20px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
+            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;margin-bottom: 40px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
       </el-tab-pane>
     </el-tabs>
 
@@ -341,13 +341,10 @@ export default {
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
-      if (!(isJPG || isJPEG || isPNG)) {
-        this.$message.error('上传图片支持jpg,jpeg,png格式!');
+      if (!(isJPG || isJPEG || isPNG) || !isLt2M) {
+        this.$message.error('上传图片仅支持jpg,jpeg,png格式! 且上传图片大小不能超过 3MB!');
         this.failedList.push(file);
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 3MB!');
-        this.failedList.push(file);
+        this.uploadLoading = false;
       }
       if(this.successList.length + this.failedList.length === this.addList.length) {
         this.preload(this.fileList, 'url');

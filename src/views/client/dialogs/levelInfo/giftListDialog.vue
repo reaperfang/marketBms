@@ -59,7 +59,8 @@ export default {
         let params = {
           nameOrId: key || '',
           pageNum: pageNum,
-          pageSize: pageSize
+          pageSize: pageSize,
+          t: Date.parse(new Date()) / 1000
         }
         this._apis.client.getGiftList(params).then((response) => {
             this.giftList = [].concat(response.list);

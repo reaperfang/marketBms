@@ -55,7 +55,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="multiple_selection">
+      <div class="multiple_selection" v-if="tableData.length">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" v-popover:popover4 :disabled="!this.multipleSelection.length">批量改分类</el-button>
         <el-button class="border-button" @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
@@ -77,7 +77,7 @@
           </div>
         </el-popover>
       </div>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

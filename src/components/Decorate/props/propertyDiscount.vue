@@ -2,19 +2,19 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="选择活动" prop="goods">
+        <div class="goods_list" v-loading="loading">
+          <ul>
+            <li v-for="(item, key) of list" :key="key" :title="item.activityName">
+              <img :src="item.goodsImgUrl" alt="">
+              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            </li>
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectDiscount'">
+              <i class="inner"></i>
+            </li>
+          </ul>
+        </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       </el-form-item>
-      <div class="goods_list" v-loading="loading">
-        <ul>
-          <li v-for="(item, key) of list" :key="key" :title="item.activityName">
-            <img :src="item.goodsImgUrl" alt="">
-            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-          </li>
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectDiscount'">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
-      <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -235,13 +235,6 @@ export default {
 <style lang="scss" scoped>
 /deep/.el-form-item__label{
   text-align: left;
-}
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
 }
 /deep/.el-checkbox-group{
   /deep/.el-checkbox{

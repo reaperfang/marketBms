@@ -293,9 +293,10 @@ export default {
     },
     onSubmit() {
       this.listQuery = Object.assign({}, this.listQuery, {
-        startIndex: 0,
-        pageSize: 20
+        startIndex: 1,
+        pageSize: 20,
       })
+      this.checkedLength = 0
       this.$refs["shop"].getList({
         startIndex: 1,
         pageSize: 20
@@ -320,6 +321,7 @@ export default {
         startIndex: 1,
         pageSize: 20,
       }
+      this.checkedLength = 0
 
       this.$refs["shop"].getList(Object.assign({}, this.listQuery, {
         type: 'resetForm'
@@ -394,6 +396,8 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
+}
 </style>
 

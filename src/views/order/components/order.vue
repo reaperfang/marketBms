@@ -300,6 +300,7 @@ export default {
         .order-container {
             margin-top: 20px;
             width: 100%;
+            min-width: 1000px;
             overflow-x: scroll;
             &::-webkit-scrollbar {
                 width: 8px;

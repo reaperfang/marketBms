@@ -260,7 +260,15 @@ export default {
                 case 6:
                     return '关闭订单'
                 case 7:
+                    return '库存不足'
+                case 8:
                     return '提前关闭订单'
+                case 9:
+                    return '商户备注'
+                case 10:
+                    return '修改收货信息'
+                case 11:
+                    return '自动发货'
             }
         },
         channelInfoIdFilter(code) {
@@ -430,6 +438,9 @@ export default {
         }
         .operate-record {
             clear: both;
+            .header {
+                padding-left: 0;
+            }
         }
     }
     .reduce-price-input {

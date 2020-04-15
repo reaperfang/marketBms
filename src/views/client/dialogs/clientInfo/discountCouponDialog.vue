@@ -105,10 +105,10 @@ export default {
     },
     getUsedCoupon(type) {
       let params;
-      if(type == "0") {
-        params = {couponType: "0", memberId: this.data.id};
-      }else{
-        params = {usedType:type, couponType: "0", memberId: this.data.id};
+      if (type == "0") {
+        params = { couponType: "0", memberId: this.data.id, t: Date.parse(new Date()) / 1000 };
+      } else {
+        params = { usedType: type, couponType: "0", memberId: this.data.id, t: Date.parse(new Date()) / 1000 };
       }
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.couponList = [];
@@ -124,10 +124,10 @@ export default {
     },
     getUsedCode(type) {
       let params;
-      if(type == "0") {
-        params = {couponType: "1", memberId: this.data.id};
-      }else{
-        params = {usedType: type, couponType: "1", memberId: this.data.id};
+      if (type == "0") {
+        params = { couponType: "1", memberId: this.data.id, t: Date.parse(new Date()) / 1000 };
+      } else {
+        params = { usedType: type, couponType: "1", memberId: this.data.id, t: Date.parse(new Date()) / 1000 };
       }
       this._apis.client.getUsedCoupon(params).then((response) => {
           this.codeList = [];

@@ -7,19 +7,19 @@
           <el-radio :label="2">商品分类</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="商品" v-if="ruleForm.source === 1" prop="goods">
+      <el-form-item label="选择商品" v-if="ruleForm.source === 1" prop="goods">
+        <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
+          <ul>
+            <li v-for="(item, key) of list" :key="key" :title="item.name">
+              <img :src="item.mainImage" alt="">
+              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            </li>
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
+              <i class="inner"></i>
+            </li>
+          </ul>
+        </div>
       </el-form-item>
-      <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
-        <ul>
-          <li v-for="(item, key) of list" :key="key" :title="item.name">
-            <img :src="item.mainImage" alt="">
-            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-          </li>
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
       <el-form-item label="商品分类" v-if="ruleForm.source === 2" prop="goodsGroup">
         <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{seletedGroup && seletedGroup.data.name || '从商品分类中选择'}}</el-button>
       </el-form-item>
@@ -358,13 +358,6 @@ export default {
 <style lang="scss" scoped>
 /deep/.el-form-item__label{
   text-align: left;
-}
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
 }
 /deep/.el-checkbox-group{
   /deep/.el-checkbox{

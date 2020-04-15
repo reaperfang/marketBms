@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="交易类型">
-          <el-select v-model="ruleForm.businessType" style="width:100px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" style="width:130px;" placeholder="全部">
             <el-option
               v-for="item in transactionTypes"
               :key="item.value"

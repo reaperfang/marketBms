@@ -9,7 +9,7 @@
         <div class="shop_code">
           <h3>手机扫码访问</h3>
           <h4>微信扫一扫分享至朋友圈</h4>
-          <img :src="qrCode" alt="">
+          <img :src="qrCode" alt="失败">
         </div>
       </div>
     </div>

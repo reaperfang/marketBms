@@ -1,8 +1,8 @@
 /* 选择N元N件弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择N元N件活动'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label="" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
@@ -10,8 +10,8 @@
           <el-button type="primary" @click="fetch">搜  索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
     <el-table
     stripe
     :data="tableData"
@@ -28,7 +28,7 @@
         <el-table-column prop="name" label="活动标题">
           <template slot-scope="scope">
             <div class="name_wrapper">
-              <img :src="scope.row.activityPic" alt="">
+              <img :src="scope.row.activityPic" alt="失败">
               <p>{{scope.row.name}}</p>
             </div>
           </template>
@@ -42,14 +42,14 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <div slot="empty" class="table_empty">
-          <img src="../../../../assets/images/table_empty.png" alt="">
+          <img src="../../../../assets/images/table_empty.png" alt="失败">
           <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addPackbuy', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
         </div>
       </el-table>
-      <div class="multiple_selection">
+      <div class="multiple_selection" v-if="tableData.length">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
       </div>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -171,6 +171,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
+}
 .name_wrapper{
     display: flex;
     flex-direction: row;

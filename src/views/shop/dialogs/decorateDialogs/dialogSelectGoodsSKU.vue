@@ -1,16 +1,16 @@
 /* 选择商品弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" title="选择货品" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入货品名称" clearable></el-input>
         </el-form-item>
         <el-form-item label prop="name">
           <el-button type="primary" @click="fetch">搜 索</el-button>
         </el-form-item>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
     <el-table
       stripe
       :data="tableData"
@@ -28,17 +28,17 @@
       <el-table-column prop="title" label="货品名称" :width="500">
         <template slot-scope="scope">
           <div class="name_wrapper">
-            <img :src="scope.row.goodsInfo.image" alt="加载错误" />
+            <img :src="scope.row.goodsInfo.image" alt="失败" />
             <p>{{scope.row.goodsInfo.name}}<span style="display:block;color: #92929B;">{{scope.row.goodsInfo.specs}}</span></p>
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间"></el-table-column>
     </el-table>
-    <div class="multiple_selection">
+    <div class="multiple_selection" v-if="tableData.length">
       <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="tableData.length">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -166,6 +166,10 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog__body{
   min-height: 400px;
+}
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
 }
 .name_wrapper {
   display: flex;
