@@ -189,7 +189,7 @@
                         <li v-for="(item, index) in addedSpecs" :key="index">
                             <div class="added-specs-header">
                                 <span>{{item.name}}</span>
-                                <el-button @click="deleteAddedSpec(index)">移除</el-button>
+                                <!--<el-button @click="deleteAddedSpec(index)">移除</el-button>-->
                             </div>
                             <ul class="spec-value-ul">
                                 <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
