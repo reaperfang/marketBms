@@ -644,5 +644,8 @@ export default {
   padding-top: 2px;
   margin-bottom: 0;
 }
+/deep/ .el-form-item__label {
+  font-weight: normal;
+}
 </style>
 

@@ -1,6 +1,6 @@
 <template>
     <div class="order-information">
-        <el-row>
+        <el-row type="flex">
             <el-col :span="8">
                 <div class="grid-content lefter">
                     <div class="item">
@@ -886,7 +886,7 @@ export default {
                     margin-right: 20px;
                     flex-shrink: 0;
                     width: 84px;
-                    text-align: right;
+                    text-align: left;
                 }
                 .value {
                     color: #9FA29F;
@@ -1020,6 +1020,10 @@ export default {
 }
 .coupon-box {
     min-width: 271px;
+}
+/deep/ .el-col-8 {
+    width: auto;
+    flex: 1;
 }
 </style>
 

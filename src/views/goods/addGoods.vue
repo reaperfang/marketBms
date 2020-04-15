@@ -2183,9 +2183,10 @@ export default {
                     try {
                         this.ruleForm.goodsInfos.forEach((val, index) => {
                             if(val.image_hide) {
-                                let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
+                                // let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
 
-                                val.image = image
+                                // val.image = image
+                                val.image = this.ruleForm.goodsInfos[index - 1].image
                             }
                         })
 
