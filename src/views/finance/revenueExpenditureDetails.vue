@@ -5,7 +5,7 @@
     <div class="top_part head-wrapper">
       <el-form :model="ruleForm" ref="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:130px;padding-right:4px;">
             <el-option
               v-for="item in revenueExpenditureTerms"
               :key="item.value"
