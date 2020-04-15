@@ -446,7 +446,7 @@ export default {
             }
         },
         getAllCoupons(id) {
-            this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1, startIndex: 1, pageSize: 999}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1, startIndex: 1, pageSize: 999, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.couponList = [].concat(response.list);
                 this.couponList.map((item) => {
                     this.$set(item, 'frozenNum',1);
@@ -456,7 +456,7 @@ export default {
             })
             },
         getAllCodes(id) {
-            this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1,startIndex: 1, pageSize: 999}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1,startIndex: 1, pageSize: 999, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.codeList = [].concat(response.list);
                 this.codeList.map((item) => {
                     this.$set(item, 'frozenNum', 1);

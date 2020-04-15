@@ -79,7 +79,8 @@ export default {
         nameOrId: key || '',
         page: page,
         pageSize: pageSize, 
-        status: 1
+        status: 1,
+        t: Date.parse(new Date()) / 1000
       }
       this._apis.client.getRedPacket(params).then((response) => {
             this.redList = [].concat(response.list);
