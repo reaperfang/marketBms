@@ -88,7 +88,7 @@
                     </ul>
                 </div>
             </div>
-            <p class="note" style="color: #d3d8df;margin-top:20px;">大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式 <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
+            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;margin-bottom: 40px;">大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式 <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
       </el-tab-pane>
     </el-tabs>
 
