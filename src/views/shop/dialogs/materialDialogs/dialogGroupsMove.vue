@@ -23,6 +23,7 @@ export default {
       data:{},
       arrayData: {},
       typeName:{},
+      fromGroupId:'',
       dialogVisible: {
           type: Boolean,
           required: true
@@ -38,6 +39,7 @@ export default {
         lazy: true,
         checkStrictly: true,
         lazyLoad (node, resolve) {
+          const {level} = node;
           setTimeout(() => {
             let id = node.level == 0 ? '0' : node.data.value
             let type =  self.typeName == 'image' ? '0' : '1'
@@ -52,6 +54,7 @@ export default {
                 const nodes = response.map(item => ({
                   value: item.id,
                   label: item.name,
+                  leaf: level >=2
                 }));
                 // 通过调用resolve将子节点数据返回，通知组件数据加载完成
                 resolve(nodes)
@@ -75,9 +78,13 @@ export default {
     }
   },
   created() {
-
+    this.init()
   },
   methods: {
+    init(){
+      this.form.groupId = this.fromGroupId
+    },
+
     submit() {
       let leg = this.form.groupId.length
       if(this.arrayData.length){
