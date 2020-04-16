@@ -837,7 +837,7 @@ export default {
             align-items: center;
             margin-bottom: 10px;
             .gain-item-lefter {
-                width: 56px;
+                width: 64px;
                 margin-right: 6px;
             }
             .more {
