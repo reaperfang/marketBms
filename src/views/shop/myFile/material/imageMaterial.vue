@@ -35,7 +35,7 @@
                 </div>
                 <p class="img_name">{{item.fileName}}</p>
                 <div class="operate" ref="operate">
-                  <el-button plain class="block mt10 ml10 btn_groups" @click="moveGroup(item.id)">分组</el-button>
+                  <el-button plain class="block mt10 ml10 btn_groups" @click="moveGroup(item.id,item.fileGroupInfoId)">分组</el-button>
                   <el-button type="primary" plain class="block mt10 btn_tailor" v-if="!item.isSyncWechat" @click="imageTailor(item)">剪裁</el-button>
                   <el-button plain class="block mt10 btn_delete" @click="deleteImage(item.id,'imageId')">删除</el-button>
                 </div>
@@ -67,7 +67,7 @@
       </div>
     </div>
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" :typeName="typeName" @submit="handleSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" :fromGroupId="fromGroupId" :typeName="typeName" @submit="handleSubmit"></component>
   </div>
 </template>
 
@@ -101,7 +101,8 @@ export default {
       pageSize:10,
       total:0,
       groupId:'',
-      typeName:'image'
+      typeName:'image',
+      fromGroupId:''
     }
   },
   created() {
@@ -222,6 +223,7 @@ export default {
         this.arrayData.push(id)
       }
     },
+
     //批量删除
     deleteImages(){
       this.data = {}
@@ -250,12 +252,13 @@ export default {
     },
 
     //分组
-    moveGroup(id){
+    moveGroup(id,fileGroupInfoId){
       this.dialogVisible = true;
       this.currentDialog = 'dialogGroupsMove'
       this.data = 'image'
       this.arrayData = []
       this.arrayData.push(id)
+      this.fromGroupId = fileGroupInfoId
     },
 
     //移动分组
@@ -263,7 +266,8 @@ export default {
       this.data = 'image'
       this.arrayData = []
       this.list.map(item =>{
-        item.checked == true && this.arrayData.push(item.id)        
+        item.checked == true && this.arrayData.push(item.id)  
+         this.fromGroupId = item.fileGroupInfoId 
       })
       if(this.arrayData.length == 0){
         this.$message.warning('请选择图片后再进行批量操作！');

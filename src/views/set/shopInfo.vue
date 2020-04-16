@@ -44,7 +44,7 @@
                 <i class="el-icon-plus avatar-uploader-icon"></i>
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>-->
-        <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p>
+        <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于3M</p>
       </el-form-item>
       <el-form-item label="公司名称:" prop="companyName">
         <el-input
@@ -512,6 +512,7 @@ export default {
   max-height: 80px;
   object-fit: fill;
   display: inline-block;
+  border:1px dashed #e6e6e6;
 }
 .shopInfo-show {
   font-size: 12px;
