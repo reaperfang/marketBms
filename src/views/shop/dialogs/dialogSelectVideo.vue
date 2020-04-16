@@ -15,25 +15,28 @@
             </div>
 
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
-              <ul class="tile-list n3 video_list" v-if="materialResultList.length">
-                <li v-for="(item, key) of materialResultList" :key="key" class="cell-item" @click="selectVideo($event, item)">
-                  <div class="video_head">
-                    <span>{{item.createTime}}</span>
-                    <span>{{(item.fileSize ? Math.floor(item.fileSize * 100) / 100 + 'MB' : '-- MB')}}</span>
-                  </div>
-                  <div class="video_body">
-                    <p>{{item.name}}</p>
-                    <video
-                      :src="item.filePath"
-                      controls="controls"
-                      class="video"
-                      :poster="item.fileCover"
-                    >您的浏览器不支持 video 标签。</video>
-                  </div>
-                </li>
-              </ul>
+              <template v-if="materialResultList.length">
+                <ul class="tile-list n3 video_list" v-if="materialResultList.length">
+                  <li v-for="(item, key) of materialResultList" :key="key" class="cell-item" @click="selectVideo($event, item)">
+                    <div class="video_head">
+                      <span>{{item.createTime}}</span>
+                      <span>{{(item.fileSize ? Math.floor(item.fileSize * 100) / 100 + 'MB' : '-- MB')}}</span>
+                    </div>
+                    <div class="video_body">
+                      <p>{{item.name}}</p>
+                      <video
+                        :src="item.filePath"
+                        controls="controls"
+                        class="video"
+                        :poster="item.fileCover"
+                      >您的浏览器不支持 video 标签。</video>
+                    </div>
+                  </li>
+                </ul>
+              </template>
+              <p class="empty" v-else>暂无数据</p>
             </div>
-            <p class="pages">
+            <p class="pages" v-if="materialResultList.length">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -425,6 +428,11 @@ export default {
   text-align: center;
   margin-top: 20px;
 }
+.empty{
+  text-align: center;
+  margin-top: 100px;
+  color: #b6b5c8;
+}
 
 /* *******************************素材库样式*********************************** */
 .material_head{
@@ -482,7 +490,7 @@ export default {
     display: inline-block;
   }
 /deep/ .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
+    border-color: #655EFF;
   }
 /deep/ .avatar-uploader-icon {
     font-size: 28px;
