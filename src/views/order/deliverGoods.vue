@@ -668,5 +668,16 @@ export default {
     
   }
 }
+/deep/ .el-checkbox {
+  display: inline-block;
+  position: static;
+  .el-checkbox__input {
+    display: inline-block;
+    position: static;
+    .el-checkbox__inner {
+      display: inline-block;
+    }
+  }
+}
 </style>
 
