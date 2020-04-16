@@ -230,7 +230,8 @@ export default {
 <style lang="scss" scoped>
 ul.template_type{
   li{
-    width:100px;
+    width:100px!important;
+    margin-right:10px!important;
     // height:100px;
     border:1px solid rgb(228,227,235);
     padding:10px;

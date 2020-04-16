@@ -264,13 +264,13 @@ export default {
 }
 ul.template_type{
   li{
-    width: 90px;
-    height: 100px;
+    width: 90px!important;
+    height: 100px90px!important;
     border: 1px solid #e4e3eb;
     padding: 10px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    margin-right: 18px;
+    margin-right: 18px!important;
     cursor: pointer;
     @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
       /* 兼容IE10和IE11 */

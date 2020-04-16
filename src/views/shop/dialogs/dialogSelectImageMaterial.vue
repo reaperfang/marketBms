@@ -2,7 +2,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
 
-     <el-tabs v-model="currentTab">
+     <el-tabs v-model="currentTab"  style="margin-bottom:40px;">
 
       <!-- 图片素材 -->
       <el-tab-pane label="素材图片" name="material">
@@ -118,14 +118,14 @@
                   </waterfall>
                 </div>
             </div>
-            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;margin-bottom: 40px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
+            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <span v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
       </el-tab-pane>
     </el-tabs>
 
-    <span class="dialog-footer fcc" style="margin-top:20px;">
-            <el-button type="primary" @click="submit">确 认</el-button>
-            <el-button @click="dialogVisible = false">取 消</el-button>
-        </span>
+    <span class="dialog-footer fcc">
+        <el-button type="primary" @click="submit">确 认</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+    </span>
   </DialogBase>
 </template>
 
@@ -580,7 +580,7 @@ export default {
 
 .pages{
   text-align: center;
-  margin-top: 20px;
+  margin-top: 45px;
 }
 .empty{
   text-align: center;
@@ -795,5 +795,17 @@ export default {
   width: 100%;
   text-align: center;
   margin-top:20px;
+}
+.dialog-footer .el-button{
+  padding: 9px 20px;
+  margin-left: 30px;
+  span{
+    letter-spacing: 5px;
+    margin-right: -4px;
+  }
+}
+.el-button:first-child {
+    display: block;
+    margin-left: 0;
 }
 </style>

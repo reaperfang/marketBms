@@ -2,7 +2,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择视频'" @submit="submit" @close="close" :showFooter="false">
 
-     <el-tabs v-model="currentTab">
+     <el-tabs v-model="currentTab" style="margin-bottom:40px;">
 
       <!-- 图片素材 -->
       <el-tab-pane label="素材视频" name="material">
@@ -20,7 +20,7 @@
                   <li v-for="(item, key) of materialResultList" :key="key" class="cell-item" @click="selectVideo($event, item)">
                     <div class="video_head">
                       <span>{{item.createTime}}</span>
-                      <span>{{(item.fileSize ? Math.floor(item.fileSize * 100) / 100 + 'MB' : '-- MB')}}</span>
+                      <span>{{(item.fileSize ? Math.floor(item.fileSize / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB')}}</span>
                     </div>
                     <div class="video_body">
                       <p>{{item.name}}</p>
@@ -91,11 +91,11 @@
                     </ul>
                 </div>
             </div>
-            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;margin-bottom: 40px;">大小不超过10mb，支持mp4格式 <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
+            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;">大小不超过10mb，支持mp4格式 <span v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
       </el-tab-pane>
     </el-tabs>
 
-    <span class="dialog-footer fcc">
+    <span class="dialog-footer fcc" style="margin-top:40px;">
             <el-button type="primary" @click="submit">确 认</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
         </span>
@@ -426,7 +426,7 @@ export default {
 
 .pages{
   text-align: center;
-  margin-top: 20px;
+  margin-top: 45px;
 }
 .empty{
   text-align: center;
@@ -550,5 +550,17 @@ ul.video_list{
     padding-top: 0;
     height: 210px;
   }
+}
+.dialog-footer .el-button{
+  padding: 9px 20px;
+  margin-left: 30px;
+  span{
+    letter-spacing: 5px;
+    margin-right: -4px;
+  }
+}
+.el-button:first-child {
+    display: block;
+    margin-left: 0;
 }
 </style>
