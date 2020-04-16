@@ -297,6 +297,12 @@ export default {
 /deep/ .el-dialog{
     border-radius: 10px;
 }
+/deep/.el-table__header{
+  width: 100% !important;
+}
+/deep/.el-table__body{
+  width: 100% !important;
+}
 .c_container {
     .marL10{
         margin-left: 10px;
