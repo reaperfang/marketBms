@@ -36,7 +36,7 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
+        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm" v-calcHeight="364">
           <div class="block header">
             <p class="title">导航设置</p>
           </div>

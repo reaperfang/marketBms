@@ -943,7 +943,7 @@ export default {
   overflow: hidden;
 }
 .avatar-uploader .el-upload:hover {
-  border-color: #409eff;
+  border-color: #655EFF;
 }
 .avatar-uploader-icon {
   font-size: 28px;

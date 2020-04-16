@@ -465,7 +465,7 @@ export default {
   display: inline-block;
 }
 /deep/ .avatar-uploader .el-upload:hover {
-  border-color: #409eff;
+  border-color: #655EFF;
 }
 /deep/ .avatar-uploader-icon {
   font-size: 28px;

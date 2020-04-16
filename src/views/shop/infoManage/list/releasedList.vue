@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column prop="authorHeadPath" label="作者头像">
            <template slot-scope="scope">
-             <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="">
+             <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="失败">
              <span v-else>--</span>
           </template>
         </el-table-column>
@@ -83,7 +83,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

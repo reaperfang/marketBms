@@ -9,7 +9,7 @@
             <el-radio :label="item.id"></el-radio>
           </div>
           <div class="demo">
-            <img :src="item.img" alt="">
+            <img :src="item.img" alt="失败">
           </div>
         </li>
       </el-radio-group>

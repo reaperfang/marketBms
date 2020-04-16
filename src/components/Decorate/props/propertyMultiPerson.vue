@@ -7,30 +7,30 @@
           <el-radio :label="2">自动获取</el-radio>
         </el-radio-group>
       </el-form-item>
-     <el-form-item label="选择活动" prop="goods">
-      </el-form-item>
-      <div class="goods_list" prop="goods" v-loading="loading">
-        <ul>
-          <template>
-            <template v-for="(item, key) of list">
-              <li :key="key" v-if="item.status !== 2" :title="item.activeName">
-                <img :src="item.mainImage" alt="">
-                <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
-              </li>
+     <el-form-item :label="ruleForm.addType === 1 ? '选择活动' : ''" prop="goods">
+        <div class="goods_list" prop="goods" v-loading="loading">
+          <ul>
+            <template>
+              <template v-for="(item, key) of list">
+                <li :key="key" v-if="item.status !== 2" :title="item.activeName">
+                  <img :src="item.mainImage" alt="">
+                  <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
+                </li>
+              </template>
             </template>
-          </template>
-          <!-- <template v-else-if="ruleForm.addType === 2">
-            <li v-for="(item, key) of []" :key="key">
-              <img :src="item.image" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            <!-- <template v-else-if="ruleForm.addType === 2">
+              <li v-for="(item, key) of []" :key="key">
+                <img :src="item.image" alt="">
+                <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+              </li>
+            </template> -->
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'" v-if="ruleForm.addType === 1">
+              <i class="inner"></i>
             </li>
-          </template> -->
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'" v-if="ruleForm.addType === 1">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
-      <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
+          </ul>
+        </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
+      </el-form-item>
       <el-form-item label="显示个数" v-if="ruleForm.addType === 2" prop="showNumber">
         <el-input  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
         <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最大设置为30个</p>  
@@ -308,13 +308,6 @@ export default {
 <style lang="scss" scoped>
 /deep/.el-form-item__label{
   text-align: left;
-}
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
 }
 /deep/.el-checkbox-group{
   /deep/.el-checkbox{

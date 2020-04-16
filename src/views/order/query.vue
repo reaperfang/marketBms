@@ -118,7 +118,7 @@
       </div>
       <el-tabs class="tabs" v-model="activeName">
         <el-tab-pane v-permission="['订单', '订单查询', '商城订单']" label="商城订单" name="shop">
-          <shop ref="shop" :params="listQuery" @batchSupplementaryLogistics="batchSupplementaryLogistics"></shop>
+          <shop :checkedLength.sync="checkedLength" ref="shop" :params="listQuery" @batchSupplementaryLogistics="batchSupplementaryLogistics"></shop>
         </el-tab-pane>
         <!-- <el-tab-pane label="积分商城订单" name="integralShop">
           <integralShop></integralShop>
@@ -292,7 +292,15 @@ export default {
         });
     },
     onSubmit() {
-      this.$refs["shop"].getList();
+      this.listQuery = Object.assign({}, this.listQuery, {
+        startIndex: 1,
+        pageSize: 20,
+      })
+      this.checkedLength = 0
+      this.$refs["shop"].getList({
+        startIndex: 1,
+        pageSize: 20
+      });
     },
     resetForm(formName) {
         this.listQuery = {
@@ -309,8 +317,11 @@ export default {
         sendType: "",
         orderStatus: "",
         searchTimeType: "createTime",
-        orderTimeValue: ""
+        orderTimeValue: "",
+        startIndex: 1,
+        pageSize: 20,
       }
+      this.checkedLength = 0
 
       this.$refs["shop"].getList(Object.assign({}, this.listQuery, {
         type: 'resetForm'
@@ -385,6 +396,8 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
+}
 </style>
 

@@ -35,17 +35,17 @@
                 </div>
                 <p class="img_name">{{item.fileName}}</p>
                 <div class="operate" ref="operate">
-                  <el-button type="primary" plain class="block mt10 ml10" @click="moveGroup(item.id)">分组</el-button>
-                  <el-button type="primary" plain class="block mt10" v-if="!item.isSyncWechat" @click="imageTailor(item)">剪裁</el-button>
-                  <el-button type="primary" plain class="block mt10" @click="deleteImage(item.id,'imageId')">删除</el-button>
+                  <el-button plain class="block mt10 ml10 btn_groups" @click="moveGroup(item.id)">分组</el-button>
+                  <el-button type="primary" plain class="block mt10 btn_tailor" v-if="!item.isSyncWechat" @click="imageTailor(item)">剪裁</el-button>
+                  <el-button plain class="block mt10 btn_delete" @click="deleteImage(item.id,'imageId')">删除</el-button>
                 </div>
               </div>
             </div>
            </div>
            <p>
             <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
-            <el-button type="warning" plain class="ml10" @click="deleteImages">批量删除</el-button>
-            <el-button type="warning" plain @click="moveGroups">移动分组</el-button>
+            <el-button plain class="ml10 border-button" @click="deleteImages">批量删除</el-button>
+            <el-button class="border-button" plain @click="moveGroups">移动分组</el-button>
            </p>
            <p class="pages">
               <el-pagination
@@ -552,4 +552,25 @@ export default {
 .inline{
   display: inline-block;
 }
+.btn_groups{
+  border: 1px solid #625FFDFF;
+  background: #D0D2D2FF;
+  color: #625FFDFF;
+}
+.btn_tailor{
+  border: 1px solid #625FFDFF;
+  background: #625FFDFF;
+  color: #fff;
+}
+.btn_delete{
+  border: 1px solid #FD4C2BFF;
+  background: #D0D2D2FF;
+  color: #FD4C2BFF;
+}
+.btn_delete:hover{
+  border: 1px solid #FD4C2BFF;
+  background: #D0D2D2FF;
+  color: #FD4C2BFF;
+}
+
 </style>

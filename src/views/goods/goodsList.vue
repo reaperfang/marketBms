@@ -91,7 +91,7 @@
                                 </template>
                                 <template v-else>
                                     {{scope.row.name.substring(0, 14)}}<i v-if="scope.row.activity" class="sale-bg"></i><br />
-                                    {{scope.row.name.substring(14)}}
+                                    {{scope.row.name.substring(14) | goodsNameFilter}}
                                 </template>
                             </div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
@@ -102,7 +102,7 @@
                         width="100">
                         <template slot-scope="scope">
                             <span class="goods-state">
-                                <span :class="{red: scope.row.status == -1}">{{scope.row.goodsInfos | statusFilter}}</span>
+                                <span :class="{red: scope.row.status == -1}">{{scope.row.status | statusFilter}}</span>
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>
                             </span>
                         </template>
@@ -475,30 +475,54 @@ export default {
         this.getMiniappInfo()
         this.getProductCatalogTreeList()
     },
+    computed: {
+        isIE() {
+            var userAgent = navigator.userAgent;
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+            if(isIE) {
+                return true;   
+            } else if(isEdge) {
+                return true; 
+            } else if(isIE11) {
+                return true; 
+            }else{
+                return false
+            }
+        },
+    },
     filters: {
-        statusFilter(goodsInfos) {
-            let item = goodsInfos[0]
+        statusFilter(val) {
+            // let item = goodsInfos[0]
 
-            if(goodsInfos.reduce((total, current) => total + current.stock, 0) == 0) {
-                return '已售馨'
-            } else {
-                if(item.status == 1) {
-                    return '上架'
-                } else if(item.status == 0) {
-                    return '下架'
-                } else if(item.status == -1) {
-                    let goodsInfosList = goodsInfos.filter(val => val.stock != -1)
+            // if(goodsInfos.reduce((total, current) => total + current.stock, 0) == 0) {
+            //     return '已售馨'
+            // } else {
+            //     if(item.status == 1) {
+            //         return '上架'
+            //     } else if(item.status == 0) {
+            //         return '下架'
+            //     } else if(item.status == -1) {
+            //         let goodsInfosList = goodsInfos.filter(val => val.stock != -1)
                     
-                    if(goodsInfosList.length) {
-                        let item = goodsInfosList[0]
+            //         if(goodsInfosList.length) {
+            //             let item = goodsInfosList[0]
 
-                        if(item.stock == 1) {
-                            return '上架'
-                        } else if(item.stock == 0) {
-                            return '下架'
-                        }
-                    }
-                }
+            //             if(item.stock == 1) {
+            //                 return '上架'
+            //             } else if(item.stock == 0) {
+            //                 return '下架'
+            //             }
+            //         }
+            //     }
+            // }
+            if(val === 1) {
+                return '上架'
+            } else if(val === 0) {
+                return '下架'
+            } else if(val === -1) {
+                return '已售罄'
             }
         },
         async productCatalogFilter(id) {
@@ -540,9 +564,71 @@ export default {
             } else {
                 return name
             }
+        },
+        goodsNameFilter(name) {
+            let isIE = () => {
+                var userAgent = navigator.userAgent;
+                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+                var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+                var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+                if(isIE) {
+                    return true;   
+                } else if(isEdge) {
+                    return true; 
+                } else if(isIE11) {
+                    return true; 
+                }else{
+                    return false
+                }
+            }
+
+            let gblen = (str) => {  
+                var len = 0;  
+                for (var i=0; i<str.length; i++) {  
+                    if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
+                    len += 2;  
+                    } else {  
+                    len ++;  
+                    }  
+                }  
+                return len;  
+            }
+
+            if(isIE) {
+                let str = ''
+
+                if(gblen(name) > 28) {
+                    for(let i=0; i<name.length; i++) {
+                        str += name[i]
+
+                        if(gblen(str) < 28) {
+                            continue
+                        } else {
+                            break
+                        }
+                    }
+
+                    return str + '...'
+                } else {
+                    return name
+                }
+            } else {
+                return name
+            }
         }
     },
     methods: {
+        gblen(str) {  
+            var len = 0;  
+            for (var i=0; i<str.length; i++) {  
+                if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
+                len += 2;  
+                } else {  
+                len ++;  
+                }  
+            }  
+            return len;  
+        },
         changePriceMore() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
@@ -628,6 +714,19 @@ export default {
             // this.dialogVisible = true
             // obj.shareMore = [...this.multipleSelection]
             // this.currentData = obj
+        },
+        getMarketActivityByIds(ids) {
+             return new Promise((resolve, reject) => {
+                this._apis.goods.getMarketActivity({ids}).then((res) => {
+                    resolve(res)
+                }).catch(error => {
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+                    reject(error)
+                })
+            })
         },
         getMarketActivity(list) {
             // var that = this
@@ -871,25 +970,58 @@ export default {
             })
         },
         upperAndLowerRacksSpu(row) {
-            let _title = ''
-            let _status
-            let _row
+            // let _title = ''
+            // let _status
+            // let _row
 
-            if(row.status == 1) {
-                _title = '下架'
-                _status = 0
-            } else if(row.status == 0) {
-                _title = '上架'
-                _status = 1
-            }
+            // if(row.status == 1) {
+            //     _title = '下架'
+            //     _status = 0
+            // } else if(row.status == 0) {
+            //     _title = '上架'
+            //     _status = 1
+            // }
 
-            _row = JSON.parse(JSON.stringify(row))
-            _row.goodsInfos.forEach(val => {
-                val.status = val.status == 1 ? true : false
+            // _row = JSON.parse(JSON.stringify(row))
+            // _row.goodsInfos.forEach(val => {
+            //     if(val.status === 1) {
+            //         val.status = true
+            //     } else if(val.status === 0) {
+            //         val.status = false
+            //     } else if(val.status === -1) {
+            //         val.status = -1
+            //     }
+            // })
+            // this.currentData = _row
+            // this.currentDialog = 'EditorUpperAndLowerRacksSpu'
+            // this.dialogVisible = true
+            this._apis.goods.getGoodsDetail({id: row.id}).then(res => {
+                this.getMarketActivity([res.id]).then(activityRes => {
+                    activityRes.forEach((val, index) => {
+                        if(val.goodsInfos) {
+                            val.goodsInfos.forEach(skuVal => {
+                                let skuid = skuVal.id
+                                let item = res.goodsInfos.find(val => val.id == skuid)
+                                
+                                if(item) {
+                                    item.activity = true
+                                }
+                            })
+                        }
+                    })
+
+                    res.goodsInfos.forEach(val => {
+                        if(val.status == 1) {
+                            val.status = true
+                        } else if(val.status == 0) {
+                            val.status = false
+                        }
+                    })
+                    this.currentData = res
+                    this.currentDialog = 'EditorUpperAndLowerRacksSpu'
+                    this.dialogVisible = true
+                })
             })
-            this.currentData = _row
-            this.currentDialog = 'EditorUpperAndLowerRacksSpu'
-            this.dialogVisible = true
         },
         moreManageHandler() {
             this.showTableCheck = true

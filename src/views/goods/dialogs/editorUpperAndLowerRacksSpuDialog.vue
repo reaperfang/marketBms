@@ -41,8 +41,10 @@ export default {
         statusFilter(val) {
             if(val == 1) {
                 return '上架'
-            } else {
+            } else if(val == 0) {
                 return '下架'
+            } else if(val == -1) {
+                return '已售罄'
             }
         },
         productSpecsFilter(val) {

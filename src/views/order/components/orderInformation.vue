@@ -1,6 +1,6 @@
 <template>
     <div class="order-information">
-        <el-row>
+        <el-row type="flex">
             <el-col :span="8">
                 <div class="grid-content lefter">
                     <div class="item">
@@ -47,35 +47,73 @@
                     <div class="value gain">
                         <template>
                             <div class="gain-item">
-                                <div class="gain-item-lefter">积分</div>
-                                <div class="gain-item-righter">{{rewardScore + ' 分' || '--'}}</div>
+                                <div class="gain-item-lefter">积分：</div>
+                                <div class="gain-item-righter">{{rewardScore + ' 分' || '无'}}</div>
                             </div>
                             <div class="gain-item">
-                                <div class="gain-item-lefter">赠品</div>
-                                <div class="gain-item-righter">{{gift || '--'}}</div>
+                                <div class="gain-item-lefter">赠品：</div>
+                                <div class="gain-item-righter">{{gift || '无'}}</div>
                             </div>
-                            <div class="gain-item">
-                                <div class="gain-item-lefter">优惠券</div>
+                            <div class="gain-item coupon">
+                                <div class="gain-item-lefter">优惠券：</div>
                                 <div class="gain-item-righter">
-                                    {{gainCouponList || '--'}}
-                                    <!--<div class="coupon-box">
-                                        <div v-if="index == 0" class="coupon" v-for="(item, index) in couponList" :key="index">
-                                            <div class="item lefter">
-                                                <p>{{item.appCoupon.useTypeFullcut}}</p>
-                                                <p>元</p>
-                                            </div>
-                                            <div class="item righter">
-                                                <p>{{item.appCoupon.name}}</p>
-                                                <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                    <template v-if="couponList && couponList.length">
+                                        <div class="coupon-box">
+                                            <div v-if="index == 0" class="coupon" v-for="(item, index) in couponList" :key="index">
+                                                <div class="item lefter">
+                                                    <template v-if="item.appCoupon.useType == 0">
+                                                        <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                        <p>元</p>
+                                                    </template>
+                                                    <template v-else>
+                                                        <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                                        <p>折</p>
+                                                    </template>
+                                                </div>
+                                                <div class="item righter">
+                                                    <p>{{item.appCoupon.name}}</p>
+                                                    <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <p class="more"><span>查看更多</span></p>-->
+                                        <p v-if="couponList && (couponList.length > 1)" class="more"><span @click="moreHandler(1)" class="pointer">查看更多</span></p>
+                                    </template>
+                                    <template v-else>
+                                        无
+                                    </template>
                                 </div>
                             </div>
-                            <div class="gain-item">
-                                <div class="gain-item-lefter">优惠码</div>
-                                <div class="gain-item-righter">{{gainCouponCodeList || '--'}}</div>
+                            <div class="gain-item coupon-code">
+                                <div class="gain-item-lefter">优惠码：</div>
+                                <div class="gain-item-righter">
+                                    <template v-if="couponCodeList && couponCodeList.length">
+                                        <div class="coupon-box">
+                                            <div class="coupon-code" v-if="index == 0" v-for="(item, index) in couponCodeList" :key="index">
+                                                <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
+                                                <div class="coupon">
+                                                    <div class="item lefter coupon-code-list-lefter">
+                                                        <template v-if="item.appCoupon.useType == 0">
+                                                            <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                            <p>元</p>
+                                                        </template>
+                                                        <template v-else>
+                                                            <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                                            <p>折</p>
+                                                        </template>
+                                                    </div>
+                                                    <div class="item righter coupon-code-list-righter">
+                                                        <p>{{item.appCoupon.name}}</p>
+                                                        <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p v-if="couponCodeList && (couponCodeList.length > 1)" class="more"><span @click="moreHandler(2)" class="pointer">查看更多</span></p>
+                                    </template>
+                                    <template v-else>
+                                        无
+                                    </template>
+                                </div>
                             </div>
                         </template>
                     </div>
@@ -86,10 +124,10 @@
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
-                            <p>发票类型 {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
-                            <p>发票抬头 {{orderInfo.invoiceTitle}}</p>
-                            <p v-if="orderInfo.invoiceTaxpayerCode">纳税人识别号 {{orderInfo.invoiceTaxpayerCode}}</p>
-                            <p>发票内容 商品明细</p>
+                            <p>发票类型： {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
+                            <p>发票抬头： {{orderInfo.invoiceTitle}}</p>
+                            <p v-if="orderInfo.invoiceTaxpayerCode">纳税人识别号： {{orderInfo.invoiceTaxpayerCode}}</p>
+                            <p>发票内容： 商品明细</p>
                             <!-- <p>电子发票将在订单完成后1-2天内开具</p> -->
                         </template>
                         <template v-else>
@@ -289,30 +327,6 @@
                     </div>
                 </section>
             </div>
-            <!-- <div class="operate-record">
-                <p class="header">操作记录</p>
-                <el-table
-                    :data="orderDetail.orderOperationRecordList"
-                    style="width: 100%"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
-                    <el-table-column
-                        label="操作"
-                        width="180">
-                        <template slot-scope="scope">
-                            {{scope.row.operationType | operationTypeFilter}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="createUserName"
-                        label="操作人"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="createTime"
-                        label="操作时间">
-                    </el-table-column>
-                </el-table>
-            </div> -->
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :ajax="ajax" :sendGoods="sendGoods" @submit="submit"></component>
     </div>
@@ -321,6 +335,7 @@
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
+import gainCouponDialog from '@/views/order/dialogs/gainCouponDialog'
 //consultType 协商类型 1加价,2减价
 export default {
     data() {
@@ -367,6 +382,8 @@ export default {
             //replacePayWechatNames: ''
             yingshouChangeMoney: '',
             invoiceOpen: 1,
+            couponList: [],
+            couponCodeList: []
         }
     },
     created() {
@@ -468,6 +485,22 @@ export default {
         //         this.$message.error(error);
         //     }) 
         // },
+        moreHandler(code) {
+            let obj = {}
+
+            if(code == 1) {
+                obj.title = '优惠券'
+                obj.coupon = true
+                obj.couponList = this.couponList
+            } else {
+                obj.title = '优惠码'
+                obj.coupon = false
+                obj.couponCodeList = this.couponCodeList
+            }
+            this.currentData = obj
+            this.currentDialog = 'gainCouponDialog'
+            this.dialogVisible = true
+        },
         getShopInfo(){
           let id = this.cid
 
@@ -759,7 +792,25 @@ export default {
             }
 
             return value
-        }
+        },
+        goodsSpecsFilter(value) {
+            let _value
+            if(!value) return ''
+            if(typeof value == 'string') {
+                _value = JSON.parse(value)
+            }
+            let str = ''
+            for(let i in _value) {
+                if(_value.hasOwnProperty(i)) {
+                    str += i + '：'
+                    str += _value[i] + '，'
+                }
+            }
+
+            str = str.replace(/^(.*)\，$/, '$1')
+
+            return str
+        },
     },
     props: {
         orderInfo: {
@@ -774,7 +825,8 @@ export default {
     components: {
         ReceiveInformationDialog,
         CouponDialog,
-        ChangePriceDialog
+        ChangePriceDialog,
+        gainCouponDialog
     }
 }
 </script>
@@ -785,7 +837,7 @@ export default {
             align-items: center;
             margin-bottom: 10px;
             .gain-item-lefter {
-                width: 49px;
+                width: 64px;
                 margin-right: 6px;
             }
             .more {
@@ -834,7 +886,7 @@ export default {
                     margin-right: 20px;
                     flex-shrink: 0;
                     width: 84px;
-                    text-align: right;
+                    text-align: left;
                 }
                 .value {
                     color: #9FA29F;
@@ -845,7 +897,9 @@ export default {
     /deep/ .remark-box .el-textarea {
         width: 180px;
     }
-
+    .goods-list {
+        border-top: 1px solid #cacfcb;
+    }
     .goods-list, .operate-record {
             background-color: #fff;
             margin-top: 20px;
@@ -947,7 +1001,7 @@ export default {
         flex-shrink: 0;
     }
 }
-.coupon {
+.coupon, .coupon-code {
     .item.lefter {
         flex-direction: column;
     }
@@ -957,6 +1011,19 @@ export default {
     .limit {
         font-size: 12px;
     }
+}
+.coupon-code-list-lefter {
+    margin-top: 0!important;
+}
+.coupon-code-list-righter {
+    margin-top: 0!important;
+}
+.coupon-box {
+    min-width: 271px;
+}
+/deep/ .el-col-8 {
+    width: auto;
+    flex: 1;
 }
 </style>
 

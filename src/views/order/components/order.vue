@@ -156,7 +156,7 @@ export default {
                     return '特权价'
                 case 4:
                     return '赠品订单'
-                case 4:
+                case 5:
                     return '分佣订单'
             }
         },
@@ -177,7 +177,7 @@ export default {
             let str = ''
             for(let i in _value) {
                 if(_value.hasOwnProperty(i)) {
-                    str += i + ':'
+                    str += i + '：'
                     str += _value[i] + '，'
                 }
             }
@@ -300,6 +300,7 @@ export default {
         .order-container {
             margin-top: 20px;
             width: 100%;
+            min-width: 1000px;
             overflow-x: scroll;
             &::-webkit-scrollbar {
                 width: 8px;

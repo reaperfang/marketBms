@@ -135,8 +135,10 @@
           </div>
           <div class="block form">
             <el-form-item label="导航风格" prop="navStyle">
-              {{ruleForm.navStyle.name || 'APP导航样式'}}
-              <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
+              <div class="nav_style_type">
+                <span>{{ruleForm.navStyle.name || 'APP导航样式'}}</span>
+                <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
+              </div>
             </el-form-item>
             <el-form-item label="应用页面" prop="applyPage">
               <el-checkbox-group v-model="ruleForm.applyPage">
@@ -807,6 +809,15 @@ export default {
         white-space: nowrap!important;
         display: block!important;
         text-align: left!important;
+      }
+      .nav_style_type{
+        width:100%;
+        display:flex;
+        span{
+          display:inline-block;
+          min-width: 100px;
+          color:rgba(211,211,211,1);
+        }
       }
     }
   }

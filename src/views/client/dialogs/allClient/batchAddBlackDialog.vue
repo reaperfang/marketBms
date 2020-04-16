@@ -229,14 +229,14 @@ export default {
             this.codeIds.splice(index, 1);
         },
         getAllCoupons() {
-            this._apis.client.getAllCoupons({couponType: 0}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 0, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.allCoupons = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);
             })
         },
         getAllCodes() {
-            this._apis.client.getAllCoupons({couponType: 1}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 1, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.allCodes = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);

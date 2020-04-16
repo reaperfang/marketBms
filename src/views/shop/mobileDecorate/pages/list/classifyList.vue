@@ -42,7 +42,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

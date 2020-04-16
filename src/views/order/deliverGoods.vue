@@ -18,6 +18,7 @@
           </div>
           <div class="content">
             <el-table
+              :class="{isIE: isIE}"
               ref="table"
               :data="tableData"
               style="width: 100%"
@@ -57,6 +58,7 @@
               <el-table-column prop="sendCount" label="本次发货数量">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{'send-input': scope.row.errorMessage}"
                     :disabled="scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
                     step="1"
@@ -259,7 +261,22 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
-    }
+    },
+    isIE() {
+        var userAgent = navigator.userAgent;
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+        if(isIE) {
+            return true;   
+        } else if(isEdge) {
+            return true; 
+        } else if(isIE11) {
+            return true; 
+        }else{
+            return false
+        }
+    },
   },
   methods: {
     inputHandler(index) {
@@ -381,12 +398,16 @@ export default {
         return;
       }
 
-      if (this.multipleSelection.some(val => !val.sendCount)) {
-        this.confirm({
-          title: "提示",
-          icon: true,
-          text: "请填写发货商品数量"
-        });
+      if (this.multipleSelection.some(val => !val.sendCount)) {        
+        // this.confirm({
+        //   title: "提示",
+        //   icon: true,
+        //   text: "请填写发货商品数量"
+        // });
+        document.querySelector('.send-input').scrollIntoView()
+        let scrollTop = document.querySelector('.content-main').scrollTop
+
+        document.querySelector('.content-main').scrollTop = scrollTop - 8
         return;
       }
 
@@ -638,6 +659,14 @@ export default {
   line-height: 1;
   padding-top: 2px;
   margin-bottom: 0;
+}
+/deep/ .el-form-item__label {
+  font-weight: normal;
+}
+/deep/ .isIE.el-table {
+  .el-checkbox {
+    
+  }
 }
 </style>
 

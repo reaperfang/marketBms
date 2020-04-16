@@ -61,7 +61,8 @@ export default {
           nameOrId: key || '',
           pageNum: pageNum,
           pageSize: pageSize,
-          couponType: 0
+          couponType: 0,
+          t: Date.parse(new Date()) / 1000
         }
         this._apis.client.getAllCoupons(params).then((response) => {
             this.couponList = [].concat(response.list);
