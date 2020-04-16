@@ -20,7 +20,7 @@
             </el-radio-group>
             <div v-if="picSorce == 0" class="goods-images">
                 <div v-for="(img, key) in images" class="good-img" :key="key" @click="changeImgCheck(key)">
-                    <img src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=366763321,1800567094&fm=26&gp=0.jpg" alt="" />
+                    <img :src="img" alt="" />
                     <span v-if="key == checkedImg"><i class="el-icon-check"></i></span>
                 </div>
             </div>
