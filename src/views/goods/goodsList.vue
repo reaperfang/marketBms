@@ -991,7 +991,7 @@ export default {
             // this.currentDialog = 'EditorUpperAndLowerRacksSpu'
             // this.dialogVisible = true
             this._apis.goods.getGoodsDetail({id: row.id}).then(res => {
-                this.getMarketActivity([res.id]).then(activityRes => {
+                this.getMarketActivityByIds([res.id]).then(activityRes => {
                     activityRes.forEach((val, index) => {
                         if(val.goodsInfos) {
                             val.goodsInfos.forEach(skuVal => {

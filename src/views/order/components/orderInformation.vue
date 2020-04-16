@@ -52,7 +52,13 @@
                             </div>
                             <div class="gain-item">
                                 <div class="gain-item-lefter">赠品：</div>
-                                <div class="gain-item-righter">{{gift || '无'}}</div>
+                                <div class="gain-item-righter">
+                                    <!--{{gift || '无'}}-->
+                                    <template v-if="giftList && giftList.length">
+                                        <span>{{giftList[0].appGift.goodsName}} ×{{giftList[0].goodsQuantity}}</span>
+                                        <span @click="moreGiftHandler" class="pointer see-more-gift">查看更多</span>
+                                    </template>
+                                </div>
                             </div>
                             <div class="gain-item coupon">
                                 <div class="gain-item-lefter">优惠券：</div>
@@ -336,6 +342,7 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
 import gainCouponDialog from '@/views/order/dialogs/gainCouponDialog'
+import gainGiftDialog from '@/views/order/dialogs/gainGiftDialog'
 //consultType 协商类型 1加价,2减价
 export default {
     data() {
@@ -485,6 +492,11 @@ export default {
         //         this.$message.error(error);
         //     }) 
         // },
+        moreGiftHandler() {
+            this.currentData = this.giftList
+            this.currentDialog = 'gainGiftDialog'
+            this.dialogVisible = true
+        },
         moreHandler(code) {
             let obj = {}
 
@@ -525,6 +537,7 @@ export default {
                 this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
                 this.couponList = res.couponList || []
                 this.couponCodeList = res.couponCodeList || []
+                this.giftList = res.giftList
             }).catch(error => {
                 this.$message.error(error);
             })
@@ -826,7 +839,8 @@ export default {
         ReceiveInformationDialog,
         CouponDialog,
         ChangePriceDialog,
-        gainCouponDialog
+        gainCouponDialog,
+        gainGiftDialog
     }
 }
 </script>
@@ -1024,6 +1038,10 @@ export default {
 /deep/ .el-col-8 {
     width: auto;
     flex: 1;
+}
+.see-more-gift {
+    margin-left: 20px;
+    color: #655EFF;
 }
 </style>
 
