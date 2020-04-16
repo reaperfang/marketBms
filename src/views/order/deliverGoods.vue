@@ -9,7 +9,7 @@
     <div class="container">
       <div class="container-item">
         <p class="deliver-goods-number">1. 选择您要进行发货的商品及数量</p>
-        <div class="container-item-content deliver-goods-list">
+        <div v-for="item in list" class="container-item-content deliver-goods-list">
           <div class="title">
             <div>
               <span>商品清单</span>
@@ -24,7 +24,7 @@
               style="width: 100%"
               @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-            >
+             >
               <el-table-column 
                 type="selection" 
                 width="55"
@@ -196,6 +196,7 @@ export default {
           }
       };
     return {
+      list: [],
       tableData: [],
       multipleSelection: [],
       ruleForm: {
@@ -229,7 +230,7 @@ export default {
     };
   },
   created() {
-    this.getOrderDetail();
+    this.getDetail();
     this.getExpressCompanyList();
   },
   filters: {
@@ -533,10 +534,10 @@ export default {
       this.orderInfo = Object.assign({}, this.orderInfo, value);
     },
     _orderDetail() {
-      let id = this.$route.query.id;
+      let id = this.$route.query.id || this.$route.query.ids;
 
       this._apis.order
-        .orderSendDetail({ ids: [this.$route.query.id] })
+        .orderSendDetail({ ids: [this.$route.query.id || this.$route.query.ids] })
         .then(res => {
           res[0].orderItemList.forEach(val => {
             val.cacheSendCount = val.sendCount;
@@ -553,8 +554,65 @@ export default {
         })
         .catch(error => {});
     },
-    getOrderDetail() {
+    getDetail() {
       this._orderDetail();
+        // try {
+        //   let ids = this.$route.query.ids || this.$route.query.id;
+        //   let orderType = this.$route.query.orderType
+        //   let sendType = this.$route.query.sendType
+
+        //   let res = await this._apis.order.orderSendDetail({ ids: ids.split(',').map(val => +val) })
+
+        //   if(res) {
+        //     res.forEach(item => {
+        //       if(sendType == 'more') {
+        //         item.express = true
+        //         item.other = "";
+        //         item.checked = false;
+        //         item.expressNos = "";
+        //         item.expressCompanyCodes = "";
+        //       }
+        //       item.orderItemList.forEach(orderItem => {
+        //         orderItem.cacheSendCount = orderItem.sendCount;
+        //         orderItem.sendCount = orderItem.goodsCount - orderItem.sendCount;
+        //         orderItem.showError = false
+        //         orderItem.errorMessage = ''
+        //         if(sendType == 'more') {
+        //           orderItem.checked = false;
+        //           orderItem.cacheSendCount = +orderItem.sendCount
+        //           orderItem.sendCount = orderItem.goodsCount - orderItem.cacheSendCount;
+        //         }
+        //       });
+        //     })
+
+        //     this.fetchAddress(res)
+        //   }
+        // } catch(error) {
+
+        // }
+    },
+    async fetchAddress(list) {
+        try {
+          let res = await this._apis.order.fetchOrderAddress({ id: this.cid, cid: this.cid })
+
+          if(res) {
+            list.forEach(item => {
+              item.sendName = res.senderName;
+              item.sendPhone = res.senderPhone;
+              item.sendProvinceCode = res.provinceCode;
+              item.sendProvinceName = res.province;
+              item.sendCityCode = res.cityCode;
+              item.sendCityName = res.city;
+              item.sendAreaCode = res.areaCode;
+              item.sendAreaName = res.area;
+              item.sendDetail = res.address;
+            })
+
+            this.list = list
+          }
+        } catch(error) {
+
+        }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
