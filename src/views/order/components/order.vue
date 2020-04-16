@@ -90,13 +90,13 @@
                         <template v-else-if="order.orderStatus == 3">
                             <!-- 待发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">发货</p>
                             <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
                         </template>
                         <template v-else-if="order.orderStatus == 4">
                             <!-- 部分发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">继续发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">继续发货</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <!-- <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p> -->
                         </template>

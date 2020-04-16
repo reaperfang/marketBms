@@ -69,7 +69,7 @@
                 <div class="item righter">
                     <p>部分发货</p>
                     <div class="button-box">
-                        <el-button @click="closeOrder">关闭订单</el-button>
+                        <!--<el-button @click="closeOrder">关闭订单</el-button>-->
                         <el-button type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                 <div class="item righter">
                     <p>部分发货</p>
                     <div class="button-box">
-                        <el-button @click="closeOrder">关闭订单</el-button>
+                        <!--<el-button @click="closeOrder">关闭订单</el-button>-->
                         <el-button type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
                     </div>
                 </div>
