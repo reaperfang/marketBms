@@ -247,7 +247,7 @@
                     <template v-if="orderDetail.orderInfo.activityListJson">
                         <div class="row" v-for="(item, index) in JSON.parse(orderDetail.orderInfo.activityListJson)" :key="index">
                             <div class="col">{{`${item.activityTypeName}（${item.name}）`}}:</div>
-                            <div class="col">- ¥{{item.reduceMoney || '0.00'}}</div>
+                            <div class="col">- ¥{{item.reduceMoney && parseFloat(item.reduceMoney) && parseFloat(item.reduceMoney).toFixed(2) || '0.00'}}</div>
                         </div>
                     </template>
                     <div class="row">
