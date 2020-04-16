@@ -625,22 +625,24 @@ table.yuan-table{
   justify-content: center;
   align-items: center;
   margin-top: 33px;
+  margin-bottom:20px;
   button {
       order: 1;
+  }
+  .el-button{
+    padding: 9px 20px;
+    margin-left: 0;
+    span{
+      letter-spacing: 5px;
+      margin-right: -4px;
+    }
   }
   .el-button--primary {
       order: 0;
   }
   .el-button:first-child {
-      //display: none;
-      margin-left: 10px;
-  }
-}
-
-.goods-custom .el-message-box__btns {
-  .el-button:first-child {
       display: block;
-      margin-left: 50px;
+      margin-left: 30px;
   }
 }
 
