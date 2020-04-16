@@ -638,12 +638,9 @@ table.yuan-table{
 }
 
 .goods-custom .el-message-box__btns {
-  .el-button{
-      padding: 9px 20px;
-  }
   .el-button:first-child {
       display: block;
-      margin-left: 30px;
+      margin-left: 50px;
   }
 }
 
@@ -834,3 +831,6 @@ table.yuan-table{
 input:-ms-input-placeholder{
   color:#92929B;
 }
+textarea:-ms-input-placeholder { 
+  color: #92929B; 
+} 
