@@ -470,6 +470,12 @@ export default {
 /deep/ .el-dialog__title {
   color: #44434b;
 }
+/deep/.el-table__header{
+  width: 100% !important;
+}
+/deep/.el-table__body{
+  width: 100% !important;
+}
 .c_container {
   .marL10 {
     margin-left: 10px;

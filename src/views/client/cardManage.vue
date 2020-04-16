@@ -30,7 +30,7 @@
                         </el-popover>
                         <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                     </div>
-                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过2M，格式支持JPG、PNG、JPEG</p>
+                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过3M，格式支持JPG、PNG、JPEG</p>
                 </div>
                 <cdTable></cdTable>
             </el-tab-pane>
