@@ -11,6 +11,10 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
+                    popper-class="leimu-popper"
+                    @focus="leimuFocus"
+                    @blur="leimuBlur"
+                    @visible-change="visibleChange"
                     :disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
@@ -78,6 +82,7 @@
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
                     <el-cascader
+                        popper-class="fenlei-popper"
                         :disabled="!ruleForm.productCategoryInfoId"
                         :options="categoryOptions"
                         v-model="categoryValue"
@@ -858,6 +863,7 @@ export default {
             newSpecValue: '',
             callObjectSpanMethod: false,
             deleteSpecArr: [],
+            leimuSelected: false,
         }
     },
     created() {
@@ -890,6 +896,7 @@ export default {
         })
         document.querySelector('body').addEventListener('click', function(e) {
             e.stopPropagation()
+            this.hideFenlei = false
             if(e.target.parentNode.parentNode.className != 'add-specs') {
                 that.showSpecsList = false
             }
@@ -903,7 +910,15 @@ export default {
                 })
                 that.addedSpecs = addedSpecs
             }
+
+            if(this.editor) {
+                this._globalEvent.$emit('addGoodsEvent', false);
+            }
         })
+
+        if(this.editor) {
+            this._globalEvent.$emit('addGoodsEvent', true);
+        }
     },
     computed: {
         editor() {
@@ -999,6 +1014,23 @@ export default {
         });
     },
     methods: {
+        visibleChange(flag) {
+            console.log(flag)
+            if(flag) {
+                this.leimuSelected = true
+            } else {
+                this.leimuSelected = false
+            }
+            this._globalEvent.$emit('addGoodsEvent', this.leimuSelected);
+        },
+        leimuFocus() {
+            this.leimuSelected = true
+            this._globalEvent.$emit('addGoodsEvent', this.leimuSelected);
+        },
+        leimuBlur() {
+            // this.leimuSelected = false
+            // this._globalEvent.$emit('addGoodsEvent', this.leimuSelected);
+        },
         deleteImage(index) {
             let imagesArr = this.ruleForm.images.split(',')
 
