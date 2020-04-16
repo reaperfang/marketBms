@@ -2,39 +2,39 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="选择模板" prop="templateType">
+        <ul class="tile-list n2 template_type">
+          <li @click="selectTemplate(1)" :class="{'active': ruleForm.templateType === 1}">
+            <div class="type type1">
+              <img src="../../../assets/images/shop/articleAD/ad1.png" alt="">
+            </div>
+            <p>一行一个</p>
+          </li>
+          <li @click="selectTemplate(2)" :class="{'active': ruleForm.templateType === 2}">
+            <div class="type type2">
+              <img src="../../../assets/images/shop/articleAD/ad2.png" alt="">
+            </div>
+            <p>轮播海报</p>
+          </li>
+          <li @click="selectTemplate(3)" :class="{'active': ruleForm.templateType === 3}">
+            <div class="type type3">
+              <img src="../../../assets/images/shop/articleAD/ad3.png" alt="">
+            </div>
+            <p>大图横向滑动</p>
+          </li>
+          <li @click="selectTemplate(4)" :class="{'active': ruleForm.templateType === 4}">
+            <div class="type type4">
+              <img src="../../../assets/images/shop/articleAD/ad4.png" alt="" style="margin-top: 20px;margin-bottom: 10px;">
+            </div>
+            <p>小图横向滑动</p>
+          </li>
+          <li @click="selectTemplate(5)" :class="{'active': ruleForm.templateType === 5}">
+            <div class="type type5">
+              <img src="../../../assets/images/shop/articleAD/ad5.png" alt="" style="margin-top: 20px;margin-bottom: 12px;margin-left: -14px;">
+            </div>
+            <p>导航横向滑动</p>
+          </li>
+        </ul>
       </el-form-item>
-      <ul class="tile-list n3 template_type">
-        <li @click="selectTemplate(1)" :class="{'active': ruleForm.templateType === 1}">
-          <div class="type1">
-            <img src="../../../assets/images/shop/articleAD/ad1.png" alt="">
-          </div>
-          <p>一行一个</p>
-        </li>
-        <li @click="selectTemplate(2)" :class="{'active': ruleForm.templateType === 2}">
-          <div class="type2">
-            <img src="../../../assets/images/shop/articleAD/ad2.png" alt="">
-          </div>
-          <p>轮播海报</p>
-        </li>
-        <li @click="selectTemplate(3)" :class="{'active': ruleForm.templateType === 3}">
-          <div class="type2">
-            <img src="../../../assets/images/shop/articleAD/ad3.png" alt="">
-          </div>
-          <p>大图横向滑动</p>
-        </li>
-        <li @click="selectTemplate(4)" :class="{'active': ruleForm.templateType === 4}">
-          <div class="type2">
-            <img src="../../../assets/images/shop/articleAD/ad4.png" alt="" style="margin-top: 20px;margin-bottom: 10px;">
-          </div>
-          <p>小图横向滑动</p>
-        </li>
-        <li @click="selectTemplate(5)" :class="{'active': ruleForm.templateType === 5}">
-          <div class="type2">
-            <img src="../../../assets/images/shop/articleAD/ad5.png" alt="" style="margin-top: 20px;margin-bottom: 12px;margin-left: -14px;">
-          </div>
-          <p>导航横向滑动</p>
-        </li>
-      </ul>
     </div>
 
     <div class="block form">
@@ -287,7 +287,7 @@ ul.template_type{
       white-space: nowrap;
       text-indent: -8px;
     }
-    .type1{
+    .type{
       height: 53px;
     }
     .type2{
