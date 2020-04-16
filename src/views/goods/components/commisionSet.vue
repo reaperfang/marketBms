@@ -481,6 +481,12 @@ export default {
         /deep/ .el-table .cell {
             text-align: center;
         }
+        /deep/.el-table__header{
+            width: 100% !important;
+        }
+        /deep/.el-table__body{
+            width: 100% !important;
+        }
     }
     .btns {
         margin-top: 100px;
