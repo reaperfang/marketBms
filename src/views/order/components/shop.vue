@@ -3,7 +3,7 @@
         <order ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
         <el-checkbox v-if="!authHide" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
         <el-button v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="wad">批量补填物流</el-button>
-        <pagination v-show="total>0" :total="total" :page.sync="params.startIndex" :limit.sync="params.pageSize" @pagination="getList" />
+        <pagination v-show="total>0" :total="total" :page.sync="params.startIndex" :limit.sync="params.pageSize" @pagination="search" />
     </div>
 </template>
 <script>
@@ -41,6 +41,10 @@ export default {
         }
     },
     methods: {
+        search() {
+            this.$emit('update:checkedLength', 0)
+            this.getList()
+        },
         wad() {
             this.$emit('batchSupplementaryLogistics')
         },
@@ -157,6 +161,9 @@ export default {
                 startIndex: 1,
                 pageSize: 20,
             }
+        },
+        checkedLength: {
+
         }
     },
     components: {
