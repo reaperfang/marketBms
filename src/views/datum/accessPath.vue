@@ -98,10 +98,10 @@
           </div>
         </div>
          <div class="p_top1" v-if="dataObj.payOrderPathTransformation">
-              <p style="padding-left:100px;" :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
+              <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
               </p>
-              <p style="padding-right:100px;" :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
+              <p :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
               </p>            
               <!-- <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
@@ -341,25 +341,34 @@ export default {
       }
     .p_top {
           height: 20px;
-          width: 900px;
+          width: 670px;
           line-height: 20px;
-          padding: 0 100px 0 160px; 
+          // padding: 0 100px 0 160px; 
+          margin-left:130px;
           font-size: 16px;
           color: #000;
           display: flex;
           flex-wrap: nowrap;
           justify-content: space-evenly;
-        }
+        p{
+          width: 100%;
+          text-align: center;
+        }  
+      }
     .p_top1 {
           height: 20px;
           width: 750px;
           line-height: 20px;
-          padding: 0 70px 0 290px;
+          padding: 0 70px 0 300px;
           font-size: 16px; 
           color: #000;
           display: flex;
           flex-wrap: nowrap;
           justify-content: space-between;
+          p{
+            width: 100%;
+            text-align: center;
+          }
       }
     }
   }

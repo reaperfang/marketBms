@@ -175,6 +175,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
+}
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
   color:#837DFF!important;

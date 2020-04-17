@@ -636,6 +636,11 @@ table.yuan-table{
       margin-left: 10px;
   }
 }
+.confirm.no-cancel {
+  .el-button {
+    margin-left: 0!important;
+  }
+}
 
 .goods-custom .el-message-box__btns {
   .el-button:first-child {
@@ -833,4 +838,19 @@ input:-ms-input-placeholder{
 }
 textarea:-ms-input-placeholder { 
   color: #92929B; 
+} 
+#app.hide-fenlei + script + script + script + script + .fenlei-popper {
+  display: none!important;
+}
+#app.hide-fenlei + script + script + #edui_fixedlayer + .fenlei-popper {
+  display: none!important;
+}
+#app.hide-fenlei + script + script + .fenlei-popper {
+  display: none!important;
+}
+#app.hide-fenlei .app-container.add-goods .el-form-item.productCatalogInfoId .el-cascader .el-input .el-input__inner {
+  border: 1px solid #DCDFE6;
+}
+.el-dialog__headerbtn .el-dialog__close {
+  font-size: 18px;
 }

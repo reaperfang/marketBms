@@ -133,6 +133,22 @@ export default {
                    [this.params.searchType]: obj.searchValue,
                    [`${this.params.searchTimeType}Start`]: '',
                 [`${this.params.searchTimeType}End`]: '',
+                searchType: "code",
+                searchValue: "",
+                code: "",
+                goodsName: "",
+                memberSn: "",
+                receivedPhone: "",
+                receivedName: "",
+                channelInfoId: "",
+                orderType: "",
+                payWay: "",
+                sendType: "",
+                orderStatus: "",
+                searchTimeType: "createTime",
+                orderTimeValue: "",
+                startIndex: 1,
+                pageSize: 20,
                }) 
             }
             this._apis.order.fetchOrderList(_params).then((res) => {

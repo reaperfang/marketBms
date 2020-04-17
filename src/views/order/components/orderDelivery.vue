@@ -125,10 +125,10 @@
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>
                             <template v-if="scope.row.status == 4">
-                                <span v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + scope.row.orderId)">继续发货</span>
+                                <span v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + scope.row.orderId)">继续发货</span>
                             </template>
                             <template v-else-if="scope.row.status == 3">
-                                <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push('/order/deliverGoods?id=' + scope.row.orderId)">发货</span>
+                                <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + scope.row.orderId)">发货</span>
                                 <span v-else @click="$router.push('/order/supplementaryLogistics?id=' + scope.row.orderId)">补填物流</span>
                             </template>
                         </div>
@@ -237,7 +237,7 @@ export default {
         },
         batchSupplementaryLogistics() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
+                this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要补填物流信息的订单。'})
                 return
             }
             if(this.multipleSelection.filter(val => val.isFillUp != 1).length) {
@@ -271,7 +271,7 @@ export default {
         },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量发货的单据。'})
+                this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量发货的单据。'})
                 return
             }
             if(this.multipleSelection.some(val => val.status != 3 && val.status != 4)) {
@@ -282,7 +282,7 @@ export default {
             this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
                 return
             }
-            this.$router.push('/order/orderBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderId).join(','))
+            this.$router.push('/order/deliverGoods?orderType=order&sendType=more&ids=' + this.multipleSelection.map(val => val.orderId).join(','))
         },
         batchPrintElectronicForm() {
             // if(this.express) {
@@ -290,7 +290,7 @@ export default {
             //     return
             // }
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量打印电子面单的单据。'})
+                this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印电子面单的单据。'})
                 return
             }
             if(!this.multipleSelection.map(val => val.isKDBird).every(val => val == true)) {
@@ -317,7 +317,7 @@ export default {
         },
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量打印配送单的单据。'})
+                this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印配送单的单据。'})
                 return
             }
             if(this.multipleSelection.some(val => val.status == 3)) {

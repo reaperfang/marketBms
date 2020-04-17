@@ -32,7 +32,7 @@ export default {
             //     this.visible = false
             // })
             
-            this._apis.order.orderAfterSaleUpdateStatus({id: this.data.id, orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1, exchangeConfirmation: this.exchangeConfirmation}).then((res) => {
+            this._apis.order.orderAfterSaleConfirmExchange({id: this.data.id, orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1, exchangeConfirmation: this.exchangeConfirmation}).then((res) => {
                 console.log(res)
                 this.$parent.getList && this.$parent.getList();
                 this.$parent.getDetail && this.$parent.getDetail();

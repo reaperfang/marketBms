@@ -52,7 +52,13 @@
                             </div>
                             <div class="gain-item">
                                 <div class="gain-item-lefter">赠品：</div>
-                                <div class="gain-item-righter">{{gift || '无'}}</div>
+                                <div class="gain-item-righter">
+                                    <!--{{gift || '无'}}-->
+                                    <template v-if="giftList && giftList.length">
+                                        <span>{{giftList[0].appGift.goodsName}} ×{{giftList[0].goodsQuantity}}</span>
+                                        <span @click="moreGiftHandler" class="pointer see-more-gift">查看更多</span>
+                                    </template>
+                                </div>
                             </div>
                             <div class="gain-item coupon">
                                 <div class="gain-item-lefter">优惠券：</div>
@@ -103,7 +109,7 @@
                                                     </div>
                                                     <div class="item righter coupon-code-list-righter">
                                                         <p>{{item.appCoupon.name}}</p>
-                                                        <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                        <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -247,7 +253,7 @@
                     <template v-if="orderDetail.orderInfo.activityListJson">
                         <div class="row" v-for="(item, index) in JSON.parse(orderDetail.orderInfo.activityListJson)" :key="index">
                             <div class="col">{{`${item.activityTypeName}（${item.name}）`}}:</div>
-                            <div class="col">- ¥{{item.reduceMoney || '0.00'}}</div>
+                            <div class="col">- ¥{{item.reduceMoney && parseFloat(item.reduceMoney) && parseFloat(item.reduceMoney).toFixed(2) || '0.00'}}</div>
                         </div>
                     </template>
                     <div class="row">
@@ -336,6 +342,7 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
 import gainCouponDialog from '@/views/order/dialogs/gainCouponDialog'
+import gainGiftDialog from '@/views/order/dialogs/gainGiftDialog'
 //consultType 协商类型 1加价,2减价
 export default {
     data() {
@@ -383,7 +390,8 @@ export default {
             yingshouChangeMoney: '',
             invoiceOpen: 1,
             couponList: [],
-            couponCodeList: []
+            couponCodeList: [],
+            giftList: []
         }
     },
     created() {
@@ -485,6 +493,11 @@ export default {
         //         this.$message.error(error);
         //     }) 
         // },
+        moreGiftHandler() {
+            this.currentData = this.giftList
+            this.currentDialog = 'gainGiftDialog'
+            this.dialogVisible = true
+        },
         moreHandler(code) {
             let obj = {}
 
@@ -525,6 +538,7 @@ export default {
                 this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
                 this.couponList = res.couponList || []
                 this.couponCodeList = res.couponCodeList || []
+                this.giftList = res.giftList
             }).catch(error => {
                 this.$message.error(error);
             })
@@ -826,7 +840,8 @@ export default {
         ReceiveInformationDialog,
         CouponDialog,
         ChangePriceDialog,
-        gainCouponDialog
+        gainCouponDialog,
+        gainGiftDialog
     }
 }
 </script>
@@ -1024,6 +1039,10 @@ export default {
 /deep/ .el-col-8 {
     width: auto;
     flex: 1;
+}
+.see-more-gift {
+    margin-left: 20px;
+    color: #655EFF;
 }
 </style>
 

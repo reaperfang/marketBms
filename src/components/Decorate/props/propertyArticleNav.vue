@@ -2,7 +2,7 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="选择模板" prop="templateType">
-        <ul class="tile-list n3 template_type">
+        <ul class="tile-list n2 template_type">
           <li @click="selectTemplate(1)" :class="{'active': ruleForm.templateType === 1}">
             <div class="type1">
               <div class="fill_block"></div>
@@ -230,7 +230,8 @@ export default {
 <style lang="scss" scoped>
 ul.template_type{
   li{
-    width:100px;
+    width:94px!important;
+    margin-right:10px!important;
     // height:100px;
     border:1px solid rgb(228,227,235);
     padding:10px;

@@ -48,3 +48,7 @@
 .el-radio__input.is-checked+.el-radio__label {  //单选框文字颜色不用变
     color: #44434B !important;
 }
+
+.el-cascader-node__postfix{
+  top:11px;
+}

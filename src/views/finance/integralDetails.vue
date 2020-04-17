@@ -15,7 +15,7 @@
           <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessTypeId" style="width:105px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessTypeId" style="width:140px;" placeholder="全部">
             <el-option
               v-for="item in idbusinessTypes"
               :key="item.value"
