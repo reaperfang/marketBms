@@ -558,23 +558,33 @@ export default {
 }
 .btn_groups{
   border: 1px solid #625FFDFF;
-  background: #D0D2D2FF;
+  background-color:transparent;
   color: #625FFDFF;
 }
+.btn_groups:hover{
+  border: 1px solid #625FFDFF;
+  background: #625FFDFF;
+  color: #fff;
+}
 .btn_tailor{
+  border: 1px solid #625FFDFF;
+  background-color:transparent;
+  color: #625FFDFF;
+}
+.btn_tailor:hover{
   border: 1px solid #625FFDFF;
   background: #625FFDFF;
   color: #fff;
 }
 .btn_delete{
   border: 1px solid #FD4C2BFF;
-  background: #D0D2D2FF;
+  background-color:transparent;
   color: #FD4C2BFF;
 }
 .btn_delete:hover{
   border: 1px solid #FD4C2BFF;
-  background: #D0D2D2FF;
-  color: #FD4C2BFF;
+  background: #FD4C2BFF;
+  color: #fff;
 }
 
 </style>
