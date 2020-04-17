@@ -160,7 +160,7 @@ methods: {
     let query ={
       id:currentData.id,
       type:type,
-      parentId:currentData.parentId
+      parentId:currentData.parentId || '0'
     }
     this._apis.file.deleteGroup(query).then((response)=>{
         this.$refs.tree.remove(node)
@@ -188,7 +188,7 @@ methods: {
       id:currentData.id,
       name:name,
       type:type,
-      parentId:currentData.parentId
+      parentId:currentData.parentId || '0'
     }
     this._apis.file.editGroup(query).then((response)=>{
         this.$set(currentData,'name',name)

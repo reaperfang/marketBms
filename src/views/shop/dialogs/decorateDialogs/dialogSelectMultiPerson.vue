@@ -130,7 +130,7 @@ export default {
         tempForm.activeName = '';
       }
       this._apis.shop.getMultiPersonList(loadAll? tempForm: this.ruleForm).then((response)=>{
-        this.tableData = response.list;
+        this.tableData = response && response.list ? response.list: [];
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -164,6 +164,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
+}
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
   color:#837DFF!important;
