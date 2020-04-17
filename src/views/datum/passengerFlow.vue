@@ -1,7 +1,8 @@
 <template>
-  <div class="p_container">
-      <div class="clearfix">
-          <div class="fr">
+<div>
+  <div class="p_container p_channel">
+       <div class="clearfix">
+          <div class="fr fr_channel">
             <el-radio-group class="fr" v-model="visitSourceType" @change="all">
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '客流分析', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
@@ -11,8 +12,7 @@
             </el-radio-group>
           </div>
       </div>
-        <div class="pane_container">
-          <div class="p_line">
+      <div class="p_line">
             <el-radio-group v-model="nearDay" @change="changeDay">
               <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
               <el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
@@ -32,15 +32,20 @@
                   @change="changeTime">
                 </el-date-picker>
             </div>
-          </div>
-          <div class="btn_tabs clearfix">
+      </div>
+      <div class="btn_tabs clearfix">
             <el-radio-group class="fr" v-model="analysisType" @change="changeType">
               <el-radio-button class="btn_bor" label="1">浏览量/访客量</el-radio-button>
               <el-radio-button class="btn_bor" label="2">到店时段</el-radio-button>
               <el-radio-button class="btn_bor" label="3">访问次数</el-radio-button>
               <el-radio-button class="btn_bor" label="4"  v-if="visitSourceType ==0 ">访问来源</el-radio-button>
             </el-radio-group>
-          </div>
+      </div>
+  </div>
+  <div class="p_container">
+      
+        <div class="pane_container">
+          
           <div class="chart_container">
             <pfChart 
             :title="'测试图表'" 
@@ -66,6 +71,7 @@
             </durationChart>
         </div>
   </div>
+</div>
 </template>
 <script>
 import {GetDateStr} from "@/utils/validate.js"
@@ -279,6 +285,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3447-1
+*
+*/
+
+.p_channel{
+    padding:0px;
+    margin-bottom:20px;
+    .fr_channel{
+        float:left;
+        margin-bottom:30px;
+    }
+}
 .p_container {
   padding: 20px;
   background-color: #fff;

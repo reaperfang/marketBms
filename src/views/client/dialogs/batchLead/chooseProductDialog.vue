@@ -61,7 +61,8 @@
                 :data="selectedList"
                 style="width: 100%"
                 ref="selectedTable"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                border
+                :header-cell-style="{color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
             >
                 <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
