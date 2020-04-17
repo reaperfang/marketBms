@@ -508,7 +508,7 @@ export default {
     display: none;
 }
 /deep/.el-checkbox.is-bordered.el-checkbox--small{
-    padding: 7px 10px 5px 10px;
+    padding: 7px 10px 5px 0;
     background:rgba(211,211,211,0.3);
     margin-right: 10px;
 }
@@ -561,7 +561,7 @@ export default {
             }
             .pop_img{
                 position: absolute;
-                left: 211px;
+                left: 284px;
                 top: -7px;
             }
         }

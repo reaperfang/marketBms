@@ -2,6 +2,7 @@
 <div>
     <DialogBase :visible.sync="visible" @submit="submit" title="加入黑名单" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
+            <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
@@ -27,7 +28,6 @@
             <div class="check_container">
                 <el-checkbox v-for="item in checks.slice(2,checks.length)" :key="item.id" v-model="item.checked" :label="item.name" class="check_item"></el-checkbox><br>
             </div>
-            <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
@@ -591,7 +591,7 @@ export default {
 }
 .red{
     color: #F55858;
-    margin-top: 15px;
+    margin: 0 0 15px 15px;
 }
 .dialog-footer{
     margin-top: 20px;

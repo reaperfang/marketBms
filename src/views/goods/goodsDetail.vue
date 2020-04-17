@@ -6,7 +6,7 @@
         <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
         <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
     </header> -->
-    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="152px" class="demo-ruleForm">
+    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="152px" class="demo-ruleForm"><!--:disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"-->
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
@@ -15,7 +15,6 @@
                     @focus="leimuFocus"
                     @blur="leimuBlur"
                     @visible-change="visibleChange"
-                    :disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
@@ -2042,15 +2041,21 @@ export default {
                 try {
                     this.getMarketActivity([res.id]).then((activityRes) => {
                         activityRes.forEach((val, index) => {
-                            if(val.goodsInfos) {
-                                val.goodsInfos.forEach(skuVal => {
-                                    let skuid = skuVal.id
-                                    let item = res.goodsInfos.find(val => val.id == skuid)
-                                    
-                                    if(item) {
-                                        item.activity = true
-                                    }
+                            if(val.isParticipateActivity) {
+                                res.goodsInfos.forEach(val => {
+                                    val.activity = true
                                 })
+                            } else {
+                                if(val.goodsInfos) {
+                                    val.goodsInfos.forEach(skuVal => {
+                                        let skuid = skuVal.id
+                                        let item = res.goodsInfos.find(val => val.id == skuid)
+                                        
+                                        if(item) {
+                                            item.activity = true
+                                        }
+                                    })
+                                }
                             }
                         })
 
@@ -2247,12 +2252,19 @@ export default {
 
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
-                        if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
+                        // if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
+                        //     this.$message({
+                        //         message: '当前SKU编码输入有误，请您重新输入',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        if(!this.ruleForm.goodsInfos[i].code) {
                             this.$message({
-                                message: '当前SKU编码输入有误，请您重新输入',
-                                type: 'warning'
-                            });
-                            return
+                                 message: '当前SKU编码输入有误，请您重新输入',
+                                 type: 'warning'
+                             });
+                             return
                         }
                         if(this.ruleForm.goodsInfos[i].image == '') {
                             this.$message({
