@@ -197,7 +197,9 @@ export default {
             currentData: '',
             loading: false,
             checkedAll: false,
-            isIndeterminate: false
+            isIndeterminate: false,
+            expressCompanys: '',
+            expressNo: ''
         }
     },
     created() {
@@ -288,8 +290,8 @@ export default {
             // })
         },
         exportOrder() {
-            let _param
-            let __param
+            var _param
+            var __param
             
             _param = Object.assign({}, this.listQuery, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
@@ -307,11 +309,9 @@ export default {
                 console.log(res)
                 if(res > 1000) {
                     this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
-                        _params = Object.assign({}, _params, {
-                        isExport: 1
-                        })
+                        _param.isExport = 1
                         this._apis.order
-                        .orderAfterSaleExport(_params)
+                        .orderAfterSaleExport(_param)
                         .then(res => {
                             window.location.href = res
                             this.$message.success('导出成功！');
@@ -386,19 +386,21 @@ export default {
             } else {
                 _orderAfterSaleStatus = 1
             }
-            if(row.type == 2) {
-                this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = row;
-                this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-                this.dialogVisible = true
-            }else{
-                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
+            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
+                if(row.type == 2) {
+                    this.getList();
+
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = row;
+                    this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
+                    this.dialogVisible = true
+                } else {
                     this.getList();
                     this.$message.success('审核成功！');
-                }).catch(error => {
-                    this.$message.error(error);
-                })
-            }
+                }
+            }).catch(error => {
+                this.$message.error(error);
+            })
         },
         // 换货确认
         confirmHandler(value) {

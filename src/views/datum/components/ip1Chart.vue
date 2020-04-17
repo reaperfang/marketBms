@@ -21,19 +21,19 @@ export default {
     //设置图表数据项
     makeOption(data) {
       this.option = {
-        title: {
-         text: "属性比例",
-          x: "center"
-        },
+        // title: {
+        //  text: "属性比例",
+        //   x: "center"
+        // },
         tooltip: {
           trigger: "item",
           formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
-        legend: {
-          orient: "horizontal",
-          x: "right",
-          data: ["非会员", "会员"]
-        },
+        // legend: {
+        //   orient: "horizontal",
+        //   x: "right",
+        //   data: ["非会员", "会员"]
+        // },
         calculable: true,
         series: [
           {

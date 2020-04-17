@@ -130,10 +130,10 @@
                     </span>   
                 </p>
                 <p class="p_email">
-                    客服电话：010-87127347 
+                    客服电话：400-660-5555
                 </p>
                 <p class="p_email">
-                    客服邮箱：shushangzhongxin@300.cn 
+                    客服邮箱：shuzishangwu@300.cn 
                 </p>
             </div>
             <div class="p_r_item p_r_more">

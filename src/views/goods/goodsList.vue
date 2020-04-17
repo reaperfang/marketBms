@@ -390,6 +390,18 @@
 .ellipsis2-big {
     width: 239px;
 }
+/deep/ .el-table td, .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
 </style>
 <style lang="scss">
     .operate-popper {
