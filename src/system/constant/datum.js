@@ -26,7 +26,7 @@ export default {
         {
             id: "004",
             url: require("@/assets/images/datum/c_04.png"),
-            color: "#3D434A",
+            color: "#FE5E7A",
             text: "下单商品数",
             num: 0
         },
