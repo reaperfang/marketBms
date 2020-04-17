@@ -21,7 +21,7 @@
                 <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
+        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
         <component :is="currentDialog" :data="currentData" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
@@ -39,6 +39,7 @@ export default {
             currentView: 'afterSalesInformation',
             itemList: [],
             orderAfterSale: {},
+            catchOrderAfterSale: {},
             orderAfterSaleSendInfo: {},
             recordList: [],
             sendItemList: [],
@@ -107,11 +108,11 @@ export default {
             if(this.orderAfterSale.type == 3) {
                 orderAfterSaleStatus = 2
             } else if(this.orderAfterSale.type == 2) {
-                this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = Object.assign({}, this.orderAfterSale);
-                this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
-                this.dialogVisible = true
-                return
+                // this.currentDialog = 'ExchangeGoodsDialog'
+                // this.currentData = Object.assign({}, this.orderAfterSale);
+                // this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
+                // this.dialogVisible = true
+                // return
             } else {
                 orderAfterSaleStatus = 1
             }
@@ -128,9 +129,20 @@ export default {
                 params.realReturnMoney = this.orderAfterSale.realReturnMoney
             }
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
-                this.getDetail()
-                this.visible = false
-                this.$message.success('审核成功！');
+                if(this.orderAfterSale.type == 2) {
+                    // 换货确认
+                    this.getDetail()
+                    
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = Object.assign({}, this.orderAfterSale);
+                    this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
+                    this.dialogVisible = true
+                    return
+                } else {
+                    this.getDetail()
+                    this.visible = false
+                    this.$message.success('审核成功！');
+                }
             }).catch(error => {
                 this.visible = false
                 this.$message.error(error);
@@ -155,6 +167,7 @@ export default {
                 this.catchRealReturnBalance = this.orderAfterSale.realReturnBalance
                 //this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
                 this.orderSendInfo = res.orderSendInfo
+                this.catchOrderAfterSale = JSON.parse(JSON.stringify(res.orderAfterSale))
             }).catch(error => {
                 this.visible = false
                 this.$message.error(error);
