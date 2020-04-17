@@ -105,6 +105,12 @@ export default {
             text: "未支付订单总金额",
             num: 0,
             unit: "元"
+        },
+        {
+            id: "04",
+            text: "",
+            num: '',
+            unit: ""
         }
     ],
     //订单交易-交易总况（支付）
