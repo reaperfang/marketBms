@@ -135,7 +135,8 @@
                 :data="selectedList"
                 style="width: 100%"
                 ref="selectedTable"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                border
+                :header-cell-style="{color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
             >
                 <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
@@ -536,6 +537,10 @@ export default {
 }
 .dialog-footer{
     margin-top: 20px;
+}
+.edit_span{
+    cursor: pointer;
+    color: #FD4C2B;
 }
 </style>
 

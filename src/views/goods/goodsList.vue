@@ -1005,15 +1005,21 @@ export default {
             this._apis.goods.getGoodsDetail({id: row.id}).then(res => {
                 this.getMarketActivityByIds([res.id]).then(activityRes => {
                     activityRes.forEach((val, index) => {
-                        if(val.goodsInfos) {
-                            val.goodsInfos.forEach(skuVal => {
-                                let skuid = skuVal.id
-                                let item = res.goodsInfos.find(val => val.id == skuid)
-                                
-                                if(item) {
-                                    item.activity = true
-                                }
+                        if(val.isParticipateActivity) {
+                            res.goodsInfos.forEach(val => {
+                                val.activity = true
                             })
+                        } else {
+                            if(val.goodsInfos) {
+                                val.goodsInfos.forEach(skuVal => {
+                                    let skuid = skuVal.id
+                                    let item = res.goodsInfos.find(val => val.id == skuid)
+                                    
+                                    if(item) {
+                                        item.activity = true
+                                    }
+                                })
+                            }
                         }
                     })
 
@@ -1092,15 +1098,21 @@ export default {
                         let goods = res.list.find(val => val.id == id)
 
                         goods.activity = true
-                        if(val.goodsInfos) {
-                            val.goodsInfos.forEach(skuVal => {
-                                let skuid = skuVal.id
-                                let item = goods.goodsInfos.find(val => val.id == skuid)
-                                
-                                if(item) {
-                                    item.activity = true
-                                }
+                        if(val.isParticipateActivity) {
+                            goods.goodsInfos.forEach(val => {
+                                val.activity = true
                             })
+                        } else {
+                            if(val.goodsInfos) {
+                                val.goodsInfos.forEach(skuVal => {
+                                    let skuid = skuVal.id
+                                    let item = goods.goodsInfos.find(val => val.id == skuid)
+                                    
+                                    if(item) {
+                                        item.activity = true
+                                    }
+                                })
+                            }
                         }
                     })
                     this.total = +res.total
