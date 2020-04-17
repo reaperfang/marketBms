@@ -1385,6 +1385,18 @@ export default {
                     return
                 }
             }
+            let name = this.addedSpecs[index].name
+            let _index = this.flatSpecsList.findIndex(val => val.name == name)
+
+            this.flatSpecsList.splice(_index, 1)
+            this.specsList.splice(this.specsList.findIndex(val => val.name == name), 1)
+            if(this.addedSpecs[index].valueList) {
+                this.addedSpecs[index].valueList.forEach(val => {
+                    let name = val.name
+
+                    this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                })
+            }
             this.addedSpecs.splice(index, 1)
             this.specsLabel = this.specsLabel.split(',').splice(index, 1).join(',')
             this.getSpecs(false, index)
