@@ -1,7 +1,8 @@
 <template>
-    <div class="p_container">
+<div>
+    <div class="p_container p_channel">
         <div class="clearfix">
-          <div class="fr">
+          <div class="fr fr_channel">
             <el-radio-group class="fr" v-model="visitSourceType" @change="all">
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '商品交易', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '商品交易', '小程序']">小程序</el-radio-button>
@@ -11,6 +12,8 @@
             </el-radio-group>
           </div>
         </div>
+    </div>
+    <div class="p_container">
         <div class="pane_container">
             <p class="p_title">商品总况：</p>
             <div class="p_blocks">
@@ -55,6 +58,7 @@
             <ct2Table style="margin-top: 26px" :listObj="listObj" @getProductDetails="getProductDetails"></ct2Table>
         </div>
     </div>
+</div>
 </template>
 <script>
 import datumCont from '@/system/constant/datum';
@@ -199,6 +203,22 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3449-5
+*
+*/
+
+.p_channel{
+    padding:0px;
+    margin-bottom:20px;
+    .fr_channel{
+        float:left;
+        margin-left:30px;
+    }
+}
 .p_container{
     padding: 20px;
     background-color: #fff;
