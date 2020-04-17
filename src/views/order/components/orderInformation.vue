@@ -109,7 +109,7 @@
                                                     </div>
                                                     <div class="item righter coupon-code-list-righter">
                                                         <p>{{item.appCoupon.name}}</p>
-                                                        <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                        <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -390,7 +390,8 @@ export default {
             yingshouChangeMoney: '',
             invoiceOpen: 1,
             couponList: [],
-            couponCodeList: []
+            couponCodeList: [],
+            giftList: []
         }
     },
     created() {
