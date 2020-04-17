@@ -3583,4 +3583,7 @@ $blue: #655EFF;
         }
     }
 }
+/deep/ .el-form-item__label {
+    color: #3D434A;
+}
 </style>
