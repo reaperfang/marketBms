@@ -99,9 +99,9 @@ export default {
                 
                 this.categoryOptions = arr
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             })
         },
@@ -127,9 +127,9 @@ export default {
                 this.loading = false
             }).catch(error => {
                 this.loading = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
+                this.$message.error({
+                    message: error,
+                    type: 'error'
                 });
             })
         },

@@ -4,7 +4,7 @@
     <!-- <sidebar class="sidebar-container"/> -->
     <div class="sidebar-lefter">
       <div class="logo-con">
-        <img :src="logo" class="logo" v-if="logo">
+        <img :src="shopInfo.logo" class="logo" v-if="shopInfo.logo">
         <img :src="require('@/assets/images/logo.png')" class="logo" v-else>
       </div>
       <ul v-calcHeight="74" style="overflow:auto">
@@ -44,8 +44,7 @@ export default {
   name: 'Layout',
   data() {
     return {
-      current: '0',
-      logo:""
+      current: '0'
     }
   },
   created() {
@@ -70,7 +69,7 @@ export default {
     if(realCurrent != this.current) {
       this.current = realCurrent
     }
-    this.getShopInfo()
+    this.$store.dispatch('getShopInfo');
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -108,6 +107,9 @@ export default {
     cid(){
         let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
         return shopInfo.id
+    },
+    shopInfo() {
+      return this.$store.getters.shopInfo || {};
     }
   },
   methods: {
@@ -142,18 +144,7 @@ export default {
     },
     isExternalLink(routePath) {
       return isExternal(routePath)
-    },
-    getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
-        this.logo = response.logo
-      }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
-    },
+    }
   },
   watch: {
     '$store.state.menu.current': function(index) {

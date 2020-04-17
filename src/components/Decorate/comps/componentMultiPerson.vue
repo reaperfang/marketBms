@@ -8,7 +8,7 @@
                     <li :key="key" v-if="item.status !== 2" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.sold > -1 ? item.sold : 0}}人已团</p>
-                            <img :src="item.image" alt="" :class="{goodsFill:goodsFill!=1}">
+                            <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                         </div>
                         <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
                             <!-- <h1 class="title">{{item.activeName || '多人拼团'}}</h1> -->
@@ -19,11 +19,21 @@
                                     <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
                                     <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
                                     <!-- <p class="time">{{item.endTime}}</p> -->
+                                    <!-- <van-count-down :time="
+                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                " class="time">
+                                    <template v-slot="timeData">
+                                         <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                    </template>
+                                </van-count-down> -->
                                 </div>
                             </div>
                         </div>
                         <div class="info_box"  v-if="showContents.length > 0">
-                            <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.teamPeople || 0}}人团</font>{{item.goodName}}</p>
+                            <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.sold || 0}}人团</font>{{item.goodName}}</p>
                             <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.goodDes}}</p>
                             <div class="limit_line">
                                 <div class="label">{{item.peopleNum || 0}}人团</div>
@@ -33,14 +43,23 @@
                                     </template>
                                     <template v-else>不限制</template>
                                 </p>
+                                <div class="remainder_box">
+                                    <div class="jd_line">
+                                        <div class="current_line" :style="{width:(item.stock - item.remainStock)/item.stock*100+'%'}"></div>
+                                    </div>
+                                    <p>仅剩{{item.remainStock}}件</p>
+                                </div>
                             </div>
                             <div class="price_line">
                                 <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice}}</font></p>
-                                <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.unitPrice}}</p>
+                                <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.salePrice}}</p>
                             </div>
-                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="kai"></componentButton>
+                            <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="kai"></componentButton> -->
                             <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="pin"></componentButton> -->
-                            <p class="activity_end" v-if="item.soldOut==1">已售罄</p>
+
+                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.remainStock>0&&item.status==1&&utils.dateDifference(item.endTime)>0 && listStyle != 3 && listStyle != 6" class="kai button" @click.native.stop="openNowBuyRuleLayer1(item)"></componentButton>
+                            <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1||item.remainStock<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                            <p class="activity_end" v-if="item.status==0">活动未开始</p>
                         </div>
                     </li>
                 </template>
@@ -113,6 +132,7 @@ export default {
         },
     },
     computed: {
+
          /* 检测是否有数据 */
         hasContent() {
             let value = false;
@@ -136,7 +156,8 @@ export default {
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
-            var bodyWidth = 370;
+            var scrollWidth = window && this.utils.isIE() ? 18 : 0;
+            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
             if(this.listStyle==1){
                 this.goodMargin = {marginTop:this.goodsMargin+'px'};
                 this.goodWidth = "100%";
@@ -175,19 +196,30 @@ export default {
         fetch(componentData = this.currentComponentData.data) {
             if(componentData) {
                 let params = {};
+
+                //兼容老数据
+                let newParams = [];
+                if(typeof componentData.ids[0] === 'string') {
+                for(let item of componentData.ids){
+                    newParams.push({spuId: item, activityId: ''})
+                }
+                }else{
+                newParams = componentData.ids;
+                }
+            
                 if(componentData.addType == 2) {
                     params = {
                         num: componentData.showNumber,
                         order: componentData.sortRule,
-                        status: 5
+                        hideStatus: 0
                     };
                 }else{
                     const ids = componentData.ids;
                     if(Array.isArray(ids) && ids.length){
                         params = {
-                            spuIds: ids.join(','),
                             order: componentData.sortRule,
-                            status: 5
+                            activityList: newParams,
+                            hideStatus: 0
                         };
                     }else{
                         this.list = [];
@@ -200,10 +232,6 @@ export default {
                     this.createList(response);
                     this.loading = false;
                 }).catch((error)=>{
-                    // this.$notify.error({
-                    //     title: '错误',
-                    //     message: error
-                    // });
                     console.error(error);
                     this.list = [];
                     this.loading = false;
@@ -213,22 +241,7 @@ export default {
 
         /* 创建数据 */
         createList(datas) {
-            if(datas.length > this.showNumber){
-                datas = datas.slice(0,this.showNumber);
-            }
-            this.list = [];
-            if(this.hideSaledGoods==true){
-                var goods = datas;
-                for(var i in datas){
-                    if(goods[i].soldOut!=1){
-                        this.list.push(datas[i]);
-                    }
-                }
-            }
-            else{
-                this.list = datas;
-            }
-
+            this.list = datas;
             this.allLoaded = true;
         }
 
@@ -274,6 +287,13 @@ export default {
                             color:#fff;
                             margin:0 4px;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -285,6 +305,18 @@ export default {
                 @extend .ellipsis;
                 .label{  
                     display:none;
+                }
+            }
+            .remainder_box{
+                float:right;
+                margin-top:4px;
+                .jd_line{
+                    width:100px;
+                    height:6px;
+                }
+                p{
+                    font-size:11px;
+                    margin-left:9px;
                 }
             }
             .kai{
@@ -364,6 +396,13 @@ export default {
                                 margin:0 2px;
                                 text-align:center;
                             }
+                            .item {
+                                background:#333;
+                                width:58px;
+                                height:32px;
+                                color:#fff;
+                                padding:0 8px;
+                            }
                         }
                     }
                 }
@@ -389,6 +428,18 @@ export default {
                     font-size:14px;
                     @include lineClamp(2);
                 }
+                .remainder_box{
+                    display:flex;
+                    .jd_line{
+                        height:6px;
+                        flex:1;
+                    }
+                    p{
+                        font-size:11px;
+                        margin-left:9px;
+                    }
+                }
+
                 .caption{
                     display:none;
                 }
@@ -462,6 +513,9 @@ export default {
                     }
                 }
                 .caption{
+                    display:none;
+                }
+                .remainder_box{
                     display:none;
                 }
                 .limit_line{
@@ -551,6 +605,13 @@ export default {
                             margin:0 2px;
                             text-align:center;
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -576,6 +637,18 @@ export default {
                     margin-right:7.5px;
                 }
             }
+            .remainder_box{
+                float:left;
+                .jd_line{
+                    width:100px;
+                    height:6px;
+                }
+                p{
+                    font-size:11px;
+                    margin-left:9px;
+                }
+            }
+
             .limit_line{
                 display:none;
             }
@@ -716,6 +789,13 @@ export default {
                                     color:#fff;
                                     margin:0 4px;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -734,6 +814,19 @@ export default {
                             display:none;
                         }
                     }
+                    .remainder_box{
+                        float:right;
+                        margin-top:4px;
+                        .jd_line{
+                            width:100px;
+                            height:6px;
+                        }
+                        p{
+                            font-size:11px;
+                            margin-left:9px;
+                        }
+                    }
+
                     .caption{
                         margin-top:6.5px;
                         line-height:14px;
@@ -855,6 +948,13 @@ export default {
                                     margin:0 2px;
                                     text-align:center;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -878,6 +978,17 @@ export default {
                         line-height:22px;
                         height:44px;
                         @include lineClamp(2);
+                    }
+                    .remainder_box{
+                        display:flex;
+                        .jd_line{
+                            height:6px;
+                            flex:1;
+                        }
+                        p{
+                            font-size:11px;
+                            margin-left:9px;
+                        }
                     }
                     .caption{
                         display:none;
@@ -955,6 +1066,13 @@ export default {
                                     margin:0 2px;
                                     text-align:center;
                                 }
+                                .item {
+                                    background:#333;
+                                    width:58px;
+                                    height:32px;
+                                    color:#fff;
+                                    padding:0 8px;
+                                }
                             }
                         }
                     }
@@ -979,6 +1097,18 @@ export default {
                         height:44px;
                         @include lineClamp(2);
                     }
+                    .remainder_box{
+                        display:flex;
+                        .jd_line{
+                            height:6px;
+                            flex:1;
+                        }
+                        p{
+                            font-size:11px;
+                            margin-left:9px;
+                        }
+                    }
+
                     .caption{
                         display:none;
                     }
@@ -1044,6 +1174,9 @@ export default {
                     .label{
                         display:none;
                     }
+                }
+                .remainder_box{
+                    display:none;
                 }
                 .caption{
                     display:none;
@@ -1148,6 +1281,13 @@ export default {
                             display:inline-block;
                             @include borderRadius(2px);
                         }
+                        .item {
+                            background:#333;
+                            width:58px;
+                            height:32px;
+                            color:#fff;
+                            padding:0 8px;
+                        }
                     }
                 }
             }
@@ -1163,6 +1303,36 @@ export default {
                     font-weight:normal;
                 }
             }
+             .remainder_box{
+                overflow:hidden;
+                .jd_line{
+                    overflow:hidden;
+                    background:#FFC9CA;
+                    position:relative;
+                    overflow:hidden;
+                    float:left;
+                    margin-top:1px;
+                    @include borderRadius(25px);
+                    .current_line{
+                        position:absolute;
+                        top:0;
+                        left:0;
+                        height:100%;
+                        background:#FC3D42;
+                        width:50%;
+                        @include borderRadius(25px);
+                    }
+                }
+                p{
+                    float:left;
+                    color:#7c7c7c;
+                    line-height:1;
+                    font{
+                        color:#FC3D42;
+                    }
+                }
+            }
+
             .name.textStyle{
                 font-weight:bold;
             }

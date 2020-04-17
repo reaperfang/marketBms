@@ -6,7 +6,7 @@
                     <div class="c_card">
                         <img v-if="imgUrl" :src="imgUrl" class="cardImg" />
                         <img v-else src="../../assets/images/client/card.png" alt class="cardImg" />
-                        <el-upload
+                        <!-- <el-upload
                             class="avatar-uploader"
                             :action="uploadUrl"
                             :show-file-list="false"
@@ -15,9 +15,9 @@
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload"
                         >
-                            <el-button v-if="!imgUrl" size="small" type="primary" class="upload_btn mini_1">待上传</el-button>
-                            <el-button v-else size="small" type="primary" class="upload_btn mini_2">更改</el-button>
-                        </el-upload>
+                        </el-upload> -->
+                        <el-button v-if="!imgUrl" size="small" type="primary" class="upload_btn mini_1" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">待上传</el-button>
+                        <el-button v-else size="small" type="primary" class="upload_btn mini_2" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更改</el-button>
                         <el-popover
                             ref="popover"
                             placement="right"
@@ -30,7 +30,7 @@
                         </el-popover>
                         <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                     </div>
-                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过2M，格式支持JPG、PNG、JPEG</p>
+                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过3M，格式支持JPG、PNG、JPEG</p>
                 </div>
                 <cdTable></cdTable>
             </el-tab-pane>
@@ -47,29 +47,35 @@
                             ></el-option>
                         </el-select>
                     </div>
-                    <span style="margin-left: 200px;">领取时间：</span>
+                    <span style="margin-left: 30px;">领取时间：</span>
                     <el-date-picker
-                        type="daterange"
+                        type="datetimerange"
                         v-model="getTime"
                         range-separator="至"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        :picker-options="utils.globalTimePickerOption.call(this)"
+                    >
                     </el-date-picker>
-                    <el-button type="primary" class="marL20" @click="handleFind">查 询</el-button>
+                    <el-button type="primary" class="marL30" @click="handleFind">查 询</el-button>
                     <el-button class="border_btn" @click="reset">重 置</el-button>
                 </div>
                 <lkTable style="margin-top: 39px" :lkParams="lkParams"></lkTable>
             </el-tab-pane>
         </el-tabs>
+        <!-- 动态弹窗 -->
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
     </div>
 </template>
 <script type="es6">
 import utils from "@/utils";
 import cdTable from './components/cardManage/cdTable';
 import lkTable from './components/cardManage/lkTable';
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
     name: "cardManage",
-    components: { cdTable, lkTable },
+    components: { cdTable, lkTable, dialogSelectImageMaterial },
     data() {
         return {
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
@@ -82,7 +88,9 @@ export default {
             cardNames: [],
             lkParams: {},
             isLoading: true,
-            loading: false
+            loading: false,
+            dialogVisible: false,
+            currentDialog:""
         }
     },
     computed:{
@@ -92,6 +100,10 @@ export default {
         }
     },
     methods: {
+        imageSelected(item) {
+            this.imgUrl = item.filePath;
+            this.addCardBg();
+        },
         handleAvatarSuccess(res, file) {
             this.imgUrl = res.data.url;
             this.addCardBg();
@@ -106,8 +118,8 @@ export default {
         handleFind() {
             let obj = {
                 name: this.selected == "" || this.selected == "全部"? null : this.selected,
-                startTime: this.getTime == "" || this.getTime == null ? "": utils.formatDate(new Date(this.getTime[0]).getTime(),"yyyy-MM-dd hh:mm:ss"),
-                endTime: this.getTime == "" || this.getTime == null ? "":utils.formatDate(new Date(this.getTime[1]).getTime() + 24 * 60 * 60 * 1000 - 1,"yyyy-MM-dd hh:mm:ss"),
+                startTime: !!this.getTime ? this.getTime[0] : '',
+                endTime: !!this.getTime ? this.getTime[1] : '',
             }
             this.lkParams = Object.assign({},obj);
         },
@@ -134,8 +146,7 @@ export default {
                 params = Object.assign(params,{id: this.imgId})
             }
             this._apis.client.addCardBg(params).then((response) => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '上传会员卡宣传图片成功',
                     type: 'success'
                 });
@@ -143,6 +154,7 @@ export default {
                 console.log(error);
             })
         },
+        //检测是否有背景图片
         checkCardBg() {
             this._apis.client.checkCardBg({}).then((response) => {
                 if(response) {
@@ -161,6 +173,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-date-editor .el-range-separator{
+    width: 10%;
+}
 /deep/ .el-button--mini{
     padding: 5px 10px;
 }
@@ -168,8 +183,8 @@ export default {
     padding: 20px;
     background-color: #fff;
 }
-.marL20{
-    margin-left: 20px;
+.marL30{
+    margin-left: 30px;
 }
 .pane_container{
     padding: 12px 20px;

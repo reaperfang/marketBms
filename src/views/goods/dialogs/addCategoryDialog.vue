@@ -15,25 +15,33 @@
                     </el-select>
                 </el-form-item> -->
                 <template v-if="data.add && data.level === 1">
-                    <!-- <el-form-item label="上级分类：">
+                    <el-form-item label="上级分类：">
                         <span>第一级：{{data.name}}</span>
-                    </el-form-item> -->
+                    </el-form-item>
                 </template>
                 <template v-else-if="data.add && data.level === 2">
-                    <!-- <el-form-item label="上级分类：">
+                    <el-form-item label="上级分类：">
                         <span>第一级：{{level1Title}}</span>
                         <span style="margin-left: 20px;">第二级：{{data.name}}</span>
-                    </el-form-item> -->
+                    </el-form-item>
                 </template>
-                <el-form-item label="分类名称：" prop="name">
-                    <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name"></el-input>
-                    <span class="description">仅支持展示最多5个字的文本标签</span>
-                </el-form-item>
-                <el-form-item label="状态：" prop="enable" class-name="float-item">
+                <template v-if="data.level == 0">
+                    <el-form-item label="分类名称：" prop="name">
+                        <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name"></el-input>
+                        <span class="description">仅支持展示最多5个字的文本标签</span>
+                    </el-form-item>
+                </template>
+                <template v-else>
+                    <el-form-item label="分类名称：" prop="name23">
+                        <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name23"></el-input>
+                        <span class="description">仅支持展示最多10个字的文本标签</span>
+                    </el-form-item>
+                </template>
+                <el-form-item label="状态：" prop="enable">
                     <el-radio v-model="basicForm.enable" :label="1">启用</el-radio>
                     <el-radio v-model="basicForm.enable" :label="0">禁用</el-radio>
                 </el-form-item>
-                <el-form-item label="排序：" prop="sort" class-name="float-item">
+                <el-form-item label="排序：" prop="sort">
                     <el-input maxlength="6" class="formInput" v-model="basicForm.sort"></el-input>
                 </el-form-item>
                 <el-form-item label="分类描述：" prop="description">
@@ -56,7 +64,6 @@
                             <i @click="deleteImage" class="el-icon-error"></i>
                         </li>
                     </ul>
-                    <p>尺寸建议750x750（正方形模式）像素以上，大小2M以下</p>
                 </el-form-item>
             </el-form>
             <div class="footer">
@@ -79,6 +86,7 @@ export default {
             showFooter: false,
             basicForm: {
                 name:'',  // 分类名称
+                name23: '',
                 level: 1, // 分类级别
                 enable: 1, // 状态
                 sort: 0, // 分类顺序
@@ -91,6 +99,10 @@ export default {
                 name: [
                     { required: true, message: '请输入分类名称', trigger: 'blur' },
                     { max: 5, message: '最多支持5个字符', trigger: 'blur' }
+                ],
+                name23: [
+                    { required: true, message: '请输入分类名称', trigger: 'blur' },
+                    { max: 10, message: '最多支持10个字符', trigger: 'blur' }
                 ],
                 enable: [
                     { required: true, message: '请选择状态', trigger: 'blur' },
@@ -113,7 +125,11 @@ export default {
         if(this.data.editor) {
             this.getCategoryDetail(this.data.id).then(res => {
                 console.log(res)
-                this.basicForm.name = res.name
+                if(this.data.level == 0) {
+                    this.basicForm.name = res.name
+                } else {
+                    this.basicForm.name23 = res.name
+                }
                 this.basicForm.enable = res.enable
                 this.basicForm.sort = res.sort
                 this.basicForm.image = res.image
@@ -153,12 +169,22 @@ export default {
                     }
                     let param = Object.assign({}, this.basicForm)
 
-                    if(/\s+/.test(this.basicForm.name)) {
-                        this.$message({
-                            message: '分类名称不能为空',
-                            type: 'warning'
-                        });
-                        return
+                    if(this.data.level == 0) {
+                        if(/\s+/.test(this.basicForm.name)) {
+                            this.$message({
+                                message: '分类名称不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    } else {
+                        if(/\s+/.test(this.basicForm.name23)) {
+                            this.$message({
+                                message: '分类名称不能为空',
+                                type: 'warning'
+                            });
+                            return
+                        }
                     }
 
                     if(this.data.add) {
@@ -173,38 +199,45 @@ export default {
                             // 新增三级分类
                             param = Object.assign(param, {level: 3, parentId: this.data.id})
                         }
-
+                        if(this.data.level != 0) {
+                            param = Object.assign(param, {
+                                name: param.name23
+                            })
+                        }
                         this._apis.goods.addCategory(param).then(res => {
-                            this.$notify({
-                                title: '成功',
+                            this.$message({
                                 message: '新增成功！',
                                 type: 'success'
                             });
                             this.$emit('submit')
                             this.onSubmit()
                         }).catch(error => {
-                            this.$notify.error({
-                                title: '错误',
-                                message: error
+                            this.$message.error({
+                                message: error,
+                                type: 'error'
                             });
                         })
                     } else {
                         let param = Object.assign({}, this.basicForm, {id: this.data.id, parentId: this.data.parentId})
+                        if(this.data.level != 0) {
+                            param = Object.assign(param, {
+                                name: param.name23
+                            })
+                        }
 
                         delete param.parentId
 
                         this._apis.goods.editorCategory(param).then(res => {
-                            this.$notify({
-                                title: '成功',
+                            this.$message({
                                 message: '修改成功！',
                                 type: 'success'
                             });
                             this.$emit('submit')
                             this.onSubmit()
                         }).catch(error => {
-                            this.$notify.error({
-                                title: '错误',
-                                message: error
+                            this.$message.error({
+                                message: error,
+                                type: 'error'
                             });
                         })
                     }
@@ -331,23 +364,6 @@ export default {
         text-align: center;
         margin-top: 60px;
         margin-bottom: 40px;
-    }
-    /deep/ .el-form-item {
-        margin-bottom: 29px;
-    }
-    /deep/ .el-form-item__error {
-        margin-top: 5px;
-    }
-    /deep/ .el-form-item {
-        &:nth-child(2) {
-            float: left;
-        }
-        &:nth-child(3) {
-            float: left;
-        }
-        &:nth-child(4) {
-            clear: both;
-        }
     }
 </style>
 

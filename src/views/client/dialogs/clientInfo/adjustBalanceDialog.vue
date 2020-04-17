@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" @submit="submit" title="手动调整余额" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
-      <p class="marB20">客户ID: {{ data.memberSn }}</p>
+      <p class="marB20">用户ID: {{ data.memberSn }}</p>
       <p class="marB20">当前余额: {{ data.balance }}</p>
       <div class="marB20">
           <span><span style="color:red">*</span>增加余额：</span>
@@ -13,7 +13,8 @@
       <div class="marB20 clearfix">
           <span class="fl"><span style="color:red">*</span>变更原因：</span>
           <div class="input_wrap2 fl">
-              <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50"></el-input>
+              <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50" resize="none"></el-input>
+              <span class="font_num">{{remark.length}}/50</span>
           </div>
       </div>
     </div>
@@ -44,15 +45,13 @@ export default {
       this.btnLoading = true;
       if(Number(this.adjustmentBalance) <= 0 || this.adjustmentBalance == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请输入增加余额, 且不能为0或负数',
           type: 'warning'
         });
       }else if(this.remark == "") {
         this.btnLoading = false;
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请输入变更原因',
           type: 'warning'
         });
@@ -67,9 +66,8 @@ export default {
         this._apis.client.manualChangeBalance(params).then((response) => {
           this.btnLoading = false;
           this.visible = false;
-          this.$notify({
-            title: '成功',
-            message: "调整余额成功",
+          this.$message({
+            message: '调整余额成功',
             type: 'success'
           });
           this.$emit('refreshPage');
@@ -82,11 +80,17 @@ export default {
     },
     handleBlur() {
       if(Number(this.adjustmentBalance) < 0) {
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '增加余额不能为负数',
           type: 'warning'
         });
+        this.adjustmentBalance = "";
+      }else if(Number(this.adjustmentBalance) > 100000000) {
+        this.$message({
+          message: '增加余额不能超过1亿',
+          type: 'warning'
+        });
+        this.adjustmentBalance = "";
       }
     } 
   },
@@ -129,8 +133,17 @@ export default {
       display: inline-block;
   }
   .input_wrap2{
+      position: relative;
       width: 500px;
       display: inline-block;
+      .font_num{
+        position: absolute;
+        display: block;
+        width: 38px;
+        color: #B5BDCA;
+        right: 0;
+        top: 33px;  
+      }
   }
 }
 </style>

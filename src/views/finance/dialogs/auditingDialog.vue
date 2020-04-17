@@ -7,7 +7,8 @@
         <span class="fl c_label">提现申请</span>
         <div class="fl">
           <div class="c_top">
-            <p>客户ID：{{info.memberSn}}</p>
+            <p>用户昵称：{{info.nickName}}</p>
+            <p>用户ID：{{info.memberSn}}</p>
             <p>
               提现金额：
               <span>￥{{info.amount}}</span>
@@ -41,7 +42,7 @@
                 v-if="radio == 1"
                 @blur="checkNull">
             </el-input>
-            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;" v-if="note">请输入拒绝原因</p>
+            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;" v-if="note">请输入拒绝原因，不超过20个字</p>
             <p style="text-align:center; margin-top:10px;">
                <el-button type="primary"  @click="submit">确定</el-button>
                 <el-button @click="cancel">取消</el-button> 
@@ -113,31 +114,32 @@ export default {
   },
   created() {
     this.getInfo()
-    this.init()
   },
   methods: {
     init(){
-      if(this.radio == 1 && this.remarks.trim() == ''){
+      if(this.radio == 1 && this.remarks.trim() == '' || this.remarks.length > 20){
         this.note = true
       }else{
         this.note = false
       }
     },
     submit() { 
-      let datas = {
-        ids:[this.data.id],
-        auditStatus:this.radio,
-        remarks:this.remarks.trim()
+      if(!this.note){
+        let datas = {
+          ids:[this.data.id],
+          auditStatus:this.radio,
+          remarks:this.remarks.trim()
+        }
+        if(this.radio == 0){
+          this.$emit("handleSubmit",datas);
+          this.visible = false
+        }else if(this.radio == 1 && this.remarks.trim()){
+           this.$emit("handleSubmit",datas);
+           this.visible = false
+        }else{
+          return false
+        }      
       }
-      if(this.radio == 0){
-        this.$emit("handleSubmit",datas);
-        this.visible = false
-      }else if(this.radio == 1 && this.remarks.trim()){
-         this.$emit("handleSubmit",datas);
-         this.visible = false
-      }else{
-        return false
-      }      
     },
     cancel(){
       this.$emit("fetch");
@@ -150,10 +152,7 @@ export default {
       this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
           this.info = response[0]
       }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: error
-          });
+          this.$message.error(error);
       })
     },
   },  

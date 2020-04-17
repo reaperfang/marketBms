@@ -21,6 +21,7 @@
           <ul class="navs type1">
             <li
               v-for="(item, key) of ruleForm.navIds"
+              v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}"
               :class="{'active': ruleForm.navMap[item].active}"
               :key="key"
               @click="selectNav(item)">
@@ -35,7 +36,7 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
+        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm" v-calcHeight="364">
           <div class="block header">
             <p class="title">导航设置</p>
           </div>
@@ -66,7 +67,7 @@
                   </div>
                 </div>
               </div>
-              建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+              <p class="nav_tips">建议尺寸：40*40像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
             </el-form-item>
           </div>
 
@@ -110,14 +111,13 @@
         </el-form>
       </div>
       <!-- 动态弹窗 -->
-      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
+      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" :showSystemIcon="true"></component>
     </div>
 </template>
 
 <script>
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 export default {
   name: 'apiNavData',
   props: ['apiNavData'],
@@ -240,7 +240,7 @@ export default {
     /* 创建导航 */
     createNav(params) {
       return {
-        id: uuid(),
+        id: uuidv4(),
         navName: params && params.navName || '导航',
         navIcon: params && params.navIcon || '',
         navIconActive: params && params.navIconActive || '',
@@ -546,5 +546,9 @@ export default {
 }
 /deep/.m-colorPicker .box.open {
     z-index: 10!important;
+}
+//导航装修tips样式
+.nav_tips{
+  color:rgba(211,216,223,1);line-height:20px;margin-top:10px;
 }
 </style>

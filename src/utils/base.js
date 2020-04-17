@@ -1,4 +1,4 @@
-
+import { getToken } from '@/system/auth'
 /**
  * 合并对象
  * 
@@ -42,97 +42,6 @@ export function deepClone(source) {
   return targetObj
 }
 
-
-
-/**
- * rgb转16进制
- *
- * @export
- * @param {*} color
- * @returns
- */
-export function colorRGB2Hex(color) {
-  if (!color) {
-    return ''
-  };
-  var rgb = color.split(',');
-  var r = parseInt(rgb[0].split('(')[1]);
-  var g = parseInt(rgb[1]);
-  var b = parseInt(rgb[2].split(')')[0]);
-
-  var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  return hex;
-}
-
-
-/* 格式化数字*/
-export function formatNumber(num, digits) {
-  const si = [
-    { value: 1E18, symbol: 'E' },
-    { value: 1E15, symbol: 'P' },
-    { value: 1E12, symbol: 'T' },
-    { value: 1E9, symbol: 'G' },
-    { value: 1E6, symbol: 'M' },
-    { value: 1E3, symbol: 'k' }
-  ]
-  for (let i = 0; i < si.length; i++) {
-    if (num >= si[i].value) {
-      return (num / si[i].value + 0.1).toFixed(digits).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, '$1') + si[i].symbol
-    }
-  }
-  return num.toString()
-}
-
-
-/**
- *格式化日期和时间
- *
- * @export
- * @param {*} value
- * @param {*} fmt
- * @returns
- */
-export function formatDate(value, fmt) {
-  if (!(value instanceof Date)) {
-    value = new Date(value);
-  }
-  var o = {
-    "M+": value.getMonth() + 1,                 //月份   
-    "d+": value.getDate(),                    //日   
-    "h+": value.getHours(),                   //小时   
-    "m+": value.getMinutes(),                 //分   
-    "s+": value.getSeconds(),                 //秒   
-    "q+": Math.floor((value.getMonth() + 3) / 3), //季度   
-    "S": value.getMilliseconds()             //毫秒   
-  };
-  if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (value.getFullYear() + "").substr(4 - RegExp.$1.length));
-  }
-  for (var k in o) {
-    if (new RegExp("(" + k + ")").test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    }
-  }
-  return fmt;
-}
-
-/**
- *计算日期
- *
- * @export
- * @param {*} value
- * @param {*} fmt
- * @returns
- */
-export function countDate(num) {
-  let date1 = new Date();
-  let date2 = new Date(date1);
-  date2.setDate(date1.getDate() + num);
-  // let time2 = date2.getFullYear()+"-"+(date2.getMonth()+1)+"-"+date2.getDate();
-  let time2 = this.formatDate(date2, "yyyy-MM-dd")
-  return time2;
-}
-
 /**
 *系统内部跳转
 *
@@ -144,36 +53,6 @@ export function routeTo(pathName, query = {}) {
     name: pathName,
     query
   })
-}
-
-/**
- * 数值百分比转换
- * @param value 
- * @param fmt string , 转换格式
- * demo ->  {{data | percent(2)}}
- */
-export function percent(value, fmt) {
-  return `${((value || 0) * 100).toFixed(fmt || 2)}%`;
-}
-
-/**
- * 推算日期
- *
- * @export
- * @param {*} dateObj      日期对象 
- * @param {*} range        推算范围  默认7天
- * @param {*} calcType     推算类型  +或者-
- * @returns
- */
-export function calcDate(dateObj, calcType, range) {
-  range = range === 1 ? 2 : range;
-  let tempDateObj = new Date();
-  if (calcType === '+') {
-    tempDateObj.setTime(dateObj.getTime() + 3600 * 1000 * 24 * (range - 1));
-  } else if (calcType === '-') {
-    tempDateObj.setTime(dateObj.getTime() - 3600 * 1000 * 24 * (range - 1));
-  }
-  return tempDateObj
 }
 
 
@@ -222,19 +101,6 @@ export function asyncLoadJs(doc, path) {
 }
 
 /**
- * 首字母大写
- *
- * @export
- * @param {*} name
- */
-export function titleCase(name) {
-  let str = name.replace(/\b\w+\b/g, function (word) {
-    return word.substring(0, 1).toUpperCase() + word.substring(1);
-  });
-  return str;
-}
-
-/**
  * 根据value值获取label
  *
  * @export
@@ -257,34 +123,6 @@ export function getDictLabel(obj, group, value) {
   return rst
 }
 
-//对字符串进行加密(偏移加密)     
-export function compileStr1(code) {
-  var c = String.fromCharCode(code.charCodeAt(0) + code.length);
-  for (var i = 1; i < code.length; i++) {
-    c += String.fromCharCode(code.charCodeAt(i) + code.charCodeAt(i - 1));
-  }
-  return escape(c);
-}
-
-//对字符串进行解密(偏移解密)     
-export function uncompileStr1(code) {
-  code = unescape(code);
-  var c = String.fromCharCode(code.charCodeAt(0) - code.length);
-  for (var i = 1; i < code.length; i++) {
-    c += String.fromCharCode(code.charCodeAt(i) - c.charCodeAt(i - 1));
-  }
-  return c;
-}
-//对字符串进行加密(无偏移)     
-export function compileStr(code) {
-  return escape(code);
-}
-
-//对字符串进行解密(无偏移)     
-export function uncompileStr(code) {
-  return unescape(code);
-}
-
 //订单状态过滤器   
 export function orderStatusFilter(status) {
   switch (status) {
@@ -305,6 +143,7 @@ export function orderStatusFilter(status) {
   }
 }
 
+//商品规格过滤器
 export function goodsSpecsFilter(value) {
   let _value
   if(!value) return ''
@@ -322,22 +161,80 @@ export function goodsSpecsFilter(value) {
   return str
 }
 
-//扁平数据解析成为树形结构
-export function buildTree(data) {
-  let parents = data.filter(value => value.navType == 0)
-  let children = data.filter(value => value.navType !== 0)
-  let translator = (parents, children) => {
-      parents.forEach((parent) => {
-          children.forEach((current, index) => {
-              if (current.parentId*1 === parent.id) {
-                  let temp = JSON.parse(JSON.stringify(children))
-                  temp.splice(index, 1)
-                  translator([current], temp)
-                  typeof parent.children !== 'undefined' ? parent.children.push(current) : parent.children = [current]
-              }
-          })
-      })
-  }
-  translator(parents, children)
-  return parents
+
+
+
+
+// 获取url中的参数
+export function GetQueryString(name) {
+	var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]);
+	return null;
 }
+
+/* 添加新营销活动 */
+export function addNewApply(path, access) {
+  let token = getToken('authToken')
+  let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+  let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
+  let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
+  let cid = shopInfo && shopInfo.id || ''
+  let newUrl = `${process.env.NODE_ENV === 'development' ? '//127.0.0.1:8080' : process.env.APPLY}/vue/marketing${path}?access=${access}&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+  let newWindow = window.open("about:blank");
+  newWindow.location.href = newUrl;
+}
+
+
+export function equalsObj(oldData,newData){
+  function  isObject(obj){
+      return Object.prototype.toString.call(obj)==='[object Object]';
+  };
+  /**
+   * 判断此类型是否是Array类型
+   * @param {Array} arr 
+   */
+  function isArray(arr){
+      return Object.prototype.toString.call(arr)==='[object Array]';
+  };
+  // 类型为基本类型时,如果相同,则返回true
+  if(oldData === newData) return true;
+  if(isObject(oldData)&&isObject(newData)&&Object.keys(oldData).length === Object.keys(newData).length){
+      // 类型为对象并且元素个数相同
+
+      // 遍历所有对象中所有属性,判断元素是否相同
+      for (const key in oldData) {
+          if (oldData.hasOwnProperty(key)) {
+              if(!equalsObj(oldData[key],newData[key]))
+                  // 对象中具有不相同属性 返回false
+                  return false;
+          }
+      }
+  }else if(isArray(oldData)&&isArray(oldData)&&oldData.length===newData.length){
+      // 类型为数组并且数组长度相同
+
+      for (let i = 0,length=oldData.length; i <length; i++) {
+          if(!equalsObj(oldData[i],newData[i]))
+          // 如果数组元素中具有不相同元素,返回false
+          return false;
+      }
+  }else{
+      // 其它类型,均返回false
+      return false;
+  }
+  
+  // 走到这里,说明数组或者对象中所有元素都相同,返回true
+  return true;
+};
+
+export function isIE() {
+    if(!!window.ActiveXObject || "ActiveXObject" in window){
+      return true;
+    }else{
+      return false;
+　　 }
+}
+
+
+
+

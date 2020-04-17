@@ -650,7 +650,6 @@ export default {
               margin-left: -20px;
               bottom: -17px;
               padding: 2px 2px;
-
             }
           }
         }
@@ -666,7 +665,6 @@ export default {
           top: 4px;
           right: 6.5px;
           padding: 2px 5px;
-
         }
       }
 

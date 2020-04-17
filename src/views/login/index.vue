@@ -4,7 +4,7 @@
       <img src="@/assets/images/chahua.png" alt="">
       <div class="main">
         <div class="title-container">
-          <h3 class="title">移动商城客户营销系统</h3>
+          <h3 class="title">移动商城用户营销系统</h3>
         </div>
         <el-form-item prop="userName">
           <span class="svg-container svg-container_login">
@@ -45,13 +45,20 @@
         <el-button @click="dialogVisible = false">暂不创建</el-button>
       </span>
     </el-dialog>
-    <shopsDialog :showShopsDialog="showShopsDialog" @handleClose="handleClose" :shopList="shopList" :route="route"></shopsDialog>
+    <shopsDialog :showShopsDialog="showShopsDialog" @handleClose="handleClose" :shopList="shopList" :route="route" :show-close="showClose"></shopsDialog>
+    <div class="auto_login_mask" v-if="autoLoginLoading">
+      <div class="progress" v-loading="autoLoginLoading"
+      element-loading-text="正在授权登录中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"></div>
+    </div>
   </div>
 </template>
 
 <script>
 import shopsDialog from '@/views/login/shopsDialog'
 import { removeToken } from '@/system/auth'
+import utils from '@/utils'
 export default {
   name: 'Login',
   data() {
@@ -90,7 +97,9 @@ export default {
       shopName:'',
       shopList:[],
       errorMsg:'',
-      route:'login'
+      route:'login',
+      autoLoginLoading: false,  //自动登录中
+      showClose: true  //是否显示店铺弹窗的关闭按钮
     }
   },
   components: {
@@ -105,7 +114,7 @@ export default {
     }
   },
   created() {
-    // this.autoLogin()
+    this.autoLogin();
   },
   destroyed() {
 
@@ -121,39 +130,66 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid && !this.loading) {
-          this.$store.dispatch('login', this.loginForm).then((response) => {
-            this.loading = false
-            this.shopList = []
-            let info = JSON.parse(localStorage.getItem('userInfo'))
-            let arr = Object.keys(info.shopInfoMap) 
-            if(arr.length == 0){//没有店铺时，提示去创建店铺
-              this.dialogVisible = true
-            }else{//有店铺时
-              let data = info.shopInfoMap
-              for(let key in data){
-                let shopObj = data[key]
-                this.shopList.push(shopObj)
-              }
-              if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
-                this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
-                  this.$router.push({ path: '/profile/profile' })
-                }).catch(error => {
-                  this.$notify.error({
-                    title: '失败',
-                    message: error
-                  })
-                })
-              }else{//多个店铺时，展示店铺列表弹窗
-                this.showShopsDialog = true
-              }
-            }
-          }).catch(error => {
-            this.errorMsg = error
-            this.loading = false
-          })
+          this.login();
         } else {
           return false
         }
+      })
+    },
+
+    /* 自动登录 */
+    autoLogin() {
+      const key = 'jhs__045_d78234nsad90kas-0w3-02uisio';
+      const urlAccountData = utils.GetQueryString('imp');
+      const convertData = urlAccountData ? utils.aesDecryption(key, urlAccountData) : '';
+      const parsedData = convertData ? JSON.parse(utils.aesDecryption(key, urlAccountData)) : {};
+      if(parsedData && parsedData.origin == 300 && parsedData.name && parsedData.password){
+        this.showClose = false;
+        this.loginForm.userName = parsedData.name;
+        this.loginForm.password = parsedData.password;
+        this.autoLoginLoading = true;
+        this.login();
+      }else{
+        this.showClose = true;
+      }
+    },
+
+    login() {
+      this.loading = true
+      this.$store.dispatch('login', this.loginForm).then((response) => {
+        this.loading = false
+        this.autoLoginLoading = false
+        this.shopList = []
+        let info = JSON.parse(localStorage.getItem('userInfo'))
+        let arr = Object.keys(info.shopInfoMap) 
+        if(arr.length == 0){//没有店铺时，提示去创建店铺
+          this.dialogVisible = true
+        }else{//有店铺时
+          let data = info.shopInfoMap
+          for(let key in data){
+            let shopObj = data[key]
+            this.shopList.push(shopObj)
+          }
+          if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
+            this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
+              this.getShopAuthList()
+              this.$router.push({ path: '/profile/profile' })
+            }).catch(error => {
+              this.$message.error(error);
+            })
+          }else{//多个店铺时，展示店铺列表弹窗
+            this.showShopsDialog = true
+          }
+        }
+      }).catch(error => {
+        this.errorMsg = error
+        this.loading = false
+        this.autoLoginLoading = false
+      })
+    },
+    getShopAuthList() {
+      this.$store.dispatch('getShopAuthList').then(() => {
+        window.eventHub.$emit('onGetShopAuthList')
       })
     },
     // login(userName, password) {
@@ -163,10 +199,7 @@ export default {
     //     this.loading = false
     //     this.$router.push({ path: '/profile/profile' })
     //   }).catch(error => {
-    //     this.$notify.error({
-    //       title: '失败',
-    //       message: error
-    //     })
+        // this.$message.error(error);
     //     this.loading = false
     //   })
     // },
@@ -184,6 +217,9 @@ export default {
       this.showShopsDialog = false
       this.loginForm.userName = ''
       this.loginForm.password = ''
+      // if(this.showClose) {  //自动登录模式
+      //   removeToken();
+      // }
     }
   },
 }
@@ -371,6 +407,33 @@ $bg_white:#fff;
 // }
 /deep/ .el-dialog__body{
   padding:10px 20px;
+}
+.auto_login_mask{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background: rgba(0,0,0,0.5);
+  .progress{
+    width:154px;
+    height:100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /deep/.el-loading-mask{
+      background:transparent!important;
+      .el-loading-spinner i{
+        color: #fff !important;
+        width: 50px;
+        height: 50px;
+        font-size: 50px;
+        margin-bottom: 20px;
+      }
+      .el-loading-text{
+        color:#fff!important;
+      }
+    }
+  }
 }
 
 </style>

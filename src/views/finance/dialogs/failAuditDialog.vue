@@ -3,7 +3,8 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
         <div class="c_container clearfix">
             <div class="c_top">
-                <p>客户ID：{{info.memberSn}}</p>
+                <p>用户昵称：{{info.nickName}}</p>
+                <p>用户ID：{{info.memberSn}}</p>
                 <p>提现金额：<span>￥{{info.amount}}</span></p>
                 <p class="gray">提现编号：{{info.cashoutSn}}</p>
                 <div class="c_status">
@@ -97,10 +98,7 @@ export default {
                this.info = response[0]
                this.info1 = response[1]
             }).catch((error)=>{
-                this.$notify.error({
-                title: '错误',
-                message: error
-                });
+                this.$message.error(error);
             })
         },
     },

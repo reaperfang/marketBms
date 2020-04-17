@@ -2,7 +2,7 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="变更会员卡" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{data.memberSn}}</p>
-            <p class="user_id">当前会员卡等级：{{data.level}}</p>
+            <p class="user_id">当前会员卡等级：{{`LV${data.oldLevel} ${data.level}`}}</p>
             <div class="s_cont">
                 <span>变更会员卡：</span>
                 <el-select v-model="selectLevel" style="margin-bottom: 10px" @change="handleChange">
@@ -50,9 +50,8 @@ export default {
                         this.btnLoading = false;
                         this.$emit('refreshPage');
                         this.visible = false;
-                        this.$notify({
-                            title: '成功',
-                            message: "变更会员成功",
+                        this.$message({
+                            message: '变更会员成功',
                             type: 'success'
                         });
                     }).catch((error) => {
@@ -62,8 +61,7 @@ export default {
                     })
                 }else{
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请选择用户等级',
                         type: 'warning'
                     });
@@ -73,9 +71,12 @@ export default {
         getLevelList() {
             this._apis.client.getCardList({}).then((response) => {
                 let list = response.list.filter((v) => {
-                    return v.enable == 0
+                    return v.enable == 0 && v.level > this.data.oldLevel
                 })
                 this.levelList = [].concat(list);
+                this.levelList.map((item) => {
+                    this.$set(item, 'alias', `${item.alias} ${item.name}`);
+                })
             }).catch((error) => {
                 console.log(error);
             })
@@ -84,8 +85,7 @@ export default {
             this.levelList.map((v) => {
                 if(v.id == this.selectLevel) {
                     if(v.level <= this.data.oldLevel) {
-                        this.$notify({
-                            title: '警告',
+                        this.$message({
                             message: '只能选择高于现在等级的会员卡',
                             type: 'warning'
                         });

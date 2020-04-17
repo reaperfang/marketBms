@@ -3,7 +3,7 @@
   <DialogBase :visible.sync="visible" width="816px" title="选择图文资讯" @submit="submit">
     <el-table
       stripe
-      :data="tableList"
+      :data="tableData"
       :row-key="getRowKey"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
@@ -18,14 +18,17 @@
       <el-table-column prop="title" label="图文名称" :width="500">
         <template slot-scope="scope">
           <div class="name_wrapper">
-            <img :src="scope.row.cover || require('../../../../assets/images/shop/error_img.png')" alt="加载错误" />
+            <img :src="scope.row.cover || require('../../../../assets/images/shop/error_img.png')" alt="失败" />
             <p>{{scope.row.title}}</p>
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间"></el-table-column>
     </el-table>
-    <div class="pagination">
+    <div class="multiple_selection" v-if="tableData.length">
+      <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+    </div>
+    <div class="pagination" v-if="tableData.length">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -43,7 +46,6 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from "@/components/TableBase";
 import utils from "@/utils";
-import uuid from "uuid/v4";
 export default {
   name: "dialogSelectInfo",
   extends: tableBase,
@@ -66,7 +68,7 @@ export default {
   data() {
     return {
       pageSize: 5,
-      tableList: [],
+      tableData: [],
       multipleSelection: [],
       ruleForm: {
         status: 0,
@@ -116,14 +118,10 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getInfoList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -133,9 +131,6 @@ export default {
     submit() {
       this.$emit("dialogDataSelected", this.multipleSelection);
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
     getRowKey(row) {
       return row.id
     },
@@ -144,16 +139,16 @@ export default {
     seletedChange(data, state) {
 
       /* 更改列表选中状态 */
-      const tempList = [...this.tableList];
+      const tempList = [...this.tableData];
       for(let item of tempList) {
         if(item.id !== data.id) {
           item.active = false;
         }
       }
-      this.tableList = tempList;
+      this.tableData = tempList;
 
       this.multipleSelection = data;
-    },
+    }
   }
 };
 </script>
@@ -161,6 +156,18 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog__body{
   min-height: 400px;
+}
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
+}
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
 }
 .name_wrapper {
   display: flex;

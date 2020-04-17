@@ -1,54 +1,62 @@
 /*积分消耗 */
 <template>
     <div class="m_container">
-         <div class="pane_container">
-            <el-form ref="form" :model="form" class="clearfix">
+         <div class="pane_container head-wrapper">
+            <el-form ref="form" :model="form" class="clearfix" :inline="true">
                 <el-form-item label="交易时间">
                     <div class="p_line">
                         <el-radio-group v-model="form.timeType">
-                            <el-radio-button class="btn_bor" label="1">7天</el-radio-button>
-                            <el-radio-button class="btn_bor" label="2">15天</el-radio-button>
-                            <el-radio-button class="btn_bor" label="3">30天</el-radio-button>
+                            <el-radio-button class="btn_bor" label="1">最近7天</el-radio-button>
+                            <el-radio-button class="btn_bor" label="2">最近15天</el-radio-button>
+                            <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
                             <el-radio-button class="btn_bor" label="5">本季度</el-radio-button>
                             <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
                         </el-radio-group>
                         <el-date-picker
                         v-if="form.timeType == 4"
                         v-model="daterange"
-                        type="daterange"
-                        :picker-options="pickerOptions"
-                        value-format="yyyy-MM-dd hh:mm:ss"
+                        type="datetimerange"
+                        align="right"
                         range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
+                        start-placeholder="开始时间"
+                        end-placeholder="结束时间"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                         @change="getData">
                     </el-date-picker>
                     </div>
                 </el-form-item>
                 <el-form-item label="消耗次数">
                     <div class="input_wrap2">
-                        <el-select v-model="form.scorePaymentCountRange" @change="getData">
+                        <el-select v-model="form.scorePaymentCountRange">
                             <el-option v-for="item in consumTimes" :label="item.name" :value="item.value" :key="item.id"></el-option>
                         </el-select>
                     </div>
                 </el-form-item>
-                <el-form-item label="客户类型">
+                <el-form-item label="用户类型">
                     <div class="input_wrap2">
-                        <el-select v-model="form.memberType"  @change="getData">
+                        <el-select v-model="form.memberType">
                             <el-option v-for="item in customType" :label="item.name" :value="item.id" :key="item.id"></el-option>
                         </el-select>
                     </div>
                 </el-form-item>
-                <el-form-item class="fr marT20">
+                <el-form-item>
+                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch(1)">查询</el-button>
+                    <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
+                </el-form-item>
+                <!-- <el-form-item class="fr marT20">
                     <el-button class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
                     <el-button class="border_btn" @click="reSet">重 置</el-button>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <div class="m_line clearfix">
-                <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占客户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>
+                <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占用户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>。</p>
                 <div class="fr marT20">
-                    <el-button class="minor_btn" @click="reScreening()">重新筛选</el-button>
-                    <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出</el-button>
+                    <!-- <el-button class="minor_btn" @click="reScreening()">重新筛选</el-button> -->
+                    <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+                        <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出</el-button>
+                    </el-tooltip>
+                    
                 </div>
             </div>
             <ma3Table 
@@ -60,43 +68,30 @@
                 :totalCount="listObj.totalSize">
             </ma3Table>
         </div>
-        <div v-if="listObj.members != undefined && note">
-            <p>运营建议:</p>
-            <p v-if="note == '1-5'" class="proposal"><b>"消耗次数1-5次"：</b>建议针对此类用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '5-10'" class="proposal"><b>"消耗次数5-10次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '10-15'" class="proposal"><b>"消耗次数10-15次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '15-10000000'" class="proposal"><b>"消耗次数15次以上"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '15-20'" class="proposal"><b>"消耗次数15-20次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '50-100'" class="proposal"><b>"消耗次数50-100次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+        <div v-if="listObj.members != undefined && showNote">
+            <p>运营建议：</p>
+            <p class="proposal"><b>消耗次数{{note.label}} ：</b>{{note.suggest}}</p>
         </div>
         <div class="contents"></div>
         <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
 <script>
 import ma3Table from './components/ma3Table';
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
+import utils from '@/utils'
 export default {
     name: 'integral',
-    components: { ma3Table },
+    components: { ma3Table ,exportTipDialog },
     data() {
         return {
             pickerOptions: {
-                onPick: ({ maxDate, minDate }) => {
-                    this.pickerMinDate = minDate.getTime()
-                    if (maxDate) {
-                    this.pickerMinDate = ''
-                    }
-                },
                 disabledDate: (time) => {
-                    if (this.pickerMinDate !== '') {
-                    const day90 = (90 - 1) * 24 * 3600 * 1000
-                    let maxTime = this.pickerMinDate + day90
-                    if (maxTime > new Date()) {
-                        maxTime = new Date() - 8.64e7
-                    }
-                    return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-                    }
-                    return time.getTime() > Date.now() - 8.64e7
+                    let yesterday = new Date();
+                    yesterday = yesterday.getTime()-24*60*60*1000;
+                    yesterday = this.utils.dayEnd(yesterday);
+                    return time.getTime() > yesterday.getTime();
                 }
             },
             daterange:'',
@@ -114,9 +109,7 @@ export default {
             ratio:0, //会员占比
             listObj:{}, //表格数据
             totalCount:0,//总条数
-            consumTimes: [
-
-            ],
+            consumTimes: [ ],
             customType: [
                 {
                     id: null,
@@ -133,7 +126,11 @@ export default {
                     name: "老会员"
                 }
             ],
-            note:''
+            note:'',
+            showNote:false,
+            currentDialog:"",
+            dialogVisible: false,
+            currentData:{},
         }
     },
     created(){
@@ -159,21 +156,32 @@ export default {
             }
             // console.log(this.form)
         },
+
+        getDate(date) {
+            return utils.formatDate(new Date(date), "yyyy-MM-dd hh:mm:ss");
+        },
         //
         //查询
-        goSearch(){
+        goSearch(num){
             this.form.loads = true
-            this.note = ''
-            let memberType = this.form.memberType;
-            let scorePaymentCountRange = this.form.scorePaymentCountRange;
-            this.form.scorePaymentCountRange == 'null' && (this.form.scorePaymentCountRange = null)
+            this.form.startIndex = num || this.form.startIndex
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
                 this.ratio = res.ratio;
                 this.listObj = res; //信息列表数据
                 this.totalCount = res.totalPage * this.form.pageSize;
                 this.form.loads = false
-                this.note = this.form.scorePaymentCountRange
+                // this.note = this.form.scorePaymentCountRange
+                 //切换消耗次数获取运营建议
+                for(let item of this.consumTimes){
+                    if(item.value == this.form.scorePaymentCountRange){
+                        this.note = {
+                            suggest:item.suggest,
+                            label:item.name
+                        }
+                        item.suggest != null && (this.showNote = true)
+                    }
+                }
             }).catch(error => {
                 this.$message.error(error);
             });
@@ -186,11 +194,12 @@ export default {
                       pages.push({
                           id:item.id,
                           value:item.minNum+'-'+ item.maxNum,
-                          name:item.name
+                          name:item.name,
+                          suggest:item.suggest
                       })
                   }
                   this.consumTimes = pages;
-                  this.form.scorePaymentCountRange = value
+                //   this.form.scorePaymentCountRange = value
             }).catch(error =>{
                
             })
@@ -221,13 +230,20 @@ export default {
             data.scorePaymentCountRange = this.form.scorePaymentCountRange
             data.memberType = this.form.memberType            
             data.timeType = this.form.timeType
-            this._apis.data.integralConsumptionExport(data)
-            .then(res => {
-                window.open(res);
-            })
-            .catch(err=>{
-                this.$message.error(err);
-            })
+            if(this.memberCount && this.memberCount > 1000 ){
+                this.dialogVisible = true
+                this.currentDialog = exportTipDialog
+                this.currentData.query = data
+                this.currentData.api = "data.integralConsumptionExport"
+            }else{
+                this._apis.data.integralConsumptionExport(data)
+                .then(res => {
+                    window.location.href = res
+                })
+                .catch(err=>{
+                    this.$message.error(err);
+                })
+            }    
         },
         sizeChange(val){
             this.form.pageSize = val;

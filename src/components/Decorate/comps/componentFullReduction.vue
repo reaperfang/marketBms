@@ -10,15 +10,17 @@
         </div>
         <div class="reduction_two">
           <ul>
-            <li
-            v-for="(item2, key2) in item.typeList " :key="key2"
-            v-if="item2.orderRewardType"
-              class="ellipsis"
-              :class="reductionStyle"
-            >
-              <span v-if="item2.orderRewardType == 1" :title="reduceData(item2)">{{reduceData(item2)}}</span>
-              <span v-else-if="item2.orderRewardType == 2" :title="discountData(item2)">{{discountData(item2)}}</span>
-            </li>
+            <template v-for="(item2, key2) in item.typeList ">
+              <li
+              :key="key2"
+              v-if="item2.orderRewardType"
+                class="ellipsis"
+                :class="reductionStyle"
+              >
+                <span v-if="item2.orderRewardType == 1" :title="reduceData(item2)">{{reduceData(item2)}}</span>
+                <span v-else-if="item2.orderRewardType == 2" :title="discountData(item2)">{{discountData(item2)}}</span>
+              </li>
+            </template>
           </ul>
         </div>
       </div>
@@ -83,10 +85,6 @@ export default {
                   this.createList(response);
                   this.loading = false;
               }).catch((error)=>{
-                  // this.$notify.error({
-                  //     title: '错误',
-                  //     message: error
-                  // });
                   console.error(error);
                   this.list = [];
                   this.loading = false;

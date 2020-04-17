@@ -1,9 +1,9 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="删除客户" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="删除用户" :hasCancel="hasCancel">
         <div class="c_container">
             <img src="../../../../assets/images/client/icon_cuowu.png" alt="" class="warn_img">
-            <p>确定删除客户ID: {{data.userId}} 吗？</p>
-            <p>删除后将彻底清除该客户所有信息，且无法恢复。</p>
+            <p>确定删除用户ID: {{data.userId}} 吗？</p>
+            <p>删除后将彻底清除该用户所有信息，且无法恢复。</p>
         </div>
     </DialogBase>
 </template>
@@ -20,8 +20,7 @@ export default {
     methods: {
         submit() {
             this._apis.client.deleteMember({id: this.data.userId}).then((response) => {
-                this.$notify({
-                    title: '成功',
+                this.$message({
                     message: '删除成功',
                     type: 'success'
                 });

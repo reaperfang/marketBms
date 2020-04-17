@@ -1,7 +1,7 @@
 /* 商品搜索示例弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="415px" :title="'查看示例'">
-    <img src="../../../../assets/images/shop/searchDemo.png" alt="">
+    <img src="../../../../assets/images/shop/searchDemo.png" alt="失败">
   </DialogBase>
 </template>
 

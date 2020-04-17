@@ -7,30 +7,30 @@
           <el-radio :label="2">自动获取</el-radio>
         </el-radio-group>
       </el-form-item>
-     <el-form-item label="选择活动" prop="goods">
-      </el-form-item>
-      <div class="goods_list" prop="goods" v-loading="loading">
-        <ul>
-          <template>
-            <template v-for="(item, key) of list">
-              <li :key="key" v-if="item.status !== 2" :title="item.activeName">
-                <img :src="item.image" alt="">
-                <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
-              </li>
+     <el-form-item :label="ruleForm.addType === 1 ? '选择活动' : ''" prop="goods">
+        <div class="goods_list" prop="goods" v-loading="loading">
+          <ul>
+            <template>
+              <template v-for="(item, key) of list">
+                <li :key="key" v-if="item.status !== 2" :title="item.activeName">
+                  <img :src="item.mainImage" alt="">
+                  <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
+                </li>
+              </template>
             </template>
-          </template>
-          <!-- <template v-else-if="ruleForm.addType === 2">
-            <li v-for="(item, key) of []" :key="key">
-              <img :src="item.image" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            <!-- <template v-else-if="ruleForm.addType === 2">
+              <li v-for="(item, key) of []" :key="key">
+                <img :src="item.image" alt="">
+                <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+              </li>
+            </template> -->
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'" v-if="ruleForm.addType === 1">
+              <i class="inner"></i>
             </li>
-          </template> -->
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'" v-if="ruleForm.addType === 1">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
-      <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
+          </ul>
+        </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
+      </el-form-item>
       <el-form-item label="显示个数" v-if="ruleForm.addType === 2" prop="showNumber">
         <el-input  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
         <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最大设置为30个</p>  
@@ -144,9 +144,14 @@
         <!-- <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input> -->
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonTextPrimary"></el-input>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideSaledGoods">
+      <el-form-item label="更多设置" prop="hideSaledGoods" v-if="ruleForm.addType == 1">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <!-- 只展示活动进行中的拼团商品 -->
+        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
+          <el-radio :label="1">24小时后隐藏</el-radio>
+          <el-radio :label="2">立即隐藏</el-radio>
+        </el-radio-group>
       </el-form-item>
     </div>
 
@@ -159,7 +164,6 @@
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectMultiPerson from '@/views/shop/dialogs/decorateDialogs/dialogSelectMultiPerson';
 import dialogMultiPersonDemo from '@/views/shop/dialogs/decorateDialogs/dialogMultiPersonDemo';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertyMultiPerson',
   mixins: [propertyMixin],
@@ -181,7 +185,9 @@ export default {
         textStyle: 1,//文本样式
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
-        hideSaledGoods: true,//隐藏已售罄拼团商品
+        hideSaledGoods: false,//隐藏已售罄拼团商品
+        hideEndGoods: false,
+        hideType: 2,
         buttonStyle: 3,// 购买按钮样式
         ids: [],//商品id列表 
         buttonText: '拼团',// 次要按钮文字
@@ -204,7 +210,10 @@ export default {
       handler(newValue) {
         this.ruleForm.ids = [];
         for(let item of newValue) {
-          this.ruleForm.ids.push(item.spuId);
+          this.ruleForm.ids.push({
+            spuId: item.spuId,
+            activityId: item.activityId || item.activeId
+          });
         }
         this.fetch();
         this._globalEvent.$emit('fetchMultiPerson', this.ruleForm, this.$parent.currentComponentId);
@@ -220,7 +229,8 @@ export default {
     },
     'ruleForm.addType'(newValue) {
         if(newValue == 2) {
-            this.fetch();
+          this.ruleForm.hideSaledGoods = false;
+          this.fetch();
         }else{
           this.list = [];
           this.fetch();
@@ -244,19 +254,30 @@ export default {
     fetch(componentData = this.ruleForm) {
         if(componentData) {
             let params = {};
+
+            //兼容老数据
+            let newParams = [];
+            if(typeof componentData.ids[0] === 'string') {
+              for(let item of componentData.ids){
+                newParams.push({spuId: item, activityId: ''})
+              }
+            }else{
+              newParams = componentData.ids;
+            }
+
             if(componentData.addType == 2) {
                 params = {
                     num: componentData.showNumber,
                     order: componentData.sortRule,
-                    status: 5
+                    hideStatus: 0
                 };
             }else{
                 const ids = componentData.ids;
                 if(Array.isArray(ids) && ids.length){
                     params = {
-                        spuIds: ids.join(','),
                         order: componentData.sortRule,
-                        status: 5
+                        activityList: newParams,
+                        hideStatus: 0
                     };
                 }else{
                     this.list = [];
@@ -269,10 +290,6 @@ export default {
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
-                // this.$notify.error({
-                //     title: '错误',
-                //     message: error
-                // });
                 console.error(error);
                 this.list = [];
                 this.loading = false;
@@ -282,21 +299,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      if(datas.length > this.showNumber){
-        datas = datas.slice(0,this.showNumber);
-      }
-      this.list = [];
-      if(this.hideSaledGoods==true){
-        var goods = datas;
-        for(var i in datas){
-          if(goods[i].soldOut!=1){
-            this.list.push(datas[i]);
-          }
-        }
-      }
-      else{
         this.list = datas;
-      }
     },
   }
 }
@@ -306,15 +309,8 @@ export default {
 /deep/.el-form-item__label{
   text-align: left;
 }
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
-}
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }

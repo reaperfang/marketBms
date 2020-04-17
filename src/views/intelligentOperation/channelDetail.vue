@@ -25,7 +25,7 @@
             </el-table-column>
             <el-table-column
                 prop="customerId"
-                label="客户ID"
+                label="用户ID"
                 align="center"
             >
             </el-table-column>
@@ -82,13 +82,6 @@ export default {
         };
     },
     mounted(){
-        this.ruleForm.startTime = this.$route.query.startTime;
-        this.ruleForm.endTime = this.$route.query.endTime;
-        this.ruleForm.channel = this.$route.query.channel;
-        this.ruleForm.changeRatioRange = this.$route.query.changeRatioRange;
-        this.ruleForm.timeType = this.$route.query.timeType;
-        this.ruleForm.startIndex = 1;
-        this.ruleForm.pageSize = 10;
         this.getData();
     },
     created() {
@@ -97,6 +90,15 @@ export default {
     methods: {
         //获取详情数据
         getData(){
+            this.ruleForm = {
+                startTime : this.$route.query.startTime,
+                endTime : this.$route.query.endTime,
+                channel : this.$route.query.channel,
+                changeRatioRange : this.$route.query.changeRatioRange,
+                timeType : this.$route.query.timeType,
+                startIndex : this.ruleForm.startIndex,
+                pageSize : this.ruleForm.pageSize
+            }
             this._apis.data.channelConversionDetails(this.ruleForm).then(response => {
                 this.list = response.list;
                 this.totalCount = response.totalSize;
@@ -131,6 +133,7 @@ export default {
         //选择页数
         handleCurrentChange(val){
             this.currentPage = val;
+            this.ruleForm.startIndex = val
             this.getData();
         }
         

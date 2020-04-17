@@ -1,10 +1,10 @@
 <!--电子面单-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in fsTerms"
               :key="item.value"
@@ -12,8 +12,6 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
@@ -29,15 +27,16 @@
         <el-form-item label="快递公司">
           <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:120px;"></el-input>
         </el-form-item>
-        <el-form-item label="发货时间">
+        <el-form-item label="操作时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
-            :picker-options="pickerNowDateBefore">
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -50,7 +49,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '物流对账', '电子面单', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '电子面单', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <el-table
@@ -92,6 +91,7 @@
       </el-table>
       <div class="page_styles">
          <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
@@ -102,6 +102,7 @@
         </el-pagination>
       </div>
     </div>
+	  <exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
   </div>
 </template>
 
@@ -109,16 +110,15 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'faceSheet',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
     return {
-      pickerNowDateBefore: {
-          disabledDate: (time) => {
-                return time.getTime() > new Date();
-              }
-      },
       inline:true,
       ruleForm:{
         searchType:'relationSn',
@@ -129,7 +129,9 @@ export default {
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     }
   },
   watch: {},
@@ -184,8 +186,8 @@ export default {
       query.businessType = this.ruleForm.businessType == -1 ? null : this.ruleForm.businessType
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.startTime = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.endTime = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.startTime = timeValue[0]
+        query.endTime = timeValue[1]
       }
       return query;
     },
@@ -218,14 +220,18 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      this._apis.finance.exportFs(query).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+         this.currentData.query = this.init()
+         this.currentData.api = "finance.exportFs"
+      }else{
+        this._apis.finance.exportFs(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+         this.$message.error(error)
       })
+      }
+      
     },
   }
 }
@@ -253,6 +259,8 @@ export default {
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display:block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;

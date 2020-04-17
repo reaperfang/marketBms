@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" label-width="80px" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
         <el-form-item label="资讯标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入资讯标题" clearable></el-input>
         </el-form-item>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="table">
-      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <!-- <el-table-column
           type="selection"
           :selectable='selectInit'
@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column prop="authorHeadPath" label="作者头像">
            <template slot-scope="scope">
-             <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="">
+             <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="失败">
              <span v-else>--</span>
           </template>
         </el-table-column>
@@ -83,7 +83,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -101,13 +101,12 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 export default {
   name: 'pageList',
   extends: tableBase,
   data () {
     return {
-      tableList:[],
+      tableData:[],
       ruleForm: {
         title: '',
         type: '',
@@ -124,73 +123,55 @@ export default {
 
     /* 删除 */
     deleteInfo(item) {
-       this.$confirm(`确定删除 [ ${item.title} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除 [ ${item.title} ] 吗？`
+      }).then(() => {
           this._apis.shop.deleteInfos({ids: [item.id], status: 0}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
     
     /* 下线 */
     offline(item) {
-       this.$confirm(`确定下线 [ ${item.title} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定下线 [ ${item.title} ] 吗？`
+      }).then(() => {
           this._apis.shop.modifyInfoType({id: item.id, type: 2}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '下线成功！',
-              type: 'success'
-            });
+            this.$message.success('下线成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     }, 
 
     /* 批量删除 */
     batchDeleteInfo(item) {
-       this.$confirm(`确定删除吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除吗？`
+      }).then(() => {
           const ids = [];
           for(let item of this.multipleSelection) {
             ids.push(item.id);
           }
           this._apis.shop.deleteInfos({ids, status: 0}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -198,7 +179,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getInfoList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
 
@@ -210,10 +191,6 @@ export default {
           }
         }
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -221,7 +198,7 @@ export default {
 
     // 修改禁用
     selectInit(row, index){
-      return (row.isHomePage != 1)
+      // return (row.isHomePage != 1)
     }
   }
 }

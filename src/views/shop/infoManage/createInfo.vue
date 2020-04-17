@@ -162,34 +162,20 @@ export default {
           this.submitLoadinig = true;
           if(!this.$route.query.id) {
             this._apis.shop.createInfo(result).then((response)=>{
-              this.$notify({
-                title: '成功',
-                message: '创建成功！',
-                type: 'success'
-              });
+              this.$message.success('创建成功！');
               this.submitLoadinig = false;
               this._routeTo('p_infoManageIndex');
             }).catch((error)=>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
               this.submitLoadinig = false;
             });
           }else{
              this._apis.shop.modifyInfo(result).then((response)=>{
-              this.$notify({
-                title: '成功',
-                message: '修改成功!',
-                type: 'success'
-              });
+              this.$message.success('修改成功！');
               this.submitLoadinig = false;
               this._routeTo('p_infoManageIndex');
             }).catch((error)=>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
               this.submitLoadinig = false;
             });
           }

@@ -21,7 +21,7 @@
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
-            <div class="header-righter-item">发货人：{{orderDetail.orderSendInfo.sendName}}</div>
+            <div class="header-righter-item">发货人：{{item.sendName}}</div>
             <div class="header-righter-item">{{item.goodsList && item.goodsList[0] && item.goodsList[0].createTime && item.goodsList && item.goodsList[0] && item.goodsList[0].createTime}}</div>
             <div @click="showContent(index)">
               <i v-if="item.showContent" class="el-icon-caret-top pointer"></i>
@@ -39,7 +39,7 @@
                   </div>
                   <div class="goods-detail-item">
                     <p>{{scope.row.goodsName}}</p>
-                    <p>{{scope.row.goodsSpces}}</p>
+                    <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                   </div>
                 </div>
               </template>
@@ -47,7 +47,7 @@
             <el-table-column prop="goodsUnit" label="单位" width="300"></el-table-column>
             <el-table-column prop="sendCount" label="本次发货数量"></el-table-column>
           </el-table>
-          <div class="remark">备注: {{orderDetail.orderSendInfo.sendRemark}}</div>
+          <div class="remark">备注: {{item.sendRemark}}</div>
         </div>
       </div>
       <Empty v-show="!orderSendItems || (orderSendItems && !orderSendItems.length)"></Empty>
@@ -96,13 +96,31 @@ export default {
       let status = orderDetail.expressNoStatusMap[value]
 
       if(status == 3) {
-        return '【客户签收】'
+        return '【用户签收】'
       } else if(status == 0 || status == 1 || status == 2 || status == 4) {
         return '【商户发货】'
       } else {
         return ''
       }
-    }
+    },
+    goodsSpecsFilter(value) {
+        let _value
+        if(!value) return ''
+        if(typeof value == 'string') {
+            _value = JSON.parse(value)
+        }
+        let str = ''
+        for(let i in _value) {
+            if(_value.hasOwnProperty(i)) {
+                str += i + '：'
+                str += _value[i] + '，'
+            }
+        }
+
+        str = str.replace(/^(.*)\，$/, '$1')
+
+        return str
+    },
   },
   watch: {
     orderDetail: {
@@ -116,7 +134,7 @@ export default {
   computed: {
     businessFilter(value) {
       if (value.memberTeceiveGoodsTime) {
-        return "【客户签收】";
+        return "【用户签收】";
       } else if (value.sendTime) {
         return "【商户发货】";
       } else {
@@ -154,7 +172,9 @@ export default {
               goodsList: this.orderDetail.orderSendItemMap[i],
               expressNo: i,
               shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
-              showContent: true
+              showContent: true,
+              sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
+              sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendName || '',
             }
           );
 
@@ -179,7 +199,7 @@ export default {
           .orderLogistics({ expressNo })
           .then(res => {
             this.currentDialog = "LogisticsDialog";
-            this.currentData = res.traces;
+            this.currentData = res.traces || [];
             this.expressCompanys = res.shipperName
             this.dialogVisible = true;
           })

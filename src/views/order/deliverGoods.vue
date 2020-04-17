@@ -18,12 +18,13 @@
           </div>
           <div class="content">
             <el-table
+              :class="{isIE: isIE}"
               ref="table"
               :data="tableData"
               style="width: 100%"
               @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-            >
+             >
               <el-table-column 
                 type="selection" 
                 width="55"
@@ -57,12 +58,16 @@
               <el-table-column prop="sendCount" label="本次发货数量">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{'send-input': scope.row.errorMessage}"
                     :disabled="scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
+                    step="1"
                     :max="scope.row.goodsCount - scope.row.cacheSendCount"
                     min="1"
+                    @input="inputHandler(scope.$index)"
                     v-model="scope.row.sendCount"
                   ></el-input>
+                  <p v-if="scope.row.showError" class="error-message">{{scope.row.errorMessage}}</p>
                 </template>
               </el-table-column>
             </el-table>
@@ -140,7 +145,7 @@
               <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
             </el-form-item>
             <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
-              <el-input :disabled="!express" v-model="ruleForm.expressNos"></el-input>
+              <el-input :disabled="!express" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
             </el-form-item>
             <el-form-item label="物流备注" prop="sendRemark">
               <el-input
@@ -191,6 +196,7 @@ export default {
           }
       };
     return {
+      list: [],
       tableData: [],
       multipleSelection: [],
       ruleForm: {
@@ -218,11 +224,13 @@ export default {
       sendGoods: "",
       title: "",
       express: true,
-      sending: false
+      sending: false,
+      errorMessage: '',
+      showError: false
     };
   },
   created() {
-    this.getOrderDetail();
+    this.getDetail();
     this.getExpressCompanyList();
   },
   filters: {
@@ -254,9 +262,48 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
-    }
+    },
+    isIE() {
+        var userAgent = navigator.userAgent;
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+        if(isIE) {
+            return true;   
+        } else if(isEdge) {
+            return true; 
+        } else if(isIE11) {
+            return true; 
+        }else{
+            return false
+        }
+    },
   },
   methods: {
+    inputHandler(index) {
+      let reg = /^[1-9]\d*$/
+
+      if(this.tableData[index].sendCount == '') {
+        this.tableData.splice(index, 1, Object.assign({}, this.tableData[index], {
+          errorMessage:  '请输入本次发货数量',
+          showError: true
+        }))
+        return
+      }
+
+      setTimeout(() => {
+        if(+this.tableData[index].sendCount <= 0 || !reg.test(this.tableData[index].sendCount)) {
+          this.tableData.splice(index, 1, Object.assign({}, this.tableData[index], {
+            sendCount: '',
+          }))
+        }
+
+        this.tableData.splice(index, 1, Object.assign({}, this.tableData[index], {
+          errorMessage: +this.tableData[index].sendCount <= 0 || !reg.test(this.tableData[index].sendCount) ? '仅支持输入非负的正整数' : '',
+          showError: +this.tableData[index].sendCount <= 0 || !reg.test(this.tableData[index].sendCount) ? true : false
+        }))
+      }, 500)
+    },
     selectable(row, index) {
       if(row.goodsCount - row.cacheSendCount == 0) {
         return false
@@ -296,10 +343,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     fetchOrderAddress() {
@@ -318,10 +362,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     getExpressCompanyList() {
@@ -340,16 +381,15 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     // 订单详情 orderId
     // 电子面单 orderId
     // 配送单 id
     sendGoodsHandler(formName) {
+      let reg = /^[1-9]\d*$/
+
       if (!this.multipleSelection.length) {
         this.confirm({
           title: "提示",
@@ -359,12 +399,16 @@ export default {
         return;
       }
 
-      if (this.multipleSelection.some(val => !val.sendCount)) {
-        this.confirm({
-          title: "提示",
-          icon: true,
-          text: "请填写发货商品数量"
-        });
+      if (this.multipleSelection.some(val => !val.sendCount)) {        
+        // this.confirm({
+        //   title: "提示",
+        //   icon: true,
+        //   text: "请填写发货商品数量"
+        // });
+        document.querySelector('.send-input').scrollIntoView()
+        let scrollTop = document.querySelector('.content-main').scrollTop
+
+        document.querySelector('.content-main').scrollTop = scrollTop - 8
         return;
       }
 
@@ -373,6 +417,14 @@ export default {
           title: "提示",
           icon: true,
           text: "本次发货数量不能大于应发数量"
+        });
+        return;
+      }
+      if (this.multipleSelection.some(val => +val.sendCount <= 0 || !reg.test(val.sendCount))) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: "仅支持输入非负的正整数"
         });
         return;
       }
@@ -437,11 +489,7 @@ export default {
           this._apis.order
             .orderSendGoods(params)
             .then(res => {
-              this.$notify({
-                title: "成功",
-                message: "发货成功",
-                type: "success"
-              });
+              this.$message.success('发货成功');
               this.sending = false
               // this.$router.push(
               //   "/order/deliverGoodsSuccess?id=" +
@@ -459,10 +507,7 @@ export default {
               })
             })
             .catch(error => {
-              this.$notify.error({
-                title: "错误",
-                message: error
-              });
+              this.$message.error(error);
               this.sending = false
             });
         } else {
@@ -489,15 +534,19 @@ export default {
       this.orderInfo = Object.assign({}, this.orderInfo, value);
     },
     _orderDetail() {
-      let id = this.$route.query.id;
+      let id = this.$route.query.id || this.$route.query.ids;
 
       this._apis.order
-        .orderSendDetail({ ids: [this.$route.query.id] })
+        .orderSendDetail({ ids: [+this.$route.query.id || +this.$route.query.ids] })
         .then(res => {
           res[0].orderItemList.forEach(val => {
             val.cacheSendCount = val.sendCount;
             val.sendCount = val.goodsCount - val.sendCount;
           });
+          res[0].orderItemList.forEach(val => {
+            val.showError = false
+            val.errorMessage = ''
+          })
           this.tableData = res[0].orderItemList;
           this.orderInfo = res[0];
 
@@ -505,8 +554,65 @@ export default {
         })
         .catch(error => {});
     },
-    getOrderDetail() {
+    getDetail() {
       this._orderDetail();
+        // try {
+        //   let ids = this.$route.query.ids || this.$route.query.id;
+        //   let orderType = this.$route.query.orderType
+        //   let sendType = this.$route.query.sendType
+
+        //   let res = await this._apis.order.orderSendDetail({ ids: ids.split(',').map(val => +val) })
+
+        //   if(res) {
+        //     res.forEach(item => {
+        //       if(sendType == 'more') {
+        //         item.express = true
+        //         item.other = "";
+        //         item.checked = false;
+        //         item.expressNos = "";
+        //         item.expressCompanyCodes = "";
+        //       }
+        //       item.orderItemList.forEach(orderItem => {
+        //         orderItem.cacheSendCount = orderItem.sendCount;
+        //         orderItem.sendCount = orderItem.goodsCount - orderItem.sendCount;
+        //         orderItem.showError = false
+        //         orderItem.errorMessage = ''
+        //         if(sendType == 'more') {
+        //           orderItem.checked = false;
+        //           orderItem.cacheSendCount = +orderItem.sendCount
+        //           orderItem.sendCount = orderItem.goodsCount - orderItem.cacheSendCount;
+        //         }
+        //       });
+        //     })
+
+        //     this.fetchAddress(res)
+        //   }
+        // } catch(error) {
+
+        // }
+    },
+    async fetchAddress(list) {
+        try {
+          let res = await this._apis.order.fetchOrderAddress({ id: this.cid, cid: this.cid })
+
+          if(res) {
+            list.forEach(item => {
+              item.sendName = res.senderName;
+              item.sendPhone = res.senderPhone;
+              item.sendProvinceCode = res.provinceCode;
+              item.sendProvinceName = res.province;
+              item.sendCityCode = res.cityCode;
+              item.sendCityName = res.city;
+              item.sendAreaCode = res.areaCode;
+              item.sendAreaName = res.area;
+              item.sendDetail = res.address;
+            })
+
+            this.list = list
+          }
+        } catch(error) {
+
+        }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -603,6 +709,32 @@ export default {
   }
   .el-input__inner {
     border: 1px solid #DCDFE6;
+  }
+}
+.error-message {
+  color: #FD4C2B;
+  font-size: 12px;
+  line-height: 1;
+  padding-top: 2px;
+  margin-bottom: 0;
+}
+/deep/ .el-form-item__label {
+  font-weight: normal;
+}
+/deep/ .isIE.el-table {
+  .el-checkbox {
+    
+  }
+}
+/deep/ .el-checkbox {
+  display: inline-block;
+  position: static;
+  .el-checkbox__input {
+    display: inline-block;
+    position: static;
+    .el-checkbox__inner {
+      display: inline-block;
+    }
   }
 }
 </style>

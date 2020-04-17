@@ -63,10 +63,6 @@ export default {
         this.templateList = response;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -79,8 +75,8 @@ export default {
 .template_wrapper{
   ul{
     li{
-      width:255px;
-      height:400px;
+      width:255px!important;
+      height:400px!important;
       padding: 15px;
       background: #fff;
       box-shadow: 6px 1px 30px rgba(0,0,0,0.2);

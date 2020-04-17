@@ -1,17 +1,18 @@
 <!--每日营收-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="日期" style="margin-bottom:0px;">
           <el-date-picker
             v-model="ruleForm.timeValue"
-            type="daterange"
+            type="datetimerange"
             align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['00:00:00', '00:00:00']"
-            :picker-options="pickerNowDateBefore">
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -24,7 +25,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '每日营收', '默认页面', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '每日营收', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <el-table
@@ -33,11 +34,13 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'accountDate', order: 'descending'}"
+        @sort-change="changeSort"
+
         >
         <el-table-column
           prop="accountDate"
           label="日期"
-          sortable>
+          sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
@@ -60,6 +63,7 @@
       </el-table>
       <div class="page_styles">
         <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.startIndex) || 1"
@@ -68,7 +72,8 @@
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
-      </div>      
+      </div>
+		<exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
     </div>
   </div>
 </template>
@@ -76,23 +81,25 @@
 <script>
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'dailyRevenue',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
-    return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
+    return {    
       inline:true,
       ruleForm:{
-        timeValue:''
+        timeValue:'',
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     }
   },
   watch: { },
@@ -103,12 +110,13 @@ export default {
         accountDateStart:'',
         accountDateEnd:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:this.ruleForm.sort
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.accountDateStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.accountDateEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.accountDateStart = timeValue[0]
+        query.accountDateEnd = timeValue[1]
       }
       return query;
     },
@@ -144,15 +152,29 @@ export default {
     //导出
     exportToExcel() {
       let query = this.init();
-      this._apis.finance.exportDr(query).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.exportDr';
+        this.currentData.query =query;
+      }else{
+        this._apis.finance.exportDr(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
+      }
+      
     },
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
+    }
   }
 }
 </script>
@@ -179,6 +201,8 @@ export default {
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display: block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;

@@ -127,7 +127,7 @@
               </el-form-item>
               <el-form-item label="分享图片" prop="picture">
                 <div class="img_preview" v-if="ruleFormMini.picture">
-                  <img :src="ruleFormMini.picture" alt="">
+                  <img :src="ruleFormMini.picture" alt="失败">
                   <span @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
                 </div>
                 <div class="add_button" v-if="!ruleFormMini.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
@@ -323,10 +323,6 @@ export default {
         }
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -349,7 +345,7 @@ export default {
             this.submitLoading = false;
             this.openSetting = false;
           }).catch((error)=>{
-            this.$notify.error({ title: '错误', message: error });
+            this.$message.error(error);
             this.submitLoading = false;
             this.openSetting = false;
           });
@@ -376,7 +372,7 @@ export default {
             this.submitLoading = false;
             this.openSetting = false;
           }).catch((error)=>{
-            this.$notify.error({ title: '错误', message: error });
+            this.$message.error(error);
             this.submitLoading = false;
             this.openSetting = false;
           });
@@ -396,10 +392,6 @@ export default {
       }).then((response)=>{
        this.download(response, '分享');
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.downloadPosterLoading = false;
       });
@@ -433,7 +425,7 @@ export default {
     openQrCodeInNewWindow(url) {
       const img = new Image();
       img.style.cssText = 'margin:200px auto 0;display: block;';
-      if(url.includes('http://')) {
+      if(url.substr(0,4) === 'http') {
          img.src = url;
       }else{
          img.src = `data:image/png;base64,${url}`;
@@ -480,7 +472,7 @@ export default {
         this.downloadPosterLoading = false;
         const aLink = document.createElement('a');
         aLink.download = name ;
-        if(url.includes('http://')) {
+        if(url.includes(location.protocol + '//')) {
           aLink.href = url; 
         }else{
           aLink.href = `data:image/png;base64,${url}`; 

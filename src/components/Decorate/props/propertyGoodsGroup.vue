@@ -12,6 +12,7 @@
             {{tag.catagoryData.name}}
           </el-tag>
         </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加15个分类</p>
       </el-form-item>
       <el-form-item label="全部分类" prop="showAllGroup">
         全部分类为商品的集合分类，增加消费者逛的体验
@@ -232,10 +233,6 @@ export default {
                 this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                 this.loading = false;
             }).catch((error)=>{
-                // this.$notify.error({
-                //   title: '错误',
-                //   message: error
-                // });
                 console.error(error);
                 this.list = {};
                 this.loading = false;
@@ -247,9 +244,7 @@ export default {
      /* 删除数据项 */
     deleteItem(item) {
       if(item.fakeData) {  //如果是假数据
-        this.$alert('示例数据不支持删除操作，请在右侧替换真实数据后重试!', '警告', {
-          confirmButtonText: '确定'
-        })
+        this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
         return;
       }
       const tempItems = {...this.list};

@@ -192,10 +192,7 @@ export default {
         // this.form.certLocalPath && (this.certFileUrlOk = false)
         // this.form.keyLocalPath && (this.keyFileUrlOk = false)
       }).catch(error =>{
-        this.$notify.info({
-          title: '提示',
-          message: '商户未设置支付信息'
-        });
+        this.$message.info('商户未设置支付信息');
       })
     },
 
@@ -205,10 +202,7 @@ export default {
         if (valid && this.form.appId || this.form.mpAppId) {
           this.id ? this.updateShopPayInfo() : this.addShopPayInfo()
         }else{
-          this.$notify.error({
-          title: '提示',
-          message: '如果开通支付，公众号和小程序的appid依据自己开通的售卖渠道必须填写一项'
-        });
+          this.$message.error('如果开通支付，公众号和小程序的appid依据自己开通的售卖渠道必须填写一项');
         }
       })   
     },
@@ -238,17 +232,11 @@ export default {
       this._apis.set.updateShopPayInfo(query).then(response =>{
         this.loading = false
         this.updateWechatBinding()
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.getShopPayInfo()
       }).catch(error =>{
         this.loading = false
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -279,17 +267,11 @@ export default {
       this._apis.set.addShopPayInfo(query).then(response =>{
         this.loading = false
         this.updateWechatBinding()
-        this.$notify.success({
-          title: '成功',
-          message: '保存成功！'
-        });
+        this.$message.success('保存成功！');
         this.getShopPayInfo()
       }).catch(error =>{
         this.loading = false
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -302,10 +284,7 @@ export default {
       this._apis.set.updateShopInfo(query).then(response =>{
         
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
   }

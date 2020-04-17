@@ -2,55 +2,90 @@
   <!-- 图文导航 -->
   <div class="componentArticleNav" :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="currentComponentData && currentComponentData.data">
 
-    <template v-if="hasContent">
       <!-- 1、图片导航 -->
       <div v-if="currentComponentData.data.templateType===1">
-        <!-- (1)固定 -->
-        <div v-if="currentComponentData.data.slideType===1">
-          <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
-            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-              <div :class="{'default': !item.url}">
-                <img :src="item.url" alt />
-              </div>
-              <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
-            </li>
-          </ul>
-        </div>
-        <!-- (2)横向滑动 -->
-        <div v-if="currentComponentData.data.slideType===2">
-          <ul class="img_nav2">
-            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-              <div >
-                <img :src="item.url" alt />
-              </div>
-              <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
-            </li>
-          </ul>
-        </div>
+          <!-- (1)固定 -->
+            <div v-if="currentComponentData.data.slideType===1">
+               <template v-if="hasContent">
+                <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
+                  <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+                    <div :class="{'default': !item.url}">
+                      <img :src="item.url" alt />
+                    </div>
+                    <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
+                  </li>
+                </ul>
+              </template>
+              <template v-else>
+                <img
+                  class="default_image"
+                  :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                  src="../../../assets/images/shop/defaultImage/nav1.png"
+                  alt
+                />
+              </template>
+            </div>
+          <!-- (2)横向滑动 -->
+            <div v-else-if="currentComponentData.data.slideType===2" class="scroll_wrapper">
+              <template v-if="hasContent">
+                <ul class="img_nav2 clearfix" ref="scrollContent">
+                  <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+                    <div >
+                      <img :src="item.url" alt />
+                    </div>
+                    <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
+                  </li>
+                </ul>
+              </template>
+              <template v-else>
+                <img
+                  class="default_image"
+                  :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                  src="../../../assets/images/shop/defaultImage/nav2.png"
+                  alt
+                />
+              </template>
+            </div>
       </div>
       <!-- 2、文字导航 -->
       <div v-if="currentComponentData.data.templateType===2">
-        <!-- (1)固定 -->
-        <div v-if="currentComponentData.data.slideType===1">
-          <ul :class="currentComponentData.data.itemList.length>5?'img_nav4':'img_nav3'">
-            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-              <span :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
-            </li>
-          </ul>
-        </div>
-        <!-- (2)横向滑动 -->
-        <div v-if="currentComponentData.data.slideType===2">
-          <ul class="img_nav5">
-            <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-              <span class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
-            </li>
-          </ul>
-        </div>
+          <!-- (1)固定 -->
+          <div v-if="currentComponentData.data.slideType===1">
+            <template v-if="hasContent">
+              <ul :class="currentComponentData.data.itemList.length>5?'img_nav4':'img_nav3'">
+                <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+                  <span :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
+                </li>
+              </ul>
+            </template>
+            <template v-else>
+              <img
+                class="default_image"
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                src="../../../assets/images/shop/defaultImage/nav3.png"
+                alt
+              />
+            </template>
+          </div>
+          <!-- (2)横向滑动 -->
+          <div v-if="currentComponentData.data.slideType===2" class="scroll_wrapper">
+            <template v-if="hasContent">
+              <ul class="img_nav5 clearfix" ref="scrollContent2">
+                <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+                  <span class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
+                </li>
+              </ul>
+            </template>
+            <template v-else>
+              <img
+                class="default_image"
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                src="../../../assets/images/shop/defaultImage/nav4.png"
+                alt
+              />
+            </template>
+          </div>
       </div>
-    </template>
-    <div v-else class="temp_block">
-       <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
-    </div>
   </div>
 </template>
 <script>
@@ -65,12 +100,16 @@ export default {
     };
   },
   created() {},
+  mounted() {
+    this.calcScroll();
+  },
   watch: {
     'currentComponentData.data': {
       handler (newValue){
         if(this.$refs.img_w) {
           this.clientHight = this.$refs.img_w[0].clientWidth - 5;
         }
+        this.calcScroll();
       }
     }
   },
@@ -83,7 +122,10 @@ export default {
             this.currentComponentData.data.itemList = [...this.currentComponentData.data.itemList];
           }
           for(let item of this.currentComponentData.data.itemList) {
-            if(item.title) {
+            if(this.currentComponentData.data.templateType===1 && item.url) {
+              value = true;
+              break;
+            }else if(this.currentComponentData.data.templateType===2 && item.title){
               value = true;
               break;
             }
@@ -92,11 +134,30 @@ export default {
         return value;
     }
   },
-  methods: {}
+  methods: {
+    /* 计算横向滚动宽度 */
+    calcScroll() {
+      this.$nextTick(()=>{
+        const name = this.currentComponentData.data.templateType === 1 ? 'scrollContent' : 'scrollContent2';
+        if(this.$refs[name]) {
+          let width = this.currentComponentData.data.itemList.length * (75 + 10);
+          this.$refs[name].style.width = width + "px";
+        }
+      })
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
 .componentArticleNav {
+  .scroll_wrapper{
+    overflow-x: auto;
+  }
+  .default_image{
+    object-fit: none;
+    width:100%;
+  }
+
   // 小于5个数
   .img_nav {
     font-size:0;
@@ -166,11 +227,17 @@ export default {
   // }
   //   横向滑动
   .img_nav2 {
-    display: -webkit-box;
-    overflow-x: scroll;
+    // display: -webkit-box;
+    // display: -moz-box;
+    // display: -ms-flexbox;
+    // display: -o-box;
+    // display: box;
+    // overflow-x: scroll;
     & > li {
-      width: 20%;
+      // width: 20%;
+      width: 75px;
       text-align: center;
+      float:left;
       & > div {
         margin: 0 auto;
         & > img {
@@ -256,15 +323,22 @@ export default {
   }
   // 文字导航横向滑动
   .img_nav5 {
-    display: -webkit-box;
+    // display: -webkit-box;
+    // display: -moz-box;
+    // display: -ms-flexbox;
+    // display: -o-box;
+    // display: box;
     width: 100%;
-    overflow-x: scroll;
+    // overflow-x: scroll;
     height: 42px;
     & > li {
-      width: 20%;
+      // width: 20%;
+      width: 75px;
+      height: 100%;
       text-align: center;
       box-sizing: border-box;
       position: relative;
+      float:left;
       & > span {
         font-size: 14px;
         position: absolute;

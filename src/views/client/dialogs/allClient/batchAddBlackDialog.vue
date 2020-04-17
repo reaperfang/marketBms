@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="批量加入黑名单" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
-            <p class="user_id">满足以上搜索条件共{{data.checkedItem.length}}个客户</p>
+            <p class="user_id">满足以上搜索条件共{{data.checkedItem.length}}个用户</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
                 <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10"></el-checkbox>
@@ -80,8 +80,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.couponIds.splice(this.couponIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠券',
                     type: 'warning'
                 });
@@ -93,8 +92,7 @@ export default {
             let flag = this.isRepeat(arr);
             if(flag) {
                 this.codeIds.splice(this.codeIds.length - 1,1);
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '不能选择重复的优惠码',
                     type: 'warning'
                 });
@@ -112,8 +110,7 @@ export default {
             if(!!this.checkCoupon) {
                 if(this.couponIds[0].id == "") {
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请选择优惠券',
                         type: 'warning'
                     });
@@ -135,8 +132,7 @@ export default {
             if(!!this.checkCode) {
                 if(this.codeIds[0].id == "") {
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '警告',
+                    this.$message({
                         message: '请选择优惠码',
                         type: 'warning'
                     });
@@ -190,9 +186,8 @@ export default {
                 this._apis.client.batchToBlack(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
-                        message: "批量加入黑名单成功",
+                    this.$message({
+                        message: '批量加入黑名单成功',
                         type: 'success'
                     });
                     this.$emit('freshTable');
@@ -203,8 +198,7 @@ export default {
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择禁用选项',
                     type: 'warning'
                 });
@@ -235,14 +229,14 @@ export default {
             this.codeIds.splice(index, 1);
         },
         getAllCoupons() {
-            this._apis.client.getAllCoupons({couponType: 0}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 0, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.allCoupons = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);
             })
         },
         getAllCodes() {
-            this._apis.client.getAllCoupons({couponType: 1}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 1, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.allCodes = [].concat(response.list);
             }).catch((error) => {
                 console.log(error);

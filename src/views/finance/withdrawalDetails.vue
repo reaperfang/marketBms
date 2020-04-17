@@ -1,10 +1,11 @@
 <!--提现明细-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
+      <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;">
+          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in presentations"
               :key="item.value"
@@ -12,19 +13,18 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="申请时间" style="margin-left:25px;">
+        <el-form-item label="申请时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']"
-            :picker-options="pickerNowDateBefore">
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="状态">
@@ -37,8 +37,16 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="客户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
+         <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
@@ -48,14 +56,12 @@
     </div>
     <div class="under_part">
       <div class="total">
-        <span>全部 <em>{{total}}</em> 项</span>
-        <span>
-         <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button>
-          <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+         <!-- <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button> -->
+          <!-- <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button> -->
+          <span>全部 <em>{{total}}</em> 项</span>
           <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-            <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
+            <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '提现明细', '默认页面', '导出']">导出</el-button>
           </el-tooltip>
-        </span>
       </div>
       <el-table
         v-loading="loading"
@@ -64,6 +70,7 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'applyTime', order: 'descending'}"
         @selection-change="handleSelectionChange"
+        ref="multipleTable"
         >
         <el-table-column
         type="selection"
@@ -73,9 +80,13 @@
           prop="cashoutSn"
           label="提现编号">
         </el-table-column>
+         <el-table-column
+          prop="nickName"
+          label="用户昵称">
+        </el-table-column>
         <el-table-column
           prop="memberSn"
-          label="客户ID">
+          label="用户ID">
         </el-table-column>
         <el-table-column
           prop="amount"
@@ -106,7 +117,13 @@
         </el-table-column>
       </el-table>
       <div class="page_styles">
+      <div class="checkAudit" v-if="dataList.length != 0">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
+      </div>
+        
          <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
@@ -133,26 +150,36 @@ import auditingDialog from './dialogs/auditingDialog'//审核
 import handleAuditDialog from './dialogs/handleAuditDialog'//提现详情  处理中
 import failAuditDialog from './dialogs/failAuditDialog'//提现详情  失败
 import successAuditDialog from './dialogs/successAuditDialog'//提现详情  成功
+import exportTipDialog from '@/components/dialogs/exportTipDialog' //导出提示框 
 export default {
   name: 'revenueSituation',
   extends: TableBase,
-  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog },
+  components:{ withdrawDialog, auditSuccessDialog, warnDialog, waitAuditDialog, auditingDialog, handleAuditDialog, failAuditDialog, successAuditDialog ,exportTipDialog},
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       ruleForm:{
         searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
         status:-1,
-        memberSn:''
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:''
       },
       dataList:[ ],
+      selectStatus:false,
       total:0,
       currentDialog:"",
       dialogVisible: false,
@@ -177,6 +204,7 @@ export default {
     init(){
       let query = {
         memberSn:'',
+        nickName:'',
         tradeDetailSn:'',
         cashoutSn:'',
         applyTimeStart:'',
@@ -194,12 +222,19 @@ export default {
             query[key] = this.ruleForm[item]
           }
         }
+        if(this.ruleForm.userType == 'memberSn'){
+          query.memberSn = this.ruleForm.userValue || ''
+          query.nickName = ''
+        }else{
+          query.nickName = this.ruleForm.userValue || ''
+          query.memberSn = ''
+        }
       }
       query.status = this.ruleForm.status == -1 ? null : this.ruleForm.status
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.applyTimeStart = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.applyTimeEnd = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.applyTimeStart = timeValue[0]
+        query.applyTimeEnd = timeValue[1]
       }
       return query;
     },
@@ -225,30 +260,54 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        memberSn:''
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:'',
       }
       this.fetch()
     },
     //导出
     exportToExcel() {
-      if(this.total >= 1000 ){
-        this.currentData.text = "导出数据量过大，建议分时间段导出。";
+      let query = this.init();
+      if(this.multipleSelection.length > 0){
+         let ids = this.multipleSelection.map((item)=> item.id)
+         query.ids = ids;
+         this._apis.finance.exportWd(query).then((response)=>{
+          window.location.href = response
+        }).catch((error)=>{
+          this.$message.error(error)
+        })
+      }else if(this.total >1000 && this.multipleSelection.length == 0 ){
         this.dialogVisible = true
-        this.currentDialog = auditingDialog
-      }else{
-        let query = this.init();
+        this.currentDialog = exportTipDialog
+        this.currentData.query = query
+        this.currentData.api = "finance.exportWd"
+      }else if(this.multipleSelection.length == 0 && this.total<=1000){
         this._apis.finance.exportWd(query).then((response)=>{
           window.location.href = response
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error)
         })
       }      
     },
+    // 全选
+    selectAll(val){
+      if(val && this.dataList.length > 0){
+        this.dataList.forEach((row)=>{
+           this.$refs.multipleTable.toggleRowSelection(row,true);
+        })
+      }else{
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
     handleSelectionChange(val){
       this.multipleSelection = val;
+      if(val.length !=0 && val.length == this.dataList.length ){
+        this.selectStatus = true; 
+      }else{
+        this.selectStatus = false;
+      }
     },
     //批量审核
     batchCheck() {
@@ -311,11 +370,10 @@ export default {
     handleSubmit(datas){
       this._apis.finance.examineWd(datas).then((response)=>{
           this.fetch()
+           this.dialogVisible = true
+           this.currentDialog = auditSuccessDialog
       }).catch((error)=>{
-          this.$notify.error({
-          title: '错误',
-          message: '网络原因,审核失败！'
-          });
+          this.$message.error('网络原因,审核失败！')
       })
     }
   }
@@ -323,27 +381,43 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
+.el-table__header-wrapper  {
+    .el-checkbox{
+      display:none;
+    }
+	
+}
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+
 .top_part{
   width: 100%;
   background: #fff;
   border-radius: 3px;
   padding: 15px 20px;
+  .withdraw{
+    text-align: right;
+    display: block;
+    color:#655EFF;
+    font-size:14px;
+    margin-bottom:15px;
+  }
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
   padding: 15px 20px;
+  
   .total{
     display: flex;
     justify-content: space-between;
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display: block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -355,4 +429,16 @@ export default {
   width: 100%; 
   margin-top:20px;
 }
+.page_styles{
+  // display: flex;
+  .checkAudit{
+    // margin-right:220px;
+    float:left;
+    .selectAll{
+      margin-left:14px;
+      margin-right:8px;
+    }
+  }
+}
+  
 </style>

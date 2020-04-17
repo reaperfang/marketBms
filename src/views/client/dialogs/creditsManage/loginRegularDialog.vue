@@ -17,7 +17,7 @@
             </div> 
             <div v-if="distinguish == '1'">
                 <div class="marB10">
-                    <span>客户</span>
+                    <span>用户</span>
                     <div class="input_wrap" style="margin-left:14px">
                         <el-input placeholder="请输入整数" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
                     </div>
@@ -87,9 +87,8 @@ export default {
                 }
             }
             this._apis.client.editCreditRegular(params).then((response) => {
-                this.$notify({
-                    title: '成功',
-                    message: "保存成功",
+                this.$message({
+                    message: '保存成功',
                     type: 'success'
                 });
                 this.$emit('refreshPage');

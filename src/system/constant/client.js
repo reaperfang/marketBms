@@ -1,9 +1,9 @@
 /* 客户模块常量 */
 export default {
     //客户身份
-    clientStatusOps: ['非会员客户','会员'],
+    clientStatusOps: ['不限','非会员用户','会员'],
     //客户状态
-    clientStateOps: ['正常','黑名单'],
+    clientStateOps: ['正常','黑名单','全部用户'],
     //clientInfo 标签信息
     memberLabels: [
         {

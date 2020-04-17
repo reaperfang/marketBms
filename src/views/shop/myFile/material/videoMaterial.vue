@@ -1,10 +1,9 @@
 <template>
   <div>
     <div class="head">
-      <div>
-        <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
-        <el-button type="warning" plain class="ml10" @click="deleteImages">批量删除</el-button>
-        <el-button type="warning" plain class="ml10" @click="moveGroups">移动分组</el-button>
+      <div class="head-wrapper">
+        <el-input v-model="searchWord" placeholder="请输入视频名称" class="search_w inline"></el-input>
+        <el-button type="primary" @click="search">查询</el-button>
       </div>
       <div>
         <el-button type="primary" plain @click="syncImage">同步微信</el-button>
@@ -24,7 +23,7 @@
                   </span>
                   <span>
                     <i class="wx_icon" v-if="item.isSyncWechat"></i>
-                    {{item.fileSize || 0}} MB
+                    <!-- {{item.fileSize || 0}} MB -->
                   </span>
               </p>
               <div class="img_body">
@@ -42,8 +41,14 @@
                 <span @click="downVideo(item.filePath,item.fileName)"><i class="el-icon-video-camera"></i></span>
                 <span @click="deleteImage(item.id,'videoId')"><i class="el-icon-delete"></i></span>
               </p>
+              <p class="img_name">{{item.fileName}}</p>
             </div>
            </div>
+           <p>
+            <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
+            <el-button type="warning" plain class="ml10" @click="deleteImages">批量删除</el-button>
+            <el-button type="warning" plain class="ml10" @click="moveGroups">移动分组</el-button>
+           </p>
            <p class="pages">
               <el-pagination
               @size-change="handleSizeChange"
@@ -59,6 +64,10 @@
         </div>
         <div class="groups">
           <p class="groups_head">全部视频</p>
+          <groups :typeName="typeName"></groups>
+        </div>
+        <!-- <div class="groups">
+          <p class="groups_head">全部视频</p>
           <p class="item" v-for="item in groupList" :key="item.id">
             <span @click="getList(item.id)" class="group_name">{{item.name}}</span>
             <span v-if="item.id != -1">
@@ -67,15 +76,16 @@
             </span>
           </p>
           <span class="newClass" @click="newGroup('','','new')">+ 新建分组</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" @submit="handleSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" :typeName="typeName" @submit="handleSubmit"></component>
   </div>
 </template>
 
 <script>
+import groups from './groups'
 import dialogVideo from '@/views/shop/dialogs/materialDialogs/dialogVideo';
 import dialogUploadVideo from '@/views/shop/dialogs/materialDialogs/dialogUploadVideo';
 import dialogSyncVideo from '@/views/shop/dialogs/materialDialogs/dialogSyncVideo';
@@ -84,12 +94,13 @@ import dialogGroups from '@/views/shop/dialogs/materialDialogs/dialogGroups';
 import dialogGroupsMove from '@/views/shop/dialogs/materialDialogs/dialogGroupsMove';
 export default {
   name: 'videoMaterial',
-  components: {dialogVideo,dialogUploadVideo,dialogSyncVideo,dialogDelete,dialogGroups,dialogGroupsMove},
+  components: {groups,dialogVideo,dialogUploadVideo,dialogSyncVideo,dialogDelete,dialogGroups,dialogGroupsMove},
   data () {
     return {
+      typeName:'video',
+      searchWord:'',
       dialogVisible: false,
       currentDialog: '',
-      checkedAll:false,
       num:10,
       checked:false,
       currentPage:1,
@@ -113,7 +124,6 @@ export default {
   },
   created() {
     this.getList()
-    this.getGroups()
   },
   methods: {
     //获取视频列表
@@ -125,6 +135,23 @@ export default {
         pageSize:this.pageSize,
         sourceMaterialType:'2'
       }
+      this.getData(query)
+    },
+
+    //查询
+    search(){
+      let query ={
+        fileGroupInfoId:'',
+        startIndex:this.currentPage,
+        pageSize:this.pageSize,
+        sourceMaterialType:'2',
+        fileName:this.searchWord
+      }
+      this.getData(query)
+    },
+
+    //获取视频数据
+    getData(query){
       this._apis.file.getMaterialList(query).then((response)=>{
         this.list = []
         response.list.map((item) => {
@@ -134,10 +161,7 @@ export default {
         })
         this.total = response.total
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //下载视频
@@ -147,94 +171,14 @@ export default {
           a.href = filepath;
           a.click();
     },
-    /**********************************        分组相关      **********************/
-    //查询分组
-    getGroups(){
-      let query ={
-        type:'2'
-      }
-      this._apis.file.getGroup(query).then((response)=>{
-        this.groupList = response
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
-    },
-    //添加分组
-    addGroup(groupName){
-      let query ={
-        name:groupName,
-        parentId:'0',
-        type:'2'
-      }
-      this._apis.file.newGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '添加成功！'
-        });
-        this.getGroups()
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })      
-    },
-    //编辑分组
-    editGroup(groupId,groupName){
-      let query ={
-        id:groupId,
-        name:groupName,
-        type:'2'
-      }
-      this._apis.file.editGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '操作成功！'
-        });
-        this.getGroups()
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })      
-    },
-    //删除分组
-    deleteGroup(id){
-      let query ={
-        id:id,
-        type:'2'
-      }
-      this._apis.file.deleteGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '操作成功！'
-        });
-        this.getGroups()
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
-    },
 
   /**********************************        弹窗相关      **********************/
     //弹窗反馈
     handleSubmit(data){
       for(let key in data){
         switch (key) {
-          case 'add': 
-            this.addGroup(data.add.groupName) 
-          break;
-          case 'edit':
-            this.editGroup(data.edit.groupId,data.edit.groupName)
-          break;
-          case 'deleteGroup':
-            this.deleteGroup(data.deleteGroup.groupId)
+          case 'getGroupVideo':
+            this.getList(data.getGroupImage.groupId)
           break;
           case 'moveGroup':
             this.handleMoveGroup(data.moveGroup.imageId,data.moveGroup.groupId)
@@ -251,16 +195,7 @@ export default {
         }
       }
     },
-    //新建分组
-    newGroup(id,name,type){
-      this.dialogVisible = true;
-      this.currentDialog = 'dialogGroups'
-      this.data = {
-        type:type,
-        id:id || '',
-        name:name || ''
-      }
-    },
+
     //删除分组或是视频
     deleteImage(id,type){
       this.dialogVisible = true;
@@ -277,13 +212,17 @@ export default {
     },
     //批量删除
     deleteImages(){
-      this.dialogVisible = true;
-      this.currentDialog = 'dialogDelete'
       this.data = {}
       this.arrayData=[]
       this.list.map(item =>{
         item.checked == true && this.arrayData.push(item.id)       
       })
+      if(this.arrayData.length == 0){
+        this.$message.warning('请选择视频后再进行批量操作！');
+      }else{
+        this.dialogVisible = true;
+        this.currentDialog = 'dialogDelete'
+      }
     },
 
     //分组
@@ -297,13 +236,17 @@ export default {
 
     //移动分组
     moveGroups(){
-      this.dialogVisible = true;
-      this.currentDialog = 'dialogGroupsMove'
       this.data = 'video'
       this.arrayData = []
       this.list.map(item =>{
         item.checked == true && this.arrayData.push(item.id)        
       })
+      if(this.arrayData.length == 0){
+        this.$message.warning('请选择视频后再进行批量操作！');
+      }else{
+        this.dialogVisible = true;
+        this.currentDialog = 'dialogGroupsMove'
+      }
     },
 
     //上传视频
@@ -326,16 +269,10 @@ export default {
 
     handleSyncImage(query){
       this._apis.file.syncMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '同步微信视频成功！'
-        });
+        this.$message.success('同步微信视频成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     /**********************************        单个视频      **********************/
@@ -347,16 +284,10 @@ export default {
         toFileGroupInfoId:groupId
       }
       this._apis.file.moveGroup(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '移动分组成功！'
-        });
-        this.getGroups()
+        this.$message.success('移动分组成功！');
+        this.checkedAll = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //删除视频
@@ -365,31 +296,20 @@ export default {
         ids:id,
       }
       this._apis.file.deleteMaterial(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '删除成功！'
-        });
+        this.$message.success('删除成功！');
         this.getList()
+        this.checkedAll = false
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     //上传视频
     uploadVideo(query){
       this._apis.file.uploadVideo(query).then((response)=>{
-        this.$notify.success({
-          title: '成功',
-          message: '上传视频成功！'
-        });
+        this.$message.success('上传视频成功！');
         this.getList()
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
     /**********************************        分页相关      **********************/
@@ -455,7 +375,7 @@ export default {
       .item_img{
         width: 250px;
         border: 1px solid #e6e6e6;
-        margin:0px 30px 50px 0px;
+        margin:0px 20px 50px 0px;
         .img_head{
           height: 25px;
           line-height: 25px;
@@ -521,11 +441,17 @@ export default {
             border-left:1px solid #fff;
           }
         }
+        .img_name{
+          padding: 5px 0px;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
+        }
       }
     }
   }
   .groups{
-    width: 300px;
+    width: 350px;
     border: 1px solid #e6e6e6;
     font-size: 14px;
     color: #44434B;
@@ -575,5 +501,11 @@ export default {
 }
 .ml10{
   margin-left: 10px;
+}
+.search_w{
+  width: 250px;
+}
+.inline{
+  display: inline-block;
 }
 </style>

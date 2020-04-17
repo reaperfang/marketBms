@@ -1,6 +1,6 @@
 <template>
 <!-- 组件-商品列表 -->
-<div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
+<div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data" v-loading="loading" ref="componentContent">
     <!-- <van-list v-model="goodListLoading" :finished="goodListFinished" finished-text="没有更多了" @load="goodListLoad" > -->
         <ul v-if="hasContent">
             <li v-for="(item,key) in list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
@@ -13,7 +13,7 @@
                     <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
                     <p class="fTitle" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('3')!=-1">{{item.description}}</p>
                     <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
-                        <p class="price">￥<font>{{item.goodsInfos[0].salePrice}}</font></p>
+                        <p class="price">￥<font>{{getPrice(item)}}</font></p>
                     </div>
                     <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                 </div>
@@ -111,7 +111,9 @@ export default {
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
-            var bodyWidth = 370;
+            var scrollWidth = window && this.utils.isIE() ? 18 : 0;
+            console.log(scrollWidth)
+            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
             if(this.listStyle=='1'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
                 this.goodWidth = "100%";
@@ -227,10 +229,6 @@ export default {
                     this.createList(response, componentData);
                     this.loading = false;
                 }).catch((error)=>{
-                    // this.$notify.error({
-                    //     title: '错误',
-                    //     message: error
-                    // });
                     console.error(error);
                     if(this.$route.path.indexOf('templateEdit') < 0) {
                         this.list = [];
@@ -276,6 +274,13 @@ export default {
                 status: '1',
                 ids: ids,
             }
+        },
+
+        getPrice(item) {
+            if(item.goodsInfos && Array.isArray(item.goodsInfos) && item.goodsInfos.length) {
+                return item.goodsInfos[0].salePrice;    
+            };
+            return '';
         }
 
     },

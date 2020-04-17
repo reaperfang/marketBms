@@ -36,10 +36,20 @@ export function fetchSpecsList(data) {
     return request({
       apiType: 'goodsOperate',
       method: 'post',
-      target: 'PUBLIC-PRODUCT-SPECS-DETAIL-LIST-PROCESSOR',
+      target: 'PUBLIC-PRODUCT-CATEGORY-SPECS-LIST-PROCESSOR',//PUBLIC-PRODUCT-SPECS-DETAIL-LIST-PROCESSOR
       data
     })
   }
+
+// 获取商品规格列表
+export function fetchSpecsList2(data) {
+  return request({
+    apiType: 'goodsOperate',
+    method: 'post',
+    target: 'PUBLIC-PRODUCT-CATEGORY-SPECS-LIST-V1-PROCESSOR',
+    data
+  })
+}
 
   // 获取敏感词列表
 export function fetchPublicSensitiveList(data) {
@@ -65,6 +75,26 @@ export function fetchPublicSensitiveList(data) {
   export function setProtocol(data) {
       return request({
         target: 'PUBLIC-REGISTRATION-PROTOCOL-UPDATE-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'goodsOperate'
+      })
+  }  
+  
+  //获取系统内置图库组
+  export function getSystemIconGroup(data) {
+      return request({
+        target: 'PUBLIC-SYSTEM-ICON-GROUP-GET-ALL-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'goodsOperate'
+      })
+  }  
+  
+  //根据分组ID获取系统内置图片
+  export function getSystemIconByGroupId(data) {
+      return request({
+        target: 'PUBLIC-SYSTEM-ICON-BY-GROUPID-PROCESSOR',
         method: 'post',
         data,
         apiType: 'goodsOperate'

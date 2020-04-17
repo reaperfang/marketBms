@@ -1,19 +1,20 @@
 /* 选择限时秒杀弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择秒杀活动'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label="" prop="activityName">
           <el-input v-model="ruleForm.activityName" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="fetch">搜  索</el-button>
+          <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
     <el-table
       stripe
-      :data="tableList"
+      :data="tableData"
       :row-key="getRowKey"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
@@ -27,7 +28,7 @@
         <el-table-column prop="activityName" label="活动标题" :width="300">
           <template slot-scope="scope">
             <div class="name_wrapper">
-              <img :src="scope.row.goodsImgUrl" alt="加载错误" />
+              <img :src="scope.row.goodsImgUrl" alt="失败" />
               <p>{{scope.row.activityName}}</p>
             </div>
           </template>
@@ -47,8 +48,15 @@
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
         </el-table-column>
+        <div slot="empty" class="table_empty">
+          <img src="../../../../assets/images/table_empty.png" alt="">
+          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/feature/addLimitTimeBuy', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
+        </div>
       </el-table>
-      <div class="pagination">
+      <div class="multiple_selection" v-if="tableData.length">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+      </div>
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -67,7 +75,7 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from '@/components/TableBase';
 import utils from "@/utils";
-import uuid from 'uuid/v4';
+import { getToken } from '@/system/auth'
 export default {
   name: "dialogSelectSecondkill",
   extends: tableBase,
@@ -86,14 +94,15 @@ export default {
   data() {
     return {
       pageSize: 5,
-      tableList: [],
+      tableData: [],
       multipleSelection: [],
       pageNum: 1,
       ruleForm: {
         pageNum: 1,
         activityName: '',
       },
-      rules: {}
+      rules: {},
+      disableStatus: [2]  //不可选状态值
     };
   },
   computed: {
@@ -124,17 +133,18 @@ export default {
     })
   },
   methods: {
-    fetch() {
+    fetch(ev, loadAll) {
       this.loading = true;
-      this._apis.shop.getSecondkillList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+      let tempForm = {};
+      if(loadAll) {
+        tempForm = {...this.ruleForm};
+        tempForm.activityName = '';
+      }
+      this._apis.shop.getSecondkillList(loadAll? tempForm: this.ruleForm).then((response)=>{
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -152,9 +162,6 @@ export default {
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
     itemSelectable(row, index) {
       if(row.status !== 2) {
         return true;
@@ -168,6 +175,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
+}
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
+}
 .name_wrapper {
   display: flex;
   flex-direction: row;

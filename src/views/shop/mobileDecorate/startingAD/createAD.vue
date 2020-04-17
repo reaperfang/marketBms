@@ -54,6 +54,7 @@
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
                 :picker-options="pickerOptions" 
+                :default-time="'00:00:00'"
                 :disabled="showType === 'view'">
               </el-date-picker>
             </div>
@@ -65,6 +66,7 @@
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="选择日期"
                 :picker-options="pickerOptions" 
+                :default-time="'23:59:59'"
                 :disabled="showType === 'view'">
               </el-date-picker>
             </div>
@@ -170,10 +172,6 @@ export default {
         this.ruleForm = response;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -186,34 +184,20 @@ export default {
           this.saveDataLoading = true;
           if(this.currentADId) {
             this._apis.shop.editADInfo(this.ruleForm).then((response)=>{
-              this.$notify({
-                title: '成功',
-                message: '编辑成功！',
-                type: 'success'
-              });
+              this.$message.success('编辑成功！')
               this._routeTo('m_ADManageIndex');
               this.saveDataLoading = false;
             }).catch((error)=>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
               this.saveDataLoading = false;
             });
           }else{
             this._apis.shop.createAD(this.ruleForm).then((response)=>{
-              this.$notify({
-                title: '成功',
-                message: '创建成功！',
-                type: 'success'
-              });
+              this.$message.success('创建成功！')
               this._routeTo('m_ADManageIndex');
               this.saveDataLoading = false;
             }).catch((error)=>{
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
               this.saveDataLoading = false;
             });
           }

@@ -4,7 +4,7 @@
             <el-checkbox-group
                 v-model="checkedItems"
                 :max="5">
-                <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag">{{tag}}</el-checkbox>
+                <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag" :disabled="selectedTags.indexOf(tag) !== -1">{{tag}}</el-checkbox>
             </el-checkbox-group>
         </div>
         <div>
@@ -26,7 +26,8 @@ export default {
             hasCancel: true,
             tagList: [],
             checkedItems:[],
-            btnLoading: false
+            btnLoading: false,
+            selectedTags: []
         }
     },
     methods: {
@@ -51,20 +52,18 @@ export default {
                 this._apis.client.markLabel(params).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '打标签成功',
                         type: 'success'
                     });
                 }).catch((error) => {
+                    console.log(error);
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
                 }) 
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择要添加的标签',
                     type: 'warning'
                 });
@@ -76,6 +75,11 @@ export default {
             }).catch((error) => {
                 console.log(error);
             })
+        },
+        getSelectedTag() {
+            this.data.labelRecordViews.map(item => {
+                this.selectedTags.push(item.memberLabelInfoName);
+            });
         }
     },
     computed: {
@@ -96,6 +100,7 @@ export default {
         }
     },
     mounted() {
+        this.getSelectedTag();
         this.getLabels();
     },
     props: {

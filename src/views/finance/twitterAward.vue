@@ -36,7 +36,7 @@
         <div class="item">
           <span class="money">累计发放红包</span>
           <span class="num">
-            <em>{{survey.hongbao || 0}}元</em>
+            <em>{{survey.hongbao || 0 | money}}{{ survey.hongbao |displayMoney}}</em>
           </span>
         </div>
         <div class="item">
@@ -92,6 +92,23 @@ export default {
     flag(){
       this.getSurvey()
     }
+  },
+  filters:{
+      money(options){
+        if(Math.abs(Math.round(options))>9999){
+          return (Math.round(options)/10000).toFixed(2)
+        }else{
+            return options
+        }
+      },
+      displayMoney(options){
+        if(Math.abs(Math.round(options))>9999){
+          return "万元"
+        }else{
+            return "元"
+        }
+      }
+
   },
   computed:{
     surveyStatus(){

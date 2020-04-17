@@ -36,31 +36,31 @@
         <div class="item">
           <span class="money">累计充值金额</span>
           <span class="num">
-            <em>{{survey.rechargeSum || 0}}元</em>
+            <em>{{survey.rechargeSum | quantity}}{{survey.rechargeSum | displayMoney}}</em>
           </span>
         </div>
         <div class="item">
           <span class="money">预计可发送短信条数</span>
           <span class="num">
-            <em>{{survey.smsLeftCount || 0}}条</em>
+            <em>{{survey.smsLeftCount | quantity}}{{survey.smsLeftCount | displayCount}}</em>
           </span>
         </div>
         <div class="item">
           <span class="money">当前短信余额</span>
           <span class="num">
-            <em>{{survey.accountBalance || 0}}元</em>
+            <em>{{survey.accountBalance | quantity}}{{survey.accountBalance | displayMoney}}</em>
           </span>
         </div>
         <div class="item">
           <span class="money">已发送短信（营销）</span>
           <span class="num">
-            <em>{{survey.marketingSmsSentCount || 0}}条</em>
+            <em>{{survey.marketingSmsSentCount | quantity}}{{survey.marketingSmsSentCount | displayCount}}</em>
           </span>
         </div>
         <div class="item">
           <span class="money">已发送短信（通知）</span>
           <span class="num">
-            <em>{{survey.notifySmsSentCount || 0}}条</em>
+            <em>{{survey.notifySmsSentCount |quantity }}{{survey.notifySmsSentCount | displayCount}}</em>
           </span>
         </div>
         <div>
@@ -75,8 +75,8 @@
 
 <script>
 import utils from "@/utils";
-import Blob from '@/excel/Blob'
-import Export2Excel from '@/excel/Export2Excel.js'
+import Blob from '@/assets/js/excel/Blob'
+import Export2Excel from '@/assets/js/excel/Export2Excel.js'
 import sgsTable from './components/sgsTable'
 import financeCons from '@/system/constant/finance'
 import { mapMutations } from 'vuex'
@@ -95,6 +95,31 @@ export default {
       },
     }
   },
+  filters:{
+  quantity(options){
+    if(Math.abs(Math.round(options))>9999){
+      return (Math.round(options)/10000).toFixed(2)
+    }else{
+      let reOption = options || 0
+        return reOption
+    }
+  },
+  displayMoney(options){
+    if(Math.abs(Math.round(options))>9999){
+      return "万元"
+    }else{
+        return "元"
+    }
+  },
+  displayCount(options){
+    if(Math.abs(Math.round(options))>9999){
+      return "万条"
+    }else{
+        return "条"
+    }
+  }
+
+},
   computed:{
     surveyStatus(){
       return financeCons.surveyStatus;

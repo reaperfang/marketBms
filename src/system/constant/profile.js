@@ -34,7 +34,7 @@ export default {
             id: "005",
             url: require("@/assets/images/profile/t_05.png"),
             color: "#FF9A54",
-            text: "支付客户数",
+            text: "支付用户数",
             price: 0
         },
         {   
@@ -100,7 +100,7 @@ export default {
             id: "08",
             url:'/client/allClient',
             img: require("@/assets/images/profile/l_08.png"),
-            text: "客户导入"
+            text: "用户导入"
         }
     ],
     //概况首页-营销活动
@@ -110,14 +110,14 @@ export default {
             url:'/apply',
             img: require("@/assets/images/profile/m_01.png"),
             title: "优惠券",
-            sub: "向客户发放店铺优惠"
+            sub: "向用户发放店铺优惠"
         },
         {
             id: "02",
             url:'/apply',
             img: require("@/assets/images/profile/m_02.png"),
             title: "优惠码",
-            sub: "向客户发放店铺优惠码"
+            sub: "向用户发放店铺优惠码"
         },
         {
             id: "03",
@@ -152,7 +152,7 @@ export default {
             url:'/apply',
             img: require("@/assets/images/profile/m_07.png"),
             title: "赠品管理",
-            sub: "管理客户赠品"
+            sub: "管理用户赠品"
         },
         {
             id: "08",

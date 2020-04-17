@@ -28,20 +28,19 @@
                 v-if="isShowUploadVideo"
                 type="primary">选取文件</el-button> -->
           </el-upload>
-          <p v-if="isShowUploadVideo">视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p>
+          <p>视频大小不超过10mb，支持mp4格式</p> 
+          <!-- <p>视频大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式</p> -->
         </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请勿超过20字" style="width:195px"></el-input>
         </el-form-item>
         <el-form-item label="分组">
-          <el-select v-model="form.groupValue" placeholder="请选择">
-            <el-option
-              v-for="item in groupList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
+          <el-cascader
+          v-model="form.groupValue"
+          :props="props"
+          class="w_300"
+          >
+          </el-cascader>
         </el-form-item>
        <el-form-item label="封面">
           <el-upload
@@ -80,12 +79,13 @@ export default {
       },
   },
   data() {
+    let self = this
     return {
       uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
       form:{
         imageUrl:'',
         name:'',
-        groupValue:'-1',
+        groupValue:['-1'],
         imageUrls:''
       },
       rules:{
@@ -95,12 +95,39 @@ export default {
       },
       fileData:{},
       videoData:{},
-      groupList:[],
+      // groupList:[],
       videoFlag:false , //是否显示进度条
 		  videoUploadPercent:"", //进度条的进度，
       isShowUploadVideo:false,
       loading:false,
       loading1:false,
+      props: {
+        lazy: true,
+        checkStrictly: true,
+        lazyLoad (node, resolve) {
+          setTimeout(() => {
+            let id = node.level == 0 ? '0' : node.data.value
+            let query ={
+              type:'1',
+              parentId:id
+            }
+            self._apis.file.getGroup(query).then((response)=>{
+              if(response == null){
+                return resolve([]);
+              }else{
+                const nodes = response.map(item => ({
+                  value: item.id,
+                  label: item.name,
+                }));
+                // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+                resolve(nodes)
+              }
+            }).catch((error)=>{
+              self.$message.error(error);
+            })
+          }, 500);
+        }
+      },
     };
   },
   computed: {
@@ -118,41 +145,27 @@ export default {
     }
   },
   created() {
-    this.getGroups()
+  
   },
   methods: {
-    //查询分组
-    getGroups(){
-      let type = '2'
-      this._apis.file.getGroup({type:type}).then((response)=>{
-        this.groupList = response
-      }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
-      })
-    },
-   //上传图片
+   //上传视频
     submit(formName){
       this.$refs[formName].validate((valid) => {
           if (valid && this.videoData.url !=undefined) {
+            let leg = this.form.groupValue.length
             let query ={
-              fileGroupInfoId:this.form.groupValue,
-              fileName:this.videoData.original,
+              fileGroupInfoId:this.form.groupValue[leg-1],
+              fileName:this.form.name,
               filePath:this.videoData.url,
               fileSize:this.videoData.size,
-              name:this.form.name,
+              name:this.videoData.original,
               fileCover:this.form.imageUrls,
               sign:'',
             }
             this.$emit('submit',{uploadVideo:{query:query}})
             this.visible = false
           }else{
-            this.$notify.warning({
-              title: '提示',
-              message: '请上传视频或等待视频上传完成后保存'
-            });
+            this.$message.warning('请上传视频或等待视频上传完成后保存')
           }
       })
     },
@@ -231,7 +244,7 @@ export default {
     display: inline-block;
   }
 /deep/ .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
+    border-color: #655EFF;
   }
 /deep/ .avatar-uploader-icon {
     font-size: 28px;

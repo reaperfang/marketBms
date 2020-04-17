@@ -43,8 +43,9 @@
         >{{item.split(',')[3]}}</el-tag>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="visible = false">取 消</el-button>
+        <el-checkbox @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
         <el-button type="primary" @click="submit" :loading="loading">确 定</el-button>
+        <el-button @click="visible = false">取 消</el-button>
       </div>
     </div>
   </DialogBase>
@@ -61,7 +62,8 @@ export default {
       // dialogWidth: '1000px',
       dialogFormVisible: true,
       checkList: [],
-      showFooter: false
+      showFooter: false,
+      checkedAll: false
     };
   },
   created() {
@@ -89,8 +91,20 @@ export default {
     region: {
       deep: true,
       handler() {
-        this.checkList = this.region.reduce((total, val) => {
-        return total.concat(val.checkList);
+        this.checkList = this.region.reduce((total, val, index) => {
+          let _region = this.region[index];
+
+          if (_region.citys.length == _region.checkList.length) {
+            let arr = []
+            let str = ' , , ,'
+
+            str += _region.checkList[0].split(',')[1]
+            arr.push(str)
+
+            return total.concat(arr);
+          } else {
+            return total.concat(val.checkList);
+          }
       }, []);
       }
     }
@@ -99,6 +113,33 @@ export default {
     DialogBase
   },
   methods: {
+    checkedAllChange() {
+      let region
+      
+      if(this.checkedAll) {
+        this.region.forEach((val, index) => {
+          this.checkboxChange(true, index)
+        })
+
+        region = JSON.parse(JSON.stringify(this.region))
+        region.forEach(val => {
+          val.checked = true
+        })
+        
+        this.region = region
+      } else {
+        this.region.forEach((val, index) => {
+          this.checkboxChange(false, index)
+        })
+
+        region = JSON.parse(JSON.stringify(this.region))
+        region.forEach(val => {
+          val.checked = false
+        })
+
+        this.region = region
+      }
+    },
     checkListchange(key) {
       let _region = this.region[key];
 
@@ -146,10 +187,18 @@ export default {
       let _region = JSON.parse(JSON.stringify(this.region))
 
       _region.forEach(val => {
-        for(let i=0; i<val.checkList.length; i++) {
-          if(val.checkList[i] == tag) {
-            val.checkList.splice(i, 1)
-            i--
+        let arr = tag.split(',')
+
+        if(arr[0] == ' ' && arr[1] == ' ' && arr[2] == ' ') {
+          if(val.name == arr[3]) {
+            val.checkList = []
+          }
+        } else {
+          for(let i=0; i<val.checkList.length; i++) {
+            if(val.checkList[i] == tag) {
+              val.checkList.splice(i, 1)
+              i--
+            }
           }
         }
       })
@@ -285,7 +334,7 @@ export default {
     }
   }
   .province {
-    width: 120px;
+    width: 150px;
     margin: 0 0 10px !important;
     position: relative;
     .citys {
@@ -321,6 +370,16 @@ export default {
 // }
 /deep/ .el-tag {
   padding: 0 5px;
+}
+.el-button+.el-button {
+    margin-left: 20px;
+}
+/deep/ .dialog-footer {
+  margin-top: 30px;
+  .el-checkbox {
+    float: left;
+    margin-top: 6px;
+  }
 }
 </style>
 

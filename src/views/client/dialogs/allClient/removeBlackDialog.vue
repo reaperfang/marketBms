@@ -9,7 +9,7 @@
                     <span class="d_span">{{item.disableItemText}}</span>
                 </div>
             </div>
-            <p class="red">确定将该客户冻结权限全部解冻吗？</p>
+            <p class="red">确定将该用户冻结权限全部解冻吗？</p>
         </div>
     </DialogBase>
 </template>
@@ -34,9 +34,8 @@ export default {
                 console.log(error)
             });
             this._apis.client.removeFromBlack({memberInfoId: this.data.id}).then((response) => {
-                this.$notify({
-                    title: '成功',
-                    message: "解除黑名单成功",
+                this.$message({
+                    message: '解除黑名单成功',
                     type: 'success'
                 });
                 this.$emit('freshTable');

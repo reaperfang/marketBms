@@ -24,7 +24,7 @@
           <el-checkbox v-model="distinguish1">区分人群奖励</el-checkbox>
         </div>
         <div v-if="distinguish1 == true">
-          <span>客户</span>
+          <span>用户</span>
           <div class="input_wrap">
             <el-input v-model="noMember1" @keyup.native="checkZero($event,noMember1,'noMember1')"></el-input>
           </div>
@@ -54,7 +54,7 @@
           <el-checkbox v-model="distinguish2">区分人群奖励</el-checkbox>
         </div>
         <div v-if="distinguish2 == true">
-          <span>客户</span>
+          <span>用户</span>
           <div class="input_wrap">
             <el-input v-model="noMember2" @keyup.native="checkZero($event,noMember2,'noMember2')"></el-input>
           </div>
@@ -84,7 +84,7 @@
           <el-checkbox v-model="distinguish3" @keyup.native="checkZero($event,distinguish3,'distinguish3')">区分人群奖励</el-checkbox>
         </div>
         <div v-if="distinguish3 == true">
-          <span>客户</span>
+          <span>用户</span>
           <div class="input_wrap">
             <el-input v-model="noMember3" @keyup.native="checkZero($event,noMember3,'noMember3')"></el-input>
           </div>
@@ -144,8 +144,7 @@ export default {
       val = val.replace(/^0/g,'');
       if(Number(val) <= Number(this.fullWord1)) {
         val = "";
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '条件2文字个数需大于条件1的',
           type: 'warning'
         });
@@ -210,10 +209,9 @@ export default {
       this._apis.client
         .editCreditRegular(params)
         .then(response => {
-          this.$notify({
-            title: "成功",
-            message: "保存成功",
-            type: "success"
+          this.$message({
+            message: '保存成功',
+            type: 'success'
           });
           this.$emit('refreshPage');
         })

@@ -9,7 +9,8 @@
             </div>
             <div class="righter">
                 <i class="memberLevelImg" :style="{background: `url(${orderDetail.memberLevelImg})`}"></i>
-                <span class="member-sn">客户ID：{{orderDetail.orderInfo.memberSn}}</span>
+                <span class="member-name">用户昵称：{{orderDetail.orderInfo.memberName}}</span>
+                <span class="member-sn">用户ID：{{orderDetail.orderInfo.memberSn}}</span>
             </div>
         </div>
         <orderState :orderInfo="orderDetail.orderInfo" :orderState="orderDetail.orderInfo.orderStatus" :payWay="orderDetail.orderInfo.payWay" :closeReaosn="orderDetail.orderInfo.closeReaosn" @orderStatusSuccess="getDetail" class="order-state"></orderState>
@@ -18,10 +19,34 @@
                 <el-tab-pane label="订单信息" name="order">
                     <orderInformation :orderInfo="orderDetail.orderInfo" :orderDetail="orderDetail" @getDetail="getDetail"></orderInformation>
                 </el-tab-pane>
-                <el-tab-pane label="发货信息" name="delivery">
+                <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
             </el-tabs>
+        </div>
+        <div class="operate-record">
+            <p class="header">操作记录</p>
+            <el-table
+                :data="orderDetail.orderOperationRecordList"
+                style="width: 100%"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                <el-table-column
+                    label="操作"
+                    width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.operationType | operationTypeFilter}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="createUserName"
+                    label="操作人"
+                    width="180">
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    label="操作时间">
+                </el-table-column>
+            </el-table>
         </div>
         <!-- <div class="goods-list">
             <p class="header">订单清单</p>
@@ -230,7 +255,15 @@ export default {
                 case 6:
                     return '关闭订单'
                 case 7:
+                    return '库存不足'
+                case 8:
                     return '提前关闭订单'
+                case 9:
+                    return '商户备注'
+                case 10:
+                    return '修改收货信息'
+                case 11:
+                    return '自动发货'
             }
         },
         channelInfoIdFilter(code) {
@@ -272,6 +305,13 @@ export default {
             return str
         }
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+          vm.$nextTick(() => {
+            document.querySelector('.content-main').scrollTop = 0
+          })
+        });
+    },
     methods: {
         sendGoods() {
             console.log('sendGoods')
@@ -280,18 +320,11 @@ export default {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
             consultType: this.goodsListMessage.consultType, consultMoney: this.goodsListMessage.consultMoney}).then(res => {
                 this.changePriceVisible = false
-                this.$notify({
-                    title: '成功',
-                    message: '添加成功！',
-                    type: 'success'
-                });
+                this.$message.success('添加成功！');
                 this.getDetail()
             }).catch(error => {
                 this.changePriceVisible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             }) 
         },
         getDetail() {
@@ -303,10 +336,7 @@ export default {
                     this.orderDetail = res
                     resolve(res)
                 }).catch(error => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: error
-                    });
+                    this.$message.error(error);
                     reject(error)
                 })
             })
@@ -399,6 +429,9 @@ export default {
         }
         .operate-record {
             clear: both;
+            .header {
+                padding-left: 0;
+            }
         }
     }
     .reduce-price-input {
@@ -414,6 +447,10 @@ export default {
         margin-right: 5px;
     }
     .member-sn {
+        color: #b6b6b9;
+    }
+    .member-name {
+        margin-right: 20px;
         color: #b6b6b9;
     }
 </style>

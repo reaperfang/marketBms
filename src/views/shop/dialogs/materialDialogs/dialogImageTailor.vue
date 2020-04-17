@@ -144,7 +144,7 @@ export default {
       this.$emit('submit',{imageTailor:{}})
       this.$refs.cropper.getCropData((data) => {
         let urlData = data.substring(23, data.length);
-        axios.post(this.uploadUrl,"json={\"cid\":\""+ this.cid +"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",{headers: {'Origin':'http'}}).then((response) => {
+        axios.post(this.uploadUrl,"json={\"cid\":\""+ this.cid +"\", \"content\":\""+ encodeURI(urlData).replace(/\+/g,'%2B')+"\"}",{headers: {'Origin':location.protocol.split(':')[0]}}).then((response) => {
          let params = {
             id: this.arrayData[0],
             filePath: response.data.data.url,
@@ -152,23 +152,13 @@ export default {
             imgPixelHeight: response.data.data.height
           }
           this._apis.file.editArticle(params).then((response) => {
-            this.$notify({
-              title: '成功',
-              message: '图片裁剪成功',
-              type: 'success'
-            });
+            this.$message.success('图片剪裁成功！');
           }).catch((error) => {
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           })
           // this.$emit('submit',{imageTailor:{}})
         }).catch((error) => {
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error);
         })
       })
     },    

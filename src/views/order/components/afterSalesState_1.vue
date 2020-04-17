@@ -8,7 +8,7 @@
                     <el-steps :active="2">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" description=""></el-step>
-                        <el-step class="word4" title="客户退货" description=""></el-step>
+                        <el-step class="word4" title="用户退货" description=""></el-step>
                         <el-step class="word4" title="商户退款" description=""></el-step>
                         <el-step class="word5" title="系统处理中" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
@@ -16,7 +16,7 @@
                 </div>
                 <div class="col righter">
                     <p>待审核</p>
-                    <p class="des">客户申请售后，待审核</p>
+                    <p class="des">用户申请售后，待审核</p>
                     <div class="button-box">
                         <el-button @click="reject">拒绝</el-button>
                         <el-button type="primary" @click="auth">同意</el-button>
@@ -31,7 +31,7 @@
                     <el-steps :active="3">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" description=""></el-step>
+                        <el-step class="word4" title="用户退货" description=""></el-step>
                         <el-step class="word4" title="商户退款" description=""></el-step>
                         <el-step class="word5" title="系统处理中" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="col righter">
                     <p>待退货</p>
-                    <p class="des">商户同意售后，客户未发货。</p>
+                    <p class="des">商户同意售后，用户未发货。</p>
 
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     <el-steps :active="4">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="用户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
                         <el-step class="word4" title="商户退款" description=""></el-step>
                         <el-step class="word5" title="系统处理中" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="col righter">
                     <p>待处理</p>
-                    <p class="des">客户发货，商户未确认收货，未退款</p>
+                    <p class="des">用户发货，商户未确认收货，未退款</p>
                     <div class="button-box">
                         <el-button v-if="!orderAfterSale.receiveGoodsTime" @click="confirmTakeOver">确认收货</el-button>
                         <el-button type="primary" @click="drawback(orderAfterSale.id)">退款</el-button>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="col righter">
                     <p>已关闭</p>
-                    <p class="des">客户撤销申请或商户拒绝售后。</p>
+                    <p class="des">用户撤销申请或商户拒绝售后。</p>
                 </div>
             </div>
         </template>
@@ -99,7 +99,7 @@
                     <el-steps :active="6">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
+                        <el-step class="word4" title="用户退货" :description="orderAfterSale.memberReturnGoodsTime"></el-step>
                         <el-step class="word4" title="商户退款" :description="orderAfterSale.refundTime"></el-step>
                         <el-step class="word5" title="系统处理中" :description="orderAfterSale.refundTime"></el-step>
                         <el-step class="word2" title="完成" :description="orderAfterSale.refundTime"></el-step>
@@ -139,18 +139,18 @@ export default {
             this.$emit('reject')
         },
         drawback(id) {
-            this._apis.order.orderAfterSaleDrawback({id}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '已发起退款，系统处理中。',
-                    type: 'success'
+            if(this.orderAfterSale.isSellerReceived == 0) {
+                this.$message({
+                message: '请先确认收货',
+                type: 'warning'
                 });
+                return
+            }
+            this._apis.order.orderAfterSaleDrawback({id}).then((res) => {
+                this.$message.success('已发起退款，系统处理中。');
                 this.$emit('getDetail')
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         }
     },

@@ -4,17 +4,14 @@
     <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <div class="item">
             <h2>自动关闭未付款订单：</h2>
-               <!-- 临时撤回v1.3的功能展示  fang_y -->
-               <!-- <el-form-item label="拍下未付款:" prop="autoCancelUnpayOrder" style="marginLeft:36px;"> -->
-               <el-form-item label="拍下未付款:" prop="autoCancelUnpayOrder">
-               <!-- 临时撤回v1.3的功能展示  fang_y -->
-               <!-- <el-switch
+               <el-form-item label="拍下未付款:" prop="autoCancelUnpayOrder" style="marginLeft:36px;">
+               <el-switch
                 v-model="autoOrder"
                 active-color="#13ce66"
                 inactive-color="#cacfcb"
                 class="item-switch1"
                 >
-              </el-switch> -->
+              </el-switch>
                 <el-input-number 
                 v-model="form.autoCancelUnpayOrder" 
                 controls-position="right" 
@@ -23,6 +20,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!autoOrder"
+                :step="1" 
+                step-strictly
                 v-if="form.acuoType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -32,6 +31,8 @@
                 placeholder="请输入整数"
                 :min="1" 
                 :precision="0"
+                :step="1" 
+                step-strictly
                 :disabled="!autoOrder"
                 v-else>
                 </el-input-number>
@@ -99,17 +100,16 @@
                 </el-checkbox>
             </el-form-item>
         </div>
-        <div class="item">
+        <div v-if="!authHide" class="item">
             <h2>自动发货：<span>开启后立即对所有订单生效，若需要关闭该功能则清空输入框数值</span></h2>
             <el-form-item  prop="orderAutoSend" label="下单">
-              <!-- 临时撤回v1.3的功能展示  fang_y -->
-              <!-- <el-switch
+              <el-switch
                 v-model="sendOrder"
                 active-color="#13ce66"
                 inactive-color="#cacfcb"
                 class="item-switch2"
                 >
-              </el-switch> -->
+              </el-switch>
                 <el-input-number 
                 v-model="form.orderAutoSend" 
                 controls-position="right" 
@@ -118,6 +118,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!sendOrder"
+                :step="1" 
+                step-strictly
                 v-if="form.oasType == 1">
                 </el-input-number>
                 <el-input-number 
@@ -128,6 +130,8 @@
                 :min="1" 
                 :precision="0"
                 :disabled="!sendOrder"
+                :step="1" 
+                step-strictly
                 v-else>
                 </el-input-number>
                 <el-select 
@@ -152,19 +156,26 @@
 </template>
 
 <script>
+import anotherAuth from '@/mixins/anotherAuth'
+
 export default {
+  mixins: [anotherAuth],
   name: 'preSale',
   data() {
     var checkCancelOrder = (rule,value,callback)=>{
-      if(this.autoOrder && !value){
+      if(this.autoOrder == 1 && !value){
         return callback(new Error('输入框不能为空'))
+      }else if(this.form.autoCancelUnpayOrder.toString().length > 9){
+        return callback(new Error('输入10位以内有效数字'))
       }else{
         callback()
       }
     }
     var checkOrderAutoSend = (rule,value,callback)=>{
       if(this.sendOrder && !value){
-          return callback(new Error('输入框不能为空'))
+        return callback(new Error('输入框不能为空'))
+      }else if(this.form.orderAutoSend.toString().length > 9){
+        return callback(new Error('输入10位以内有效数字'))
       }else{
         callback()
       }
@@ -172,8 +183,8 @@ export default {
     return {
       loading:false,
       currentTab: 'preSale',
-      autoOrder:true,
-      sendOrder:true,
+      autoOrder:"",
+      sendOrder:"",
       form: {
             autoCancelUnpayOrder: '',
             acuoType: 1,
@@ -181,6 +192,8 @@ export default {
             transportationExpenseType: 1,
             orderAutoSend: '',
             oasType: '',
+            isAutoCancelUnpayOrder:0,
+            isOrderAutoSend:0
 
         },
      rules: {
@@ -205,12 +218,12 @@ export default {
   },
   components: {},
   watch: {
-    // autoOrder(after,before){
-    //   console.log(after,before)
-    //   if(after == true){
-      
-    //   }
-    // }
+    autoOrder(after,before){
+      this.form.isAutoCancelUnpayOrder  =Number(after)
+    },
+    sendOrder(after,before){
+      this.form.isOrderAutoSend  =Number(after)
+    }
   },
   computed:{
       deliverGoodsTypeCheckout:{
@@ -226,6 +239,10 @@ export default {
           return shopInfo.id
       }
    },
+  mounted(){
+
+   
+  },
   created() {
       this.getShopInfo()
   },
@@ -236,13 +253,11 @@ export default {
     getShopInfo(){
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
-        console.log(response,"222")
         this.form = response
+        this.autoOrder = Boolean(response.isAutoCancelUnpayOrder)
+        this.sendOrder = Boolean(response.isOrderAutoSend)
       }).catch(error =>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       })
     },
 
@@ -258,27 +273,20 @@ export default {
               deliverGoodsType:this.form.deliverGoodsType,
               transportationExpenseType:this.form.transportationExpenseType,
               orderAutoSend:this.form.orderAutoSend,
-              oasType:this.form.oasType
+              oasType:this.form.oasType,
+              isAutoCancelUnpayOrder:this.form.isAutoCancelUnpayOrder,
+              isOrderAutoSend:this.form.isOrderAutoSend
             }
             this._apis.set.updateShopInfo(data).then(response =>{
               this.loading = false
-              this.$notify.success({
-                title: '成功',
-                message: '保存成功！'
-              });
+              this.$message.success('保存成功！');
             }).catch(error =>{
               this.loading = false
-              this.$notify.error({
-                title: '错误',
-                message: error
-              });
+              this.$message.error(error);
             })
           }else{
             this.loading = false
-            this.$notify.error({
-                title: '输入框不能为空',
-                message: '保存失败'
-              });
+            this.$message.error('输入框不能为空，保存失败');
           }
       })
     },

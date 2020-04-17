@@ -8,7 +8,17 @@
                 <el-form-item label="商品名称">
                     <el-input v-model="listQuery.goodsName" placeholder="请输入"></el-input>
                 </el-form-item>
-                <el-form-item label="审核状态">
+                <el-form-item label="评价时间">
+                    <el-date-picker
+                        v-model="listQuery.orderDate"
+                        type="datetimerange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="utils.globalTimePickerOption.call(this)">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="状态">
                     <el-select v-model="listQuery.auditStatus">
                         <el-option label="全部" value=""></el-option>
                         <el-option label="待审核" value="0"></el-option>
@@ -16,41 +26,33 @@
                         <el-option label="审核未通过" value="2"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="评价星级">
-                    <el-select v-model="listQuery.starNum">
+                <el-form-item label="精选评价">
+                    <el-select v-model="listQuery.isChoiceness">
                         <el-option label="全部" value=""></el-option>
-                        <el-option label="1星" value="1"></el-option>
-                        <el-option label="2星" value="2"></el-option>
-                        <el-option label="3星" value="3"></el-option>
-                        <el-option label="4星" value="4"></el-option>
-                        <el-option label="5星" value="5"></el-option>
+                        <el-option label="是" :value="1"></el-option>
+                        <el-option label="否" :value="0"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="评论时间">
-                    <el-date-picker
-                        v-model="listQuery.orderDate"
-                        type="datetimerange"
-                        range-separator="-"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :default-time="['00:00:00', '23:59:59']">
-                    </el-date-picker>
+                <el-form-item>
+                    <el-button @click="search" type="primary">查询</el-button>
+                    <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
-                <div class="buttons">
+                <!-- <div class="buttons" style="display: inline-block; float: right;">
                     <div class="lefter">
-                        <el-button v-permission="['订单', '评价管理', '默认页面', '批量审核']" @click="batchAudit" class="border-button">批量审核</el-button>
-                        <!-- <el-button v-permission="['订单', '评价管理', '默认页面', '批量回复']" @click="batchReply" class="border-button">批量回复</el-button> -->
-                        <el-button v-permission="['订单', '评价管理', '默认页面', '敏感词设置']" @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button>
                     </div>
                     <div class="righter">
-                        <span @click="resetForm('form')" class="resetting pointer">重置</span>
-                        <el-button @click="getList" type="primary">查询</el-button>
+                        <el-button @click="getList" type="primary">搜索</el-button>
+                        <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </div>
-                </div>
+                </div> -->
+                <div style="clear: both;"></div>
             </el-form>
         </div>
         <div class="content">
-            <p class="statistics">已选择<span>{{multipleSelection.length}}</span>项，全部<span>{{total}}</span>项</p>
+            <div class="content-header">
+                <p class="statistics">已选择<span>{{multipleSelection.length}}</span>项，全部<span>{{total}}</span>项</p>
+                <el-button v-permission="['订单', '评价管理', '默认页面', '敏感词设置']" @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button>
+            </div>
             <div class="table-box">
                 <el-table
                     v-loading="loading"
@@ -64,7 +66,7 @@
                         type="selection"
                         width="55">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                         prop="isChoiceness"
                         label="全部"
                         width="120"
@@ -74,6 +76,11 @@
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.isChoiceness == 1" color="#FF4B1C">{{scope.row.isChoiceness | isChoicenessFilter}}</el-tag>
                         </template>
+                    </el-table-column> -->
+                    <el-table-column
+                        prop="goodsName"
+                        label="商品名称"
+                        width="120">
                     </el-table-column>
                     <el-table-column
                         prop="starNum"
@@ -86,18 +93,14 @@
                             {{scope.row.starNum}}星
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        prop="goodsName"
-                        label="商品名称"
-                        width="120">
-                    </el-table-column>
+
                     <el-table-column
                         prop="orderCode"
                         label="订单编号">
                     </el-table-column>
                     <el-table-column
-                        prop="memberSn"
-                        label="客户ID">
+                        prop="memberName"
+                        label="用户昵称">
                     </el-table-column>
                     <el-table-column
                         prop="auditStatus"
@@ -137,9 +140,14 @@
                     </el-table-column>
                 </el-table>
             </div>
+            <div v-show="!loading" class="footer">
+                <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+                <el-button v-permission="['订单', '评价管理', '默认页面', '批量审核']" @click="batchAudit" class="border-button">批量审核</el-button>
+                <el-button v-permission="['订单', '评价管理', '默认页面', '批量回复']" @click="batchReply" class="border-button">批量回复</el-button>
+            </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" @audit="auditSubmit" :title="title"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" @audit="auditSubmit" :title="title"></component>
     </div>
 </template>
 <script>
@@ -183,7 +191,7 @@ export default {
             ],
             multipleSelection: [],
             multipleTable: [
-                {}
+                
             ],
             total: 0,
             listQuery: {
@@ -196,6 +204,7 @@ export default {
                 creaTetimeEnd: '', // 评论查询结束时间
                 auditStatus: '', // 审核状态
                 starNum: '', // 星级数量
+                isChoiceness: ''
             },
             tableData: [
                 
@@ -205,7 +214,9 @@ export default {
             dialogVisible: false,
             title: '',
             batch: false,
-            loading: false
+            loading: false,
+            checkedAll: false,
+            isIndeterminate: false
         }
     },
     created() {
@@ -235,6 +246,23 @@ export default {
         }
     },
     methods: {
+        search() {
+            this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
+            })
+            
+            this.getList()
+        },
+        checkedAllChange() {
+            if(this.checkedAll) {
+                this.$refs.multipleTable.clearSelection();
+                this.$refs.multipleTable.toggleAllSelection();
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+            this.isIndeterminate = false;
+        },
         auditSubmit(value) {
             let params = {auditStatus: +value}
             let ids = this.multipleSelection.map(val => +val.id) 
@@ -247,17 +275,10 @@ export default {
             this._apis.order.orderCommentAuth(params).then((res) => {
                 this.getList()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: `审核成功！`,
-                    type: 'success'
-                });
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         setChoiceness(row) {
@@ -271,37 +292,25 @@ export default {
                 }
                 this.getList()
                 this.visible = false
-                this.$notify({
-                    title: '成功',
-                    message: `${message}成功！`,
-                    type: 'success'
-                });
+                this.$message.success(`${message}成功！`);
             }).catch(error => {
                 this.visible = false
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         onSubmit(value) {
             console.log(value)
             this._apis.order.replyComment({ids: this.multipleSelection.map(val => val.id), replyContent: value}).then((res) => {
-                this.$notify({
-                    title: '成功',
-                    message: '批量回复成功！',
-                    type: 'success'
-                });
+                // this.$message.success('批量回复成功！');
+                this.getList()
+                this.confirm({title: '提示', iconSuccess: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
             }).catch(error => {
-                this.$notify.error({
-                    title: '错误',
-                    message: error
-                });
+                this.$message.error(error);
             })
         },
         batchAudit() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了'})
+                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了', showCancelButton: false})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.auditStatus != 0).length) {
@@ -318,11 +327,11 @@ export default {
         },
         batchReply() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量回复的评论', confirmText: '知道了'})
+                this.confirm({title: '提示', icon: false, text: '请先勾选当前页需要批量回复的评论', confirmText: '我知道了', showCancelButton: false})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.isReply).length) {
-                    this.confirm({title: '提示', icon: true, text: '勾选的评论中包含已回复的数据，无法批量回复，请重新选择。', confirmText: '知道了'})
+                    this.confirm({title: '提示', icon: false, text: '勾选的评论中包含已回复的数据，无法批量回复，请重新选择。', confirmText: '我知道了', showCancelButton: false})
 
                     return
                 }
@@ -334,6 +343,8 @@ export default {
         },
         resetForm(formName) {
             this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
                 orderCode: '',
                 goodsName: '',
                 orderDate: '',
@@ -346,6 +357,9 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            let checkedCount = val.length;
+            this.checkedAll = checkedCount === this.tableData.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         filterTag(value, row) {
             return row.isChoiceness === value;
@@ -361,8 +375,8 @@ export default {
             let _param
             
             _param = Object.assign({}, this.listQuery, param, {
-                createTimeStart: this.listQuery.orderDate[0] ? utils.formatDate(new Date(this.listQuery.orderDate[0] * 1), "yyyy-MM-dd hh:mm:ss") : '',
-                creaTetimeEnd: this.listQuery.orderDate[1] ? utils.formatDate(new Date(this.listQuery.orderDate[1] * 1), "yyyy-MM-dd hh:mm:ss") : ''
+                createTimeStart: this.listQuery.orderDate && this.listQuery.orderDate[0] ? utils.formatDate(new Date(this.listQuery.orderDate[0] * 1), "yyyy-MM-dd hh:mm:ss") : '',
+                creaTetimeEnd: this.listQuery.orderDate && this.listQuery.orderDate[1] ? utils.formatDate(new Date(this.listQuery.orderDate[1] * 1), "yyyy-MM-dd hh:mm:ss") : ''
             })
 
             this._apis.order.getCommentList(_param).then((res) => {
@@ -387,6 +401,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.search {
+    /deep/ .el-form-item__label {
+        padding-right: 8px;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-right: 26px;
+        .el-button+.el-button {
+            margin-left: 16px;
+        }
+    }
+}
 .reviews {
     .search {
         background-color: #fff;
@@ -395,7 +420,7 @@ export default {
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             .resetting {
                 color: #FD932B;
                 margin-right: 40px;
@@ -414,8 +439,9 @@ export default {
                 color: rgb(76, 75, 83);
             }
         }
-        .table-box {
-            margin-left: 60px;
+        .footer {
+            padding: 20px;
+            padding-left: 15px;
         }
     }
 }
@@ -437,6 +463,21 @@ export default {
     color: #fff;
     padding-left: 2px;
     padding-right: 2px;
+}
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/deep/ .el-checkbox__label {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.el-button+.el-button {
+    margin-left: 12px;
+}
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
 }
 </style>
 

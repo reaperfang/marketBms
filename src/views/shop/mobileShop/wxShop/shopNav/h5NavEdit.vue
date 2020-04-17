@@ -19,14 +19,14 @@
         <!-- 手机底部 H5-->
         <div class="phone-footer">
           <ul class="navs type1" v-if="ruleForm.navStyle.id == 1">
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <img src="" alt="" class="empty_img" v-else>
               <span>{{ruleForm.navMap[item].navName}}</span>
             </li>
           </ul>
           <ul class="navs type2" v-if="ruleForm.navStyle.id == 2">
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <img src="" alt="" class="empty_img" v-else>
             </li>
@@ -35,7 +35,7 @@
             <div class="keyboard">
               <i class="el-icon-platform-eleme"></i>
             </div>
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <i class="el-icon-notebook-2"></i>
               <span>{{ruleForm.navMap[item].navName}}</span>
             </li>
@@ -46,7 +46,7 @@
                 <i class="el-icon-plus"></i>
               </span>
             </li>
-            <li v-for="(item, key) of ruleForm.navIds" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
+            <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
               <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
               <img src="" alt="" class="empty_img" v-else>
             </li>
@@ -79,7 +79,7 @@
                   </div>
                   <div class="add_button" v-if="!currentNav.navIconActive" @click="currentImg='active';dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
                     <i class="inner"></i>
-                  </div>
+                  </div> 
                 </div>
                 <div class="img_block">
                   <p>未选中</p>
@@ -92,7 +92,7 @@
                   </div>
                 </div>
               </div>
-              建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+              <p class="nav_tips">建议尺寸：40*40像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
             </el-form-item>
             <!-- <el-form-item label="导航链接" prop="navLinkType" v-if="navigation_type === '0'">
               <el-radio-group v-model="currentNav.navLinkType">
@@ -135,8 +135,10 @@
           </div>
           <div class="block form">
             <el-form-item label="导航风格" prop="navStyle">
-              {{ruleForm.navStyle.name || 'APP导航样式'}}
-              <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
+              <div class="nav_style_type">
+                <span>{{ruleForm.navStyle.name || 'APP导航样式'}}</span>
+                <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
+              </div>
             </el-form-item>
             <el-form-item label="应用页面" prop="applyPage">
               <el-checkbox-group v-model="ruleForm.applyPage">
@@ -162,7 +164,7 @@
         </el-form>
       </div>
       <!-- 动态弹窗 -->
-      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @navTypeSelected="navTypeSelected" :navStyleId="ruleForm.navStyle.id"></component>
+      <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @navTypeSelected="navTypeSelected" :navStyleId="ruleForm.navStyle.id" :showSystemIcon="true"></component>
 
       <DialogBase :visible.sync="pageDialogVisible" width="816px" :title="currentPageName" @submit="seletePage">
         <component v-if="pageDialogVisible" :is="currentPageDialog" @seletedRow="rowSeleted"></component>
@@ -183,7 +185,6 @@ import goods from "@/views/shop/dialogs/jumpLists/goods";
 import goodsGroup from "@/views/shop/dialogs/jumpLists/goodsGroup";
 
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 export default {
   name: 'shopNav',
   components: {dialogSelectImageMaterial, dialogSelectNavTemplate, DialogBase, microPage, microPageClassify, marketCampaign, goods, goodsGroup},
@@ -367,7 +368,7 @@ export default {
     /* 创建导航 */
     createNav(params) {
       return {
-        id: uuid(),
+        id: uuidv4(),
         navName: params && params.navName || '导航',
         navIcon: params && params.navIcon || '',
         navIconActive: params && params.navIconActive || '',
@@ -809,6 +810,15 @@ export default {
         display: block!important;
         text-align: left!important;
       }
+      .nav_style_type{
+        width:100%;
+        display:flex;
+        span{
+          display:inline-block;
+          min-width: 100px;
+          color:rgba(211,211,211,1);
+        }
+      }
     }
   }
 }
@@ -824,5 +834,9 @@ export default {
   .el-checkbox{
     margin-right: 10px;
   }
+}
+//导航装修tips样式
+.nav_tips{
+  color:rgba(211,216,223,1);line-height:20px;margin-top:10px;
 }
 </style>

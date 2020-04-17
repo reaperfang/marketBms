@@ -50,7 +50,6 @@
 import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from "./dialogSelectGoods";
 import utils from "@/utils";
-import uuid from "uuid/v4";
 export default {
   name: "dialogSelectGoodsGroup",
   components: { DialogBase, dialogSelectGoods },
@@ -113,10 +112,6 @@ export default {
           this.loading = false;
         })
         .catch(error => {
-          // this.$notify.error({
-          //   title: "错误",
-          //   message: error
-          // });
           console.error(error);
           this.loading = false;
         });

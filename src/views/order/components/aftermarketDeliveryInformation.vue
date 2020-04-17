@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
-            客户发货
+            用户发货
         </div>
         <div class="container">
             <div v-if="orderAfterSale.returnExpressNo" class="item" :class="{close: !showCustomerContent}">
@@ -13,7 +13,7 @@
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | customerFilter}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSale.memberSn}}</div>
+                        <div class="header-righter-item">发货人：{{orderAfterSale.memberName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.memberReturnGoodsTime}}</div>
                         <div @click="showCustomerContent = !showCustomerContent">
                             <i v-if="showCustomerContent" class="el-icon-caret-top pointer"></i>
@@ -157,7 +157,7 @@ export default {
             ],
             currentDialog: '',
             dialogVisible: false,
-            currentData: {},
+            currentData: [],
             showCustomerContent: true,
             showContent: true,
             expressNo: '',
@@ -187,16 +187,16 @@ export default {
             if(value.receiveGoodsTime) {
                 return '【商户签收】'
             } else if(value.returnExpressNo) {
-                return '【客户发货】'
+                return '【用户发货】'
             } else {
                 return ''
             }
         },
         businessFilter(value, expressNos) {
             if(value.memberReceiveGoodsTime) {
-                return '【客户签收】'
+                return '【用户签收】'
             } else if(expressNos) {
-                return '【商户发货】'
+                return '【用户发货】'
             } else {
                 return ''
             }
@@ -244,7 +244,7 @@ export default {
                 .orderLogistics({ expressNo })
                 .then(res => {
                     this.currentDialog = "LogisticsDialog";
-                    this.currentData = res.traces;
+                    this.currentData = res.traces || [];
                     this.expressCompanys = this.expressCompanys
                     this.dialogVisible = true;
                 })

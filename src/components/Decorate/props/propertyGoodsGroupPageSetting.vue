@@ -149,7 +149,7 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: this.ruleForm.shareUrl.replace("&","[^]"),
+        url: location.protocol + this.ruleForm.shareUrl.split(':')[1].replace("&","[^]"),
         width: '150',
         height: '150',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
@@ -157,10 +157,6 @@ export default {
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
       });
     }
@@ -175,14 +171,6 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: center;
-  }
-}
-
-.el-radio-group{
-  margin-top: 9px;
-  .el-radio {
-      margin-bottom: 10px;
-      margin-right: 10px;
   }
 }
 .el-checkbox-group{

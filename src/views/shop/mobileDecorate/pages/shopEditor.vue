@@ -29,10 +29,7 @@ export default {
       /* 装修编辑器配置 */
       config: {
         pageBase: {  //装修页面基础信息
-          type: 'pageInfo',
-          isBase: true,
-          hidden: true,
-          title: '页面信息'
+          type: 'pageInfo'
         },
         buttons: {  //按钮组
           saveData: {
@@ -192,18 +189,11 @@ export default {
     /* 发起请求 */
     sendRequest(params) {
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
-          this.$notify({
-            title: '成功',
-            message: params.tipWord,
-            type: 'success'
-          });
+          this.$message.success(params.tipWord);
           this.setLoading(false);
           this._routeTo('m_pageManageIndex');
         }).catch((error)=>{
-          this.$notify.error({
-            title: '错误',
-            message: error
-          });
+          this.$message.error(error);
           this.setLoading(false);
         });
     },

@@ -5,8 +5,8 @@
         <div class="form_container">
             <el-form ref="form" :model="form">
                 <el-row>
-                    <el-col :span="6">
-                        <el-form-item prop="labelName">
+                    <el-col :span="wWidth < 1500 ? 8:6">
+                        <el-form-item label="查询条件：" prop="labelName">
                             <el-select v-model="form.labelName" placeholder="请选择" clearable>
                                 <el-option label="昵称" value="nickName"></el-option>
                                 <el-option label="用户ID" value="memberSn"></el-option>
@@ -22,7 +22,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-form-item label="客户身份：" class="relaPosition" prop="memberType">
+                <el-form-item label="用户身份：" class="relaPosition" prop="memberType">
                     <el-checkbox-group v-model="form.memberType" :max="1">
                         <el-checkbox v-for="item in clientStatusOps" :label="item" :key="item" border>{{item}}</el-checkbox>
                     </el-checkbox-group>
@@ -33,13 +33,13 @@
                         v-model="popVisible"
                         trigger="hover"
                     >
-                        <p class="p_title">客户身份说明</p>
-                        <p class="p_over1">客户身份包括：非会员、会员，其中会员包括新会员和老会员。成为老会员条件可进行配置。</p>
+                        <p class="p_title">用户身份说明</p>
+                        <p class="p_over1">用户身份包括：非会员、会员，其中会员包括新会员和老会员。成为老会员条件可进行配置。</p>
                         <p class="p_over2" @click="goToSet">【查看/配置会员身份规则】</p>
                     </el-popover>
                     <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                 </el-form-item>
-                <el-form-item label="客户标签：" class="relaPosition clearfix" prop="memberLabels">
+                <el-form-item label="用户标签：" class="relaPosition clearfix" prop="memberLabels">
                     <div class="group_container fl">
                         <el-checkbox-group v-model="form.memberLabels" :style="{width: labels.length > 5 ?'506px':'',height: showMoreTag ?'':'37px', overflow: showMoreTag ? 'block':'hidden'}">
                             <el-checkbox v-for="item in labels" :label="item" :key="item" border>{{item}}</el-checkbox>
@@ -48,7 +48,7 @@
                     <el-button type="primary" class="fl" @click="_routeTo('batchImport')" :style="{'margin-left': labels.length == 0?'0':'15px'}">添 加</el-button>
                     <img src="../../assets/images/client/icon_down.png" alt="" class="down_img fl" @click="extendTag" v-if="labels.length > 5" :style="{transform: showMoreTag ? 'rotate(180deg)':''}">
                 </el-form-item>
-                <el-form-item label="客户渠道：" class="relaPosition" prop="channelId">
+                <el-form-item label="用户渠道：" class="relaPosition" prop="channelId">
                     <div style="max-width: 80%; overflow: auto;">
                         <el-checkbox-group v-model="form.channelId" >
                             <el-checkbox v-for="item in channels" :label="item" :key="item" border>{{item}}</el-checkbox>
@@ -57,15 +57,15 @@
                     <div class="more font12" @click="handleMore" v-if="!showFold">更多查询条件<i class="el-icon-arrow-down"></i></div>
                 </el-form-item>
                 <div class="fold_part" v-if="showFold">
-                    <el-form-item label="客户状态：" prop="status">
+                    <el-form-item label="用户状态：" prop="status">
                         <el-checkbox-group v-model="form.status" :max="1">
                             <el-checkbox v-for="item in clientStateOps" :label="item" :key="item" border>{{item}}</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                     <el-row>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="积分：" prop="scoreMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 27px;">
                                     <el-input v-model="form.scoreMin" placeholder="最小值" @keyup.native="number2($event,form.scoreMin,'scoreMin')"></el-input>
                                 </div>
                                 <span>分</span>
@@ -76,7 +76,7 @@
                                 <span>分</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="累计消费金额：" prop="totalDealMoneyMin">
                                 <div class="input_wrap">
                                     <el-input v-model="form.totalDealMoneyMin" placeholder="最小值" @keyup.native="number3($event,form.totalDealMoneyMin,'totalDealMoneyMin')"></el-input>
@@ -89,7 +89,7 @@
                                 <span>元</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="购买次数：" prop="dealTimesMin">
                                 <div class="input_wrap">
                                     <el-input v-model="form.dealTimesMin" placeholder="最小值" @keyup.native="number2($event,form.dealTimesMin,'dealTimesMin')"></el-input>
@@ -104,9 +104,9 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="客单价：" prop="perUnitPriceMin">
-                                <div class="input_wrap">
+                                <div class="input_wrap" style="margin-left: 13px;">
                                     <el-input v-model="form.perUnitPriceMin" placeholder="最小值" @keyup.native="number3($event,form.perUnitPriceMin,'perUnitPriceMin')"></el-input>
                                 </div>
                                 <span>元</span>
@@ -117,28 +117,36 @@
                                 <span>元</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8" :style="{marginTop: wWidth < 1800 ? '-42px':''}">
                             <el-form-item label="注册时间：">
                                 <div class="input_wrap3">
                                     <el-date-picker
                                         v-model="becameCustomerTime"
-                                        type="daterange"
+                                        type="datetimerange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
-                                        end-placeholder="结束日期">
+                                        end-placeholder="结束日期"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        :editable="false"
+                                        :picker-options="utils.globalTimePickerOption.call(this)"
+                                        >
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="wWidth < 1800 ? 12:8">
                             <el-form-item label="上次消费：" prop="lastPayTimeStart">
                                 <div class="input_wrap3">
                                     <el-date-picker
                                         v-model="lastPayTime"
-                                        type="daterange"
+                                        type="datetimerange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
-                                        end-placeholder="结束日期">
+                                        end-placeholder="结束日期"
+                                        value-format="yyyy-MM-dd HH:mm:ss"
+                                        :editable="false"
+                                        :picker-options="utils.globalTimePickerOption.call(this)"
+                                    >
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
@@ -146,20 +154,20 @@
                     </el-row>
                 </div>
                 <el-form-item class="padR40 marT20">
-                    <span class="shou" @click="handleMore" v-if="showFold">收起<i class="el-icon-arrow-up marL10"></i></span>
+                    <span class="shou" @click="handleMore" v-if="showFold">收起<i class="el-icon-arrow-up margetClientListL10"></i></span>
                     <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
                     <el-button type="primary" class="fr" @click="getClientList" :loading="btnloading">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div>
-            <div class="btn_container">
-                <el-button type="primary" @click="_routeTo('clientImport')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
+        </div>
+        <div class="all_container2">
+            <div class="btn_container" style="float: right; margin: 9px 118px 24px 0px">
+                <el-button type="primary" @click="_routeTo('importClient')" v-permission="['客户', '全部客户', '默认页面', '客户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
             <acTable :newForm="newForm" @stopLoading="stopLoading"></acTable>
         </div>
-    </div>
   </div>
 </template>
 <script>
@@ -199,11 +207,14 @@ export default {
         btnloading: false,
         becameCustomerTime:"",
         lastPayTime:"",
-        isPc: false
+        isPc: false,
+        wWidth: document.body.clientWidth
     }
   },
   watch: {
-
+      wWidth() {
+          return document.body.clientWidth
+      }
   },
   computed:{
     clientStatusOps() {
@@ -222,7 +233,6 @@ export default {
   }, 
   created() {
     // window.addEventListener('hashchange', this.afterQRScan)
-    
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
@@ -273,6 +283,7 @@ export default {
             response.map((v) => {
                 this.labels.push(v.tagName);
             })
+            this.labels = ['不限', ...this.labels];
         }).catch((error) => {
             console.log(error);
         })
@@ -281,6 +292,7 @@ export default {
         this._apis.client.getChannels({}).then((response) => {
             this.channelsList = [].concat(response);
             response.map((v) => {this.channels.push(v.channerlName)});
+            this.channels = ['不限', ...this.channels];
             if(!this.isPc) {
                 this.channels.splice(this.channels.indexOf('PC端'),1);
                 this.channels.splice(this.channels.indexOf('wap端'),1);
@@ -316,91 +328,98 @@ export default {
         let canSubmit = true;
         if(!!this.isNumber(this.form.scoreMin)) {
             if(!this.isNumber(this.form.scoreMax) || Number(this.form.scoreMax) <= Number(this.form.scoreMin)) {
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入最大积分',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最大积分',
+                        type: 'warning'
+                    });
+                },100)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.scoreMax)) {
             if(!this.isNumber(this.form.scoreMin) || Number(this.form.scoreMin) >= Number(this.form.scoreMax)) {
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入最小积分',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最小积分',
+                        type: 'warning'
+                    });
+                },200)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.totalDealMoneyMin)) {
             if(!this.isNumber(this.form.totalDealMoneyMax) || Number(this.form.totalDealMoneyMax) <= Number(this.form.totalDealMoneyMin)) {
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入累计最大金额',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入累计最大金额',
+                        type: 'warning'
+                    });
+                },300)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.totalDealMoneyMax)) {
             if(!this.isNumber(this.form.totalDealMoneyMin) || Number(this.form.totalDealMoneyMin) >= Number(this.form.totalDealMoneyMax)) {
-
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入累计最小金额',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入累计最小金额',
+                        type: 'warning'
+                    });
+                },400)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.dealTimesMin)) {
             if(!this.isNumber(this.form.dealTimesMax) || Number(this.form.dealTimesMax) <= Number(this.form.dealTimesMin)) {
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入最大购买次数',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最大购买次数',
+                        type: 'warning'
+                    });
+                },500)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.dealTimesMax)) {
             if(!this.isNumber(this.form.dealTimesMin) || Number(this.form.dealTimesMin) >= Number(this.form.dealTimesMax)) {
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入最小购买次数',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最小购买次数',
+                        type: 'warning'
+                    });
+                },600)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.perUnitPriceMin)) {
             if(!this.isNumber(this.form.perUnitPriceMax) || Number(this.form.perUnitPriceMax) <= Number(this.form.perUnitPriceMin)) {
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入最大客单价',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最大客单价',
+                        type: 'warning'
+                    });
+                },700)
                 canSubmit = false;
             }
         }
         if(!!this.isNumber(this.form.perUnitPriceMax)) {
             if(!this.isNumber(this.form.perUnitPriceMin) || Number(this.form.perUnitPriceMin) >= Number(this.form.perUnitPriceMax)) {
-                this.$notify({
-                    title: '警告',
-                    message: '请正确输入最小客单价',
-                    type: 'warning'
-                });
+                setTimeout(() => {
+                    this.$message({
+                        message: '请正确输入最小客单价',
+                        type: 'warning'
+                    });
+                },800)
                 canSubmit = false;
             }
         }
         if(!!canSubmit) {
             this.btnloading = true;
-            this.form.becameCustomerTimeStart = this.becameCustomerTime ? utils.formatDate(new Date(this.becameCustomerTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.becameCustomerTimeEnd = this.becameCustomerTime?utils.formatDate(new Date(this.becameCustomerTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.lastPayTimeStart = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[0].getTime()),"yyyy-MM-dd hh:mm:ss"):'';
-            this.form.lastPayTimeEnd = this.lastPayTime ? utils.formatDate(new Date(this.lastPayTime[1].getTime() + 24 * 60 * 60 * 1000 - 1),"yyyy-MM-dd hh:mm:ss"):'';
+            this.form.becameCustomerTimeStart = this.becameCustomerTime ? this.becameCustomerTime[0]:'';
+            this.form.becameCustomerTimeEnd = this.becameCustomerTime ? this.becameCustomerTime[1]:'';
+            this.form.lastPayTimeStart = this.lastPayTime ? this.lastPayTime[0]:'';
+            this.form.lastPayTimeEnd = this.lastPayTime ? this.lastPayTime[1]:'';
             let oForm = Object.assign({},this.form);
             let labelNames = oForm.memberLabels;
             let channelNames = oForm.channelId;
@@ -408,16 +427,23 @@ export default {
             let channelIds = [];
             let newForm = {};
             if(labelNames.length > 0) {
-                this.labelsList.map((item) => {
-                    labelNames.map((v) => {
-                        if(v == item.tagName) {
-                            labelIds.push(item.id);
-                        }
-                    })
-                });
+                if(labelNames.indexOf('不限') !== -1) {
+                    labelIds = [];
+                }else{
+                    this.labelsList.map((item) => {
+                        labelNames.map((v) => {
+                            if(v == item.tagName) {
+                                labelIds.push(item.id);
+                            }
+                        })
+                    });
+                    labelIds = labelIds.join(',');
+                }
             }
-            labelIds = labelIds.join(',');
             if(channelNames.length > 0) {
+                if(channelNames.indexOf('不限') !== -1) {
+                    channelIds = [];
+                } 
                 this.channelsList.map((item) => {
                     channelNames.map((v) => {
                         if(v == item.channerlName) {
@@ -447,6 +473,7 @@ export default {
             delete newForm.labelValue;
             delete newForm.channelId;
             delete newForm.memberType;
+            
             this.newForm = Object.assign({},newForm);
         }
         
@@ -500,13 +527,20 @@ export default {
 /deep/.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item{
     margin-bottom: 10px;
 }
+/deep/.el-date-editor .el-range-separator{
+    width: 9%;
+}
 .el-input-group__append button.el-button{
     color: #5D78FF;
 }
+.marL20{
+    margin-left: 20px;
+}
 .all_container{
-    padding: 19px;
+    padding: 20px;
     background-color: #fff;
     font-size: 14px;
+    border-radius: 4px;
     .form_container{
         .relaPosition{
             .absoPosition{
@@ -514,15 +548,13 @@ export default {
             }
             .down_img{
                 position: absolute;
-                left: 569px;
+                left: 562px;
                 top: 5px;
             }
             .more{
                 cursor: pointer;
                 color: #5B54E6;
-                position: absolute;
-                right: 40px;
-                top: 0;
+                margin-left: 81px;
                 i{
                     margin-left: 10px;
                 }
@@ -555,6 +587,13 @@ export default {
             cursor: pointer;
         }
     }
+}
+.all_container2{
+    padding: 20px;
+    background-color: #fff;
+    font-size: 14px;
+    margin-top: 20px;
+    border-radius: 4px;
 }
 .p_title{
     height: 40px;

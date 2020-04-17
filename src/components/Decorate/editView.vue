@@ -4,7 +4,7 @@
       <img src="@/assets/images/shop/editor/phone_head.png" alt="">
       <span>{{baseInfo.title || '页面标题'}}</span>
     </div>
-    <div class="phone-body" @click="clickTitle($event)" v-calcHeight="height">
+    <div class="phone-body" ref="view_container" @click="clickTitle($event)" v-calcHeight="height" @drop="dropAddComponent($event)" @dragover="dragover($event)" @dragleave="dragleave($event)">
 
       <!-- 可拖拽调整顺序 -->
       <vuedraggable 
@@ -21,7 +21,9 @@
       :move='onMoveHandler'>
         <template v-for="(item, key) of componentDataIds">
           <div 
+          :title="getComponentData(item).title"
           class="component_wrapper" 
+          :data-id="getComponentData(item).id"
           v-if="!getComponentData(item).hidden"
           :key="key" 
           :class="{'actived': item === currentComponentId}"
@@ -60,7 +62,7 @@
 
 <script>
 import utils from '@/utils';
-import widget from '@/system/constant/widget';
+import widget from './widgetConfig';
 import vuedraggable from "vuedraggable";
 
 export default {
@@ -113,6 +115,10 @@ export default {
     this.loadTemplateLists();
     this._globalEvent.$on('scrollToBottom', ()=>{
       this.scrollToBottom();
+    }) 
+    
+    this._globalEvent.$on('autoScrollToComponent', (id)=>{
+      this.autoScrollToComponent(id);
     })
   },
   mounted() {
@@ -129,8 +135,8 @@ export default {
       let loadedLength = 0;
       let widgetList = widget.getWidgetList();
       for(let item of widgetList) {
-        import(`./comps/component${this.utils.titleCase(item)}.vue`).then(loadedComponent => {
-          this.templateList[item] = loadedComponent.default;
+        import(`./comps/component${this.utils.titleCase(item.type)}.vue`).then(loadedComponent => {
+          this.templateList[item.type] = loadedComponent.default;
           loadedLength ++;
           if(loadedLength >= widgetList.length) {
             this.allTemplateLoaded = true;
@@ -151,10 +157,12 @@ export default {
 
     //删除组件
     deleteComponent(id) {
-      this.$confirm(`确定删除此组件吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: '确定删除此组件吗？'
       }).then(() => {
         this.$store.commit('deleteComponent', id)
       })
@@ -191,10 +199,14 @@ export default {
             var container = this.$el.querySelector(".phone-body");
             let tempScrollHeight = container.scrollHeight;
             setTimeout(()=>{
-              container.scrollTo({
-                top: 0,
-                behavior: "smooth"
-              });
+              if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+                container.scrollTop = 0
+              }else{
+                container.scrollTo({
+                  top: 0,
+                  behavior: "smooth"
+                });
+              }
             });
         });
     },
@@ -205,12 +217,38 @@ export default {
             var container = this.$el.querySelector(".phone-body");
             let tempScrollHeight = container.scrollHeight;
             setTimeout(()=>{
-              container.scrollTo({
-                top: tempScrollHeight,
-                behavior: "smooth"
-              });
+              if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+                container.scrollTop = tempScrollHeight
+              }else{
+                container.scrollTo({
+                  top: tempScrollHeight,
+                  behavior: "smooth"
+                });
+              }
             });
         });
+    },
+
+    /* 自动跟踪组件添加滚动到组件位置 */
+    autoScrollToComponent(id) {
+      // this.$nextTick(()=>{
+      //   var container = this.$el.querySelector(".phone-body");
+      //   let blocks = this.$refs.view_container.querySelectorAll('.component_wrapper');
+      //   for(let i=0;i< blocks.length;i++) {
+      //     if(id === blocks[i].getAttribute('data-id')) {
+      //       const offsetTop = blocks[i].offsetTop;
+      //       const offsetHeight = blocks[i].offsetHeight;
+      //       if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+      //         container.scrollTop = offsetTop + offsetHeight
+      //       }else {
+      //         container.scrollTo({
+      //           top: offsetTop + offsetHeight,
+      //           behavior: "smooth"
+      //         });
+      //       }
+      //     }
+      //   }
+      // })
     },
 
     /* 按钮鼠标移入 */
@@ -228,6 +266,52 @@ export default {
     /* 组件加载状态改变 */
     loadStatusChange(data) {
       //console.log(data);
+    },
+
+    /* 允许拖拽进来 */
+    dragover(ev) {
+      ev.preventDefault();
+    }, 
+    
+    /* 拖拽离开 */
+    dragleave(ev) {
+      ev.preventDefault();
+    },
+
+    /* 拖拽添加组件 */
+    dropAddComponent(ev) {
+      ev.preventDefault();
+      let data= ev.dataTransfer.getData("dragAddComponent");
+
+      if(!data) {
+        return;
+      }
+
+      //当目前选中的是基础组件的时候，先强行选中最后一个组件再执行下文
+      if(this.currentComponentId === this.basePropertyId) {
+        this.$store.commit('setCurrentComponentId', this.componentDataIds[this.componentDataIds.length - 1]);
+      }
+
+      this.$store.commit('addComponent', {
+        component: JSON.parse(data),
+        targetId: this.currentComponentId,
+        after: true
+      });
+
+      //组件添加自动滚动到组件位置
+      let index = this.componentDataIds.indexOf(this.currentComponentId);
+      if(index > 0) {
+        index--;
+      }
+      let prev = this.componentDataIds[index];
+      this.autoScrollToComponent(prev);
+
+      //只有根组件的情况下直接定位到底部
+      if(this.currentComponentId === this.componentDataIds[this.componentDataIds.length - 1]) {
+        this.$nextTick(()=>{
+          this.scrollToBottom();
+        })
+      }
     }
   }
 }
@@ -237,6 +321,12 @@ export default {
  .view {
    position:relative;
     .phone-body {
+      box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+      width: 375px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
       .component_wrapper{
         // min-height: 50px;
         &.actived{

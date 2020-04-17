@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" label-width="80px" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
         <el-form-item label="" prop="classify">
           <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
             <el-option label="全部分类" value=""></el-option>
@@ -17,30 +17,11 @@
       </el-form>
       <div class="btns">
         <el-button type="primary" @click="_routeTo('m_templateManageIndex')">新建页面</el-button>
-        <el-popover
-          ref="popover4"
-          placement="right"
-          width="400"
-          title="修改分类"
-          v-model="visible"
-          trigger="click">
-          <el-radio-group v-model="seletedClassify">
-            <div v-for="(item, key) of classifyList" :key="key">
-              <el-radio :label="item.id">{{item.name}}</el-radio>
-            </div>
-          </el-radio-group>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false; modifyClassify()">确定</el-button>
-          </div>
-        </el-popover>
-        <el-button type="primary" plain v-popover:popover4  :disabled="!this.multipleSelection.length">批量改分类</el-button>
-        <el-button type="warning" plain @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
     </div>
     <div class="table" v-calcHeight="300">
       <p>草稿（共{{total || 0}}个）</p>
-      <el-table :data="tableList" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
         <el-table-column
           type="selection"  
           width="30">
@@ -71,7 +52,29 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
+      <div class="multiple_selection" v-if="tableData.length">
+        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button class="border-button" v-popover:popover4  :disabled="!this.multipleSelection.length">批量改分类</el-button>
+        <el-button class="border-button" @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
+        <el-popover
+          ref="popover4"
+          placement="right"
+          width="400"
+          title="修改分类"
+          v-model="visible"
+          trigger="click">
+          <el-radio-group v-model="seletedClassify">
+            <div v-for="(item, key) of classifyList" :key="key">
+              <el-radio :label="item.id">{{item.name}}</el-radio>
+            </div>
+          </el-radio-group>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="visible = false; modifyClassify()">确定</el-button>
+          </div>
+        </el-popover>
+      </div>
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -89,14 +92,13 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 export default {
   name: 'draftList',
   extends: tableBase,
   components: {},
   data () {
     return {
-      tableList:[],
+      tableData:[],
       classifyList: [],
        ruleForm: {
         status: '1',
@@ -116,23 +118,17 @@ export default {
     /* 复制页面 */
     copyPage(item) {
       this.currentItem = item;
-      this.$confirm(`确定复制 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定复制 [ ${item.name} ] 吗？`
+      }).then(() => {
           this._apis.shop.copyPage({id: item.id}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '复制成功！',
-              type: 'success'
-            });
+            this.$message.success('复制成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -140,23 +136,17 @@ export default {
     /* 删除页面 */
     deletePage(item) {
       this.currentItem = item;
-       this.$confirm(`确定删除 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除 [ ${item.name} ] 吗？`
+      }).then(() => {
           this._apis.shop.deletePages({ids: [item.id]}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -164,11 +154,12 @@ export default {
     /* 上架页面 */
     apply(item) {
       this.currentItem = item;
-       this.$confirm(`确定上架 [ ${item.name} ] 吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定上架 [ ${item.name} ] 吗？`
+      }).then(() => {
           const resultData = {
             colorStyle: item.colorStyle,
             explain: item.explain,
@@ -182,44 +173,31 @@ export default {
           }
             
           this._apis.shop.editPageInfo(resultData).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '上架成功！',
-              type: 'success'
-            });
+            this.$message.success('上架成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
 
      /* 批量删除页面 */
     batchDeletePage(item) {
-       this.$confirm(`确定删除吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定删除吗？`
+      }).then(() => {
           const ids = [];
           for(let item of this.multipleSelection) {
             ids.push(item.id);
           }
           this._apis.shop.deletePages({ids}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '删除成功！',
-              type: 'success'
-            });
+            this.$message.success('删除成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -227,23 +205,17 @@ export default {
     /* 设为首页 */
     setIndex(item) {
       this.currentItem = item;
-       this.$confirm(`确定将 [ ${item.name} ] 设为首页吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.confirm({
+        title: '提示', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `确定将 [ ${item.name} ] 设为首页吗？`
+      }).then(() => {
           this._apis.shop.setIndex({id: item.id}).then((response)=>{
-            this.$notify({
-              title: '成功',
-              message: '设置成功！',
-              type: 'success'
-            });
+            this.$message.success('设置成功！');
             this.fetch();
           }).catch((error)=>{
-            this.$notify.error({
-              title: '错误',
-              message: error
-            });
+            this.$message.error(error);
           });
         })
     },
@@ -251,14 +223,10 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getPageList(this.ruleForm).then((response)=>{
-        this.tableList = response.list;
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -270,10 +238,6 @@ export default {
       this._apis.shop.selectAllClassify({}).then((response)=>{
         this.classifyList = response;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
       });
     },
@@ -289,17 +253,10 @@ export default {
         ids,
         pageCategoryInfoId: this.seletedClassify
       }).then((response)=>{
-        this.$notify({
-          title: '成功',
-          message: '修改成功！',
-          type: 'success'
-        });
+        this.$message.success('修改成功！');
         this.fetch();
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error);
       });
     }
   }
@@ -327,6 +284,7 @@ export default {
 }
 .page_name{
   cursor: pointer;
+  text-decoration:underline;
   &:hover{
     color: $globalMainColor;
   }

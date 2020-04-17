@@ -8,15 +8,15 @@
                     <el-steps :active="2">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" description=""></el-step>
-                        <el-step class="word4" title="客户退货" description=""></el-step>
+                        <el-step class="word4" title="用户退货" description=""></el-step>
                         <el-step class="word4" title="商户发货" description=""></el-step>
-                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word4" title="用户收货" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
                     <p>待审核</p>
-                    <p class="des">客户申请售后，待审核</p>
+                    <p class="des">用户申请售后，待审核</p>
                     <div class="button-box">
                         <el-button @click="reject">拒绝</el-button>
                         <el-button type="primary" @click="auth">同意</el-button>
@@ -31,22 +31,22 @@
                     <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 2 : 3">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step v-if="this.orderAfterSale.exchangeConfirmation != 0" class="word4" title="客户退货" description=""></el-step>
+                        <el-step v-if="this.orderAfterSale.exchangeConfirmation != 0" class="word4" title="用户退货" description=""></el-step>
                         <el-step class="word4" title="商户发货" description=""></el-step>
-                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word4" title="用户收货" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
                     <template v-if="this.orderAfterSale.exchangeConfirmation != 0">
                         <p>待退货</p>
-                        <p class="des">商户同意售后，客户未发货。</p>
+                        <p class="des">商户同意售后，用户未发货。</p>
                     </template>
                     <template v-else>
                         <p>待处理</p>
                         <p class="des">商户未发货</p>
                         <div class="button-box">
-                            <el-button type="primary" @click="sendGoods">发货</el-button>
+                            <el-button v-if="!authHide" type="primary" @click="sendGoods">发货</el-button>
                         </div>
                     </template>
                 </div>
@@ -59,18 +59,18 @@
                     <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 3 :4">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
+                        <el-step class="word4" title="用户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
                         <el-step class="word4" title="商户发货" description=""></el-step>
-                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word4" title="用户收货" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
                     <p>待处理</p>
-                    <p class="des">客户已退货，商户未发货</p>
+                    <p class="des">用户已退货，商户未发货</p>
                     <div class="button-box">
                         <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
-                        <el-button type="primary" @click="sendGoods">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="sendGoods">发货</el-button>
                     </div>
                 </div>
             </div>
@@ -82,15 +82,15 @@
                     <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 4: 5">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
+                        <el-step class="word4" title="用户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
                         <el-step class="word4" title="商户发货" :description="orderAfterSale.sendTime"></el-step>
-                        <el-step class="word4" title="客户收货" description=""></el-step>
+                        <el-step class="word4" title="用户收货" description=""></el-step>
                         <el-step class="word2" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
                     <p>待收货</p>
-                    <p class="des">商户已换货发货，客户未收货</p>
+                    <p class="des">商户已换货发货，用户未收货</p>
                     <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="col righter">
                     <p>已关闭</p>
-                    <p class="des">客户撤销申请或商户拒绝售后。</p>
+                    <p v-if="orderAfterSale.refuseReason" class="des">拒绝申请原因：{{orderAfterSale.refuseReason}}</p>
                 </div>
             </div>
         </template>
@@ -127,16 +127,16 @@
                     <el-steps :active="this.orderAfterSale.exchangeConfirmation == 0 ? 6 :7">
                         <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
                         <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
-                        <el-step class="word4" title="客户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
+                        <el-step class="word4" title="用户退货" :description="orderAfterSale.memberReturnGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
                         <el-step class="word4" title="商户发货" :description="orderAfterSale.sendTime"></el-step>
                         <el-step class="word4" title="商户收货" :description="orderAfterSale.receiveGoodsTime" v-if="orderAfterSale.exchangeConfirmation != 0"></el-step>
-                        <el-step class="word4" title="客户收货" :description="orderAfterSale.memberReceiveGoodsTime"></el-step>
+                        <el-step class="word4" title="用户收货" :description="orderAfterSale.memberReceiveGoodsTime"></el-step>
                         <el-step class="word2" title="完成" :description="orderAfterSale.memberReceiveGoodsTime"></el-step>
                     </el-steps>
                 </div>
                 <div class="col righter">
                     <p>已完成</p>
-                    <p class="des">退款消息给客户，客户确认收款。</p>
+                    <p class="des">退款消息给用户，用户确认收款。</p>
                     <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
@@ -144,7 +144,10 @@
     </div>
 </template>
 <script>
+import anotherAuth from '@/mixins/anotherAuth'
+
 export default {
+    mixins: [anotherAuth],
     data() {
         return {
             customerClose: true

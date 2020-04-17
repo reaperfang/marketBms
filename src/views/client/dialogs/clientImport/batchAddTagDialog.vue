@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="批量加标签" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
-            <p class="c_info">该批次导入客户共{{data.successNum}}人，确定批量添加以下标签吗？</p>
+            <p class="c_info">该批次导入用户共{{data.successNum}}人，确定批量添加以下标签吗？</p>
             <el-checkbox-group
                 v-model="checkedItems"
                 :max="5">
@@ -48,20 +48,18 @@ export default {
                 this._apis.client.addImportLabel({importRecordId: this.data.id, memberLabelInfoIds}).then((response) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '添加标签成功',
                         type: 'success'
                     });
                 }).catch((error) => {
+                    console.log(error);
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择标签',
                     type: 'warning'
                 });

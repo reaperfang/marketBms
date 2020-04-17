@@ -1,13 +1,21 @@
 <!--积分明细-->
 <template>
   <div>
-    <div class="top_part">
+    <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="客户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
+        <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessTypeId" style="width:100px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessTypeId" style="width:140px;" placeholder="全部">
             <el-option
               v-for="item in idbusinessTypes"
               :key="item.value"
@@ -16,15 +24,16 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="获取时间" style="margin-left:25px;">
+        <el-form-item label="交易时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['12:00:00', '08:00:00']"
-            :picker-options="pickerNowDateBefore">
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -37,7 +46,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="yellow_btn" icon="el-icon-share"  @click='exportToExcel()' v-permission="['财务', '积分明细', '默认页面', '导出']">导出</el-button>
+          <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '积分明细', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <!-- <idTable style="margin-top:20px"></idTable> -->
@@ -54,7 +63,11 @@
         </el-table-column>
         <el-table-column
           prop="memberSn"
-          label="客户ID">
+          label="用户ID">
+        </el-table-column>
+        <el-table-column
+          prop='nickName'
+          label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="businessTypeId"
@@ -88,6 +101,7 @@
       </el-table>
       <div class="page_styles">
         <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.startIndex) || 1"
@@ -97,6 +111,7 @@
           :total="total*1">
         </el-pagination>
       </div>
+		<exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
     </div>
   </div>
 </template>
@@ -105,25 +120,39 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'integralDetails',
   extends: TableBase,
+  components:{
+    exportTipDialog
+  },
   data() {
     return {
-      pickerNowDateBefore: {
-        disabledDate: (time) => {
-          return time.getTime() > new Date();
-        }
-      },
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       ruleForm:{
         memberSn:'',
         businessTypeId:-1,
-        timeValue:''
+        timeValue:'',
+        nickName:'',
+        userType:'memberSn',
+        userValue:'',
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      currentData:{},
+      dialogVisible:false
     }
   },
   watch: { },
@@ -141,12 +170,20 @@ export default {
         startTime:'',
         endTime:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        nickName:this.ruleForm.nickName
+      }
+      if(this.ruleForm.userType == 'memberSn'){
+        query.memberSn = this.ruleForm.userValue || ''
+        query.nickName = ''
+      }else{
+        query.nickName = this.ruleForm.userValue || ''
+        query.memberSn = ''
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.startTime = utils.formatDate(timeValue[0], "yyyy-MM-dd hh:mm:ss")
-        query.endTime = utils.formatDate(timeValue[1], "yyyy-MM-dd hh:mm:ss")
+        query.startTime = timeValue[0]
+        query.endTime = timeValue[1]
       }
       return query;
     },
@@ -168,23 +205,29 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        memberSn:'',
         businessTypeId:'',
-        timeValue:''
+        timeValue:'',
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:'',
       }
       this.fetch()
     },
     //导出
     exportToExcel() {
       let query = this.init();
-      this._apis.finance.exportId(query).then((response)=>{
+      if(this.total >1000){
+        this.dialogVisible = true;
+        this.currentData.api = 'finance.exportId';
+        this.currentData.query =query;
+      }else{
+        this._apis.finance.exportId(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
-        this.$notify.error({
-          title: '错误',
-          message: error
-        });
+        this.$message.error(error)
       })
+      }
     },
   }
 }
@@ -212,6 +255,8 @@ export default {
     span{
       font-size: 16px;
       color: #B6B5C8;
+      display: block;
+      margin-top:15px;
       em{
         font-style: normal;
         color: #000;

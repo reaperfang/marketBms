@@ -45,6 +45,7 @@
               border
               :header-cell-style="{background:'#f3f4f3', color:'#132215'}"
               style="width: 100%"
+              :class="{isIE: isIE}"
             >
               <el-table-column prop="areaInfoList" label="配送到" width="180">
                 <template slot-scope="scope">
@@ -56,7 +57,7 @@
                   <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
                 </template>
               </el-table-column>
-              <el-table-column label="运费（元）">
+              <el-table-column label="运费（元）" width="100">
                 <template slot-scope="scope">
                   <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.freight"></el-input>
                 </template>
@@ -192,6 +193,21 @@ export default {
         return '续体积'
       }
     },
+    isIE() {
+            var userAgent = navigator.userAgent;
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+            if(isIE) {
+                return true;   
+            } else if(isEdge) {
+                return true; 
+            } else if(isIE11) {
+                return true; 
+            }else{
+                return false
+            }
+        }
   },
   methods: {
     deleteRow(index) {
@@ -206,18 +222,11 @@ export default {
       this._apis.order
         .editorFreightTemplate(params)
         .then(res => {
-          this.$notify({
-            title: "成功",
-            message: "新建成功！",
-            type: "success"
-          });
+          this.$message.success('新建成功！');
           this.$router.push("/order/quickDelivery");
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     add() {
@@ -229,18 +238,11 @@ export default {
       this._apis.order
         .addFreightTemplate(params)
         .then(res => {
-          this.$notify({
-            title: "成功",
-            message: "新建成功！",
-            type: "success"
-          });
+          this.$message.success('新建成功！');
           this.$router.push("/order/quickDelivery");
         })
         .catch(error => {
-          this.$notify.error({
-            title: "错误",
-            message: error
-          });
+          this.$message.error(error);
         });
     },
     submit(formName) {
@@ -382,10 +384,7 @@ export default {
           })
           .catch(error => {
             this.visible = false;
-            this.$notify.error({
-              title: "错误",
-              message: error
-            });
+            this.$message.error(error);
           });
       });
     },
@@ -470,6 +469,11 @@ export default {
 }
 /deep/ .el-radio {
   margin-right: 30px;
+}
+/deep/ {
+  .isIE.el-table .cell, .isIE.el-table th div {
+    text-overflow: clip;
+  }
 }
 </style>
 

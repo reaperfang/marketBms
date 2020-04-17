@@ -3,13 +3,14 @@
         <div class="c_container">
             <p class="user_id">会员卡：{{data.name}}</p>
             <div class="clearfix">
-                <p class="c_label fl">发放人群：</p>
+                <p class="c_label fl">选择标签：</p>
                 <div class="fl tags_container">
                     <el-checkbox-group v-model="checkList" @change="handleChange">
                         <el-checkbox v-for="item in tags" :key="item.id" :label="item.tagName"></el-checkbox>
                     </el-checkbox-group>
                 </div>
             </div> 
+            <el-checkbox v-model="checkAll" @change="handleCheckAll" style="margin-left: 71px">全部</el-checkbox>
             <p class="red">确定给{{this.labels || '  '}}发放会员卡：{{data.name}}吗？</p>
         </div>
         <div>
@@ -32,10 +33,14 @@ export default {
             tags: [],
             checkList: [],
             labels: "",
-            btnLoading: false
+            btnLoading: false,
+            checkAll: false
         }
     },
     methods: {
+        handleCheckAll(val) {
+            this.checkList = val?this.tags:[];
+        },
         submit() {
             this.btnLoading = true;
             let tagIds = [];
@@ -57,25 +62,18 @@ export default {
                 this._apis.client.sendCard(params).then((response) => {
                     this.visible = false;
                     this.btnLoading = false;
-                    this.$notify({
-                        title: '成功',
+                    this.$message({
                         message: '发卡成功',
                         type: 'success'
                     });
                 }).catch((error) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    this.$notify.info({
-                        title: '提示',
-                        message: error
-                    });
+                    this.$message.error(error);
                 })
             }else{
                 this.btnLoading = false;
-                this.$notify.info({
-                    title: '提示',
-                    message: '请选择标签'
-                });
+                this.$message('请选择标签');
             }
         },
         getLabels() {
@@ -127,7 +125,7 @@ export default {
 }
 .user_id{
     text-align: left;
-    padding: 0 0 10px 15px;
+    padding: 0 0 14px 15px;
 }
 .c_label{
     width: 70px;

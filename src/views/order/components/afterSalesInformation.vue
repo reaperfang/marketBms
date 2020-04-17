@@ -33,7 +33,7 @@
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <div @click="dialogVisible = true; bigMessage.image = true; bigMessage.url = item.image;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
+                                        <div @click="dialogVisible = true; bigMessage.image = true; bigMessage.url = item.image; bigMessage.descriptionImages = orderAfterSale.descriptionImages; bigMessage.imageIndex = index;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
                                             <img
                                                 width="51"
                                                 :src="item.image"
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="col righter-col">
-                    <div class="row">
+                    <div v-if="orderAfterSale.type != 2" class="row">
                         <div class="col list-lefter">
                             退款方式
                         </div>
@@ -68,7 +68,7 @@
                     </div>
                     <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
                         <div class="col list-lefter">
-                            客户收货信息
+                            用户收货信息
                         </div>
                         <div class="col list-righter">
                             <p>{{orderSendInfo.receivedName}} {{orderSendInfo.receivedPhone}}</p>
@@ -106,7 +106,7 @@
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div class="col">
+                                    <div style="margin-right: 5px;" class="col">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
@@ -126,10 +126,12 @@
                             label="数量">
                         </el-table-column>
                         <el-table-column
+                            v-if="orderAfterSale.type != 2"
                             prop="goodsPrice"
                             label="商品单价">
                         </el-table-column>
                         <el-table-column
+                            v-if="orderAfterSale.type != 2"
                             prop="subtotalMoney"
                             label="小计">
                         </el-table-column>
@@ -210,10 +212,10 @@
             </div> -->
         <!-- </section> -->
         <section class="drawback" v-if="orderAfterSale.type != 2">
-            <p class="section-header">卖家退款合计</p>
-            <div class="row justity-between align-center">
-                <div class="col" style="margin-right: 50px;">
-                    <div class="row">
+            <p class="section-header">商户退款合计</p>
+            <div class="row justify-center align-stretch">
+                <div class="col return-money-left" style="margin-right: 50px;">
+                    <div v-if="orderAfterSale.shouldReturnScore" class="row">
                         <div class="col">
                             应退还积分：
                         </div>
@@ -226,7 +228,7 @@
                             应退金额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnMoney || '0.00'}}
+                            ￥{{orderAfterSale.shouldReturnMoney || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
@@ -234,7 +236,7 @@
                             应退还余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnBalance || '0.00'}}
+                            ￥{{orderAfterSale.shouldReturnBalance || '0.00'}}
                         </div>
                     </div>
                     <div class="row">
@@ -242,7 +244,7 @@
                             应退还第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.shouldReturnWalletMoney || '0.00'}}
+                            ￥{{orderAfterSale.shouldReturnWalletMoney || '0.00'}}
                         </div>
                     </div>
                     <!-- <div class="row">
@@ -287,23 +289,41 @@
                         </div>
                     </div> -->
                 </div>
-                <div class="col">
+                <div class="col return-money-right">
                     <div class="row align-center">
                         <div class="col">
                             实退积分：
                         </div>
-                        <div class="col">
-                            <el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnScore || 0}}</span>
+                        <div class="col change-box">
+                            <!-- <el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
+                            <span style="font-weight:600;" v-else>{{orderAfterSale.realReturnScore || 0}}</span> -->
+                            <span v-if="orderAfterSale.orderAfterSaleStatus != 0" class="show-span">{{orderAfterSale.realReturnScore || 0}}</span>
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && !showScoreInput">
+                                <span class="show-span">{{orderAfterSale.realReturnScore || 0}}</span>
+                                <span class="operate-span" @click="showScoreInput = true">修改</span>
+                            </template>
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && showScoreInput">
+                                ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnScore"></el-input>
+                                <span class="operate-span" @click="changeScoreHandler">确定</span>
+                            </template>
                         </div>
                     </div>
                     <div class="row align-center">
                         <div class="col">
                             实退金额：
                         </div>
-                        <div class="col">
-                            <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
-                            <span v-else>{{orderAfterSale.realReturnMoney || 0}}</span>
+                        <div class="col change-box">
+                            <!-- <el-input v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2" min="0" type="number" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
+                            <span style="font-weight:600;" v-else>￥{{orderAfterSale.realReturnMoney || 0}}</span> -->
+                            <span v-if="orderAfterSale.orderAfterSaleStatus != 0 && orderAfterSale.type != 2" class="show-span">￥{{orderAfterSale.realReturnMoney || 0}}</span>
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2 && !showMoneyInput">
+                                <span class="show-span">￥{{orderAfterSale.realReturnMoney || 0}}</span>
+                                <span class="operate-span" @click="showMoneyInput = true">修改</span>
+                            </template>
+                            <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2 && showMoneyInput">
+                                ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnMoney" @change.native="changeHandler"></el-input>
+                                <span class="operate-span" @click="changeAmountHandler">确定</span>
+                            </template>
                         </div>
                     </div>
                     <div class="row align-center">
@@ -311,7 +331,7 @@
                             实退余额：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnBalance || '0.00'}}
+                            ￥{{orderAfterSale.realReturnBalance || '0.00'}}
                         </div>
                     </div>
                     <div class="row align-center">
@@ -319,7 +339,7 @@
                             实退第三方支付：
                         </div>
                         <div class="col">
-                            {{orderAfterSale.realReturnWalletMoney || '0.00'}}
+                            ￥{{orderAfterSale.realReturnWalletMoney || '0.00'}}
                         </div>
                     </div>
                 </div>
@@ -352,18 +372,26 @@
         <el-dialog
             title=""
             :visible.sync="dialogVisible"
-            width="540px"
+            width="800px"
             :close-on-click-modal="false"
             :close-on-press-escape="false">
-            <template v-if="bigMessage.image">
-                <img width="500" :src="bigMessage.url" />
+            <template v-if="!/\.mp4|\.ogg|\.mov$/.test(bigMessage.url)">
+                <div class="images-box">
+                    <div @click="goImage('left')" class="lefter"></div>
+                    <div class="image">
+                        <img width="500" :src="bigMessage.url" />
+                    </div>
+                    <div @click="goImage('right')" class="righter"></div>
+                </div>
             </template>
             <template v-else>
-                <video width="500" controls="controls">
-                <source :src="bigMessage.url" type="video/ogg">
-                <source :src="bigMessage.url" type="video/mp4">
-                Your browser does not support the video tag.
-                </video>
+                <div class="video-box">
+                    <video width="500" controls="controls">
+                    <source :src="bigMessage.url" type="video/ogg">
+                    <source :src="bigMessage.url" type="video/mp4">
+                    Your browser does not support the video tag.
+                    </video>
+                </div>
             </template>
             <!-- <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -377,7 +405,7 @@ export default {
     data() {
         return {
             tableData: [
-                {}
+                
             ],
             data: {
                 price: '500',
@@ -386,7 +414,9 @@ export default {
                 code: '1'
             },
             dialogVisible: false,
-            bigMessage: {}
+            bigMessage: {},
+            showScoreInput: false,
+            showMoneyInput: false
         }
     },
     filters: {
@@ -401,15 +431,23 @@ export default {
                 case 4:
                     return '拒绝申请'
                 case 5:
-                    return '客户发货'//
+                    return '用户发货'//
                 case 6:
                     return '商家收货'
                 case 7:
                     return '商家发货'
                 case 8:
-                    return '客户收货'//
+                    return '用户收货'//
                 case 9:
                     return '退款'
+                case 10:
+                    return '修改退还积分'
+                case 11:
+                    return '修改退还金额'
+                case 12:
+                    return '无需用户退货'
+                case 13:
+                    return '需要用户退货'
             }
         },
         refundwayFilter(code) {// 1线上 2线下
@@ -459,6 +497,92 @@ export default {
         }
     },
     methods: {
+        changeHandler() {
+            //orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0
+        },
+        changeScoreHandler() {
+            this.showScoreInput = false
+            if(this.orderAfterSale.realReturnScore < 0) {
+                this.$message({
+                message: '非法输入，仅支持输入非负数，请重新输入',
+                type: 'warning'
+                });
+                this.orderAfterSale.realReturnScore = this.catchOrderAfterSale.realReturnScore
+                return
+            }
+            this._apis.order.editorScoreAmount({
+                id: this.$route.query.id,
+                realReturnScore: this.orderAfterSale.realReturnScore
+            }).then(res => {
+                this.$message({
+                            message: '修改成功！',
+                            type: 'success'
+                        });
+                this.$emit('submit')
+            }).catch(error => {
+                this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+                this.$emit('submit')
+            })
+        },
+        changeAmountHandler() {
+            this.showMoneyInput = false
+            if(this.orderAfterSale.realReturnMoney < 0) {
+                this.$message({
+                message: '非法输入，仅支持输入非负数，请重新输入',
+                type: 'warning'
+                });
+                this.orderAfterSale.realReturnMoney = this.catchOrderAfterSale.realReturnMoney
+                return
+            }
+            if(!/^\d+$|^\d+\.\d+$/.test(this.orderAfterSale.realReturnMoney + '')) {
+                this.$message({
+                message: '非法输入，仅支持输入非负数，请重新输入',
+                type: 'warning'
+                });
+                this.orderAfterSale.realReturnMoney = this.catchOrderAfterSale.realReturnMoney
+                return
+            }
+            this._apis.order.editorScoreAmount({
+                id: this.$route.query.id,
+                realReturnMoney: this.orderAfterSale.realReturnMoney
+            }).then(res => {
+                this.$message({
+                            message: '修改成功！',
+                            type: 'success'
+                        });
+                this.$emit('submit')
+            }).catch(error => {
+                this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+                this.$emit('submit')
+            })
+        },
+        goImage(flag) {
+            let index = this.bigMessage.imageIndex
+            let list = this.bigMessage.descriptionImages
+            
+            if(flag == 'left') {
+                index = index - 1
+                this.bigMessage.imageIndex = index
+
+                if(index >=0) {
+                    this.bigMessage.url = list[index].image
+                    this.$forceUpdate()
+                }
+            } else {
+                index = index + 1
+                this.bigMessage.imageIndex = index
+                if(index <= list.length - 1) {
+                    this.bigMessage.url = list[index].image
+                    this.$forceUpdate()
+                }
+            }
+        },
         realReturnMoneyHandler() {
             // realReturnWalletMoney 剩余退还余额
             // realReturnMoney 实退金额
@@ -504,6 +628,10 @@ export default {
             required: true
         },
         orderAfterSale: {
+            type: Object,
+            default: {}
+        },
+        catchOrderAfterSale: {
             type: Object,
             default: {}
         },
@@ -602,6 +730,75 @@ export default {
     }
     /deep/ .el-dialog__body {
         text-align: center;
+    }
+    /deep/ .el-dialog__body {
+        padding: 10px;
+        padding-bottom: 60px;
+    }
+    .images-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .lefter {
+            width: 48px;
+            height: 48px;
+            background: url(../../../assets/images/order/left-icon.png) no-repeat;
+            cursor: pointer;
+        }
+        .righter {
+            width: 48px;
+            height: 48px;
+            background: url(../../../assets/images/order/right-icon.png) no-repeat;
+            cursor: pointer;
+        }
+    }
+    .video-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .return-money-left {
+        padding-right: 100px;
+    }
+    .return-money-right {
+        border-left: 1px solid #D3D3D3;
+        padding-left: 40px;
+    }
+    .drawback .row {
+        margin-bottom: 17px;
+        color: #44434B;
+        .col {
+            &:first-child {
+                margin-right: 20px;
+                color: #92929B;
+                text-align: right;
+                flex-shrink: 0;
+                flex-basis: 140px;
+            }
+            &:last-child {
+                font-weight:600;
+            }
+        }
+    }
+    .change-box {
+        display: flex; 
+        justify-content: flex-start; 
+        align-items: center;
+        /deep/ .el-input {
+            width: 100px;
+        }
+        span {
+            &.operate-span {
+                color: #655EFF;
+                margin-left: 5px;
+                flex-shrink: 0;
+                cursor: pointer;
+            }
+            &.show-span {
+                font-weight:600; 
+                width: 100px;
+            }
+        }
     }
 </style>
 

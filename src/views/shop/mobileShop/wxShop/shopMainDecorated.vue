@@ -158,7 +158,7 @@ export default {
       /* 获取二维码 */
     getQrcode(codeType, callback) {
       this._apis.shop.getQrcode({
-        url: this.decoratePageData.shareUrl.replace("&","[^]"),
+        url: location.protocol + this.decoratePageData.shareUrl.split(':')[1].replace("&","[^]"),
         width: '250',
         height: '250',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
@@ -166,10 +166,6 @@ export default {
         this.qrCode = `data:image/png;base64,${response}`;
         callback && callback(response);
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
       });
     },
@@ -179,10 +175,6 @@ export default {
       this._apis.shop.getMiniProgramStatus().then((response)=>{
         this.miniProgramStatus = response;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
       });
     },

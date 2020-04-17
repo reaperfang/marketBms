@@ -8,12 +8,12 @@
       ref="allClientTable"
       style="width: 100%"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-      :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
+      @sort-change="changeSort"
     >
       <el-table-column type="selection" :reserve-selection="true"></el-table-column>
-      <el-table-column prop="memberSn" label="客户ID"></el-table-column>
-      <el-table-column label="客户信息">
+      <el-table-column prop="memberSn" label="用户ID"></el-table-column>
+      <el-table-column label="用户信息">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
             <img v-if="scope.row.headIcon" :src="scope.row.headIcon" alt="" class="headIcon fl">
@@ -34,18 +34,31 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="score" label="积分" sortable></el-table-column>
-      <el-table-column prop="totalDealMoney" label="累计消费金额" sortable></el-table-column>
-      <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
-      <el-table-column prop="perUnitPrice" label="客单价（元）" sortable></el-table-column>
+      <el-table-column label="余额" sortable="custom" prop="balance">
+        <template slot-scope="scope">
+          ¥{{scope.row.balance}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="score" label="积分" sortable="custom"></el-table-column>
+      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney">
+        <template slot-scope="scope">
+          ¥{{scope.row.totalDealMoney}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="dealTimes" label="购买次数" sortable="custom"></el-table-column>
+      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom">
+        <template slot-scope="scope">
+          ¥{{scope.row.perUnitPrice}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <div class="btns clearfix">
             <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['客户', '全部客户', '默认页面', '查看详情']">详情</span>
-            <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['客户', '全部客户', '默认页面', '删除']">删除</span> -->
-            <span class="s3" @click="addTag(scope.row.id)">标签</span>
-            <span class="s4" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
-            <span class="s5" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
+            <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['用户', '全部客户', '默认页面', '删除']">删除</span> -->
+            <span class="s2" @click="addTag(scope.row)">标签</span>
+            <span class="s3" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
+            <span class="s3" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
           </div>
         </template>
       </el-table-column>
@@ -62,11 +75,11 @@
       ></el-pagination>
     </div>
     <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange"></el-checkbox>
+      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
-      <el-button class="border_btn" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
-      <el-button class="border_btn" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
-      <el-button class="border_btn" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
+      <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
     </div>
     <component
       :is="currentDialog"
@@ -108,7 +121,9 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      loading: false
+      loading: false,
+      couponList:[],
+      codeList:[]
     };
   },
   computed: {
@@ -120,6 +135,31 @@ export default {
     //this.getMembers(1, this.pageSize);
   },
   methods: {
+    changeSort(val) {
+      let tOrder = null;
+      switch(val.prop) {
+        case "balance":
+          tOrder = val.order == "ascending" ? 0:1
+          break;
+        case "score":
+          tOrder = val.order == "ascending" ? 2:3
+          break;
+        case "totalDealMoney":
+          tOrder = val.order == "ascending" ? 4:5
+          break;
+        case "dealTimes":
+          tOrder = val.order == "ascending" ? 6:7
+          break;
+        case "perUnitPrice":
+          tOrder = val.order == "ascending" ? 8:9
+          break;
+        default:
+          break;
+      }
+      this.$set(this.newForm,'orderByCondition', tOrder);
+      this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
+    },
     getRowKeys(row) {
       return row.id
     },
@@ -136,8 +176,7 @@ export default {
           console.log(error);
         })
       }else{
-        this.$notify({
-          title: '警告',
+        this.$message({
           message: '请选择要导出的数据',
           type: 'warning'
         });
@@ -145,6 +184,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getMembers(val, this.pageSize);
+      this.startIndex = val;
     },
     handleSizeChange(val) {
       this.getMembers(1, val);
@@ -161,10 +201,7 @@ export default {
         this.currentDialog = "batchDeleteUserDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
     batchAddTag() {
@@ -173,22 +210,19 @@ export default {
         this.currentDialog = "batchAddTagDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
-    addTag(id) {
+    addTag(row) {
       this.dialogVisible = true;
       this.currentDialog = "addTagDialog";
-      this.currentData.id = id;
+      this.currentData.id = row.id;
+      this.currentData.labelRecordViews = row.labelRecordViews;
     },
     addBlackList(row) {
       this.dialogVisible = true;
       this.currentDialog = "addBlackDialog";
-      this.currentData.memberSn = row.memberSn;
-      this.currentData.id = row.id;
+      this.currentData = {memberSn: row.memberSn, id: row.id};
     },
     removeBlack(row) {
       this.dialogVisible = true;
@@ -202,10 +236,7 @@ export default {
         this.currentDialog = "batchAddBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
     batchRemoveBlack() {
@@ -214,10 +245,7 @@ export default {
         this.currentDialog = "batchRemoveBlackDialog";
         this.currentData.checkedItem = this.$refs.allClientTable.selection;
       } else {
-        this.$notify.info({
-          title: "消息",
-          message: "请选择客户"
-        });
+        this.$message('请选择用户');
       }
     },
     handleChange(val) {
@@ -235,7 +263,7 @@ export default {
           let list = response.list;
           if(list.length > 0) {
             list.map((v) => {
-              v.memberType = v.memberType == 0 ? '客户':'会员'
+              v.memberType = v.memberType == 0 ? '用户':'会员'
             })
           }
           this.memberList = [].concat(list);
@@ -249,12 +277,13 @@ export default {
     },
     freshTable() {
       this.checkAll = false;
-      this.getMembers(1, this.pageSize);
+      this.getMembers(this.startIndex, this.pageSize);
     }
   },
   watch: {
     newForm(val) {
       this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
     }
   },
 };
@@ -282,44 +311,29 @@ export default {
       float: left;
       height: 41px;
       font-size: 12px;
-      padding-top: 22px;
+      padding-top: 10px;
       text-align: center;
       margin-right: 5px;
       cursor: pointer;
       &.s1 {
         color: #655eff;
-        background: url("../../../../assets/images/client/icon_info.png") 0 0
-          no-repeat;
       }
       &.s2 {
-        color: #f55858;
-        background: url("../../../../assets/images/client/icon_delete.png") 0 0
-          no-repeat;
+        color: #655eff;
       }
       &.s3 {
-        color: #fd932b;
-        background: url("../../../../assets/images/client/icon_tag.png") 0 0
-          no-repeat;
-      }
-      &.s4 {
-        color: #578efa;
-        background: url("../../../../assets/images/client/icon_addblack.png")
-          17px 0 no-repeat;
-      }
-      &.s5 {
-        color: #578efa;
-        background: url("../../../../assets/images/client/icon_relieve.png")
-          17px 0 no-repeat;
+        color: #fd4c2b;
       }
     }
   }
 }
 .acTable_container{
   position: relative;
+  margin-top: 60px;
   .export_btn{
     position: absolute;
-    top: -62px;
-    left: 73px;
+    top: -52px;
+    right: 40px;
   }
 }
 .a_line {

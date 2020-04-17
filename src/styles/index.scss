@@ -1,3 +1,4 @@
+@import 'normalize.css/normalize.css'; // A modern alternative to CSS resets
 @import './variables.scss';
 @import './mixin.scss';
 @import './transition.scss';
@@ -7,6 +8,7 @@
 @import './decorate/publicStyle.scss';
 @import './decorate/iconfont.css';
 @import './animate.css';
+@import './shopStyle.scss';
 // @font-face {
 //   font-family: 'PingFangSC-Regular';
 //   src: url('../assets/font/PingFangSCRegular.ttf'); //你的资源目录
@@ -247,6 +249,38 @@ table.yuan-table{
   }
 }
 
+.cascader-menu-list-wrap{
+  border: 1px solid #E4E7ED;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  left: -1px;
+}
+.area-selectable-list-wrap, .cascader-menu-list {
+    &::-webkit-scrollbar{
+      width: 6px!important;
+    }
+    &::-webkit-scrollbar-thumb{
+      background-color: rgb(222,222,225)!important;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: rgb(222,222,225)!important;
+    }
+    &::-webkit-scrollbar-track-piece {
+      background:#fff;
+    }
+}
+.cascader-menu-list .cascader-menu-option{
+  padding: 0 30px 0 20px;
+  background:#fff;
+}
+.cascader-menu-list .cascader-menu-option.selected{
+  color:#655EFF;
+  background:#fff;
+  &:hover{
+    background:rgb(245,247,250);
+  }
+}
+
 /* 取色器样式 */
 .color_block {
 	display: flex;
@@ -454,6 +488,9 @@ table.yuan-table{
   &.align-center {
       align-items: center;
   }
+  &.align-stretch {
+      align-items: stretch;
+  }
   .col {
       &.flex1 {
           flex: 1;
@@ -509,8 +546,8 @@ table.yuan-table{
 
 // 按钮
 .border-button {
-  color: $globalMainColor;
-  border: 1px solid $globalMainColor;
+  color: $globalMainColor!important;
+  border: 1px solid $globalMainColor!important;
 }
 
 .orange {
@@ -560,15 +597,28 @@ table.yuan-table{
   padding-right: 10px;
   .el-message-box__message {
       text-align: center;
+      max-height: 400px!important;
+      overflow-y: auto!important;
       .el-icon-warning {
           font-size: 60px;
           color: rgb(245, 88, 88);
+      }
+      .el-icon-success {
+          font-size: 60px;
+          color: #00e223;
       }
       .content-text {
           font-size: 18px;
           margin-top: 20px;
       }
   }
+}
+.confirm .el-message-box__message::-webkit-scrollbar-thumb {
+  background: rgba(101,94,255,0.4) !important;
+}
+.confirm .el-message-box__message::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 .confirm .el-message-box__btns {
   display: flex;
@@ -584,6 +634,11 @@ table.yuan-table{
   .el-button:first-child {
       //display: none;
       margin-left: 10px;
+  }
+}
+.confirm.no-cancel {
+  .el-button {
+    margin-left: 0!important;
   }
 }
 
@@ -777,4 +832,25 @@ table.yuan-table{
     list-style: inherit!important;
   } 
 
+}
+input:-ms-input-placeholder{
+  color:#92929B;
+}
+textarea:-ms-input-placeholder { 
+  color: #92929B; 
+} 
+#app.hide-fenlei + script + script + script + script + .fenlei-popper {
+  display: none!important;
+}
+#app.hide-fenlei + script + script + #edui_fixedlayer + .fenlei-popper {
+  display: none!important;
+}
+#app.hide-fenlei + script + script + .fenlei-popper {
+  display: none!important;
+}
+#app.hide-fenlei .app-container.add-goods .el-form-item.productCatalogInfoId .el-cascader .el-input .el-input__inner {
+  border: 1px solid #DCDFE6;
+}
+.el-dialog__headerbtn .el-dialog__close {
+  font-size: 18px;
 }

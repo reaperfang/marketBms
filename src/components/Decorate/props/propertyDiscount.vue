@@ -2,19 +2,19 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="选择活动" prop="goods">
+        <div class="goods_list" v-loading="loading">
+          <ul>
+            <li v-for="(item, key) of list" :key="key" :title="item.activityName">
+              <img :src="item.goodsImgUrl" alt="">
+              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            </li>
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectDiscount'">
+              <i class="inner"></i>
+            </li>
+          </ul>
+        </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       </el-form-item>
-      <div class="goods_list" v-loading="loading">
-        <ul>
-          <li v-for="(item, key) of list" :key="key" :title="item.activityName">
-            <img :src="item.goodsImgUrl" alt="">
-            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-          </li>
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectDiscount'">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
-      <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -111,6 +111,15 @@
         </el-radio-group>
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
       </el-form-item>
+      <el-form-item label="更多设置">
+        <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
+        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
+          <el-radio :label="1">24小时后隐藏</el-radio>
+          <el-radio :label="2">立即隐藏</el-radio>
+        </el-radio-group>
+      </el-form-item>
     </div>
 
      <!-- 动态弹窗 -->
@@ -121,7 +130,6 @@
 <script>
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectDiscount from '@/views/shop/dialogs/decorateDialogs/dialogSelectDiscount';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertyDiscount',
   mixins: [propertyMixin],
@@ -141,7 +149,10 @@ export default {
         showContents: ['1', '2', '3', '4', '5', '6', '7', '8'],//显示内容
         buttonStyle: 1,//购买按钮样式
         ids: [],//折扣商品id列表
-        buttonText: '加入购物车'//按钮文字
+        buttonText: '加入购物车',//按钮文字
+        hideSaledGoods: false,
+        hideEndGoods: false,
+        hideType: 2
       },
       rules: {
 
@@ -160,7 +171,10 @@ export default {
       handler(newValue) {
         this.ruleForm.ids = [];
         for(let item of newValue) {
-          this.ruleForm.ids.push(item.spuId);
+          this.ruleForm.ids.push({
+            spuId: item.spuId,
+            activityId: item.activityId
+          });
         }
         this.fetch();
         this._globalEvent.$emit('fetchDiscount', this.ruleForm, this.$parent.currentComponentId);
@@ -180,18 +194,26 @@ export default {
       fetch(componentData = this.ruleForm) {
           if(componentData) {
               if(Array.isArray(componentData.ids) && componentData.ids.length){
+
+                  //兼容老数据
+                  let newParams = [];
+                  if(typeof componentData.ids[0] === 'string') {
+                    for(let item of componentData.ids){
+                      newParams.push({spuId: item, activityId: ''})
+                    }
+                  }else{
+                    newParams = componentData.ids;
+                  }
+
                   this.loading = true;
                   this._apis.shop.getDiscountListByIds({
                       rightsDiscount: 1, 
-                      spuIds: componentData.ids.join(',')
+                      spuInfoJson: JSON.stringify(newParams),
+                      hideStatus: 0
                   }).then((response)=>{
                       this.createList(response);
                       this.loading = false;
                   }).catch((error)=>{
-                      // this.$notify.error({
-                      //     title: '错误',
-                      //     message: error
-                      // });
                       console.error(error);
                       this.list = [];
                       this.loading = false;
@@ -214,15 +236,8 @@ export default {
 /deep/.el-form-item__label{
   text-align: left;
 }
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
-}
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }

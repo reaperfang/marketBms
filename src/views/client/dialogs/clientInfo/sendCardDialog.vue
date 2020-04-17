@@ -36,9 +36,8 @@ export default {
                 });
                 let params = {memberInfoId: this.data.id, cardLevelInfoId: levelInfoId, name: levelInfoName};
                 this._apis.client.giveCard(params).then((response) => {
-                    this.$notify({
-                        title: '成功',
-                        message: "发放会员成功",
+                    this.$message({
+                        message: '发放会员成功',
                         type: 'success'
                     });
                     this.$emit('refreshPage');
@@ -50,8 +49,7 @@ export default {
                     // });
                 })
             }else{
-                this.$notify({
-                    title: '警告',
+                this.$message({
                     message: '请选择用户等级',
                     type: 'warning'
                 });
@@ -64,6 +62,9 @@ export default {
                     return v.enable == 0
                 })
                 this.levelList = [].concat(list);
+                this.levelList.map((item) => {
+                    this.$set(item, 'alias', `${item.alias} ${item.name}`);
+                })
             }).catch((error) => {
                 console.log(error);
                 // this.$notify.error({

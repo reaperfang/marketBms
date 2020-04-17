@@ -46,8 +46,13 @@ export default {
                 this.path = this.refreshPath || this.defultPath;
                 console.log('其他')
             }
+
+            let applyId = '';
+            if(this.$route.query.applyId){
+                applyId = this.$route.query.applyId
+            }
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
-            this.src = `${process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}`
+            this.src = `${process.env.NODE_ENV === 'development' ? '//127.0.0.1:8080' : process.env.APPLY}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}`
         },
 
         // iframe 刷新  -- 暂时不用
@@ -80,6 +85,7 @@ export default {
     .main {
         width: 100%;
         height: 100%;
+        margin-left:-20px;
         iframe{
             width:100%;
             height: 100%;

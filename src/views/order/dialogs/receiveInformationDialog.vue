@@ -8,7 +8,7 @@
                 <el-form-item label="发货人电话" prop="sendPhone">
                     <el-input v-model="ruleForm.sendPhone" placeholder="请输入"></el-input>
                 </el-form-item>
-                <el-form-item label="发货地址" prop="deliveryAddress">
+                <el-form-item :class="{isIE: isIE}" label="发货地址" prop="deliveryAddress">
                     <area-cascader type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
                 </el-form-item>
@@ -35,7 +35,7 @@
                 <el-form-item label="收货人电话" prop="receivedPhone">
                     <el-input v-model="ruleForm.receivedPhone" placeholder="请输入"></el-input>
                 </el-form-item>
-                <el-form-item label="收货地址" prop="deliveryAddress">
+                <el-form-item :class="{isIE: isIE}" label="收货地址" prop="deliveryAddress">
                     <area-cascader type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
                 </el-form-item>
@@ -270,46 +270,31 @@ export default {
                                 sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
                             }
 
-                            this._apis.order.orderUpdateAddress({
-                                id: this.cid, // 和cid相同
-                                cid: this.cid,
-                                // receivedProvinceCode: codes0,
-                                // receivedProvinceName: name0,
-                                // receivedCityCode: codes1,
-                                // receivedCityName: name1,
-                                // receivedAreaCode: codes2,
-                                // receivedAreaName: name2,
-                                // receivedDetail: this.ruleForm.receivedDetail,
-                                // receivedPhone: this.ruleForm.receivedPhone,
-                                // receivedName: this.ruleForm.receivedName,
+                            // this._apis.order.orderUpdateAddress({
+                            //     id: this.cid, // 和cid相同
+                            //     cid: this.cid,
+                                
 
-                                province: name0,
-                                provinceCode: codes0,
-                                city: name1,
-                                cityCode: codes1,
-                                area: name2,
-                                areaCode: codes2,
-                                address: this.ruleForm.sendDetail,
-                                senderPhone: this.ruleForm.sendPhone,
-                                senderName: this.ruleForm.sendName
+                            //     province: name0,
+                            //     provinceCode: codes0,
+                            //     city: name1,
+                            //     cityCode: codes1,
+                            //     area: name2,
+                            //     areaCode: codes2,
+                            //     address: this.ruleForm.sendDetail,
+                            //     senderPhone: this.ruleForm.sendPhone,
+                            //     senderName: this.ruleForm.sendName
 
-                            }).then(res => {
-                                this.$emit('submit', obj)
-                                this.visible = false
-                                this.$notify({
-                                    title: '成功',
-                                    message: '修改成功！',
-                                    type: 'success'
-                                });
-                            }).catch(error => {
-                                this.visible = false
-                                this.$notify.error({
-                                    title: '错误',
-                                    message: error
-                                });
-                            }) 
+                            // }).then(res => {
+                            //     this.$emit('submit', obj)
+                            //     this.visible = false
+                            //     this.$message.success('修改成功！');
+                            // }).catch(error => {
+                            //     this.visible = false
+                            //     this.$message.error(error);
+                            // }) 
 
-                            return
+                            // return
                         }
                         this.$emit('submit', obj)
                         this.visible = false
@@ -331,17 +316,10 @@ export default {
                     }).then(res => {
                         this.$emit('submit')
                         this.visible = false
-                        this.$notify({
-                            title: '成功',
-                            message: '修改成功！',
-                            type: 'success'
-                        });
+                        this.$message.success('修改成功！');
                     }).catch(error => {
                         this.visible = false
-                        this.$notify.error({
-                            title: '错误',
-                            message: error
-                        });
+                        this.$message.error(error);
                     }) 
                 } else {
                     console.log('error submit!!');
@@ -365,6 +343,21 @@ export default {
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             return shopInfo.id
+        },
+        isIE() {
+            var userAgent = navigator.userAgent;
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+            if(isIE) {
+                return true;   
+            } else if(isEdge) {
+                return true; 
+            } else if(isIE11) {
+                return true; 
+            }else{
+                return false
+            }
         }
     },
     props: {
@@ -428,6 +421,16 @@ export default {
         content: '*';
         color: #f56c6c;
         margin-right: 4px;
+    }
+    /deep/ .isIE {
+        .area-select {
+            .area-selected-trigger {
+                display: inline;
+            }
+        }
+        .area-select.large {
+            width: 100%;
+        }
     }
 </style>
 <style lang="scss">

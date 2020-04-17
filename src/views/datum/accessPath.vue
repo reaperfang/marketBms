@@ -22,12 +22,13 @@
         <div class="input_wrap" v-if="dateType == 4">
           <el-date-picker
             v-model="range"
-            type="daterange"
-            range-separator="—"
-            value-format="yyyy-MM-dd"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :picker-options="pickerOptions"
+            type="datetimerange"
+            align="right"
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
             @change="changeTime"
           ></el-date-picker>
         </div>
@@ -97,10 +98,10 @@
           </div>
         </div>
          <div class="p_top1" v-if="dataObj.payOrderPathTransformation">
-              <p style="padding-left:100px;" :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
+              <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
               </p>
-              <p style="padding-right:100px;" :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
+              <p :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
                 {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
               </p>            
               <!-- <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
@@ -144,22 +145,11 @@ export default {
   data() {
     return {
       pickerOptions: {
-          onPick: ({ maxDate, minDate }) => {
-              this.pickerMinDate = minDate.getTime()
-              if (maxDate) {
-              this.pickerMinDate = ''
-              }
-          },
           disabledDate: (time) => {
-              if (this.pickerMinDate !== '') {
-              const day90 = (90 - 1) * 24 * 3600 * 1000
-              let maxTime = this.pickerMinDate + day90
-              if (maxTime > new Date()) {
-                  maxTime = new Date()- 8.64e7
-              }
-              return time.getTime() > maxTime || time.getTime() == this.pickerMinDate
-              }
-              return time.getTime() > Date.now() - 8.64e7
+              let yesterday = new Date();
+              yesterday = yesterday.getTime()-24*60*60*1000;
+              yesterday = this.utils.dayEnd(yesterday);
+              return time.getTime() > yesterday.getTime();
           }
       },
       range: "",
@@ -214,8 +204,8 @@ export default {
         });
     },
     changeTime(val) {
-      this.startTime = this.getDate(val[0])
-      this.endTime = this.getDate(val[1])
+      this.startTime = val[0]
+      this.endTime = val[1]
       this.nearDay = "";
       this.getPathConversion();
     },
@@ -351,25 +341,34 @@ export default {
       }
     .p_top {
           height: 20px;
-          width: 900px;
+          width: 670px;
           line-height: 20px;
-          padding: 0 100px 0 160px; 
+          // padding: 0 100px 0 160px; 
+          margin-left:130px;
           font-size: 16px;
           color: #000;
           display: flex;
           flex-wrap: nowrap;
           justify-content: space-evenly;
-        }
+        p{
+          width: 100%;
+          text-align: center;
+        }  
+      }
     .p_top1 {
           height: 20px;
           width: 750px;
           line-height: 20px;
-          padding: 0 70px 0 290px;
+          padding: 0 70px 0 300px;
           font-size: 16px; 
           color: #000;
           display: flex;
           flex-wrap: nowrap;
           justify-content: space-between;
+          p{
+            width: 100%;
+            text-align: center;
+          }
       }
     }
   }

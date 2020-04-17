@@ -48,10 +48,6 @@ export default {
         this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
         this.loading = false;
       }).catch((error)=>{
-        // this.$notify.error({
-        //   title: '错误',
-        //   message: error
-        // });
         console.error(error);
         this.loading = false;
       });
@@ -131,6 +127,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
+}
 .inline-head{
   justify-content: flex-end;
 }

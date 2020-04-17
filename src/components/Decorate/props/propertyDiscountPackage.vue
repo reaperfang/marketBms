@@ -1,20 +1,20 @@
 <template>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
-      <el-form-item label="选择套餐" prop="packages">
+      <el-form-item label="选择套装" prop="packages">
+        <div class="goods_list" v-loading="loading">
+          <ul>
+            <li v-for="(item, key) of list" :key="key" :title="item.name">
+              <img :src="item.activityPic" alt="">
+              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            </li>
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectPackage'">
+              <i class="inner"></i>
+            </li>
+          </ul>
+        </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       </el-form-item>
-      <div class="goods_list" v-loading="loading">
-        <ul>
-          <li v-for="(item, key) of list" :key="key" :title="item.name">
-            <img :src="item.activityPic" alt="">
-            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-          </li>
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectPackage'">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
-      <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -111,11 +111,12 @@
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox>
-        <el-radio-group v-model="ruleForm.hideType">
-          <el-radio :label="1">24小时后隐藏</el-radio>
+        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
+        <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
+        <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
+          <!-- <el-radio :label="1">24小时后隐藏</el-radio> -->
           <el-radio :label="2">立即隐藏</el-radio>
-        </el-radio-group> -->
+        </el-radio-group>
       </el-form-item>
     </div>
 
@@ -127,7 +128,6 @@
 <script>
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectPackage from '@/views/shop/dialogs/decorateDialogs/dialogSelectPackage';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertyDiscountPackage',
   mixins: [propertyMixin],
@@ -146,9 +146,9 @@ export default {
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6'],//显示内容
         buttonStyle: 1,//购买按钮样式
-        hideSaledGoods: true,// 隐藏已售罄套餐
+        hideSaledGoods: false,// 隐藏已售罄套餐
         hideEndGoods: false,//隐藏活动结束套餐
-        hideType: 1,//隐藏类型
+        hideType: 2,//隐藏类型
         ids: [],//优惠套装id列表
         buttonText: '查看活动'//按钮文字
       },
@@ -197,10 +197,6 @@ export default {
                     this.createList(response);
                     this.loading = false;
                 }).catch((error)=>{
-                    // this.$notify.error({
-                    //     title: '错误',
-                    //     message: error
-                    // });
                     console.error(error);
                     this.list = [];
                     this.loading = false;
@@ -213,29 +209,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      this.list = [];
-            if(this.hideSaledGoods==true){
-                for(var i in datas){
-                    if(datas[i].soldOut!=1){
-                        this.list.push(datas[i]);
-                    }
-                }
-            }
-            else{
-                this.list = datas;
-            }
-            var list = this.list;
-            this.list = [];
-            if(this.hideEndGoods==true){
-                for(var i in list){
-                    if(list[i].activityEnd!=1){
-                        this.list.push(list[i]);
-                    }
-                }
-            }
-            else{
-                this.list = list;
-            }
+        this.list = datas;
     },
   }
 }
@@ -245,15 +219,8 @@ export default {
 /deep/.el-form-item__label{
   text-align: left;
 }
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
-}
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }
