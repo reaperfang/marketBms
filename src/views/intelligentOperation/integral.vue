@@ -257,6 +257,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3504
+*
+*/
+
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -282,6 +291,11 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
     .pane_container{
         color:#3D434A;
         padding: 10px;

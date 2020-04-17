@@ -23,7 +23,11 @@ export default {
     makeOption(data,type) {
       this.option = {
         title: {
-        text: '趋势图'
+        text: '趋势图',
+        textStyle:{
+            fontSize:14,
+            color:'#44434B'
+        }
       },
       tooltip: {
           trigger: 'axis'
