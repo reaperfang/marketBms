@@ -1,17 +1,17 @@
 <template>
-  <div class="p_container">
-    <div class="clearfix">
-      <div class="fr">
-        <el-radio-group class="fr" v-model="visitSourceType" @change="all">
-          <el-radio-button class="btn_bor" label="0">全部</el-radio-button>
-          <el-radio-button class="btn_bor" label="1">小程序</el-radio-button>
-          <el-radio-button class="btn_bor" label="2">公众号</el-radio-button>
-          <el-radio-button class="btn_bor" label="3" v-if="isPc">pc</el-radio-button>
-          <el-radio-button class="btn_bor" label="4" v-if="isPc">wap</el-radio-button>
-        </el-radio-group>
+<div>
+  <div class="p_container p_channel">
+      <div class="clearfix">
+        <div class="fr fr_channel">
+          <el-radio-group class="fr" v-model="visitSourceType" @change="all">
+            <el-radio-button class="btn_bor" label="0">全部</el-radio-button>
+            <el-radio-button class="btn_bor" label="1">小程序</el-radio-button>
+            <el-radio-button class="btn_bor" label="2">公众号</el-radio-button>
+            <el-radio-button class="btn_bor" label="3" v-if="isPc">pc</el-radio-button>
+            <el-radio-button class="btn_bor" label="4" v-if="isPc">wap</el-radio-button>
+          </el-radio-group>
+        </div>
       </div>
-    </div>
-    <div class="pane_container">
       <div class="p_line">
         <el-radio-group v-model="dateType" @change="changeDay">
           <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
@@ -33,7 +33,9 @@
           ></el-date-picker>
         </div>
       </div>
-
+  </div>
+  <div class="p_container">
+    <div class="pane_container">
       <div class="chart_container">
         <div class="path_line clearfix" v-if="dataObj.uv">
           <div class="p_l">
@@ -135,6 +137,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 import utils from "@/utils";
@@ -226,6 +229,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3448-1
+*
+*/
+
+.p_channel{
+    padding:0px;
+    margin-bottom:20px;
+    .fr_channel{
+        float:left;
+        margin-bottom:30px;
+    }
+}
 .p_container {
   padding: 20px;
   background-color: #fff;
