@@ -224,7 +224,7 @@ export default {
   text-align: left;
 }
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }

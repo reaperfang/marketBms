@@ -11,6 +11,10 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
+                    popper-class="leimu-popper"
+                    @focus="leimuFocus"
+                    @blur="leimuBlur"
+                    @visible-change="visibleChange"
                     :disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
@@ -78,6 +82,7 @@
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
                     <el-cascader
+                        popper-class="fenlei-popper"
                         :disabled="!ruleForm.productCategoryInfoId"
                         :options="categoryOptions"
                         v-model="categoryValue"
@@ -142,7 +147,7 @@
                                 <el-popover
                                     placement="bottom"
                                     width="430"
-                                    trigger="manual"
+                                    :trigger="trigger"
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
@@ -189,7 +194,7 @@
                         <li v-for="(item, index) in addedSpecs" :key="index">
                             <div class="added-specs-header">
                                 <span>{{item.name}}</span>
-                                <el-button @click="deleteAddedSpec(index)">移除</el-button>
+                                <!--<el-button @click="deleteAddedSpec(index)">移除</el-button>-->
                             </div>
                             <ul class="spec-value-ul">
                                 <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
@@ -201,7 +206,7 @@
                                 <el-popover
                                     placement="bottom"
                                     width="430"
-                                    trigger="click"
+                                    :trigger="trigger"
                                     v-model="item.visible">
                                     <div class="add-specs-value">
                                         <div class="add-specs-value-input">
@@ -857,7 +862,8 @@ export default {
             newSpec: '',
             newSpecValue: '',
             callObjectSpanMethod: false,
-            deleteSpecArr: []
+            deleteSpecArr: [],
+            leimuSelected: false,
         }
     },
     created() {
@@ -872,13 +878,25 @@ export default {
         //     }
         // })
         var that = this
-        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
+        // Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getProductLabelList(), this.getUnitList(), this.getBrandList(), this.getTemplateList()]).then(() => {
+        //     if(this.$route.query.id && this.$route.query.goodsInfoId) {
+        //         this.getGoodsDetail()
+        //     }
+        // })
+        this.getOperateCategoryList()
+        this.getCategoryList()
+        this.getProductLabelList()
+        this.getUnitList()
+        this.getBrandList()
+        this.getTemplateList()
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
         })
         document.querySelector('body').addEventListener('click', function(e) {
             e.stopPropagation()
+            this.hideFenlei = false
             if(e.target.parentNode.parentNode.className != 'add-specs') {
                 that.showSpecsList = false
             }
@@ -892,7 +910,15 @@ export default {
                 })
                 that.addedSpecs = addedSpecs
             }
+
+            if(this.editor) {
+                this._globalEvent.$emit('addGoodsEvent', false);
+            }
         })
+
+        if(this.editor) {
+            this._globalEvent.$emit('addGoodsEvent', true);
+        }
     },
     computed: {
         editor() {
@@ -942,6 +968,13 @@ export default {
             }else{
                 return false
             }
+        },
+        trigger() {
+            if(this.isIE) {
+                return 'click'
+            } else {
+                return 'manual'
+            }
         }
     },
     watch: {
@@ -981,6 +1014,23 @@ export default {
         });
     },
     methods: {
+        visibleChange(flag) {
+            console.log(flag)
+            if(flag) {
+                this.leimuSelected = true
+            } else {
+                this.leimuSelected = false
+            }
+            this._globalEvent.$emit('addGoodsEvent', this.leimuSelected);
+        },
+        leimuFocus() {
+            this.leimuSelected = true
+            this._globalEvent.$emit('addGoodsEvent', this.leimuSelected);
+        },
+        leimuBlur() {
+            // this.leimuSelected = false
+            // this._globalEvent.$emit('addGoodsEvent', this.leimuSelected);
+        },
         deleteImage(index) {
             let imagesArr = this.ruleForm.images.split(',')
 
@@ -1053,7 +1103,16 @@ export default {
             let addedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
             let name = item.name
             let flatIndex = this.flatSpecsList.findIndex(val => val.name == name)
+            let copyAddedSpecs = JSON.parse(JSON.stringify(this.addedSpecs))
+            let flatCopyAddedSpecs = this.flatTreeArray(copyAddedSpecs, 'valueList')
 
+            if(flatCopyAddedSpecs.find(val => val.name == name)) {
+                this.$message({
+                    message: '此规格值正在使用，不可删除',
+                    type: 'warning'
+                });
+                return
+            }
             addedSpecs[addedSpecs.length - 1].list.splice(index, 1)
             this.addedSpecs = addedSpecs
             this.specsValues.splice(index, 1)
@@ -1326,6 +1385,18 @@ export default {
                     return
                 }
             }
+            let name = this.addedSpecs[index].name
+            let _index = this.flatSpecsList.findIndex(val => val.name == name)
+
+            this.flatSpecsList.splice(_index, 1)
+            this.specsList.splice(this.specsList.findIndex(val => val.name == name), 1)
+            if(this.addedSpecs[index].valueList) {
+                this.addedSpecs[index].valueList.forEach(val => {
+                    let name = val.name
+
+                    this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                })
+            }
             this.addedSpecs.splice(index, 1)
             this.specsLabel = this.specsLabel.split(',').splice(index, 1).join(',')
             this.getSpecs(false, index)
@@ -1386,9 +1457,11 @@ export default {
                     this.addedSpecs = addedSpecs
                 }
             } else {
+                let item = this.addedSpecs[index].valueList.find(val => val.id == id)
+                
                 if(this.addedSpecs[index].valueList.find(val => val.id == id)) {
-                    let index = this.addedSpecs[index].valueList.findIndex(val => val.id == id)
-                    addedSpecs[index].valueList.splice(valueIndex, 1)
+                    let _index = this.addedSpecs[index].valueList.findIndex(val => val.id == id)
+                    addedSpecs[index].valueList.splice(_index, 1)
                     this.addedSpecs = addedSpecs
                 }
             }
@@ -2165,9 +2238,10 @@ export default {
                     try {
                         this.ruleForm.goodsInfos.forEach((val, index) => {
                             if(val.image_hide) {
-                                let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
+                                // let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
 
-                                val.image = image
+                                // val.image = image
+                                val.image = this.ruleForm.goodsInfos[index - 1].image
                             }
                         })
 
@@ -3520,5 +3594,8 @@ $blue: #655EFF;
             }
         }
     }
+}
+/deep/ .el-form-item__label {
+    color: #3D434A;
 }
 </style>

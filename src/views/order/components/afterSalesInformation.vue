@@ -321,7 +321,7 @@
                                 <span class="operate-span" @click="showMoneyInput = true">修改</span>
                             </template>
                             <template v-if="orderAfterSale.orderAfterSaleStatus == 0 && orderAfterSale.type != 2 && showMoneyInput">
-                                ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnMoney" @change.native="orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0"></el-input>
+                                ￥<el-input type="number" min="0" v-if="orderAfterSale.orderAfterSaleStatus == 0" v-model="orderAfterSale.realReturnMoney" @change.native="changeHandler"></el-input>
                                 <span class="operate-span" @click="changeAmountHandler">确定</span>
                             </template>
                         </div>
@@ -497,6 +497,9 @@ export default {
         }
     },
     methods: {
+        changeHandler() {
+            //orderAfterSale.realReturnMoney = (+orderAfterSale.realReturnMoney).toFixed(2) >=0 ? (+orderAfterSale.realReturnMoney).toFixed(2) : 0
+        },
         changeScoreHandler() {
             this.showScoreInput = false
             if(this.orderAfterSale.realReturnScore < 0) {
@@ -504,6 +507,7 @@ export default {
                 message: '非法输入，仅支持输入非负数，请重新输入',
                 type: 'warning'
                 });
+                this.orderAfterSale.realReturnScore = this.catchOrderAfterSale.realReturnScore
                 return
             }
             this._apis.order.editorScoreAmount({
@@ -530,6 +534,15 @@ export default {
                 message: '非法输入，仅支持输入非负数，请重新输入',
                 type: 'warning'
                 });
+                this.orderAfterSale.realReturnMoney = this.catchOrderAfterSale.realReturnMoney
+                return
+            }
+            if(!/^\d+$|^\d+\.\d+$/.test(this.orderAfterSale.realReturnMoney + '')) {
+                this.$message({
+                message: '非法输入，仅支持输入非负数，请重新输入',
+                type: 'warning'
+                });
+                this.orderAfterSale.realReturnMoney = this.catchOrderAfterSale.realReturnMoney
                 return
             }
             this._apis.order.editorScoreAmount({
@@ -615,6 +628,10 @@ export default {
             required: true
         },
         orderAfterSale: {
+            type: Object,
+            default: {}
+        },
+        catchOrderAfterSale: {
             type: Object,
             default: {}
         },

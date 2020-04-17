@@ -395,6 +395,18 @@
 .ellipsis2-big {
     width: 239px;
 }
+/deep/ .el-table td, .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
 </style>
 <style lang="scss">
     .operate-popper {
@@ -1131,7 +1143,7 @@ export default {
         },
         deleleHandler(row) {
             if(row.activity) {
-                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动，活动有效期内商品不得“删除”。`}).then(() => {
+                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动<br />活动有效期内商品不得“删除”。`}).then(() => {
                     
                 })
             } else {
