@@ -448,7 +448,7 @@ ul.cube {
                   overflow-x: hidden!important;
                   text-overflow: ellipsis!important;
                   white-space: nowrap!important;
-                  display: block!important;
+                  // display: block!important;
                   text-align: left!important;
                 }          
             }
@@ -574,6 +574,12 @@ ul.cube {
             .el-button+.el-button {
                   margin-left: 16px;
             }
+      }
+}
+
+.select_dialog {
+      /deep/.el-form-item__content{
+            display:flex!important;
       }
 }
 

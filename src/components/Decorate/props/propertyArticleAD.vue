@@ -23,13 +23,13 @@
           </li>
           <li @click="selectTemplate(4)" :class="{'active': ruleForm.templateType === 4}">
             <div class="type type4">
-              <img src="../../../assets/images/shop/articleAD/ad4.png" alt="" style="margin-top: 20px;margin-bottom: 10px;">
+              <img src="../../../assets/images/shop/articleAD/ad4.png" alt="">
             </div>
             <p>小图横向滑动</p>
           </li>
           <li @click="selectTemplate(5)" :class="{'active': ruleForm.templateType === 5}">
             <div class="type type5">
-              <img src="../../../assets/images/shop/articleAD/ad5.png" alt="" style="margin-top: 20px;margin-bottom: 12px;margin-left: -14px;">
+              <img src="../../../assets/images/shop/articleAD/ad5.png" alt="">
             </div>
             <p>导航横向滑动</p>
           </li>
@@ -264,7 +264,7 @@ export default {
 }
 ul.template_type{
   li{
-    width: 90px!important;
+    width: 85px!important;
     height: 100px90px!important;
     border: 1px solid #e4e3eb;
     padding: 10px;
@@ -272,10 +272,7 @@ ul.template_type{
     box-sizing: border-box;
     margin-right: 18px!important;
     cursor: pointer;
-    @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
-      /* 兼容IE10和IE11 */
-      width: 80px;
-    }
+    font-size:12px;
     &.active{
       border:1px solid $globalMainColor;
     }
@@ -285,10 +282,15 @@ ul.template_type{
       line-height: 1;
       color:rgba(110,110,114,1);
       white-space: nowrap;
-      text-indent: -8px;
+      text-indent: -4px;
     }
     .type{
       height: 53px;
+      display: flex;
+      align-items: center;
+      img{
+        width:100%;
+      }
     }
     .type2{
       // display: flex;
