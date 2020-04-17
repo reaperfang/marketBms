@@ -6,7 +6,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">查询</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">查询</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">

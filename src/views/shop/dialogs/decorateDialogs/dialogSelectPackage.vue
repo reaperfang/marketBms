@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入套餐名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="" prop="name">
-          <el-button type="primary" @click="fetch">搜  索</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜  索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
       </el-form>
@@ -139,6 +139,7 @@ export default {
       if(loadAll) {
         tempForm = {...this.ruleForm};
         tempForm.name = '';
+        this.ruleForm.name = '';
       }
       this._apis.shop.getDiscountPackageList(loadAll? tempForm: this.ruleForm).then((response)=>{
         this.tableData = response.list;

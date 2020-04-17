@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '短信成本', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '短信成本', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -87,7 +87,7 @@
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -137,7 +137,8 @@ export default {
   },
   created() { },
   methods: {
-    fetch(){
+    fetch(num){
+      this.ruleForm.pageNum = num || this.ruleForm.pageNum
       this._apis.finance.smsPagelist(this.ruleForm).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
@@ -146,8 +147,8 @@ export default {
         this.loading = false
       })
     },
-    onSubmit(){
-      this.fetch();
+    onSubmit(num){
+      this.fetch(num);
     },
     //重置
     resetForm(){
