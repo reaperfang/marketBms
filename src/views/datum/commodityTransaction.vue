@@ -27,7 +27,7 @@
             </div>
             <ct1Table  :hotData="hotData"></ct1Table>
             <div class="c_line">
-                <span class="c_title">商品详情</span>
+                <span class="c_title">商品详情:</span>
                 <span>
                     <span class="c_label">筛选日期：</span>
                     <el-radio-group v-model="dateType" @change="changeDayM">
@@ -209,7 +209,7 @@ export default {
             font-size: 16px;
         }
         .p_blocks{
-            width: 900px;
+            width: 950px;
             display: flex;
             flex-wrap: wrap;
             margin-top: 15px;
@@ -220,7 +220,7 @@ export default {
             margin: 5px 0;
         }
         .p_item{
-            width: 176px;
+            width: 200px;
             height: 86px;
             border: 1px solid #CCCCCC;
             margin: 0 34px 12px 0;
@@ -229,7 +229,7 @@ export default {
                 margin: 19px 0 0 8px;
             }
             div{
-                width: 105px;
+                width: 125px;
                 margin:19px 6px 0 0;
                 p{
                     text-align: center;
@@ -241,7 +241,7 @@ export default {
             }
         }
         .c_line{
-            padding-top: 30px;
+            padding-top: 80px;
             border-top: 1px dashed #D3D3D3;
             display:flex;
             justify-content:space-between;
@@ -249,7 +249,7 @@ export default {
                 color: #655EFF;
                 // margin-left: 20px;
                 &.c_title{
-                    font-weight: bold;
+                    font-size: 16px;
                     color: #474C53;
                 }
                 &.c_label{

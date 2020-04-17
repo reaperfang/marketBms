@@ -9,10 +9,11 @@
       >
       <el-table-column
         prop="productName"
-        label="商品名称">        
+        label="商品名称"
+        width="200px">        
         <template slot-scope="scope">
           <div  style="height:60px; width:180px; display:flex">
-            <img :src="scope.row.mainImage" alt="" style="width:60px;height:60px;display:inline-block" />
+            <img :src="scope.row.mainImage" alt="" style="width:60px;height:60px;margin-right:20px;display:inline-block" />
              <span style="line-height:60px;display:inline-block;width:65px;overflow: hidden; text-overflow:ellipsis; white-space: nowrap;" :title="scope.row.productName">{{scope.row.productName}}</span>
             </div>
         </template>
