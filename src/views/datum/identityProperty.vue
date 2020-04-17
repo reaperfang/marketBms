@@ -17,9 +17,9 @@
         </div>
         <div class="chart1_info">
           <p>累计用户数：{{grandTotal}}</p>
-          <p>非会员：占比 {{(data1.customerRatio*100).toFixed(2)}}% 人数 {{data1.customerNum}}</p>
+          <p>非会员：占比 {{(data1.customerRatio*100).toFixed(2)}}% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人数 {{data1.customerNum}}</p>
           <p>
-            会员：占比 {{(data1.memberRatio*100).toFixed(2)}}% 人数 {{data1.memberNum}}
+            会员：占比 {{(data1.memberRatio*100).toFixed(2)}}% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人数 {{data1.memberNum}}
             <span
               @click="_routeTo('allClient')"
             >查看详情</span>
@@ -34,7 +34,7 @@
           <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
           <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
         </el-radio-group>
-        <div class="input_wrap" v-if="nearDay1 == 4">
+        <div class="input_wrap" v-show="nearDay1 == 4">
           <el-date-picker
             v-model="date1"
             type="datetimerange"
@@ -60,7 +60,7 @@
           <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
           <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
         </el-radio-group>
-        <div class="input_wrap" v-if="nearDay2 == 4">
+        <div class="input_wrap" v-show="nearDay2 == 4">
           <el-date-picker v-model="date2" type="month" @change="changeDate2" placeholder="选择月份" :picker-options="pickerOptions"></el-date-picker>
         </div>
         <span class="fr" @click="toLink()">会员消费</span>
@@ -280,7 +280,7 @@ export default {
           }
         })
         .catch(error => {
-          this.ip3Show = fale
+          this.ip3Show = false
           console.log('error',error)
         });
     },
@@ -301,6 +301,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3446
+*
+*/
+
+.el-radio-group{
+  width:332px;
+  float:left;
+  margin-bottom: 25px;
+}
 .p_container {
   padding: 20px;
   background-color: #fff;
@@ -308,7 +322,7 @@ export default {
     color: #3d434a;
     .i_title {
       font-weight: bold;
-      margin: 23px 0 32px 38px;
+      margin: 23px 0 23px 0;
     }
     .chart1_container {
       padding-bottom: 32px;
@@ -334,14 +348,18 @@ export default {
       }
     }
     .i_line {
-      padding-left: 35px;
+      // padding-left: 35px;
       .input_wrap {
         width: 220px;
+        float:left;
         display: inline-block;
       }
       span {
         color: #655eff;
+        display: inline-block;
+        float:left;
         margin-left: 20px;
+        line-height: 32px;
       }
     }
     .chart2_container {
