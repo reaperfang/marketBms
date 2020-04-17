@@ -1,7 +1,8 @@
 <template>
-    <div class="p_container">
+<div>
+    <div class="p_container p_channel">
         <div class="clearfix">
-          <div class="fr">
+          <div class="fr fr_channel">
             <el-radio-group class="fr" v-model="visitSourceType" @change="all">
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '订单交易', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '订单交易', '小程序']">小程序</el-radio-button>
@@ -11,6 +12,8 @@
             </el-radio-group>
           </div>
        </div>
+    </div>
+    <div class="p_container">
         <div class="pane_container">
             <p class="p_title">交易总况：</p>
             <div class="order_list">
@@ -55,8 +58,8 @@
                 </div>
             </div>
             <div class="c_line">
-                <span class="c_title">交易趋势（单）</span>
-                <div>
+                <span class="c_title">交易趋势（单）：</span>
+                <div class="line_div">
                     <span class="c_label">筛选日期：</span>
                     <el-radio-group v-model="nearDay" @change="changeDayM">
                         <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
@@ -64,7 +67,7 @@
                         <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
                         <el-radio-button class="btn_bor" label="4">自定义</el-radio-button>
                     </el-radio-group>
-                    <div class="input_wrap" v-if="nearDay == 4">
+                    <div class="input_wrap" v-show="nearDay == 4">
                         <el-date-picker
                             v-model="range"
                             type="datetimerange"
@@ -81,6 +84,7 @@
             </div>
             <ip4Chart :title="'测试图表'" ref="ip4"></ip4Chart>
         </div>
+    </div>
     </div>
 </template>
 <script>
@@ -219,6 +223,23 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3450
+*
+*/
+
+.p_channel{
+    padding:0px;
+    margin-bottom:20px;
+    .fr_channel{
+        float:left;
+        margin-left:38px;
+    }
+}
 .p_container{
     padding: 20px;
     background-color: #fff;
@@ -227,6 +248,8 @@ export default {
         padding: 23px 38px;
         .p_title{
             font-size: 16px;
+            font-weight: bold;
+            color: #474C53;
         }
         .p_blocks{
             width: 900px;
@@ -240,17 +263,17 @@ export default {
             margin: 5px 0;
         }
         .p_item{
-            width: 176px;
+            width: 200px;
             height: 86px;
             border: 1px solid #CCCCCC;
-            margin: 0 34px 12px 0;
-            border-radius:4px;
+            margin: 0 14px 12px 0;
+            border-radius: 4px;
             img{
                 margin: 19px 0 0 8px;
             }
             div{
                 width: 105px;
-                margin:19px 6px 0 0;
+                margin:19px 19px 0 0;
                 p{
                     text-align: center;
                     &:last-child{
@@ -263,22 +286,24 @@ export default {
         .c_line{
             padding-top: 30px;
             border-top: 1px dashed #D3D3D3;
-            display: flex;
-            justify-content:space-between;
+            // display: flex;
+            // justify-content:space-between;
+            .c_title{
+                font-weight: bold;
+                color: #474C53;
+                font-size: 16px;
+            }
+            .c_label{
+                color: #474C53;
+            }
             div{
-                &.c_title{
-                    font-weight: bold;
-                    color: #474C53;
-                }
-                &.c_label{
-                    margin-right: 30px;
-                    color: #474C53;
+                &.line_div{
+                    margin-top:30px;
                 }
                 .input_wrap{
                     width: 220px;
-                    display: block;
-                    margin-left:35px;
-                    margin-top:10px;
+                    margin-left:10px;
+                    display: inline-block;
                 }
             }
         }
@@ -293,6 +318,9 @@ export default {
                 height: 60px;
                 line-height: 60px;
                 border-bottom: 1px solid #CACFCB;
+                div{
+                    flex: 1;
+                }
                 .order_img{
                     margin:20px 5px 0 0;
                 }
