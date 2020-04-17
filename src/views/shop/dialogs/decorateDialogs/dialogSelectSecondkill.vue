@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.activityName" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">搜  索</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜  索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
         </el-form-item>
       </el-form>
@@ -139,6 +139,7 @@ export default {
       if(loadAll) {
         tempForm = {...this.ruleForm};
         tempForm.activityName = '';
+        this.ruleForm.activityName = '';
       }
       this._apis.shop.getSecondkillList(loadAll? tempForm: this.ruleForm).then((response)=>{
         this.tableData = response.list;

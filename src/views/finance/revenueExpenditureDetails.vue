@@ -65,7 +65,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '收支明细', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '收支明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -144,9 +144,9 @@
           v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="Number(ruleForm.pageNum) || 1"
+          :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -181,7 +181,8 @@ export default {
         amountMin:'',
         amountMax:'',
         timeValue:'',
-        pageNum:''
+        startIndex:'1',
+        pageSize:'10'
       },
       dataList:[ ],
       total:0,
@@ -272,8 +273,8 @@ export default {
         tradeTimeStart:'',
         tradeTimeEnd:'',
         sort:'',
-        startIndex:'',
-        pageSize:''
+        startIndex:'1',
+        pageSize:'10'
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
@@ -298,10 +299,11 @@ export default {
       }
       return query;
     },  
-    fetch(orde){
+    fetch(orde,num){
       if(this.ruleForm.amountMin > this.ruleForm.amountMax){
         this.$message('交易金额最小值应该小于最大值')
       }else{
+        this.ruleForm.startIndex = num || this.ruleForm.startIndex
         let query = this.init(orde);
         this._apis.finance.getListRe(query).then((response)=>{
           this.dataList = response.list
@@ -313,9 +315,10 @@ export default {
       }
     },
     //搜索
-    onSubmit(){
+    onSubmit(startIndex){
       let orde = 'desc'
-      this.fetch(orde)
+      let num = startIndex || this.ruleForm.startIndex
+      this.fetch(orde,num)
     },
     //排序
     sortTable(column){

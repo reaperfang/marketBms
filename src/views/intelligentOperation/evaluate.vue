@@ -67,7 +67,7 @@
                         差评率<span>{{listObj.badGoodsRatio ? (listObj.badGoodsRatio*100).toFixed(2) : 0}}%</span>。</p>
                     </div>
                     <div class="m_line clearfix">
-                        <div class="fr marT20">
+                        <div class="fr fr_mar5">
                             <!-- <el-button class="minor_btn" @click="rescreen()">重新筛选</el-button> -->
                             <el-tooltip content="当前最多支持导出1000条数据" placement="top">
                             <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
@@ -259,6 +259,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3505
+*
+*/
+
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -284,6 +293,14 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
+    .fr_mar5{
+        margin-top:10px;
+    }
     .pane_container{
         color:#3D434A;
         padding: 10px;

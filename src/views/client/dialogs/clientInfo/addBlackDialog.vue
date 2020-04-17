@@ -582,6 +582,7 @@ export default {
         }
         .a_d_delete{
             color: #FD4C2B;
+            margin-left: 40px;
         }
     }
 }
