@@ -22,6 +22,9 @@ export default {
         color: ["#c23531", "#2f4554", "#61a0a8", "#eee"],
         title: {
           text: "支付趋势（人）",
+          textStyle:{
+            fontSize:12
+          }
           //subtext: "Rainbow bar example",
           // link: "http://echarts.baidu.com/doc/example.html"
         },
