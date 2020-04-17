@@ -44,7 +44,7 @@ export default {
       }else if(val == 4){
          this.option.title.text = "访问来源（人）",
          this.option.legend.data = ["小程序","公众号"],
-         this.option.series = [{name:"小程序",type: "line",stack: "总量",areaStyle: {},data: this.flow['yAxis1']},
+         this.option.series = [{name:"小程序",type: "line",stack: "总量",data: this.flow['yAxis1']},
          {name:"公众号",type: "line",stack: "总量",areaStyle: {},data: this.flow['yAxis2']},
          ]
       }
