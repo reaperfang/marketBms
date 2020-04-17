@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="p_block marT20">
-             <p class="p_title">历史记录</p>
+            <p class="p_title p_mar5">历史记录</p>
             <div class="clearfix">
                 <div class="fl gflex">
                     <p >按时间筛选</p>
@@ -29,12 +29,7 @@
                         <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
                      </el-radio-group>
                 </div>
-                <div class="fr">
-                    <el-button class="border_btn" @click="resetAll()">重 置</el-button>
-                </div> 
-            </div>
-            <div class="clearfix">
-                <div class="fl gflex">
+                <div class="fl gflex mar_time_option">
                     <p >关键指标详解</p>
                      <el-radio-group v-model="preType" @change="changePre">
                         <el-radio-button class="btn_bor" label="1">客单价</el-radio-button>
@@ -42,11 +37,17 @@
                         <el-radio-button class="btn_bor" label="3">人均消费金额趋势</el-radio-button>
                     </el-radio-group>
                 </div>
-                <div class="fr">
+                <div class="fr mar_fr">
+                    <el-button class="border_btn" @click="resetAll()">重 置</el-button>
+                </div> 
+            </div>
+        </div>
+        <div class="p_block marT20">
+           <div class="clearfix res_export">
+                <div class="fr pos_fr">
                     <el-tooltip content="当前最多支持导出1000条数据" placement="top">
                         <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
                     </el-tooltip>
-                    <!-- <el-button class="minor_btn fr" @click="getHistoryRecord()">重新筛选</el-button> -->
                 </div> 
             </div>
             <div>
@@ -257,6 +258,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3502
+*
+*/
+
 /deep/ .el-tabs__nav{
     float: right;
 }
@@ -276,6 +286,32 @@ export default {
 .p_block{
     background-color: #fff;
     padding: 15px 20px;
+    .res_export{
+        position: relative;
+    }
+    .pos_fr{
+        position: absolute;
+        top: 4px;
+        right: 5px;
+    }
+    .mar_time_option{
+        margin-left:30px;
+    }
+    .mar_fr{
+        float: right;
+        margin: 5px;
+    }
+    .p_mar5{
+        margin-left:5px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color:#161617;
+        font-size:16px;
+    }
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+    }
     .p_title{
         font-size: 16px;
         span{
