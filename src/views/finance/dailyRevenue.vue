@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '每日营收', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '每日营收', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -121,7 +121,8 @@ export default {
       return query;
     },
 
-    fetch(){
+    fetch(num){
+      this.ruleForm.startIndex = num || this.ruleForm.startIndex
       let query = this.init();
       this._apis.finance.getListDr(query).then((response)=>{
         this.dataList = []
@@ -137,8 +138,8 @@ export default {
     },
 
     //搜索
-    onSubmit(){
-      this.fetch()
+    onSubmit(num){
+      this.fetch(num)
     },
 
     //重置
