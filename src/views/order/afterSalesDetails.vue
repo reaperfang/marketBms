@@ -107,27 +107,21 @@ export default {
 
             if(this.orderAfterSale.type == 3) {
                 orderAfterSaleStatus = 2
-            } else if(this.orderAfterSale.type == 2) {
-                // this.currentDialog = 'ExchangeGoodsDialog'
-                // this.currentData = Object.assign({}, this.orderAfterSale);
-                // this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
-                // this.dialogVisible = true
-                // return
             } else {
                 orderAfterSaleStatus = 1
             }
             let params = {
                 id: this.orderAfterSale.id,
-                realReturnScore: this.orderAfterSale.realReturnScore,
+                //realReturnScore: this.orderAfterSale.realReturnScore,
                 //realReturnMoney: this.orderAfterSale.realReturnMoney,
                 //realReturnBalance: this.orderAfterSale.realReturnBalance,
                 //realReturnWalletMoney: this.orderAfterSale.realReturnWalletMoney,
                 orderAfterSaleStatus: orderAfterSaleStatus
             }
 
-            if(this.orderAfterSale.realReturnMoney != this.orderAfterSale.shouldReturnMoney) {
-                params.realReturnMoney = this.orderAfterSale.realReturnMoney
-            }
+            // if(this.orderAfterSale.realReturnMoney != this.orderAfterSale.shouldReturnMoney) {
+            //     params.realReturnMoney = this.orderAfterSale.realReturnMoney
+            // }
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                 if(this.orderAfterSale.type == 2) {
                     // 换货确认
