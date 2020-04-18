@@ -93,7 +93,11 @@
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
                     <span @click="addCategory">新增分类</span>
-                    <el-button type="primary" @click="getCategoryList">刷新</el-button>
+                    <!-- <el-button type="primary" @click="getCategoryList">刷新</el-button> -->
+                    <span class="shuaxin-fenlei" @click="getCategoryList">
+                        刷新
+                        <i></i>
+                    </span>
                 </div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
@@ -2996,7 +3000,7 @@ $blue: #655EFF;
     .add-tag {
         display: flex;
         .item {
-            margin-right: 24px;
+            margin-right: 28px;
             &.tag {
                 margin-right: 72px;
                 color: $blue;
@@ -3609,5 +3613,39 @@ $blue: #655EFF;
 }
 /deep/ .el-form-item__label {
     color: #3D434A;
+}
+/deep/ .upload-box .image-list {
+    .image-item {
+        overflow: visible;
+        label {
+            position: absolute;
+            right: -7px;
+            top: -6px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #13ce66;
+            .el-icon-check:before {
+                position: absolute;
+                top: -16px;
+                left: 3px;
+            }
+        }
+    }
+}
+.shuaxin-fenlei {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px;
+    width: 80px;
+    height: 34px;
+    background-color: #e6fbf3;
+    i {
+        margin-left: 12px;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url('../../assets/images/goods/renovate.png');
+    }
 }
 </style>

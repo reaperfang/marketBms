@@ -282,7 +282,7 @@ export default {
             this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
                 return
             }
-            this.$router.push('/order/deliverGoods?orderType=order&sendType=more&ids=' + this.multipleSelection.map(val => val.orderId).join(','))
+            this.$router.push('/order/orderBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderId).join(','))
         },
         batchPrintElectronicForm() {
             // if(this.express) {
