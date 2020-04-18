@@ -282,8 +282,12 @@ export default {
             //this.selectedIds = val;
         },
         isInteger(val) {
-            let v = Number(val);
-            return Math.floor(v) === v;
+            if(val) {
+                let v = Number(val);
+                return Math.floor(v) === v;
+            }else{
+                return false;
+            }
         },
         saveLabel(isRepeat) {
             if(!isRepeat && !this.$route.query.id) {
