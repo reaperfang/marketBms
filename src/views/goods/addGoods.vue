@@ -93,11 +93,11 @@
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
                     <span @click="addCategory">新增分类</span>
-                    <el-button type="primary" @click="getCategoryList">刷新</el-button>
-                    <!-- <span class="shuaxin-fenlei" @click="getCategoryList">
+                    <!-- <el-button type="primary" @click="getCategoryList">刷新</el-button> -->
+                    <span class="shuaxin-fenlei" @click="getCategoryList">
                         刷新
                         <i></i>
-                    </span> -->
+                    </span>
                 </div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
@@ -3634,10 +3634,14 @@ $blue: #655EFF;
     }
 }
 .shuaxin-fenlei {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    padding: 12px;
     width: 80px;
     height: 34px;
+    background-color: #e6fbf3;
     i {
+        margin-left: 12px;
         display: inline-block;
         width: 16px;
         height: 16px;
