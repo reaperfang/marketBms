@@ -21,11 +21,11 @@
         <div class="add_button" v-else @click="dialogVisible=true; currentDialog='dialogSelectVideo'">
           <i class="inner"></i>
         </div>
-        建议视频宽高比16：9
+        <p style="color:rgb(211, 211, 211);margin-top:5px;">建议视频宽高比16：9</p>
       </el-form-item>
       <el-form-item label="" v-if="source === 2" prop="videoUrl">
         <el-input  v-model="ruleForm.videoUrl" placeholder="此处粘贴视频播放地址"></el-input>
-        仅支持.mp4格式的播放地址
+        <p style="color:rgb(211, 211, 211);margin-top:5px;">仅支持.mp4格式的播放地址</p>
       </el-form-item>
       <el-form-item label="封面图" v-if="ruleForm.videoUrl">
         <el-radio-group v-model="coverType">
