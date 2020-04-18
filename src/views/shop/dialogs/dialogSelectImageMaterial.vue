@@ -485,19 +485,27 @@ export default {
 
     /* 向父组件提交选中的数据 */
     submit() {
-      if(!this.materialSelectedItem && !this.systemSelectedItem && !this.localSelectedItem) {
-        this.$message.warning('请选择图片后重试！');
-        return;
-      };
       let copyItem = {};
 
       if(this.currentTab == 'material') {
+        if(!this.materialSelectedItem) {
+          this.$message.warning('请选择图片后重试！');
+          return;
+        }
         copyItem = {...this.materialSelectedItem};
         copyItem['filePath'] = copyItem.filePath;
       }else if(this.currentTab == 'system') {
+        if(!this.systemSelectedItem) {
+          this.$message.warning('请选择图片后重试！');
+          return;
+        }
         copyItem = {...this.systemSelectedItem};
         copyItem['filePath'] = copyItem.address;
       }else if(this.currentTab === 'local') {
+        if(!this.localSelectedItem) {
+          this.$message.warning('请选择图片后重试！');
+          return;
+        }
         copyItem = {...this.localSelectedItem};
         copyItem['filePath'] = copyItem.url;
       }

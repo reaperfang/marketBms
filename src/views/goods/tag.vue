@@ -2,7 +2,7 @@
   <div class="tag">
     <div class="search">
       <div>
-        <el-button v-permission="['商品', '商品标签', '默认页面', '新建标签']" @click="currentDialog = 'AddTagDialog'; dialogVisible = true" type="primary">新建标签</el-button>
+        <el-button v-permission="['商品', '商品标签', '默认页面', '新建标签']" @click="addTagHandler" type="primary">新建标签</el-button>
         <!-- <el-button class="border-button" @click="moreManageHandler">批量管理</el-button> -->
       </div>
       <el-form :inline="true" :model="listQuery" ref="form" class="form-inline">
@@ -137,6 +137,13 @@ export default {
     }
   },
   methods: {
+    addTagHandler() {
+      this.currentData = {
+        editor: false
+      }
+      this.currentDialog = 'AddTagDialog'; 
+      this.dialogVisible = true
+    },
     checkedAllChange() {
         if(this.checkedAll) {
             this.$refs.table.clearSelection();
