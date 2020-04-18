@@ -2226,6 +2226,23 @@ export default {
         },
         submitGoods(formName) {
             this.$refs[formName].validate((valid) => {
+                if(this.ruleForm.other) {
+                        if(!this.ruleForm.otherUnit) {
+                            this.$message({
+                                message: '请输入计量单位',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    } else {
+                        if(!this.ruleForm.productUnit) {
+                            this.$message({
+                                message: '请选择计量单位',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    }
                 if (valid) {
                     if(this.ruleForm.other) {
                         if(/\s+/.test(this.ruleForm.otherUnit)) {
@@ -2236,6 +2253,7 @@ export default {
                             return
                         }
                     }
+                    
                     let params
                     let _goodsInfos
                     let obj = {
@@ -2263,13 +2281,13 @@ export default {
                         //     });
                         //     return
                         // }
-                        if(!this.ruleForm.goodsInfos[i].code) {
-                            this.$message({
-                                 message: '当前SKU编码输入有误，请您重新输入',
-                                 type: 'warning'
-                             });
-                             return
-                        }
+                        // if(!this.ruleForm.goodsInfos[i].code) {
+                        //     this.$message({
+                        //          message: '当前SKU编码输入有误，请您重新输入',
+                        //          type: 'warning'
+                        //      });
+                        //      return
+                        // }
                         if(this.ruleForm.goodsInfos[i].image == '') {
                             this.$message({
                                 message: '请上传图片',

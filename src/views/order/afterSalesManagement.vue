@@ -269,9 +269,9 @@ export default {
         showLogistics(row) {
             this.expressNo = row.returnExpressNo
             this.expressCompanys = row.returnExpressName
-            this._apis.order.orderLogistics({expressNo: row.returnExpressNo}).then(res => {
+            this._apis.order.orderLogistics({expressNo: row.returnExpressNo, id: row.id, isOrderAfter: 1}).then(res => {
                 this.currentDialog = 'LogisticsDialog'
-                this.currentData = res.traces
+                this.currentData = res.traces || []
                 this.dialogVisible = true
             }).catch(error => {
                 this.$message.error(error);
