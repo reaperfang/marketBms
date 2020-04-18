@@ -386,18 +386,16 @@ export default {
             } else {
                 _orderAfterSaleStatus = 1
             }
+            if(row.type == 2) {
+                this.currentDialog = 'ExchangeGoodsDialog'
+                this.currentData = row;
+                this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
+                this.dialogVisible = true
+                return
+            }
             this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                if(row.type == 2) {
-                    this.getList();
-
-                    this.currentDialog = 'ExchangeGoodsDialog'
-                    this.currentData = row;
-                    this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-                    this.dialogVisible = true
-                } else {
-                    this.getList();
-                    this.$message.success('审核成功！');
-                }
+                this.getList();
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.$message.error(error);
             })
