@@ -110,6 +110,15 @@ export default {
             } else {
                 orderAfterSaleStatus = 1
             }
+
+            if(this.orderAfterSale.type == 2) {
+                // 换货确认
+                this.currentDialog = 'ExchangeGoodsDialog'
+                this.currentData = Object.assign({}, this.orderAfterSale);
+                this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
+                this.dialogVisible = true
+                return
+            }
             let params = {
                 id: this.orderAfterSale.id,
                 //realReturnScore: this.orderAfterSale.realReturnScore,
@@ -123,20 +132,9 @@ export default {
             //     params.realReturnMoney = this.orderAfterSale.realReturnMoney
             // }
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
-                if(this.orderAfterSale.type == 2) {
-                    // 换货确认
-                    this.getDetail()
-                    
-                    this.currentDialog = 'ExchangeGoodsDialog'
-                    this.currentData = Object.assign({}, this.orderAfterSale);
-                    this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
-                    this.dialogVisible = true
-                    return
-                } else {
-                    this.getDetail()
-                    this.visible = false
-                    this.$message.success('审核成功！');
-                }
+                this.getDetail()
+                this.visible = false
+                this.$message.success('审核成功！');
             }).catch(error => {
                 this.visible = false
                 this.$message.error(error);
