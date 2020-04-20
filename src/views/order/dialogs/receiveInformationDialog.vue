@@ -294,7 +294,6 @@ export default {
                                 this.$message.error(error);
                             }) 
 
-                            return
                         }
                         this.$emit('submit', obj)
                         this.visible = false
