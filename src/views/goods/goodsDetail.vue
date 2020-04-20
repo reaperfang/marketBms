@@ -518,7 +518,7 @@
                         v-for="item in unitList"
                         :key="item.id"
                         :label="item.name"
-                        :value="item.name">
+                        :value="item.id">
                     </el-option>
                 </el-select>
                 <!-- <el-button class="border-button new-units">新增单位</el-button> -->

@@ -69,6 +69,13 @@ export default {
                         });
                         return
                     }
+                    // if(+this.data.salePrice < +Math.max.apply(null, this.data.goodsInfos.map(val => val.costPrice))) {
+                    //     this.$message({
+                    //     message: '售卖价不得低于成本价！请重新输入',
+                    //     type: 'warning'
+                    //     });
+                    //     return
+                    // }
                 }
                 if(/^\s*$/.test(this.ruleForm.price)) {
                     let name

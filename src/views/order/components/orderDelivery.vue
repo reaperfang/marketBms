@@ -119,6 +119,16 @@
                     prop="sendTime"
                     label="最新发货时间"
                     width="170">
+                    <template slot-scope="scope">
+                        <div>
+                            <template v-if="scope.row.isAutoSend && (scope.row.status == 3) && scope.row.isFillUp">
+                                {{scope.row.updateTime}}
+                            </template>
+                            <template v-else>
+                                {{scope.row.sendTime}}
+                            </template>
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" width="120">
                     <template slot-scope="scope">

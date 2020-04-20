@@ -29,11 +29,11 @@
         <span v-if="form.logo" class="avatar">
           <img :src="form.logo" class="logo_img" />
           <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
-          <span
-            class="uploadFont"
-            @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
-          >上传</span>
         </span>
+        <span
+          class="uploadFont"
+          @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
+        >上传</span>
         <!-- <el-upload
                 class="avatar-uploader"
                 :action="uploadUrl"
