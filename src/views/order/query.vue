@@ -28,10 +28,10 @@
               <el-option label="用户昵称" value="memberName"></el-option>
               <el-option label="收货人姓名" value="receivedName"></el-option>
               <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员ID" value="resellerInfoId"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员姓名" value="resellerName"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员昵称" value="resellerNick"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员手机号" value="resellerPhone"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员ID" value="resellerInfoId"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员姓名" value="resellerName"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员昵称" value="resellerNick"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员手机号" value="resellerPhone"></el-option>
             </el-select>
           </el-input>
         </el-form-item>
