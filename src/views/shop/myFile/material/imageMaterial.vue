@@ -35,9 +35,9 @@
                 </div>
                 <p class="img_name">{{item.fileName}}</p>
                 <div class="operate" ref="operate">
-                  <el-button plain class="block mt10 ml10 btn_groups" @click="moveGroup(item.id,item.fileGroupInfoId)">分组</el-button>
-                  <el-button type="primary" plain class="block mt10 btn_tailor" v-if="!item.isSyncWechat" @click="imageTailor(item)">剪裁</el-button>
-                  <el-button plain class="block mt10 btn_delete" @click="deleteImage(item.id,'imageId')">删除</el-button>
+                  <el-button plain class="block mt10 ml10 btn_groups" @click="moveGroup(item.id,item.fileGroupInfoId)">分 组</el-button>
+                  <el-button type="primary" plain class="block mt10 btn_tailor" v-if="!item.isSyncWechat" @click="imageTailor(item)">剪 裁</el-button>
+                  <el-button plain class="block mt10 btn_delete" @click="deleteImage(item.id,'imageId')">删 除</el-button>
                 </div>
               </div>
             </div>
@@ -557,33 +557,39 @@ export default {
   display: inline-block;
 }
 .btn_groups{
-  border: 1px solid #625FFDFF;
+  border: 1px solid #655EFF;
+  border-radius: 4px;
   background-color:transparent;
-  color: #625FFDFF;
+  color: #655EFF;
 }
 .btn_groups:hover{
-  border: 1px solid #625FFDFF;
-  background: #625FFDFF;
+  border: 1px solid #655EFF;
+  border-radius: 4px;
+  background: #655EFF;
   color: #fff;
 }
 .btn_tailor{
-  border: 1px solid #625FFDFF;
+  border: 1px solid #655EFF;
+  border-radius: 4px;
   background-color:transparent;
-  color: #625FFDFF;
+  color: #655EFF;
 }
 .btn_tailor:hover{
-  border: 1px solid #625FFDFF;
-  background: #625FFDFF;
+  border: 1px solid #655EFF;
+  border-radius: 4px;
+  background: #655EFF;
   color: #fff;
 }
 .btn_delete{
-  border: 1px solid #FD4C2BFF;
+  border: 1px solid #FD4C2B;
+  border-radius: 4px;
   background-color:transparent;
-  color: #FD4C2BFF;
+  color: #FD4C2B;
 }
 .btn_delete:hover{
-  border: 1px solid #FD4C2BFF;
-  background: #FD4C2BFF;
+  border: 1px solid #FD4C2B;
+  border-radius: 4px;
+  background: #FD4C2B;
   color: #fff;
 }
 
