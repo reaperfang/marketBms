@@ -69,15 +69,19 @@
                             <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
+                            <p v-if="item.showErrorExpressCompany" class="error-message">{{item.errorMessageExpressCompany}}</p>
                             <el-input
                           style="margin-top: 5px;"
                           v-if="item.expressCompanyCodes == 'other'"
                           v-model="item.other"
+                          @input="otherInput(index)"
                           placeholder="请输入快递公司名称"
                         ></el-input>
+                        <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="!item.express" v-model="item.expressNos"></el-input>
+                            <el-input :disabled="!item.express" v-model="item.expressNos" @input="ExpressNosInput(index)"></el-input>
+                            <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                     </el-form>
                   </div>
@@ -179,6 +183,11 @@ export default {
           this.visible = false;
           this.$message.error(error);
         });
+
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorExpressCompany: false,
+          errorMessageExpressCompany: ''
+        }))
     },
     printingElectronicForm() {
       this.$router.push('/order/printingElectronicForm?ids=' + this.list.map(val => val.id).join(',') + '&type=batchSupplementaryLogistics')
@@ -190,21 +199,64 @@ export default {
           try {
               let params
 
-              if (
-              this.list
-                .reduce((total, val) => {
-                  return total.concat(val.orderItemList);
-                }, [])
-                .filter(val => val.checked)
-                .some(val => {
-                  if(val.express) {
-                    return !val.expressNos || /^\s+$/.test(val.expressNos)
+            //   if (
+            //   this.list
+            //     .reduce((total, val) => {
+            //       return total.concat(val.orderItemList);
+            //     }, [])
+            //     .filter(val => val.checked)
+            //     .some(val => {
+            //       if(val.express) {
+            //         return !val.expressNos || /^\s+$/.test(val.expressNos)
+            //       }
+            //       return false
+            //     })
+            // ) {
+            //   this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
+            //   return;
+            // }
+            let isWrong = false
+            let _list = JSON.parse(JSON.stringify(this.list))
+
+            _list.forEach((item, index) => {
+              let orderItemList = item.orderItemList
+
+              if(item.expressCompanyCodes == 'other') {
+                if(!item.other) {
+                  isWrong = true
+                  item.showErrorOther = true
+                  item.errorMessageOther = '请输入快递公司名称'
+                } else {
+                  if(!item.expressNos) {
+                    isWrong = true
+                    item.showErrorExpressNos = true
+                    item.errorMessageExpressNos = '请输入快递单号'
                   }
-                  return false
-                })
-            ) {
-              this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
-              return;
+                }
+              } else {
+                if(!item.expressCompanyCodes) {
+                  isWrong = true
+                  item.showErrorExpressCompany = true
+                  item.errorMessageExpressCompany = '请选择快递公司'
+                } else {
+                  if(item.express && !item.expressNos) {
+                    isWrong = true
+                    item.showErrorExpressNos = true
+                    item.errorMessageExpressNos = '请输入快递单号'
+                  }
+                }
+              }
+            })
+            this.list = _list
+
+            if(isWrong) {
+              this.$nextTick(() => {
+                document.querySelector('.error-message').scrollIntoView()
+                let scrollTop = document.querySelector('.content-main').scrollTop
+
+                document.querySelector('.content-main').scrollTop = scrollTop - 40
+              })
+              return
             }
 
             this.sending = true
@@ -345,6 +397,12 @@ export default {
             val.checked = false;
             val.expressNos = "";
             val.expressCompanyCodes = ''
+            val.showErrorExpressCompany = false
+            val.errorMessageExpressCompany = ''
+            val.showErrorExpressNos = false
+            val.errorMessageExpressNos = ''
+            val.showErrorOther = false
+            val.errorMessageOther = ''
             val.orderItemList.forEach(goods => {
               goods.checked = false;
               goods.sendCount = goods.goodsCount
@@ -390,6 +448,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bulk-delivery {
+  min-width: 1153px;
   color: #333333;
   background-color: #fff;
   padding: 20px;
@@ -481,5 +540,12 @@ export default {
 }
 .footer {
   text-align: center;
+}
+.error-message {
+  color: #FD4C2B;
+  font-size: 12px;
+  line-height: 1;
+  padding-top: 2px;
+  margin-bottom: 0;
 }
 </style>
