@@ -659,6 +659,7 @@ export default {
                 })
                 return
             }
+            this.currentData = JSON.parse(JSON.stringify(this.multipleSelection))
             this.currentDialog = 'PriceChangeDialog'
             this.dialogVisible = true
         },

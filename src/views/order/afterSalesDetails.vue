@@ -113,8 +113,10 @@ export default {
 
             if(this.orderAfterSale.type == 2) {
                 // 换货确认
+                let _orderAfterSale = JSON.parse(JSON.stringify(this.orderAfterSale))
+
                 this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = Object.assign({}, this.orderAfterSale);
+                this.currentData = _orderAfterSale
                 this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
                 this.dialogVisible = true
                 return
