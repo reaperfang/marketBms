@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入货品名称" clearable></el-input>
         </el-form-item>
         <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜 索</el-button>
         </el-form-item>
       </el-form>
     </div>

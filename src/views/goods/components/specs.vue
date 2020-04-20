@@ -380,7 +380,7 @@ export default {
         }
         tr th {
             height: 40px;
-            background: rgb(242, 236, 255);
+            background:rgba(101,94,255,0.1);
             color: rgb(101, 94, 255);
         }
     }
@@ -435,6 +435,24 @@ export default {
     }
     /deep/ .el-input input {
         padding-right: 0;
+    }
+    /deep/ .upload-spec {
+        .el-upload-list__item {
+            overflow: visible;
+            .el-upload-list__item-status-label {
+                position: absolute;
+                right: -7px;
+                top: -6px;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: #13ce66;
+                .el-icon-upload-success:before {
+                    position: absolute;
+                    top: -12px;
+                }
+            }
+        }
     }
 </style>
 

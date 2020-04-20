@@ -494,6 +494,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/deep/ .el-table .cell{
+  padding-left: 16px;
+}
 /deep/ .el-table__body-wrapper{
     overflow: auto;
     height: 502px;
@@ -511,6 +514,7 @@ export default {
     border-radius: 50%;
     line-height: 18px;
     margin-top: 5px;
+    margin-left: -12px;
 }
 /deep/ .el-input-number--small .el-input-number__increase{
     width: 18px;
@@ -521,14 +525,16 @@ export default {
     border-radius: 50%;
     line-height: 18px;
     margin-top: 5px;
+    margin-right: -24px;
 }
 /deep/ .el-input-number--small{
-    width: 94px;
+    width: 60px;
+    padding-left: 10px;
 }
 /deep/ .el-input-number--small .el-input__inner{
-    padding-left: 21px;
-    padding-right: 21px;
-    border: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #ddd;
     background: none;
 }
 /deep/ .el-dialog{
@@ -572,6 +578,7 @@ export default {
         }
         .a_d_delete{
             color: #FD4C2B;
+            margin-left: 40px
         }
     }
 }

@@ -48,7 +48,7 @@
                         <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button @click="getList" type="primary">查询</el-button>
+                        <el-button @click="search" type="primary">查询</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </el-form-item>
                     </el-form>
@@ -373,7 +373,8 @@
     display: inline-block;
     width: 38px;
     height: 10px;
-    background:url('../../assets/images/goods/sale.png') no-repeat;
+    background:url('../../assets/images/goods/sale.jpg') no-repeat;
+    background-size: 100% 100%;
     margin-left: 5px;
 }
 /deep/ .el-checkbox__label {
@@ -630,6 +631,13 @@ export default {
         }
     },
     methods: {
+        search() {
+            this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
+            })
+            this.getList()
+        },
         gblen(str) {  
             var len = 0;  
             for (var i=0; i<str.length; i++) {  
