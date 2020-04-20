@@ -387,8 +387,10 @@ export default {
                 _orderAfterSaleStatus = 1
             }
             if(row.type == 2) {
+                let _row = JSON.parse(JSON.stringify(row))
+
                 this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = row;
+                this.currentData = _row;
                 this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
                 this.dialogVisible = true
                 return
