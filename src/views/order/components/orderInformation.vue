@@ -50,7 +50,7 @@
                                 <div class="gain-item-lefter">积分：</div>
                                 <div class="gain-item-righter">{{rewardScore + ' 分' || '无'}}</div>
                             </div>
-                            <div class="gain-item">
+                            <div class="gain-item gift">
                                 <div class="gain-item-lefter">赠品：</div>
                                 <div class="gain-item-righter">
                                     <!--{{gift || '无'}}-->
@@ -851,6 +851,14 @@ export default {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+            &.gift {
+                .gain-item-righter {
+                    display: flex;
+                    .see-more-gift {
+                        flex-shrink: 0;
+                    }
+                }
+            }
             .gain-item-lefter {
                 width: 64px;
                 margin-right: 6px;
@@ -1044,6 +1052,7 @@ export default {
     margin-left: 20px;
     color: #655EFF;
 }
+
 </style>
 
 
