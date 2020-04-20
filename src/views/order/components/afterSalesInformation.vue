@@ -20,11 +20,12 @@
                             {{orderAfterSale.description}}
                             <div class="images">
                                 <template v-for="(item, index) in orderAfterSale.descriptionImages">
-                                    <template v-if="/\.mp4|\.ogg$/.test(item.image)">
+                                    <template v-if="/\.mp4|\.ogg|\.mov$/.test(item.image)">
                                         <div @click="dialogVisible = true; bigMessage.image = false; bigMessage.url = item.image;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
                                             <video width="51" controls="controls">
                                             <source :src="item.image" type="video/ogg">
                                             <source :src="item.image" type="video/mp4">
+                                            <source :src="item.image" type="video/mov">
                                             Your browser does not support the video tag.
                                             </video>
                                             <div class="over">
