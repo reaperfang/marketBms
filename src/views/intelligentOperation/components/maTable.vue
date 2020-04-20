@@ -13,10 +13,12 @@
       </el-table-column>
       <el-table-column
         prop="id"
-        label="用户ID">
+        label="用户ID"
+        align="center">
       </el-table-column>
       <el-table-column
-        label="用户类型">
+        label="用户类型"
+        align="center">
         <template slot-scope="scope">
           <span style="line-height:60px; display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
         </template>
@@ -24,7 +26,7 @@
       <el-table-column
         prop="phone"
         label="手机号码"
-      >
+      align="center">
         <template slot-scope="scope">
             <span v-if="!scope.row.phone" class="txtCenter"> - </span>
             <span v-else>{{scope.row.phone}}</span>
@@ -33,17 +35,17 @@
       <el-table-column
         prop="name"
         label="昵称"
-      >
+      align="center">
       </el-table-column>
       <el-table-column
         prop="score"
         label="积分"
-      >
+      align="center">
       </el-table-column>
       <el-table-column
-        label="（会员）入会时间"
+        label="(会员)入会时间"
         width="150"
-      >
+      align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.joinTime">
             {{Number(scope.row.joinTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}
@@ -52,17 +54,17 @@
       </el-table-column>
       <el-table-column
         prop="tradeCount"
-        label="交易次数（总）"
-      >
+        label="交易次数(总)"
+      align="center">
       </el-table-column>
       <el-table-column
         prop="orderPaymentCount"
-        label="订单（总）金额"
-      >
+        label="订单(总)金额"
+      align="center">
       </el-table-column>
       <el-table-column
         label="最后交易时间"
-      >
+      align="center">
         <template slot-scope="scope">
           <span>{{Number(scope.row.lastTradeTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
         </template>

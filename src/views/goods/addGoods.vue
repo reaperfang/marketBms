@@ -6,7 +6,7 @@
         <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
         <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
     </header> -->
-    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="152px" class="demo-ruleForm">
+    <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="152px" class="demo-ruleForm"><!--:disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"-->
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
@@ -15,7 +15,6 @@
                     @focus="leimuFocus"
                     @blur="leimuBlur"
                     @visible-change="visibleChange"
-                    :disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"
                     :options="itemCatList"
                     v-model="ruleForm.itemCat"
                     @change="itemCatHandleChange"
@@ -94,7 +93,11 @@
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
                     <span @click="addCategory">新增分类</span>
-                    <el-button type="primary" @click="getCategoryList">刷新</el-button>
+                    <!-- <el-button type="primary" @click="getCategoryList">刷新</el-button> -->
+                    <span class="shuaxin-fenlei" @click="getCategoryList">
+                        刷新
+                        <i></i>
+                    </span>
                 </div>
             </el-form-item>
             <el-form-item label="商品标签" prop="productLabelId">
@@ -2042,15 +2045,21 @@ export default {
                 try {
                     this.getMarketActivity([res.id]).then((activityRes) => {
                         activityRes.forEach((val, index) => {
-                            if(val.goodsInfos) {
-                                val.goodsInfos.forEach(skuVal => {
-                                    let skuid = skuVal.id
-                                    let item = res.goodsInfos.find(val => val.id == skuid)
-                                    
-                                    if(item) {
-                                        item.activity = true
-                                    }
+                            if(val.isParticipateActivity) {
+                                res.goodsInfos.forEach(val => {
+                                    val.activity = true
                                 })
+                            } else {
+                                if(val.goodsInfos) {
+                                    val.goodsInfos.forEach(skuVal => {
+                                        let skuid = skuVal.id
+                                        let item = res.goodsInfos.find(val => val.id == skuid)
+                                        
+                                        if(item) {
+                                            item.activity = true
+                                        }
+                                    })
+                                }
                             }
                         })
 
@@ -2217,6 +2226,23 @@ export default {
         },
         submitGoods(formName) {
             this.$refs[formName].validate((valid) => {
+                if(this.ruleForm.other) {
+                        if(!this.ruleForm.otherUnit) {
+                            this.$message({
+                                message: '请输入计量单位',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    } else {
+                        if(!this.ruleForm.productUnit) {
+                            this.$message({
+                                message: '请选择计量单位',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                    }
                 if (valid) {
                     if(this.ruleForm.other) {
                         if(/\s+/.test(this.ruleForm.otherUnit)) {
@@ -2227,6 +2253,7 @@ export default {
                             return
                         }
                     }
+                    
                     let params
                     let _goodsInfos
                     let obj = {
@@ -2247,13 +2274,20 @@ export default {
 
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
-                        if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
-                            this.$message({
-                                message: '当前SKU编码输入有误，请您重新输入',
-                                type: 'warning'
-                            });
-                            return
-                        }
+                        // if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
+                        //     this.$message({
+                        //         message: '当前SKU编码输入有误，请您重新输入',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
+                        // if(!this.ruleForm.goodsInfos[i].code) {
+                        //     this.$message({
+                        //          message: '当前SKU编码输入有误，请您重新输入',
+                        //          type: 'warning'
+                        //      });
+                        //      return
+                        // }
                         if(this.ruleForm.goodsInfos[i].image == '') {
                             this.$message({
                                 message: '请上传图片',
@@ -2984,7 +3018,7 @@ $blue: #655EFF;
     .add-tag {
         display: flex;
         .item {
-            margin-right: 24px;
+            margin-right: 28px;
             &.tag {
                 margin-right: 72px;
                 color: $blue;
@@ -3597,5 +3631,39 @@ $blue: #655EFF;
 }
 /deep/ .el-form-item__label {
     color: #3D434A;
+}
+/deep/ .upload-box .image-list {
+    .image-item {
+        overflow: visible;
+        label {
+            position: absolute;
+            right: -7px;
+            top: -6px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #13ce66;
+            .el-icon-check:before {
+                position: absolute;
+                top: -16px;
+                left: 3px;
+            }
+        }
+    }
+}
+.shuaxin-fenlei {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px;
+    width: 80px;
+    height: 34px;
+    background-color: #e6fbf3;
+    i {
+        margin-left: 12px;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url('../../assets/images/goods/renovate.png');
+    }
 }
 </style>
