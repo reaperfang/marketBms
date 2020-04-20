@@ -298,8 +298,8 @@ export default {
         margin-left:30px;
     }
     .mar_fr{
-        float: right;
-        margin: 5px;
+        float: left;
+		margin: 5px 0 0 10px;
     }
     .p_mar5{
         margin-left:5px;

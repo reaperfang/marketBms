@@ -323,6 +323,8 @@ export default {
     .i_title {
       font-weight: bold;
       margin: 23px 0 23px 0;
+		padding-top: 23px;
+		border-top: 1px dashed #d3d3d3;
     }
     .chart1_container {
       padding-bottom: 32px;
