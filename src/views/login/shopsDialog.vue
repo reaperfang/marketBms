@@ -10,7 +10,8 @@
         :show-close="showClose"
         style="margin-top:20vh;">
         <span slot="title" class="dialog_title">
-            <a>返回官网</a> | <a>创建店铺</a>
+            <a href="https://www.300.cn/ " target="_blank">返回官网</a> 
+            <!-- | <a>创建店铺</a> -->
         </span>
         <div class="content">
             <div class="content_top">
