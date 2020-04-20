@@ -55,10 +55,12 @@
                     <el-input
                       type="number"
                       min="1"
+                      @input="inputHandler(index, i)"
                       :max="goods.goodsCount - goods.cacheSendCount"
                       v-model="goods.sendCount"
                       placeholder="请输入"
                     ></el-input>
+                    <p v-if="goods.showError" class="error-message">{{goods.errorMessage}}</p>
                   </div>
                 </div>
               </div>
@@ -81,16 +83,20 @@
                             :key="index"
                           ></el-option>
                         </el-select>
+                        <p v-if="item.showErrorExpressCompany" class="error-message">{{item.errorMessageExpressCompany}}</p>
                         <el-input
                           style="margin-top: 5px;"
                           v-if="item.expressCompanyCodes == 'other'"
                           @change="otherInputChange(index)"
+                          @input="otherInput(index)"
                           v-model="item.other"
                           placeholder="请输入快递公司名称"
                         ></el-input>
+                        <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                       </el-form-item>
                       <el-form-item label="快递单号" prop="expressNos">
-                        <el-input :disabled="!item.express" v-model="item.expressNos" :placeholder="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
+                        <el-input :disabled="!item.express" v-model="item.expressNos" :placeholder="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
+                        <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                       </el-form-item>
                     </el-form>
                   </div>
@@ -190,6 +196,68 @@ export default {
     }
   },
   methods: {
+    otherInput(index) {
+      let item = this.list[index]
+
+      if(!item.other) {
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorOther: true,
+          errorMessageOther: '请输入快递公司名称'
+        }))
+      } else {
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorOther: false,
+          errorMessageOther: ''
+        }))
+      }
+    },
+    ExpressNosInput(index) {
+      let item = this.list[index]
+
+      if(!item.expressCompanyCodes) {
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorExpressCompany: true,
+          errorMessageExpressCompany: '请选择快递公司'
+        }))
+
+        setTimeout(() => {
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: ''
+            }))
+        }, 500)
+      } else {
+        if(!this.list[index].expressNos) {
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+            showErrorExpressNos: true,
+            errorMessageExpressNos: '请输入快递单号'
+          }))
+        }
+      }
+    },
+    inputHandler(index, i) {
+      let reg = /^[1-9]\d*$/
+
+      if(this.list[index].orderItemList[i] == '') {
+        this.list[index].orderItemList.splice(i, 1, Object.assign({}, this.list[index].orderItemList[i], {
+          errorMessage:  '请输入本次发货数量',
+          showError: true
+        }))
+        return
+      }
+
+      setTimeout(() => {
+        if(+this.list[index].orderItemList[i].sendCount <= 0 || !reg.test(this.list[index].orderItemList[i].sendCount)) {
+          this.list[index].orderItemList.splice(i, 1, Object.assign({}, this.list[index].orderItemList[i], {
+            sendCount: '',
+          }))
+        }
+
+        this.list[index].orderItemList.splice(i, 1, Object.assign({}, this.list[index].orderItemList[i], {
+          errorMessage: +this.list[index].orderItemList[i].sendCount <= 0 || !reg.test(this.list[index].orderItemList[i].sendCount) ? '仅支持输入非负的正整数' : '',
+          showError: +this.list[index].orderItemList[i].sendCount <= 0 || !reg.test(this.list[index].orderItemList[i].sendCount) ? true : false
+        }))
+      }, 500)
+    },
     otherInputChange(index) {
       if(index != 0) return
 
@@ -241,6 +309,11 @@ export default {
           this.visible = false;
           this.$message.error(error);
         });
+
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorExpressCompany: false,
+          errorMessageExpressCompany: ''
+        }))
     },
     deleteOrder(index) {
       this.list.splice(index, 1);
@@ -280,66 +353,123 @@ export default {
           return;
         }
 
-        if (
-          this.list
-            .reduce((total, val) => {
-              return total.concat(val.orderItemList);
-            }, [])
-            .filter(val => val.checked)
-            .some(val => !val.sendCount)
-        ) {
-          this.confirm({
-            title: "提示",
-            icon: true,
-            text: "本次发货数量不能为空"
-          });
-          return;
-        }
+        // if (
+        //   this.list
+        //     .reduce((total, val) => {
+        //       return total.concat(val.orderItemList);
+        //     }, [])
+        //     .filter(val => val.checked)
+        //     .some(val => !val.sendCount)
+        // ) {
+        //   this.confirm({
+        //     title: "提示",
+        //     icon: true,
+        //     text: "本次发货数量不能为空"
+        //   });
+        //   return;
+        // }
 
-        if (
-          this.list
-            .reduce((total, val) => {
-              return total.concat(val.orderItemList);
-            }, [])
-            .filter(val => val.checked)
-            .some(val => +val.sendCount > val.goodsCount)
-        ) {
-          this.confirm({
-            title: "提示",
-            icon: true,
-            text: "本次发货数量不能大于应发数量"
-          });
-          return;
-        }
+        // if (
+        //   this.list
+        //     .reduce((total, val) => {
+        //       return total.concat(val.orderItemList);
+        //     }, [])
+        //     .filter(val => val.checked)
+        //     .some(val => +val.sendCount > val.goodsCount)
+        // ) {
+        //   this.confirm({
+        //     title: "提示",
+        //     icon: true,
+        //     text: "本次发货数量不能大于应发数量"
+        //   });
+        //   return;
+        // }
 
-        if (
-          this.list
-            .filter(val => val.expressCompanyCodes == "other")
-            .some(val => !val.other || /^\s+$/.test(val.other))
-        ) {
-          this.confirm({
-            title: "提示",
-            icon: true,
-            text: "请输入快递公司名称"
-          });
-          return;
-        }
+        // if (
+        //   this.list
+        //     .filter(val => val.expressCompanyCodes == "other")
+        //     .some(val => !val.other || /^\s+$/.test(val.other))
+        // ) {
+        //   this.confirm({
+        //     title: "提示",
+        //     icon: true,
+        //     text: "请输入快递公司名称"
+        //   });
+        //   return;
+        // }
 
-        if (
-          this.list
-            .reduce((total, val) => {
-              return total.concat(val.orderItemList);
-            }, [])
-            .filter(val => val.checked)
-            .some(val => {
-              if(val.express) {
-                return !val.expressNos || /^\s+$/.test(val.expressNos)
+        // if (
+        //   this.list
+        //     .reduce((total, val) => {
+        //       return total.concat(val.orderItemList);
+        //     }, [])
+        //     .filter(val => val.checked)
+        //     .some(val => {
+        //       if(val.express) {
+        //         return !val.expressNos || /^\s+$/.test(val.expressNos)
+        //       }
+        //       return false
+        //     })
+        // ) {
+        //   this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
+        //   return;
+        // }
+
+        let isWrong = false
+        let _list = JSON.parse(JSON.stringify(this.list.filter(val => val.checked)))
+
+        _list.forEach((item, index) => {
+          let orderItemList = item.orderItemList
+
+          orderItemList.forEach(goods => {
+            if(!goods.sendCount) {
+              isWrong = true
+              goods.showError = true
+              goods.errorMessage = '请输入本次发货数量'
+            }
+            if(+goods.sendCount > +goods.goodsCount) {
+              isWrong = true
+              goods.showError = true
+              goods.errorMessage = '本次发货数量不能大于应发数量'
+            }
+          })
+
+          if(item.expressCompanyCodes == 'other') {
+            if(!item.other) {
+              isWrong = true
+              item.showErrorOther = true
+              item.errorMessageOther = '请输入快递公司名称'
+            } else {
+              if(!item.expressNos) {
+                isWrong = true
+                item.showErrorExpressNos = true
+                item.errorMessageExpressNos = '请输入快递单号'
               }
-              return false
-            })
-        ) {
-          this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
-          return;
+            }
+          } else {
+            if(!item.expressCompanyCodes) {
+              isWrong = true
+              item.showErrorExpressCompany = true
+              item.errorMessageExpressCompany = '请选择快递公司'
+            } else {
+              if(item.express && !item.expressNos) {
+                isWrong = true
+                item.showErrorExpressNos = true
+                item.errorMessageExpressNos = '请输入快递单号'
+              }
+            }
+          }
+        })
+        this.list = _list
+
+        if(isWrong) {
+          this.$nextTick(() => {
+            document.querySelector('.error-message').scrollIntoView()
+            let scrollTop = document.querySelector('.content-main').scrollTop
+
+            document.querySelector('.content-main').scrollTop = scrollTop - 40
+          })
+          return
         }
 
         this.sending = true
@@ -506,7 +636,15 @@ export default {
               goods.checked = false;
               goods.cacheSendCount = +goods.sendCount
               goods.sendCount = goods.goodsCount - goods.cacheSendCount;
+              goods.showError = false
+              goods.errorMessage = ''
             });
+            val.showErrorExpressCompany = false
+            val.errorMessageExpressCompany = ''
+            val.showErrorExpressNos = false
+            val.errorMessageExpressNos = ''
+            val.showErrorOther = false
+            val.errorMessageOther = ''
           });
           // res.forEach(val => {
           //   val.orderItemList.forEach(item => {
@@ -709,4 +847,11 @@ export default {
       width: 290px!important;
   }
 } 
+.error-message {
+  color: #FD4C2B;
+  font-size: 12px;
+  line-height: 1;
+  padding-top: 2px;
+  margin-bottom: 0;
+}
 </style>

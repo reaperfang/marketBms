@@ -510,6 +510,14 @@ export default {
                 this.orderAfterSale.realReturnScore = this.catchOrderAfterSale.realReturnScore
                 return
             }
+            if(!/^\d+$/.test(this.orderAfterSale.realReturnScore)) {
+                this.$message({
+                message: '非法输入，仅支持输入非负数，请重新输入',
+                type: 'warning'
+                });
+                this.orderAfterSale.realReturnScore = this.catchOrderAfterSale.realReturnScore
+                return
+            }
             this._apis.order.editorScoreAmount({
                 id: this.$route.query.id,
                 realReturnScore: this.orderAfterSale.realReturnScore
