@@ -29,14 +29,7 @@
                         <el-radio-button class="btn_bor" label="3">最近30天</el-radio-button>
                      </el-radio-group>
                 </div>
-                <div class="fl gflex mar_time_option">
-                    <p >关键指标详解</p>
-                     <el-radio-group v-model="preType" @change="changePre">
-                        <el-radio-button class="btn_bor" label="1">客单价</el-radio-button>
-                        <el-radio-button class="btn_bor" label="2">订单量</el-radio-button>
-                        <el-radio-button class="btn_bor" label="3">人均消费金额趋势</el-radio-button>
-                    </el-radio-group>
-                </div>
+
                 <div class="fr mar_fr">
                     <el-button class="border_btn" @click="resetAll()">重 置</el-button>
                 </div> 
@@ -44,11 +37,20 @@
         </div>
         <div class="p_block marT20">
            <div class="clearfix res_export">
-                <div class="fr pos_fr">
-                    <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-                        <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
-                    </el-tooltip>
-                </div> 
+			   <div class="fl gflex mar_time_option">
+				   <p >关键指标详解</p>
+				   <div class="radio-group">
+					   <span @click="preTypeFn(1)" :class="classId == 1 ? 'active' : ''">客单价</span>
+					   <span @click="preTypeFn(2)" :class="classId == 2 ? 'active' : ''">订单量</span>
+					   <span @click="preTypeFn(3)" :class="classId == 3 ? 'active' : ''">人均消费金额趋势</span>
+				   </div>
+				   <div class="fr pos_fr">
+					   <el-tooltip content="当前最多支持导出1000条数据" placement="top">
+						   <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
+					   </el-tooltip>
+				   </div>
+			   </div>
+
             </div>
             <div>
                 <pp2Chart :title="'测试图表'" ref="pp2"></pp2Chart>
@@ -123,6 +125,7 @@ export default {
             dialogVisible: false,
             currentData:{},
             totalNum:0,
+			classId:1
         }
     },
     methods: {
@@ -143,6 +146,12 @@ export default {
           this.$message.error(error);
         });
         },
+		//更新chart
+		preTypeFn(val){
+        	this.preType = val;
+        	this.classId = val;
+			this.chart();
+		},
         //历史记录
         getHistoryRecord(){
             let data = {
@@ -259,14 +268,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-/**
-*
-* @Author zpw
-* @Update 2020/4/17
-* @Description  产研-电商中台  bugID: CYDSZT-3502
-*
-*/
-
 /deep/ .el-tabs__nav{
     float: right;
 }
@@ -288,6 +289,7 @@ export default {
     padding: 15px 20px;
     .res_export{
         position: relative;
+		margin-bottom: 39px;
     }
     .pos_fr{
         position: absolute;
@@ -295,7 +297,6 @@ export default {
         right: 5px;
     }
     .mar_time_option{
-        margin-left:30px;
     }
     .mar_fr{
         float: left;
@@ -368,7 +369,6 @@ export default {
     }
     .pane_container{
         position: relative;
-        
     }
     .export_btn{
         // margin-top: -20px;
@@ -377,14 +377,35 @@ export default {
         border: none;
     }
 }
+.radio-group{
+	position: absolute;
+	right: 111px;
+}
+.radio-group span{
+	display: inline-block;
+	cursor: pointer;
+	margin-left: 30px;
+	font-size: 16px;
+	color: #44434B;
+	line-height: 16px;
+	margin-top: 7px;
+}
+.radio-group span.active{
+	color: #655EFF;
+	padding-bottom: 6px;
+	border-bottom: 3px solid #655EFF;
+}
+.el-radio-group label:last-child {
+	margin-left: 0px;
+}
 .gflex{
-    display: flex;
-    margin: 5px;
-    p{
-        line-height: 32px;
-        margin-right: 10px;
-        width: 84px;
-    }
+display: flex;
+margin: 5px;
+p{
+line-height: 32px;
+margin-right: 10px;
+width: 84px;
+}
 }
 </style>
 
