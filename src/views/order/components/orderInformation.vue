@@ -58,6 +58,9 @@
                                         <span>{{giftList[0].appGift.goodsName}} ×{{giftList[0].goodsQuantity}}</span>
                                         <span @click="moreGiftHandler" class="pointer see-more-gift">查看更多</span>
                                     </template>
+                                    <template v-else>
+                                        无
+                                    </template>
                                 </div>
                             </div>
                             <div class="gain-item coupon">
