@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="pane_container">
-      <p class="i_title">属性比例：</p>
+      <p class="i_title i_emtry">属性比例：</p>
       <div class="chart1_container clearfix">
         <div class="chart1">
           <ip1Chart :title="'测试图表'" ref="ip1"></ip1Chart>
@@ -326,9 +326,12 @@ export default {
 		padding-top: 23px;
 		border-top: 1px dashed #d3d3d3;
     }
+	.i_emtry{
+		padding-top: 0px;
+		border-top: 0px dashed #d3d3d3;
+	}
     .chart1_container {
       padding-bottom: 32px;
-      border-bottom: 1px dashed #d3d3d3;
       .chart1 {
         float: left;
         width: 500px;
