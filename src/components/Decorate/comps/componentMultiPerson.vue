@@ -5,7 +5,7 @@
         <template v-if="hasContent">
             <ul>
                 <template  v-for="(item,key) of list">
-                    <li :key="key" v-if="item.status !== 2" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                    <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.sold > -1 ? item.sold : 0}}人已团</p>
                             <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">

@@ -41,7 +41,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch(1)">查询</el-button>
+                    <el-button type="primary" class="minor_btn"  @click="goSearch(1)">查 询</el-button>
                     <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
                 </el-form-item>
                 <!-- <el-form-item class="fr marT20">
@@ -296,6 +296,10 @@ export default {
         color: #655EFF;
         background-color: #ffffff;
     }
+	.minor_btn{
+		background-color: #655EFF;
+		color:#fff;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;

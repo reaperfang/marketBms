@@ -595,7 +595,8 @@
                     </el-select>
                     <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
                         <span @click="addTemplate">新增模板</span>
-                        <el-button type="primary" @click="getTemplateList">刷新</el-button>
+                        <!--<el-button type="primary" @click="getTemplateList">刷新</el-button>-->
+                        <span class="shuaxin-fenlei" @click="getTemplateList">刷新<i></i></span>
                     </div>
                 </div>
                 <div>

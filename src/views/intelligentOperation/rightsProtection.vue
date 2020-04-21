@@ -52,7 +52,7 @@
                         </el-select>
                     </div>
                     <div class="marL26">
-                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getRightsProtection(1,10)">查询</el-button>
+                        <el-button type="primary" class="minor_btn" @click="getRightsProtection(1,10)">查 询</el-button>
                         <el-button type="primary" class="border_btn" @click="resetAll()" style="margin-left:16px;">重 置</el-button>
                     </div>
                 </el-form-item>
@@ -239,6 +239,7 @@ export default {
     margin-left: 65px;
     line-height: 50px;
 }
+
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
@@ -247,6 +248,10 @@ export default {
         color: #655EFF;
         background-color: #ffffff;
     }
+	.minor_btn{
+		background-color: #655EFF;
+		color:#fff;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;
