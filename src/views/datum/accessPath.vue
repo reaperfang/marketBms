@@ -17,12 +17,18 @@
   <div class="p_container">
     <div class="pane_container">
 		<div class="p_line">
-			<el-radio-group v-model="dateType" @change="changeDay">
-				<el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
-				<el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
-				<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
-				<el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
-			</el-radio-group>
+			<!--<el-radio-group v-model="dateType" @change="changeDay">-->
+				<!--<el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>-->
+				<!--<el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>-->
+				<!--<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>-->
+				<!--<el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>-->
+			<!--</el-radio-group>-->
+			<div class="radio-group">
+				<span @click="changeDay(7)" :class="dateType == 7 ? 'active' : ''">最近7天</span>
+				<span @click="changeDay(15)" :class="dateType == 15 ? 'active' : ''">最近15天</span>
+				<span @click="changeDay(30)" :class="dateType == 30 ? 'active' : ''">最近30天</span>
+				<span @click="changeDay(4)" :class="dateType == 4 ? 'active' : ''">自定义时间</span>
+			</div>
 			<div class="input_wrap" v-if="dateType == 4">
 				<el-date-picker
 					v-model="range"
@@ -219,6 +225,7 @@ export default {
       this.getPathConversion();
     },
     changeDay(val) {
+    	this.dateType= val;
       if (val != 4) {
         this.nearDay = val
         this.startTime = ""
@@ -231,14 +238,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/**
-*
-* @Author zpw
-* @Update 2020/4/17
-* @Description  产研-电商中台  bugID: CYDSZT-3448-1
-*
-*/
-
+.radio-group{
+	display: inline-block;
+}
+.radio-group span{
+	display: inline-block;
+	font-size: 14px;
+	background-color: #fff;
+	line-height: 14px;
+	padding: 6px 29px;
+	cursor: pointer;
+	color: #B6B5C8;
+}
+.radio-group span.active{
+	color:#655EFF;
+	background-color: #E6E4FF;
+}
 .p_channel{
     padding:0px;
     margin-bottom:20px;
@@ -259,8 +274,6 @@ export default {
 		padding-bottom: 30px;
 		border-bottom: 1px dashed #d3d3d3;
       span {
-        color: #655eff;
-        margin-left: 20px;
         cursor: pointer;
       }
     }
