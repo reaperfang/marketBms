@@ -52,7 +52,7 @@
                             </div>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getEvaluation(1,10)">查询</el-button>
+                            <el-button type="primary" class="minor_btn"  @click="getEvaluation(1,10)">查 询</el-button>
                             <el-button type="primary" class="border_btn" @click="resetAll()">重 置</el-button>
                         </el-form-item>
                     </el-form>
@@ -290,6 +290,7 @@ export default {
 .proposal{
     margin-left: 65px;
 }
+
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
@@ -298,6 +299,10 @@ export default {
         color: #655EFF;
         background-color: #ffffff;
     }
+	.minor_btn{
+		background-color: #655EFF;
+		color:#fff;
+	}
     .fr_mar5{
         margin-top:10px;
     }
