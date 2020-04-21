@@ -557,40 +557,40 @@ export default {
   display: inline-block;
 }
 .btn_groups{
-  border: 1px solid #655EFF;
+  border: 1px solid #655EFF !important;
   border-radius: 4px;
-  background-color:transparent;
-  color: #655EFF;
+  background-color:transparent !important;
+  color: #655EFF !important;
 }
 .btn_groups:hover{
-  border: 1px solid #655EFF;
+  border: 1px solid #655EFF !important;
   border-radius: 4px;
   background: #655EFF !important;
-  color: #fff;
+  color: #fff !important;
 }
 .btn_tailor{
-  border: 1px solid #655EFF;
+  border: 1px solid #655EFF !important;
   border-radius: 4px;
-  background-color:transparent;
-  color: #655EFF;
+  background-color:transparent !important;
+  color: #655EFF !important;
 }
 .btn_tailor:hover{
-  border: 1px solid #655EFF;
+  border: 1px solid #655EFF !important;
   border-radius: 4px;
   background: #655EFF !important;
-  color: #fff;
+  color: #fff !important;
 }
 .btn_delete{
-  border: 1px solid #FD4C2B;
+  border: 1px solid #FD4C2B !important;
   border-radius: 4px;
-  background-color:transparent;
-  color: #FD4C2B;
+  background-color:transparent !important;
+  color: #FD4C2B !important;
 }
 .btn_delete:hover{
-  border: 1px solid #FD4C2B;
+  border: 1px solid #FD4C2B !important;
   border-radius: 4px;
   background: #FD4C2B !important;
-  color: #fff;
+  color: #fff !important;
 }
 
 </style>
