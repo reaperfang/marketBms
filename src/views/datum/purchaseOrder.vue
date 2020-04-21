@@ -308,7 +308,7 @@ export default {
             }
         }
         .order_list{
-            width: 866px;
+            width: 1080px;
             margin: 22px 0;
             border-top: 1px solid #CACFCB;
             .order_line{

@@ -301,6 +301,13 @@ export default {
         margin-bottom:30px;
     }
 }
+.p_line {
+	padding-bottom: 30px;
+	border-bottom: 1px  dashed #d3d3d3;
+}
+.btn_tabs {
+	margin-top:30px;
+}
 .p_container {
   padding: 20px;
   background-color: #fff;

@@ -17,7 +17,7 @@
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
-            <div @click="showLogistics(item.expressNo, item.shipperName)" class="header-lefter-item blue pointer">查看物流</div>
+            <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
@@ -175,6 +175,7 @@ export default {
               showContent: true,
               sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
               sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendName || '',
+              id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
             }
           );
 
@@ -184,7 +185,7 @@ export default {
 
       this.orderSendItems = arr;
     },
-    showLogistics(expressNo, expressCompanys) {
+    showLogistics(expressNo, expressCompanys, id) {
       if (this.isTrace == 0) {
         this.currentDialog = "LogisticsDialog";
         this.currentData = [];
@@ -196,7 +197,7 @@ export default {
         this.reject = false;
         this.expressNo = expressNo
         this._apis.order
-          .orderLogistics({ expressNo })
+          .orderLogistics({ expressNo, id: id, isOrderAfter: 0 })
           .then(res => {
             this.currentDialog = "LogisticsDialog";
             this.currentData = res.traces || [];
@@ -204,10 +205,7 @@ export default {
             this.dialogVisible = true;
           })
           .catch(error => {
-            // this.$notify.error({
-            //   title: "错误",
-            //   message: error
-            // });
+
           });
       }
     },

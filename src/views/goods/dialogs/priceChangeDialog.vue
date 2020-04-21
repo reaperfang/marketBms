@@ -55,13 +55,13 @@ export default {
                         return
                     }
                 } else {
-                    if(+this.ruleForm.price < 0) {
-                        this.$message({
-                        message: '价格不能为负值',
-                        type: 'warning'
-                        });
-                        return
-                    }
+                    // if(+this.ruleForm.price < 0) {
+                    //     this.$message({
+                    //     message: '价格不能为负值',
+                    //     type: 'warning'
+                    //     });
+                    //     return
+                    // }
                     if(+this.ruleForm.price > 10000000) {
                         this.$message({
                         message: '当前价格最大限制为10000000，请您重新输入',
@@ -69,6 +69,13 @@ export default {
                         });
                         return
                     }
+                    // if(+this.data.salePrice < +Math.max.apply(null, this.data.goodsInfos.map(val => val.costPrice))) {
+                    //     this.$message({
+                    //     message: '售卖价不得低于成本价！请重新输入',
+                    //     type: 'warning'
+                    //     });
+                    //     return
+                    // }
                 }
                 if(/^\s*$/.test(this.ruleForm.price)) {
                     let name
