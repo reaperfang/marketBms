@@ -450,7 +450,7 @@ export default {
           params = {
             sendInfoDtoList: [
               {
-                orderId: this.$route.query.orderId || this.$route.query.id, // 订单id
+                orderId: this.$route.query.orderId || this.$route.query.id || this.$route.query.ids, // 订单id
                 memberInfoId: this.orderInfo.memberInfoId,
                 orderCode: this.orderInfo.orderCode,
                 orderItems: this.multipleSelection.map(val => ({

@@ -147,10 +147,20 @@ export default {
             }
         },
         save() {
-            let formObj = this.ruleForm;
+            let formObj = Object.assign({},this.ruleForm);
             if(formObj.scoreToCash == '1' && formObj.scorePercentage == "" && formObj.scorePercentage == "") {
                 this.$message({
                     message: "开启积分抵现则抵现比例为必填",
+                    type: 'warning'
+                });
+            }else if(formObj.scoreEnableOrderAchieveCash && formObj.scoreToCashOrderMoney == ""){
+                this.$message({
+                    message: "请输入订单满元值",
+                    type: 'warning'
+                });
+            }else if(formObj.scoreEnableOrderHighCash && formObj.scoreToCashOrderRate == ""){
+                this.$message({
+                    message: "请输入最高可抵现订单金额百分比",
                     type: 'warning'
                 });
             }else{

@@ -258,43 +258,42 @@ export default {
                                 receivedName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
                             }
                         } else if(this.sendGoods == 'send') {
-                            obj = {
-                                sendProvinceCode: codes0,
-                                sendProvinceName: name0,
-                                sendCityCode: codes1,
-                                sendCityName: name1,
-                                sendAreaCode: codes2,
-                                sendAreaName: name2,
-                                sendDetail: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
-                                sendPhone: this.sendGoods == 'send' ? this.ruleForm.sendPhone : this.ruleForm.receivedPhone,
-                                sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
-                            }
+                            // obj = {
+                            //     sendProvinceCode: codes0,
+                            //     sendProvinceName: name0,
+                            //     sendCityCode: codes1,
+                            //     sendCityName: name1,
+                            //     sendAreaCode: codes2,
+                            //     sendAreaName: name2,
+                            //     sendDetail: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
+                            //     sendPhone: this.sendGoods == 'send' ? this.ruleForm.sendPhone : this.ruleForm.receivedPhone,
+                            //     sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
+                            // }
 
-                            // this._apis.order.orderUpdateAddress({
-                            //     id: this.cid, // 和cid相同
-                            //     cid: this.cid,
+                            this._apis.order.orderUpdateAddress({
+                                id: this.cid, // 和cid相同
+                                cid: this.cid,
                                 
 
-                            //     province: name0,
-                            //     provinceCode: codes0,
-                            //     city: name1,
-                            //     cityCode: codes1,
-                            //     area: name2,
-                            //     areaCode: codes2,
-                            //     address: this.ruleForm.sendDetail,
-                            //     senderPhone: this.ruleForm.sendPhone,
-                            //     senderName: this.ruleForm.sendName
+                                // province: name0,
+                                // provinceCode: codes0,
+                                // city: name1,
+                                // cityCode: codes1,
+                                // area: name2,
+                                // areaCode: codes2,
+                                // address: this.ruleForm.sendDetail,
+                                senderPhone: this.ruleForm.sendPhone,
+                                senderName: this.ruleForm.sendName
 
-                            // }).then(res => {
-                            //     this.$emit('submit', obj)
-                            //     this.visible = false
-                            //     this.$message.success('修改成功！');
-                            // }).catch(error => {
-                            //     this.visible = false
-                            //     this.$message.error(error);
-                            // }) 
+                            }).then(res => {
+                                this.$emit('submit', obj)
+                                this.visible = false
+                                this.$message.success('修改成功！');
+                            }).catch(error => {
+                                this.visible = false
+                                this.$message.error(error);
+                            }) 
 
-                            // return
                         }
                         this.$emit('submit', obj)
                         this.visible = false

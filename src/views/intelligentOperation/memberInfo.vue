@@ -59,7 +59,7 @@
                         <el-input placeholder="最高金额（元）" v-model="highprice" type="number"></el-input>
                     </div>
                     <div class="marL26">
-                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch(1)">查询</el-button>
+                        <el-button type="primary" class="minor_btn"  @click="goSearch(1)">查 询</el-button>
                         <el-button type="primary" class="border_btn" @click="reSet" style="margin-left:16px;">重 置</el-button>
                     </div>
                 </el-form-item>
@@ -367,9 +367,25 @@ export default {
 .proposal{
     margin-left: 65px;
 }
+.el-range-editor.el-input__inner {padding-top:1px;}
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
+    .el-radio-group label:last-child{
+        margin-left:0px;
+    }
+    .minor_btn{
+        background-color: #655EFF;
+        color:#fff;
+    }
+	.is-active{
+		margin-top:-2px;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;
@@ -383,7 +399,7 @@ export default {
         }
         .input_wrap3{
             display: inline-block;
-            width: 200px;
+            width: 234px;
         }
         .span_label{
             margin: 0 10px 0 25px;
@@ -403,11 +419,11 @@ export default {
     position: relative;
 }
 .mr10{
-    margin-right:10px;
+    margin-right:25px;
 }
 .marL26{
-    margin-left:26px;
-    display:inline-block;
+	display: inline-block;
+	margin-left: 20px;
 }
 .contents{
     width: 100%;

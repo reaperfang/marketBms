@@ -6,7 +6,7 @@
       <div class="marB20">
           <span><span style="color:red">*</span>增加余额：</span>
           <div class="input_wrap">
-              <el-input placeholder="请输入增加余额" v-model.trim="adjustmentBalance" @blur="handleBlur"></el-input>
+              <el-input placeholder="请输入增加余额" v-model.trim="adjustmentBalance" @blur="handleBlur" @keyup.native="number($event,adjustmentBalance,'adjustmentBalance')"></el-input>
           </div>
       </div>
       <p class="marB20">调整后余额: {{adjustmentAfterBalance}}</p>
@@ -41,6 +41,12 @@ export default {
     };
   },
   methods: {
+    number(event,val,ele) {
+      val = val.replace(/[^\.\d]/g,'');
+      val = val.replace('-','');
+      val = val.replace(/^0/g,'');
+      this[ele] = val;
+    },
     submit() {
       this.btnLoading = true;
       if(Number(this.adjustmentBalance) <= 0 || this.adjustmentBalance == "") {

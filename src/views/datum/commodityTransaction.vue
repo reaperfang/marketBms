@@ -1,7 +1,8 @@
 <template>
-    <div class="p_container">
+<div>
+    <div class="p_container p_channel">
         <div class="clearfix">
-          <div class="fr">
+          <div class="fr fr_channel">
             <el-radio-group class="fr" v-model="visitSourceType" @change="all">
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '商品交易', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '商品交易', '小程序']">小程序</el-radio-button>
@@ -11,6 +12,8 @@
             </el-radio-group>
           </div>
         </div>
+    </div>
+    <div class="p_container">
         <div class="pane_container">
             <p class="p_title">商品总况：</p>
             <div class="p_blocks">
@@ -23,13 +26,13 @@
                 </div>
             </div>
             <div class="title_line clearfix">
-                <p class="fl" style="font-size: 16px">热销TOP5商品榜单：</p>
+                <p class="fl" style="font-size: 16px;line-height:16px;margin-top:15px;">热销TOP5商品榜单：</p>
             </div>
             <ct1Table  :hotData="hotData"></ct1Table>
             <div class="c_line">
-                <span class="c_title">商品详情:</span>
+                <span class="c_title">商品详情：</span>
                 <span>
-                    <span class="c_label">筛选日期：</span>
+                    <!--<span class="c_label">筛选日期：</span>-->
                     <el-radio-group v-model="dateType" @change="changeDayM">
                         <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
                         <el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
@@ -37,24 +40,26 @@
                         <el-radio-button class="btn_bor" label="4">自定义</el-radio-button>
                     </el-radio-group>
                 </span>
+				<div class="input_wrap" v-show="dateType == 4">
+					<span></span>
+					<el-date-picker
+						v-model="range"
+						type="datetimerange"
+						align="right"
+						range-separator="至"
+						start-placeholder="开始时间"
+						end-placeholder="结束时间"
+						value-format="yyyy-MM-dd HH:mm:ss"
+						:picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
+						@change="changeTime"
+					></el-date-picker>
+				</div>
             </div>
-            <div class="input_wrap" v-if="dateType == 4">
-                <span></span>
-                <el-date-picker
-                    v-model="range"
-                    type="datetimerange"
-                    align="right"
-                    range-separator="至"
-                    start-placeholder="开始时间"
-                    end-placeholder="结束时间"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
-                    @change="changeTime"
-                ></el-date-picker>
-            </div>
-            <ct2Table style="margin-top: 26px" :listObj="listObj" @getProductDetails="getProductDetails"></ct2Table>
+
+            <ct2Table style="margin-top: 15px" :listObj="listObj" @getProductDetails="getProductDetails"></ct2Table>
         </div>
     </div>
+</div>
 </template>
 <script>
 import datumCont from '@/system/constant/datum';
@@ -199,6 +204,24 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3449-5
+*
+*/
+.el-range-editor.el-input__inner{
+	padding: 0px 10px;
+}
+.p_channel{
+    padding:0px;
+    margin-bottom:20px;
+    .fr_channel{
+        float:left;
+        margin-left:30px;
+    }
+}
 .p_container{
     padding: 20px;
     background-color: #fff;
@@ -207,23 +230,22 @@ export default {
         padding: 23px 38px;
         .p_title{
             font-size: 16px;
+			line-height: 16px;
         }
         .p_blocks{
-            width: 950px;
+            width: 1140px;
             display: flex;
             flex-wrap: wrap;
             margin-top: 15px;
         }
         .title_line{
-            height: 86px;
-            line-height: 86px;
-            margin: 5px 0;
+            height: 46px;
         }
         .p_item{
-            width: 200px;
+            width: 252px;
             height: 86px;
             border: 1px solid #CCCCCC;
-            margin: 0 34px 12px 0;
+            margin: 0 20px 20px 0;
             border-radius:4px;
             img{
                 margin: 19px 0 0 8px;
@@ -243,13 +265,14 @@ export default {
         .c_line{
             padding-top: 80px;
             border-top: 1px dashed #D3D3D3;
-            display:flex;
-            justify-content:space-between;
+            /*display:flex;*/
+            /*justify-content:space-between;*/
             span{
                 color: #655EFF;
                 // margin-left: 20px;
                 &.c_title{
                     font-size: 16px;
+					line-height: 16px;
                     color: #474C53;
                 }
                 &.c_label{
@@ -259,10 +282,8 @@ export default {
             }
         }
         .input_wrap{
-            width: 100%;
-            margin-top:10px;
-            display:flex;
-            justify-content:flex-end;
+			width: 400px;
+			display: inline-block;
         }
     }
 }

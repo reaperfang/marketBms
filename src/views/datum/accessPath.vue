@@ -1,39 +1,42 @@
 <template>
-  <div class="p_container">
-    <div class="clearfix">
-      <div class="fr">
-        <el-radio-group class="fr" v-model="visitSourceType" @change="all">
-          <el-radio-button class="btn_bor" label="0">全部</el-radio-button>
-          <el-radio-button class="btn_bor" label="1">小程序</el-radio-button>
-          <el-radio-button class="btn_bor" label="2">公众号</el-radio-button>
-          <el-radio-button class="btn_bor" label="3" v-if="isPc">pc</el-radio-button>
-          <el-radio-button class="btn_bor" label="4" v-if="isPc">wap</el-radio-button>
-        </el-radio-group>
-      </div>
-    </div>
-    <div class="pane_container">
-      <div class="p_line">
-        <el-radio-group v-model="dateType" @change="changeDay">
-          <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
-          <el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
-          <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
-          <el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
-        </el-radio-group>
-        <div class="input_wrap" v-if="dateType == 4">
-          <el-date-picker
-            v-model="range"
-            type="datetimerange"
-            align="right"
-            range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
-            @change="changeTime"
-          ></el-date-picker>
+<div>
+  <div class="p_container p_channel">
+      <div class="clearfix">
+        <div class="fr fr_channel">
+          <el-radio-group class="fr" v-model="visitSourceType" @change="all">
+            <el-radio-button class="btn_bor" label="0">全部</el-radio-button>
+            <el-radio-button class="btn_bor" label="1">小程序</el-radio-button>
+            <el-radio-button class="btn_bor" label="2">公众号</el-radio-button>
+            <el-radio-button class="btn_bor" label="3" v-if="isPc">pc</el-radio-button>
+            <el-radio-button class="btn_bor" label="4" v-if="isPc">wap</el-radio-button>
+          </el-radio-group>
         </div>
       </div>
 
+  </div>
+  <div class="p_container">
+    <div class="pane_container">
+		<div class="p_line">
+			<el-radio-group v-model="dateType" @change="changeDay">
+				<el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
+				<el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
+				<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
+				<el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>
+			</el-radio-group>
+			<div class="input_wrap" v-if="dateType == 4">
+				<el-date-picker
+					v-model="range"
+					type="datetimerange"
+					align="right"
+					range-separator="至"
+					start-placeholder="开始时间"
+					end-placeholder="结束时间"
+					value-format="yyyy-MM-dd HH:mm:ss"
+					:picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
+					@change="changeTime"
+				></el-date-picker>
+			</div>
+		</div>
       <div class="chart_container">
         <div class="path_line clearfix" v-if="dataObj.uv">
           <div class="p_l">
@@ -97,17 +100,7 @@
             </div>
           </div>
         </div>
-         <div class="p_top1" v-if="dataObj.payOrderPathTransformation">
-              <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'">
-                {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
-              </p>
-              <p :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'">
-                {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
-              </p>            
-              <!-- <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
-                {{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}
-              </p> -->
-         </div>
+
         <div class="path_line clearfix">
           <div class="p_l">
             <p>第三步</p>
@@ -132,9 +125,21 @@
             </div>
           </div>
         </div>
+		  <div class="p_top1" v-if="dataObj.payOrderPathTransformation">
+			  <p :title="'确认订单页到支付成功的转化率为'+(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'" style="text-align: right;margin-right: 48px;">
+				  {{(dataObj.payOrderPathTransformation[1]*100).toFixed(2)+ '%'}}
+			  </p>
+			  <p :title="'确认订单页到直接退出的转化率为'+(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'" style="text-align: left;margin-left: 14px;">
+				  {{(dataObj.payOrderPathTransformation[2]*100).toFixed(2)+ '%'}}
+			  </p>
+			  <!-- <p :title="'确认订单页到其他页的转化率为'+(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'">
+                {{(dataObj.payOrderPathTransformation[3]*100).toFixed(2)+ '%'}}
+              </p> -->
+		  </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 import utils from "@/utils";
@@ -226,16 +231,33 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3448-1
+*
+*/
+
+.p_channel{
+    padding:0px;
+    margin-bottom:20px;
+    .fr_channel{
+        float:left;
+    }
+}
+.input_wrap {
+	width: 400px;
+	display: inline-block;
+}
 .p_container {
   padding: 20px;
   background-color: #fff;
   .pane_container {
-        height: 600px;
+     height: 600px;
     .p_line {
-      .input_wrap {
-        width: 350px;
-        display: inline-block;
-      }
+		padding-bottom: 30px;
+		border-bottom: 1px dashed #d3d3d3;
       span {
         color: #655eff;
         margin-left: 20px;
@@ -250,10 +272,11 @@ export default {
       }
     }
     .chart_container {
-      padding: 100px 0 50px 20px;
+      padding: 20px 0 50px 20px;
       height: 400px;
       .path_line {
         padding: 20px 0px;
+		padding-bottom:10px;
         .p_l {
           color: #333;
           font-size: 19px;
@@ -346,12 +369,12 @@ export default {
           // padding: 0 100px 0 160px; 
           margin-left:130px;
           font-size: 16px;
-          color: #000;
+          color: #35dcd2;
           display: flex;
           flex-wrap: nowrap;
           justify-content: space-evenly;
         p{
-          width: 100%;
+          width: 75px;
           text-align: center;
         }  
       }
@@ -361,7 +384,7 @@ export default {
           line-height: 20px;
           padding: 0 70px 0 300px;
           font-size: 16px; 
-          color: #000;
+          color: #22c1ef;
           display: flex;
           flex-wrap: nowrap;
           justify-content: space-between;
@@ -371,6 +394,7 @@ export default {
           }
       }
     }
+
   }
 }
 .el-radio-group label:last-child{
