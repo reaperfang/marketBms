@@ -86,7 +86,13 @@ export default {
      /* 检测是否有数据 */
     hasContent() {
         let value = false;
-        if(this.list && this.list.length) {
+        let list = [];
+        this.list.forEach((item)=>{
+          if(!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)) {
+            list.push(item);
+          }
+        })
+        if(list && list.length) {
             value = true;
         }
         return value;
