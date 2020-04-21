@@ -1745,19 +1745,21 @@ export default {
         },
         deleteSpec(index) {
             if(this.ruleForm.goodsInfos[index].activity) {
-                this.$message({
-                message: '商品正在参加营销活动，不可删除',
-                type: 'warning'
-                });
+                this.confirm({title: '立即删除', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
                 return
             }
-            console.log(index)
-            let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
-            let __goodsInfos
+            this.confirm({title: '立即删除', icon: true, text: '是否确认删除？'}).then(() => {
+                console.log(index)
+                let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
+                let __goodsInfos
 
-            _goodsInfos.splice(index, 1)
-            __goodsInfos = this.computedList(_goodsInfos)
-            this.ruleForm.goodsInfos = __goodsInfos
+                _goodsInfos.splice(index, 1)
+                __goodsInfos = this.computedList(_goodsInfos)
+                this.ruleForm.goodsInfos = __goodsInfos
+            })
+            
             
             // this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
             //     this.deleteSpecArr.push(index)
