@@ -565,7 +565,7 @@ export default {
 .btn_groups:hover{
   border: 1px solid #655EFF;
   border-radius: 4px;
-  background: #655EFF;
+  background: #655EFF !important;
   color: #fff;
 }
 .btn_tailor{
@@ -577,7 +577,7 @@ export default {
 .btn_tailor:hover{
   border: 1px solid #655EFF;
   border-radius: 4px;
-  background: #655EFF;
+  background: #655EFF !important;
   color: #fff;
 }
 .btn_delete{
@@ -589,7 +589,7 @@ export default {
 .btn_delete:hover{
   border: 1px solid #FD4C2B;
   border-radius: 4px;
-  background: #FD4C2B;
+  background: #FD4C2B !important;
   color: #fff;
 }
 
