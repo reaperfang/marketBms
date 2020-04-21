@@ -367,6 +367,7 @@ export default {
 .proposal{
     margin-left: 65px;
 }
+.el-range-editor.el-input__inner {padding-top:1px;}
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
@@ -382,6 +383,9 @@ export default {
         background-color: #655EFF;
         color:#fff;
     }
+	.is-active{
+		margin-top:-2px;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;
@@ -395,7 +399,7 @@ export default {
         }
         .input_wrap3{
             display: inline-block;
-            width: 200px;
+            width: 234px;
         }
         .span_label{
             margin: 0 10px 0 25px;
@@ -415,12 +419,11 @@ export default {
     position: relative;
 }
 .mr10{
-    margin-right:10px;
+    margin-right:25px;
 }
 .marL26{
-    display: block;
-    float: right;
-    margin-top: 44px;
+	display: inline-block;
+	margin-left: 20px;
 }
 .contents{
     width: 100%;

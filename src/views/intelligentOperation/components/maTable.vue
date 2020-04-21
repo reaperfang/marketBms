@@ -54,7 +54,7 @@
       </el-table-column>
       <el-table-column
         prop="tradeCount"
-        label="交易次数(总)"
+        label="交易(总)次数"
       align="center">
       </el-table-column>
       <el-table-column
@@ -65,7 +65,7 @@
       <el-table-column
         label="最后交易时间"
       align="center">
-        <template slot-scope="scope">
+        <template slot-scope="scope" style="width:171px;">
           <span>{{Number(scope.row.lastTradeTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
         </template>
       </el-table-column>

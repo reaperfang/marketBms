@@ -56,13 +56,13 @@ export default {
                 this.visible = false
                 return
             }
-            if(this.data.goodsInfos.some(val => +val.salePrice < +val.costPrice)) {
-                this.$message({
-                message: '售卖价不得低于成本价！请重新输入',
-                type: 'warning'
-                });
-                return
-            }
+            // if(this.data.goodsInfos.some(val => +val.salePrice < +val.costPrice)) {
+            //     this.$message({
+            //     message: '售卖价不得低于成本价！请重新输入',
+            //     type: 'warning'
+            //     });
+            //     return
+            // }
             if(this.data.goodsInfos.some(val => +val.salePrice > 10000000)) {
                 this.$message({
                 message: '当前售卖价最大限制为10000000，请您重新输入',
