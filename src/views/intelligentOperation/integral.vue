@@ -215,6 +215,7 @@ export default {
                 startIndex:1,
                 pageSize:10
             }
+            this.showNote = false
             this.goSearch();
         },
         //重新筛选

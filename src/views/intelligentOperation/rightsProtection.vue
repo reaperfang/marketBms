@@ -162,6 +162,7 @@ export default {
                 startIndex:1,
                 pageSize:10
             },
+            this.node = ''
             this.getRightsProtection(1,10)
         },
         // 重新筛选

@@ -842,6 +842,9 @@ textarea:-ms-input-placeholder {
 #app.hide-fenlei + script + script + script + script + .fenlei-popper {
   display: none!important;
 }
+#app.hide-fenlei + script + script + script + script + #edui_fixedlayer + .fenlei-popper {
+  display: none!important;
+}
 #app.hide-fenlei + script + script + script + script + .fenlei-popper + .fenlei-popper {
   display: none!important;
 }

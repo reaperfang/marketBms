@@ -298,6 +298,7 @@ export default {
             }
             this.lowprice = ''
             this.highprice = ''
+            this.showNote = false
             this.goSearch();
         },
         //重新筛选

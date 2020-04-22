@@ -871,6 +871,7 @@ export default {
         }
     },
     created() {
+        var that = this
         // this.getOperateCategoryList().then(res => {
         //     this.getCategoryList()
         //     this.getProductLabelList()
@@ -915,8 +916,10 @@ export default {
                 that.addedSpecs = addedSpecs
             }
 
-            if(this.editor) {
-                this._globalEvent.$emit('addGoodsEvent', false);
+            if(that.editor) {
+                that._globalEvent.$emit('addGoodsEvent', false);
+            } else {
+                that._globalEvent.$emit('addGoodsEvent', false);
             }
         })
 
