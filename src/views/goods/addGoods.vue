@@ -901,7 +901,7 @@ export default {
             }
         })
         document.querySelector('body').addEventListener('click', function(e) {
-            e.stopPropagation()
+            //e.stopPropagation()
             this.hideFenlei = false
             if(e.target.parentNode.parentNode.className != 'add-specs') {
                 that.showSpecsList = false
@@ -923,6 +923,16 @@ export default {
                 that._globalEvent.$emit('addGoodsEvent', false);
             }
         })
+
+        if(this.editor) {
+            document.querySelector('body').click()
+        }
+
+        // this.$nextTick(() => {
+        //     document.querySelector('.el-form-item.productCatalogInfoId .el-input__suffix').addEventListener('click', function(e) {
+        //         that._globalEvent.$emit('addGoodsEvent', false);
+        //     })
+        // })
 
         if(this.editor) {
             this._globalEvent.$emit('addGoodsEvent', true);
