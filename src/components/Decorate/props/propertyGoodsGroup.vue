@@ -136,7 +136,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="list"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="echoList"></component>
   </el-form>
 </template>
 
@@ -172,6 +172,7 @@ export default {
 
       },
       list: {},
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
 
@@ -205,6 +206,17 @@ export default {
       if(this.ruleForm.showTemplate == 2 && [2,4,5].includes(newValue) && ![2,4,5].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({id: item});
+        })
+      },
+      deep: true
     }
   },
   methods: {

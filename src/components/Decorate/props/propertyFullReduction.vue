@@ -31,7 +31,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="list"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="echoList"></component>
   </el-form>
 </template>
 
@@ -54,6 +54,7 @@ export default {
 
       },
       list: [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: ''
     }
@@ -70,6 +71,17 @@ export default {
         }
         this.fetch();
         this._globalEvent.$emit('fetchFullReduction', this.ruleForm, this.$parent.currentComponentId);
+      },
+      deep: true
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({id: item});
+        })
       },
       deep: true
     }
