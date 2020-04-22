@@ -106,8 +106,8 @@ export default {
       pageNum: 1,
       ruleForm: {
         pageNum: 1,
-        name: '',
-        selectStatus: '0,1'
+        name: ''
+        // selectStatus: '0,1'
       },
       rules: {},
       disableStatus: [2]  //不可选状态值
