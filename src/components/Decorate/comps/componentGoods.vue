@@ -355,21 +355,67 @@ export default {
         li.goodsStyle1{
             border:0;
             background:#fff;
+            .goods_end{
+                right:10px;
+                bottom:15px;
+                line-height:31px;
+                font-size:18px;
+                position:absolute;
+                color:#bbb;
+                font-weight:700;
+            }
         }
         li.goodsStyle2{
             background:#fff;
             box-shadow:0px 1px 3px 0px rgba(154,154,154,0.19);
+            .goods_end{
+                right:10px;
+                bottom:6px;
+                line-height:31px;
+                font-size:16px;
+                position:absolute;
+                color:#bbb;
+                font-weight:700;
+            }
         }
         li.goodsStyle3{
             border:1px solid #eee;
             background:#fff;
+            .goods_end{
+                right:10px;
+                bottom:4px;
+                line-height:31px;
+                font-size:14px;
+                position:absolute;
+                color:#bbb;
+                font-weight:700;
+            }
         }
         li.goodsStyle4{
             border:0;
             background:none;
+            .goods_end{
+                right:10px;
+                bottom:-5px;
+                line-height:31px;
+                font-size:14px;
+                position:absolute;
+                color:#bbb;
+                font-weight:700;
+            }
         }
         li.goodsChamfer{
             @include borderRadius(8px);
+            .goods_end{
+                right: -2px;
+                bottom: 4px;
+                line-height: 31px;
+                font-size: 12px;
+                position: absolute;
+                color: #bbb;
+                transform: scale(0.8);
+                font-weight: 700;
+            }
         }
     }
     .van-list__finished-text{
@@ -996,14 +1042,5 @@ export default {
             }
         } 
     } 
-}
-.goods_end{
-    right:10px;
-    bottom:15px;
-    line-height:31px;
-    font-size:18px;
-    position:absolute;
-    color:#bbb;
-    font-weight:700;
 }
 </style>

@@ -160,7 +160,9 @@ export default {
        this.allLoaded = true;
        this.$nextTick(()=>{
           let width = (this.list.length + 1) * (128 + 10);
-          this.$refs.scrollContent.style.width = width + "px";
+          if(this.$refs.scrollContent) {
+            this.$refs.scrollContent.style.width = width + "px";  
+          }
        })
     },
 
