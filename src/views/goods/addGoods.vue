@@ -3103,11 +3103,12 @@ $blue: #655EFF;
         line-height: 34px;
     }
 }
+
 /deep/ .input-number .el-input--small .el-input__inner {
     width: 34px;
     height: 34px;
     padding-left: 2px;
-    padding-right: 2px;
+    padding-right: 2px!important;
     text-align: center;
 }
 /deep/ .el-checkbox {
@@ -3405,7 +3406,7 @@ $blue: #655EFF;
 }
 /deep/ .productCatalogInfoId {
     .el-cascader__tags input {
-        margin-left: 9px;
+        margin-left: 0;
     }
 }
 // /deep/ .el-cascader {
