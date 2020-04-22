@@ -3647,8 +3647,16 @@ $blue: #655EFF;
         }
     }
 }
+/deep/ .shop_classify_tag{
+	.el-input__inner{
+		padding-right: 0!important;
+	}
+}
 /deep/ .shop_classify_tag .el-input{
 	.el-input--suffix .el-input__inner{
+		padding-right: 0;
+	}
+	.el-input__inner{
 		padding-right: 0;
 	}
 	input{
