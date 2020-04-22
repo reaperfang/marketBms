@@ -1,9 +1,9 @@
 <template>
   <div class="bulk-delivery">
-    <div class="title">订单批量发货</div>
+    <div class="title">批量补填物流</div>
     <div class="container">
       <section>
-        <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
+        <div class="title">1. 选择您要进行批量补填物流的商品并填写物流信息</div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
             <span>商品清单</span>
@@ -160,6 +160,44 @@ export default {
         }
     },
   methods: {
+    otherInput(index) {
+      let item = this.list[index]
+
+      if(!item.other) {
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorOther: true,
+          errorMessageOther: '请输入快递公司名称'
+        }))
+      } else {
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorOther: false,
+          errorMessageOther: ''
+        }))
+      }
+    },
+    ExpressNosInput(index) {
+      let item = this.list[index]
+
+      if(!item.expressCompanyCodes) {
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorExpressCompany: true,
+          errorMessageExpressCompany: '请选择快递公司'
+        }))
+
+        setTimeout(() => {
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: ''
+            }))
+        }, 500)
+      } else {
+        if(!this.list[index].expressNos) {
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+            showErrorExpressNos: true,
+            errorMessageExpressNos: '请输入快递单号'
+          }))
+        }
+      }
+    },
     checkExpress(index) {
       let expressCompanyCodes
       let expressName
@@ -178,6 +216,22 @@ export default {
           this.list.splice(index, 1, Object.assign({}, this.list[index], {
             express: res
           }))
+
+          // 批量填充
+          if(index == 0) {
+            let list = JSON.parse(JSON.stringify(this.list))
+            let expressCompanyCodes = list[0].expressCompanyCodes
+            let express = list[0].express
+
+            list.forEach((val, index) => {
+              if(index != 0) {
+                val.expressCompanyCodes = expressCompanyCodes
+                val.express = express
+              }
+            })
+
+            this.list = list
+          }
         })
         .catch(error => {
           this.visible = false;
