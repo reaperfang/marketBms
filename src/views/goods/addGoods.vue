@@ -3103,6 +3103,7 @@ $blue: #655EFF;
         line-height: 34px;
     }
 }
+
 /deep/ .input-number .el-input--small .el-input__inner {
     width: 34px;
     height: 34px;
