@@ -113,7 +113,7 @@
               </div>
               <div class="item">
                 <div class="label">发货信息</div>
-                <div class="value">{{list[0] && list[0].sendDetail}}</div>
+                <!-- <div class="value">{{list[0] && list[0].sendDetail}}</div> -->
                 <div class="value" v-if="list[0]">
                   {{list[0].sendProvinceName}} {{list[0].sendCityName}} {{list[0].sendAreaName}} {{list[0].sendDetail}}</div>
                 <div class="value" v-else>--</div>
