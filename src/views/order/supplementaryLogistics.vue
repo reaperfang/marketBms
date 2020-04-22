@@ -506,5 +506,12 @@ export default {
 /deep/ .logistics .el-input {
     width: 226px;
 }
+.ellipsis {
+    width: 313px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 </style>
 

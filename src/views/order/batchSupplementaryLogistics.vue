@@ -44,7 +44,7 @@
                         <img width="66" :src="goods.goodsImage" alt />
                       </div>
                       <div class="col">
-                        <p class="ellipsis" style="width: 200px;">{{goods.goodsName}}</p>
+                        <p :title="goods.goodsName" class="ellipsis" style="width: 200px;">{{goods.goodsName}}</p>
                         <p class="goods-specs">{{goods.goodsSpecs | goodsSpecsFilter}}</p>
                       </div>
                     </div>
@@ -601,5 +601,12 @@ export default {
   line-height: 1;
   padding-top: 2px;
   margin-bottom: 0;
+}
+.ellipsis {
+    width: 313px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>
