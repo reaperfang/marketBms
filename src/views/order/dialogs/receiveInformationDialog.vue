@@ -270,6 +270,18 @@ export default {
                             //     sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
                             // }
 
+                            obj = {
+                                sendProvinceCode: codes0,
+                                sendProvinceName: name0,
+                                sendCityCode: codes1,
+                                sendCityName: name1,
+                                sendAreaCode: codes2,
+                                sendAreaName: name2,
+                                sendDetail: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
+                                sendPhone: this.sendGoods == 'send' ? this.ruleForm.sendPhone : this.ruleForm.receivedPhone,
+                                sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
+                            }
+
                             this._apis.order.orderUpdateAddress({
                                 id: this.cid, // 和cid相同
                                 cid: this.cid,

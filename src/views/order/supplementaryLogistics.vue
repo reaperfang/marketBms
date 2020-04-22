@@ -36,7 +36,7 @@
                                             <img width="66" :src="scope.row.goodsImage" alt="">
                                         </div>
                                         <div class="goods-detail-item">
-                                            <p class="ellipsis" style="width: 350px;">{{scope.row.goodsName}}</p>
+                                            <p :title="scope.row.goodsName" class="ellipsis">{{scope.row.goodsName}}</p>
                                             <p>{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
                                         </div>
                                     </div>
@@ -505,6 +505,13 @@ export default {
 }
 /deep/ .logistics .el-input {
     width: 226px;
+}
+.ellipsis {
+    width: 311px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>
 

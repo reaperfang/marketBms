@@ -8,6 +8,9 @@
                     <div class="imgAbsolute">
                         <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                     </div>
+                    <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1">{{item.productLabelInfo.name}}</div>
+                    <p class="nothing" v-if="item.stock<1">售罄</p>
+                    <div class="nothingLayer" v-if="item.stock<1"></div>
                 </div>
                 <div class="text" v-if="showContents.length>0">
                     <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
@@ -15,9 +18,7 @@
                     <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
                         <p class="price">￥<font>{{getPrice(item)}}</font></p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="item.status==1 && showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
-                    <p class="goods_end" v-if="item.status==0">已下架</p>
-                    <p class="goods_end" v-if="item.status==-1">已售罄</p>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&item.stock>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                 </div>
             </li>
         </ul>
@@ -114,7 +115,6 @@ export default {
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
             var scrollWidth = window && this.utils.isIE() ? 18 : 0;
-            console.log(scrollWidth)
             var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
             if(this.listStyle=='1'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
@@ -157,7 +157,8 @@ export default {
             }
             else if(this.listStyle=='5'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
-                var bodyWidth = 370;
+                var scrollWidth = window && this.utils.isIE() ? 18 : 0;
+                var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
                 if('showTemplate' in this.currentComponentData.data){
                     this.showTemplate= this.currentComponentData.data.showTemplate;
                     if(this.showTemplate!=1){
@@ -221,7 +222,7 @@ export default {
                         return;
                     }
                     params = {
-                        // status: '1',
+                        status: '1',
                         productCatalogInfoId: componentData.currentCatagoryId
                     };
                 }
@@ -257,12 +258,12 @@ export default {
                     }
                 }
                 params = {
-                    // status: '1',
+                    status: '1',
                     ids: allIds
                 }
             }else{
                 params = {
-                    // status: '1',
+                    status: '1',
                     ids: ids[this.currentCatagoryId],
                     productCatalogInfoId: this.currentCatagoryId
                 }
@@ -273,7 +274,7 @@ export default {
         /* 设置普通商品参数 */
         setNormalGoodsParams(ids) {
             return {
-                // status: '1',
+                status: '1',
                 ids: ids,
             }
         },
@@ -320,6 +321,42 @@ export default {
                         object-fit: contain;
                     }
                 }
+                .label{
+                    position:absolute;
+                    left:0;
+                    top:0;
+                    padding:0 6px;
+                    height:15px;
+                    font-size:11px;
+                    color:#fff;
+                    border-radius:1.5px;
+                    line-height:15px;
+                    background:#ffe08b;
+                }
+                .nothing{
+                    position:absolute;
+                    width:52px;
+                    height:52px;
+                    margin-left:-26px;
+                    margin-top:-26px;
+                    top:50%;
+                    left:50%;
+                    line-height:52px;
+                    color:#fff;
+                    text-align:center;
+                    background:rgba(0,0,0,0.5);
+                    font-size:14px;
+                    @include borderRadius(50%);
+                    z-index:1;
+                }
+                .nothingLayer{
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    left:0;
+                    position:absolute;
+                    background:rgba(0,0,0,0.1);
+                }
             }
             .text{
                 .title{
@@ -342,7 +379,9 @@ export default {
                 }
                 .priceLine{
                     .price{
-                        color:#FC3D42;
+                        color:#333;
+                        line-height:28px;
+                        height:28px;
                     }
                 }
                 .button{
@@ -355,67 +394,21 @@ export default {
         li.goodsStyle1{
             border:0;
             background:#fff;
-            .goods_end{
-                right:10px;
-                bottom:15px;
-                line-height:31px;
-                font-size:18px;
-                position:absolute;
-                color:#bbb;
-                font-weight:700;
-            }
         }
         li.goodsStyle2{
             background:#fff;
             box-shadow:0px 1px 3px 0px rgba(154,154,154,0.19);
-            .goods_end{
-                right:10px;
-                bottom:6px;
-                line-height:31px;
-                font-size:16px;
-                position:absolute;
-                color:#bbb;
-                font-weight:700;
-            }
         }
         li.goodsStyle3{
             border:1px solid #eee;
             background:#fff;
-            .goods_end{
-                right:10px;
-                bottom:4px;
-                line-height:31px;
-                font-size:14px;
-                position:absolute;
-                color:#bbb;
-                font-weight:700;
-            }
         }
         li.goodsStyle4{
             border:0;
             background:none;
-            .goods_end{
-                right:10px;
-                bottom:-5px;
-                line-height:31px;
-                font-size:14px;
-                position:absolute;
-                color:#bbb;
-                font-weight:700;
-            }
         }
         li.goodsChamfer{
             @include borderRadius(8px);
-            .goods_end{
-                right: -2px;
-                bottom: 4px;
-                line-height: 31px;
-                font-size: 12px;
-                position: absolute;
-                color: #bbb;
-                transform: scale(0.8);
-                font-weight: 700;
-            }
         }
     }
     .van-list__finished-text{
@@ -521,7 +514,7 @@ export default {
             }
             .text{
                 overflow:hidden;
-                padding:10px;
+                padding:10px 10px 15px 10px;
                 position:relative;
                 .title{
                     font-size:13px;
@@ -1018,6 +1011,7 @@ export default {
                 .button{
                     right:10px;
                     bottom:10px;
+                    display:none;
                 }
             }
         } 
