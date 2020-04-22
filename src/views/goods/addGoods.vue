@@ -81,6 +81,7 @@
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
                     <el-cascader
+                        @focus="fenleiFocus"
                         popper-class="fenlei-popper"
                         :disabled="!ruleForm.productCategoryInfoId"
                         :options="categoryOptions"
@@ -1021,6 +1022,10 @@ export default {
         });
     },
     methods: {
+        fenleiFocus() {
+            this.leimuSelected = false
+            this._globalEvent.$emit('addGoodsEvent', this.leimuSelected);
+        },
         visibleChange(flag) {
             console.log(flag)
             if(flag) {
