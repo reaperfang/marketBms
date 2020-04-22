@@ -54,7 +54,7 @@
                     </template>
                 </el-button>
             </p>
-            <p class="download-box">导入规则：请先<a class="download" href="javascript:;" @click="downloadTemplate">下载商品导入模板</a>，在模板中按要求填写商品信息，然后上传该文件</p>
+            <p class="download-box">导入规则：请先<a class="download" target="_blank" :href="dowmnloadUrl">下载商品导入模板</a>，在模板中按要求填写商品信息，然后上传该文件</p>
         </section>
         <section>
             <p class="records">导入记录</p>
@@ -117,7 +117,8 @@ export default {
             showFileList: false,
             loading: false,
             showImport: true,
-            importing: false
+            importing: false,
+            dowmnloadUrl: location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`
         }
     },
     computed:{
@@ -130,13 +131,13 @@ export default {
         this.getList()
     },
     methods: {
-        downloadTemplate() {
-            let a = document.createElement("a");
+        // downloadTemplate() {
+        //     let a = document.createElement("a");
 
-            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`);
-            a.setAttribute("target", "_blank");
-            a.click();
-        },
+        //     a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`);
+        //     a.setAttribute("target", "_blank");
+        //     a.click();
+        // },
         renovate() {
             this.getList()
         },
