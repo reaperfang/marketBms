@@ -123,7 +123,7 @@
     </div>
     
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="echoList" @dialogDataSelected="dialogDataSelected"></component>
 
     <!-- 商品分类选择弹框 -->
     <DialogBase :visible.sync="pageDialogVisible" width="816px" title="选择商品分类" @submit="seletePage">
@@ -167,6 +167,7 @@ export default {
 
       },
       list: this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       tempGroup: null,   //临时选中的商品分类
@@ -212,6 +213,17 @@ export default {
       this.fetchCatagoryDetail();
       this.fetch();
       this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({id: item});
+        })
+      },
+      deep: true
     }
   },
   methods: {

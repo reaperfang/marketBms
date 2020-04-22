@@ -100,18 +100,22 @@ methods: {
 
   // 增加同级节点事件
   handleAddSameLevelNode (name) {
-    let type =  this.typeName == 'image' ? '0' : '1'
-    let  query ={
-        name:name,
-        type:type,
-        parentId:'0'  
-      }
-    this._apis.file.newGroup(query).then((response)=>{
+    if(name == "未分组"){
+      this.$message.error('分组名称已存在');
+    }else{
+      let type =  this.typeName == 'image' ? '0' : '1'
+      let  query ={
+          name:name,
+          type:type,
+          parentId:'0'  
+        }
+      this._apis.file.newGroup(query).then((response)=>{
         let data = {id:response,name:name}
         this.$refs.tree.append(data)
       }).catch((error)=>{
         this.$message.error(error);
       })
+    }
   },
 
   // 增加子级节点弹窗打开

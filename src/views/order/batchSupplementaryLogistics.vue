@@ -44,7 +44,7 @@
                         <img width="66" :src="goods.goodsImage" alt />
                       </div>
                       <div class="col">
-                        <p class="ellipsis" style="width: 200px;">{{goods.goodsName}}</p>
+                        <p :title="goods.goodsName" class="ellipsis">{{goods.goodsName}}</p>
                         <p class="goods-specs">{{goods.goodsSpecs | goodsSpecsFilter}}</p>
                       </div>
                     </div>
@@ -113,7 +113,7 @@
               </div>
               <div class="item">
                 <div class="label">发货信息</div>
-                <div class="value">{{list[0] && list[0].sendDetail}}</div>
+                <!-- <div class="value">{{list[0] && list[0].sendDetail}}</div> -->
                 <div class="value" v-if="list[0]">
                   {{list[0].sendProvinceName}} {{list[0].sendCityName}} {{list[0].sendAreaName}} {{list[0].sendDetail}}</div>
                 <div class="value" v-else>--</div>
@@ -601,5 +601,12 @@ export default {
   line-height: 1;
   padding-top: 2px;
   margin-bottom: 0;
+}
+.ellipsis {
+    width: 311px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>

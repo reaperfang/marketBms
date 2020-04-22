@@ -123,7 +123,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="echoList" @dialogDataSelected="dialogDataSelected"></component>
   </el-form>
 </template>
 
@@ -158,6 +158,7 @@ export default {
 
       },
       list: [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
@@ -184,6 +185,17 @@ export default {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({activityId: item});
+        })
+      },
+      deep: true
     }
   },
   methods: {

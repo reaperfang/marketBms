@@ -46,7 +46,7 @@
                                                 <img width="66" :src="goods.goodsImage" alt="">
                                             </div>
                                             <div class="col">
-                                                <p class="ellipsis" style="width: 297px;">{{goods.goodsName}}</p>
+                                                <p :title="goods.goodsName" class="ellipsis" style="width: 297px;">{{goods.goodsName}}</p>
                                                 <p class="goods-specs">{{goods.goodsSpecs | goodsSpecsFilter}}</p>
                                             </div>
                                         </div>
