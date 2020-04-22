@@ -46,7 +46,7 @@ export default {
   methods: {
     scroll() {
       let con1 = this.$refs.rollul;
-      if(con1) {
+      if (con1.length>0) {
         con1[0].style.marginTop = "30px";
         this.animate = !this.animate;
         var that = this; // 在异步函数中会出现this的偏移问题，此处一定要先保存好this的指向

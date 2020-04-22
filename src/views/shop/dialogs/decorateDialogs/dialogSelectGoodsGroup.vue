@@ -41,7 +41,7 @@
       @dialogDataSelected="dialogDataSelected"
       :categoryId="currentCategory.id"
       :categoryName="currentCategory.categoryName"
-      :goodsEcho.sync="list"
+      :goodsEcho.sync="echoList"
     ></component>
   </DialogBase>
 </template>
@@ -76,6 +76,7 @@ export default {
         name: "",
         enable: "1"
       },
+      echoList: [],
       rules: {},
       dialogVisible2: false, //子弹窗是否显示
       currentDialog: "", //当前弹窗
@@ -122,7 +123,7 @@ export default {
       this.loading = true;
       if(this.resultData[this.currentCategory.id] && this.resultData[this.currentCategory.id].goods.length) {
         this._apis.goods.fetchAllSpuGoodsList({
-            status: '1',
+            // status: '1',
             ids: this.resultData[this.currentCategory.id].goods,
             productCatalogInfoId: this.currentCategory.id
         }).then((response)=>{
@@ -221,6 +222,11 @@ export default {
       this.currentCategory = data;
       this.fetchSelectedGoods((list) => {
         this.list = list;
+        const _self = this;
+        this.echoList = [];
+        list.forEach((item)=>{
+          _self.echoList.push({id: item.id});
+        })
         this.currentDialog = "dialogSelectGoods";
         this.dialogVisible2 = true;
       });
@@ -233,9 +239,9 @@ export default {
 
     /* 弹窗选中了数据项 */
     dialogDataSelected(items) {
-      if(!items.length) {  //没有数据的分类不添加
-        return;
-      }
+      // if(!items.length) {  //没有数据的分类不添加
+      //   return;
+      // }
       /* 重置树形数据，把选中的商品回显到列表中 */
       for (let item of this.responseData) {
         if (this.currentCategory.id === item.id) {

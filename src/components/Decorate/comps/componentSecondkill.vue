@@ -34,29 +34,21 @@
                         <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{getReduce(item)}}元</font>{{item.goodsName}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
                         <div class="limit_line">
-                            <p class="limit" v-if="showContents.indexOf('7')!=-1">
-                                <template v-if="item.activityJoinLimit >= 0">
-                                    限 {{item.activityJoinLimit}}件/人
-                                </template>
-                                <template v-else>不限制</template>
+                            <p class="limit" v-if="showContents.indexOf('7')!=-1">{{item.activityJoinLimit==-1?'不限':'限 ' + item.activityJoinLimit + ' 件/人'}}</p>
                             <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
                                 <div class="jd_line">
                                     <div class="current_line" :style="{width:getProgress(item)}"></div>
                                 </div>
-                                <p>仅剩{{item.remainStock}}件</p>
+                                <p>仅剩{{item.remainStock?item.remainStock:0}}件</p>
                             </div>
                         </div>
                         <div class="price_line">
                             <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{getReducePrice(item)}}</font></p>
                             <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
                         </div>
-                        <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton> -->
 
                         <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&(item.remainStock>0&&utils.dateDifference(item.endTime)>0&&item.status==1)"></componentButton>
-                        <!-- <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
-                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p> -->
-
-                        <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1||item.remainStock<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                        <p class="activity_end" v-if="item.status==2">活动已结束</p>
                         <p class="activity_end" v-if="item.status==0">活动未开始</p>
                     </div>
                 </li>

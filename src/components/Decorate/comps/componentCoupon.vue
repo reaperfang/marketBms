@@ -13,6 +13,7 @@
                 <span :class="style1">{{getContent(item)}}</span>
               </div>
               <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
+              <div :class="style2" class="first_present" v-else>无门槛限制</div>
             </li>
           </template>
         </ul>
