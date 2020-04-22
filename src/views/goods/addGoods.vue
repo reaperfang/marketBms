@@ -939,7 +939,7 @@ export default {
         }
     },
     computed: {
-        eeditor() {
+        editor() {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 return true
             } else {
