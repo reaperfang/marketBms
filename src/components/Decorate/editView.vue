@@ -2,7 +2,7 @@
   <div class="module view" :style="{backgroundColor: baseInfo&&baseInfo.colorStyle}">
     <div class="phone-head" @click="clickTitle(null)" title="点击编辑页面信息">
       <img src="@/assets/images/shop/editor/phone_head.png" alt="">
-      <span>{{baseInfo.title || '页面标题'}}</span>
+      <span>{{baseInfo.title || baseInfo.name || '页面标题'}}</span>
     </div>
     <div class="phone-body" ref="view_container" @click="clickTitle($event)" v-calcHeight="height" @drop="dropAddComponent($event)" @dragover="dragover($event)" @dragleave="dragleave($event)">
 

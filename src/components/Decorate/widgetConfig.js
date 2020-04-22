@@ -25,7 +25,7 @@ export default {
               type: 'classify',
               iconClass: '',
               title: '微页面分类',
-              hidden: true,
+              hidden: false,
               preLoad: false,
               isBase: true
             }
