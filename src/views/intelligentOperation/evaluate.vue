@@ -213,6 +213,8 @@ export default {
                 pageSize:10,
                 startIndex:1,
             },
+            this.showNote = false
+            this.showNote1 = false
             this.getEvaluation(1,10)
         },
         // 重新筛选
