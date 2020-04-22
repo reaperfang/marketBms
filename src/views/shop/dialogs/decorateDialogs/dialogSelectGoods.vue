@@ -183,7 +183,7 @@ export default {
      /* 清除失效数据 */
     clearInvalidData() {
       this.tableData.forEach((row, index) => {
-        if(!row.fakeData && row.status === 2) {  //假数据不允许添加选中状态
+        if(!row.fakeData && (row.status === 0 || row.status === -1)) {  //假数据不允许添加选中状态
           this.$refs.multipleTable.toggleRowSelection(row, false);
         }
       })

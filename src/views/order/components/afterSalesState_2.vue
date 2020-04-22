@@ -136,7 +136,7 @@
                 </div>
                 <div class="col righter">
                     <p>已完成</p>
-                    <p class="des">退款消息给用户，用户确认收款。</p>
+                    <p class="des">客户确认收货，完成换货。</p>
                     <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
