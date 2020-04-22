@@ -185,7 +185,7 @@
                                 <img width="66" :src="scope.row.goodsImage" alt="">
                             </div>
                             <div class="item">
-                                <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                <p :title="scope.row.goodsName" class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
                                 <p class="goods-specs">{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
                             </div>
                         </div>
