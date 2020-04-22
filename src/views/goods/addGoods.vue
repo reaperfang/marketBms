@@ -3650,6 +3650,7 @@ $blue: #655EFF;
 /deep/ .el-form-item__label {
     color: #3D434A;
 }
+
 /deep/ .upload-box .image-list {
     .image-item {
         overflow: visible;
