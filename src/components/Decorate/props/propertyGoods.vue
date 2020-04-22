@@ -268,7 +268,7 @@ export default {
                 return;
               }
               params = {
-                  status: '1',
+                  // status: '1',
                   productCatalogInfoId: this.ruleForm.currentCatagoryId
               };
             }
@@ -306,12 +306,12 @@ export default {
                 }
             }
             params = {
-                status: '1',
+                // status: '1',
                 ids: allIds
             }
         }else{
             params = {
-                status: '1',
+                // status: '1',
                 ids: ids[this.currentCatagoryId],
                 productCatalogInfoId: this.currentCatagoryId
             }
@@ -322,7 +322,7 @@ export default {
     /* 设置普通商品参数 */
     setNormalGoodsParams(ids) {
         return {
-            status: '1',
+            // status: '1',
             ids: ids,
         }
     },

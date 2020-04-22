@@ -15,7 +15,9 @@
                     <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
                         <p class="price">￥<font>{{getPrice(item)}}</font></p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="item.status==1 && showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
+                    <p class="goods_end" v-if="item.status==0">已下架</p>
+                    <p class="goods_end" v-if="item.status==-1">已售罄</p>
                 </div>
             </li>
         </ul>
@@ -219,7 +221,7 @@ export default {
                         return;
                     }
                     params = {
-                        status: '1',
+                        // status: '1',
                         productCatalogInfoId: componentData.currentCatagoryId
                     };
                 }
@@ -255,12 +257,12 @@ export default {
                     }
                 }
                 params = {
-                    status: '1',
+                    // status: '1',
                     ids: allIds
                 }
             }else{
                 params = {
-                    status: '1',
+                    // status: '1',
                     ids: ids[this.currentCatagoryId],
                     productCatalogInfoId: this.currentCatagoryId
                 }
@@ -271,7 +273,7 @@ export default {
         /* 设置普通商品参数 */
         setNormalGoodsParams(ids) {
             return {
-                status: '1',
+                // status: '1',
                 ids: ids,
             }
         },
@@ -994,5 +996,14 @@ export default {
             }
         } 
     } 
+}
+.goods_end{
+    right:10px;
+    bottom:15px;
+    line-height:31px;
+    font-size:18px;
+    position:absolute;
+    color:#bbb;
+    font-weight:700;
 }
 </style>
