@@ -2968,8 +2968,10 @@ export default {
 
                 window.thisv = this
                 setTimeout(() => {
-                    this.$refs.fenleiCascader.toggleDropDownVisible(false)
-                    this._globalEvent.$emit('addGoodsEvent', false);
+                    if(this.editor) {
+                        this.$refs.fenleiCascader.toggleDropDownVisible(false)
+                        this._globalEvent.$emit('addGoodsEvent', false);
+                    }
                 }, 10000)
             }
         })
