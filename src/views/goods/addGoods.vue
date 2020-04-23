@@ -2623,6 +2623,10 @@ export default {
             this.itemCatText = arr.map(val => val.name).join(' > ')
             this.ruleForm.productCategoryInfoId = _value.pop()
             this.getSpecsList()
+
+            this.$nextTick(() => {
+                this.$refs.fenleiCascader.toggleDropDownVisible(false)
+            })
         },
         // 获取商品类目列表
         getOperateCategoryList() {
