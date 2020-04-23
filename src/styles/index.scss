@@ -854,6 +854,9 @@ textarea:-ms-input-placeholder {
 #app.hide-fenlei + script + script + .fenlei-popper {
   display: none!important;
 }
+#app.hide-fenlei~.fenlei-popper {
+  display: none!important;
+}
 #app.hide-fenlei .app-container.add-goods .el-form-item.productCatalogInfoId .el-cascader .el-input .el-input__inner {
   border: 1px solid #DCDFE6;
 }
