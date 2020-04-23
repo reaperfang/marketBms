@@ -2971,13 +2971,13 @@ export default {
                 
                 
                 if(this.editor) {
-                    let timer = setTimeout(() => {
+                    let timer = setInterval(() => {
                     
                     if(this.$refs.fenleiCascader.dropDownVisible) {
                         this.$refs.fenleiCascader.toggleDropDownVisible(false)
                         this._globalEvent.$emit('addGoodsEvent', false);
                     } else {
-                        clearTimeout(timer)
+                        clearInterval(timer)
                     }
                 }, 500)
                 }
