@@ -2622,13 +2622,12 @@ export default {
             this.ruleForm.productCategoryInfoId = _value.pop()
             this.getSpecsList()
 
-            this.$nextTick(() => {
-                //this.$refs.fenleiCascader.toggleDropDownVisible(false)
-                setTimeout(() => {
-                    this.$refs.fenleiCascader.toggleDropDownVisible(false)
-                    this._globalEvent.$emit('addGoodsEvent', false);
-                }, 10000)
-            })
+            // this.$nextTick(() => {
+            //     setTimeout(() => {
+            //         this.$refs.fenleiCascader.toggleDropDownVisible(false)
+            //         this._globalEvent.$emit('addGoodsEvent', false);
+            //     }, 10000)
+            // })
         },
         // 获取商品类目列表
         getOperateCategoryList() {
@@ -2962,13 +2961,14 @@ export default {
     },
     mounted() {
         //window.addEventListener('scroll', this.handleScroll)
+        window.thisv = this
         this.$nextTick(() => {
             if(this.isIE) {
                 if(document.querySelector('.productCatalogInfoId .el-input').className.indexOf('is-focus') != -1) {
                     document.querySelector('.productCatalogInfoId .el-form-item__label').click()
                 }
 
-                window.thisv = this
+                
                 setTimeout(() => {
                     if(this.editor) {
                         this.$refs.fenleiCascader.toggleDropDownVisible(false)
