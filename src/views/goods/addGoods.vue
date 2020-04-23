@@ -2970,7 +2970,7 @@ export default {
                 setTimeout(() => {
                     this.$refs.fenleiCascader.toggleDropDownVisible(false)
                     this._globalEvent.$emit('addGoodsEvent', false);
-                }, 5000)
+                }, 10000)
             }
         })
     },
