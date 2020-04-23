@@ -1,7 +1,7 @@
 <template>
     <div class="c_container">
         <el-tabs v-model="activeName">
-            <el-tab-pane label="积分通用规则" name="first" v-permission="['客户', '积分管理', '积分通用规则']">
+            <el-tab-pane label="积分通用规则" name="first" v-permission="['用户', '积分管理', '积分通用规则']">
                 <p class="c_title">积分使用规则：</p>
                 <div>
                     <el-form :model="ruleForm" ref="ruleForm">
@@ -51,10 +51,10 @@
                     </el-form>
                 </div>
                 <div class="btn_cont">
-                    <el-button type="primary" class="btn_primary" @click="save" v-permission="['客户', '积分管理', '积分通用规则', '保存']">保 存</el-button>
+                    <el-button type="primary" class="btn_primary" @click="save" v-permission="['用户', '积分管理', '积分通用规则', '保存']">保 存</el-button>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="获取积分规则" name="second" v-permission="['客户', '积分管理', '获取积分规则']">
+            <el-tab-pane label="获取积分规则" name="second" v-permission="['用户', '积分管理', '获取积分规则']">
                 <div class="c_block">
                     <el-switch
                         v-model="isSwitch"
