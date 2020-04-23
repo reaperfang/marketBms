@@ -920,8 +920,6 @@ export default {
 
             if(that.editor) {
                 that._globalEvent.$emit('addGoodsEvent', false);
-            } else {
-                that._globalEvent.$emit('addGoodsEvent', false);
             }
         })
 
