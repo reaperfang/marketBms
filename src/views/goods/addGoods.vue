@@ -2022,7 +2022,21 @@ export default {
                 let __goodsInfos
 
 
+                if(this.isIE) {
+                    if(this.editor) {
+                        let flag = []
 
+                        let timer = setInterval(() => {
+                        
+                            if(this.$refs.fenleiCascader.dropDownVisible) {
+                                this.$refs.fenleiCascader.toggleDropDownVisible(false)
+                                this._globalEvent.$emit('addGoodsEvent', false);
+
+                                clearInterval(timer)
+                            }
+                        }, 500)
+                    }
+                }
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
 
                 res.goodsInfos.forEach(val => {
@@ -2970,17 +2984,7 @@ export default {
 
                 
                 
-                if(this.editor) {
-                    let timer = setInterval(() => {
-                    
-                    if(this.$refs.fenleiCascader.dropDownVisible) {
-                        this.$refs.fenleiCascader.toggleDropDownVisible(false)
-                        this._globalEvent.$emit('addGoodsEvent', false);
-                    } else {
-                        clearInterval(timer)
-                    }
-                }, 500)
-                }
+                
             }
         })
     },
