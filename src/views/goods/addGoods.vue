@@ -2969,12 +2969,18 @@ export default {
                 }
 
                 
-                setTimeout(() => {
-                    if(this.editor) {
+                
+                if(this.editor) {
+                    let timer = setTimeout(() => {
+                    
+                    if(this.$refs.fenleiCascader.dropDownVisible) {
                         this.$refs.fenleiCascader.toggleDropDownVisible(false)
                         this._globalEvent.$emit('addGoodsEvent', false);
+                    } else {
+                        clearTimeout(timer)
                     }
-                }, 10000)
+                }, 500)
+                }
             }
         })
     },
