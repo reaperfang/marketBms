@@ -21,7 +21,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <span class="edit_span" @click="editCredit(scope.row)" v-permission="['客户', '积分管理', '获取积分规则', '查看']">
+            <span class="edit_span" @click="editCredit(scope.row)" v-permission="['用户', '积分管理', '获取积分规则', '查看']">
                 <!-- <i class="edit_i"></i> -->
                 查看&编辑
             </span>

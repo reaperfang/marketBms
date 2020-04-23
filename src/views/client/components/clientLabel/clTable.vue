@@ -29,7 +29,7 @@
           <span
             class="edit_span"
             @click="edit(scope.row)"
-            v-permission="['客户', '客户标签', '默认页面', '查看标签']"
+            v-permission="['用户', '用户标签', '默认页面', '查看标签']"
           >
             <!-- <i class="edit_i"></i> -->
             编辑

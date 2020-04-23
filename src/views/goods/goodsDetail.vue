@@ -81,6 +81,7 @@
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
                     <el-cascader
+                        ref="fenleiCascader"
                         class="shop_classify_tag"
                         popper-class="fenlei-popper"
                         :disabled="!ruleForm.productCategoryInfoId"
@@ -919,8 +920,6 @@ export default {
 
             if(that.editor) {
                 that._globalEvent.$emit('addGoodsEvent', false);
-            } else {
-                that._globalEvent.$emit('addGoodsEvent', false);
             }
         })
 
@@ -937,6 +936,8 @@ export default {
         if(this.editor) {
             this._globalEvent.$emit('addGoodsEvent', true);
         }
+
+        console.log(this.$refs.fenleiCascader)
     },
     computed: {
         editor() {
@@ -2021,7 +2022,21 @@ export default {
                 let __goodsInfos
 
 
+                if(this.isIE) {
+                    if(this.editor) {
+                        let flag = []
 
+                        let timer = setInterval(() => {
+                        
+                            if(this.$refs.fenleiCascader.dropDownVisible) {
+                                this.$refs.fenleiCascader.toggleDropDownVisible(false)
+                                this._globalEvent.$emit('addGoodsEvent', false);
+
+                                clearInterval(timer)
+                            }
+                        }, 500)
+                    }
+                }
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
 
                 res.goodsInfos.forEach(val => {
@@ -2620,6 +2635,13 @@ export default {
             this.itemCatText = arr.map(val => val.name).join(' > ')
             this.ruleForm.productCategoryInfoId = _value.pop()
             this.getSpecsList()
+
+            // this.$nextTick(() => {
+            //     setTimeout(() => {
+            //         this.$refs.fenleiCascader.toggleDropDownVisible(false)
+            //         this._globalEvent.$emit('addGoodsEvent', false);
+            //     }, 10000)
+            // })
         },
         // 获取商品类目列表
         getOperateCategoryList() {
@@ -2953,11 +2975,16 @@ export default {
     },
     mounted() {
         //window.addEventListener('scroll', this.handleScroll)
+        window.thisv = this
         this.$nextTick(() => {
             if(this.isIE) {
                 if(document.querySelector('.productCatalogInfoId .el-input').className.indexOf('is-focus') != -1) {
                     document.querySelector('.productCatalogInfoId .el-form-item__label').click()
                 }
+
+                
+                
+                
             }
         })
     },
