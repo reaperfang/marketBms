@@ -2625,7 +2625,11 @@ export default {
             this.getSpecsList()
 
             this.$nextTick(() => {
-                this.$refs.fenleiCascader.toggleDropDownVisible(false)
+                //this.$refs.fenleiCascader.toggleDropDownVisible(false)
+                setTimeout(() => {
+                    this.$refs.fenleiCascader.toggleDropDownVisible(false)
+                    this._globalEvent.$emit('addGoodsEvent', false);
+                }, 10000)
             })
         },
         // 获取商品类目列表
