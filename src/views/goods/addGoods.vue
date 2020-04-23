@@ -81,6 +81,7 @@
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
                     <el-cascader
+                        ref="fenleiCascader"
 						class="shop_classify_tag"
                         popper-class="fenlei-popper"
                         :disabled="!ruleForm.productCategoryInfoId"
@@ -937,6 +938,8 @@ export default {
         if(this.editor) {
             this._globalEvent.$emit('addGoodsEvent', true);
         }
+
+        console.log(this.$refs.fenleiCascader)
     },
     computed: {
         editor() {
@@ -2957,6 +2960,10 @@ export default {
             if(this.isIE) {
                 if(document.querySelector('.productCatalogInfoId .el-input').className.indexOf('is-focus') != -1) {
                     document.querySelector('.productCatalogInfoId .el-form-item__label').click()
+                }
+
+                if(this.editor) {
+                    this.$refs.fenleiCascader.toggleDropDownVisible(false)
                 }
             }
         })
