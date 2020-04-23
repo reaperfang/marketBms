@@ -156,6 +156,20 @@ export default {
       drag: false
     }
   },
+  watch: {
+    'ruleForm.itemList': {
+      handler(newValue) {
+        let list = [...newValue];
+        list.forEach((item)=>{
+          if(!item.id) {
+            item.id = uuidv4();
+          }
+        })
+        newValue = list
+      },
+      deep: true
+    }
+  },
   computed: {
      /* 检测是否有数据 */
     hasContent() {
