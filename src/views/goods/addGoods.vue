@@ -2024,12 +2024,14 @@ export default {
 
                 if(this.isIE) {
                     if(this.editor) {
+                        let flag = []
+
                         let timer = setInterval(() => {
                         
                             if(this.$refs.fenleiCascader.dropDownVisible) {
                                 this.$refs.fenleiCascader.toggleDropDownVisible(false)
                                 this._globalEvent.$emit('addGoodsEvent', false);
-                            } else {
+
                                 clearInterval(timer)
                             }
                         }, 500)

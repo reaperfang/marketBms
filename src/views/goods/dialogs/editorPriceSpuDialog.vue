@@ -70,9 +70,9 @@ export default {
                 });
                 return
             }
-            if(this.data.goodsInfos.some(val => val.salePrice < 0)) {
+            if(this.data.goodsInfos.some(val => +val.salePrice < 0.01)) {
                 this.$message({
-                message: '售卖价不可以小于0',
+                message: '售卖价不可以小于0.01',
                 type: 'warning'
                 });
                 return
