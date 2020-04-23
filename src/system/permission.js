@@ -12,7 +12,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 function hasPermission(msfList, route) {
   if (route && route.path) {
-    let title = route.meta.title == '全部用户' ? '全部客户' : route.meta.title;  //add_by fangyuan 对于客户改成用户的需求，后端返回的还是全部客户，所以需要特殊处理
+    let title =  route.meta.title;
     return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo'
   } else {
     return true
