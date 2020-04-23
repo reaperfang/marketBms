@@ -2962,9 +2962,7 @@ export default {
                     document.querySelector('.productCatalogInfoId .el-form-item__label').click()
                 }
 
-                if(this.editor) {
-                    this.$refs.fenleiCascader.toggleDropDownVisible(false)
-                }
+                this.$refs.fenleiCascader.toggleDropDownVisible(false)
             }
         })
     },
