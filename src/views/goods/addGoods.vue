@@ -2966,9 +2966,10 @@ export default {
                     document.querySelector('.productCatalogInfoId .el-form-item__label').click()
                 }
 
-                
+                window.thisv = this
                 setTimeout(() => {
                     this.$refs.fenleiCascader.toggleDropDownVisible(false)
+                    this._globalEvent.$emit('addGoodsEvent', false);
                 }, 5000)
             }
         })
