@@ -1,4 +1,4 @@
-<!--提现明细-->
+<!--分佣明细-->
 <template>
   <div>
     <div class="top_part head-wrapper">
@@ -128,8 +128,8 @@ export default {
       ruleForm:{
         searchType:'tradeDetailSn', //交易流水号
         searchValue:'', // 交易流水号对应值
-        minTradeAmount: '', // 分佣金额上限
-        maxTradeAmount: '', // 分佣金额下限
+        minTradeAmount: '0.00', // 分佣金额上限
+        maxTradeAmount: '0.00', // 分佣金额下限
         timeValue:'', // 交易时间
         userType:'resellerSn', // 分佣员类型
         userValue:'' // 分佣员类型对应值
@@ -194,7 +194,9 @@ export default {
     },
 
     fetch(){
-      if(this.ruleForm.minTradeAmount > this.ruleForm.maxTradeAmount){
+      if(this.ruleForm.minTradeAmount == '' || this.ruleForm.maxTradeAmount == ''){
+        this.$message('分佣金额不能为空')
+      }else if(this.ruleForm.minTradeAmount > this.ruleForm.maxTradeAmount){
         this.$message('分佣金额最小值应该小于最大值')
       }else{
         let query = this.init();
@@ -216,8 +218,8 @@ export default {
       this.ruleForm = {
         searchType:'tradeDetailSn', //交易流水号
         searchValue:'', // 交易流水号对应值
-        minTradeAmount: '', // 分佣金额上限
-        maxTradeAmount: '', // 分佣金额下限
+        minTradeAmount: '0.00', // 分佣金额上限
+        maxTradeAmount: '0.00', // 分佣金额下限
         timeValue:'', // 交易时间
         userType:'resellerSn', // 分佣员类型
         userValue:'' // 分佣员类型对应值
