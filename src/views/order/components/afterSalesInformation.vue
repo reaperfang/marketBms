@@ -128,8 +128,11 @@
                         </el-table-column>
                         <el-table-column
                             v-if="orderAfterSale.type != 2"
-                            prop="goodsPrice"
+                            prop="salePrice"
                             label="商品单价">
+                            <template  slot-scope="scope">
+                                {{scope.row.salePrice}}
+                            </template>
                         </el-table-column>
                         <el-table-column
                             v-if="orderAfterSale.type != 2"
