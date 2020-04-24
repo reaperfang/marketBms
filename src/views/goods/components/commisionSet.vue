@@ -323,7 +323,7 @@ export default {
 
         // 分佣图片展示
         this.images = detail.images ? detail.images.split(',') : [];        
-        if(this.images.indexOf(detail.resellImage) !== -1) {
+        if(this.images.length &&  detail.resellImage && this.images.indexOf(detail.resellImage) !== -1) {
             this.checkedImg = this.images.indexOf(detail.resellImage);
             this.picSorce = 0;
         } else {
