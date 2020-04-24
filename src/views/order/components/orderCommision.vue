@@ -15,19 +15,19 @@
             </template>
         </el-table-column>
         <el-table-column label="分佣员姓名" width="180">
-            <template><p class="line-height" v-for="item in resellerInfoList">{{item.resellerName}}</p></template>
+            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerName}}</p></template>
         </el-table-column>
         <el-table-column label="手机号">
-            <template><p class="line-height" v-for="item in resellerInfoList">{{item.resellerPhone}}</p></template>
+            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerPhone}}</p></template>
         </el-table-column>
         <el-table-column label="分佣比例">
-            <template><p class="line-height" v-for="item in resellerInfoList">{{item.resellerSettlementScale}}%</p></template>  
+            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerSettlementScale}}%</p></template>  
         </el-table-column>
         <el-table-column label="分佣金额">
-            <template><p class="line-height" v-for="item in resellerInfoList">¥{{item.resellerSettlementMoney}}</p></template>  
+            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">¥{{item.resellerSettlementMoney}}</p></template>  
         </el-table-column>
         <el-table-column label="分佣状态" class-name="goods-status">
-            <template><p class="line-height" v-for="item in resellerInfoList">{{item.status ? '已结算' : '未结算'}}</p></template>  
+            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.status ? '已结算' : '未结算'}}</p></template>  
         </el-table-column>
     </el-table>
 </div>
