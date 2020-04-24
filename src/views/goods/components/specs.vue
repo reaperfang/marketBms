@@ -1,6 +1,6 @@
 <template>
     <div v-if="list.length" class="specs">
-        <table :style="{width: (specsLabel.split(',').length*50 + 1350) + 'px'}" style="border-collapse: collapse;" border="1">
+        <table :style="{width: (specsLabel.split(',').length*50 + 1350) + 'px'}" style="border-collapse: collapse;">
             <!-- <tr>
                 <td rowspan="3">XLL</td>
                 <td rowspan="2">红色</td>
@@ -374,13 +374,13 @@ export default {
         text-align: center;
     }
     table {
-        border: 1px solid #DCDFE6;
+        //border: 1px solid #DCDFE6;
         td {
             padding: 5px 0;
         }
         tr th {
             height: 40px;
-            background: rgb(242, 236, 255);
+            background:rgba(101,94,255,0.1);
             color: rgb(101, 94, 255);
         }
     }
@@ -430,11 +430,35 @@ export default {
         padding: 14px 2px;
         border: 1px solid #DCDFE6;
     }
+    table tr:nth-child(2) {
+        td {
+            border-top: none;
+        }
+    }
     table tr th {
-        border: 1px solid #DCDFE6;
+        //border: 1px solid #DCDFE6;
+        border: none;
     }
     /deep/ .el-input input {
         padding-right: 0;
+    }
+    /deep/ .upload-spec {
+        .el-upload-list__item {
+            overflow: visible;
+            .el-upload-list__item-status-label {
+                position: absolute;
+                right: -7px;
+                top: -6px;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: #13ce66;
+                .el-icon-upload-success:before {
+                    position: absolute;
+                    top: -12px;
+                }
+            }
+        }
     }
 </style>
 

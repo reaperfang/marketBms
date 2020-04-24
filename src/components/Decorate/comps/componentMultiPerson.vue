@@ -5,7 +5,7 @@
         <template v-if="hasContent">
             <ul>
                 <template  v-for="(item,key) of list">
-                    <li :key="key" v-if="item.status !== 2" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                    <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.sold > -1 ? item.sold : 0}}人已团</p>
                             <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -37,12 +37,7 @@
                             <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.goodDes}}</p>
                             <div class="limit_line">
                                 <div class="label">{{item.peopleNum || 0}}人团</div>
-                                <p class="limit" v-if="showContents.indexOf('7')!=-1">
-                                    <template v-if="item.buyLimit >= 0">
-                                        限 {{item.buyLimit}}件/人
-                                    </template>
-                                    <template v-else>不限制</template>
-                                </p>
+                                <p class="limit" v-if="showContents.indexOf('7')!=-1">{{item.buyLimit==-1?'不限':'限'+item.buyLimit+'件/人'}}</p>
                                 <div class="remainder_box">
                                     <div class="jd_line">
                                         <div class="current_line" :style="{width:(item.stock - item.remainStock)/item.stock*100+'%'}"></div>
@@ -54,11 +49,9 @@
                                 <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice}}</font></p>
                                 <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.salePrice}}</p>
                             </div>
-                            <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="kai"></componentButton> -->
-                            <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('8')!=-1&&item.soldOut!=1 && listStyle != 3 && listStyle != 6" class="pin"></componentButton> -->
 
-                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.remainStock>0&&item.status==1&&utils.dateDifference(item.endTime)>0 && listStyle != 3 && listStyle != 6" class="kai button" @click.native.stop="openNowBuyRuleLayer1(item)"></componentButton>
-                            <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1||item.remainStock<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6" class="kai button"></componentButton>
+                            <p class="activity_end" v-if="item.status==2">活动已结束</p>
                             <p class="activity_end" v-if="item.status==0">活动未开始</p>
                         </div>
                     </li>

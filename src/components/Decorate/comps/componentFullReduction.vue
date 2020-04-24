@@ -6,7 +6,7 @@
         <div class="reduction_first">
           <span>减</span>
           <span>{{item.name}}</span>
-          <span>{{item.startTime}}至{{item.endTime}}</span>
+          <span>{{item.startTime.slice(0,10)}}至{{item.endTime.slice(0,10)}}</span>
         </div>
         <div class="reduction_two">
           <ul>

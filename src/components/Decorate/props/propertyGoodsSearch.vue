@@ -2,7 +2,8 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="90px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="搜索热词" prop="">
-        <p>鼠标拖拽调整热词顺序，搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中
+        <!-- <p>鼠标拖拽调整热词顺序，搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中 -->
+        <p>搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中
           <el-button type="text" @click="dialogVisible=true; currentDialog='dialogGoodsSearchDemo'">查看示例</el-button>
         </p>
         <el-tag
@@ -37,7 +38,7 @@
             <el-slider v-model="ruleForm.borderHeight" :min="28" :max="40"></el-slider>
             <span>{{ruleForm.borderHeight}}像素</span>
           </div>
-          小程序V2.17及以上版本支持
+          <p style="color:rgb(211, 211, 211);margin-top:5px;">小程序V2.17及以上版本支持</p>
         </el-form-item>
       <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">

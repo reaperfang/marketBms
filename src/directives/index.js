@@ -170,7 +170,7 @@ let enable = 0
 
 window.eventHub = new Vue()
 var shopInfos = function() {
-    if(localStorage.getItem('shopInfos')) {
+    if(localStorage.getItem('shopInfos') && JSON.parse(localStorage.getItem('shopInfos')) && JSON.parse(localStorage.getItem('shopInfos')).data && JSON.parse(localStorage.getItem('shopInfos')).data.functions && JSON.parse(localStorage.getItem('shopInfos')).data.functions[0] && JSON.parse(localStorage.getItem('shopInfos')).data.functions[0].children) {
         msfList = JSON.parse(localStorage.getItem('shopInfos')).data.functions[0].children
 
         Vue.directive('permission', {

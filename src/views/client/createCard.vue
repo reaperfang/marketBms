@@ -44,7 +44,7 @@
               size="small"
               type="primary"
               class="upload_btn"
-              v-permission="['客户', '会员卡', '会员卡管理', '上传']"
+              v-permission="['用户', '会员卡', '会员卡管理', '上传']"
               v-if="ruleForm.backgroundType == '1'"
               @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
             >点击上传</el-button>

@@ -7,8 +7,9 @@
           <el-input v-model="ruleForm.name" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
         <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜 索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
+          <el-button type="text" style="width:34px;" @click="clearInvalidData">清除失效数据</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -105,8 +106,8 @@ export default {
       pageNum: 1,
       ruleForm: {
         pageNum: 1,
-        name: '',
-        selectStatus: '0,1'
+        name: ''
+        // selectStatus: '0,1'
       },
       rules: {},
       disableStatus: [2]  //不可选状态值
@@ -147,6 +148,7 @@ export default {
       if(loadAll) {
         tempForm = {...this.ruleForm};
         tempForm.name = '';
+        this.ruleForm.name = '';
       }
       this._apis.shop.getFullReductionList(loadAll? tempForm: this.ruleForm).then((response)=>{
         this.tableData = response.list;
@@ -176,6 +178,16 @@ export default {
       return row.id
     },
 
+     /* 清除失效数据 */
+    clearInvalidData() {
+      this.tableData.forEach((row, index) => {
+        if(!row.fakeData && row.status === 2) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, false);
+        }
+      })
+      this.$message.success('清除成功！');
+    },
+
     /* 向父组件提交选中的数据 */
     submit() {
       this.$emit("dialogDataSelected", this.multipleSelection);
@@ -185,6 +197,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
+}
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
   color:#837DFF!important;

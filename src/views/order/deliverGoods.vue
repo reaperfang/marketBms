@@ -9,7 +9,7 @@
     <div class="container">
       <div class="container-item">
         <p class="deliver-goods-number">1. 选择您要进行发货的商品及数量</p>
-        <div v-for="item in list" class="container-item-content deliver-goods-list">
+        <div class="container-item-content deliver-goods-list">
           <div class="title">
             <div>
               <span>商品清单</span>
@@ -450,7 +450,7 @@ export default {
           params = {
             sendInfoDtoList: [
               {
-                orderId: this.$route.query.orderId || this.$route.query.id, // 订单id
+                orderId: this.$route.query.orderId || this.$route.query.id || this.$route.query.ids, // 订单id
                 memberInfoId: this.orderInfo.memberInfoId,
                 orderCode: this.orderInfo.orderCode,
                 orderItems: this.multipleSelection.map(val => ({
@@ -537,7 +537,7 @@ export default {
       let id = this.$route.query.id || this.$route.query.ids;
 
       this._apis.order
-        .orderSendDetail({ ids: [this.$route.query.id || this.$route.query.ids] })
+        .orderSendDetail({ ids: [+this.$route.query.id || +this.$route.query.ids] })
         .then(res => {
           res[0].orderItemList.forEach(val => {
             val.cacheSendCount = val.sendCount;

@@ -8,6 +8,9 @@
                     <div class="imgAbsolute">
                         <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                     </div>
+                    <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1">{{item.productLabelInfo.name}}</div>
+                    <p class="nothing" v-if="item.stock<1">售罄</p>
+                    <div class="nothingLayer" v-if="item.stock<1"></div>
                 </div>
                 <div class="text" v-if="showContents.length>0">
                     <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
@@ -15,7 +18,7 @@
                     <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
                         <p class="price">￥<font>{{getPrice(item)}}</font></p>
                     </div>
-                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
+                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&item.stock>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                 </div>
             </li>
         </ul>
@@ -112,7 +115,6 @@ export default {
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
             var scrollWidth = window && this.utils.isIE() ? 18 : 0;
-            console.log(scrollWidth)
             var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
             if(this.listStyle=='1'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
@@ -155,7 +157,8 @@ export default {
             }
             else if(this.listStyle=='5'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
-                var bodyWidth = 370;
+                var scrollWidth = window && this.utils.isIE() ? 18 : 0;
+                var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
                 if('showTemplate' in this.currentComponentData.data){
                     this.showTemplate= this.currentComponentData.data.showTemplate;
                     if(this.showTemplate!=1){
@@ -318,6 +321,42 @@ export default {
                         object-fit: contain;
                     }
                 }
+                .label{
+                    position:absolute;
+                    left:0;
+                    top:0;
+                    padding:0 6px;
+                    height:15px;
+                    font-size:11px;
+                    color:#fff;
+                    border-radius:1.5px;
+                    line-height:15px;
+                    background:#ffe08b;
+                }
+                .nothing{
+                    position:absolute;
+                    width:52px;
+                    height:52px;
+                    margin-left:-26px;
+                    margin-top:-26px;
+                    top:50%;
+                    left:50%;
+                    line-height:52px;
+                    color:#fff;
+                    text-align:center;
+                    background:rgba(0,0,0,0.5);
+                    font-size:14px;
+                    @include borderRadius(50%);
+                    z-index:1;
+                }
+                .nothingLayer{
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    left:0;
+                    position:absolute;
+                    background:rgba(0,0,0,0.1);
+                }
             }
             .text{
                 .title{
@@ -340,7 +379,9 @@ export default {
                 }
                 .priceLine{
                     .price{
-                        color:#FC3D42;
+                        color:#333;
+                        line-height:28px;
+                        height:28px;
                     }
                 }
                 .button{
@@ -473,7 +514,7 @@ export default {
             }
             .text{
                 overflow:hidden;
-                padding:10px;
+                padding:10px 10px 15px 10px;
                 position:relative;
                 .title{
                     font-size:13px;
@@ -970,6 +1011,7 @@ export default {
                 .button{
                     right:10px;
                     bottom:10px;
+                    display:none;
                 }
             }
         } 

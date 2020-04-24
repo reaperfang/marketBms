@@ -28,10 +28,10 @@
               <el-option label="用户昵称" value="memberName"></el-option>
               <el-option label="收货人姓名" value="receivedName"></el-option>
               <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员ID" value="resellerInfoId"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员姓名" value="resellerName"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员昵称" value="resellerNick"></el-option>
-              <el-option v-if="resellConfigInfo" label="分佣员手机号" value="resellerPhone"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员ID" value="resellerInfoId"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员姓名" value="resellerName"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员昵称" value="resellerNick"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员手机号" value="resellerPhone"></el-option>
             </el-select>
           </el-input>
         </el-form-item>
@@ -176,6 +176,14 @@ export default {
           orderType
       })
     }
+    if(this.$route.query.resellerInfoId) {
+      let resellerInfoId = this.$route.query.resellerInfoId
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          searchType2: 'resellerInfoId',
+          searchValue2: resellerInfoId
+      })
+    }
     console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
@@ -223,7 +231,7 @@ export default {
           return
       }
       if(this.$refs['shop'].list.filter(val => val.checked).filter(val => val.isFillUp != 1).length) {
-        this.confirm({title: '提示', icon: true, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
+        this.confirm({title: '提示', icon: true, showCancelButton: false, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
         return
       }
       this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))

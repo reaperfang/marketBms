@@ -29,11 +29,11 @@
         <span v-if="form.logo" class="avatar">
           <img :src="form.logo" class="logo_img" />
           <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
-          <span
-            class="uploadFont"
-            @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
-          >上传</span>
         </span>
+        <span
+          class="uploadFont"
+          @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
+        >上传</span>
         <!-- <el-upload
                 class="avatar-uploader"
                 :action="uploadUrl"
@@ -44,7 +44,7 @@
                 <i class="el-icon-plus avatar-uploader-icon"></i>
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>-->
-        <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于2M</p>
+        <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于3M</p>
       </el-form-item>
       <el-form-item label="公司名称:" prop="companyName">
         <el-input
@@ -512,6 +512,7 @@ export default {
   max-height: 80px;
   object-fit: fill;
   display: inline-block;
+  border:1px dashed #e6e6e6;
 }
 .shopInfo-show {
   font-size: 12px;

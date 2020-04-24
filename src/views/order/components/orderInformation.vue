@@ -50,13 +50,16 @@
                                 <div class="gain-item-lefter">积分：</div>
                                 <div class="gain-item-righter">{{rewardScore + ' 分' || '无'}}</div>
                             </div>
-                            <div class="gain-item">
+                            <div class="gain-item gift">
                                 <div class="gain-item-lefter">赠品：</div>
                                 <div class="gain-item-righter">
                                     <!--{{gift || '无'}}-->
                                     <template v-if="giftList && giftList.length">
                                         <span>{{giftList[0].appGift.goodsName}} ×{{giftList[0].goodsQuantity}}</span>
                                         <span @click="moreGiftHandler" class="pointer see-more-gift">查看更多</span>
+                                    </template>
+                                    <template v-else>
+                                        无
                                     </template>
                                 </div>
                             </div>
@@ -109,7 +112,7 @@
                                                     </div>
                                                     <div class="item righter coupon-code-list-righter">
                                                         <p>{{item.appCoupon.name}}</p>
-                                                        <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                        <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,7 +185,7 @@
                                 <img width="66" :src="scope.row.goodsImage" alt="">
                             </div>
                             <div class="item">
-                                <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                <p :title="scope.row.goodsName" class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
                                 <p class="goods-specs">{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
                             </div>
                         </div>
@@ -390,7 +393,8 @@ export default {
             yingshouChangeMoney: '',
             invoiceOpen: 1,
             couponList: [],
-            couponCodeList: []
+            couponCodeList: [],
+            giftList: []
         }
     },
     created() {
@@ -850,6 +854,14 @@ export default {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+            &.gift {
+                .gain-item-righter {
+                    display: flex;
+                    .see-more-gift {
+                        flex-shrink: 0;
+                    }
+                }
+            }
             .gain-item-lefter {
                 width: 64px;
                 margin-right: 6px;
@@ -1043,6 +1055,7 @@ export default {
     margin-left: 20px;
     color: #655EFF;
 }
+
 </style>
 
 

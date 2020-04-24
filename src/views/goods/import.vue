@@ -117,7 +117,7 @@ export default {
             showFileList: false,
             loading: false,
             showImport: true,
-            importing: false
+            importing: false,
         }
     },
     computed:{
@@ -131,11 +131,7 @@ export default {
     },
     methods: {
         downloadTemplate() {
-            let a = document.createElement("a");
-
-            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`);
-            a.setAttribute("target", "_blank");
-            a.click();
+          window.location.href = location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`
         },
         renovate() {
             this.getList()

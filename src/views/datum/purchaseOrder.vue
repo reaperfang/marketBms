@@ -1,7 +1,8 @@
 <template>
-    <div class="p_container">
+<div>
+    <div class="p_container p_channel">
         <div class="clearfix">
-          <div class="fr">
+          <div class="fr fr_channel">
             <el-radio-group class="fr" v-model="visitSourceType" @change="all">
               <el-radio-button class="btn_bor" label="0" v-permission="['数据', '订单交易', '全部']">全部</el-radio-button>
               <el-radio-button class="btn_bor" label="1" v-permission="['数据', '订单交易', '小程序']">小程序</el-radio-button>
@@ -11,6 +12,8 @@
             </el-radio-group>
           </div>
        </div>
+    </div>
+    <div class="p_container">
         <div class="pane_container">
             <p class="p_title">交易总况：</p>
             <div class="order_list">
@@ -55,16 +58,22 @@
                 </div>
             </div>
             <div class="c_line">
-                <span class="c_title">交易趋势（单）</span>
-                <div>
+                <span class="c_title">交易趋势（单）：</span>
+                <div class="line_div">
                     <span class="c_label">筛选日期：</span>
-                    <el-radio-group v-model="nearDay" @change="changeDayM">
-                        <el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>
-                        <el-radio-button class="btn_bor" label="4">自定义</el-radio-button>
-                    </el-radio-group>
-                    <div class="input_wrap" v-if="nearDay == 4">
+                    <!--<el-radio-group v-model="nearDay" @change="changeDayM">-->
+                        <!--<el-radio-button class="btn_bor" label="7">最近7天</el-radio-button>-->
+                        <!--<el-radio-button class="btn_bor" label="15">最近15天</el-radio-button>-->
+                        <!--<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>-->
+                        <!--<el-radio-button class="btn_bor" label="4">自定义</el-radio-button>-->
+                    <!--</el-radio-group>-->
+					<div class="radio-group">
+						<span @click="changeDayM(7)" :class="nearDay == 7 ? 'active' : ''">最近7天</span>
+						<span @click="changeDayM(15)" :class="nearDay == 15 ? 'active' : ''">最近15天</span>
+						<span @click="changeDayM(30)" :class="nearDay == 30 ? 'active' : ''">最近30天</span>
+						<span @click="changeDayM(4)" :class="nearDay == 4 ? 'active' : ''">自定义時間</span>
+					</div>
+                    <div class="input_wrap" v-show="nearDay == 4">
                         <el-date-picker
                             v-model="range"
                             type="datetimerange"
@@ -81,6 +90,7 @@
             </div>
             <ip4Chart :title="'测试图表'" ref="ip4"></ip4Chart>
         </div>
+    </div>
     </div>
 </template>
 <script>
@@ -108,7 +118,8 @@ export default {
             nonPaymentData:[],
             paymentData:[],
             orderProbabilityData:[],
-            isPc:false
+            isPc:false,
+			classId:7
         }
     },
     components:{ip4Chart},
@@ -138,7 +149,8 @@ export default {
             this.getTradingTrend()
         },
         //切换天数
-        changeDayM(){
+        changeDayM(val){
+        	this.nearDay = val;
             if(this.nearDay != 4){
                 this.startTime = ""
                 this.endTime = ""
@@ -219,6 +231,31 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+.radio-group{
+	display: inline-block;
+}
+.radio-group span{
+	display: inline-block;
+	font-size: 14px;
+	background-color: #fff;
+	line-height: 14px;
+	padding: 6px 29px;
+	cursor: pointer;
+	color: #B6B5C8;
+}
+.radio-group span.active{
+	color:#655EFF;
+	background-color: #E6E4FF;
+}
+.p_channel{
+    padding:0px;
+    margin-bottom:20px;
+    .fr_channel{
+        float:left;
+        margin-left:38px;
+    }
+}
 .p_container{
     padding: 20px;
     background-color: #fff;
@@ -227,6 +264,8 @@ export default {
         padding: 23px 38px;
         .p_title{
             font-size: 16px;
+            font-weight: bold;
+            color: #474C53;
         }
         .p_blocks{
             width: 900px;
@@ -240,17 +279,17 @@ export default {
             margin: 5px 0;
         }
         .p_item{
-            width: 176px;
+            width: 200px;
             height: 86px;
             border: 1px solid #CCCCCC;
-            margin: 0 34px 12px 0;
-            border-radius:4px;
+            margin: 0 14px 12px 0;
+            border-radius: 4px;
             img{
                 margin: 19px 0 0 8px;
             }
             div{
                 width: 105px;
-                margin:19px 6px 0 0;
+                margin:19px 19px 0 0;
                 p{
                     text-align: center;
                     &:last-child{
@@ -263,27 +302,29 @@ export default {
         .c_line{
             padding-top: 30px;
             border-top: 1px dashed #D3D3D3;
-            display: flex;
-            justify-content:space-between;
+            // display: flex;
+            // justify-content:space-between;
+            .c_title{
+                font-weight: bold;
+                color: #474C53;
+                font-size: 16px;
+            }
+            .c_label{
+                color: #474C53;
+            }
             div{
-                &.c_title{
-                    font-weight: bold;
-                    color: #474C53;
-                }
-                &.c_label{
-                    margin-right: 30px;
-                    color: #474C53;
+                &.line_div{
+                    margin-top:30px;
                 }
                 .input_wrap{
                     width: 220px;
-                    display: block;
-                    margin-left:35px;
-                    margin-top:10px;
+                    margin-left:10px;
+                    display: inline-block;
                 }
             }
         }
         .order_list{
-            width: 866px;
+            width: 1080px;
             margin: 22px 0;
             border-top: 1px solid #CACFCB;
             .order_line{
@@ -293,6 +334,9 @@ export default {
                 height: 60px;
                 line-height: 60px;
                 border-bottom: 1px solid #CACFCB;
+                div{
+                    flex: 1;
+                }
                 .order_img{
                     margin:20px 5px 0 0;
                 }

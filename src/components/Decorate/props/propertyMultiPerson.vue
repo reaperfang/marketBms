@@ -12,7 +12,7 @@
           <ul>
             <template>
               <template v-for="(item, key) of list">
-                <li :key="key" v-if="item.status !== 2" :title="item.activeName">
+                <li :key="key" :title="item.activeName">
                   <img :src="item.mainImage" alt="">
                   <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
                 </li>
@@ -156,7 +156,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected" @dialogClosed="dialogClosed"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="echoList" @dialogDataSelected="dialogDataSelected" @dialogClosed="dialogClosed"></component>
   </el-form>
 </template>
 
@@ -197,6 +197,7 @@ export default {
 
       },
       list: [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
@@ -242,6 +243,17 @@ export default {
     'ruleForm.sortRule'(newValue) {
         this.fetch();
     },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({activityId: item.activityId});
+        })
+      },
+      deep: true
+    }
   },
   methods: {
 
@@ -310,7 +322,7 @@ export default {
   text-align: left;
 }
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }

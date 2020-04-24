@@ -168,7 +168,9 @@ export default {
               }
               this.$refs.scrollContent.style.width = width + 85 + "px";
             }else{
-              this.$refs.scrollContent.style.width ='auto'
+              if(this.$refs.scrollContent) {
+                this.$refs.scrollContent.style.width ='auto'
+              }
             }
           })
         }

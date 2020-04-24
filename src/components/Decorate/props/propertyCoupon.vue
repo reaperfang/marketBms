@@ -61,7 +61,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="list"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="echoList"></component>
   </el-form>
 </template>
 
@@ -88,6 +88,7 @@ export default {
 
       },
       list: [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
@@ -127,6 +128,17 @@ export default {
     /* 监听显示个数 */
     'ruleForm.showNumber'(newValue) {
       this.fetch();
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({id: item});
+        })
+      },
+      deep: true
     }
   },
   methods: {

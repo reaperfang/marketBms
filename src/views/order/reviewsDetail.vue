@@ -58,6 +58,7 @@
                             <video width="51" controls="controls">
                             <source :src="item.image" type="video/ogg">
                             <source :src="item.image" type="video/mp4">
+                            <source :src="item.image" type="video/mov">
                             Your browser does not support the video tag.
                             </video>
                             <div class="over">

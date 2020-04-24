@@ -15,7 +15,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label prop="name">
-            <el-button type="primary" @click="fetch">搜 索</el-button>
+            <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜 索</el-button>
+            <el-button type="text" style="width:34px;" @click="clearInvalidData">清除失效数据</el-button>
           </el-form-item>
       </el-form>
     </div>
@@ -178,6 +179,16 @@ export default {
     getRowKey(row) {
       return row.id
     },
+
+     /* 清除失效数据 */
+    clearInvalidData() {
+      this.tableData.forEach((row, index) => {
+        if(!row.fakeData && (row.status === 0 || row.status === -1)) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, false);
+        }
+      })
+      this.$message.success('清除成功！');
+    }
   }
 };
 </script>
@@ -185,6 +196,14 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog__body{
   min-height: 400px;
+}
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
 }
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
