@@ -131,7 +131,7 @@
                             prop="salePrice"
                             label="商品单价">
                             <template  slot-scope="scope">
-                                {{scope.row.salePrice || scope.row.goodsPrice}}
+                                {{scope.row.salePrice}}
                             </template>
                         </el-table-column>
                         <el-table-column
