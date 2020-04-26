@@ -60,7 +60,7 @@
                                 <i class="el-icon-check"></i>
                             </label>
                             <span class="image-item-actions">
-                                <span @click="imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
+                                <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                 <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
                             </span>
                         </div>
@@ -2586,6 +2586,17 @@ export default {
                         productCatalogInfoId: ''
                     })
 
+                    if(this.ruleForm.other) {
+                        params = Object.assign({}, params, {
+                            productUnit: params.otherUnit
+                        })
+                    } else {
+                        let item = this.unitList.find(val => val.id == this.ruleForm.productUnit)
+
+                        params = Object.assign({}, params, {
+                            productUnit: item && item.name || ''
+                        })
+                    }
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
