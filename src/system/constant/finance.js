@@ -128,8 +128,9 @@ export default {
     ],
     //分佣明细---业务类型-------------------------
     businessTypeList:[
-        { value: '-1', label: '全部' },
-        { value: '1', label: '分销结算' },
-        { value: '2', label: '分销体现' }
+        { value: 0, label: '全部' },
+        { value: 1, label: '分销结算' },
+        { value: 2, label: '申请提现' },
+        { value: 3, label: '提现失败' }
     ],
 }
