@@ -14,15 +14,18 @@
 
     <ul class="demo_list tile-list n3" v-if="selectedItem" v-calcHeight="160+78+40+22">
       <li>
-        <img :src="require('@/assets/images/shop/style/goodsDetail'+ selectedItem.type +'.png')" alt="">
+        <img v-if="require('@/assets/images/shop/style/goodsDetail'+ selectedItem.type +'.png').default" :src="require('@/assets/images/shop/style/goodsDetail'+ selectedItem.type +'.png').default" alt="">
+        <img v-else :src="require('@/assets/images/shop/style/goodsDetail'+ selectedItem.type +'.png')" alt="">
         <p>商品详情</p>
       </li>
       <li>
-        <img :src="require('@/assets/images/shop/style/shoppingCar'+ selectedItem.type +'.png')" alt="">
+        <img v-if="require('@/assets/images/shop/style/shoppingCar'+ selectedItem.type +'.png').default" :src="require('@/assets/images/shop/style/shoppingCar'+ selectedItem.type +'.png').default" alt="">
+        <img v-else :src="require('@/assets/images/shop/style/shoppingCar'+ selectedItem.type +'.png')" alt="">
         <p>购物车</p>
       </li>
       <li>
-        <img :src="require('@/assets/images/shop/style/orderDetail'+ selectedItem.type +'.png')" alt="">
+        <img v-if="require('@/assets/images/shop/style/orderDetail'+ selectedItem.type +'.png').default" :src="require('@/assets/images/shop/style/orderDetail'+ selectedItem.type +'.png').default" alt="">
+        <img v-else :src="require('@/assets/images/shop/style/orderDetail'+ selectedItem.type +'.png')" alt="">
         <p>订单详情</p>
       </li>
     </ul>
