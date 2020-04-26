@@ -2586,6 +2586,17 @@ export default {
                         productCatalogInfoId: ''
                     })
 
+                    if(this.ruleForm.other) {
+                        params = Object.assign({}, params, {
+                            productUnit: params.otherUnit
+                        })
+                    } else {
+                        let item = this.unitList.find(val => val.id == this.ruleForm.productUnit)
+
+                        params = Object.assign({}, params, {
+                            productUnit: item && item.name || ''
+                        })
+                    }
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
