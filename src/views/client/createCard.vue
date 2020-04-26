@@ -610,9 +610,9 @@ export default {
             message: '请输入使用须知',
             type: 'warning'
           });
-        }else if(this.ruleForm.phone == ""){
+        }else if(!this.isPhone(this.ruleForm.phone)){
           this.$message({
-            message: '请输入客服电话',
+            message: '请正确输入客服电话',
             type: 'warning'
           });
         }else{
@@ -620,6 +620,13 @@ export default {
         }
       }else {
         this.excuteSave();
+      }
+    },
+    isPhone(phone) {
+      if((/^1[3456789]\d{9}$/.test(phone))) {
+        return true;
+      }else{
+        return false;
       }
     },
     excuteSave() {
