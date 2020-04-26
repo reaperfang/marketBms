@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '客户余额', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -49,7 +49,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '客户余额', '默认页面', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()'>导出</el-button>
         </el-tooltip>
       </div>
       <el-table
@@ -85,6 +85,9 @@
         <el-table-column
           prop="businessType"
           label="业务类型">
+          <template slot-scope="scope">
+            {{businessTypeList[scope.row.businessType].label}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="tradeAmount"
@@ -106,7 +109,7 @@
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -134,8 +137,10 @@ export default {
         userType:'resellerSn', // 分佣员类型
         userValue:'', // 分佣员类型对应值
         tradeDetailSn:'', // 交易流水号
-        businessType:'-1', // 业务类型
+        businessType:0, // 业务类型
         timeValue:'', // 交易时间
+        startIndex:1,
+        pageSize:10
       },
       dataList:[ ],
       total:0,
@@ -173,7 +178,7 @@ export default {
     init(){
       let query = {
         tradeDetailSn:this.ruleForm.tradeDetailSn,
-        businessType:this.ruleForm.businessType == '-1' ? null : this.ruleForm.businessType,
+        businessType:this.ruleForm.businessType == '0' ? null : this.ruleForm.businessType,
         startTime:'',
         endTime:'',
         resellerSn: '',
@@ -195,7 +200,8 @@ export default {
       return query;
     },
 
-    fetch(){
+    fetch(num){
+      this.ruleForm.startIndex = num || this.ruleForm.startIndex
       let query = this.init();
         this._apis.finance.getCommissionLIst(query).then((response)=>{
           this.dataList = response.list
@@ -206,8 +212,8 @@ export default {
       })
     },
 
-    onSubmit(){
-      this.fetch()
+    onSubmit(num){
+      this.fetch(num)
     },
     //重置
     resetForm(){
@@ -215,8 +221,10 @@ export default {
         userType:'resellerSn', // 分佣员类型
         userValue:'', // 分佣员类型对应值
         tradeDetailSn:'', // 交易流水号
-        businessType:'-1', // 业务类型
+        businessType:0, // 业务类型
         timeValue:'', // 交易时间
+        startIndex:1,
+        pageSize:10
       },
       this.fetch()
     },
