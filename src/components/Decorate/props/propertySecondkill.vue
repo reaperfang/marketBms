@@ -2,19 +2,19 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="选择活动" prop="goods">
+        <div class="goods_list" v-loading="loading">
+          <ul>
+            <li v-for="(item, key) of list" :key="key" :title="item.activityName">
+              <img :src="item.goodsImgUrl" alt="">
+              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            </li>
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectSecondkill'">
+              <i class="inner"></i>
+            </li>
+          </ul>
+        </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       </el-form-item>
-      <div class="goods_list" v-loading="loading">
-        <ul>
-          <li v-for="(item, key) of list" :key="key" :title="item.activityName">
-            <img :src="item.goodsImgUrl" alt="">
-            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-          </li>
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectSecondkill'">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
-      <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
@@ -123,14 +123,13 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="echoList" @dialogDataSelected="dialogDataSelected"></component>
   </el-form>
 </template>
 
 <script>
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectSecondkill from '@/views/shop/dialogs/decorateDialogs/dialogSelectSecondkill';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertySecondkill',
   mixins: [propertyMixin],
@@ -159,6 +158,7 @@ export default {
 
       },
       list: [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
@@ -185,6 +185,17 @@ export default {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({activityId: item});
+        })
+      },
+      deep: true
     }
   },
   methods: {
@@ -224,15 +235,8 @@ export default {
 /deep/.el-form-item__label{
   text-align: left;
 }
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
-}
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }

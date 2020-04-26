@@ -7,9 +7,8 @@
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
               <el-option label="订单编号" value="code"></el-option>
               <el-option label="商品名称" value="goodsName"></el-option>
-              <el-option label="用户昵称" value="memberName"></el-option>
-              <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-              <el-option label="收货人" value="receivedName"></el-option>
+              <!--<el-option label="商品SPU编码" value="code"></el-option>
+              <el-option label="商品SKU编码" value="goodsInfoCode"></el-option>-->
             </el-select>
           </el-input>
         </el-form-item>
@@ -22,6 +21,20 @@
             <el-option label="WAP" :value="4"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label>
+          <el-input placeholder="请输入内容" v-model="listQuery.searchValue2" class="input-with-select">
+            <el-select v-model="listQuery.searchType2" slot="prepend" placeholder="请输入">
+              <el-option label="用户ID" value="memberSn"></el-option>
+              <el-option label="用户昵称" value="memberName"></el-option>
+              <el-option label="收货人姓名" value="receivedName"></el-option>
+              <el-option label="收货人联系电话" value="receivedPhone"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员ID" value="resellerInfoId"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员姓名" value="resellerName"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员昵称" value="resellerNick"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员手机号" value="resellerPhone"></el-option>
+            </el-select>
+          </el-input>
+        </el-form-item>
         <el-form-item label="订单类型">
           <el-select v-model="listQuery.orderType" placeholder>
             <el-option label="全部" value></el-option>
@@ -29,6 +42,7 @@
             <el-option label="拼团订单" :value="1"></el-option>
             <el-option label="优惠套装订单" :value="2"></el-option>
             <el-option label="赠品订单" :value="4"></el-option>
+            <el-option v-if="resellConfigInfo" label="分佣订单" :value="5"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="支付方式">
@@ -104,7 +118,7 @@
       </div>
       <el-tabs class="tabs" v-model="activeName">
         <el-tab-pane v-permission="['订单', '订单查询', '商城订单']" label="商城订单" name="shop">
-          <shop ref="shop" :params="listQuery" @batchSupplementaryLogistics="batchSupplementaryLogistics"></shop>
+          <shop :checkedLength.sync="checkedLength" ref="shop" :params="listQuery" @batchSupplementaryLogistics="batchSupplementaryLogistics"></shop>
         </el-tab-pane>
         <!-- <el-tab-pane label="积分商城订单" name="integralShop">
           <integralShop></integralShop>
@@ -135,6 +149,8 @@ export default {
       listQuery: {
         searchType: "code",
         searchValue: "",
+        searchType2: "memberSn",
+        searchValue2: "",
         code: "", // 订单编号
         goodsName: "", // 商品名称
         memberName: "", // 用户昵称
@@ -148,10 +164,26 @@ export default {
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
         orderTimeValue: "",
       },
-      activeName: "shop"
+      activeName: "shop",
+      resellConfigInfo: null
     };
   },
   created() {
+    if(this.$route.query.orderType) {
+      let orderType = +this.$route.query.orderType
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          orderType
+      })
+    }
+    if(this.$route.query.resellerInfoId) {
+      let resellerInfoId = this.$route.query.resellerInfoId
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          searchType2: 'resellerInfoId',
+          searchValue2: resellerInfoId
+      })
+    }
     console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
@@ -170,8 +202,18 @@ export default {
               orderStatus
           })
       }
+    this.checkCreditRule()
   },
   methods: {
+    checkCreditRule() {
+      // 获取分销商设置
+      this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+
+          if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
+      }).catch((error) => {
+          console.error(error);
+      });
+    },
     batchSendGoods() {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
             this.confirm({title: '提示', icon: true, text: '请选择需要发货的订单'})
@@ -189,7 +231,7 @@ export default {
           return
       }
       if(this.$refs['shop'].list.filter(val => val.checked).filter(val => val.isFillUp != 1).length) {
-        this.confirm({title: '提示', icon: true, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
+        this.confirm({title: '提示', icon: true, showCancelButton: false, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
         return
       }
       this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))
@@ -258,7 +300,15 @@ export default {
         });
     },
     onSubmit() {
-      this.$refs["shop"].getList();
+      this.listQuery = Object.assign({}, this.listQuery, {
+        startIndex: 1,
+        pageSize: 20,
+      })
+      this.checkedLength = 0
+      this.$refs["shop"].getList({
+        startIndex: 1,
+        pageSize: 20
+      });
     },
     resetForm(formName) {
         this.listQuery = {
@@ -275,8 +325,11 @@ export default {
         sendType: "",
         orderStatus: "",
         searchTimeType: "createTime",
-        orderTimeValue: ""
+        orderTimeValue: "",
+        startIndex: 1,
+        pageSize: 20,
       }
+      this.checkedLength = 0
 
       this.$refs["shop"].getList(Object.assign({}, this.listQuery, {
         type: 'resetForm'
@@ -351,6 +404,8 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
+}
 </style>
 

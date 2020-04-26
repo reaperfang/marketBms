@@ -7,30 +7,30 @@
           <el-radio :label="2">自动获取</el-radio>
         </el-radio-group>
       </el-form-item>
-     <el-form-item label="选择活动" prop="goods">
-      </el-form-item>
-      <div class="goods_list" prop="goods" v-loading="loading">
-        <ul>
-          <template>
-            <template v-for="(item, key) of list">
-              <li :key="key" v-if="item.status !== 2" :title="item.activeName">
-                <img :src="item.mainImage" alt="">
-                <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
-              </li>
+     <el-form-item :label="ruleForm.addType === 1 ? '选择活动' : ''" prop="goods">
+        <div class="goods_list" prop="goods" v-loading="loading">
+          <ul>
+            <template>
+              <template v-for="(item, key) of list">
+                <li :key="key" :title="item.activeName">
+                  <img :src="item.mainImage" alt="">
+                  <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
+                </li>
+              </template>
             </template>
-          </template>
-          <!-- <template v-else-if="ruleForm.addType === 2">
-            <li v-for="(item, key) of []" :key="key">
-              <img :src="item.image" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            <!-- <template v-else-if="ruleForm.addType === 2">
+              <li v-for="(item, key) of []" :key="key">
+                <img :src="item.image" alt="">
+                <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+              </li>
+            </template> -->
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'" v-if="ruleForm.addType === 1">
+              <i class="inner"></i>
             </li>
-          </template> -->
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectMultiPerson'" v-if="ruleForm.addType === 1">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
-      <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
+          </ul>
+        </div>
+        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
+      </el-form-item>
       <el-form-item label="显示个数" v-if="ruleForm.addType === 2" prop="showNumber">
         <el-input  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
         <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最大设置为30个</p>  
@@ -144,7 +144,7 @@
         <!-- <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input> -->
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonTextPrimary"></el-input>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideSaledGoods">
+      <el-form-item label="更多设置" prop="hideSaledGoods" v-if="ruleForm.addType == 1">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
         <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
@@ -156,7 +156,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected" @dialogClosed="dialogClosed"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="echoList" @dialogDataSelected="dialogDataSelected" @dialogClosed="dialogClosed"></component>
   </el-form>
 </template>
 
@@ -164,7 +164,6 @@
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectMultiPerson from '@/views/shop/dialogs/decorateDialogs/dialogSelectMultiPerson';
 import dialogMultiPersonDemo from '@/views/shop/dialogs/decorateDialogs/dialogMultiPersonDemo';
-import uuid from 'uuid/v4';
 export default {
   name: 'propertyMultiPerson',
   mixins: [propertyMixin],
@@ -198,6 +197,7 @@ export default {
 
       },
       list: [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
@@ -230,7 +230,8 @@ export default {
     },
     'ruleForm.addType'(newValue) {
         if(newValue == 2) {
-            this.fetch();
+          this.ruleForm.hideSaledGoods = false;
+          this.fetch();
         }else{
           this.list = [];
           this.fetch();
@@ -242,6 +243,17 @@ export default {
     'ruleForm.sortRule'(newValue) {
         this.fetch();
     },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({activityId: item.activityId});
+        })
+      },
+      deep: true
+    }
   },
   methods: {
 
@@ -309,15 +321,8 @@ export default {
 /deep/.el-form-item__label{
   text-align: left;
 }
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
-}
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }

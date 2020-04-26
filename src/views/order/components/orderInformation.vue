@@ -1,6 +1,6 @@
 <template>
     <div class="order-information">
-        <el-row>
+        <el-row type="flex">
             <el-col :span="8">
                 <div class="grid-content lefter">
                     <div class="item">
@@ -14,7 +14,7 @@
                             <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
-                    <p v-if="orderInfo.orderStatus != 5" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
+                    <p v-if="orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
                 </div>
             </el-col>
             <el-col :span="8"><div class="grid-content center">
@@ -43,28 +43,100 @@
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
                 <div class="item">
-                    <div class="label">本单获得</div>
-                    <div class="value">
-                        <template v-if="rewardScore && gift && gainCouponList && gainCouponCodeList">
-                            <p>积分 {{rewardScore}}</p>
-                            <p style="word-break: break-all;">赠品 {{gift || '--'}}</p>
-                            <p style="word-break: break-all;">优惠券 {{gainCouponList || '--'}}</p>
-                            <p style="word-break: break-all;">优惠码 {{gainCouponCodeList || '--'}}</p>
-                        </template>
-                        <template v-else>
-                            无
+                    <div class="label">本单奖励</div>
+                    <div class="value gain">
+                        <template>
+                            <div class="gain-item">
+                                <div class="gain-item-lefter">积分：</div>
+                                <div class="gain-item-righter">{{rewardScore + ' 分' || '无'}}</div>
+                            </div>
+                            <div class="gain-item gift">
+                                <div class="gain-item-lefter">赠品：</div>
+                                <div class="gain-item-righter">
+                                    <!--{{gift || '无'}}-->
+                                    <template v-if="giftList && giftList.length">
+                                        <span>{{giftList[0].appGift.goodsName}} ×{{giftList[0].goodsQuantity}}</span>
+                                        <span @click="moreGiftHandler" class="pointer see-more-gift">查看更多</span>
+                                    </template>
+                                    <template v-else>
+                                        无
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="gain-item coupon">
+                                <div class="gain-item-lefter">优惠券：</div>
+                                <div class="gain-item-righter">
+                                    <template v-if="couponList && couponList.length">
+                                        <div class="coupon-box">
+                                            <div v-if="index == 0" class="coupon" v-for="(item, index) in couponList" :key="index">
+                                                <div class="item lefter">
+                                                    <template v-if="item.appCoupon.useType == 0">
+                                                        <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                        <p>元</p>
+                                                    </template>
+                                                    <template v-else>
+                                                        <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                                        <p>折</p>
+                                                    </template>
+                                                </div>
+                                                <div class="item righter">
+                                                    <p>{{item.appCoupon.name}}</p>
+                                                    <p class="limit">使用时限:{{item.appCoupon.effectBeginTime | timeFilter}}-{{item.appCoupon.endTime | timeFilter}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p v-if="couponList && (couponList.length > 1)" class="more"><span @click="moreHandler(1)" class="pointer">查看更多</span></p>
+                                    </template>
+                                    <template v-else>
+                                        无
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="gain-item coupon-code">
+                                <div class="gain-item-lefter">优惠码：</div>
+                                <div class="gain-item-righter">
+                                    <template v-if="couponCodeList && couponCodeList.length">
+                                        <div class="coupon-box">
+                                            <div class="coupon-code" v-if="index == 0" v-for="(item, index) in couponCodeList" :key="index">
+                                                <div class="coupon-code-header">优惠码 {{item.couponCode}}</div>
+                                                <div class="coupon">
+                                                    <div class="item lefter coupon-code-list-lefter">
+                                                        <template v-if="item.appCoupon.useType == 0">
+                                                            <p>{{item.appCoupon.useTypeFullcut}}</p>
+                                                            <p>元</p>
+                                                        </template>
+                                                        <template v-else>
+                                                            <p>{{item.appCoupon.useTypeDiscount*10}}</p>
+                                                            <p>折</p>
+                                                        </template>
+                                                    </div>
+                                                    <div class="item righter coupon-code-list-righter">
+                                                        <p>{{item.appCoupon.name}}</p>
+                                                        <p class="limit">使用时限:{{item.startTime | timeFilter}}-{{item.endTime | timeFilter}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p v-if="couponCodeList && (couponCodeList.length > 1)" class="more"><span @click="moreHandler(2)" class="pointer">查看更多</span></p>
+                                    </template>
+                                    <template v-else>
+                                        无
+                                    </template>
+                                </div>
+                            </div>
                         </template>
                     </div>
                 </div>
             </div></el-col>
             <el-col :span="8"><div class="grid-content righter">
-                <div class="item">
+                <div v-if="invoiceOpen == 1"  class="item">
                     <div class="label">发票信息</div>
                     <div class="value">
                         <template v-if="orderInfo.isInvoice == 1">
-                            <p>发票类型 {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
-                            <p>发票抬头 {{orderInfo.invoiceTitle}}</p>
-                            <p>发票内容 商品明细</p>
+                            <p>发票类型： {{orderInfo.invoiceType | invoiceTypeFilter}}</p>
+                            <p>发票抬头： {{orderInfo.invoiceTitle}}</p>
+                            <p v-if="orderInfo.invoiceTaxpayerCode">纳税人识别号： {{orderInfo.invoiceTaxpayerCode}}</p>
+                            <p>发票内容： 商品明细</p>
                             <!-- <p>电子发票将在订单完成后1-2天内开具</p> -->
                         </template>
                         <template v-else>
@@ -74,7 +146,7 @@
                 </div>
                 <div class="item">
                     <div class="label">用户备注</div>
-                    <div class="value">{{orderInfo.buyerRemark || '--'}}</div>
+                    <div class="value">{{orderInfo.buyerRemark || '无备注'}}</div>
                 </div>
                 <div class="item remark-box">
                     <div class="label">商户备注</div>
@@ -113,7 +185,7 @@
                                 <img width="66" :src="scope.row.goodsImage" alt="">
                             </div>
                             <div class="item">
-                                <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                <p :title="scope.row.goodsName" class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
                                 <p class="goods-specs">{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
                             </div>
                         </div>
@@ -184,7 +256,7 @@
                     <template v-if="orderDetail.orderInfo.activityListJson">
                         <div class="row" v-for="(item, index) in JSON.parse(orderDetail.orderInfo.activityListJson)" :key="index">
                             <div class="col">{{`${item.activityTypeName}（${item.name}）`}}:</div>
-                            <div class="col">- ¥{{item.reduceMoney || '0.00'}}</div>
+                            <div class="col">- ¥{{item.reduceMoney && parseFloat(item.reduceMoney) && parseFloat(item.reduceMoney).toFixed(2) || '0.00'}}</div>
                         </div>
                     </template>
                     <div class="row">
@@ -201,7 +273,7 @@
                     </div>
                     <div class="row">
                         <div class="col">积分抵现:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
+                        <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
                     </div>
                     <!-- <div class="row align-center">
                         <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
@@ -240,7 +312,7 @@
                         <div :style="{width: changePriceVisible ? '209px' : '199px'}" class="col">应收金额:</div>
                         <div class="col">
                             <div class="yingshow-right-box">
-                                <span>¥{{yingshow}}</span>
+                                <span>¥{{orderDetail.orderInfo.receivableMoney}}</span>
                                 <span v-if="this.orderDetail.orderInfo.orderStatus == 0" @click="changePriceVisible = true" class="yingshou-change">改价</span>
                                 <el-input v-if="changePriceVisible" style="width: 112px; margin-right: 6px; margin-left: 6px;" type="number" v-model="yingshouChangeMoney" placeholder="请输入金额"></el-input>
                                 <el-button v-if="changePriceVisible" @click="yingshouSubmit" type="primary">确定</el-button>
@@ -253,33 +325,16 @@
                     </div>
                     <div class="row strong">
                         <div class="col">第三方支付:</div>
-                        <div class="col">¥{{orderDetail.orderInfo.actualMoney || 0}}</div>
+                        <template v-if="orderDetail.orderInfo.payWay == 2">
+                            <div v-if="orderDetail.orderInfo.orderStatus == 6" class="col">¥{{orderDetail.orderInfo.actualMoney || '0.00'}}</div>
+                            <div v-else class="col"></div>
+                        </template>
+                        <template v-else>
+                            <div v-if="orderDetail.orderInfo.orderStatus != 0" class="col">¥{{orderDetail.orderInfo.actualMoney || '0.00'}}</div>
+                            <div v-else class="col"></div>
+                        </template>
                     </div>
                 </section>
-            </div>
-            <div class="operate-record">
-                <p class="header">操作记录</p>
-                <el-table
-                    :data="orderDetail.orderOperationRecordList"
-                    style="width: 100%"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
-                    <el-table-column
-                        label="操作"
-                        width="180">
-                        <template slot-scope="scope">
-                            {{scope.row.operationType | operationTypeFilter}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="createUserName"
-                        label="操作人"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="createTime"
-                        label="操作时间">
-                    </el-table-column>
-                </el-table>
             </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" :ajax="ajax" :sendGoods="sendGoods" @submit="submit"></component>
@@ -289,6 +344,8 @@
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 import ChangePriceDialog from '@/views/order/dialogs/changePriceDialog'
+import gainCouponDialog from '@/views/order/dialogs/gainCouponDialog'
+import gainGiftDialog from '@/views/order/dialogs/gainGiftDialog'
 //consultType 协商类型 1加价,2减价
 export default {
     data() {
@@ -333,12 +390,17 @@ export default {
             gainCouponList: '',
             gainCouponCodeList: '',
             //replacePayWechatNames: ''
-            yingshouChangeMoney: ''
+            yingshouChangeMoney: '',
+            invoiceOpen: 1,
+            couponList: [],
+            couponCodeList: [],
+            giftList: []
         }
     },
     created() {
         //this.getOrderPayRecordList()
         this.getGain()
+        this.getShopInfo()
     },
     watch: {
         orderInfo: {
@@ -415,6 +477,10 @@ export default {
                 return this.orderDetail.orderPayRecordList.filter(val => val.transactionCode).length
             }
             return 0
+        },
+        cid(){
+          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          return shopInfo.id
         }
     },
     methods: {
@@ -430,6 +496,36 @@ export default {
         //         this.$message.error(error);
         //     }) 
         // },
+        moreGiftHandler() {
+            this.currentData = this.giftList
+            this.currentDialog = 'gainGiftDialog'
+            this.dialogVisible = true
+        },
+        moreHandler(code) {
+            let obj = {}
+
+            if(code == 1) {
+                obj.title = '优惠券'
+                obj.coupon = true
+                obj.couponList = this.couponList
+            } else {
+                obj.title = '优惠码'
+                obj.coupon = false
+                obj.couponCodeList = this.couponCodeList
+            }
+            this.currentData = obj
+            this.currentDialog = 'gainCouponDialog'
+            this.dialogVisible = true
+        },
+        getShopInfo(){
+          let id = this.cid
+
+          this._apis.set.getShopInfo({id:id}).then(response =>{
+            this.invoiceOpen = response.invoiceOpen
+          }).catch(error =>{
+            console.log(error)
+          })
+        },
         getGain() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
             console.log(this);
@@ -443,6 +539,9 @@ export default {
                 this.gift = res.giftList && res.giftList.map(val => val.appGift.goodsName).join(',') || ''
                 this.gainCouponList = res.couponList && res.couponList.map(val => val.appCoupon.name).join(',') || ''
                 this.gainCouponCodeList = res.couponCodeList && res.couponCodeList.map(val => val.appCoupon.name).join(',') || ''
+                this.couponList = res.couponList || []
+                this.couponCodeList = res.couponCodeList || []
+                this.giftList = res.giftList
             }).catch(error => {
                 this.$message.error(error);
             })
@@ -536,14 +635,14 @@ export default {
             }) 
         },
         yingshouSubmit() {
-            if(this.yingshouChangeMoney < 0) {
+            if(+this.yingshouChangeMoney < 0) {
                 this.$message({
                     message: '非法输入，仅支持输入非负数，请重新输入',
                     type: 'warning'
                 });
                 return
             }
-            if(this.yingshouChangeMoney < this.orderDetail.orderInfo.consumeBalanceMoney) {
+            if(+this.yingshouChangeMoney < +this.orderDetail.orderInfo.consumeBalanceMoney) {
                 this.$message({
                     message: '改价金额不小于余额实付金额',
                     type: 'warning'
@@ -551,7 +650,7 @@ export default {
                 return
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-                 consultMoney: this.yingshouChangeMoney}).then(res => {
+                 consultMoney: +this.yingshouChangeMoney}).then(res => {
                     this.changePriceVisible = false
                     this.$emit('getDetail')
                     this.currentDialog = 'ChangePriceDialog'
@@ -670,22 +769,24 @@ export default {
             }
         },
         orderStatusFilter(row) {
-            if(row.afterSaleStatus== 1 || row.afterSaleStatus== 2) {
-                if(row.orderAfterStatus == 1) {
-                    return '换货中'
-                } else if(row.orderAfterStatus == 2) {
-                    return '退款中'
-                }else if(row.orderAfterStatus == 3) {
-                    return '退货中'
-                }else if(row.orderAfterStatus == 4) {
-                    return '退款完成'
-                }else if(row.orderAfterStatus == 5) {
-                    return '换货完成'
-                }else if(row.orderAfterStatus == 6) {
-                    return '退货完成'
-                }
-            } else {
-                if(row.orderStatus == 0) {
+            if(row.afterSaleStatus== 1 || row.afterSaleStatus== 2 || row.orderAfterStatus == 0) {
+                if(row.orderAfterStatus == 0){
+            return '售后关闭'
+            }else if(row.orderAfterStatus == 1) {
+                        return '换货中'
+                    } else if(row.orderAfterStatus == 2) {
+                        return '退款中'
+                    }else if(row.orderAfterStatus == 3) {
+                        return '退货中'
+                    }else if(row.orderAfterStatus == 4) {
+                        return '退款完成'
+                    }else if(row.orderAfterStatus == 5) {
+                        return '换货完成'
+                    }else if(row.orderAfterStatus == 6) {
+                        return '退货完成'
+                    }
+                } else {
+                    if(row.orderStatus == 0) {
                     return '待付款'
                 } else if(row.orderStatus == 1) {
                     return '待成团'
@@ -698,10 +799,35 @@ export default {
                 } else if(row.orderStatus == 5) {
                     return '待收货'
                 } else if(row.orderStatus == 6) {
-                    return '完成'
+                    return '交易成功'
+                }
+                    }
+        },
+        timeFilter(value) {
+            if(value && value.split(/\s+/).length) {
+                return value.split(/\s+/)[0]
+            }
+
+            return value
+        },
+        goodsSpecsFilter(value) {
+            let _value
+            if(!value) return ''
+            if(typeof value == 'string') {
+                _value = JSON.parse(value)
+            }
+            let str = ''
+            for(let i in _value) {
+                if(_value.hasOwnProperty(i)) {
+                    str += i + '：'
+                    str += _value[i] + '，'
                 }
             }
-        }
+
+            str = str.replace(/^(.*)\，$/, '$1')
+
+            return str
+        },
     },
     props: {
         orderInfo: {
@@ -716,11 +842,38 @@ export default {
     components: {
         ReceiveInformationDialog,
         CouponDialog,
-        ChangePriceDialog
+        ChangePriceDialog,
+        gainCouponDialog,
+        gainGiftDialog
     }
 }
 </script>
 <style lang="scss" scoped>
+    .gain {
+        .gain-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            &.gift {
+                .gain-item-righter {
+                    display: flex;
+                    .see-more-gift {
+                        flex-shrink: 0;
+                    }
+                }
+            }
+            .gain-item-lefter {
+                width: 64px;
+                margin-right: 6px;
+            }
+            .more {
+                font-size:14px;
+                font-weight:400;
+                color:rgba(101,94,255,1);
+                text-align: right;
+            }
+        }
+    }
     .order-information {
         .blue {
             color: $globalMainColor;
@@ -759,7 +912,7 @@ export default {
                     margin-right: 20px;
                     flex-shrink: 0;
                     width: 84px;
-                    text-align: right;
+                    text-align: left;
                 }
                 .value {
                     color: #9FA29F;
@@ -770,7 +923,9 @@ export default {
     /deep/ .remark-box .el-textarea {
         width: 180px;
     }
-
+    .goods-list {
+        border-top: 1px solid #cacfcb;
+    }
     .goods-list, .operate-record {
             background-color: #fff;
             margin-top: 20px;
@@ -872,6 +1027,35 @@ export default {
         flex-shrink: 0;
     }
 }
+.coupon, .coupon-code {
+    .item.lefter {
+        flex-direction: column;
+    }
+    .item.righter {
+        flex-direction: column;
+    }
+    .limit {
+        font-size: 12px;
+    }
+}
+.coupon-code-list-lefter {
+    margin-top: 0!important;
+}
+.coupon-code-list-righter {
+    margin-top: 0!important;
+}
+.coupon-box {
+    min-width: 271px;
+}
+/deep/ .el-col-8 {
+    width: auto;
+    flex: 1;
+}
+.see-more-gift {
+    margin-left: 20px;
+    color: #655EFF;
+}
+
 </style>
 
 

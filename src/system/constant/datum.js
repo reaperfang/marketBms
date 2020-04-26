@@ -26,7 +26,7 @@ export default {
         {
             id: "004",
             url: require("@/assets/images/datum/c_04.png"),
-            color: "#3D434A",
+            color: "#FE5E7A",
             text: "下单商品数",
             num: 0
         },
@@ -105,6 +105,12 @@ export default {
             text: "未支付订单总金额",
             num: 0,
             unit: "元"
+        },
+        {
+            id: "04",
+            text: "",
+            num: '',
+            unit: ""
         }
     ],
     //订单交易-交易总况（支付）

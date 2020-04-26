@@ -2,10 +2,11 @@
 <div>
     <DialogBase :visible.sync="visible" @submit="submit" title="加入黑名单" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
+            <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
-                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon" v-if="data.couponList && data.couponList.length !== 0"></el-checkbox>
+                <el-checkbox v-model="checkCoupon" label="优惠券" class="fl marT10" @change="changeCoupon" v-if="couponList && couponList.length !== 0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCoupons" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -15,7 +16,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode" v-if="data.codeList && data.codeList.length !== 0"></el-checkbox>
+                <el-checkbox v-model="checkCode" label="优惠码" class="fl marT11" style="margin-left: 86px" @change="changeCode" v-if="codeList && codeList.length !== 0"></el-checkbox>
                 <div class="form_container fl">
                     <div class="a_d" v-for="(item,index) in selectedCodes" :key="index">
                         <span class="a_d_name">{{item.name}}</span>
@@ -27,7 +28,6 @@
             <div class="check_container">
                 <el-checkbox v-for="item in checks.slice(2,checks.length)" :key="item.id" v-model="item.checked" :label="item.name" class="check_item"></el-checkbox><br>
             </div>
-            <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
@@ -44,7 +44,7 @@
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
             <el-table
-                :data="data.couponList"
+                :data="couponList"
                 style="width: 100%"
                 ref="couponListTable"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -91,7 +91,7 @@
                     <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{!!data.couponList ? data.couponList.length:0}}条数据
+                    共{{!!couponList ? couponList.length:0}}条数据
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
         <div>
             <p class="user_id2">用户ID: {{ data.memberSn }}</p>
             <el-table
-                :data="data.codeList"
+                :data="codeList"
                 style="width: 100%"
                 ref="codeListTable"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
@@ -155,7 +155,7 @@
                     <el-checkbox v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
                 </div>
                 <div class="fr">
-                    共{{!!data.codeList ? data.codeList.length:0}}条数据
+                    共{{!!codeList ? codeList.length:0}}条数据
                 </div>
             </div>
         </div>
@@ -192,7 +192,15 @@ export default {
             checkAll: false,
             checkAll2: false,
             selectedCoupons: [],
-            selectedCodes: []
+            selectedCodes: [],
+            codeList: [],
+            couponList: []
+        }
+    },
+    watch: {
+        data(newValue, oldValue) {
+            this.getAllCoupons(newValue.id);
+            this.getAllCodes(newValue.id);
         }
     },
     methods: {
@@ -225,12 +233,12 @@ export default {
             }
         },
         handleChangeAll(val) {
-            this.data.couponList.forEach(row => {
+            this.couponList.forEach(row => {
                 this.$refs.couponListTable.toggleRowSelection(row,val);
             });
         },
         handleChangeAll2(val) {
-            this.data.codeList.forEach(row => {
+            this.codeList.forEach(row => {
                 this.$refs.codeListTable.toggleRowSelection(row,val);
             });
         },
@@ -411,7 +419,7 @@ export default {
         },
         deleteCoupon(index) {
             this.selectedCoupons.splice(index, 1);
-            this.data.couponList.forEach((row,i) => {
+            this.couponList.forEach((row,i) => {
                 if(i == index) {
                     this.$refs.couponListTable.toggleRowSelection(row, false);
                 }
@@ -425,7 +433,7 @@ export default {
         },
         deleteCode(index) {
             this.selectedCodes.splice(index, 1);
-            this.data.codeList.forEach((row,i) => {
+            this.codeList.forEach((row,i) => {
                 if(i == index) {
                     this.$refs.codeListTable.toggleRowSelection(row, false);
                 }
@@ -436,6 +444,26 @@ export default {
                     this.$refs.codeListTable.toggleRowSelection(row, false);
                 })
             }
+        },
+        getAllCoupons(id) {
+            this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1, startIndex: 1, pageSize: 999, t: Date.parse(new Date()) / 1000}).then((response) => {
+                this.couponList = [].concat(response.list);
+                this.couponList.map((item) => {
+                    this.$set(item, 'frozenNum',1);
+                })
+            }).catch((error) => {
+                console.log(error);
+            })
+            },
+        getAllCodes(id) {
+            this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1,startIndex: 1, pageSize: 999, t: Date.parse(new Date()) / 1000}).then((response) => {
+                this.codeList = [].concat(response.list);
+                this.codeList.map((item) => {
+                    this.$set(item, 'frozenNum', 1);
+                });
+            }).catch((error) => {
+                console.log(error);
+            })
         }
     },
     computed: {
@@ -466,6 +494,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/deep/ .el-table .cell{
+  padding-left: 16px;
+}
+/deep/ .el-table__body-wrapper{
+    overflow: auto;
+    height: 502px;
+}
 /deep/ .el-dialog__header{
     background: #f1f0ff;
     border-radius: 10px 10px 0 0;
@@ -479,6 +514,7 @@ export default {
     border-radius: 50%;
     line-height: 18px;
     margin-top: 5px;
+    margin-left: -12px;
 }
 /deep/ .el-input-number--small .el-input-number__increase{
     width: 18px;
@@ -489,14 +525,16 @@ export default {
     border-radius: 50%;
     line-height: 18px;
     margin-top: 5px;
+    margin-right: -24px;
 }
 /deep/ .el-input-number--small{
-    width: 94px;
+    width: 60px;
+    padding-left: 10px;
 }
 /deep/ .el-input-number--small .el-input__inner{
-    padding-left: 21px;
-    padding-right: 21px;
-    border: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #ddd;
     background: none;
 }
 /deep/ .el-dialog{
@@ -540,6 +578,7 @@ export default {
         }
         .a_d_delete{
             color: #FD4C2B;
+            margin-left: 40px
         }
     }
 }
@@ -559,7 +598,7 @@ export default {
 }
 .red{
     color: #F55858;
-    margin-top: 15px;
+    margin: 0 0 15px 15px;
 }
 .dialog-footer{
     margin-top: 20px;

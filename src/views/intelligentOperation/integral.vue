@@ -41,7 +41,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                    <el-button type="primary" class="minor_btn"  @click="goSearch(1)">查 询</el-button>
                     <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
                 </el-form-item>
                 <!-- <el-form-item class="fr marT20">
@@ -50,7 +50,7 @@
                 </el-form-item> -->
             </el-form>
             <div class="m_line clearfix">
-                <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占用户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>
+                <p class="fl">该筛选条件下：会员共计<span>{{memberCount || 0}}</span>人；占用户总数的<span>{{ratio ? (ratio*100).toFixed(2) : 0}}%</span>。</p>
                 <div class="fr marT20">
                     <!-- <el-button class="minor_btn" @click="reScreening()">重新筛选</el-button> -->
                     <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -68,14 +68,9 @@
                 :totalCount="listObj.totalSize">
             </ma3Table>
         </div>
-        <div v-if="listObj.members != undefined && note">
-            <p>运营建议:</p>
-            <p v-if="note == '1-5'" class="proposal"><b>"消耗次数1-5次"：</b>建议针对此类用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '5-10'" class="proposal"><b>"消耗次数5-10次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '10-15'" class="proposal"><b>"消耗次数10-15次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '15-10000000'" class="proposal"><b>"消耗次数15次以上"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '15-20'" class="proposal"><b>"消耗次数15-20次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
-            <p v-if="note == '50-100'" class="proposal"><b>"消耗次数50-100次"：</b>建议1-2个月内进行产品更新换代，让用户有新鲜感，针对此用户推荐“签到有礼”活动，来提升积分的赚取、从而促使其积分的消耗。</p> 
+        <div v-if="listObj.members != undefined && showNote">
+            <p>运营建议：</p>
+            <p class="proposal"><b>消耗次数{{note.label}} ：</b>{{note.suggest}}</p>
         </div>
         <div class="contents"></div>
         <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
@@ -114,9 +109,7 @@ export default {
             ratio:0, //会员占比
             listObj:{}, //表格数据
             totalCount:0,//总条数
-            consumTimes: [
-
-            ],
+            consumTimes: [ ],
             customType: [
                 {
                     id: null,
@@ -134,6 +127,7 @@ export default {
                 }
             ],
             note:'',
+            showNote:false,
             currentDialog:"",
             dialogVisible: false,
             currentData:{},
@@ -168,19 +162,26 @@ export default {
         },
         //
         //查询
-        goSearch(){
+        goSearch(num){
             this.form.loads = true
-            this.note = ''
-            let memberType = this.form.memberType;
-            let scorePaymentCountRange = this.form.scorePaymentCountRange;
-            this.form.scorePaymentCountRange == 'null' && (this.form.scorePaymentCountRange = null)
+            this.form.startIndex = num || this.form.startIndex
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
                 this.ratio = res.ratio;
                 this.listObj = res; //信息列表数据
                 this.totalCount = res.totalPage * this.form.pageSize;
                 this.form.loads = false
-                this.note = this.form.scorePaymentCountRange
+                // this.note = this.form.scorePaymentCountRange
+                 //切换消耗次数获取运营建议
+                for(let item of this.consumTimes){
+                    if(item.value == this.form.scorePaymentCountRange){
+                        this.note = {
+                            suggest:item.suggest,
+                            label:item.name
+                        }
+                        item.suggest != null && (this.showNote = true)
+                    }
+                }
             }).catch(error => {
                 this.$message.error(error);
             });
@@ -193,11 +194,12 @@ export default {
                       pages.push({
                           id:item.id,
                           value:item.minNum+'-'+ item.maxNum,
-                          name:item.name
+                          name:item.name,
+                          suggest:item.suggest
                       })
                   }
                   this.consumTimes = pages;
-                  this.form.scorePaymentCountRange = value
+                //   this.form.scorePaymentCountRange = value
             }).catch(error =>{
                
             })
@@ -213,6 +215,7 @@ export default {
                 startIndex:1,
                 pageSize:10
             }
+            this.showNote = false
             this.goSearch();
         },
         //重新筛选
@@ -236,7 +239,7 @@ export default {
             }else{
                 this._apis.data.integralConsumptionExport(data)
                 .then(res => {
-                    window.open(res);
+                    window.location.href = res
                 })
                 .catch(err=>{
                     this.$message.error(err);
@@ -255,6 +258,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3504
+*
+*/
+
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -280,6 +292,15 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
+	.minor_btn{
+		background-color: #655EFF;
+		color:#fff;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;

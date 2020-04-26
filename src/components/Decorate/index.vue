@@ -22,7 +22,6 @@ import widgetView from "./widgetView";
 import editView from "./editView";
 import propView from "./propView";
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 import widget from './widgetConfig'
 export default {
   name: "decorate",
@@ -48,7 +47,7 @@ export default {
   created() {
 
     //创建组件id
-    const id = uuid();
+    const id = uuidv4();
 
     //转换接口数据为可识别格式
     this.convertDecorateData(this.decoratePageData);

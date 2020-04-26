@@ -29,6 +29,7 @@
                 <li>在【商品导入模板】按规则添加商品数据信息；</li>
                 <li>导入结果会在导入完成后提示，并在导入记录中展示； </li>
                 <li>一次最多导入1000个SKU商品；</li>
+                <li>模板中商品图片的链接需要先将所需图片上传至“我的文件-素材库”中，然后复制其图片地址链接；</li>
             </ol>
             <p class="import-box tc">
                 <el-upload
@@ -91,6 +92,9 @@
             </el-table>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </section>
+        <div v-if="importing" class="loadding-box">
+            <div class="loadding-icon"></div>
+        </div>
     </div>
 </template>
 <script>
@@ -113,7 +117,7 @@ export default {
             showFileList: false,
             loading: false,
             showImport: true,
-            importing: false
+            importing: false,
         }
     },
     computed:{
@@ -127,11 +131,7 @@ export default {
     },
     methods: {
         downloadTemplate() {
-            let a = document.createElement("a");
-
-            a.setAttribute("href", location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`);
-            a.setAttribute("target", "_blank");
-            a.click();
+          window.location.href = location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`
         },
         renovate() {
             this.getList()
@@ -192,13 +192,13 @@ export default {
                 if(res.importFailCount == 0) {
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
 
-                    this.confirm({title: '数据导入成功', text: _text})
+                    this.confirm({title: '数据导入成功', text: _text, customClass: 'import-confirm'})
                     this.active = 3
                 } else {
                     _text = ''
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
                     _text += '<br>' + res.failureMsg
-                    this.confirm({title: '数据导入失败', text: _text})
+                    this.confirm({title: '数据导入失败', icon: true, text: _text, showCancelButton: false, customClass: 'import-confirm'})
                     this.active = 1
                 }
                 this.$refs.upload.clearFiles();
@@ -207,10 +207,11 @@ export default {
             }).catch(error => {
                 //message.close()
                 this.visible = false
-                this.$message.error({
-                    message: error,
-                    type: 'error'
-                });
+                // this.$message.error({
+                //     message: error,
+                //     type: 'error'
+                // });
+                this.confirm({title: '数据导入失败', text: error, showCancelButton: false})
                 this.active = 1
                 this.$refs.upload.clearFiles();
                 this.showImport = true
@@ -228,8 +229,10 @@ export default {
 </script>
 <style lang="scss" scoped>
     .import {
+        position: relative;
         background-color: #fff;
-        padding: 32px 63px;
+        padding: 32px 38px;
+        padding-top: 10px;
         font-size: 14px;
         section {
             border-bottom: 1px dashed #d3d3d3;
@@ -255,7 +258,7 @@ export default {
                 }
             }
             .steps {
-                margin-top: 32px;
+                margin-top: 36px;
             }
         }
         .importing {
@@ -304,6 +307,24 @@ export default {
                 }
             }
         }
+        .loadding-box {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 400px;
+            background-color: rgba(255, 255, 255, 0.9);
+            .loadding-icon {
+                width: 100px;
+                height: 100px;
+                background: url('../../assets/images/goods/pastedImage.gif') no-repeat;
+                background-size: 100% 100%;
+            }
+        }
     }
     /deep/ .el-step__head.is-process {
         color: $contentColor;
@@ -342,6 +363,30 @@ export default {
     }
     /deep/ .el-button--primary {
         background-color: #655eff;
+    }
+    /deep/ .el-message-box__message {
+        max-height: 400px!important;
+        overflow-y: scroll!important;
+    }
+    /deep/ .el-message-box__message::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    /deep/ .el-message-box__message::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+</style>
+<style lang="scss">
+    .import-confirm .el-message-box__message {
+        max-height: 400px!important;
+        overflow-y: scroll!important;
+    }
+    .import-confirm .el-message-box__message::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .import-confirm .el-message-box__message::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
     }
 </style>
 

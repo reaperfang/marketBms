@@ -1,7 +1,8 @@
 <template>
   <DialogBase :visible.sync="visible" width="600px" title="上传图片" :showFooter="false">
-    <el-form :model="form" class="demo-form-inline" label-width="90px">
-      <el-form-item label="本地上传">
+    <el-form :model="form" class="demo-form-inline">
+      <el-form-item label="本地上传"></el-form-item>
+      <el-form-item>
         <!-- <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar"> -->
         <!-- <el-upload
             class="avatar-uploader"
@@ -23,7 +24,7 @@
           :data="{json: JSON.stringify({cid: cid})}"
           :limit="6"
           :multiple="true"
-          list-type="picture"
+          list-type="picture-card"
           :before-upload="beforeAvatarUpload"
           :on-success="handleAvatarSuccess"
           :on-remove="handleRemove"
@@ -209,7 +210,7 @@ export default {
   display: inline-block;
 }
 /deep/ .avatar-uploader .el-upload:hover {
-  border-color: #409eff;
+  border-color: #655EFF;
 }
 /deep/ .avatar-uploader-icon {
   font-size: 28px;
@@ -272,6 +273,9 @@ export default {
 }
 /deep/ .el-upload-list__item .el-icon-close {
   z-index: 999;
+}
+/deep/.el-dialog__body{
+  padding: 15px 20px;
 }
 .txt_center {
   width: 100%;

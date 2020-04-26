@@ -33,24 +33,15 @@
                         <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('5')!=-1">{{item.setMealPrice}}元任选{{item.goodsTotalNumber}}件商品</p>
                         <div class="limit_line">
-                            <p class="limit" v-if="showContents.indexOf('4')!=-1">
-                                <template v-if="item.joinLimit >= 0">
-                                    限 {{item.joinLimit}}次/人
-                                </template>
-                                <template v-else>不限制</template>
-                            </p>
+                            <p class="limit" v-if="showContents.indexOf('4')!=-1">{{item.joinLimit==-1?'不限':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
                         <div class="price_line">
                             <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{item.setMealPrice}}</font></p>
                         </div>
-                        <!-- <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton> -->
 
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.status==1&&utils.dateDifference(item.endTime)>0&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6"></componentButton>
 
-                        <!-- <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
-                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p> -->
-
-                        <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                        <p class="activity_end" v-if="item.status==2">活动已结束</p>
                         <p class="activity_end" v-if="item.status==0">活动未开始</p>
                     </div>
                 </li>
@@ -128,7 +119,8 @@ export default {
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
-            var bodyWidth = 370;
+            var scrollWidth = window && this.utils.isIE() ? 18 : 0;
+            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
             if(this.listStyle==1){
                 this.goodMargin = {marginTop:this.goodsMargin+'px'};
                 this.goodWidth = "100%";

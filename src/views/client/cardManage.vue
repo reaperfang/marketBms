@@ -1,7 +1,7 @@
 <template>
     <div class="c_container">
         <el-tabs v-model="activeName">
-            <el-tab-pane label="会员卡管理" name="first" v-permission="['客户', '会员卡', '会员卡管理']">
+            <el-tab-pane label="会员卡管理" name="first" v-permission="['用户', '会员卡', '会员卡管理']">
                 <div class="pane_container">
                     <div class="c_card">
                         <img v-if="imgUrl" :src="imgUrl" class="cardImg" />
@@ -30,11 +30,11 @@
                         </el-popover>
                         <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                     </div>
-                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过2M，格式支持JPG、PNG、JPEG</p>
+                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过3M，格式支持JPG、PNG、JPEG</p>
                 </div>
                 <cdTable></cdTable>
             </el-tab-pane>
-            <el-tab-pane label="领卡记录" name="second" v-permission="['客户', '会员卡', '领卡记录']">
+            <el-tab-pane label="领卡记录" name="second" v-permission="['用户', '会员卡', '领卡记录']">
                 <div class="c_line">
                     <span>卡名称：</span>
                     <div class="input_wrap">

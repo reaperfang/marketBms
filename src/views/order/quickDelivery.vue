@@ -29,7 +29,7 @@
             <el-form-item label="模板名称">
               <el-input v-model="listQuery.name" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="创建时间">
+            <el-form-item label="编辑时间">
               <el-date-picker
                 v-model="listQuery.time"
                 type="datetimerange"
@@ -40,7 +40,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="getList">搜索</el-button>
+              <el-button type="primary" @click="search">查询</el-button>
               <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
             </el-form-item>
           </div>
@@ -137,8 +137,8 @@ export default {
         pageSize: 20,
         name: "",
         time: "",
-        startTime: "",
-        endTime: ""
+        updateTimeStart: "",
+        updateTimeEnd: ""
       },
       currentDialog: "",
       dialogVisible: false,
@@ -162,6 +162,14 @@ export default {
     }
   },
   methods: {
+    search() {
+        this.listQuery = Object.assign({}, this.listQuery, {
+            startIndex: 1,
+            pageSize: 20,
+        })
+        
+        this.getList()
+    },
     deletequickDelivery(id) {
       this.confirm({
         title: "提示",
@@ -196,10 +204,12 @@ export default {
     },
     resetForm(formName) {
       this.listQuery = Object.assign({}, this.listQuery, {
+        startIndex: 1,
+        pageSize: 20,
         name: "",
         time: "",
-        startTime: "",
-        endTime: ""
+        updateTimeStart: "",
+        updateTimeEnd: ""
       });
       this.getList()
     },
@@ -208,8 +218,8 @@ export default {
       this._apis.order
         .fetchTemplatePageList(
           Object.assign({}, this.listQuery, {
-            startTime: this.listQuery.time ? utils.formatDate(this.listQuery.time[0], "yyyy-MM-dd hh:mm:ss") : "",
-            endTime: this.listQuery.time ? utils.formatDate(this.listQuery.time[1], "yyyy-MM-dd hh:mm:ss") : ""
+            updateTimeStart: this.listQuery.time ? utils.formatDate(this.listQuery.time[0], "yyyy-MM-dd hh:mm:ss") : "",
+            updateTimeEnd: this.listQuery.time ? utils.formatDate(this.listQuery.time[1], "yyyy-MM-dd hh:mm:ss") : ""
           })
         )
         .then(res => {
@@ -280,6 +290,9 @@ export default {
 }
 .table-box .table-title {
     margin-bottom: 0;
+}
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
 }
 </style>
 

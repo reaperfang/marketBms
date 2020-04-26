@@ -52,7 +52,7 @@
                         </el-select>
                     </div>
                     <div class="marL26">
-                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getRightsProtection()">查询</el-button>
+                        <el-button type="primary" class="minor_btn" @click="getRightsProtection(1,10)">查 询</el-button>
                         <el-button type="primary" class="border_btn" @click="resetAll()" style="margin-left:16px;">重 置</el-button>
                     </div>
                 </el-form-item>
@@ -60,9 +60,9 @@
             <div class="m_line clearfix">
                 <p style="line-height:40px;" v-if="listObj">
                 该筛选条件下：会员共计<span>{{listObj.memberCount || 0}}</span>人，
-                占用户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；
+                占用户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}%</span>；
                 订单共计<span>{{listObj.orderCount || 0}}</span>个、商品总数共计<span>{{listObj.goodsCount || 0}}</span>个；
-                维权次数共计<span>{{listObj.protectionCount || 0}}</span>次；
+                维权次数共计<span>{{listObj.protectionCount || 0}}</span>次。
                 </p>
             </div>
             <div class="m_line clearfix">
@@ -162,6 +162,7 @@ export default {
                 startIndex:1,
                 pageSize:10
             },
+            this.node = ''
             this.getRightsProtection(1,10)
         },
         // 重新筛选
@@ -177,7 +178,7 @@ export default {
                 this.currentData.api = "data.exportOfrights"
             }else{
                 this._apis.data.exportOfrights(this.form).then(response => {
-                    window.open(response);
+                    window.location.href = response
                 })
             }
         },
@@ -207,6 +208,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3506
+*
+*/
+
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -230,9 +240,19 @@ export default {
     margin-left: 65px;
     line-height: 50px;
 }
+
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
+	.minor_btn{
+		background-color: #655EFF;
+		color:#fff;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;

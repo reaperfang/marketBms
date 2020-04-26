@@ -22,6 +22,9 @@ export default {
       this.option = {
         title: {
           text: "趋势图（人）",
+          textStyle:{
+            fontSize:12
+          }
           //subtext: "纯属虚构"
         },
         tooltip: {

@@ -9,11 +9,11 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSale.returnExpressNo}}</div>
-                        <div @click="showLogistics(orderAfterSale.returnExpressNo, true)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div @click="showLogistics(orderAfterSale.returnExpressNo, true, orderAfterSale.id)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | customerFilter}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSale.memberSn}}</div>
+                        <div class="header-righter-item">发货人：{{orderAfterSale.memberName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.memberReturnGoodsTime}}</div>
                         <div @click="showCustomerContent = !showCustomerContent">
                             <i v-if="showCustomerContent" class="el-icon-caret-top pointer"></i>
@@ -76,7 +76,7 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSaleSendInfo.expressNos}}</div>
-                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false, orderAfterSaleSendInfo.id)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
@@ -157,7 +157,7 @@ export default {
             ],
             currentDialog: '',
             dialogVisible: false,
-            currentData: {},
+            currentData: [],
             showCustomerContent: true,
             showContent: true,
             expressNo: '',
@@ -212,7 +212,7 @@ export default {
         this.getIsTrace();
     },
     methods: {
-        showLogistics(expressNo, isComstomer) {
+        showLogistics(expressNo, isComstomer, id) {
             this.expressNo = expressNo
             if(isComstomer) {
                 this.expressCompanys = this.orderAfterSale.returnExpressName
@@ -241,10 +241,10 @@ export default {
                 this.reject = false;
                 this.expressNo = expressNo
                 this._apis.order
-                .orderLogistics({ expressNo })
+                .orderLogistics({ expressNo, id: id, isOrderAfter: 1 })
                 .then(res => {
                     this.currentDialog = "LogisticsDialog";
-                    this.currentData = res.traces;
+                    this.currentData = res.traces || [];
                     this.expressCompanys = this.expressCompanys
                     this.dialogVisible = true;
                 })

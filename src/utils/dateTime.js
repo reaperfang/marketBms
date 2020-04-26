@@ -1,5 +1,4 @@
 /* 日期和时间相关工具 */
-import uuid from 'uuid/v4';
 let timePickerId = '';
 
 /**

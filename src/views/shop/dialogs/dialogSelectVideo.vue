@@ -2,7 +2,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择视频'" @submit="submit" @close="close" :showFooter="false">
 
-     <el-tabs v-model="currentTab">
+     <el-tabs v-model="currentTab" style="margin-bottom:40px;">
 
       <!-- 图片素材 -->
       <el-tab-pane label="素材视频" name="material">
@@ -15,25 +15,28 @@
             </div>
 
             <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
-              <ul class="tile-list n3 video_list" v-if="materialResultList.length">
-                <li v-for="(item, key) of materialResultList" :key="key" class="cell-item" @click="selectVideo($event, item)">
-                  <div class="video_head">
-                    <span>{{item.createTime}}</span>
-                    <span>{{(item.fileSize ? Math.floor(item.fileSize * 100) / 100 + 'MB' : '-- MB')}}</span>
-                  </div>
-                  <div class="video_body">
-                    <p>{{item.name}}</p>
-                    <video
-                      :src="item.filePath"
-                      controls="controls"
-                      class="video"
-                      :poster="item.fileCover"
-                    >您的浏览器不支持 video 标签。</video>
-                  </div>
-                </li>
-              </ul>
+              <template v-if="materialResultList.length">
+                <ul class="tile-list n3 video_list" v-if="materialResultList.length">
+                  <li v-for="(item, key) of materialResultList" :key="key" class="cell-item" @click="selectVideo($event, item)">
+                    <div class="video_head">
+                      <span>{{item.createTime}}</span>
+                      <span>{{(item.fileSize ? Math.floor(item.fileSize / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB')}}</span>
+                    </div>
+                    <div class="video_body">
+                      <p>{{item.name}}</p>
+                      <video
+                        :src="item.filePath"
+                        controls="controls"
+                        class="video"
+                        :poster="item.fileCover"
+                      >您的浏览器不支持 video 标签。</video>
+                    </div>
+                  </li>
+                </ul>
+              </template>
+              <p class="empty" v-else>暂无数据</p>
             </div>
-            <p class="pages">
+            <p class="pages" v-if="materialResultList.length">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -73,7 +76,7 @@
                       <li v-for="(item, key) of fileList" :key="key" class="cell-item" @click="selectVideo($event, item)">
                         <div class="video_head">
                           <span>{{item.createTime}}</span>
-                          <span>{{item.size ? Math.floor(item.size / 1024 * 100) / 100 + 'MB' : '-- MB'}}</span>
+                          <span>{{item.size ? Math.floor(item.size / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB'}}</span>
                         </div>
                         <div class="video_body"> 
                           <p>{{item.original}}</p>
@@ -88,11 +91,11 @@
                     </ul>
                 </div>
             </div>
-            <p class="note" style="color: #d3d8df;margin-top:20px;">大小不超过10mb，支持mp4,mov,m4v,flv,x-flv,mkv,wmv,avi,rmvb,3gp格式 <el-button v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;" @click="clearTempSave">清除上传记录</el-button></p>
+            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;">大小不超过10mb，支持mp4格式 <span v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
       </el-tab-pane>
     </el-tabs>
 
-    <span class="dialog-footer fcc">
+    <span class="dialog-footer fcc" style="margin-top:40px;">
             <el-button type="primary" @click="submit">确 认</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
         </span>
@@ -239,14 +242,11 @@ export default {
     /* 上传前钩子 */
     beforeUpload(file) {
       const isLt10M = file.size / 1024 / 1024 < 10;
-      if (!['video/mp4', 'video/mov', 'video/m4v', 'video/flv', 'video/x-flv', 'video/mkv', 'video/wmv', 'video/avi', 'video/rmvb', 'video/3gp'].includes(file.type)) {
-        this.$message.error('请上传正确的视频格式!');
+      // if (!['video/mp4', 'video/mov', 'video/m4v', 'video/flv', 'video/x-flv', 'video/mkv', 'video/wmv', 'video/avi', 'video/rmvb', 'video/3gp'].includes(file.type) || !isLt10M) {
+      if (!['video/mp4'].includes(file.type) || !isLt10M) {
+        this.$message.error('请上传正确的视频格式! 且上传视频大小不能超过 10MB!');
         this.failedList.push(file);
-        return false;
-      }
-      if (!isLt10M) {
-        this.$message.error('上传图片大小不能超过 10MB!');
-        this.failedList.push(file);
+        this.uploadLoading = false;
         return false;
       }
       return true;
@@ -426,7 +426,12 @@ export default {
 
 .pages{
   text-align: center;
-  margin-top: 20px;
+  margin-top: 45px;
+}
+.empty{
+  text-align: center;
+  margin-top: 100px;
+  color: #b6b5c8;
 }
 
 /* *******************************素材库样式*********************************** */
@@ -485,7 +490,7 @@ export default {
     display: inline-block;
   }
 /deep/ .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
+    border-color: #655EFF;
   }
 /deep/ .avatar-uploader-icon {
     font-size: 28px;
@@ -545,5 +550,17 @@ ul.video_list{
     padding-top: 0;
     height: 210px;
   }
+}
+.dialog-footer .el-button{
+  padding: 9px 20px;
+  margin-left: 30px;
+  span{
+    letter-spacing: 5px;
+    margin-right: -4px;
+  }
+}
+.el-button:first-child {
+    display: block;
+    margin-left: 0;
 }
 </style>

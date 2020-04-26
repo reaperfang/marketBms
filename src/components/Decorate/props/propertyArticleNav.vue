@@ -2,7 +2,7 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="选择模板" prop="templateType">
-        <ul class="tile-list n3 template_type">
+        <ul class="tile-list n2 template_type">
           <li @click="selectTemplate(1)" :class="{'active': ruleForm.templateType === 1}">
             <div class="type1">
               <div class="fill_block"></div>
@@ -94,7 +94,6 @@
 import propertyMixin from '../mixins/mixinProps';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
-import uuid from 'uuid/v4';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleNav',
@@ -111,14 +110,14 @@ export default {
           title: '',
           url: '',
           linkTo: null,
-          id: uuid()
+          id: uuidv4()
         }],
       },
       rules: {},
       currentNav: null,  //当前操作的图文导航
       dialogVisible: false,
       currentDialog: '',
-      suggestSize: '建议尺寸：宽高1：1',
+      suggestSize: '建议尺寸：宽高1:1',
       dragOptions: {
           animation: 300,
           group: "description",
@@ -154,7 +153,7 @@ export default {
       this.blockType = 1;
       switch(Number(templateType)) {
         case 1:
-          this.suggestSize = '建议尺寸：宽高1：1';
+          this.suggestSize = '建议尺寸：宽高1:1';
           break; 
         case 2:
           this.suggestSize = '建议：不超过5个汉字';
@@ -173,7 +172,7 @@ export default {
           title: '导航',
           url: '',
           linkTo: null,
-          id: uuid()
+          id: uuidv4()
         });
         this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
         // this.dialogVisible=true; 
@@ -231,7 +230,8 @@ export default {
 <style lang="scss" scoped>
 ul.template_type{
   li{
-    width:100px;
+    width:94px!important;
+    margin-right:10px!important;
     // height:100px;
     border:1px solid rgb(228,227,235);
     padding:10px;

@@ -1,23 +1,25 @@
 /* 选择商品弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="1000px" :title="categoryName ? '选择 ['+categoryName+'] 分类下的商品' : '选择商品'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules"  :inline="true">
-      <div class="inline-head">
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
-        </el-form-item> 
-        <el-form-item label="商品状态" prop="status">
-          <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
-            <el-option label="全部" :value="null"></el-option>
-            <el-option label="售罄" :value="-1"></el-option>
-            <el-option label="上架" :value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
-        </el-form-item>
-      </div>
-    </el-form>
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules"  :inline="true">
+          <el-form-item label="商品名称" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
+          </el-form-item> 
+          <el-form-item label="商品状态" prop="status">
+            <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
+              <el-option label="全部" :value="null"></el-option>
+              <el-option label="上架" :value="1"></el-option>
+              <el-option label="下架" :value="0"></el-option>
+              <el-option label="售罄" :value="-1"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label prop="name">
+            <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜 索</el-button>
+            <el-button type="text" style="width:34px;" @click="clearInvalidData">清除失效数据</el-button>
+          </el-form-item>
+      </el-form>
+    </div>
     <el-table
       stripe
       :data="tableData"
@@ -26,11 +28,11 @@
       @selection-change="handleSelectionChange"
       v-loading="loading"
     >
-      <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" :selectable="itemSelectable" width="55"></el-table-column>
       <el-table-column prop="title" label="商品名称" :width="300">
         <template slot-scope="scope">
           <div class="name_wrapper">
-            <img :src="scope.row.mainImage" alt="加载错误" />
+            <img :src="scope.row.mainImage" alt="失败" />
             <p>{{scope.row.name}}</p>
           </div>
         </template>
@@ -59,10 +61,10 @@
       </el-table-column>
       <!-- <el-table-column prop="createTime" label="创建时间"></el-table-column> -->
     </el-table>
-    <div class="multiple_selection">
+    <div class="multiple_selection" v-if="tableData.length">
       <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="tableData.length">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -80,7 +82,6 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from "@/components/TableBase";
 import utils from "@/utils";
-import uuid from "uuid/v4";
 export default {
   name: "dialogSelectGoods",
   extends: tableBase,
@@ -112,7 +113,8 @@ export default {
         status: null,
         productCatalogInfoId: this.categoryId || ''
       },
-      rules: {}
+      rules: {},
+      disableStatus: [0, -1]  //不可选状态值
     };
   },
   computed: {
@@ -156,11 +158,7 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.goods.fetchSpuGoodsList(this.ruleForm).then((response)=>{
-        if(response.list && Array.isArray(response.list) && response.list.length) {
-          this.tableData = response.list.filter((item)=>{
-            return item.status == -1 || item.status == 1;
-          });
-        }
+        this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
       }).catch((error)=>{
@@ -173,11 +171,23 @@ export default {
     submit() {
       this.$emit("dialogDataSelected", this.multipleSelection);
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    itemSelectable(row, index) {
+      if(row.status !== 0 && row.status !== -1) {
+        return true;
+      }
     },
     getRowKey(row) {
       return row.id
+    },
+
+     /* 清除失效数据 */
+    clearInvalidData() {
+      this.tableData.forEach((row, index) => {
+        if(!row.fakeData && (row.status === 0 || row.status === -1)) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, false);
+        }
+      })
+      this.$message.success('清除成功！');
     }
   }
 };
@@ -186,6 +196,18 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog__body{
   min-height: 400px;
+}
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
+}
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
 }
 .name_wrapper {
   display: flex;

@@ -29,7 +29,7 @@
           <span
             class="edit_span"
             @click="edit(scope.row)"
-            v-permission="['客户', '客户标签', '默认页面', '查看标签']"
+            v-permission="['用户', '用户标签', '默认页面', '查看标签']"
           >
             <!-- <i class="edit_i"></i> -->
             编辑
@@ -108,6 +108,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getLabelList(val, this.pageSize);
+      this.startIndex = val;
     },
     handleChange(val) {
       this.tagList.forEach(row => {
@@ -182,11 +183,11 @@ export default {
   },
   watch: {
     params() {
-      this.getLabelList(this.startIndex, this.pageSize);
+      this.getLabelList(1, this.pageSize);
     }
   },
   mounted() {
-    this.getLabelList(this.startIndex, this.pageSize);
+    this.getLabelList(1, this.pageSize);
   }
 };
 </script>

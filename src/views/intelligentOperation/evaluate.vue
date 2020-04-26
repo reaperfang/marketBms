@@ -52,22 +52,22 @@
                             </div>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="getEvaluation()">查询</el-button>
+                            <el-button type="primary" class="minor_btn"  @click="getEvaluation(1,10)">查 询</el-button>
                             <el-button type="primary" class="border_btn" @click="resetAll()">重 置</el-button>
                         </el-form-item>
                     </el-form>
                     <div class="m_line clearfix" v-if="listObj">
-                        <p style="line-height:40px;">该筛选条件下：会员共计<span>{{listObj.memberCount || 0}}</span>人，
-                        占用户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}</span>%；</p>
-                        <p style="line-height:40px;">其中订单总计<span>{{listObj.orderCount || 0}}</span>个，
+                        <p style="line-height:30px;margin-top: 15px;">该筛选条件下：会员共计<span>{{listObj.memberCount || 0}}</span>人，
+                        占用户总数的<span>{{listObj.ratio ? (listObj.ratio*100).toFixed(2) : 0}}%</span>；</p>
+                        <p style="line-height:30px;margin-bottom: 15px;">其中订单总计<span>{{listObj.orderCount || 0}}</span>个，
                         商品总计<span>{{listObj.goodsCount || 0}}</span>个，
                         满意商品数共计<span>{{listObj.niceGoodsCount}}</span>个,
                         满意率<span>{{listObj.niceGoodsRatio ? (listObj.niceGoodsRatio*100).toFixed(2) : 0}}%</span>；
                         差评商品数共计<span>{{listObj.badGoodsCount || 0}}</span>个，
-                        差评率<span>{{listObj.badGoodsRatio ? (listObj.badGoodsRatio*100).toFixed(2) : 0}}</span>%;</p>
+                        差评率<span>{{listObj.badGoodsRatio ? (listObj.badGoodsRatio*100).toFixed(2) : 0}}%</span>。</p>
                     </div>
                     <div class="m_line clearfix">
-                        <div class="fr marT20">
+                        <div class="fr fr_mar5">
                             <!-- <el-button class="minor_btn" @click="rescreen()">重新筛选</el-button> -->
                             <el-tooltip content="当前最多支持导出1000条数据" placement="top">
                             <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl()">导出</el-button>
@@ -76,20 +76,10 @@
                     </div>
                     <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
                 </div>
-                <div v-if="listObj.members != undefined && (note || note1)">
-                    <p>运营建议:</p>
-                    <p v-if="note == '0.00-1.00'" class="proposal"><b>"满意率0-1%/满意个数1个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，从而来提升满意率。</p>                
-                    <p v-if="note == '2.00-5.00'" class="proposal"><b>"满意率2%-5%/满意个数2-5个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
-                    <p v-if="note == '5.00-100.00'" class="proposal"><b>"满意率5%以上/满意个数5个以上"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
-                    <p v-if="note == '30.00-80.00'" class="proposal"><b>"满意率30%-80%/满意个数30-80个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
-                    <p v-if="note == '12.00-20.00'" class="proposal"><b>"满意率12%-20%/满意个数12-20个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
-                    <p v-if="note == '80.00-90.00'" class="proposal"><b>"满意率80%-90%/满意个数80-90个"：</b>建议针对此类用户客服即时回复，和用户提升互动性，还可以赠送商品优惠券，代金券，从而来提升满意率</p>
-                
-                    <p v-if="note1 == '0.00-1.00'"  class="proposal"><b>"差评率0-1%/差评个数1个"：</b>建议针对此类用户客服即时回复，发放现金红包补偿，从而降低差评率。</p>                
-                    <p v-if="note1 == '2.00-5.00'"  class="proposal"><b>"差评率2%-5%/差评个数2-5个"：</b>建议针对此类用户赠送礼品，提升认可度，整体改进，提升售后服务，从而降低差评率。</p>
-                    <p v-if="note1 == '5.00-100.00'"  class="proposal"><b>"差评率5%以上/差评个数5个以上"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
-                    <p v-if="note1 == '10.00-15.00'"  class="proposal"><b>"差评率10%-15%/差评个数10-15个"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
-                    <p v-if="note1 == '70.00-90.00'"  class="proposal"><b>"差评率70%-90%/差评个数70-90个"：</b>建议针对此类用户进行退换货处理，赠送礼品，提升认可度，整体改进，提升售后服务，发放现金红包补偿，从而降低差评率。</p>
+                <div v-if="listObj.members != undefined && (showNote || showNote1)">
+                    <p>运营建议：</p>
+                    <p class="proposal" v-if="showNote"><b>满意率{{note.label}} ：</b>{{note.suggest}}</p>
+                    <p class="proposal" v-if="showNote1"><b>差评率{{note1.label}} ：</b>{{note1.suggest}}</p>
                 </div>
                 <div class="contents"></div>
                 <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
@@ -133,6 +123,8 @@ export default {
             },
             note:'',
             note1:'',
+            showNote:false,
+            showNote1:false,
             currentDialog:"",
             dialogVisible: false,
             currentData:{}
@@ -142,8 +134,6 @@ export default {
         // 查询
         getEvaluation(idx,pageS){
             this.form.loads = true
-            this.note = ''
-            this.note1 = ''
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
             this.form.memberType == 'null' && (this.form.memberType = null)
@@ -152,8 +142,25 @@ export default {
             this._apis.data.evaluation(this.form).then(response => {
                 this.listObj = response;
                 this.form.loads = false
-                this.note = this.form.niceRatioRange
-                this.note1 = this.form.badRatioRange
+                //切换满意率或差评率获取运营建议
+                for(let item of this.satisfaction){
+                    if(item.value == this.form.niceRatioRange){
+                        this.note = {
+                            suggest:item.suggest,
+                            label:item.name
+                        }
+                        item.suggest != null && (this.showNote = true)
+                    }
+                }
+                for(let item of this.badreviews){
+                    if(item.value == this.form.badRatioRange){
+                        this.note1 = {
+                            suggest:item.suggest,
+                            label:item.name
+                        }
+                        item.suggest != null && (this.showNote1 = true)
+                    }
+                }
             })
         },
         //获取口碑满意率
@@ -164,11 +171,10 @@ export default {
                     pleased.push({
                         id: item.id,
                         value: item.minNum+'-'+ item.maxNum,
-                        name: item.name
+                        name: item.name,
+                        suggest:item.suggest
                     })
                 }
-                // console.log('res',res)
-                // console.log(pleased)
                 this.satisfaction = pleased
             }).catch(error =>{
                 console.log('error',error)
@@ -182,11 +188,10 @@ export default {
                     differences.push({
                         id: item.id,
                         value: item.minNum+'-'+item.maxNum,
-                        name: item.name
+                        name: item.name,
+                        suggest:item.suggest
                     })
                 }
-                // console.log('res',res)
-                // console.log(differences)
                 this.badreviews = differences
             }).catch(error =>{
                 console.log('error',error)
@@ -208,6 +213,8 @@ export default {
                 pageSize:10,
                 startIndex:1,
             },
+            this.showNote = false
+            this.showNote1 = false
             this.getEvaluation(1,10)
         },
         // 重新筛选
@@ -223,7 +230,7 @@ export default {
                 this.currentData.api = "data.evaluationExport"
             }else{
                 this._apis.data.evaluationExport(this.form).then(response => {
-                    window.open(response);
+                    window.location.href = response
                 })
             } 
         },
@@ -254,6 +261,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3505
+*
+*/
+
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -276,9 +292,22 @@ export default {
 .proposal{
     margin-left: 65px;
 }
+
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
+	.minor_btn{
+		background-color: #655EFF;
+		color:#fff;
+	}
+    .fr_mar5{
+        margin-top:10px;
+    }
     .pane_container{
         color:#3D434A;
         padding: 10px;

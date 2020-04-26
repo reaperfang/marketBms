@@ -1,17 +1,18 @@
 /* 选择满减满折弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择满减满折活动'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
+    <div class="head-wrapper">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入活动名称" clearable></el-input>
         </el-form-item>
         <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜 索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
+          <el-button type="text" style="width:34px;" @click="clearInvalidData">清除失效数据</el-button>
         </el-form-item>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
     <el-table
       :data="tableData"
       stripe
@@ -60,10 +61,10 @@
         <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addFullreduce', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
       </div>
     </el-table>
-    <div class="multiple_selection">
+    <div class="multiple_selection" v-if="tableData.length">
       <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="tableData.length">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -81,7 +82,6 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from "@/components/TableBase";
 import utils from "@/utils";
-import uuid from "uuid/v4";
 import { getToken } from '@/system/auth'
 export default {
   name: "dialogSelectFullReduction",
@@ -106,10 +106,11 @@ export default {
       pageNum: 1,
       ruleForm: {
         pageNum: 1,
-        name: '',
-        selectStatus: '0,1'
+        name: ''
+        // selectStatus: '0,1'
       },
-      rules: {}
+      rules: {},
+      disableStatus: [2]  //不可选状态值
     };
   },
   computed: {
@@ -147,6 +148,7 @@ export default {
       if(loadAll) {
         tempForm = {...this.ruleForm};
         tempForm.name = '';
+        this.ruleForm.name = '';
       }
       this._apis.shop.getFullReductionList(loadAll? tempForm: this.ruleForm).then((response)=>{
         this.tableData = response.list;
@@ -176,6 +178,16 @@ export default {
       return row.id
     },
 
+     /* 清除失效数据 */
+    clearInvalidData() {
+      this.tableData.forEach((row, index) => {
+        if(!row.fakeData && row.status === 2) {  //假数据不允许添加选中状态
+          this.$refs.multipleTable.toggleRowSelection(row, false);
+        }
+      })
+      this.$message.success('清除成功！');
+    },
+
     /* 向父组件提交选中的数据 */
     submit() {
       this.$emit("dialogDataSelected", this.multipleSelection);
@@ -185,6 +197,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/{
+  table{
+    width:auto!important;
+  }
+  .el-table__empty-block{
+    width:100%!important;
+  }
+}
+/deep/ thead th{
+  background: rgba(230,228,255,1)!important;
+  color:#837DFF!important;
+}
 .name_wrapper {
   display: flex;
   flex-direction: row;

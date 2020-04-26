@@ -41,7 +41,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button @click="search" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
                 <!-- <div class="buttons" style="display: inline-block; float: right;">
@@ -111,7 +111,7 @@
                         <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
                         <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
                         <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">查看物流</span>
-                        <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1">确认收货</span>
+                        <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.exchangeConfirmation ==1  &&  (scope.row.isSellerReceived == 0)">确认收货</span><!-- scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 -->
                         <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
                         <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
                     </template>
@@ -197,7 +197,9 @@ export default {
             currentData: '',
             loading: false,
             checkedAll: false,
-            isIndeterminate: false
+            isIndeterminate: false,
+            expressCompanys: '',
+            expressNo: ''
         }
     },
     created() {
@@ -236,6 +238,14 @@ export default {
         }
     },
     methods: {
+        search() {
+            this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
+            })
+            
+            this.getList()
+        },
         checkedAllChange() {
             if(this.checkedAll) {
                 this.$refs.multipleTable.clearSelection();
@@ -243,11 +253,14 @@ export default {
             } else {
                 this.$refs.multipleTable.clearSelection();
             }
-            this.isIndeterminate = false;
+            this.isIndeterminate = true;
         },
         confirmReceived(row) {
             this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
-                this.$message.success('确认收货成功');
+                //this.$message.success('确认收货成功');
+                this.confirm({title: '提示', iconSuccess: true, text: '确认收货成功', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                    
+                })
                 this.getList()
             }).catch(error => {
                 this.$message.error(error);
@@ -256,9 +269,9 @@ export default {
         showLogistics(row) {
             this.expressNo = row.returnExpressNo
             this.expressCompanys = row.returnExpressName
-            this._apis.order.orderLogistics({expressNo: row.returnExpressNo}).then(res => {
+            this._apis.order.orderLogistics({expressNo: row.returnExpressNo, id: row.id, isOrderAfter: 1}).then(res => {
                 this.currentDialog = 'LogisticsDialog'
-                this.currentData = res.traces
+                this.currentData = res.traces || []
                 this.dialogVisible = true
             }).catch(error => {
                 this.$message.error(error);
@@ -277,7 +290,8 @@ export default {
             // })
         },
         exportOrder() {
-            let _param
+            var _param
+            var __param
             
             _param = Object.assign({}, this.listQuery, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
@@ -287,7 +301,7 @@ export default {
                 isExport: 0
             })
             if(this.multipleSelection.length) {
-              _params = Object.assign({}, _params, {
+              _param = Object.assign({}, _param, {
                 ids: this.multipleSelection.map(val => val.id)
               })
             }
@@ -295,11 +309,9 @@ export default {
                 console.log(res)
                 if(res > 1000) {
                     this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
-                        _params = Object.assign({}, _params, {
-                        isExport: 1
-                        })
+                        _param.isExport = 1
                         this._apis.order
-                        .orderAfterSaleExport(_params)
+                        .orderAfterSaleExport(_param)
                         .then(res => {
                             window.location.href = res
                             this.$message.success('导出成功！');
@@ -318,11 +330,11 @@ export default {
         },
         batchUpdateStatus() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请勾选需要批量审核的售后单', confirmText: '我知道了'})
+                this.confirm({title: '提示', icon: true, text: '请勾选需要批量审核的售后单', showCancelButton: false, confirmText: '我知道了'})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.orderAfterSaleStatus != 0).length) {
-                    this.confirm({title: '提示', icon: true, text: '选择的数据中包含已经审核过的售后单， 无法批量审核，请重新选择', confirmText: '我知道了'})
+                    this.confirm({title: '提示', icon: true, text: '选择的数据中包含已经审核过的售后单， 无法批量审核，请重新选择', showCancelButton: false, confirmText: '我知道了'})
                     return
                 }
             }
@@ -375,18 +387,20 @@ export default {
                 _orderAfterSaleStatus = 1
             }
             if(row.type == 2) {
+                let _row = JSON.parse(JSON.stringify(row))
+
                 this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = row;
+                this.currentData = _row;
                 this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
                 this.dialogVisible = true
-            }else{
-                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                    this.getList();
-                    this.$message.success('审核成功！');
-                }).catch(error => {
-                    this.$message.error(error);
-                })
+                return
             }
+            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
+                this.getList();
+                this.$message.success('审核成功！');
+            }).catch(error => {
+                this.$message.error(error);
+            })
         },
         // 换货确认
         confirmHandler(value) {
@@ -511,6 +525,9 @@ export default {
 }
 .el-button+.el-button {
     margin-left: 12px;
+}
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
 }
 </style>
 

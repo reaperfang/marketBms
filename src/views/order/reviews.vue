@@ -34,7 +34,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="getList" type="primary">查询</el-button>
+                    <el-button @click="search" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                 </el-form-item>
                 <!-- <div class="buttons" style="display: inline-block; float: right;">
@@ -147,7 +147,7 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" @audit="auditSubmit" :title="title"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" @audit="auditSubmit" :title="title"></component>
     </div>
 </template>
 <script>
@@ -204,7 +204,7 @@ export default {
                 creaTetimeEnd: '', // 评论查询结束时间
                 auditStatus: '', // 审核状态
                 starNum: '', // 星级数量
-                isChoiceness: 0
+                isChoiceness: ''
             },
             tableData: [
                 
@@ -246,6 +246,14 @@ export default {
         }
     },
     methods: {
+        search() {
+            this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
+            })
+            
+            this.getList()
+        },
         checkedAllChange() {
             if(this.checkedAll) {
                 this.$refs.multipleTable.clearSelection();
@@ -302,7 +310,7 @@ export default {
         },
         batchAudit() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了'})
+                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了', showCancelButton: false})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.auditStatus != 0).length) {
@@ -335,6 +343,8 @@ export default {
         },
         resetForm(formName) {
             this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
                 orderCode: '',
                 goodsName: '',
                 orderDate: '',
@@ -365,8 +375,8 @@ export default {
             let _param
             
             _param = Object.assign({}, this.listQuery, param, {
-                createTimeStart: this.listQuery.orderDate[0] ? utils.formatDate(new Date(this.listQuery.orderDate[0] * 1), "yyyy-MM-dd hh:mm:ss") : '',
-                creaTetimeEnd: this.listQuery.orderDate[1] ? utils.formatDate(new Date(this.listQuery.orderDate[1] * 1), "yyyy-MM-dd hh:mm:ss") : ''
+                createTimeStart: this.listQuery.orderDate && this.listQuery.orderDate[0] ? utils.formatDate(new Date(this.listQuery.orderDate[0] * 1), "yyyy-MM-dd hh:mm:ss") : '',
+                creaTetimeEnd: this.listQuery.orderDate && this.listQuery.orderDate[1] ? utils.formatDate(new Date(this.listQuery.orderDate[1] * 1), "yyyy-MM-dd hh:mm:ss") : ''
             })
 
             this._apis.order.getCommentList(_param).then((res) => {
@@ -465,6 +475,9 @@ export default {
 }
 .el-button+.el-button {
     margin-left: 12px;
+}
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
 }
 </style>
 

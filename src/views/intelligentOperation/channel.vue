@@ -43,7 +43,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                        <el-button type="primary" class="minor_btn"  @click="goSearch(1)">查 询</el-button>
                         <el-button type="primary" class="border_btn" @click="reSet">重 置</el-button>
                     </el-form-item>
 
@@ -73,14 +73,9 @@
                 >
                 </channel-table>               
             </div>
-            <div v-if="listObj.list.length!=0 && note">
-                <p>运营建议:</p>
-                <p v-if="note == '0.00-1.00'" class="proposal"><b>"转化率0-1%"：</b>建议针对此类用户推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
-                <p v-if="note == '1.00-3.00'" class="proposal"><b>"转化率1-3%"：</b>建议针对此类用户推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
-                <p v-if="note == '3.00-5.00'" class="proposal"><b>"转化率3-5%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，来提升转化率。</p> 
-                <p v-if="note == '5.00-10.00'" class="proposal"><b>"转化率5-10%"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
-                <p v-if="note == '10.00-100.00'" class="proposal"><b>"转化率10%以上"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
-                <p v-if="note == '20.00-50.00'" class="proposal"><b>"转化率20-60"：</b>建议针对此类用户可设定分销机制，推荐积分商城、积分兑换，充值赠送：如100送30，还可推荐营销活动“活动海报”：推荐3-5人赠送积分或余额、推荐5-10人赠送积分或余额，来提升转化率。</p> 
+            <div v-if="listObj.list.length!=0 && showNote">
+                <p>运营建议：</p>
+                <p class="proposal"><b>转化率{{note.label}} ：</b>{{note.suggest}}</p>
             </div>
             <div class="contents"></div>
            <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
@@ -113,16 +108,15 @@ export default {
                 loads:false,
                 pageSize: '10',
             },
-            productiveness:[
-
-            ],
+            productiveness:[ ],
             listObj:{
                 list:[]
             },
             totalCount:0,//总页数
             pickerMinDate: '',
             dateRange: [],
-            note:'',
+            note:null,
+            showNote:false,
             currentDialog:"",
             dialogVisible: false,
             currentData:{},
@@ -139,18 +133,26 @@ export default {
             this.form.endTime = val[1]
         },
         //查询
-        goSearch(){
+        goSearch(num){
             this.form.loads = true
-            this.note = ''
-            this.form.channel == 'null' && (this.form.channel = null)
-            this.form.changeRatioRange == 'null' && (this.form.changeRatioRange = null)
+            this.form.startIndex = num || this.form.startIndex
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
                 this.totalNum = response.totalSize || 0;
-                // console.log(response)
-                 this.form.loads = false
-                 this.note = this.form.changeRatioRange
-            })
+                this.form.loads = false
+                //切换成功支付转化率获取运营建议
+                for(let item of this.productiveness){
+                    if(item.value == this.form.changeRatioRange){
+                        this.note = {
+                            suggest:item.suggest,
+                            label:item.name
+                        }
+                        item.suggest != null && (this.showNote = true)
+                    }
+                }
+            }).catch(error => {
+                this.$message.error(error);
+            });
         },
         // 重置
         reSet(){
@@ -163,6 +165,7 @@ export default {
                 startIndex:1,
                 pageSize: '10',
             }
+            this.showNote = false
             this.goSearch();
         },
         //重新筛选
@@ -190,7 +193,7 @@ export default {
             }else{
                 this._apis.data.channelConversionExport(data)
                 .then(res => {
-                    window.open(res);
+                    window.location.href = res
                 })
                 .catch(err=>{
                     this.$message.error(err);
@@ -205,23 +208,25 @@ export default {
                     vipcake.push({
                         id:item.id,
                         value:item.minNum+'-'+item.maxNum,
-                        name:item.name
+                        name:item.name,
+                        suggest:item.suggest
                     })                   
                 }
                 this.productiveness = vipcake
             }).catch(error =>{
                 console.log('error',error)
             })
-              this.goSearch();
         },
         //查看详情
         showDetails(){
             this._routeTo('channelDetail',this.form)
         },
+
         sizeChange(val){
             this.form.pageSize = val;
             this.goSearch();
         },
+
         currentChange(val){
             this.form.startIndex = val;
             this.goSearch();
@@ -230,6 +235,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3504
+*
+*/
+
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -255,6 +269,15 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
+	.minor_btn{
+		background-color: #655EFF;
+		color:#fff;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;

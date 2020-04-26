@@ -9,21 +9,25 @@
       >
       <el-table-column
         type="index"
-        label="排序">
+        label="排序"
+        align="center">
       </el-table-column>
       <el-table-column
         prop="orderNumber"
-        label="订单号">
+        label="订单号"
+        align="center">
       </el-table-column>
       <el-table-column
         prop="id"
-        label="用户ID">
+        label="用户ID"
+        align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.id ? scope.row.id : '-'}}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="用户类型">
+        label="用户类型"
+        align="center">
         <template slot-scope="scope">
             <span  v-if="scope.row.memberType" style="line-height:60px;display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
             <span v-else> - </span>
@@ -31,32 +35,36 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="会员昵称">
+        label="会员昵称"
+        align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name ? scope.row.name : '-'}}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="phone"
-        label="手机号">
+        label="手机号"
+        align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone ? scope.row.phone : '-'}}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="维权时间"
-        width="150">
+        width="150"
+        align="center">
         <template slot-scope="scope">
           <span>{{scope.row.tradeTime && Number(scope.row.tradeTime) | time}}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="protectionGoodsCount"
-        label="维权商品数">
+        label="维权商品数"
+        align="center">
       </el-table-column>
       <el-table-column
         label="维权类型"
-        >
+        align="center">
         <template slot-scope="scope">
              <span style="line-height:60px;display:inline-block" v-if="scope.row.protectionType">{{{1:'退款（仅退款不退货）',2:'退款退货',3:'换货'}[scope.row.protectionType]}}</span>
              <span style="line-height:60px;display:inline-block" v-else>-</span>
@@ -64,7 +72,7 @@
       </el-table-column>
       <el-table-column
         label="维权原因"
-        >
+        align="center">
         <template slot-scope="scope">
              <span style="line-height:60px;display:inline-block" v-if="scope.row.protectionReason">{{{5:'不想要了',6:'卖家缺货',7:'发票问题',8:'拍错了/订单信息错误',9:'其他'}[scope.row.protectionReason]}}</span>
              <span style="line-height:60px;display:inline-block" v-else>-</span>
@@ -130,6 +138,15 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+
+/**
+*
+* @Author zpw
+* @Update 2020/4/17
+* @Description  产研-电商中台  bugID: CYDSZT-3506
+*
+*/
+
 /deep/ .cell{
             .btns{
                 span{
@@ -138,5 +155,4 @@ export default {
                 }
             }
         }
-
 </style>

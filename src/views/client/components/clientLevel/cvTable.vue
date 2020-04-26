@@ -41,16 +41,16 @@
       <el-table-column label="状态">
         <template slot-scope="scope">
             <!-- <el-switch v-model="scope.row.status" @change="handleSwitch(scope.row)" v-permission="['用户', '会员等级', '默认页面', '启用/禁用']"></el-switch> -->
-            <span v-if="scope.row.status == 1" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">启用</span>
-            <span v-if="scope.row.status == 0" v-permission="['客户', '会员等级', '默认页面', '启用/禁用']">未启用</span>
+            <span v-if="scope.row.status == 1" v-permission="['用户', '会员等级', '默认页面', '启用/禁用']">启用</span>
+            <span v-if="scope.row.status == 0" v-permission="['用户', '会员等级', '默认页面', '启用/禁用']">未启用</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <span class="edit_span" @click="handleOpen(scope.row)" v-if="scope.row.enableShow == true && scope.row.name" v-permission="['客户', '会员等级', '默认页面', '查看']">启用</span>
-            <span class="edit_span" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['客户', '会员等级', '默认页面', '查看']">禁用</span>
-            <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['客户', '会员等级', '默认页面', '查看']">编辑</span>
-            <span class="edit_span" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['客户', '会员等级', '默认页面', '待配置']">待配置</span>
+            <span class="edit_span" @click="handleOpen(scope.row)" v-if="scope.row.enableShow == true && scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">启用</span>
+            <span class="edit_span" style="color:#FD4C2B" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['用户', '会员等级', '默认页面', '查看']">禁用</span>
+            <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">编辑</span>
+            <span class="edit_span" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['用户', '会员等级', '默认页面', '待配置']">待配置</span>
         </template>
       </el-table-column>
     </el-table>
@@ -110,7 +110,7 @@ export default {
               });
             }else if(response == 2){
               this.$message({
-                message: '当前等级或上一等级下有客户，不能禁用',
+                message: '该等级下有会员或即将有会员升至该等级，不可禁用',
                 type: 'warning'
               });
             }

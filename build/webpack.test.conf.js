@@ -8,32 +8,31 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-const env = require('../config/' + process.env.env_config + '.env')
+const env = require('../config/' + process.env.NODE_ENV + '.env')
 
 // For NamedChunksPlugin
 const seen = new Set()
 const nameLength = 4
 
 const webpackConfig = merge(baseWebpackConfig, {
-  mode: 'testing',
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.testBuild.productionSourceMap,
+      sourceMap: config.test.productionSourceMap,
       extract: true,
       usePostCSS: true
     })
   },
-  devtool: config.testBuild.productionSourceMap ? config.testBuild.devtool : false,
+  devtool: config.test.productionSourceMap ? config.test.devtool : false,
   output: {
-    path: config.testBuild.assetsRoot,
+    path: config.test.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash:8].js'),
     chunkFilename: utils.assetsPath('js/[name].[chunkhash:8].js')
   },
@@ -43,21 +42,41 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     // extract css into its own file
-    new MiniCssExtractPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash:8].css'),
-      chunkFilename: utils.assetsPath('css/[name].[contenthash:8].css')
+    new ExtractTextPlugin({
+      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      // Setting the following option to `false` will not extract CSS from codesplit chunks.
+      // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
+      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
+      // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
+      allChunks: true,
+    }),
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        compress: {
+          warnings: false
+        }
+      },
+      sourceMap: config.test.productionSourceMap,
+      parallel: true
+    }),
+    // Compress extracted CSS. We are using this plugin so that possible
+    // duplicated CSS from different components can be deduped.
+    new OptimizeCSSPlugin({
+      cssProcessorOptions: config.test.productionSourceMap
+        ? { safe: true, map: { inline: false } }
+        : { safe: true }
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.testBuild.index,
+      filename: config.test.index,
       template: 'index.html',
       inject: true,
       favicon: resolve('favicon.ico'),
       title: 'bms',
       templateParameters: {
-        BASE_URL: config.testBuild.assetsPublicPath + config.testBuild.assetsSubDirectory,
+        BASE_URL: config.test.assetsPublicPath + config.test.assetsSubDirectory,
       },
       minify: {
         removeComments: true,
@@ -65,6 +84,24 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
+    // enable scope hoisting
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    // split vendor js into its own file
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks (module) {
+        // any required modules inside node_modules are extracted to vendor
+        return (
+          module.resource &&
+          /\.js$/.test(module.resource) &&
+          module.resource.indexOf(
+            path.join(__dirname, '../node_modules')
+          ) === 0
+        )
       }
       // default sort mode uses toposort which cannot handle cyclic deps
       // in certain cases, and in webpack 4, chunk order in HTML doesn't
@@ -91,61 +128,36 @@ const webpackConfig = merge(baseWebpackConfig, {
         return modules[0].id
       }
     }),
-    // keep module.id stable when vender modules does not change
+     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
+    // extract webpack runtime and module manifest to its own file in order to
+    // prevent vendor hash from being updated whenever app bundle is updated
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity
+    }),
+    // This instance extracts shared chunks from code splitted chunks and bundles them
+    // in a separate chunk, similar to the vendor chunk
+    // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'app',
+      async: 'vendor-async',
+      children: true,
+      minChunks: 3
+    }),
+
     // copy custom static assets
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
-        to: config.testBuild.assetsSubDirectory,
+        to: config.test.assetsSubDirectory,
         ignore: ['.*']
       }
     ])
-  ],
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        libs: {
-          name: 'chunk-libs',
-          test: /[\\/]node_modules[\\/]/,
-          priority: 10,
-          chunks: 'initial' // 只打包初始时依赖的第三方
-        },
-        elementUI: {
-          name: 'chunk-elementUI', // 单独将 elementUI 拆包
-          priority: 20, // 权重要大于 libs 和 app 不然会被打包进 libs 或者 app
-          test: /[\\/]node_modules[\\/]element-ui[\\/]/
-        },
-        commons: {
-          name: 'chunk-commons',
-          test: resolve('src/components'), // 可自定义拓展你的规则
-          minChunks: 2, // 最小公用次数
-          priority: 5,
-          reuseExistingChunk: true
-        }
-      }
-    },
-    runtimeChunk: 'single',
-    minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          mangle: {
-            safari10: true
-          }
-        },
-        sourceMap: config.testBuild.productionSourceMap,
-        cache: true,
-        parallel: true
-      }),
-      // Compress extracted CSS. We are using this plugin so that possible
-      // duplicated CSS from different components can be deduped.
-      new OptimizeCSSAssetsPlugin()
-    ]
-  }
+  ]
 })
 
-if (config.testBuild.productionGzip) {
+if (config.test.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
   webpackConfig.plugins.push(
@@ -153,7 +165,9 @@ if (config.testBuild.productionGzip) {
       filename: '[path].gz[query]',   //解决bug https://segmentfault.com/q/1010000016302841/a-1020000016307819
       algorithm: 'gzip',
       test: new RegExp(
-        '\\.(' + config.testBuild.productionGzipExtensions.join('|') + ')$'
+        '\\.(' +
+        config.test.productionGzipExtensions.join('|') +
+        ')$'
       ),
       threshold: 10240,
       minRatio: 0.8
@@ -161,28 +175,9 @@ if (config.testBuild.productionGzip) {
   )
 }
 
-if (config.testBuild.generateAnalyzerReport || config.testBuild.bundleAnalyzerReport) {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-    .BundleAnalyzerPlugin
-
-  if (config.testBuild.bundleAnalyzerReport) {
-    webpackConfig.plugins.push(
-      new BundleAnalyzerPlugin({
-        analyzerPort: 8080,
-        generateStatsFile: false
-      })
-    )
-  }
-
-  if (config.testBuild.generateAnalyzerReport) {
-    webpackConfig.plugins.push(
-      new BundleAnalyzerPlugin({
-        analyzerMode: 'static',
-        reportFilename: 'bundle-report.html',
-        openAnalyzer: false
-      })
-    )
-  }
+if (config.test.bundleAnalyzerReport) {
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 
 module.exports = webpackConfig

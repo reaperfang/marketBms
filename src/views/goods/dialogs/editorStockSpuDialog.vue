@@ -20,13 +20,15 @@
 </template>
 <script>
 import DialogBase from '@/components/DialogBase'
+import utils from '@/utils';
 
 export default {
     data() {
         return {
             hasCancel: true,
             list: [{spec: '银色', stock: 1}, {spec: '银色', stock: 1}, {spec: '银色', stock: 1}],
-            showFooter: false
+            showFooter: false,
+            oldData: null
         }
     },
     filters: {
@@ -37,11 +39,34 @@ export default {
             return str
         }
     },
+    created() {
+        this.oldData = JSON.parse(JSON.stringify(this.data.goodsInfos))
+    },
     methods: {
         submit() {
+            let newData = JSON.parse(JSON.stringify(this.data.goodsInfos))
+
+            if(utils.equalsObj(this.oldData, newData)) {
+                this.visible = false
+                return
+            }
             if(this.data.goodsInfos.some(val => val.stock < 0)) {
                 this.$message({
                 message: '库存不能小于0',
+                type: 'warning'
+                });
+                return
+            }
+            if(this.data.goodsInfos.some(val => +val.stock > 10000000)) {
+                this.$message({
+                message: '库存不得高于10000000',
+                type: 'warning'
+                });
+                return
+            }
+            if(this.data.goodsInfos.some(val => /\./.test(val.stock))) {
+                this.$message({
+                message: '请输入正确的数字',
                 type: 'warning'
                 });
                 return
@@ -110,7 +135,7 @@ export default {
         padding-left: 62px;
         padding-top: 20px;
         max-height: 400px;
-        overflow-y: scroll;
+        overflow-y: auto;
         .title {
             padding-bottom: 20px;
         }

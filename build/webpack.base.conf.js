@@ -2,47 +2,52 @@
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
-const { VueLoaderPlugin } = require('vue-loader')
 const vueLoaderConfig = require('./vue-loader.conf')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-// const createLintingRule = () => ({
-//   test: /\.(js|vue)$/,
-//   loader: 'eslint-loader',
-//   enforce: 'pre',
-//   include: [resolve('src'), resolve('test')],
-//   options: {
-//     formatter: require('eslint-friendly-formatter'),
-//     emitWarning: !config.dev.showEslintErrorsInOverlay
-//   }
-// })
+let getPublicPath = function() {
+  let publicPath = '';
+  switch(process.env.NODE_ENV) {
+    case 'testing':
+      publicPath = config.test.assetsPublicPath
+      break;
+    case 'testing2':
+      publicPath = config.test2.assetsPublicPath
+      break;
+    case 'pre':
+      publicPath = config.pre.assetsPublicPath
+      break;
+    case 'production':
+      publicPath = config.build.assetsPublicPath
+      break;
+      default:
+      publicPath = config.dev.assetsPublicPath
+  }
+  return publicPath
+}
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: ['babel-polyfill', './src/main.js']
+    app: ["babel-polyfill", "./src/main.js"]
   },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath:
-      (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'pre')
-        ? config.build.assetsPublicPath : (process.env.NODE_ENV === 'testing' ? config.testBuild.assetsPublicPath
-        : config.dev.assetsPublicPath)
+    publicPath: getPublicPath()
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      '@': resolve('src')
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
     }
   },
   module: {
     rules: [
-      //...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -51,11 +56,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader?cacheDirectory',
-        include: [
-          resolve('src'),
-          resolve('test'),
-          resolve('node_modules/webpack-dev-server/client')
-        ]
+        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
         test: /\.svg$/,
@@ -68,7 +69,6 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
-        exclude: [resolve('src/assets/icons')],
         options: {
           limit: 500000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
@@ -92,7 +92,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [new VueLoaderPlugin()],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).

@@ -15,7 +15,7 @@
                     </div>
                     <p class="label_warn">
                         手动标签：无筛选条件给用户定义标签<br>
-                        自动标签：按照筛选条件自动为用户打标签，条件不符合自动删除和添加
+                        自动标签：按照筛选条件自动为用户打标签
                     </p>
                 </el-form-item>
                 <div v-if="ruleForm.tagType == '1'">
@@ -119,7 +119,7 @@
             </el-form>
         </div>
         <div class="btn_cont">
-            <el-button type="primary" @click="doubleCheck" v-permission="['客户', '客户标签', '默认页面', '保存']">保 存</el-button>
+            <el-button type="primary" @click="doubleCheck" v-permission="['用户', '用户标签', '默认页面', '保存']">保 存</el-button>
             <el-button @click="_routeTo('clientLabel')">取 消</el-button>
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @getSelected="getSelected"></component>
@@ -245,6 +245,7 @@ export default {
             if(val) {
                 this.ruleForm.consumeTimeType = "0";
             }else{
+                this.ruleForm.consumeTimeType = "";
                 this.ruleForm.consumeTimeValue = "";
                 this.ruleForm.consumeTimeUnit = "";
                 this.consumeTime = "";
@@ -277,12 +278,16 @@ export default {
             }
         },
         getSelected(val) {
-            this.selectedList = [].concat(val);
+            this.selectedList = this.selectedList.concat(val);
             //this.selectedIds = val;
         },
         isInteger(val) {
-            let v = Number(val);
-            return Math.floor(v) === v;
+            if(val) {
+                let v = Number(val);
+                return Math.floor(v) === v;
+            }else{
+                return false;
+            }
         },
         saveLabel(isRepeat) {
             if(!isRepeat && !this.$route.query.id) {
@@ -322,7 +327,8 @@ export default {
                     }
                 }
                 if(this.ruleForm.isTotalConsumeTimes == true) {
-                    if(!this.isInteger(this.ruleForm.consumeTimesMin) || !this.isInteger(this.ruleForm.consumeTimesMax)) {
+                    if(!this.isInteger(this.ruleForm.consumeTimesMin) || !this.isInteger(this.ruleForm.consumeTimesMax) || Number(this.ruleForm.consumeTimesMin) > Number(this.ruleForm.consumeTimesMax)) {
+                        console.log(Number(this.ruleForm.consumeTimesMin) < Number(this.ruleForm.consumeTimesMax))
                         this.$message({
                             message: '请正确输入累计消费次数区间',
                             type: 'warning'
@@ -331,7 +337,7 @@ export default {
                     }
                 }
                 if(this.ruleForm.isTotalConsumeMoney == true) {
-                    if(!this.isInteger(this.ruleForm.consumeMoneyMin) || !this.isInteger(this.ruleForm.consumeMoneyMax)) {
+                    if(!this.isInteger(this.ruleForm.consumeMoneyMin) || !this.isInteger(this.ruleForm.consumeMoneyMax) || Number(this.ruleForm.consumeMoneyMin) > Number(this.ruleForm.consumeMoneyMax)) {
                         this.$message({
                             message: '请正确输入累计消费金额区间',
                             type: 'warning'
@@ -340,7 +346,7 @@ export default {
                     }
                 }
                 if(this.ruleForm.isPreUnitPrice == true) {
-                    if(!this.isInteger(this.ruleForm.preUnitPriceMin)|| !this.isInteger(this.ruleForm.preUnitPriceMax)) {
+                    if(!this.isInteger(this.ruleForm.preUnitPriceMin)|| !this.isInteger(this.ruleForm.preUnitPriceMax) || Number(this.ruleForm.preUnitPriceMin) > Number(this.ruleForm.preUnitPriceMax)) {
                         this.$message({
                             message: '请正确输入客单价区间',
                             type: 'warning'
@@ -349,7 +355,7 @@ export default {
                     }
                 }
                 if(this.ruleForm.isTotalScore == true) {
-                    if(!this.isInteger(this.ruleForm.totalScoreMin)|| !this.isInteger(this.ruleForm.totalScoreMax)) {
+                    if(!this.isInteger(this.ruleForm.totalScoreMin)|| !this.isInteger(this.ruleForm.totalScoreMax) || Number(this.ruleForm.totalScoreMin) > Number(this.ruleForm.totalScoreMax)) {
                         this.$message({
                             message: '请正确输入累计获得积分区间',
                             type: 'warning'
@@ -483,6 +489,7 @@ export default {
                     //根据selectedIds查询商品
                     this._apis.client.getSkuList({ids: this.selectedIds.split(','), startIndex: 1,pageSize: 99}).then((response) => {
                         this.selectedList = [].concat(response.list);
+                        this.currentData.selectedList = [].concat(response.list);
                         this.selectedList.map((item) => {
                             item.goodsInfo.specs = item.goodsInfo.specs.replace(/"|{|}/g, "");
                         })
@@ -526,7 +533,7 @@ export default {
             display: inline-block;
         }
         .label_warn{
-            width: 252px;
+            width: 255px;
             font-size: 12px;
             color: #92929B;
             line-height: 20px;

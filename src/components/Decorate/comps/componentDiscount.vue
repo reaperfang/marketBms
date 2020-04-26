@@ -1,6 +1,6 @@
 <template>
 <!-- 组件-限时秒杀 -->
-    <div class="componentDiscount" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
+    <div class="componentDiscount" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading" ref="componentContent">
         <template v-if="hasContent">
             <ul>
                 <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
@@ -32,17 +32,12 @@
                         <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{getReduce(item)}}元</font>{{item.goodsName}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
                         <div class="limit_line" v-if="showContents.indexOf('6')!=-1||showContents.indexOf('7')!=-1">
-                            <p class="limit" v-if="showContents.indexOf('7')!=-1">
-                                <template v-if="item.activityJoinLimit >= 0">
-                                    限 {{item.activityJoinLimit}}件/人
-                                </template>
-                                <template v-else>不限制</template>
-                            </p>
+                            <p class="limit" v-if="showContents.indexOf('7')!=-1">{{item.activityJoinLimit==-1?'不限':'限'+item.activityJoinLimit+'件/人'}}</p>
                            <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
                                 <div class="jd_line">
                                     <div class="current_line" :style="{width: getProgress(item)}"></div>
                                 </div>
-                                <p>剩余<font>{{item.remainStock}}</font>件</p>
+                                <p>仅剩<font>{{item.remainStock?item.remainStock:0}}</font>件</p>
                             </div>
                         </div>
                         <div class="price_line">
@@ -51,7 +46,8 @@
                         </div>
                         <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button s1" v-if="showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6 &&(item.remainStock>0&&utils.dateDifference(item.endTime)>0&&item.status==1)||showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6&&item.status==0"></componentButton>
 
-                        <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1||item.remainStock<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                        <p class="activity_end" v-if="item.status==2">活动已结束</p>
+                        <p class="activity_end" v-if="item.status==0">活动未开始</p>
                     </div>
                 </li>
             </ul>
@@ -125,7 +121,8 @@ export default {
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
-            var bodyWidth = 370;
+            var scrollWidth = window && this.utils.isIE() ? 18 : 0;
+            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
             if(this.listStyle==1){
                 this.goodMargin = {marginTop:this.goodsMargin+'px'};
                 this.goodWidth = "100%";

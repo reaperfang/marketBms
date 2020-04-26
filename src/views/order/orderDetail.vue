@@ -22,7 +22,34 @@
                 <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
+                <el-tab-pane v-if="orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分佣信息" name="commision">
+                    <OrderCommision :orderDetail="orderDetail" @getDetail="getDetail"></OrderCommision>
+                </el-tab-pane>
             </el-tabs>
+        </div>
+        <div class="operate-record">
+            <p class="header">操作记录</p>
+            <el-table
+                :data="orderDetail.orderOperationRecordList"
+                style="width: 100%"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                <el-table-column
+                    label="操作"
+                    width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.operationType | operationTypeFilter}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="createUserName"
+                    label="操作人"
+                    width="180">
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    label="操作时间">
+                </el-table-column>
+            </el-table>
         </div>
         <!-- <div class="goods-list">
             <p class="header">订单清单</p>
@@ -153,6 +180,8 @@
 <script>
 import OrderState from './components/orderState'
 import OrderInformation from './components/orderInformation'
+import OrderCommision from './components/orderCommision'
+import OrderOperate from './components/orderOperate'
 import DeliveryInformation from './components/deliveryInformation'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 
@@ -231,7 +260,15 @@ export default {
                 case 6:
                     return '关闭订单'
                 case 7:
+                    return '库存不足'
+                case 8:
                     return '提前关闭订单'
+                case 9:
+                    return '商户备注'
+                case 10:
+                    return '修改收货信息'
+                case 11:
+                    return '自动发货'
             }
         },
         channelInfoIdFilter(code) {
@@ -254,6 +291,8 @@ export default {
                     return '特权价'
                 case '4':
                     return '赠品订单'
+                case '5': 
+                    return '分佣订单'
             }
         },
         goodsSpecsFilter(value) {
@@ -272,6 +311,13 @@ export default {
 
             return str
         }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+          vm.$nextTick(() => {
+            document.querySelector('.content-main').scrollTop = 0
+          })
+        });
     },
     methods: {
         sendGoods() {
@@ -307,7 +353,9 @@ export default {
         OrderState,
         OrderInformation,
         CouponDialog,
-        DeliveryInformation
+        DeliveryInformation,
+        OrderCommision,
+        OrderOperate
     }
 }
 </script>
@@ -390,6 +438,9 @@ export default {
         }
         .operate-record {
             clear: both;
+            .header {
+                padding-left: 0;
+            }
         }
     }
     .reduce-price-input {

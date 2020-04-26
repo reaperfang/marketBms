@@ -60,9 +60,9 @@ Vue.use(Element, {
 import vueJsonp from 'vue-jsonp';  
 Vue.use(vueJsonp);
 
-//注册取色器插件
-import vcolorpicker from 'vcolorpicker'
-Vue.use(vcolorpicker)
+// //注册取色器插件
+require('@/assets/js/vcolorpicker.umd.js')
+Vue.use({...window.vcolorpicker.default})
 
 //注册拖拽插件
 import VueDND from 'awe-dnd';
@@ -99,8 +99,9 @@ Vue.use(VueClipboard)
 
 /* ***************************** 导出vue实例 ******************************/
 new Vue({
-  el: '#app', 
+  el: '#app',
   router,
   store,
-  render: h => h(App)
+  components: { App },
+  template: '<App/>'
 })

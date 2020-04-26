@@ -6,7 +6,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">查询</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">查询</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">
@@ -25,7 +25,7 @@
         <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'150px'" fixed="right">
+        <el-table-column prop="" label="操作" :width="'300px'" fixed="right">
           <template slot-scope="scope">
             <span class="table-btn" @click="_routeTo('m_classifyEditor', {pageId: scope.row.id})">编辑</span>
             <span class="table-btn" @click="deleteClassify(scope.row)">删除</span>
@@ -34,15 +34,15 @@
               width="400"
               trigger="click">
               <div style="display:flex;">
-                <el-input v-model="scope.row.shareUrl" placeholder="请输入内容" style="margin-right:10px"></el-input>
-                <el-button type="primary" v-clipboard:copy="scope.row.shareUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
+                <el-input :value="getPageLink(scope.row)" style="margin-right:10px"></el-input>
+                <el-button type="primary" v-clipboard:copy="getPageLink(scope.row)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
               </div>
               <span class="table-btn" slot="reference" @click="link(scope.row)">链接</span>
             </el-popover>
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -60,7 +60,6 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 export default {
   name: 'classifyList',
   extends: tableBase,
@@ -124,6 +123,12 @@ export default {
     },
     onError () {
       this.$message.error(this.$t('prompt.copyFail'))
+    },
+
+    getPageLink(row) {
+      if(row.shareUrl) {
+        return location.protocol + row.shareUrl.split(':')[1]
+      }
     }
   }
 }

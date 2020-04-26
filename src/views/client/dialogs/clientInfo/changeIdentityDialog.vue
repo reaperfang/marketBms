@@ -2,7 +2,7 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="变更用户身份" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
-            <p class="user_id">当前身份：{{ data.memberType == 0? '非会员用户':`VIP${data.level} ${data.identity}`}}</p>
+            <p class="user_id">当前身份：{{ data.memberType == 0 || data.level == 0? '非会员用户':`VIP${data.level} ${data.identity}`}}</p>
             <div class="s_cont">
                 <span>变更为：</span>
                 <el-select v-model="selectLevel" style="margin-bottom: 10px">
@@ -86,6 +86,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.data);
         this.getLevelList();
     },
     props: {

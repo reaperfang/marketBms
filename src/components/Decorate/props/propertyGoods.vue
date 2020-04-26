@@ -7,19 +7,19 @@
           <el-radio :label="2">商品分类</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="商品" v-if="ruleForm.source === 1" prop="goods">
+      <el-form-item label="选择商品" v-if="ruleForm.source === 1" prop="goods">
+        <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
+          <ul>
+            <li v-for="(item, key) of list" :key="key" :title="item.name">
+              <img :src="item.mainImage" alt="">
+              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+            </li>
+            <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
+              <i class="inner"></i>
+            </li>
+          </ul>
+        </div>
       </el-form-item>
-      <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
-        <ul>
-          <li v-for="(item, key) of list" :key="key" :title="item.name">
-            <img :src="item.mainImage" alt="">
-            <i class="delete_btn" @click.stop="deleteItem(item)"></i>
-          </li>
-          <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
-            <i class="inner"></i>
-          </li>
-        </ul>
-      </div>
       <el-form-item label="商品分类" v-if="ruleForm.source === 2" prop="goodsGroup">
         <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{seletedGroup && seletedGroup.data.name || '从商品分类中选择'}}</el-button>
       </el-form-item>
@@ -123,7 +123,7 @@
     </div>
     
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="list" @dialogDataSelected="dialogDataSelected"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :goodsEcho.sync="echoList" @dialogDataSelected="dialogDataSelected"></component>
 
     <!-- 商品分类选择弹框 -->
     <DialogBase :visible.sync="pageDialogVisible" width="816px" title="选择商品分类" @submit="seletePage">
@@ -167,6 +167,7 @@ export default {
 
       },
       list: this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       tempGroup: null,   //临时选中的商品分类
@@ -212,6 +213,17 @@ export default {
       this.fetchCatagoryDetail();
       this.fetch();
       this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({id: item});
+        })
+      },
+      deep: true
     }
   },
   methods: {
@@ -268,7 +280,7 @@ export default {
                 return;
               }
               params = {
-                  status: '1',
+                  // status: '1',
                   productCatalogInfoId: this.ruleForm.currentCatagoryId
               };
             }
@@ -306,12 +318,12 @@ export default {
                 }
             }
             params = {
-                status: '1',
+                // status: '1',
                 ids: allIds
             }
         }else{
             params = {
-                status: '1',
+                // status: '1',
                 ids: ids[this.currentCatagoryId],
                 productCatalogInfoId: this.currentCatagoryId
             }
@@ -322,7 +334,7 @@ export default {
     /* 设置普通商品参数 */
     setNormalGoodsParams(ids) {
         return {
-            status: '1',
+            // status: '1',
             ids: ids,
         }
     },
@@ -359,15 +371,8 @@ export default {
 /deep/.el-form-item__label{
   text-align: left;
 }
-/deep/.el-radio-group{
-  margin-top: 9px;
-  /deep/.el-radio {
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
-}
 /deep/.el-checkbox-group{
-  /deep/.el-checkbox{
+  .el-checkbox{
     margin-right: 10px;
   }
 }

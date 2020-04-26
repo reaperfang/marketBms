@@ -22,7 +22,7 @@
             <el-form-item label="电子面单名称">
               <el-input v-model="listQuery.name" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="创建时间">
+            <el-form-item label="编辑时间">
               <el-date-picker
                 v-model="listQuery.time"
                 type="datetimerange"
@@ -119,6 +119,8 @@ export default {
   methods: {
     resetForm(formName) {
           this.listQuery = Object.assign({}, this.listQuery, {
+            startIndex: 1,
+            pageSize: 20,
             time: '',
             name: '',
             startTime: '',
@@ -138,6 +140,10 @@ export default {
       })
     },
     onSubmit() {
+      this.listQuery = Object.assign({}, this.listQuery, {
+          startIndex: 1,
+          pageSize: 20,
+      })
       this.getList()
     },
     getList() {
@@ -209,6 +215,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+}
+/deep/ input:-ms-input-placeholder{
+  color:#92929B;
 }
 </style>
 

@@ -457,6 +457,17 @@ export function getMiniappInfo(data) {
   })
 }
 
+// 分佣商品设置
+export function commisionGoodsSet(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-RESELL-EDIT-PROCESSOR',
+    data,
+    token
+  })
+}
+
 
 
 

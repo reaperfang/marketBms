@@ -6,7 +6,7 @@
           <el-input v-model="ruleForm.title" placeholder="请输入资讯标题" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">搜索</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜索</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">
@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column prop="authorHeadPath" label="作者头像">
            <template slot-scope="scope">
-             <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="">
+             <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="失败">
              <span v-else>--</span>
           </template>
         </el-table-column>
@@ -83,7 +83,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -101,7 +101,6 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 export default {
   name: 'pageList',
   extends: tableBase,
@@ -199,7 +198,7 @@ export default {
 
     // 修改禁用
     selectInit(row, index){
-      return (row.isHomePage != 1)
+      // return (row.isHomePage != 1)
     }
   }
 }

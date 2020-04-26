@@ -52,7 +52,7 @@
         </el-radio-group> -->
         <wxColor v-model="ruleForm.couponColor" @input="yuan"></wxColor>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideScrambled">
+      <el-form-item label="更多设置" prop="hideScrambled" v-if="ruleForm.addType == 1">
         <el-checkbox v-model="ruleForm.hideScrambled">隐藏已抢完劵</el-checkbox>
       </el-form-item>
       <el-form-item label="">
@@ -61,7 +61,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="list"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @dialogDataSelected="dialogDataSelected" :goodsEcho.sync="echoList"></component>
   </el-form>
 </template>
 
@@ -88,6 +88,7 @@ export default {
 
       },
       list: [],
+      echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
@@ -111,6 +112,7 @@ export default {
     /* 监听添加类型，自动获取状态则拉取一下数据 */
     'ruleForm.addType'(newValue) {
       if(newValue == 2) {
+        this.ruleForm.hideScrambled = false;
         this.fetch();
       }else{
         this.list = [];
@@ -126,6 +128,17 @@ export default {
     /* 监听显示个数 */
     'ruleForm.showNumber'(newValue) {
       this.fetch();
+    },
+
+    'ruleForm.ids': {
+      handler(newValue, oldValue) {
+        const _self = this;
+        this.echoList = [];
+        newValue.forEach((item)=>{
+          _self.echoList.push({id: item});
+        })
+      },
+      deep: true
     }
   },
   methods: {

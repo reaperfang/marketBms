@@ -1,6 +1,6 @@
 <template>
     <div style="min-height: 100vh;" v-loading="loading">
-        <div v-if="list.length" class="goods-list">
+        <div class="goods-list">
             <header class="header">
                 <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
@@ -15,7 +15,7 @@
                             <el-option label="全部" value=""></el-option>
                         <el-option label="上架" :value="1"></el-option>
                         <el-option label="下架" :value="0"></el-option>
-                        <el-option label="售罄" :value="-1"></el-option>
+                        <el-option label="已售罄" :value="-1"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="商品分类" prop="productCatalogInfoId">
@@ -48,7 +48,7 @@
                         <el-input v-model="listQuery.name" placeholder="请输入商品名称"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button @click="getList" type="primary">查询</el-button>
+                        <el-button @click="search" type="primary">查询</el-button>
                         <el-button class="border-button" @click="resetForm('form')">重置</el-button>
                     </el-form-item>
                     </el-form>
@@ -64,17 +64,36 @@
                     ref="table"
                     style="width: 100%"
                     :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-                    @selection-change="handleSelectionChange">
+                    @selection-change="handleSelectionChange"
+                    :empty-text="emptyText">
                     <el-table-column
                         type="selection"
                         width="55">
                     </el-table-column>
+                    <!-- <el-table-column
+                    prop="code"
+                    label="SPU编码"
+                    width="124">
+                    </el-table-column> -->
+                    <el-table-column
+                    prop="code"
+                    label="SPU编码"
+                    width="124">
+                    </el-table-column>
                     <el-table-column
                     prop="name"
                     label="商品名称"
-                    width="380">
+                    :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
                         <template slot-scope="scope">
-                            <div class="ellipsis2" style="width: 350px;" :title="scope.row.name">{{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i></div>
+                            <div class="ellipsis2" :class="{'ellipsis2-big': list.filter(val => val.activity) && list.filter(val => val.activity).length}" style="width: 196px;" :style="{width: list.filter(val => val.activity) && list.filter(val => val.activity).length ? 239 : 196}" :title="scope.row.name">
+                                <template v-if="scope.row.name.length < 14">
+                                    {{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i>
+                                </template>
+                                <template v-else>
+                                    {{scope.row.name.substring(0, 14)}}<i v-if="scope.row.activity" class="sale-bg"></i><br />
+                                    {{scope.row.name.substring(14) | goodsNameFilter}}
+                                </template>
+                            </div>
                             <!-- <div class="gray">{{scope.row.goodsInfo.specs | specsFilter}}</div> -->
                         </template>
                     </el-table-column>
@@ -83,7 +102,7 @@
                         width="100">
                         <template slot-scope="scope">
                             <span class="goods-state">
-                                <span :class="{red: scope.row.status == -1}">{{scope.row.goodsInfos[0].status | statusFilter}}</span>
+                                <span :class="{red: scope.row.status == -1}">{{scope.row.status | statusFilter}}</span>
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>
                             </span>
                         </template>
@@ -109,7 +128,7 @@
                     <el-table-column
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{red: scope.row.warningStock && (Math.min.apply(null, scope.row.goodsInfos.map(val => val.stock)) <= scope.row.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
+                            <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -164,13 +183,20 @@
             </div>
             <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
-        <div v-else class="goods-list-empty">
-            <div v-if="!loading" class="goods-list-empty-content">
+        <div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
+            <div class="goods-list-empty-content">
                 <div class="image"></div>
-                <p>没有找到相关商品，换个搜索词试试吧</p>
+                <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
                 <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
             </div>
         </div>
+        <!-- <div v-else class="goods-list-empty">
+            <div v-if="!loading" class="goods-list-empty-content">
+                <div class="image"></div>
+                <p>没有找到相关商品，换个搜索词试试吧</p>
+                <el-button @click="$router.push('/goods/goodsList')" class="add-goods" type="primary">返回列表页</el-button>
+            </div>
+        </div> -->
     </div>
 </template>
 <style lang="scss" scoped>
@@ -313,6 +339,7 @@
     text-align: center;
     .goods-list-empty-content {
         padding-top: 155px;
+        padding-bottom: 20px;
         .image {
             width: 210px;
             height: 178px;
@@ -339,14 +366,15 @@
 .table-header {
     margin-bottom: 10px;
 }
-/deep/ .salePrice {
+/deep/ .salePrice-red {
     color: #F66060;
 }
 .sale-bg {
     display: inline-block;
     width: 38px;
     height: 10px;
-    background:url('../../assets/images/goods/sale.png') no-repeat;
+    background:url('../../assets/images/goods/sale.jpg') no-repeat;
+    background-size: 100% 100%;
     margin-left: 5px;
 }
 /deep/ .el-checkbox__label {
@@ -357,13 +385,28 @@
     margin-left: 12px;
 }
 .ellipsis2 {
-    width: 350px;
+    width: 196px;
     text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+.ellipsis2-big {
+    width: 239px;
+}
+/deep/ .el-table td, .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
 }
 </style>
 <style lang="scss">
@@ -406,6 +449,7 @@ export default {
             ],
             list: [],
             total: 0,
+            allTotal: 0,
             loading: false,
             listQuery: {
                 startIndex: 1,
@@ -430,26 +474,68 @@ export default {
                 children: 'childrenCatalogs',
                 multiple: false, 
                 checkStrictly: true
-            }
+            },
+            emptyText: '没有找到相关商品，换个搜索词试试吧'
         }
     },
     created() {
         if(typeof this.$route.query.status != 'undefined') {
             this.listQuery = Object.assign({}, this.listQuery, {status: +this.$route.query.status})
         }
+        this.getAllList()
         this.getList()
         this.getCategoryList()
         this.getMiniappInfo()
         this.getProductCatalogTreeList()
     },
+    computed: {
+        isIE() {
+            var userAgent = navigator.userAgent;
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+            if(isIE) {
+                return true;   
+            } else if(isEdge) {
+                return true; 
+            } else if(isIE11) {
+                return true; 
+            }else{
+                return false
+            }
+        },
+    },
     filters: {
         statusFilter(val) {
-            if(val == 1) {
+            // let item = goodsInfos[0]
+
+            // if(goodsInfos.reduce((total, current) => total + current.stock, 0) == 0) {
+            //     return '已售馨'
+            // } else {
+            //     if(item.status == 1) {
+            //         return '上架'
+            //     } else if(item.status == 0) {
+            //         return '下架'
+            //     } else if(item.status == -1) {
+            //         let goodsInfosList = goodsInfos.filter(val => val.stock != -1)
+                    
+            //         if(goodsInfosList.length) {
+            //             let item = goodsInfosList[0]
+
+            //             if(item.stock == 1) {
+            //                 return '上架'
+            //             } else if(item.stock == 0) {
+            //                 return '下架'
+            //             }
+            //         }
+            //     }
+            // }
+            if(val === 1) {
                 return '上架'
-            } else if(val == 0) {
+            } else if(val === 0) {
                 return '下架'
-            } else if(val == -1) {
-                return '已售馨'
+            } else if(val === -1) {
+                return '已售罄'
             }
         },
         async productCatalogFilter(id) {
@@ -478,9 +564,91 @@ export default {
             str = str.replace(/(^.*?)\,$/, '$1')
 
             return str
+        },
+        nameFilter(name) {
+            let str = ''
+
+            if(name.length > 14) {
+                str += name.substring(0, 14)
+                str += '\n'
+                str += name.substring(14)
+
+                return str
+            } else {
+                return name
+            }
+        },
+        goodsNameFilter(name) {
+            let isIE = () => {
+                var userAgent = navigator.userAgent;
+                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+                var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+                var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+                if(isIE) {
+                    return true;   
+                } else if(isEdge) {
+                    return true; 
+                } else if(isIE11) {
+                    return true; 
+                }else{
+                    return false
+                }
+            }
+
+            let gblen = (str) => {  
+                var len = 0;  
+                for (var i=0; i<str.length; i++) {  
+                    if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
+                    len += 2;  
+                    } else {  
+                    len ++;  
+                    }  
+                }  
+                return len;  
+            }
+
+            if(isIE) {
+                let str = ''
+
+                if(gblen(name) > 28) {
+                    for(let i=0; i<name.length; i++) {
+                        str += name[i]
+
+                        if(gblen(str) < 28) {
+                            continue
+                        } else {
+                            break
+                        }
+                    }
+
+                    return str + '...'
+                } else {
+                    return name
+                }
+            } else {
+                return name
+            }
         }
     },
     methods: {
+        search() {
+            this.listQuery = Object.assign({}, this.listQuery, {
+                startIndex: 1,
+                pageSize: 20,
+            })
+            this.getList()
+        },
+        gblen(str) {  
+            var len = 0;  
+            for (var i=0; i<str.length; i++) {  
+                if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
+                len += 2;  
+                } else {  
+                len ++;  
+                }  
+            }  
+            return len;  
+        },
         changePriceMore() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
@@ -496,6 +664,7 @@ export default {
                 })
                 return
             }
+            this.currentData = JSON.parse(JSON.stringify(this.multipleSelection))
             this.currentDialog = 'PriceChangeDialog'
             this.dialogVisible = true
         },
@@ -514,6 +683,7 @@ export default {
                 .allUpdatePriceSpu(_param)
                 .then(res => {
                 this.getList();
+                this.checkedAll = false
                 this.visible = false;
                 
                 this.$message({
@@ -552,6 +722,8 @@ export default {
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
                     window.location.href = res
+                    this.$refs.table.clearSelection();
+                    this.checkedAll = false
                 }).catch(error => {
                     this.$message.error({
                     message: error,
@@ -563,6 +735,19 @@ export default {
             // this.dialogVisible = true
             // obj.shareMore = [...this.multipleSelection]
             // this.currentData = obj
+        },
+        getMarketActivityByIds(ids) {
+             return new Promise((resolve, reject) => {
+                this._apis.goods.getMarketActivity({ids}).then((res) => {
+                    resolve(res)
+                }).catch(error => {
+                    this.$message.error({
+                    message: error,
+                    type: 'error'
+                });
+                    reject(error)
+                })
+            })
         },
         getMarketActivity(list) {
             // var that = this
@@ -617,7 +802,14 @@ export default {
             this.currentData = _row
         },
         resetForm(formName) {
-            this.$refs[formName].resetFields();
+            //this.$refs[formName].resetFields();
+            this.listQuery = Object.assign({}, this.listQuery, {
+                name: '',
+                status: '',
+                productCatalogInfoId: '',
+                searchType: 'code',
+                searchValue: ''
+            })
             this.categoryValue = ''
             this.getList()
         },
@@ -641,8 +833,24 @@ export default {
             }
 
             this.confirm({title: '批量删除', icon: true, text: '是否确认批量删除？'}).then(() => {
+                let isLast = false
+
+                if(this.listQuery.startIndex == 1) {
+                    isLast = true
+                } else {
+                    if((this.listQuery.startIndex - 1)*this.listQuery.pageSize + this.list.length == this.total) {
+                        isLast = true
+                    }
+                }
                 this._apis.goods.allDeleteSpu({ids}).then((res) => {
-                    this.getList()
+                    if(isLast) {
+                        this.listQuery.startIndex = 1
+                        this.getList()
+                    } else {
+                        this.getList()
+                    }
+                    this.getAllList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                             message: '删除成功！',
@@ -665,6 +873,7 @@ export default {
             this.confirm({title: `批量${statusStr}`, icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids, status}).then((res) => {
                     this.getList()
+                    this.checkedAll = false
                     this.visible = false
                     this.$message({
                         message: '修改成功！',
@@ -782,25 +991,64 @@ export default {
             })
         },
         upperAndLowerRacksSpu(row) {
-            let _title = ''
-            let _status
-            let _row
+            // let _title = ''
+            // let _status
+            // let _row
 
-            if(row.status == 1) {
-                _title = '下架'
-                _status = 0
-            } else if(row.status == 0) {
-                _title = '上架'
-                _status = 1
-            }
+            // if(row.status == 1) {
+            //     _title = '下架'
+            //     _status = 0
+            // } else if(row.status == 0) {
+            //     _title = '上架'
+            //     _status = 1
+            // }
 
-            _row = JSON.parse(JSON.stringify(row))
-            _row.goodsInfos.forEach(val => {
-                val.status = val.status == 1 ? true : false
+            // _row = JSON.parse(JSON.stringify(row))
+            // _row.goodsInfos.forEach(val => {
+            //     if(val.status === 1) {
+            //         val.status = true
+            //     } else if(val.status === 0) {
+            //         val.status = false
+            //     } else if(val.status === -1) {
+            //         val.status = -1
+            //     }
+            // })
+            // this.currentData = _row
+            // this.currentDialog = 'EditorUpperAndLowerRacksSpu'
+            // this.dialogVisible = true
+            this._apis.goods.getGoodsDetail({id: row.id}).then(res => {
+                this.getMarketActivityByIds([res.id]).then(activityRes => {
+                    activityRes.forEach((val, index) => {
+                        if(val.isParticipateActivity) {
+                            res.goodsInfos.forEach(val => {
+                                val.activity = true
+                            })
+                        } else {
+                            if(val.goodsInfos) {
+                                val.goodsInfos.forEach(skuVal => {
+                                    let skuid = skuVal.id
+                                    let item = res.goodsInfos.find(val => val.id == skuid)
+                                    
+                                    if(item) {
+                                        item.activity = true
+                                    }
+                                })
+                            }
+                        }
+                    })
+
+                    res.goodsInfos.forEach(val => {
+                        if(val.status == 1) {
+                            val.status = true
+                        } else if(val.status == 0) {
+                            val.status = false
+                        }
+                    })
+                    this.currentData = res
+                    this.currentDialog = 'EditorUpperAndLowerRacksSpu'
+                    this.dialogVisible = true
+                })
             })
-            this.currentData = _row
-            this.currentDialog = 'EditorUpperAndLowerRacksSpu'
-            this.dialogVisible = true
         },
         moreManageHandler() {
             this.showTableCheck = true
@@ -841,6 +1089,13 @@ export default {
 
             this.getList(param)
         },
+        getAllList() {
+            this._apis.goods.fetchSpuGoodsList().then((res) => {
+                this.allTotal = +res.total
+            }).catch(error => {
+                //this.loading = false
+            })
+        },
         getList(param) {
             this.loading = true
             let _param
@@ -857,18 +1112,30 @@ export default {
                         let goods = res.list.find(val => val.id == id)
 
                         goods.activity = true
-                        if(val.goodsInfos) {
-                            val.goodsInfos.forEach(skuVal => {
-                                let skuid = skuVal.id
-
-                                goods.goodsInfos.find(val => val.id == skuid).activity = true
+                        if(val.isParticipateActivity) {
+                            goods.goodsInfos.forEach(val => {
+                                val.activity = true
                             })
+                        } else {
+                            if(val.goodsInfos) {
+                                val.goodsInfos.forEach(skuVal => {
+                                    let skuid = skuVal.id
+                                    let item = goods.goodsInfos.find(val => val.id == skuid)
+                                    
+                                    if(item) {
+                                        item.activity = true
+                                    }
+                                })
+                            }
                         }
                     })
                     this.total = +res.total
                     //this.getCategoryName(res.list)
                     this.list = res.list
                     this.loading = false
+                    // if(this.allTotal && !this.total) {
+                    //     this.$router.push('/goods/goodsListEmpty')
+                    // }
                 })
             }).catch(error => {
                 //this.loading = false
@@ -897,13 +1164,14 @@ export default {
         },
         deleleHandler(row) {
             if(row.activity) {
-                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动，活动有效期内商品不得“删除”。`}).then(() => {
+                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动<br />活动有效期内商品不得“删除”。`}).then(() => {
                     
                 })
             } else {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
-                    this._apis.goods.allDelete({ids: [row.id]}).then((res) => {
+                    this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
+                        this.getAllList()
                         this.visible = false
                         this.$message({
                             message: '删除成功！',

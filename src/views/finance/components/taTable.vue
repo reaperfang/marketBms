@@ -3,11 +3,16 @@
   <div>
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model='ruleForm.nickName' placeholder="请输入" style="width:226px;"></el-input>
+        <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <!-- <el-form-item label="订单编号">
           <el-input v-model="ruleForm.value2" placeholder="请输入" style="width:226px;"></el-input>
@@ -36,7 +41,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -69,6 +74,9 @@
         <el-table-column
           prop="presentType"
           label="奖励方式">
+          <template slot-scope="scope">
+            {{rewards[scope.row.presentType].label}}
+          </template>
         </el-table-column>
         <el-table-column
           prop="presentContent"
@@ -82,11 +90,12 @@
       </el-table>
       <div class="page_styles">
         <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -112,6 +121,16 @@ export default {
       dataList:[],
       total:0,
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       times:[],
       ruleForm:{
         memberSn:'',
@@ -121,7 +140,9 @@ export default {
         stopTime:'',
         sort:'desc',
         pageSize:10,
-        pageNum:1
+        pageNum:1,
+        userType:'memberSn',
+        userValue:'',
       },
       loading:true,
       currentData:{},
@@ -158,8 +179,26 @@ export default {
         </div>
       )
     },
-    fetch(){
-      this._apis.finance.getListTa(this.ruleForm).then((response)=>{
+    fetch(num){
+      this.ruleForm.pageNum = num || this.ruleForm.pageNum
+      let query = {
+        memberSn:'',
+        nickName:'',
+        presentType:this.ruleForm.presentType,
+        startTime:this.ruleForm.startTime,
+        stopTime:this.ruleForm.stopTime,
+        sort:this.ruleForm.sort,
+        pageSize:this.ruleForm.pageSize,
+        pageNum:this.ruleForm.pageNum,
+      }
+      if(this.ruleForm.userType == 'memberSn'){
+        query.memberSn = this.ruleForm.userValue || ''
+        query.nickName = ''
+      }else{
+        query.nickName = this.ruleForm.userValue || ''
+        query.memberSn = ''
+      }
+      this._apis.finance.getListTa(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
         this.loading = false
@@ -167,8 +206,8 @@ export default {
         this.loading = false
       })
     },
-    onSubmit(){
-      this.fetch();
+    onSubmit(num){
+      this.fetch(num);
     },
     //排序
     sortTable(column){
@@ -188,6 +227,8 @@ export default {
         sort:'desc',
         pageNum:1,
         pageSize:10,
+        userType:'memberSn',
+        userValue:''
       }
       this.times= []
       this.fetch()

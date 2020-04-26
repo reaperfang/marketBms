@@ -12,7 +12,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入页面名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">查询</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">查询</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">
@@ -52,7 +52,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="multiple_selection">
+      <div class="multiple_selection" v-if="tableData.length">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" v-popover:popover4  :disabled="!this.multipleSelection.length">批量改分类</el-button>
         <el-button class="border-button" @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
@@ -74,7 +74,7 @@
           </div>
         </el-popover>
       </div>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -92,7 +92,6 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 export default {
   name: 'draftList',
   extends: tableBase,

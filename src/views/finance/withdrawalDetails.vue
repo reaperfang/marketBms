@@ -4,7 +4,6 @@
     <div class="top_part head-wrapper">
       <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        
         <el-form-item>
           <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;padding-right:4px;">
             <el-option
@@ -38,15 +37,20 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model="ruleForm.nickName" placeholder="请输入" style="width:226px;"></el-input>
+         <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -113,17 +117,18 @@
         </el-table-column>
       </el-table>
       <div class="page_styles">
-      <div class="checkAudit">
+      <div class="checkAudit" v-if="dataList.length != 0">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
       </div>
         
          <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="Number(ruleForm.pageNum) || 1"
+          :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -153,13 +158,27 @@ export default {
   data() {
     return {
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       ruleForm:{
         searchType:'cashoutSn',
         searchValue:'',
         timeValue:'',
         status:-1,
+        userType:'memberSn',
+        userValue:'',
         memberSn:'',
-        nickName:''
+        nickName:'',
+        startIndex:1,
+        pageSize:10
       },
       dataList:[ ],
       selectStatus:false,
@@ -205,6 +224,13 @@ export default {
             query[key] = this.ruleForm[item]
           }
         }
+        if(this.ruleForm.userType == 'memberSn'){
+          query.memberSn = this.ruleForm.userValue || ''
+          query.nickName = ''
+        }else{
+          query.nickName = this.ruleForm.userValue || ''
+          query.memberSn = ''
+        }
       }
       query.status = this.ruleForm.status == -1 ? null : this.ruleForm.status
       let timeValue = this.ruleForm.timeValue
@@ -215,7 +241,8 @@ export default {
       return query;
     },
 
-    fetch(){
+    fetch(num){
+      this.ruleForm.startIndex = num || this.ruleForm.startIndex
       let query = this.init();
       this._apis.finance.getListWd(query).then((response)=>{
         this.dataList = response.list
@@ -226,8 +253,8 @@ export default {
       })
     },
     //搜索
-    onSubmit(){
-      this.fetch()
+    onSubmit(num){
+      this.fetch(num)
     },
     //重置
     resetForm(){
@@ -236,7 +263,10 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        memberSn:''
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:'',
       }
       this.fetch()
     },

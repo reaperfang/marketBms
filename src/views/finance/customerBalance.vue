@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="交易类型">
-          <el-select v-model="ruleForm.businessType" style="width:100px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" style="width:140px;" placeholder="全部">
             <el-option
               v-for="item in transactionTypes"
               :key="item.value"
@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '客户余额', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '客户余额', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -92,11 +92,12 @@
       </el-table>
       <div class="page_styles">
         <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -123,7 +124,9 @@ export default {
       ruleForm:{
         tradeDetailSn:'',
         businessType:-1,
-        timeValue:''
+        timeValue:'',
+        startIndex:1,
+        pageSize:10
       },
       dataList:[ ],
       total:0,
@@ -172,7 +175,8 @@ export default {
       return query;
     },
 
-    fetch(){
+    fetch(num){
+      this.ruleForm.startIndex = num || this.ruleForm.startIndex
       let query = this.init();
       this._apis.finance.getListCb(query).then((response)=>{
         this.dataList = response.list
@@ -183,8 +187,8 @@ export default {
       })
     },
 
-    onSubmit(){
-      this.fetch()
+    onSubmit(num){
+      this.fetch(num)
     },
     //重置
     resetForm(){
@@ -204,7 +208,7 @@ export default {
          this.currentData.api = "finance.exportCb"
        }else{
          this._apis.finance.exportCb(query).then((response)=>{
-          window.location.href = response
+         window.location.href = response
       }).catch((error)=>{
         this.$message.error(error)
       })

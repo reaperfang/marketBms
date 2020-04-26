@@ -2,7 +2,7 @@
   <div class="module view" :style="{backgroundColor: baseInfo&&baseInfo.colorStyle}">
     <div class="phone-head" @click="clickTitle(null)" title="点击编辑页面信息">
       <img src="@/assets/images/shop/editor/phone_head.png" alt="">
-      <span>{{baseInfo.title || '页面标题'}}</span>
+      <span>{{baseInfo.title || baseInfo.name || '页面标题'}}</span>
     </div>
     <div class="phone-body" ref="view_container" @click="clickTitle($event)" v-calcHeight="height" @drop="dropAddComponent($event)" @dragover="dragover($event)" @dragleave="dragleave($event)">
 
@@ -199,10 +199,14 @@ export default {
             var container = this.$el.querySelector(".phone-body");
             let tempScrollHeight = container.scrollHeight;
             setTimeout(()=>{
-              container.scrollTo({
-                top: 0,
-                behavior: "smooth"
-              });
+              if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+                container.scrollTop = 0
+              }else{
+                container.scrollTo({
+                  top: 0,
+                  behavior: "smooth"
+                });
+              }
             });
         });
     },
@@ -213,10 +217,14 @@ export default {
             var container = this.$el.querySelector(".phone-body");
             let tempScrollHeight = container.scrollHeight;
             setTimeout(()=>{
-              container.scrollTo({
-                top: tempScrollHeight,
-                behavior: "smooth"
-              });
+              if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+                container.scrollTop = tempScrollHeight
+              }else{
+                container.scrollTo({
+                  top: tempScrollHeight,
+                  behavior: "smooth"
+                });
+              }
             });
         });
     },
@@ -230,10 +238,14 @@ export default {
       //     if(id === blocks[i].getAttribute('data-id')) {
       //       const offsetTop = blocks[i].offsetTop;
       //       const offsetHeight = blocks[i].offsetHeight;
-      //       container.scrollTo({
-      //         top: offsetTop + offsetHeight,
-      //         behavior: "smooth"
-      //       });
+      //       if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+      //         container.scrollTop = offsetTop + offsetHeight
+      //       }else {
+      //         container.scrollTo({
+      //           top: offsetTop + offsetHeight,
+      //           behavior: "smooth"
+      //         });
+      //       }
       //     }
       //   }
       // })
@@ -310,6 +322,11 @@ export default {
    position:relative;
     .phone-body {
       box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+      width: 375px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
       .component_wrapper{
         // min-height: 50px;
         &.actived{

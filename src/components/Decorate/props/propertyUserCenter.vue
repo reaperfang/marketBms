@@ -55,10 +55,10 @@
               :label="item.title"
               :prop="'moduleList.'+ key +'.titleValue'"
               :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]">
-              <div class="module_block">
+              <div class="module_block color_block">
                   <el-input v-model="item.titleValue"></el-input>
                   <div class="img_preview">
-                    <img :src="item.icon || require('@/assets/images/shop/userCenter/' + item.defaultIcon + '.png')" alt="">
+                    <img :src="item.icon || require('@/assets/images/shop/userCenter/' + item.defaultIcon + '.png')" alt="" title="点击更换">
                     <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
                   </div>
                   <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
@@ -282,7 +282,7 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: this.ruleForm.shareUrl.replace("&","[^]"),
+        url: location.protocol + this.ruleForm.shareUrl.split(':')[1].replace("&","[^]"),
         width: '150',
         height: '150',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
@@ -312,18 +312,25 @@ export default {
     .el-input{
       margin-right:10px;
     }
-    /deep/.img_preview{
-      width: 64px;
-      height: 31px;
+    .img_preview{
+      width: 64px!important;
+      height: 31px!important;
       display: block;
       margin-right: 10px;
+      &:hover span{
+        opacity: 1;
+        transition: all 0.3s;
+      }
       span{
         font-size: 12px;
         height: 16px;
         line-height: 16px;
+        opacity: 0;
+        transition: all 0.3s;
+        cursor: pointer;
       }
     }
-    /deep/.colorBtn{
+    .colorBtn{
       width:31px!important;
       height:31px!important;
       margin-right:10px;
@@ -331,13 +338,6 @@ export default {
     }
   }
 
-.el-radio-group{
-  margin-top: 9px;
-  .el-radio {
-      margin-bottom: 10px;
-      margin-right: 10px;
-  }
-}
 .el-checkbox-group{
   .el-checkbox{
     margin-right: 10px;

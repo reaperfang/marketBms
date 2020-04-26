@@ -13,7 +13,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">搜索</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜索</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">
@@ -53,7 +53,7 @@
         </el-table-column>
         <el-table-column prop="authorHeadPath" label="作者头像">
            <template slot-scope="scope">
-            <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="">
+            <img v-if="scope.row.authorHeadPath" class="author_img" :src="scope.row.authorHeadPath" alt="失败">
             <span v-else>--</span>
           </template>
         </el-table-column>
@@ -89,11 +89,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="multiple_selection">
+      <div class="multiple_selection" v-if="tableData.length">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button type="warning" plain @click="batchDeleteInfo"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -111,7 +111,6 @@
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 export default {
   name: 'pageList',
   extends: tableBase,
@@ -234,7 +233,7 @@ export default {
 
     // 修改禁用
     selectInit(row, index){
-      return (row.isHomePage != 1)
+      // return (row.isHomePage != 1)
     }
   }
 }

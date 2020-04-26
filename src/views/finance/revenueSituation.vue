@@ -227,7 +227,7 @@ export default {
   },
   created() {
     this.init(7);
-    this.getDataDateRs()
+    this.getDataDateRs();
     this.getSurveyDay();
   },
   methods: {
@@ -369,7 +369,7 @@ export default {
 .under_part{
   width: 100%;
   background: #fff;
-  margin-top: 56px;
+  margin-top: 20px;
   padding: 0px 20px;
   .title{
     height: 60px;

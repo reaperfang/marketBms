@@ -3,14 +3,19 @@
   <div>
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item label="用户ID">
-          <el-input v-model="ruleForm.memberSn" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input v-model="ruleForm.nickName" placeholder="请输入" style="width:226px;"></el-input>
+        <el-form-item>
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+            <el-option
+              v-for="item in userTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessTypeId" style="width:100px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessTypeId" style="width:140px;" placeholder="全部">
             <el-option
               v-for="item in idbusinessTypes"
               :key="item.value"
@@ -33,7 +38,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '积分明细', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '积分明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -96,11 +101,12 @@
       </el-table>
       <div class="page_styles">
         <el-pagination
+          v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -124,11 +130,25 @@ export default {
   data() {
     return {
       inline:true,
+      userTypes:[
+        {
+          value:'memberSn',
+          label:'用户ID'
+        },
+        {
+          value:'nickName',
+          label:'用户昵称'
+        },
+      ],
       ruleForm:{
         memberSn:'',
         businessTypeId:-1,
         timeValue:'',
-        nickName:''
+        nickName:'',
+        userType:'memberSn',
+        userValue:'',
+        startIndex:1,
+        pageSize:10
       },
       dataList:[ ],
       total:0,
@@ -143,7 +163,7 @@ export default {
       return financeCons.idbusinessTypes;
     }
   },
-  created() { },
+  created() {},
   methods: {
     init(){
       let query = {
@@ -155,6 +175,13 @@ export default {
         pageSize:this.ruleForm.pageSize,
         nickName:this.ruleForm.nickName
       }
+      if(this.ruleForm.userType == 'memberSn'){
+        query.memberSn = this.ruleForm.userValue || ''
+        query.nickName = ''
+      }else{
+        query.nickName = this.ruleForm.userValue || ''
+        query.memberSn = ''
+      }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.startTime = timeValue[0]
@@ -163,7 +190,8 @@ export default {
       return query;
     },
 
-    fetch(){
+    fetch(num){
+      this.ruleForm.startIndex = num || this.ruleForm.startIndex
       let query = this.init();
       this._apis.finance.getListId(query).then((response)=>{
         this.dataList = response.list
@@ -174,15 +202,18 @@ export default {
       })
     },
 
-    onSubmit(){
-      this.fetch()
+    onSubmit(num){
+      this.fetch(num)
     },
     //重置
     resetForm(){
       this.ruleForm = {
-        memberSn:'',
         businessTypeId:'',
-        timeValue:''
+        timeValue:'',
+        userType:'memberSn',
+        userValue:'',
+        memberSn:'',
+        nickName:'',
       }
       this.fetch()
     },

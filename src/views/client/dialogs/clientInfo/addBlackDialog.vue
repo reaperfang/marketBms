@@ -2,6 +2,7 @@
 <div>
     <DialogBase :visible.sync="visible" @submit="submit" title="加入黑名单" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
+            <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
             <p class="user_id">用户ID：{{ data.memberSn }}</p>
             <div class="clearfix">
                 <p class="c_label fl">禁用选择：</p>
@@ -27,7 +28,6 @@
             <div class="check_container">
                 <el-checkbox v-for="item in checks.slice(2,checks.length)" :key="item.id" v-model="item.checked" :label="item.name" class="check_item"></el-checkbox><br>
             </div>
-            <p class="red">提示：积分、余额和优惠券属于虚拟资产，冻结可能会产品生法律风险，请谨慎操作。</p>
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
@@ -448,7 +448,7 @@ export default {
             }
         },
         getAllCoupons() {
-            this._apis.client.getAllCoupons({couponType: 0, memberId: this.data.id, frozenType: 1}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 0, memberId: this.data.id, frozenType: 1, startIndex: 1, pageSize: 999, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.couponList = [].concat(response.list);
                 this.couponList.map((item) => {
                     this.$set(item, 'frozenNum',1);
@@ -458,7 +458,7 @@ export default {
             })
         },
         getAllCodes() {
-            this._apis.client.getAllCoupons({couponType: 1, memberId: this.data.id, frozenType: 1}).then((response) => {
+            this._apis.client.getAllCoupons({couponType: 1, memberId: this.data.id, frozenType: 1, startIndex: 1, pageSize: 999, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.codeList = [].concat(response.list);
                 this.codeList.map((item) => {
                     this.$set(item, 'frozenNum', 1);
@@ -498,6 +498,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/deep/ .el-table .cell{
+  padding-left: 16px;
+}
+/deep/ .el-table__body-wrapper{
+    overflow: auto;
+    height: 502px;
+}
 /deep/ .el-dialog__header{
     background: #f1f0ff;
     border-radius: 10px 10px 0 0;
@@ -511,6 +518,7 @@ export default {
     border-radius: 50%;
     line-height: 18px;
     margin-top: 5px;
+    margin-left: -12px;
 }
 /deep/ .el-input-number--small .el-input-number__increase{
     width: 18px;
@@ -521,14 +529,16 @@ export default {
     border-radius: 50%;
     line-height: 18px;
     margin-top: 5px;
+    margin-right: -24px;
 }
 /deep/ .el-input-number--small{
-    width: 94px;
+    width: 60px;
+    padding-left: 10px;
 }
 /deep/ .el-input-number--small .el-input__inner{
-    padding-left: 21px;
-    padding-right: 21px;
-    border: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #ddd;
     background: none;
 }
 /deep/ .el-dialog{
@@ -572,6 +582,7 @@ export default {
         }
         .a_d_delete{
             color: #FD4C2B;
+            margin-left: 40px;
         }
     }
 }
@@ -591,7 +602,7 @@ export default {
 }
 .red{
     color: #F55858;
-    margin-top: 15px;
+    margin: 0 0 15px 15px;
 }
 .dialog-footer{
     margin-top: 20px;

@@ -44,7 +44,7 @@ export default {
     width: 100%;
     position: relative;
     overflow: hidden;
-    margin-top: 60px;
+    margin-top: 65px;
   .content-box {
     display: flex;
     height: 100%;

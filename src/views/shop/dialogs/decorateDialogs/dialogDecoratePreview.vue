@@ -2,14 +2,14 @@
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="(baseInfo.name || '页面名称') + '预览'">
     <div class="preview_wrapper">
-      <editView :dragable="false" v-if="height > 0" :height="height"></editView>
+      <editView :dragable="false" :height="1000"></editView>
       <div class="shop_info">
         <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
         <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
         <div class="shop_code">
           <h3>手机扫码访问</h3>
           <h4>微信扫一扫分享至朋友圈</h4>
-          <img :src="qrCode" alt="">
+          <img :src="qrCode" alt="失败">
         </div>
       </div>
     </div>
@@ -36,8 +36,7 @@ export default {
   data() {
     return {
       utils,
-      qrCode: '',
-      height: 0
+      qrCode: ''
     };
   },
   computed: {
@@ -60,9 +59,6 @@ export default {
     this.$store.dispatch('getShopInfo');
     this.getQrcode();
   },
-  mounted() {
-    this.height = document.body.clientHeight - 290;
-  },
   watch: {
     shopInfo:{
       handler(newValue) {
@@ -79,7 +75,7 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: this.decorateData.shareUrl.replace("&","[^]"),
+        url: location.protocol + this.decorateData.shareUrl.split(':')[1].replace("&","[^]"),
         width: '250',
         height: '250',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
@@ -139,6 +135,7 @@ export default {
         img{
           width:100%;
           margin-top:40px;
+          object-fit: none;
         }
       }
     }

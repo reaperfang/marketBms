@@ -35,7 +35,8 @@
 			ref="category"
             default-expand-all
 			:expand-on-click-node="false"
-			:render-content="renderContent">
+			:render-content="renderContent"
+            :indent="indent">
 		</el-tree>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :add="add" :data="currentData" :onSubmit="getTreeList"></component>
     </div>
@@ -63,7 +64,8 @@ export default {
             add: true,
             flatArr: [],
             currentData: '',
-            onoff: 0
+            onoff: 0,
+            indent: 53
         }
     },
     created() {
@@ -407,6 +409,9 @@ export default {
                 margin-left: 16px;
             }
         }
+    }
+    /deep/ .el-tree-node__content>.el-tree-node__expand-icon {
+        padding: 3px!important;
     }
 </style>
 <style lang="scss">

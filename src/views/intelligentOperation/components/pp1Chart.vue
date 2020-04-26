@@ -25,8 +25,13 @@ export default {
     makeOption(data) {
       this.option = {
         title: {
-        text: '折线图堆叠'
+        text: '折线图堆叠',
+        textStyle:{
+            fontSize:14,
+            color:'#44434B'
+        }
     },
+    
     tooltip: {
         trigger: 'axis'
     },

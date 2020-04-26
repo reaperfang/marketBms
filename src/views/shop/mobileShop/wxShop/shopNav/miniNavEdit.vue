@@ -21,6 +21,7 @@
           <ul class="navs type1">
             <li
               v-for="(item, key) of ruleForm.navIds"
+              v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}"
               :class="{'active': ruleForm.navMap[item].active}"
               :key="key"
               @click="selectNav(item)">
@@ -35,7 +36,7 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
+        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm" v-calcHeight="364">
           <div class="block header">
             <p class="title">导航设置</p>
           </div>
@@ -117,7 +118,6 @@
 <script>
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import utils from "@/utils";
-import uuid from 'uuid/v4';
 export default {
   name: 'apiNavData',
   props: ['apiNavData'],
@@ -240,7 +240,7 @@ export default {
     /* 创建导航 */
     createNav(params) {
       return {
-        id: uuid(),
+        id: uuidv4(),
         navName: params && params.navName || '导航',
         navIcon: params && params.navIcon || '',
         navIconActive: params && params.navIconActive || '',

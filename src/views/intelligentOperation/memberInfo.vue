@@ -59,7 +59,7 @@
                         <el-input placeholder="最高金额（元）" v-model="highprice" type="number"></el-input>
                     </div>
                     <div class="marL26">
-                        <el-button type="primary" class="minor_btn" icon="el-icon-search" @click="goSearch()">查询</el-button>
+                        <el-button type="primary" class="minor_btn"  @click="goSearch(1)">查 询</el-button>
                         <el-button type="primary" class="border_btn" @click="reSet" style="margin-left:16px;">重 置</el-button>
                     </div>
                 </el-form-item>
@@ -87,7 +87,7 @@
                         老会员共计<span>{{oldMemberCount || 0}}</span>人；
                         占用户总数的<span>{{oldMemberRatio != 0 ? (oldMemberRatio*100).toFixed(2) : 0}}%</span>;    
                     </i>
-                    <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span></i>。
+                    <i v-if="repeatPaymentRatio != undefined" style="font-style:normal">复购率为<span>{{repeatPaymentRatio !=0 ? (repeatPaymentRatio*100).toFixed(2) : 0}}%</span>。</i>
                 </p>
                 <div class="fr marT20">
                     <!-- <el-button class="minor_btn" @click="reScreening">重新筛选</el-button> -->
@@ -103,13 +103,9 @@
                 :totalCount="totalCount">
             </maTable>
         </div>
-        <div v-if="listObj.members != undefined && note">
-            <p>运营建议:</p>
-             <p v-if="note == '1-1'" class="proposal"><b>"交易次数1次"：</b>此用户群体为低频用户，建议提升产品认可度，提升服务质量，有助于提升低频用户交易次数。</p> 
-             <p v-if="note == '2-5'" class="proposal"><b>"交易次数2-5次"：</b>此用户群体为中频用户，建议提升产品认可度，提升服务质量，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受95折，有助于提升低频用户交易次数。</p> 
-             <p v-if="note == '6-8'" class="proposal"><b>"交易次数6-8次"：</b>此用户群体为高频用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受9折，有助于提升低频用户交易次数。</p> 
-             <p v-if="note == '8-8'" class="proposal"><b>"交易次数8次以上"：</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p>
-             <p v-if="note == '10-50'" class="proposal"><b>"交易次数10-50次"：</b>此用户群体为忠实用户，建议针对高频用户可设定分销机制，对商品搞一些营销活动：拼团、砍价、满减，此用户购物可以享受88折，有助于提升低频用户交易次数。</p>  
+        <div v-if="listObj.members != undefined && showNote">
+            <p>运营建议：</p>
+            <p class="proposal"><b>交易次数{{note.label}} ：</b>{{note.suggest}}</p>
         </div>
             <div class="contents"></div>
             <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
@@ -179,6 +175,7 @@ export default {
             oldMemberCount:'',
             oldMemberRatio:'',
             note:'',
+            showNote:false,
             currentDialog:"",
             dialogVisible: false,
             currentData:{},
@@ -229,7 +226,8 @@ export default {
                     reviseitem.push({
                         id:item.id,
                         value:item.minNum+'-'+ item.maxNum,
-                        name:item.name
+                        name:item.name,
+                        suggest:item.suggest
                     })                  
                 }
                   this.tradeCount=reviseitem;
@@ -238,19 +236,22 @@ export default {
             })
         },
         //查询
-        goSearch(){ 
+        goSearch(num){ 
+            //  this.form.tradeCountRange == 'null' && (this.form.tradeCountRange = null)
+            if(this.form.queryOrderMoneyType != null){
+                 if(this.lowprice == '' || this.highprice == '' ){
+                    this.$message.warning('当前金额不能为空、请您输入重新查询')
+                    return
+                }else if(this.lowprice - this.highprice > 0){
+                    this.$message.warning('最高金额不能低于最低金额')
+                    return
+                }else if(this.lowprice&&this.highprice){
+                    this.form.MoneyRange =  String(this.lowprice)+'-'+String(this.highprice);
+                } 
+            }
+            this.form.startIndex = num || this.form.startIndex
             this.form.loads = true
-            this.note = ''
-            if((this.lowprice != '' && this.highprice == '' ) || (this.lowprice == '' && this.highprice != '' )){
-                this.$message.warning('最低金额于最高金额需要同时输入')
-                return
-            }else if(this.lowprice - this.highprice > 0){
-                this.$message.warning('最高金额不能低于最低金额')
-                return
-            }else if(this.lowprice&&this.highprice){
-                this.form.MoneyRange =  String(this.lowprice)+'-'+String(this.highprice);
-            } 
-            let memberType = this.form.memberType;
+            // let memberType = this.form.memberType;
             this._apis.data.memberInformation(this.form).then(res => {
                 this.repeatPaymentRatio = res.repeatPaymentRatio;
                 this.listObj = res; //信息列表数据
@@ -263,24 +264,20 @@ export default {
                 this.customerCount = res.customerCount;
                 this.customerRatio = res.customerRatio || 0;
                 this.form.loads = false
-                this.note = this.form.tradeCountRange
-                // if(memberType == 1){ //新会员
-                //     this.textTips = true;
-                //     this.newMemberCount = res.newMemberCount;
-                //     this.newMemberRatio = res.newMemberRatio;
-                // }else if(memberType == 2){ //老会员
-                //     this.textTips = true;
-                //     this.oldMemberCount = res.oldMemberCount;
-                //     this.oldMemberRatio = res.oldMemberRatio;
-                // }else if(memberType == 0){ //非会员
-                //     this.textTips = true;
-                //     this.customerCount = res.customerCount;
-                //     this.customerRatio = res.customerRatio;
-                // }else{ //其他
-                //     this.textTips = false;
-                // }
+                // this.note = this.form.tradeCountRange
+                //切换交易次数获取运营建议
+                for(let item of this.tradeCount){
+                    if(item.value == this.form.tradeCountRange){
+                        this.note = {
+                            suggest:item.suggest,
+                            label:item.name
+                        }
+                        item.suggest != null && (this.showNote = true)
+                    }
+                }
 
             }).catch(error => {
+                this.form.loads = false
                 this.$message.error(error);
             });
         },
@@ -301,6 +298,7 @@ export default {
             }
             this.lowprice = ''
             this.highprice = ''
+            this.showNote = false
             this.goSearch();
         },
         //重新筛选
@@ -329,7 +327,7 @@ export default {
             }else{
                 this._apis.data.memberInformationExport(data)
                 .then(res => {
-                    window.open(res);
+                    window.location.href = res
                 })
                 .catch(err=>{
                     this.$message.error(err);
@@ -370,9 +368,25 @@ export default {
 .proposal{
     margin-left: 65px;
 }
+.el-range-editor.el-input__inner {padding-top:1px;}
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    .el-button--small{
+        border: 1px solid #655EFF;
+        color: #655EFF;
+        background-color: #ffffff;
+    }
+    .el-radio-group label:last-child{
+        margin-left:0px;
+    }
+    .minor_btn{
+        background-color: #655EFF;
+        color:#fff;
+    }
+	.is-active{
+		margin-top:-2px;
+	}
     .pane_container{
         color:#3D434A;
         padding: 10px;
@@ -386,7 +400,7 @@ export default {
         }
         .input_wrap3{
             display: inline-block;
-            width: 200px;
+            width: 234px;
         }
         .span_label{
             margin: 0 10px 0 25px;
@@ -406,11 +420,11 @@ export default {
     position: relative;
 }
 .mr10{
-    margin-right:10px;
+    margin-right:25px;
 }
 .marL26{
-    margin-left:26px;
-    display:inline-block;
+	display: inline-block;
+	margin-left: 20px;
 }
 .contents{
     width: 100%;

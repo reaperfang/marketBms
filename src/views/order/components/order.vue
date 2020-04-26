@@ -1,5 +1,5 @@
 <template>
-    <div v-if="list.length" class="order">
+    <div class="order">
         <div class="order-header">
             <div class="item goods">
                 <div class="row justify-between">
@@ -13,7 +13,7 @@
             <div class="item">状态</div>
             <div class="item">操作</div>
         </div>
-        <div class="order-container" v-loading="loading">
+        <div v-if="list.length" class="order-container" v-loading="loading">
             <div class="container-item" v-for="(order, index) in list" :key="index">
                 <div class="container-item-header">
                     <div class="item">
@@ -46,7 +46,7 @@
                                                 <img width="66" :src="goods.goodsImage" alt="">
                                             </div>
                                             <div class="col">
-                                                <p class="ellipsis" style="width: 297px;">{{goods.goodsName}}</p>
+                                                <p :title="goods.goodsName" class="ellipsis" style="width: 297px;">{{goods.goodsName}}</p>
                                                 <p class="goods-specs">{{goods.goodsSpecs | goodsSpecsFilter}}</p>
                                             </div>
                                         </div>
@@ -61,7 +61,8 @@
                     <div class="item" style="width: 120px;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
-                        <p>¥{{order | yingshowFilter}}</p>
+                        <!-- <p>¥{{order | yingshowFilter}}</p> -->
+                        <p>¥{{order.receivableMoney}}</p>
                         <!-- <p>{{order.channelName}}支付</p> -->
                     </div>
                     <div class="item" style="width: 120px;">
@@ -89,13 +90,13 @@
                         <template v-else-if="order.orderStatus == 3">
                             <!-- 待发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">发货</p>
                             <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
                         </template>
                         <template v-else-if="order.orderStatus == 4">
                             <!-- 部分发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?id=' + order.id)">继续发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">继续发货</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <!-- <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p> -->
                         </template>
@@ -114,9 +115,9 @@
                 </div>
             </div>
         </div>
+        <Empty v-else></Empty>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
     </div>
-    <Empty v-else></Empty>
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
@@ -155,6 +156,8 @@ export default {
                     return '特权价'
                 case 4:
                     return '赠品订单'
+                case 5:
+                    return '分佣订单'
             }
         },
         deliveryWayFilter(code) {
@@ -174,10 +177,12 @@ export default {
             let str = ''
             for(let i in _value) {
                 if(_value.hasOwnProperty(i)) {
-                    str += i + ':'
-                    str += _value[i] + ','
+                    str += i + '：'
+                    str += _value[i] + '，'
                 }
             }
+
+            str = str.replace(/^(.*)\，$/, '$1')
 
             return str
         },
@@ -295,6 +300,7 @@ export default {
         .order-container {
             margin-top: 20px;
             width: 100%;
+            min-width: 1000px;
             overflow-x: scroll;
             &::-webkit-scrollbar {
                 width: 8px;

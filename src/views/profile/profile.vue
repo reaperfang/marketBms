@@ -130,10 +130,10 @@
                     </span>   
                 </p>
                 <p class="p_email">
-                    客服电话：010-87127347 
+                    客服电话：400-660-5555
                 </p>
                 <p class="p_email">
-                    客服邮箱：shushangzhongxin@300.cn 
+                    客服邮箱：service4006@300.cn
                 </p>
             </div>
             <div class="p_r_item p_r_more">
@@ -147,7 +147,7 @@
                     商户工作台H5
                 </p>
                 <p class="link_h5">
-                    <span ref="linkH5">http://omo.aiyouyi.cn/bh</span>
+                    <span ref="linkH5">{{protocol}}//omo.aiyouyi.cn/bh</span>
                     <img :src="require('@/assets/images/profile/icon_05.png')" alt="" v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">
                 </p>
                 <img :src="qrCode" alt="">
@@ -173,8 +173,9 @@ export default {
             stayProcessedCount:'',
             staySendCount:'',
             stayAuthCount:'',
-            pageLink:'http://omo.aiyouyi.cn/bh',
+            pageLink: location.protocol + '//omo.aiyouyi.cn/bh',
             qrCode:'',
+            protocol: location.protocol
         }
     },
     computed: {

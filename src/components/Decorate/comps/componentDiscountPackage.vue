@@ -3,7 +3,7 @@
     <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
         <template v-if="hasContent">
             <ul>
-                <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                <li v-for="(item,key) of list" :key="key" v-if="!(item.status==2&&currentComponentData.data.hideSaledGoods==true|| utils.dateDifference(item.endTime)<1&&currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&currentComponentData.data.hideSaledGoods==true)" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
                         <div class="label">已售{{item.participateActivityNum}}套</div>
                         <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -32,20 +32,18 @@
                     <div class="info_box" v-if="showContents.length > 0">
                         <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">套餐包含商品{{item.totalGoodsNum}}件</p>
-                        <div class="limit_line" v-if="showContents.indexOf('5')!=-1">
-                            <p class="limit">
-                                <template v-if="item.joinLimit >= 0">
-                                    限 {{item.joinLimit}}次/人
-                                </template>
-                                <template v-else>不限制</template>
-                            </p>
+                        <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&listStyle==4">
+                            <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
+                        </div>
+			<div class="limit_line" v-else-if="showContents.indexOf('5')!=-1&&listStyle==1&&item.joinLimit!=-1">
+                            <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
                         <div class="price_line">
                             <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice}}</font></p>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.soldOut!=1&&item.activityEnd!=1 && listStyle != 3 && listStyle != 6"></componentButton>
-                        <p class="activity_end" v-if="item.soldOut==1&&item.activityEnd!=1">已售罄</p>
-                        <p class="activity_end" v-if="item.activityEnd==1">活动结束</p>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.status==1&&utils.dateDifference(item.endTime) && listStyle != 3 && listStyle != 6"></componentButton>
+                        <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
+                        <p class="activity_end" v-if="item.status==0">活动未开始</p>
                     </div>
                 </li>
             </ul>
@@ -122,7 +120,8 @@ export default {
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
-            var bodyWidth = 370;
+            var scrollWidth = window && this.utils.isIE() ? 18 : 0;
+            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
             if(this.listStyle==1){
                 this.goodMargin = {marginTop:this.goodsMargin+'px'};
                 this.goodWidth = "100%";

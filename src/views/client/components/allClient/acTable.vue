@@ -1,7 +1,7 @@
 /* 全部客户列表 */
 <template>
   <div class="acTable_container">
-    <el-button @click="exportToLocal" class="export_btn" v-permission="['客户', '全部客户', '默认页面', '客户导出']">导出</el-button>
+    <el-button @click="exportToLocal" class="export_btn" v-permission="['用户', '全部用户', '默认页面', '用户导出']">导出</el-button>
     <el-table
       :data="memberList"
       :row-key="getRowKeys"
@@ -34,19 +34,19 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="余额" sortable="custom">
+      <el-table-column label="余额" sortable="custom" prop="balance">
         <template slot-scope="scope">
           ¥{{scope.row.balance}}
         </template>
       </el-table-column>
-      <el-table-column prop="score" label="积分" sortable></el-table-column>
-      <el-table-column label="累计消费金额" sortable>
+      <el-table-column prop="score" label="积分" sortable="custom"></el-table-column>
+      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney">
         <template slot-scope="scope">
           ¥{{scope.row.totalDealMoney}}
         </template>
       </el-table-column>
-      <el-table-column prop="dealTimes" label="购买次数" sortable></el-table-column>
-      <el-table-column label="客单价（元）" sortable>
+      <el-table-column prop="dealTimes" label="购买次数" sortable="custom"></el-table-column>
+      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom">
         <template slot-scope="scope">
           ¥{{scope.row.perUnitPrice}}
         </template>
@@ -54,11 +54,11 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <div class="btns clearfix">
-            <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['客户', '全部客户', '默认页面', '查看详情']">详情</span>
+            <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['用户', '全部用户', '默认页面', '查看详情']">详情</span>
             <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['用户', '全部客户', '默认页面', '删除']">删除</span> -->
-            <span class="s2" @click="addTag(scope.row.id)">标签</span>
-            <span class="s3" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
-            <span class="s3" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
+            <span class="s2" @click="addTag(scope.row)">标签</span>
+            <span class="s3" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
+            <span class="s3" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
           </div>
         </template>
       </el-table-column>
@@ -77,9 +77,9 @@
     <div class="a_line">
       <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
-      <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['客户', '全部客户', '默认页面', '打标签']">打标签</el-button>
-      <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
-      <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['客户', '全部客户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['用户', '全部用户', '默认页面', '打标签']">打标签</el-button>
+      <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
     </div>
     <component
       :is="currentDialog"
@@ -213,22 +213,16 @@ export default {
         this.$message('请选择用户');
       }
     },
-    addTag(id) {
+    addTag(row) {
       this.dialogVisible = true;
       this.currentDialog = "addTagDialog";
-      this.currentData.id = id;
+      this.currentData.id = row.id;
+      this.currentData.labelRecordViews = row.labelRecordViews;
     },
     addBlackList(row) {
-      this.getAllCoupons(row.id);
-      this.getAllCodes(row.id);
       this.dialogVisible = true;
       this.currentDialog = "addBlackDialog";
-      this.currentData.memberSn = row.memberSn;
-      this.currentData.id = row.id;
-      setTimeout(() => {
-        this.currentData.couponList = this.couponList;
-        this.currentData.codeList = this.codeList;
-      },200);
+      this.currentData = {memberSn: row.memberSn, id: row.id};
     },
     removeBlack(row) {
       this.dialogVisible = true;
@@ -284,33 +278,12 @@ export default {
     freshTable() {
       this.checkAll = false;
       this.getMembers(this.startIndex, this.pageSize);
-    },
-    getAllCoupons(id) {
-      this._apis.client.getAllCoupons({couponType: 0, memberId: id, frozenType: 1}).then((response) => {
-          this.couponList = [].concat(response.list);
-          this.couponList.map((item) => {
-              this.$set(item, 'frozenNum',1);
-          })
-          this.currentData.couponList = this.couponList;
-      }).catch((error) => {
-          console.log(error);
-      })
-    },
-    getAllCodes(id) {
-        this._apis.client.getAllCoupons({couponType: 1, memberId: id, frozenType: 1}).then((response) => {
-            this.codeList = [].concat(response.list);
-            this.codeList.map((item) => {
-                this.$set(item, 'frozenNum', 1);
-            });
-            this.currentData.codeList = this.codeList;
-        }).catch((error) => {
-            console.log(error);
-        })
     }
   },
   watch: {
     newForm(val) {
       this.getMembers(1, this.pageSize);
+      this.startIndex = 1;
     }
   },
 };
@@ -349,7 +322,7 @@ export default {
         color: #655eff;
       }
       &.s3 {
-        color: #fd932b;
+        color: #fd4c2b;
       }
     }
   }

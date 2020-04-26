@@ -336,7 +336,7 @@ ul.cube.template_type{
     padding:10px;
     cursor:pointer;
     margin-right: 18px;
-    width: 90px;
+    width: 84px;
     &:nth-child(3n){
       margin-right: 0;
     }

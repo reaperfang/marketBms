@@ -18,12 +18,13 @@
           </div>
           <div class="content">
             <el-table
+              :class="{isIE: isIE}"
               ref="table"
               :data="tableData"
               style="width: 100%"
               @selection-change="handleSelectionChange"
               :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-            >
+             >
               <el-table-column 
                 type="selection" 
                 width="55"
@@ -57,6 +58,7 @@
               <el-table-column prop="sendCount" label="本次发货数量">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{'send-input': scope.row.errorMessage}"
                     :disabled="scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
                     step="1"
@@ -194,6 +196,7 @@ export default {
           }
       };
     return {
+      list: [],
       tableData: [],
       multipleSelection: [],
       ruleForm: {
@@ -227,7 +230,7 @@ export default {
     };
   },
   created() {
-    this.getOrderDetail();
+    this.getDetail();
     this.getExpressCompanyList();
   },
   filters: {
@@ -259,7 +262,22 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
-    }
+    },
+    isIE() {
+        var userAgent = navigator.userAgent;
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
+        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+        if(isIE) {
+            return true;   
+        } else if(isEdge) {
+            return true; 
+        } else if(isIE11) {
+            return true; 
+        }else{
+            return false
+        }
+    },
   },
   methods: {
     inputHandler(index) {
@@ -381,12 +399,16 @@ export default {
         return;
       }
 
-      if (this.multipleSelection.some(val => !val.sendCount)) {
-        this.confirm({
-          title: "提示",
-          icon: true,
-          text: "请填写发货商品数量"
-        });
+      if (this.multipleSelection.some(val => !val.sendCount)) {        
+        // this.confirm({
+        //   title: "提示",
+        //   icon: true,
+        //   text: "请填写发货商品数量"
+        // });
+        document.querySelector('.send-input').scrollIntoView()
+        let scrollTop = document.querySelector('.content-main').scrollTop
+
+        document.querySelector('.content-main').scrollTop = scrollTop - 8
         return;
       }
 
@@ -428,7 +450,7 @@ export default {
           params = {
             sendInfoDtoList: [
               {
-                orderId: this.$route.query.orderId || this.$route.query.id, // 订单id
+                orderId: this.$route.query.orderId || this.$route.query.id || this.$route.query.ids, // 订单id
                 memberInfoId: this.orderInfo.memberInfoId,
                 orderCode: this.orderInfo.orderCode,
                 orderItems: this.multipleSelection.map(val => ({
@@ -512,10 +534,10 @@ export default {
       this.orderInfo = Object.assign({}, this.orderInfo, value);
     },
     _orderDetail() {
-      let id = this.$route.query.id;
+      let id = this.$route.query.id || this.$route.query.ids;
 
       this._apis.order
-        .orderSendDetail({ ids: [this.$route.query.id] })
+        .orderSendDetail({ ids: [+this.$route.query.id || +this.$route.query.ids] })
         .then(res => {
           res[0].orderItemList.forEach(val => {
             val.cacheSendCount = val.sendCount;
@@ -532,8 +554,65 @@ export default {
         })
         .catch(error => {});
     },
-    getOrderDetail() {
+    getDetail() {
       this._orderDetail();
+        // try {
+        //   let ids = this.$route.query.ids || this.$route.query.id;
+        //   let orderType = this.$route.query.orderType
+        //   let sendType = this.$route.query.sendType
+
+        //   let res = await this._apis.order.orderSendDetail({ ids: ids.split(',').map(val => +val) })
+
+        //   if(res) {
+        //     res.forEach(item => {
+        //       if(sendType == 'more') {
+        //         item.express = true
+        //         item.other = "";
+        //         item.checked = false;
+        //         item.expressNos = "";
+        //         item.expressCompanyCodes = "";
+        //       }
+        //       item.orderItemList.forEach(orderItem => {
+        //         orderItem.cacheSendCount = orderItem.sendCount;
+        //         orderItem.sendCount = orderItem.goodsCount - orderItem.sendCount;
+        //         orderItem.showError = false
+        //         orderItem.errorMessage = ''
+        //         if(sendType == 'more') {
+        //           orderItem.checked = false;
+        //           orderItem.cacheSendCount = +orderItem.sendCount
+        //           orderItem.sendCount = orderItem.goodsCount - orderItem.cacheSendCount;
+        //         }
+        //       });
+        //     })
+
+        //     this.fetchAddress(res)
+        //   }
+        // } catch(error) {
+
+        // }
+    },
+    async fetchAddress(list) {
+        try {
+          let res = await this._apis.order.fetchOrderAddress({ id: this.cid, cid: this.cid })
+
+          if(res) {
+            list.forEach(item => {
+              item.sendName = res.senderName;
+              item.sendPhone = res.senderPhone;
+              item.sendProvinceCode = res.provinceCode;
+              item.sendProvinceName = res.province;
+              item.sendCityCode = res.cityCode;
+              item.sendCityName = res.city;
+              item.sendAreaCode = res.areaCode;
+              item.sendAreaName = res.area;
+              item.sendDetail = res.address;
+            })
+
+            this.list = list
+          }
+        } catch(error) {
+
+        }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -638,6 +717,25 @@ export default {
   line-height: 1;
   padding-top: 2px;
   margin-bottom: 0;
+}
+/deep/ .el-form-item__label {
+  font-weight: normal;
+}
+/deep/ .isIE.el-table {
+  .el-checkbox {
+    
+  }
+}
+/deep/ .el-checkbox {
+  display: inline-block;
+  position: static;
+  .el-checkbox__input {
+    display: inline-block;
+    position: static;
+    .el-checkbox__inner {
+      display: inline-block;
+    }
+  }
 }
 </style>
 

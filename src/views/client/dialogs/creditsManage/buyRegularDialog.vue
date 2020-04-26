@@ -98,7 +98,7 @@
             :default-sort="{prop: 'date', order: 'descending'}"
             :row-key="getRowKeys"
           >
-            <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true"></el-table-column>
+            <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable"></el-table-column>
             <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
             <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
             <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
@@ -129,12 +129,14 @@
         width="45%"
     >
         <div>
+            <span class="clearFont">（清空全部已选商品）</span>
             <el-button class="clearBtn" @click="clearList">清 空</el-button>
             <el-table
                 :data="selectedList"
                 style="width: 100%"
                 ref="selectedTable"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                border
+                :header-cell-style="{color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
             >
                 <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
@@ -191,9 +193,21 @@ export default {
     };
   },
   methods: {
+    selectable(row, index) {
+      if(row.noselected == true) {
+        return false
+      }else{
+        return true
+      }
+    },
     deleteRow(row) {
       this.selectedList.splice(row, 1);
-      this.skuList.push(row);
+      //删除的设为可选
+      this.skuList.map((item) => {
+        if(item.goodsInfo.id == row.goodsInfo.id) {
+          this.$set(item, 'noselected', false);
+        }
+      });
     },
     checkZero(event,val,ele) {
       val = val.replace(/[^\d]/g,'');
@@ -278,7 +292,9 @@ export default {
     showDialog(val) {
       if (val == 1) {
         this.otherVisible = true;
-        this.getSkuList(this.startIndex, this.pageSize);
+        if(this.skuList.length == 0) {
+          this.getSkuList(this.startIndex, this.pageSize);
+        }
       }else{
         this.selectProducts = [];
       }
@@ -322,7 +338,7 @@ export default {
     getSkuList(startIndex, pageSize) {
       let params = {
         name: this.name,
-        productCatalogInfoId: this.categoryValue[2],
+        productCatalogInfoId: this.categoryValue[this.categoryValue.length - 1],
         startIndex: startIndex,
         pageSize: pageSize,
         productLabelName: this.productLabelName,
@@ -331,10 +347,17 @@ export default {
       this._apis.client
         .getSkuList(params)
         .then(response => {
-          response.list.map(v => {
-            v.goodsInfo.specs = v.goodsInfo.specs.replace(/{|}|"|"/g, "");
-          });
           this.skuList = [].concat(response.list);
+          this.skuList.map(v => {
+            v.goodsInfo.specs = v.goodsInfo.specs.replace(/{|}|"|"/g, "");
+            if(this.selectedList.length > 0) {
+              this.selectedList.map(i => {
+                if(i.goodsInfo.id == v.goodsInfo.id) {
+                  this.$set(v, 'noselected', true);
+                }
+              })
+            }
+          });
           this.total = response.total;
         })
         .catch(error => {
@@ -351,24 +374,21 @@ export default {
       this.getSkuList(this.startIndex, this.pageSize);
     },
     submit2() {
-      //this.otherVisible = false;
-      this.dialogVisible2 = true;
       let selections = this.$refs.skuTable.selection;
-      this.selectedList = this.selectedList.concat(selections);
-      if(selections.length > 0) {
-          this.skuList.map((item) => {
-            selections.map((i) => {
-              if(item.goodsInfo.id == i.goodsInfo.id) {
-                this.skuList.splice(item, 1);
-              }
-            })
-          })
-        }
+      if(selections.length !== 0) {
+        this.dialogVisible2 = true;
+        this.selectedList = this.selectedList.concat(selections);
         this.$nextTick(() => {
           this.skuList.forEach(row => {
             this.$refs.skuTable.toggleRowSelection(row,false);
           });
-        })
+        })  
+      }else{
+        this.$message({
+          message: '请选择商品',
+          type: 'warning'
+        });
+      }
     },
     getInfo() {
       let row = this.data.row;
@@ -382,7 +402,19 @@ export default {
         this.oldMember = sceneRule.yesDistinguish.oldMember || 0;
         this.newMember = sceneRule.yesDistinguish.newMember || 0;
         this.noMember = sceneRule.yesDistinguish.noMember || 0;
+        let ids = [];
+        sceneRule.selectProducts.map(i => {
+          ids.push(i.id);
+        });
         //this.payAmount = sceneRule.yesDistinguish.payAmount;
+        this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.pageSize}).then((response) => {
+          this.selectedList = response.list;
+          this.selectedList.map(item => {
+            item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
+          })
+        }).catch((error) => {
+          console.log(error);
+        })
       }
     },
     clearList() {
@@ -392,6 +424,13 @@ export default {
       this.$nextTick(() => {
         this.otherVisible = false;
         this.dialogVisible2 = false;
+        this.skuList.map((item) => {
+          this.selectedList.map((i) => {
+            if(i.goodsInfo.id == item.goodsInfo.id) {
+              this.$set(item, 'noselected', true);
+            }
+          })
+        })
       }); 
     }
   },
@@ -431,6 +470,12 @@ export default {
 }
 /deep/ .el-dialog__title {
   color: #44434b;
+}
+/deep/.el-table__header{
+  width: 100% !important;
+}
+/deep/.el-table__body{
+  width: 100% !important;
 }
 .c_container {
   .marL10 {
@@ -472,6 +517,12 @@ export default {
     float: right;
     margin-bottom: 20px;
   }
+  .clearFont{
+    float: right;
+    color: #9FA29F;
+    font-size: 14px;
+    margin-top: 9px;
+  }
   .proList{
     ul li{
       margin-bottom: 10px;
@@ -483,6 +534,10 @@ export default {
 }
 .dialog-footer{
     margin-top: 20px;
+}
+.edit_span{
+    cursor: pointer;
+    color: #FD4C2B;
 }
 </style>
 

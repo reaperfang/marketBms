@@ -56,7 +56,7 @@ export default {
         if(pageData && pageData.avatarPosition) {
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
-          this.ruleForm['shareUrl'] = response.shareUrl;
+          this.ruleForm['shareUrl'] = location.protocol + response.shareUrl.split(':')[1];
         }
         this.loading = false;
       }).catch((error)=>{
@@ -103,7 +103,7 @@ export default {
         if(pageData && pageData.avatarPosition) {
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
-          this.ruleForm['shareUrl'] = response.shareUrl;
+          this.ruleForm['shareUrl'] = location.protocol + response.shareUrl.split(':')[1];
         }
         this._globalEvent.$emit('userCenterResetLoading', true);
       }).catch((error)=>{

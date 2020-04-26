@@ -12,7 +12,7 @@
           <el-input v-model="ruleForm.name" placeholder="请输入页面名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="fetch">查询</el-button>
+          <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">查询</el-button>
         </el-form-item>
       </el-form>
       <div class="btns">
@@ -45,7 +45,7 @@
         <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'250px'" fixed="right">
+        <el-table-column prop="" label="操作" :width="'300px'" fixed="right">
           <template slot-scope="scope">
             <span class="table-btn" @click="copyPage(scope.row)">复制</span>
             <span class="table-btn" @click="_routeTo('m_shopEditor', {pageId: scope.row.id})">编辑</span>
@@ -55,7 +55,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="multiple_selection">
+      <div class="multiple_selection" v-if="tableData.length">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" v-popover:popover4 :disabled="!this.multipleSelection.length">批量改分类</el-button>
         <el-button class="border-button" @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
@@ -77,7 +77,7 @@
           </div>
         </el-popover>
       </div>
-      <div class="pagination">
+      <div class="pagination" v-if="tableData.length">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -91,13 +91,12 @@
       </div>
     </div>
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :pageId="currentItem.id" :pageLink="currentItem.shareUrl"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :pageId="currentItem.id" :pageLink="pageLink"></component>
   </div>
 </template>
 
 <script>
 import tableBase from '@/components/TableBase';
-import uuid from 'uuid/v4';
 import dialogPopularize from '@/views/shop/dialogs/decorateDialogs/dialogPopularize';
 export default {
   name: 'pageList',
@@ -116,11 +115,24 @@ export default {
         name: ''
       },
       seletedClassify: '',   //选中的分类
-      visible: false  //是否显示批量该分类浮层
+      visible: false,  //是否显示批量该分类浮层
+      pageLink: '',
+      disableStatus: [1],  //不可选状态值
+      disableKey: 'isHomePage'
     }
   },
   created() {
     this.getClassifyList();
+  },
+  watch: {
+    currentItem: {
+      handler(newValue) {
+        if(newValue && newValue.shareUrl) {
+          this.pageLink = location.protocol + newValue.shareUrl.split(':')[1]
+        }
+      },
+      deep: true
+    }
   },
   methods: {
 
