@@ -184,6 +184,14 @@ export default {
           searchValue2: resellerInfoId
       })
     }
+    if(this.$route.query.resellerPhone) {
+      let resellerPhone = this.$route.query.resellerPhone || ''
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          searchType2: 'resellerPhone',
+          searchValue2: resellerPhone
+      })
+    }
     console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
