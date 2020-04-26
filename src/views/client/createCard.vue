@@ -406,7 +406,6 @@ export default {
             this.colors.map(v => {
               if (v.imgUrl == this.ruleForm.background) {
                 v.active = "1";
-                console.log(v.imgKey)
                 this.currentColor = v.imgKey
               }
             });
@@ -596,6 +595,13 @@ export default {
             }
           })
         }
+      }
+    },
+    isPhone(phone) {
+      if((/^1[3456789]\d{9}$/.test(phone))) {
+        return true;
+      }else{
+        return false;
       }
     },
     save() {
