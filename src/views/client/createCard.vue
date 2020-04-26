@@ -406,7 +406,6 @@ export default {
             this.colors.map(v => {
               if (v.imgUrl == this.ruleForm.background) {
                 v.active = "1";
-                console.log(v.imgKey)
                 this.currentColor = v.imgKey
               }
             });
@@ -627,9 +626,9 @@ export default {
             message: '请输入使用须知',
             type: 'warning'
           });
-        }else if(!this.isPhone(this.ruleForm.phone)){
+        }else if(this.ruleForm.phone == ""){
           this.$message({
-            message: '请正确输入客服电话',
+            message: '请输入客服电话',
             type: 'warning'
           });
         }else{
