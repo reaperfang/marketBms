@@ -184,7 +184,7 @@ export default {
           searchValue2: resellerInfoId
       })
     }
-    if(this.$route.query.resellerPhone) {
+    if(this.$route.query.resellerPhone === '') {
       let resellerPhone = this.$route.query.resellerPhone || ''
 
       this.listQuery = Object.assign({}, this.listQuery, {
@@ -331,7 +331,7 @@ export default {
           receivedPhone: "",
           receivedName: "",
           channelInfoId: "",
-          orderType: orderType,
+          orderType: +orderType,
           payWay: "",
           sendType: "",
           orderStatus: "",
@@ -339,6 +339,7 @@ export default {
           orderTimeValue: "",
           startIndex: 1,
           pageSize: 20,
+          searchType2: 'resellerPhone'
         }
       } else {
         this.listQuery = {
