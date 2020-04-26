@@ -1,6 +1,13 @@
 <template>
     <div style="min-height: 100vh;" v-loading="loading">
-        <div class="goods-list">
+		<div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
+			<div class="goods-list-empty-content">
+				<div class="image"></div>
+				<p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
+				<el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
+			</div>
+		</div>
+        <div class="goods-list" v-else>
             <header class="header">
                 <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
@@ -178,13 +185,6 @@
             </div>
             <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
-        <div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
-            <div class="goods-list-empty-content">
-                <div class="image"></div>
-                <p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
-                <el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
-            </div>
-        </div>
         <!-- <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
                 <div class="image"></div>
@@ -312,7 +312,7 @@
             background-size: 13px;
             margin-right: 12px;
         }
-    } 
+    }
 }
 /deep/ .el-form-item__label {
     font-weight: normal;
@@ -467,7 +467,7 @@ export default {
                 value: 'id',
                 label: 'name',
                 children: 'childrenCatalogs',
-                multiple: false, 
+                multiple: false,
                 checkStrictly: true
             },
             emptyText: '没有找到相关商品，换个搜索词试试吧'
@@ -486,15 +486,15 @@ export default {
     computed: {
         isIE() {
             var userAgent = navigator.userAgent;
-            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
-            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+            var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+            var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;
             var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
             if(isIE) {
-                return true;   
+                return true;
             } else if(isEdge) {
-                return true; 
+                return true;
             } else if(isIE11) {
-                return true; 
+                return true;
             }else{
                 return false
             }
@@ -513,7 +513,7 @@ export default {
             //         return '下架'
             //     } else if(item.status == -1) {
             //         let goodsInfosList = goodsInfos.filter(val => val.stock != -1)
-                    
+
             //         if(goodsInfosList.length) {
             //             let item = goodsInfosList[0]
 
@@ -576,30 +576,30 @@ export default {
         goodsNameFilter(name) {
             let isIE = () => {
                 var userAgent = navigator.userAgent;
-                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
-                var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
+                var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+                var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;
                 var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
                 if(isIE) {
-                    return true;   
+                    return true;
                 } else if(isEdge) {
-                    return true; 
+                    return true;
                 } else if(isIE11) {
-                    return true; 
+                    return true;
                 }else{
                     return false
                 }
             }
 
-            let gblen = (str) => {  
-                var len = 0;  
-                for (var i=0; i<str.length; i++) {  
-                    if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
-                    len += 2;  
-                    } else {  
-                    len ++;  
-                    }  
-                }  
-                return len;  
+            let gblen = (str) => {
+                var len = 0;
+                for (var i=0; i<str.length; i++) {
+                    if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {
+                    len += 2;
+                    } else {
+                    len ++;
+                    }
+                }
+                return len;
             }
 
             if(isIE) {
@@ -633,21 +633,21 @@ export default {
             })
             this.getList()
         },
-        gblen(str) {  
-            var len = 0;  
-            for (var i=0; i<str.length; i++) {  
-                if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {  
-                len += 2;  
-                } else {  
-                len ++;  
-                }  
-            }  
-            return len;  
+        gblen(str) {
+            var len = 0;
+            for (var i=0; i<str.length; i++) {
+                if (str.charCodeAt(i)>127 || str.charCodeAt(i)==94) {
+                len += 2;
+                } else {
+                len ++;
+                }
+            }
+            return len;
         },
         changePriceMore() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
@@ -655,7 +655,7 @@ export default {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
                 this.confirm({title: '批量改价', icon: true, text: `所选商品“${name}”正在参加营销活动，活动结束/失效才可修改价格。`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
@@ -680,7 +680,7 @@ export default {
                 this.getList();
                 this.checkedAll = false
                 this.visible = false;
-                
+
                 this.$message({
                             message: '改价成功！',
                             type: 'success'
@@ -708,7 +708,7 @@ export default {
             let obj = {}
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
@@ -770,7 +770,7 @@ export default {
             // })
 
             // return Promise.all(arr).then(val => {
-                
+
             // })
              return new Promise((resolve, reject) => {
                 this._apis.goods.getMarketActivity({ids: list.map(val => val.id)}).then((res) => {
@@ -815,14 +815,14 @@ export default {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
                 this.confirm({title: '批量删除', icon: true, text: `当前商品中“${name}”参与的营销活动未结束，无法进行批量删除操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
 
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量删除的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
@@ -888,13 +888,13 @@ export default {
                 let name = this.multipleSelection.filter(val => val.stock == 0)[0].name
 
                 this.confirm({title: '批量上架', icon: true, text: `当前商品中”${name}“的库存为“0”，无法进行批量上架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量上架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
@@ -905,13 +905,13 @@ export default {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
                 this.confirm({title: '批量下架', icon: true, text: `当前商品中“${name}”参与的营销活动未结束， 无法进行批量下架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择想要批量下架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
+
                 })
                 return
             }
@@ -921,8 +921,8 @@ export default {
             var result = [], temp;
             for (var i = 0; i < data.length; i++) {
                 if (data[i].parentId == pid) {
-                    var obj = {"categoryName": data[i].name,"id": data[i].id, 
-                        parentId: data[i].parentId, level: data[i].level, sort: data[i].sort, 
+                    var obj = {"categoryName": data[i].name,"id": data[i].id,
+                        parentId: data[i].parentId, level: data[i].level, sort: data[i].sort,
                         image: data[i].image, enable: data[i].enable, label: data[i].name, value: data[i].id};
                     temp = this.transTreeData(data, data[i].id);
                     if (temp.length > 0) {
@@ -936,7 +936,7 @@ export default {
         getCategoryList() {
             this._apis.goods.fetchCategoryList().then((res) => {
                 let arr = this.transTreeData(res, 0)
-                
+
                 this.categoryOptions = arr
             }).catch(error => {
 
@@ -1023,7 +1023,7 @@ export default {
                                 val.goodsInfos.forEach(skuVal => {
                                     let skuid = skuVal.id
                                     let item = res.goodsInfos.find(val => val.id == skuid)
-                                    
+
                                     if(item) {
                                         item.activity = true
                                     }
@@ -1094,7 +1094,7 @@ export default {
         getList(param) {
             this.loading = true
             let _param
-            
+
             _param = Object.assign({}, this.listQuery, param)
             _param = Object.assign({}, _param, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
@@ -1116,7 +1116,7 @@ export default {
                                 val.goodsInfos.forEach(skuVal => {
                                     let skuid = skuVal.id
                                     let item = goods.goodsInfos.find(val => val.id == skuid)
-                                    
+
                                     if(item) {
                                         item.activity = true
                                     }
@@ -1144,7 +1144,7 @@ export default {
                 let promise = this._apis.goods.getCategoryDetail({id}).then((res) => {
                     val.categoryName = res.name
                 }).catch(error => {
-                    
+
                 })
 
                 arr.push(promise)
@@ -1160,7 +1160,7 @@ export default {
         deleleHandler(row) {
             if(row.activity) {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动<br />活动有效期内商品不得“删除”。`}).then(() => {
-                    
+
                 })
             } else {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
