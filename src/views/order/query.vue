@@ -12,6 +12,21 @@
             </el-select>
           </el-input>
         </el-form-item>
+        <el-form-item label  class="searchTimeType">
+          <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
+            <el-option label="下单时间" value="createTime"></el-option>
+            <el-option label="完成时间" value="complateTime"></el-option>
+            <el-option label="发货时间" value="sendTime"></el-option>
+          </el-select>
+          <el-date-picker
+            v-model="listQuery.orderTimeValue"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :picker-options="utils.globalTimePickerOption.call(this)"
+          ></el-date-picker>
+        </el-form-item>
         <el-form-item label="订单来源">
           <el-select v-model="listQuery.channelInfoId" placeholder>
             <el-option label="全部" value></el-option>
@@ -19,6 +34,18 @@
             <el-option label="公众号" :value="2"></el-option>
             <el-option label="PC" :value="3"></el-option>
             <el-option label="WAP" :value="4"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="listQuery.orderStatus" placeholder>
+            <el-option label="全部" value></el-option>
+            <el-option label="待付款" :value="0"></el-option>
+            <el-option label="待成团" :value="1"></el-option>
+            <el-option label="关闭" :value="2"></el-option>
+            <el-option label="待发货" :value="3"></el-option>
+            <el-option label="部分发货" :value="4"></el-option>
+            <el-option label="待收货" :value="5"></el-option>
+            <el-option label="完成" :value="6"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label>
@@ -60,33 +87,6 @@
             <el-option label="自动发货" :value="2"></el-option>
             <el-option label="优先发货" :value="3"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="订单状态">
-          <el-select v-model="listQuery.orderStatus" placeholder>
-            <el-option label="全部" value></el-option>
-            <el-option label="待付款" :value="0"></el-option>
-            <el-option label="待成团" :value="1"></el-option>
-            <el-option label="关闭" :value="2"></el-option>
-            <el-option label="待发货" :value="3"></el-option>
-            <el-option label="部分发货" :value="4"></el-option>
-            <el-option label="待收货" :value="5"></el-option>
-            <el-option label="完成" :value="6"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label  class="searchTimeType">
-          <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
-            <el-option label="下单时间" value="createTime"></el-option>
-            <el-option label="完成时间" value="complateTime"></el-option>
-            <el-option label="发货时间" value="sendTime"></el-option>
-          </el-select>
-          <el-date-picker
-            v-model="listQuery.orderTimeValue"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :picker-options="utils.globalTimePickerOption.call(this)"
-          ></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -182,6 +182,14 @@ export default {
       this.listQuery = Object.assign({}, this.listQuery, {
           searchType2: 'resellerInfoId',
           searchValue2: resellerInfoId
+      })
+    }
+    if(this.$route.query.resellerPhone) {
+      let resellerPhone = this.$route.query.resellerPhone || ''
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          searchType2: 'resellerPhone',
+          searchValue2: resellerPhone
       })
     }
     console.log(this.$route.query.id);
@@ -311,23 +319,48 @@ export default {
       });
     },
     resetForm(formName) {
+      let {orderType} = this.$route.query
+
+      if(this.$route.query.orderType && this.$route.query.orderType == 5) {
         this.listQuery = {
-        searchType: "code",
-        searchValue: "",
-        code: "",
-        goodsName: "",
-        memberSn: "",
-        receivedPhone: "",
-        receivedName: "",
-        channelInfoId: "",
-        orderType: "",
-        payWay: "",
-        sendType: "",
-        orderStatus: "",
-        searchTimeType: "createTime",
-        orderTimeValue: "",
-        startIndex: 1,
-        pageSize: 20,
+          searchType: "code",
+          searchValue: "",
+          code: "",
+          goodsName: "",
+          memberSn: "",
+          receivedPhone: "",
+          receivedName: "",
+          channelInfoId: "",
+          orderType: orderType,
+          payWay: "",
+          sendType: "",
+          orderStatus: "",
+          searchTimeType: "createTime",
+          orderTimeValue: "",
+          startIndex: 1,
+          pageSize: 20,
+        }
+      } else {
+        this.listQuery = {
+          searchType: "code",
+          searchValue: "",
+          code: "",
+          goodsName: "",
+          memberSn: "",
+          receivedPhone: "",
+          receivedName: "",
+          channelInfoId: "",
+          orderType: "",
+          payWay: "",
+          sendType: "",
+          orderStatus: "",
+          searchTimeType: "createTime",
+          orderTimeValue: "",
+          startIndex: 1,
+          pageSize: 20,
+          searchType2: '',
+          searchValue2: ''
+        }
       }
       this.checkedLength = 0
 

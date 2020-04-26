@@ -47,8 +47,8 @@
                         :class="{hide:item.image}"
                         :limit="1"
                         :data="{json: JSON.stringify({cid: cid})}"
-                        :on-preview="function() {
-                            $emit('handlePictureCardPreview')
+                        :on-preview="function(file) {
+                            $emit('handlePictureCardPreview', file)
                         }"
                         :on-remove="function() {
                             $emit('specHandleRemove', index)

@@ -163,7 +163,7 @@ export default {
       return financeCons.idbusinessTypes;
     }
   },
-  created() { },
+  created() {},
   methods: {
     init(){
       let query = {
