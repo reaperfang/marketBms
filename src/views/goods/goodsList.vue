@@ -115,7 +115,7 @@
                         class-name="salePrice">
                         <template slot-scope="scope">
                             <span class="price">
-                                {{Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice))}}
+                                {{scope.row.goodsInfos && scope.row.goodsInfos.length ? Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice)) : scope.row.salePrice}}
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
                             </span>
                         </template>
