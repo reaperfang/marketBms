@@ -38,11 +38,11 @@
     </div>
 
     <div class="block form">
-      添加图片: 
+      添加图片:
       <p style="color:rgb(211, 211, 211);margin-top:5px;">最多添加10个广告，鼠标拖拽可调整广告顺序</p>
 
       <!-- 可拖拽调整顺序 -->
-      <vuedraggable 
+      <vuedraggable
       class="drag-wrap item_list"
       :list='ruleForm.itemList'
       v-bind="dragOptions"
@@ -66,9 +66,9 @@
               </p>
               <p>
                 <span>跳转链接</span>
-                <el-button 
-                type="text" 
-                @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'" 
+                <el-button
+                type="text"
+                @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'"
                 :title="item.linkTo ? item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'">
                 {{item.linkTo ? item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'}}
                 </el-button>
@@ -146,7 +146,7 @@ export default {
         }],
       },
       rules: {},
-      currentAD: null,  //当前操作的图文导航 
+      currentAD: null,  //当前操作的图文导航
       suggestSize: '建议尺寸：宽度750像素，高度360像素。', //推荐尺寸文本
       dragOptions: {
           animation: 300,
@@ -197,16 +197,16 @@ export default {
       switch(Number(templateType)) {
         case 1:
           this.suggestSize = '建议尺寸：宽度750像素，高度360像素。';
-          break; 
+          break;
         case 2:
           this.suggestSize = '建议尺寸：宽度750像素，高度320像素。';
-          break; 
+          break;
         case 3:
           this.suggestSize = '建议尺寸：宽度750像素，高度430像素。';
-          break; 
+          break;
         case 4:
           this.suggestSize = '建议尺寸：宽高1:1';
-          break; 
+          break;
         case 5:
           this.suggestSize = '建议尺寸：宽高1:1';
           break;
@@ -221,13 +221,13 @@ export default {
         id: uuidv4()
       });
       // this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
-      // this.dialogVisible=true; 
+      // this.dialogVisible=true;
       // this.currentDialog='dialogSelectImageMaterial';
     },
 
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.currentAD.title= dialogData.fileName,
+      this.currentAD.title= '',
       this.currentAD.url= dialogData.filePath;
     },
 
@@ -239,12 +239,12 @@ export default {
     deleteItem(item) {
       if(this.ruleForm.itemList.length < 2) {
         this.$message.warning('最后一个不允许删除');
-        return;           
+        return;
       }
       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: '确定删除此图片广告吗？'
       }).then(() => {
         const tempItems = [...this.ruleForm.itemList];
