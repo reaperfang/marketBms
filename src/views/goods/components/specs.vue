@@ -37,7 +37,7 @@
                     </td>
                 </template>
                 <td v-if="!item['image_hide']" :rowspan="item['image_rowspan']">
-                    <el-upload
+                    <!-- <el-upload
                         :disabled="!productCategoryInfoId"
                         class="upload-spec"
                         :action="uploadUrl"
@@ -61,7 +61,24 @@
                             点击上传
                         </p>
                     </el-upload>
-                    <div class="upload-spec-ku" v-if="!item.image && productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = index; dialogVisible = true">素材库</div>
+                    <div class="upload-spec-ku" v-if="!item.image && productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = index; dialogVisible = true">素材库</div> -->
+                    <div class="upload-box upload-specs">
+                        <div class="image-list">
+                            <div v-if="item.image" class="image-item" :style="{backgroundImage: `url(${item.image})`}">
+                                <label>
+                                    <i class="el-icon-check"></i>
+                                </label>
+                                <span class="image-item-actions">
+                                    <span @click="dialogImageUrl = item.image; materialIndex = index; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
+                                    <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                                </span>
+                            </div>
+                            <div v-if="!item.image" @click="currentDialog = 'dialogSelectImageMaterial';  materialIndex = index; dialogVisible = true" class="upload-add">
+                                <i data-v-03229368="" class="el-icon-plus"></i>
+                                <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传图片</p>
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 <td>
                     <el-input type="number" min="0" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
@@ -98,6 +115,11 @@
             </tr>
         </table>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
+        <el-dialog :visible.sync="imageDialogVisible"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false">
+            <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -197,9 +219,11 @@ export default {
                 },
             ],
             materialIndex: 0,
-            material: false,
+            material: true,
             currentDialog: '',
             dialogVisible: false,
+            dialogImageUrl: '',
+            imageDialogVisible: false,
         }
     },
     computed: {
@@ -286,6 +310,16 @@ export default {
         
     },
     methods: {
+        deleteImage(index) {
+            // let imagesArr = this.ruleForm.images.split(',')
+
+            // imagesArr.splice(index, 1)
+            // this.ruleForm.images = imagesArr.join(',')
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                fileList: [],
+                image: ''
+            }))
+        },
         codeBlur(code, index) {
             if(!/^[a-zA-Z0-9_]{6,}$/.test(code)) {
                 this.list.splice(index, 1, Object.assign({}, this.list[index], {
@@ -311,7 +345,7 @@ export default {
                         }
                     ]
                 }))
-                this.material = false
+                //this.material = false
             } else {
                 this.fileList.push(Object.assign({}, image, {
                     name: image.fileName,
@@ -456,6 +490,137 @@ export default {
                 .el-icon-upload-success:before {
                     position: absolute;
                     top: -12px;
+                }
+            }
+        }
+    }
+    .upload-box.upload-specs {
+        .image-list {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            .upload-add {
+                margin: 0 auto;
+                &:hover {
+                    border-color: #655EFF;
+                    color: #655EFF;
+                }
+                &:focus {
+                    border-color: #655EFF;
+                    color: #655EFF;
+                }
+                .el-icon-plus {
+                    font-size: 28px;
+                    color: #8c939d;
+                }
+                width: 80px !important;
+                height: 80px !important;
+                line-height: 90px !important;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                outline: 0;
+                background-color: #fbfdff;
+                border: 1px dashed #c0ccda;
+                border-radius: 6px;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                width: 148px;
+                height: 148px;
+                line-height: 146px;
+                vertical-align: top;
+            }
+            .image-item {
+                &:hover {
+                    label {
+                        display: none;
+                    }
+                }
+                margin-right: 8px;
+                margin-bottom: 8px;
+                width: 80px;
+                height: 80px;
+                margin: 0 auto;
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+                border: 1px solid #c0ccda;
+                border-radius: 6px;
+                position: relative;
+                overflow: hidden;
+                label {
+                    display: block;
+                    position: absolute;
+                    right: -15px;
+                    top: -6px;
+                    width: 40px;
+                    height: 24px;
+                    background: #13ce66;
+                    text-align: center;
+                    -webkit-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                    -webkit-box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+                    box-shadow: 0 0 1pc 1px rgba(0,0,0,.2);
+                    .el-icon-check {
+                        color: #fff;
+                        -webkit-transform: rotate(-45deg);
+                        transform: rotate(-45deg);
+                    }
+                }
+                .image-item-actions {
+                    &:hover {
+                        opacity: 1;
+                    }
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                    cursor: default;
+                    text-align: center;
+                    color: #fff;
+                    opacity: 0;
+                    font-size: 20px;
+                    background-color: rgba(0,0,0,.5);
+                    -webkit-transition: opacity .3s;
+                    transition: opacity .3s;
+                    i {
+                        font-family: element-icons!important;
+                        speak: none;
+                        font-style: normal;
+                        font-weight: 400;
+                        font-variant: normal;
+                        text-transform: none;
+                        line-height: 1;
+                        vertical-align: baseline;
+                        display: inline-block;
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                    }
+                    .image-item-actions-delete {
+                        margin-left: 15px;
+                    }
+                }
+            }
+        }
+    }
+    /deep/ .upload-box.upload-specs .image-list {
+        .image-item {
+            overflow: visible;
+            label {
+                position: absolute;
+                right: -7px;
+                top: -6px;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: #13ce66;
+                .el-icon-check:before {
+                    position: absolute;
+                    top: -12px;
+                    left: -2px;
                 }
             }
         }
