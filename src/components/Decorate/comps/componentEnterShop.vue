@@ -1,17 +1,19 @@
 <template>
   <!-- 进入店铺 -->
-  <div class="componentEnterShop" v-if="currentComponentData && currentComponentData.data">
-    <div class="group_shop">
-      <ul>
-        <li>
-          <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
-        </li>
-        <li class="ellipsis">{{shopInfo.shopName || '店铺名称'}}</li>
-        <li class="ellipsis">{{currentComponentData.data.words}}</li>
-        <li>
-          <img src="@/assets/images/shop/triangle.png" alt />
-        </li>
-      </ul>
+  <div class="component_wrapper">
+    <div class="componentEnterShop" v-if="currentComponentData && currentComponentData.data">
+      <div class="group_shop">
+        <ul>
+          <li>
+            <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
+          </li>
+          <li class="ellipsis">{{shopInfo.shopName || '店铺名称'}}</li>
+          <li class="ellipsis">{{currentComponentData.data.words}}</li>
+          <li>
+            <img src="@/assets/images/shop/triangle.png" alt />
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

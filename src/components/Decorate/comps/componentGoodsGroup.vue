@@ -1,7 +1,7 @@
 <template>
 <!-- 组件-商品分类 -->
-    <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-      <template v-if="hasContent">
+    <div class="component_wrapper" v-loading="loading">
+      <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data && hasContent">
           <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
             <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
@@ -14,10 +14,8 @@
           <div class="componentGoodsGroup_content">
               <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : 'all'"></componentGoods>
           </div> 
-      </template>
-      <div v-else class="temp_block">
-          <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
       </div>
+      <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
 </template>
 <script>

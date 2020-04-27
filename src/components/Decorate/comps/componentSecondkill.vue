@@ -1,9 +1,8 @@
 <template>
 <!-- 组件-限时秒杀 -->
-    <div class="componentSecondkill" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-
-        <template v-if="hasContent">
-            <ul>
+    <div class="component_wrapper" v-loading="loading">
+        <div v-if="currentComponentData && currentComponentData.data && hasContent">
+            <ul class="componentSecondkill" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle">
                 <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
                         <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -21,7 +20,7 @@
                                 item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
                                 " class="time">
                                     <template v-slot="timeData">
-                                         <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                        <span class="item">{{ utils.addZero(timeData.days) }}</span>
                                         <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
                                         <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
                                         <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
@@ -53,8 +52,8 @@
                     </div>
                 </li>
             </ul>
-        </template>
-        <img  v-else class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
+        </div>
+        <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
 
 </template>

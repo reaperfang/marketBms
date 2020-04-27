@@ -1,6 +1,8 @@
 <script>
+import componentEmpty from '../comps/componentEmpty';
 export default {
   name: "componentMixin",
+  components: {componentEmpty},
   props: ["data"],
   data() {
     return {

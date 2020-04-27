@@ -1,19 +1,19 @@
 <template>
   <!-- 文本 -->
-  <div
-    class="componentText"
-    :style="{'backgroundColor':currentComponentData.data.backgroundColor}"
-    :class="currentComponentData.data.showDivider===true?'borb':''"
-    v-if="currentComponentData && currentComponentData.data"
-  >
+  <div class="component_wrapper">
     <div
-      class="group_text"
-      :class="['font_size'+currentComponentData.data.fontSize,'style'+currentComponentData.data.displayStyle]"
-      :style="{'color':currentComponentData.data.fontColor}"
-      v-if="hasContent"
-    >{{currentComponentData.data.textContent}}</div>
-     <div v-else class="temp_block">
-       <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
+      class="componentText"
+      :style="{'backgroundColor':currentComponentData.data.backgroundColor}"
+      :class="currentComponentData.data.showDivider===true?'borb':''"
+      v-if="currentComponentData && currentComponentData.data"
+    >
+      <div
+        class="group_text"
+        :class="['font_size'+currentComponentData.data.fontSize,'style'+currentComponentData.data.displayStyle]"
+        :style="{'color':currentComponentData.data.fontColor}"
+        v-if="hasContent"
+      >{{currentComponentData.data.textContent}}</div>
+      <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
   </div>
 </template>
