@@ -1,12 +1,14 @@
 <template>
   <!-- 公告 -->
-  <div class="componentNotice" v-if="currentComponentData && currentComponentData.data">
-    <van-notice-bar
-      :text="currentComponentData.data.notice"
-      left-icon="volume-o"
-      :color="currentComponentData.data.fontColor "
-      :background="currentComponentData.data.backgroundColor"
-    />
+  <div class="component_wrapper">
+    <div class="componentNotice" v-if="currentComponentData && currentComponentData.data">
+      <van-notice-bar
+        :text="currentComponentData.data.notice"
+        left-icon="volume-o"
+        :color="currentComponentData.data.fontColor "
+        :background="currentComponentData.data.backgroundColor"
+      />
+    </div>
   </div>
 </template>
 

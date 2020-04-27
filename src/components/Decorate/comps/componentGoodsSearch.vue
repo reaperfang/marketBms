@@ -1,17 +1,19 @@
 <template>
 <!-- 组件-公用搜索框 -->
-    <div class="componentGoodsSearch" style="z-index:4;" :style="[{background:backgroundColor}]" v-if="currentComponentData && currentComponentData.data">
-        <div class="inputBox" :class="[{'textPosition':textPosition!=1},{'borderStyle':borderStyle!=1}]" :style="[{background:'#eff1f0'},{height:borderHeight+'px'},{border:'1px solid #eff1f0'},{color:fontColor},{marginRight:shoppingCartBtn==1 ? '0px' : '10px'}]">
-            <img src="@/assets/images/shop/fdj.png" class="fdj" />
-            <p :style="{color:fontColor}">{{hotWords[0]}}</p>
-        </div>
-        <!-- <div class="gwcNotice" v-if="noticeCartBtn==1">
-            <img src="@/assets/images/shop/notice.png" alt="消息">
-            <span></span>
-        </div> -->
-        <!-- <p class="searchButton">搜索</p> -->
-        <div class="gwcIcon" v-if="shoppingCartBtn==1">
-            <img src="@/assets/images/shop/gwcIcon2.png" alt="">
+    <div class="component_wrapper">
+        <div class="componentGoodsSearch" style="z-index:4;" :style="[{background:backgroundColor}]" v-if="currentComponentData && currentComponentData.data">
+            <div class="inputBox" :class="[{'textPosition':textPosition!=1},{'borderStyle':borderStyle!=1}]" :style="[{background:'#eff1f0'},{height:borderHeight+'px'},{border:'1px solid #eff1f0'},{color:fontColor},{marginRight:shoppingCartBtn==1 ? '0px' : '10px'}]">
+                <img src="@/assets/images/shop/fdj.png" class="fdj" />
+                <p :style="{color:fontColor}">{{hotWords[0]}}</p>
+            </div>
+            <!-- <div class="gwcNotice" v-if="noticeCartBtn==1">
+                <img src="@/assets/images/shop/notice.png" alt="消息">
+                <span></span>
+            </div> -->
+            <!-- <p class="searchButton">搜索</p> -->
+            <div class="gwcIcon" v-if="shoppingCartBtn==1">
+                <img src="@/assets/images/shop/gwcIcon2.png" alt="">
+            </div>
         </div>
     </div>
 </template>
