@@ -233,8 +233,9 @@ export default {
   methods: {
     //格式化最近日期
     nearDays(num) {
+      let Num = Number(num);
       let arr = [];
-      for(let i = 3; i < num + 2; i++) {
+      for(let i = 3; i < Num + 2; i++) {
         arr.push(utils.formatDate(utils.calcDate(new Date(), '-', i), "yyyy-MM-dd"))
       }
       return arr;
@@ -273,14 +274,13 @@ export default {
           this.init(this.days);
         }
       }).catch((error)=>{
-        this.chartData.dates = [].concat(this.nearDays(this.days));
         this.$message.error(error)
       })
     },
     //最近天数趋势
     getDataNumRs(){
       this._apis.finance.getDataNumRs({recentDays:this.days}).then((response)=>{
-        if(response){
+        if(!response){
           this.survey = response
           this.dataList = response.accountList
         }else{
@@ -289,11 +289,11 @@ export default {
           //   message: "查询结果集为空，没有可以显示的数据"
           // });
           // this.days = 7
-          this.chartData.dates = [].concat(this.nearDays(this.days));
+          this.chartData = {dates: [].concat(this.nearDays(this.days))}
           return
         }
       }).catch((error)=>{
-        this.chartData.dates = [].concat(this.nearDays(this.days));
+        this.chartData = {dates: [].concat(this.nearDays(this.days))}
         this.$message.error(error)
       })
     },
