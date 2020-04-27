@@ -42,7 +42,7 @@
                     <div class="label">第三方流水号</div>
                     <div class="value" style="word-break: break-all;">{{orderDetail.orderPayRecordList | wechatFilter}}</div>
                 </div>
-                <div class="item">
+                <div v-if="!(!rewardScore && (giftList ? !giftList.length : !giftList) && (couponList ? !couponList.length : !couponList) && (couponCodeList ? !couponCodeList.length : !couponCodeList))" class="item">
                     <div class="label">本单奖励</div>
                     <div class="value gain">
                         <template>

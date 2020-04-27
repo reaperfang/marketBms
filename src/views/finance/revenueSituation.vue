@@ -235,7 +235,7 @@ export default {
     nearDays(num) {
       let arr = [];
       for(let i = 3; i < num + 2; i++) {
-        arr.push(utils.formatDate(utils.calcDate(new Date(), '-', i), "yyyy-MM-dd hh:mm:ss"))
+        arr.push(utils.formatDate(utils.calcDate(new Date(), '-', i), "yyyy-MM-dd"))
       }
       return arr;
     },
