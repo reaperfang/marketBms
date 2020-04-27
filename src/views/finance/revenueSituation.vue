@@ -231,12 +231,21 @@ export default {
     this.getSurveyDay();
   },
   methods: {
+    //格式化最近日期
+    nearDays(num) {
+      let arr = [];
+      for(let i = 3; i < num + 2; i++) {
+        arr.push(utils.formatDate(utils.calcDate(new Date(), '-', i), "yyyy-MM-dd hh:mm:ss"))
+      }
+      return arr;
+    },
     //初始化数据
     init(day){
       let date = new Date()
       let endDate = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss")
       let startDate = utils.countDate(-day)+" 00:00:00"
-      this.timeValue = [startDate,endDate]
+      this.timeValue = [startDate,endDate];
+      this.chartData.dates = [].concat(this.nearDays(day));
     },
     //概况
     getSurveyDay(){
@@ -255,15 +264,16 @@ export default {
       this._apis.finance.getDataDateRs(queryDate).then((response)=>{
         if(response){
           this.survey = response   
-          this.dataList = response.accountList
+          this.dataList = response.accountList;
         }else{
           // this.$notify.info({
           //   title: '消息',
           //   message: "查询结果集为空，没有可以显示的数据"
           // });
-          this.init(this.days)
+          this.init(this.days);
         }
       }).catch((error)=>{
+        this.chartData.dates = [].concat(this.nearDays(this.days));
         this.$message.error(error)
       })
     },
@@ -279,9 +289,11 @@ export default {
           //   message: "查询结果集为空，没有可以显示的数据"
           // });
           // this.days = 7
+          this.chartData.dates = [].concat(this.nearDays(this.days));
           return
         }
       }).catch((error)=>{
+        this.chartData.dates = [].concat(this.nearDays(this.days));
         this.$message.error(error)
       })
     },
