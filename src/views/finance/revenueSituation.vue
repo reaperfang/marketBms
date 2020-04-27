@@ -289,9 +289,11 @@ export default {
           //   message: "查询结果集为空，没有可以显示的数据"
           // });
           // this.days = 7
+          this.chartData.dates = [].concat(this.nearDays(this.days));
           return
         }
       }).catch((error)=>{
+        this.chartData.dates = [].concat(this.nearDays(this.days));
         this.$message.error(error)
       })
     },
