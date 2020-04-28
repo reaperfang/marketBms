@@ -1,8 +1,8 @@
 <template>
 <!-- 组件-限时秒杀 -->
     <div class="component_wrapper" v-loading="loading">
-        <div v-if="currentComponentData && currentComponentData.data && hasContent">
-            <ul class="componentSecondkill" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle">
+        <div class="componentSecondkill" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data && hasContent">
+            <ul>
                 <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
                         <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">

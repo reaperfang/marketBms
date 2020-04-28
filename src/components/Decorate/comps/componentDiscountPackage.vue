@@ -1,8 +1,8 @@
 <template>
 <!-- 组件-优惠套装 -->
     <div class="component_wrapper" v-loading="loading">
-        <div v-if="currentComponentData && currentComponentData.data && hasContent">
-            <ul class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" >
+        <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data && hasContent">
+            <ul>
                 <li v-for="(item,key) of list" :key="key" v-if="!(item.status==2&&currentComponentData.data.hideSaledGoods==true|| utils.dateDifference(item.endTime)<1&&currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&currentComponentData.data.hideSaledGoods==true)" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
                         <div class="label">已售{{item.participateActivityNum}}套</div>
