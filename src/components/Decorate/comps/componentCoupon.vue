@@ -1,9 +1,9 @@
 <template>
   <!-- 优惠券 -->
-  <div class="componentCoupon" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-    <template v-if="hasContent">
+  <div class="component_wrapper" v-loading="loading">
+    <div v-if="currentComponentData && currentComponentData.data && hasContent" class="componentCoupon">
       <!-- 样式一 -->
-      <div class="coupon_first">
+      <div class="coupon_first componentCoupon">
         <ul ref="scrollContent" class="clearfix">
           <!-- status:true时候是已领取,hideScrambled:false, -->
           <template v-for="(item, key) in list">
@@ -18,10 +18,8 @@
           </template>
         </ul>
       </div>
-    </template>
-    <div v-else class="temp_block">
-       <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
     </div>
+    <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
   </div>
 </template>
 

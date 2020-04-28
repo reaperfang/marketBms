@@ -1,22 +1,24 @@
 <template>
   <!-- 购买公告 -->
-  <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-    <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}">
-      <li>
-        <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
-      </li>
-      <li class="ellipsis">
-        <div class="nwwest-roll" id="nwwest-roll">
-          <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
-            <li ref="rollul" v-for="(item, key) in list" :key="key" class="ellipsis" :class="{anim:animate===true}">
-              <img :src="item.member" alt="">
-              <span class="name">{{item.content}}</span>
-            </li>
-          </ul>
-        </div>
-      </li>
-      <li :style="{'color':currentComponentData.data.fontColor}">刚刚</li>
-    </ul>
+  <div class="component_wrapper" v-loading="loading">
+    <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
+      <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}">
+        <li>
+          <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
+        </li>
+        <li class="ellipsis">
+          <div class="nwwest-roll" id="nwwest-roll">
+            <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
+              <li ref="rollul" v-for="(item, key) in list" :key="key" class="ellipsis" :class="{anim:animate===true}">
+                <img :src="item.member" alt="">
+                <span class="name">{{item.content}}</span>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li :style="{'color':currentComponentData.data.fontColor}">刚刚</li>
+      </ul>
+    </div>
   </div>
 </template>
 

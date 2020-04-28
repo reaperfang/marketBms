@@ -1,14 +1,16 @@
 <template>
   <!-- 视频 -->
-  <div class="componentVideo" v-if="currentComponentData && currentComponentData.data">
-    <div>
-      <video
-        v-if="show"
-        :src="currentComponentData.data.videoUrl"
-        controls="controls"
-        class="video"
-        :poster="currentComponentData.data.coverUrl"
-      >您的浏览器不支持 video 标签。</video>
+  <div class="component_wrapper">
+    <div class="componentVideo" v-if="currentComponentData && currentComponentData.data">
+      <div>
+        <video
+          v-if="show"
+          :src="currentComponentData.data.videoUrl"
+          controls="controls"
+          class="video"
+          :poster="currentComponentData.data.coverUrl"
+        >您的浏览器不支持 video 标签。</video>
+      </div>
     </div>
   </div>
 </template>

@@ -54,16 +54,20 @@ export default {
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if(this.typeData.type == 'edit'){
-            this.$emit('submit',{edit:{groupName:this.form.groupName,currentData:this.typeData.currentData}})
+          if(this.form.groupName == '未分组'){
+            this.$message.error('分组名称已存在');
           }else{
-            if(this.dialogTitle == '新建一级分组'){
-              this.$emit('submit',{add:{groupLevel:'1',groupName:this.form.groupName}})
+            if(this.typeData.type == 'edit'){
+              this.$emit('submit',{edit:{groupName:this.form.groupName,currentData:this.typeData.currentData}})
             }else{
-              this.$emit('submit',{add:{groupLevel:'2',groupName:this.form.groupName,currentData:this.typeData.currentData,node:this.typeData.node}})
-            }
-          }          
-          this.visible = false
+              if(this.dialogTitle == '新建一级分组'){
+                this.$emit('submit',{add:{groupLevel:'1',groupName:this.form.groupName}})
+              }else{
+                this.$emit('submit',{add:{groupLevel:'2',groupName:this.form.groupName,currentData:this.typeData.currentData,node:this.typeData.node}})
+              }
+            }          
+            this.visible = false
+          }
         }
       })
     }
