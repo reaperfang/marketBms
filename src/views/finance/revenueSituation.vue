@@ -233,7 +233,6 @@ export default {
   methods: {
     //格式化最近日期
     nearDays(num) {
-      console.log(num);
       let Num = Number(num);
       let arr = [];
       for(let i = 3; i < Num + 2; i++) {
@@ -259,7 +258,6 @@ export default {
     },
     //时间段趋势
     getDataDateRs(){
-      console.log(1);
       let queryDate = {
         accountDateStart:this.timeValue[0],
         accountDateEnd:this.timeValue[1]
