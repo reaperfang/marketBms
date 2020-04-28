@@ -96,7 +96,7 @@
                         </div>
                         <p class="line-tip">&nbsp;</p>
                         <!-- 分佣佣金参考 -->
-                        <p v-if="resellGood.length" class="line-tip">（以下是我们根据您填写各层级分佣比例计算出的商品各层级分佣佣金，仅供参考。实际分佣结果将以最终保存的比例）</p>
+                        <p v-if="resellGood.length" class="line-tip">（以下是我们根据您填写各层级分佣比例计算出的商品各层级分佣佣金，仅供参考。实际分佣结果将以最终保存的比例计算）</p>
                         <div v-if="resellGood.length">
                             <el-table :data="resellGood" tooltip-effect="dark" style="width: 100%">
                                 <el-table-column prop="sku" label="SKU"></el-table-column>
