@@ -4,7 +4,7 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:130px;padding-right:4px;">
             <el-option
               v-for="item in serialNumberType"
               :key="item.value"
@@ -44,7 +44,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -103,7 +103,7 @@
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageSize*1"
+          :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
           :total="total*1">
         </el-pagination>
@@ -132,7 +132,9 @@ export default {
         maxTradeAmount: '0.00', // 分佣金额下限
         timeValue:'', // 交易时间
         userType:'resellerSn', // 分佣员类型
-        userValue:'' // 分佣员类型对应值
+        userValue:'',// 分佣员类型对应值
+        startIndex:1,
+        pageSize:10
       },
       dataList:[ ],
       total:0,
@@ -157,6 +159,7 @@ export default {
   methods: {
     init(){
       let query = {
+        choosePage:'1',
         tradeDetailSn:'',
         relationSn: '',
         thirdPartySn: '',
@@ -193,12 +196,13 @@ export default {
       return query;
     },
 
-    fetch(){
-      if(this.ruleForm.minTradeAmount == '' || this.ruleForm.maxTradeAmount == ''){
+    fetch(num){
+      if(this.ruleForm.minTradeAmount == undefined || this.ruleForm.maxTradeAmount == undefined){
         this.$message('分佣金额不能为空')
       }else if(this.ruleForm.minTradeAmount > this.ruleForm.maxTradeAmount){
         this.$message('分佣金额最小值应该小于最大值')
       }else{
+        this.ruleForm.startIndex = num || this.ruleForm.startIndex
         let query = this.init();
         this._apis.finance.getCommissionLIst(query).then((response)=>{
           this.dataList = response.list
@@ -210,8 +214,8 @@ export default {
       }
     },
     //搜索
-    onSubmit(){
-      this.fetch()
+    onSubmit(num){
+      this.fetch(num)
     },
     //重置
     resetForm(){
@@ -222,7 +226,9 @@ export default {
         maxTradeAmount: '0.00', // 分佣金额下限
         timeValue:'', // 交易时间
         userType:'resellerSn', // 分佣员类型
-        userValue:'' // 分佣员类型对应值
+        userValue:'', // 分佣员类型对应值
+        startIndex:1,
+        pageSize:10
       }
       this.fetch()
     },

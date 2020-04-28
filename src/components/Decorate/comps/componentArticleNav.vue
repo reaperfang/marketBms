@@ -1,39 +1,61 @@
 <template>
   <!-- 图文导航 -->
-  <div class="componentArticleNav" :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="currentComponentData && currentComponentData.data">
+  <div class="component_wrapper">
+    <div class="componentArticleNav" :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="currentComponentData && currentComponentData.data">
 
-      <!-- 1、图片导航 -->
-      <div v-if="currentComponentData.data.templateType===1">
-          <!-- (1)固定 -->
+        <!-- 1、图片导航 -->
+        <div v-if="currentComponentData.data.templateType===1">
+            <!-- (1)固定 -->
+              <div v-if="currentComponentData.data.slideType===1">
+                <template v-if="hasContent">
+                  <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
+                    <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+                      <div :class="{'default': !item.url}">
+                        <img :src="item.url" alt />
+                      </div>
+                      <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
+                    </li>
+                  </ul>
+                </template>
+                <template v-else>
+                  <img
+                    class="default_image"
+                    :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                    src="../../../assets/images/shop/defaultImage/nav1.png"
+                    alt
+                  />
+                </template>
+              </div>
+            <!-- (2)横向滑动 -->
+              <div v-else-if="currentComponentData.data.slideType===2" class="scroll_wrapper">
+                <template v-if="hasContent">
+                  <ul class="img_nav2 clearfix" ref="scrollContent">
+                    <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+                      <div >
+                        <img :src="item.url" alt />
+                      </div>
+                      <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
+                    </li>
+                  </ul>
+                </template>
+                <template v-else>
+                  <img
+                    class="default_image"
+                    :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                    src="../../../assets/images/shop/defaultImage/nav2.png"
+                    alt
+                  />
+                </template>
+              </div>
+        </div>
+        <!-- 2、文字导航 -->
+        <div v-if="currentComponentData.data.templateType===2">
+            <!-- (1)固定 -->
             <div v-if="currentComponentData.data.slideType===1">
-               <template v-if="hasContent">
-                <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
-                  <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-                    <div :class="{'default': !item.url}">
-                      <img :src="item.url" alt />
-                    </div>
-                    <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
-                  </li>
-                </ul>
-              </template>
-              <template v-else>
-                <img
-                  class="default_image"
-                  :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  src="../../../assets/images/shop/defaultImage/nav1.png"
-                  alt
-                />
-              </template>
-            </div>
-          <!-- (2)横向滑动 -->
-            <div v-else-if="currentComponentData.data.slideType===2" class="scroll_wrapper">
               <template v-if="hasContent">
-                <ul class="img_nav2 clearfix" ref="scrollContent">
+                <ul :class="currentComponentData.data.itemList.length>5?'img_nav4':'img_nav3'">
                   <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-                    <div >
-                      <img :src="item.url" alt />
-                    </div>
-                    <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
+                    <span :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
                   </li>
                 </ul>
               </template>
@@ -41,51 +63,31 @@
                 <img
                   class="default_image"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  src="../../../assets/images/shop/defaultImage/nav2.png"
+                  src="../../../assets/images/shop/defaultImage/nav3.png"
                   alt
                 />
               </template>
             </div>
-      </div>
-      <!-- 2、文字导航 -->
-      <div v-if="currentComponentData.data.templateType===2">
-          <!-- (1)固定 -->
-          <div v-if="currentComponentData.data.slideType===1">
-            <template v-if="hasContent">
-              <ul :class="currentComponentData.data.itemList.length>5?'img_nav4':'img_nav3'">
-                <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-                  <span :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
-                </li>
-              </ul>
-            </template>
-            <template v-else>
-              <img
-                class="default_image"
-                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/nav3.png"
-                alt
-              />
-            </template>
-          </div>
-          <!-- (2)横向滑动 -->
-          <div v-if="currentComponentData.data.slideType===2" class="scroll_wrapper">
-            <template v-if="hasContent">
-              <ul class="img_nav5 clearfix" ref="scrollContent2">
-                <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
-                  <span class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
-                </li>
-              </ul>
-            </template>
-            <template v-else>
-              <img
-                class="default_image"
-                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/nav4.png"
-                alt
-              />
-            </template>
-          </div>
-      </div>
+            <!-- (2)横向滑动 -->
+            <div v-if="currentComponentData.data.slideType===2" class="scroll_wrapper">
+              <template v-if="hasContent">
+                <ul class="img_nav5 clearfix" ref="scrollContent2">
+                  <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
+                    <span class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</span>
+                  </li>
+                </ul>
+              </template>
+              <template v-else>
+                <img
+                  class="default_image"
+                  :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                  src="../../../assets/images/shop/defaultImage/nav4.png"
+                  alt
+                />
+              </template>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 <script>

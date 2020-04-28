@@ -1,7 +1,7 @@
 <template>
 <!-- 组件-优惠套装 -->
-    <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-        <template v-if="hasContent">
+    <div class="component_wrapper" v-loading="loading">
+        <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data && hasContent">
             <ul>
                 <li v-for="(item,key) of list" :key="key" v-if="!(item.status==2&&currentComponentData.data.hideSaledGoods==true|| utils.dateDifference(item.endTime)<1&&currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&currentComponentData.data.hideSaledGoods==true)" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
@@ -20,7 +20,7 @@
                                 item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
                                 " class="time">
                                     <template v-slot="timeData">
-                                         <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                        <span class="item">{{ utils.addZero(timeData.days) }}</span>
                                         <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
                                         <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
                                         <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
@@ -35,7 +35,7 @@
                         <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&listStyle==4">
                             <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
-			<div class="limit_line" v-else-if="showContents.indexOf('5')!=-1&&listStyle==1&&item.joinLimit!=-1">
+            <div class="limit_line" v-else-if="showContents.indexOf('5')!=-1&&listStyle==1&&item.joinLimit!=-1">
                             <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
                         <div class="price_line">
@@ -47,8 +47,8 @@
                     </div>
                 </li>
             </ul>
-        </template>
-        <img v-else class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
+        </div>
+        <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
 
 </template>

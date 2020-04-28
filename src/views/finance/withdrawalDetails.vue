@@ -160,12 +160,12 @@ export default {
       inline:true,
       userTypes:[
         {
-          value:'memberSn',
-          label:'用户ID'
-        },
-        {
           value:'nickName',
           label:'用户昵称'
+        },
+        {
+          value:'memberSn',
+          label:'用户ID'
         },
       ],
       ruleForm:{
@@ -173,7 +173,7 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         memberSn:'',
         nickName:'',
