@@ -268,8 +268,8 @@ export default {
         businessType:'',
         tradeType:'',
         payWay:'',
-        amountMin:'',
-        amountMax:'',
+        amountMin:'0.00',
+        amountMax:'0.00',
         tradeTimeStart:'',
         tradeTimeEnd:'',
         sort:'',
@@ -300,7 +300,9 @@ export default {
       return query;
     },  
     fetch(orde,num){
-      if(this.ruleForm.amountMin > this.ruleForm.amountMax){
+      if(this.ruleForm.amountMin == undefined || this.ruleForm.amountMax == undefined){
+        this.$message('分佣金额不能为空')
+      }else if(this.ruleForm.amountMin > this.ruleForm.amountMax){
         this.$message('交易金额最小值应该小于最大值')
       }else{
         this.ruleForm.startIndex = num || this.ruleForm.startIndex
@@ -334,8 +336,8 @@ export default {
         businessType:'',
         payWay:'',
         tradeType:'',
-        amountMin:'',
-        amountMax:'',
+        amountMin:'0.00',
+        amountMax:'0.00',
         timeValue:''
       }
       this.onSubmit()

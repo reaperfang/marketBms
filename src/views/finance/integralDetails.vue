@@ -132,20 +132,20 @@ export default {
       inline:true,
       userTypes:[
         {
-          value:'memberSn',
-          label:'用户ID'
-        },
-        {
           value:'nickName',
           label:'用户昵称'
         },
+        {
+          value:'memberSn',
+          label:'用户ID'
+        }
       ],
       ruleForm:{
         memberSn:'',
         businessTypeId:-1,
         timeValue:'',
         nickName:'',
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         startIndex:1,
         pageSize:10
