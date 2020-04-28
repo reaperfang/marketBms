@@ -154,7 +154,7 @@ export default {
             }
             this._apis.order.fetchOrderList(_params).then((res) => {
                 console.log(res)
-                res.list.forEach((val, index) => {
+                (res.list || []).forEach((val, index) => {
                     let _val = Object.assign({}, val, val.orderInfo)
                     _val.checked = false
                     res.list.splice(index, 1, _val)
