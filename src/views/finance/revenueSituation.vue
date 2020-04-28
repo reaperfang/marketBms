@@ -243,10 +243,14 @@ export default {
     //初始化数据
     init(day){
       let date = new Date()
-      let endDate = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss")
+      let yesterday = new Date(date.getTime()-24*60*60*1000);
+      yesterday.setHours(23);
+      yesterday.setMinutes(59);
+      yesterday.setSeconds(59);
+      let endDate = utils.formatDate(yesterday, 'yyyy-MM-dd hh:mm:ss');
       let startDate = utils.countDate(-day)+" 00:00:00"
       this.timeValue = [startDate,endDate];
-      this.chartData.dates = [].concat(this.nearDays(day));
+      this.chartData = {dates: [].concat(this.nearDays(day))}
     },
     //概况
     getSurveyDay(){
@@ -271,7 +275,14 @@ export default {
           //   title: '消息',
           //   message: "查询结果集为空，没有可以显示的数据"
           // });
-          this.init(this.days);
+          let startDate = Date.parse(queryDate.accountDateStart);
+          let endDate = Date.parse(queryDate.accountDateEnd);
+          let days=parseInt((endDate - startDate)/(1*24*60*60*1000));
+          if(days == this.days) {
+            this.init(Number(this.days));
+          }else{
+            this.init(Number(days));
+          }
         }
       }).catch((error)=>{
         this.$message.error(error)
@@ -280,7 +291,7 @@ export default {
     //最近天数趋势
     getDataNumRs(){
       this._apis.finance.getDataNumRs({recentDays:this.days}).then((response)=>{
-        if(!response){
+        if(response){
           this.survey = response
           this.dataList = response.accountList
         }else{
