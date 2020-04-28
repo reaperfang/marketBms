@@ -233,8 +233,9 @@ export default {
   methods: {
     //格式化最近日期
     nearDays(num) {
+      let Num = Number(num);
       let arr = [];
-      for(let i = 3; i < num + 2; i++) {
+      for(let i = 3; i < Num + 2; i++) {
         arr.push(utils.formatDate(utils.calcDate(new Date(), '-', i), "yyyy-MM-dd"))
       }
       return arr;
@@ -245,7 +246,7 @@ export default {
       let endDate = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss")
       let startDate = utils.countDate(-day)+" 00:00:00"
       this.timeValue = [startDate,endDate];
-      this.chartData.dates = [].concat(this.nearDays(day));
+      this.chartData = {dates: [].concat(this.nearDays(day))}
     },
     //概况
     getSurveyDay(){
@@ -270,10 +271,16 @@ export default {
           //   title: '消息',
           //   message: "查询结果集为空，没有可以显示的数据"
           // });
-          this.init(this.days);
+          let startDate = Date.parse(queryDate.accountDateStart);
+          let endDate = Date.parse(queryDate.accountDateEnd);
+          let days=parseInt((endDate - startDate)/(1*24*60*60*1000));
+          if(days == this.days) {
+            this.init(Number(this.days));
+          }else{
+            this.init(Number(days));
+          }
         }
       }).catch((error)=>{
-        this.chartData.dates = [].concat(this.nearDays(this.days));
         this.$message.error(error)
       })
     },
@@ -289,11 +296,11 @@ export default {
           //   message: "查询结果集为空，没有可以显示的数据"
           // });
           // this.days = 7
-          this.chartData.dates = [].concat(this.nearDays(this.days));
+          this.chartData = {dates: [].concat(this.nearDays(this.days))}
           return
         }
       }).catch((error)=>{
-        this.chartData.dates = [].concat(this.nearDays(this.days));
+        this.chartData = {dates: [].concat(this.nearDays(this.days))}
         this.$message.error(error)
       })
     },

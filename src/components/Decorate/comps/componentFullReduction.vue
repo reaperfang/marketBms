@@ -1,33 +1,31 @@
 <template>
   <!-- 满减瞒折 -->
-  <div class="componentFullReduction" v-if="currentComponentData && currentComponentData.data" v-loading="loading">
-    <template v-if="hasContent">
-      <div class="reduction"  v-for="(item, key) in list" :key="key">
-        <div class="reduction_first">
-          <span>减</span>
-          <span>{{item.name}}</span>
-          <span>{{item.startTime.slice(0,10)}}至{{item.endTime.slice(0,10)}}</span>
+  <div class="component_wrapper" v-loading="loading">
+    <div class="componentFullReduction" v-if="currentComponentData && currentComponentData.data && hasContent">
+        <div class="reduction"  v-for="(item, key) in list" :key="key">
+          <div class="reduction_first">
+            <span>减</span>
+            <span>{{item.name}}</span>
+            <span>{{item.startTime.slice(0,10)}}至{{item.endTime.slice(0,10)}}</span>
+          </div>
+          <div class="reduction_two">
+            <ul>
+              <template v-for="(item2, key2) in item.typeList ">
+                <li
+                :key="key2"
+                v-if="item2.orderRewardType"
+                  class="ellipsis"
+                  :class="reductionStyle"
+                >
+                  <span v-if="item2.orderRewardType == 1" :title="reduceData(item2)">{{reduceData(item2)}}</span>
+                  <span v-else-if="item2.orderRewardType == 2" :title="discountData(item2)">{{discountData(item2)}}</span>
+                </li>
+              </template>
+            </ul>
+          </div>
         </div>
-        <div class="reduction_two">
-          <ul>
-            <template v-for="(item2, key2) in item.typeList ">
-              <li
-              :key="key2"
-              v-if="item2.orderRewardType"
-                class="ellipsis"
-                :class="reductionStyle"
-              >
-                <span v-if="item2.orderRewardType == 1" :title="reduceData(item2)">{{reduceData(item2)}}</span>
-                <span v-else-if="item2.orderRewardType == 2" :title="discountData(item2)">{{discountData(item2)}}</span>
-              </li>
-            </template>
-          </ul>
-        </div>
-      </div>
-    </template>
-    <div v-else class="temp_block">
-        <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
     </div>
+    <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
   </div>
 </template>
 
