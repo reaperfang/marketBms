@@ -30,7 +30,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '客户余额', '默认页面', '搜索']">搜索</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '用户余额', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -38,7 +38,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '客户余额', '默认页面', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '用户余额', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <!-- <cbTable style="margin-top:20px"></cbTable> -->

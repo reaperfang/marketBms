@@ -4,7 +4,7 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:124px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:130px;padding-right:4px;">
             <el-option
               v-for="item in serialNumberType"
               :key="item.value"
@@ -159,6 +159,7 @@ export default {
   methods: {
     init(){
       let query = {
+        choosePage:'1',
         tradeDetailSn:'',
         relationSn: '',
         thirdPartySn: '',

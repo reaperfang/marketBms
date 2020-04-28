@@ -177,6 +177,7 @@ export default {
     },
     init(){
       let query = {
+        choosePage:'2',
         tradeDetailSn:this.ruleForm.tradeDetailSn,
         businessType:this.ruleForm.businessType == '0' ? null : this.ruleForm.businessType,
         startTime:'',

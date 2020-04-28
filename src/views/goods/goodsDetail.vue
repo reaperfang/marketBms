@@ -171,6 +171,7 @@
                                         <p class="spec-message" v-if="item.focus && !item.list || (item.focus && item.list && !item.list.length)">暂无匹配项，您可新增规格值到列表</p>
                                         <div class="add-specs-value-footer">
                                             <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
+                                            <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)">取消</el-button>
                                         </div>
                                     </div>
                                     <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)">添加规格值</el-button>
@@ -2586,6 +2587,17 @@ export default {
                         productCatalogInfoId: ''
                     })
 
+                    if(this.ruleForm.other) {
+                        params = Object.assign({}, params, {
+                            productUnit: params.otherUnit
+                        })
+                    } else {
+                        let item = this.unitList.find(val => val.id == this.ruleForm.productUnit)
+
+                        params = Object.assign({}, params, {
+                            productUnit: item && item.name || ''
+                        })
+                    }
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
