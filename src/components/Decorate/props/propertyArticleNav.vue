@@ -117,7 +117,7 @@ export default {
       currentNav: null,  //当前操作的图文导航
       dialogVisible: false,
       currentDialog: '',
-      suggestSize: '建议尺寸：宽高1:1',
+      suggestSize: '建议上传尺寸160*160像素(或其他1: 1尺寸)且小于3M的图片（当尺寸不匹配时图片会被压缩或拉伸至变形）',
       dragOptions: {
           animation: 300,
           group: "description",
@@ -153,7 +153,7 @@ export default {
       this.blockType = 1;
       switch(Number(templateType)) {
         case 1:
-          this.suggestSize = '建议尺寸：宽高1:1';
+          this.suggestSize = '建议上传尺寸160*160像素(或其他1: 1尺寸)且小于3M的图片（当尺寸不匹配时图片会被压缩或拉伸至变形）';
           break; 
         case 2:
           this.suggestSize = '建议：不超过5个汉字';
