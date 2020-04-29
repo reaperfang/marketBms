@@ -88,7 +88,7 @@ export default {
     /* 获取模板下的页面列表 */
     getPageList() {
       this.loading = true;
-      this._apis.shop.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
+      this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
         this.pageList = response;
         this.loading = false;
         if(!response || !response.length) {
@@ -159,22 +159,22 @@ export default {
           });
           return false;
         }else{
-          for(let item of this.componentDataIds) {
-            const componentData = this.componentDataMap[item];
-            if(componentData.type === 'goods') {
-              if(componentData.data.ids && !componentData.data.ids.length) {
-                this.$alert('请在右侧选择真实商品后重试', '提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                    //打开基础信息面板
-                    this.$store.commit('setCurrentComponentId', componentData.id);
-                    this.setLoading(false);
-                  }
-                });
-                return false;
-              }
-            }
-          }
+          // for(let item of this.componentDataIds) {
+          //   const componentData = this.componentDataMap[item];
+          //   if(componentData.type === 'goods') {
+          //     if(componentData.data.ids && !componentData.data.ids.length) {
+          //       this.$alert('请在右侧选择真实商品后重试', '提示', {
+          //         confirmButtonText: '确定',
+          //         callback: action => {
+          //           //打开基础信息面板
+          //           this.$store.commit('setCurrentComponentId', componentData.id);
+          //           this.setLoading(false);
+          //         }
+          //       });
+          //       return false;
+          //     }
+          //   }
+          // }
           return true;
         }
       }

@@ -88,7 +88,7 @@ export default {
     /* 获取模板下的页面列表 */
     getPageList() {
       this.loading = true;
-      this._apis.shop.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
+      this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
         this.pageList = response;
         this.loading = false;
         if(!response || !response.length) {
