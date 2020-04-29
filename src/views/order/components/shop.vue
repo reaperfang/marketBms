@@ -157,6 +157,7 @@ export default {
             this._apis.order.fetchOrderList(_params).then((res) => {
                 this.loading = false
                 console.log(res)
+                if(res.list === null) res.list = []
                 res.list.forEach((val, index) => {
                     let _val = Object.assign({}, val, val.orderInfo)
                     _val.checked = false
