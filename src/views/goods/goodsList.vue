@@ -398,13 +398,13 @@
 }
 /deep/ .el-table td, .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }
 /deep/ .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }

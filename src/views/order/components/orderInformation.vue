@@ -763,7 +763,7 @@ export default {
         },
         wechatFilter(value) {
             if(value && value instanceof Array) {
-                return value.map(val => val.transactionCode).join(',')
+                return value.filter(val => val.transactionCode).map(val => val.transactionCode).join(',')
             } else {
                 return ''
             }

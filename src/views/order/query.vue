@@ -359,7 +359,7 @@ export default {
           orderTimeValue: "",
           startIndex: 1,
           pageSize: 20,
-          searchType2: '',
+          searchType2: 'memberSn',
           searchValue2: ''
         }
       }
