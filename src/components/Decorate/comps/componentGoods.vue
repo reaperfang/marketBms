@@ -58,7 +58,7 @@ export default {
             // 上拉加载
             goodListLoading: false,
             goodListFinished: false,
-            list:  this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
+            list: [],
             loading: false
         }
     },
@@ -203,15 +203,11 @@ export default {
                                 return;
                             }
                         }else{
-                            if(this.$route.path.indexOf('templateEdit') < 0) {
-                                this.list = [];
-                            }
+                            this.list = [];
                             return;
                         }
                     }else{
-                        if(this.$route.path.indexOf('templateEdit') < 0) {
-                            this.list = [];
-                        }
+                        this.list = [];
                         return;
                     }
                 }else if(componentData.source === 2){
@@ -231,9 +227,7 @@ export default {
                     this.loading = false;
                 }).catch((error)=>{
                     console.error(error);
-                    if(this.$route.path.indexOf('templateEdit') < 0) {
-                        this.list = [];
-                    }
+                    this.list = [];
                     this.loading = false;
                 });
             }

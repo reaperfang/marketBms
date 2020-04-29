@@ -166,7 +166,7 @@ export default {
       rules: {
 
       },
-      list: this.$route.path.indexOf('templateEdit') > -1 ? (process.env.NODE_ENV === 'production' ? GOODS_LIST_PROD : GOODS_LIST): [],
+      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -260,17 +260,13 @@ export default {
                             return;
                         }
                     }else{
-                      if(this.$route.path.indexOf('templateEdit') < 0) {
-                        this.list = [];
-                        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
-                      }
+                      this.list = [];
+                      this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                         return;
                     }
                 }else{
-                     if(this.$route.path.indexOf('templateEdit') < 0) {
-                        this.list = [];
-                        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
-                      }
+                      this.list = [];
+                      this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                     return;
                 }
             }else if(componentData.source === 2){
@@ -291,9 +287,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                 if(this.$route.path.indexOf('templateEdit') < 0) {
-                        this.list = [];
-                      }
+                this.list = [];
                 this.loading = false;
             });
         }

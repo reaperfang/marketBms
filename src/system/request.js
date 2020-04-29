@@ -196,6 +196,7 @@ class Ajax {
             break;
           case 'goodsOperate':  //商品运营
             config.baseURL = `${process.env.DATA_API}/api-public-web/public/api.do`;
+            // config.baseURL = `http://172.22.146.133:8085/api-public-web/public/api.do`;
             //config.baseURL = `/goodsOperate_server/api-public-web/public/api.do`;
             break;
           case 'manager':  //广告和导航开关修改  许涛
