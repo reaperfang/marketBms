@@ -85,7 +85,7 @@
                     <el-table-column
                     prop="code"
                     label="SPU编码"
-                    width="124">
+                    width="130">
                     </el-table-column>
                     <el-table-column
                     prop="name"
@@ -361,7 +361,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 128px;
+  width: 160px;
 }
 .table-header {
     margin-bottom: 10px;
