@@ -271,7 +271,7 @@ export default {
             title=""
             width="160"
             trigger="hover"
-            content="订单编号">
+            content="订单编号或提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
         </div>
