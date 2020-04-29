@@ -180,8 +180,8 @@ export default {
         choosePage:'2',
         tradeDetailSn:this.ruleForm.tradeDetailSn,
         businessType:this.ruleForm.businessType == '0' ? null : this.ruleForm.businessType,
-        startTime:'',
-        endTime:'',
+        startTradeTime:'',
+        endTradeTime:'',
         resellerSn: '',
         resellerName: '',
         resellerPhone: '',
@@ -195,8 +195,8 @@ export default {
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.startTime = timeValue[0]
-        query.endTime = timeValue[1]
+        query.startTradeTime = timeValue[0]
+        query.endTradeTime = timeValue[1]
       }
       return query;
     },

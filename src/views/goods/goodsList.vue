@@ -85,7 +85,7 @@
                     <el-table-column
                     prop="code"
                     label="SPU编码"
-                    width="124">
+                    width="130">
                     </el-table-column>
                     <el-table-column
                     prop="name"
@@ -121,12 +121,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="总库存">
-                        <template slot-scope="scope">
-                            <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
                         prop="price"
                         label="售卖价（元）"
                         width="120"
@@ -136,6 +130,12 @@
                                 {{scope.row.goodsInfos && scope.row.goodsInfos.length ? Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice)) : scope.row.salePrice}}
                                 <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
                             </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="总库存">
+                        <template slot-scope="scope">
+                            <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -361,7 +361,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 128px;
+  width: 160px;
 }
 .table-header {
     margin-bottom: 10px;
@@ -398,13 +398,13 @@
 }
 /deep/ .el-table td, .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }
 /deep/ .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }
