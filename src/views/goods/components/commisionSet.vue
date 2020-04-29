@@ -340,9 +340,14 @@ export default {
             tmp.sku = v.id;
             tmp.specs = Object.values(JSON.parse(v.specs)).join(' ');
             tmp.status = '';
-            if(v.status == 1) tmp.status = '上架';
-            if(v.status == 0) tmp.status = '下架';
-            if(v.status == 1) tmp.status = '售罄';
+            if(v.stock > 0) {
+                if(v.status == 1) tmp.status = '上架';
+                if(v.status == 0) tmp.status = '下架';
+                if(v.status == -1) tmp.status = '售罄';
+            } else {
+                 tmp.status = '售罄';
+            }
+            
             tmp.salePrice = v.salePrice;
             tmp.costPrice = v.costPrice;
             tmp.profits = v.salePrice - v.costPrice;
