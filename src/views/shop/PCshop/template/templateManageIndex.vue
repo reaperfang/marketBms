@@ -65,7 +65,7 @@ export default {
   methods: {
     fetch() {
       // this.loading = true;
-      // this._apis.shop.getTemplateList({}).then((response)=>{
+      // this._apis.goodsOperate.getTemplateList({}).then((response)=>{
       //   this.templateList = response;
       //   this.loading = false;
       // }).catch((error)=>{

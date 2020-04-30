@@ -76,7 +76,7 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSaleSendInfo.expressNos}}</div>
-                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false, orderAfterSaleSendInfo.id)" class="header-lefter-item  blue pointer">查看物流</div>
+                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false, orderAfterSaleSendInfo.orderAfterSaleId)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>

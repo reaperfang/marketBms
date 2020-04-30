@@ -165,9 +165,11 @@ export default {
     font-size:0;
     white-space:nowrap;
     overflow:hidden;
+    padding:11.5px 0 19px;
     & > li {
       width:25%;
       float:left;
+      padding:7.5px 0;
       & > div {
         width:50px;
         height:50px;
@@ -237,14 +239,14 @@ export default {
     // overflow-x: scroll;
     & > li {
       // width: 20%;
-      width: 75px;
+      width: 80px;
       text-align: center;
       float:left;
       & > div {
         margin: 0 auto;
         & > img {
           width: 100%;
-          height: 100%;
+          height: 80px;
         }
       }
       & > p {

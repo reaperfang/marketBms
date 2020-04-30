@@ -243,7 +243,11 @@ export default {
     //初始化数据
     init(day){
       let date = new Date()
-      let endDate = utils.formatDate(date, "yyyy-MM-dd hh:mm:ss")
+      let yesterday = new Date(date.getTime()-24*60*60*1000);
+      yesterday.setHours(23);
+      yesterday.setMinutes(59);
+      yesterday.setSeconds(59);
+      let endDate = utils.formatDate(yesterday, 'yyyy-MM-dd hh:mm:ss');
       let startDate = utils.countDate(-day)+" 00:00:00"
       this.timeValue = [startDate,endDate];
       this.chartData = {dates: [].concat(this.nearDays(day))}

@@ -99,5 +99,25 @@ export function fetchPublicSensitiveList(data) {
         data,
         apiType: 'goodsOperate'
       })
+  }   
+  
+  //模板列表
+  export function getTemplateList(data) {
+      return request({
+        target: 'PUBLIC-PAGE-TEMPLALE-FIND-PROCESSOR',
+        method: 'post',
+        data,
+        apiType: 'goodsOperate'
+      })
   } 
+
+  //获取店铺装修某个模板的页面列表
+export function getPagesByTemplateId(data) {
+    return request({
+      target: 'PUBLIC-PAGE-TEMPLATE-ITEM-FIND-PROCESSOR',
+      method: 'post',
+      apiType: 'goodsOperate',
+      data
+    })
+}
 
