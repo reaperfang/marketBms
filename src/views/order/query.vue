@@ -176,12 +176,12 @@ export default {
           orderType
       })
     }
-    if(this.$route.query.resellerInfoId) {
-      let resellerInfoId = this.$route.query.resellerInfoId
+    if(this.$route.query.resellersn) {
+      let resellersn = this.$route.query.resellersn
 
       this.listQuery = Object.assign({}, this.listQuery, {
           searchType2: 'resellersn',
-          searchValue2: resellerInfoId
+          searchValue2: resellersn
       })
     }
     if(this.$route.query.resellerPhone === '') {
