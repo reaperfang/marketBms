@@ -220,7 +220,7 @@ export default {
             }
             data.isAloneResellRule = this.enable ? 1 : 0;
             let  resellRule = Object.assign({}, this.resellRule);
-            let  regPos = /^\d+(\.\d+)?$/;
+            let  regPos = /^[1-9]\d*$/;
 
             // 开启了独立分佣
             if(this.status == 1 && this.enable) {
@@ -237,7 +237,7 @@ export default {
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                         return false;
                     } 
                 } else if (resellConfigInfo.resellGrade == 2) {
@@ -254,7 +254,7 @@ export default {
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else if (resellConfigInfo.resellGrade == 3) {
@@ -272,7 +272,7 @@ export default {
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else return false;
