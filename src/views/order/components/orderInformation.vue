@@ -160,8 +160,8 @@
                             v-model="orderInfo.sellerRemark"
                             maxlength="50">
                         </el-input>
-                        <span v-if="!remarkVisible" @click="remarkVisible = true" class="blue pointer">我要备注</span>
-                        <span v-if="remarkVisible" class="blue pointer" @click="remarkHandler">完成</span>
+                        <span v-if="!remarkVisible" @click="remarkVisible = true" class="blue pointer nowrap">我要备注</span>
+                        <span v-if="remarkVisible" class="blue pointer nowrap" @click="remarkHandler">完成</span>
                     </div>
                 </div>
             </div></el-col>
@@ -1053,11 +1053,16 @@ export default {
     flex: 1;
     border-right: 1px solid #cacfcb;
 }
+/deep/ .el-col-8:last-child {
+    border: none;
+}
 .see-more-gift {
     margin-left: 20px;
     color: #655EFF;
 }
-
+.nowrap {
+    white-space: nowrap;
+}
 </style>
 
 

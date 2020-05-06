@@ -34,16 +34,14 @@
                 style="width: 100%"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
                 <el-table-column
-                    label="操作"
-                    width="180">
+                    label="操作">
                     <template slot-scope="scope">
                         {{scope.row.operationType | operationTypeFilter}}
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="createUserName"
-                    label="操作人"
-                    width="180">
+                    label="操作人">
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
@@ -461,6 +459,9 @@ export default {
     .member-name {
         margin-right: 20px;
         color: #b6b6b9;
+    }
+    /deep/ .operate-record .el-table .cell {
+        text-align: center;
     }
 </style>
 
