@@ -460,7 +460,7 @@ export default {
         margin-right: 20px;
         color: #b6b6b9;
     }
-    /deep/ .operate-record .el-table .cell {
+    /deep/ .el-table .cell {
         text-align: center;
     }
 </style>
