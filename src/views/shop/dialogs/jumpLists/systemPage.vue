@@ -8,18 +8,6 @@
           </el-table-column>
         <el-table-column prop="title" label="页面名称"></el-table-column>
       </el-table>
-      <div class="pagination">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="Number(startIndex) || 1"
-          :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
-          :page-size="pageSize*1"
-          :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
-          >
-        </el-pagination>
-      </div>
   </div>
 </template>
 

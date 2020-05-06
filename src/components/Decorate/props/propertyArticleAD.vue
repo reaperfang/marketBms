@@ -115,7 +115,7 @@
 
 
    <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @seletedPage="seletedPage"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @seletedPage="seletedPage" :customLinkDisabled="false"></component>
   </el-form>
 </template>
 

@@ -9,6 +9,7 @@
         <el-tab-pane label="商品详情" name="goods"></el-tab-pane>
         <el-tab-pane label="营销活动" name="marketCampaign"></el-tab-pane>
         <el-tab-pane label="系统页面" name="systemPage"></el-tab-pane>
+        <el-tab-pane label="自定义链接" name="customLink" v-if="!customLinkDisabled"></el-tab-pane>
       </el-tabs>
       <component :is="currentTab" @seletedRow="rowSeleted"></component>
     </div>
@@ -23,14 +24,19 @@ import goods from "../jumpLists/goods";
 import goodsGroup from "../jumpLists/goodsGroup";
 import marketCampaign from "../jumpLists/marketCampaign";
 import systemPage from "../jumpLists/systemPage";
+import customLink from "../jumpLists/customLink";
 export default {
   name: "dialogSelectJumpPage",
-  components: {DialogBase, microPage, microPageClassify, goods, goodsGroup, marketCampaign, systemPage},
+  components: {DialogBase, microPage, microPageClassify, goods, goodsGroup, marketCampaign, systemPage, customLink},
   props: {
       dialogVisible: {
           type: Boolean,
           required: true
       },
+      customLinkDisabled: {
+        default: true,
+        type: Boolean
+      }
   },
   data() {
     return {
