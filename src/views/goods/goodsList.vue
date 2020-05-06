@@ -639,8 +639,26 @@ export default {
                 });
                 return
             }
-            this.currentDialog = 'copyUrlDialog'
-            this.dialogVisible = true
+            if(!this.multipleSelection.every(val => val.status == 1)) {
+                this.$message({
+                    message: '只能选择上架商品',
+                    type: 'warning'
+                });
+                return
+            }
+            this._apis.goods
+                .getJdLive({ids: this.multipleSelection.map(val => val.id)})
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(error => {
+                    this.$message.error({
+                        message: error,
+                        type: 'error'
+                    });
+                });
+            // this.currentDialog = 'copyUrlDialog'
+            // this.dialogVisible = true
         },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
