@@ -64,21 +64,19 @@
                 <span>图片标题</span>
                 <el-input v-model="item.title"></el-input>
               </p>
-              <p>
-                <span>跳转链接</span>
+              <p style="display:flex;">
+                <el-button type="text" style="width: 60px;color: rgba(68,67,75,1);cursor: text;">跳转链接</el-button>
                 <el-button
                 v-if="!item.linkTo"
                 type="text"
                 @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
               </p>
               <div class="link_overview clearFix" v-if="item.linkTo">
-                <div class="content l">
-                  <span :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
-                  <i></i>
+                <div class="cont l">
+                  <span class="l" :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
+                  <i @click="removeLink(item)"></i>
                 </div>
-                <div class="modify r">
-                  <el-button type="text" @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'">修改</el-button>
-                </div>
+                <span class="modify r" @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'">修改</span>
               </div>
             </div>
             <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
@@ -274,6 +272,18 @@ export default {
         }
       }
       this.ruleForm.itemList = tempList;
+    },
+
+    /* 移除链接 */
+    removeLink(item) {
+      const tempList = [...this.ruleForm.itemList];
+      for(let item2 of tempList) {
+        if(item.id === item2.id) {
+          item2.linkTo = null;
+          break;
+        }
+      }
+      this.ruleForm.itemList = tempList;
     }
   }
 }
@@ -328,7 +338,7 @@ ul.template_type{
   li{
     display:flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin-bottom:20px;
     position:relative;
     .left{

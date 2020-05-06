@@ -68,14 +68,20 @@
                 <span v-else-if="ruleForm.templateType === 2">导航文字</span>
                 <el-input v-model="item.title"></el-input>
               </p>
-              <p>
-                <el-button 
-                type="text" 
-                @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'" 
-                :title="item.linkTo ?  item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'">
-                {{item.linkTo ?  '['+item.linkTo.typeName + ']-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'}}
-                </el-button>
+              <p style="display:flex;">
+                <el-button type="text" style="width: 60px;color: rgba(68,67,75,1);cursor: text;">跳转链接</el-button>
+                <el-button
+                v-if="!item.linkTo"
+                type="text"
+                @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
               </p>
+              <div class="link_overview clearFix" v-if="item.linkTo">
+                <div class="cont l">
+                  <span class="l" :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
+                  <i @click="removeLink(item)"></i>
+                </div>
+                <span class="modify r" @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">修改</span>
+              </div>
             </div>
             <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
           </li>
@@ -218,6 +224,18 @@ export default {
       for(let item2 of tempList) {
         if(item.id === item2.id) {
           item2.url = '';
+          break;
+        }
+      }
+      this.ruleForm.itemList = tempList;
+    },
+
+    /* 移除链接 */
+    removeLink(item) {
+      const tempList = [...this.ruleForm.itemList];
+      for(let item2 of tempList) {
+        if(item.id === item2.id) {
+          item2.linkTo = null;
           break;
         }
       }
