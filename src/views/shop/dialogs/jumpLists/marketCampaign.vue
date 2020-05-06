@@ -61,6 +61,7 @@ export default {
       },
       pageNum: 1,
       rules: {},
+      invalid: true,  //数据是否无效
       activities: [],
       tableData: [],
     };
@@ -128,18 +129,26 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
       let cid = shopInfo && shopInfo.id || ''
 
-      /* 向父组件发送选中的数据 */
-      this.$emit('seletedRow',  {
-        pageType: 'marketCampaign',
-        typeName: '营销活动',
-        id: 6,
-        data: {
-          id: data.appId,
-          name: data.appActivityName,
-          activityType: data.appType
-        },
-        cid
-      });
+      if(state) {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  {
+          pageType: 'marketCampaign',
+          typeName: '营销活动',
+          id: 6,
+          data: {
+            id: data.appId,
+            name: data.appActivityName,
+            activityType: data.appType
+          },
+          cid
+        });
+        this.$emit('invalidChange', false)
+      }else {
+          /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  null);
+        this.$emit('invalidChange', true)
+      }
+
     }
 
   }

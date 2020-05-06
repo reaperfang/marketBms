@@ -1,7 +1,7 @@
 <template>
   <div>
      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-        <el-form-item label="" prop="activityName">
+        <el-form-item label="" prop="customLink">
           <el-input v-model="ruleForm.customLink" placeholder="请输入自定义链接" clearable></el-input>
         </el-form-item>
       </el-form>
@@ -24,9 +24,17 @@ export default {
       rules: {
         customLink: [
           { required: true, message: "请输入自定义链接", trigger: "blur" },
-          // {validator: validateTitle, trigger: "blur"}
+          {validator: (rule, value, callback) => {
+            var reg = /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:\/~+#]*[\w\-@?^=%&\/~+#])?$/;
+            if(reg.test(value)) {
+              callback();
+            }else {
+              callback(new Error('请输入正确的网址格式'));
+            }
+          }, trigger: "blur"}
         ]
       },
+      invalid: true  //数据是否无效
     };
   },
   created() {
@@ -43,9 +51,9 @@ export default {
     seletedChange(newValue) {
 
       this.$refs.ruleForm.validate(valid => {
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let cid = shopInfo && shopInfo.id || ''
         if (valid) {
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-          let cid = shopInfo && shopInfo.id || ''
 
           /* 向父组件发送选中的数据 */
           this.$emit('seletedRow',  {
@@ -59,6 +67,11 @@ export default {
             },
             cid
           });
+          this.$emit('invalidChange', false)
+        }else {
+          /* 向父组件发送选中的数据 */
+          this.$emit('seletedRow',  null);
+          this.$emit('invalidChange', true)
         }
       })
     }
@@ -67,9 +80,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.el-input{
-  width: 500px;
+<style lang="scss" scoped>
+/deep/.el-input{
+  width: 500px!important;
   margin: 0 auto;
 }
 </style>

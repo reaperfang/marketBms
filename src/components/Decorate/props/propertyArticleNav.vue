@@ -73,7 +73,7 @@
                 type="text" 
                 @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'" 
                 :title="item.linkTo ?  item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'">
-                {{item.linkTo ?  item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'}}
+                {{item.linkTo ?  '['+item.linkTo.typeName + ']-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'}}
                 </el-button>
               </p>
             </div>

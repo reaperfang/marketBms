@@ -73,6 +73,7 @@ export default {
         status: '1',
       },
       rules: {},
+      invalid: true,  //数据是否无效
       goodsClassifyList: [],
       tableData: [],
       currentClassifyId: [],
@@ -149,18 +150,26 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
       let cid = shopInfo && shopInfo.id || ''
 
-      /* 向父组件发送选中的数据 */
-      this.$emit('seletedRow',  {
-        pageType: 'goods',
-        typeName: '商品详情',
-        id: 5,
-        data: {
-          id: data.id,
-          name: data.name,
-          mainImage: data.mainImage
-        },
-        cid
-      });
+      if(state) {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  {
+          pageType: 'goods',
+          typeName: '商品详情',
+          id: 5,
+          data: {
+            id: data.id,
+            name: data.name,
+            mainImage: data.mainImage
+          },
+          cid
+        });
+        this.$emit('invalidChange', false)
+      }else {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  null);
+        this.$emit('invalidChange', true)
+      }
+
     },
 
 

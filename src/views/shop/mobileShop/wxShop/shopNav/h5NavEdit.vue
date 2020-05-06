@@ -123,7 +123,7 @@
               v-if="currentNav.linkTo" 
               class="nav_tag" 
               :title="currentNav.linkTo.typeName + ' - ' + (currentNav.linkTo.data.title || currentNav.linkTo.data.name)">
-                {{currentNav.linkTo.typeName + ' - ' + (currentNav.linkTo.data.title || currentNav.linkTo.data.name)}}
+                {{'['+currentNav.linkTo.typeName + '] - ' + (currentNav.linkTo.data.title || currentNav.linkTo.data.name)}}
               </el-tag>
             </el-form-item>
           </div>

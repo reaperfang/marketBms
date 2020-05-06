@@ -26,6 +26,7 @@ export default {
         name: ''
       },
       rules: {},
+      invalid: true,  //数据是否无效
       tableData: [
         {
           id: 'index',
@@ -69,18 +70,25 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
       let cid = shopInfo && shopInfo.id || ''
 
-      /* 向父组件发送选中的数据 */
-      this.$emit('seletedRow',  {
-        pageType: 'systemPage',
-        typeName: '系统页面',
-        id: 7,
-        data: {
-          id: data.id,
-          name: data.name,
-          title: data.title
-        },
-        cid
-      });
+      if(state) {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  {
+          pageType: 'systemPage',
+          typeName: '系统页面',
+          id: 7,
+          data: {
+            id: data.id,
+            name: data.name,
+            title: data.title
+          },
+          cid
+        });
+        this.$emit('invalidChange', false)
+      }else {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  null);
+        this.$emit('invalidChange', true)
+      }
     }
 
   }

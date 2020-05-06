@@ -67,12 +67,19 @@
               <p>
                 <span>跳转链接</span>
                 <el-button
+                v-if="!item.linkTo"
                 type="text"
-                @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'"
-                :title="item.linkTo ? item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'">
-                {{item.linkTo ? item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name) : '选择跳转到的页面'}}
-                </el-button>
+                @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
               </p>
+              <div class="link_overview clearFix" v-if="item.linkTo">
+                <div class="content l">
+                  <span :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
+                  <i></i>
+                </div>
+                <div class="modify r">
+                  <el-button type="text" @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'">修改</el-button>
+                </div>
+              </div>
             </div>
             <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
           </li>
