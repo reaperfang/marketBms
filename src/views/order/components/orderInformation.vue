@@ -885,7 +885,7 @@ export default {
                 line-height: 21px;
             }
             &.lefter {
-                height: 146px;
+                // height: 146px;
                 .change {
                     color: $globalMainColor;
                     text-align: right;
@@ -894,6 +894,7 @@ export default {
             }
             &.righter {
                 border: none;
+                padding-left: 10px;
                 .remark-box {
                     p {
                         margin-top: 8px;
@@ -902,8 +903,8 @@ export default {
             }
             &.center {
                 padding-left: 10px;
-                border-left: 1px solid #cacfcb;
-                border-right: 1px solid #cacfcb;
+                // border-left: 1px solid #cacfcb;
+                // border-right: 1px solid #cacfcb;
             }
             .item {
                 display: flex;
@@ -1050,6 +1051,7 @@ export default {
 /deep/ .el-col-8 {
     width: auto;
     flex: 1;
+    border-right: 1px solid #cacfcb;
 }
 .see-more-gift {
     margin-left: 20px;
