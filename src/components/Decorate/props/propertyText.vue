@@ -42,7 +42,7 @@
         type="text" 
         @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" 
         :title="ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'">
-        {{ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'}}
+        {{ruleForm.linkTo ? '['+ruleForm.linkTo.typeName + ']-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'}}
         </el-button>
       </el-form-item>
       <el-form-item label="更多设置" prop="showDivider">

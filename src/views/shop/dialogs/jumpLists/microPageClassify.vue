@@ -52,6 +52,7 @@ export default {
         name: ''
       },
       rules: {},
+      invalid: true,  //数据是否无效
       tableData: [],
     };
   },
@@ -89,17 +90,25 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
       let cid = shopInfo && shopInfo.id || ''
 
-      /* 向父组件发送选中的数据 */
-      this.$emit('seletedRow',  {
-        pageType: 'microPageClassify',
-        typeName: '微页面分类',
-        id: 3,
-        data: {
-          id: data.id,
-          name: data.name
-        },
-        cid
-      });
+      if(state) {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  {
+          pageType: 'microPageClassify',
+          typeName: '微页面分类',
+          id: 3,
+          data: {
+            id: data.id,
+            name: data.name
+          },
+          cid
+        });
+        this.$emit('invalidChange', false)
+      }else {
+           /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  null);
+        this.$emit('invalidChange', true)
+      }
+
     }
 
   }

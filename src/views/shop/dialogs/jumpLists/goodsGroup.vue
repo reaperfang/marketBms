@@ -26,6 +26,7 @@ export default {
         name: ''
       },
       rules: {},
+      invalid: true,  //数据是否无效
       goodsClassifyList: [],
       categoryData: [],
       defaultProps: {
@@ -120,6 +121,8 @@ export default {
         },
         cid
       });
+
+      this.$emit('invalidChange', false)
     }
 
   }

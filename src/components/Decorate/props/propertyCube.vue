@@ -233,7 +233,7 @@
         type="text" 
         @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" 
         :title="ruleForm.list[blockType] && ruleForm.list[blockType].linkTo ? ruleForm.list[blockType].linkTo.typeName + '-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name) : '选择跳转到的页面'">
-        {{ruleForm.list[blockType] && ruleForm.list[blockType].linkTo ? ruleForm.list[blockType].linkTo.typeName + '-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name) : '选择跳转到的页面'}}
+        {{ruleForm.list[blockType] && ruleForm.list[blockType].linkTo ? '['+ruleForm.list[blockType].linkTo.typeName + ']-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name) : '选择跳转到的页面'}}
         </el-button>
       </el-form-item>
     </div>

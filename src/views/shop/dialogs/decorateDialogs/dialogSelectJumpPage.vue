@@ -1,6 +1,6 @@
 /* 选择页面跳转弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择跳转页面'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择跳转页面'" @submit="submit" :showFooter="false">
     <div class="jump_wrapper">
       <el-tabs v-model="currentTab">
         <el-tab-pane label="微页面" name="microPage"></el-tab-pane>
@@ -11,7 +11,11 @@
         <el-tab-pane label="系统页面" name="systemPage"></el-tab-pane>
         <el-tab-pane label="自定义链接" name="customLink" v-if="!customLinkDisabled"></el-tab-pane>
       </el-tabs>
-      <component :is="currentTab" @seletedRow="rowSeleted"></component>
+      <component :is="currentTab" @seletedRow="rowSeleted" @invalidChange="invalidChange"></component>
+      <span class="dialog-footer fcc" style="margin-top:20px;">
+        <el-button type="primary" @click="submit">确 认</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+      </span>
     </div>
   </DialogBase>
 </template>
@@ -41,7 +45,9 @@ export default {
   data() {
     return {
       currentTab: 'microPage',
-      seletedRow: null
+      seletedRow: null,
+      seletedData: null,
+      invalid: true
     };
   },
   computed: {
@@ -64,10 +70,20 @@ export default {
 
     /* 向父组件提交选中的数据 */
     submit() {
-      if(this.seletedData) {
+      if(this.seletedData && !this.invalid) {
         this.$emit('seletedPage',  this.seletedData);
+        this.$nextTick(()=>{
+          this.dialogVisible = false
+        })
+      }else {
+        this.$message.warning('请填入正确的跳转页面或链接！')
       }
     },
+
+    /* 数据可用性更新 */
+    invalidChange(value) {
+      this.invalid = value;
+    }
   }
 };
 </script>
