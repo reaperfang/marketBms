@@ -29,6 +29,7 @@
                 <div style="width:260px;">
                     <div class="uploadBtn"><i @click="changeDialog" class="el-icon-plus"></i></div>
                     <div style="display:inline-block;margin:60px 0 0 10px;" class="line-tip">建议尺寸：640PX*640PX</div>
+                    <div class="uploadBtnTip">上传图片</div>
                 </div>
             </div>
         </div>
@@ -427,6 +428,15 @@ export default {
                 font-size: 24px;
                 color: #D0D6E4;
             }
+        }
+        .uploadBtnTip {
+            width: 84px;
+            margin-left: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #655eff;
+            line-height: 2;
+            font-weight: 500;
         }
         .commision {
             display: flex;
