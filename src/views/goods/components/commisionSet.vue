@@ -80,7 +80,7 @@
                                 <el-table-column prop="profits">
                                     <template slot="header">
                                         <el-tooltip placement="top">
-                                            <div slot="content">利润=商品售价-成本价</div>
+                                            <div slot="content">利润=商品售价-成本价;当商品利润小于0时，各级佣金为0。</div>
                                             <p>利润&nbsp;<i class="el-icon-warning" style="color:#655EFF;"></i></p>
                                         </el-tooltip>
                                     </template>    
@@ -200,6 +200,10 @@ export default {
                 tmp.one = (tmp.profits * (this.resellRule.percentOfCommissionThree - 0) / 100).toFixed(2);
                 tmp.two = (tmp.profits * (this.resellRule.percentOfCommissionTwo - 0) / 100).toFixed(2);
                 tmp.three = (tmp.profits * (this.resellRule.percentOfCommissionOne - 0) / 100).toFixed(2);
+                tmp.one = tmp.one > 0 ? tmp.one : 0;
+                tmp.two = tmp.two > 0 ? tmp.two : 0;
+                tmp.three = tmp.three > 0 ? tmp.three : 0;
+                
                 tmp.profitRate = ((tmp.profits / v.costPrice) * 100 ).toFixed(2) + '%';
                 resellGood.push(tmp);
             });
