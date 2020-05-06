@@ -178,12 +178,13 @@
                     <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
                     <el-button @click="shareMore" class="border-button">批量推广</el-button>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="border-button">批量删除</el-button>
+                    <el-button @click="copyUrl" class="border-button">复制链接</el-button>
                 </div>
             </div>
             <div class="footer">
                 <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
             </div>
-            <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
+            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
         <!-- <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
@@ -425,6 +426,7 @@ import EditorUpperAndLowerRacksSpu from '@/views/goods/dialogs/editorUpperAndLow
 import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
 import PriceChangeDialog from "@/views/goods/dialogs/priceChangeDialog";
 import anotherAuth from '@/mixins/anotherAuth'
+import copyUrlDialog from "@/views/goods/dialogs/copyUrlDialog";
 
 export default {
     mixins: [anotherAuth],
@@ -626,6 +628,20 @@ export default {
         }
     },
     methods: {
+        clear() {
+            this.$refs.table.clearSelection();
+        },
+        copyUrl() {
+            if(!this.multipleSelection.length) {
+                this.$message({
+                    message: '请选择商品',
+                    type: 'warning'
+                });
+                return
+            }
+            this.currentDialog = 'copyUrlDialog'
+            this.dialogVisible = true
+        },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
                 startIndex: 1,
@@ -1201,7 +1217,8 @@ export default {
         EditorPriceSpu,
         EditorUpperAndLowerRacksSpu,
         ShareSelect,
-        PriceChangeDialog
+        PriceChangeDialog,
+        copyUrlDialog
     }
 }
 </script>
