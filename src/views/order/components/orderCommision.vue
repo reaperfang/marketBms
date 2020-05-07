@@ -21,7 +21,7 @@
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerPhone}}</p></template>
         </el-table-column>
         <el-table-column label="分佣比例">
-            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerSettlementScale}}%</p></template>  
+            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerSettlementScale * 100}}%</p></template>  
         </el-table-column>
         <el-table-column label="分佣金额">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">¥{{item.resellerSettlementMoney}}</p></template>  

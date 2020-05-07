@@ -29,6 +29,7 @@
                 <div style="width:260px;">
                     <div class="uploadBtn"><i @click="changeDialog" class="el-icon-plus"></i></div>
                     <div style="display:inline-block;margin:60px 0 0 10px;" class="line-tip">建议尺寸：640PX*640PX</div>
+                    <div class="uploadBtnTip">上传图片</div>
                 </div>
             </div>
         </div>
@@ -79,7 +80,7 @@
                                 <el-table-column prop="profits">
                                     <template slot="header">
                                         <el-tooltip placement="top">
-                                            <div slot="content">利润=商品售价-成本价</div>
+                                            <div slot="content">利润=商品售价-成本价;当商品利润小于0时，各级佣金为0。</div>
                                             <p>利润&nbsp;<i class="el-icon-warning" style="color:#655EFF;"></i></p>
                                         </el-tooltip>
                                     </template>    
@@ -141,7 +142,7 @@ export default {
     watch: {
         resellRule: {
             handler(value, oldVal){
-                let  regPos = /^\d+(\.\d+)?$/;
+                let  regPos = /^[1-9]\d*$/;
                 if(
                     (regPos.test(value.percentOfCommissionOne) || value.percentOfCommissionOne === '') &&
                     (regPos.test(value.percentOfCommissionTwo) || value.percentOfCommissionTwo === '') &&
@@ -157,7 +158,7 @@ export default {
                     }
                 }    
                 else {
-                    this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                    this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                 }
             },
             deep: true
@@ -199,6 +200,10 @@ export default {
                 tmp.one = (tmp.profits * (this.resellRule.percentOfCommissionThree - 0) / 100).toFixed(2);
                 tmp.two = (tmp.profits * (this.resellRule.percentOfCommissionTwo - 0) / 100).toFixed(2);
                 tmp.three = (tmp.profits * (this.resellRule.percentOfCommissionOne - 0) / 100).toFixed(2);
+                tmp.one = tmp.one > 0 ? tmp.one : 0;
+                tmp.two = tmp.two > 0 ? tmp.two : 0;
+                tmp.three = tmp.three > 0 ? tmp.three : 0;
+                
                 tmp.profitRate = ((tmp.profits / v.costPrice) * 100 ).toFixed(2) + '%';
                 resellGood.push(tmp);
             });
@@ -220,59 +225,59 @@ export default {
             }
             data.isAloneResellRule = this.enable ? 1 : 0;
             let  resellRule = Object.assign({}, this.resellRule);
-            let  regPos = /^\d+(\.\d+)?$/;
+            let  regPos = /^[1-9]\d*$/;
 
             // 开启了独立分佣
             if(this.status == 1 && this.enable) {
                 if(resellConfigInfo.resellGrade == 1) {
-                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                     resellRule.percentOfCommissionTwo = '';
                     resellRule.percentOfCommissionOne = '';
                     if(
                         (regPos.test(resellRule.percentOfCommissionThree))
                     ) {
+                        resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                         return false;
                     } 
                 } else if (resellConfigInfo.resellGrade == 2) {
-                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
-                    resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                     resellRule.percentOfCommissionOne = '';
                     if(
                         (regPos.test(resellRule.percentOfCommissionThree)) &&
                         (regPos.test(resellRule.percentOfCommissionTwo))
                     ) {
+                        resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
+                        resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                         let total = (resellRule.percentOfCommissionThree - 0) + (resellRule.percentOfCommissionTwo - 0);
                         if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else if (resellConfigInfo.resellGrade == 3) {
-                    resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
-                    resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
-                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                     if(
                         (regPos.test(resellRule.percentOfCommissionOne)) &&
                         (regPos.test(resellRule.percentOfCommissionTwo)) &&
                         (regPos.test(resellRule.percentOfCommissionThree)) 
                     ) {
+                        resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
+                        resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
+                        resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0) + (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else return false;
@@ -427,6 +432,15 @@ export default {
                 font-size: 24px;
                 color: #D0D6E4;
             }
+        }
+        .uploadBtnTip {
+            width: 84px;
+            margin-left: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #655eff;
+            line-height: 2;
+            font-weight: 500;
         }
         .commision {
             display: flex;

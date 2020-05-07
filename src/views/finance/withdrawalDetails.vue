@@ -263,7 +263,7 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         memberSn:'',
         nickName:'',
