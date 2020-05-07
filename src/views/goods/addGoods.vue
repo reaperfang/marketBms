@@ -1797,7 +1797,7 @@ export default {
                 weight: '',
                 volume: '',
                 image: '',
-                //code: ''
+                code: !(this.ruleForm.isSyncProduct == 1 && this.authHide) ? '' : this.ruleForm.goodsInfos[index].code
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
             console.log(this.ruleForm.goodsInfos)
