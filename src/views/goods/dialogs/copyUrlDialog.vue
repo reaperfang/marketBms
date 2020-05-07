@@ -6,7 +6,7 @@
                     <ul>
                         <li v-for="item in data">{{item.url}}</li>
                     </ul>
-                    <textarea style="position: absolute; left: -99999px; top: 0;" class="value-list" cols="20" rows="10" id="biao1">{{data.map(val => JSON.stringify(val)).join(',')}}</textarea>
+                    <textarea style="position: absolute; left: -99999px; top: 0;" class="value-list" cols="20" rows="10" id="biao1">{{data.map(val => JSON.stringify(val)).join(',\r')}}</textarea>
                 </div>
                 <p class="url-message">复制小程序商品链接，仅限于视频电商助手功能使用。向视频电商助手APP添加链接时，商品链接间需以“，”分隔，一个“{}”内即为一个商品链接，最后一个商品链接后不需要加分隔，多条链接时，默认已分隔。</p>
             </div>
