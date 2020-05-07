@@ -70,6 +70,7 @@
                     :data="list"
                     ref="table"
                     style="width: 100%"
+                    :default-sort = "{prop: 'stock', order: 'descending'}"
                     :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                     @selection-change="handleSelectionChange"
                     :empty-text="emptyText">
@@ -116,6 +117,8 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                        sortable
+                        :sort-method="salePriceMethod"
                         prop="price"
                         label="售卖价（元）"
                         width="120"
@@ -128,12 +131,17 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                    <el-table-column
+                        sortable
+                        :sort-method="stockSortMethod"
                         label="总库存">
                         <template slot-scope="scope">
                             <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
+                        sortable
+                        :sort-method="saleCountSortMethod"
                         label="总销量">
                         <template slot-scope="scope">
                             <span class="store">{{scope.row.saleCount}}</span>
@@ -626,6 +634,45 @@ export default {
         }
     },
     methods: {
+        stockSortMethod(a, b) {
+            if(a.stock > b.stock) {
+                return -1
+            } else if(a.stock < b.stock) {
+                return 1
+            } else {
+                if(new Date(a.createTime).getTime() > new Date(b.createTime).getTime()) {
+                    return -1
+                } else if(new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) {
+                    return 1
+                } else {
+                    return 0
+                }
+            }
+        },
+        saleCountSortMethod(a, b) {
+            if(a.saleCount > b.saleCount) {
+                return -1
+            } else if(a.saleCount < b.saleCount) {
+                return 1
+            } else {
+                if(new Date(a.createTime).getTime() > new Date(b.createTime).getTime()) {
+                    return -1
+                } else if(new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) {
+                    return 1
+                } else {
+                    return 0
+                }
+            }
+        },
+        salePriceMethod(a, b) {
+            if(+a.salePrice > +b.salePrice) {
+                return -1
+            } else if(+a.salePrice < +b.salePrice) {
+                return 1
+            } else {
+                return 0
+            }
+        },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
                 startIndex: 1,
