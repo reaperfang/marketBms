@@ -2996,7 +2996,7 @@ export default {
                     name: image.fileName,
                     url: image.filePath
                 }))
-                if(this.ruleForm.images != '') {
+                if(this.ruleForm.images) {
                     this.ruleForm.images += ',' + image.filePath
                 } else {
                     this.ruleForm.images = image.filePath
