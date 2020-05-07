@@ -649,7 +649,9 @@ export default {
             this._apis.goods
                 .getJdLive({ids: this.multipleSelection.map(val => val.id)})
                 .then(res => {
-                    console.log(res)
+                    this.currentData = res
+                    this.currentDialog = 'copyUrlDialog'
+                    this.dialogVisible = true
                 })
                 .catch(error => {
                     this.$message.error({
@@ -657,8 +659,6 @@ export default {
                         type: 'error'
                     });
                 });
-            // this.currentDialog = 'copyUrlDialog'
-            // this.dialogVisible = true
         },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
