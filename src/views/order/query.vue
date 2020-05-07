@@ -74,6 +74,21 @@
             :picker-options="utils.globalTimePickerOption.call(this)"
           ></el-date-picker>
         </el-form-item>
+        <el-form-item label="配送方式">
+          <el-select v-model="listQuery.deliveryMethod" placeholder>
+            <el-option label="全部" value></el-option>
+            <el-option label="普通快递" :value="1"></el-option>
+            <el-option label="商家配送" :value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="配送时间">
+          <el-date-picker
+            style="margin-left: 0;"
+            v-model="listQuery.date"
+            type="date"
+            placeholder="全部日期">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
@@ -146,6 +161,9 @@ export default {
         sendType: "", // 发货类型:1正常发货,2自动发货,3优先发货
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
+        deliveryMethod: "", // 配送方式:1普通快递,2商家配送
+        date: "", //商家配送-日期
+        timeSlot: "", //商家配送-时间段
         orderTimeValue: "",
       },
       activeName: "shop"

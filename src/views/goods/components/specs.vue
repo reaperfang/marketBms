@@ -22,7 +22,7 @@
                 <th class="salePrice" width="150"><span>售卖价</span></th>
                 <th class="stock" width="150"><span>库存</span></th>
                 <th class="warningStock" width="150"><span>库存预警</span></th>
-                <th width="150"><span>重量</span></th>
+                <th :class="{'weight': weightRequired}" width="150"><span>重量</span></th>
                 <th width="150"><span>体积</span></th>
                 <th width="150"><span>SKU编码</span></th>
                 <th width="150"><span>操作</span></th>
@@ -375,6 +375,10 @@ export default {
         },
         hideDelete: {
             type: Boolean
+        },
+        weightRequired: { //重量是否必填
+            type: Boolean,
+            default: false
         }
     },
     components: {
@@ -422,6 +426,7 @@ export default {
     table th.salePrice span,
     table th.stock span,
     table th.warningStock span,
+    table th.weight span,
     table th.image span {
         position: relative;
         &:before {
