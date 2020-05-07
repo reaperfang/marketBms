@@ -39,7 +39,14 @@ export default {
     },
     methods: {
         handleCheckAll(val) {
-            this.checkList = val?this.tags:[];
+            if(val) {
+                this.checkList = [];
+                this.tags.map(item => {
+                    this.checkList.push(item.tagName);
+                })
+            }else{
+                this.checkList = [];
+            }
         },
         submit() {
             this.btnLoading = true;
