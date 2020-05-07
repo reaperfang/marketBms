@@ -214,7 +214,7 @@ export default {
       this.ruleForm = {
         businessTypeId:'',
         timeValue:'',
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         memberSn:'',
         nickName:'',
