@@ -336,15 +336,38 @@ export default {
         },
         imageSelected(image) {
             if(this.material) {
-                this.list.splice(this.materialIndex, 1, Object.assign({}, this.list[this.materialIndex], {
-                    image: image.filePath,
-                    fileList: [
-                        {
-                            name: '',
-                            url: image.filePath
-                        }
-                    ]
-                }))
+                // this.list.splice(this.materialIndex, 1, Object.assign({}, this.list[this.materialIndex], {
+                //     image: image.filePath,
+                //     fileList: [
+                //         {
+                //             name: '',
+                //             url: image.filePath
+                //         }
+                //     ]
+                // }))
+                if(this.list[this.materialIndex].image_rowspan > 1) {
+                    for(let i=this.materialIndex; i<this.materialIndex + this.list[this.materialIndex].image_rowspan; i++) {
+                        this.list.splice(i, 1, Object.assign({}, this.list[i], {
+                            image: image.filePath,
+                            fileList: [
+                                {
+                                    name: '',
+                                    url: image.filePath
+                                }
+                            ]
+                        }))
+                    }
+                } else {
+                    this.list.splice(this.materialIndex, 1, Object.assign({}, this.list[this.materialIndex], {
+                        image: image.filePath,
+                        fileList: [
+                            {
+                                name: '',
+                                url: image.filePath
+                            }
+                        ]
+                    }))
+                }
                 //this.material = false
             } else {
                 this.fileList.push(Object.assign({}, image, {
