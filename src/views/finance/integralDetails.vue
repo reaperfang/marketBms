@@ -56,6 +56,7 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'changeTime', order: 'descending'}"
+        @sort-change="changeSort"
         >
         <el-table-column
           prop="scoreDetailSn"
@@ -149,7 +150,8 @@ export default {
         userType:'nickName',
         userValue:'',
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -174,7 +176,8 @@ export default {
         endTime:'',
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
-        nickName:this.ruleForm.nickName
+        nickName:this.ruleForm.nickName,
+        sort:'desc'
       }
       if(this.ruleForm.userType == 'memberSn'){
         query.memberSn = this.ruleForm.userValue || ''
@@ -215,6 +218,7 @@ export default {
         userValue:'',
         memberSn:'',
         nickName:'',
+        sort:'desc'
       }
       this.fetch()
     },
@@ -232,6 +236,17 @@ export default {
         this.$message.error(error)
       })
       }
+    },
+      //交易时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
   }
 }

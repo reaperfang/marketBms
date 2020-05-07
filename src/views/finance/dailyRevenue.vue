@@ -35,7 +35,6 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'accountDate', order: 'descending'}"
         @sort-change="changeSort"
-
         >
         <el-table-column
           prop="accountDate"

@@ -48,6 +48,7 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'createTime', order: 'descending'}"
+        @sort-change="changeSort"
         >
         <el-table-column
           prop="expressSn"
@@ -108,7 +109,8 @@ export default {
         timeValue:'',
         expressCompany:'',
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -150,7 +152,8 @@ export default {
         startTime:'',
         endTime:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:'desc'
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
@@ -192,6 +195,7 @@ export default {
         searchType:'relationSn',
         timeValue:'',
         expressCompany:'',
+        sort:'desc'
       }
       this.fetch()
     },
@@ -209,6 +213,17 @@ export default {
          this.$message.error(error);
       })
       }
+    },
+    //操作时间排序
+     changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
   }
 }

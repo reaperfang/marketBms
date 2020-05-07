@@ -44,6 +44,7 @@
       style="width: 100%; margin-top:20px;"
       :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      @sort-change="changeSort"
       >
         <el-table-column
           prop="content"
@@ -188,9 +189,19 @@ export default {
       }).catch((error)=>{
         this.$message.error(error);
       })
-      }
-      
+      }  
     },
+    //发送时间排序
+     changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.orderBy = 'send_time asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.orderBy = 'send_time desc'
+      }else{
+        return 
+      }
+      this.fetch()
+    }
   },
   computed:{
     surveyStatus(){
