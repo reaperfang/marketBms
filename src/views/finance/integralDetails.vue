@@ -59,7 +59,8 @@
         >
         <el-table-column
           prop="scoreDetailSn"
-          label="积分流水号">
+          label="积分流水号"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
