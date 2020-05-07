@@ -78,7 +78,8 @@
         </el-table-column>
         <el-table-column
           prop="cashoutSn"
-          label="提现编号">
+          label="提现编号"
+          width="200px">
         </el-table-column>
          <el-table-column
           prop="nickName"
