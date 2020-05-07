@@ -448,7 +448,7 @@ ul.cube {
                   overflow-x: hidden!important;
                   text-overflow: ellipsis!important;
                   white-space: nowrap!important;
-                  // display: block!important;
+                  display: block!important;
                   text-align: left!important;
                 }          
             }
@@ -581,4 +581,51 @@ ul.cube {
 .hide_tips{
       color: #d3d8df;
       font-size:13px;
+}
+
+/* 跳转链接预览样式 */
+.link_overview{
+      display:flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .cont{
+            margin-right:12px;
+            display:flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width:178px;
+            height:26px;
+            background:rgba(230,228,255,0.5);
+            border:1px solid rgba(182,181,200,1);
+            span{
+                  font-size: 12px;
+                  font-family: MicrosoftYaHei;
+                  color: #6e6e72;
+                  line-height: 23px;
+                  margin-left: 5px;
+                  width: 147px;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  display: block;
+            }
+            i{
+                  display:block;
+                  background: url('../assets/images/shop/close2.png') no-repeat 0 0;
+                  width: 12px;
+                  height: 12px;
+                  margin-top: 6px;
+                  margin-right:10px;
+                  cursor: pointer;
+            }
+      }
+      .modify{
+            margin-right: 10px;
+            font-size: 14px;
+            font-family: MicrosoftYaHei;
+            color: #655eff;
+            width: 30px;
+            cursor: pointer;
+      }
 }

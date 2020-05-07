@@ -8,18 +8,6 @@
           </el-table-column>
         <el-table-column prop="title" label="页面名称"></el-table-column>
       </el-table>
-      <div class="pagination">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="Number(startIndex) || 1"
-          :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
-          :page-size="pageSize*1"
-          :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
-          >
-        </el-pagination>
-      </div>
   </div>
 </template>
 
@@ -38,6 +26,7 @@ export default {
         name: ''
       },
       rules: {},
+      invalid: true,  //数据是否无效
       tableData: [
         {
           id: 'index',
@@ -81,18 +70,25 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
       let cid = shopInfo && shopInfo.id || ''
 
-      /* 向父组件发送选中的数据 */
-      this.$emit('seletedRow',  {
-        pageType: 'systemPage',
-        typeName: '系统页面',
-        id: 7,
-        data: {
-          id: data.id,
-          name: data.name,
-          title: data.title
-        },
-        cid
-      });
+      if(state) {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  {
+          pageType: 'systemPage',
+          typeName: '系统页面',
+          id: 7,
+          data: {
+            id: data.id,
+            name: data.name,
+            title: data.title
+          },
+          cid
+        });
+        this.$emit('invalidChange', false)
+      }else {
+        /* 向父组件发送选中的数据 */
+        this.$emit('seletedRow',  null);
+        this.$emit('invalidChange', true)
+      }
     }
 
   }

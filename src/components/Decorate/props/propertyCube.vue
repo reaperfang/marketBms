@@ -229,12 +229,17 @@
         </div>
       </el-form-item>
       <el-form-item label="跳转链接" prop="pageLink" v-if="hasContent">
-        <el-button 
-        type="text" 
-        @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" 
-        :title="ruleForm.list[blockType] && ruleForm.list[blockType].linkTo ? ruleForm.list[blockType].linkTo.typeName + '-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name) : '选择跳转到的页面'">
-        {{ruleForm.list[blockType] && ruleForm.list[blockType].linkTo ? ruleForm.list[blockType].linkTo.typeName + '-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name) : '选择跳转到的页面'}}
-        </el-button>
+        <el-button
+        v-if="!(ruleForm.list[blockType] && ruleForm.list[blockType].linkTo)"
+        type="text"
+        @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
+        <div class="link_overview clearFix" v-if="ruleForm.list[blockType] && ruleForm.list[blockType].linkTo">
+          <div class="cont l">
+            <span class="l" :title="ruleForm.list[blockType].linkTo.typeName + '-' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name)">{{ruleForm.list[blockType].linkTo.typeName + ' | ' + (ruleForm.list[blockType].linkTo.data.title || ruleForm.list[blockType].linkTo.data.name)}}</span>
+            <i @click="removeLink(blockType)"></i>
+          </div>
+          <span class="modify r" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">修改</span>
+        </div>
       </el-form-item>
     </div>
 
@@ -319,6 +324,13 @@ export default {
     deleteImage(blockType) {
       let tempList = {...this.ruleForm.list};
       tempList[this.blockType].url = '';
+      this.ruleForm.list = tempList;
+    },
+
+    /* 移除某个块的链接 */
+    removeLink(blockType) {
+      let tempList = {...this.ruleForm.list};
+      tempList[this.blockType].linkTo = null;
       this.ruleForm.list = tempList;
     }
   }
