@@ -1790,8 +1790,8 @@ export default {
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
                 costPrice: '',
-                salePrice: '',
-                stock: '',
+                //salePrice: '',
+                //stock: '',
                 warningStock: '',
                 weight: '',
                 volume: '',
@@ -2013,6 +2013,23 @@ export default {
                 })
             })
         },
+        setGoodsImage(arr) {
+            arr.forEach((val, index) => {
+                if(val.image_rowspan && val.image_rowspan > 1) {
+                    if(!val.image && !val.image_hide) {
+                        let _arr = arr.slice(index, index + val.image_rowspan)
+                        
+                        if(_arr && _arr.length) {
+                            let imageArr = _arr.filter(val => val.image)
+
+                            if(imageArr && imageArr.length) {
+                                val.image = imageArr[0].image
+                            }
+                        }
+                    }
+                }
+            })
+        },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
@@ -2051,6 +2068,7 @@ export default {
                 this.computedAddSpecs(res.productSpecs)
 
                 __goodsInfos = this.computedList(res.goodsInfos)
+                this.setGoodsImage(__goodsInfos)
                 res.goodsInfos = __goodsInfos
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
