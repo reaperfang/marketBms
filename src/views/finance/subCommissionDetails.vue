@@ -65,11 +65,13 @@
         >
         <el-table-column
           prop="tradeDetailSn"
-          label="交易流水号">
+          label="交易流水号"
+          width="180px">
         </el-table-column>
          <el-table-column
           prop="relationSn"
           label="关联单据编号"
+          width="180px"
           :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
@@ -84,10 +86,10 @@
           prop="resellerPhone"
           label="手机号码">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="thirdPartySn"
           label="第三方流水号">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="tradeAmount"
           label="分佣金额（元）">
