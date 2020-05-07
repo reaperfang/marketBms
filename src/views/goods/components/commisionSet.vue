@@ -142,7 +142,7 @@ export default {
     watch: {
         resellRule: {
             handler(value, oldVal){
-                let  regPos = /^\d+(\.\d+)?$/;
+                let  regPos = /^[1-9]\d*$/;
                 if(
                     (regPos.test(value.percentOfCommissionOne) || value.percentOfCommissionOne === '') &&
                     (regPos.test(value.percentOfCommissionTwo) || value.percentOfCommissionTwo === '') &&
@@ -158,7 +158,7 @@ export default {
                     }
                 }    
                 else {
-                    this.$message({ message: '分佣比例必须是数子', type: 'warning' });
+                    this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
                 }
             },
             deep: true
