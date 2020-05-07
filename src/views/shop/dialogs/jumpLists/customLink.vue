@@ -81,8 +81,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/.el-input{
-  width: 500px!important;
-  margin: 0 auto;
+/deep/.el-form-item{
+  input{
+    width: 500px!important;
+    height:40px!important;
+    margin-left:100px!important;
+  }
+  .el-form-item__error {
+    padding-top: 2px;
+    margin-left: 100px;
+    margin-top:5px;
+  }
 }
 </style>
