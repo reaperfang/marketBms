@@ -230,12 +230,12 @@ export default {
             // 开启了独立分佣
             if(this.status == 1 && this.enable) {
                 if(resellConfigInfo.resellGrade == 1) {
-                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                     resellRule.percentOfCommissionTwo = '';
                     resellRule.percentOfCommissionOne = '';
                     if(
                         (regPos.test(resellRule.percentOfCommissionThree))
                     ) {
+                        resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
@@ -246,13 +246,13 @@ export default {
                         return false;
                     } 
                 } else if (resellConfigInfo.resellGrade == 2) {
-                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
-                    resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                     resellRule.percentOfCommissionOne = '';
                     if(
                         (regPos.test(resellRule.percentOfCommissionThree)) &&
                         (regPos.test(resellRule.percentOfCommissionTwo))
                     ) {
+                        resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
+                        resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                         let total = (resellRule.percentOfCommissionThree - 0) + (resellRule.percentOfCommissionTwo - 0);
                         if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
@@ -263,14 +263,14 @@ export default {
                         return false;
                     }    
                 } else if (resellConfigInfo.resellGrade == 3) {
-                    resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
-                    resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
-                    resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                     if(
                         (regPos.test(resellRule.percentOfCommissionOne)) &&
                         (regPos.test(resellRule.percentOfCommissionTwo)) &&
                         (regPos.test(resellRule.percentOfCommissionThree)) 
                     ) {
+                        resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
+                        resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
+                        resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0) + (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
                             this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
