@@ -81,9 +81,9 @@
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="sortTable"
         >
-        <!-- :default-sort = "{prop: 'tradeTime', order: 'descending'}" -->
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号"
@@ -182,7 +182,8 @@ export default {
         amountMax:'',
         timeValue:'',
         startIndex:'1',
-        pageSize:'10'
+        pageSize:'10',
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -260,7 +261,7 @@ export default {
         </div>
       )
     },
-    init(orde){
+    init(){
       let query = {
         tradeDetailSn:'',
         relationSn:'',
@@ -272,7 +273,7 @@ export default {
         amountMax:'0.00',
         tradeTimeStart:'',
         tradeTimeEnd:'',
-        sort:'',
+        sort:this.ruleForm.sort,
         startIndex:'1',
         pageSize:'10'
       }
@@ -291,7 +292,6 @@ export default {
       query.payWay = this.ruleForm.payWay == -1 ? null : this.ruleForm.payWay
       query.amountMin = this.ruleForm.amountMin == 0 ? '' : this.ruleForm.amountMin
       query.amountMax = this.ruleForm.amountMax == 0 ? '' : this.ruleForm.amountMax
-      query.sort = orde || 'desc'
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.tradeTimeStart = timeValue[0]
@@ -299,14 +299,14 @@ export default {
       }
       return query;
     },  
-    fetch(orde,num){
+    fetch(num){
       if(this.ruleForm.amountMin == undefined || this.ruleForm.amountMax == undefined){
         this.$message('分佣金额不能为空')
       }else if(this.ruleForm.amountMin > this.ruleForm.amountMax){
         this.$message('交易金额最小值应该小于最大值')
       }else{
         this.ruleForm.startIndex = num || this.ruleForm.startIndex
-        let query = this.init(orde);
+        let query = this.init();
         this._apis.finance.getListRe(query).then((response)=>{
           this.dataList = response.list
           this.total = response.total || 0
@@ -318,15 +318,19 @@ export default {
     },
     //搜索
     onSubmit(startIndex){
-      let orde = 'desc'
       let num = startIndex || this.ruleForm.startIndex
-      this.fetch(orde,num)
+      this.fetch(num)
     },
     //排序
-    sortTable(column){
-      let obj = column
-      let orde = obj.order == 'descending' ? 'desc' : 'asc'
-      this.fetch(orde)
+    sortTable(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
     //重置
     resetForm(){
