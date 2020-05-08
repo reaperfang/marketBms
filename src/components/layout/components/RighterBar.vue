@@ -5,7 +5,7 @@
         <div v-if="item.children" class="item">
           <h2>{{item.name}}</h2>
           <div v-if="!child.hidden" v-for="child in item.children" class="item-child">
-            <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path, child.path)">{{child.meta.title}}</router-link>
+            <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(item.path, child.path)">{{child.meta.title}}</router-link>
           </div>
         </div>
         <div v-else>
@@ -15,13 +15,13 @@
               <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
                 <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
                 <div>
-                  <router-link class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+                  <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
                 </div>
               </div>
             </div>
           </div>
           <div v-else class="item">
-            <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path)">{{item.meta.title}}</router-link>
+            <router-link :title="item.meta.title" class="ellipsis" active-class="active" :to="resolvePath(item.path)">{{item.meta.title}}</router-link>
           </div>
         </div>
       </div>
