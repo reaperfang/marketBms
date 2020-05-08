@@ -2692,20 +2692,20 @@ export default {
                             productUnit: params.otherUnit
                         })
                     } else {
-                        let item = this.unitList.find(val => val.id == this.ruleForm.productUnit)
-
+                        //因为编辑时productUnit返回的是name，而不是id，所以直接保存时会有问题，所以这里在处理一下name
+                        let item = this.unitList.find(val => val.id == this.ruleForm.productUnit) || this.unitList.find(val => val.name === this.ruleForm.productUnit)
                         params = Object.assign({}, params, {
                             productUnit: item && item.name || ''
                         })
                     }
                     //如果配送方式没有选择普通快递，则快递运费相关参数不在上传
-                    if(!this.ruleForm.deliveryMethod.includes(0)){
-                        delete params.isFreeFreight; //删除运费选择方式
-                        delete params.freightTemplateId; //删除模板id
-                    }
+                    //if(!this.ruleForm.deliveryMethod.includes(0)){
+                        //delete params.isFreeFreight; //删除运费选择方式
+                        //delete params.freightTemplateId; //删除模板id
+                    //}
 
                     console.log(params)
-                    return;
+                    //return;
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {

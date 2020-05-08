@@ -613,6 +613,16 @@ export function editorScoreAmount(data) {
   })
 }
 
+//获取配送时间自定义的时间段
+export function getTimeSlot(data) {
+  return request({
+    target: 'PRODUCT-SELLING-CHIME-PROCESSOR',
+    method: 'post',
+    apiType: 'overview',
+    data
+  })
+}
+
 
 
 

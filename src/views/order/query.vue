@@ -74,21 +74,7 @@
             :picker-options="utils.globalTimePickerOption.call(this)"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="配送方式">
-          <el-select v-model="listQuery.deliveryMethod" placeholder>
-            <el-option label="全部" value></el-option>
-            <el-option label="普通快递" :value="1"></el-option>
-            <el-option label="商家配送" :value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="配送时间">
-          <el-date-picker
-            style="margin-left: 0;"
-            v-model="listQuery.date"
-            type="date"
-            placeholder="全部日期">
-          </el-date-picker>
-        </el-form-item>
+        <deliveryMethod :listQuery="listQuery"></deliveryMethod>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
           <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
@@ -131,6 +117,7 @@
 <script>
 import Shop from "./components/shop";
 import IntegralShop from "./components/integralShop";
+import DeliveryMethod from "./components/deliveryMethod"; //配送方式组件
 import { fetchOrderList } from "@/api/order";
 import appConfig from '@/system/appConfig';
 import { search } from './mixins/orderMixin'
@@ -276,6 +263,7 @@ export default {
         });
     },
     onSubmit() {
+      console.log(this.listQuery)
       this.listQuery = Object.assign({}, this.listQuery, {
         startIndex: 1,
         pageSize: 20,
@@ -302,6 +290,9 @@ export default {
         orderStatus: "",
         searchTimeType: "createTime",
         orderTimeValue: "",
+        deliveryMethod: "", // 配送方式:1普通快递,2商家配送
+        date: "", //商家配送-日期
+        timeSlot: "", //商家配送-时间段
         startIndex: 1,
         pageSize: 20,
       }
@@ -314,7 +305,8 @@ export default {
   },
   components: {
     Shop,
-    IntegralShop
+    IntegralShop,
+    DeliveryMethod
   }
 };
 </script>
