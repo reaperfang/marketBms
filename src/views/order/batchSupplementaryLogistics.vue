@@ -609,4 +609,13 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.container-item-content {
+  .content {
+    .item {
+      .label {
+        flex-shrink: 0;
+      }
+    }
+  }
+}
 </style>

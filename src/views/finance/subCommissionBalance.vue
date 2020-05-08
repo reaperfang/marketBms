@@ -58,6 +58,7 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
+        @sort-change="changeSort"
         >
         <el-table-column
           prop="tradeDetailSn"
@@ -100,7 +101,7 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -140,7 +141,8 @@ export default {
         businessType:0, // 业务类型
         timeValue:'', // 交易时间
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -167,7 +169,7 @@ export default {
           <el-popover
             placement="top-start"
             title=""
-            width="160"
+            width="170"
             trigger="hover"
             content="订单编号或提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
@@ -186,7 +188,8 @@ export default {
         resellerName: '',
         resellerPhone: '',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:'desc'
       }
       for(let key  in query){
         if(this.ruleForm.userType == key){
@@ -225,7 +228,8 @@ export default {
         businessType:0, // 业务类型
         timeValue:'', // 交易时间
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       this.fetch()
     },
@@ -258,6 +262,17 @@ export default {
          this.$message.error(error)
         })
       }
+    },
+    //交易时间排序
+     changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
   }
 }

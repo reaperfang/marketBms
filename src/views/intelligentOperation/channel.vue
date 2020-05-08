@@ -70,6 +70,7 @@
                     :listObj="listObj"
                     @sizeChange="sizeChange"
                     @currentChange="currentChange"
+                    @changeSort="changeSort"
                 >
                 </channel-table>               
             </div>
@@ -231,6 +232,11 @@ export default {
             this.form.startIndex = val;
             this.goSearch();
         },
+
+        changeSort(val){
+            this.goSearch();
+        },
+
     }
 }
 </script>

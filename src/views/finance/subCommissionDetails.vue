@@ -61,14 +61,17 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
+        @sort-change="changeSort"
         >
         <el-table-column
           prop="tradeDetailSn"
-          label="交易流水号">
+          label="交易流水号"
+          width="180px">
         </el-table-column>
          <el-table-column
           prop="relationSn"
           label="关联单据编号"
+          width="180px"
           :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
@@ -83,10 +86,10 @@
           prop="resellerPhone"
           label="手机号码">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="thirdPartySn"
           label="第三方流水号">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="tradeAmount"
           label="分佣金额（元）">
@@ -94,7 +97,7 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -134,7 +137,8 @@ export default {
         userType:'resellerSn', // 分佣员类型
         userValue:'',// 分佣员类型对应值
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -171,7 +175,8 @@ export default {
         resellerName: '',
         resellerPhone: '',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:'desc'
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
@@ -228,7 +233,8 @@ export default {
         userType:'resellerSn', // 分佣员类型
         userValue:'', // 分佣员类型对应值
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       }
       this.fetch()
     },
@@ -262,6 +268,17 @@ export default {
         })
       }
     },
+    //交易时间排序
+     changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
+    },
     renderRelationSn(){
       return(
         <div style="height:49px;line-height:49px;">
@@ -269,7 +286,7 @@ export default {
           <el-popover
             placement="top-start"
             title=""
-            width="160"
+            width="170"
             trigger="hover"
             content="订单编号或提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>

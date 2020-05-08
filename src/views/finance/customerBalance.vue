@@ -48,6 +48,7 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
+        @sort-change="changeSort"
         >
         <el-table-column
           prop="tradeDetailSn"
@@ -87,7 +88,7 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -126,7 +127,8 @@ export default {
         businessType:-1,
         timeValue:'',
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -165,7 +167,8 @@ export default {
         startTime:'',
         endTime:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:'desc'
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
@@ -195,7 +198,8 @@ export default {
       this.ruleForm = {
         tradeDetailSn:'',
         businessType:'',
-        timeValue:''
+        timeValue:'',
+        sort:'desc'
       }
       this.fetch()
     },
@@ -213,7 +217,17 @@ export default {
         this.$message.error(error)
       })
        }
-      
+    },
+     //交易时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
   }
 }
