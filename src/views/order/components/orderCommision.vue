@@ -27,7 +27,13 @@
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">¥{{item.resellerSettlementMoney}}</p></template>  
         </el-table-column>
         <el-table-column label="分佣状态" class-name="goods-status">
-            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.status ? '已结算' : '未结算'}}</p></template>  
+            <template>
+                <p class="line-height" v-for="item in orderDetail.resellerInfoList">
+                    <span v-if="item.status == 0">未结算</span>
+                    <span v-if="item.status == 1">已结算</span>
+                    <span v-if="item.status == 2">结算失败</span>
+                </p>
+            </template>  
         </el-table-column>
     </el-table>
 </div>
