@@ -95,7 +95,7 @@
                         <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                       </el-form-item>
                       <el-form-item label="快递单号" prop="expressNos">
-                        <el-input :disabled="!item.express" v-model="item.expressNos" :placeholder="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
+                        <el-input maxlength="20" :disabled="!item.express" v-model="item.expressNos" :placeholder="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
                         <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                       </el-form-item>
                     </el-form>

@@ -122,7 +122,7 @@
                             <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="!express" v-model="ruleForm.expressNos" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
+                            <el-input :disabled="!express" v-model="ruleForm.expressNos" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" maxlength="20"></el-input>
                         </el-form-item>
                         <el-form-item label="物流备注" prop="remark">
                             <el-input
