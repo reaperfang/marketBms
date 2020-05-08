@@ -51,7 +51,10 @@
                     <template v-if="$route.query.afterSale">
                         <tr v-for="(sendItem, index) in item.sendItemList" :key="index">
                             <td style="height: 45px; text-align: center;">{{index + 1}}</td>
-                            <td style="height: 45px; text-align: center;">{{sendItem.goodsName}}</td>
+                            <td style="height: 45px; text-align: center;">
+                                <p>{{sendItem.goodsName}}</p>
+                                <p style="margin-top: 2px;">{{sendItem.goodsSpces | goodsSpcesFilter}}</p>
+                            </td>
                             <td style="height: 45px; text-align: center;">{{sendItem.sendCount}}</td>
                             <td style="height: 45px; text-align: center;">-</td>
                             <!-- <td style="height: 45px; text-align: center;">-</td> -->
@@ -61,7 +64,10 @@
                     <template v-else>
                         <tr v-for="(sendItem, index) in item.orderSendItemViewList" :key="index">
                             <td style="height: 45px; text-align: center;">{{index + 1}}</td>
-                            <td style="height: 45px; text-align: center;">{{sendItem.goodsName}}</td>
+                            <td style="height: 45px; text-align: center;">
+                                <p>{{sendItem.goodsName}}</p>
+                                <p style="margin-top: 2px;">{{sendItem.goodsSpces | goodsSpcesFilter}}</p>
+                            </td>
                             <td style="height: 45px; text-align: center;">{{sendItem.sendCount}}</td>
                             <td style="height: 45px; text-align: center;">{{sendItem.salePrice}}</td>
                             <!-- <td style="height: 45px; text-align: center;">{{((sendItem.salePrice - sendItem.goodsPrice) * sendItem.sendCount).toFixed(2)}}</td> -->
@@ -103,6 +109,25 @@ export default {
     },
     created() {
         this.getPrintInfo()
+    },
+    filters: {
+        goodsSpcesFilter(value) {
+            let str = ''
+            let objectValue = JSON.parse(value)
+
+            for(let i in objectValue) {
+                if(objectValue.hasOwnProperty(i)) {
+                    str += i
+                    str += '：'
+                    str += objectValue[i]
+                    str += '，'
+                }
+            }
+
+            str = str.replace(/^([^，]*)，$/, '$1')
+
+            return str
+        }
     },
     methods: {
         getPrintInfo() {
