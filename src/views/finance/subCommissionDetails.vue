@@ -176,7 +176,7 @@ export default {
         resellerPhone: '',
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
-        sort:'desc'
+        sort:this.ruleForm.sort 
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
