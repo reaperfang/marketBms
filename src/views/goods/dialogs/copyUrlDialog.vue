@@ -4,11 +4,18 @@
             <div>
                 <div class="url-box">
                     <ul>
-                        <li v-for="item in data">{{item.url}}</li>
+                        <li v-for="(item, index) in data">
+                            <template v-if="index == data.length - 1">
+                                {{JSON.stringify(item)}}
+                            </template>
+                            <template v-else>
+                                {{JSON.stringify(item) + ','}}
+                            </template>
+                        </li>
                     </ul>
                     <textarea style="position: absolute; left: -99999px; top: 0;" class="value-list" cols="20" rows="10" id="biao1">{{data.map(val => JSON.stringify(val)).join(',\r')}}</textarea>
                 </div>
-                <p class="url-message">复制小程序商品链接，仅限于视频电商助手功能使用。向视频电商助手APP添加链接时，商品链接间需以“，”分隔，一个“{}”内即为一个商品链接，最后一个商品链接后不需要加分隔，多条链接时，默认已分隔。</p>
+                <p class="url-message"><i></i>复制小程序商品链接，仅限于视频电商助手功能使用。向视频电商助手APP添加链接时，商品链接间需以“，”分隔，一个“{}”内即为一个商品链接，最后一个商品链接后不需要加分隔，多条链接时，默认已分隔。</p>
             </div>
             <div class="footer">
                 <el-button @click="submit" type="primary">复制链接</el-button>
@@ -96,6 +103,16 @@ export default {
         line-height:17px;
         margin-top: 14px;
         margin-bottom: 30px;
+        i {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            background: url('../../../assets/images/goods/icon_cuowu.png') no-repeat;
+            background-size: 100% 100%;
+            margin-right: 2px;
+            position: relative;
+            top: 2px;
+        }
     }
     .url-box::-webkit-scrollbar-thumb {
         background: rgba(101,94,255,0.4) !important;
