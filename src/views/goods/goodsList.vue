@@ -1158,6 +1158,9 @@ export default {
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
+                if(res.status !== -1) {
+                    res.switchStatus = !!res.status
+                }
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id
