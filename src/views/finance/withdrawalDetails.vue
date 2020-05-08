@@ -108,7 +108,7 @@
         <el-table-column
           prop="applyTime"
           label="申请时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
         <el-table-column
         label="操作">

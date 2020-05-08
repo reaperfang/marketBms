@@ -87,7 +87,7 @@
         <el-table-column
           prop="createTime"
           label="操作时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">

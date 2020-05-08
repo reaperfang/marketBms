@@ -70,7 +70,7 @@
         <el-table-column
           prop="createTime"
           label="查询时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">

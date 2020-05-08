@@ -88,7 +88,7 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">

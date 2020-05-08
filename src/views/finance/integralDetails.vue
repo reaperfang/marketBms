@@ -94,7 +94,7 @@
         <el-table-column
           prop="changeTime"
           label="交易时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="remarks"
