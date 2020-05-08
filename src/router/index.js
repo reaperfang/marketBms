@@ -13,7 +13,7 @@ import client from './client';
 import datum from './datum';
 import profile from './profile';
 import apply from './apply';
- 
+
 export const asyncRouterMap = [  //异步路由表
 	// ...demo,
   ...profile,
@@ -66,10 +66,10 @@ export const syncRouterMap = [ //同步路由表
     component: () => import('@/components/errorPage/401'),
     hidden: true
   }
-]   
+]
 
 const routerConfig = {
-  mode: 'history', 
+  mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: syncRouterMap
 };

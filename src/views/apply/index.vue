@@ -1,6 +1,6 @@
 /*应用*/
 <template>
-    <div class="main" v-loading="isLoaded">       
+    <div class="main" v-loading="isLoaded">
         <iframe :src="src" ref="refreshFrame" @load="iframeLoad"></iframe>
     </div>
 </template>
@@ -32,7 +32,10 @@ export default {
             this.refreshPath = window.localStorage.getItem('marketing_router_path')
         }
     },
-    methods:{
+	beforeDestroy() {
+		localStorage.setItem('marketing_router_path', this.defultPath)
+	},
+	methods:{
         init(){
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
@@ -43,14 +46,18 @@ export default {
                 this.path = this.$route.query.paths
                 console.log('应用',this.path)
             }else{
-                this.path = this.refreshPath || this.defultPath;
+                // this.path = this.refreshPath || this.defultPath;
+                this.path = localStorage.getItem('marketing_router_path') || this.defultPath;
                 console.log('其他')
             }
 
             let applyId = '';
             if(this.$route.query.applyId){
                 applyId = this.$route.query.applyId
-            }
+            } else if(localStorage.marketing_router_path_appId) {
+				applyId = localStorage.marketing_router_path_appId
+			}
+
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
             this.src = `${process.env.NODE_ENV === 'development' ? '//127.0.0.1:8080' : process.env.APPLY}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}`
         },
@@ -74,6 +81,7 @@ export default {
             if ( message.cmd == 'marketing_router_path' ) {
                 this.path = message.params.path; // 营销路由
                 window.localStorage.setItem('marketing_router_path', this.path);
+                window.localStorage.setItem('marketing_router_path_appId', message.params.id);
                 this.isLoaded  = false;
             }
         },
