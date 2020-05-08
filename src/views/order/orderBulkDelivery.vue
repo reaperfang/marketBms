@@ -854,4 +854,13 @@ export default {
   padding-top: 2px;
   margin-bottom: 0;
 }
+.container-item-content {
+  .content {
+    .item {
+      .label {
+        flex-shrink: 0;
+      }
+    }
+  }
+}
 </style>
