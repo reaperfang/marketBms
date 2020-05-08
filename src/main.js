@@ -7,7 +7,7 @@ import store from './store'
 import '@/directives/index.js'  //导入指令
 import '@/styles/index.scss' // 导入全局scss
 import '@/system/permission' // 权限控制
-import utils from '@/utils'; //导入全局工具箱
+import utils from '@/utils'; // 导入全局工具箱
 Vue.config.productionTip = false
 
 
