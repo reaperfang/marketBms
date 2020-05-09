@@ -257,6 +257,7 @@ export default {
             }
             _params = Object.assign({}, this.listQuery, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
+                [this.listQuery.searchType2]: this.listQuery.searchValue2,
                 [`${this.listQuery.searchTimeType}Start`]: this.listQuery.orderTimeValue ? searchTimeTypeStart : '',
                 [`${this.listQuery.searchTimeType}End`]: this.listQuery.orderTimeValue ? searchTimeTypeEnd : '',
                 isExport: 0
