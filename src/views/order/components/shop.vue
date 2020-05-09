@@ -133,6 +133,7 @@ export default {
             if(obj && obj.type == 'resetForm') {
                _params = Object.assign({}, _params, {
                    [this.params.searchType]: obj.searchValue,
+                   [this.params.searchType2]: obj.searchValue2,
                    [`${this.params.searchTimeType}Start`]: '',
                 [`${this.params.searchTimeType}End`]: '',
                 searchType: "code",
