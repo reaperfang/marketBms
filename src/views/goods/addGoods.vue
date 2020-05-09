@@ -62,6 +62,10 @@
                             <span class="image-item-actions">
                                 <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                 <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                                <span class="image-item-actions-footer">
+                                    <i class="lefter"><</i>
+                                    <i class="righter">></i>
+                                </span>
                             </span>
                         </div>
                         <div v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="upload-add">
@@ -3650,7 +3654,8 @@ $blue: #655EFF;
                 &:hover {
                     opacity: 1;
                 }
-                display: flex;
+                padding-top: 20px;
+                //display: flex;
                 align-items: center;
                 justify-content: center;
                 position: absolute;
@@ -3666,6 +3671,30 @@ $blue: #655EFF;
                 background-color: rgba(0,0,0,.5);
                 -webkit-transition: opacity .3s;
                 transition: opacity .3s;
+                .image-item-actions-footer {
+                    display: block;
+                    height: 25px;
+                    position: relative;
+                    i {
+                        display: inline-block;
+                        width: 18px;
+                        height: 16px;
+                        line-height: 16px;
+                        background: #000;
+                        text-align: center;
+                        font-size: 14px;
+                        position: absolute;
+                        bottom: 0;
+                        &.lefter {
+                            float: left;
+                            left: 0;
+                        }
+                        &.righter {
+                            float: right;
+                            right: 0;
+                        }
+                    }
+                }
                 i {
                     font-family: element-icons!important;
                     speak: none;
