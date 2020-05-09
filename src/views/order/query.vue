@@ -361,7 +361,11 @@ export default {
           startIndex: 1,
           pageSize: 20,
           searchType2: 'memberSn',
-          searchValue2: ''
+          searchValue2: '',
+          resellersn: '',
+          resellerName: '',
+          resellerNick: '',
+          resellerPhone: '',
         }
       }
       this.checkedLength = 0
