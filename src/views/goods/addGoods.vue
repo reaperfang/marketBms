@@ -593,12 +593,10 @@
                     <el-checkbox :label="1" @change="((val)=>{deliveryMethodChange(val, '1')})" style="margin-left:195px;">商家配送</el-checkbox>
                 </el-checkbox-group>
                 <div>
-                    <div style="display:inline-block;width:296px;" v-show="!isDeliverySet || !isExpressSet">
-                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效</span>
-                        <span class="blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
+                    <div style="display:inline-block;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
+                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
                     </div>
-                    <span class="prompt" v-show="!isDeliverySet">“商家配送”需在店铺设置开启后生效</span>
-                    <span class="blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                    <span class="prompt" v-show="!isDeliverySet">“商家配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
                 </div>
             </el-form-item>
             <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryMethod.includes(0)">
@@ -3850,5 +3848,9 @@ $blue: #655EFF;
         height: 16px;
         background: url('../../assets/images/goods/renovate.png');
     }
+}
+.set-btn:hover {
+    color: #444a51;
+    text-decoration: underline;
 }
 </style>
