@@ -1,3 +1,4 @@
+/* 微信用户中心装修预览区 */
 <template>
   <!-- 我的->用户中心wyy 2019/7/23 v-if="data && personalData"-->
   <div class="container">
