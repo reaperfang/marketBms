@@ -665,6 +665,7 @@ export default {
                 startIndex: 1,
                 pageSize: 20,
             })
+            this.checkedAll = false
             this.getList()
         },
         gblen(str) {
@@ -840,6 +841,7 @@ export default {
                 searchValue: ''
             })
             this.categoryValue = ''
+            this.checkedAll = false
             this.getList()
         },
         allDelete() {
