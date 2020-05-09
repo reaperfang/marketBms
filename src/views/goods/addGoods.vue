@@ -544,14 +544,15 @@
         </section>
         <section class="form-section">
             <h2>物流/售后</h2>
-            <el-form-item v-show="!editor" label="上架时间" prop="status">
-                <span>定时上架的商品在上架前请到“仓库中的宝贝”里编辑商品。</span>
+            <el-form-item label="上架时间" prop="status">
+                <span style="font-size: 12px;">定时上架的商品在上架前为“下架”状态。</span>
+                <span v-if="ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品状态。</span>
                 <div>
                     <el-radio-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
-                        <el-radio :disabled="editor" :label="0">放入仓库</el-radio>
-                        <el-radio :disabled="editor" :label="1">立即上架</el-radio>
+                        <el-radio :label="1">上架</el-radio>
+                        <el-radio :disabled="editor && ruleForm.activity" :label="0">下架</el-radio>
                         <template v-if="editor">
-                            <span><el-radio disabled :label="2">定时上架</el-radio></span>
+                            <span><el-radio :disabled="ruleForm.activity" :label="2">定时上架</el-radio></span>
                         </template>
                         <template v-else>
                             <span @click="timelyShelvingHandler"><el-radio :label="2">定时上架</el-radio></span>
@@ -1796,7 +1797,7 @@ export default {
                 weight: '',
                 volume: '',
                 image: '',
-                code: ''
+                code: !(this.ruleForm.isSyncProduct == 1 && this.authHide) ? '' : this.ruleForm.goodsInfos[index].code
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
             console.log(this.ruleForm.goodsInfos)
@@ -2096,6 +2097,7 @@ export default {
                 try {
                     this.getMarketActivity([res.id]).then((activityRes) => {
                         activityRes.forEach((val, index) => {
+                            res.activity = true
                             if(val.isParticipateActivity) {
                                 res.goodsInfos.forEach(val => {
                                     val.activity = true
@@ -2994,7 +2996,7 @@ export default {
                     name: image.fileName,
                     url: image.filePath
                 }))
-                if(this.ruleForm.images != '') {
+                if(this.ruleForm.images) {
                     this.ruleForm.images += ',' + image.filePath
                 } else {
                     this.ruleForm.images = image.filePath
@@ -3760,5 +3762,11 @@ $blue: #655EFF;
         height: 16px;
         background: url('../../assets/images/goods/renovate.png');
     }
+}
+.activity-message {
+    font-size:14px;
+    font-weight:400;
+    color:rgba(245,88,88,1);
+    margin-left: 27px;
 }
 </style>

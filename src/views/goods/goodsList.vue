@@ -70,6 +70,7 @@
                     :data="list"
                     ref="table"
                     style="width: 100%"
+                    :default-sort = "{prop: 'stock', order: 'descending'}"
                     :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                     @selection-change="handleSelectionChange"
                     :empty-text="emptyText">
@@ -105,7 +106,14 @@
                         <template slot-scope="scope">
                             <span class="goods-state">
                                 <span :class="{red: scope.row.status == -1}">{{scope.row.status | statusFilter}}</span>
-                                <i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>
+                                <!--<i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>-->
+                                <el-switch
+                                    v-if="scope.row.status !== -1"
+                                    v-model="scope.row.switchStatus"
+                                    active-color="#0cd4af"
+                                    inactive-color="#c8c8ca"
+                                    @change="switchStatusChange">
+                                </el-switch>
                             </span>
                         </template>
                     </el-table-column>
@@ -116,6 +124,8 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                        sortable
+                        :sort-method="salePriceMethod"
                         prop="price"
                         label="售卖价（元）"
                         width="120"
@@ -128,12 +138,17 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                    <el-table-column
+                        sortable
+                        :sort-method="stockSortMethod"
                         label="总库存">
                         <template slot-scope="scope">
                             <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
+                        sortable
+                        :sort-method="saleCountSortMethod"
                         label="总销量">
                         <template slot-scope="scope">
                             <span class="store">{{scope.row.saleCount}}</span>
@@ -626,6 +641,48 @@ export default {
         }
     },
     methods: {
+        switchStatusChange(flag) {
+            
+        },
+        stockSortMethod(a, b) {
+            if(a.stock > b.stock) {
+                return -1
+            } else if(a.stock < b.stock) {
+                return 1
+            } else {
+                if(new Date(a.createTime).getTime() > new Date(b.createTime).getTime()) {
+                    return -1
+                } else if(new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) {
+                    return 1
+                } else {
+                    return 0
+                }
+            }
+        },
+        saleCountSortMethod(a, b) {
+            if(a.saleCount > b.saleCount) {
+                return -1
+            } else if(a.saleCount < b.saleCount) {
+                return 1
+            } else {
+                if(new Date(a.createTime).getTime() > new Date(b.createTime).getTime()) {
+                    return -1
+                } else if(new Date(a.createTime).getTime() < new Date(b.createTime).getTime()) {
+                    return 1
+                } else {
+                    return 0
+                }
+            }
+        },
+        salePriceMethod(a, b) {
+            if(+a.salePrice > +b.salePrice) {
+                return -1
+            } else if(+a.salePrice < +b.salePrice) {
+                return 1
+            } else {
+                return 0
+            }
+        },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
                 startIndex: 1,
@@ -1101,6 +1158,9 @@ export default {
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
+                if(res.status !== -1) {
+                    res.switchStatus = !!res.status
+                }
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id
