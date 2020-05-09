@@ -63,8 +63,8 @@
                                 <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                 <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
                                 <span class="image-item-actions-footer">
-                                    <i class="lefter"><</i>
-                                    <i class="righter">></i>
+                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter"><</i>
+                                    <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter">></i>
                                 </span>
                             </span>
                         </div>
@@ -81,6 +81,32 @@
                 </el-dialog>
                 <!-- <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span> -->
                 <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
+            </el-form-item>
+            <el-form-item label="主图视频" prop="videoUrl">
+                <div class="upload-box">
+                    <div class="image-list">
+                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in (ruleForm.videoUrl && ruleForm.videoUrl.split(',') || [])">
+                            <label>
+                                <i class="el-icon-check"></i>
+                            </label>
+                            <span class="image-item-actions">
+                                <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
+                                <span @click="deleteVideo" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                            </span>
+                        </div>
+                        <div v-if="!ruleForm.videoUrl" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true; uploadVideo = true" class="upload-add">
+                            <i data-v-03229368="" class="el-icon-plus"></i>
+                            <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传视频</p>
+                        </div>
+                    </div>
+                </div>
+                <el-dialog :visible.sync="imageDialogVisible"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false">
+                    <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+                <!-- <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span> -->
+                <p class="upload-prompt">最多支持上传1个视频素材，封面默认为第一张商品主图，突出展现商品1-2个核心卖点；视频大小不超过10mb，支持mp4格式。</p>
             </el-form-item>
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
@@ -876,6 +902,7 @@ export default {
             callObjectSpanMethod: false,
             deleteSpecArr: [],
             leimuSelected: false,
+            uploadVideo: false
         }
     },
     created() {
@@ -1039,6 +1066,38 @@ export default {
         });
     },
     methods: {
+        moveImage(flag, index) {
+            var swapItems = function(arr, index1, index2){
+            　　arr[index1] = arr.splice(index2,1,arr[index1])[0]
+            　　return arr
+            }
+            var upData = function(arr, index) {
+            　　if (arr.length > 1 && index !== 0) {
+            　　　　return swapItems(arr, index, index - 1)
+            　　}
+                return arr
+            }
+            var downData = function(arr, index) {
+            　　if (arr.length > 1 && index !== (arr.length - 1)) {
+            　　　　return swapItems(arr, index, index + 1)
+            　　}
+                return arr
+            }
+
+            if(flag == 'left') {
+                let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
+
+                let resultArr = upData(arr, index)
+                
+                this.ruleForm.images = resultArr.join(',')
+            } else {
+                let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
+
+                let resultArr = downData(arr, index)
+                
+                this.ruleForm.images = resultArr.join(',')
+            }
+        },
         visibleChange(flag) {
             console.log(flag)
             if(flag) {
@@ -1061,6 +1120,9 @@ export default {
 
             imagesArr.splice(index, 1)
             this.ruleForm.images = imagesArr.join(',')
+        },
+        deleteVideo() {
+            this.ruleForm.videoUrl = ''
         },
         beforeUpload(file) {
             console.log(file)
@@ -2970,6 +3032,18 @@ export default {
             }
         },
         imageSelected(image) {
+            if(this.uploadVideo) {
+                if(!/\.mp4|\.ogg|\.mov$/.test(image.filePath)) {
+                    this.$message({
+                    message: '上传的文件格式不正确，请重新上传',
+                    type: 'warning'
+                    });
+                    return
+                }
+                this.ruleForm.videoUrl = image.filePath
+                this.uploadVideo = false
+                return
+            }
             if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
