@@ -1,17 +1,17 @@
 /* 失败 */
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
+    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false" v-if="info">
         <div class="c_container clearfix">
             <div class="c_top">
-                <p>用户昵称：{{info.nickName}}</p>
-                <p>用户ID：{{info.memberSn}}</p>
-                <p>提现金额：<span>￥{{info.amount}}</span></p>
-                <p class="gray">提现编号：{{info.cashoutSn}}</p>
+                <p>用户昵称：{{info2.nickName}}</p>
+                <p>用户ID：{{info2.memberSn}}</p>
+                <p>提现金额：<span>￥{{info2.amount}}</span></p>
+                <p class="gray">提现编号：{{info2.cashoutSn}}</p>
                 <div class="c_status">
                     <p>失败</p>
                     <span>审核未通过</span>
-                    <span>操作人：{{info.createUserName}}</span>
-                    <span>操作时间：{{info.createTime}}</span>
+                    <span>操作人：{{info2.createUserName}}</span>
+                    <span>操作时间：{{info2.createTime}}</span>
                 </div>
             </div>
              <div class="c_steps clearfix" v-if="info">

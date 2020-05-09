@@ -1,6 +1,6 @@
 /* 处理中 */
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
+    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false" v-if="info">
         <div class="c_container clearfix">
             <div class="c_top">
                 <p>用户昵称：{{info.nickName}}</p>
