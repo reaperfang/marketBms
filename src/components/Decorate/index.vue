@@ -22,7 +22,7 @@ import widgetView from "./widgetView";
 import editView from "./editView";
 import propView from "./propView";
 import utils from "@/utils";
-import widget from './widgetConfig'
+import widget from './config/widgetConfig'
 export default {
   name: "decorate",
   components: { widgetView, editView, propView },

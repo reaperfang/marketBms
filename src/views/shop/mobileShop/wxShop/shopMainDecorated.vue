@@ -250,14 +250,16 @@ export default {
         padding:30px;
         box-sizing: border-box;
         text-align:center;
-        border:1px solid rgba(211,211,211,1);
-        background:rgba(248,248,248,1);
+        // border:1px solid rgba(211,211,211,1);
+        // background:rgba(248,248,248,1);
+        background:#fff;
         h3{
           font-size:18px;
         }
         h4{
            font-size:16px;
            margin-top:30px;
+          text-align: left;
         }
         .qrcode_wrapper{
           padding:5px;
@@ -271,12 +273,13 @@ export default {
         }
       }
       .tools{
-        margin-top:20px;
+        margin-top:10px;
         padding:30px;
         box-sizing: border-box;
         text-align:center;
-        border:1px solid rgba(211,211,211,1);
-        background:rgba(248,248,248,1);
+        // border:1px solid rgba(211,211,211,1);
+        // background:rgba(248,248,248,1);
+        background: #fff;
         h3{
           text-align:center;
           font-size:18px;
