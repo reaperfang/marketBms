@@ -240,9 +240,9 @@ export default {
       delete query.pageSize;
       delete query.startIndex;
       if (this.total > 1000) {
-        query.isExport = '1'
-      } else {
         query.isExport = '0'
+      } else {
+        query.isExport = '1'
       }
       return query
     },
