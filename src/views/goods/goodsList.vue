@@ -106,7 +106,14 @@
                         <template slot-scope="scope">
                             <span class="goods-state">
                                 <span :class="{red: scope.row.status == -1}">{{scope.row.status | statusFilter}}</span>
-                                <i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>
+                                <!--<i v-permission="['商品', '商品列表', '默认页面', '修改上下架']" @click="upperAndLowerRacksSpu(scope.row)" :class="{grounding: scope.row.status == 1, undercarriage: scope.row.status == 0}" class="i-bg pointer"></i>-->
+                                <el-switch
+                                    v-if="scope.row.status !== -1"
+                                    v-model="scope.row.switchStatus"
+                                    active-color="#0cd4af"
+                                    inactive-color="#c8c8ca"
+                                    @change="switchStatusChange">
+                                </el-switch>
                             </span>
                         </template>
                     </el-table-column>
@@ -634,6 +641,9 @@ export default {
         }
     },
     methods: {
+        switchStatusChange(flag) {
+            
+        },
         stockSortMethod(a, b) {
             if(a.stock > b.stock) {
                 return -1
@@ -1148,6 +1158,9 @@ export default {
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
+                if(res.status !== -1) {
+                    res.switchStatus = !!res.status
+                }
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id

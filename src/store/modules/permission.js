@@ -13,7 +13,7 @@ function hasPermission(msfList, route) {
       return true
     }
   }else {
-    return route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息' ? true : false 
+    return route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息' ? true : false
   }
 }
 
