@@ -84,6 +84,13 @@
                     width="124">
                     </el-table-column> -->
                     <el-table-column
+                        label="商品主图"
+                        width="80">
+                        <template slot-scope="scope">
+                            <div class="mainImage" :style="{backgroundImage: `url(${scope.row.mainImage})`}"></div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                     prop="name"
                     label="商品名称"
                     :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
@@ -112,7 +119,9 @@
                                     v-model="scope.row.switchStatus"
                                     active-color="#0cd4af"
                                     inactive-color="#c8c8ca"
-                                    @change="switchStatusChange">
+                                    @change="(flag) => {
+                                        switchStatusChange(flag, scope.row.id, scope.row.activity)
+                                    }">
                                 </el-switch>
                             </span>
                         </template>
@@ -418,6 +427,12 @@
         text-align: left;
     }
 }
+.mainImage {
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 44px;
+    height: 44px;
+}
 </style>
 <style lang="scss">
     .operate-popper {
@@ -641,8 +656,38 @@ export default {
         }
     },
     methods: {
-        switchStatusChange(flag) {
-            
+        switchStatusChange(flag, id, activity) {
+            let str = ''
+            let _flag = flag
+
+            if(_flag) {
+                str = '上架'
+            } else {
+                str = '下架'
+                if(activity) {
+                    this.confirm({title: str, icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
+                        
+                    })
+                    return
+                }
+            }
+            this.confirm({title: str, icon: true, text: `确定${str}此商品？`, width: '500px'}).then(() => {
+                this._apis.goods.productUpperOrLowerSpu({id, status: _flag ? 1 : 0}).then((res) => {
+                    this.getList()
+                    this.$message({
+                        message: `${str}成功`,
+                        type: 'success'
+                    });
+                }).catch(error => {
+                    let text = ''
+
+                    text += '<p>上架失败！</p>'
+                    text += `<p>${error}</p>`
+                    this.confirm({title: '编辑上下架', text, width: '500px'})
+                })
+            }).catch(() => {
+                this.getList()
+            })
         },
         stockSortMethod(a, b) {
             if(a.stock > b.stock) {
@@ -937,6 +982,12 @@ export default {
                         message: error,
                         type: 'error'
                     });
+                    
+                    // let text = ''
+
+                    // text += '<p>批量上架失败！</p>'
+                    // text += `<p>${error}</p>`
+                    // this.confirm({title: `批量${statusStr}`, text, width: '500px'})
                 })
             })
         },
@@ -1158,9 +1209,6 @@ export default {
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
-                if(res.status !== -1) {
-                    res.switchStatus = !!res.status
-                }
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id
@@ -1186,6 +1234,11 @@ export default {
                     })
                     this.total = +res.total
                     //this.getCategoryName(res.list)
+                    res.list.forEach(item => {
+                        if(item.status !== -1) {
+                            item.switchStatus = !!item.status
+                        }
+                    })
                     this.list = res.list
                     this.loading = false
                     // if(this.allTotal && !this.total) {

@@ -1076,6 +1076,12 @@ export default {
     .input_wrap {
       width: 338px;
       display: inline-block;
+      position: relative;
+      .show_num{
+        position: absolute;
+        color: #D0D6E4;
+        right: 6px;
+      }
     }
     .input_wrap2 {
       width: 160px;
