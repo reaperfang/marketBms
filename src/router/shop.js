@@ -18,6 +18,8 @@ export default [
 		children: [
 
 			//移动店铺首页
+
+			//微信店铺
 			{
 				path: "m_wxShopIndex",
 				component: () => import("@/views/shop/mobileShop/wxShop/wxShopIndex"),
@@ -27,6 +29,21 @@ export default [
 			{
 				path: "m_shopNavIndex",
 				component: () => import("@/views/shop/mobileShop/wxShop/shopNavIndex"),
+				name: "m_shopNavIndex",
+				meta: { title: "店铺导航", noCache: true, tabTitle: '移动店铺',navType:2},
+				hidden:true
+			},
+
+			//H5店铺
+			{
+				path: "m_h5ShopIndex",
+				component: () => import("@/views/shop/mobileShop/h5Shop/h5ShopIndex"),
+				name: "m_h5ShopIndex",
+				meta: { title: "移动H5", noCache: true, tabTitle: '移动店铺',navType:2}
+			},
+			{
+				path: "m_h5ShopNavIndex",
+				component: () => import("@/views/shop/mobileShop/h5Shop/h5ShopNavIndex"),
 				name: "m_shopNavIndex",
 				meta: { title: "店铺导航", noCache: true, tabTitle: '移动店铺',navType:2},
 				hidden:true
