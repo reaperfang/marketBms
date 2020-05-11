@@ -1,5 +1,5 @@
 module.exports = {
-	NODE_ENV: '"testing3"',
+	NODE_ENV: '"test3"',
   	ENV_CONFIG: '"test3"',
   	DATA_API: '"http://test3-omo.aiyouyi.cn"',
 	SALE_API: '"/mkt-api"',

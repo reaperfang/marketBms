@@ -7,7 +7,13 @@ const packageConfig = require('../package.json')
 exports.assetsPath = function(_path) {
   let assetsSubDirectory = '';
   switch(process.env.NODE_ENV) {
-    case 'testing':
+    case 'test':
+      assetsSubDirectory = config.test.assetsSubDirectory
+      break;
+    case 'test2':
+      assetsSubDirectory = config.test.assetsSubDirectory
+      break;
+    case 'test3':
       assetsSubDirectory = config.test.assetsSubDirectory
       break;
     case 'pre':
