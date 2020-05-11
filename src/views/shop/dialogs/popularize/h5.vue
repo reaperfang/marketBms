@@ -154,7 +154,7 @@ import DialogBase from "@/components/DialogBase";
 import dialogSelectImageMaterial from '../dialogSelectImageMaterial';
 import utils from "@/utils";
 export default {
-  name: "dialogPopularize",
+  name: "h5",
   components: {DialogBase, dialogSelectImageMaterial},
   props: {
       data: {},
