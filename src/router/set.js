@@ -112,7 +112,22 @@ export default [
                 name: 'createRole',
                 meta: { title: '默认页面', noCache: true, tabTitle: '权限管理', navType:3  },
                 hidden: true
-            }
+            },
+            
+            {
+                path: 'newTemplate',
+                component: () => import('@/views/set/newTemplate'),
+                name: 'newTemplate',
+                hidden: true,
+                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:5},
+            },
+            {
+                path: 'newElectronicFaceSheet',
+                component: () => import('@/views/set/newElectronicFaceSheet'),
+                name: 'newElectronicFaceSheet',
+                hidden: true,
+                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:5},
+            },
             // {
             //     path: 'authorize',
             //     component: () => import('@/views/set/authorize'),

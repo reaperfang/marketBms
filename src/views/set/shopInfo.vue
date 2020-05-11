@@ -222,7 +222,7 @@ export default {
       return shopInfo.id;
     },
     getAddress() {
-      return `${this.province}${this.city}${this.area}${this.form.address}`
+      return `${this.province}${this.city}${this.area}`
     }
   },
   created() {

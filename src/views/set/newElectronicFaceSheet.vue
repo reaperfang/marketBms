@@ -5,7 +5,7 @@
       <div class="row justify-between">
         <div class="col content-lefter">
           <el-form
-            :disabled="$route.query.detail"
+            :disabled="!!$route.query.detail"
             :model="ruleForm"
             :rules="rules"
             ref="ruleForm"
@@ -171,7 +171,7 @@ export default {
         .editorElectronicFaceSheet(this.ruleForm)
         .then(res => {
           this.$message.success('编辑成功！');
-          this.$router.push('/order/electronicFaceSheet')
+          this.$router.push({path:'/set/ordinaryExpress', query: { currentTab: 'electronicFaceSheet' }});
         })
         .catch(error => {
           this.visible = false;
@@ -187,7 +187,7 @@ export default {
         .addElectronicFaceSheet(this.ruleForm)
         .then(res => {
           this.$message.success('添加成功！');
-          this.$router.push('/order/electronicFaceSheet')
+           this.$router.push({path:'/set/ordinaryExpress', query: { currentTab: 'electronicFaceSheet' }});
         })
         .catch(error => {
           this.visible = false;

@@ -222,8 +222,8 @@ export default {
       this._apis.order
         .editorFreightTemplate(params)
         .then(res => {
-          this.$message.success('新建成功！');
-          this.$router.push("/order/quickDelivery");
+          this.$message.success('编辑成功！');
+          this.$router.push({path:'/set/ordinaryExpress', query: { currentTab: 'quickDelivery' }})
         })
         .catch(error => {
           this.$message.error(error);
@@ -239,7 +239,7 @@ export default {
         .addFreightTemplate(params)
         .then(res => {
           this.$message.success('新建成功！');
-          this.$router.push("/order/quickDelivery");
+          this.$router.push({path:'/set/ordinaryExpress', query: { currentTab: 'quickDelivery' }});
         })
         .catch(error => {
           this.$message.error(error);
