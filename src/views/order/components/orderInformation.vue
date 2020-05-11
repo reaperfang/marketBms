@@ -7,6 +7,11 @@
                         <div class="label">配送方式</div>
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
                     </div>
+                    <!-- 开启了预约配送则显示C端用户下单时选定的配送时间 -->
+                    <div class="item" v-if="orderInfo.deliveryWay == 2">
+                        <div class="label">配送时间</div>
+                        <div class="value">2020-04-01 13:00~17:00</div>
+                    </div>
                     <div class="item">
                         <div class="label">收货信息</div>
                         <div class="value">
@@ -679,7 +684,7 @@ export default {
             if(code === 1) {
                 return '普通快递'
             } else if(code === 2) {
-                return '商家自送'
+                return '商家配送'
             }
         },
         payWayFilter(code) {

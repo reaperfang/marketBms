@@ -415,10 +415,11 @@ export default {
         }
         .icon-store{
             display: inline-block;
-            width: 14px;
-            height: 13px;
+            width: 16px;
+            height: 15px;
             margin-right: 5px;
-            background: url(~@/assets/images/order/customerImg.png) no-repeat;
+            vertical-align: -2px;
+            background: url(~@/assets/images/order/icon_store.png) no-repeat;
         }
         .store-time{
             color: #999;
