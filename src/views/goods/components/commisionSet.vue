@@ -319,9 +319,9 @@ export default {
             
             let resellRule = detail.resellRule ? JSON.parse(detail.resellRule) : null;
             if(resellRule) {
-                resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne ? resellRule.percentOfCommissionOne * 100 : '';
-                resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo ? resellRule.percentOfCommissionTwo * 100 : '';
-                resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree ? resellRule.percentOfCommissionThree * 100 : '';
+                resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne ? (resellRule.percentOfCommissionOne * 100).toFixed(0) : '';
+                resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo ? (resellRule.percentOfCommissionTwo * 100).toFixed(0) : '';
+                resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree ? (resellRule.percentOfCommissionThree * 100).toFixed(0) : '';
                 this.resellRule = resellRule;           
             }
         } 
