@@ -342,7 +342,8 @@ export default {
         tradeType:'',
         amountMin:'0.00',
         amountMax:'0.00',
-        timeValue:''
+        timeValue:'',
+        sort:'desc'
       }
       this.onSubmit()
     },
