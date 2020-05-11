@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="table">
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           :selectable='selectInit'
@@ -63,12 +63,12 @@
             <span v-else-if="scope.row.channelType == 4">WAP端</span>
           </template>
         </el-table-column>   -->
-        <el-table-column prop="createTime" sortable label="创建时间">
+        <el-table-column prop="createTime" label="创建时间">
            <template slot-scope="scope">
             <span>{{scope.row.createTime || '--'}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="updateTime" sortable label="最后编辑时间" :width="150">
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" :width="150">
            <template slot-scope="scope">
             <span>{{scope.row.updateTime || '--'}}</span>
           </template>
@@ -145,7 +145,8 @@ export default {
       ruleForm: {
         type: '',
         title: '',
-        status: 1
+        status: 1,
+        sort: 0
       },
       visible: false,  //是否显示批量该分类浮层
       isFindPrev: false//是否向上查询了一页
@@ -234,7 +235,19 @@ export default {
     // 修改禁用
     selectInit(row, index){
       // return (row.isHomePage != 1)
-    }
+    },
+
+    //时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 1
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 0
+      }else{
+        return 
+      }
+      this.fetch()
+    },
   }
 }
 </script>

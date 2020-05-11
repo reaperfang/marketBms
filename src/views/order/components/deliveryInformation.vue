@@ -261,7 +261,7 @@ export default {
         background-color: rgb(243, 244, 244);
         border-radius: 10px;
         padding: 0 20px;
-        line-height: 60px;
+        //line-height: 60px;
         display: flex;
         justify-content: space-between;
         .header-lefter {
@@ -285,6 +285,7 @@ export default {
           align-items: center;
           .header-righter-item {
             margin-right: 20px;
+            flex-shrink: 0;
           }
         }
       }

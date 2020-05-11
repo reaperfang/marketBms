@@ -701,7 +701,8 @@ export default {
             },
         getMiniappInfo() {
             this._apis.goods.getMiniappInfo().then(res => {
-                this.currentStatus = res.data.current_status
+                //this.currentStatus = res.data.current_status
+                this.currentStatus = res.status
             }).catch(error => {
                 this.$message.error({
                     message: error,

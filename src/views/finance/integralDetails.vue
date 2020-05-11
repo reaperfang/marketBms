@@ -177,7 +177,7 @@ export default {
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
         nickName:this.ruleForm.nickName,
-        sort:'desc'
+        sort:this.ruleForm.sort
       }
       if(this.ruleForm.userType == 'memberSn'){
         query.memberSn = this.ruleForm.userValue || ''

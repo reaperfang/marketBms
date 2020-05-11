@@ -189,7 +189,7 @@ export default {
         resellerPhone: '',
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
-        sort:'desc'
+        sort:this.ruleForm.sort
       }
       for(let key  in query){
         if(this.ruleForm.userType == key){
@@ -240,9 +240,9 @@ export default {
       delete query.pageSize;
       delete query.startIndex;
       if (this.total > 1000) {
-        query.isExport = '1'
-      } else {
         query.isExport = '0'
+      } else {
+        query.isExport = '1'
       }
       return query
     },

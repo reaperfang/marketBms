@@ -15,15 +15,15 @@
     </div>
     <div class="table" v-calcHeight="300">
       <p>微页面分类（共{{total || 0}}个）</p>
-      <el-table :data="tableData" stripe v-loading="loading">
+      <el-table :data="tableData" stripe v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column prop="name" label="分类名称">
            <template slot-scope="scope">
             <span class="page_name" @click="_routeTo('m_decorateClassifyPreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
           </template>
         </el-table-column>
         <el-table-column prop="pageNum" label="页面数量"></el-table-column>
-        <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
         <el-table-column prop="" label="操作" :width="'300px'" fixed="right">
           <template slot-scope="scope">
@@ -71,7 +71,7 @@ export default {
       ruleForm: {
         status: '1',
         name: '',
-        dateSort: '0'
+        dateSort: 0
       }
     }
   },
@@ -129,7 +129,19 @@ export default {
       if(row.shareUrl) {
         return location.protocol + row.shareUrl.split(':')[1]
       }
-    }
+    },
+
+    //时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.dateSort = 1
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.dateSort = 0
+      }else{
+        return 
+      }
+      this.fetch()
+    },
   }
 }
 </script>

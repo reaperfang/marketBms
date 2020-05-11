@@ -3,7 +3,7 @@
         <template v-if="sendGoods == 'send'">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="发货人姓名" prop="sendName">
-                    <el-input v-model="ruleForm.sendName" placeholder="请选择" maxlength="50"></el-input>
+                    <el-input v-model="ruleForm.sendName" placeholder="请选择" maxlength="15"></el-input>
                 </el-form-item>
                 <el-form-item label="发货人电话" prop="sendPhone">
                     <el-input v-model="ruleForm.sendPhone" placeholder="请输入"></el-input>
@@ -30,7 +30,7 @@
         <template v-else>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="收货人姓名" prop="receivedName">
-                    <el-input v-model="ruleForm.receivedName" placeholder="请选择" maxlength="50"></el-input>
+                    <el-input v-model="ruleForm.receivedName" placeholder="请选择" maxlength="15"></el-input>
                 </el-form-item>
                 <el-form-item label="收货人电话" prop="receivedPhone">
                     <el-input v-model="ruleForm.receivedPhone" placeholder="请输入"></el-input>

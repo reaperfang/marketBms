@@ -136,7 +136,7 @@
         </el-pagination>
       </div>
     </div>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @handleSubmit="handleSubmit"></component>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @handleSubmit="handleSubmit" v-if="currentDialog"></component>
   </div>
 </template>
 
