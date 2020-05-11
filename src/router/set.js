@@ -37,6 +37,18 @@ export default [
                 meta: { title: '会员设置', noCache: true, tabTitle: '通用设置' , navType:2 }
             },
             {
+                path: 'ordinaryExpress',
+                component: () => import('@/views/set/ordinaryExpress'),
+                name: 'ordinaryExpress',
+                meta: { title: '普通快递', noCache: true, tabTitle: '配送设置', navType:2  }
+            },
+            {
+                path: 'shopExpress',
+                component: () => import('@/views/set/shopExpress'),
+                name: 'shopExpress',
+                meta: { title: '商家配送', noCache: true, tabTitle: '配送设置', navType:2  }
+            },
+            {
                 path: 'payType',
                 component: () => import('@/views/set/payType'),
                 name: 'payType',

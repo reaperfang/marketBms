@@ -10,7 +10,8 @@ export default {
 	map: {
 		url: 'https://map.qq.com/api/js?v=2.exp',
 		key: '7FYBZ-SKMKW-D5HR6-RUHRK-Z76EE-DNBYL',
-		defaultCenter: [39.9046900000,116.4071700000]
+		defaultCenter: [39.9046900000,116.4071700000],
+		apiBaseUrl: 'https://apis.map.qq.com/ws/'
 	},
 	realmName: 'http://172.22.146.118'
 }

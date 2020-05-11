@@ -10,7 +10,7 @@
           <span @mouseover="showShop = true" @mouseout="showShop = false">查看样例</span>
         </p>
       </el-form-item>
-      <el-form-item label="主营类目:" prop="sellCategoryId">
+      <el-form-item label="主营类目:" prop="business">
         <!-- {{form.business}} -->
         <el-cascader
           :options="itemCatList"
@@ -20,7 +20,7 @@
           clearable
           filterable
         ></el-cascader>
-        <span class="category-display">您当前的选择是：{{itemCatText}}</span>
+        <div class="category-display" v-if="itemCatText">您当前的选择是：{{itemCatText}}</div>
       </el-form-item>
       <el-form-item
         label="创建日期:"
@@ -63,7 +63,7 @@
       <el-form-item label="公司邮箱:" prop="companyEmail">
         <el-input v-model="form.companyEmail" placeholder="请输入公司邮箱" style="width:200px;"></el-input>
       </el-form-item>
-      <el-form-item label="联系地址:" prop="address">
+      <el-form-item label="联系地址:" prop="addressCode">
         <area-cascader
           :level="1"
           :data="$pcaa"
@@ -73,7 +73,10 @@
           style="width:200px;"
         ></area-cascader>
         <!-- <el-cascader :options="cityLists" :props="cityProps" v-model="form.addressCode" expand-trigger="hover"/> -->
-        <el-input v-model="form.address" style="width:300px; margin-top:10px;" placeholder="详细地址" />
+      </el-form-item>
+      <el-form-item label="详细地址:" prop="address">
+        <el-input v-model="form.address" style="width:300px;" placeholder="详细地址" />
+        <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button>
       </el-form-item>
       <el-form-item label="店铺简介:" prop="shopIntroduce">
         <el-input
@@ -92,11 +95,13 @@
           v-loading="loading"
         >保存</el-button>
       </el-form-item>
-      <div v-if="showShop" class="shop-set">
+      <div v-show="showShop" class="shop-set">
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
+      <shopInfoMap class="map" ref="shopInfoMap" :address="getAddress" :scaleControl="mapStyle.scaleControl" :zoom="mapStyle.zoom" :zoomControl="mapStyle.zoomControl" :panControl="mapStyle.panControl" :center="[39.9046900000,116.4071700000]" @getMapClickPoi="getMapClickPoi"></shopInfoMap>
     </el-form>
+    <!-- map -->
     <!-- 动态弹窗 -->
     <component
       v-if="dialogVisible"
@@ -107,6 +112,7 @@
   </div>
 </template>
 <script>
+import shopInfoMap from './components/shopInfoMap'
 import dialogSelectImageMaterial from "@/views/shop/dialogs/dialogSelectImageMaterial";
 import axios from "axios";
 export default {
@@ -142,7 +148,7 @@ export default {
         logo: "",
         logoCircle: "",
         phone: "",
-        addressCode: [],
+        addressCode: "",
         address: "",
         shopIntroduce: "",
         business: "",
@@ -175,8 +181,8 @@ export default {
             trigger: "blur"
           }
         ],
-        sellCategoryId: [
-          { required: true, message: "请选择主营类目", trigger: "blur" }
+        business: [
+          { required: true, message: "请选择主营类目", trigger: "change" }
         ],
         companyName: [
           { required: true, message: "请输入公司名称", trigger: "blur" },
@@ -195,11 +201,17 @@ export default {
       area: "",
       loading: false,
       uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
-      uploadUrlBase64: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`
+      uploadUrlBase64: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`,
+      mapStyle: {
+        zoom: 12,
+        zoomControl: false,
+        panControl: false,
+        scaleControl: false
+      } // 地图配置
       //canvas:{}
     };
   },
-  components: { dialogSelectImageMaterial },
+  components: { dialogSelectImageMaterial, shopInfoMap },
   watch: {},
   computed: {
     canvas() {
@@ -208,6 +220,9 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
+    },
+    getAddress() {
+      return `${this.province}${this.city}${this.area}${this.form.address}`
     }
   },
   created() {
@@ -230,6 +245,7 @@ export default {
       this.itemCatText = arr.map(val => val.name).join(" > ");
       this.form.sellCategoryId = _value.pop();
       this.form.sellCategory = arr[arr.length - 1].name;
+      console.log('---itemCatHandleChange---')
     },
     // 获取商品类目列表
     getOperateCategoryList() {
@@ -426,12 +442,21 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG || isJPEG || (isPNG && isLt2M);
+    },
+    // 模糊搜索地址列表
+    searchMap() {
+      this.$refs.shopInfoMap.handlePropSearch(this.form.address)
+      this.$refs.shopInfoMap.isShowMap = true
+    },
+    getMapClickPoi(poi) {
+      this.form.address = poi.address
     }
   }
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+
 .shopInfo {
   width: 100%;
   background: #fff;
@@ -441,6 +466,28 @@ export default {
     color: #3d434a;
     font-weight: 500;
     margin-bottom: 30px;
+  }
+  .map {
+    position:absolute;
+    right: -20px;
+    top: 0;
+    padding: 20px;
+    width: 800px;
+    height: 700px;
+    // border-left: 1px solid #ccc;
+  }
+  .search-map {
+    margin-left: 17px;
+    width:106px;
+    height:34px;
+    border: 0;
+    padding: 7px 12px;
+    background:rgba(240,239,255,1);
+    border-radius:4px;
+    color:rgba(101,94,255,1);
+    i {
+      padding-left: 6px;
+    }
   }
 }
 /deep/ .area-select .area-selected-trigger {
@@ -534,6 +581,7 @@ export default {
     background-size: 100% 100%;
     right: 60px;
     top: 0;
+    z-index: 3;
     .top {
       position: absolute;
       left: 50%;
@@ -554,7 +602,6 @@ export default {
   }
 }
 .category-display {
-  margin-left: 10px;
   font-size: 12px;
 }
 </style>
