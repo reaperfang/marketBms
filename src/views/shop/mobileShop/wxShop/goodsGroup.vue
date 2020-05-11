@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import componentGoodsGroupPageSetting from '@/components/Decorate/comps/componentGoodsGroupPageSetting';
-import propertyGoodsGroupPageSetting from '@/components/Decorate/props/propertyGoodsGroupPageSetting';
+import componentGoodsGroupPageSetting from './editorComps/componentGoodsGroupPageSetting';
+import propertyGoodsGroupPageSetting from './editorComps/propertyGoodsGroupPageSetting';
 import utils from "@/utils";
 export default {
   name: "shopIndex",

@@ -62,7 +62,7 @@
 
 <script>
 import utils from '@/utils';
-import widget from './widgetConfig';
+import widget from './config/widgetConfig';
 import vuedraggable from "vuedraggable";
 
 export default {

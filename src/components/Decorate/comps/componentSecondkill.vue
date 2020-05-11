@@ -58,7 +58,6 @@
 
 </template>
 <script>
-import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
 export default {
     name:"componentSecondkill",
@@ -87,9 +86,6 @@ export default {
             list: [],
             loading: false
         }
-    },
-    components:{
-        componentButton
     },
     watch: {
       currentComponentData(){
