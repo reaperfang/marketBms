@@ -18,7 +18,17 @@ spinner.start()
 
 let webpackConfig = {}, assetsRoot = '', assetsSubDirectory = '';
 switch(process.env.NODE_ENV) {
-  case 'testing':
+  case 'test':
+    webpackConfig = webpackConfigTest
+    assetsRoot = config.test.assetsRoot
+    assetsSubDirectory = config.test.assetsSubDirectory
+    break;
+  case 'test2':
+    webpackConfig = webpackConfigTest
+    assetsRoot = config.test.assetsRoot
+    assetsSubDirectory = config.test.assetsSubDirectory
+    break;
+  case 'test3':
     webpackConfig = webpackConfigTest
     assetsRoot = config.test.assetsRoot
     assetsSubDirectory = config.test.assetsSubDirectory

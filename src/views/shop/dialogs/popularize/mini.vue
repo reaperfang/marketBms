@@ -1,17 +1,13 @@
 /* 页面管理-推广弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'推广'" :showFooter="false">
-     <el-tabs v-model="currentType">
-      <el-tab-pane label="公众号" name="h5"></el-tab-pane>
-      <el-tab-pane label="小程序" name="mini"></el-tab-pane>
-      <div class="popularize_wrapper">
+   <div class="popularize_wrapper">
 
         <!-- 预览区 -->
         <div class="preview poster" v-if="shareStyle == 1">
           <div class="one">
-            <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
-            <h3>{{(currentType === 'h5'?ruleFormH5.title:ruleFormMini.title) || '分享标题'}}</h3>
-            <p>{{(currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe) || '分享描述'}}</p>
+            <img :src="ruleFormMini.picture" alt="分享店铺LOGO">
+            <h3>{{ruleFormMini.title || '分享标题'}}</h3>
+            <p>{{ruleFormMini.describe || '分享描述'}}</p>
           </div>
           <div class="two">
             <div class="left">
@@ -27,75 +23,25 @@
         <div class="preview wechat_friends" v-if="shareStyle == 2">
           <div class="bubble">
               <div class="left">
-                <h3>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</h3>
-                <p>{{currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe || '页面描述'}}</p>
+                <h3>{{ruleFormMini.title || '页面名称'}}</h3>
+                <p>{{ruleFormMini.describe || '页面描述'}}</p>
               </div>
               <div class="right">
-                <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
+                <img :src="ruleFormMini.picture" alt="分享店铺LOGO">
               </div>
           </div>
         </div>
 
         <div class="preview wechat_ommunity" v-if="shareStyle == 3">
            <div class="bubble">
-              <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
-              <span>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</span>
+              <img :src="ruleFormMini.picture" alt="分享店铺LOGO">
+              <span>{{ruleFormMini.title || '页面名称'}}</span>
           </div>
         </div>
 
         <!-- 设置区 -->
         <div class="setting" v-loading="loading">
-          <div v-show="currentType === 'h5'">
-            <div style="display:flex;">
-              <el-input v-model="pageLink" placeholder="右击右侧按钮复制链接" style="margin-right:20px;"></el-input>
-              <el-button type="primary"  v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
-            </div>
-            <div>
-              <el-button type="text" @click="openSetting = true">更多设置</el-button>
-              <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
-              <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading">下载二维码</el-button>
-            </div>
-            <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="80px" v-if="openSetting">
-              <el-form-item label="分享样式" prop="shareStyle">
-                <el-radio-group v-model="shareStyle">
-                  <el-radio :label="1">海报</el-radio>
-                  <!-- <el-radio :label="2">微信好友</el-radio>
-                  <el-radio :label="3">微信朋友圈</el-radio> -->
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="分享标题" prop="title">
-                <el-input
-                  :rows="5"
-                  :max="10"
-                  placeholder="请输入分享标题，最多10字"
-                  v-model="ruleFormH5.title">
-                </el-input>
-              </el-form-item>
-              <el-form-item label="分享描述" prop="describe">
-                <el-input
-                  :rows="5"
-                  :max="18"
-                  placeholder="请输入分享描述，最多10字"
-                  v-model="ruleFormH5.describe">
-                </el-input>
-              </el-form-item>
-              <el-form-item label="分享图片" prop="picture">
-                <div class="img_preview" v-if="ruleFormH5.picture">
-                  <img :src="ruleFormH5.picture" alt="">
-                  <span @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
-                </div>
-                <div class="add_button" v-if="!ruleFormH5.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
-                  <i class="inner"></i>
-                </div>
-                建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="onSubmitH5" :loading="submitLoading">确定</el-button>
-                <el-button @click="openSetting = false">取消</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div v-show="currentType === 'mini'">
+          <div>
             <div>
               <el-button type="text" @click="openSetting = true">更多设置</el-button>
               <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
@@ -128,9 +74,9 @@
               <el-form-item label="分享图片" prop="picture">
                 <div class="img_preview" v-if="ruleFormMini.picture">
                   <img :src="ruleFormMini.picture" alt="失败">
-                  <span @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+                  <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
                 </div>
-                <div class="add_button" v-if="!ruleFormMini.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
+                <div class="add_button" v-if="!ruleFormMini.picture" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
                   <i class="inner"></i>
                 </div>
                 建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
@@ -142,11 +88,9 @@
             </el-form>
           </div>
         </div>
+        <!-- 动态弹窗 -->
+        <component  v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
       </div>
-    </el-tabs>
-    <!-- 动态弹窗 -->
-    <component  v-if="dialogVisible2" :is="currentDialog" :dialogVisible.sync="dialogVisible2" @imageSelected="imageSelected"></component>
-  </DialogBase>
 </template>
 
 <script>
@@ -154,7 +98,7 @@ import DialogBase from "@/components/DialogBase";
 import dialogSelectImageMaterial from '../dialogSelectImageMaterial';
 import utils from "@/utils";
 export default {
-  name: "dialogPopularize",
+  name: "mini",
   components: {DialogBase, dialogSelectImageMaterial},
   props: {
       data: {},
@@ -173,50 +117,19 @@ export default {
   },
   data() {
     return {
-      currentType: 'h5',
       currentDialog: '',
-      dialogVisible2: false,
+      dialogVisible: false,
       shareStyle: 1,
       loading: true,  //加载loading
       downloadPosterLoading: false,  //下载海报loading
       submitLoading: false,  //提交loading
       openQrcodeLoading: false,  //打开二维码loading
-      ruleFormH5: {
-        pageInfoId: this.pageId,
-        type: '0',
-        title: '',
-        describe: '',
-        picture: ''
-      },
       ruleFormMini: {
         pageInfoId: this.pageId,
         type: '0',
         title: '',
         describe: '',
         picture: ''
-      },
-      rulesH5: {
-        title: [
-          { required: true, message: "请输入内容", trigger: "blur" },
-          {
-            min: 1,
-            max: 10,
-            message: "长度在 1 到 10 个字符",
-            trigger: "blur"
-          }
-        ],
-        describe: [
-          { required: true, message: "请输入内容", trigger: "blur" },
-          {
-            min: 1,
-            max: 12,
-            message: "长度在 1 到 12 个字符",
-            trigger: "blur"
-          }
-        ],
-        picture: [
-          { required: false, message: "请选择logo", trigger: "change" }
-        ]
       },
       rulesMini: {
         title: [
