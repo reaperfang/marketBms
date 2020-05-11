@@ -3,7 +3,7 @@ const merge = require('webpack-merge')
 const prodEnv = require('./production.env')
 
 module.exports = merge(prodEnv, {
-	NODE_ENV: '"testing2"',
+	NODE_ENV: '"test2"',
   	ENV_CONFIG: '"test2"',
   	DATA_API: '"http://test2-omo.aiyouyi.cn"',
 	SALE_API: '"/mkt-api"',
