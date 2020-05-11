@@ -6,4 +6,5 @@ module.exports = {
 	WEBSOCKET_server:'"ws://127.0.0.1:9000"',
 	staticHost: 'https://test3-m-aiyouyi.yun300.cn/',
 	UPLOAD_SERVER:'"http://test3-omo.aiyouyi.cn"',
+	APPLY: '"//test3-omo.aiyouyi.cn"'
 }
