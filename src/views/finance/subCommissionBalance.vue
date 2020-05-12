@@ -236,7 +236,7 @@ export default {
     // 导出参数特殊处理
     queryExport() {
       let query = this.init();
-      query.exportType = 1
+      query.exportType = 2
       delete query.pageSize;
       delete query.startIndex;
       if (this.total > 1000) {
