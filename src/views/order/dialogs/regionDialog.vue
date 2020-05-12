@@ -62,6 +62,7 @@ export default {
       // dialogWidth: '1000px',
       dialogFormVisible: true,
       checkList: [],
+      checkList2: [],
       showFooter: false,
       checkedAll: false
     };
@@ -105,6 +106,11 @@ export default {
           } else {
             return total.concat(val.checkList);
           }
+      }, []);
+      this.checkList2 = this.region.reduce((total, val, index) => {
+          let _region = this.region[index];
+
+          return total.concat(val.checkList);
       }, []);
       }
     }
@@ -251,7 +257,7 @@ export default {
     submit() {
       this.$emit(
         "submit",
-        this.checkList.map(val => {
+        this.checkList2.map(val => {
           let arr = val.split(",");
 
           return {
