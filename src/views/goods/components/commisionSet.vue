@@ -4,10 +4,10 @@
         <div class="line-title">是否参与分销：</div>
         <div class="line-content">
              <el-radio-group v-model="status">
-                <el-radio :label="0">不参与分佣</el-radio>
-                <el-radio :label="1">参与分佣</el-radio>
+                <el-radio :label="0">不参与分销</el-radio>
+                <el-radio :label="1">参与分销</el-radio>
             </el-radio-group>
-            <p class="line-tip">如商品不参与分佣，则不产生分佣销售佣金</p>
+            <p class="line-tip">如商品不参与分销，则不产生分销销售佣金</p>
         </div>
     </div>
 
@@ -39,18 +39,18 @@
         <div class="line-title">独立规则：</div>
         <div class="line-content">
              <el-checkbox-group v-model="enable">
-                <el-checkbox label="启用独立分佣比例"></el-checkbox>
+                <el-checkbox label="启用独立分销比例"></el-checkbox>
             </el-checkbox-group>
             <div v-if="enable">
-                <p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分佣员等级比例的默认设置限制</p>
+                <p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分销员等级比例的默认设置限制</p>
                 <div style="margin-top:45px;">
-                    <p class="line-tip">建议参考商品的实际利润设置分佣比例，设置后该spu下的所有sku将均按照此比例计算分佣金额</p>
+                    <p class="line-tip">建议参考商品的实际利润设置分销比例，设置后该spu下的所有sku将均按照此比例计算分销金额</p>
                     <!-- 分佣比例设置 -->
                     <div class="commision">
                         <div class="commision-cell-left">
-                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分佣员本人（三级）佣金占分佣总佣金</div>
-                            <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分佣员（二级）佣金占分佣总佣金</div>
-                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分佣员（一级）佣金占分佣总佣金分佣</div>
+                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分销员本人（三级）佣金占分销总佣金</div>
+                            <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分销员（二级）佣金占分销总佣金</div>
+                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分销员（一级）佣金占分销总佣金</div>
                         </div>
                         <div class="commision-cell-center">
                             <div v-if="resellConfigInfo.resellGrade >=1" class="commision-prent">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="commision-right">
-                            <p class="line-tip">（注：所有层级分佣比例相加之和不能大于100%）</p>
+                            <p class="line-tip">（注：所有层级分销比例相加之和不能大于100%）</p>
                         </div>
                     </div>
                     <div class="consult">
@@ -97,14 +97,14 @@
                         </div>
                         <p class="line-tip">&nbsp;</p>
                         <!-- 分佣佣金参考 -->
-                        <p v-if="resellGood.length" class="line-tip">（以下是我们根据您填写各层级分佣比例计算出的商品各层级分佣佣金，仅供参考。实际分佣结果将以最终保存的比例计算）</p>
+                        <p v-if="resellGood.length" class="line-tip">（以下是我们根据您填写各层级分销比例计算出的商品各层级分销佣金，仅供参考。实际分销结果将以最终保存的比例计算）</p>
                         <div v-if="resellGood.length">
                             <el-table :data="resellGood" tooltip-effect="dark" style="width: 100%">
                                 <el-table-column prop="sku" label="SKU"></el-table-column>
                                 <el-table-column prop="specs" label="规格"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" prop="one" label="分佣员本人（三级）佣金金额" width="220"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=2" prop="two" label="上级分佣员（二级）佣金金额" width="220"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分佣员（一级）佣金金额" width="220"></el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" prop="one" label="分销员本人（三级）佣金金额" width="220"></el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=2" prop="two" label="上级分销员（二级）佣金金额" width="220"></el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分销员（一级）佣金金额" width="220"></el-table-column>
                             </el-table>
                         </div>
                     </div>
@@ -154,11 +154,11 @@ export default {
                     if(this.resellConfigInfo.resellGrade == 1) total = (value.percentOfCommissionThree - 0);
                     if(total <= 100) this.initResellGood();
                     else {
-                        this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                        this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                     }
                 }    
                 else {
-                    this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                    this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                 }
             },
             deep: true
@@ -238,11 +238,11 @@ export default {
                         resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                        this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                         return false;
                     } 
                 } else if (resellConfigInfo.resellGrade == 2) {
@@ -255,11 +255,11 @@ export default {
                         resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                         let total = (resellRule.percentOfCommissionThree - 0) + (resellRule.percentOfCommissionTwo - 0);
                         if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                        this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else if (resellConfigInfo.resellGrade == 3) {
@@ -273,11 +273,11 @@ export default {
                         resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0) + (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                        this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else return false;
