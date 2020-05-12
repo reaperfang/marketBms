@@ -166,7 +166,7 @@ export default [
         component: () => import('@/views/order/electronicFaceSheet'),
         name: 'electronicFaceSheet',
         hidden: false,
-        meta: { title: '电子面单', noCache: true, tabTitle: '物流配送' ,navType:2, anotherAuth: true},
+        meta: { title: '电子面单', noCache: true, tabTitle: '物流配送' ,navType:2},
       },
       {
         path: 'newElectronicFaceSheet',

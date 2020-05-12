@@ -182,7 +182,7 @@
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
                     <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
                     <el-button @click="shareMore" class="border-button">批量推广</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="border-button">批量删除</el-button>
+                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
                 </div>
             </div>
             <div class="footer">
@@ -407,6 +407,14 @@
     &:nth-child(3) {
         text-align: left;
     }
+}
+/deep/ .input-with-select {
+    .el-input-group__prepend {
+        background-color: #fff;
+    }
+}
+/deep/ .all-delete {
+    border:1px solid rgba(146,146,155,1);
 }
 </style>
 <style lang="scss">

@@ -64,8 +64,8 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button @click="resetForm">重置</el-button>
           <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '收支明细', '默认页面', '搜索']">搜索</el-button>
+          <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
