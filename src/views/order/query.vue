@@ -446,5 +446,14 @@ export default {
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
 }
+/deep/ .input-with-select {
+    .el-input-group__prepend {
+        background-color: #fff;
+    }
+}
+/deep/ .el-form-item__label {
+  color: rgba(68,67,75,1);
+  font-weight: normal!important;
+}
 </style>
 
