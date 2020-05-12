@@ -228,6 +228,7 @@ export default {
 
     //浏览量/访客量 or 到店时段 or 访问次数 or 访问来源
     changeType(e) {
+    	console.log("skdjfks");
       if(this.nearDay != 4 || this.range != ''){
         switch (e) {
           case '1':
@@ -340,6 +341,7 @@ export default {
 		position: absolute;
 		right: 60px;
 		top: 0;
+		z-index: 10;
       .active_btn {
         background: rgba(101, 94, 255, 0.1);
         color: #655eff;
