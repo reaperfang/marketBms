@@ -1,20 +1,20 @@
 /* 成功 */
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
+    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false" v-if="info">
         <div class="c_container clearfix">
             <div class="c_top">
-                <p>用户昵称：{{info.nickName}}</p>
-                <p>用户ID：{{info.memberSn}}</p>
-                <p>提现金额：<span>￥{{info.amount}}</span></p>
-                <p class="gray">提现编号：{{info.cashoutSn}}</p>
+                <p>用户昵称：{{info2.nickName}}</p>
+                <p>用户ID：{{info2.memberSn}}</p>
+                <p>提现金额：<span>￥{{info2.amount}}</span></p>
+                <p class="gray">提现编号：{{info2.cashoutSn}}</p>
                 <div class="c_status">
                     <p>成功</p>
                     <span>已审核通过，提现已到账。</span>
-                    <span>操作人：{{info.createUserName}}</span>
-                    <span>操作时间：{{info.createTime}}</span>
+                    <span>操作人：{{info2.createUserName}}</span>
+                    <span>操作时间：{{info2.createTime}}</span>
                 </div>
             </div>
-            <div class="c_steps clearfix">
+            <div class="c_steps clearfix" v-if="info">
                 <div class="c_step_l">
                     <span class="c_green"></span>
                     {{info.createTime}}
@@ -24,7 +24,7 @@
                     <p>提现申请处理完成</p>
                 </div>
             </div>
-            <div class="c_steps clearfix">
+            <div class="c_steps clearfix" v-if="info1">
                 <div class="c_step_l gray">
                     <span class="c_green"></span>
                     {{info1.createTime}}
@@ -98,9 +98,16 @@ export default {
         },
         getInfo(){
             this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
-               this.info = response[0]
-               this.info1 = response[1]
-               this.info2 = response[2]
+                if(response.length == 1){
+                    this.info2 = response[0]
+                }else if(response.length == 2){
+                    this.info1 = response[0]
+                    this.info2 = response[1]
+                }else{
+                    this.info = response[0]
+                    this.info1 = response[1]
+                    this.info2 = response[2]
+                }
             }).catch((error)=>{
                 this.$message.error(error);
             })

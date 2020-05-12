@@ -168,7 +168,7 @@ export default {
         endTime:'',
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
-        sort:'desc'
+        sort:this.ruleForm.sort
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){

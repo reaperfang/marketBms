@@ -116,7 +116,7 @@ export default {
     ],
     //分佣明细 --- 分销员类型
     commissionClerkStatus:[
-        { value: 'resellerSn', label: '分销员ID' },
+        { value: 'resellerSn', label: '分佣员ID' },
         { value: 'resellerName', label: '姓名' },
         { value: 'resellerPhone', label: '手机号码' },
     ],
