@@ -14,22 +14,22 @@
                 </div>
             </template>
         </el-table-column>
-        <el-table-column label="分佣员姓名" width="180">
+        <el-table-column label="分销员姓名" width="180">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerName}}</p></template>
         </el-table-column>
         <el-table-column label="手机号">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerPhone}}</p></template>
         </el-table-column>
-        <el-table-column label="分佣比例">
+        <el-table-column label="分销比例">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerSettlementScale * 100}}%</p></template>  
         </el-table-column>
-        <el-table-column label="分佣金额">
+        <el-table-column label="分销金额">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">¥{{item.resellerSettlementMoney}}</p></template>  
         </el-table-column>
-        <el-table-column label="分佣状态" class-name="goods-status">
+        <el-table-column label="分销状态" class-name="goods-status">
             <template>
                 <p class="line-height" v-for="item in orderDetail.resellerInfoList">
-                    <span v-if="item.status == 0">待结算</span>
+                    <span v-if="item.status == 0">未结算</span>
                     <span v-if="item.status == 1">已结算</span>
                     <span v-if="item.status == 2">结算失败</span>
                 </p>

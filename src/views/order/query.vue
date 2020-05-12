@@ -55,10 +55,10 @@
               <el-option label="用户昵称" value="memberName"></el-option>
               <el-option label="收货人姓名" value="receivedName"></el-option>
               <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员ID" value="resellersn"></el-option>
-              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员姓名" value="resellerName"></el-option>
-              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员昵称" value="resellerNick"></el-option>
-              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分佣员手机号" value="resellerPhone"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员ID" value="resellersn"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员姓名" value="resellerName"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员昵称" value="resellerNick"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员手机号" value="resellerPhone"></el-option>
             </el-select>
           </el-input>
         </el-form-item>
@@ -69,7 +69,7 @@
             <el-option label="拼团订单" :value="1"></el-option>
             <el-option label="优惠套装订单" :value="2"></el-option>
             <el-option label="赠品订单" :value="4"></el-option>
-            <el-option v-if="resellConfigInfo" label="分佣订单" :value="5"></el-option>
+            <el-option v-if="resellConfigInfo" label="分销订单" :value="5"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="支付方式">
