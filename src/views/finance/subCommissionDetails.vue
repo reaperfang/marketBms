@@ -1,4 +1,4 @@
-<!--分佣明细-->
+<!--分销明细-->
 <template>
   <div>
     <div class="top_part head-wrapper">
@@ -14,7 +14,7 @@
           </el-select>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="分佣金额">
+        <el-form-item label="分销金额">
           <el-input-number v-model="ruleForm.minTradeAmount" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
           -
           <el-input-number v-model="ruleForm.maxTradeAmount" :precision="2" :step="0.1" :min="0" placeholder="请输入" style="width:120px;"></el-input-number>
@@ -76,7 +76,7 @@
         </el-table-column>
         <el-table-column
           prop="resellerSn"
-          label="分佣员ID">
+          label="分销员ID">
         </el-table-column>
         <el-table-column
           prop="resellerName"
@@ -92,7 +92,7 @@
         </el-table-column> -->
         <el-table-column
           prop="tradeAmount"
-          label="分佣金额（元）">
+          label="分销金额（元）">
         </el-table-column>
         <el-table-column
           prop="tradeTime"
@@ -131,11 +131,11 @@ export default {
       ruleForm:{
         searchType:'tradeDetailSn', //交易流水号
         searchValue:'', // 交易流水号对应值
-        minTradeAmount: '0.00', // 分佣金额上限
-        maxTradeAmount: '0.00', // 分佣金额下限
+        minTradeAmount: '0.00', // 分销金额上限
+        maxTradeAmount: '0.00', // 分销金额下限
         timeValue:'', // 交易时间
-        userType:'resellerSn', // 分佣员类型
-        userValue:'',// 分佣员类型对应值
+        userType:'resellerSn', // 分销员类型
+        userValue:'',// 分销员类型对应值
         startIndex:1,
         pageSize:10,
         sort:'desc'
@@ -203,9 +203,9 @@ export default {
 
     fetch(num){
       if(this.ruleForm.minTradeAmount == undefined || this.ruleForm.maxTradeAmount == undefined){
-        this.$message('分佣金额不能为空')
+        this.$message('分销金额不能为空')
       }else if(this.ruleForm.minTradeAmount > this.ruleForm.maxTradeAmount){
-        this.$message('分佣金额最小值应该小于最大值')
+        this.$message('分销金额最小值应该小于最大值')
       }else{
         this.ruleForm.startIndex = num || this.ruleForm.startIndex
         let query = this.init();
@@ -227,11 +227,11 @@ export default {
       this.ruleForm = {
         searchType:'tradeDetailSn', //交易流水号
         searchValue:'', // 交易流水号对应值
-        minTradeAmount: '0.00', // 分佣金额上限
-        maxTradeAmount: '0.00', // 分佣金额下限
+        minTradeAmount: '0.00', // 分销金额上限
+        maxTradeAmount: '0.00', // 分销金额下限
         timeValue:'', // 交易时间
-        userType:'resellerSn', // 分佣员类型
-        userValue:'', // 分佣员类型对应值
+        userType:'resellerSn', // 分销员类型
+        userValue:'', // 分销员类型对应值
         startIndex:1,
         pageSize:10,
         sort:'desc'
