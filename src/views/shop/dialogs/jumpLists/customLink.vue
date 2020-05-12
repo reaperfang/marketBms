@@ -1,7 +1,7 @@
 <template>
   <div>
      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-        <el-form-item label="" prop="customLink">
+        <el-form-item label="" prop="customLink" style="margin-top: 18px;">
           <el-input v-model="ruleForm.customLink" placeholder="请输入自定义链接" clearable></el-input>
         </el-form-item>
       </el-form>
@@ -85,11 +85,11 @@ export default {
   input{
     width: 500px!important;
     height:40px!important;
-    margin-left:100px!important;
+    margin-left:118px!important;
   }
   .el-form-item__error {
     padding-top: 2px;
-    margin-left: 100px;
+    margin-left: 118px;
     margin-top:5px;
   }
 }
