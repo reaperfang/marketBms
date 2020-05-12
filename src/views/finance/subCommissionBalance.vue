@@ -73,7 +73,7 @@
         </el-table-column>
         <el-table-column
           prop="resellerSn"
-          label="分销ID">
+          label="分销员ID">
         </el-table-column>
         <el-table-column
           prop="resellerName"
