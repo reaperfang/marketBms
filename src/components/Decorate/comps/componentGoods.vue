@@ -27,10 +27,7 @@
     </div>
 </template>
 <script>
-import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
-import GOODS_LIST from '@/assets/json/goodsList.json'; 
-import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
     name:"componentGoods",
     mixins:[componentMixin],
@@ -61,9 +58,6 @@ export default {
             list: [],
             loading: false
         }
-    },
-    components:{
-        componentButton
     },
     created() {
         const _self = this;

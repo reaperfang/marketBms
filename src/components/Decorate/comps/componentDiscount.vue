@@ -57,7 +57,6 @@
 
 </template>
 <script>
-import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
 export default {
     name:"componentDiscount",
@@ -83,9 +82,6 @@ export default {
             list: [],
             loading: false
         }
-    },
-    components:{
-        componentButton
     },
     created() {
         this.fetch();

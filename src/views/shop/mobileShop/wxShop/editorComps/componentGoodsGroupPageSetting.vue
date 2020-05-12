@@ -1,3 +1,4 @@
+/* 微信商品分类装修预览区 */
 <template>
     <div ref="groupWrapper" :style="fontStyle" v-if="data">
       <div class="componentGoodsSearch" style="z-index:4;">

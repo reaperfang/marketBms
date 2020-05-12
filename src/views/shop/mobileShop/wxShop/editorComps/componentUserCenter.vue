@@ -1,3 +1,4 @@
+/* 微信用户中心装修预览区 */
 <template>
   <!-- 我的->用户中心wyy 2019/7/23 v-if="data && personalData"-->
   <div class="container">
@@ -12,7 +13,7 @@
             <!-- 头像 名称 -->
             <div class="avatarBox" :class="data.avatarPosition?(data.avatarPosition==1?'styleLeft':(data.avatarPosition==2?'styleCenter':'styleRight')):'styleLeft'">
               <div class="avatar">
-                <img src="../../../assets/images/shop/userCenter/userAvater.png" alt="">
+                <img src="../../../../../assets/images/shop/userCenter/userAvater.png" alt="">
               </div>
               <div class="statusBox">
                 <!-- 已登录 -->
@@ -46,7 +47,7 @@
               <!-- 已领取会员卡 样式 style1 style2 style3 -->
               <div class="afterReceiveBox" :class="data.memberColumeStyle?'style'+data.memberColumeStyle:'style1'" >
                 <div class="logo">
-                  <img src="../../../assets/images/shop/userCenter/userCenterVipLogo.png" alt="">
+                  <img src="../../../../../assets/images/shop/userCenter/userCenterVipLogo.png" alt="">
                 </div>
                 <p class="level">Lv5</p>
                 <p class="title">卡名称展示</p>
@@ -92,19 +93,19 @@
             <ul>
               <li>
                 <div class="label">3</div>
-                <img src="../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon1.png" alt="" class="tb">
+                <img src="../../../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon1.png" alt="" class="tb">
                 <p class="name">待付款</p>
               </li>
               <li>
-                <img src="../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon2.png" alt="" class="tb">
+                <img src="../../../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon2.png" alt="" class="tb">
                 <p class="name">待收货</p>
               </li>
               <li>
-                <img src="../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon3.png" alt="" class="tb">
+                <img src="../../../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon3.png" alt="" class="tb">
                 <p class="name">待评价</p>
               </li>
               <li>
-                <img src="../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon4.png" alt="" class="tb">
+                <img src="../../../../../assets/images/shop/userCenter/userCenterMyOrderStatusIcon4.png" alt="" class="tb">
                 <p class="name">售后</p>
               </li>
             </ul>
@@ -127,25 +128,25 @@
             </li> -->
             <!-- 会员等级id:会员id,levelId:会员等级id -->
             <li>
-              <img :src="data.moduleList.memberRank.icon || require('../../../assets/images/shop/userCenter/userCenter13.png')" alt class="tb" />
+              <img :src="data.moduleList.memberRank.icon || require('../../../../../assets/images/shop/userCenter/userCenter13.png')" alt class="tb" />
               <p class="name" :style="{color: data.moduleList.memberRank.color}">{{data.moduleList.memberRank.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan">Lv5</p>
             </li>
             <!--赠品包  -->
             <li>
-              <img  :src="data.moduleList.gift.icon || require('../../../assets/images/shop/userCenter/userCenter16.png')" alt="" class="tb">
+              <img  :src="data.moduleList.gift.icon || require('../../../../../assets/images/shop/userCenter/userCenter16.png')" alt="" class="tb">
               <p class="name" :style="{color: data.moduleList.gift.color}">{{data.moduleList.gift.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan">待领取5件</p>
             </li>
             <!-- 我的拼团 -->
             <li>
-              <img :src="data.moduleList.myAssemble.icon || require('../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
+              <img :src="data.moduleList.myAssemble.icon || require('../../../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
               <p class="name" :style="{color: data.moduleList.myAssemble.color}">{{data.moduleList.myAssemble.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan">拼团中1个</p>
             </li>
             <!--收货地址  -->
             <li>
-              <img :src="data.moduleList.address.icon || require('../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
+              <img :src="data.moduleList.address.icon || require('../../../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
               <p class="name" :style="{color: data.moduleList.address.color}">{{data.moduleList.address.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
@@ -167,11 +168,11 @@ export default {
       bg: {
         background:
           "linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)),url('" +
-          (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) +
+          (this.data.backgroundImage || require('../../../../../assets/images/shop/userCenter/userCenter1.png')) +
           "') no-repeat center"
       },
       bg1: {
-        background: "url('" + (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) + "') no-repeat"
+        background: "url('" + (this.data.backgroundImage || require('../../../../../assets/images/shop/userCenter/userCenter1.png')) + "') no-repeat"
       }
     };
   },
@@ -183,11 +184,11 @@ export default {
         this.bg= {
           background:
             "linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255)),url('" +
-            (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) +
+            (this.data.backgroundImage || require('../../../../../assets/images/shop/userCenter/userCenter1.png')) +
             "') no-repeat center"
         };
         this.bg1= {
-          background: "url('" + (this.data.backgroundImage || require('../../../assets/images/shop/userCenter/userCenter1.png')) + "') no-repeat"
+          background: "url('" + (this.data.backgroundImage || require('../../../../../assets/images/shop/userCenter/userCenter1.png')) + "') no-repeat"
         };
       },
       deep: true
@@ -379,7 +380,7 @@ export default {
           margin:0 15px;
           padding:0 15px;
           height:62px;
-          background:url("../../../assets/images/shop/userCenter/userCenterVipCardBj.png") no-repeat;
+          background:url("../../../../../assets/images/shop/userCenter/userCenterVipCardBj.png") no-repeat;
           background-size:100% 100%;
           .logo{
             float:left;
@@ -451,7 +452,7 @@ export default {
         }
         // 领取后 风格1
         .afterReceiveBox.style1{
-          background:url("../../../assets/images/shop/userCenter/userCenterVipCardBj.png") no-repeat;
+          background:url("../../../../../assets/images/shop/userCenter/userCenterVipCardBj.png") no-repeat;
           background-size:100% 100%;
           margin:0 15px;
           &:before{
@@ -500,7 +501,7 @@ export default {
         }
         // 领取后 风格2
         .afterReceiveBox.style2{
-          background:url("../../../assets/images/shop/userCenter/userCenterVipCardBj.png") no-repeat;
+          background:url("../../../../../assets/images/shop/userCenter/userCenterVipCardBj.png") no-repeat;
           background-size:100% 100%;
           border-radius:50px;
           &:before{
@@ -549,7 +550,7 @@ export default {
         }
         // 领取后 风格3
         .afterReceiveBox.style3{
-          background:url("../../../assets/images/shop/userCenter/userCenterVipCardBj2.png") no-repeat;
+          background:url("../../../../../assets/images/shop/userCenter/userCenterVipCardBj2.png") no-repeat;
           background-size:100% 100%;
           width:160px;
           height:62px;

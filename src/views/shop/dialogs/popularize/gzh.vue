@@ -1,0 +1,519 @@
+/* 页面管理-推广弹框 */
+<template>
+  <div class="popularize_wrapper">
+
+    <!-- 预览区 -->
+    <div class="preview poster" v-if="shareStyle == 1">
+      <div class="one">
+        <img :src="ruleFormH5.picture" alt="分享店铺LOGO">
+        <h3>{{ruleFormH5.title || '分享标题'}}</h3>
+        <p>{{ruleFormH5.describe || '分享描述'}}</p>
+      </div>
+      <div class="two">
+        <div class="left">
+          <h3>{{shopInfo.shopName || '店铺名称'}}</h3>
+          <p>扫码或长按二维码</p>
+        </div>
+        <div class="right">
+          <img :src="qrCode" alt="页面二维码">
+        </div>
+      </div>
+    </div>
+
+    <div class="preview wechat_friends" v-if="shareStyle == 2">
+      <div class="bubble">
+          <div class="left">
+            <h3>{{ruleFormH5.title || '页面名称'}}</h3>
+            <p>{{ruleFormH5.describe || '页面描述'}}</p>
+          </div>
+          <div class="right">
+            <img :src="ruleFormH5.picture" alt="分享店铺LOGO">
+          </div>
+      </div>
+    </div>
+
+    <div class="preview wechat_ommunity" v-if="shareStyle == 3">
+        <div class="bubble">
+          <img :src="ruleFormH5.picture" alt="分享店铺LOGO">
+          <span>{{ruleFormH5.title || '页面名称'}}</span>
+      </div>
+    </div>
+
+    <!-- 设置区 -->
+    <div class="setting" v-loading="loading">
+      <div>
+        <div style="display:flex;">
+          <el-input v-model="pageLink" placeholder="右击右侧按钮复制链接" style="margin-right:20px;"></el-input>
+          <el-button type="primary"  v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
+        </div>
+        <div>
+          <el-button type="text" @click="openSetting = true">更多设置</el-button>
+          <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
+          <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading">下载二维码</el-button>
+        </div>
+        <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="80px" v-if="openSetting">
+          <el-form-item label="分享样式" prop="shareStyle">
+            <el-radio-group v-model="shareStyle">
+              <el-radio :label="1">海报</el-radio>
+              <el-radio :label="2">微信好友</el-radio>
+              <el-radio :label="3">微信朋友圈</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="分享标题" prop="title">
+            <el-input
+              :rows="5"
+              :max="10"
+              placeholder="请输入分享标题，最多10字"
+              v-model="ruleFormH5.title">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="分享描述" prop="describe">
+            <el-input
+              :rows="5"
+              :max="18"
+              placeholder="请输入分享描述，最多10字"
+              v-model="ruleFormH5.describe">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="分享图片" prop="picture">
+            <div class="img_preview" v-if="ruleFormH5.picture">
+              <img :src="ruleFormH5.picture" alt="">
+              <span @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
+            </div>
+            <div class="add_button" v-if="!ruleFormH5.picture" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
+              <i class="inner"></i>
+            </div>
+            建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmitH5" :loading="submitLoading">确定</el-button>
+            <el-button @click="openSetting = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+    <!-- 动态弹窗 -->
+    <component  v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
+  </div>
+</template>
+
+<script>
+import DialogBase from "@/components/DialogBase";
+import dialogSelectImageMaterial from '../dialogSelectImageMaterial';
+import utils from "@/utils";
+export default {
+  name: "gzh",
+  components: {DialogBase, dialogSelectImageMaterial},
+  props: {
+      data: {},
+      dialogVisible: {
+          type: Boolean,
+          required: true
+      },
+      pageId: {
+        type: String,
+        default: ''
+      },
+      pageLink: {
+        type: String,
+        default: ''
+      }
+  },
+  data() {
+    return {
+      currentDialog: '',
+      dialogVisible: false,
+      shareStyle: 1,
+      loading: true,  //加载loading
+      downloadPosterLoading: false,  //下载海报loading
+      submitLoading: false,  //提交loading
+      openQrcodeLoading: false,  //打开二维码loading
+      ruleFormH5: {
+        pageInfoId: this.pageId,
+        type: '0',
+        title: '',
+        describe: '',
+        picture: ''
+      },
+      rulesH5: {
+        title: [
+          { required: true, message: "请输入内容", trigger: "blur" },
+          {
+            min: 1,
+            max: 10,
+            message: "长度在 1 到 10 个字符",
+            trigger: "blur"
+          }
+        ],
+        describe: [
+          { required: true, message: "请输入内容", trigger: "blur" },
+          {
+            min: 1,
+            max: 12,
+            message: "长度在 1 到 12 个字符",
+            trigger: "blur"
+          }
+        ],
+        picture: [
+          { required: false, message: "请选择logo", trigger: "change" }
+        ]
+      },
+      qrCode: '',
+      openSetting: false,  //是否开启设置
+      h5DownloadPosterAble: false  //h5是否可下载海报
+    };
+  },
+  watch: {
+    shopInfo:{
+      handler(newValue) {
+        this.ruleFormH5.picture = this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo;
+        this.getQrcode();
+      },
+      deep: true
+    }
+  },
+  computed: {
+    visible: {
+      get() {
+          return this.dialogVisible
+      },
+      set(val) {
+          this.$emit('update:dialogVisible', val)
+      }
+    },
+    shopInfo() {
+      return this.$store.getters.shopInfo || {};
+    },
+  },
+  created() {
+    this.fetch();
+    this.$store.dispatch('getShopInfo');
+    this.getQrcode();
+  },
+  methods: {
+
+    fetch() {
+      this.loading = true;
+      let pageId   = this.ruleFormH5.pageInfoId;
+      this._apis.shop.getPageShare({
+        type: '0',
+        pageInfoId: pageId
+      })
+      .then((response)=>{
+        if(response && response.pageInfoId) {
+          this.ruleFormH5 = response;
+          if(response.title && response.describe) {
+            this.h5DownloadPosterAble = true;
+          }
+        } else {
+          this.ruleFormH5['pageInfoId'] = this.pageId;
+        }
+        this.loading = false;
+      }).catch((error)=>{
+        console.error(error);
+        this.loading = false;
+      });
+    },
+
+    // 提交h5 校验
+    onSubmitH5() {
+      this.$refs.ruleFormH5.validate(valid => {
+        if (valid) {
+          this.submitLoading = true;
+          this._apis.shop.updatePageShare({
+            type: '0',
+            pageInfoId: this.ruleFormH5.pageInfoId,
+            title: this.ruleFormH5.title,
+            describe: this.ruleFormH5.describe,
+            picture: this.ruleFormH5.picture
+          })
+          .then((response)=>{
+            this.fetch();
+            this.submitLoading = false;
+            this.openSetting = false;
+          }).catch((error)=>{
+            this.$message.error(error);
+            this.submitLoading = false;
+            this.openSetting = false;
+          });
+        } else {
+          this.$message({ message: '填写正确的信息', type: 'warning' });
+        }
+      })
+    },
+
+    /* 获取海报 */
+    getPoster() {
+      this.downloadPosterLoading = true;
+      let pageId = this.ruleFormH5.pageInfoId;
+      this._apis.shop.getPoster({
+        type: '0',
+        pageInfoId: pageId
+      }).then((response)=>{
+       this.download(response, '分享');
+      }).catch((error)=>{
+        console.error(error);
+        this.downloadPosterLoading = false;
+      });
+    },
+
+    /* 打开二维码 */
+    openQrcode(codeType) {
+      const _self = this;
+      this.getQrcode(codeType, (url) =>{
+        _self.download(url, '二维码'); // 下载二维码
+        // _self.openQrCodeInNewWindow(url);
+      });
+    },
+
+    //新窗口打开二维码
+    openQrCodeInNewWindow(url) {
+      const img = new Image();
+      img.style.cssText = 'margin:200px auto 0;display: block;';
+      if(url.substr(0,4) === 'http') {
+         img.src = url;
+      }else{
+         img.src = `data:image/png;base64,${url}`;
+      };
+      const newWin = window.open("", "_blank");
+      newWin.document.write(img.outerHTML);
+      newWin.document.title = "二维码"
+      newWin.document.close();
+    },
+
+    /* 获取二维码 */
+    getQrcode(codeType, callback) {
+      this.openQrcodeLoading = true;
+      this._apis.shop.getQrcode({
+        url: this.pageLink.replace("&","[^]"),
+        width: '225',
+        height: '225',
+        logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
+      }).then((response)=>{
+        this.qrCode = `data:image/png;base64,${response}`;
+        this.openQrcodeLoading = false;
+        callback && callback(response); // 打开二维码
+      }).catch((error)=>{
+        this.openQrcodeLoading = false;
+        this.$message({ message: error, type: 'error' });
+      });
+    },
+
+    /* 下载图片实现 */
+    download(url, name) {
+        this.downloadPosterLoading = false;
+        const aLink = document.createElement('a');
+        aLink.download = name ;
+        if(url.includes(location.protocol + '//')) {
+          aLink.href = url; 
+        }else{
+          aLink.href = `data:image/png;base64,${url}`; 
+        };
+        aLink.dispatchEvent(new MouseEvent('click', {}));
+    },
+
+     /* 弹框选中图片 */
+    imageSelected(dialogData) {
+      this.ruleFormH5.picture = dialogData.filePath;
+    },
+
+     onCopy () {
+      this.$message({
+        message: `复制成功！`,
+        type: 'success'
+      });
+    },
+    onError () {
+      this.$message.error(this.$t('prompt.copyFail'))
+    },
+
+    //从canvas获取在线图片base64码
+    getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var dataURL = canvas.toDataURL("image/png");  // 可选其他值 image/jpeg
+        return dataURL;
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+.popularize_wrapper{
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .preview{
+    width:245px;
+    margin-right:15px;
+    &.poster{
+      .one{
+        background:rgba(248,248,248,1);
+        border-radius:2px;
+        border:1px solid rgba(211,211,211,1);
+        padding:20px;
+        box-sizing: border-box;
+        text-align: center;
+        img{
+          width: 200px;
+          display: block;
+          height: 200px;
+          border: 1px solid #ddd;
+          // border-radius: 100px;
+          // object-fit: contain;
+        }
+        h3{
+          margin-top:20px;
+          font-size:16px;
+          color:rgba(68,67,75,1);
+        }
+        p{
+          margin-top:5px;
+          font-size:5px;
+          color:rgba(146,146,155,1);
+        }
+      }
+      .two{
+        margin-top:20px;
+        background:rgba(248,248,248,1);
+        border-radius:2px;
+        border:1px solid rgba(211,211,211,1);
+        padding:25px;
+        box-sizing: border-box;
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .left{
+          width:calc(100% - 20px -20px);
+          margin-right:20px;
+          display:flex;
+          flex-direction: column;
+          justify-content: center;
+          h3{
+            font-size:14px;
+            color:rgba(68,67,75,1);
+          }
+          p{
+            margin-top:5px;
+            font-size:5px;
+            color:rgba(146,146,155,1);
+          }
+        }
+        .right{
+          padding:5px;
+          background:#fff;
+          img{
+            width: 60px;
+            height: 60px;
+            // object-fit: cover;
+            display: block;
+            border: 1px solid #ddd;
+          }
+        }
+      }
+    }
+    &.wechat_friends{
+      background:url('../../../../assets/images/shop/wechat_friends.png') no-repeat 0 0;
+      background-size: contain;
+      position:relative;
+      .bubble{
+        background:#fff;
+        width:166px;
+        height:60px;
+        padding:10px;
+        box-sizing: border-box;
+        position: absolute;
+        top: 61px;
+        right: 45px;
+        border-radius: 6px;
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .left{
+          display:flex;
+          flex-direction: column;
+          justify-content: center;
+          h3{
+            font-size:14px;
+            color:rgba(68,67,75,1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width:100px;
+          }
+          p{
+            margin-top:5px;
+            font-size:5px;
+            color:rgba(146,146,155,1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width:100px;
+          }
+        }
+        .right{
+          img{
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            display: block;
+            border: 1px solid #ddd;
+          }
+        }
+      }
+    }
+    &.wechat_ommunity{
+      background:url('../../../../assets/images/shop/wechat_community.png') no-repeat 0 0;
+      background-size: contain;
+      position:relative;
+      height: 378px;
+       .bubble{
+          background: #f3f3f5;
+          width: 208px;
+          height: 35px;
+          padding: 5px;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          position: absolute;
+          bottom: 63px;
+          left: 43px;
+          border-radius: 6px;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: horizontal;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+          flex-direction: row;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          /* justify-content: space-between; */
+          align-items: center;
+          img{
+            width:28px;
+            height:28px;
+            object-fit: cover;
+            border-radius:5px;
+            display: block;
+            border: 1px solid #ddd;
+          }
+          span{
+            color:rgba(68,67,75,1);
+            font-size:12px;
+            margin-left:10px;
+            width:100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+      }
+    }
+  }
+  .setting{
+
+  }
+}
+</style>

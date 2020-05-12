@@ -73,6 +73,7 @@
                     :default-sort = "{prop: 'stock', order: 'descending'}"
                     :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                     @selection-change="handleSelectionChange"
+                    @sort-change="sortChange"
                     :empty-text="emptyText">
                     <el-table-column
                         type="selection"
@@ -133,11 +134,11 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        sortable
+                        sortable="custom"
                         :sort-method="salePriceMethod"
-                        prop="price"
+                        prop="salePrice"
                         label="售卖价（元）"
-                        width="120"
+                        width="130"
                         class-name="salePrice">
                         <template slot-scope="scope">
                             <span class="price">
@@ -148,15 +149,17 @@
                     </el-table-column>
                     <el-table-column
                     <el-table-column
-                        sortable
+                        sortable="custom"
                         :sort-method="stockSortMethod"
+                        prop="stock"
                         label="总库存">
                         <template slot-scope="scope">
                             <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock < val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        sortable
+                        sortable="custom"
+                        prop="saleCount"
                         :sort-method="saleCountSortMethod"
                         label="总销量">
                         <template slot-scope="scope">
@@ -417,13 +420,13 @@
 }
 /deep/ .el-table td, .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }
 /deep/ .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }
@@ -483,7 +486,8 @@ export default {
                 status: '', // 商品状态 0下架,1上架,2售罄
                 productCatalogInfoId: '', // 商品分类ID
                 searchType: 'code',
-                searchValue: ''
+                searchValue: '',
+                sortType: 1
             },
             currentDialog: '',
             dialogVisible: false,
@@ -656,6 +660,28 @@ export default {
         }
     },
     methods: {
+        sortChange({column, prop, order}) {
+            if(prop == 'salePrice') {
+                if(order == 'descending') {
+                    this.listQuery.sortType = 2
+                } else if(order == 'ascending') {
+                    this.listQuery.sortType = 7
+                }
+            } else if(prop == 'stock') {
+                if(order == 'descending') {
+                    this.listQuery.sortType = 6
+                } else if(order == 'ascending') {
+                    this.listQuery.sortType = 5
+                }
+            } else if(prop == 'saleCount') {
+                if(order == 'descending') {
+                    this.listQuery.sortType = 4
+                } else if(order == 'ascending') {
+                    this.listQuery.sortType = 3
+                }
+            }
+            this.getList()
+        },
         switchStatusChange(flag, id, activity) {
             let str = ''
             let _flag = flag

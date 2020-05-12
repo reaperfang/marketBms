@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import widget from './widgetConfig';
+import widget from './config/widgetConfig';
 export default {
   name: 'widgetView',
   components: {},

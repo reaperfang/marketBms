@@ -655,6 +655,12 @@ export default {
                     this.$emit('getDetail')
                     this.currentDialog = 'ChangePriceDialog'
                     this.dialogVisible = true
+
+                    let timer = setTimeout(() => {
+                        this.$router.push('/order/query')
+                        this.dialogVisible = false
+                        clearTimeout(timer)
+                    }, 5000)
                 }).catch(error => {
                     this.changePriceVisible = false
                     this.$message.error(error);

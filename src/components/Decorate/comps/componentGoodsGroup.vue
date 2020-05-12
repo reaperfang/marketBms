@@ -19,7 +19,6 @@
     </div>
 </template>
 <script>
-import componentButton from './componentButton';
 import componentGoods from './componentGoods';
 import componentMixin from '../mixins/mixinComps';
 export default {

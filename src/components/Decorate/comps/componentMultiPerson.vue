@@ -62,7 +62,6 @@
 
 </template>
 <script>
-import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
 export default {
     name:"componentMultiPerson",
@@ -133,9 +132,6 @@ export default {
             }
             return value;
         }
-    },
-    components:{
-        componentButton
     },
     methods:{
         decoration(){
