@@ -2,8 +2,8 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="是否参与分销" prop="resource">
             <el-radio-group v-model="ruleForm.resource">
-            <el-radio label="不参与分佣"></el-radio>
-            <el-radio label="参与分佣"></el-radio>
+            <el-radio label="不参与分销"></el-radio>
+            <el-radio label="参与分销"></el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item label="海报图片" prop="resource">
@@ -13,7 +13,7 @@
             </el-radio-group>
         </el-form-item>
         <el-form-item label="独立规则" prop="resource">
-            <el-checkbox v-model="checked">启用独立分佣比例</el-checkbox>
+            <el-checkbox v-model="checked">启用独立分销比例</el-checkbox>
         </el-form-item>
     </el-form>
 </template>
