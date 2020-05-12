@@ -55,7 +55,7 @@
             全部
             <span>{{total}}</span>项
           </div>
-          <el-button v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
+          <el-button v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
       </div>
       <div class="table">
         <el-table
@@ -71,8 +71,8 @@
             <template slot-scope="scope">
               <div class="operate-box">
                 <span v-permission="['订单', '电子面单', '默认页', '查看']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
-                <span v-permission="['订单', '电子面单', '默认页', '修改']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
-                <span v-permission="['订单', '电子面单', '默认页', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
+                <span v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '修改']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
+                <span v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
               </div>
             </template>
           </el-table-column>
@@ -91,8 +91,10 @@
 <script>
 import Pagination from "@/components/Pagination";
 import utils from "@/utils";
+import anotherAuth from '@/mixins/anotherAuth'
 
 export default {
+  mixins: [anotherAuth],
   data() {
     return {
       formInline: {
