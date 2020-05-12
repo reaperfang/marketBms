@@ -70,13 +70,13 @@ export default [
         path: 'subCommissionDetails',
         component: () => import('@/views/finance/subCommissionDetails'),
         name: 'subCommissionDetails',
-        meta: { title: '分佣明细', noCache: true, tabTitle: '分佣账目' , navType:2 }
+        meta: { title: '分销明细', noCache: true, tabTitle: '分销账目' , navType:2 }
       },
       {
         path: 'subCommissionBalance',
         component: () => import('@/views/finance/subCommissionBalance'),
         name: 'subCommissionBalance',
-        meta: { title: '分佣商余额', noCache: true, tabTitle: '分佣账目' , navType:2 }
+        meta: { title: '分销商余额', noCache: true, tabTitle: '分销账目' , navType:2 }
       },
     ]
 	}

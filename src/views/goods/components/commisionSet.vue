@@ -4,10 +4,10 @@
         <div class="line-title">是否参与分销：</div>
         <div class="line-content">
              <el-radio-group v-model="status">
-                <el-radio :label="0">不参与分佣</el-radio>
-                <el-radio :label="1">参与分佣</el-radio>
+                <el-radio :label="0">不参与分销</el-radio>
+                <el-radio :label="1">参与分销</el-radio>
             </el-radio-group>
-            <p class="line-tip">如商品不参与分佣，则不产生分佣销售佣金</p>
+            <p class="line-tip">如商品不参与分销，则不产生分销销售佣金</p>
         </div>
     </div>
 
@@ -39,18 +39,18 @@
         <div class="line-title">独立规则：</div>
         <div class="line-content">
              <el-checkbox-group v-model="enable">
-                <el-checkbox label="启用独立分佣比例"></el-checkbox>
+                <el-checkbox label="启用独立分销比例"></el-checkbox>
             </el-checkbox-group>
             <div v-if="enable">
-                <p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分佣员等级比例的默认设置限制</p>
+                <p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分销员等级比例的默认设置限制</p>
                 <div style="margin-top:45px;">
-                    <p class="line-tip">建议参考商品的实际利润设置分佣比例，设置后该spu下的所有sku将均按照此比例计算分佣金额</p>
-                    <!-- 分佣比例设置 -->
+                    <p class="line-tip">建议参考商品的实际利润设置分销比例，设置后该spu下的所有sku将均按照此比例计算分销金额</p>
+                    <!-- 分销比例设置 -->
                     <div class="commision">
                         <div class="commision-cell-left">
-                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分佣员本人（三级）佣金占分佣总佣金</div>
-                            <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分佣员（二级）佣金占分佣总佣金</div>
-                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分佣员（一级）佣金占分佣总佣金分佣</div>
+                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分销员本人（三级）佣金与商品总利润占比</div>
+                            <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分销员（二级）佣金与商品总利润占比</div>
+                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分销员（一级）佣金与商品总利润占比</div>
                         </div>
                         <div class="commision-cell-center">
                             <div v-if="resellConfigInfo.resellGrade >=1" class="commision-prent">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="commision-right">
-                            <p class="line-tip">（注：所有层级分佣比例相加之和不能大于100%）</p>
+                            <p class="line-tip">（注：所有层级分销比例相加之和不能大于100%）</p>
                         </div>
                     </div>
                     <div class="consult">
@@ -96,15 +96,15 @@
                             </el-table>
                         </div>
                         <p class="line-tip">&nbsp;</p>
-                        <!-- 分佣佣金参考 -->
-                        <p v-if="resellGood.length" class="line-tip">（以下是我们根据您填写各层级分佣比例计算出的商品各层级分佣佣金，仅供参考。实际分佣结果将以最终保存的比例计算）</p>
+                        <!-- 分销佣金参考 -->
+                        <p v-if="resellGood.length" class="line-tip">（以下是我们根据您填写各层级分销比例计算出的商品各层级分销佣金，仅供参考。实际分销结果将以最终保存的比例计算）</p>
                         <div v-if="resellGood.length">
                             <el-table :data="resellGood" tooltip-effect="dark" style="width: 100%">
                                 <el-table-column prop="sku" label="SKU"></el-table-column>
                                 <el-table-column prop="specs" label="规格"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" prop="one" label="分佣员本人（三级）佣金金额" width="220"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=2" prop="two" label="上级分佣员（二级）佣金金额" width="220"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分佣员（一级）佣金金额" width="220"></el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" prop="one" label="分销员本人（三级）佣金金额" width="220"></el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=2" prop="two" label="上级分销员（二级）佣金金额" width="220"></el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分销员（一级）佣金金额" width="220"></el-table-column>
                             </el-table>
                         </div>
                     </div>
@@ -127,9 +127,9 @@ export default {
         return {
             currentDialog: '', // 动态弹窗
             dialogVisible: false, // 动态弹窗可见
-            resellGood: [], // 商品分佣列表
+            resellGood: [], // 商品分销列表
             enable: false, // 是否开启独立规则
-            status: 0, // 是否参与分佣
+            status: 0, // 是否参与分销
             picSorce: 0, // 海报图片来源你
             checkedImg: 0, // 海报默认选中那个商品图
             src: '', // 上传海报图片路径
@@ -154,11 +154,11 @@ export default {
                     if(this.resellConfigInfo.resellGrade == 1) total = (value.percentOfCommissionThree - 0);
                     if(total <= 100) this.initResellGood();
                     else {
-                        this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                        this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                     }
                 }    
                 else {
-                    this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                    this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                 }
             },
             deep: true
@@ -171,7 +171,7 @@ export default {
         changeImgCheck (key) {
             this.checkedImg = key;
         },
-        // 开启独立分佣
+        // 开启独立分销
         changeEnable(val) {
             this.enable = val ? 1 : 0;
         },
@@ -184,7 +184,7 @@ export default {
             this.dialogVisible = true;
             this.currentDialog = 'dialogSelectImageMaterial';
         },
-        // 初始化商品分佣佣金
+        // 初始化商品分销佣金
         initResellGood() {
             let detail = this.detail;
             let resellGood = [];
@@ -227,7 +227,7 @@ export default {
             let  resellRule = Object.assign({}, this.resellRule);
             let  regPos = /^[1-9]\d*$/;
 
-            // 开启了独立分佣
+            // 开启了独立分销
             if(this.status == 1 && this.enable) {
                 if(resellConfigInfo.resellGrade == 1) {
                     resellRule.percentOfCommissionTwo = '';
@@ -238,11 +238,11 @@ export default {
                         resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                        this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                         return false;
                     } 
                 } else if (resellConfigInfo.resellGrade == 2) {
@@ -255,11 +255,11 @@ export default {
                         resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                         let total = (resellRule.percentOfCommissionThree - 0) + (resellRule.percentOfCommissionTwo - 0);
                         if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                        this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else if (resellConfigInfo.resellGrade == 3) {
@@ -273,11 +273,11 @@ export default {
                         resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0) + (resellRule.percentOfCommissionThree - 0);
                         if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分佣比例相加之和不能大于100%', type: 'warning' });
+                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
-                        this.$message({ message: '分佣比例必须是正整数', type: 'warning' });
+                        this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                         return false;
                     }    
                 } else return false;
@@ -291,7 +291,7 @@ export default {
             let data = this.getSubmitData();
             if(data) {
                 data.id = this.detail.id;
-                // todo 保存商品分佣设置
+                // todo 保存商品分销设置
                 this._apis.goods.commisionGoodsSet(data).then(res => {
                     this.historyBack();
                 }).catch((error) => { 
@@ -302,7 +302,7 @@ export default {
         // 返回
         historyBack() {
             // TODO 返回
-            if(this.$route.query.commissionEdit) { // 分佣商品列表
+            if(this.$route.query.commissionEdit) { // 分销商品列表
                 this.$router.push({path:'/apply',query:{paths:'/commission/commissionGoods/goods'}})
                 this.SETCURRENT(8)
             } else { // bms 商品列表
@@ -314,7 +314,7 @@ export default {
         // 商品详情
         let detail = this.detail;
 
-        if(detail.isAloneResellRule == 1){ // 是否独立分佣商品
+        if(detail.isAloneResellRule == 1){ // 是否独立分销商品
             this.enable = true;
             
             let resellRule = detail.resellRule ? JSON.parse(detail.resellRule) : null;
@@ -326,7 +326,7 @@ export default {
             }
         } 
 
-        // 分佣图片展示
+        // 分销图片展示
         this.images = detail.images ? detail.images.split(',') : [];        
         if(this.images.length &&  detail.resellImage && this.images.indexOf(detail.resellImage) !== -1) {
             this.checkedImg = this.images.indexOf(detail.resellImage);
@@ -336,7 +336,7 @@ export default {
             this.src = detail.resellImage;
         }
 
-        // 是否参与分佣
+        // 是否参与分销
         if(detail.isResell == 1) this.status = 1;
         let sku = [];
         detail.goodsInfos.forEach(v => {

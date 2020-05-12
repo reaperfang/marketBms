@@ -64,8 +64,8 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button @click="resetForm">重置</el-button>
           <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '收支明细', '默认页面', '搜索']">搜索</el-button>
+          <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -301,7 +301,7 @@ export default {
     },  
     fetch(num){
       if(this.ruleForm.amountMin == undefined || this.ruleForm.amountMax == undefined){
-        this.$message('分佣金额不能为空')
+        this.$message('分销金额不能为空')
       }else if(this.ruleForm.amountMin > this.ruleForm.amountMax){
         this.$message('交易金额最小值应该小于最大值')
       }else{
