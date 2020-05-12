@@ -75,15 +75,20 @@
                                 <el-table-column prop="sku" label="SKU"></el-table-column>
                                 <el-table-column prop="specs" label="规格"></el-table-column>
                                 <el-table-column prop="status" label="状态"></el-table-column>
-                                <el-table-column prop="salePrice" label="售卖价"></el-table-column>
-                                <el-table-column prop="costPrice" label="成本价"></el-table-column>
-                                <el-table-column prop="profits">
+                                <el-table-column label="售卖价">
+                                    <template slot-scope="scope"><div>¥{{scope.row.salePrice}}</div></template>
+                                </el-table-column>
+                                <el-table-column label="成本价">
+                                    <template slot-scope="scope"><div>¥{{scope.row.costPrice}}</div></template>
+                                </el-table-column>
+                                <el-table-column>
                                     <template slot="header">
                                         <el-tooltip placement="top">
                                             <div slot="content">利润=商品售价-成本价;当商品利润小于0时，各级佣金为0。</div>
                                             <p>利润&nbsp;<i class="el-icon-warning" style="color:#655EFF;"></i></p>
                                         </el-tooltip>
-                                    </template>    
+                                    </template>
+                                    <template slot-scope="scope"><div>¥{{scope.row.profits}}</div></template> 
                                 </el-table-column>
                                 <el-table-column prop="profitRate">
                                     <template slot="header">
@@ -102,9 +107,15 @@
                             <el-table :data="resellGood" tooltip-effect="dark" style="width: 100%">
                                 <el-table-column prop="sku" label="SKU"></el-table-column>
                                 <el-table-column prop="specs" label="规格"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" prop="one" label="分销员本人（三级）佣金金额" width="220"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=2" prop="two" label="上级分销员（二级）佣金金额" width="220"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分销员（一级）佣金金额" width="220"></el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" label="分销员本人（三级）佣金金额" width="220">
+                                    <template slot-scope="scope"><div>¥{{scope.row.one}}</div></template> 
+                                </el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=2" label="上级分销员（二级）佣金金额" width="220">
+                                    <template slot-scope="scope"><div>¥{{scope.row.two}}</div></template> 
+                                </el-table-column>
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分销员（一级）佣金金额" width="220">
+                                    <template slot-scope="scope"><div>¥{{scope.row.three}}</div></template> 
+                                </el-table-column>
                             </el-table>
                         </div>
                     </div>
@@ -499,6 +510,9 @@ export default {
         }
         /deep/ .el-table .cell {
             text-align: center;
+        }
+        /deep/ .el-table td .cell {
+            color: #44434B;
         }
         /deep/.el-table__header{
             width: 100% !important;
