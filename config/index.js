@@ -34,7 +34,7 @@ module.exports = {
 
 		proxyTable: {
 			'/data-server/**': {
-				target: 'https://test-omo.aiyouyi.cn',
+				target: 'http://test3-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
 				changeOrigin: true,
 				pathRewrite: {
 					'^/data-server': ''
@@ -50,7 +50,7 @@ module.exports = {
 				}
 			},
 			'/upload_server/**': {
-				target: 'https://test-omo.aiyouyi.cn',
+				target: 'http://test3-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
 				changeOrigin: true,
 				pathRewrite: {
 					'^/upload_server': ''
