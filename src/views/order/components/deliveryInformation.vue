@@ -38,7 +38,7 @@
                 item.address.receivedProvinceName + item.address.receivedCityName + item.address.receivedAreaName + item.address.receivedDetail : ''}}
               </span>
             </p>
-            <p>发货信息：
+            <p class="message-send">发货信息：
               <span class="message-name">{{item.address && item.address.sendName}}</span>
               <span class="message-phone">{{item.address && item.address.sendPhone}}</span>
               <span class="message-address">{{item.address ? 
@@ -46,7 +46,7 @@
               </span>
             </p>
           </div>
-          <el-table :data="item.goodsList" style="width: 100%">
+          <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
             <el-table-column label="商品" width="300">
               <template slot-scope="scope">
                 <div class="goods-detail">
@@ -332,8 +332,9 @@ export default {
     &:first-child {
       margin-bottom: 17px;
     }
-    &:last-child {
-      margin-bottom: 26px;
+    &.message-send {
+      padding-bottom: 26px;
+      border-bottom: 1px solid #CACFCB;
     }
   }
   span {
