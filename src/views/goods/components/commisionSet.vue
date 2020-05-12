@@ -48,9 +48,9 @@
                     <!-- 分佣比例设置 -->
                     <div class="commision">
                         <div class="commision-cell-left">
-                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分销员本人（三级）佣金占分销总佣金</div>
-                            <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分销员（二级）佣金占分销总佣金</div>
-                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分销员（一级）佣金占分销总佣金</div>
+                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分销员本人（三级）佣金与商品总利润占比</div>
+                            <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分销员（二级）佣金与商品总利润占比</div>
+                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分销员（一级）佣金与商品总利润占比</div>
                         </div>
                         <div class="commision-cell-center">
                             <div v-if="resellConfigInfo.resellGrade >=1" class="commision-prent">
