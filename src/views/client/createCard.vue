@@ -52,7 +52,7 @@
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >像素大小控制在1000象素*600象素以下</span>
-          <div v-if="ruleForm.backgroundType == '1'" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`}">
+          <div v-if="ruleForm.backgroundType == '1'" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`, backgroundSize: '100% 100%'}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
             <p class="c_level">{{ ruleForm.alias }}</p>
