@@ -1,6 +1,6 @@
 <template>
   <div class="template_wrapper">
-    <ul class="clearFix">
+    <ul class="clearFix" v-loading="loading">
       <li>
         <div class="inner">
           <div class="view">
@@ -17,7 +17,7 @@
           </div>
         </div>
       </li>
-      <li v-for="(item, key) of templateList" :key="key" v-loading="loading">
+      <li v-for="(item, key) of templateList" :key="key">
         <div class="inner">
           <div class="view">
             <img :src="item.photoHalfUrl" alt="">
@@ -59,15 +59,31 @@
       </div>
       <div class="apply" @click="apply(currentTemplate)">立即应用</div>
     </div>
+
+    <div class="pagination" v-if="templateList.length">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="Number(startIndex) || 1"
+          :page-size="pageSize*1"
+          :total="total*1"
+          layout="total, prev, pager, next, jumper"
+          >
+        </el-pagination>
+      </div>
   </div>
 </template>
 
 <script>
+import tableBase from '@/components/TableBase';
 export default {
   name: 'templateManage',
+  extends: tableBase,
   components: {},
   data () {
     return {
+      pageSize: 11,
+      
       loading: true,
       templateList: [],
       showBigPreview: false,
@@ -102,9 +118,14 @@ export default {
   methods: {
     fetch() {
       this.loading = true;
-      this._apis.goodsOperate.getTemplateList({}).then((response)=>{
-        this.templateList = response;
-        this.preload(response, 'photoDetailsUrl');
+      this._apis.goodsOperate.getTemplateList({
+        startIndex: this.startIndex,
+        pageSize: this.pageSize
+      }).then((response)=>{
+        this.total = response.total;
+        this.templateList = response.list;
+        this.imgNow = 0;
+        this.preload(response.list, 'photoDetailsUrl');
         this.loading = false;
       }).catch((error)=>{
         console.error(error);
