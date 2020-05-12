@@ -301,7 +301,7 @@ export default {
     },  
     fetch(num){
       if(this.ruleForm.amountMin == undefined || this.ruleForm.amountMax == undefined){
-        this.$message('分佣金额不能为空')
+        this.$message('分销金额不能为空')
       }else if(this.ruleForm.amountMin > this.ruleForm.amountMax){
         this.$message('交易金额最小值应该小于最大值')
       }else{

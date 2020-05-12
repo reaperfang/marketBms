@@ -73,7 +73,7 @@
         </el-table-column>
         <el-table-column
           prop="resellerSn"
-          label="分佣ID">
+          label="分销ID">
         </el-table-column>
         <el-table-column
           prop="resellerName"
@@ -135,8 +135,8 @@ export default {
     return {
       inline:true,
       ruleForm:{
-        userType:'resellerSn', // 分佣员类型
-        userValue:'', // 分佣员类型对应值
+        userType:'resellerSn', // 分销员类型
+        userValue:'', // 分销员类型对应值
         tradeDetailSn:'', // 交易流水号
         businessType:0, // 业务类型
         timeValue:'', // 交易时间
@@ -222,8 +222,8 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        userType:'resellerSn', // 分佣员类型
-        userValue:'', // 分佣员类型对应值
+        userType:'resellerSn', // 分销员类型
+        userValue:'', // 分销员类型对应值
         tradeDetailSn:'', // 交易流水号
         businessType:0, // 业务类型
         timeValue:'', // 交易时间
@@ -236,7 +236,7 @@ export default {
     // 导出参数特殊处理
     queryExport() {
       let query = this.init();
-      query.exportType = 1
+      query.exportType = 2
       delete query.pageSize;
       delete query.startIndex;
       if (this.total > 1000) {
