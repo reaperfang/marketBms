@@ -125,7 +125,8 @@
       </div>
       <div class="container-item">
         <p>3.填写物流信息</p>
-        <div class="logistics deliver-goods-logistics">
+        <!-- 配送方式为普通快递 -->
+        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 1">
           <el-form
             :model="ruleForm"
             :rules="rules"
@@ -133,6 +134,47 @@
             label-width="100px"
             class="demo-ruleForm"
           >
+            <el-form-item label="配送方式">
+              <span>普通快递</span>
+            </el-form-item>
+            <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
+              <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
+                <el-option
+                  :label="item.expressCompany"
+                  :value="item.expressCompanyCode"
+                  v-for="(item, index) in expressCompanyList"
+                  :key="index"
+                ></el-option>
+              </el-select>
+              <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
+            </el-form-item>
+            <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
+              <el-input :disabled="!express" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
+            </el-form-item>
+            <el-form-item label="物流备注" prop="sendRemark">
+              <el-input
+                style="width: 623px;"
+                type="textarea"
+                :rows="2"
+                maxlength="100"
+                placeholder="非必填，请输入，不超过100个字符"
+                v-model="ruleForm.sendRemark"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <!-- 配送方式为商家配送 -->
+        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 2">
+          <el-form
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item label="配送方式">
+              <span>商家配送</span>
+            </el-form-item>
             <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
               <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                 <el-option
@@ -539,6 +581,8 @@ export default {
       this._apis.order
         .orderSendDetail({ ids: [+this.$route.query.id || +this.$route.query.ids] })
         .then(res => {
+          res[0].deliveryWay = 2;
+
           res[0].orderItemList.forEach(val => {
             val.cacheSendCount = val.sendCount;
             val.sendCount = val.goodsCount - val.sendCount;

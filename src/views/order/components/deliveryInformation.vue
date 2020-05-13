@@ -16,8 +16,15 @@
         <div class="header">
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
+            <div class="header-lefter-item fb">{{item.deliveryWay | deliveryWayFilter}}</div>
+            <template v-if="item.deliveryWay == 1">
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
             <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
+            </template>
+            <template v-if="item.deliveryWay == 2">
+            <div class="header-lefter-item">配送员：{{item.deliveryName}}</div>
+            <div class="header-lefter-item">联系方式：{{item.phone}}</div>
+            </template>
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
@@ -121,6 +128,14 @@ export default {
 
         return str
     },
+    deliveryWayFilter(code) {
+        switch(code) {
+            case 1:
+                return '普通快递'
+            case 2:
+                return '商家配送'
+        }
+    },
   },
   watch: {
     orderDetail: {
@@ -176,13 +191,15 @@ export default {
               sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
               sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendName || '',
               id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+              deliveryWay: 2,
+              deliveryName: '小王',
+              phone: '15952621547'
             }
           );
-
           arr.push(obj);
         }
       }
-
+      console.log(arr)
       this.orderSendItems = arr;
     },
     showLogistics(expressNo, expressCompanys, id) {
@@ -239,6 +256,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.fb{
+  font-weight: 500;
+  font-family:PingFangSC-Medium,PingFang SC;
+}
 .delivery-information {
   .blue {
     color: $globalMainColor;

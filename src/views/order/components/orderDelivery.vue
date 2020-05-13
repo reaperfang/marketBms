@@ -53,6 +53,7 @@
                         :picker-options="utils.globalTimePickerOption.call(this)"
                     ></el-date-picker>
                 </el-form-item>
+                <deliveryMethod :listQuery="listQuery"></deliveryMethod>
                 <el-form-item>
                     <el-button @click="search" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
@@ -99,6 +100,21 @@
                     prop="memberName"
                     label="用户昵称"
                     width="120">
+                </el-table-column>
+                <el-table-column
+                    prop="deliveryWay"
+                    label="配送方式"
+                    width="120">
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.deliveryWay | deliveryWayFilter}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="updateTime"
+                    label="配送时间"
+                    width="170">
                 </el-table-column>
                 <el-table-column
                     prop="receivedName"
@@ -159,6 +175,7 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
+import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import utils from "@/utils";
 
 export default {
@@ -188,6 +205,9 @@ export default {
                 orderProductNames: '',
                 expressCompanys: '',
                 receivedName: '',
+                deliveryMethod: "", // 配送方式:1普通快递,2商家配送
+                date: "", //商家配送-日期
+                timeSlot: "", //商家配送-时间段
             },
             tableData: [],
             loading: false,
@@ -213,6 +233,14 @@ export default {
                     return '待收货'
                 case 6:
                     return '已完成'
+            }
+        },
+        deliveryWayFilter(code) {
+            switch(code) {
+                case 1:
+                    return '普通快递'
+                case 2:
+                    return '商家配送'
             }
         },
     },
@@ -283,6 +311,10 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量发货的单据。'})
                 return
+            }
+            if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+                return;
             }
             if(this.multipleSelection.some(val => val.status != 3 && val.status != 4)) {
             this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
@@ -360,6 +392,9 @@ export default {
                 orderProductNames: '',
                 expressCompanys: '',
                 receivedName: '',
+                deliveryMethod: "", // 配送方式:1普通快递,2商家配送
+                date: "", //商家配送-日期
+                timeSlot: "", //商家配送-时间段
             }
             this.getList()
         },
@@ -394,7 +429,8 @@ export default {
         }
     },
     components: {
-        Pagination
+        Pagination,
+        DeliveryMethod
     }
 }
 </script>
