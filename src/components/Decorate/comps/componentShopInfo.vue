@@ -6,7 +6,7 @@
       <div v-if="displayStyle1" class="shopinfo1" :style="background">
         <div class="shopinfo_cont">
           <div class="shopinfo_img">
-            <img :src="shopInfo.logoCircle || shopInfo.logo" alt />
+            <img :src="shopInfo.logoCircle || shopInfo.logo || require('@/assets/images/logo.png')" alt />
           </div>
           <div class="shopinfo_introduce">
             <p class="shopinfo_title">{{shopInfo.shopName || '店铺名称'}}</p>
@@ -158,6 +158,7 @@ export default {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          border-radius: 50%;
         }
       }
       & > .shopinfo_introduce {
