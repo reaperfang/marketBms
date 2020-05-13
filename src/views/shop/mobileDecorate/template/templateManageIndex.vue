@@ -299,6 +299,7 @@ export default {
           margin-top:10px;
           .top{
             display:flex;
+            align-items: center;
             span{
               margin-right:30px;
             }
@@ -406,5 +407,14 @@ export default {
       }
     }
   }
+}
+/deep/.el-button--small{
+  padding:9px 12px;
+  background: #fff;
+  border-radius:4px;
+}
+/deep/.el-button--success{
+  border:1px solid rgba(62,180,136,1);
+  color: rgba(62,180,136,1);
 }
 </style>
