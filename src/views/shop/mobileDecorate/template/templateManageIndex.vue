@@ -1,7 +1,7 @@
 <template>
   <div class="template_wrapper">
     <ul class="clearFix" v-loading="loading">
-      <li>
+      <li v-if="!templateList.length || startIndex == 1">
         <div class="inner">
           <div class="view">
             <div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
@@ -60,7 +60,7 @@
       <div class="apply" @click="apply(currentTemplate)">立即应用</div>
     </div>
 
-    <div class="pagination" v-if="templateList.length">
+    <div class="pagination" v-if="templateList.length || (!templateList.length && startIndex != 1)">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -82,7 +82,7 @@ export default {
   components: {},
   data () {
     return {
-      pageSize: 11,
+      pageSize: 12,
       
       loading: true,
       templateList: [],
@@ -92,7 +92,8 @@ export default {
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
       maxWidth: 550,  //最大宽度
-      mode: null
+      mode: null,
+      cacheLast: null
     }
   },
   created() {
@@ -113,20 +114,32 @@ export default {
         this.$refs.bigImage.style.width = 'auto';
         this.$refs.bigImage.style.height = '100%';
       }
-    } 
+    },
   },
   methods: {
     fetch() {
+      const _self = this;
       this.loading = true;
+      console.log(11,this.startIndex);
+      console.log(22,this.pageSize);
       this._apis.goodsOperate.getTemplateList({
         startIndex: this.startIndex,
         pageSize: this.pageSize
       }).then((response)=>{
-        this.total = response.total;
-        this.templateList = response.list;
-        this.imgNow = 0;
-        this.preload(response.list, 'photoDetailsUrl');
-        this.loading = false;
+        _self.total = response.total;
+        if(_self.startIndex == 1) {
+          _self.cacheLast = response.list[response.list.length - 1];
+          response.list.pop();
+          _self.templateList = response.list;
+        }else {
+          const tempCache =  response.list[response.list.length - 1];
+          response.list.pop();
+          _self.templateList = [_self.cacheLast].concat(response.list);
+          _self.cacheLast = tempCache;
+        }
+        _self.imgNow = 0;
+        _self.preload(_self.templateList, 'photoDetailsUrl');
+        _self.loading = false;
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
