@@ -185,6 +185,13 @@ export default {
         }
     },
     created(){
+        this._globalEvent.$on('refreshProfile', ()=> {
+            this.init()
+            this.getQrcode()
+            this.getOverviewDetails()
+            this.getOerviewRemind()
+            this.getOverviewSelling()
+        })
         this.$message.closeAll();
         this.init()
         this.getQrcode()
