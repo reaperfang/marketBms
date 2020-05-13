@@ -215,17 +215,17 @@ export default {
         /* 获取优惠价 */
         getReducePrice(item) {
             if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
-                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice;
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice || 0;
             };
-            return '';
+            return 0;
         },
 
         /* 获取原价 */
         getYprice(item) {
             if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
-                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice;
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice || 0;
             };
-            return '';
+            return 0;
         }
 
     },
