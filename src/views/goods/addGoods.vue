@@ -85,8 +85,18 @@
             <el-form-item label="主图视频" prop="videoUrl">
                 <div class="upload-box">
                     <div class="video-list image-list">
-                        <div @click="videoDialogVisible = true;" :style="{backgroundImage: `url(${ruleForm.mainImage})`}" v-if="ruleForm.mainImage" class="image-item">
-                            <i class="el-icon-caret-right"></i>
+                        <div :style="{backgroundImage: `url(${ruleForm.mainImage})`}" v-if="ruleForm.videoUrl" class="image-item">
+                            <label>
+                                <i class="el-icon-check"></i>
+                            </label>
+                            <span class="image-item-actions">
+                                <span @click="videoDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-caret-right"></i></span>
+                                <span @click="deleteVideo" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                                <span class="image-item-actions-footer">
+                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter"><</i>
+                                    <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter">></i>
+                                </span>
+                            </span>
                         </div>
                         <div v-if="!ruleForm.videoUrl" @click="currentDialog = 'dialogSelectVideo'; dialogVisible = true; uploadVideo = true" class="upload-add">
                             <i data-v-03229368="" class="el-icon-plus"></i>
@@ -1077,6 +1087,9 @@ export default {
         });
     },
     methods: {
+        deleteVideo() {
+            this.ruleForm.videoUrl = ''
+        },
         videoSelected(video) {
             this.ruleForm.mainImage = video.fileCover
             this.ruleForm.videoUrl = video.filePath
@@ -3047,18 +3060,18 @@ export default {
             }
         },
         imageSelected(image) {
-            if(this.uploadVideo) {
-                if(!/\.mp4|\.ogg|\.mov$/.test(image.filePath)) {
-                    this.$message({
-                    message: '上传的文件格式不正确，请重新上传',
-                    type: 'warning'
-                    });
-                    return
-                }
-                this.ruleForm.videoUrl = image.filePath
-                this.uploadVideo = false
-                return
-            }
+            // if(this.uploadVideo) {
+            //     if(!/\.mp4|\.ogg|\.mov$/.test(image.filePath)) {
+            //         this.$message({
+            //         message: '上传的文件格式不正确，请重新上传',
+            //         type: 'warning'
+            //         });
+            //         return
+            //     }
+            //     this.ruleForm.videoUrl = image.filePath
+            //     this.uploadVideo = false
+            //     return
+            // }
             if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
