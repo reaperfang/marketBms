@@ -1710,12 +1710,12 @@ export default {
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
-            let routeData = this.$router.resolve({ path: '/order/newTemplate', query: {mode: 'new'} });
+            let routeData = this.$router.resolve({ path: '/set/newTemplate', query: {mode: 'new'} });
             window.open(routeData.href, '_blank');
             // this.$nextTick(() => {
             //     let a = document.createElement('a')
 
-            //     a.href = '/bp/order/newTemplate?mode=new'
+            //     a.href = '/bp/set/newTemplate?mode=new'
             //     a.target = '_blank'
 
             //     a.click()

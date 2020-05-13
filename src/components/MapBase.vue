@@ -21,7 +21,7 @@ export default {
     //缩放
     zoom:{  
       type: Number,
-      default: 11
+      default: 12
     },
 
     //中心坐标
@@ -30,6 +30,18 @@ export default {
       default: ()=>{
         return appConfig.map.defaultCenter
       }
+    },
+    scaleControl: {
+      type: Boolean,
+      default: true
+    },
+    zoomControl: {
+      type: Boolean,
+      default: true
+    },
+    panControl: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -68,7 +80,10 @@ export default {
       this.mapObj = new qq.maps.Map(this.$refs.mapContainer, {
         zoom: this.zoom,
         center: this.centerObj,
-        mapTypeId: qq.maps.MapTypeId.ROADMAP
+        mapTypeId: qq.maps.MapTypeId.ROADMAP,
+        scaleControl: this.scaleControl,
+        zoomControl: this.zoomControl,
+        panControl: this.panControl
       });
 
       //初始化事件
@@ -81,9 +96,6 @@ export default {
     /* 初始化搜索 */
     initSearch() {
       const _self = this;
-      if(!this.$refs.infoDiv){
-        return;
-      }
       this.searchService = new qq.maps.SearchService({
         //设置搜索范围为北京
         location: this.searchParams.location || '北京',
@@ -92,7 +104,7 @@ export default {
         //设置每页的结果数为5
         pageCapacity: this.searchParams.pageCapacity || 5,
         //设置展现查询结构到infoDIV上
-        panel: this.$refs.infoDiv,
+        panel: this.$refs.infoDiv || null,
         //设置动扩大检索区域。默认值true，会自动检索指定城市以外区域。
         autoExtend: this.searchParams.autoExtend || true,
         //检索成功的回调函数
@@ -101,7 +113,7 @@ export default {
         },
         //若服务请求失败，则运行以下函数
         error: function() {
-          this.$message.error('搜索出错');
+          _self.$message.error('搜索出错');
         }
       });
     }

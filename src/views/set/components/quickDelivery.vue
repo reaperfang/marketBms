@@ -3,10 +3,10 @@
     <section class="operate">
       <div class="row justify-between operate-top">
         <div class="col">当前订单运费计费方式选择为</div>
-        <div class="col">
+        <!-- <div class="col">
           <span>您可以到交易设置中</span>
           <span class="change-mode pointer" @click="$router.push('/set/tradeSet')">更改订单运费计费方式</span>
-        </div>
+        </div> -->
       </div>
       <div class="radio-box">
         <el-radio :disabled="mode == 1" v-model="mode" :label="0">组合运费（推荐）</el-radio>
@@ -18,7 +18,7 @@
       </div>
       <!-- <el-button
         v-permission="['订单', '快递发货', '默认页面', '新建模板']"
-        @click="$router.push('/order/newTemplate?mode=new')"
+        @click="$router.push('/set/newTemplate?mode=new')"
         class="border-button new-template"
       >新建模板</el-button> -->
     </section>
@@ -61,7 +61,7 @@
           </div>
           <el-button
             v-permission="['订单', '快递发货', '默认页面', '新建模板']"
-            @click="$router.push('/order/newTemplate?mode=new')"
+            @click="$router.push('/set/newTemplate?mode=new')"
             class="border-button new-template"
           >新建模板</el-button>
       </div>
@@ -86,15 +86,15 @@
               <div class="operate-box">
                 <span
                   v-permission="['订单', '快递发货', '默认页面', '查看']"
-                  @click="$router.push('/order/newTemplate?mode=look&id=' + scope.row.id)"
+                  @click="$router.push('/set/newTemplate?mode=look&id=' + scope.row.id)"
                 >查看</span>
                 <span
                   v-permission="['订单', '快递发货', '默认页面', '复制']"
-                  @click="$router.push('/order/newTemplate?mode=copy&id=' + scope.row.id)"
+                  @click="$router.push('/set/newTemplate?mode=copy&id=' + scope.row.id)"
                 >复制</span>
                 <span
                   v-permission="['订单', '快递发货', '默认页面', '修改']"
-                  @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)"
+                  @click="$router.push('/set/newTemplate?mode=change&id=' + scope.row.id)"
                 >编辑</span>
                 <span
                   v-if="!scope.row.productCount"

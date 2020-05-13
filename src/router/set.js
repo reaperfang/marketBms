@@ -37,6 +37,18 @@ export default [
                 meta: { title: '会员设置', noCache: true, tabTitle: '通用设置' , navType:2 }
             },
             {
+                path: 'ordinaryExpress',
+                component: () => import('@/views/set/ordinaryExpress'),
+                name: 'ordinaryExpress',
+                meta: { title: '普通快递', noCache: true, tabTitle: '配送设置', navType:2  }
+            },
+            {
+                path: 'shopExpress',
+                component: () => import('@/views/set/shopExpress'),
+                name: 'shopExpress',
+                meta: { title: '商家配送', noCache: true, tabTitle: '配送设置', navType:2  }
+            },
+            {
                 path: 'payType',
                 component: () => import('@/views/set/payType'),
                 name: 'payType',
@@ -100,7 +112,22 @@ export default [
                 name: 'createRole',
                 meta: { title: '默认页面', noCache: true, tabTitle: '权限管理', navType:3  },
                 hidden: true
-            }
+            },
+            
+            {
+                path: 'newTemplate',
+                component: () => import('@/views/set/newTemplate'),
+                name: 'newTemplate',
+                hidden: true,
+                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:5},
+            },
+            {
+                path: 'newElectronicFaceSheet',
+                component: () => import('@/views/set/newElectronicFaceSheet'),
+                name: 'newElectronicFaceSheet',
+                hidden: true,
+                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:5},
+            },
             // {
             //     path: 'authorize',
             //     component: () => import('@/views/set/authorize'),

@@ -148,33 +148,33 @@ export default [
         hidden: true,
         meta: { title: '发货成功', noCache: true, tabTitle: '订单处理' , navType:5},
       },
-      {
-        path: 'quickDelivery',
-        component: () => import('@/views/order/quickDelivery'),
-        name: 'quickDelivery',
-        meta: { title: '快递发货', noCache: true, tabTitle: '物流配送' ,navType:2},
-      },
-      {
-        path: 'newTemplate',
-        component: () => import('@/views/order/newTemplate'),
-        name: 'newTemplate',
-        hidden: true,
-        meta: { title: '新建模板', noCache: true, tabTitle: '物流配送' ,navType:5},
-      },
-      {
-        path: 'electronicFaceSheet',
-        component: () => import('@/views/order/electronicFaceSheet'),
-        name: 'electronicFaceSheet',
-        hidden: false,
-        meta: { title: '电子面单', noCache: true, tabTitle: '物流配送' ,navType:2, anotherAuth: true},
-      },
-      {
-        path: 'newElectronicFaceSheet',
-        component: () => import('@/views/order/newElectronicFaceSheet'),
-        name: 'newElectronicFaceSheet',
-        hidden: true,
-        meta: { title: '新建', noCache: true, tabTitle: '物流配送' ,navType:5},
-      },
+      // {
+      //   path: 'quickDelivery',
+      //   component: () => import('@/views/order/quickDelivery'),
+      //   name: 'quickDelivery',
+      //   meta: { title: '快递发货', noCache: true, tabTitle: '物流配送' ,navType:2},
+      // },
+      // {
+      //   path: 'newTemplate',
+      //   component: () => import('@/views/order/newTemplate'),
+      //   name: 'newTemplate',
+      //   hidden: true,
+      //   meta: { title: '新建模板', noCache: true, tabTitle: '物流配送' ,navType:5},
+      // },
+      // {
+      //   path: 'electronicFaceSheet',
+      //   component: () => import('@/views/order/electronicFaceSheet'),
+      //   name: 'electronicFaceSheet',
+      //   hidden: false,
+      //   meta: { title: '电子面单', noCache: true, tabTitle: '物流配送' ,navType:2, anotherAuth: true},
+      // },
+      // {
+      //   path: 'newElectronicFaceSheet',
+      //   component: () => import('@/views/order/newElectronicFaceSheet'),
+      //   name: 'newElectronicFaceSheet',
+      //   hidden: true,
+      //   meta: { title: '新建', noCache: true, tabTitle: '物流配送' ,navType:5},
+      // },
     ]
   }
 ]
