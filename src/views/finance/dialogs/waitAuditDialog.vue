@@ -1,23 +1,23 @@
 /*待审核 */
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false" v-if="info">
+    <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
         <div class="c_container clearfix">
             <div class="c_top">
-                <p>用户昵称：{{info.nickName}}</p>
-                <p>用户ID：{{info.memberSn}}</p>
-                <p>提现金额：<span>￥{{info.amount}}</span></p>
-                <p>提现编号：{{info.cashoutSn}}</p>
+                <p>用户昵称：{{data.nickName}}</p>
+                <p>用户ID：{{data.memberSn}}</p>
+                <p>提现金额：<span>￥{{data.amount}}</span></p>
+                <p>提现编号：{{data.cashoutSn}}</p>
                 <p class="c_status">待审核</p>
             </div>
-            <div class="c_steps clearfix">
+            <div class="c_steps clearfix" v-for="(info,key) in infos" :key="key">
                 <div class="c_step_l">
                     <span class="c_green"></span>
-                    {{info.createTime}}
+                    {{info.m3}}
                 </div>
                 <div class="c_step_r">
-                    <p>提交申请</p>
-                    <p>账户可用余额冻结 ￥{{info.amount}}</p>
-                    <p>交易流水 {{info.tradeDetailSn}}</p>
+                    <p>{{info.m0}}</p>
+                    <p>{{info.m1}}</p>
+                    <p>{{info.m2}}</p>
                 </div>
             </div>
         </div> 
@@ -30,7 +30,7 @@ export default {
     name: "waitAuditDialog",
     data() {
         return { 
-            info:{}
+            infos:[],
          }
     },
     props: {
@@ -68,7 +68,7 @@ export default {
 
         getInfo(){
             this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
-               this.info = response[0]
+               this.infos = response.list
             }).catch((error)=>{
                this.$message.error(error);
             })
