@@ -29,7 +29,7 @@
         <el-table-column label="分销状态" class-name="goods-status">
             <template>
                 <p class="line-height" v-for="item in orderDetail.resellerInfoList">
-                    <span v-if="item.status == 0">未结算</span>
+                    <span v-if="item.status == 0">待结算</span>
                     <span v-if="item.status == 1">已结算</span>
                     <span v-if="item.status == 2">结算失败</span>
                 </p>
