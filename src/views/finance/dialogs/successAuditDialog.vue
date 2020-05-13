@@ -14,7 +14,7 @@
                     <span>操作时间：{{info2.createTime}}</span>
                 </div>
             </div>
-            <div class="c_steps clearfix" v-if="info">
+            <div class="c_steps clearfix"  v-if="data.length == 3">
                 <div class="c_step_l">
                     <span class="c_green"></span>
                     {{info.createTime}}
@@ -24,7 +24,7 @@
                     <p>提现申请处理完成</p>
                 </div>
             </div>
-            <div class="c_steps clearfix" v-if="info1">
+            <div class="c_steps clearfix" v-if="data.length == 2 || data.length == 3">
                 <div class="c_step_l gray">
                     <span class="c_green"></span>
                     {{info1.createTime}}
@@ -59,7 +59,8 @@ export default {
         return {
            info:{},
            info1:{},
-           info2:{}
+           info2:{},
+           data:[]
         }
     },
     props: {
@@ -98,6 +99,7 @@ export default {
         },
         getInfo(){
             this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
+                this.data = response
                 if(response.length == 1){
                     this.info2 = response[0]
                 }else if(response.length == 2){
