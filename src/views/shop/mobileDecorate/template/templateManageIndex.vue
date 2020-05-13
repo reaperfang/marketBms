@@ -66,8 +66,9 @@
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-size="pageSize*1"
+          :page-sizes="[12]"
           :total="total*1"
-          layout="total, prev, pager, next, jumper"
+          layout="total, sizes, prev, pager, next, jumper"
           >
         </el-pagination>
       </div>
@@ -132,10 +133,14 @@ export default {
           response.list.pop();
           _self.templateList = response.list;
         }else {
-          const tempCache =  response.list[response.list.length - 1];
-          response.list.pop();
-          _self.templateList = [_self.cacheLast].concat(response.list);
-          _self.cacheLast = tempCache;
+          if(_self.startIndex != response.pages) {
+            const tempCache =  response.list[response.list.length - 1];
+            response.list.pop();
+            _self.templateList = [_self.cacheLast].concat(response.list);
+            _self.cacheLast = tempCache;
+          }else {
+            _self.templateList = [_self.cacheLast].concat(response.list);
+          }
         }
         _self.imgNow = 0;
         _self.preload(_self.templateList, 'photoDetailsUrl');
@@ -227,6 +232,8 @@ export default {
 <style lang="scss" scoped>
 .template_wrapper{
   // min-width:1650px;
+  background: #fff;
+  padding-bottom:20px;
   ul{
     display:flex;
     flex-direction: row;
