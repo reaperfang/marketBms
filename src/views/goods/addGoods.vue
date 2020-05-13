@@ -85,7 +85,7 @@
             <el-form-item label="主图视频" prop="videoUrl">
                 <div class="upload-box">
                     <div class="video-list image-list">
-                        <div @click="videoDialogVisible = true;" :style="{backgroundImage: `url(${fileCover})`}" v-if="fileCover" class="image-item">
+                        <div @click="videoDialogVisible = true;" :style="{backgroundImage: `url(${ruleForm.mainImage})`}" v-if="ruleForm.mainImage" class="image-item">
                             <i class="el-icon-caret-right"></i>
                         </div>
                         <div v-if="!ruleForm.videoUrl" @click="currentDialog = 'dialogSelectVideo'; dialogVisible = true; uploadVideo = true" class="upload-add">
@@ -1078,7 +1078,7 @@ export default {
     },
     methods: {
         videoSelected(video) {
-            this.fileCover = video.fileCover
+            this.ruleForm.mainImage = video.fileCover
             this.ruleForm.videoUrl = video.filePath
         },
         moveImage(flag, index) {
