@@ -166,7 +166,7 @@ export default {
       }
     },
     getRowKey(row) {
-      return row.spuId
+      return row.activityId || row.activeId
     },
 
     /* 清除失效数据 */

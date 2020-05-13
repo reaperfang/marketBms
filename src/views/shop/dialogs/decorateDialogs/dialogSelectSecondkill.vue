@@ -170,7 +170,7 @@ export default {
       }
     },
     getRowKey(row) {
-      return row.spuId
+      return row.activityId
     },
 
      /* 清除失效数据 */
