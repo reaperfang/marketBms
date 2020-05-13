@@ -84,28 +84,21 @@
             </el-form-item>
             <el-form-item label="主图视频" prop="videoUrl">
                 <div class="upload-box">
-                    <div class="image-list">
-                        <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in (ruleForm.videoUrl && ruleForm.videoUrl.split(',') || [])">
-                            <label>
-                                <i class="el-icon-check"></i>
-                            </label>
-                            <span class="image-item-actions">
-                                <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
-                                <span @click="deleteVideo" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
-                            </span>
+                    <div class="video-list image-list">
+                        <div @click="videoDialogVisible = true;" :style="{backgroundImage: `url(${fileCover})`}" v-if="fileCover" class="image-item">
+                            <i class="el-icon-caret-right"></i>
                         </div>
-                        <div v-if="!ruleForm.videoUrl" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true; uploadVideo = true" class="upload-add">
+                        <div v-if="!ruleForm.videoUrl" @click="currentDialog = 'dialogSelectVideo'; dialogVisible = true; uploadVideo = true" class="upload-add">
                             <i data-v-03229368="" class="el-icon-plus"></i>
                             <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传视频</p>
                         </div>
                     </div>
                 </div>
-                <el-dialog :visible.sync="imageDialogVisible"
+                <!--<el-dialog :visible.sync="imageDialogVisible"
                 :close-on-click-modal="false"
                 :close-on-press-escape="false">
                     <img width="100%" :src="dialogImageUrl" alt="">
-                </el-dialog>
-                <!-- <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span> -->
+                </el-dialog>-->
                 <p class="upload-prompt">最多支持上传1个视频素材，封面默认为第一张商品主图，突出展现商品1-2个核心卖点；视频大小不超过10mb，支持mp4格式。</p>
             </el-form-item>
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
@@ -693,8 +686,23 @@
             </div>
         </section>
     </el-form>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList"></component>
     <component :is="selectSpecificationsCurrentDialog" :dialogVisible.sync="selectSpecificationsDialogVisible" @submit="submit" :data="currentData" :specsLength.sync="specsLength" :flatSpecsList="flatSpecsList"></component>
+    <el-dialog
+        title=""
+        :visible.sync="videoDialogVisible"
+        width="800px"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false">
+        <div class="video-box">
+            <video width="500" controls="controls">
+            <source :src="ruleForm.videoUrl" type="video/ogg">
+            <source :src="ruleForm.videoUrl" type="video/mp4">
+            <source :src="ruleForm.videoUrl" type="video/mov">
+            Your browser does not support the video tag.
+            </video>
+        </div>
+    </el-dialog>
 </div>
 </template>
 <script>
@@ -707,6 +715,7 @@ import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
+import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo'
 import Specs from '@/views/goods/components/specs'
 import anotherAuth from '@/mixins/anotherAuth'
 export default {
@@ -902,7 +911,9 @@ export default {
             callObjectSpanMethod: false,
             deleteSpecArr: [],
             leimuSelected: false,
-            uploadVideo: false
+            uploadVideo: false,
+            fileCover: '',
+            videoDialogVisible: false
         }
     },
     created() {
@@ -1066,6 +1077,10 @@ export default {
         });
     },
     methods: {
+        videoSelected(video) {
+            this.fileCover = video.fileCover
+            this.ruleForm.videoUrl = video.filePath
+        },
         moveImage(flag, index) {
             var swapItems = function(arr, index1, index2){
             　　arr[index1] = arr.splice(index2,1,arr[index1])[0]
@@ -3109,7 +3124,8 @@ export default {
         AddTagDialog,
         dialogSelectImageMaterial,
         RichEditor,
-        Specs
+        Specs,
+        dialogSelectVideo
     }
 }
 </script>
@@ -3659,6 +3675,17 @@ $blue: #655EFF;
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        &.video-list {
+            .image-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /deep/ .el-icon-caret-right:before {
+                    color: #fff;
+                    font-size: 24px;
+                }
+            }
+        }
         .upload-add {
             &:hover {
                 border-color: #655EFF;
@@ -3871,5 +3898,10 @@ $blue: #655EFF;
     font-weight:400;
     color:rgba(245,88,88,1);
     margin-left: 27px;
+}
+.video-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
