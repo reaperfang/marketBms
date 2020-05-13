@@ -385,7 +385,7 @@
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
-                        :weightRequired="ruleForm.deliveryMethod.includes(2)"
+                        :weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -492,7 +492,7 @@
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
-                        :weightRequired="ruleForm.deliveryMethod.includes(2)"
+                        :weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -587,10 +587,10 @@
                     <el-radio :label="0">否</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="配送方式" prop="deliveryMethod">
-                <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryMethod">
-                    <el-checkbox :label="1" @change="((val)=>{deliveryMethodChange(val, '1')})">普通快递</el-checkbox>
-                    <el-checkbox :label="2" @change="((val)=>{deliveryMethodChange(val, '2')})" style="margin-left:195px;">商家配送</el-checkbox>
+            <el-form-item label="配送方式" prop="deliveryWay">
+                <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
+                    <el-checkbox :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
+                    <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:195px;">商家配送</el-checkbox>
                 </el-checkbox-group>
                 <div>
                     <div style="display:inline-block;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
@@ -599,7 +599,7 @@
                     <span class="prompt" v-show="!isDeliverySet">“商家配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
                 </div>
             </el-form-item>
-            <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryMethod.includes(1)">
+            <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryWay.includes(1)">
                 <div>
                     <el-radio :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isFreeFreight" :label="0">选择运费模板</el-radio>
                     <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.freightTemplateId" placeholder="请选择">
@@ -730,7 +730,7 @@ export default {
         };
         var isFreeFreightValidator = (rule, value, callback) => {
             //如果配送方式选择了普通快递，则才进入模板的验证流程
-            if(this.ruleForm.isFreeFreight == 0 && this.ruleForm.deliveryMethod.includes(1)) {
+            if(this.ruleForm.isFreeFreight == 0 && this.ruleForm.deliveryWay.includes(1)) {
                 if(!this.ruleForm.freightTemplateId) {
                     callback(new Error('请选择运费模板'));
                 } else {
@@ -773,7 +773,7 @@ export default {
                 other: false,
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
-                deliveryMethod: [], //配送方式
+                deliveryWay: [], //配送方式
                 isFreeFreight: 0, // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
@@ -827,7 +827,7 @@ export default {
                 isCashOnDelivery: [
                     { required: true, message: '请选择', trigger: 'blur' },
                 ],
-                deliveryMethod: [
+                deliveryWay: [
                     { required: true, message: '请选择', trigger: 'change' },
                 ],
                 isFreeFreight: [
@@ -1681,7 +1681,7 @@ export default {
             .catch(error => {});
         },
         //配送方式选择
-        deliveryMethodChange(val, index){
+        deliveryWayChange(val, index){
             //普通快递
             if(index === '1'){
                 if(val){ //如果选中，则验证店铺中是否开启，未开启则提示去设置
@@ -2095,11 +2095,11 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 //配送方式(根据选中去请求是否在店铺开启)
-                res.deliveryMethod = [1];
-                if(res.deliveryMethod.includes(1)){
+                res.deliveryWay = [1];
+                if(res.deliveryWay.includes(1)){
                     this.getExpressSet();
                 }
-                if(res.deliveryMethod.includes(2)){
+                if(res.deliveryWay.includes(2)){
                     this.getDeliverySet();
                 }
 
@@ -2492,7 +2492,7 @@ export default {
                             return
                         }
                         //如果配送方式勾选了商家配送，则重量为必填项
-                        if(this.ruleForm.deliveryMethod.includes(2)){
+                        if(this.ruleForm.deliveryWay.includes(2)){
                             if(!this.ruleForm.goodsInfos[i].weight) {
                                 this.$message({
                                     message: '请输入重量',
@@ -2529,7 +2529,7 @@ export default {
                     }
                     console.log(this.ruleForm.isFreeFreight)
                     //如果是普通快递，同时选择的为 选择运费模板
-                    if(this.ruleForm.isFreeFreight == 0 && this.ruleForm.deliveryMethod.includes(1)) {
+                    if(this.ruleForm.isFreeFreight == 0 && this.ruleForm.deliveryWay.includes(1)) {
                         let id = this.ruleForm.freightTemplateId
                         calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
                         if(calculationWay == 3) {
@@ -2697,7 +2697,7 @@ export default {
                         })
                     }
                     //如果配送方式没有选择普通快递，则快递运费相关参数不在上传
-                    //if(!this.ruleForm.deliveryMethod.includes(1)){
+                    //if(!this.ruleForm.deliveryWay.includes(1)){
                         //delete params.isFreeFreight; //删除运费选择方式
                         //delete params.freightTemplateId; //删除模板id
                     //}
