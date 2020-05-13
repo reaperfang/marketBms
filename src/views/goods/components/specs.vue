@@ -17,7 +17,7 @@
                 <th width="50" v-for="(labelItem, labelIndex) in specsLabel.split(',')">
                     <span>{{labelItem}}</span>
                 </th>
-                <th class="image" width="150"><span>图片</span></th>
+                <th class="image" width="150"><span>SKU图片</span></th>
                 <th class="costPrice" width="150"><span>成本价</span></th>
                 <th class="salePrice" width="150"><span>售卖价</span></th>
                 <th class="stock" width="150"><span>库存</span></th>
@@ -444,8 +444,7 @@ export default {
     table th.costPrice span,
     table th.salePrice span,
     table th.stock span,
-    table th.warningStock span,
-    table th.image span {
+    table th.warningStock span {
         position: relative;
         &:before {
             content: '*';

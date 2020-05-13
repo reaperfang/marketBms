@@ -2422,13 +2422,13 @@ export default {
                         //      });
                         //      return
                         // }
-                        if(this.ruleForm.goodsInfos[i].image == '') {
-                            this.$message({
-                                message: '请上传图片',
-                                type: 'warning'
-                            });
-                            return
-                        }
+                        // if(this.ruleForm.goodsInfos[i].image == '') {
+                        //     this.$message({
+                        //         message: '请上传图片',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
                         if(this.ruleForm.goodsInfos[i].costPrice == '') {
                             this.$message({
                                 message: '请输入成本价',
