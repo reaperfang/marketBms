@@ -1091,7 +1091,20 @@ export default {
             this.ruleForm.videoUrl = ''
         },
         videoSelected(video) {
-            this.ruleForm.mainImage = video.fileCover
+            if(!/\.mp4|\.ogg|\.mov$/.test(video.filePath)) {
+                this.$message({
+                message: '上传的文件格式不正确，请重新上传',
+                type: 'warning'
+                });
+                return
+            }
+            if(video.fileSize > 1024*1024*10) {
+                this.$message({
+                message: '上传视频不能超过10M',
+                type: 'warning'
+                });
+                return
+            }
             this.ruleForm.videoUrl = video.filePath
         },
         moveImage(flag, index) {
