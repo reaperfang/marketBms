@@ -67,7 +67,6 @@ export default {
       isShowMap: false, // 是否显示地图
       lng: null,
       lat: null,
-      infoWindow: null,
       info: null,
       markers: [],
       pois: [],
@@ -77,6 +76,9 @@ export default {
   methods: {
     //实例初始化结束
     inited() {
+      this.info = new qq.maps.InfoWindow({
+        map: this.mapObj
+      })
       // this.initEvent();
       // let marker = new qq.maps.Marker({
       //   position: this.centerObj,
@@ -116,12 +118,29 @@ export default {
     //   );
     // },
 
+    // clear maker
+    clearMarker(index) {
+      if (index) {
+        this.markers[index].setMap(null)
+      }
+    },
+    clearAllMaker() {
+      const markers = this.markers
+      let len = markers.length
+      if (len > 0) {
+        for( let i = 0; i < len; i++) {
+          markers[i].setMap(null)
+        }
+      }
+    },
     //执行搜索
     search() {
+      this.clearAllMaker()
       this.searchService.search(this.keyword);
     },
     handlePropSearch(keyword) {
       this.keyword = keyword
+      this.clearAllMaker()
       this.searchService.search(keyword);
     },
     openInfoWindow(info, marker, map, poi) {
@@ -152,9 +171,7 @@ export default {
       });
 
       marker.setTitle(index + 1);
-      this.info = new qq.maps.InfoWindow({
-        map: this.mapObj
-      })
+      
       qq.maps.event.addListener(marker, 'click', function(e) {
         
         self.info.close();
@@ -235,7 +252,6 @@ export default {
   }
   .search {
     position: absolute;
-    height: 100%;
     width: 340px;
     padding:15px;
     z-index: 2;

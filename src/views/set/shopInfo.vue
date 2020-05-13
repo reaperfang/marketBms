@@ -292,8 +292,8 @@ export default {
     // 获取类目
     getCategoryInfoIds(arr, id) {
       try {
-        let parentId = this.operateCategoryList.find(val => val.id == id)
-          .parentId;
+        console.log('------operateCategoryList----', id, operateCategoryList)
+        let parentId = this.operateCategoryList.find(val => val.id == id).parentId;
 
         arr.unshift(id + "");
 
@@ -449,6 +449,7 @@ export default {
       this.$refs.shopInfoMap.isShowMap = true
     },
     getMapClickPoi(poi) {
+      console.log('poi----getMapClickPoi', poi)
       this.form.address = poi.address
     }
   }
