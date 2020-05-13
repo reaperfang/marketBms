@@ -47,7 +47,7 @@
           label="总收入（元）"
           align="center">
           <template slot-scope="scope">
-            {{'+' + scope.row.income}}
+            {{scope.row.income}}
           </template>
         </el-table-column>
         <el-table-column
@@ -55,7 +55,7 @@
           label="总支出（元）"
           align="center">
           <template slot-scope="scope">
-            {{'-' + scope.row.expend}}
+            {{scope.row.expend}}
           </template>
         </el-table-column>
         <el-table-column
