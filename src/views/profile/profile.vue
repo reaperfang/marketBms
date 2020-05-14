@@ -136,6 +136,37 @@
                     客服邮箱：service4006@300.cn
                 </p>
             </div>
+            <div class="p_r_item p_r_kefu">
+                <p class="p_title warn">
+                    <span>
+                        <img :src="require('@/assets/images/profile/icon_06.png')" alt="">
+                        资讯
+                    </span>  
+                     <el-link href="https://www.300.cn/info/hangye/" target="_blank" :underline="false"> <i class="icon_more"></i> </el-link>
+                </p>
+                <ul class="info_box">
+                    <li class="info_list">
+                        <p>  中企动力抗疫公益中企动力抗疫公益中企动力 </p><span>02/11</span>
+                    </li>
+                     <li class="info_list">
+                        <p>  中企动力抗疫公益中企动力抗疫公益中企动力 </p><span>02/11</span>
+                    </li>
+                     <li class="info_list">
+                        <p>  中企动力抗疫公益中企动力抗疫公益中企动力 </p><span>02/11</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="p_r_item p_r_kefu">
+                <p class="p_title warn">
+                    <span>
+                        <img :src="require('@/assets/images/profile/icon_07.png')" alt="">
+                        公告
+                    </span>  
+                     <el-link href="https://www.300.cn/info/news/" target="_blank" :underline="false"> <i class="icon_more"></i> </el-link>
+                </p>
+               
+                <p class="p_email no_data">暂无资讯</p>
+            </div>
             <div class="p_r_item p_r_more">
                 <p class="p_title warn">
                     <span>
@@ -410,7 +441,37 @@ export default {
                 font-size: 12px;
                 color: #92929BFF;
             }
+        } 
+        .icon_more{
+                width: 18px;
+                height: 15px;
+                background:url('../../assets/images/profile/icon_08.png') no-repeat ;
+                display: inline-block;
+            }
+        .info_box{
+            margin-top: 10px;
+           
         }
+        .info_list{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            line-height: 20px;
+            padding: 3px 0;
+            font-size:14px;
+            p{
+                 white-space: nowrap;
+                 text-overflow: ellipsis;
+                 overflow: hidden;
+                 word-break: break-all;
+                 cursor: pointer;
+                 width: 165px;
+            }
+            &:hover{
+                color:#FD932B;
+            }
+        }
+        .no_data{ color: #92929B !important;}
     }
 }
 

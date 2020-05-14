@@ -4,7 +4,11 @@
       <div class="navbar-item">{{shopName}}</div>
       <!-- <div class="navbar-item"></div> -->
       <div class="right-menu">
-        <router-link to="/profile/upgrade" class="set_meal">套餐升级 </router-link> 
+        <router-link to="/profile/upgrade" class="set_meal">套餐升级 </router-link>
+      <el-link href="https://www.300.cn/service/yidongshangcheng/" target="_blank" :underline="false" class="set_meal">帮助中心 </el-link>  
+      <el-input v-model="searchName" placeholder="请输入需要帮助的内容" class="search_int"><el-button slot="append" icon="el-icon-search"></el-button></el-input>
+      
+      <!-- <el-button  icon="el-icon-search" size="small"  class="mr20">搜索</el-button>| -->
         <el-dropdown class="avatar-container right-menu-item" trigger="click">
           <div class="avatar-wrapper">
             <i class="el-icon-user-solid"/>
@@ -62,7 +66,8 @@ export default {
       showShopsDialog:false,
       shopList:[],
       route:'index',
-      shopName:''
+      shopName:'',
+      searchName:'',//搜索名称
     }
   },
   components: {
@@ -171,9 +176,22 @@ export default {
     }
     .set_meal{
       margin-right: 20px;
+     // margin-left: 20px;
       font-size: 14px;
       color: #44434B;
       cursor: pointer;
+    }
+    .search_int{
+      width:158px;
+      height:22px;
+      border-radius:2px;
+      font-size: 10px;
+      .el-input-group__append{
+        background: #666666;
+      }
+    }
+    .mr20{
+      margin-right: 20px;
     }
     .right-menu-item {
       display: inline-block;
@@ -211,5 +229,17 @@ export default {
   font-size: 14px;
   color: #333333;
   font-weight: bold;
+}
+ .search_int /deep/.el-input-group__append{
+        background: #666666;
+        color: #fff;
+        border: 1px solid #666666;
+        width: 23px;
+        padding: 0;
+        text-align: center;
+    }
+.search_int /deep/ .el-input__inner{
+  line-height: 22px;
+  height:22px;
 }
 </style>
