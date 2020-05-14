@@ -1,7 +1,7 @@
 <template>
   <div class="template_wrapper">
-    <ul class="clearFix">
-      <li>
+    <ul class="clearFix" v-loading="loading">
+      <li v-if="!templateList.length || startIndex == 1">
         <div class="inner">
           <div class="view">
             <div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
@@ -17,7 +17,7 @@
           </div>
         </div>
       </li>
-      <li v-for="(item, key) of templateList" :key="key" v-loading="loading">
+      <li v-for="(item, key) of templateList" :key="key">
         <div class="inner">
           <div class="view">
             <img :src="item.photoHalfUrl" alt="">
@@ -59,15 +59,32 @@
       </div>
       <div class="apply" @click="apply(currentTemplate)">立即应用</div>
     </div>
+
+    <div class="pagination" v-if="templateList.length || (!templateList.length && startIndex != 1)">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="Number(startIndex) || 1"
+          :page-size="pageSize*1"
+          :page-sizes="[12]"
+          :total="total*1"
+          layout="total, sizes, prev, pager, next, jumper"
+          >
+        </el-pagination>
+      </div>
   </div>
 </template>
 
 <script>
+import tableBase from '@/components/TableBase';
 export default {
   name: 'templateManage',
+  extends: tableBase,
   components: {},
   data () {
     return {
+      pageSize: 12,
+      
       loading: true,
       templateList: [],
       showBigPreview: false,
@@ -76,7 +93,8 @@ export default {
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
       maxWidth: 550,  //最大宽度
-      mode: null
+      mode: null,
+      cacheLast: null
     }
   },
   created() {
@@ -97,15 +115,36 @@ export default {
         this.$refs.bigImage.style.width = 'auto';
         this.$refs.bigImage.style.height = '100%';
       }
-    } 
+    },
   },
   methods: {
     fetch() {
+      const _self = this;
       this.loading = true;
-      this._apis.goodsOperate.getTemplateList({}).then((response)=>{
-        this.templateList = response;
-        this.preload(response, 'photoDetailsUrl');
-        this.loading = false;
+      console.log(11,this.startIndex);
+      console.log(22,this.pageSize);
+      this._apis.goodsOperate.getTemplateList({
+        startIndex: this.startIndex,
+        pageSize: this.pageSize
+      }).then((response)=>{
+        _self.total = response.total;
+        if(_self.startIndex == 1) {
+          _self.cacheLast = response.list[response.list.length - 1];
+          response.list.pop();
+          _self.templateList = response.list;
+        }else {
+          if(_self.startIndex != response.pages) {
+            const tempCache =  response.list[response.list.length - 1];
+            response.list.pop();
+            _self.templateList = [_self.cacheLast].concat(response.list);
+            _self.cacheLast = tempCache;
+          }else {
+            _self.templateList = [_self.cacheLast].concat(response.list);
+          }
+        }
+        _self.imgNow = 0;
+        _self.preload(_self.templateList, 'photoDetailsUrl');
+        _self.loading = false;
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
@@ -193,6 +232,8 @@ export default {
 <style lang="scss" scoped>
 .template_wrapper{
   // min-width:1650px;
+  background: #fff;
+  padding-bottom:20px;
   ul{
     display:flex;
     flex-direction: row;
@@ -258,6 +299,8 @@ export default {
           margin-top:10px;
           .top{
             display:flex;
+            align-items: center;
+            height:23px;
             span{
               margin-right:30px;
             }
@@ -278,6 +321,7 @@ export default {
             display:flex;
             justify-content: space-between;
             margin-top:10px;
+            align-items: center;
             .price{
               color:rgb(253,76,43);
               font-weight:700;
@@ -365,5 +409,15 @@ export default {
       }
     }
   }
+}
+/deep/.el-button--small{
+  padding:9px 12px!important;
+  background: #fff!important;
+  border-radius:4px!important;
+}
+/deep/.el-button--success{
+  border:1px solid rgba(62,180,136,1)!important;
+  color: rgba(62,180,136,1)!important;
+  
 }
 </style>

@@ -45,8 +45,8 @@
                                 </div>
                             </div>
                             <div class="price_line">
-                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice}}</font></p>
-                                <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.salePrice}}</p>
+                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice || 0}}</font></p>
+                                <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.salePrice || 0}}</p>
                             </div>
 
                             <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6" class="kai button"></componentButton>

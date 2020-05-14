@@ -273,9 +273,9 @@ export default {
 
         getPrice(item) {
             if(item.goodsInfos && Array.isArray(item.goodsInfos) && item.goodsInfos.length) {
-                return item.goodsInfos[0].salePrice;    
+                return item.goodsInfos[0].salePrice || 0;    
             };
-            return '';
+            return 0;
         }
 
     },

@@ -5,14 +5,14 @@
           <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
             <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
-                <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+                <p :class="{active:!activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
                 <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
                 @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
               </div>
             </div>
           </div>
           <div class="componentGoodsGroup_content">
-              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : 'all'"></componentGoods>
+              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? list[0] && list[0].id : 'all'"></componentGoods>
           </div> 
       </div>
       <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
