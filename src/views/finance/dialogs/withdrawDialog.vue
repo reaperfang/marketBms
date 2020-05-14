@@ -3,23 +3,28 @@
 <div>
     <DialogBase :visible.sync="visible" :showFooter="false" title="提现审核" :hasCancel="hasCancel">
         <div class="c_container">
-            <div class="marB20">
-                <el-radio v-model="radio" label="0">同意申请</el-radio>
-                <el-radio v-model="radio" label="1">拒绝申请</el-radio>
-            </div>
-            <el-input
-                type="textarea"
-                :rows="4"
-                placeholder="请输入拒绝原因，不超过20个字"
-                v-model="remarks"
-                v-if="radio == 1"
-                @blur="checkNull">
-            </el-input>
-            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;text-align:left;" v-if="note">请输入拒绝原因</p>
-            <p style="text-align:center; margin-top:10px;">
-               <el-button type="primary"  @click="submit">确定</el-button>
-                <el-button @click="cancel">取消</el-button> 
-            </p>
+             <el-form ref="form" :model="form" :rules="rules">
+              <el-form-item prop="radio">
+                <el-radio-group v-model="form.radio">
+                  <el-radio label="0">同意申请</el-radio>
+                  <el-radio label="1">拒绝申请</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item prop="remarks">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  placeholder="请输入拒绝原因，不超过20个字"
+                  v-model="form.remarks"
+                  v-if="form.radio == 1"
+                  style="width:300px;">
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submit('form')">确定</el-button>
+                <el-button @click="cancel">取消</el-button>
+              </el-form-item>
+            </el-form>
         </div>
     </DialogBase>
     <el-dialog
@@ -48,12 +53,19 @@ export default {
     data() {
         return {
             hasCancel: true,
-            radio: '1',
-            remarks:"",
             otherVisible: false,
             currentDialog: "",
             currentData:{},
-            note:false
+            form:{
+                radio:'0',
+                remarks:'',
+            },
+            rules: {
+                remarks: [
+                    { required: true, message: '请输入拒绝原因', trigger: 'blur' },
+                    { min: 1, max: 20, message: '不超过20个字', trigger: 'blur' }
+                ],
+            },
         }
     },
     props: {
@@ -79,45 +91,33 @@ export default {
             }
         }
     },
-    watch:{
-        radio(){
-            this.init()
-        }
-    },
+    watch:{},
     created() { 
-        this.init()
+
      },
     methods: {
-        init(){
-            if(this.radio == 1 && this.remarks.trim() == ''){
-                this.note = true
-            }else{
-                this.note = false
-            }
-        },
-        submit() {
+        submit(formName) {
             let datas = {
                 ids:this.data,
-                auditStatus:this.radio,
-                remarks:this.remarks.trim()
+                auditStatus:this.form.radio,
+                remarks:this.form.remarks.trim()
             }
-            if(this.radio == 0){
+            if(this.form.radio == 0){
                 this.$emit("handleSubmit",datas);
                 this.visible = false
-            }else if(this.radio == 1 && this.remarks.trim()){
-                this.$emit("handleSubmit",datas);
-                this.visible = false
-            }else{
-                return false
-            }
+            }else if(this.form.radio == 1){
+                this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.$emit("handleSubmit",datas);
+                    this.visible = false
+                }
+                })
+            }   
         },
         cancel(){
             this.$emit("fetch");
             this.visible = false
         },
-        checkNull(){
-            this.init()
-        }
     },    
 }
 </script>
