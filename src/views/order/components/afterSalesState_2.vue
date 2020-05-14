@@ -69,7 +69,7 @@
                     <p>待处理</p>
                     <p class="des">用户已退货，商户未发货</p>
                     <div class="button-box">
-                        <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
+                        <el-button v-if="!authHide && !orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                         <el-button v-if="!authHide" type="primary" @click="sendGoods">发货</el-button>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                 <div class="col righter">
                     <p>待收货</p>
                     <p class="des">商户已换货发货，用户未收货</p>
-                    <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
+                    <el-button v-if="!authHide && !orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>
@@ -137,7 +137,7 @@
                 <div class="col righter">
                     <p>已完成</p>
                     <p class="des">客户确认收货，完成换货。</p>
-                    <el-button v-if="!orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
+                    <el-button v-if="!authHide && !orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
                 </div>
             </div>
         </template>
