@@ -195,7 +195,7 @@
               </div>
             </el-form-item>
             <el-form-item label="联系方式" prop="phone">
-              <el-input placeholder="请输入手机号码" v-model="ruleFormStore.phone"></el-input>
+              <el-input placeholder="请输入配送员手机号码" v-model="ruleFormStore.phone"></el-input>
             </el-form-item>
             <el-form-item label="物流备注" prop="sendRemark">
               <el-input
@@ -382,8 +382,8 @@ export default {
       })
     },
     selectBlur(){
-      //失去焦点时如果input中有值，则需要根据name查询出对应的数据
-      if(this.ruleFormStore.distributorValue != ''){
+      //失去焦点时如果input中有值，且发生了变化，则需要根据name查询出对应的数据
+      if(this.ruleFormStore.distributorValue != '' && this.ruleFormStore.distributorValue != this.distributorName){
         let arr = this.distributorListFilter.filter((item) => {
           if (item.name === this.ruleFormStore.distributorValue) {
             return true
