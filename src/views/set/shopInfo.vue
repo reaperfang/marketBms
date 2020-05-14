@@ -67,6 +67,7 @@
         <area-cascader
           :level="1"
           :data="$pcaa"
+          v-if="isInit"
           ref="cascaderAddr"
           v-model="form.addressCode"
           @change="handleChange"
@@ -143,6 +144,7 @@ export default {
       showShop: false,
       dialogVisible: false,
       currentDialog: "",
+      isInit: true,
       form: {
         shopName: "",
         logo: "",
@@ -304,7 +306,7 @@ export default {
         console.error(e);
       }
     },
-    handleChange() {
+    handleChange(val) {
       this.province = this.$pcaa[86][this.form.addressCode[0]];
       this.city = this.$pcaa[this.form.addressCode[0]][
         this.form.addressCode[1]
@@ -448,9 +450,81 @@ export default {
       this.$refs.shopInfoMap.handlePropSearch(this.form.address)
       this.$refs.shopInfoMap.isShowMap = true
     },
+    getProvinceCode() {
+      let provinces = this.$pcaa[86]
+      let provinceCode = null
+      for( const val in provinces) {
+        console.log(val, this.province)
+        if (provinces[val] === this.province) {
+          console.log('--province---',val, provinces[val])
+          provinceCode = val
+          break
+        }
+      }
+      return provinceCode
+    },
+    getCityCodeByProvinceCode(provinceCode) {
+      const citys = this.$pcaa[provinceCode]
+      let cityCode = null
+      for( const val in citys) {
+        if (citys[val] === this.city) {
+          cityCode = val
+          break
+        }
+      }
+      return cityCode
+    },
+    getAreaCodeByCityCode(cityCode) {
+      // this.area = this.$pcaa[this.form.addressCode[1]][
+      //   this.form.addressCode[2]
+      // ];
+       const areas = this.$pcaa[cityCode]
+      let areaCode = null
+      for( const val in areas) {
+        if (areas[val] === this.area) {
+          areaCode = val
+          break
+        }
+      }
+      return areaCode
+    },
+    setCode() {
+      const provinceCode =  this.getProvinceCode()
+      const cityCode = this.getCityCodeByProvinceCode(provinceCode)
+      const areaCode = this.getAreaCodeByCityCode(cityCode)
+      // isInit 解决area-cascader 组件只有在初始化时 更新问题
+      this.isInit = false
+      let arr = [];
+      arr.push(provinceCode);
+      arr.push(cityCode);
+      arr.push(areaCode);
+      this.form.addressCode = arr;
+      this.$nextTick(() => {
+        this.isInit = true
+      })
+    },
+    // 通过详细地址获取省市区
+    getProvincesCities(address){
+      const reg = /.+?(省|市|自治区|自治州|县|区)/g
+      const arr = address.match(reg)
+      if (arr) {
+        if (arr.length == 2) {
+          this.province = arr[0]
+          this.city = arr[0]
+          this.area = arr[1]
+        }
+        if (arr.length >= 3) {
+          this.province = arr[0]
+          this.city = arr[1]
+          this.area = arr[2]
+        }
+        this.setCode()
+      }
+    },
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
       this.form.address = poi.address
+      this.getProvincesCities(poi.address)
     }
   }
 };
