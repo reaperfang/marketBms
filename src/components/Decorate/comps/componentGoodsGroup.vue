@@ -5,8 +5,8 @@
           <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
             <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
-                <p :class="{active:!activeGoodId&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-                <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&activeGoodId==item.id}" :key="key" 
+                <p :class="{active:!activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+                <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
                 @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
               </div>
             </div>
@@ -122,7 +122,6 @@ export default {
                 this._apis.goods.fetchCategoryList({ids}).then((response)=>{
                     this.list = response;
                     this.calcScroll();
-                    this.activeGoodId = response.length && response[0] && this.currentComponentData.showAllGroup === 2 ? response[0].id : 'all';
                     this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                     this.loading = false;
                     this.allLoaded = true;
