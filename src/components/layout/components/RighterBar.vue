@@ -10,16 +10,15 @@
         </div>
         <div v-else>
           <div v-if="item.tabTitle">
-            <div class="item" v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
+            <!-- <div class="item" v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
               <h2>{{item.tabTitle}}</h2>
               <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
-                <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
                 <div>
                   <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
                 </div>
               </div>
-            </div>
-            <div class="item" v-else-if="isOpenResell || (item.tabTitle !== '分销账目')">
+            </div> -->
+            <div class="item" v-if="isOpenResell || (item.tabTitle !== '分销账目')">
               <h2>{{item.tabTitle}}</h2>
               <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
                 <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
