@@ -1404,7 +1404,22 @@ export default {
                     specs: _specs,
                     image: '',
                     fileList: [],
-                    showCodeSpan: false
+                    showCodeSpan: false,
+
+                    showCostPriceError: false,
+                    costPriceErrorMessage: '',
+                    showSalePriceError: false,
+                    salePriceErrorMessage: '',
+                    showStockError: false,
+                    stockErrorMessage: '',
+                    showWarningStockError: false,
+                    warningStockErrorMessage: '',
+                    showWeightError: false,
+                    weightErrorMessage: '',
+                    showVolumeError: false,
+                    volumeErrorMessage: '',
+                    showCodeError: false,
+                    codeErrorMessage: '',
                 }
             })
             this.ruleForm.goodsInfos.forEach((val, index) => {
@@ -2249,6 +2264,21 @@ export default {
                                     name: '',
                                     url: val.image
                                 }]
+
+                                val.showCostPriceError = false
+                                val.costPriceErrorMessage = ''
+                                val.showSalePriceError = false
+                                val.salePriceErrorMessage = ''
+                                val.showStockError = false
+                                val.stockErrorMessage = ''
+                                val.showWarningStockError = false
+                                val.warningStockErrorMessage = ''
+                                val.showWeightError = false
+                                val.weightErrorMessage = ''
+                                val.showVolumeError = false
+                                val.volumeErrorMessage = ''
+                                val.showCodeError = false
+                                val.codeErrorMessage = ''
                             })
                             this.ruleForm.goodsInfos = goodsInfos
                         }
@@ -2942,7 +2972,7 @@ export default {
                         volume: '',
                         specs: _specs,
                         image: '',
-                        fileList: []
+                        fileList: [],
                     }
                 })
                 this.ruleForm.goodsInfos.forEach((val, index) => {
