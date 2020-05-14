@@ -5,7 +5,7 @@
           <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
             <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
-                <p :class="{active:!activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+                <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
                 <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
                 @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
               </div>
