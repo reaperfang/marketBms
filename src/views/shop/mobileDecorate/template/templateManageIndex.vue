@@ -300,6 +300,7 @@ export default {
           .top{
             display:flex;
             align-items: center;
+            height:23px;
             span{
               margin-right:30px;
             }
@@ -320,6 +321,7 @@ export default {
             display:flex;
             justify-content: space-between;
             margin-top:10px;
+            align-items: center;
             .price{
               color:rgb(253,76,43);
               font-weight:700;
