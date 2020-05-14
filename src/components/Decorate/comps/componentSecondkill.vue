@@ -46,9 +46,9 @@
                             <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
                         </div>
 
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&(item.remainStock>0&&item.status==1)"></componentButton>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&(item.remainStock>0&& (item.status==1 || item.status==0))"></componentButton>
                         <p class="activity_end" v-if="item.status==2">活动已结束</p>
-                        <p class="activity_end" v-if="item.status==0">活动未开始</p>
+                        <!-- <p class="activity_end" v-if="item.status==0">活动未开始</p> -->
                     </div>
                 </li>
             </ul>
