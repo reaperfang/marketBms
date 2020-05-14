@@ -623,6 +623,16 @@ export function getTimeSlot(data) {
   })
 }
 
+//获取配送员列表
+export function getDistributorList(data) {
+  return request({
+    target: 'PRODUCT-SELLING-CHIME-PROCESSOR',
+    method: 'post',
+    apiType: 'overview',
+    data
+  })
+}
+
 
 
 
