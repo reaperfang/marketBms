@@ -124,7 +124,7 @@ export default {
     serialNumberType:[
         { value: 'tradeDetailSn', label: '交易流水号' },
         { value: 'relationSn', label: '关联单据编号' },
-        { value: 'thirdPartySn', label: '第三方流水号' },
+        // { value: 'thirdPartySn', label: '第三方流水号' },
     ],
     //分销明细---业务类型-------------------------
     businessTypeList:[

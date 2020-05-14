@@ -103,7 +103,7 @@
           label="业务类型"
           :render-header="renderBusinessType">
           <template slot-scope="scope">
-            {{rebusinessTypes[scope.row.businessType].label}}
+            {{rebusinessTypes[scope.row.businessType] ? rebusinessTypes[scope.row.businessType].label : ''}}
           </template>
         </el-table-column>
         <el-table-column
@@ -187,7 +187,8 @@ export default {
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      types:[]
     }
   },
   watch: {
@@ -198,7 +199,7 @@ export default {
       return financeCons.revenueExpenditureTerms;
     },
     rebusinessTypes(){
-      return financeCons.rebusinessTypes;
+      return this.types;
     },
     payTypes(){
       return financeCons.payTypes;
@@ -207,7 +208,9 @@ export default {
       return financeCons.tradeTypes;
     }
   },
-  created() { },
+  created() { 
+    this.getRebusinessTypes()
+  },
   methods: {
     renderTradeDetailSn(){
       return(
@@ -261,6 +264,21 @@ export default {
         </div>
       )
     },
+
+    getRebusinessTypes(){
+       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+          if(data.isOpenResell == 1){
+            this.types = financeCons.rebusinessTypes
+          }else{
+            financeCons.rebusinessTypes.map(item =>{
+              item.value !== 6 && this.types.push(item) 
+            })
+          }
+      }).catch((error) => {
+          console.error(error);
+      });
+    },
+
     init(){
       let query = {
         tradeDetailSn:'',
