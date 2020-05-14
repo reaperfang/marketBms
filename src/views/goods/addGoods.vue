@@ -581,14 +581,14 @@
                 <span style="font-size: 12px;">定时上架的商品在上架前为“下架”状态。</span>
                 <span v-if="ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品状态。</span>
                 <div>
-                    <el-radio-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
+                    <el-radio-group @change="statusChange" :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
                         <el-radio :label="1">上架</el-radio>
                         <el-radio :disabled="editor && ruleForm.activity" :label="0">下架</el-radio>
                         <template v-if="editor">
                             <span><el-radio :disabled="ruleForm.activity" :label="2">定时上架</el-radio></span>
                         </template>
                         <template v-else>
-                            <span @click="timelyShelvingHandler"><el-radio :label="2">定时上架</el-radio></span>
+                            <span style="display: inline-block;"><el-radio @click.native="timelyShelvingHandler" :label="2">定时上架</el-radio></span>
                         </template>
                         <span v-if="ruleForm.status == 2" class="autoSaleTime">{{ruleForm.autoSaleTime}}</span>
                     </el-radio-group>
@@ -1087,6 +1087,12 @@ export default {
         });
     },
     methods: {
+        statusChange() {
+            if(this.ruleForm.status == 2) {
+                this.currentDialog = 'TimelyShelvingDialog'
+                this.dialogVisible = true
+            }
+        },
         deleteVideo() {
             this.ruleForm.videoUrl = ''
         },
