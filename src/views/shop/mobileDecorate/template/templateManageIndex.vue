@@ -411,12 +411,12 @@ export default {
   }
 }
 /deep/.el-button--small{
-  padding:9px 12px;
-  background: #fff;
-  border-radius:4px;
+  padding:9px 12px!important;
+  background: #fff!important;
+  border-radius:4px!important;
 }
 /deep/.el-button--success{
-  border:1px solid rgba(62,180,136,1);
-  color: rgba(62,180,136,1);
+  border:1px solid rgba(62,180,136,1)!important;
+  color: rgba(62,180,136,1)!important;
 }
 </style>
