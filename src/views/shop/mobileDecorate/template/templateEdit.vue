@@ -6,7 +6,7 @@
       </div>
 
       <!-- 装修编辑器 -->
-      <Decorate ref="Decorate" :decorateData="decorateData" :config="config" v-if="decorateRender"></Decorate>
+      <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
     </div>
     <div v-else v-loading="loading" style="padding:50px;">
       暂无可用页面
@@ -111,10 +111,10 @@ export default {
       if(newValue) {
         this.$store.commit("clearAllData");
         this.decorateRender = false;
-        this.$nextTick(() => {
+        setTimeout(()=>{
           this.decorateRender = true;
           this.decorateData = this.pageMaps[newValue];
-        })
+        },200)
       }
     },
 
