@@ -22,7 +22,7 @@
                 <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
-                <el-tab-pane v-if="orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分销信息" name="commision">
+                <el-tab-pane v-if="resellConfigInfo && orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分销信息" name="commision">
                     <OrderCommision :orderDetail="orderDetail" @getDetail="getDetail"></OrderCommision>
                 </el-tab-pane>
             </el-tabs>
@@ -224,7 +224,8 @@ export default {
                     value: 2
                 }
             ],
-            changePriceVisible: false
+            changePriceVisible: false,
+            resellConfigInfo: null
         }
     },
     created() {
@@ -233,6 +234,13 @@ export default {
                 this.activeName = 'delivery'
             }
         })
+
+        // 获取分销商设置
+        this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+            if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
+        }).catch((error) => {
+            console.error(error);
+        });
     },
     computed: {
         usedCouponList() {
