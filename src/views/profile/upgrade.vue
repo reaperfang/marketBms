@@ -168,6 +168,8 @@ export default {
           if (data.isOpenResell == 1) {
             //专业版开启，时间显示在专业版本上
             this.status = "1";
+          }else{
+            this.status = "0";
           }
         })
         .catch(error => {
