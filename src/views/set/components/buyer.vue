@@ -1,8 +1,19 @@
 /*客户通知 */
 <template>
  <div class="main">
-    <p class="title"><i>请注意：</i>请先输入想要接受短信通知提醒的客户手机号： </p>
-    <p class="title ml57">如不设置则默认发送至店铺主账号绑定的手机号</p>
+    <p class="title">
+      <i>请注意：</i>
+      请先输入想要接受短信通知提醒的客户手机号： 
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" :inline="true" style="display:inline-block;">
+        <el-form-item  prop="msgReceivePhone">
+          <el-input v-model="ruleForm.msgReceivePhone" style="width:200px;"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+        </el-form-item>
+      </el-form>
+    </p>
+    <p class="note ml57">如不设置则默认发送至店铺主账号绑定的手机号</p>
     <el-table
       v-loading="loading"
       :data="tableData"
@@ -106,9 +117,26 @@
 export default {
   name: 'buyer',
   data() {
+    var validatePass = (rule, value, callback) => {
+      let mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+      if (!mobile.test(value)) {
+        return callback(new Error("您输入的手机号有误，请您重新输入"));
+      } else {
+        callback();
+      }
+    };
     return {
       tableData: [],
-      loading:true
+      loading:true,
+      ruleForm:{
+
+      },
+      rules: {
+          msgReceivePhone: [
+            { required: true, message: '请输入手机号码', trigger: 'blur' },
+            { validator: validatePass, trigger: "blur" },
+          ],
+      }
     }
   },
   components: { },
@@ -116,6 +144,10 @@ export default {
     
   },
   computed: {
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    }
   }, 
   created() {
     this.getShopMessage()
@@ -123,7 +155,6 @@ export default {
   methods: {
     getShopMessage(){
       this._apis.set.getShopMessage({msgReceiver:'1'}).then(response =>{
-        response.splice(response.length - 1, 1);
         this.tableData = []
         response.map(item => {
           if(item.tcShopInfoMsgTemplateId != 21){
@@ -182,8 +213,26 @@ export default {
         this.getShopMessage()
       })
     },
-    handleClick(comp) {
-      this.currentTab = comp.name;
+
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let data = {
+            id:this.cid,
+            msgReceivePhone:this.ruleForm.msgReceivePhone
+          }
+          this._apis.set.updateShopInfo(data).then(response =>{
+            this.$message({
+              type: 'success',
+              message: '操作成功！'
+            });
+          }).catch(error =>{
+            this.$message.error(error);
+          })    
+        } else {
+          return false;
+        }
+      });
     },
 
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -200,7 +249,7 @@ export default {
           };
         }
       }
-    }
+    },
   },
   mounted() {
 
@@ -219,16 +268,22 @@ export default {
 }
 .main{
   width: 100%;
-  padding: 20px;
+  padding: 0px 20px 50px 20px;
   background: #fff;
 }
 .title{
+  font-size: 14px;
   line-height: 26px;
   padding-bottom: 10px;
   i{
     color: red;
     font-style: normal;
   }
+}
+.note{
+  font-size: 12px;
+  color: #9FA29F;
+  padding-bottom: 10px;
 }
 .preview_title{
   // padding-left: 6px;
@@ -255,4 +310,7 @@ export default {
 .ml57{
   margin-left:57px;
 }
+.el-form-item{
+  margin-bottom:0px;
+} 
 </style>

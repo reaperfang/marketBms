@@ -124,7 +124,6 @@ export default {
   methods: {
     getShopMessage(){
       this._apis.set.getShopMessage({msgReceiver:'0'}).then(response =>{
-        response.splice(response.length - 1, 1);
         this.tableData = []
         response.map(item => {
           if(item.tcShopInfoMsgTemplateId != 21){
@@ -183,9 +182,6 @@ export default {
         this.getShopMessage()
       })
     },
-    handleClick(comp) {
-      this.currentTab = comp.name;
-    },
 
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -220,7 +216,7 @@ export default {
 }
 .main{
   width: 100%;
-  padding: 20px;
+  padding: 0px 20px 50px 20px;
   background: #fff;
 }
 .title{

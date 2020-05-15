@@ -2755,11 +2755,11 @@ export default {
                             productUnit: params.otherUnit
                         })
                     } else {
-                        // let item = this.unitList.find(val => val.id == this.ruleForm.productUnit)
+                        let item = this.unitList.find(val => val.id == this.ruleForm.productUnit)
 
-                        // params = Object.assign({}, params, {
-                        //     productUnit: item && item.name || ''
-                        // })
+                        params = Object.assign({}, params, {
+                            productUnit: item && item.name || ''
+                        })
                     }
                     if(!this.editor) {
                         this.addGoods(params)
@@ -3621,7 +3621,7 @@ $blue: #655EFF;
 }
 /deep/ .productCatalogInfoId {
     .el-cascader__tags input {
-        margin-left: 0;
+        //margin-left: 0;
     }
 }
 // /deep/ .el-cascader {

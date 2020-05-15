@@ -1,7 +1,14 @@
 <template>
-  <DialogBase :visible.sync="visible" width="600px" title="上传图片" :showFooter="false">
-    <el-form :model="form" class="demo-form-inline">
-      <el-form-item label="本地上传"></el-form-item>
+  <DialogBase :visible.sync="visible" width="800px" title="上传图片" :showFooter="false">
+    <div class="img_list">
+    <div class="title">
+      本地上传
+      <span>一次最多上传100张图片，仅支持jpg,jpeg,png格式，大小不超过3.0MB</span>
+    </div>
+    <el-form :model="form" class="demo-form-inline mt20">
+      <el-form-item label="分组">
+        <el-cascader v-model="form.groupValue" :props="props" class="w_300"></el-cascader>
+      </el-form-item>
       <el-form-item>
         <!-- <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar"> -->
         <!-- <el-upload
@@ -22,7 +29,7 @@
           class="upload-demo"
           :action="uploadUrl"
           :data="{json: JSON.stringify({cid: cid})}"
-          :limit="6"
+          :limit="100"
           :multiple="true"
           list-type="picture-card"
           :before-upload="beforeAvatarUpload"
@@ -33,13 +40,9 @@
         >
           <i class="el-icon-plus"></i>
         </el-upload>
-
-        <div class="note">一次最多上传6张图片，仅支持jpg,jpeg,png格式，大小不超过3.0MB</div>
-      </el-form-item>
-      <el-form-item label="分组名称：">
-        <el-cascader v-model="form.groupValue" :props="props" class="w_300"></el-cascader>
       </el-form-item>
     </el-form>
+    </div>
     <p class="txt_center">
       <el-button type="primary" @click="submit()">确 认</el-button>
       <el-button @click="visible = false">取 消</el-button>
@@ -172,7 +175,7 @@ export default {
     },
     /* 上传文件超出个数限制时的钩子 */
     handleDelet(files, fileList) {
-      this.$message.error("最多支持上传6张！");
+      this.$message.error("最多支持上传100张！");
     },
 
     handleRemove(file, fileList) {
@@ -187,10 +190,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.note {
+.title{
+  color: #443D4A;
   font-size: 14px;
-  color: #d3d8df;
-  float: left;
+  span{
+    font-size: 14px;
+    color:#D3D3D3;
+    margin-left:30px;
+  }
+}
+.mt20{
+  margin-top:20px;
+}
+.img_list{
+  height: 300px;
+  overflow-y: scroll;
 }
 /deep/ .el-upload {
   display: inline-block;
