@@ -502,7 +502,10 @@ export default {
             width: 100%;
             border: 1px solid #CCCCCC;
             border-radius:4px;
-            background: rgba(250,250,250,.62    );
+            background: rgba(250,250,250,.62);
+            /deep/ .el-table .el-table__row {
+                background: rgba(250,250,250,.62);
+            }
         }
         /deep/ .el-table th {
             background: rgb(235, 234, 250);
