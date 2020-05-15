@@ -203,6 +203,7 @@ export default {
       // border-right: 1px solid #eee;
       p {
         width: 100%;
+        color:rgba(102,102,102,1);
       }
       p.active {
           &:after {
@@ -223,6 +224,7 @@ export default {
         p {
           width: 100%;
           margin-top: 10px;
+          color:rgba(102,102,102,1);
           &:first-child {
             margin-top: 0;
           }
@@ -232,6 +234,7 @@ export default {
         p {
           width: 100%;
           margin-top: 10px;
+          color:rgba(102,102,102,1);
           &:first-child {
             margin-top: 0;
           }
@@ -307,7 +310,7 @@ export default {
     .componentGoodsGroup_tab.menuStyle1 {
         background: #fff;
         p {
-          color: #333;
+          color: rgba(102,102,102,1);
           line-height: 44px;
           min-width: 70px;
         }
@@ -354,6 +357,7 @@ export default {
           min-width: 60px;
           background: #ececec;
           line-height: 33px;
+          color:rgba(102,102,102,1);
         }
         p.active {
           background: #fc3d42;
