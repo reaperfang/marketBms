@@ -420,4 +420,7 @@ export default {
   color: rgba(62,180,136,1)!important;
   
 }
+/deep/.el-button--primary{
+  color: #655EFF!important;
+}
 </style>
