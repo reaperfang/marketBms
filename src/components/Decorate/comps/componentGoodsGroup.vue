@@ -200,7 +200,7 @@ export default {
     }
     .componentGoodsGroup_tab.menuStyle1 {
       padding: 0;
-      border-right: 1px solid #eee;
+      // border-right: 1px solid #eee;
       p {
         width: 100%;
       }
@@ -219,7 +219,7 @@ export default {
     }
     .componentGoodsGroup_tab.menuStyle2 {
         padding: 0 10px;
-        border-right: 1px solid #eee;
+        // border-right: 1px solid #eee;
         p {
           width: 100%;
           margin-top: 10px;
@@ -254,7 +254,7 @@ export default {
     }
     .componentGoodsGroup{
         overflow:hidden;
-        background:#f7f7f7;
+        background:#fff;
         .componentGoodsGroup_tab{
             padding:0 5px;
             display:flex;
@@ -288,7 +288,7 @@ export default {
 }
 .componentGoodsGroup {
   overflow: hidden;
-  background: #f7f7f7;
+  background:#fff;
     .componentGoodsGroup_tab {
         padding: 0 5px;
         display: flex;
@@ -333,8 +333,9 @@ export default {
         padding-bottom: 9px;
         p {
           min-width: 60px;
-          background: #ccc;
-          color: #666;
+          background: rgba(236,236,236,1);
+          font-weight:400;
+          color:rgba(102,102,102,1);
           line-height: 34px;
           @include borderRadius(50px);
         }
@@ -376,6 +377,7 @@ export default {
     }
     .componentGoodsGroup_content {
         overflow: hidden;
+        background: rgb(247,247,247);
     }
 }
 </style>
