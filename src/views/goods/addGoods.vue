@@ -3621,7 +3621,7 @@ $blue: #655EFF;
 }
 /deep/ .productCatalogInfoId {
     .el-cascader__tags input {
-        margin-left: 0;
+        //margin-left: 0;
     }
 }
 // /deep/ .el-cascader {
