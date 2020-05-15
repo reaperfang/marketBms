@@ -83,7 +83,23 @@ export default {
     }
   },
   created() {
+    this.$set(this.ruleForm, 'pageCategoryInfoId', this.ruleForm.pageCategoryInfoId || '-1');
+    this.$set(this.ruleForm, 'colorStyle', this.ruleForm.colorStyle || '#ffffff');
     this.getClassifyList();
+  },
+  watch: {
+    'ruleForm.pageCategoryInfoId': {
+      handler(newValue) {
+        this.changeValidate();
+      },
+      deep: true
+    },
+    'ruleForm.colorStyle': {
+      handler(newValue) {
+        this.changeValidate();
+      },
+      deep: true
+    }
   },
   methods: {
 
