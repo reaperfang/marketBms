@@ -1,7 +1,7 @@
 <template>
   <div class="template_wrapper">
     <ul class="clearFix" v-loading="loading">
-      <li v-if="!templateList.length || startIndex == 1">
+      <li v-if="!templateList.length">
         <div class="inner">
           <div class="view">
             <div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
@@ -17,8 +17,24 @@
           </div>
         </div>
       </li>
-      <li v-for="(item, key) of templateList" :key="key">
-        <div class="inner">
+      <li v-for="(item, key) of templateList" :key="key" v-else>
+
+        <div class="inner" v-if="item.sort === 0">
+          <div class="view">
+            <div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
+          </div>
+          <div class="info">
+            <div class="top">
+              <span>空白模板</span>
+            </div>
+            <div class="bottom">
+              <span class="price"></span>
+              <el-button type="primary" plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="inner" v-else>
           <div class="view">
             <img :src="item.photoHalfUrl" alt="">
             <div class="cover_small">
@@ -93,8 +109,7 @@ export default {
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
       maxWidth: 550,  //最大宽度
-      mode: null,
-      cacheLast: null
+      mode: null
     }
   },
   created() {
@@ -119,7 +134,6 @@ export default {
   },
   methods: {
     fetch() {
-      const _self = this;
       this.loading = true;
       console.log(11,this.startIndex);
       console.log(22,this.pageSize);
@@ -127,26 +141,14 @@ export default {
         startIndex: this.startIndex,
         pageSize: this.pageSize
       }).then((response)=>{
-        _self.total = response.total;
-        // if(_self.startIndex == 1) {
-        //   _self.cacheLast = response.list[response.list.length - 1];
-        //   response.list.pop();
-          _self.templateList = response.list;
-        // }else {
-        //   if(_self.startIndex != response.pages) {
-        //     const tempCache =  response.list[response.list.length - 1];
-        //     response.list.pop();
-        //     _self.templateList = [_self.cacheLast].concat(response.list);
-        //     _self.cacheLast = tempCache;
-        //   }else {
-        //     _self.templateList = [_self.cacheLast].concat(response.list);
-        //   }
-        // }
-        _self.imgNow = 0;
-        _self.preload(_self.templateList, 'photoDetailsUrl');
-        _self.loading = false;
+        this.total = response.total;
+        this.templateList = response.list;
+        this.imgNow = 0;
+        this.preload(this.templateList, 'photoDetailsUrl');
+        this.loading = false;
       }).catch((error)=>{
         console.error(error);
+        this.templateList = [];
         this.loading = false;
       });
     },
