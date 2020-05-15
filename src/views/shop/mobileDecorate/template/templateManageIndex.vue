@@ -128,20 +128,20 @@ export default {
         pageSize: this.pageSize
       }).then((response)=>{
         _self.total = response.total;
-        if(_self.startIndex == 1) {
-          _self.cacheLast = response.list[response.list.length - 1];
-          response.list.pop();
+        // if(_self.startIndex == 1) {
+        //   _self.cacheLast = response.list[response.list.length - 1];
+        //   response.list.pop();
           _self.templateList = response.list;
-        }else {
-          if(_self.startIndex != response.pages) {
-            const tempCache =  response.list[response.list.length - 1];
-            response.list.pop();
-            _self.templateList = [_self.cacheLast].concat(response.list);
-            _self.cacheLast = tempCache;
-          }else {
-            _self.templateList = [_self.cacheLast].concat(response.list);
-          }
-        }
+        // }else {
+        //   if(_self.startIndex != response.pages) {
+        //     const tempCache =  response.list[response.list.length - 1];
+        //     response.list.pop();
+        //     _self.templateList = [_self.cacheLast].concat(response.list);
+        //     _self.cacheLast = tempCache;
+        //   }else {
+        //     _self.templateList = [_self.cacheLast].concat(response.list);
+        //   }
+        // }
         _self.imgNow = 0;
         _self.preload(_self.templateList, 'photoDetailsUrl');
         _self.loading = false;
