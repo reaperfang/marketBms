@@ -155,7 +155,6 @@ export default {
   methods: {
     getShopMessage(){
       this._apis.set.getShopMessage({msgReceiver:'1'}).then(response =>{
-        response.splice(response.length - 1, 1);
         this.tableData = []
         response.map(item => {
           if(item.tcShopInfoMsgTemplateId != 21){
