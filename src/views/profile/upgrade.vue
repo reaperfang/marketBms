@@ -6,7 +6,7 @@
         <div class="u_item">
           <div class="u_t p1">
             <p>基础版</p>
-            <!-- <span>有效期至：{{time}}</span> -->
+            <span v-if="status=='0'">有效期至：{{time}}</span>
           </div>
           <div class="u_b">
             <p class="main">基础版功能</p>
@@ -56,7 +56,7 @@
         <div class="u_item">
           <div class="u_t p4">
             <p>专业版</p>
-            <span>有效期至：{{time}}</span>
+            <span v-if="status=='1'">有效期至：{{time}}</span>
           </div>
           <div class="u_b">
             <p class="main">专业版功能</p>
@@ -84,7 +84,7 @@
               </div>
             </div>
             <div class="con_box con_pr">
-                <i class="icon_start"></i>
+              <i class="icon_start"></i>
               <span class="color_orange">分销裂变：</span>
               <div>
                 <p class="color_orange">完善的三级分销系统，让你的顾客</p>
@@ -140,7 +140,9 @@ import utils from "@/utils";
 export default {
   name: "upgrade",
   data() {
-    return {};
+    return {
+      status: "0"
+    };
   },
   computed: {
     time() {
@@ -153,8 +155,26 @@ export default {
       return time;
     }
   },
-  created() {},
-  methods: {}
+  created() {
+    this.show();
+  },
+  methods: {
+    show() {
+      this._apis.client
+        .checkCreditRule({
+          id: JSON.parse(localStorage.getItem("shopInfos")).id
+        })
+        .then(data => {
+          if (data.isOpenResell == 1) {
+            //专业版开启，时间显示在专业版本上
+            this.status = "1";
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -250,32 +270,32 @@ p.title {
   margin-left: 20px;
   margin-bottom: 5px;
   span {
-   min-width: 75px;
-   display: block; 
-  }
-
-  
-}
-.con_pr{
-    position: relative;
-}
-.icon_start{
-    position: absolute;
-    top: 6px;
-    left: -15px;
+    min-width: 75px;
     display: block;
-    width: 10px;
-    height: 10px;
-    background: url("../../assets/images/profile/icon_start.png") 0 0 no-repeat;
+  }
+}
+.con_pr {
+  position: relative;
+}
+.icon_start {
+  position: absolute;
+  top: 6px;
+  left: -15px;
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: url("../../assets/images/profile/icon_start.png") 0 0 no-repeat;
 }
 .wrap_box {
   display: flex;
   justify-content: space-between;
   .wrap_item {
-  width: 49%;
+    width: 49%;
   }
 }
-.color_orange{ color: #FD932B !important;}
+.color_orange {
+  color: #fd932b !important;
+}
 </style>
 
 
