@@ -183,9 +183,6 @@ export default {
         this.getShopMessage()
       })
     },
-    handleClick(comp) {
-      this.currentTab = comp.name;
-    },
 
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -220,7 +217,7 @@ export default {
 }
 .main{
   width: 100%;
-  padding: 20px;
+  padding: 0px 20px 50px 20px;
   background: #fff;
 }
 .title{
