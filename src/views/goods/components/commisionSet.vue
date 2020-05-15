@@ -124,8 +124,8 @@
         </div>
     </div>
     <div class="btns">
-        <el-button @click="submit" style="margin-right:50px;" type="primary">保存</el-button>
-        <el-button @click="historyBack">返回</el-button>
+        <el-button @click="submit" style="margin-right:50px;" type="primary">保&nbsp;&nbsp;存</el-button>
+        <el-button @click="historyBack">返&nbsp;&nbsp;回</el-button>
     </div>
     <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected"></component>
 </div>    
