@@ -6,7 +6,7 @@
             <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
                 <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-                <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
+                <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" 
                 @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
               </div>
             </div>
@@ -107,6 +107,7 @@ export default {
 
         //根据ids拉取数据
         fetch(componentData = this.currentComponentData.data) {
+          const _self = this;
           if(componentData) {
               if(componentData.ids) {
                 let ids = [];
@@ -121,6 +122,11 @@ export default {
                 this.loading = true;
                 this._apis.goods.fetchCategoryList({ids}).then((response)=>{
                     this.list = response;
+                    if(response && response[0] && _self.currentComponentData.data.showAllGroup == 2) {
+                      _self.activeGoodId = response[0].id;
+                    }else {
+                      _self.activeGoodId = '';
+                    }
                     this.calcScroll();
                     this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                     this.loading = false;
