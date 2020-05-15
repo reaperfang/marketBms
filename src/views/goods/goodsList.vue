@@ -663,9 +663,9 @@ export default {
         sortChange({column, prop, order}) {
             if(prop == 'salePrice') {
                 if(order == 'descending') {
-                    this.listQuery.sortType = 2
+                    this.listQuery.sortType = 4
                 } else if(order == 'ascending') {
-                    this.listQuery.sortType = 7
+                    this.listQuery.sortType = 3
                 }
             } else if(prop == 'stock') {
                 if(order == 'descending') {
@@ -675,9 +675,9 @@ export default {
                 }
             } else if(prop == 'saleCount') {
                 if(order == 'descending') {
-                    this.listQuery.sortType = 4
+                    this.listQuery.sortType = 2
                 } else if(order == 'ascending') {
-                    this.listQuery.sortType = 3
+                    this.listQuery.sortType = 7
                 }
             }
             this.getList()

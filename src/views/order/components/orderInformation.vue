@@ -239,14 +239,14 @@
                         <div class="col">订单总金额:</div>
                         <div class="col">¥{{orderAmount}}</div>
                     </div>
-                    <div class="row">
+                    <div v-if="orderDetail.orderInfo.consumeCouponMoney" class="row">
                         <div class="col">优惠券金额:</div>
                         <div class="col">
                             <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: true, title: '使用的优惠券'}; dialogVisible = true" class="coupon-img"></i>
                             -¥{{orderDetail.orderInfo.consumeCouponMoney || '0.00'}}
                         </div>
                     </div>
-                    <div class="row">
+                    <div v-if="orderDetail.orderInfo.consumeCouponCodeMoney && orderDetail.orderInfo.consumeCouponCodeMoney != '0.00'" class="row">
                         <div class="col">优惠码金额:</div>
                         <div class="col">
                             <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList, coupon: false, title: '使用的优惠码'}; dialogVisible = true" class="coupon-img"></i>
@@ -259,21 +259,21 @@
                             <div class="col">- ¥{{item.reduceMoney && parseFloat(item.reduceMoney) && parseFloat(item.reduceMoney).toFixed(2) || '0.00'}}</div>
                         </div>
                     </template>
-                    <div class="row">
+                    <div v-if="orderDetail.orderInfo.memberDiscountMoney && orderDetail.orderInfo.memberDiscountMoney != '0.00'" class="row">
                         <div class="col">会员折扣:</div>
                         <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney || '0.00'}}</div>
                     </div>
-                    <div class="row">
+                    <div v-if="orderDetail.orderInfo.discountPackageMoney && orderDetail.orderInfo.discountPackageMoney != '0.00'" class="row">
                         <div class="col">优惠套装:</div>
                         <div class="col">- ¥{{orderDetail.orderInfo.discountPackageMoney || '0.00'}}</div>
                     </div>
-                    <div class="row" v-if="orderDetail.orderInfo && orderDetail.orderInfo.discountFreight">
+                    <div class="row" v-if="orderDetail.orderInfo && orderDetail.orderInfo.discountFreight && orderDetail.orderInfo.discountFreight != '0.00'">
                         <div class="col">满包邮:</div>
-                        <div class="col">- ¥{{orderDetail.orderInfo.discountFreight}}</div>
+                        <div class="col">- ¥{{orderDetail.orderInfo.discountFreight || '0.00'}}</div>
                     </div>
-                    <div class="row">
+                    <div v-if="orderDetail.orderInfo.consumeScoreConvertMoney && orderDetail.orderInfo.consumeScoreConvertMoney != '0.00'" class="row">
                         <div class="col">积分抵现:</div>
-                        <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || 0}}</div>
+                        <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || '0.00'}}</div>
                     </div>
                     <!-- <div class="row align-center">
                         <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
