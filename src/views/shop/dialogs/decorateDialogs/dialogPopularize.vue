@@ -7,7 +7,7 @@
       <div class="popularize_wrapper">
 
         <!-- 预览区 -->
-        <div class="preview poster" v-if="shareStyle == 1">
+        <div class="preview poster" v-if="shareStyle == 0">
           <div class="one">
             <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
             <h3>{{(currentType === 'h5'?ruleFormH5.title:ruleFormMini.title) || '分享标题'}}</h3>
@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <div class="preview wechat_friends" v-if="shareStyle == 2">
+        <div class="preview wechat_friends" v-if="shareStyle == 1">
           <div class="bubble">
               <div class="left">
                 <h3>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</h3>
@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="preview wechat_ommunity" v-if="shareStyle == 3">
+        <div class="preview wechat_ommunity" v-if="shareStyle == 2">
            <div class="bubble">
               <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
               <span>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</span>
@@ -52,15 +52,15 @@
             </div>
             <div>
               <el-button type="text" @click="openSetting = true">更多设置</el-button>
-              <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
-              <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading">下载二维码</el-button>
+              <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading" v-if="currentType === 'h5' && shareStyle == 0">下载海报图片</el-button>
+              <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading" v-if="currentType === 'h5' && shareStyle == 0">下载二维码</el-button>
             </div>
             <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="80px" v-if="openSetting">
               <el-form-item label="分享样式" prop="shareStyle">
                 <el-radio-group v-model="shareStyle">
-                  <el-radio :label="1">海报</el-radio>
-                  <!-- <el-radio :label="2">微信好友</el-radio>
-                  <el-radio :label="3">微信朋友圈</el-radio> -->
+                  <el-radio :label="0">海报</el-radio>
+                  <el-radio :label="1">微信好友</el-radio>
+                  <el-radio :label="2">微信朋友圈</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="分享标题" prop="title">
@@ -98,13 +98,13 @@
           <div v-show="currentType === 'mini'">
             <div>
               <el-button type="text" @click="openSetting = true">更多设置</el-button>
-              <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading">下载海报图片</el-button>
+              <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading" v-if="currentType === 'h5' && shareStyle == 0">下载海报图片</el-button>
               <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">打开小程序码</el-button>
             </div>
             <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="80px" v-if="openSetting">
-              <el-form-item label="分享样式" prop="shareStyle">
-                <el-radio-group v-model="shareStyle">
-                  <el-radio :label="1">海报</el-radio>
+              <el-form-item label="分享样式" prop="shareStyle2">
+                <el-radio-group v-model="shareStyle2">
+                  <el-radio :label="1">微信好友</el-radio>
                   <!-- <el-radio :label="2">微信好友</el-radio>
                   <el-radio :label="3">微信朋友圈</el-radio> -->
                 </el-radio-group>
@@ -176,7 +176,8 @@ export default {
       currentType: 'h5',
       currentDialog: '',
       dialogVisible2: false,
-      shareStyle: 1,
+      shareStyle: 0,
+      shareStyle2: 1,
       loading: true,  //加载loading
       downloadPosterLoading: false,  //下载海报loading
       submitLoading: false,  //提交loading
@@ -268,6 +269,12 @@ export default {
         }
       },
       deep: true
+    },
+    shareStyle() {
+      this.fetch();
+    },
+    shareStyle2() {
+      this.fetch();
     }
   },
   computed: {
@@ -299,6 +306,7 @@ export default {
       let pageId   = this.currentType === 'h5' ?this.ruleFormH5.pageInfoId:this.ruleFormMini.pageInfoId;
       this._apis.shop.getPageShare({
         type: this.currentType === 'h5' ? '0' : '1',
+        shareStyle: this.currentType === 'h5' ? this.shareStyle : this.shareStyle2,
         pageInfoId: pageId
       })
       .then((response)=>{
@@ -316,9 +324,21 @@ export default {
           }
         } else {
           if (this.currentType === 'h5') {
-            this.ruleFormH5['pageInfoId'] = this.pageId;
+            this.ruleFormH5 = {
+              pageInfoId: this.pageId,
+              type: '0',
+              title: '',
+              describe: '',
+              picture: ''
+            };
           } else {
-            this.ruleFormMini['pageInfoId'] = this.pageId;
+            this.ruleFormMini = {
+              pageInfoId: this.pageId,
+              type: '0',
+              title: '',
+              describe: '',
+              picture: ''
+            };
           }
         }
         this.loading = false;
@@ -335,6 +355,7 @@ export default {
           this.submitLoading = true;
           this._apis.shop.updatePageShare({
             type: '0',
+            shareStyle: this.shareStyle,
             pageInfoId: this.ruleFormH5.pageInfoId,
             title: this.ruleFormH5.title,
             describe: this.ruleFormH5.describe,
@@ -362,6 +383,7 @@ export default {
           this.submitLoading = true;
           this._apis.shop.updatePageShare({
             type: '1',
+            shareStyle: this.shareStyle2,
             pageInfoId: this.ruleFormMini.pageInfoId,
             title: this.ruleFormMini.title,
             describe: this.ruleFormMini.describe,
