@@ -86,6 +86,7 @@ export default {
         copy() {
             let input = document.getElementById('address')
 
+            console.log(333)
             input.select();
             document.execCommand("Copy");
             //alert("复制成功。");
