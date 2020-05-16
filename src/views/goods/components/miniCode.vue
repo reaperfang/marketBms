@@ -19,6 +19,10 @@
             </el-tooltip>
         </div>
         <div class="miniCode-content">
+            <h2>一键复制小程序商品路径:</h2>
+            <el-input id="address" v-model="productUrl">
+                <template slot="append"><span class="pointer" @click="copy">复制</span></template>
+            </el-input>
             <div class="qrcode-box">
                 <!-- <div id="qrcode"></div> -->
                 <img width="136" :src="content" />
@@ -38,6 +42,7 @@ export default {
             url: '',
             content: '',
             name: '',
+            productUrl: ''
         }
     },
     mounted () {
@@ -49,6 +54,7 @@ export default {
                 console.log(res)
                 this.content = res.content
                 this.name = res.name
+                this.productUrl = res.productUrl
                 //this.qrcode();
             }).catch(error => {
                 this.visible = false
