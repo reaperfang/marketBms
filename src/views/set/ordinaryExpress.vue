@@ -1,4 +1,4 @@
-/*交易设置 */
+/*普通快递 */
 <template>
   <div>
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
