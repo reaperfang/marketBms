@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="head-wrapper">
        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true" style="overflow-y: initial;">
           <div class="inline-head">
             <el-form-item label="" prop="name">
@@ -233,7 +233,7 @@ export default {
   color:#837DFF!important;
 }
 .inline-head{
-  justify-content: flex-end;
+  justify-content: flex-start!important;
 }
 .name_wrapper {
   display: flex;
