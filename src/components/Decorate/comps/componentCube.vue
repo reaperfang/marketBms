@@ -301,6 +301,6 @@ export default {
   }
 }
 ul.cube li .fill_block{
-  // background:#fff;
+  background:#fff;
 }
 </style>

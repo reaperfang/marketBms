@@ -511,8 +511,8 @@ export default {
                 .title{
                     font-size:13px;
                     line-height:16px;
-                    height:32px;
-                    @include lineClamp(2);
+                    height:15px;
+                    @include lineClamp(1);
                 }
                 .fTitle{
                     font-size:12px;
@@ -535,7 +535,7 @@ export default {
                 }
                 .button{
                     right:10px;
-                    bottom:10px;
+                    bottom:15px;
                 }
             }
         }  
@@ -620,6 +620,7 @@ export default {
                 .button{
                     right:10px;
                     bottom:10px;
+                    display:none;
                 }
             }
         } 
@@ -662,7 +663,7 @@ export default {
                 float:left;
                 margin-right:12.5px;
                 position:relative;
-                @include borderRadius(8px);
+                //@include borderRadius(8px);
                 overflow:hidden;
             }
             .text{
@@ -725,8 +726,8 @@ export default {
             }
             .text{
                 .title{
-                    height:17px;
-                    @include lineClamp(1);
+                    height:34px;
+                    @include lineClamp(2);
                     margin-top:2.5px;
                 }
                 .fTitle{
@@ -852,8 +853,8 @@ export default {
                     .title{
                         font-size:13px;
                         line-height:16px;
-                        height:32px;
-                        @include lineClamp(2);
+                        height:15px;
+                        @include lineClamp(1);
                     }
                     .fTitle{
                         font-size:12px;
@@ -903,8 +904,8 @@ export default {
                     .title{
                         font-size:13px;
                         line-height:16px;
-                        height:32px;
-                        @include lineClamp(2);
+                        height:15px;
+                        @include lineClamp(1);
                     }
                     .fTitle{
                         font-size:12px;
@@ -959,6 +960,7 @@ export default {
     ul{
         display:flex;
         overflow-x:scroll;
+        -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 95px;
             overflow:hidden;
