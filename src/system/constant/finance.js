@@ -78,8 +78,7 @@ export default {
         { value: 13, label: '会员卡升级奖励' },
         { value: 14, label: '退货退款' },
         { value: 15, label: '冻结积分' },
-        { value: 16, label: '解冻积分' },
-        { value: 17, label: '充值有礼' }
+        { value: 16, label: '解冻积分' }
     ],
     //推客奖励---奖励方式??????
     rewards:[
