@@ -7,11 +7,11 @@
       <div class="popularize_wrapper">
 
         <!-- 预览区 -->
-        <div class="preview poster" v-if="shareStyle == 0">
+        <div class="preview poster" v-if="currentType === 'h5' && shareStyle == 0">
           <div class="one">
-            <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
-            <h3>{{(currentType === 'h5'?ruleFormH5.title:ruleFormMini.title) || '分享标题'}}</h3>
-            <p>{{(currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe) || '分享描述'}}</p>
+            <img :src="ruleFormH5.picture" alt="LOGO">
+            <h3>{{ruleFormH5.title || '分享标题'}}</h3>
+            <p>{{(ruleFormH5.describe) || '分享描述'}}</p>
           </div>
           <div class="two">
             <div class="left">
@@ -22,24 +22,44 @@
               <img :src="qrCode" alt="页面二维码">
             </div>
           </div>
+          <div class="three">
+            <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading" >下载完整海报图片</el-button>
+            <el-button type="text">|</el-button>
+            <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading">仅下载二维码</el-button>
+          </div>
         </div>
 
-        <div class="preview wechat_friends" v-if="shareStyle == 1">
+        <div class="preview wechat_friends" v-if="currentType === 'h5' && shareStyle == 1">
           <div class="bubble">
               <div class="left">
-                <h3>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</h3>
-                <p>{{currentType === 'h5'?ruleFormH5.describe:ruleFormMini.describe || '页面描述'}}</p>
+                <h3>{{ruleFormH5.title || '页面名称'}}</h3>
+                <p>{{ruleFormH5.describe || '页面描述'}}</p>
               </div>
               <div class="right">
-                <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
+                <img :src="ruleFormH5.picture" alt="LOGO">
               </div>
           </div>
         </div>
 
-        <div class="preview wechat_ommunity" v-if="shareStyle == 2">
+        <div class="preview wechat_ommunity" v-if="currentType === 'h5' && shareStyle == 2">
            <div class="bubble">
-              <img :src="currentType === 'h5'?ruleFormH5.picture:ruleFormMini.picture" alt="分享店铺LOGO">
-              <span>{{currentType === 'h5'?ruleFormH5.title:ruleFormMini.title || '页面名称'}}</span>
+              <img :src="ruleFormH5.picture" alt="">
+              <span>{{ruleFormH5.title || '页面名称'}}</span>
+          </div>
+        </div>
+        
+        <div class="preview wechat_ommunity" v-if="currentType === 'mini' && shareStyle2 == 1">
+          <div class="bubble">
+              <div class="left">
+                <p>{{ruleFormMini.describe || '页面描述'}}</p>
+              </div>
+              <div class="right">
+                <img :src="ruleFormMini.picture" alt="LOGO">
+              </div>
+          </div>
+           <div class="bubble">
+              <img :src="ruleFormMini.picture" alt="">
+              <span>{{ruleFormMini.title || '页面名称'}}</span>
           </div>
         </div>
 
@@ -51,9 +71,7 @@
               <el-button type="primary"  v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
             </div>
             <div>
-              <el-button type="text" @click="openSetting = true">更多设置</el-button>
-              <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading" v-if="currentType === 'h5' && shareStyle == 0">下载海报图片</el-button>
-              <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading" v-if="currentType === 'h5' && shareStyle == 0">下载二维码</el-button>
+              <el-button type="text" @click="openSetting = true">自定义分享内容</el-button>
             </div>
             <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="80px" v-if="openSetting">
               <el-form-item label="分享样式" prop="shareStyle">
@@ -63,11 +81,11 @@
                   <el-radio :label="2">微信朋友圈</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="分享标题" prop="title">
+              <el-form-item label="分享标题" prop="title" v-if="shareStyle != 2">
                 <el-input
                   :rows="5"
                   :max="10"
-                  placeholder="请输入分享标题，最多10字"
+                  placeholder="请输入分享标题，建议不超过15个汉字"
                   v-model="ruleFormH5.title">
                 </el-input>
               </el-form-item>
@@ -75,7 +93,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
-                  placeholder="请输入分享描述，最多10字"
+                  placeholder="请输入分享描述，建议不超过30个汉字"
                   v-model="ruleFormH5.describe">
                 </el-input>
               </el-form-item>
@@ -87,7 +105,7 @@
                 <div class="add_button" v-if="!ruleFormH5.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
                   <i class="inner"></i>
                 </div>
-                建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+                <p style="color: rgb(211, 211, 211);;margin-top:10px;">1：图片大小不超过3MB<br/>2：建议上传长：宽=1:1的图片，否则图片将被压缩或拉伸以铺满整个画布。</p>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmitH5" :loading="submitLoading">确定</el-button>
@@ -97,31 +115,21 @@
           </div>
           <div v-show="currentType === 'mini'">
             <div>
-              <el-button type="text" @click="openSetting = true">更多设置</el-button>
-              <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading" v-if="currentType === 'h5' && shareStyle == 0">下载海报图片</el-button>
-              <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">打开小程序码</el-button>
+              <el-button type="text" @click="openSetting = true">自定义分享内容</el-button>
+              <!-- <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading" v-if="currentType === 'h5' && shareStyle == 0">下载海报图片</el-button>
+              <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">打开小程序码</el-button> -->
             </div>
             <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="80px" v-if="openSetting">
               <el-form-item label="分享样式" prop="shareStyle2">
                 <el-radio-group v-model="shareStyle2">
                   <el-radio :label="1">微信好友</el-radio>
-                  <!-- <el-radio :label="2">微信好友</el-radio>
-                  <el-radio :label="3">微信朋友圈</el-radio> -->
                 </el-radio-group>
-              </el-form-item>
-              <el-form-item label="分享标题" prop="title">
-                <el-input
-                  :rows="5"
-                  :max="10"
-                  placeholder="请输入分享标题，最多10字"
-                  v-model="ruleFormMini.title">
-                </el-input>
               </el-form-item>
               <el-form-item label="分享描述" prop="describe">
                 <el-input
                   :rows="5"
                   :max="18"
-                  placeholder="请输入分享标题，最多10字"
+                  placeholder="请输入分享描述，建议不超过30个汉字"
                   v-model="ruleFormMini.describe">
                 </el-input>
               </el-form-item>
@@ -133,7 +141,7 @@
                 <div class="add_button" v-if="!ruleFormMini.picture" @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">
                   <i class="inner"></i>
                 </div>
-                建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周
+                <p style="color: rgb(211, 211, 211);;margin-top:10px;">1：图片大小不超过3MB<br/>2：建议上传450*360的图片，当尺寸不匹配时，图片将被压缩或拉伸以铺满整个画布。</p>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmitMini" :loading="submitLoading">确定</el-button>
@@ -185,33 +193,33 @@ export default {
       ruleFormH5: {
         pageInfoId: this.pageId,
         type: '0',
-        title: '',
-        describe: '',
+        title: '店铺名称',
+        describe: '我发现了一个不错的店铺，快来看看吧。',
         picture: ''
       },
       ruleFormMini: {
         pageInfoId: this.pageId,
         type: '0',
         title: '',
-        describe: '',
+        describe: '我发现了一个不错的店铺，快来看看吧。',
         picture: ''
       },
       rulesH5: {
         title: [
-          { required: true, message: "请输入内容", trigger: "blur" },
+          { required: true, message: "请输入分享标题，建议不超过15个汉字", trigger: "blur" },
           {
             min: 1,
-            max: 10,
-            message: "长度在 1 到 10 个字符",
+            max: 15,
+            message: "建议不超过15个汉字",
             trigger: "blur"
           }
         ],
         describe: [
-          { required: true, message: "请输入内容", trigger: "blur" },
+          { required: true, message: "请输入分享描述，建议不超过30个汉字", trigger: "blur" },
           {
             min: 1,
-            max: 12,
-            message: "长度在 1 到 12 个字符",
+            max: 30,
+            message: "建议不超过30个汉字",
             trigger: "blur"
           }
         ],
@@ -220,21 +228,12 @@ export default {
         ]
       },
       rulesMini: {
-        title: [
-          { required: true, message: "请输入内容", trigger: "blur" },
-          {
-            min: 1,
-            max: 10,
-            message: "长度在 1 到 10 个字符",
-            trigger: "blur"
-          }
-        ],
         describe: [
-          { required: true, message: "请输入内容", trigger: "blur" },
+          { required: true, message: "请输入分享描述，建议不超过30个汉字", trigger: "blur" },
           {
             min: 1,
-            max: 12,
-            message: "长度在 1 到 12 个字符",
+            max: 30,
+            message: "建议不超过30个汉字",
             trigger: "blur"
           }
         ],
@@ -609,6 +608,11 @@ export default {
           }
         }
       }
+      .three{
+        /deep/.el-button{
+          font-size: 14px;
+        }
+      }
     }
     &.wechat_friends{
       background:url('../../../../assets/images/shop/wechat_friends.png') no-repeat 0 0;
@@ -667,13 +671,13 @@ export default {
       height: 378px;
        .bubble{
           background: #f3f3f5;
-          width: 208px;
+          width: 182px;
           height: 35px;
           padding: 5px;
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
           position: absolute;
-          bottom: 63px;
+          bottom: 90px;
           left: 43px;
           border-radius: 6px;
           display: -webkit-box;
