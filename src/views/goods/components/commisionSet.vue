@@ -41,8 +41,8 @@
              <el-checkbox-group v-model="enable">
                 <el-checkbox label="启用独立分销比例"></el-checkbox>
             </el-checkbox-group>
+            <div><p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分销员等级比例的默认设置限制</p></div>
             <div v-if="enable">
-                <p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分销员等级比例的默认设置限制</p>
                 <div style="margin-top:45px;">
                     <p class="line-tip">建议参考商品的实际利润设置分销比例，设置后该spu下的所有sku将均按照此比例计算分销金额</p>
                     <!-- 分销比例设置 -->
