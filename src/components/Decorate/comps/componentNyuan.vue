@@ -296,7 +296,10 @@ export default {
                         display:none;
                     }
                     .content{
-                        @extend .flexCenterMiddle;
+                        // @extend .flexCenterMiddle;
+                        display:flex;
+                        align-items:center;
+                        padding:0 10px;
                         .caption{
                             color:#fff;
                             font-size:10px;
@@ -728,7 +731,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
@@ -804,7 +810,7 @@ export default {
                     .button{
                         height:24px;
                         right:10px;
-                        bottom:12.5px;
+                        // bottom:12.5px;
                     }
                     .activity_end{
                         right:10px;
@@ -829,7 +835,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
@@ -905,7 +914,7 @@ export default {
                     .button{
                         height:24px;
                         right:10px;
-                        bottom:12.5px;
+                        bottom:0px;
                     }
                     .activity_end{
                         right:10px;
