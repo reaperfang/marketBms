@@ -43,7 +43,7 @@ export default {
             title: '保存并生效',
             function: this.saveAndApplyData,
             type: 'primary',
-            show: () => !!this.id,
+            show: () => true,
             loading: false
           },
           resetData: {
@@ -58,6 +58,13 @@ export default {
             function: this.preview,
             type: '',
             show: () => !!this.id,
+            loading: false
+          },
+          cancel: {
+            title: '取消',
+            function: this.cancelSave,
+            type: '',
+            show: () => true,
             loading: false
           }
         },
@@ -157,7 +164,7 @@ export default {
           if(this.id) {
             this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
           }else{
-            this.sendRequest({methodName: 'createPage', resultData, tipWord: '创建成功!'});
+            this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存并上架成功!'});
           }
         };
       }
@@ -211,6 +218,18 @@ export default {
     preview() {
       this.dialogVisible=true;
       this.currentDialog='dialogDecoratePreview';
+    },
+
+    /* 取消保存 */
+    cancelSave() {
+      this.confirm({
+        title: '确认取消？', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `取消后，放弃当前编辑数据，且无法恢复。`
+      }).then(() => {
+        this._routeTo('m_pageManageIndex');
+      })
     }
 
   },
