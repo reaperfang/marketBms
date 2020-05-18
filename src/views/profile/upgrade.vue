@@ -241,7 +241,7 @@ export default {
     padding: 22px;
     background: #fff;
     border-radius: 10px;
-    min-height: 450spx;
+    min-height: 450px;
     p {
       font-size: 14px;
       color: #92929b;
