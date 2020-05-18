@@ -47,7 +47,7 @@ export default {
       return shopInfo.id
     },
     getSwitchTxt() {
-      return this.isOpen ? '已开启' : '已关闭'
+      return this.form.isOpen ? '已开启' : '已关闭'
     }
   },
 
@@ -150,7 +150,7 @@ export default {
   .promit {
     font-size:12px;
     font-weight:400;
-    color:rgba(61,67,74,1);
+    color:rgba(61,67,74,.5);
     line-height:17px;
     span {
       padding-left: 7px;
