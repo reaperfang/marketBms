@@ -302,7 +302,10 @@ export default {
                         display:none;
                     }
                     .content{
-                        @extend .flexCenterMiddle;
+                        // @extend .flexCenterMiddle;
+                        display:flex;
+                        align-items:center;
+                        padding:0 10px;
                         .caption{
                             color:#fff;
                             font-size:10px;
@@ -745,7 +748,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
@@ -847,7 +853,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
