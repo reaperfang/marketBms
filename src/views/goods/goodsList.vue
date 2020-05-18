@@ -692,7 +692,9 @@ export default {
                 str = '下架'
                 if(activity) {
                     this.confirm({title: str, icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
-                        
+                        this.getList()
+                    }).catch(() => {
+                        this.getList()
                     })
                     return
                 }
@@ -709,7 +711,11 @@ export default {
 
                     text += '<p>上架失败！</p>'
                     text += `<p>${error}</p>`
-                    this.confirm({title: '编辑上下架', text, width: '500px'})
+                    this.confirm({title: '编辑上下架', text, width: '500px'}).then(() => {
+                        this.getList()
+                    }).catch(() => {
+                        this.getList()
+                    })
                 })
             }).catch(() => {
                 this.getList()
