@@ -17,7 +17,7 @@
           <el-input v-model="form.name" placeholder="请填写标题、描述或作者"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="getList">搜索</el-button>
+          <el-button type="primary" @click="getList">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
