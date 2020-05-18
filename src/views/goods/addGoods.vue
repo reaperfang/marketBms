@@ -2296,6 +2296,8 @@ export default {
                             if(!this.unitList.find(val => val.name == this.ruleForm.productUnit)) {
                                 this.ruleForm.other = true
                                 this.ruleForm.otherUnit = this.ruleForm.productUnit
+                            } else {
+                                this.ruleForm.productUnit = this.unitList.find(val => val.name == this.ruleForm.productUnit).id
                             }
                         }
                         if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {

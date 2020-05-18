@@ -201,6 +201,14 @@
                     label="数量">
                 </el-table-column>
                 <el-table-column
+                    prop="productCode"
+                    label="SPU编码">
+                </el-table-column>
+                <el-table-column
+                    prop="goodsCode"
+                    label="SKU编码">
+                </el-table-column>
+                <el-table-column
                     label="商品单价">
                     <template slot-scope="scope">
                         ¥{{scope.row.salePrice}}
