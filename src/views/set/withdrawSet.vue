@@ -148,6 +148,7 @@ export default {
                 this._apis.set.updateShopInfo(data).then(response =>{
                   this.loading = false
                   this.$message.success('保存成功！');
+                  this.getShopInfo()
                 }).catch(error =>{
                   this.loading = false
                   this.$message.error(error);
