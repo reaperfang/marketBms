@@ -1,21 +1,21 @@
 <template>
     <div class="el-form-item">
         <el-form-item label="配送方式">
-          <el-select v-model="listQuery.deliveryMethod" @change="deliveryMethodChange">
+          <el-select v-model="listQuery.deliveryWay" @change="deliveryMethodChange">
             <el-option label="全部" value></el-option>
             <el-option label="普通快递" :value="1"></el-option>
             <el-option label="商家配送" :value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="配送时间" v-show="listQuery.deliveryMethod == 2">
+        <el-form-item label="配送时间" v-show="listQuery.deliveryWay == 2">
           <el-date-picker
             style="margin-left: 0;"
-            v-model="listQuery.date"
+            v-model="listQuery.deliveryDate"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="全部日期">
           </el-date-picker>
-          <el-select v-model="listQuery.timeSlot">
+          <el-select v-model="listQuery.deliveryTime">
             <el-option label="全部时间段" value></el-option>
             <el-option v-for="(item, index) in timeSlotArr" :key="index" :label="item" :value="item"></el-option>
           </el-select>

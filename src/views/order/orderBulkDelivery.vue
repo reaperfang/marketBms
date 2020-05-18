@@ -220,7 +220,10 @@ export default {
     }
   },
   methods: {
-    dataFilter(val, index) {
+    dataFilter(value, index) {
+      //这里需要使用input本身的value，且过滤前后空格
+      const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
+      const val = input.value.trim();
       this.list[index].distributorValue = val;
       if (val) {
       this.distributorList[index] = this.distributorListFilter.filter((item) => {
@@ -233,11 +236,11 @@ export default {
       }
     },
     selectFocus(e, index){
-      let value = e.target.value;
-      let input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
-       setTimeout(() => {
-          input.setAttribute('placeholder', '请输入或选择');
-          input.value = value;
+      const value = e.target.value;
+      const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
+      this.$nextTick(() => {
+        input.setAttribute('placeholder', '请输入或选择');
+        input.value = value;
       })
     },
     selectBlur(val, index){
@@ -855,7 +858,6 @@ export default {
           //模拟数据，之后删除掉
           res[0].deliveryWay = 2
           res[1].deliveryWay = 1
-          res[2].deliveryWay = 2
 
           this.list = res;
           this._apis.order

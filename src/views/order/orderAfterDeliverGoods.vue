@@ -113,8 +113,11 @@
             </div>
             <div class="container-item">
                 <p>3.填写物流信息</p>
-                <div class="logistics deliver-goods-logistics">
+                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 1">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                        <el-form-item label="配送方式">
+                            <span>普通快递</span>
+                        </el-form-item>
                         <el-form-item label="快递公司" prop="expressCompanyCode">
                             <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
@@ -136,9 +139,56 @@
                         </el-form-item>
                     </el-form>
                 </div>
+                <!-- 配送方式为商家配送 -->
+                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 2">
+                <el-form
+                    :model="ruleFormStore"
+                    :rules="rulesStore"
+                    ref="ruleFormStore"
+                    label-width="100px"
+                    class="demo-ruleForm"
+                >
+                    <el-form-item label="配送方式">
+                    <span>商家配送</span>
+                    </el-form-item>
+                    <el-form-item label="配送时间">
+                    <span>2020-04-10 13:00~17:00</span>
+                    </el-form-item>
+                    <el-form-item label="配送员" prop="distributorValue">
+                    <el-select v-model="ruleFormStore.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" ref="searchSelect" :filter-method="dataFilter" @visible-change="visibleChange" @focus="selectFocus" @blur="selectBlur" @change="selectChange">
+                        <el-option
+                        v-for="item in distributorList"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.name">
+                        </el-option>
+                    </el-select>
+                    <div class="pointer" style="display: inline-block; margin-left: 20px; margin-right: 10px;vertical-align:middle;">
+                        <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
+                    </div>
+                    <div class="prompt" style="display:inline-block;" v-show="isDistributorShow">
+                        <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoRoleManage">创建配送员角色</span><span>并</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
+                    </div>
+                    </el-form-item>
+                    <el-form-item label="联系方式" prop="phone">
+                    <el-input placeholder="请输入配送员手机号码" v-model="ruleFormStore.phone"></el-input>
+                    </el-form-item>
+                    <el-form-item label="物流备注" prop="remark">
+                    <el-input
+                        style="width: 623px;"
+                        type="textarea"
+                        :rows="2"
+                        maxlength="100"
+                        placeholder="非必填，请输入，不超过100个字符"
+                        v-model="ruleFormStore.remark"
+                    ></el-input>
+                    </el-form-item>
+                </el-form>
+                </div>
             </div>
             <div class="footer">
-                <el-button :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+                <el-button v-if="orderDetail.deliveryWay == 1" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+                <el-button v-if="orderDetail.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
             </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title"></component>
@@ -146,6 +196,8 @@
 </template>
 <script>
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
+
+import { validatePhone } from "@/utils/validate.js"
 
 export default {
     data() {
@@ -162,6 +214,16 @@ export default {
               } else {
                 callback();
               }
+          }
+      };
+      //手机号验证
+      var phoneValidator = (rule, value, callback) => {
+          if(value == ''){
+            callback(new Error('请输入手机号码'));
+          }else if(!validatePhone(value)){
+            callback(new Error('请输入正确的手机号码'));
+          }else{
+            callback();
           }
       };
         return {
@@ -183,6 +245,19 @@ export default {
                     { validator: expressCompanyCodeValidator, trigger: "blur" }
                 ]
             },
+            ruleFormStore: { //商家配送form
+                distributorValue: '', //选择的配送员值
+                phone: "", //联系方式
+                remark: ""
+            },
+            rulesStore: { //商家配送form验证规则
+                distributorValue: [
+                { required: true, message: '请输入或选择配送员', trigger: "change" }
+                ],
+                phone: [
+                { required: true, validator: phoneValidator, trigger: "blur" }
+                ]
+            },
             orderDetail: {},
             nameList: [],
             itemList: [],
@@ -195,7 +270,12 @@ export default {
             title: '',
             sendGoods: '',
             express: true,
-            sending: false
+            sending: false,
+            distributorList: [], //配送员筛选后的数据
+            distributorListFilter: [], //所有配送员数据
+            distributorName: '', //配送员名字
+            distributorId: '', //配送员id
+            isDistributorShow: false //尚未创建配送员信息提示控制
         }
     },
     created() {
@@ -216,6 +296,113 @@ export default {
     }
     },
     methods: {
+        dataFilter() {
+            //这里需要使用input本身的value，且过滤前后空格
+            const input = this.$refs.searchSelect.$children[0].$refs.input;
+            const val = input.value.trim();
+            this.ruleFormStore.distributorValue = val;
+            if (val) {
+            this.distributorList = this.distributorListFilter.filter((item) => {
+                if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
+                    return true
+                }
+            })
+            } else {
+            this.distributorList = this.distributorListFilter;
+            }
+        },
+        selectFocus(e){
+            const value = e.target.value;
+            const input = this.$refs.searchSelect.$children[0].$refs.input;
+            this.$nextTick(() => {
+                input.setAttribute('placeholder', '请输入或选择');
+                input.value = value;
+            })
+        },
+        selectBlur(){
+            //失去焦点时如果input中有值，且发生了变化，则需要根据name查询出对应的数据
+            if(this.ruleFormStore.distributorValue != '' && this.ruleFormStore.distributorValue != this.distributorName){
+                let arr = this.distributorListFilter.filter((item) => {
+                if (item.name === this.ruleFormStore.distributorValue) {
+                    return true
+                }
+                })
+                //如果未查询到，则把没有id，只记录配送员名字
+                if(arr.length == 0){
+                this.distributorName = this.ruleFormStore.distributorValue;
+                this.distributorId = '';
+                }else{
+                this.distributorName = arr[0].name;
+                this.distributorId = arr[0].id;
+                this.ruleFormStore.phone = arr[0].phone;
+                this.$refs.ruleFormStore.validateField('phone');
+                }
+            }
+        },
+        selectChange(val){
+            //选择后，把筛选列表重置
+            this.distributorList = this.distributorListFilter.filter((item) => {
+                if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
+                    return true
+                }
+            })
+            //根据name查询出对应数据，把选择的name和id给到相关字段
+            let arr = this.distributorListFilter.filter((item) => {
+                if (item.name === val) {
+                    return true
+                }
+                })
+            this.distributorName = arr[0].name;
+            this.distributorId = arr[0].id;
+            this.ruleFormStore.phone = arr[0].phone;
+            this.$refs.ruleFormStore.validateField('phone');
+            },
+            visibleChange(val){
+            if(!val){
+                let input = this.$refs.searchSelect.$children[0].$refs.input;
+                input.blur();
+            }
+        },
+            //获取配送员列表
+        getDistributorList(){
+            this._apis.order
+                .getDistributorList()
+                .then(res => {
+                res = [
+                    {"id":1,"name":"张三","phone":15910526104},
+                    {"id":2,"name":"李四","phone":15910526104},
+                    {"id":3,"name":"张四","phone":15910526104},
+                ]
+                //如果没有配送员，则提示去创建
+                if(res.length == 0){
+                    this.isDistributorShow = true;
+                }else{
+                    this.isDistributorShow = false;
+                }
+                this.distributorListFilter = res;
+                //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
+                if(this.distributorName){
+                    this.distributorList = this.distributorListFilter.filter((item) => {
+                        if (item.name.includes(this.distributorName) || item.name.toUpperCase().includes(val.toUpperCase())) {
+                        return true
+                        }
+                    })
+                }else{ //否则直接赋值全部配送员
+                    this.distributorList = res;
+                }
+                })
+                .catch(error => {});
+        },
+        //新页面打开角色管理
+        gotoRoleManage() {
+            let routeData = this.$router.resolve({ path: '/set/roleManage' });
+            window.open(routeData.href, '_blank');
+        },
+        //新页面打开子帐号管理
+        gotoSubaccountManage() {
+            let routeData = this.$router.resolve({ path: '/set/subaccountManage' });
+            window.open(routeData.href, '_blank');
+        },
         fetchOrderAddress() {
       this._apis.order
         .fetchOrderAddress({ id: this.cid, cid: this.cid })
@@ -282,10 +469,12 @@ export default {
         },
         sendGoodsHandler(formName) {
             let params
-
-            if(!this.ruleForm.expressCompanyCode) {
-                this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
-                return
+            //如果是普通快递
+            if(formName == 'ruleForm'){
+                if(!this.ruleForm.expressCompanyCode) {
+                    this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
+                    return
+                }
             }
 
             if(!this.multipleSelection.length) {
@@ -295,23 +484,21 @@ export default {
 
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(this.ruleForm.expressCompanyCode == 'other') {
-                        this.ruleForm.expressCompany = this.ruleForm.other
-                    } else {
-                        this.ruleForm.expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == this.ruleForm.expressCompanyCode).expressCompany
+
+                    //如果是普通快递
+                    if(formName == 'ruleForm'){
+                        if(this.ruleForm.expressCompanyCode == 'other') {
+                            this.ruleForm.expressCompany = this.ruleForm.other
+                        } else {
+                            this.ruleForm.expressCompany = this.expressCompanyList.find(val => val.expressCompanyCode == this.ruleForm.expressCompanyCode).expressCompany
+                        }
                     }
 
                     this.sending = true
-
-                    params = {
-                        orderAfterSaleSendInfoDtoList: [
-                            {
+                    let obj = {
                                 orderAfterSaleId: this.$route.query.id,
                                 memberInfoId: this.orderAfterSaleSendInfo.memberInfoId,
                                 orderAfterSaleCode: this.orderAfterSaleSendInfo.orderAfterSaleCode,
-                                expressCompanys: this.ruleForm.expressCompany,
-                                expressCompanyCodes: this.ruleForm.expressCompanyCode,
-                                expressNos: this.ruleForm.expressNos,
                                 receivedName: this.orderAfterSaleSendInfo.receivedName,
                                 receivedPhone: this.orderAfterSaleSendInfo.receivedPhone,
                                 receivedProvinceCode: this.orderAfterSaleSendInfo.receivedProvinceCode,
@@ -329,11 +516,28 @@ export default {
                                 sendCityName: this.orderAfterSaleSendInfo.sendCityName,
                                 sendAreaCode: this.orderAfterSaleSendInfo.sendAreaCode,
                                 sendAreaName: this.orderAfterSaleSendInfo.sendAreaName,
-                                sendDetail: this.orderAfterSaleSendInfo.sendDetail,
-                                remark: this.ruleForm.remark 
-                            }
+                                sendDetail: this.orderAfterSaleSendInfo.sendDetail
+                            };
+                    //如果是普通快递
+                    if(formName == 'ruleForm'){
+                        obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
+                        obj.expressNos = this.ruleForm.expressNos; // 快递单号
+                        obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
+                        obj.remark = this.ruleForm.remark; // 发货备注
+                      }else if(formName == 'ruleFormStore'){ //如果是商家配送
+                        obj.distributorName = this.distributorName; //配送员名字
+                        obj.distributorId = this.distributorId; //配送员id，自己输入的新的名字没有id
+                        obj.phone = this.ruleFormStore.phone; //配送员手机号
+                        obj.remark = this.ruleFormStore.remark; // 物流备注
+                    }
+                    params = {
+                        orderAfterSaleSendInfoDtoList: [
+                            obj
                         ],
                     }
+                    console.log(params)
+                    this.sending = false
+                    return;
                     this._apis.order.orderAfterSaleSend(params).then((res) => {
                         this.$message.success('发货成功');
                         this.sending = false
@@ -376,9 +580,19 @@ export default {
         },
         getOrderDetail() {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.id]}).then((res) => {
+                console.log()
+                //模拟数据，最后去掉
+                res[0].deliveryWay = 2;
+
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 this.fetchOrderAddress();
+
+                this.orderDetail = res[0];
+                //如果是商家配送，则需要请求拿到配送员列表
+                if(this.orderDetail.deliveryWay == 2){
+                    this.getDistributorList();
+                }
             }).catch(error => {
                 this.$message.error(error);
             })
@@ -483,6 +697,26 @@ export default {
 }
 .goods-detail-item {
     margin-right: 10px;
+}
+.shuaxin-fenlei {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px;
+    width: 80px;
+    height: 34px;
+    color: #6ACEA8;
+    background-color: #e6fbf3;
+    i {
+        margin-left: 12px;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url('~@/assets/images/goods/renovate.png');
+    }
+}
+.set-btn:hover {
+    color: #444a51;
+    text-decoration: underline;
 }
 
 </style>

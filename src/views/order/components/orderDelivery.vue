@@ -107,6 +107,7 @@
                     width="120">
                     <template slot-scope="scope">
                         <div>
+                            <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
                             {{scope.row.deliveryWay | deliveryWayFilter}}
                         </div>
                     </template>
@@ -115,6 +116,11 @@
                     prop="updateTime"
                     label="配送时间"
                     width="170">
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.deliveryDate}} {{scope.row.deliveryTime}}
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="receivedName"
@@ -205,9 +211,9 @@ export default {
                 orderProductNames: '',
                 expressCompanys: '',
                 receivedName: '',
-                deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-                date: "", //商家配送-日期
-                timeSlot: "", //商家配送-时间段
+                deliveryWay: "", // 配送方式:1普通快递,2商家配送
+                deliveryDate: "", //商家配送-日期
+                deliveryTime: "" //商家配送-时间段
             },
             tableData: [],
             loading: false,
@@ -392,9 +398,9 @@ export default {
                 orderProductNames: '',
                 expressCompanys: '',
                 receivedName: '',
-                deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-                date: "", //商家配送-日期
-                timeSlot: "", //商家配送-时间段
+                deliveryWay: "", // 配送方式:1普通快递,2商家配送
+                deliveryDate: "", //商家配送-日期
+                deliveryTime: "" //商家配送-时间段
             }
             this.getList()
         },
@@ -540,6 +546,14 @@ export default {
       text-decoration: underline;
       display: inline-block;
       cursor: pointer;
+    }
+    .icon-store{
+        display: inline-block;
+        width: 16px;
+        height: 15px;
+        margin-right: 5px;
+        vertical-align: -2px;
+        background: url(~@/assets/images/order/icon_store.png) no-repeat;
     }
 </style>
 

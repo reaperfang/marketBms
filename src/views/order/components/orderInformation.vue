@@ -10,7 +10,7 @@
                     <!-- 开启了预约配送则显示C端用户下单时选定的配送时间 -->
                     <div class="item" v-if="orderInfo.deliveryWay == 2">
                         <div class="label">配送时间</div>
-                        <div class="value">2020-04-01 13:00~17:00</div>
+                        <div class="value">{{orderInfo.deliveryDate}} {{orderInfo.deliveryTime}}</div>
                     </div>
                     <div class="item">
                         <div class="label">收货信息</div>

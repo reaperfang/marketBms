@@ -297,7 +297,10 @@ export default {
         }
     },
     methods: {
-        dataFilter(val) {
+        dataFilter() {
+            //这里需要使用input本身的value，且过滤前后空格
+            const input = this.$refs.searchSelect.$children[0].$refs.input;
+            const val = input.value.trim();
             this.ruleFormStore.distributorValue = val;
             if (val) {
             this.distributorList = this.distributorListFilter.filter((item) => {
@@ -308,16 +311,16 @@ export default {
             } else {
             this.distributorList = this.distributorListFilter;
             }
-            },
-            selectFocus(e){
-            let value = e.target.value;
-            let input = this.$refs.searchSelect.$children[0].$refs.input;
-            setTimeout(() => {
+        },
+        selectFocus(e){
+            const value = e.target.value;
+            const input = this.$refs.searchSelect.$children[0].$refs.input;
+            this.$nextTick(() => {
                 input.setAttribute('placeholder', '请输入或选择');
                 input.value = value;
             })
-            },
-            selectBlur(){
+        },
+        selectBlur(){
             //失去焦点时如果input中有值，且发生了变化，则需要根据name查询出对应的数据
             if(this.ruleFormStore.distributorValue != '' && this.ruleFormStore.distributorValue != this.distributorName){
                 let arr = this.distributorListFilter.filter((item) => {
@@ -336,8 +339,8 @@ export default {
                 this.$refs.ruleFormStore.validateField('phone');
                 }
             }
-            },
-            selectChange(val){
+        },
+        selectChange(val){
             //选择后，把筛选列表重置
             this.distributorList = this.distributorListFilter.filter((item) => {
                 if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
@@ -360,9 +363,9 @@ export default {
                 let input = this.$refs.searchSelect.$children[0].$refs.input;
                 input.blur();
             }
-            },
+        },
             //获取配送员列表
-            getDistributorList(){
+        getDistributorList(){
             this._apis.order
                 .getDistributorList()
                 .then(res => {
@@ -390,17 +393,17 @@ export default {
                 }
                 })
                 .catch(error => {});
-            },
-            //新页面打开角色管理
-            gotoRoleManage() {
-                let routeData = this.$router.resolve({ path: '/set/roleManage' });
-                window.open(routeData.href, '_blank');
-            },
-            //新页面打开子帐号管理
-            gotoSubaccountManage() {
-                let routeData = this.$router.resolve({ path: '/set/subaccountManage' });
-                window.open(routeData.href, '_blank');
-            },
+        },
+        //新页面打开角色管理
+        gotoRoleManage() {
+            let routeData = this.$router.resolve({ path: '/set/roleManage' });
+            window.open(routeData.href, '_blank');
+        },
+        //新页面打开子帐号管理
+        gotoSubaccountManage() {
+            let routeData = this.$router.resolve({ path: '/set/subaccountManage' });
+            window.open(routeData.href, '_blank');
+        },
         checkExpress() {
       let expressName
 

@@ -2095,15 +2095,18 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 //配送方式(根据选中去请求是否在店铺开启)
-                res.deliveryWay = [1];
-                if(res.deliveryWay.includes(1)){
+                let deliveryWayArr = [];
+                if(res.generalExpressType == 1){ //如果开启了普通快递
+                    deliveryWayArr.push(1);
                     this.getExpressSet();
                 }
-                if(res.deliveryWay.includes(2)){
+                if(res.businessDispatchType == 1){ //如果开启了商家配送
+                    deliveryWayArr.push(2);
                     this.getDeliverySet();
                 }
+                res.deliveryWay = deliveryWayArr;
 
-                console.log(res)
+                //console.log(res)
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
@@ -2701,6 +2704,16 @@ export default {
                         //delete params.isFreeFreight; //删除运费选择方式
                         //delete params.freightTemplateId; //删除模板id
                     //}
+                    //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
+                    params.generalExpressType = 0; //普通快递
+                    params.businessDispatchType = 0; //商家配送
+                    if(this.ruleForm.deliveryWay.includes(1)){
+                        params.generalExpressType = 1;
+                    }
+                    if(this.ruleForm.deliveryWay.includes(2)){
+                        params.businessDispatchType = 1;
+                    }
+                    delete params.deliveryWay;
 
                     console.log(params)
                     //return;

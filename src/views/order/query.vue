@@ -148,9 +148,9 @@ export default {
         sendType: "", // 发货类型:1正常发货,2自动发货,3优先发货
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
-        deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-        date: "", //商家配送-日期
-        timeSlot: "", //商家配送-时间段
+        deliveryWay: "", // 配送方式:1普通快递,2商家配送
+        deliveryDate: "", //商家配送-日期
+        deliveryTime: "", //商家配送-时间段
         orderTimeValue: "",
       },
       activeName: "shop"
@@ -290,9 +290,9 @@ export default {
         orderStatus: "",
         searchTimeType: "createTime",
         orderTimeValue: "",
-        deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-        date: "", //商家配送-日期
-        timeSlot: "", //商家配送-时间段
+        deliveryWay: "", // 配送方式:1普通快递,2商家配送
+        deliveryDate: "", //商家配送-日期
+        deliveryTime: "", //商家配送-时间段
         startIndex: 1,
         pageSize: 20,
       }

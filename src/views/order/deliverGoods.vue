@@ -361,24 +361,27 @@ export default {
     },
   },
   methods: {
-    dataFilter(val) {
+    dataFilter() {
+      //这里需要使用input本身的value，且过滤前后空格
+      const input = this.$refs.searchSelect.$children[0].$refs.input;
+      const val = input.value.trim();
       this.ruleFormStore.distributorValue = val;
       if (val) {
-      this.distributorList = this.distributorListFilter.filter((item) => {
-          if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
-            return true
-          }
-      })
-      } else {
-      this.distributorList = this.distributorListFilter;
+        this.distributorList = this.distributorListFilter.filter((item) => {
+            if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
+              return true
+            }
+        })
+      } else{
+        this.distributorList = this.distributorListFilter;
       }
     },
     selectFocus(e){
-      let value = e.target.value;
-      let input = this.$refs.searchSelect.$children[0].$refs.input;
-       setTimeout(() => {
-          input.setAttribute('placeholder', '请输入或选择');
-          input.value = value;
+      const value = e.target.value;
+      const input = this.$refs.searchSelect.$children[0].$refs.input;
+      this.$nextTick(() => {
+        input.setAttribute('placeholder', '请输入或选择');
+        input.value = value;
       })
     },
     selectBlur(){
