@@ -26,7 +26,10 @@ export default {
       shopMain: 'shopMainDefault',  //当前主页类型
       loading: true,
       hasHomePage: false,  //是否有首页装修数据
-      decorateData: null  //首页装修数据
+      decorateData: null,  //首页装修数据
+      ruleForm: {
+        pageTag: 0
+      }
     }
   },
 
@@ -39,7 +42,7 @@ export default {
     /* 获取首页数据 */
     fetch() {
       this.loading = true;
-      this._apis.shop.getHomePage({}).then((response)=>{
+      this._apis.shop.getHomePage(this.ruleForm).then((response)=>{
 
         //没有装修首页
         if(!response) {

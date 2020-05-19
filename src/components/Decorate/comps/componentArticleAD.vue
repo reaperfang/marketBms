@@ -26,14 +26,16 @@
           </template>
         </div>
         <!-- 2、轮播海报 -->
-        <div v-if="currentComponentData.data.templateType==2" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
+        <div v-if="currentComponentData.data.templateType==2" :style="{'padding':currentComponentData.data.pageMargin+'px','height':type3Height,'overflow':'hidden'}">
           <template v-if="hasContent">
-            <van-swipe :autoplay="3000" indicator-color="white">
+            <van-swipe :autoplay="3000" indicator-color="white"  @change="type3Change">
               <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
                   :src="item.url"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   alt
+                  ref="imgOption"
+                  @load="type3ChangeFirstLoad(key)"
                 />
               </van-swipe-item>
             </van-swipe>
@@ -48,15 +50,17 @@
           </template>
         </div>
         <!-- 3、大图横向滑动 -->
-        <div v-if="currentComponentData.data.templateType==3" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
+        <div v-if="currentComponentData.data.templateType==3" :style="{'padding':currentComponentData.data.pageMargin+'px','height':type3Height,'overflow':'hidden'}">
           <template v-if="hasContent">
-            <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="340 + currentComponentData.data.imgMargin" :height="'auto'" class="big_image">
+            <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="340 + currentComponentData.data.imgMargin" :height="'auto'" class="big_image" @change="type3Change">
               <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
                   :src="item.url"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
                   alt
+                  ref="imgOption"
+                  @load="type3ChangeFirstLoad(key)"
                 />
               </van-swipe-item>
             </van-swipe>
@@ -96,9 +100,9 @@
           </template>
         </div>
         <!-- 5、导航横向滑动 -->
-        <div v-if="currentComponentData.data.templateType==5" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
+        <div v-if="currentComponentData.data.templateType==5"  class="style5" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
           <template v-if="hasContent">
-            <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="93 + currentComponentData.data.imgMargin" :height="93">
+            <!-- <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="93 + currentComponentData.data.imgMargin" :height="93">
               <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
                   :src="item.url"
@@ -107,7 +111,17 @@
                   alt
                 />
               </van-swipe-item>
-            </van-swipe>
+            </van-swipe> -->
+            <div class="container">
+              <img
+                v-for="(item, key) of currentComponentData.data.itemList"
+                :key="key" 
+                :src="item.url"
+                :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                alt
+                :style="{'marginLeft':currentComponentData.data.imgMargin + 'px'}"
+              />
+            </div>
             <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
           </template>
           <template v-else>
@@ -131,7 +145,7 @@ export default {
   components: {},
   data () {
     return {
-      
+      type3Height:'auto'
     }
   },
   created() {
@@ -166,6 +180,15 @@ export default {
     }
   },
   methods: {
+    type3Change(index){
+      this.type3Height=this.$refs.imgOption[index].height + 'px';
+      console.log(index,this.type3Height);
+    },
+    type3ChangeFirstLoad(index){
+      if(index==0){
+        this.type3Height=this.$refs.imgOption[index].height + 'px';
+      }
+    }
   }
 }
 </script>
@@ -183,18 +206,18 @@ export default {
     & > img {
       width: 100%;
       // height: 180px;
+      object-fit: fill;
       display: block;
-      //   object-fit: contain;
     }
     & > img:last-child {
       margin-bottom: 0px !important;
     }
   }
   /deep/ .van-swipe__track {
-    height: 160px;
+    height: auto;
     img {
       width: 100%;
-      height: 100%;
+      display:block;
     }
   }
   .big_image{
@@ -202,12 +225,12 @@ export default {
       height: auto;
       img {
         width: 100%;  
-        height: 100%;
+        display:block;
       }
     }
   }
   /deep/ .van-swipe-item {
-    height: 160px;
+    height: auto;
   }
   .pdr_16 {
     padding-right: 8px;
@@ -222,6 +245,23 @@ export default {
   //   投影
   .boxShadow {
     box-shadow: 0px 5px 10px 0px rgba(232, 232, 240, 1);
+  }
+}
+.style5{
+  overflow:hidden;
+  .container{
+    width:100%;
+    overflow-x:scroll;
+    white-space:nowrap;
+    font-size:0;
+    img{
+      display:inline-block;
+      width:110px;
+      height:55px;
+      &:first-child{
+        margin-left:0 !important;
+      }
+    }
   }
 }
 </style>

@@ -49,8 +49,8 @@
           <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '提现明细', '默认页面', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '提现明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>

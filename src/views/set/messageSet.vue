@@ -26,7 +26,7 @@ export default {
   computed: {
   }, 
   created() { 
-    this.getShopMessage()
+
   },
   methods: {
     handleClick(comp) {

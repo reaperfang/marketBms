@@ -36,17 +36,17 @@
           inactive-color="#eee"
           v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
-          <el-popover
-            :disabled="!scope.row.wechatPublicId"
-            placement="right"
-            width="400"
-            trigger="click">
+          <el-tooltip
+            :disabled="!scope.row.wechatPublicId" 
+            placement="bottom">
+            <div slot="content" style="width:200px;">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
               <div class="preview_content" v-html="scope.row.wechatPublicPreview"></div>
-              <p class="checkInfo" v-if="scope.row.isGotoWechatPublicDetail == 1">详情</p>
+              <!-- <p class="checkInfo" v-if="scope.row.isGotoWechatPublicDetail == 1">详情</p> -->
               <p class="preview_id">模板ID:{{scope.row.wechatPublicId}}</p>
-            <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.wechatPublicId?'预览':'--'}}</el-link>
-          </el-popover>
+            </div>
+            <el-link type="primary" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.wechatPublicId?'预览':'--'}}</el-link>
+          </el-tooltip>
         </template>
       </el-table-column>
       <!-- <el-table-column
@@ -88,15 +88,15 @@
           inactive-color="#eee"
           v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
-          <el-popover
+          <el-tooltip
             :disabled="scope.row.smsPreview == undefined || !scope.row.smsTemplateKey"
-            placement="right"
-            width="400"
-            trigger="click">
+            placement="bottom">
+            <div slot="content" style="width:200px;">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
               <div v-html="scope.row.smsPreview" class="rich_wrapper"></div>
-            <el-link type="primary" slot="reference" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.smsTemplateKey?'预览':'--'}}</el-link>
-          </el-popover>
+            </div>
+            <el-link type="primary" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.smsTemplateKey?'预览':'--'}}</el-link>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -123,8 +123,7 @@ export default {
   },
   methods: {
     getShopMessage(){
-      this._apis.set.getShopMessage().then(response =>{
-        response.splice(response.length - 1, 1);
+      this._apis.set.getShopMessage({msgReceiver:'0'}).then(response =>{
         this.tableData = []
         response.map(item => {
           if(item.tcShopInfoMsgTemplateId != 21){
@@ -183,9 +182,6 @@ export default {
         this.getShopMessage()
       })
     },
-    handleClick(comp) {
-      this.currentTab = comp.name;
-    },
 
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -204,7 +200,7 @@ export default {
     }
   },
   mounted() {
-   // console.log(this.previewContent);
+
   },
 }
 </script>
@@ -220,7 +216,7 @@ export default {
 }
 .main{
   width: 100%;
-  padding: 20px;
+  padding: 0px 20px 50px 20px;
   background: #fff;
 }
 .title{
@@ -232,17 +228,22 @@ export default {
   }
 }
 .preview_title{
-  padding-left: 6px;
+  // padding-left: 6px;
   height: 36px;
   line-height: 36px;
-  background-color: #eee;
+  // background-color: #eee;
+  font-size: 12px;
+  text-align: center;
+}
+.preview_content{
+  font-size: 10px;
 }
 .rich_wrapper{
   padding: 6px 0 0 6px;
   line-height: 25px;
 }
 .preview_id{
-  padding: 6px 0 0 6px;
+  padding-top: 10px;
 }
 .checkInfo{
   color: red;

@@ -101,7 +101,7 @@
                   :before-upload="beforeUpload" 
                   :on-success="handleSuccess"
                   :on-change="handleChange"
-                  :limit="6"
+                  :limit="100"
                   :on-exceed="uploadLimit">
                   <i class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>

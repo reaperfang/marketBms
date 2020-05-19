@@ -17,7 +17,7 @@
                 <th width="50" v-for="(labelItem, labelIndex) in specsLabel.split(',')">
                     <span>{{labelItem}}</span>
                 </th>
-                <th class="image" width="150"><span>图片</span></th>
+                <th class="image" width="150"><span>SKU图片</span></th>
                 <th class="costPrice" width="150"><span>成本价</span></th>
                 <th class="salePrice" width="150"><span>售卖价</span></th>
                 <th class="stock" width="150"><span>库存</span></th>
@@ -81,26 +81,32 @@
                     </div>
                 </td>
                 <td>
-                    <el-input type="number" min="0" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input @change="specsChange(index, 'costPrice')" type="number" min="0" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
+                    <span class="message-span" v-if="item.showCostPriceError">{{item.costPriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input type="number" min="0" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input @change="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                    <span class="message-span" v-if="item.showSalePriceError">{{item.salePriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input type="number" min="0" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <el-input @change="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <span class="message-span" v-if="item.showStockError">{{item.stockErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input type="number" min="0" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
+                    <el-input @change="specsChange(index, 'warningStock')" type="number" min="0" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
+                    <span class="message-span" v-if="item.showWarningStockError">{{item.warningStockErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input type="number" min="0" v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
+                    <el-input @change="specsChange(index, 'weight')" type="number" min="0" v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
+                    <span class="message-span" v-if="item.showWeightError">{{item.weightErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
+                    <el-input @change="specsChange(index, 'volume')" type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
+                    <span class="message-span" v-if="item.showVolumeError">{{item.volumeErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="codeBlur(item.code, index)" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
-                    <!-- <p class="error-message" v-if="item.showCodeSpan">输入格式有误</p> -->
+                    <el-input @change="specsChange(index, 'code')" @blur="codeBlur(item.code, index)" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <span class="message-span" v-if="item.showCodeError">{{item.codeErrorMessage}}</span>
                 </td>
                 <td>
                     <div class="spec-operate">
@@ -310,6 +316,93 @@ export default {
         
     },
     methods: {
+        specsChange(index, str) {
+            if(str == 'costPrice') {
+                if(this.list[index].costPrice < 0) {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showCostPriceError: true,
+                        costPriceErrorMessage: '请输入正确的数字'
+                    }))
+                } else {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showCostPriceError: false,
+                        costPriceErrorMessage: ''
+                    }))
+                }
+            } else if(str == 'salePrice') {
+                if(this.list[index].salePrice < 0) {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showSalePriceError: true,
+                        salePriceErrorMessage: '请输入正确的数字'
+                    }))
+                } else {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showSalePriceError: false,
+                        salePriceErrorMessage: ''
+                    }))
+                }
+            } else if(str == 'stock') {
+                if(this.list[index].stock < 0) {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showStockError: true,
+                        stockErrorMessage: '请输入正确的数字'
+                    }))
+                } else {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showStockError: false,
+                        stockErrorMessage: ''
+                    }))
+                }
+            } else if(str == 'warningStock') {
+                if(this.list[index].warningStock < 0) {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showWarningStockError: true,
+                        warningStockErrorMessage: '请输入正确的数字'
+                    }))
+                } else {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showWarningStockError: false,
+                        warningStockErrorMessage: ''
+                    }))
+                }
+            } else if(str == 'weight') {
+                if(this.list[index].weight < 0) {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showWeightError: true,
+                        weightErrorMessage: '请输入正确的数字'
+                    }))
+                } else {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showWeightError: false,
+                        weightErrorMessage: ''
+                    }))
+                }
+            } else if(str == 'volume') {
+                if(this.list[index].volume < 0) {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showVolumeError: true,
+                        volumeErrorMessage: '请输入正确的数字'
+                    }))
+                } else {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showVolumeError: false,
+                        volumeErrorMessage: ''
+                    }))
+                }
+            } else if(str == 'code') {
+                if(!/^[a-zA-Z\d_\$]+$/.test(this.list[index].code)) {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showCodeError: true,
+                        codeErrorMessage: '编码格式不正确'
+                    }))
+                } else {
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showCodeError: false,
+                        codeErrorMessage: ''
+                    }))
+                }
+            }
+        },
         deleteImage(index) {
             // let imagesArr = this.ruleForm.images.split(',')
 
@@ -444,8 +537,7 @@ export default {
     table th.costPrice span,
     table th.salePrice span,
     table th.stock span,
-    table th.warningStock span,
-    table th.image span {
+    table th.warningStock span {
         position: relative;
         &:before {
             content: '*';
@@ -647,6 +739,12 @@ export default {
                 }
             }
         }
+    }
+    .message-span {
+        margin-left: 18px;
+        margin-top: 2px;
+        color:rgba(253,76,43,1);
+        font-size: 12px;
     }
 </style>
 

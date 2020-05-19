@@ -11,5 +11,12 @@ export default {
   name: 'h5ShopIndex',
   components: {shopMainDefault, shopMainDecorated, personCenter, goodsGroup, shopNavIndex},
   extends: wxShopIndex,
+  data() {
+    return {
+      ruleForm: {
+        pageTag: 1
+      }
+    }
+  }
 }
 </script>
