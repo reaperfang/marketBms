@@ -91,7 +91,7 @@ export default {
 
     /* 去开通H5店铺 */
     linkToOpenH5() {
-      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', applyId:3}})
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp', applyId:3}})
       this.SETCURRENT(8)
     },
 
