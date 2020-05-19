@@ -195,9 +195,10 @@ export default {
   .u_t {
     width: 100%;
     height: 211px;
+    position: relative;
     &.p1 {
       background: url("../../assets/images/profile/b_1s.jpg") 0 0 no-repeat;
-      background-size: contain;
+      background-size: 100% 100%;
     }
     &.p2 {
       background: url("../../assets/images/profile/b_2.png") 0 0 no-repeat;
@@ -207,21 +208,22 @@ export default {
     }
     &.p4 {
       background: url("../../assets/images/profile/b_4.png") 0 0 no-repeat;
-      background-size: contain;
+      background-size: 100% 100%;
     }
     p {
       color: #fff;
       font-size: 28px;
       text-align: center;
       margin-bottom: 29px;
-      padding-top: 54px;
+      padding-top:76px;
     }
     span {
       width: 100%;
+      position: absolute;
       display: inline-block;
-      padding-right: 30px;
+      right: 30px;
       text-align: right;
-      margin-top: 40px;
+      bottom: 22px;
       color: #fff;
     }
     div {
