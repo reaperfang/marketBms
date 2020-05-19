@@ -9,8 +9,8 @@
                             <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                         </div>
                         <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1">{{item.productLabelInfo.name}}</div>
-                        <p class="nothing" v-if="item.stock<1">售罄</p>
-                        <div class="nothingLayer" v-if="item.stock<1"></div>
+                        <p class="nothing" v-if="calcSotck(item)<1">售罄</p>
+                        <div class="nothingLayer" v-if="calcSotck(item)<1"></div>
                     </div>
                     <div class="text" v-if="showContents.length>0">
                         <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
@@ -18,7 +18,7 @@
                         <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
                             <p class="price">￥<font>{{getPrice(item)}}</font></p>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&item.stock>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&calcSotck(item)>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                     </div>
                 </li>
             </ul>
@@ -276,6 +276,17 @@ export default {
                 return item.goodsInfos[0].salePrice || 0;    
             };
             return 0;
+        },
+
+        //计算库存
+        calcSotck(item={}) {
+            let totalStock = 0;
+            for(let i of item.goodsInfos) {
+                if(i.status !== 0) {
+                   totalStock+= i.stock; 
+                }
+            }
+            return totalStock;
         }
 
     },
