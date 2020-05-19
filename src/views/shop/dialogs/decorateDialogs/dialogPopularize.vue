@@ -65,7 +65,7 @@
         </div>
 
         <!-- 设置区 -->
-        <div class="setting" v-loading="loading">
+        <div class="setting" v-loading="loading" v-if="displaySetting">
           <div v-show="currentType === 'h5'">
             <div style="display:flex;">
               <el-input v-model="pageLink" placeholder="右击右侧按钮复制链接" style="margin-right:20px;"></el-input>
@@ -181,6 +181,7 @@ export default {
       }
   },
   data() {
+    const _self = this;
     return {
       currentType: 'h5',
       currentDialog: '',
@@ -204,22 +205,42 @@ export default {
       },
       rulesH5: {
         title: [
-          { required: true, message: "请输入分享标题，建议不超过15个汉字", trigger: "blur" },
-          {
-            min: 1,
-            max: 15,
-            message: "建议不超过15个汉字",
-            trigger: "blur"
-          }
+          { required: true, message: "请输入分享标题", trigger: "blur" },
+          {validator: (rule, value, callback)=> {
+            let limit = 0;
+            if(_self.currentType === 'h5') {
+              if(_self.shareStyle === 0) {
+                limit = 15;
+              }else if(_self.shareStyle === 1){
+                limit = 25;
+              }
+            }
+            if(value.length >0 && value.length <= limit) {
+              callback();
+            }else {
+              callback(new Error(`请输入分享标题，建议不超过${limit}个汉字`));
+            }
+          }, trigger: 'blur'}
         ],
         describe: [
-          { required: true, message: "请输入分享描述，建议不超过30个汉字", trigger: "blur" },
-          {
-            min: 1,
-            max: 30,
-            message: "建议不超过30个汉字",
-            trigger: "blur"
-          }
+          { required: true, message: "请输入分享描述", trigger: "blur" },
+          {validator: (rule, value, callback)=> {
+            let limit = 0;
+            if(_self.currentType === 'h5') {
+              if(_self.shareStyle === 0) {
+                limit = 30;
+              }else if(_self.shareStyle === 1){
+                limit = 30;
+              }else if(_self.shareStyle === 2){
+                limit = 36;
+              }
+            }
+            if(value.length >0 && value.length <= limit) {
+              callback();
+            }else {
+              callback(new Error(`请输入分享描述，建议不超过${limit}个汉字`));
+            }
+          }, trigger: 'blur'}
         ],
         picture: [
           { required: false, message: "请选择logo", trigger: "change" }
@@ -227,13 +248,18 @@ export default {
       },
       rulesMini: {
         describe: [
-          { required: true, message: "请输入分享描述，建议不超过30个汉字", trigger: "blur" },
-          {
-            min: 1,
-            max: 30,
-            message: "建议不超过30个汉字",
-            trigger: "blur"
-          }
+          { required: true, message: "请输入分享描述", trigger: "blur" },
+          {validator: (rule, value, callback)=> {
+            let limit = 0;
+            if(_self.shareStyle2 === 1) {
+              limit = 30;
+            }
+            if(value.length >0 && value.length <= limit) {
+              callback();
+            }else {
+              callback(new Error(`请输入分享描述，建议不超过${limit}个汉字`));
+            }
+          }, trigger: 'blur'}
         ],
         picture: [
           { required: false, message: "请选择logo", trigger: "change" }
@@ -244,7 +270,8 @@ export default {
       openSetting: false,  //是否开启设置
       openSetting2: false,  //是否开启设置(小程序)
       h5DownloadPosterAble: false,  //h5是否可下载海报
-      miniDownloadPosterAble: false //小程序是否可下载海报
+      miniDownloadPosterAble: false, //小程序是否可下载海报
+      displaySetting: true  //是否渲染设置区(用来切换)
     };
   },
   watch: {
@@ -255,6 +282,10 @@ export default {
         this.getMiniAppQrcode();
       }
       this.fetch();
+      this.displaySetting = false;
+      this.$nextTick(()=>{
+        this.displaySetting = true;
+      })
     },
     shopInfo:{
       handler(newValue) {
@@ -270,9 +301,17 @@ export default {
     },
     shareStyle() {
       this.fetch();
+      this.displaySetting = false;
+      this.$nextTick(()=>{
+        this.displaySetting = true;
+      })
     },
     shareStyle2() {
       this.fetch();
+      this.displaySetting = false;
+      this.$nextTick(()=>{
+        this.displaySetting = true;
+      })
     }
   },
   computed: {
@@ -357,6 +396,7 @@ export default {
             picture: this.ruleFormH5.picture
           })
           .then((response)=>{
+            this.$message.success('提交成功！')
             this.fetch();
             this.submitLoading = false;
             this.openSetting = false;
@@ -366,7 +406,7 @@ export default {
             this.openSetting = false;
           });
         } else {
-          this.$message({ message: '填写正确的信息', type: 'warning' });
+          // this.$message({ message: '填写正确的信息', type: 'warning' });
         }
       })
     },
@@ -393,7 +433,7 @@ export default {
             this.openSetting2 = false;
           });
         } else {
-          this.$message({ message: '填写正确的信息', type: 'warning' });
+          // this.$message({ message: '填写正确的信息', type: 'warning' });
         }
       })
     },
@@ -558,11 +598,21 @@ export default {
           margin-top:20px;
           font-size:16px;
           color:rgba(68,67,75,1);
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         p{
           margin-top:5px;
           font-size:5px;
           color:rgba(146,146,155,1);
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
       .two{
@@ -618,7 +668,7 @@ export default {
       .bubble{
         background:#fff;
         width:166px;
-        height:60px;
+        min-height:60px;
         padding:10px;
         box-sizing: border-box;
         position: absolute;
@@ -635,19 +685,23 @@ export default {
           h3{
             font-size:14px;
             color:rgba(68,67,75,1);
+            width:100px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-            width:100px;
           }
           p{
             margin-top:5px;
             font-size:5px;
             color:rgba(146,146,155,1);
+            width:100px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-            width:100px;
           }
         }
         .right{
@@ -710,9 +764,11 @@ export default {
             font-size:12px;
             margin-left:10px;
             width:100%;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
           }
       }
     }
@@ -746,6 +802,11 @@ export default {
           .bottom{
             color:rgba(68,67,75,1);
             margin: 8px 0 5px 0;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
         .bg{
