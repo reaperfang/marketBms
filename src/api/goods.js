@@ -457,25 +457,13 @@ export function getMiniappInfo(data) {
   })
 }
 
-//获取普通快递在店铺是否设置开启状态
-export function getExpressSet(data) {
+//通过店铺查询获取普通快递、商家配送是否设置开启状态
+export function getExpressAndDeliverySet(data) {
   return request({
-    target: 'PRODUCT-SELLING-CHIME-PROCESSOR',
+    target: 'SHOP-API-100-PROCESSOR',
     method: 'post',
-    apiType: 'overview',
-    data,
-    token
-  })
-}
-
-//获取商家配送在店铺是否设置开启状态
-export function getDeliverySet(data) {
-  return request({
-    target: 'PRODUCT-SELLING-CHIME-PROCESSOR',
-    method: 'post',
-    apiType: 'overview',
-    data,
-    token
+    apiType: 'manager',
+    data
   })
 }
 

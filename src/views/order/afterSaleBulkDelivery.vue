@@ -11,7 +11,7 @@
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
-              <div class="col table-title-left" style="width: 660px;">
+              <div class="col table-title-left" style="width: 660px;margin-right: 40px;">
                 <div class="row align-center row-margin">
                   <div class="col">
                     <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked}"></i>
@@ -61,7 +61,7 @@
                     <p>收货地址: {{item.orderAfterSaleSendInfo.receivedProvinceName}} {{item.orderAfterSaleSendInfo.receivedCityName}} {{item.orderAfterSaleSendInfo.receivedAreaName}} {{item.orderAfterSaleSendInfo.receivedDetail}}</p>
                   </div>
                   <div class="col">
-                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm">
+                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
                         <el-form-item label="快递公司" prop="expressCompanyCodes">
                             <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
@@ -76,6 +76,26 @@
                         <el-form-item label="快递单号" prop="expressNos">
                             <el-input :disabled="!item.express" v-model="item.orderAfterSaleSendInfo.expressNos"></el-input>
                         </el-form-item>
+                    </el-form>
+                    <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
+                      <el-form-item label="配送时间">
+                        <span>2020-04-10 13:00~17:00</span>
+                      </el-form-item>
+                      <el-form-item label="配送员" prop="distributorValue">
+                        <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">
+                          <el-option
+                            v-for="items in distributorList[index]"
+                            :key="items.id"
+                            :label="items.name"
+                            :value="items.name">
+                          </el-option>
+                        </el-select>
+                        <p v-if="item.showErrorDistributorName" class="error-message">{{item.errorMessageDistributorName}}</p>
+                      </el-form-item>
+                      <el-form-item label="联系方式" prop="phone">
+                        <el-input placeholder="请输入配送员手机号码" v-model="item.phone" @blur="(e)=>{distributorPhoneBlur(e, index)}"></el-input>
+                        <p v-if="item.showErrorPhone" class="error-message">{{item.errorMessagePhone}}</p>
+                      </el-form-item>
                     </el-form>
                   </div>
                 </div>
@@ -124,6 +144,8 @@
 <script>
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 
+import { validatePhone } from "@/utils/validate.js"
+
 export default {
   data() {
     return {
@@ -135,7 +157,9 @@ export default {
       currentData: '',
       sendGoods: '',
       title: '',
-      expressCompanyList: []
+      expressCompanyList: [],
+      distributorList: [], //每个订单对应的筛选后的配送员列表
+      distributorListFilter: [] //配送员列表
     };
   },
   created() {
@@ -149,6 +173,160 @@ export default {
     }
   },
   methods: {
+    dataFilter(value, index) {
+      //这里需要使用input本身的value，且过滤前后空格
+      const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
+      const val = input.value.trim();
+      this.list[index].distributorValue = val;
+      if (val) {
+      this.distributorList[index] = this.distributorListFilter.filter((item) => {
+          if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
+            return true
+          }
+      })
+      } else {
+        this.distributorList[index] = this.distributorListFilter;
+      }
+    },
+    selectFocus(e, index){
+      const value = e.target.value;
+      const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
+      this.$nextTick(() => {
+        input.setAttribute('placeholder', '请输入或选择');
+        input.value = value;
+      })
+    },
+    selectBlur(val, index){
+      //失去焦点时如果input中有值，且发生了变化，则需要根据name查询出对应的数据
+      if(this.list[index].distributorValue != '' && this.list[index].distributorValue != this.list[index].distributorName){
+        let arr = this.distributorListFilter.filter((item) => {
+          if (item.name === this.list[index].distributorValue) {
+            return true
+          }
+        })
+        //如果未查询到，则把没有id，只记录配送员名字
+        if(arr.length == 0){
+          this.list[index].distributorName = this.list[index].distributorValue;
+          this.list[index].distributorId = '';
+        }else{
+          this.list[index].distributorName = arr[0].name;
+          this.list[index].distributorId = arr[0].id;
+          this.list[index].phone = arr[0].phone;
+          this.list[index].showErrorPhone = false;
+        }
+        //检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
+        this.list.forEach((items, indexs) => {
+          if(indexs != index){
+            if(items.distributorValue == ''){
+              items.distributorValue = this.list[index].distributorName;
+              items.distributorName = this.list[index].distributorName;
+              items.distributorId = this.list[index].distributorId;
+              items.showErrorDistributorName = false;
+
+              this.distributorList[indexs] = this.distributorListFilter.filter((item) => {
+                  if (item.name.includes(items.distributorValue) || item.name.toUpperCase().includes(items.distributorValue.toUpperCase())) {
+                    return true
+                  }
+              })
+            }
+            if(items.phone == '' && arr.length != 0){
+              items.phone = this.list[index].phone;
+              items.showErrorPhone = false;
+            }
+          }
+        })
+      }
+      if(this.list[index].distributorValue != ''){
+        this.list[index].showErrorDistributorName = false;
+      }else{
+        this.list[index].showErrorDistributorName = true;
+      }
+    },
+    selectChange(val, index){
+      this.list[index].showErrorDistributorName = false;
+      this.list[index].showErrorPhone = false;
+      //选择后，把筛选列表重置
+      this.distributorList[index] = this.distributorListFilter.filter((item) => {
+          if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
+            return true
+          }
+      })
+      //根据name查询出对应数据，把选择的name和id给到相关字段
+      let arr = this.distributorListFilter.filter((item) => {
+          if (item.name === val) {
+            return true
+          }
+        })
+      this.list[index].distributorName = arr[0].name;
+      this.list[index].distributorId = arr[0].id;
+      this.list[index].phone = arr[0].phone;
+
+      //检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
+      this.list.forEach((items, indexs) => {
+        if(indexs != index){
+          if(items.distributorValue == ''){
+            items.distributorValue = this.list[index].distributorName;
+            items.distributorName = this.list[index].distributorName;
+            items.distributorId = this.list[index].distributorId;
+            this.distributorList[indexs] = this.distributorListFilter.filter((item) => {
+                if (item.name.includes(items.distributorValue) || item.name.toUpperCase().includes(items.distributorValue.toUpperCase())) {
+                  return true
+                }
+            })
+          }
+          if(items.phone == ''){
+            items.phone = this.list[index].phone;
+          }
+          items.showErrorDistributorName = false;
+          items.showErrorPhone = false;
+        }
+      })
+    },
+    visibleChange(val, index){
+      if(!val){
+        let input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
+        input.blur();
+      }
+    },
+    distributorPhoneBlur(e, index){
+      let value = e.target.value;
+      if(value == ''){
+        this.list[index].showErrorPhone = true;
+        this.list[index].errorMessagePhone = '请输入手机号码';
+      }else if(!validatePhone(value)){
+        this.list[index].showErrorPhone = true;
+        this.list[index].errorMessagePhone = '请输入正确的手机号码';
+      }else{
+        this.list[index].showErrorPhone = false;
+        //检测其他订单中配送员手机号是否有为空的，如果有，则直接按当前的给自动填充上
+        this.list.forEach((items, indexs) => {
+          if(indexs != index){
+            if(items.phone == ''){
+              items.phone = value;
+              items.showErrorPhone = false;
+            }
+          }
+        })
+      }
+    },
+    //获取配送员列表
+    getDistributorList(length){
+        this._apis.order
+            .getDistributorList()
+            .then(res => {
+            res = [
+                {"id":1,"name":"张三","phone":15910526104},
+                {"id":2,"name":"李四","phone":15910526105},
+                {"id":3,"name":"张四","phone":15910526106},
+            ]
+            this.distributorListFilter = res;
+            for(let i = 0; i < length; i++){
+              this.distributorList.push(res);
+            }
+            
+            })
+            .catch(error => {});
+    },
     checkExpress(index) {
       let expressCompanyCodes
       let expressName
@@ -187,45 +365,79 @@ export default {
       }
     },
       sendGoodsHandler() {
+          //配送方式
+          const deliveryWay = this.list[0].deliveryWay; 
+          
           try {
               let params
 
-              if (
-                this.list
-                  .reduce((total, val) => {
-                    return total.concat(val.itemList);
-                  }, [])
-                  .filter(val => val.checked)
-                  .some(val => {
-                    if(val.express) {
-                      return !val.orderAfterSaleSendInfo.expressNos || /^\s+$/.test(val.orderAfterSaleSendInfo.expressNos)
-                    }
-                    return false
-                  })
-              ) {
-                this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
-                return;
+              if(deliveryWay == 1){ //如果为普通快递
+                if (
+                  this.list
+                    .reduce((total, val) => {
+                      return total.concat(val.itemList);
+                    }, [])
+                    .filter(val => val.checked)
+                    .some(val => {
+                      if(val.express) {
+                        return !val.orderAfterSaleSendInfo.expressNos || /^\s+$/.test(val.orderAfterSaleSendInfo.expressNos)
+                      }
+                      return false
+                    })
+                ) {
+                  this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
+                  return;
+                }
               }
+
+              let isWrong = false;
+              this.list.forEach((item, index) => {
+                //如果是商家配送，则验证配送员信息
+                  if(item.deliveryWay == 2){
+                    if(item.distributorName == ''){
+                      isWrong = true;
+                      item.showErrorDistributorName = true;
+                    }
+                    if(item.phone == ''){
+                      isWrong = true;
+                      item.showErrorPhone = true;
+                      item.errorMessagePhone = '请输入手机号码'
+                    }else if(!validatePhone(item.phone)){
+                      isWrong = true;
+                      item.showErrorPhone = true;
+                      item.errorMessagePhone = '请输入正确的手机号码'
+                    }
+                  }
+ 
+              })
+            if(isWrong) {
+              this.$nextTick(() => {
+                document.querySelector('.error-message').scrollIntoView()
+                let scrollTop = document.querySelector('.content-main').scrollTop
+
+                document.querySelector('.content-main').scrollTop = scrollTop - 40
+              })
+              return
+            }
+              
 
             params = {
                 orderAfterSaleSendInfoDtoList: this.list.map(item => {
                     let expressCompanys = ''
                     
-                    if (item.expressCompanyCodes == "other") {
-                      expressCompanys = item.other;
-                    } else {
-                      if(this.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes)) {
-                        expressCompanys = this.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                    if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
+                      if (item.expressCompanyCodes == "other") {
+                        expressCompanys = item.other;
+                      } else {
+                        if(this.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes)) {
+                          expressCompanys = this.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                      }
+                      }
                     }
-                    }
-
-                    return {
+                    let obj = {
                         orderAfterSaleId: item.orderAfterSaleSendInfo.orderAfterSaleId,
                         memberInfoId: item.orderAfterSaleSendInfo.memberInfoId,
                         orderAfterSaleCode: item.orderAfterSaleSendInfo.code,
-                        expressCompanys: expressCompanys,
-                        expressCompanyCodes: item.orderAfterSaleSendInfo.expressCompanyCodes,
-                        expressNos: item.orderAfterSaleSendInfo.expressNos,
                         receivedName: item.orderAfterSaleSendInfo.receivedName,
                         receivedPhone: item.orderAfterSaleSendInfo.receivedPhone,
                         receivedProvinceCode: item.orderAfterSaleSendInfo.receivedProvinceCode,
@@ -245,9 +457,24 @@ export default {
                         sendAreaName: item.orderAfterSaleSendInfo.sendAreaName,
                         sendDetail: item.orderAfterSaleSendInfo.sendDetail,
                         remark: item.orderAfterSaleSendInfo.remark 
+                    };
+                    //如果是普通快递，则添加快递公司与快递单号
+                    if(item.deliveryWay == 1){
+                      obj.expressCompanys = expressCompanys;
+                      obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
+                      obj.expressCompanyCodes = item.orderAfterSaleSendInfo.expressCompanyCodes;
                     }
+                    //如果是商家配送，则添加配送员信息
+                    if(item.deliveryWay == 2){
+                      obj.distributorName = item.distributorName;
+                      obj.distributorId = item.distributorId;
+                      obj.phone = item.phone;
+                    }
+                    return obj
                 })
             }
+            console.log(params)
+            return;
             this._apis.order.orderAfterSaleSend(params).then((res) => {
                 this.$message.success('发货成功');
                 this.$router.push('/order/deliverGoodsSuccess?ids=' + this.$route.query.ids + '&type=afterSaleBulkDelivery')
@@ -349,7 +576,25 @@ export default {
                   goods.checked = false
                   goods.sendCount = "";
               })
+
+            val.distributorValue = '';
+            val.distributorName = '';
+            val.distributorId = '';
+            val.phone = '';
+            val.showErrorDistributorName = false;
+            val.errorMessageDistributorName = '请输入或选择配送员';
+            val.showErrorPhone = false;
+            val.errorMessagePhone = '';
+
           })
+
+          //获取配送员列表
+          this.getDistributorList(res.length);
+
+          //模拟数据，之后删除掉
+          res[0].deliveryWay = 2
+          res[1].deliveryWay = 2
+
           this.list = res;
 
           this._apis.order
@@ -434,6 +679,36 @@ export default {
       }
     }
   }
+  .table-title {
+    background: #ebeafa;
+    color: #655eff;
+    height: 46px;
+    padding-left: 15px;
+  }
+  .table-container {
+    padding-left: 15px;
+    padding-top: 20px;
+    .col:first-child {
+      margin-right: 40px;
+    }
+  }
+  .goodsItem {
+    padding-bottom: 44px;
+    padding-top: 20px;
+    border-bottom: 1px solid #d3d7d4;
+    &:last-child {
+      border: none;
+      padding-bottom: 0;
+    }
+  }
+  .goods-specs {
+    color: #9fa29f;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  .footer {
+    text-align: center;
+  }
 }
 .container-item {
   margin-top: 20px;
@@ -509,4 +784,11 @@ export default {
       width: 290px!important;
   }
 } 
+.error-message {
+  color: #FD4C2B;
+  font-size: 12px;
+  line-height: 21px;
+  padding-top: 2px;
+  margin-bottom: 0;
+}
 </style>
