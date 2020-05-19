@@ -53,6 +53,8 @@ class Ajax {
             return res
           }
           return res.data;
+        }else if (res.code === 1) {
+          return res.data;
         }else if(res.status === 'error' && res.code === "10088"){
           MessageBox.alert('该店铺已停用！', '提示', {
             confirmButtonText: '确定',

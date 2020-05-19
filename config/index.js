@@ -54,6 +54,13 @@ module.exports = {
           '^/upload_server': ''
         }
       },
+      '/zx_server/**': {
+        target: 'https://test-cms-api.300.cn',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/zx_server': ''
+        }
+      },
     }
   },
 
