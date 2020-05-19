@@ -1,65 +1,84 @@
 /* 移动H5已装修 -- 继承自 微信已装修 */
 <template>
-  <div class="shop_index_wrapper">
-    <div class="tips">
-      <i></i>
-      <div class="words">
-        <p>店铺的“个人中心”“商品分类”“店铺导航”记得要去开启生效哦~ </p>
-        <p>否则会影响店铺在C端的显示~ </p>
-      </div>
+  <div class="shop_index_wrapper" v-loading="loading" v-calcHeight="160">
+    <div v-if="!webPageStatus || (webPageStatus === 0)" class="no_open">
+      <img src="../../../../assets/images/shop/no-open-h5.png" alt="">
+      <p>您尚未开启移动H5店铺，请您去“应用中心-渠道应用”设置域名并开启店铺：</p>
+      <div class="button" @click="linkToOpenH5"><span>渠道应用</span></div>
     </div>
-    <div class="preview_wrapper">
-      <!-- 装修编辑器 -->
-      <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config" :height="175+7+64"></Decorate>
-      <div class="shop_info" v-calcHeight="175+10">
-        <div class="shop_code">
-          <h3>H5店铺手机预览</h3>
-          <h4>请您使用手机内自带浏览器扫描二维码，预览店铺效果</h4>
-          <div class="qrcode_wrapper">
-            <img :src="qrCode" alt="">
-          </div>
-        </div>
-        <div class="url">
-          <h3>H5店铺预览地址：</h3>
-          <el-input v-model="shareUrl"></el-input>
-          <div class="url_btn">
-            <el-button type="primary" v-clipboard:copy="shareUrl" v-clipboard:success="onCopy">一键复制</el-button>
-          </div>
-        </div>
-        <div class="tools">
-          <h3>店铺工具</h3>
-          <ul class="tile-list n3">
-            <li>
-              <el-button type="primary" plain @click="_routeTo('m_ADManageIndex')">首页广告</el-button>
-              <p>{{shopInfo.adOpenType === 1 ? '已开启' : '已关闭'}}</p>
-            </li>
-            <li>
-              <el-button type="primary" plain @click="_routeTo('m_h5ShopNavIndex')">店铺导航</el-button>
-              <p>{{shopInfo.shopNavigation === 1 ? '已开启' : '已关闭'}}</p>
-            </li>
-            <li>
-              <el-button type="primary" plain @click="_routeTo('m_shopStyle')">店铺风格</el-button>
-              <div class="color_wrapper">
-                <div class="style_block" v-for="(item, key) of colorStyle.colors" :key="key" :style="{'backgroundColor': item}"></div>
-              </div>
-            </li>
-            <li>
-              <el-button type="primary" plain @click="_routeTo('m_shopEditor', {pageId: decoratePageData.id})">首页装修</el-button>
-            </li>
-            <li>
-              <el-button type="primary" plain  @click="_routeTo('m_templateManageIndex')">店铺模板</el-button>
-            </li>
-          </ul>
+    <div v-if="webPageStatus === 1" class="no_bind">
+      <img src="../../../../assets/images/shop/no-open-h5.png" alt="">
+      <p>您尚未成功开启H5店铺，店铺域名未连接成功，请您去“渠道应用-H5店铺”重新设置：</p>
+      <div class="button" @click="linkToBindDomain"><span>移动</span>H5</div>
+    </div>
+    <template v-if="webPageStatus === 2">
+      <div class="tips">
+        <i></i>
+        <div class="words">
+          <p>店铺的“个人中心”“商品分类”“店铺导航”记得要去开启生效哦~ </p>
+          <p>否则会影响店铺在C端的显示~ </p>
         </div>
       </div>
-    </div>
+      <div class="preview_wrapper">
+        <!-- 装修编辑器 -->
+        <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config" :height="175+7+64"></Decorate>
+        <div class="shop_info" v-calcHeight="175+10">
+          <div class="shop_code">
+            <h3>H5店铺手机预览</h3>
+            <h4>请您使用手机内自带浏览器扫描二维码，预览店铺效果</h4>
+            <div class="qrcode_wrapper">
+              <img :src="qrCode" alt="">
+            </div>
+          </div>
+          <div class="url">
+            <h3>H5店铺预览地址：</h3>
+            <el-input v-model="shareUrl"></el-input>
+            <div class="url_btn">
+              <el-button type="primary" v-clipboard:copy="shareUrl" v-clipboard:success="onCopy">一键复制</el-button>
+            </div>
+          </div>
+          <div class="tools">
+            <h3>店铺工具</h3>
+            <ul class="tile-list n3">
+              <li>
+                <el-button type="primary" plain @click="_routeTo('m_ADManageIndex')">首页广告</el-button>
+                <p>{{shopInfo.adOpenType === 1 ? '已开启' : '已关闭'}}</p>
+              </li>
+              <li>
+                <el-button type="primary" plain @click="_routeTo('m_h5ShopNavIndex')">店铺导航</el-button>
+                <p>{{shopInfo.shopNavigation === 1 ? '已开启' : '已关闭'}}</p>
+              </li>
+              <li>
+                <el-button type="primary" plain @click="_routeTo('m_shopStyle')">店铺风格</el-button>
+                <div class="color_wrapper">
+                  <div class="style_block" v-for="(item, key) of colorStyle.colors" :key="key" :style="{'backgroundColor': item}"></div>
+                </div>
+              </li>
+              <li>
+                <el-button type="primary" plain @click="_routeTo('m_shopEditor', {pageId: decoratePageData.id})">首页装修</el-button>
+              </li>
+              <li>
+                <el-button type="primary" plain  @click="_routeTo('m_templateManageIndex')">店铺模板</el-button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
 import shopMainDecorated from '../wxShop/shopMainDecorated';
+import { mapMutations } from 'vuex'
 export default {
   name: "h5ShopMainDecorated",  
   extends: shopMainDecorated,
+  data() {
+    return {
+      loading: true,
+      webPageStatus: 0  //未绑定过域名
+    }
+  },
   watch: {
     decoratePageData: {
       handler(newValue) {
@@ -70,18 +89,84 @@ export default {
   },
   created() {
     this.shareUrl = this.decoratePageData ? this.decoratePageData.shareUrl : '';
+    this.getH5StoreStatus();
   },
   methods: {
+    ...mapMutations(['SETCURRENT']),
     onCopy () {
       this.$message({
         message: `复制成功！`,
         type: 'success'
       });
     },
+
+    /* 获取H5店铺状态 */
+    getH5StoreStatus() {
+      this.loading = true;
+      this._apis.shop.getH5StoreStatus({}).then((response)=>{
+        this.webPageStatus = response.webPageStatus;
+        this.loading = false;
+      }).catch((error)=>{
+        console.error(error);
+        this.loading = false;
+      });
+    },
+
+    /* 去开通H5店铺 */
+    linkToOpenH5() {
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', applyId:3}})
+      this.SETCURRENT(8)
+    },
+
+    /* 去绑定H5店铺域名 */
+    linkToBindDomain() {
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', applyId:3}})
+      this.SETCURRENT(8)
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
+.no_open,.no_bind{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  img{
+    margin-top:33px;
+    width:403px;
+    height:330px;
+  }
+  p{
+    font-size:16px;
+    font-family:MicrosoftYaHei;
+    color:rgba(68,67,75,1);
+    margin-top:37px;
+  }
+  .button{
+    margin-top: 24px;
+    width: 152px;
+    height: 34px;
+    /* line-height: 34px; */
+    background: #655EFF;
+    font-size: 14px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: #fff;
+    padding: 7px 20px 7px 32px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    span{
+      letter-spacing: 8px;
+    }
+  }
+}
+.no_bind{
+  .button{
+    padding: 7px 30px 7px 32px;
+  }
+}
 .tips{
   display:flex;
   justify-content: flex-start;

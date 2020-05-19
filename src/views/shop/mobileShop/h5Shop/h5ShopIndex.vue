@@ -14,20 +14,9 @@ export default {
   data() {
     return {
       ruleForm: {
-        pageTag: 1,
-        webPageStatus: 0  //未绑定过域名
+        pageTag: 1
       }
     }
-  },
-  methods: {
-    // getH5StoreStatus() {
-    //   this.shop.getH5StoreStatus().then((response)=>{
-    //     this.webPageStatus = response.webPageStatus;
-    //   }).catch((error)=>{
-    //     console.error(error);
-    //     this.loading = false;
-    //   });
-    // }
   }
 }
 </script>

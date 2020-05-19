@@ -43,7 +43,7 @@ module.exports = {
 
 			/* 营销服务 */
 			'/sale_server/**': {
-				target: 'https://test-omo.aiyouyi.cn/mkt-api/',
+				target: 'https://test3-omo.aiyouyi.cn/mkt-api/',
 				changeOrigin: true,
 				pathRewrite: {
 					'^/sale_server': ''

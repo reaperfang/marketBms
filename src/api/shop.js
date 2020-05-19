@@ -710,12 +710,17 @@ export function changeSwitchStatus(data) {
 
     //获取H5店铺状态
   export function getH5StoreStatus(data) {
+      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let cid = shopInfo && shopInfo.id || ''
       return request({
         url: '/v1/b/app-h5-store/get/status',
         method: 'get',
         baseURL: process.env.SALE_API,
         params:data,
-        isDev: true
+        isDev: true,
+        headers: {
+          sid: cid
+        }
       })
   }
 
