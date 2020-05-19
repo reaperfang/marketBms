@@ -1,12 +1,13 @@
 <template>
   <div>
     <el-tabs v-model="currentTab">
-      <el-tab-pane label="店铺主页" :name="shopMain" v-loading="loading"></el-tab-pane>
+      <el-tab-pane label="店铺主页" :name="shopMain"></el-tab-pane>
       <el-tab-pane label="个人中心" name="personCenter"></el-tab-pane>
       <el-tab-pane label="商品分类" name="goodsGroup"></el-tab-pane>
       <el-tab-pane label="店铺导航" name="shopNavIndex"></el-tab-pane>
     </el-tabs>
-    <component :is="currentTab" :decorateData="decorateData"></component>
+    <div v-if="loading && currentTab === 'shopMainDefault'" class="loading_wrapper" v-calcHeight="160" v-loading="loading"></div>
+    <component v-if="!loading" :is="currentTab" :decorateData="decorateData" class="animated fadeIn"></component>
   </div>
 </template>
 
@@ -70,5 +71,8 @@ export default {
   padding:20px;
   padding-bottom: 0;
   background: rgb(255, 255, 255);
+}
+.loading_wrapper{
+  width:100%;
 }
 </style>

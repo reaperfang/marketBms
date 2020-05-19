@@ -5,7 +5,6 @@
       <el-tab-pane label="公众号" name="h5"></el-tab-pane>
       <el-tab-pane label="小程序" name="mini"></el-tab-pane>
       <div class="popularize_wrapper">
-
         <!-- 预览区 -->
         <div class="preview poster" v-if="currentType === 'h5' && shareStyle == 0">
           <div class="one">
@@ -194,15 +193,12 @@ export default {
       openQrcodeLoading: false,  //打开二维码loading
       ruleFormH5: {
         pageInfoId: this.pageId,
-        type: '0',
         title: '店铺名称',
         describe: '我发现了一个不错的店铺，快来看看吧。',
         picture: ''
       },
       ruleFormMini: {
         pageInfoId: this.pageId,
-        type: '0',
-        title: '',
         describe: '我发现了一个不错的店铺，快来看看吧。',
         picture: ''
       },
@@ -262,8 +258,8 @@ export default {
     },
     shopInfo:{
       handler(newValue) {
-        this.ruleFormH5.picture = this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo;
-        this.ruleFormMini.picture = this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo;
+        this.$set(this.ruleFormH5, 'picture', this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo)
+        this.$set(this.ruleFormMini, 'picture', this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo)
         if(this.currentType === 'h5') {
           this.getQrcode();
         }else if(this.currentType === 'mini') {
@@ -328,18 +324,15 @@ export default {
           if (this.currentType === 'h5') {
             this.ruleFormH5 = {
               pageInfoId: this.pageId,
-              type: '0',
-              title: '',
-              describe: '',
-              picture: ''
+              title: '店铺名称',
+              describe: '我发现了一个不错的店铺，快来看看吧。',
+              picture: this.shopInfo.logoCircle || this.shopInfo.logo
             };
           } else {
             this.ruleFormMini = {
               pageInfoId: this.pageId,
-              type: '0',
-              title: '',
-              describe: '',
-              picture: ''
+              describe: '我发现了一个不错的店铺，快来看看吧。',
+              picture: this.shopInfo.logoCircle || this.shopInfo.logo
             };
           }
         }
@@ -387,7 +380,6 @@ export default {
             type: '1',
             shareStyle: this.shareStyle2,
             pageInfoId: this.ruleFormMini.pageInfoId,
-            title: this.ruleFormMini.title,
             describe: this.ruleFormMini.describe,
             picture: this.ruleFormMini.picture
           })
@@ -691,7 +683,7 @@ export default {
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
           position: absolute;
-          bottom: 90px;
+          bottom: 60px;
           left: 43px;
           border-radius: 6px;
           display: -webkit-box;
