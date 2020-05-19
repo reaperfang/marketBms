@@ -997,26 +997,27 @@ export default {
     }
   }
   .cardImg2 {
-    width: 323px;
+    width: 313px;
     height: 140px;
     position: absolute;
     right: 20px;
     top: -86px;
     border-radius: 8px;
     background: url('../../assets/images/client/bg_card.png') 0 0 no-repeat;
+    color: #fff;
     .c_bh{
       font-size: 12px;
-      margin: 4px 0 0 13px;
+      margin: 8px 0 0 24px;
     }
     .c_name{
       font-size: 20px;
-      text-align: center;
       font-weight: bold;
-      margin-top: 20px;
+      margin-top: -6px;
+      margin-left: 25px;
     }
     .c_level{
-      margin: 20px 0 0 15px;
-      font-size: 16px;
+      margin: 34px 0 0 26px;
+      font-size: 18px;
     }
   }
   .level_order {
