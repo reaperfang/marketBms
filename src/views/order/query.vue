@@ -163,9 +163,11 @@ export default {
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
         orderTimeValue: "",
+        startIndex: 1,
+        pageSize: 20
       },
       activeName: "shop",
-      resellConfigInfo: null
+      resellConfigInfo: null,
     };
   },
   created() {
