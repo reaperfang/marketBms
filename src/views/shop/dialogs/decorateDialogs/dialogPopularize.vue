@@ -8,7 +8,7 @@
         <!-- 预览区 -->
         <div class="preview poster" v-if="currentType === 'h5' && shareStyle == 0">
           <div class="one">
-            <img :src="ruleFormH5.picture" alt="LOGO">
+            <img :src="ruleFormH5.picture" alt="">
             <h3>{{ruleFormH5.title || '分享标题'}}</h3>
             <p>{{(ruleFormH5.describe) || '分享描述'}}</p>
           </div>
@@ -22,7 +22,8 @@
             </div>
           </div>
           <div class="three">
-            <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading" >下载完整海报图片</el-button>
+            <!-- <el-button type="text" @click="getPoster" :disabled="!h5DownloadPosterAble" :loading="downloadPosterLoading" >下载完整海报图片</el-button> -->
+            <el-button type="text" @click="getPoster" :loading="downloadPosterLoading" >下载完整海报图片</el-button>
             <el-button type="text">|</el-button>
             <el-button type="text" @click="openQrcode('h5')" :loading="openQrcodeLoading">仅下载二维码</el-button>
           </div>
@@ -35,31 +36,33 @@
                 <p>{{ruleFormH5.describe || '页面描述'}}</p>
               </div>
               <div class="right">
-                <img :src="ruleFormH5.picture" alt="LOGO">
+                <img :src="ruleFormH5.picture" alt="">
               </div>
           </div>
+          <i class="icon"></i>
         </div>
 
         <div class="preview wechat_ommunity" v-if="currentType === 'h5' && shareStyle == 2">
            <div class="bubble">
               <img :src="ruleFormH5.picture" alt="">
-              <span>{{ruleFormH5.title || '页面名称'}}</span>
+              <span>{{ruleFormH5.describe || '页面描述'}}</span>
           </div>
         </div>
         
-        <div class="preview wechat_ommunity" v-if="currentType === 'mini' && shareStyle2 == 1">
+        <div class="preview wechat_friends_mini" v-if="currentType === 'mini' && shareStyle2 == 1">
           <div class="bubble">
-              <div class="left">
-                <p>{{ruleFormMini.describe || '页面描述'}}</p>
+              <div class="con">
+                <div class="left">
+                  <div class="top">
+                    <img :src="ruleFormMini.picture" alt=""> 
+                    <p>{{shopInfo.name || '店铺名称'}}</p>
+                  </div>
+                  <div class="bottom">{{ruleFormMini.describe}}</div>
+                </div>
               </div>
-              <div class="right">
-                <img :src="ruleFormMini.picture" alt="LOGO">
-              </div>
+              <i class="bg"></i>
           </div>
-           <div class="bubble">
-              <img :src="ruleFormMini.picture" alt="">
-              <span>{{ruleFormMini.title || '页面名称'}}</span>
-          </div>
+          <i class="icon"></i>
         </div>
 
         <!-- 设置区 -->
@@ -114,11 +117,11 @@
           </div>
           <div v-show="currentType === 'mini'">
             <div>
-              <el-button type="text" @click="openSetting = true">自定义分享内容</el-button>
+              <el-button type="text" @click="openSetting2 = true">自定义分享内容</el-button>
               <!-- <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading" v-if="currentType === 'h5' && shareStyle == 0">下载海报图片</el-button>
               <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">打开小程序码</el-button> -->
             </div>
-            <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="80px" v-if="openSetting">
+            <el-form ref="ruleFormMini" :model="ruleFormMini" :rules="rulesMini" label-width="80px" v-if="openSetting2">
               <el-form-item label="分享样式" prop="shareStyle2">
                 <el-radio-group v-model="shareStyle2">
                   <el-radio :label="1">微信好友</el-radio>
@@ -144,7 +147,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmitMini" :loading="submitLoading">确定</el-button>
-                <el-button @click="openSetting = false">取消</el-button>
+                <el-button @click="openSetting2 = false">取消</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -266,6 +269,7 @@ export default {
       qrCode: '',
       miniAppQrcode: '',
       openSetting: false,  //是否开启设置
+      openSetting2: false,  //是否开启设置(小程序)
       h5DownloadPosterAble: false,  //h5是否可下载海报
       miniDownloadPosterAble: false, //小程序是否可下载海报
       displaySetting: true  //是否渲染设置区(用来切换)
@@ -286,8 +290,8 @@ export default {
     },
     shopInfo:{
       handler(newValue) {
-        this.$set(this.ruleFormH5, 'picture', this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo)
-        this.$set(this.ruleFormMini, 'picture', this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo)
+        this.$set(this.ruleFormH5, 'picture', this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png'))
+        this.$set(this.ruleFormMini, 'picture', this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png'))
         if(this.currentType === 'h5') {
           this.getQrcode();
         }else if(this.currentType === 'mini') {
@@ -309,6 +313,12 @@ export default {
       this.$nextTick(()=>{
         this.displaySetting = true;
       })
+    },
+    ruleFormH5: {
+      handler(newValue){
+        console.log(newValue);
+      },
+      deep: true
     }
   },
   computed: {
@@ -345,6 +355,9 @@ export default {
       })
       .then((response)=>{
         if(response && response.pageInfoId) {
+          if(!response.picture) {
+            response['picture'] = this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
+          }
           if (this.currentType === 'h5') {
             this.ruleFormH5 = response;
             if(response.title && response.describe) {
@@ -362,13 +375,13 @@ export default {
               pageInfoId: this.pageId,
               title: '店铺名称',
               describe: '我发现了一个不错的店铺，快来看看吧。',
-              picture: this.shopInfo.logoCircle || this.shopInfo.logo
+              picture: this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
             };
           } else {
             this.ruleFormMini = {
               pageInfoId: this.pageId,
               describe: '我发现了一个不错的店铺，快来看看吧。',
-              picture: this.shopInfo.logoCircle || this.shopInfo.logo
+              picture: this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
             };
           }
         }
@@ -423,11 +436,11 @@ export default {
           .then((response)=>{
             this.fetch();
             this.submitLoading = false;
-            this.openSetting = false;
+            this.openSetting2 = false;
           }).catch((error)=>{
             this.$message.error(error);
             this.submitLoading = false;
-            this.openSetting = false;
+            this.openSetting2 = false;
           });
         } else {
           // this.$message({ message: '填写正确的信息', type: 'warning' });
@@ -491,7 +504,6 @@ export default {
 
     /* 获取二维码 */
     getQrcode(codeType, callback) {
-      console.log(this.pageLink,'123')
       this.openQrcodeLoading = true;
       this._apis.shop.getQrcode({
         url: this.pageLink.replace("&","[^]"),
@@ -574,7 +586,7 @@ export default {
   flex-direction: row;
   justify-content: flex-start;
   .preview{
-    width:245px;
+    width:260px;
     margin-right:15px;
     &.poster{
       .one{
@@ -658,9 +670,11 @@ export default {
       }
     }
     &.wechat_friends{
-      background:url('../../../../assets/images/shop/wechat_friends.png') no-repeat 0 0;
+      background:url('../../../../assets/images/shop/tuiguang-bj2.png') no-repeat 0 0;
       background-size: contain;
       position:relative;
+      width:260px;
+      height:442px;
       .bubble{
         background:#fff;
         width:166px;
@@ -709,6 +723,15 @@ export default {
             border: 1px solid #ddd;
           }
         }
+      }
+      .icon{
+        background: url('../../../../assets/images/shop/touxiang1.png') no-repeat 0 0;
+        width:30px;
+        height:30px;
+        top: 61px;
+        right: 8px;
+        display:block;
+        position:absolute;
       }
     }
     &.wechat_ommunity{
@@ -767,7 +790,6 @@ export default {
       height:442px;
       .bubble{
         width:175px;
-        padding:10px;
         padding-top:2px;
         box-sizing: border-box;
         position: absolute;
@@ -776,6 +798,7 @@ export default {
         border-radius: 6px;
         background:#fff;
         .con{
+        padding:10px;
           .top{
             display: flex;
             width: 100%;
@@ -797,7 +820,7 @@ export default {
           }
         }
         .bg{
-          background:url('../../../../assets/images/shop/mini-background.png') no-repeat 0 0;
+          background:url('../../../../assets/images/shop/mini-background.png') no-repeat 4px 0;
           background-size: contain;
           width:100%;
           height: 142px;
@@ -816,7 +839,7 @@ export default {
     }
   }
   .setting{
-
+    width: calc(100% - 275px);
   }
 }
 </style>
