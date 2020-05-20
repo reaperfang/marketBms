@@ -10,5 +10,6 @@ module.exports = merge(prodEnv, {
 	WEBSOCKET_server:'"ws://127.0.0.1:9000"',
 	staticHost: '//test2-m-aiyouyi.yun300.cn/',
 	UPLOAD_SERVER:'"//test2-omo.aiyouyi.cn"',
-	APPLY: '"//test2-omo.aiyouyi.cn"'
+	APPLY: '"//test2-omo.aiyouyi.cn"',
+	ZX_HELP:'"//test-www.300.cn/"'//链接
 })
