@@ -382,6 +382,7 @@ export default {
       this.$nextTick(() => {
         input.setAttribute('placeholder', '请输入或选择');
         input.value = value;
+        input.selectionStart=input.selectionEnd=input.value.length
       })
     },
     selectBlur(){
@@ -426,6 +427,12 @@ export default {
       if(!val){
         let input = this.$refs.searchSelect.$children[0].$refs.input;
         input.blur();
+      }else{
+          let input = this.$refs.searchSelect.$children[0].$refs.input;
+          let value = input.value;
+          this.$nextTick(() => {
+            input.value = value;
+          })
       }
     },
     //获取配送员列表
