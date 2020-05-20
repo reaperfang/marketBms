@@ -7,8 +7,9 @@ module.exports = merge(prodEnv, {
   DATA_API: '"//omo.aiyouyi.cn"',
   SALE_API: '"/mkt-api"',
   WEBSOCKET_server: '"ws://127.0.0.1:9000"',
-  staticHost: '//test-m-aiyouyi.yun300.cn/',
+  staticHost: '"//test-m-aiyouyi.yun300.cn/"',
   UPLOAD_SERVER: '"//omo.aiyouyi.cn"',
   APPLY: '"//omo.aiyouyi.cn"',
-  ZX_HELP:'"//www.300.cn/"'
+  ZX_API: '"/zx_server"',
+  ZX_HELP:'"//test-www.300.cn/"'//链接
 })
