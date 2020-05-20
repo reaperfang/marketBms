@@ -759,8 +759,6 @@ export default {
           }
       }
     }
-<<<<<<< HEAD
-=======
     &.wechat_friends_mini{
       background:url('../../../../assets/images/shop/tuiguang-bj2.png') no-repeat 0 0;
       position:relative;
@@ -816,7 +814,6 @@ export default {
         position:absolute;
       }
     }
->>>>>>> 07f892d212db1639e37ddd5745c7a41ac9e41d4e
   }
   .setting{
 
