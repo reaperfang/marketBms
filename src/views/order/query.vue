@@ -148,9 +148,9 @@ export default {
         sendType: "", // 发货类型:1正常发货,2自动发货,3优先发货
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
-        deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-        date: "", //商家配送-日期
-        timeSlot: "", //商家配送-时间段
+        deliveryWay: "", // 配送方式:1普通快递,2商家配送
+        deliveryDate: "", //商家配送-日期
+        deliveryTime: "", //商家配送-时间段
         orderTimeValue: "",
       },
       activeName: "shop"
@@ -192,6 +192,10 @@ export default {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
           this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
           return
+      }
+      if(this.$refs['shop'].list.some(val => val.deliveryWay == 1) && this.$refs['shop'].list.some(val => val.deliveryWay == 2)){
+          this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
+          return;
       }
       if(this.$refs['shop'].list.filter(val => val.checked).filter(val => val.isFillUp != 1).length) {
         this.confirm({title: '提示', icon: true, showCancelButton: false, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
@@ -290,9 +294,9 @@ export default {
         orderStatus: "",
         searchTimeType: "createTime",
         orderTimeValue: "",
-        deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-        date: "", //商家配送-日期
-        timeSlot: "", //商家配送-时间段
+        deliveryWay: "", // 配送方式:1普通快递,2商家配送
+        deliveryDate: "", //商家配送-日期
+        deliveryTime: "", //商家配送-时间段
         startIndex: 1,
         pageSize: 20,
       }

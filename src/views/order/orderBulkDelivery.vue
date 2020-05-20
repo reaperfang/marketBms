@@ -220,7 +220,10 @@ export default {
     }
   },
   methods: {
-    dataFilter(val, index) {
+    dataFilter(value, index) {
+      //这里需要使用input本身的value，且过滤前后空格
+      const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
+      const val = input.value.trim();
       this.list[index].distributorValue = val;
       if (val) {
       this.distributorList[index] = this.distributorListFilter.filter((item) => {
@@ -233,11 +236,11 @@ export default {
       }
     },
     selectFocus(e, index){
-      let value = e.target.value;
-      let input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
-       setTimeout(() => {
-          input.setAttribute('placeholder', '请输入或选择');
-          input.value = value;
+      const value = e.target.value;
+      const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
+      this.$nextTick(() => {
+        input.setAttribute('placeholder', '请输入或选择');
+        input.value = value;
       })
     },
     selectBlur(val, index){
@@ -266,6 +269,11 @@ export default {
               items.distributorName = this.list[index].distributorName;
               items.distributorId = this.list[index].distributorId;
               items.showErrorDistributorName = false;
+              this.distributorList[indexs] = this.distributorListFilter.filter((item) => {
+                  if (item.name.includes(items.distributorValue) || item.name.toUpperCase().includes(items.distributorValue.toUpperCase())) {
+                    return true
+                  }
+              })
             }
             if(items.phone == '' && arr.length != 0){
               items.phone = this.list[index].phone;
@@ -306,6 +314,11 @@ export default {
             items.distributorValue = this.list[index].distributorName;
             items.distributorName = this.list[index].distributorName;
             items.distributorId = this.list[index].distributorId;
+            this.distributorList[indexs] = this.distributorListFilter.filter((item) => {
+                  if (item.name.includes(items.distributorValue) || item.name.toUpperCase().includes(items.distributorValue.toUpperCase())) {
+                    return true
+                  }
+              })
           }
           if(items.phone == ''){
             items.phone = this.list[index].phone;
@@ -341,6 +354,24 @@ export default {
           }
         })
       }
+    },
+    //获取配送员列表
+    getDistributorList(length){
+        this._apis.order
+            .getDistributorList()
+            .then(res => {
+            res = [
+                {"id":1,"name":"张三","phone":15910526104},
+                {"id":2,"name":"李四","phone":15910526105},
+                {"id":3,"name":"张四","phone":15910526106},
+            ]
+            this.distributorListFilter = res;
+            for(let i = 0; i < length; i++){
+              this.distributorList.push(res);
+            }
+            
+            })
+            .catch(error => {});
     },
     otherInput(index) {
       let item = this.list[index]
@@ -649,19 +680,22 @@ export default {
           sendInfoDtoList: this.list.filter(val => val.checked).map(item => {
             let expressCompanys = "";
             console.log(this.expressCompanyList);
-            if (item.expressCompanyCodes == "other") {
-              expressCompanys = item.other;
-            } else {
-              if (
-                this.expressCompanyList.find(
-                  val => val.expressCompanyCode == item.expressCompanyCodes
-                )
-              ) {
-                expressCompanys = this.expressCompanyList.find(
-                  val => val.expressCompanyCode == item.expressCompanyCodes
-                ).expressCompany;
+            if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
+              if (item.expressCompanyCodes == "other") {
+                expressCompanys = item.other;
+              } else {
+                if (
+                  this.expressCompanyList.find(
+                    val => val.expressCompanyCode == item.expressCompanyCodes
+                  )
+                ) {
+                  expressCompanys = this.expressCompanyList.find(
+                    val => val.expressCompanyCode == item.expressCompanyCodes
+                  ).expressCompany;
+                }
               }
             }
+            
             let obj = {
               orderId: item.orderId,
               memberInfoId: item.memberInfoId,
@@ -803,9 +837,6 @@ export default {
       this.dialogVisible = true;
     },
     getDetail() {
-      this.distributorListFilter = [{"id":1,"name":"张三","phone":15910526104},
-            {"id":2,"name":"李四","phone":15910526104},
-            {"id":3,"name":"张四","phone":15910526104}];
       this._apis.order
         .orderSendDetail({
           ids: this.$route.query.ids.split(",").map(val => +val)
@@ -841,10 +872,6 @@ export default {
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
 
-            let arr = [{"id":1,"name":"张三","phone":15910526104},
-            {"id":2,"name":"李四","phone":15910526104},
-            {"id":3,"name":"张四","phone":15910526104}];
-            this.distributorList.push(arr);
           });
           // res.forEach(val => {
           //   val.orderItemList.forEach(item => {
@@ -852,10 +879,12 @@ export default {
           //   });
           // });
 
+          //获取配送员列表
+          this.getDistributorList(res.length);
+
           //模拟数据，之后删除掉
           res[0].deliveryWay = 2
-          res[1].deliveryWay = 1
-          res[2].deliveryWay = 2
+          res[1].deliveryWay = 2
 
           this.list = res;
           this._apis.order

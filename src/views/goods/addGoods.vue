@@ -1655,26 +1655,20 @@ export default {
             window.open(routeData.href, '_blank');
         },
         //获取普通快递在店铺是否设置开启状态
-        getExpressSet(){
+        getExpressAndDeliverySet(name){
+            const params = {
+                "id": this.cid
+            };
             this._apis.goods
-            .getExpressSet()
+            .getExpressAndDeliverySet(params)
             .then(res => {
-                res = {"enable": 2};
-                //未开启则提示去设置
-                if(res.enable == 2){
+                res = {"isOpenOrdinaryExpress": 0, "isOpenMerchantDeliver": 1};
+                //如果普通快递未开启则提示去设置
+                if(name == 'express' && res.isOpenOrdinaryExpress == 0){
                     this.isExpressSet = false;
                 }
-            })
-            .catch(error => {});
-        },
-        //获取商家配送在店铺是否设置开启状态
-        getDeliverySet(){
-            this._apis.goods
-            .getDeliverySet()
-            .then(res => {
-                res = {"enable": 2};
-                //未开启则提示去设置
-                if(res.enable == 2){
+                //如果商家配送未开启则提示去设置
+                if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
                     this.isDeliverySet = false;
                 }
             })
@@ -1685,7 +1679,7 @@ export default {
             //普通快递
             if(index === '1'){
                 if(val){ //如果选中，则验证店铺中是否开启，未开启则提示去设置
-                    this.getExpressSet();
+                    this.getExpressAndDeliverySet('express');
                 }else{ //不选中，则直接隐藏提示即可
                     this.isExpressSet = true;
                 }
@@ -1693,7 +1687,7 @@ export default {
             //商家配送
             if(index === '2'){
                 if(val){ //如果选中，则验证店铺中是否开启，未开启则提示去设置
-                    this.getDeliverySet();
+                    this.getExpressAndDeliverySet('delivery');
                 }else{ //不选中，则直接隐藏提示即可
                     this.isDeliverySet = true;
                 }
@@ -2095,15 +2089,18 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 //配送方式(根据选中去请求是否在店铺开启)
-                res.deliveryWay = [1];
-                if(res.deliveryWay.includes(1)){
-                    this.getExpressSet();
+                let deliveryWayArr = [];
+                if(res.generalExpressType == 1){ //如果开启了普通快递
+                    deliveryWayArr.push(1);
+                    this.getExpressAndDeliverySet('express');
                 }
-                if(res.deliveryWay.includes(2)){
-                    this.getDeliverySet();
+                if(res.businessDispatchType == 1){ //如果开启了商家配送
+                    deliveryWayArr.push(2);
+                    this.getExpressAndDeliverySet('delivery');
                 }
+                res.deliveryWay = deliveryWayArr;
 
-                console.log(res)
+                //console.log(res)
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
@@ -2701,6 +2698,16 @@ export default {
                         //delete params.isFreeFreight; //删除运费选择方式
                         //delete params.freightTemplateId; //删除模板id
                     //}
+                    //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
+                    params.generalExpressType = 0; //普通快递
+                    params.businessDispatchType = 0; //商家配送
+                    if(this.ruleForm.deliveryWay.includes(1)){
+                        params.generalExpressType = 1;
+                    }
+                    if(this.ruleForm.deliveryWay.includes(2)){
+                        params.businessDispatchType = 1;
+                    }
+                    delete params.deliveryWay;
 
                     console.log(params)
                     //return;

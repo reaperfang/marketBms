@@ -107,6 +107,7 @@
                     width="120">
                     <template slot-scope="scope">
                         <div>
+                            <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
                             {{scope.row.deliveryWay | deliveryWayFilter}}
                         </div>
                     </template>
@@ -115,6 +116,11 @@
                     prop="updateTime"
                     label="配送时间"
                     width="170">
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.deliveryDate}} {{scope.row.deliveryTime}}
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="receivedName"
@@ -205,9 +211,9 @@ export default {
                 orderProductNames: '',
                 expressCompanys: '',
                 receivedName: '',
-                deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-                date: "", //商家配送-日期
-                timeSlot: "", //商家配送-时间段
+                deliveryWay: "", // 配送方式:1普通快递,2商家配送
+                deliveryDate: "", //商家配送-日期
+                deliveryTime: "" //商家配送-时间段
             },
             tableData: [],
             loading: false,
@@ -277,6 +283,10 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要补填物流信息的订单。'})
                 return
+            }
+            if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
+                return;
             }
             if(this.multipleSelection.filter(val => val.isFillUp != 1).length) {
                 this.confirm({title: '提示', icon: true, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
@@ -392,9 +402,9 @@ export default {
                 orderProductNames: '',
                 expressCompanys: '',
                 receivedName: '',
-                deliveryMethod: "", // 配送方式:1普通快递,2商家配送
-                date: "", //商家配送-日期
-                timeSlot: "", //商家配送-时间段
+                deliveryWay: "", // 配送方式:1普通快递,2商家配送
+                deliveryDate: "", //商家配送-日期
+                deliveryTime: "" //商家配送-时间段
             }
             this.getList()
         },
@@ -540,6 +550,14 @@ export default {
       text-decoration: underline;
       display: inline-block;
       cursor: pointer;
+    }
+    .icon-store{
+        display: inline-block;
+        width: 16px;
+        height: 15px;
+        margin-right: 5px;
+        vertical-align: -2px;
+        background: url(~@/assets/images/order/icon_store.png) no-repeat;
     }
 </style>
 
