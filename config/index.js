@@ -13,7 +13,7 @@ module.exports = {
 		assetsSubDirectory: 'static',
 		assetsPublicPath: '/',
 		host: '0.0.0.0', // can be overwritten by process.env.HOST
-		// host: '127.0.0.1', // can be overwritten by process.env.HOST
+		host: '127.0.0.1', // can be overwritten by process.env.HOST
 		port: 9001, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
 		autoOpenBrowser: false,
 		errorOverlay: true,
@@ -43,7 +43,7 @@ module.exports = {
 
 			/* 营销服务 */
 			'/sale_server/**': {
-				target: 'https://test-omo.aiyouyi.cn/mkt-api/',
+				target: 'https://test3-omo.aiyouyi.cn/mkt-api/',
 				changeOrigin: true,
 				pathRewrite: {
 					'^/sale_server': ''
