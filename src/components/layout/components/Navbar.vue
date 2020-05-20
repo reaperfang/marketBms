@@ -6,7 +6,7 @@
       <div class="right-menu">
         <router-link to="/profile/upgrade" class="set_meal">套餐升级</router-link>
         <el-link
-          :href="zxLink+'service/yidongshangcheng/'"
+          :href="zxLink+'/service/yidongshangcheng/'"
           target="_blank"
           :underline="false"
           class="set_meal"
