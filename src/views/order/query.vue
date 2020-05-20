@@ -165,7 +165,9 @@ export default {
         orderTimeValue: "",
       },
       activeName: "shop",
-      resellConfigInfo: null
+      resellConfigInfo: null,
+      startIndex: 1,
+      pageSize: 20
     };
   },
   created() {

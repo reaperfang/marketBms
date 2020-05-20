@@ -167,6 +167,8 @@ export default {
                 this.list = res.list
                 this.total = +res.total
                 this._globalEvent.$emit('total', this.total)
+                this.$emit('update:page', res.pageNum)
+                this.$emit('update:limit', res.pageSize)
                 //this.$refs['order'].loading = false
                 //loading.close();
             }).catch(error => {
