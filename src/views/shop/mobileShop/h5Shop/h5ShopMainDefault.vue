@@ -103,3 +103,45 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.no_open,.no_bind{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  img{
+    margin-top:33px;
+    width:403px;
+    height:330px;
+  }
+  p{
+    font-size:16px;
+    font-family:MicrosoftYaHei;
+    color:rgba(68,67,75,1);
+    margin-top:37px;
+  }
+  .button{
+    margin-top: 24px;
+    width: 152px;
+    height: 34px;
+    /* line-height: 34px; */
+    background: #655EFF;
+    font-size: 14px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: #fff;
+    padding: 7px 20px 7px 32px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    span{
+      letter-spacing: 8px;
+    }
+  }
+}
+.no_bind{
+  .button{
+    padding: 7px 30px 7px 32px;
+  }
+}
+</style>
