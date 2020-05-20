@@ -32,7 +32,7 @@
             <el-form-item label="商品描述" prop="description">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
             </el-form-item>
-            <el-form-item label="商品图片" prop="images">
+            <el-form-item label="商品主图" prop="images">
                 <!-- <img v-for="(item, key) of imageList" :key="key" :src="item.src" alt="" style="width:100px;height:100px"> -->
                 <!-- <el-upload
                     :disabled="!ruleForm.productCategoryInfoId"
