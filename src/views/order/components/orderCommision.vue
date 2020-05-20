@@ -20,6 +20,15 @@
         <el-table-column label="手机号">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerPhone}}</p></template>
         </el-table-column>
+        <el-table-column label="层级">
+            <template>
+                <p class="line-height" v-for="item in orderDetail.resellerInfoList">
+                    <span v-if="item.resellerLevel == 1">一级分佣</span>
+                    <span v-if="item.resellerLevel == 2">二级分佣</span>
+                    <span v-if="item.resellerLevel == 3">三级分佣</span>
+                </p>
+            </template>
+        </el-table-column>
         <el-table-column label="分销比例">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerSettlementScale * 100}}%</p></template>  
         </el-table-column>
