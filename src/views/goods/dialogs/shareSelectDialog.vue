@@ -3,7 +3,7 @@
         <DialogBase :visible.sync="visible" width="443px" title="推广渠道" :hasCancel="hasCancel" :showFooter="showFooter">
             <div class="content">
                 <el-checkbox v-model="h5Checked">公众号</el-checkbox>
-                <el-checkbox :disabled="data.currentStatus != 1" v-model="miniCodeChecked">小程序</el-checkbox>
+                <el-checkbox :disabled="data.currentStatus != 'published'" v-model="miniCodeChecked">小程序</el-checkbox>
             </div>
             <div class="footer">
                 <el-button @click="submit" type="primary">确 认</el-button>
