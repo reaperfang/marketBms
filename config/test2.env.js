@@ -12,5 +12,5 @@ module.exports = merge(prodEnv, {
 	UPLOAD_SERVER:'"//test2-omo.aiyouyi.cn"',
 	APPLY: '"//test2-omo.aiyouyi.cn"',
 	ZX_API: '"/cms-api"',
-  	ZX_HELP: '"https://test-m.300.cn"'	
+	ZX_HELP: '"https://test-www.300.cn"'	
 })
