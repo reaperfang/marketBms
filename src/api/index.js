@@ -12,7 +12,7 @@ import * as file from "./file"; //文件模块
 import * as data from "./data"; //数据模块
 import * as overview from "./overview"; //概况
 import * as set from "./set"; //设置模块
-
+import * as map from "./map"
 
 export default {
 	demo,
@@ -28,5 +28,6 @@ export default {
 	file,
 	data,
 	set,
-	overview
+	overview,
+	map
 };
