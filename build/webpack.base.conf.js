@@ -14,6 +14,9 @@ let getPublicPath = function() {
     case 'testing':
       publicPath = config.test.assetsPublicPath
       break;
+    case 'testing2':
+      publicPath = config.test2.assetsPublicPath
+      break;
     case 'pre':
       publicPath = config.pre.assetsPublicPath
       break;

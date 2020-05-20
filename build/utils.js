@@ -10,6 +10,9 @@ exports.assetsPath = function(_path) {
     case 'testing':
       assetsSubDirectory = config.test.assetsSubDirectory
       break;
+    case 'testing2':
+      assetsSubDirectory = config.test2.assetsSubDirectory
+      break;
     case 'pre':
       assetsSubDirectory = config.pre.assetsSubDirectory
       break;

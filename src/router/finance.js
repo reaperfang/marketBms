@@ -66,6 +66,18 @@ export default [
         name: 'smsGroupSends',
         meta: { title: '短信成本', noCache: true, tabTitle: '成本核算' , navType:2 }
       },
+      {
+        path: 'subCommissionDetails',
+        component: () => import('@/views/finance/subCommissionDetails'),
+        name: 'subCommissionDetails',
+        meta: { title: '分销明细', noCache: true, tabTitle: '分销账目' , navType:2 }
+      },
+      {
+        path: 'subCommissionBalance',
+        component: () => import('@/views/finance/subCommissionBalance'),
+        name: 'subCommissionBalance',
+        meta: { title: '分销商余额', noCache: true, tabTitle: '分销账目' , navType:2 }
+      },
     ]
 	}
 ]

@@ -57,19 +57,19 @@ export default {
                 name:'总收入',
                 type:'line',
                 // stack: '总量',
-                data: this.dataList.incomes
+                data: this.dataList.incomes && this.dataList.incomes.reverse()
             },
             {
                 name:'总支出',
                 type:'line',
                 // stack: '总量',
-                data: this.dataList.expends
+                data: this.dataList.expends && this.dataList.expends.reverse()
             },
             {
                 name:'实际收入',
                 type:'line',
                 // stack: '总量',
-                data: this.dataList.realIncomes
+                data: this.dataList.realIncomes && this.dataList.realIncomes.reverse()
             }
         ]
       };

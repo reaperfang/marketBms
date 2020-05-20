@@ -1,33 +1,33 @@
-<!--电子面单-->
+<!--客户ID余额-->
 <template>
   <div>
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;padding-right:4px;">
+        <el-form-item label="交易流水号">
+          <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
+        </el-form-item>
+        <el-form-item> 
+          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
             <el-option
-              v-for="item in fsTerms"
+              v-for="item in commissionClerkStatus"
               :key="item.value"
               :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" style="width:100px;" placeholder="全部">
             <el-option
-              v-for="item in fsTypes"
+              v-for="item in businessTypeList"
               :key="item.value"
               :label="item.label"
               :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="快递公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:120px;"></el-input>
-        </el-form-item>
-        <el-form-item label="操作时间">
+        <el-form-item label="交易时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
@@ -40,7 +40,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '电子面单', '查询']">查询</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '分销商余额', '默认页面', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -49,50 +49,63 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '电子面单', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()'>导出</el-button>
         </el-tooltip>
       </div>
       <el-table
-      v-loading="loading"
+        v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-        :default-sort = "{prop: 'createTime', order: 'descending'}"
+        :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="changeSort"
         >
         <el-table-column
-          prop="expressSn"
-          label="快递单号">
+          prop="tradeDetailSn"
+          label="交易流水号"
+          width='200'>
         </el-table-column>
         <el-table-column
-          prop="expressCompany"
-          label="快递公司">
+          prop="relationSn"
+          label="关联单据编号"
+          :render-header="renderRelationSn"
+          width='200'>
+        </el-table-column>
+        <el-table-column
+          prop="resellerSn"
+          label="分销员ID">
+        </el-table-column>
+        <el-table-column
+          prop="resellerName"
+          label="姓名">
+        </el-table-column>
+        <el-table-column
+          prop="resellerPhone"
+          label="手机号码">
         </el-table-column>
         <el-table-column
           prop="businessType"
           label="业务类型">
           <template slot-scope="scope">
-            {{scope.row.businessType ? '售后发货' : '订单发货'}}
-          </template>  
+            {{businessTypeList[scope.row.businessType].label}}
+          </template>
         </el-table-column>
         <el-table-column
-          prop="relationSn"
-          label="关联单据编号"
-          :render-header="renderRelationSn">
+          prop="tradeAmount"
+          label="变动金额(元)">
         </el-table-column>
         <el-table-column
-          prop="createUserName"
-          label="操作人">
+          prop="balance"
+          label="剩余金额(元)">
         </el-table-column>
         <el-table-column
-          prop="createTime"
-          label="操作时间"
+          prop="tradeTime"
+          label="交易时间"
           sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">
-         <el-pagination
-          v-if="dataList.length != 0"
+        <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.startIndex) || 1"
@@ -102,8 +115,8 @@
           :total="total*1">
         </el-pagination>
       </div>
+      <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" ></exportTipDialog>
     </div>
-	  <exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
   </div>
 </template>
 
@@ -111,22 +124,22 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
-import exportTipDialog from '@/components/dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
-  name: 'faceSheet',
+  name: 'customerBalance',
   extends: TableBase,
   components:{
-    exportTipDialog
-  },
+    exportTipDialog
+  },
   data() {
     return {
       inline:true,
       ruleForm:{
-        searchType:'relationSn',
-        searchValue:'',
-        businessType:-1,
-        expressCompany:'',
-        timeValue:'',
+        userType:'resellerSn', // 分销员类型
+        userValue:'', // 分销员类型对应值
+        tradeDetailSn:'', // 交易流水号
+        businessType:0, // 业务类型
+        timeValue:'', // 交易时间
         startIndex:1,
         pageSize:10,
         sort:'desc'
@@ -134,21 +147,20 @@ export default {
       dataList:[ ],
       total:0,
       loading:true,
-      currentData:{},
-      dialogVisible:false
+      dialogVisible:false,
+      currentData:{}
     }
   },
-  watch: {},
+  watch: { },
   computed:{
-    fsTerms(){
-      return financeCons.fsTerms;
+    businessTypeList(){
+      return financeCons.businessTypeList;
     },
-    fsTypes(){
-      return financeCons.fsTypes;
+    commissionClerkStatus(){
+      return financeCons.commissionClerkStatus;
     }
   },
-  created() {    
-  },
+  created() { },
   methods: {
     renderRelationSn(){
       return(
@@ -157,9 +169,9 @@ export default {
           <el-popover
             placement="top-start"
             title=""
-            width="160"
+            width="170"
             trigger="hover"
-            content="订单编号、售后单编号、提现编号">
+            content="订单编号或提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
         </div>
@@ -167,32 +179,27 @@ export default {
     },
     init(){
       let query = {
-        queryType:0,
-        relationSn:'',
-        expressSn:'',
-        expressCompany:'',
-        businessType:'',
-        startTime:'',
-        endTime:'',
+        choosePage:'2',
+        tradeDetailSn:this.ruleForm.tradeDetailSn,
+        businessType:this.ruleForm.businessType == '0' ? null : this.ruleForm.businessType,
+        startTradeTime:'',
+        endTradeTime:'',
+        resellerSn: '',
+        resellerName: '',
+        resellerPhone: '',
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
-        sort:'desc'
+        sort:this.ruleForm.sort
       }
       for(let key  in query){
-        if(this.ruleForm.searchType == key){
-          query[key] = this.ruleForm.searchValue
-        }
-        for(let item in this.ruleForm){
-          if(item == key){
-            query[key] = this.ruleForm[item]
-          }
+        if(this.ruleForm.userType == key){
+          query[key] = this.ruleForm.userValue
         }
       }
-      query.businessType = this.ruleForm.businessType == -1 ? null : this.ruleForm.businessType
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.startTime = timeValue[0]
-        query.endTime = timeValue[1]
+        query.startTradeTime = timeValue[0]
+        query.endTradeTime = timeValue[1]
       }
       return query;
     },
@@ -200,46 +207,63 @@ export default {
     fetch(num){
       this.ruleForm.startIndex = num || this.ruleForm.startIndex
       let query = this.init();
-      this._apis.finance.getListFs(query).then((response)=>{
-        this.dataList = response.list
-        this.total = response.total || 0
-        this.loading = false
+        this._apis.finance.getCommissionLIst(query).then((response)=>{
+          this.dataList = response.list
+          this.total = response.total || 0
+          this.loading = false
       }).catch((error)=>{
         this.loading = false
       })
     },
-    //搜索
+
     onSubmit(num){
       this.fetch(num)
     },
     //重置
     resetForm(){
       this.ruleForm = {
-        searchType:'relationSn',
-        searchValue:'',
-        businessType:'',
-        expressCompany:'',
-        timeValue:'',
+        userType:'resellerSn', // 分销员类型
+        userValue:'', // 分销员类型对应值
+        tradeDetailSn:'', // 交易流水号
+        businessType:0, // 业务类型
+        timeValue:'', // 交易时间
+        startIndex:1,
+        pageSize:10,
         sort:'desc'
-      }
+      },
       this.fetch()
     },
-    //导出
-    exportToExcel() {
+    // 导出参数特殊处理
+    queryExport() {
       let query = this.init();
-      if(this.total >1000){
+      query.exportType = 2
+      delete query.pageSize;
+      delete query.startIndex;
+      if (this.total > 1000) {
+        query.isExport = '0'
+      } else {
+        query.isExport = '1'
+      }
+      return query
+    },
+    //导出
+    exportToExcel(){
+      if(this.total > 1000){
+        this.currentDialog = exportTipDialog;
         this.dialogVisible = true;
-         this.currentData.query = this.init()
-         this.currentData.api = "finance.exportFs"
-      }else{
-        this._apis.finance.exportFs(query).then((response)=>{
-        window.location.href = response
-      }).catch((error)=>{
+        this.currentData.api = 'finance.commissionExport';
+        let query = this.queryExport();
+        this.currentData.query = query
+      } else {
+        let query = this.queryExport();
+        this._apis.finance.commissionExport(query).then((response)=>{
+          window.location.href = response
+        }).catch((error)=>{
          this.$message.error(error)
-      })
+        })
       }
     },
-    //操作时间排序
+    //交易时间排序
      changeSort(val){
       if(val && val.order == 'ascending') {
         this.ruleForm.sort = 'asc'
@@ -276,7 +300,7 @@ export default {
     span{
       font-size: 16px;
       color: #B6B5C8;
-      display:block;
+      display: block;
       margin-top:15px;
       em{
         font-style: normal;

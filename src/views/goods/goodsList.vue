@@ -83,6 +83,11 @@
                     width="124">
                     </el-table-column> -->
                     <el-table-column
+                    prop="code"
+                    label="SPU编码"
+                    width="130">
+                    </el-table-column>
+                    <el-table-column
                     prop="name"
                     label="商品名称"
                     :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
@@ -177,7 +182,7 @@
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
                     <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
                     <el-button @click="shareMore" class="border-button">批量推广</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="border-button">批量删除</el-button>
+                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
                     <el-button @click="copyUrl" class="border-button">复制链接</el-button>
                 </div>
             </div>
@@ -357,7 +362,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 128px;
+  width: 160px;
 }
 .table-header {
     margin-bottom: 10px;
@@ -394,15 +399,23 @@
 }
 /deep/ .el-table td, .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }
 /deep/ .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
+}
+/deep/ .input-with-select {
+    .el-input-group__prepend {
+        background-color: #fff;
+    }
+}
+/deep/ .all-delete {
+    border:1px solid rgba(146,146,155,1);
 }
 </style>
 <style lang="scss">
@@ -731,7 +744,8 @@ export default {
             },
         getMiniappInfo() {
             this._apis.goods.getMiniappInfo().then(res => {
-                this.currentStatus = res.data.current_status
+                //this.currentStatus = res.data.current_status
+                this.currentStatus = res.status
             }).catch(error => {
                 this.$message.error({
                     message: error,
