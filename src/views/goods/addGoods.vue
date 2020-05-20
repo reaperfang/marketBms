@@ -85,17 +85,17 @@
             <el-form-item label="主图视频" prop="videoUrl">
                 <div class="upload-box">
                     <div class="video-list image-list">
-                        <div :style="{backgroundImage: `url(${ruleForm.mainImage})`}" v-if="ruleForm.videoUrl" class="image-item">
+                        <div :style="{backgroundImage: `url(${ruleForm.mainImage || (ruleForm.images && ruleForm.images.split(',') && ruleForm.images.split(',')[0])})`}" v-if="ruleForm.videoUrl" class="image-item">
                             <label>
                                 <i class="el-icon-check"></i>
                             </label>
                             <span class="image-item-actions">
                                 <span @click="videoDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-caret-right"></i></span>
                                 <span @click="deleteVideo" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
-                                <span class="image-item-actions-footer">
+                                <!--<span class="image-item-actions-footer">
                                     <i v-if="index > 0" @click="moveImage('left', index)" class="lefter"><</i>
                                     <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter">></i>
-                                </span>
+                                </span>-->
                             </span>
                         </div>
                         <div v-if="!ruleForm.videoUrl" @click="currentDialog = 'dialogSelectVideo'; dialogVisible = true; uploadVideo = true" class="upload-add">
@@ -3130,9 +3130,9 @@ export default {
                 });
                 return
             }
-            if(image.fileSize > 1024*1024*2) {
+            if(image.fileSize > 1024*1024*3) {
                 this.$message({
-                message: '上传图片不能超过2M',
+                message: '上传图片不能超过3M',
                 type: 'warning'
                 });
                 return
