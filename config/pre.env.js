@@ -10,6 +10,6 @@ module.exports = merge(prodEnv, {
 	staticHost: '"//test-m-aiyouyi.yun300.cn/"',
 	UPLOAD_SERVER: '"//pre-omo.aiyouyi.cn"',
 	APPLY: '"//pre-omo.aiyouyi.cn"',
-	ZX_API: '"//cms-api.300.cn/"',
+	ZX_API: '"/cms-api"',
   	ZX_HELP: '"https://m.300.cn"'
 })
