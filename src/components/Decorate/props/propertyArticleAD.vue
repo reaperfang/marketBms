@@ -210,10 +210,10 @@ export default {
           this.suggestSize = '建议尺寸：宽度750像素，高度430像素。';
           break;
         case 4:
-          this.suggestSize = '建议尺寸：宽高1:1';
+          this.suggestSize = '建议上传220像素*220像素，或宽高1: 1的图片';
           break;
         case 5:
-          this.suggestSize = '建议尺寸：宽高1:1';
+          this.suggestSize = '建议上传220像素*110像素，或宽高2: 1的图片';
           break;
       }
     },
