@@ -80,7 +80,7 @@
                     <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
                 <!-- <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span> -->
-                <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
+                <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小3M以下。</p>
             </el-form-item>
             <el-form-item label="主图视频" prop="videoUrl">
                 <div class="upload-box">
