@@ -8,6 +8,7 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 const webpackConfigTest = require('./webpack.test.conf')
+const webpackConfigTest2 = require('./webpack.test2.conf')
 const webpackConfigPre = require('./webpack.pre.conf')
 const webpackConfigProd = require('./webpack.prod.conf')
 
@@ -22,6 +23,11 @@ switch(process.env.NODE_ENV) {
     webpackConfig = webpackConfigTest
     assetsRoot = config.test.assetsRoot
     assetsSubDirectory = config.test.assetsSubDirectory
+    break;
+  case 'testing2':
+    webpackConfig = webpackConfigTest2
+    assetsRoot = config.test2.assetsRoot
+    assetsSubDirectory = config.test2.assetsSubDirectory
     break;
   case 'pre':
     webpackConfig = webpackConfigPre

@@ -32,7 +32,7 @@ module.exports = {
 
     proxyTable: {
       '/data-server/**': {
-        target: 'https://test-omo.aiyouyi.cn',
+        target: 'https://test2-omo.aiyouyi.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/data-server': ''
@@ -41,14 +41,14 @@ module.exports = {
 
       /* 营销服务 */
       '/sale_server/**': {
-        target: 'https://test-omo.aiyouyi.cn/mkt-api/',
+        target: 'https://test2-omo.aiyouyi.cn/mkt-api/',
         changeOrigin: true,
         pathRewrite: {
           '^/sale_server': ''
         }
       },
       '/upload_server/**': {
-        target: 'https://test-omo.aiyouyi.cn',
+        target: 'https://test2-omo.aiyouyi.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/upload_server': ''
@@ -58,6 +58,37 @@ module.exports = {
   },
 
   test: {
+    // Template for index.html
+    index: path.resolve(__dirname, '../dist/index.html'),
+
+    // Paths
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: './',
+
+    /**
+     * Source Maps
+     */
+
+    productionSourceMap: true,
+    // https://webpack.js.org/configuration/devtool/#production
+    devtool: 'cheap-module-eval-source-map',
+
+    // Gzip off by default as many popular static hosts such as
+    // Surge or Netlify already gzip all static assets for you.
+    // Before setting to `true`, make sure to:
+    // npm install --save-dev compression-webpack-plugin
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css'],
+
+    // Run the build command with an extra argument to
+    // View the bundle analyzer report after build finishes:
+    // `npm run build --report`
+    // Set to `true` or `false` to always turn it on or off
+    bundleAnalyzerReport: process.env.npm_config_report
+  },
+
+  test2: {
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 

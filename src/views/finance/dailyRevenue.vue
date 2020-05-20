@@ -16,7 +16,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '每日营收', '默认页面', '搜索']">查询</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '每日营收', '默认页面', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -35,30 +35,33 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'accountDate', order: 'descending'}"
         @sort-change="changeSort"
-
         >
         <el-table-column
           prop="accountDate"
           label="日期"
+          align="center"
           sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
-          label="总收入（元）">
+          label="总收入（元）"
+          align="center">
           <template slot-scope="scope">
-            {{'+' + scope.row.income}}
+            {{scope.row.income}}
           </template>
         </el-table-column>
         <el-table-column
           prop="expend"
-          label="总支出（元）">
+          label="总支出（元）"
+          align="center">
           <template slot-scope="scope">
-            {{'-' + scope.row.expend}}
+            {{scope.row.expend}}
           </template>
         </el-table-column>
         <el-table-column
           prop="realIncome"
-          label="实际收入（元）">
+          label="实际收入（元）"
+          align="center">
         </el-table-column>
       </el-table>
       <div class="page_styles">

@@ -64,8 +64,8 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '收支明细', '默认页面', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '收支明细', '默认页面', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -81,9 +81,9 @@
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="sortTable"
         >
-        <!-- :default-sort = "{prop: 'tradeTime', order: 'descending'}" -->
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号"
@@ -103,7 +103,7 @@
           label="业务类型"
           :render-header="renderBusinessType">
           <template slot-scope="scope">
-            {{rebusinessTypes[scope.row.businessType].label}}
+            {{rebusinessTypes[scope.row.businessType] ? rebusinessTypes[scope.row.businessType].label : ''}}
           </template>
         </el-table-column>
         <el-table-column
@@ -136,7 +136,7 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable>
+          sortable="custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -182,11 +182,13 @@ export default {
         amountMax:'',
         timeValue:'',
         startIndex:'1',
-        pageSize:'10'
+        pageSize:'10',
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
-      loading:true
+      loading:true,
+      types:[]
     }
   },
   watch: {
@@ -197,7 +199,7 @@ export default {
       return financeCons.revenueExpenditureTerms;
     },
     rebusinessTypes(){
-      return financeCons.rebusinessTypes;
+      return this.types;
     },
     payTypes(){
       return financeCons.payTypes;
@@ -206,7 +208,9 @@ export default {
       return financeCons.tradeTypes;
     }
   },
-  created() { },
+  created() { 
+    this.getRebusinessTypes()
+  },
   methods: {
     renderTradeDetailSn(){
       return(
@@ -260,7 +264,22 @@ export default {
         </div>
       )
     },
-    init(orde){
+
+    getRebusinessTypes(){
+       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+          if(data.isOpenResell == 1){
+            this.types = financeCons.rebusinessTypes
+          }else{
+            financeCons.rebusinessTypes.map(item =>{
+              item.value !== 6 && this.types.push(item) 
+            })
+          }
+      }).catch((error) => {
+          console.error(error);
+      });
+    },
+
+    init(){
       let query = {
         tradeDetailSn:'',
         relationSn:'',
@@ -268,11 +287,11 @@ export default {
         businessType:'',
         tradeType:'',
         payWay:'',
-        amountMin:'',
-        amountMax:'',
+        amountMin:'0.00',
+        amountMax:'0.00',
         tradeTimeStart:'',
         tradeTimeEnd:'',
-        sort:'',
+        sort:this.ruleForm.sort,
         startIndex:'1',
         pageSize:'10'
       }
@@ -291,7 +310,6 @@ export default {
       query.payWay = this.ruleForm.payWay == -1 ? null : this.ruleForm.payWay
       query.amountMin = this.ruleForm.amountMin == 0 ? '' : this.ruleForm.amountMin
       query.amountMax = this.ruleForm.amountMax == 0 ? '' : this.ruleForm.amountMax
-      query.sort = orde || 'desc'
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.tradeTimeStart = timeValue[0]
@@ -299,12 +317,14 @@ export default {
       }
       return query;
     },  
-    fetch(orde,num){
-      if(this.ruleForm.amountMin > this.ruleForm.amountMax){
+    fetch(num){
+      if(this.ruleForm.amountMin == undefined || this.ruleForm.amountMax == undefined){
+        this.$message('分销金额不能为空')
+      }else if(this.ruleForm.amountMin > this.ruleForm.amountMax){
         this.$message('交易金额最小值应该小于最大值')
       }else{
         this.ruleForm.startIndex = num || this.ruleForm.startIndex
-        let query = this.init(orde);
+        let query = this.init();
         this._apis.finance.getListRe(query).then((response)=>{
           this.dataList = response.list
           this.total = response.total || 0
@@ -316,15 +336,19 @@ export default {
     },
     //搜索
     onSubmit(startIndex){
-      let orde = 'desc'
       let num = startIndex || this.ruleForm.startIndex
-      this.fetch(orde,num)
+      this.fetch(num)
     },
     //排序
-    sortTable(column){
-      let obj = column
-      let orde = obj.order == 'descending' ? 'desc' : 'asc'
-      this.fetch(orde)
+    sortTable(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
     //重置
     resetForm(){
@@ -334,9 +358,10 @@ export default {
         businessType:'',
         payWay:'',
         tradeType:'',
-        amountMin:'',
-        amountMax:'',
-        timeValue:''
+        amountMin:'0.00',
+        amountMax:'0.00',
+        timeValue:'',
+        sort:'desc'
       }
       this.onSubmit()
     },

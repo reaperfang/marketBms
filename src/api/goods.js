@@ -463,6 +463,14 @@ export function getJdLive(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-SPU-JD-LIVE-LINKS-PROCESSOR',
+  })
+}
+// 分销商品设置
+export function commisionGoodsSet(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-RESELL-EDIT-PROCESSOR',
     data,
     token
   })

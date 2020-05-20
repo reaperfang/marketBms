@@ -5,23 +5,31 @@
         <div v-if="item.children" class="item">
           <h2>{{item.name}}</h2>
           <div v-if="!child.hidden" v-for="child in item.children" class="item-child">
-            <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path, child.path)">{{child.meta.title}}</router-link>
+            <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(item.path, child.path)">{{child.meta.title}}</router-link>
           </div>
         </div>
         <div v-else>
           <div v-if="item.tabTitle">
-            <div class="item" v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
+            <!-- <div class="item" v-if="isPc || (item.tabTitle !== 'PC店铺' && item.tabTitle !== '资讯管理')">
+              <h2>{{item.tabTitle}}</h2>
+              <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
+                <div>
+                  <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+                </div>
+              </div>
+            </div> -->
+            <div class="item" v-if="isOpenResell || (item.tabTitle !== '分销账目')">
               <h2>{{item.tabTitle}}</h2>
               <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
                 <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
                 <div>
-                  <router-link class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+                  <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
                 </div>
               </div>
             </div>
           </div>
           <div v-else class="item">
-            <router-link class="ellipsis" active-class="active" :to="resolvePath(item.path)">{{item.meta.title}}</router-link>
+            <router-link :title="item.meta.title" class="ellipsis" active-class="active" :to="resolvePath(item.path)">{{item.meta.title}}</router-link>
           </div>
         </div>
       </div>
@@ -44,7 +52,8 @@ export default {
       basePath: '',
       //userType: false,
       current: '0',
-      isPc: false  //是否开通了pc和wap店铺
+      isPc: false,  //是否开通了pc和wap店铺
+      isOpenResell:false //是否开通了分销应用
     }
   },
   components: { },
@@ -88,6 +97,7 @@ export default {
       this.current = realCurrent
       this.setSidebarItems()
     }
+    this.getRebusinessTypes()
   },
   methods: {
     // setUserType() {
@@ -99,6 +109,18 @@ export default {
     //     this.userType = false
     //   }
     // },
+    getRebusinessTypes(){
+       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+          if(data.isOpenResell == 1){
+            this.isOpenResell = true
+          }else{
+            this.isOpenResell = false
+          }
+      }).catch((error) => {
+          console.error(error);
+      });
+    },
+
     handleTabTitle(arr) {
       var map = {},
           dest = [];

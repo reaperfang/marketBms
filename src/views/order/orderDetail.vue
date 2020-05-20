@@ -22,6 +22,9 @@
                 <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
+                <el-tab-pane v-if="resellConfigInfo && orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分销信息" name="commision">
+                    <OrderCommision :orderDetail="orderDetail" @getDetail="getDetail"></OrderCommision>
+                </el-tab-pane>
             </el-tabs>
         </div>
         <div class="operate-record">
@@ -31,16 +34,14 @@
                 style="width: 100%"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
                 <el-table-column
-                    label="操作"
-                    width="180">
+                    label="操作">
                     <template slot-scope="scope">
                         {{scope.row.operationType | operationTypeFilter}}
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="createUserName"
-                    label="操作人"
-                    width="180">
+                    label="操作人">
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
@@ -177,6 +178,8 @@
 <script>
 import OrderState from './components/orderState'
 import OrderInformation from './components/orderInformation'
+import OrderCommision from './components/orderCommision'
+import OrderOperate from './components/orderOperate'
 import DeliveryInformation from './components/deliveryInformation'
 import CouponDialog from '@/views/order/dialogs/couponDialog'
 
@@ -221,7 +224,8 @@ export default {
                     value: 2
                 }
             ],
-            changePriceVisible: false
+            changePriceVisible: false,
+            resellConfigInfo: null
         }
     },
     created() {
@@ -230,6 +234,13 @@ export default {
                 this.activeName = 'delivery'
             }
         })
+
+        // 获取分销商设置
+        this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+            if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
+        }).catch((error) => {
+            console.error(error);
+        });
     },
     computed: {
         usedCouponList() {
@@ -286,6 +297,8 @@ export default {
                     return '特权价'
                 case '4':
                     return '赠品订单'
+                case '5': 
+                    return '分销订单'
             }
         },
         goodsSpecsFilter(value) {
@@ -346,7 +359,9 @@ export default {
         OrderState,
         OrderInformation,
         CouponDialog,
-        DeliveryInformation
+        DeliveryInformation,
+        OrderCommision,
+        OrderOperate
     }
 }
 </script>
@@ -452,6 +467,9 @@ export default {
     .member-name {
         margin-right: 20px;
         color: #b6b6b9;
+    }
+    /deep/ .el-table .cell {
+        text-align: center;
     }
 </style>
 

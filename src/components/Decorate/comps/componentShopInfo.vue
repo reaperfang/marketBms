@@ -6,7 +6,7 @@
       <div v-if="displayStyle1" class="shopinfo1" :style="background">
         <div class="shopinfo_cont">
           <div class="shopinfo_img">
-            <img :src="shopInfo.logoCircle || shopInfo.logo || require('@/assets/images/logo.png')" alt />
+            <img :src="shopInfo.logo || require('@/assets/images/logo.png')" alt />
           </div>
           <div class="shopinfo_introduce">
             <p class="shopinfo_title">{{shopInfo.shopName || '店铺名称'}}</p>
@@ -39,7 +39,7 @@
       <div v-if="displayStyle3" class="shopinfo3" :style="background">
         <div class="shopinfo3_cont">
           <div class="shopinfo3_img">
-            <img :src="shopInfo.logoCircle || shopInfo.logo || require('@/assets/images/logo.png')" alt />
+            <img :src="shopInfo.logo || require('@/assets/images/logo.png')" alt />
           </div>
           <div class="shopinfo3_introduce">
             <p>{{shopInfo.shopName || '店铺名称'}}</p>

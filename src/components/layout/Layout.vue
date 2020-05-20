@@ -44,7 +44,8 @@ export default {
   name: 'Layout',
   data() {
     return {
-      current: '0'
+      current: '0',
+      num : '0'
     }
   },
   created() {
@@ -118,9 +119,12 @@ export default {
       this.$store.dispatch('closeSideBar', { withoutAnimation: false })
     },
     menuHandler(index) {
-      this.SETCURRENT(index)
+      if(index == 8){
+        this.$router.push({name:'apply',params:{id:this.num++}});
+      }else{
+        this.SETCURRENT(index)
+      }
       localStorage.setItem('siderBarCurrent', index)
-
       this.jumpTo(index)
     },
     jumpTo(index) {

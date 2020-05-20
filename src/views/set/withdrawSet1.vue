@@ -118,29 +118,25 @@ export default {
               this.$message.error('允许状态下至少勾选一个条件');
             }else{
               let id = this.cid
-              if(this.cashOutUpperChecked == false){
-                this.form.cashOutUpper = null
-              }else if(String(this.form.cashOutUpper).trim()== 'undefined'){
+              this.cashOutUpperChecked == false && (this.form.cashOutUpper = null)
+              this.cashOutLowerChecked == false && (this.form.cashOutLower = null)
+              this.cashOutTimesChecked == false && (this.form.cashOutTimes = null)
+              this.cashOutMoneyChecked == false && (this.form.cashOutMoney = null)
+              if(String(this.form.cashOutUpper).trim()== 'undefined'){
                 this.$message({
                   message: '单笔提现金额上限,请输入有效数字',
                   type: 'warning'
                 });
-              }else if(this.cashOutLowerChecked == false){
-                this.form.cashOutLower = null
               }else if(!String(this.form.cashOutLower).trim()== 'undefined'){
                 this.$message({
                   message: '单笔最低提现金额,请输入有效数字',
                   type: 'warning'
                 });
-              }else if(this.cashOutTimesChecked == false){
-                this.form.cashOutTimes = null
               }else if(!String(this.form.cashOutTimes).trim()== 'undefined'){
                 this.$message({
                   message: '每日提现次数上限,请输入有效数字',
                   type: 'warning'
                 });
-              }else if(this.cashOutMoneyChecked == false){
-                this.form.cashOutMoney = null
               }else if(!String(this.form.cashOutMoney).trim()== 'undefined'){
                 this.$message({
                   message: '体现余额限制,请输入有效数字',
