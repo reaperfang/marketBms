@@ -318,7 +318,7 @@ export default {
     methods: {
         specsChange(index, str) {
             if(str == 'costPrice') {
-                if(this.list[index].costPrice < 0) {
+                if(+this.list[index].costPrice < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].costPrice)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showCostPriceError: true,
                         costPriceErrorMessage: '请输入正确的数字'
@@ -330,7 +330,7 @@ export default {
                     }))
                 }
             } else if(str == 'salePrice') {
-                if(this.list[index].salePrice < 0) {
+                if(+this.list[index].salePrice < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].salePrice)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showSalePriceError: true,
                         salePriceErrorMessage: '请输入正确的数字'
@@ -342,7 +342,7 @@ export default {
                     }))
                 }
             } else if(str == 'stock') {
-                if(this.list[index].stock < 0) {
+                if(+this.list[index].stock < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].stock)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showStockError: true,
                         stockErrorMessage: '请输入正确的数字'
@@ -354,7 +354,7 @@ export default {
                     }))
                 }
             } else if(str == 'warningStock') {
-                if(this.list[index].warningStock < 0) {
+                if(+this.list[index].warningStock < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].warningStock)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showWarningStockError: true,
                         warningStockErrorMessage: '请输入正确的数字'
@@ -366,7 +366,7 @@ export default {
                     }))
                 }
             } else if(str == 'weight') {
-                if(this.list[index].weight < 0) {
+                if(+this.list[index].weight < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].weight)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showWeightError: true,
                         weightErrorMessage: '请输入正确的数字'
@@ -378,7 +378,7 @@ export default {
                     }))
                 }
             } else if(str == 'volume') {
-                if(this.list[index].volume < 0) {
+                if(+this.list[index].volume < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].volume)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showVolumeError: true,
                         volumeErrorMessage: '请输入正确的数字'
