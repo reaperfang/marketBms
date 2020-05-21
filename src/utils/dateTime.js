@@ -262,7 +262,7 @@ export function globalTimePickerOption(editable = true, disableComing = true) {
         if(disableComing) {
           return time.getTime() >= Date.now()
         } else {
-          return time.getTime() <= Date.now()
+          return time.getTime() + 24*60*60*1000 <= Date.now()
         }
     }
   }
