@@ -110,7 +110,7 @@
                     </el-table-column>
                     <el-table-column
                         label="状态"
-                        width="100">
+                        width="120">
                         <template slot-scope="scope">
                             <span class="goods-state">
                                 <span :class="{red: scope.row.status == -1}">{{scope.row.status | statusFilter}}</span>
