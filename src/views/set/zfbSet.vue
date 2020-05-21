@@ -83,7 +83,7 @@ export default {
         this.form.private_key = param.private_key
         this.form.alipay_public_key = param.alipay_public_key
       }).catch(error =>{
-        this.$message.warning('商户未设置支付信息');
+        // this.$message.warning('商户未设置支付信息');
       })
     },
 
