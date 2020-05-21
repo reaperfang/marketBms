@@ -132,7 +132,7 @@ export default {
     },
     methods: {
         downloadTemplate() {
-          window.location.href = location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xls`
+          window.location.href = location.protocol + '//' + location.host + `/bp/static/template/${encodeURIComponent('商品导入模板')}.xlsx`
         },
         renovate() {
             this.getList()
