@@ -457,7 +457,7 @@ export default {
             
             oForm.memberLabels = labelIds;
             oForm.channelIds = channelIds;
-            if(oForm.memberType.length > 0) {
+            if(oForm.memberType.length > 0 && oForm.memberType[0] !== "不限") {
                 oForm.memberTypes = oForm.memberType[0] == "会员" ? [1,2]:[0];
             }
             if(oForm.status.length > 0) {
