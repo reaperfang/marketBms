@@ -8,5 +8,5 @@ module.exports = {
 	UPLOAD_SERVER:'"//test3-omo.aiyouyi.cn"',
 	APPLY: '"//test3-omo.aiyouyi.cn"',
 	ZX_API: '"/cms-api"',
-  	ZX_HELP: '"https://test-m.300.cn"'
+  	ZX_HELP: '"https://test-www.300.cn"'
 }

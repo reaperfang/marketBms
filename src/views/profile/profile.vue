@@ -165,7 +165,7 @@
             <img :src="require('@/assets/images/profile/icon_07.png')" alt />
             公告
           </span>
-          <el-link  :href="zxLink+'cms?type=news&dept=aiyouyi.cn&cat=news'" target="_blank" :underline="false">
+          <el-link  :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=news'" target="_blank" :underline="false">
             <i class="icon_more"></i>
           </el-link>
         </p>
@@ -388,7 +388,7 @@ export default {
         })
         .catch(error => {});
     },
-   
+
      //点击资讯/公告详情
      onDetail(id){
         window.open(`${this.zxLink}/cms/news/${id}.html`)

@@ -358,7 +358,7 @@ export default {
         this.successList = [];
         this.failedList = [];
       }
-      return isJPG || isJPEG || isPNG && isLt2M;
+      return (isJPG || isJPEG || isPNG) && isLt2M;
     },
 
     /* 上传成功钩子 */
