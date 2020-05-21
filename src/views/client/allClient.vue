@@ -443,16 +443,18 @@ export default {
             if(channelNames.length > 0) {
                 if(channelNames.indexOf('不限') !== -1) {
                     channelIds = [];
-                } 
-                this.channelsList.map((item) => {
-                    channelNames.map((v) => {
-                        if(v == item.channerlName) {
-                            channelIds.push(item.id);
-                        }
-                    })
-                });
+                }else{
+                    this.channelsList.map((item) => {
+                        channelNames.map((v) => {
+                            if(v == item.channerlName) {
+                                channelIds.push(item.id);
+                            }
+                        })
+                    });
+                    channelIds = channelIds.join(',');
+                }
             }
-            channelIds = channelIds.join(',');
+            
             oForm.memberLabels = labelIds;
             oForm.channelIds = channelIds;
             if(oForm.memberType.length > 0) {
@@ -548,7 +550,7 @@ export default {
             }
             .down_img{
                 position: absolute;
-                left: 562px;
+                left: 580px;
                 top: 5px;
             }
             .more{
