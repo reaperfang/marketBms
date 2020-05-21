@@ -7,7 +7,11 @@
       <el-tab-pane label="店铺导航" name="shopNavIndex"></el-tab-pane>
     </el-tabs>
     <div v-if="loading && currentTab === 'shopMainDefault'" class="loading_wrapper" v-calcHeight="160" v-loading="loading"></div>
-    <component v-if="!loading" :is="currentTab" :decorateData="decorateData" class="animated fadeIn"></component>
+    <template v-if="!loading">
+      <transition name="fade" :duration="{ enter: 100, leave: 100 }">
+        <component :is="currentTab" :decorateData="decorateData"></component>
+      </transition>
+    </template>
   </div>
 </template>
 

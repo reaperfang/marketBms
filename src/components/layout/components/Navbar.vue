@@ -198,7 +198,7 @@ export default {
       cursor: pointer;
     }
     .search_int {
-      width: 158px;
+      width: 175px;
       height: 22px;
       border-radius: 2px;
       font-size: 10px;

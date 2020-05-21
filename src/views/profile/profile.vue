@@ -149,7 +149,7 @@
             <i class="icon_more"></i>
           </el-link>
         </p>
-        <p class="p_email no_data" v-if="Array.isArray(information) && information.length == 0">暂无公告</p>
+        <p class="p_email no_data" v-if="Array.isArray(information) && information.length == 0">暂无资讯</p>
         <ul class="info_box" v-else>
           <template v-for="(item, key, index) in information">
             <li class="info_list" v-if="index < 3" :key="key">
