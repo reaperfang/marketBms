@@ -1,7 +1,9 @@
 /*新建子账号 */
 <template>
     <div class="main">
-        <h1>创建子账号</h1>
+        <h1>创建子账号
+          <span class="note">注：子账号的默认初始密码为：子账号的手机号码后4位+@A</span>
+        </h1>
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <!-- <el-form-item label="店铺名称:" prop="shopName">
                 <el-input v-model="form.shopName" style="width:182px;" placeholder="10个汉字"></el-input>
@@ -246,5 +248,10 @@ export default {
 }
 .mtb100{
     margin: 100px 0;
+}
+.note{
+  font-size: 12px;
+  color: #999;
+  margin-left: 20px;
 }
 </style>
