@@ -463,7 +463,8 @@ export function getJdLive(data) {
     apiType: 'goods',
     method: 'post',
     target: 'PRODUCT-SPU-JD-LIVE-LINKS-PROCESSOR',
-    data
+    data,
+    token
   })
 }
 // 分销商品设置
