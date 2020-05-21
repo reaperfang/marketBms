@@ -47,12 +47,17 @@
         <el-input placeholder="请输入名称" v-model="ruleForm.navName"></el-input>
       </el-form-item>
        <el-form-item label="跳转链接" prop="linkTo">
-        <el-button 
-        type="text" 
-        @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" 
-        :title="ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'">
-        {{ruleForm.linkTo ? ruleForm.linkTo.typeName + '-' +  (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name) : '选择跳转到的页面'}}
-        </el-button>
+         <el-button
+        v-if="!ruleForm.linkTo"
+        type="text"
+        @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
+        <div class="link_overview clearFix" v-if="ruleForm.linkTo">
+          <div class="cont l">
+            <span class="l" :title="ruleForm.linkTo.typeName + '-' + (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name)">{{ruleForm.linkTo.typeName + ' | ' + (ruleForm.linkTo.data.title || ruleForm.linkTo.data.name)}}</span>
+            <i @click="removeLink"></i>
+          </div>
+          <span class="modify r" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">修改</span>
+        </div>
       </el-form-item>
     </div>
 
@@ -106,6 +111,11 @@ export default {
     seletedPage(linkTo) {
       this.ruleForm.linkTo = linkTo;
     },
+
+    /* 移除链接 */
+    removeLink() {
+      this.$set(this.ruleForm, 'linkTo', null)
+    }
   }
 }
 </script>

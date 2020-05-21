@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间"></el-table-column>
     </el-table>
-    <div class="multiple_selection" v-if="tableData.length">
+    <div class="multiple_selection" v-if="tableData.length&& multiple === true">
       <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
     </div>
     <div class="pagination" v-if="tableData.length">

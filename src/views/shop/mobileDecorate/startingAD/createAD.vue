@@ -43,8 +43,20 @@
             <span class="upload_tips">建议尺寸:640 * 350 像素 , 请将所有广告图片尺寸保持一致，图片只能选择一张</span>
           </el-form-item>
           <el-form-item label="广告链接" prop="advertiseJump">
-            <el-button v-if="ruleForm.advertiseJump" type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">{{ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name)}}</el-button>
-            <el-button v-else type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">选择跳转页面</el-button>
+            <el-button
+            v-if="!ruleForm.advertiseJump"
+            type="text"
+            @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
+            <div class="link_overview clearFix" v-if="ruleForm.advertiseJump">
+              <div class="cont l">
+                <span class="l" :title="ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name)">{{ruleForm.advertiseJump.typeName + ' | ' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name)}}</span>
+                <i @click="removeLink"></i>
+              </div>
+              <span class="modify r" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'">修改</span>
+            </div>
+
+            <!-- <el-button v-if="ruleForm.advertiseJump" type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">{{ruleForm.advertiseJump.typeName + '-' + (ruleForm.advertiseJump.data.title || ruleForm.advertiseJump.data.name)}}</el-button>
+            <el-button v-else type="text" @click="dialogVisible=true; currentDialog='dialogSelectJumpPage'" :disabled="showType === 'view'">选择跳转页面</el-button> -->
           </el-form-item>
           <el-form-item label="展示时间" prop="startTime">
             <div>
@@ -203,6 +215,11 @@ export default {
           }
         }
       })
+    },
+
+    /* 移除链接 */
+    removeLink() {
+      this.$set(this.ruleForm, 'advertiseJump', null)
     }
   }
 }

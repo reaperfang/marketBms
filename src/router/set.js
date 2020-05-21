@@ -103,7 +103,7 @@ export default [
             }
             // {
             //     path: 'authorize',
-            //     component: () => import('@/views/set/authorize'),
+            //     component: () => import('@/views/set/authorize') ,
             //     name: 'authorize',
             //     meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
             // }

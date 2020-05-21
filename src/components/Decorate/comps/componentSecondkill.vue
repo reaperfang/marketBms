@@ -46,9 +46,9 @@
                             <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
                         </div>
 
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&(item.remainStock>0&&item.status==1)"></componentButton>
+                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&(item.remainStock>0&& (item.status==1 || item.status==0))"></componentButton>
                         <p class="activity_end" v-if="item.status==2">活动已结束</p>
-                        <p class="activity_end" v-if="item.status==0">活动未开始</p>
+                        <!-- <p class="activity_end" v-if="item.status==0">活动未开始</p> -->
                     </div>
                 </li>
             </ul>
@@ -209,17 +209,17 @@ export default {
         /* 获取优惠价 */
         getReducePrice(item) {
             if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
-                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice;
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice || 0;
             };
-            return '';
+            return 0;
         },
 
         /* 获取原价 */
         getYprice(item) {
             if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
-                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice;
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice || 0;
             };
-            return '';
+            return 0;
         }
 
     },
@@ -354,7 +354,10 @@ export default {
                         display:none;
                     }
                     .content{
-                        @extend .flexCenterMiddle;
+                        // @extend .flexCenterMiddle;
+                        display:flex;
+                        align-items:center;
+                        padding:0 10px;
                         .caption{
                             color:#fff;
                             font-size:10px;
@@ -828,7 +831,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
@@ -943,7 +949,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;

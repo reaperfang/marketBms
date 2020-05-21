@@ -195,7 +195,7 @@ export default {
         const _self = this;
         this.echoList = [];
         newValue.forEach((item)=>{
-          _self.echoList.push({activityId: item.activityId});
+          _self.echoList.push({activityId: item.activityId, spuId: item.spuId});
         })
       },
       deep: true

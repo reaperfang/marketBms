@@ -33,7 +33,7 @@
     </div>
     <div class="table" v-calcHeight="300">
       <p>广告（{{total || 0}}个）</p>
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"  
           width="30">
@@ -53,8 +53,8 @@
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" sortable label="创建时间" :width="170"></el-table-column>
-        <el-table-column prop="updateTime" sortable label="更新时间" :width="170"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :width="170"></el-table-column>
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" :width="170"></el-table-column>
         <!-- <el-table-column prop="startTime" sortable label="开始时间" :width="170"></el-table-column>
         <el-table-column prop="endTime" sortable label="结束时间" :width="170"></el-table-column> -->
         <el-table-column prop="createUserName" label="操作账号"></el-table-column>
@@ -238,7 +238,19 @@ export default {
       }).catch((error)=>{
         this.$message.error(error);
       });
-    }
+    },
+
+    //时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
+    },
 
   }
 }

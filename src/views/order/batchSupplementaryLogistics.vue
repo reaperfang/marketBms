@@ -80,7 +80,7 @@
                         <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="!item.express" v-model="item.expressNos" @input="ExpressNosInput(index)"></el-input>
+                            <el-input :disabled="!item.express" v-model="item.expressNos" @input="ExpressNosInput(index)" maxlength="20"></el-input>
                             <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                     </el-form>
@@ -608,5 +608,14 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+.container-item-content {
+  .content {
+    .item {
+      .label {
+        flex-shrink: 0;
+      }
+    }
+  }
 }
 </style>

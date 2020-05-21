@@ -30,8 +30,8 @@
           <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
         </el-form-item>
         <el-form-item>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '搜索']">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -48,6 +48,7 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'createTime', order: 'descending'}"
+        @sort-change="changeSort"
         >
         <el-table-column
           prop="expressSn"
@@ -69,7 +70,7 @@
         <el-table-column
           prop="createTime"
           label="查询时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -108,7 +109,8 @@ export default {
         timeValue:'',
         expressCompany:'',
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -150,7 +152,8 @@ export default {
         startTime:'',
         endTime:'',
         startIndex:this.ruleForm.startIndex,
-        pageSize:this.ruleForm.pageSize
+        pageSize:this.ruleForm.pageSize,
+        sort:'desc'
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
@@ -192,6 +195,7 @@ export default {
         searchType:'relationSn',
         timeValue:'',
         expressCompany:'',
+        sort:'desc'
       }
       this.fetch()
     },
@@ -209,6 +213,17 @@ export default {
          this.$message.error(error);
       })
       }
+    },
+    //操作时间排序
+     changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
   }
 }

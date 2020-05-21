@@ -36,7 +36,7 @@
                             <p class="limit" v-if="showContents.indexOf('4')!=-1">{{item.joinLimit==-1?'不限':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
                         <div class="price_line">
-                            <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{item.setMealPrice}}</font></p>
+                            <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{item.setMealPrice || 0}}</font></p>
                         </div>
 
                         <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6"></componentButton>
@@ -296,7 +296,10 @@ export default {
                         display:none;
                     }
                     .content{
-                        @extend .flexCenterMiddle;
+                        // @extend .flexCenterMiddle;
+                        display:flex;
+                        align-items:center;
+                        padding:0 10px;
                         .caption{
                             color:#fff;
                             font-size:10px;
@@ -728,7 +731,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
@@ -804,7 +810,7 @@ export default {
                     .button{
                         height:24px;
                         right:10px;
-                        bottom:12.5px;
+                        // bottom:12.5px;
                     }
                     .activity_end{
                         right:10px;
@@ -829,7 +835,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
@@ -905,7 +914,7 @@ export default {
                     .button{
                         height:24px;
                         right:10px;
-                        bottom:12.5px;
+                        bottom:0px;
                     }
                     .activity_end{
                         right:10px;

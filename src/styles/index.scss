@@ -639,13 +639,25 @@ table.yuan-table{
 .confirm.no-cancel {
   .el-button {
     margin-left: 0!important;
+    padding: 9px 12px 9px 20px;
+    letter-spacing: 8px;
+    font-size:14px;
   }
 }
-
+.goods-custom{
+  padding-bottom: 30px!important;
+  width: 500px!important;
+}
 .goods-custom .el-message-box__btns {
+  margin-top:24px;
+  .el-button {
+    padding: 9px 12px 9px 20px;
+    letter-spacing: 8px;
+    font-size:14px;
+  }
   .el-button:first-child {
       display: block;
-      margin-left: 50px;
+      margin-left: 30px;
   }
 }
 

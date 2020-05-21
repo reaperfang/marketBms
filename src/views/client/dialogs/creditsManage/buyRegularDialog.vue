@@ -226,7 +226,6 @@ export default {
     },
     handleCurrentChange(val) {
       this.getSkuList(val, this.pageSize);
-      this.startIndex = val;
     },
     submit() {
       this.btnLoading = true;
@@ -366,14 +365,12 @@ export default {
         });
     },
     handleSearch() {
-      this.startIndex = 1;
       this.getSkuList(this.startIndex, this.pageSize);
     },
     reset() {
       this.categoryValue = [];
       this.productLabelName = "";
       this.name = "";
-      this.startIndex = 1;
       this.getSkuList(this.startIndex, this.pageSize);
     },
     submit2() {

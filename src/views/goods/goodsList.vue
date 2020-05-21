@@ -83,6 +83,11 @@
                     width="124">
                     </el-table-column> -->
                     <el-table-column
+                    prop="code"
+                    label="SPU编码"
+                    width="130">
+                    </el-table-column>
+                    <el-table-column
                     prop="name"
                     label="商品名称"
                     :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
@@ -177,13 +182,14 @@
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
                     <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
                     <el-button @click="shareMore" class="border-button">批量推广</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="border-button">批量删除</el-button>
+                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
+                    <el-button @click="copyUrl" class="border-button">复制链接</el-button>
                 </div>
             </div>
             <div class="footer">
                 <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
             </div>
-            <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
+            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
         </div>
         <!-- <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
@@ -356,7 +362,7 @@
     display: flex;
 }
 /deep/ .input-with-select .el-input__inner {
-  width: 128px;
+  width: 160px;
 }
 .table-header {
     margin-bottom: 10px;
@@ -393,15 +399,23 @@
 }
 /deep/ .el-table td, .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
 }
 /deep/ .el-table th {
     text-align: center;
-    &:nth-child(2) {
+    &:nth-child(3) {
         text-align: left;
     }
+}
+/deep/ .input-with-select {
+    .el-input-group__prepend {
+        background-color: #fff;
+    }
+}
+/deep/ .all-delete {
+    border:1px solid rgba(146,146,155,1);
 }
 </style>
 <style lang="scss">
@@ -425,6 +439,7 @@ import EditorUpperAndLowerRacksSpu from '@/views/goods/dialogs/editorUpperAndLow
 import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
 import PriceChangeDialog from "@/views/goods/dialogs/priceChangeDialog";
 import anotherAuth from '@/mixins/anotherAuth'
+import copyUrlDialog from "@/views/goods/dialogs/copyUrlDialog";
 
 export default {
     mixins: [anotherAuth],
@@ -626,11 +641,44 @@ export default {
         }
     },
     methods: {
+        clear() {
+            this.$refs.table.clearSelection();
+        },
+        copyUrl() {
+            if(!this.multipleSelection.length) {
+                this.$message({
+                    message: '请选择商品',
+                    type: 'warning'
+                });
+                return
+            }
+            if(!this.multipleSelection.every(val => val.status == 1)) {
+                this.$message({
+                    message: '只能选择上架商品',
+                    type: 'warning'
+                });
+                return
+            }
+            this._apis.goods
+                .getJdLive({ids: this.multipleSelection.map(val => val.id)})
+                .then(res => {
+                    this.currentData = res
+                    this.currentDialog = 'copyUrlDialog'
+                    this.dialogVisible = true
+                })
+                .catch(error => {
+                    this.$message.error({
+                        message: error,
+                        type: 'error'
+                    });
+                });
+        },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
                 startIndex: 1,
                 pageSize: 20,
             })
+            this.checkedAll = false
             this.getList()
         },
         gblen(str) {
@@ -806,6 +854,7 @@ export default {
                 searchValue: ''
             })
             this.categoryValue = ''
+            this.checkedAll = false
             this.getList()
         },
         allDelete() {
@@ -1201,7 +1250,8 @@ export default {
         EditorPriceSpu,
         EditorUpperAndLowerRacksSpu,
         ShareSelect,
-        PriceChangeDialog
+        PriceChangeDialog,
+        copyUrlDialog
     }
 }
 </script>
