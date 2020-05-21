@@ -561,12 +561,10 @@ export default {
             // }
             if(val === 1) {
                 return '上架'
-            } else if(val === 0) {
+            } else if(val === 0 || val === 2) {
                 return '下架'
             } else if(val === -1) {
                 return '已售罄'
-            } else if(val === 2) {
-                return '定时上架'
             }
         },
         async productCatalogFilter(id) {
