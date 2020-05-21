@@ -1267,8 +1267,10 @@ export default {
                     this.total = +res.total
                     //this.getCategoryName(res.list)
                     res.list.forEach(item => {
-                        if(item.status !== -1) {
-                            item.switchStatus = !!item.status
+                        if(item.status === 1) {
+                            item.switchStatus = true
+                        } else if(item.status === 0 || item.status === 2) {
+                            item.switchStatus = false
                         }
                     })
                     this.list = res.list
