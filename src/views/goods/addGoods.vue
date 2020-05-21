@@ -2906,6 +2906,9 @@ export default {
             this.ruleForm.productCatalogInfoIds = _value
         },
         timelyShelvingHandler() {
+            this.currentData = {
+                time: this.ruleForm.autoSaleTime
+            }
             this.currentDialog = 'TimelyShelvingDialog'
             this.dialogVisible = true
         },

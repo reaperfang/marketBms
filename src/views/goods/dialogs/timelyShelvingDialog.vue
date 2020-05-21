@@ -24,7 +24,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item class="footer">
-        <el-button @click="onSubmit" type="primary">上 架</el-button>
+        <el-button @click="onSubmit('ruleForm')" type="primary">上 架</el-button>
         <el-button @click="visible = false">取 消</el-button>
       </el-form-item>
     </el-form>
@@ -36,13 +36,23 @@ import utils from "@/utils";
 
 export default {
   data() {
+    var validateTime = (rule, value, callback) => {
+      if (value <= Date.now()) {
+        callback(new Error('选择时间必须大于当前时间'));
+      } else {
+        callback();
+      }
+    };
     return {
       showFooter: false,
       ruleForm: {
         time: ""
       },
       rules: {
-        time: [{ required: true, message: "请选择", trigger: "blur" }]
+        time: [
+          { required: true, message: '请选择', trigger: 'change' },
+          { validator: validateTime, trigger: 'blur' },
+        ]
       },
       pickerBeginDateBefore: {
         disabledDate(time) {
@@ -59,20 +69,30 @@ export default {
     //     }
     //   };
     // });
+    if(this.data && this.data.time) {
+      this.ruleForm.time = new Date(this.data.time)
+    }
   },
   methods: {
     // pickerBeginDateBefore (time) {
 
     // },
-    onSubmit() {
-      this.$emit(
-        "submit",
-        utils.formatDate(
-          new Date(this.ruleForm.time * 1),
-          "yyyy-MM-dd hh:mm:ss"
-        )
-      );
-      this.visible = false;
+    onSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$emit(
+            "submit",
+            utils.formatDate(
+              new Date(this.ruleForm.time * 1),
+              "yyyy-MM-dd hh:mm:ss"
+            )
+          );
+          this.visible = false;
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     }
   },
   computed: {
