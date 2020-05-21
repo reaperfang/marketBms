@@ -177,7 +177,7 @@ export function dayEnd(endTime) {
 
 
 /* 全局时间选择器配置项逻辑 */
-export function globalTimePickerOption(editable = true) {
+export function globalTimePickerOption(editable = true, disableComing = true) {
   const _self = this;
   const prefixInteter = require('./transform').prefixInteter;
 
@@ -259,7 +259,11 @@ export function globalTimePickerOption(editable = true) {
       }
     },
     disabledDate: (time) => {
-        return time.getTime() >= Date.now()
+        if(disableComing) {
+          return time.getTime() >= Date.now()
+        } else {
+          return time.getTime() <= Date.now()
+        }
     }
   }
 }

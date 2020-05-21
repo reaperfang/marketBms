@@ -19,7 +19,7 @@
         <el-date-picker
           v-model="ruleForm.time"
           type="datetime"
-          :picker-options="utils.globalTimePickerOption.call(this)"
+          :picker-options="utils.globalTimePickerOption.call(this, true, false)"
           placeholder="选择日期时间"
         ></el-date-picker>
       </el-form-item>
