@@ -81,31 +81,31 @@
                     </div>
                 </td>
                 <td>
-                    <el-input @change="specsChange(index, 'costPrice')" type="number" min="0" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input @blur="specsChange(index, 'costPrice')" type="number" min="0" v-model="item.costPrice" placeholder="请输入价格(元)"></el-input>
                     <span class="message-span" v-if="item.showCostPriceError">{{item.costPriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @change="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input @blur="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
                     <span class="message-span" v-if="item.showSalePriceError">{{item.salePriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @change="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <el-input @blur="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled" v-model="item.stock" placeholder="请输入库存"></el-input>
                     <span class="message-span" v-if="item.showStockError">{{item.stockErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @change="specsChange(index, 'warningStock')" type="number" min="0" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
+                    <el-input @blur="specsChange(index, 'warningStock')" type="number" min="0" v-model="item.warningStock" placeholder="请输入库存预警"></el-input>
                     <span class="message-span" v-if="item.showWarningStockError">{{item.warningStockErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @change="specsChange(index, 'weight')" type="number" min="0" v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
+                    <el-input @blur="specsChange(index, 'weight')" type="number" min="0" v-model="item.weight" placeholder="请输入重量(kg)"></el-input>
                     <span class="message-span" v-if="item.showWeightError">{{item.weightErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @change="specsChange(index, 'volume')" type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
+                    <el-input @blur="specsChange(index, 'volume')" type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)"></el-input>
                     <span class="message-span" v-if="item.showVolumeError">{{item.volumeErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @change="specsChange(index, 'code')" @blur="codeBlur(item.code, index)" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <el-input @blur="specsChange(index, 'code')" :disabled="hideDelete" v-model="item.code" placeholder="请输入SKU编码"></el-input>
                     <span class="message-span" v-if="item.showCodeError">{{item.codeErrorMessage}}</span>
                 </td>
                 <td>
