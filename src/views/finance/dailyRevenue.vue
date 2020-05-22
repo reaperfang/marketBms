@@ -35,30 +35,33 @@
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'accountDate', order: 'descending'}"
         @sort-change="changeSort"
-
         >
         <el-table-column
           prop="accountDate"
           label="日期"
+          align="center"
           sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
-          label="总收入（元）">
+          label="总收入（元）"
+          align="center">
           <template slot-scope="scope">
-            {{'+' + scope.row.income}}
+            {{scope.row.income}}
           </template>
         </el-table-column>
         <el-table-column
           prop="expend"
-          label="总支出（元）">
+          label="总支出（元）"
+          align="center">
           <template slot-scope="scope">
-            {{'-' + scope.row.expend}}
+            {{scope.row.expend}}
           </template>
         </el-table-column>
         <el-table-column
           prop="realIncome"
-          label="实际收入（元）">
+          label="实际收入（元）"
+          align="center">
         </el-table-column>
       </el-table>
       <div class="page_styles">

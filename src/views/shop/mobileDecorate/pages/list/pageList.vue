@@ -21,7 +21,7 @@
     </div>
     <div class="table" v-calcHeight="300">
       <p>微页面（共{{total || 0}}个）</p>
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
+      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           :selectable='selectInit'
@@ -42,8 +42,8 @@
         </el-table-column>
         <el-table-column prop="vv" label="访客数"></el-table-column>
         <el-table-column prop="pv" label="浏览数"></el-table-column>
-        <el-table-column prop="createTime" sortable label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" sortable label="更新时间"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
         <el-table-column prop="" label="操作" :width="'300px'" fixed="right">
           <template slot-scope="scope">
@@ -112,7 +112,8 @@ export default {
       ruleForm: {
         status: '0',
         pageCategoryInfoId: '',
-        name: ''
+        name: '',
+        dateSort: 0
       },
       seletedClassify: '',   //选中的分类
       visible: false,  //是否显示批量该分类浮层
@@ -261,7 +262,19 @@ export default {
     // 修改禁用
     selectInit(row, index){
       return (row.isHomePage != 1)
-    }
+    },
+
+    //时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.dateSort = 1
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.dateSort = 0
+      }else{
+        return 
+      }
+      this.fetch()
+    },
   }
 }
 </script>

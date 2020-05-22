@@ -56,10 +56,12 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'changeTime', order: 'descending'}"
+        @sort-change="changeSort"
         >
         <el-table-column
           prop="scoreDetailSn"
-          label="积分流水号">
+          label="积分流水号"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
@@ -92,7 +94,7 @@
         <el-table-column
           prop="changeTime"
           label="交易时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="remarks"
@@ -132,23 +134,24 @@ export default {
       inline:true,
       userTypes:[
         {
-          value:'memberSn',
-          label:'用户ID'
-        },
-        {
           value:'nickName',
           label:'用户昵称'
         },
+        {
+          value:'memberSn',
+          label:'用户ID'
+        }
       ],
       ruleForm:{
         memberSn:'',
         businessTypeId:-1,
         timeValue:'',
         nickName:'',
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       total:0,
@@ -163,7 +166,7 @@ export default {
       return financeCons.idbusinessTypes;
     }
   },
-  created() { },
+  created() {},
   methods: {
     init(){
       let query = {
@@ -173,7 +176,8 @@ export default {
         endTime:'',
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
-        nickName:this.ruleForm.nickName
+        nickName:this.ruleForm.nickName,
+        sort:this.ruleForm.sort
       }
       if(this.ruleForm.userType == 'memberSn'){
         query.memberSn = this.ruleForm.userValue || ''
@@ -210,10 +214,11 @@ export default {
       this.ruleForm = {
         businessTypeId:'',
         timeValue:'',
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         memberSn:'',
         nickName:'',
+        sort:'desc'
       }
       this.fetch()
     },
@@ -231,6 +236,17 @@ export default {
         this.$message.error(error)
       })
       }
+    },
+      //交易时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
   }
 }

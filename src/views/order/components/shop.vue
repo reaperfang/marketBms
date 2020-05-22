@@ -1,5 +1,5 @@
 <template>
-    <div class="order">
+    <div class="order" v-loading="loading">
         <order ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
         <el-checkbox v-if="!authHide" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
         <el-button v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="wad">批量补填物流</el-button>
@@ -23,7 +23,8 @@ export default {
             // },
             list: [],
             memberLevelImg: '',
-            checkedAll: false
+            checkedAll: false,
+            loading: false
         }
     },
     created() {
@@ -86,7 +87,7 @@ export default {
             //     spinner: 'el-icon-loading',
             //     target: '.order-container'
             // });
-            this.$refs['order'].loading = true
+            //this.$refs['order'].loading = true
             this.checkedAll = false
             if(obj) {
                 if(obj.orderTimeValue && obj.orderTimeValue.length) {
@@ -118,6 +119,7 @@ export default {
             }
             _params = Object.assign({}, this.params, {
                 [this.params.searchType]: this.params.searchValue,
+                [this.params.searchType2]: this.params.searchValue2,
                 [`${this.params.searchTimeType}Start`]: this.params.orderTimeValue ? searchTimeTypeStart : '',
                 [`${this.params.searchTimeType}End`]: this.params.orderTimeValue ? searchTimeTypeEnd : '',
                 memberInfoId: this.$route.query.id
@@ -131,6 +133,7 @@ export default {
             if(obj && obj.type == 'resetForm') {
                _params = Object.assign({}, _params, {
                    [this.params.searchType]: obj.searchValue,
+                   [this.params.searchType2]: obj.searchValue2,
                    [`${this.params.searchTimeType}Start`]: '',
                 [`${this.params.searchTimeType}End`]: '',
                 searchType: "code",
@@ -151,8 +154,11 @@ export default {
                 pageSize: 20,
                }) 
             }
+            this.loading = true
             this._apis.order.fetchOrderList(_params).then((res) => {
+                this.loading = false
                 console.log(res)
+                if(res.list === null) res.list = []
                 res.list.forEach((val, index) => {
                     let _val = Object.assign({}, val, val.orderInfo)
                     _val.checked = false
@@ -161,12 +167,15 @@ export default {
                 this.list = res.list
                 this.total = +res.total
                 this._globalEvent.$emit('total', this.total)
-                this.$refs['order'].loading = false
+                this.$emit('update:page', res.pageNum)
+                this.$emit('update:limit', res.pageSize)
+                //this.$refs['order'].loading = false
                 //loading.close();
             }).catch(error => {
                 //loading.close();
                 // this.$message.error(error);
-                this.$refs['order'].loading = false
+                this.loading = false
+                //this.$refs['order'].loading = false
             })
         }
     },

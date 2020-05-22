@@ -6,13 +6,13 @@
             <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
                 <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-                <p v-for="(item,key) of list" :class="{active:showAllGroup!=1&&key==0||activeGoodId==item.id}" :key="key" 
+                <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" 
                 @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
               </div>
             </div>
           </div>
           <div class="componentGoodsGroup_content">
-              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : 'all'"></componentGoods>
+              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? list[0] && list[0].id : 'all'"></componentGoods>
           </div> 
       </div>
       <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
@@ -106,6 +106,7 @@ export default {
 
         //根据ids拉取数据
         fetch(componentData = this.currentComponentData.data) {
+          const _self = this;
           if(componentData) {
               if(componentData.ids) {
                 let ids = [];
@@ -120,6 +121,11 @@ export default {
                 this.loading = true;
                 this._apis.goods.fetchCategoryList({ids}).then((response)=>{
                     this.list = response;
+                    if(response && response[0] && _self.currentComponentData.data.showAllGroup == 2) {
+                      _self.activeGoodId = response[0].id;
+                    }else {
+                      _self.activeGoodId = '';
+                    }
                     this.calcScroll();
                     this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
                     this.loading = false;
@@ -193,9 +199,10 @@ export default {
     }
     .componentGoodsGroup_tab.menuStyle1 {
       padding: 0;
-      border-right: 1px solid #eee;
+      // border-right: 1px solid #eee;
       p {
         width: 100%;
+        color:rgba(102,102,102,1);
       }
       p.active {
           &:after {
@@ -212,10 +219,11 @@ export default {
     }
     .componentGoodsGroup_tab.menuStyle2 {
         padding: 0 10px;
-        border-right: 1px solid #eee;
+        // border-right: 1px solid #eee;
         p {
           width: 100%;
           margin-top: 10px;
+          color:rgba(102,102,102,1);
           &:first-child {
             margin-top: 0;
           }
@@ -225,6 +233,7 @@ export default {
         p {
           width: 100%;
           margin-top: 10px;
+          color:rgba(102,102,102,1);
           &:first-child {
             margin-top: 0;
           }
@@ -247,7 +256,7 @@ export default {
     }
     .componentGoodsGroup{
         overflow:hidden;
-        background:#f7f7f7;
+        background:#fff;
         .componentGoodsGroup_tab{
             padding:0 5px;
             display:flex;
@@ -281,7 +290,7 @@ export default {
 }
 .componentGoodsGroup {
   overflow: hidden;
-  background: #f7f7f7;
+  background:#fff;
     .componentGoodsGroup_tab {
         padding: 0 5px;
         display: flex;
@@ -300,7 +309,7 @@ export default {
     .componentGoodsGroup_tab.menuStyle1 {
         background: #fff;
         p {
-          color: #333;
+          color: rgba(102,102,102,1);
           line-height: 44px;
           min-width: 70px;
         }
@@ -326,8 +335,9 @@ export default {
         padding-bottom: 9px;
         p {
           min-width: 60px;
-          background: #ccc;
-          color: #666;
+          background: rgba(236,236,236,1);
+          font-weight:400;
+          color:rgba(102,102,102,1);
           line-height: 34px;
           @include borderRadius(50px);
         }
@@ -346,6 +356,7 @@ export default {
           min-width: 60px;
           background: #ececec;
           line-height: 33px;
+          color:rgba(102,102,102,1);
         }
         p.active {
           background: #fc3d42;
@@ -369,6 +380,7 @@ export default {
     }
     .componentGoodsGroup_content {
         overflow: hidden;
+        background: rgb(247,247,247);
     }
 }
 </style>

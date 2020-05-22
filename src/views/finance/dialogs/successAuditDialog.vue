@@ -3,47 +3,26 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
         <div class="c_container clearfix">
             <div class="c_top">
-                <p>用户昵称：{{info.nickName}}</p>
-                <p>用户ID：{{info.memberSn}}</p>
-                <p>提现金额：<span>￥{{info.amount}}</span></p>
-                <p class="gray">提现编号：{{info.cashoutSn}}</p>
+                <p>用户昵称：{{data.nickName}}</p>
+                <p>用户ID：{{data.memberSn}}</p>
+                <p>提现金额：<span>￥{{data.amount}}</span></p>
+                <p class="gray">提现编号：{{data.cashoutSn}}</p>
                 <div class="c_status">
                     <p>成功</p>
-                    <span>已审核通过，提现已到账。</span>
-                    <span>操作人：{{info.createUserName}}</span>
-                    <span>操作时间：{{info.createTime}}</span>
+                    <!-- <span>已审核通过，提现已到账。</span> -->
+                    <span>操作人：{{data.updateUserName}}</span>
+                    <span>操作时间：{{data.updateTime}}</span>
                 </div>
             </div>
-            <div class="c_steps clearfix">
+            <div class="c_steps clearfix" v-for="(info,key) in infos" :key="key">
                 <div class="c_step_l">
                     <span class="c_green"></span>
-                    {{info.createTime}}
+                    {{info.m3}}
                 </div>
                 <div class="c_step_r">
-                    <p>提现到帐</p>
-                    <p>提现申请处理完成</p>
-                </div>
-            </div>
-            <div class="c_steps clearfix">
-                <div class="c_step_l gray">
-                    <span class="c_green"></span>
-                    {{info1.createTime}}
-                </div>
-                <div class="c_step_r">
-                    <p>审核通过</p>
-                    <p>提现申请已通过商家审核，请等待提现到帐</p>
-                    <p>交易流水号 {{info1.tradeDetailSn}}</p>
-                </div>
-            </div>
-            <div class="c_steps clearfix">
-                <div class="c_step_l gray">
-                    <span class="c_green"></span>
-                    {{info2.createTime}}
-                </div>
-                <div class="c_step_r">
-                    <p>提交申请</p>
-                    <p>账户可用余额冻结 ￥{{info2.amount}}</p>
-                    <p>交易流水 {{info2.tradeDetailSn}}</p>
+                    <p>{{info.m0}}</p>
+                    <p>{{info.m1}}</p>
+                    <p>{{info.m2}}</p>
                 </div>
             </div>
         </div> 
@@ -57,9 +36,7 @@ export default {
     props: ['data'],
     data() {
         return {
-           info:{},
-           info1:{},
-           info2:{}
+           infos:[],
         }
     },
     props: {
@@ -98,9 +75,7 @@ export default {
         },
         getInfo(){
             this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
-               this.info = response[0]
-               this.info1 = response[1]
-               this.info2 = response[2]
+                this.infos = response.list
             }).catch((error)=>{
                 this.$message.error(error);
             })

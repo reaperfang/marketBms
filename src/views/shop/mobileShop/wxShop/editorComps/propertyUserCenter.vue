@@ -259,7 +259,8 @@ export default {
           self.saveDataLoading = true;
           self.save();
         } else {
-          this.$message({ message: '请填写正确信息', type: 'warning' });
+          // this.$message({ message: '请填写正确信息', type: 'warning' });
+          return;
         }
       })
     },
@@ -272,7 +273,8 @@ export default {
           self.saveAndApplyDataLoading = true;
           self.saveAndApply();
         } else {
-          this.$message({ message: '请填写正确信息', type: 'warning' });
+          // this.$message({ message: '请填写正确信息', type: 'warning' });
+          return;
         }
       })
     },

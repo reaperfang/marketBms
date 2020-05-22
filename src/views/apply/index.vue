@@ -32,6 +32,15 @@ export default {
             this.refreshPath = window.localStorage.getItem('marketing_router_path')
         }
     },
+     watch: {
+    // 利用watch方法检测路由变化：
+    $route: function(to, from) {
+      // 拿到目标参数 to.params.id 去再次请求数据接口
+      console.log(to.params.id);
+      this.sendMessage('push')
+    },
+    deep: true
+  },
 	beforeDestroy() {
 		localStorage.setItem('marketing_router_path', this.defultPath)
 	},
@@ -63,9 +72,13 @@ export default {
         },
 
         // iframe 刷新  -- 暂时不用
-        sendMessage () {
-            this.iframeWin.postMessage({ cmd: 'marketing_router_refresh', params: {} }, '*')
-        },
+        sendMessage(index) {
+	      if(index == 'refrech'){
+	        this.iframeWin.postMessage({ cmd: "marketing_router_refresh", params: {} },"*");
+	      }else{
+	        this.iframeWin.postMessage({ cmd: "marketing_router_push", params: {} },"*");
+	      }
+	    },
 
         // iframe 加载完成
         iframeLoad () {

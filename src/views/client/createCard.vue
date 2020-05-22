@@ -638,6 +638,13 @@ export default {
         this.excuteSave();
       }
     },
+    isPhone(phone) {
+      if((/^1[3456789]\d{9}$/.test(phone))) {
+        return true;
+      }else{
+        return false;
+      }
+    },
     excuteSave() {
       if (this.ruleForm.id) {
           let formObj = {};

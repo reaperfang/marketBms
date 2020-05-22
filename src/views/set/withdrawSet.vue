@@ -17,25 +17,25 @@
             </a>            
           </p>
           <el-form-item prop="cashOutUpper">
-            <el-checkbox v-model="cashOutUpperChecked"></el-checkbox>
+            <el-checkbox v-model="form.isCashOutUpper"></el-checkbox>
             单笔提现金额上限
             <el-input-number v-model="form.cashOutUpper" :min="0" :max="5000" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
           <el-form-item prop="cashOutLower">
-            <el-checkbox v-model="cashOutLowerChecked"></el-checkbox>
+            <el-checkbox v-model="form.isCashOutLower"></el-checkbox>
             单笔最低提现金额
             <el-input-number v-model="form.cashOutLower" :min="0" :max="5000" label="请输入整数" :precision="0">
             </el-input-number> 元
           </el-form-item>
           <el-form-item prop="cashOutTimes">
-            <el-checkbox v-model="cashOutTimesChecked"></el-checkbox>
+            <el-checkbox v-model="form.isCashOutTimes"></el-checkbox>
             每日提现次数上限
             <el-input-number v-model="form.cashOutTimes" :min="0" label="请输入整数" :precision="0">
             </el-input-number> 次
           </el-form-item>
           <el-form-item prop="cashOutMoney">
-            <el-checkbox v-model="cashOutMoneyChecked"></el-checkbox>
+            <el-checkbox v-model="form.isCashOutMoney"></el-checkbox>
             余额满
             <el-input-number v-model="form.cashOutMoney" :min="0" :max="5000" label="请输入整数" :precision="0">
             </el-input-number> 元,可提现
@@ -59,12 +59,12 @@ export default {
         cashOutUpper:0,
         cashOutLower:0,
         cashOutTimes:0,
-        cashOutMoney:0,        
+        cashOutMoney:0,  
+        isCashOutUpper:0,
+        isCashOutLower:0,
+        isCashOutTimes:0,
+        isCashOutMoney:0
       },
-      cashOutUpperChecked:false,
-      cashOutLowerChecked:false,
-      cashOutTimesChecked:false,
-      cashOutMoneyChecked:false,
     }
   },
   components: {},
@@ -88,10 +88,10 @@ export default {
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
         this.form = response
-        this.form.cashOutUpper != null  && (this.cashOutUpperChecked = true)
-        this.form.cashOutLower != null  && (this.cashOutLowerChecked = true)
-        this.form.cashOutTimes != null  && (this.cashOutTimesChecked = true)
-        this.form.cashOutMoney != null  && (this.cashOutMoneyChecked = true)
+        this.form.isCashOutUpper =  this.form.isCashOutUpper == 1 ? true : false
+        this.form.isCashOutLower =  this.form.isCashOutLower == 1 ? true : false
+        this.form.isCashOutTimes =  this.form.isCashOutTimes == 1 ? true : false
+        this.form.isCashOutMoney =  this.form.isCashOutMoney == 1 ? true : false
       }).catch(error =>{
         this.$message.error(error);
       })
@@ -114,33 +114,29 @@ export default {
           if (valid) {
             if(this.form.cashOutUpper <= this.form.cashOutLower){
               this.$message.error('单笔提现金额上限应大于单笔最低提现金额');
-            }else if(!(this.cashOutUpperChecked || this.cashOutLowerChecked || this.cashOutTimesChecked || this.cashOutMoneyChecked)){
+            }else if(!(this.form.isCashOutUpper || this.form.isCashOutLower || this.form.isCashOutTimes || this.form.isCashOutMoney)){
               this.$message.error('允许状态下至少勾选一个条件');
             }else{
               let id = this.cid
-              if(this.cashOutUpperChecked == false){
-                this.form.cashOutUpper = null
-              }else if(String(this.form.cashOutUpper).trim()== 'undefined'){
+              this.form.isCashOutUpper =  this.form.isCashOutUpper == true ? 1 : 0
+              this.form.isCashOutLower =  this.form.isCashOutLower == true ? 1 : 0
+              this.form.isCashOutTimes =  this.form.isCashOutTimes == true ? 1 : 0
+              this.form.isCashOutMoney =  this.form.isCashOutMoney == true ? 1 : 0
+              if(String(this.form.cashOutUpper).trim()== 'undefined'){
                 this.$message({
                   message: '单笔提现金额上限,请输入有效数字',
                   type: 'warning'
                 });
-              }else if(this.cashOutLowerChecked == false){
-                this.form.cashOutLower = null
               }else if(!String(this.form.cashOutLower).trim()== 'undefined'){
                 this.$message({
                   message: '单笔最低提现金额,请输入有效数字',
                   type: 'warning'
                 });
-              }else if(this.cashOutTimesChecked == false){
-                this.form.cashOutTimes = null
               }else if(!String(this.form.cashOutTimes).trim()== 'undefined'){
                 this.$message({
                   message: '每日提现次数上限,请输入有效数字',
                   type: 'warning'
                 });
-              }else if(this.cashOutMoneyChecked == false){
-                this.form.cashOutMoney = null
               }else if(!String(this.form.cashOutMoney).trim()== 'undefined'){
                 this.$message({
                   message: '体现余额限制,请输入有效数字',
@@ -152,6 +148,7 @@ export default {
                 this._apis.set.updateShopInfo(data).then(response =>{
                   this.loading = false
                   this.$message.success('保存成功！');
+                  this.getShopInfo()
                 }).catch(error =>{
                   this.loading = false
                   this.$message.error(error);

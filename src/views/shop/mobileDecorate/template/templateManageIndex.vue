@@ -1,7 +1,7 @@
 <template>
   <div class="template_wrapper">
-    <ul class="clearFix">
-      <li>
+    <ul class="clearFix" v-loading="loading">
+      <li v-if="!templateList.length">
         <div class="inner">
           <div class="view">
             <div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
@@ -17,8 +17,24 @@
           </div>
         </div>
       </li>
-      <li v-for="(item, key) of templateList" :key="key" v-loading="loading">
-        <div class="inner">
+      <li v-for="(item, key) of templateList" :key="key" v-else>
+
+        <div class="inner" v-if="item.sort === 0">
+          <div class="view">
+            <div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
+          </div>
+          <div class="info">
+            <div class="top">
+              <span>空白模板</span>
+            </div>
+            <div class="bottom">
+              <span class="price"></span>
+              <el-button type="primary" plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="inner" v-else>
           <div class="view">
             <img :src="item.photoHalfUrl" alt="">
             <div class="cover_small">
@@ -59,15 +75,32 @@
       </div>
       <div class="apply" @click="apply(currentTemplate)">立即应用</div>
     </div>
+
+    <div class="pagination" v-if="templateList.length || (!templateList.length && startIndex != 1)">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="Number(startIndex) || 1"
+          :page-size="pageSize*1"
+          :page-sizes="[12]"
+          :total="total*1"
+          layout="total, sizes, prev, pager, next, jumper"
+          >
+        </el-pagination>
+      </div>
   </div>
 </template>
 
 <script>
+import tableBase from '@/components/TableBase';
 export default {
   name: 'templateManage',
+  extends: tableBase,
   components: {},
   data () {
     return {
+      pageSize: 12,
+      
       loading: true,
       templateList: [],
       showBigPreview: false,
@@ -97,17 +130,25 @@ export default {
         this.$refs.bigImage.style.width = 'auto';
         this.$refs.bigImage.style.height = '100%';
       }
-    } 
+    },
   },
   methods: {
     fetch() {
       this.loading = true;
-      this._apis.goodsOperate.getTemplateList({}).then((response)=>{
-        this.templateList = response;
-        this.preload(response, 'photoDetailsUrl');
+      console.log(11,this.startIndex);
+      console.log(22,this.pageSize);
+      this._apis.goodsOperate.getTemplateList({
+        startIndex: this.startIndex,
+        pageSize: this.pageSize
+      }).then((response)=>{
+        this.total = response.total;
+        this.templateList = response.list;
+        this.imgNow = 0;
+        this.preload(this.templateList, 'photoDetailsUrl');
         this.loading = false;
       }).catch((error)=>{
         console.error(error);
+        this.templateList = [];
         this.loading = false;
       });
     },
@@ -193,6 +234,8 @@ export default {
 <style lang="scss" scoped>
 .template_wrapper{
   // min-width:1650px;
+  background: #fff;
+  padding-bottom:20px;
   ul{
     display:flex;
     flex-direction: row;
@@ -258,6 +301,8 @@ export default {
           margin-top:10px;
           .top{
             display:flex;
+            align-items: center;
+            height:23px;
             span{
               margin-right:30px;
             }
@@ -278,6 +323,7 @@ export default {
             display:flex;
             justify-content: space-between;
             margin-top:10px;
+            align-items: center;
             .price{
               color:rgb(253,76,43);
               font-weight:700;
@@ -365,5 +411,18 @@ export default {
       }
     }
   }
+}
+/deep/.el-button--small{
+  padding:9px 12px!important;
+  background: #fff!important;
+  border-radius:4px!important;
+}
+/deep/.el-button--success{
+  border:1px solid rgba(62,180,136,1)!important;
+  color: rgba(62,180,136,1)!important;
+  
+}
+/deep/.el-button--primary{
+  color: #655EFF!important;
 }
 </style>
