@@ -23,7 +23,7 @@
                             <p class="p_over1">上传后将后出现在用户端的用户中心展示，更显目的引导用户领取会员卡，当用户领取会员卡后，则此引导图隐藏。</p>
                         </el-popover>
                     </div>
-                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过3M，格式支持JPG、PNG、JPEG</p>
+                    <p class="c_warn">建议上传图片尺寸326*62像素，不超过3M，格式支持JPG、PNG、JPEG</p>
                 </div>
                 <cdTable></cdTable>
             </el-tab-pane>
