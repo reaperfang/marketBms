@@ -3,7 +3,6 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -11,9 +10,21 @@ function resolve (dir) {
 let getPublicPath = function() {
   let publicPath = '';
   switch(process.env.NODE_ENV) {
-    case 'testing':
+    case 'test':
       publicPath = config.test.assetsPublicPath
       break;
+  	case 'test2':
+		  publicPath = config.test2.assetsPublicPath
+      break;
+    case 'test3':
+		  publicPath = config.test3.assetsPublicPath
+      break;
+    case 'test4':
+		  publicPath = config.test3.assetsPublicPath
+      break;
+    case 'test5':
+		  publicPath = config.test3.assetsPublicPath
+	  	break;
     case 'pre':
       publicPath = config.pre.assetsPublicPath
       break;
