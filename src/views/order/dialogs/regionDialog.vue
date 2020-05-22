@@ -62,6 +62,7 @@ export default {
       // dialogWidth: '1000px',
       dialogFormVisible: true,
       checkList: [],
+      checkList2: [],
       showFooter: false,
       checkedAll: false
     };
@@ -105,6 +106,11 @@ export default {
           } else {
             return total.concat(val.checkList);
           }
+      }, []);
+      this.checkList2 = this.region.reduce((total, val, index) => {
+          let _region = this.region[index];
+
+          return total.concat(val.checkList);
       }, []);
       }
     }
@@ -251,7 +257,7 @@ export default {
     submit() {
       this.$emit(
         "submit",
-        this.checkList.map(val => {
+        this.checkList2.map(val => {
           let arr = val.split(",");
 
           return {
@@ -322,8 +328,8 @@ export default {
   display: flex;
   flex-wrap: wrap;
   // .el-checkbox.title{
-  // 	width: 90px;
-  // 	margin: 0 5px 10px 0 !important;
+  //  width: 90px;
+  //  margin: 0 5px 10px 0 !important;
   // }
   p.title {
     border: 1px solid transparent;
@@ -366,7 +372,7 @@ export default {
   text-align: center;
 }
 // p.title:hover + .citys{
-// 	display:block;
+//  display:block;
 // }
 /deep/ .el-tag {
   padding: 0 5px;
@@ -382,7 +388,3 @@ export default {
   }
 }
 </style>
-
-
-
-
