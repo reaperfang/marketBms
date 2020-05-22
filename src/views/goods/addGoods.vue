@@ -123,7 +123,9 @@
                         @change="handleChange"
                         :props="{ multiple: true, checkStrictly: true }"
                         placeholder="请输入关键字"
-                        filterable>
+                        filterable
+                        size="medium"
+                        :show-all-levels="true">
                     </el-cascader>
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
@@ -3970,5 +3972,14 @@ $blue: #655EFF;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.shop_classify_tag {
+    width: 450px;
+    /deep/ .el-input {
+        width: 450px;
+        .el-input__inner {
+            width: 450px;
+        }
+    }
 }
 </style>

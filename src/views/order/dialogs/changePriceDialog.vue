@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提示" width="500px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" @close="close" title="提示" width="500px" :showFooter="showFooter">
         <div class="container">
             <div class="icon-box">
                 <i class="icon-success"></i>
@@ -24,6 +24,9 @@ export default {
     methods: {
         submit() {
             
+        },
+        close() {
+            clearTimeout(this.data.timer)
         }
     },
     computed: {

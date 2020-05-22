@@ -663,14 +663,17 @@ export default {
                  consultMoney: +this.yingshouChangeMoney}).then(res => {
                     this.changePriceVisible = false
                     this.$emit('getDetail')
-                    this.currentDialog = 'ChangePriceDialog'
-                    this.dialogVisible = true
-
                     let timer = setTimeout(() => {
                         this.$router.push('/order/query')
                         this.dialogVisible = false
                         clearTimeout(timer)
                     }, 5000)
+                    
+                    this.currentData = {
+                        timer
+                    }
+                    this.currentDialog = 'ChangePriceDialog'
+                    this.dialogVisible = true
                 }).catch(error => {
                     this.changePriceVisible = false
                     this.$message.error(error);
