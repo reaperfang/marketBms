@@ -1,7 +1,7 @@
 /*新建子账号 */
 <template>
     <div class="main">
-        <h1>创建角色</h1>
+        <h1>{{ title }}</h1>
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <!-- <el-form-item label="店铺名称:" prop="shopName">
                 <el-input v-model="form.shopName" style="width:182px;" placeholder="10个汉字"></el-input>
@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       loading:false,
+      title: '创建角色',
       form: {
           roleName:'',
           roleDesc: '',
@@ -99,6 +100,7 @@ export default {
             this.roleInfo.shopIds.split(',').map(item =>{
                 this.shopChecked.push(item * 1)             
             }) 
+            this.title = '编辑角色'
         }
         
     },

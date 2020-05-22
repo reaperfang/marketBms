@@ -6,7 +6,12 @@
   "private": true,
   "scripts": {
     "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "build:test": "cross-env NODE_ENV=testing node build/build.js",
+    "build:test": "cross-env NODE_ENV=test node build/build.js",
+    "build:test1": "cross-env NODE_ENV=test1 node build/build.js",
+    "build:test2": "cross-env NODE_ENV=test2 node build/build.js",
+    "build:test3": "cross-env NODE_ENV=test3 node build/build.js",
+    "build:test4": "cross-env NODE_ENV=test4 node build/build.js",
+    "build:test5": "cross-env NODE_ENV=test5 node build/build.js",
     "build:pre": "cross-env NODE_ENV=pre node build/build.js",
     "build:prod": "cross-env NODE_ENV=production node build/build.js"
   },

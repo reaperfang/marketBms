@@ -6,6 +6,7 @@ export function getGeocoder(data) {
       target:'PUBLIC-TENCENT-MAP-GEO-CODER-PROCESSOR',
       method: 'post',
       apiType: 'goodsOperate',
+      noCid: true,
       data
     })
 }
