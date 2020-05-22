@@ -5,7 +5,7 @@
                 <i class="icon-success"></i>
             </div>
             <p class="message">修改价格成功！</p>
-            <p>5S后自动跳转到订单列表页或 <a @click="$router.push('/order/query')" href="javascript:;">立即跳转</a>。</p>
+            <p>{{time}}S后自动跳转到订单列表页或 <a @click="$router.push('/order/query')" href="javascript:;">立即跳转</a>。</p>
         </div>
     </DialogBase>
 </template>
@@ -18,7 +18,22 @@ export default {
             showFooter: false,
             operationType: '6',
             operationRemark: '',
-            showTextarea: false
+            showTextarea: false,
+            time: 5,
+            timer: null
+        }
+    },
+    created() {
+        function startTime() {
+            this.timer = setTimeout(function(){ startTime() }, 1000);
+
+            if(this.time == 0) {
+                clearTimeout(this.timer)
+                this.$router.push('/order/query')
+                this.visible = false
+            } else {
+                this.time = this.time - 1
+            }
         }
     },
     methods: {
@@ -26,7 +41,7 @@ export default {
             
         },
         close() {
-            clearTimeout(this.data.timer)
+            clearTimeout(this.timer)
         }
     },
     computed: {
