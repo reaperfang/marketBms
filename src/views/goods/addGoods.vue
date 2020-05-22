@@ -2087,8 +2087,7 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                console.log('++++++++++++++++++++++++++++++')
-                console.log(res)
+                //console.log(res)
                 //配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [];
                 if(res.generalExpressType == 1){ //如果开启了普通快递
