@@ -26,6 +26,7 @@
 </template>
 
 <script>
+let isHasOtherWay 
 export default {
   components: {},
 
@@ -48,10 +49,22 @@ export default {
     },
     getSwitchTxt() {
       return this.form.isOpen ? '已开启' : '已关闭'
+    },
+    shopInfo() {
+      return this.$store.state.shop.shopInfo
     }
   },
 
-  watch: {},
+  watch: {
+    shopInfo(curr) {
+      if (curr) {
+        this.init(curr)
+      }
+    },
+    isOpen(curr) {
+      console.log('--isOpen---',curr)
+    }
+  },
 
   created() {
     this.getShopLogistics()
@@ -60,45 +73,87 @@ export default {
   mounted() {},
 
   methods: {
+    init(curr) {
+      if (curr) {
+        this.isOpen = curr.isOpenOrdinaryExpress === 1 ? true : false
+        isHasOtherWay = curr.isOpenMerchantDeliver === 1 || curr.isOpenTh3Deliver === 1 || curr.isOpenSelfLift === 1
+      }
+    },
     handleIsOpen(val) {
+      // return false
       console.log('val', val)
       // 当前是否开启普通快递
       if (val) {
         this.open()
+        // return false
       } else {
         this.close()
+        // return false
       }
     },
+    updateShopInfo(data) {
+      const id = this.cid
+
+      return new Promise((resolve, reject) => {
+        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+          this.$store.dispatch('getShopInfo');    
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+        })
+      })
+    },
     open() {
-      this.confirm({
-        title: "提示",
-        iconSuccess: true,
-        text: '已成功开启快递配送！',
-        confirmText: '我知道了',
-        showCancelButton: false
-      });
+      this.updateShopInfo({ isOpenOrdinaryExpress: 1 }).then(response =>{
+        this.confirm({
+          title: "提示",
+          iconSuccess: true,
+          text: '已成功开启快递配送！',
+          confirmText: '我知道了',
+          showCancelButton: false
+        });
+        if (!this.isOpen) {
+          this.form.isOpen = true
+        }
+      }).catch(error =>{
+        this.form.isOpen = false
+        this.$message.error(error);
+        // this.loading = false
+      })
+      
     },
     close() {
       // 判断是否有其他配送方式
-      const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
+      // const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
+
       if (isHasOtherWay) {
         this.confirm({
           title: "提示",
           icon: true,
           text: '关闭快递配送功能，买家下单时将不能使用普通快递配送 您确定要关闭吗？'
         }).then(() => {
+          this.updateShopInfo({ isOpenOrdinaryExpress: 0 }).then(response =>{  
+            this.form.isOpen = false
             this.$message.success('保存成功！');
+          }).catch(error =>{
+            this.form.isOpen = true
+            this.$message.error(error);
+            // this.loading = false
+          })
         }).catch(()=> {
-          this.$message.error(error);
+            this.form.isOpen = true
         });
       } else {
         this.confirm({
-        title: "提示",
-        icon: true,
-        text: '至少需要开启快递发货、商家配送中的一种配送方式 店铺才能正常经营',
-        confirmText: '我知道了',
-        showCancelButton: false
-      });
+          title: "提示",
+          icon: true,
+          text: '至少需要开启快递发货、商家配送中的一种配送方式 店铺才能正常经营',
+          confirmText: '我知道了',
+          showCancelButton: false
+        }).finally(() => {
+          console.log('----finally--')
+          this.form.isOpen = true
+        });
       }
     },
     handleOnSubmit(formName){

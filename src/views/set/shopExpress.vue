@@ -249,6 +249,7 @@ import mapRadius from './components/mapRadius'
 import { debounce } from '@/utils/base.js'
 import order from '@/system/constant/order.js'
 let isCompleted
+let isHasOtherWay
 export default {
   components: {
     mapRadius
@@ -417,6 +418,7 @@ export default {
 
   watch: {
     shopInfo(curr) {
+      console.log('-----watch-shopInfo------')
       if (curr) {
         this.getShopInfo(curr)
       }
@@ -425,7 +427,10 @@ export default {
 
   created() {
     this._formatDecimals = debounce(this.formatDecimals, 500)
-    
+    if (this.shopInfo) {
+      this.getShopInfo(this.shopInfo)
+    }
+    this.getOrderDeliverInfo()
   },
 
   mounted() {
@@ -468,15 +473,19 @@ export default {
         //   address = `${province}${city}${area}${address}`
         // }
         // address = 
+        // const data = {
+        //   address
+        // }
+        // console.log('---address----', address)
         const data = {
-          address
+          location: '39.984154,116.307490',
+          wantPoi: 0
         }
-        console.log('---address----', address)
         // api
-        // this._apis.map.getGeocoder(data).then((res) => {
-        //   this.ruleForm.lng = res.result.location.lng
-        //   this.ruleForm.lat = res.result.location.lat
-        // })
+        this._apis.map.getGeocoder(data).then((res) => {
+          this.ruleForm.lng = res.result.location.lng
+          this.ruleForm.lat = res.result.location.lat
+        })
       }
     },
     getSelectableRange(key) {
@@ -597,22 +606,43 @@ export default {
           icon: true,
           text: '您未完成配送范围、起送金额、配送时间等配置项设置，需设置并提交保存后，才能开启商家配送开关。',
           confirmText: '我知道了',
-          showCancelButton: false,
-          // beforeClose() {
-          //   this.isOpen = false
-          // }
-        }).then(() => {
-          this.isOpen = false
-        }).catch(() => {
+          showCancelButton: false
+        }).finally(() => {
           this.isOpen = false
         })
       } else {
-        this.openMerchantDeliver()
+        this.updateShopInfo({ isOpenMerchantDeliver: 1 }).then(response =>{
+          this.confirm({
+            title: "提示",
+            iconSuccess: true,
+            text: '已成功开启商家配送！',
+            confirmText: '我知道了',
+            showCancelButton: false
+          });
+          if (!this.isOpen) {
+            this.isOpen = true
+          }
+        }).catch(error =>{
+          this.isOpen = false
+          this.$message.error(error);
+          // this.loading = false
+        })
       }
+    },
+    updateShopInfo(data) {
+      const id = this.cid
+      return new Promise((resolve, reject) => {
+        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+          this.$store.dispatch('getShopInfo');    
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+        })
+      })
     },
     close() {
       // 判断是否有其他配送方式
-      const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
+      // const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
       if (isHasOtherWay) {
         this.confirm({
           title: "提示",
@@ -622,8 +652,16 @@ export default {
           //   this.isOpen = true
           // }
         }).then(() => {
-          this.isOpen = false
+          this.updateShopInfo({ isOpenMerchantDeliver: 0 }).then(response =>{  
+            this.isOpen = false
             this.$message.success('保存成功！');
+          }).catch(error =>{
+            this.isOpen = true
+            this.$message.error(error);
+            // this.loading = false
+          })
+          // this.isOpen = false
+          //   this.$message.success('保存成功！');
         }).catch(()=> {
             this.isOpen = true
         });
@@ -634,10 +672,8 @@ export default {
           text: '至少需要开启快递发货、商家配送中的一种配送方式 店铺才能正常经营',
           confirmText: '我知道了',
           showCancelButton: false,
-          // beforeClose() {
-          //   this.isOpen = true
-          // }
-        }).then(() => {
+        }).finally(() => {
+          console.log('----finally--')
           this.isOpen = true
         });
       }
@@ -680,7 +716,7 @@ export default {
     },
     // 开启商家配送 api
     openMerchantDeliver() {
-      const id = this.shopinfo.id
+      const id = this.cid
       const data = {
         id,
         isOpenMerchantDeliver: 1
@@ -694,7 +730,11 @@ export default {
           confirmText: '我知道了',
           showCancelButton: false
         });
+        if (!this.isOpen) {
+          this.isOpen = true
+        }
       }).catch(error =>{
+        this.isOpen = false
         this.$message.error(error);
         // this.loading = false
       })
@@ -704,7 +744,7 @@ export default {
       // const id = this.cid
       // this._apis.set.getShopInfo({ id }).then(res => {
         
-        if (res) {
+        if (res && res.hasOwnProperty('id')) {
           this.isOpen = res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
           
           this.ruleForm.radius = res.deliverServiceRadius || null // 配送服务半径
@@ -713,9 +753,10 @@ export default {
           this.isOpenSelfLift = res.isOpenSelfLift // 是否开启上门自提 0-否 1-是
           this.ruleForm.lng = res.longitude
           this.ruleForm.lat = res.latitude
-          this.ruleForm.areaCode = res.areaCode
-          this.ruleForm.cityCode = res.cityCode
-          this.ruleForm.provinceCode = res.provinceCode
+          const areaCode = res.areaCode
+          const cityCode = res.cityCode
+          const provinceCode = res.provinceCode
+          isHasOtherWay = res.isOpenMerchantDeliver === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
           this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
           this.getLngLat(this.address)
         }
