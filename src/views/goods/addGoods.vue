@@ -1646,12 +1646,12 @@ export default {
         //v1.5.4
         //新页面打开普通快递设置
         gotoExpressSet() {
-            let routeData = this.$router.resolve({ path: '/set/express' });
+            let routeData = this.$router.resolve({ path: '/set/ordinaryExpress' });
             window.open(routeData.href, '_blank');
         },
         //新页面打开商家配送设置
         gotoDeliverySet() {
-            let routeData = this.$router.resolve({ path: '/set/delivery' });
+            let routeData = this.$router.resolve({ path: '/set/shopExpress' });
             window.open(routeData.href, '_blank');
         },
         //获取普通快递在店铺是否设置开启状态
@@ -1662,7 +1662,6 @@ export default {
             this._apis.goods
             .getExpressAndDeliverySet(params)
             .then(res => {
-                res = {"isOpenOrdinaryExpress": 0, "isOpenMerchantDeliver": 1};
                 //如果普通快递未开启则提示去设置
                 if(name == 'express' && res.isOpenOrdinaryExpress == 0){
                     this.isExpressSet = false;
@@ -2088,6 +2087,8 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
+                console.log('++++++++++++++++++++++++++++++')
+                console.log(res)
                 //配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [];
                 if(res.generalExpressType == 1){ //如果开启了普通快递
