@@ -4,6 +4,11 @@ const config = require('../config')
 
 let sourceMap, extract, usePostCSS;
 switch(process.env.NODE_ENV) {
+  case 'testing':
+    sourceMap = config.test.productionSourceMap
+    extract = true
+    usePostCSS =  true
+    break;
   case 'test':
     sourceMap = config.test.productionSourceMap
     extract = true

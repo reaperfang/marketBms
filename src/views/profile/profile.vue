@@ -136,6 +136,49 @@
                     客服邮箱：service4006@300.cn
                 </p>
             </div>
+	    <div class="p_r_item p_r_kefu">
+        <p class="p_title warn">
+          <span>
+            <img :src="require('@/assets/images/profile/icon_06.png')" alt />
+            资讯
+          </span>
+          <el-link :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=hangye'" target="_blank" :underline="false">
+            <i class="icon_more"></i>
+          </el-link>
+        </p>
+        <p class="p_email no_data" v-if="Array.isArray(information) && information.length == 0">暂无资讯</p>
+        <ul class="info_box" v-else>
+          <template v-for="(item, key, index) in information">
+            <li class="info_list" v-if="index < 3" :key="key">
+              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <span>{{item.publish_at | formatDate('MM/dd')}}</span>
+            </li>
+          </template>
+        </ul>
+      </div>
+      <div class="p_r_item p_r_kefu">
+        <p class="p_title warn">
+          <span>
+            <img :src="require('@/assets/images/profile/icon_07.png')" alt />
+            公告
+          </span>
+          <el-link  :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=news'" target="_blank" :underline="false">
+            <i class="icon_more"></i>
+          </el-link>
+        </p>
+        <p
+          class="p_email no_data"
+          v-if="Array.isArray(announcement) && announcement.length == 0"
+        >暂无公告</p>
+        <ul class="info_box" v-else>
+          <template v-for="(item, key, index) in announcement">
+            <li class="info_list" v-if="index < 3" :key="key">
+              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <span>{{item.publish_at | formatDate('MM/dd')}}</span>
+            </li>
+          </template>
+        </ul>
+      </div>
             <div class="p_r_item p_r_more">
                 <p class="p_title warn">
                     <span>
@@ -175,7 +218,10 @@ export default {
             stayAuthCount:'',
             pageLink: location.protocol + '//omo.aiyouyi.cn/bh',
             qrCode:'',
-            protocol: location.protocol
+            protocol: location.protocol,
+	        information: {}, //资讯
+            announcement: {} ,//公告
+            zxLink: `${process.env.ZX_HELP}`//链接
         }
     },
     computed: {
@@ -198,6 +244,8 @@ export default {
         this.getOverviewDetails()
         this.getOerviewRemind()
         this.getOverviewSelling()
+        this.getCat();
+        this.getCatNews();
     },
     methods:{
         ...mapMutations(['SETCURRENT']),
@@ -295,7 +343,31 @@ export default {
                 message: '该浏览器不支持复制。',
                 type: 'warning'
             });  
+        },
+        // 资讯列表
+        getCat() {
+            this._apis.profile
+                .getIndustry({})
+                .then(response => {
+                    this.information = response.list;
+                })
+                .catch(error => {});
+        },
+        //公告列表
+        getCatNews() {
+            this._apis.profile
+                .getNews({})
+                .then(response => {
+                    this.announcement = response.list;
+                })
+                .catch(error => {});
+        },
+
+        //点击资讯/公告详情
+        onDetail(id){
+            window.open(`${this.zxLink}/cms/news/${id}.html`)
         }
+    
     }
 }
 </script>
@@ -418,37 +490,68 @@ export default {
                 color: #92929BFF;
             }
         }
-    }
-}
-
-.p_title{
-    font-size: 14px;
-    font-weight:500;
-    color: #3D434AFF;
-    span{
-        color: #92929BFF;
-        margin-left: 10px;
-        font-size: 12px;
-    }
-}
-
-.warn{
-    display: flex;
-    justify-content:space-between;
-    span{
-        font-size: 14px;
-        font-weight:500;
-        color: #3D434A;
-        margin-left: 0px;
-        img{
-            vertical-align: middle;
-            margin-right: 5px;
+        .icon_more {
+            width: 18px;
+            height: 15px;
+            background: url("../../assets/images/profile/icon_08.png") no-repeat;
+            display: inline-block;
+            }
+            .info_box {
+            margin-top: 10px;
+            }
+            .info_list {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            line-height: 20px;
+            padding: 3px 0;
+            font-size: 14px;
+            p {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                word-break: break-all;
+                cursor: pointer;
+                width: 165px;
+            }
+            &:hover {
+                color: #fd932b;
+            }
+            }
+            .no_data {
+            color: #92929b !important;
+            }
+            }
         }
-    }
-    i{
-        cursor: pointer;
-    }
-}
+
+        .p_title{
+            font-size: 14px;
+            font-weight:500;
+            color: #3D434AFF;
+            span{
+                color: #92929BFF;
+                margin-left: 10px;
+                font-size: 12px;
+            }
+        }
+
+        .warn{
+            display: flex;
+            justify-content:space-between;
+            span{
+                font-size: 14px;
+                font-weight:500;
+                color: #3D434A;
+                margin-left: 0px;
+                img{
+                    vertical-align: middle;
+                    margin-right: 5px;
+                }
+            }
+            i{
+                cursor: pointer;
+            }
+        }
 </style>
 
 

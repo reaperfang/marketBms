@@ -10,6 +10,12 @@ function resolve (dir) {
 let getPublicPath = function() {
   let publicPath = '';
   switch(process.env.NODE_ENV) {
+  case 'testing':
+      publicPath = config.test.assetsPublicPath
+      break;
+    case 'testing2':
+      publicPath = config.test2.assetsPublicPath
+      break;
     case 'test':
       publicPath = config.test.assetsPublicPath
       break;
