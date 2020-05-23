@@ -24,17 +24,21 @@ export default {
         }
     },
     created() {
+        let that = this
+        
         function startTime() {
-            this.timer = setTimeout(function(){ startTime() }, 1000);
+            that.timer = setTimeout(function(){ startTime() }, 1000);
 
-            if(this.time == 0) {
-                clearTimeout(this.timer)
-                this.$router.push('/order/query')
-                this.visible = false
+            if(that.time == 0) {
+                clearTimeout(that.timer)
+                that.$router.push('/order/query')
+                that.visible = false
             } else {
-                this.time = this.time - 1
+                that.time = that.time - 1
             }
         }
+
+        startTime()
     },
     methods: {
         submit() {
