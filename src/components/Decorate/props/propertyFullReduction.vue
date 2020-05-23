@@ -78,10 +78,12 @@ export default {
     'ruleForm.ids': {
       handler(newValue, oldValue) {
         const _self = this;
-        this.echoList = [];
-        newValue.forEach((item)=>{
-          _self.echoList.push({id: item});
-        })
+        if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+          this.echoList = [];
+          newValue.forEach((item)=>{
+            _self.echoList.push({id: item});
+          })
+        }
       },
       deep: true
     }

@@ -107,7 +107,18 @@ export default {
         currentComponentData(){
             this.decoration();
         },
-        'currentComponentData.data.addType'(newValue) {
+        'currentComponentData.data.ids': {
+            handler(newValue, oldValue) {
+                if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                    this.fetch();
+                }
+            },
+            deep: true
+        },
+        'currentComponentData.data.addType'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
             if(newValue == 2) {
                 this.fetch();
             }else{
@@ -115,10 +126,16 @@ export default {
                 this.fetch();
             }
         },
-        'currentComponentData.data.showNumber'(newValue) {
+        'currentComponentData.data.showNumber'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
             this.fetch();
         },
-        'currentComponentData.data.sortRule'(newValue) {
+        'currentComponentData.data.sortRule'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
             this.fetch();
         },
     },

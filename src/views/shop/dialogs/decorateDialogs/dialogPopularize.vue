@@ -54,13 +54,18 @@
               <div class="con">
                 <div class="left">
                   <div class="top">
-                    <img :src="ruleFormMini.picture" alt=""> 
+                    <img :src="shopInfo.logoCircle || shopInfo.logo || require('@/assets/images/logo.png')" alt=""> 
                     <p>{{shopInfo.name || '店铺名称'}}</p>
                   </div>
                   <div class="bottom">{{ruleFormMini.describe}}</div>
+                  <div class="bottom2">
+                    <img :src="ruleFormMini.picture"/>
+                  </div>
                 </div>
               </div>
-              <i class="bg"></i>
+              <div class="footer">
+                <i class="bg"></i><span>小程序</span>
+              </div>
           </div>
           <i class="icon"></i>
         </div>
@@ -821,13 +826,38 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
           }
+          .bottom2{
+            width:100%;
+            height:116px;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            img{
+              width:100%;
+              height:100%;
+            }
+          }
         }
-        .bg{
-          background:url('../../../../assets/images/shop/mini-background.png') no-repeat 4px 0;
-          background-size: contain;
-          width:100%;
-          height: 142px;
-          display: block;
+        .footer{
+          border-top: 1px solid #ddd;
+          display:flex;
+          justify-content: flex-start;
+          width: calc(100% - 20px);
+          padding:3px;
+          margin: 0 auto;
+          .bg{
+            background:url('../../../../assets/images/shop/mini-bg2.png') no-repeat 0px -1px;
+            background-size: contain;
+            width:15px;
+            height: 15px;
+            display: block;
+          }
+          span{
+            color:rgba(146,146,155,1);
+            font-size:12px;
+            margin-left:3px;
+          }
         }
       }
       .icon{

@@ -235,6 +235,11 @@ export function isIE() {
 　　 }
 }
 
+/* 数组项对比是否相同 */
+export function isIdsUpdate(newValue, oldValue) {
+    return newValue.length==oldValue.length && newValue.every(function(v,i) { return v === oldValue[i]});
+}
+
 
 
 

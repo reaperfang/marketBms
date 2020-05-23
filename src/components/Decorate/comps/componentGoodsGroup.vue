@@ -72,6 +72,14 @@ export default {
       currentComponentData(){
          this.calcScroll();
          this.decoration();
+      },
+      'currentComponentData.data.ids': {
+          handler(newValue, oldValue) {
+              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                  this.fetch();
+              }
+          },
+          deep: true
       }
     },
     computed: {
