@@ -11,5 +11,5 @@ module.exports = merge(prodEnv, {
   UPLOAD_SERVER: '"/upload_server"', // "/upload_server"
   APPLY: '"/data-server"',
   ZX_API: '"/zx_server"',
-  ZX_HELP:'"//test-www.300.cn/"'//链接
+  ZX_HELP:'"//test-www.300.cn"'//链接
 })

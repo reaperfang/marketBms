@@ -56,11 +56,18 @@ module.exports = {
 					'^/upload_server': ''
 				}
 			},
+			'/zx_server/**': {
+				target: 'https://test-cms-api.300.cn',
+				changeOrigin: true,
+				pathRewrite: {
+					'^/zx_server': ''
+				}
+			}
 		}
 	},
 
 	test: {
-    ...test,
+		...test,
 		// Template for index.html
 		index: path.resolve(__dirname, '../dist/index.html'),
 
@@ -89,9 +96,9 @@ module.exports = {
 		// `npm run build --report`
 		// Set to `true` or `false` to always turn it on or off
 		bundleAnalyzerReport: process.env.npm_config_report
-  },
-  test2: {
-    ...test2,
+	},
+	test2: {
+		...test2,
 		// Template for index.html
 		index: path.resolve(__dirname, '../dist/index.html'),
 
@@ -122,7 +129,7 @@ module.exports = {
 		bundleAnalyzerReport: process.env.npm_config_report
 	},
 	test3: {
-    ...test3,
+		...test3,
 		// Template for index.html
 		index: path.resolve(__dirname, '../dist/index.html'),
 

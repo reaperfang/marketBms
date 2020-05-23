@@ -9,37 +9,37 @@
                     <div class="p_p_l">
                         <span>
                             <div>支付金额</div>
-                            <div>{{profileData.payMoneyAmount ? '¥'+ profileData.payMoneyAmount : '--' }}</div>    
+                            <div>{{profileData.payMoneyAmount ? '¥'+ profileData.payMoneyAmount : '--' }}</div>
                         </span>
                         <span>
                             <div>支付订单数</div>
-                            <div>{{profileData.payNum ? profileData.payNum : '--' }}</div>    
+                            <div>{{profileData.payNum ? profileData.payNum : '--' }}</div>
                         </span>
                         <span>
                             <div>支付用户数</div>
-                            <div>{{profileData.customPayerNum ? profileData.customPayerNum : '--' }}</div>    
+                            <div>{{profileData.customPayerNum ? profileData.customPayerNum : '--' }}</div>
                         </span>
                         <span>
                             <div>客单价</div>
-                            <div>{{profileData.averageMoney ? '¥'+ profileData.averageMoney : '--' }}</div>    
+                            <div>{{profileData.averageMoney ? '¥'+ profileData.averageMoney : '--' }}</div>
                         </span>
                     </div>
                      <div class="p_p_r">
                          <span>
                             <div>累计总收入</div>
-                            <div>{{profileData.income ? '¥'+ profileData.income : '--' }}</div>    
+                            <div>{{profileData.income ? '¥'+ profileData.income : '--' }}</div>
                         </span>
                         <span>
                             <div>累计实际总收入</div>
-                            <div>{{profileData.realIncome ? '¥'+ profileData.realIncome : '--' }}</div>    
+                            <div>{{profileData.realIncome ? '¥'+ profileData.realIncome : '--' }}</div>
                         </span>
                         <span>
                             <div>累计售后单数</div>
-                            <div>{{profileData.protectCount ? profileData.protectCount : '--' }}</div>    
+                            <div>{{profileData.protectCount ? profileData.protectCount : '--' }}</div>
                         </span>
                         <span>
                             <div>累计售后单金额</div>
-                            <div>{{profileData.refundMoneyAmount ? '¥'+ profileData.refundMoneyAmount : '--' }}</div>    
+                            <div>{{profileData.refundMoneyAmount ? '¥'+ profileData.refundMoneyAmount : '--' }}</div>
                         </span>
                      </div>
                 </div>
@@ -97,13 +97,13 @@
                         <img :src="require('@/assets/images/profile/icon_01.png')" alt="">
                         待办提醒
                     </span>
-                    <i class="el-icon-refresh" @click="refresh"></i>    
+                    <i class="el-icon-refresh" @click="refresh"></i>
                 </p>
                 <div class="p_r_list">
                     <p>商品售罄
                         <router-link to="/goods/goodsList?status=-1">
                             <span>({{toBeSoldOut || 0}})</span>
-                        </router-link>    
+                        </router-link>
                     </p>
                     <p>待发货订单
                         <router-link to="/order/deliveryManagement?status=3">
@@ -127,7 +127,7 @@
                     <span>
                         <img :src="require('@/assets/images/profile/icon_02.png')" alt="">
                         客服中心
-                    </span>   
+                    </span>
                 </p>
                 <p class="p_email">
                     客服电话：400-660-5555
@@ -148,8 +148,8 @@
         </p>
         <p class="p_email no_data" v-if="Array.isArray(information) && information.length == 0">暂无资讯</p>
         <ul class="info_box" v-else>
-          <template v-for="(item, key, index) in information">
-            <li class="info_list" v-if="index < 3" :key="key">
+          <template v-for="(item, key, ) in information">
+            <li class="info_list" :key="key">
               <p @click="onDetail(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
@@ -171,8 +171,8 @@
           v-if="Array.isArray(announcement) && announcement.length == 0"
         >暂无公告</p>
         <ul class="info_box" v-else>
-          <template v-for="(item, key, index) in announcement">
-            <li class="info_list" v-if="index < 3" :key="key">
+          <template v-for="(item, key) in announcement">
+            <li class="info_list" :key="key">
               <p @click="onDetail(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
@@ -184,7 +184,7 @@
                     <span>
                         <img :src="require('@/assets/images/profile/icon_04.png')" alt="">
                         更多工具
-                    </span>   
+                    </span>
                 </p>
                 <p class="title_h5">
                     商户工作台H5
@@ -278,7 +278,7 @@ export default {
         },
 
         // 实时概况
-        getOverviewDetails(){ 
+        getOverviewDetails(){
          this._apis.overview.overviewDetails({}).then(response => {
            this.profileData = response
          }).catch(error =>{
@@ -342,12 +342,12 @@ export default {
             this.$message({
                 message: '该浏览器不支持复制。',
                 type: 'warning'
-            });  
+            });
         },
         // 资讯列表
         getCat() {
             this._apis.profile
-                .getIndustry({})
+                .getIndustry()
                 .then(response => {
                     this.information = response.list;
                 })
@@ -356,7 +356,7 @@ export default {
         //公告列表
         getCatNews() {
             this._apis.profile
-                .getNews({})
+                .getNews()
                 .then(response => {
                     this.announcement = response.list;
                 })
@@ -367,7 +367,7 @@ export default {
         onDetail(id){
             window.open(`${this.zxLink}/cms/news/${id}.html`)
         }
-    
+
     }
 }
 </script>
@@ -388,7 +388,7 @@ export default {
                 .p_p_l{
                     width: 45%;
                     float: left;
-                    border-right:1px solid #F2F2F9FF; 
+                    border-right:1px solid #F2F2F9FF;
                     padding-left: 20px;
                 }
                 .p_p_r{
@@ -418,10 +418,10 @@ export default {
             }
         }
         .p_l_main{
-            margin-top:15px; 
+            margin-top:15px;
         }
         .p_l_bottom{
-            margin-top:15px; 
+            margin-top:15px;
             .functions{
                 clear: both;
                 overflow: hidden;
@@ -449,7 +449,7 @@ export default {
             color: #3D434A;
             border-radius: 5px;
         }
-        .p_r_top{           
+        .p_r_top{
             .p_r_list{
                 p{
                     margin-top: 20px;
