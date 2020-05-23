@@ -147,6 +147,10 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
+    },
+    phone(){
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.msgReceivePhone;
     }
   }, 
   created() {
@@ -164,6 +168,7 @@ export default {
             this.tableData.push(item);
           }
         })
+        this.ruleForm.msgReceivePhone = this.phone
         this.loading = false
       }).catch(error =>{
         this.loading = false
