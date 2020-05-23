@@ -50,6 +50,16 @@ export default {
       }
     });
   },
+  watch: {
+    'currentComponentData.data.ids': {
+        handler(newValue, oldValue) {
+            if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                this.fetch();
+            }
+        },
+        deep: true
+    }
+  },
   computed: {
     reductionStyle() {
       return `style${this.currentComponentData.data.displayStyle}`;

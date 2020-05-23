@@ -77,14 +77,34 @@ export default {
         this.decoration();
     },
     watch: {
-        currentComponentData(){
+        currentComponentData(newValue, oldValue){
             this.decoration();
         },
-        currentCatagoryId(newValue) {
-            this.fetch();
+        'currentComponentData.data.ids': {
+            handler(newValue, oldValue) {
+                if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                    this.fetch();
+                }
+            },
+            deep: true
         },
-        'ruleForm.currentCatagoryId'() {
-            this.fetch();
+        'currentComponentData.data.currentCatagoryId': {
+            handler(newValue, oldValue) {
+                if(newValue !== oldValue) {
+                    this.fetch();
+                }
+            },
+            deep: true
+        },
+        currentCatagoryId(newValue, oldValue) {
+            if(newValue !== oldValue) {
+                this.fetch();
+            }
+        },
+        'ruleForm.currentCatagoryId'(newValue, oldValue) {
+            if(newValue !== oldValue) {
+                this.fetch();
+            }
         },
     },
     computed: {

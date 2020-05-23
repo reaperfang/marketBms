@@ -110,7 +110,10 @@ export default {
       deep: true
     },
     /* 监听添加类型，自动获取状态则拉取一下数据 */
-    'ruleForm.addType'(newValue) {
+    'ruleForm.addType'(newValue, oldValue) {
+      if(newValue === oldValue) {
+          return;
+      }
       if(newValue == 2) {
         this.ruleForm.hideScrambled = false;
         this.fetch();
@@ -121,22 +124,30 @@ export default {
     },
 
     /* 监听显示个数类型 */
-    'ruleForm.couponNumberType'(newValue) {
+    'ruleForm.couponNumberType'(newValue, oldValue) {
+      if(newValue === oldValue) {
+          return;
+      }
       this.fetch();
     },
 
     /* 监听显示个数 */
-    'ruleForm.showNumber'(newValue) {
+    'ruleForm.showNumber'(newValue, oldValue) {
+      if(newValue === oldValue) {
+          return;
+      }
       this.fetch();
     },
 
     'ruleForm.ids': {
       handler(newValue, oldValue) {
         const _self = this;
-        this.echoList = [];
-        newValue.forEach((item)=>{
-          _self.echoList.push({id: item});
-        })
+        if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+          this.echoList = [];
+          newValue.forEach((item)=>{
+            _self.echoList.push({id: item});
+          })
+        }
       },
       deep: true
     }

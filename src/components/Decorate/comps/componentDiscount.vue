@@ -95,9 +95,17 @@ export default {
         this.decoration();
     },
     watch: {
-      currentComponentData(){
-        this.decoration();
-      }
+        currentComponentData(){
+            this.decoration();
+        },
+        'currentComponentData.data.ids': {
+            handler(newValue, oldValue) {
+                if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                    this.fetch();
+                }
+            },
+            deep: true
+        }
     },
     computed: {
          /* 检测是否有数据 */
