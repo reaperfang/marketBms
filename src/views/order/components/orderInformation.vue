@@ -661,6 +661,7 @@ export default {
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
                  consultMoney: +this.yingshouChangeMoney}).then(res => {
+                    this.yingshouChangeMoney = ''
                     this.changePriceVisible = false
                     this.$emit('getDetail')
                     this.currentDialog = 'ChangePriceDialog'

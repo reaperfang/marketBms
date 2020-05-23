@@ -154,7 +154,7 @@
                         prop="stock"
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{'salePrice-red': scope.row.goodsInfos.some(val => val.stock <= val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
+                            <span :class="{'salePrice-red': scope.row.status === 1 && scope.row.goodsInfos.some(val => val.stock <= val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
