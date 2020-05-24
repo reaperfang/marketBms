@@ -180,7 +180,7 @@ export function addNewApply(path, access) {
   let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
   let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
   let cid = shopInfo && shopInfo.id || ''
-  let newUrl = `${process.env.NODE_ENV === 'development' ? '//127.0.0.1:8080' : process.env.APPLY}/vue/marketing${path}?access=${access}&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
+  let newUrl = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${path}?access=${access}&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
   let newWindow = window.open("about:blank");
   newWindow.location.href = newUrl;
 }
