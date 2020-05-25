@@ -324,4 +324,7 @@ export default {
 .el-form-item{
   margin-bottom:0px;
 } 
+/deep/.el-form-item--small .el-form-item__error{
+  padding-top: 5px;
+}
 </style>
