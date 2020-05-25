@@ -100,7 +100,7 @@
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
-      <shopInfoMap class="map" ref="shopInfoMap" :address="getAddress" :scaleControl="mapStyle.scaleControl" :zoom="mapStyle.zoom" :zoomControl="mapStyle.zoomControl" :panControl="mapStyle.panControl" :center="[39.9046900000,116.4071700000]" @getMapClickPoi="getMapClickPoi"></shopInfoMap>
+      <shopInfoMap class="map" ref="shopInfoMap" :address="getAddress" :city="city" :scaleControl="mapStyle.scaleControl" :zoom="mapStyle.zoom" :zoomControl="mapStyle.zoomControl" :panControl="mapStyle.panControl" :center="[39.9046900000,116.4071700000]" @getMapClickPoi="getMapClickPoi"></shopInfoMap>
     </el-form>
     <!-- map -->
     <!-- 动态弹窗 -->
@@ -158,7 +158,9 @@ export default {
         sellCategoryId: "",
         sellCategory: "",
         companyName: "",
-        companyEmail: ""
+        companyEmail: "",
+        lat: "",
+        lng: ""
       },
       rules: {
         shopName: [
@@ -294,7 +296,6 @@ export default {
     // 获取类目
     getCategoryInfoIds(arr, id) {
       try {
-        console.log('------operateCategoryList----', id, operateCategoryList)
         let parentId = this.operateCategoryList.find(val => val.id == id).parentId;
 
         arr.unshift(id + "");
@@ -339,43 +340,88 @@ export default {
             arr.push(response.areaCode);
             this.form.addressCode = arr;
           }
+          // 经纬度
+          this.form.lat = response.latitude
+          this.form.lng = response.longitude
         })
         .catch(error => {
           this.$message.error(error);
         });
     },
+    // 格式化省市县
+    formatAddress(address, provinceCode, cityCode, areaCode) {
+      const reg = /.+?(省|市|自治区|自治州|县|区)/g
+      const province = this.$pcaa[86][provinceCode];
+      const city = this.$pcaa[provinceCode][cityCode];
+      const area = this.$pcaa[cityCode][areaCode];
+      if (reg.test(address)) {
+        address = address.replace(reg, '')
+      }
+      console.log('--formatAddress---',address)
 
+      address = province === city ? `${province}${area}${address}`: `${province}${city}${area}${address}`
+      
+      return address
+    },
+    updateShopInfo() {
+      let id = this.cid
+      let data = {
+        id:id,
+        shopName:this.form.shopName,
+        logo:this.form.logo,
+        logoCircle:this.form.logoCircle,
+        phone:this.form.phone,
+        province: this.province,
+        city: this.city,
+        area: this.area,
+        provinceCode:this.form.addressCode[0],
+        cityCode:this.form.addressCode[1],
+        areaCode:this.form.addressCode[2],
+        address: this.form.address,
+        shopIntroduce:this.form.shopIntroduce,
+        sellCategoryId: this.form.sellCategoryId,
+        sellCategory: this.form.sellCategory,
+        companyName: this.form.companyName,
+        companyEmail: this.form.companyEmail,
+        longitude: this.form.lng,
+        latitude: this.form.lat
+      }
+      this._apis.set.updateShopInfo(data).then(response =>{
+        this.setShopName()    
+        this.$store.dispatch('getShopInfo');          
+      }).catch(error =>{
+        this.$message.error(error);
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     onSubmit(formName){
       this.$refs[formName].validate((valid) => {
           if (valid) {
             this.loading = true
-            let id = this.cid
-            let data = {
-              id:id,
-              shopName:this.form.shopName,
-              logo:this.form.logo,
-              logoCircle:this.form.logoCircle,
-              phone:this.form.phone,
-              province: this.province,
-              city: this.city,
-              area: this.area,
-              provinceCode:this.form.addressCode[0],
-              cityCode:this.form.addressCode[1],
-              areaCode:this.form.addressCode[2],
-              address:this.form.address,
-              shopIntroduce:this.form.shopIntroduce,
-              sellCategoryId: this.form.sellCategoryId,
-              sellCategory: this.form.sellCategory,
-              companyName: this.form.companyName,
-              companyEmail: this.form.companyEmail
+            this.getProvincesCities(this.form.address)
+            if (!this.form.lng) {
+              this._apis.map.getGeocoderAddress({ address: this.form.address }).then((res) => {
+                console.log('res',res)
+                this.form.lng = res.result.location.lng
+                this.form.lat = res.result.location.lat
+                this.updateShopInfo()
+              }).catch((err) => {
+                console.log('err',err)
+                this.$message.error('获取经纬度失败，请尝试通过地图查询详细地址');
+                this.loading = false
+              })
+            } else {
+              this.updateShopInfo()
             }
-            this._apis.set.updateShopInfo(data).then(response =>{
-              this.setShopName()    
-              this.$store.dispatch('getShopInfo');          
-            }).catch(error =>{
-              this.$message.error(error);
-              this.loading = false
-            })
+            
+            // this._apis.set.updateShopInfo(data).then(response =>{
+            //   this.setShopName()    
+            //   this.$store.dispatch('getShopInfo');          
+            // }).catch(error =>{
+            //   this.$message.error(error);
+            //   this.loading = false
+            // })
         }
       });
     },
@@ -488,6 +534,9 @@ export default {
       }
       return areaCode
     },
+    // getCity() {
+
+    // },
     setCode() {
       const provinceCode =  this.getProvinceCode()
       const cityCode = this.getCityCodeByProvinceCode(provinceCode)
@@ -507,23 +556,38 @@ export default {
     getProvincesCities(address){
       const reg = /.+?(省|市|自治区|自治州|县|区)/g
       const arr = address.match(reg)
-      if (arr) {
-        if (arr.length == 2) {
+      console.log('---getProvincesCities---',arr)
+      if (arr && arr.length > 0) {
+        if (arr[0] !== '北京市' && arr[0] !== '上海市' && arr[0] !== '天津市' && arr[0] !== '重庆市') {
+          this.province = arr[0]
+          this.city = arr[1]
+          this.area = arr[2]
+        } else {
           this.province = arr[0]
           this.city = arr[0]
           this.area = arr[1]
         }
-        if (arr.length >= 3) {
-          this.province = arr[0]
-          this.city = arr[1]
-          this.area = arr[2]
-        }
         this.setCode()
       }
+      // if (arr) {
+      //   if (arr.length == 2) {
+      //     this.province = arr[0]
+      //     this.city = arr[0]
+      //     this.area = arr[1]
+      //   }
+      //   if (arr.length >= 3) {
+      //     this.province = arr[0]
+      //     this.city = arr[1]
+      //     this.area = arr[2]
+      //   }
+      //   this.setCode()
+      // }
     },
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
       this.form.address = poi.address
+      this.form.lat = poi.latLng.lat
+      this.form.lng = poi.latLng.lng
       this.getProvincesCities(poi.address)
     }
   }

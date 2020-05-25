@@ -23,7 +23,19 @@
               <p v-if="item.phone"> {{ item.phone }}</p>
             </li>
           </ol>
-          <!-- <pagination v-show="pois.length > 0" :total="pois.totalNum" :page.sync="pois.pageIndex" :limit.sync="pois.pageCapacity" /> -->
+          <el-pagination 
+            v-if="pois.length > 0"
+            class="pagination"
+            background
+            small
+            :pager-count="5"
+            :total="totalNum" 
+            layout="prev, pager, next"
+            @current-change="handleCurrentChange"
+            :current-page.sync="page"
+            :page-size="pageSize"
+          >
+          </el-pagination>
           <!-- <span class="temp">这里是搜索结果列表</span> -->
           <!-- <el-timeline>
             <el-timeline-item
@@ -53,6 +65,10 @@ export default {
     address: {
       type: String,
       default: ''
+    },
+    city: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -70,10 +86,17 @@ export default {
       info: null,
       markers: [],
       pois: [],
+      page: 1,
+      pageSize: 10,
+      totalNum: 0,
       keyword: ''
     };
   },
   methods: {
+    handleCurrentChange(val) {
+      this.page = val
+      this.search()
+    },
     //实例初始化结束
     inited() {
       this.info = new qq.maps.InfoWindow({
@@ -133,15 +156,60 @@ export default {
         }
       }
     },
+    getSearch(data) {
+      return new Promise((resolve, reject) => {
+        this._apis.map.getSearch(data).then((response)=> {
+          resolve(response)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
+    getCities(address) {
+      const reg = /.+?(市|自治区|自治州|县|区)/g
+      const arr = address.match(reg)
+      let city = ''
+      if (arr && arr.length > 0) {
+        city = arr[0]
+      }
+      return city
+    },
     //执行搜索
     search() {
       this.clearAllMaker()
-      this.searchService.search(this.keyword);
+      let city = this.getCities(this.keyword)
+      if (!city) {
+        city = this.city || '北京市'
+      }
+      const data = {
+        keyword: this.keyword,
+        boundary: `region(${this.city},1)`,
+        mapPageIndex: this.page,
+        mapPageSize: this.pageSize
+      }
+
+      //根据输入的城市设置搜索范围
+      this.searchService.setLocation(city);
+      //设置搜索页码
+      this.searchService.setPageIndex(this.page);
+      //设置每页的结果数
+      this.searchService.setPageCapacity(this.pageSize);
+      //根据输入的关键字在搜索范围内检索
+      this.searchService.search(data.keyword);
+      this.mapObj.zoomTo(17)
+      // this.getSearch(data).then((response) => {
+      //   console.log('---response---', response)
+      //   this.totalNum = response.count
+      //   this.pois = response.data || []
+      //   this.searchCompleted(response)
+      // }).catch((err) => {
+      // })
     },
     handlePropSearch(keyword) {
       this.keyword = keyword
-      this.clearAllMaker()
-      this.searchService.search(keyword);
+      this.search()
+      // this.clearAllMaker()
+      // this.searchService.search(keyword);
     },
     openInfoWindow(info, marker, map, poi) {
       info.open();
@@ -160,16 +228,16 @@ export default {
       // }, 2000);
     },
     setMarker(poi, index) {
+      console.log('setMarker: poi.latLng', poi.latLng)
       const self = this
       // 创建MarkerDecoration
       // let content = index + 1;
       // let decoration = new qq.maps.MarkerDecoration(content, new qq.maps.Point(0, -5))
       let marker = new qq.maps.Marker({
         map: this.mapObj,
-        position: poi.latLng,
-        // decoration
+        position: poi.latLng
       });
-
+      // marker.setPosition(poi.latLng);
       marker.setTitle(index + 1);
       
       qq.maps.event.addListener(marker, 'click', function(e) {
@@ -181,12 +249,58 @@ export default {
       return marker
     },
     //搜索结束
+    // searchCompleted(results) {
+    //   const self = this
+    //   // debugger
+    //   console.log('---searchCompleted----', results)
+    //   let latlngBounds = new qq.maps.LatLngBounds();
+    //   this.markers = [];
+    //   let pois = results.data;
+    //   // this.pois = pois
+    //   var infoWin = new qq.maps.InfoWindow({
+    //     map: this.mapObj
+    //   });
+    //   this.setPanTo(pois[0].location)
+    //   for (let i = 0, l = pois.length; i < l; i++) {
+    //     console.log('-------', i, l)
+    //     let poi = pois[i];
+    //     console.log(poi.location)
+    //     //扩展边界范围，用来包含搜索到的Poi点
+    //     latlngBounds.extend(poi.location);
+    //     // const marker = this.setMarker(poi, i+1)
+    //     // console.log('---marker---', marker)
+    //     (function(poi) {
+    //       console.log('setMarker: poi.location', poi.location)
+    //       // 创建MarkerDecoration
+    //       // let content = index + 1;
+    //       // let decoration = new qq.maps.MarkerDecoration(content, new qq.maps.Point(0, -5))
+    //       let marker = new qq.maps.Marker({
+    //         map: self.mapObj,
+    //         // decoration
+    //       });
+    //       marker.setPosition(poi.location);
+    //       marker.setTitle(index + 1);
+          
+    //       self.markers.push(marker);
+    //       qq.maps.event.addListener(marker, 'click', function(e) {
+           
+    //         self.openInfoWindow(self.info, marker, self.mapObj, poi)
+    //         self.$emit('getMapClickPoi', poi)
+            
+    //       })
+    //     })(poi);
+    //   }
+    //   //调整地图视野
+    //   this.mapObj.fitBounds(latlngBounds);
+    // },
+    // //搜索结束
     searchCompleted(results) {
       console.log('---searchCompleted----', results)
       let latlngBounds = new qq.maps.LatLngBounds();
       this.markers = [];
       let pois = results.detail.pois;
       this.pois = pois
+      this.totalNum = results.detail.totalNum
       for (let i = 0, l = pois.length; i < l; i++) {
         let poi = pois[i];
         //扩展边界范围，用来包含搜索到的Poi点
@@ -199,18 +313,26 @@ export default {
     },
     // 设置根据地区经纬度变化改变当前地图中心
     setPanTo(lng, lat) {
+      console.log('-lng, lat---',lng, lat)
       const oLatLng = new qq.maps.LatLng(lat, lng)
       this.mapObj.panTo(oLatLng)
-      // this.mapObj.zoomTo(12)
+      this.mapObj.zoomTo(17)
     },
     // 通过address 获取经纬度 待api开发
     getGeocoderByAddress() {
       console.log('-----获取经纬度----')
-      const lng = 116.307015
-      const lat = 39.982915
-      setTimeout(() => {
+      // const lng = 116.307015
+      // const lat = 39.982915
+      this._apis.map.getGeocoderAddress({ address: this.address }).then((res) => {
+        const lng = res.result.location.lng
+        const lat = res.result.location.lat
         this.setPanTo(lng, lat)
-      }, 2000)
+      }).catch((err) => {
+        console.log(err)
+      })
+      // setTimeout(() => {
+      //   this.setPanTo(lng, lat)
+      // }, 2000)
       // const url = `${appConfig.map.apiBaseUrl}v1/`
       // this.$jsonp(url,{
       //   address: this.address,
@@ -252,7 +374,7 @@ export default {
   }
   .search {
     position: absolute;
-    width: 340px;
+    width: 360px;
     padding:15px;
     z-index: 2;
     
@@ -274,7 +396,7 @@ export default {
     ol{
       overflow-y: auto;
     }
-    /deep/ li {
+    /deep/ ol li {
       overflow: hidden;
       padding: 5px 5px 5px 20px;
       line-height: 16px;
@@ -295,6 +417,9 @@ export default {
           padding-right: 5px;
         }
       }
+    }
+    .pagination {
+      text-align: center;
     }
   }
 }

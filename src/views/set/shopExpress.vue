@@ -32,7 +32,7 @@
           </div>
         </el-form-item>
         <div class="map">
-          <map-radius  class="map-radius" :radius="ruleForm.radius" :center="[ruleForm.lat,ruleForm.lng]" :zoom="14" :address="address"></map-radius>
+          <map-radius v-if="ruleForm.lat && ruleForm.lng" class="map-radius" :radius="ruleForm.radius" :center="[ruleForm.lat,ruleForm.lng]" :zoom="14" :address="address"></map-radius>
         </div>
         
       </section>
@@ -417,19 +417,20 @@ export default {
   },
 
   watch: {
-    shopInfo(curr) {
-      console.log('-----watch-shopInfo------')
-      if (curr) {
-        this.getShopInfo(curr)
-      }
-    }
+    // shopInfo(curr) {
+    //   console.log('-----watch-shopInfo------')
+    //   if (curr) {
+    //     this.getShopInfo(curr)
+    //   }
+    // }
   },
 
   created() {
     this._formatDecimals = debounce(this.formatDecimals, 500)
-    if (this.shopInfo) {
-      this.getShopInfo(this.shopInfo)
-    }
+    // if (this.shopInfo) {
+    //   this.getShopInfo(this.shopInfo)
+    // }
+    this.getShopInfo()
     this.getOrderDeliverInfo()
   },
 
@@ -445,10 +446,12 @@ export default {
       const city = this.$pcaa[provinceCode][cityCode];
       const area = this.$pcaa[cityCode][areaCode];
       if (reg.test(address)) {
-        address = address.replace(reg, `${province}${city}${area}`)
-      } else {
-        address = `${province}${city}${area}${address}`
+        address = address.replace(reg, '')
       }
+      console.log('--formatAddress---',address)
+
+      address = province === city ? `${province}${area}${address}`: `${province}${city}${area}${address}`
+      
       return address
     },
     // 获取经纬度
@@ -458,31 +461,10 @@ export default {
       const lng = this.ruleForm.lng
       const lat = this.ruleForm.lat
       if (!lng || !lat) {
-        // let address = this.address
-        // const reg = /.+?(省|市|自治区|自治州|县|区)/g
-        // const province = this.$pcaa[86][this.ruleForm.provinceCode];
-        // const city = this.$pcaa[this.ruleForm.provinceCode][
-        //   this.ruleForm.cityCode
-        // ];
-        // const area = this.$pcaa[this.ruleForm.cityCode][
-        //   this.ruleForm.areaCode
-        // ];
-        // if (reg.test(address)) {
-        //   address = address.replace(reg, `${province}${city}${area}`)
-        // } else {
-        //   address = `${province}${city}${area}${address}`
-        // }
-        // address = 
-        // const data = {
-        //   address
-        // }
-        // console.log('---address----', address)
-        const data = {
-          location: '39.984154,116.307490',
-          wantPoi: 0
-        }
         // api
-        this._apis.map.getGeocoder(data).then((res) => {
+        this._apis.map.getGeocoderAddress({
+          address
+        }).then((res) => {
           this.ruleForm.lng = res.result.location.lng
           this.ruleForm.lat = res.result.location.lat
         })
@@ -741,8 +723,8 @@ export default {
     },
     //  店铺查询 api
     getShopInfo(res) {
-      // const id = this.cid
-      // this._apis.set.getShopInfo({ id }).then(res => {
+      const id = this.cid
+      this._apis.set.getShopInfo({ id }).then(res => {
         
         if (res && res.hasOwnProperty('id')) {
           this.isOpen = res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
@@ -760,9 +742,9 @@ export default {
           this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
           this.getLngLat(this.address)
         }
-      // }).catch(err => {
-      //   this.$message.error(err);
-      // })
+      }).catch(err => {
+        this.$message.error(err);
+      })
     },
     formatTime(date){
       return date >= 10 ? date : `0${date}`
