@@ -69,6 +69,7 @@
         class="table"
         :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort = "{prop: 'applyTime', order: 'descending'}"
+        @sort-change="changeSort"
         @selection-change="handleSelectionChange"
         ref="multipleTable"
         >
@@ -78,7 +79,8 @@
         </el-table-column>
         <el-table-column
           prop="cashoutSn"
-          label="提现编号">
+          label="提现编号"
+          width="200px">
         </el-table-column>
          <el-table-column
           prop="nickName"
@@ -106,7 +108,7 @@
         <el-table-column
           prop="applyTime"
           label="申请时间"
-          sortable>
+          sortable = "custom">
         </el-table-column>
         <el-table-column
         label="操作">
@@ -134,7 +136,7 @@
         </el-pagination>
       </div>
     </div>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @handleSubmit="handleSubmit"></component>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @handleSubmit="handleSubmit" v-if="currentDialog"></component>
   </div>
 </template>
 
@@ -160,12 +162,12 @@ export default {
       inline:true,
       userTypes:[
         {
-          value:'memberSn',
-          label:'用户ID'
-        },
-        {
           value:'nickName',
           label:'用户昵称'
+        },
+        {
+          value:'memberSn',
+          label:'用户ID'
         },
       ],
       ruleForm:{
@@ -173,12 +175,13 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         memberSn:'',
         nickName:'',
         startIndex:1,
-        pageSize:10
+        pageSize:10,
+        sort:'desc'
       },
       dataList:[ ],
       selectStatus:false,
@@ -213,7 +216,8 @@ export default {
         applyTimeEnd:'',
         status:'',
         startIndex:'',
-        pageSize:''
+        pageSize:'',
+        sort:'desc'
       }
       for(let key  in query){
         if(this.ruleForm.searchType == key){
@@ -263,10 +267,11 @@ export default {
         searchValue:'',
         timeValue:'',
         status:-1,
-        userType:'memberSn',
+        userType:'nickName',
         userValue:'',
         memberSn:'',
         nickName:'',
+        sort:'desc'
       }
       this.fetch()
     },
@@ -293,6 +298,17 @@ export default {
           this.$message.error(error)
         })
       }      
+    },
+    //申请时间排序
+    changeSort(val){
+      if(val && val.order == 'ascending') {
+        this.ruleForm.sort = 'asc'
+      }else if(val && val.order == 'descending'){
+        this.ruleForm.sort = 'desc'
+      }else{
+        return 
+      }
+      this.fetch()
     },
     // 全选
     selectAll(val){

@@ -5,27 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const packageConfig = require('../package.json')
 
 exports.assetsPath = function(_path) {
-  let assetsSubDirectory = '';
-  switch(process.env.NODE_ENV) {
-    case 'test':
-      assetsSubDirectory = config.test.assetsSubDirectory
-      break;
-    case 'test2':
-      assetsSubDirectory = config.test.assetsSubDirectory
-      break;
-    case 'test3':
-      assetsSubDirectory = config.test.assetsSubDirectory
-      break;
-    case 'pre':
-      assetsSubDirectory = config.pre.assetsSubDirectory
-      break;
-    case 'production':
-      assetsSubDirectory = config.build.assetsSubDirectory
-      break;
-      default:
-      assetsSubDirectory = config.dev.assetsSubDirectory
-  }
-  return path.posix.join(assetsSubDirectory, _path)
+  return path.posix.join(config[process.env.NODE_ENV].assetsSubDirectory || '', _path)
 }
 
 exports.cssLoaders = function (options) {

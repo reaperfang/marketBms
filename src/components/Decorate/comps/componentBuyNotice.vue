@@ -45,6 +45,16 @@ export default {
       }
     });
   },
+  watch: {
+    'currentComponentData.data.ids': {
+          handler(newValue, oldValue) {
+              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                  this.fetch();
+              }
+          },
+          deep: true
+      }
+  },
   methods: {
     scroll() {
       let con1 = this.$refs.rollul;

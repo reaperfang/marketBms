@@ -160,8 +160,8 @@
                             v-model="orderInfo.sellerRemark"
                             maxlength="50">
                         </el-input>
-                        <span v-if="!remarkVisible" @click="remarkVisible = true" class="blue pointer">我要备注</span>
-                        <span v-if="remarkVisible" class="blue pointer" @click="remarkHandler">完成</span>
+                        <span v-if="!remarkVisible" @click="remarkVisible = true" class="blue pointer nowrap">我要备注</span>
+                        <span v-if="remarkVisible" class="blue pointer nowrap" @click="remarkHandler">完成</span>
                     </div>
                 </div>
             </div></el-col>
@@ -661,16 +661,11 @@ export default {
             }
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
                  consultMoney: +this.yingshouChangeMoney}).then(res => {
+                    this.yingshouChangeMoney = ''
                     this.changePriceVisible = false
                     this.$emit('getDetail')
                     this.currentDialog = 'ChangePriceDialog'
                     this.dialogVisible = true
-
-                    let timer = setTimeout(() => {
-                        this.$router.push('/order/query')
-                        this.dialogVisible = false
-                        clearTimeout(timer)
-                    }, 5000)
                 }).catch(error => {
                     this.changePriceVisible = false
                     this.$message.error(error);
@@ -901,7 +896,7 @@ export default {
                 line-height: 21px;
             }
             &.lefter {
-                height: 146px;
+                // height: 146px;
                 .change {
                     color: $globalMainColor;
                     text-align: right;
@@ -910,6 +905,7 @@ export default {
             }
             &.righter {
                 border: none;
+                padding-left: 10px;
                 .remark-box {
                     p {
                         margin-top: 8px;
@@ -918,8 +914,8 @@ export default {
             }
             &.center {
                 padding-left: 10px;
-                border-left: 1px solid #cacfcb;
-                border-right: 1px solid #cacfcb;
+                // border-left: 1px solid #cacfcb;
+                // border-right: 1px solid #cacfcb;
             }
             .item {
                 display: flex;
@@ -1066,12 +1062,18 @@ export default {
 /deep/ .el-col-8 {
     width: auto;
     flex: 1;
+    border-right: 1px solid #cacfcb;
+}
+/deep/ .el-col-8:last-child {
+    border: none;
 }
 .see-more-gift {
     margin-left: 20px;
     color: #655EFF;
 }
-
+.nowrap {
+    white-space: nowrap;
+}
 </style>
 
 

@@ -93,7 +93,10 @@ export default {
   },
   watch: {
     /* 监听添加类型，自动获取状态则拉取一下数据 */
-    'currentComponentData.data.addType'(newValue) {
+    'currentComponentData.data.addType'(newValue, oldValue) {
+      if(newValue === oldValue) {
+        return;
+      }
       if(newValue == 2) {
         this.fetch();
       }else{
@@ -103,13 +106,27 @@ export default {
     },
 
     /* 监听显示个数类型 */
-    'currentComponentData.data.couponNumberType'(newValue) {
+    'currentComponentData.data.couponNumberType'(newValue, oldValue) {
+      if(newValue === oldValue) {
+        return;
+      }
       this.fetch();
     },
 
     /* 监听显示个数 */
-    'currentComponentData.data.showNumber'(newValue) {
+    'currentComponentData.data.showNumber'(newValue, oldValue) {
+      if(newValue === oldValue) {
+        return;
+      }
       this.fetch();
+    },
+    'currentComponentData.data.ids': {
+        handler(newValue, oldValue) {
+            if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                this.fetch();
+            }
+        },
+        deep: true
     }
   },
   methods: {

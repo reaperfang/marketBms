@@ -113,6 +113,7 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch("toggleSideBar");
+      this.$store.dispatch('getShopInfo')
     },
     //推出登录
     logout() {

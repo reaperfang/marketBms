@@ -6,6 +6,7 @@
             style="width: 100%"
             :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort = "{prop: 'changeRatio', order: 'descending'}"
+            @sort-change="changeSort"
         >
             <el-table-column
                 width="180"
@@ -78,7 +79,11 @@ export default {
         handleCurrentChange(val){
             console.log(val)
             this.$emit('currentChange',val)
-        }       
+        },
+        //支付转化率排序
+        changeSort(val){
+            this.$emit('changeSort',val)
+        },    
     },
     filters:{
         //时间戳过滤

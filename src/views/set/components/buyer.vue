@@ -118,7 +118,7 @@ export default {
   name: 'buyer',
   data() {
     var validatePass = (rule, value, callback) => {
-      let mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+      let mobile = /^1[3456789]\d{9}$/;
       if (!mobile.test(value)) {
         return callback(new Error("您输入的手机号有误，请您重新输入"));
       } else {
@@ -129,7 +129,7 @@ export default {
       tableData: [],
       loading:true,
       ruleForm:{
-
+        msgReceivePhone:'',
       },
       rules: {
           msgReceivePhone: [
@@ -147,10 +147,11 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
-    }
+    },
   }, 
   created() {
     this.getShopMessage()
+    this.getShopInfo()
   },
   methods: {
     getShopMessage(){
@@ -167,6 +168,15 @@ export default {
         this.loading = false
       }).catch(error =>{
         this.loading = false
+      })
+    },
+
+    getShopInfo(){
+      let id = this.cid;
+      this._apis.set.getShopInfo({ id: id }).then(response => {
+        this.ruleForm.msgReceivePhone = response.msgReceivePhone
+      }).catch(error =>{
+        console.log(error)
       })
     },
 
@@ -226,6 +236,7 @@ export default {
               type: 'success',
               message: '操作成功！'
             });
+          this.getShopInfo()
           }).catch(error =>{
             this.$message.error(error);
           })    
@@ -313,4 +324,7 @@ export default {
 .el-form-item{
   margin-bottom:0px;
 } 
+/deep/.el-form-item--small .el-form-item__error{
+  padding-top: 5px;
+}
 </style>

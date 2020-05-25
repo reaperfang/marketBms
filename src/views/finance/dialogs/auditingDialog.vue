@@ -7,46 +7,52 @@
         <span class="fl c_label">提现申请</span>
         <div class="fl">
           <div class="c_top">
-            <p>用户昵称：{{info.nickName}}</p>
-            <p>用户ID：{{info.memberSn}}</p>
+            <p>用户昵称：{{data.nickName}}</p>
+            <p>用户ID：{{data.memberSn}}</p>
             <p>
               提现金额：
-              <span>￥{{info.amount}}</span>
+              <span>￥{{data.amount}}</span>
             </p>
-            <p>提现编号：{{info.cashoutSn}}</p>
+            <p>提现编号：{{data.cashoutSn}}</p>
           </div>
-          <div class="c_steps clearfix">
-            <div class="c_step_l">
-              <span class="c_green"></span>
-              {{info.createTime}}
-            </div>
-            <div class="c_step_r">
-              <p>提交申请</p>
-              <p>账户可用余额冻结 ￥{{info.amount}}</p>
-              <p>交易流水 {{info.tradeDetailSn}}</p>
-            </div>
+          <div class="c_steps clearfix" v-for="(info,key) in infos" :key="key">
+              <div class="c_step_l">
+                  <span class="c_green"></span>
+                  {{info.m3}}
+              </div>
+              <div class="c_step_r">
+                  <p>{{info.m0}}</p>
+                  <p>{{info.m1}}</p>
+                  <p>{{info.m2}}</p>
+              </div>
           </div>
         </div>
       </div>
       <div class="clearfix marT30">
         <span class="fl c_label">提现申请</span>
         <div class="fl">
-            <el-radio v-model="radio" label="0">同意申请</el-radio>
-            <el-radio v-model="radio" label="1">拒绝申请</el-radio>
-            <el-input
-                type="textarea"
-                :rows="3"
-                class="marT20"
-                placeholder="请输入拒绝原因，不超过20个字"
-                v-model="remarks"
-                v-if="radio == 1"
-                @blur="checkNull">
-            </el-input>
-            <p style="color:#FD4C2B;font-size:12px;margin-top:10px;" v-if="note">请输入拒绝原因，不超过20个字</p>
-            <p style="text-align:center; margin-top:10px;">
-               <el-button type="primary"  @click="submit">确定</el-button>
-                <el-button @click="cancel">取消</el-button> 
-            </p>
+            <el-form ref="form" :model="form" :rules="rules">
+              <el-form-item prop="radio">
+                <el-radio-group v-model="form.radio">
+                  <el-radio label="0">同意申请</el-radio>
+                  <el-radio label="1">拒绝申请</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item prop="remarks">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  placeholder="请输入拒绝原因，不超过20个字"
+                  v-model="form.remarks"
+                  v-if="form.radio == 1"
+                  style="width:300px;">
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submit('form')">确定</el-button>
+                <el-button @click="cancel">取消</el-button>
+              </el-form-item>
+            </el-form>
         </div>
       </div>
     </div>
@@ -76,11 +82,18 @@ export default {
   props: ["data"],
   data() {
     return {
-      info:{},
-      radio: "0",
-      remarks:'',
+      infos:[],
+      form:{
+        radio:'0',
+        remarks:'',
+      },
+      rules: {
+        remarks: [
+          { required: true, message: '请输入拒绝原因', trigger: 'blur' },
+          { min: 1, max: 20, message: '不超过20个字', trigger: 'blur' }
+        ],
+      },
       otherVisible: false,
-      note:false
     };
   },
   props: {
@@ -108,49 +121,37 @@ export default {
       data(){
           this.getInfo()
       },
-      radio(){
-        this.init()
-      }
   },
   created() {
     this.getInfo()
   },
   methods: {
-    init(){
-      if(this.radio == 1 && this.remarks.trim() == '' || this.remarks.length > 20){
-        this.note = true
-      }else{
-        this.note = false
+    submit(formName) {
+      let datas = {
+        ids:[this.data.id],
+        auditStatus:this.form.radio,
+        remarks:this.form.remarks.trim()
       }
-    },
-    submit() { 
-      if(!this.note){
-        let datas = {
-          ids:[this.data.id],
-          auditStatus:this.radio,
-          remarks:this.remarks.trim()
-        }
-        if(this.radio == 0){
-          this.$emit("handleSubmit",datas);
-          this.visible = false
-        }else if(this.radio == 1 && this.remarks.trim()){
-           this.$emit("handleSubmit",datas);
-           this.visible = false
-        }else{
-          return false
-        }      
-      }
+      if(this.form.radio == 0){
+        this.$emit("handleSubmit",datas);
+        this.visible = false
+      }else if(this.form.radio == 1){
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.$emit("handleSubmit",datas);
+            this.visible = false
+          }
+        })
+      }   
     },
     cancel(){
       this.$emit("fetch");
       this.visible = false
     },
-    checkNull(){
-        this.init()
-    },
+    
     getInfo(){
       this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
-          this.info = response[0]
+          this.infos = response.list
       }).catch((error)=>{
           this.$message.error(error);
       })

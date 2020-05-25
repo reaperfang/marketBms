@@ -2,38 +2,9 @@
 const utils = require('./utils')
 const config = require('../config')
 
-let sourceMap, extract, usePostCSS;
-switch(process.env.NODE_ENV) {
-  case 'test':
-    sourceMap = config.test.productionSourceMap
-    extract = true
-    usePostCSS =  true
-    break;
-  case 'test2':
-    sourceMap = config.test.productionSourceMap
-    extract = true
-    usePostCSS =  true
-    break;
-  case 'test3':
-    sourceMap = config.test.productionSourceMap
-    extract = true
-    usePostCSS =  true
-    break;
-  case 'pre':
-    sourceMap = config.pre.productionSourceMap
-    extract = true
-    usePostCSS =  true
-    break;
-  case 'production':
-    sourceMap = config.build.productionSourceMap
-    extract = true
-    usePostCSS =  true
-    break;
-    default:
-    sourceMap = config.dev.cssSourceMap
-    extract = false,
-    usePostCSS =  true
-}
+let sourceMap = config[process.env.NODE_ENV][process.env.NODE_ENV === 'dev' ? 'cssSourceMap' : 'productionSourceMap'] ||{};
+let extract = process.env.NODE_ENV !== 'dev';
+let usePostCSS = true;
 
 
 module.exports = {

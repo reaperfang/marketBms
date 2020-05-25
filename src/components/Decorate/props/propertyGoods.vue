@@ -200,16 +200,25 @@ export default {
       }
     },
 
-    currentCatagoryId(newValue) {
+    currentCatagoryId(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
         this.fetch();
         this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
     },
-    'ruleForm.currentCatagoryId'() {
+    'ruleForm.currentCatagoryId'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
         this.fetchCatagoryDetail();
         this.fetch();
         this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
     },
-    'ruleForm.source'(newValue) {
+    'ruleForm.source'(newValue, oldValue) {
+      if(newValue === oldValue) {
+          return;
+      }
       this.fetchCatagoryDetail();
       this.fetch();
       this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
@@ -218,10 +227,12 @@ export default {
     'ruleForm.ids': {
       handler(newValue, oldValue) {
         const _self = this;
-        this.echoList = [];
-        newValue.forEach((item)=>{
-          _self.echoList.push({id: item});
-        })
+        if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+          this.echoList = [];
+          newValue.forEach((item)=>{
+            _self.echoList.push({id: item});
+          })
+        }
       },
       deep: true
     }

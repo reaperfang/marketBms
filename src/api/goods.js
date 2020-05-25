@@ -457,6 +457,27 @@ export function getMiniappInfo(data) {
   })
 }
 
+// 直播-商品链接
+export function getJdLive(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-SPU-JD-LIVE-LINKS-PROCESSOR',
+    data,
+    token
+  })
+}
+// 分销商品设置
+export function commisionGoodsSet(data) {
+  return request({
+    apiType: 'goods',
+    method: 'post',
+    target: 'PRODUCT-RESELL-EDIT-PROCESSOR',
+    data,
+    token
+  })
+}
+
 
 
 

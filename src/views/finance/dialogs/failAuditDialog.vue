@@ -3,45 +3,34 @@
     <DialogBase :visible.sync="visible" @submit="submit" title="提现详情" :showFooter="false">
         <div class="c_container clearfix">
             <div class="c_top">
-                <p>用户昵称：{{info.nickName}}</p>
-                <p>用户ID：{{info.memberSn}}</p>
-                <p>提现金额：<span>￥{{info.amount}}</span></p>
-                <p class="gray">提现编号：{{info.cashoutSn}}</p>
+                <p>用户昵称：{{data.nickName}}</p>
+                <p>用户ID：{{data.memberSn}}</p>
+                <p>提现金额：<span>￥{{data.amount}}</span></p>
+                <p class="gray">提现编号：{{data.cashoutSn}}</p>
                 <div class="c_status">
                     <p>失败</p>
-                    <span>审核未通过</span>
-                    <span>操作人：{{info.createUserName}}</span>
-                    <span>操作时间：{{info.createTime}}</span>
+                    <!-- <span>审核未通过</span> -->
+                    <span>操作人：{{data.updateUserName}}</span>
+                    <span>操作时间：{{data.updateTime}}</span>
                 </div>
             </div>
-            <div class="c_steps clearfix">
+            <div class="c_steps clearfix" v-for="(info,key) in infos" :key="key">
                 <div class="c_step_l">
                     <span class="c_green"></span>
-                    {{info.createTime}}
+                    {{info.m3}}
                 </div>
                 <div class="c_step_r">
-                    <p>申请驳回</p>
-                    <p>提现申请被商家驳回，账户可用余额返还￥{{info.amount}}</p>
-                    <p>交易流水号 {{info.tradeDetailSn}}</p>
-                </div>
-            </div>
-            <div class="c_steps clearfix">
-                <div class="c_step_l">
-                    <span class="c_green"></span>
-                    {{info1.createTime}}
-                </div>
-                <div class="c_step_r">
-                    <p>提交申请</p>
-                    <p>账户可用余额冻结 ￥{{info1.amount}}</p>
-                    <p>交易流水 {{info1.tradeDetailSn}}</p>
+                    <p>{{info.m0}}</p>
+                    <p>{{info.m1}}</p>
+                    <p>{{info.m2}}</p>
                 </div>
             </div>
             <div class="c_bottom clearfix">
                 <div class="fl">
-                    审核未通过原因：
+                    失败原因：
                 </div>
                 <div class="fl gray">
-                    {{info.remarks}}
+                    {{reason}}
                 </div>
             </div>
         </div> 
@@ -55,8 +44,8 @@ export default {
     props: ['data'],
     data() {
         return {
-            info:{},
-            info1:{}
+            reason:'',
+            infos:[],
         }
     },
     props: {
@@ -95,8 +84,8 @@ export default {
         },
         getInfo(){
             this._apis.finance.getInfoWd({cashoutDetailId:this.data.id}).then((response)=>{
-               this.info = response[0]
-               this.info1 = response[1]
+                this.reason = response.reason
+                this.infos = response.list
             }).catch((error)=>{
                 this.$message.error(error);
             })

@@ -6,7 +6,7 @@
       </div>
 
       <!-- 装修编辑器 -->
-      <Decorate ref="Decorate" :decorateData="decorateData" :config="config" v-if="decorateRender"></Decorate>
+      <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
     </div>
     <div v-else v-loading="loading" style="padding:50px;">
       暂无可用页面
@@ -126,10 +126,10 @@ export default {
       if(newValue) {
         this.$store.commit("clearAllData");
         this.decorateRender = false;
-        this.$nextTick(() => {
+        setTimeout(()=>{
           this.decorateRender = true;
           this.decorateData = this.pageMaps[newValue];
-        })
+        },200)
       }
     },
 
@@ -173,7 +173,15 @@ export default {
     /* 检查输入正确性 */
     checkInput(resultData) {
       if (this.baseInfo.vError) {
-        this.$message({ message: '请填写正确信息', type: 'warning' });
+        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+            confirmButtonText: '确定',
+            callback: action => {
+              //打开基础信息面板
+              this.$store.commit('setCurrentComponentId', this.basePropertyId);
+              this.setLoading(false);
+            }
+          });
+        // this.$message({ message: '请填写正确信息', type: 'warning' });
         return false;
       }else{
         if(!resultData.name || !resultData.title || !resultData.explain) {

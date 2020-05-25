@@ -39,7 +39,7 @@
                             <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
                         <div class="price_line">
-                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice}}</font></p>
+                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice || 0}}</font></p>
                         </div>
                         <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.status==1&&utils.dateDifference(item.endTime) && listStyle != 3 && listStyle != 6"></componentButton>
                         <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
@@ -96,7 +96,15 @@ export default {
     watch: {
       currentComponentData(){
         this.decoration();
-      }
+      },
+      'currentComponentData.data.ids': {
+            handler(newValue, oldValue) {
+                if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                    this.fetch();
+                }
+            },
+            deep: true
+        }
     },
     computed: {
          /* 检测是否有数据 */
@@ -298,7 +306,10 @@ export default {
                         display:none;
                     }
                     .content{
-                        @extend .flexCenterMiddle;
+                        // @extend .flexCenterMiddle;
+                        display:flex;
+                        align-items:center;
+                        padding:0 10px;
                         .caption{
                             color:#fff;
                             font-size:10px;
@@ -741,7 +752,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;
@@ -843,7 +857,10 @@ export default {
                             display:none;
                         }
                         .content{
-                            @extend .flexCenterMiddle;
+                            // @extend .flexCenterMiddle;
+                            display:flex;
+                            align-items:center;
+                            padding:0 10px;
                             .caption{
                                 color:#fff;
                                 font-size:10px;

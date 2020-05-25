@@ -54,13 +54,18 @@
               <div class="con">
                 <div class="left">
                   <div class="top">
-                    <img :src="ruleFormMini.picture" alt=""> 
+                    <img :src="shopInfo.logoCircle || shopInfo.logo || require('@/assets/images/logo.png')" alt=""> 
                     <p>{{shopInfo.name || '店铺名称'}}</p>
                   </div>
                   <div class="bottom">{{ruleFormMini.describe}}</div>
+                  <div class="bottom2">
+                    <img :src="ruleFormMini.picture"/>
+                  </div>
                 </div>
               </div>
-              <i class="bg"></i>
+              <div class="footer">
+                <i class="bg"></i><span>小程序</span>
+              </div>
           </div>
           <i class="icon"></i>
         </div>
@@ -87,7 +92,7 @@
                 <el-input
                   :rows="5"
                   :max="10"
-                  placeholder="请输入分享标题，建议不超过15个汉字"
+                  placeholder="请输入分享标题，不超过15个汉字"
                   v-model="ruleFormH5.title">
                 </el-input>
               </el-form-item>
@@ -95,7 +100,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
-                  placeholder="请输入分享描述，建议不超过30个汉字"
+                  placeholder="请输入分享描述，不超过30个汉字"
                   v-model="ruleFormH5.describe">
                 </el-input>
               </el-form-item>
@@ -131,7 +136,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
-                  placeholder="请输入分享描述，建议不超过30个汉字"
+                  placeholder="请输入分享描述，不超过30个汉字"
                   v-model="ruleFormMini.describe">
                 </el-input>
               </el-form-item>
@@ -219,7 +224,7 @@ export default {
             if(value.length >0 && value.length <= limit) {
               callback();
             }else {
-              callback(new Error(`请输入分享标题，建议不超过${limit}个汉字`));
+              callback(new Error(`请输入分享标题，不超过${limit}个汉字`));
             }
           }, trigger: 'blur'}
         ],
@@ -239,7 +244,7 @@ export default {
             if(value.length >0 && value.length <= limit) {
               callback();
             }else {
-              callback(new Error(`请输入分享描述，建议不超过${limit}个汉字`));
+              callback(new Error(`请输入分享描述，不超过${limit}个汉字`));
             }
           }, trigger: 'blur'}
         ],
@@ -258,7 +263,7 @@ export default {
             if(value.length >0 && value.length <= limit) {
               callback();
             }else {
-              callback(new Error(`请输入分享描述，建议不超过${limit}个汉字`));
+              callback(new Error(`请输入分享描述，不超过${limit}个汉字`));
             }
           }, trigger: 'blur'}
         ],
@@ -290,8 +295,8 @@ export default {
     },
     shopInfo:{
       handler(newValue) {
-        this.$set(this.ruleFormH5, 'picture', this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png'))
-        this.$set(this.ruleFormMini, 'picture', this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png'))
+        this.$set(this.ruleFormH5, 'picture', this.ruleFormH5.picture || this.shopInfo.logo || require('@/assets/images/logo.png'))
+        this.$set(this.ruleFormMini, 'picture', this.ruleFormMini.picture || this.shopInfo.logo || require('@/assets/images/logo.png'))
         if(this.currentType === 'h5') {
           this.getQrcode();
         }else if(this.currentType === 'mini') {
@@ -356,7 +361,7 @@ export default {
       .then((response)=>{
         if(response && response.pageInfoId) {
           if(!response.picture) {
-            response['picture'] = this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
+            response['picture'] = this.shopInfo.logo || require('@/assets/images/logo.png')
           }
           if (this.currentType === 'h5') {
             this.ruleFormH5 = response;
@@ -375,13 +380,13 @@ export default {
               pageInfoId: this.pageId,
               title: '店铺名称',
               describe: '我发现了一个不错的店铺，快来看看吧。',
-              picture: this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
+              picture: this.shopInfo.logo || require('@/assets/images/logo.png')
             };
           } else {
             this.ruleFormMini = {
               pageInfoId: this.pageId,
               describe: '我发现了一个不错的店铺，快来看看吧。',
-              picture: this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
+              picture: this.shopInfo.logo || require('@/assets/images/logo.png')
             };
           }
         }
@@ -585,6 +590,9 @@ export default {
   display:flex;
   flex-direction: row;
   justify-content: flex-start;
+  .img_preview img {
+    object-fit: initial!important;
+ }
   .preview{
     width:260px;
     margin-right:15px;
@@ -807,6 +815,7 @@ export default {
               width: 20px;
               height:20px;
               margin-right:3px;
+              border-radius: 50%;
             }
           }
           .bottom{
@@ -818,13 +827,38 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
           }
+          .bottom2{
+            width:100%;
+            height:116px;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            img{
+              width:100%;
+              height:100%;
+            }
+          }
         }
-        .bg{
-          background:url('../../../../assets/images/shop/mini-background.png') no-repeat 4px 0;
-          background-size: contain;
-          width:100%;
-          height: 142px;
-          display: block;
+        .footer{
+          border-top: 1px solid #ddd;
+          display:flex;
+          justify-content: flex-start;
+          width: calc(100% - 20px);
+          padding:3px;
+          margin: 0 auto;
+          .bg{
+            background:url('../../../../assets/images/shop/mini-bg2.png') no-repeat 0px -1px;
+            background-size: contain;
+            width:15px;
+            height: 15px;
+            display: block;
+          }
+          span{
+            color:rgba(146,146,155,1);
+            font-size:12px;
+            margin-left:3px;
+          }
         }
       }
       .icon{

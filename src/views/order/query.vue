@@ -7,11 +7,25 @@
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
               <el-option label="订单编号" value="code"></el-option>
               <el-option label="商品名称" value="goodsName"></el-option>
-              <el-option label="用户昵称" value="memberName"></el-option>
-              <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-              <el-option label="收货人" value="receivedName"></el-option>
+              <!--<el-option label="商品SPU编码" value="code"></el-option>
+              <el-option label="商品SKU编码" value="goodsInfoCode"></el-option>-->
             </el-select>
           </el-input>
+        </el-form-item>
+        <el-form-item label  class="searchTimeType">
+          <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
+            <el-option label="下单时间" value="createTime"></el-option>
+            <el-option label="完成时间" value="complateTime"></el-option>
+            <el-option label="发货时间" value="sendTime"></el-option>
+          </el-select>
+          <el-date-picker
+            v-model="listQuery.orderTimeValue"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :picker-options="utils.globalTimePickerOption.call(this)"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="订单来源">
           <el-select v-model="listQuery.channelInfoId" placeholder>
@@ -22,6 +36,32 @@
             <el-option label="WAP" :value="4"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="listQuery.orderStatus" placeholder>
+            <el-option label="全部" value></el-option>
+            <el-option label="待付款" :value="0"></el-option>
+            <el-option label="待成团" :value="1"></el-option>
+            <el-option label="关闭" :value="2"></el-option>
+            <el-option label="待发货" :value="3"></el-option>
+            <el-option label="部分发货" :value="4"></el-option>
+            <el-option label="待收货" :value="5"></el-option>
+            <el-option label="完成" :value="6"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label>
+          <el-input placeholder="请输入内容" v-model="listQuery.searchValue2" class="input-with-select">
+            <el-select v-model="listQuery.searchType2" slot="prepend" placeholder="请输入">
+              <el-option label="用户ID" value="memberSn"></el-option>
+              <el-option label="用户昵称" value="memberName"></el-option>
+              <el-option label="收货人姓名" value="receivedName"></el-option>
+              <el-option label="收货人联系电话" value="receivedPhone"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员ID" value="resellersn"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员姓名" value="resellerName"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员昵称" value="resellerNick"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员手机号" value="resellerPhone"></el-option>
+            </el-select>
+          </el-input>
+        </el-form-item>
         <el-form-item label="订单类型">
           <el-select v-model="listQuery.orderType" placeholder>
             <el-option label="全部" value></el-option>
@@ -29,6 +69,7 @@
             <el-option label="拼团订单" :value="1"></el-option>
             <el-option label="优惠套装订单" :value="2"></el-option>
             <el-option label="赠品订单" :value="4"></el-option>
+            <el-option v-if="resellConfigInfo" label="分销订单" :value="5"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="支付方式">
@@ -46,33 +87,6 @@
             <el-option label="自动发货" :value="2"></el-option>
             <el-option label="优先发货" :value="3"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="订单状态">
-          <el-select v-model="listQuery.orderStatus" placeholder>
-            <el-option label="全部" value></el-option>
-            <el-option label="待付款" :value="0"></el-option>
-            <el-option label="待成团" :value="1"></el-option>
-            <el-option label="关闭" :value="2"></el-option>
-            <el-option label="待发货" :value="3"></el-option>
-            <el-option label="部分发货" :value="4"></el-option>
-            <el-option label="待收货" :value="5"></el-option>
-            <el-option label="完成" :value="6"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label  class="searchTimeType">
-          <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
-            <el-option label="下单时间" value="createTime"></el-option>
-            <el-option label="完成时间" value="complateTime"></el-option>
-            <el-option label="发货时间" value="sendTime"></el-option>
-          </el-select>
-          <el-date-picker
-            v-model="listQuery.orderTimeValue"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :picker-options="utils.globalTimePickerOption.call(this)"
-          ></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -135,6 +149,8 @@ export default {
       listQuery: {
         searchType: "code",
         searchValue: "",
+        searchType2: "memberSn",
+        searchValue2: "",
         code: "", // 订单编号
         goodsName: "", // 商品名称
         memberName: "", // 用户昵称
@@ -147,11 +163,37 @@ export default {
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
         orderTimeValue: "",
+        startIndex: 1,
+        pageSize: 20
       },
-      activeName: "shop"
+      activeName: "shop",
+      resellConfigInfo: null,
     };
   },
   created() {
+    if(this.$route.query.orderType) {
+      let orderType = +this.$route.query.orderType
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          orderType
+      })
+    }
+    if(this.$route.query.resellersn) {
+      let resellersn = this.$route.query.resellersn
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          searchType2: 'resellersn',
+          searchValue2: resellersn
+      })
+    }
+    if(this.$route.query.resellerPhone === '') {
+      let resellerPhone = this.$route.query.resellerPhone || ''
+
+      this.listQuery = Object.assign({}, this.listQuery, {
+          searchType2: 'resellerPhone',
+          searchValue2: resellerPhone
+      })
+    }
     console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
@@ -170,8 +212,18 @@ export default {
               orderStatus
           })
       }
+    this.checkCreditRule()
   },
   methods: {
+    checkCreditRule() {
+      // 获取分销商设置
+      this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+
+          if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
+      }).catch((error) => {
+          console.error(error);
+      });
+    },
     batchSendGoods() {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
             this.confirm({title: '提示', icon: true, text: '请选择需要发货的订单'})
@@ -207,6 +259,7 @@ export default {
             }
             _params = Object.assign({}, this.listQuery, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
+                [this.listQuery.searchType2]: this.listQuery.searchValue2,
                 [`${this.listQuery.searchTimeType}Start`]: this.listQuery.orderTimeValue ? searchTimeTypeStart : '',
                 [`${this.listQuery.searchTimeType}End`]: this.listQuery.orderTimeValue ? searchTimeTypeEnd : '',
                 isExport: 0
@@ -269,23 +322,53 @@ export default {
       });
     },
     resetForm(formName) {
+      let {orderType} = this.$route.query
+
+      if(this.$route.query.orderType && this.$route.query.orderType == 5) {
         this.listQuery = {
-        searchType: "code",
-        searchValue: "",
-        code: "",
-        goodsName: "",
-        memberSn: "",
-        receivedPhone: "",
-        receivedName: "",
-        channelInfoId: "",
-        orderType: "",
-        payWay: "",
-        sendType: "",
-        orderStatus: "",
-        searchTimeType: "createTime",
-        orderTimeValue: "",
-        startIndex: 1,
-        pageSize: 20,
+          searchType: "code",
+          searchValue: "",
+          code: "",
+          goodsName: "",
+          memberSn: "",
+          receivedPhone: "",
+          receivedName: "",
+          channelInfoId: "",
+          orderType: +orderType,
+          payWay: "",
+          sendType: "",
+          orderStatus: "",
+          searchTimeType: "createTime",
+          orderTimeValue: "",
+          startIndex: 1,
+          pageSize: 20,
+          searchType2: 'resellerPhone'
+        }
+      } else {
+        this.listQuery = {
+          searchType: "code",
+          searchValue: "",
+          code: "",
+          goodsName: "",
+          memberSn: "",
+          receivedPhone: "",
+          receivedName: "",
+          channelInfoId: "",
+          orderType: "",
+          payWay: "",
+          sendType: "",
+          orderStatus: "",
+          searchTimeType: "createTime",
+          orderTimeValue: "",
+          startIndex: 1,
+          pageSize: 20,
+          searchType2: 'memberSn',
+          searchValue2: '',
+          resellersn: '',
+          resellerName: '',
+          resellerNick: '',
+          resellerPhone: '',
+        }
       }
       this.checkedLength = 0
 
@@ -364,6 +447,15 @@ export default {
 }
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
+}
+/deep/ .input-with-select {
+    .el-input-group__prepend {
+        background-color: #fff;
+    }
+}
+/deep/ .el-form-item__label {
+  color: rgba(68,67,75,1);
+  font-weight: normal!important;
 }
 </style>
 

@@ -32,6 +32,15 @@ export default {
             this.refreshPath = window.localStorage.getItem('marketing_router_path')
         }
     },
+     watch: {
+    // 利用watch方法检测路由变化：
+    $route: function(to, from) {
+      // 拿到目标参数 to.params.id 去再次请求数据接口
+      console.log(to.params.id);
+      this.sendMessage('push')
+    },
+    deep: true
+  },
 	beforeDestroy() {
 		localStorage.setItem('marketing_router_path', this.defultPath)
 	},
@@ -59,13 +68,17 @@ export default {
 			}
 
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
-            this.src = `${process.env.NODE_ENV === 'development' ? '//127.0.0.1:8080' : process.env.APPLY}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}`
+            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}`
         },
 
         // iframe 刷新  -- 暂时不用
-        sendMessage () {
-            this.iframeWin.postMessage({ cmd: 'marketing_router_refresh', params: {} }, '*')
-        },
+        sendMessage(index) {
+	      if(index == 'refrech'){
+	        this.iframeWin.postMessage({ cmd: "marketing_router_refresh", params: {} },"*");
+	      }else{
+	        this.iframeWin.postMessage({ cmd: "marketing_router_push", params: {} },"*");
+	      }
+	    },
 
         // iframe 加载完成
         iframeLoad () {

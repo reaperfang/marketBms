@@ -1,49 +1,21 @@
 'use strict'
 require('./check-versions')()
-
 const ora = require('ora')
 const rm = require('rimraf')
 const path = require('path')
 const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
-const webpackConfigTest = require('./webpack.test.conf')
-const webpackConfigPre = require('./webpack.pre.conf')
-const webpackConfigProd = require('./webpack.prod.conf')
+
 
 const spinner = ora(
   'building for ' + process.env.NODE_ENV + ' environment...'
 )
 spinner.start()
 
-let webpackConfig = {}, assetsRoot = '', assetsSubDirectory = '';
-switch(process.env.NODE_ENV) {
-  case 'test':
-    webpackConfig = webpackConfigTest
-    assetsRoot = config.test.assetsRoot
-    assetsSubDirectory = config.test.assetsSubDirectory
-    break;
-  case 'test2':
-    webpackConfig = webpackConfigTest
-    assetsRoot = config.test.assetsRoot
-    assetsSubDirectory = config.test.assetsSubDirectory
-    break;
-  case 'test3':
-    webpackConfig = webpackConfigTest
-    assetsRoot = config.test.assetsRoot
-    assetsSubDirectory = config.test.assetsSubDirectory
-    break;
-  case 'pre':
-    webpackConfig = webpackConfigPre
-    assetsRoot = config.pre.assetsRoot
-    assetsSubDirectory = config.pre.assetsSubDirectory
-    break;
-  case 'production':
-    webpackConfig = webpackConfigProd
-    assetsRoot = config.build.assetsRoot
-    assetsSubDirectory = config.build.assetsSubDirectory
-    break;
-}
+let webpackConfig = require(`./webpack.${process.env.NODE_ENV === 'dev' ? 'dev' : 'pack'}.conf`) || {}; 
+let assetsRoot = config[process.env.NODE_ENV].assetsRoot || '';
+let assetsSubDirectory = config[process.env.NODE_ENV].assetsSubDirectory || '';
 
 rm(path.join(assetsRoot, assetsSubDirectory), err => {
   if (err) throw err

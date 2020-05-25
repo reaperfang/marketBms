@@ -228,7 +228,10 @@ export default {
         this.ruleForm.buttonStyle = 3;
       }
     },
-    'ruleForm.addType'(newValue) {
+    'ruleForm.addType'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
         if(newValue == 2) {
           this.ruleForm.hideSaledGoods = false;
           this.fetch();
@@ -237,20 +240,28 @@ export default {
           this.fetch();
         }
     },
-    'ruleForm.showNumber'(newValue) {
+    'ruleForm.showNumber'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
         this.fetch();
     },
-    'ruleForm.sortRule'(newValue) {
+    'ruleForm.sortRule'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
         this.fetch();
     },
 
     'ruleForm.ids': {
       handler(newValue, oldValue) {
         const _self = this;
-        this.echoList = [];
-        newValue.forEach((item)=>{
-          _self.echoList.push({activityId: item.activityId});
-        })
+        if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+          this.echoList = [];
+          newValue.forEach((item)=>{
+            _self.echoList.push({activityId: item.activityId, spuId: item.spuId});
+          })
+        }
       },
       deep: true
     }

@@ -55,6 +55,8 @@ export default {
     toShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
           this.$store.dispatch('setShopInfos',shop).then(() => {
+            this.$store.dispatch('getShopInfo')
+            this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
             this.$router.push({ path: '/profile/profile' })

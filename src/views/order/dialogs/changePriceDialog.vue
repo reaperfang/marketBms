@@ -1,11 +1,11 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="提示" width="500px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" @close="close" title="提示" width="500px" :showFooter="showFooter">
         <div class="container">
             <div class="icon-box">
                 <i class="icon-success"></i>
             </div>
             <p class="message">修改价格成功！</p>
-            <p>5S后自动跳转到订单列表页或 <a @click="$router.push('/order/query')" href="javascript:;">立即跳转</a>。</p>
+            <p>{{time}}S后自动跳转到订单列表页或 <a @click="$router.push('/order/query')" href="javascript:;">立即跳转</a>。</p>
         </div>
     </DialogBase>
 </template>
@@ -18,12 +18,34 @@ export default {
             showFooter: false,
             operationType: '6',
             operationRemark: '',
-            showTextarea: false
+            showTextarea: false,
+            time: 5,
+            timer: null
         }
+    },
+    created() {
+        let that = this
+        
+        function startTime() {
+            that.timer = setTimeout(function(){ startTime() }, 1000);
+
+            if(that.time == 0) {
+                clearTimeout(that.timer)
+                that.$router.push('/order/query')
+                that.visible = false
+            } else {
+                that.time = that.time - 1
+            }
+        }
+
+        startTime()
     },
     methods: {
         submit() {
             
+        },
+        close() {
+            clearTimeout(this.timer)
         }
     },
     computed: {
