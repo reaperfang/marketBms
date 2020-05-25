@@ -295,8 +295,8 @@ export default {
     },
     shopInfo:{
       handler(newValue) {
-        this.$set(this.ruleFormH5, 'picture', this.ruleFormH5.picture || this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png'))
-        this.$set(this.ruleFormMini, 'picture', this.ruleFormMini.picture || this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png'))
+        this.$set(this.ruleFormH5, 'picture', this.ruleFormH5.picture || this.shopInfo.logo || require('@/assets/images/logo.png'))
+        this.$set(this.ruleFormMini, 'picture', this.ruleFormMini.picture || this.shopInfo.logo || require('@/assets/images/logo.png'))
         if(this.currentType === 'h5') {
           this.getQrcode();
         }else if(this.currentType === 'mini') {
@@ -361,7 +361,7 @@ export default {
       .then((response)=>{
         if(response && response.pageInfoId) {
           if(!response.picture) {
-            response['picture'] = this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
+            response['picture'] = this.shopInfo.logo || require('@/assets/images/logo.png')
           }
           if (this.currentType === 'h5') {
             this.ruleFormH5 = response;
@@ -380,13 +380,13 @@ export default {
               pageInfoId: this.pageId,
               title: '店铺名称',
               describe: '我发现了一个不错的店铺，快来看看吧。',
-              picture: this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
+              picture: this.shopInfo.logo || require('@/assets/images/logo.png')
             };
           } else {
             this.ruleFormMini = {
               pageInfoId: this.pageId,
               describe: '我发现了一个不错的店铺，快来看看吧。',
-              picture: this.shopInfo.logoCircle || this.shopInfo.logo || require('@/assets/images/logo.png')
+              picture: this.shopInfo.logo || require('@/assets/images/logo.png')
             };
           }
         }
@@ -815,6 +815,7 @@ export default {
               width: 20px;
               height:20px;
               margin-right:3px;
+              border-radius: 50%;
             }
           }
           .bottom{
