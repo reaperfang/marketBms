@@ -5,12 +5,13 @@
       <!-- <div class="navbar-item"></div> -->
       <div class="right-menu">
         <router-link to="/profile/upgrade" class="set_meal">套餐升级</router-link>
-        <el-link
-          :href="zxLink+'/service/yidongshangcheng/'"
+        <a
+          :href="zxLink + helpLink"
           target="_blank"
           :underline="false"
           class="set_meal"
-        >帮助中心</el-link>
+          @click="onHelp"
+        >帮助中心</a>
         <el-input v-model="searchName" placeholder="请输入需要帮助的内容" class="search_int">
           <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>
         </el-input>
@@ -70,6 +71,7 @@
 import { mapGetters, Store } from "vuex";
 import Hamburger from "@/components/Hamburger";
 import shopsDialog from "@/views/login/shopsDialog";
+import $ from "jquery";
 // import { userInfo } from 'os';
 
 export default {
@@ -80,7 +82,8 @@ export default {
       route: "index",
       shopName: "",
       searchName: "", //搜索名称
-      zxLink: `${process.env.ZX_HELP}`//链接
+      helpLink: "",
+      zxLink: `${process.env.ZX_HELP}` //链接
     };
   },
   components: {
@@ -99,21 +102,34 @@ export default {
         return true;
       }
       return false;
-    }
-    // shopName(){
-    //   let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-    //   return shopInfo.shopName || ''
-    // }
+    },
+   
+    
   },
   created() {
     this.getShopName();
-    console.log(this.zxLink)
-    //this.zxLink = process.env.ZX_HELP;
   },
   methods: {
+    onHelp() {
+      let link =
+          "/cms/search?type=service&dept=aiyouyi.cn&cat=yidongshangcheng",
+        tag =
+          document.querySelector(".sidebar-lefter .active span") ||
+          document.querySelector(".sidebar-lefter .active a");
+      if (tag) {
+        const text = tag.innerText;
+        if (text && text == "概况") {
+          this.helpLink = "/service/yidongshangcheng/";
+          return;
+        }
+        link += `&wd=${text}`;
+        this.helpLink = link;
+      }
+    },
+
     toggleSideBar() {
       this.$store.dispatch("toggleSideBar");
-      this.$store.dispatch('getShopInfo')
+      this.$store.dispatch("getShopInfo");
     },
     //推出登录
     logout() {
@@ -146,9 +162,11 @@ export default {
         this.showShopsDialog = true;
       }
     },
-   //帮助中心搜索
+    //帮助中心搜索
     onSearch() {
-     window.open(`${this.zxLink}/cms/search?type=service&wd=${this.searchName}&dept=aiyouyi.cn&cat=yidongshangcheng`)
+      window.open(
+        `${this.zxLink}/cms/search?type=service&wd=${this.searchName}&dept=aiyouyi.cn&cat=yidongshangcheng`
+      );
     }
   }
 };
