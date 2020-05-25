@@ -118,7 +118,7 @@ export default {
   name: 'buyer',
   data() {
     var validatePass = (rule, value, callback) => {
-      let mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+      let mobile = /^1[3456789]\d{9}$/;
       if (!mobile.test(value)) {
         return callback(new Error("您输入的手机号有误，请您重新输入"));
       } else {
@@ -129,7 +129,7 @@ export default {
       tableData: [],
       loading:true,
       ruleForm:{
-
+        msgReceivePhone:'',
       },
       rules: {
           msgReceivePhone: [
@@ -148,13 +148,10 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
     },
-    phone(){
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.msgReceivePhone;
-    }
   }, 
   created() {
     this.getShopMessage()
+    this.getShopInfo()
   },
   methods: {
     getShopMessage(){
@@ -168,10 +165,18 @@ export default {
             this.tableData.push(item);
           }
         })
-        this.ruleForm.msgReceivePhone = this.phone
         this.loading = false
       }).catch(error =>{
         this.loading = false
+      })
+    },
+
+    getShopInfo(){
+      let id = this.cid;
+      this._apis.set.getShopInfo({ id: id }).then(response => {
+        this.ruleForm.msgReceivePhone = response.msgReceivePhone
+      }).catch(error =>{
+        console.log(error)
       })
     },
 
@@ -231,6 +236,7 @@ export default {
               type: 'success',
               message: '操作成功！'
             });
+          this.getShopInfo()
           }).catch(error =>{
             this.$message.error(error);
           })    
