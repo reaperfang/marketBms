@@ -144,7 +144,7 @@ export default {
                 receivedPhone: "",
                 receivedName: "",
                 channelInfoId: "",
-                orderType: "",
+                orderType: this.$route.query.orderType ? this.$route.query.orderType : '',
                 payWay: "",
                 sendType: "",
                 orderStatus: "",
