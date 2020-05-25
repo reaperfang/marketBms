@@ -170,7 +170,9 @@ export default {
       expressCompanyList: [],
       sending: false,
       distributorList: [], //每个订单对应的筛选后的配送员列表
-      distributorListFilter: [] //配送员列表
+      distributorListFilter: [], //配送员列表
+      distributorNameFirst: true, //配送员名字第一次输入标记
+      distributorPhoneFirst: true, //配送员联系方式第一次输入标记
     };
   },
   created() {
@@ -205,6 +207,7 @@ export default {
       this.$nextTick(() => {
         input.setAttribute('placeholder', '请输入或选择');
         input.value = value;
+        input.setAttribute('maxlength', 20);
         input.selectionStart=input.selectionEnd=input.value.length
       })
     },
@@ -226,10 +229,11 @@ export default {
           this.list[index].phone = arr[0].phone;
           this.list[index].showErrorPhone = false;
         }
-        //检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
-        this.list.forEach((items, indexs) => {
-          if(indexs != index){
-            if(items.distributorValue == ''){
+        //第一次，检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
+        if(this.distributorNameFirst){
+          this.distributorNameFirst = false;
+          this.list.forEach((items, indexs) => {
+            if(indexs != index){
               items.distributorValue = this.list[index].distributorName;
               items.distributorName = this.list[index].distributorName;
               items.distributorId = this.list[index].distributorId;
@@ -239,13 +243,14 @@ export default {
                     return true
                   }
               })
+              if(arr.length != 0){
+                this.distributorPhoneFirst = false;
+                items.phone = this.list[index].phone;
+                items.showErrorPhone = false;
+              }
             }
-            if(items.phone == '' && arr.length != 0){
-              items.phone = this.list[index].phone;
-              items.showErrorPhone = false;
-            }
-          }
-        })
+          })
+        }
       }
       if(this.list[index].distributorValue != ''){
         this.list[index].showErrorDistributorName = false;
@@ -272,10 +277,12 @@ export default {
       this.list[index].distributorId = arr[0].id;
       this.list[index].phone = arr[0].phone;
 
-      //检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
-      this.list.forEach((items, indexs) => {
-        if(indexs != index){
-          if(items.distributorValue == ''){
+      //第一次检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
+      if(this.distributorNameFirst){
+        this.distributorNameFirst = false;
+        this.distributorPhoneFirst = false;
+        this.list.forEach((items, indexs) => {
+          if(indexs != index){
             items.distributorValue = this.list[index].distributorName;
             items.distributorName = this.list[index].distributorName;
             items.distributorId = this.list[index].distributorId;
@@ -284,14 +291,12 @@ export default {
                     return true
                   }
               })
-          }
-          if(items.phone == ''){
             items.phone = this.list[index].phone;
+            items.showErrorDistributorName = false;
+            items.showErrorPhone = false;
           }
-          items.showErrorDistributorName = false;
-          items.showErrorPhone = false;
-        }
-      })
+        })
+      }
     },
     visibleChange(val, index){
       if(!val){
@@ -315,15 +320,16 @@ export default {
         this.list[index].errorMessagePhone = '请输入正确的手机号码';
       }else{
         this.list[index].showErrorPhone = false;
-        //检测其他订单中配送员手机号是否有为空的，如果有，则直接按当前的给自动填充上
-        this.list.forEach((items, indexs) => {
-          if(indexs != index){
-            if(items.phone == ''){
+        //第一次，检测其他订单中配送员手机号是否有为空的，如果有，则直接按当前的给自动填充上
+        if(this.distributorPhoneFirst){
+          this.distributorPhoneFirst = false;
+          this.list.forEach((items, indexs) => {
+            if(indexs != index){
               items.phone = value;
               items.showErrorPhone = false;
             }
-          }
-        })
+          })
+        }
       }
     },
     //获取配送员列表

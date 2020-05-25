@@ -50,12 +50,16 @@
                     this._apis.order
                     .getTimeSlot()
                     .then(res => {
-                        res = [];
+                        console.log('+++++++++++++++++++++')
+                        console.log(res)
+                        // res = {
+                        //     "subscribeTimeHourRanges": "00:00:00~00:01:00,00:08:00~00:09:00,00:13:00~00:14:00"
+                        // };
                         //如果没有自定义的时间段，则选用默认的
-                        if(res.length == 0){
+                        if(!res.subscribeTimeHourRanges){
                             this.timeSlotArr = order.timeSlot;
                         }else{
-                            this.timeSlotArr = res;
+                            this.timeSlotArr = res.subscribeTimeHourRanges.split(',');
                         }
                     })
                     .catch(error => {})
