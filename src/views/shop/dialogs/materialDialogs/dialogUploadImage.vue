@@ -299,4 +299,10 @@ export default {
 .w_300 {
   width: 300px;
 }
+/deep/.el-form-item__label{
+  font-weight: normal;
+}
+/deep/.el-upload-list__item-status-label{
+  background: #655EFF !important;
+}
 </style>
