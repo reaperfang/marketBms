@@ -7,12 +7,12 @@
       <p>您尚未开启移动H5店铺，请您去“应用中心-渠道应用”设置域名并开启店铺：</p>
       <div class="button" @click="linkToOpenH5"><span>渠道应用</span></div>
     </div>
-    <div v-if="webPageStatus === 1" class="no_bind">
+    <div v-if="webPageStatus === 2" class="no_bind">
       <img src="../../../../assets/images/shop/no-open-h5.png" alt="">
       <p>您尚未成功开启H5店铺，店铺域名未连接成功，请您去“渠道应用-H5店铺”重新设置：</p>
       <div class="button"  @click="linkToBindDomain"><span>移动</span>H5</div>
     </div>
-    <template v-if="webPageStatus === 2">
+    <template v-if="webPageStatus === 1">
       <div class="inner">
         <div class="left">
           <div class="screen">

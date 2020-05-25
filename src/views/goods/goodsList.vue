@@ -527,7 +527,7 @@ export default {
         if(typeof this.$route.query.status != 'undefined') {
             this.listQuery = Object.assign({}, this.listQuery, {status: +this.$route.query.status})
         }
-        this.getAllList()
+        //this.getAllList()
         this.getList()
         this.getCategoryList()
         this.getMiniappInfo()
@@ -1028,7 +1028,7 @@ export default {
                     } else {
                         this.getList()
                     }
-                    this.getAllList()
+                    //this.getAllList()
                     this.checkedAll = false
                     this.visible = false
                     this.$message({
@@ -1291,6 +1291,7 @@ export default {
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
+                this.allTotal = +res.total
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id
@@ -1363,7 +1364,7 @@ export default {
                 this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                     this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
-                        this.getAllList()
+                        //this.getAllList()
                         this.visible = false
                         this.$message({
                             message: '删除成功！',

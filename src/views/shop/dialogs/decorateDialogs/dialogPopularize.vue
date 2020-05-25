@@ -73,22 +73,21 @@
         <!-- 设置区 -->
         <div class="setting" v-loading="loading" v-if="displaySetting">
           <div v-show="currentType === 'h5'">
-            <div style="display:flex;">
+            <div style="display:flex;margin-bottom: 15px;">
               <el-input v-model="pageLink" placeholder="右击右侧按钮复制链接" style="margin-right:20px;"></el-input>
               <el-button type="primary"  v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
             </div>
-            <div>
-              <el-button type="text" @click="openSetting = true">自定义分享内容</el-button>
-            </div>
-            <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="80px" v-if="openSetting">
+            <el-form ref="ruleFormH5" :model="ruleFormH5" :rules="rulesH5" label-width="80px">
               <el-form-item label="分享样式" prop="shareStyle">
                 <el-radio-group v-model="shareStyle">
                   <el-radio :label="0">海报</el-radio>
                   <el-radio :label="1">微信好友</el-radio>
                   <el-radio :label="2">微信朋友圈</el-radio>
                 </el-radio-group>
+                <br/>
+                <el-button style="margin-left:-69px;" :style="{color: !openSetting ? 'rgba(101,94,255,1)' : 'rgba(58,64,72,1)'}" type="text" @click="openSetting = true">自定义分享内容</el-button>
               </el-form-item>
-              <el-form-item label="分享标题" prop="title" v-if="shareStyle != 2">
+              <el-form-item label="分享标题" prop="title" v-if="openSetting && shareStyle != 2">
                 <el-input
                   :rows="5"
                   :max="10"
@@ -96,7 +95,7 @@
                   v-model="ruleFormH5.title">
                 </el-input>
               </el-form-item>
-              <el-form-item label="分享描述" prop="describe">
+              <el-form-item label="分享描述" prop="describe" v-if="openSetting">
                 <el-input
                   :rows="5"
                   :max="18"
@@ -104,7 +103,7 @@
                   v-model="ruleFormH5.describe">
                 </el-input>
               </el-form-item>
-              <el-form-item label="分享图片" prop="picture">
+              <el-form-item label="分享图片" prop="picture" v-if="openSetting">
                 <div class="img_preview" v-if="ruleFormH5.picture">
                   <img :src="ruleFormH5.picture" alt="">
                   <span @click="dialogVisible2=true; currentDialog='dialogSelectImageMaterial'">更换图片</span>
@@ -114,7 +113,7 @@
                 </div>
                 <p style="color: rgb(211, 211, 211);;margin-top:10px;">1：图片大小不超过3MB<br/>2：建议上传长：宽=1:1的图片，否则图片将被压缩或拉伸以铺满整个画布。</p>
               </el-form-item>
-              <el-form-item>
+              <el-form-item v-if="openSetting">
                 <el-button type="primary" @click="onSubmitH5" :loading="submitLoading">确定</el-button>
                 <el-button @click="openSetting = false">取消</el-button>
               </el-form-item>
@@ -122,7 +121,7 @@
           </div>
           <div v-show="currentType === 'mini'">
             <div>
-              <el-button type="text" @click="openSetting2 = true">自定义分享内容</el-button>
+              <el-button type="text" @click="openSetting2 = true" :style="{color: !openSetting2 ? 'rgba(101,94,255,1)' : 'rgba(58,64,72,1)'}">自定义分享内容</el-button>
               <!-- <el-button type="text" @click="getPoster" :disabled="!miniDownloadPosterAble" :loading="downloadPosterLoading" v-if="currentType === 'h5' && shareStyle == 0">下载海报图片</el-button>
               <el-button type="text" @click="openQrcode('mini')" :loading="openQrcodeLoading">打开小程序码</el-button> -->
             </div>
@@ -603,7 +602,7 @@ export default {
         border:1px solid rgba(211,211,211,1);
         padding:20px;
         box-sizing: border-box;
-        text-align: center;
+        text-align: left;
         img{
           width: 200px;
           display: block;
@@ -624,7 +623,7 @@ export default {
         }
         p{
           margin-top:5px;
-          font-size:5px;
+          font-size:12px;
           color:rgba(146,146,155,1);
           display: -webkit-box;
           -webkit-box-orient: vertical;
@@ -638,7 +637,7 @@ export default {
         background:rgba(248,248,248,1);
         border-radius:2px;
         border:1px solid rgba(211,211,211,1);
-        padding:25px;
+        padding:15px 20px;
         box-sizing: border-box;
         display:flex;
         flex-direction: row;
@@ -652,10 +651,15 @@ export default {
           h3{
             font-size:14px;
             color:rgba(68,67,75,1);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
           p{
             margin-top:5px;
-            font-size:5px;
+            font-size:12px;
             color:rgba(146,146,155,1);
           }
         }
@@ -667,13 +671,16 @@ export default {
             height: 60px;
             // object-fit: cover;
             display: block;
-            border: 1px solid #ddd;
+            // border: 1px solid #ddd;
           }
         }
       }
       .three{
         /deep/.el-button{
           font-size: 14px;
+        }
+        /deep/.el-button--text:focus, .el-button--text:hover{
+          color: #655EFF!important;
         }
       }
     }
@@ -728,7 +735,7 @@ export default {
             height: 40px;
             object-fit: cover;
             display: block;
-            border: 1px solid #ddd;
+            // border: 1px solid #ddd;
           }
         }
       }
@@ -775,7 +782,7 @@ export default {
             object-fit: cover;
             border-radius:5px;
             display: block;
-            border: 1px solid #ddd;
+            // border: 1px solid #ddd;
           }
           span{
             color:rgba(68,67,75,1);
