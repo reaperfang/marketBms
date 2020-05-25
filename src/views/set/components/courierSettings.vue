@@ -56,28 +56,28 @@ export default {
   },
 
   watch: {
-    shopInfo(curr) {
-      if (curr) {
-        this.init(curr)
-      }
-    },
-    isOpen(curr) {
-      console.log('--isOpen---',curr)
-    }
   },
 
   created() {
     this.getShopLogistics()
+    this.init()
   },
 
   mounted() {},
 
   methods: {
-    init(curr) {
-      if (curr) {
-        this.isOpen = curr.isOpenOrdinaryExpress === 1 ? true : false
-        isHasOtherWay = curr.isOpenMerchantDeliver === 1 || curr.isOpenTh3Deliver === 1 || curr.isOpenSelfLift === 1
-      }
+    init() {
+      let id = this.cid;
+      this._apis.set
+        .getShopInfo({ id })
+        .then(response => {
+          console.log('----response-', response.isOpenOrdinaryExpress, typeof response.isOpenOrdinaryExpress)
+          this.form.isOpen = response.isOpenOrdinaryExpress === 1 ? true : false
+          isHasOtherWay = response.isOpenMerchantDeliver === 1 || response.isOpenTh3Deliver === 1 || response.isOpenSelfLift === 1
+        })
+        .catch(error => {
+          this.$message.error(error);
+        });
     },
     handleIsOpen(val) {
       // return false
@@ -112,7 +112,7 @@ export default {
           confirmText: '我知道了',
           showCancelButton: false
         });
-        if (!this.isOpen) {
+        if (!this.form.isOpen) {
           this.form.isOpen = true
         }
       }).catch(error =>{
