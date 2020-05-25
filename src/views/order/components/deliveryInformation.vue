@@ -193,13 +193,25 @@ export default {
               sendRemark: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendRemark || '',
               sendName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendName || '',
               id: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].orderId || '',
+              createTime: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].createTime || '',
             }
           );
 
           arr.push(obj);
         }
       }
+      arr.sort((a, b) => {
+        let timeA = new Date(a.createTime).getTime()
+        let timeB = new Date(b.createTime).getTime()
 
+        if(timeA > timeB) {
+          return -1
+        } else if(timeA < timeB) {
+          return 1
+        } else if(timeA == timeB) {
+          return 0
+        } 
+      })
       this.orderSendItems = arr;
     },
     showLogistics(expressNo, expressCompanys, id) {

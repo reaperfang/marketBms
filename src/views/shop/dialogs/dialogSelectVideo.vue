@@ -71,6 +71,7 @@
                   :on-exceed="uploadLimit">
                   <i class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+                <p class="note" style="color: #d3d8df;margin: 8px 0;height: 16px;">大小不超过10mb，支持mp4格式 <span v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
                 <div class="material_wrapper" ref="localWrapper" v-loading="uploadLoading" :style="{'overflow-y': uploadLoading ? 'hidden' : 'auto'}">
                     <ul class="tile-list n3 video_list" v-if="fileList.length" ref="localWrapper">
                       <li v-for="(item, key) of fileList" :key="key" class="cell-item" @click="selectVideo($event, item)">
@@ -91,7 +92,6 @@
                     </ul>
                 </div>
             </div>
-            <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;">大小不超过10mb，支持mp4格式 <span v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
       </el-tab-pane>
     </el-tabs>
 
@@ -478,7 +478,6 @@ export default {
   height: 80px;
   display: inline-block;
   vertical-align: middle;
-  margin-bottom:20px;
   // margin-top:20px;
 }
 /deep/ .avatar-uploader .el-upload {

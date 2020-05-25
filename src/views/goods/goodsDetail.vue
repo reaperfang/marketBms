@@ -63,8 +63,8 @@
                                 <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                 <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
                                 <span class="image-item-actions-footer">
-                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter"><</i>
-                                    <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter">></i>
+                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter el-icon-arrow-left"><</i>
+                                    <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter el-icon-arrow-right">></i>
                                 </span>
                             </span>
                         </div>
@@ -3824,7 +3824,7 @@ $blue: #655EFF;
                 &:hover {
                     opacity: 1;
                 }
-                padding-top: 20px;
+                padding-top: 15px;
                 //display: flex;
                 align-items: center;
                 justify-content: center;
@@ -3843,7 +3843,7 @@ $blue: #655EFF;
                 transition: opacity .3s;
                 .image-item-actions-footer {
                     display: block;
-                    height: 25px;
+                    height: 30px;
                     position: relative;
                     i {
                         display: inline-block;
@@ -3981,5 +3981,11 @@ $blue: #655EFF;
             width: 450px;
         }
     }
+}
+/deep/ .el-icon-arrow-left:before {
+    font-size: 12px;
+}
+/deep/ .el-icon-arrow-right:before {
+    font-size: 12px;
 }
 </style>

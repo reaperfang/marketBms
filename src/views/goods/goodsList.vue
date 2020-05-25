@@ -445,6 +445,9 @@
 /deep/ .all-delete {
     border:1px solid rgba(146,146,155,1);
 }
+/deep/ .el-table table thead tr th .cell {
+    font-weight: normal;
+}
 </style>
 <style lang="scss">
     .operate-popper {
@@ -453,6 +456,9 @@
         .popper__arrow {
             background: #D8D8D8!important;
         }
+    }
+    .confirm-goods {
+        padding-bottom: 30px;
     }
 </style>
 
@@ -701,7 +707,7 @@ export default {
             } else {
                 str = '下架'
                 if(activity) {
-                    this.confirm({title: str, icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
+                    this.confirm({title: str, customClass: 'confirm-goods', icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
                         this.getList()
                     }).catch(() => {
                         this.getList()
@@ -709,7 +715,7 @@ export default {
                     return
                 }
             }
-            this.confirm({title: str, icon: true, text: `确定${str}此商品？`, width: '500px'}).then(() => {
+            this.confirm({title: str, customClass: 'confirm-goods', icon: true, text: `确定${str}此商品？`, width: '500px'}).then(() => {
                 this._apis.goods.productUpperOrLowerSpu({id, status: _flag ? 1 : 0}).then((res) => {
                     this.getList()
                     this.$message({
@@ -721,7 +727,7 @@ export default {
 
                     text += '<p>上架失败！</p>'
                     text += `<p>${error}</p>`
-                    this.confirm({title: '编辑上下架', text, width: '500px'}).then(() => {
+                    this.confirm({title: '编辑上下架', customClass: 'confirm-goods', text, width: '500px'}).then(() => {
                         this.getList()
                     }).catch(() => {
                         this.getList()
@@ -823,7 +829,7 @@ export default {
         },
         changePriceMore() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -831,7 +837,7 @@ export default {
             if(this.multipleSelection.some(val => val.activity)) {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
-                this.confirm({title: '批量改价', icon: true, text: `所选商品“${name}”正在参加营销活动，活动结束/失效才可修改价格。`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '批量改价', customClass: 'confirm-goods', icon: true, text: `所选商品“${name}”正在参加营销活动，活动结束/失效才可修改价格。`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -884,12 +890,12 @@ export default {
         shareMore() {
             let obj = {}
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '提示', icon: true, text: '当前只支持批量下载微信公众号商品详情页二维码图片！', confirmText: '一键下载'}).then(() => {
+            this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '当前只支持批量下载微信公众号商品详情页二维码图片！', confirmText: '一键下载'}).then(() => {
                 let ids = this.multipleSelection.map(val => val.id)
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
@@ -999,13 +1005,13 @@ export default {
             }
 
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择想要批量删除的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量删除的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
 
-            this.confirm({title: '批量删除', icon: true, text: '是否确认批量删除？'}).then(() => {
+            this.confirm({title: '批量删除', customClass: 'confirm-goods', icon: true, text: '是否确认批量删除？'}).then(() => {
                 let isLast = false
 
                 if(this.listQuery.startIndex == 1) {
@@ -1043,7 +1049,7 @@ export default {
 
             let statusStr = status == 1 ? '上架' : '下架'
 
-            this.confirm({title: `批量${statusStr}`, icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
+            this.confirm({title: `批量${statusStr}`, customClass: 'confirm-goods', icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids, status}).then((res) => {
                     this.getList()
                     this.checkedAll = false
@@ -1071,13 +1077,13 @@ export default {
             if(this.multipleSelection.some(val => val.stock == 0)) {
                 let name = this.multipleSelection.filter(val => val.stock == 0)[0].name
 
-                this.confirm({title: '批量上架', icon: true, text: `当前商品中”${name}“的库存为“0”，无法进行批量上架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '批量上架', customClass: 'confirm-goods', icon: true, text: `当前商品中”${name}“的库存为“0”，无法进行批量上架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择想要批量上架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量上架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1088,13 +1094,13 @@ export default {
             if(this.multipleSelection.some(val => val.activity)) {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
-                this.confirm({title: '批量下架', icon: true, text: `当前商品中“${name}”参与的营销活动未结束， 无法进行批量下架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '批量下架', customClass: 'confirm-goods', icon: true, text: `当前商品中“${name}”参与的营销活动未结束， 无法进行批量下架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择想要批量下架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量下架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1152,7 +1158,7 @@ export default {
                 _status = 1
             }
 
-            this.confirm({title: '立即' + _title, icon: true, text: `是否确认${_title}？`}).then(() => {
+            this.confirm({title: '立即' + _title, customClass: 'confirm-goods', icon: true, text: `是否确认${_title}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids: [row.goodsInfo.id], status: _status}).then((res) => {
                     this.getList()
                     this.visible = false
