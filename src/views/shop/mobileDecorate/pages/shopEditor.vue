@@ -231,10 +231,11 @@ export default {
     /* 取消保存 */
     cancelSave() {
       this.confirm({
-        title: '确认取消？', 
+        title: '提示', 
+        subTitle: '确认取消？',
         customClass: 'goods-custom', 
         icon: true, 
-        text: `取消后，放弃当前编辑数据，且无法恢复。`
+        text: `<h3 style="font-size:18px;color:rgba(68,61,74,1);margin-bottom:10px;">确认取消？</h3><span style="font-size:16px;color:rgba(110,110,114,1);">取消后，放弃当前编辑数据，且无法恢复。</span>`
       }).then(() => {
         this._routeTo('m_pageManageIndex');
       })
