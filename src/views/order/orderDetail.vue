@@ -19,7 +19,7 @@
                 <el-tab-pane label="订单信息" name="order">
                     <orderInformation :orderInfo="orderDetail.orderInfo" :orderDetail="orderDetail" @getDetail="getDetail"></orderInformation>
                 </el-tab-pane>
-                <el-tab-pane v-if="orderDetail.sendItemAndAddress && orderDetail.sendItemAndAddress.length" label="发货信息" name="delivery">
+                <el-tab-pane v-if="orderDetail.sendItemAndAddress && Object.keys(orderDetail.sendItemAndAddress).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
                 <el-tab-pane v-if="resellConfigInfo && orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分销信息" name="commision">

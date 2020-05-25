@@ -27,18 +27,20 @@ export default {
         let that = this
         
         function startTime() {
-            that.timer = setTimeout(function(){ startTime() }, 1000);
-
             if(that.time == 0) {
                 clearTimeout(that.timer)
                 that.$router.push('/order/query')
                 that.visible = false
             } else {
+                that.timer = setTimeout(function(){ startTime() }, 1000);
                 that.time = that.time - 1
             }
         }
 
-        startTime()
+        let timer2 = setTimeout(() => {
+            startTime()
+            clearTimeout(timer2)
+        }, 1000)
     },
     methods: {
         submit() {

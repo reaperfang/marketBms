@@ -180,28 +180,38 @@ export default {
     getOrderSendItems() {
       let arr = [];
 
-      this.orderDetail.sendItemAndAddress.forEach((item, index) => {
-        for (let i in item) {
-          if (item.hasOwnProperty(i)) {
-            let obj = Object.assign(
-              {},
-              {
-                address: item[i].address ? JSON.parse(item[i].address) : '',
-                goodsList: item[i].list,
-                expressNo: i,
-                shipperName: item[i] && item[i].list[0] && item[i].list[0].expressCompany || '',
-                showContent: true,
-                sendRemark: item[i] && item[i].list[0] && item[i].list[0].sendRemark || '',
-                sendName: item[i] && item[i].list[0] && item[i].list[0].sendName || '',
-                id: item[i] && item[i].list[0] && item[i].list[0].orderId || '',
-              }
-            );
+      for (let i in this.orderDetail.sendItemAndAddress) {
+        if (this.orderDetail.sendItemAndAddress.hasOwnProperty(i)) {
+          let obj = Object.assign(
+            {},
+            {
+              address: this.orderDetail.sendItemAndAddress[i].address ? JSON.parse(this.orderDetail.sendItemAndAddress[i].address) : '',
+              goodsList: this.orderDetail.sendItemAndAddress[i].list,
+              expressNo: i,
+              shipperName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].expressCompany || '',
+              showContent: true,
+              sendRemark: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendRemark || '',
+              sendName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendName || '',
+              id: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].orderId || '',
+              createTime: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].createTime || '',
+            }
+          );
 
-            arr.push(obj);
-          }
+          arr.push(obj);
         }
-      })
+      }
+      arr.sort((a, b) => {
+        let timeA = new Date(a.createTime).getTime()
+        let timeB = new Date(b.createTime).getTime()
 
+        if(timeA > timeB) {
+          return -1
+        } else if(timeA < timeB) {
+          return 1
+        } else if(timeA == timeB) {
+          return 0
+        } 
+      })
       this.orderSendItems = arr;
     },
     showLogistics(expressNo, expressCompanys, id) {

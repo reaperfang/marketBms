@@ -445,6 +445,9 @@
 /deep/ .all-delete {
     border:1px solid rgba(146,146,155,1);
 }
+/deep/ .el-table table thead tr th .cell {
+    font-weight: normal;
+}
 </style>
 <style lang="scss">
     .operate-popper {
