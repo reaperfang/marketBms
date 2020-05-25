@@ -254,4 +254,7 @@ export default {
   color: #999;
   margin-left: 20px;
 }
+/deep/.el-radio-group label:last-child{
+  margin-left:0px;
+}
 </style>
