@@ -318,6 +318,7 @@ export default {
             this.$nextTick(() => {
                 input.setAttribute('placeholder', '请输入或选择');
                 input.value = value;
+                input.setAttribute('maxlength', 20);
                 input.selectionStart=input.selectionEnd=input.value.length
             })
         },

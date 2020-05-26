@@ -616,9 +616,9 @@ export function editorScoreAmount(data) {
 //获取配送时间自定义的时间段
 export function getTimeSlot(data) {
   return request({
-    target: 'PRODUCT-SELLING-CHIME-PROCESSOR',
+    target: 'ORDER-DELIVER-INFO-DETAIL-PROCESS',
     method: 'post',
-    apiType: 'overview',
+    apiType: 'order',
     data
   })
 }
