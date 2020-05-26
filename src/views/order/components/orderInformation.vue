@@ -205,7 +205,7 @@
                     label="SPU编码">
                 </el-table-column>
                 <el-table-column
-                    prop="goodsCode"
+                    prop="code"
                     label="SKU编码">
                 </el-table-column>
                 <el-table-column
