@@ -193,7 +193,7 @@ export default {
 .title{
   color: #443D4A;
   font-size: 14px;
-  font-weight: 400;
+  
   span{
     font-size: 14px;
     color:#D3D3D3;
@@ -301,6 +301,9 @@ export default {
   width: 300px;
 }
 /deep/.el-form-item__label{
-  font-weight: 400;
+  font-weight: normal;
+}
+/deep/.el-upload-list__item-status-label{
+  background: #655EFF !important;
 }
 </style>
