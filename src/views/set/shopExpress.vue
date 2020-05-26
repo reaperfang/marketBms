@@ -20,7 +20,7 @@
           <!-- <label>配送范围设置：</label> -->
           <p class="prompt">收货地址在配送范围之外的买家将无法使用商家配送</p>
           <el-radio-group v-model="ruleForm.radiusType">
-            <el-radio label="1">按服务半径</el-radio>
+            <el-radio :label="1">按服务半径</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item prop="radius">
@@ -426,7 +426,7 @@ export default {
   },
 
   created() {
-    this._formatDecimals = debounce(this.formatDecimals, 200)
+    this._formatDecimals = debounce(this.formatDecimals, 500)
     // if (this.shopInfo) {
     //   this.getShopInfo(this.shopInfo)
     // }
@@ -565,10 +565,12 @@ export default {
       callback()
     },
     formatDecimals(val, key, digits = 2) {
-      if (Number.isNaN(+val)) {
-        return false
+      if (val) {
+        if (Number.isNaN(+val)) {
+          return false
+        }
+        this.ruleForm[key] = Number(val).toFixed(digits) 
       }
-      this.ruleForm[key] = Number(val).toFixed(digits) 
     },
     handleIsOpen(val) {
       console.log('val', val)
@@ -729,7 +731,7 @@ export default {
         
         if (res && res.hasOwnProperty('id')) {
           this.isOpen = res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
-          
+          this.ruleForm.radiusType = res.deliverRangeType || 1
           this.ruleForm.radius = res.deliverServiceRadius || null // 配送服务半径
           this.isOpenOrdinaryExpress = res.isOpenOrdinaryExpress // 是否开启普通快递 0-否 1-是
           this.isOpenTh3Deliver = res.isOpenTh3Deliver // 是否开启第三方配送 0-否 1-是
@@ -907,6 +909,7 @@ export default {
       const id = this.cid
       const data = {
         id,
+        deliverRangeType: this.ruleForm.radiusType,
         deliverServiceRadius: this.ruleForm.radius,
         longitude: this.ruleForm.longitude,
         latitude: this.ruleForm.latitude

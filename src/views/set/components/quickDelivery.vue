@@ -17,7 +17,7 @@
         >计费规则说明</span>
       </div>
       <!-- <el-button
-        v-permission="['订单', '快递发货', '默认页面', '新建模板']"
+        v-permission="['设置', '普通快递', '快递设置', '新建模板']"
         @click="$router.push('/set/newTemplate?mode=new')"
         class="border-button new-template"
       >新建模板</el-button> -->
@@ -60,7 +60,7 @@
             <span>{{total}}</span>项
           </div>
           <el-button
-            v-permission="['订单', '快递发货', '默认页面', '新建模板']"
+            v-permission="['设置', '普通快递', '快递设置', '新建模板']"
             @click="$router.push('/set/newTemplate?mode=new')"
             class="border-button new-template"
           >新建模板</el-button>
@@ -85,20 +85,20 @@
             <template slot-scope="scope">
               <div class="operate-box">
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '查看']"
+                  v-permission="['设置', '普通快递', '快递设置', '查看']"
                   @click="$router.push('/set/newTemplate?mode=look&id=' + scope.row.id)"
                 >查看</span>
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '复制']"
+                  v-permission="['设置', '普通快递', '快递设置', '复制']"
                   @click="$router.push('/set/newTemplate?mode=copy&id=' + scope.row.id)"
                 >复制</span>
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '修改']"
+                  v-permission="['设置', '普通快递', '快递设置', '修改']"
                   @click="$router.push('/set/newTemplate?mode=change&id=' + scope.row.id)"
                 >编辑</span>
                 <span
                   v-if="!scope.row.productCount"
-                  v-permission="['订单', '快递发货', '默认页面', '删除']"
+                  v-permission="['设置', '普通快递', '快递设置', '删除']"
                   @click="deletequickDelivery(scope.row.id)"
                 >删除</span>
               </div>

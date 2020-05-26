@@ -2,13 +2,22 @@
 <template>
   <div>
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
-      <el-tab-pane label="快递设置" v-permission="['设置','普通快递','快递设置']" name="courierSettings" >
+      <!-- <el-tab-pane label="快递设置" v-permission="['设置','普通快递','快递设置']" name="courierSettings" >
         <component v-if="currentTab === 'courierSettings'" :is="currentTab"></component>
       </el-tab-pane>
       <el-tab-pane label="运费模版" v-permission="['设置','普通快递','运费模版']" name="quickDelivery">
         <component v-if="currentTab === 'quickDelivery'" :is="currentTab"></component>
       </el-tab-pane>
       <el-tab-pane label="电子面单" v-permission="['设置','普通快递','电子面单']" name="electronicFaceSheet">
+        <component v-if="currentTab === 'electronicFaceSheet'" :is="currentTab"></component>
+      </el-tab-pane> -->
+       <el-tab-pane label="快递设置" name="courierSettings" >
+        <component v-if="currentTab === 'courierSettings'" :is="currentTab"></component>
+      </el-tab-pane>
+      <el-tab-pane label="运费模版" name="quickDelivery">
+        <component v-if="currentTab === 'quickDelivery'" :is="currentTab"></component>
+      </el-tab-pane>
+      <el-tab-pane label="电子面单" name="electronicFaceSheet">
         <component v-if="currentTab === 'electronicFaceSheet'" :is="currentTab"></component>
       </el-tab-pane>
     </el-tabs>
