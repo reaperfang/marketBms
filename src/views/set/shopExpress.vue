@@ -478,9 +478,9 @@ export default {
       let hour = start.getHours()
       let minute = start.getMinutes()
       let second = start.getSeconds()
-      hour = hour > 10 ? hour : `0${hour}`
-      minute = minute > 10 ? minute : `0${minute}`
-      second = second > 10 ? second : `0${second}`
+      hour = +hour >= 10 ? hour : `0${hour}`
+      minute = +minute >= 10 ? minute : `0${minute}`
+      second = +second >= 10 ? second : `0${second}`
       return `${hour}:${minute}:${second} - 23:59:59`
     },
     clearValidate(key) {
@@ -757,9 +757,9 @@ export default {
       const date = new Date()
       const year = date.getFullYear()
       let month = date.getMonth() + 1
-      month = month >= 10 ? month : `0${month}`
+      month = month > 10 ? month : `0${month}`
       let day = date.getDate()
-      day = day >= 10 ? day : `0${day}`
+      day = day > 10 ? day : `0${day}`
       const timePeriods = arr.map(item => {
         const timeslot = item.split('~')
         const start = `${year}-${month}-${day} ${timeslot[0]}`
@@ -840,9 +840,11 @@ export default {
         let hour = date.getHours()
         let minute = date.getMinutes()
         let second = date.getSeconds()
-        hour = hour > 10 ? hour : `0${hour}`
-        minute = minute > 10 ? minute : `0${minute}`
-        second = second > 10 ? second : `0${second}`
+        console.log('getHourMinuteSecond:before',hour,minute,second)
+        hour = +hour >= 10 ? hour : `0${hour}`
+        minute = +minute >= 10 ? minute : `0${minute}`
+        second = +second >= 10 ? second : `0${second}`
+        console.log('getHourMinuteSecond:after',hour,minute,second)
         return `${hour}:${minute}:${second}`
 
     },
