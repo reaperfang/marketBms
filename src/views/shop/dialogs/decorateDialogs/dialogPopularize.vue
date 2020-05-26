@@ -719,7 +719,7 @@ export default {
           }
           p{
             margin-top:5px;
-            font-size:5px;
+            font-size:12px;
             color:rgba(146,146,155,1);
             width:100px;
             display: -webkit-box;
