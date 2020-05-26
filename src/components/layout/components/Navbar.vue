@@ -119,7 +119,7 @@ export default {
       if (tag) {
         const text = tag.innerText;
         if (text && text == "概况") {
-          this.helpLink = "/service/yidongshangcheng/";
+          this.helpLink = "/cms?type=service&dept=aiyouyi.cn&cat=yidongshangcheng";
           return;
         }
         link += `&wd=${text}`;
