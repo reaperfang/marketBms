@@ -919,8 +919,8 @@ export default {
               type: 'success'
           });
         } else {
-          const str = `<p><i class="el-icon-success"></i><span>保存成功</span></p>
-          <p>您可以去开启商家配送了</p>
+          const str = `<p style="text-align: center;"><i class="el-icon-success" style="    font-size: 40px;color: rgba(108,213,33,1);"></i><span style="ertical-align: super;">保存成功</span></p>
+          <p style="text-align: center;color:#ccc;">您可以去开启商家配送了</p>
           `
           this.$confirm(str, '', {
             dangerouslyUseHTMLString: true,
