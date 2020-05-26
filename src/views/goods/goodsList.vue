@@ -458,7 +458,7 @@
         }
     }
     .confirm-goods {
-        padding-bottom: 30px;
+        padding-bottom: 30px!important;
     }
 </style>
 
