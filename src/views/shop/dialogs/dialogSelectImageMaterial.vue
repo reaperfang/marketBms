@@ -347,7 +347,8 @@ export default {
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
-      if (!(isJPG || isJPEG || isPNG) || !isLt2M) {
+      const isNameRight = /\.jpg|\.jpeg|\.png|\.JPG|\.JPEG|\.PNG$/.test(file.name);
+      if (!(isJPG || isJPEG || isPNG) || !isLt2M || !isNameRight) {
         this.$message.error('上传图片仅支持jpg,jpeg,png格式! 且上传图片大小不能超过 3MB!');
         this.failedList.push(file);
         this.uploadLoading = false;
@@ -358,7 +359,7 @@ export default {
         this.successList = [];
         this.failedList = [];
       }
-      return (isJPG || isJPEG || isPNG) && isLt2M;
+      return (isJPG || isJPEG || isPNG) && isLt2M && isNameRight;
     },
 
     /* 上传成功钩子 */

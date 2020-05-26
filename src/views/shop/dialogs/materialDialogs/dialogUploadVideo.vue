@@ -182,13 +182,17 @@ export default {
       const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 3;
-      if (!(isJPG || isJPEG || isPNG)) {
+      if (!(isJPG || isJPEG || isPNG) || !/\.jpg|\.jpeg|\.png|\.JPG|\.JPEG|\.PNG$/.test(file.name)) {
         this.$message.error('上传图片支持jpg,jpeg,png格式!');
+        this.loading1 = false;
+        return false;
       }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 3MB!');
+        this.loading1 = false;
+        return false;
       }
-      return isJPG || isJPEG || isPNG && isLt2M;
+      return true;
     },
 
     //上传成功回调

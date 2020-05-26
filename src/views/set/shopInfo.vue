@@ -419,7 +419,7 @@ export default {
       const isPNG = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!(isJPG || isJPEG || isPNG)) {
+      if (!(isJPG || isJPEG || isPNG)  || !/\.jpg|\.jpeg|\.png|\.JPG|\.JPEG|\.PNG$/.test(file.name)) {
         this.$message.error("上传头像图片只能是JPG、JPEG、PNG格式!");
       }
       if (!isLt2M) {
