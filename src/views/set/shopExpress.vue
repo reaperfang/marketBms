@@ -426,7 +426,7 @@ export default {
   },
 
   created() {
-    this._formatDecimals = debounce(this.formatDecimals, 500)
+    this._formatDecimals = debounce(this.formatDecimals, 200)
     // if (this.shopInfo) {
     //   this.getShopInfo(this.shopInfo)
     // }
@@ -623,6 +623,7 @@ export default {
       })
     },
     close() {
+      console.log('--isHasOtherWay---', isHasOtherWay)
       // 判断是否有其他配送方式
       // const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
       if (isHasOtherWay) {
@@ -738,7 +739,7 @@ export default {
           const areaCode = res.areaCode
           const cityCode = res.cityCode
           const provinceCode = res.provinceCode
-          isHasOtherWay = res.isOpenMerchantDeliver === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
+          isHasOtherWay = res.isOpenOrdinaryExpress === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
           this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
           this.getLngLat(this.address)
         }
