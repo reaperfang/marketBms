@@ -747,8 +747,8 @@ export default {
             //如果是商家配送，则添加配送员信息
             if(item.deliveryWay == 2){
               obj.distributorName = item.distributorName;
-              obj.distributorId = item.distributorId;
-              obj.phone = item.phone;
+              //obj.distributorId = item.distributorId;
+              obj.distributorPhone = item.phone;
             }
             return obj;
           })

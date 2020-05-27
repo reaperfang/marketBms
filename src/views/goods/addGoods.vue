@@ -589,7 +589,7 @@
             </el-form-item>
             <el-form-item label="配送方式" prop="deliveryWay">
                 <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
-                    <el-checkbox :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
+                    <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
                     <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:195px;">商家配送</el-checkbox>
                 </el-checkbox-group>
                 <div>
@@ -730,7 +730,7 @@ export default {
         };
         var isFreeFreightValidator = (rule, value, callback) => {
             //如果配送方式选择了普通快递，则才进入模板的验证流程
-            if(this.ruleForm.isFreeFreight == 0 && this.ruleForm.deliveryWay.includes(1)) {
+            if(this.ruleForm.isFreeFreight == 0) {
                 if(!this.ruleForm.freightTemplateId) {
                     callback(new Error('请选择运费模板'));
                 } else {
@@ -773,7 +773,7 @@ export default {
                 other: false,
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
-                deliveryWay: [], //配送方式
+                deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
                 isFreeFreight: 0, // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
@@ -2089,11 +2089,7 @@ export default {
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 //console.log(res)
                 //配送方式(根据选中去请求是否在店铺开启)
-                let deliveryWayArr = [];
-                if(res.generalExpressType == 1){ //如果开启了普通快递
-                    deliveryWayArr.push(1);
-                    this.getExpressAndDeliverySet('express');
-                }
+                let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
                     deliveryWayArr.push(2);
                     this.getExpressAndDeliverySet('delivery');
@@ -2525,8 +2521,7 @@ export default {
                         return
                     }
                     console.log(this.ruleForm.isFreeFreight)
-                    //如果是普通快递，同时选择的为 选择运费模板
-                    if(this.ruleForm.isFreeFreight == 0 && this.ruleForm.deliveryWay.includes(1)) {
+                    if(this.ruleForm.isFreeFreight == 0) {
                         let id = this.ruleForm.freightTemplateId
                         calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
                         if(calculationWay == 3) {
@@ -2693,17 +2688,9 @@ export default {
                             productUnit: item && item.name || ''
                         })
                     }
-                    //如果配送方式没有选择普通快递，则快递运费相关参数不在上传
-                    //if(!this.ruleForm.deliveryWay.includes(1)){
-                        //delete params.isFreeFreight; //删除运费选择方式
-                        //delete params.freightTemplateId; //删除模板id
-                    //}
                     //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
-                    params.generalExpressType = 0; //普通快递
+                    params.generalExpressType = 1; //普通快递
                     params.businessDispatchType = 0; //商家配送
-                    if(this.ruleForm.deliveryWay.includes(1)){
-                        params.generalExpressType = 1;
-                    }
                     if(this.ruleForm.deliveryWay.includes(2)){
                         params.businessDispatchType = 1;
                     }

@@ -686,8 +686,8 @@ export default {
             obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
             obj.distributorName = this.distributorName; //配送员名字
-            obj.distributorId = this.distributorId; //配送员id，自己输入的新的名字没有id
-            obj.phone = this.ruleFormStore.phone; //配送员手机号
+            //obj.distributorId = this.distributorId; //配送员id，自己输入的新的名字没有id
+            obj.distributorName = this.ruleFormStore.phone; //配送员手机号
             obj.sendRemark = this.ruleFormStore.sendRemark; // 物流备注
           }
           params = {
