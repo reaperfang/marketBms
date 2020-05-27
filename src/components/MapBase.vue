@@ -39,8 +39,6 @@ export default {
       type: Object,
       default(){
         return {
-          //设置控件位置相对右下角对齐，向左排列
-          position: qq.maps.ControlPosition.BOTTOM_RIGHT
         }
       }
     },
@@ -52,8 +50,6 @@ export default {
       type: Object,
       default(){
         return {
-          position: qq.maps.ControlPosition.LEFT_CENTER,
-          style: qq.maps.ZoomControlStyle.SMALL
         }
       }
     },
@@ -65,8 +61,6 @@ export default {
       type: Object,
       default(){
         return {
-          //设置平移控件的位置为相对右方中间位置对齐.
-          position: qq.maps.ControlPosition.RIGHT_CENTER
         }
       }
     },

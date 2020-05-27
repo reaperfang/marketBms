@@ -22,7 +22,7 @@
   <map-search
     ref="mapSearch" 
     :address="getAddress"
-    :city="city"
+    :boundary="boundary"
     :scaleControl="mapStyle.scaleControl"
     :zoom="mapStyle.zoom"
     :zoomControl="mapStyle.zoomControl"
@@ -51,7 +51,8 @@ export default {
         zoomControl: false,
         panControl: false,
         scaleControl: false
-      }
+      },
+      boundary: ''
     }
   },
   computed: {

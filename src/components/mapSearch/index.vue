@@ -48,7 +48,7 @@ export default {
       type: String,
       default: ''
     },
-    city: {
+    boundary: {
       type: String,
       default: ''
     }
@@ -122,13 +122,13 @@ export default {
     //执行搜索
     search() {
       this.clearAllMaker()
-      let city = this.getCities(this.keyword)
-      if (!city) {
-        city = this.city || '北京市'
+      let boundary = this.getCities(this.keyword)
+      if (!boundary) {
+        boundary = this.boundary || '北京市'
       }
       const data = {
         keyword: this.keyword,
-        boundary: `region(${this.city},1)`,
+        boundary: `region(${boundary},1)`,
         mapPageIndex: this.page,
         mapPageSize: this.pageSize
       }
