@@ -17,6 +17,7 @@
       </el-form-item> -->
       <el-form-item label="设定上架时间" prop="time">
         <el-date-picker
+          format="yyyy-MM-dd HH:mm"
           popper-class="timelyShelving"
           v-model="ruleForm.time"
           type="datetime"
@@ -38,7 +39,11 @@ import utils from "@/utils";
 export default {
   data() {
     var validateTime = (rule, value, callback) => {
-      if (value <= Date.now()) {
+      value && value.setSeconds(0)
+      let now = new Date()
+
+      now.setSeconds(0)
+      if (value.getTime() < now.getTime() && (now.getTime() - value.getTime() > 1000)) {
         callback(new Error('选择时间必须大于当前时间'));
       } else {
         callback();
