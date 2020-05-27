@@ -41,14 +41,14 @@
 import mapBase from "@/components/MapBase";
 import appConfig from '@/system/appConfig';
 export default {
-  name: "shopInfoMap",
+  name: "mapSearch",
   extends: mapBase,
   props: {
     address: {
       type: String,
       default: ''
     },
-    boundary: {
+    city: {
       type: String,
       default: ''
     }
@@ -122,13 +122,13 @@ export default {
     //执行搜索
     search() {
       this.clearAllMaker()
-      let boundary = this.getCities(this.keyword)
-      if (!boundary) {
-        boundary = this.boundary || '北京市'
+      let city = this.getCities(this.keyword)
+      if (!city) {
+        city = this.city || '北京市'
       }
       const data = {
         keyword: this.keyword,
-        boundary: `region(${this.boundary},1)`,
+        boundary: `region(${this.city},1)`,
         mapPageIndex: this.page,
         mapPageSize: this.pageSize
       }
@@ -221,6 +221,7 @@ export default {
   },
   watch: {
     address(curr) {
+      console.log('----watch---',curr)
       if (curr) {
         this.isShowMap = true
         this.getGeocoderByAddress()
@@ -294,4 +295,3 @@ export default {
   }
 }
 </style>
-

@@ -100,7 +100,7 @@
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
-      <shopInfoMap class="map" ref="shopInfoMap" :address="getAddress" :city="city" :scaleControl="mapStyle.scaleControl" :zoom="mapStyle.zoom" :zoomControl="mapStyle.zoomControl" :panControl="mapStyle.panControl" :center="[39.9046900000,116.4071700000]" @getMapClickPoi="getMapClickPoi"></shopInfoMap>
+      <map-search class="map" ref="shopInfoMap" :address="getAddress" :boundary="city" :scaleControl="mapStyle.scaleControl" :zoom="mapStyle.zoom" :zoomControl="mapStyle.zoomControl" :panControl="mapStyle.panControl" :center="[39.9046900000,116.4071700000]" @getMapClickPoi="getMapClickPoi" :isInitSearch="false"></map-search>
     </el-form>
     <!-- map -->
     <!-- 动态弹窗 -->
@@ -113,7 +113,7 @@
   </div>
 </template>
 <script>
-import shopInfoMap from './components/shopInfoMap'
+import mapSearch from '@/components/mapSearch'
 import dialogSelectImageMaterial from "@/views/shop/dialogs/dialogSelectImageMaterial";
 import axios from "axios";
 export default {
@@ -215,7 +215,7 @@ export default {
       //canvas:{}
     };
   },
-  components: { dialogSelectImageMaterial, shopInfoMap },
+  components: { dialogSelectImageMaterial, mapSearch },
   watch: {},
   computed: {
     canvas() {
@@ -586,8 +586,8 @@ export default {
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
       this.form.address = poi.address
-      this.form.lat = poi.latLng.lat
-      this.form.lng = poi.latLng.lng
+      this.form.lat = poi.location.lat
+      this.form.lng = poi.location.lng
       this.getProvincesCities(poi.address)
     }
   }

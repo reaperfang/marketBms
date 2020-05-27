@@ -28,18 +28,49 @@ export default {
     center:{  
       type: Array,
       default: ()=>{
-        return appConfig.map.defaultCenter
+        return appConfig.map.defaultCenter || [39.9046900000, 116.4071700000]
       }
     },
     scaleControl: {
       type: Boolean,
       default: true
     },
+    scaleControlOptions: {
+      type: Object,
+      default(){
+        return {
+          //设置控件位置相对右下角对齐，向左排列
+          position: qq.maps.ControlPosition.BOTTOM_RIGHT
+        }
+      }
+    },
     zoomControl: {
       type: Boolean,
       default: true
     },
+    zoomControlOptions: {
+      type: Object,
+      default(){
+        return {
+          position: qq.maps.ControlPosition.LEFT_CENTER,
+          style: qq.maps.ZoomControlStyle.SMALL
+        }
+      }
+    },
     panControl: {
+      type: Boolean,
+      default: true
+    },
+    PanControlOptions: {
+      type: Object,
+      default(){
+        return {
+          //设置平移控件的位置为相对右方中间位置对齐.
+          position: qq.maps.ControlPosition.RIGHT_CENTER
+        }
+      }
+    },
+    isInitSearch: {
       type: Boolean,
       default: true
     }
@@ -83,14 +114,19 @@ export default {
         mapTypeId: qq.maps.MapTypeId.ROADMAP,
         scaleControl: this.scaleControl,
         zoomControl: this.zoomControl,
-        panControl: this.panControl
+        panControl: this.panControl,
+        PanControlOptions: this.PanControlOptions,
+        zoomControlOptions: this.zoomControlOptions,
+        scaleControlOptions:this.scaleControlOptions
       });
 
       //初始化事件
       this.inited();
 
       //初始化搜索
-      this.initSearch();
+      if (this.isInitSearch) {
+        this.initSearch();
+      }
     },
 
     /* 初始化搜索 */
