@@ -132,11 +132,18 @@ export default {
 }
 </style>
 <style lang="scss">
-  .timelyShelving .el-time-spinner {
-    .el-time-spinner__wrapper {
-      width: 50%!important;
-      &:last-child {
-        display: none!important;
+  .timelyShelving {
+    .el-time-spinner {
+      .el-time-spinner__wrapper {
+        width: 50%!important;
+        &:last-child {
+          display: none!important;
+        }
+      }
+    }
+    .el-picker-panel__footer {
+      button:first-child {
+        display: none;
       }
     }
   }
