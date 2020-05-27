@@ -47,7 +47,7 @@
                         :picker-options="utils.globalTimePickerOption.call(this)"
                     ></el-date-picker>
                 </el-form-item>
-                <deliveryMethod :listQuery="listQuery"></deliveryMethod>
+                <deliveryMethod :listQuery="listQuery" :isAfterSales="true"></deliveryMethod>
                 <el-form-item>
                     <el-button @click="search" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
@@ -86,7 +86,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="deliveryWay"
-                    label="配送方式"
+                    label="退货方式"
                     width="120">
                     <template slot-scope="scope">
                         <div>

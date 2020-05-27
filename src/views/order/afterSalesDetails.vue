@@ -18,7 +18,7 @@
         <section class="container">
             <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane v-permission="['订单', '售后详情', '售后信息']" label="售后信息" name="afterSalesInformation"></el-tab-pane>
-                <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
+                <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos || orderAfterSaleSendInfo.distributorPhone)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
         <component @submit="onSubmit" :is="currentView" :deliveryWay="deliveryWay" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
@@ -145,7 +145,10 @@ export default {
         },
         getDetail() {
             this._apis.order.getOrderAfterSaleDetail({id: this.$route.query.id}).then((res) => {
-                res.deliveryWay = 1;
+                //如果不是商家配送，则默认为普通快递
+                if(res.deliveryWay != 2){
+                    res.deliveryWay = 1;
+                }
                 console.log(res)
                 this.deliveryWay = res.deliveryWay;
 

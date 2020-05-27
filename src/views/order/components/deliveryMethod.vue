@@ -1,13 +1,13 @@
 <template>
     <div class="el-form-item">
-        <el-form-item label="配送方式">
+        <el-form-item :label="isAfterSales ? '退货方式' : '配送方式'">
           <el-select v-model="listQuery.deliveryWay" @change="deliveryMethodChange">
             <el-option label="全部" value></el-option>
             <el-option label="普通快递" :value="1"></el-option>
             <el-option label="商家配送" :value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="配送时间" v-show="listQuery.deliveryWay == 2">
+        <el-form-item :label="isAfterSales ? '取货时间' : '配送时间'" v-show="listQuery.deliveryWay == 2">
           <el-date-picker
             style="margin-left: 0;"
             v-model="listQuery.deliveryDate"
@@ -31,6 +31,10 @@
             listQuery: {
                 type: Object,
                 default: {}
+            },
+            isAfterSales: { //是否为售后，如果为售后则文本改为 退货方式  与   取货时间
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -50,15 +54,10 @@
                     this._apis.order
                     .getTimeSlot()
                     .then(res => {
-                        console.log('+++++++++++++++++++++')
-                        console.log(res)
-                        // res = {
-                        //     "subscribeTimeHourRanges": "00:00:00~00:01:00,00:08:00~00:09:00,00:13:00~00:14:00"
-                        // };
-                        //如果没有自定义的时间段，则选用默认的
-                        if(!res.subscribeTimeHourRanges){
+                        //如果买家预约时间类型不是自定义，则选用默认的时间段
+                        if(res.subscribeTimeType != 2){
                             this.timeSlotArr = order.timeSlot;
-                        }else{
+                        }else{ //是自定义，则使用获取到的自定义时间段
                             this.timeSlotArr = res.subscribeTimeHourRanges.split(',');
                         }
                     })

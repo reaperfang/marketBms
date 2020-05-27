@@ -28,18 +28,43 @@ export default {
     center:{  
       type: Array,
       default: ()=>{
-        return appConfig.map.defaultCenter
+        return appConfig.map.defaultCenter || [39.9046900000, 116.4071700000]
       }
     },
     scaleControl: {
       type: Boolean,
       default: true
     },
+    scaleControlOptions: {
+      type: Object,
+      default(){
+        return {
+        }
+      }
+    },
     zoomControl: {
       type: Boolean,
       default: true
     },
+    zoomControlOptions: {
+      type: Object,
+      default(){
+        return {
+        }
+      }
+    },
     panControl: {
+      type: Boolean,
+      default: true
+    },
+    PanControlOptions: {
+      type: Object,
+      default(){
+        return {
+        }
+      }
+    },
+    isInitSearch: {
       type: Boolean,
       default: true
     }
@@ -83,14 +108,19 @@ export default {
         mapTypeId: qq.maps.MapTypeId.ROADMAP,
         scaleControl: this.scaleControl,
         zoomControl: this.zoomControl,
-        panControl: this.panControl
+        panControl: this.panControl,
+        PanControlOptions: this.PanControlOptions,
+        zoomControlOptions: this.zoomControlOptions,
+        scaleControlOptions:this.scaleControlOptions
       });
 
       //初始化事件
       this.inited();
 
       //初始化搜索
-      this.initSearch();
+      if (this.isInitSearch) {
+        this.initSearch();
+      }
     },
 
     /* 初始化搜索 */

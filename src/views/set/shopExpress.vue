@@ -909,8 +909,7 @@ export default {
       const id = this.cid
       const data = {
         id,
-        // deliverRangeType: this.ruleForm.radiusType,
-        deliverRangeType:0,
+        deliverRangeType: this.ruleForm.radiusType,
         deliverServiceRadius: this.ruleForm.radius,
         longitude: this.ruleForm.longitude,
         latitude: this.ruleForm.latitude

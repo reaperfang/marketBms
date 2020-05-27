@@ -136,7 +136,7 @@
         <!-- 商家配送 -->
         <template v-if="deliveryWay == 2">
         <div class="delivery-information-header">
-            用户发货
+            用户退货
         </div>
         <div class="container">
             <div class="item" :class="{close: !showCustomerContent}">
@@ -144,7 +144,7 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
                         <div class="header-lefter-item ">商家自取</div>
-                        <div class="header-lefter-item ">取货时间：2020-4-29 13：00-15：00</div>
+                        <div class="header-lefter-item ">取货时间：{{orderAfterSale.deliveryDate}} {{orderAfterSale.deliveryTime}}</div>
                      </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | sotreCustomerFilter}}</div>
@@ -163,7 +163,7 @@
                         <div @click="showLogistics(orderAfterSale.returnExpressNo, true, orderAfterSale.id)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
                     <div class="header-righter">
-                        <div class="header-righter-item">{{orderAfterSale | sotreCustomerFilter}}</div>
+                        <div class="header-righter-item">{{orderAfterSale |  customerFilter}}</div>
                         <div class="header-righter-item">发货人：{{orderAfterSale.memberName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.memberReturnGoodsTime}}</div>
                         <div @click="showCustomerContent = !showCustomerContent">
@@ -218,36 +218,20 @@
             </div>
         </div>
 
-        <div v-if="orderAfterSaleSendInfo.expressNos" class="delivery-information-header">
+        <div v-if="orderAfterSaleSendInfo.distributorPhone" class="delivery-information-header">
             商家发货
         </div>
         <div class="container">
-            <div v-if="orderAfterSaleSendInfo.expressNos" class="item" :class="{close: !showContent}">
-                <div class="header" v-if="!orderAfterSaleSendInfo.expressNos">
+            <div v-if="orderAfterSaleSendInfo.distributorPhone" class="item" :class="{close: !showContent}">
+                <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
                         <div class="header-lefter-item ">商家配送</div>
-                        <div class="header-lefter-item ">配送员：小王</div>
-                        <div class="header-lefter-item ">联系方式：13000000000</div>
+                        <div class="header-lefter-item ">配送员：{{orderAfterSaleSendInfo.distributorName}}</div>
+                        <div class="header-lefter-item ">联系方式：{{orderAfterSaleSendInfo.distributorPhone}}</div>
                     </div>
                     <div class="header-righter">
-                        <div class="header-righter-item">{{orderAfterSale | storeBusinessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
-                        <div class="header-righter-item">{{orderAfterSaleSendInfo.sendTime}}</div>
-                        <div @click="showContent = !showContent">
-                            <i v-if="showContent" class="el-icon-caret-top pointer"></i>
-                            <i v-if="!showContent" class="el-icon-caret-bottom pointer"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="header" v-if="orderAfterSaleSendInfo.expressNos">
-                    <div class="header-lefter">
-                        <div class="header-lefter-item number">2</div>
-                        <div class="header-lefter-item ">快递单号：{{orderAfterSaleSendInfo.expressNos}}</div>
-                        <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false, orderAfterSaleSendInfo.orderAfterSaleId)" class="header-lefter-item  blue pointer">查看物流</div>
-                    </div>
-                    <div class="header-righter">
-                        <div class="header-righter-item">{{orderAfterSale | storeBusinessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSaleSendInfo.sendName}}</div>
+                        <div class="header-righter-item">{{orderAfterSale | storeBusinessFilter(orderAfterSaleSendInfo.distributorPhone)}}</div>
                         <div class="header-righter-item">{{orderAfterSaleSendInfo.sendTime}}</div>
                         <div @click="showContent = !showContent">
                             <i v-if="showContent" class="el-icon-caret-top pointer"></i>
@@ -372,7 +356,7 @@ export default {
         sotreCustomerFilter(value) {
             if(value.receiveGoodsTime) {
                 return '【商户签收】'
-            } else if(value.returnExpressNo) {
+            } else if(value.memberReturnGoodsTime) {
                 return '【等待取货】'
             } else {
                 return ''

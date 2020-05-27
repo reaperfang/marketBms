@@ -1,10 +1,10 @@
 <template>
    <div class="courierSettings">
      <el-form ref="form" label-position="right" :model="form" label-width="124px">
-       <el-form-item label="开启普通快递">
+       <!-- <el-form-item label="开启普通快递">
         <el-switch v-model="form.isOpen" @change="handleIsOpen"></el-switch>
         <span class="promit"><span>{{ getSwitchTxt }}</span>启用后，买家下单可以选择快递发货，由你安排快递送货上门</span>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="开启物流轨迹查询" prop="isTrace">
         <el-radio-group v-model="form.isTrace">
           <el-radio :label="1" class="pr50">是</el-radio>
