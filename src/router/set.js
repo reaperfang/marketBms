@@ -46,7 +46,7 @@ export default [
                 path: 'shopExpress',
                 component: () => import('@/views/set/shopExpress'),
                 name: 'shopExpress',
-                meta: { title: '商家配送', noCache: true, tabTitle: '配送设置', navType:2  }
+                meta: { title: '同城配送', noCache: true, tabTitle: '配送设置', navType:2  }
             },
             {
                 path: 'payType',
