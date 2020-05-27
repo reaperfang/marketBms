@@ -20,7 +20,7 @@
           <!-- <label>配送范围设置：</label> -->
           <p class="prompt">收货地址在配送范围之外的买家将无法使用商家配送</p>
           <el-radio-group v-model="ruleForm.radiusType">
-            <el-radio label="1">按服务半径</el-radio>
+            <el-radio :label="1">按服务半径</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item prop="radius">
@@ -290,7 +290,7 @@ export default {
       isLoading: false,
       tempWeeks: [],
       ruleForm: {
-        radiusType: '1',  // 配送范围设置类型
+        radiusType: 1,  // 配送范围设置类型
         radius: null, //  配送半径
         lng: null, // 经度
         lat: null, // 纬度
@@ -478,9 +478,9 @@ export default {
       let hour = start.getHours()
       let minute = start.getMinutes()
       let second = start.getSeconds()
-      hour = hour > 10 ? hour : `0${hour}`
-      minute = minute > 10 ? minute : `0${minute}`
-      second = second > 10 ? second : `0${second}`
+      hour = +hour >= 10 ? hour : `0${hour}`
+      minute = +minute >= 10 ? minute : `0${minute}`
+      second = +second >= 10 ? second : `0${second}`
       return `${hour}:${minute}:${second} - 23:59:59`
     },
     clearValidate(key) {
@@ -565,10 +565,12 @@ export default {
       callback()
     },
     formatDecimals(val, key, digits = 2) {
-      if (Number.isNaN(+val)) {
-        return false
+      if (val) {
+        if (Number.isNaN(+val)) {
+          return false
+        }
+        this.ruleForm[key] = Number(val).toFixed(digits) 
       }
-      this.ruleForm[key] = Number(val).toFixed(digits) 
     },
     handleIsOpen(val) {
       console.log('val', val)
@@ -623,6 +625,7 @@ export default {
       })
     },
     close() {
+      console.log('--isHasOtherWay---', isHasOtherWay)
       // 判断是否有其他配送方式
       // const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
       if (isHasOtherWay) {
@@ -728,7 +731,7 @@ export default {
         
         if (res && res.hasOwnProperty('id')) {
           this.isOpen = res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
-          
+          this.ruleForm.radiusType = res.deliverRangeType || 1
           this.ruleForm.radius = res.deliverServiceRadius || null // 配送服务半径
           this.isOpenOrdinaryExpress = res.isOpenOrdinaryExpress // 是否开启普通快递 0-否 1-是
           this.isOpenTh3Deliver = res.isOpenTh3Deliver // 是否开启第三方配送 0-否 1-是
@@ -738,7 +741,7 @@ export default {
           const areaCode = res.areaCode
           const cityCode = res.cityCode
           const provinceCode = res.provinceCode
-          isHasOtherWay = res.isOpenMerchantDeliver === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
+          isHasOtherWay = res.isOpenOrdinaryExpress === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
           this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
           this.getLngLat(this.address)
         }
@@ -757,9 +760,9 @@ export default {
       const date = new Date()
       const year = date.getFullYear()
       let month = date.getMonth() + 1
-      month = month >= 10 ? month : `0${month}`
+      month = month > 10 ? month : `0${month}`
       let day = date.getDate()
-      day = day >= 10 ? day : `0${day}`
+      day = day > 10 ? day : `0${day}`
       const timePeriods = arr.map(item => {
         const timeslot = item.split('~')
         const start = `${year}-${month}-${day} ${timeslot[0]}`
@@ -840,9 +843,11 @@ export default {
         let hour = date.getHours()
         let minute = date.getMinutes()
         let second = date.getSeconds()
-        hour = hour > 10 ? hour : `0${hour}`
-        minute = minute > 10 ? minute : `0${minute}`
-        second = second > 10 ? second : `0${second}`
+        console.log('getHourMinuteSecond:before',hour,minute,second)
+        hour = +hour >= 10 ? hour : `0${hour}`
+        minute = +minute >= 10 ? minute : `0${minute}`
+        second = +second >= 10 ? second : `0${second}`
+        console.log('getHourMinuteSecond:after',hour,minute,second)
         return `${hour}:${minute}:${second}`
 
     },
@@ -904,6 +909,7 @@ export default {
       const id = this.cid
       const data = {
         id,
+        deliverRangeType: this.ruleForm.radiusType,
         deliverServiceRadius: this.ruleForm.radius,
         longitude: this.ruleForm.longitude,
         latitude: this.ruleForm.latitude

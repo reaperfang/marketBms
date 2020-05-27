@@ -66,7 +66,7 @@ module.exports = {
 
 		proxyTable: {
 			'/data-server/**': {
-				target: 'https://test-omo.aiyouyi.cn',
+				target: 'https://test4-omo.aiyouyi.cn',
 				changeOrigin: true,
 				pathRewrite: {
 					'^/data-server': ''

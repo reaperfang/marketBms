@@ -38,13 +38,15 @@ export default {
           map: this.mapObj,
           content:this.address
       });
+      const radius = this.radius * 1000 // 经测试图上半径为米来进行计算
       this.circle = new qq.maps.Circle({
           map: this.mapObj,
           center: this.centerObj,
-          radius: 1000,
-          fillColor: new qq.maps.Color(0,255,0, 0.5),
+          radius,
+          fillColor: new qq.maps.Color(0,255,0, 0.3),
           strokeWeight: 5
       });
+      // this.circle.setRadius()
       // circle.setFillColor("0, 255, 0, 0.5");
     },
     setRadius(val) {
