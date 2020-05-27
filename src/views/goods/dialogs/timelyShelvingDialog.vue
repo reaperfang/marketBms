@@ -17,6 +17,7 @@
       </el-form-item> -->
       <el-form-item label="设定上架时间" prop="time">
         <el-date-picker
+          popper-class="timelyShelving"
           v-model="ruleForm.time"
           type="datetime"
           :picker-options="utils.globalTimePickerOption.call(this, true, false)"
@@ -124,6 +125,16 @@ export default {
 .footer {
   margin-top: 85px;
 }
+</style>
+<style lang="scss">
+  .timelyShelving .el-time-spinner {
+    .el-time-spinner__wrapper {
+      width: 50%!important;
+      &:last-child {
+        display: none!important;
+      }
+    }
+  }
 </style>
 
 
