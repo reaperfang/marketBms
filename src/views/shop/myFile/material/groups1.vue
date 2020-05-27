@@ -3,9 +3,10 @@
     <el-tree 
       :data="treeData"
       node-key="id"
-      :props="defaultProps"
       @node-click="handleLeftclick"
       :expand-on-click-node="false"
+      :load="loadNode"
+      lazy
       ref="tree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ data.name }}</span>
@@ -33,11 +34,7 @@ data () {
     dialogVisible: false,
     currentDialog: '',
     dialogTitle:'',
-    typeData:'',
-    defaultProps: {
-      children: 'childFileGroupInfoList',
-      label: 'name'
-    }
+    typeData:''
   }
 },
 
@@ -49,22 +46,29 @@ watch: { },
 
 mounted () {},
 
-created(){
-  this.gitGroups()
-},
+created(){ },
 
 methods: {
-  //获取分组数据
-  gitGroups(){
-    let type =  this.typeName == 'image' ? '0' : '1'
-    let query ={
-      type:type,
-    }
-    this._apis.file.getGroup(query).then((response)=>{
-      this.treeData = response
-    }).catch(error => {
-      this.$message.error(error);
-    })
+  //节点数据懒加载
+  loadNode(node, resolve) {
+      setTimeout(() => {
+        let id = node.data.id
+        let type =  this.typeName == 'image' ? '0' : '1'
+        let query ={
+            type:type,
+            parentId:id || '0'
+          }
+        this._apis.file.getGroup(query).then((response)=>{
+          if(response == null){
+            this.$message.warning('该分组下无其他分组')
+            return resolve([ ]);
+          }else{
+            resolve(response)
+          }
+        }).catch((error)=>{
+          this.$message.error(error);
+        })
+      }, 500);
   },
 
   //弹窗反馈

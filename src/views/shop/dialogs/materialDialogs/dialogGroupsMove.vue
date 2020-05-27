@@ -4,7 +4,8 @@
         <el-form-item label="分组名称：">
           <el-cascader
           v-model="form.groupId"
-          :props="props"
+          :options="options"
+          :props="defaultProps"
           class="w_300"
           >
           </el-cascader>
@@ -30,41 +31,17 @@ export default {
       },
   },
   data() {
-    let self = this
     return {
       form:{
         groupId:['-1']
       },
-      props: {
-        lazy: true,
+      defaultProps: {
+        children: 'childFileGroupInfoList',
+        label: 'name',
+        value:'id',
         checkStrictly: true,
-        lazyLoad (node, resolve) {
-          const {level} = node;
-          setTimeout(() => {
-            let id = node.level == 0 ? '0' : node.data.value
-            let type =  self.typeName == 'image' ? '0' : '1'
-            let query ={
-              type:type,
-              parentId:id
-            }
-            self._apis.file.getGroup(query).then((response)=>{
-              if(response == null){
-                return resolve([]);
-              }else{
-                const nodes = response.map(item => ({
-                  value: item.id,
-                  label: item.name,
-                  leaf: level >=2
-                }));
-                // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-                resolve(nodes)
-              }
-            }).catch((error)=>{
-              self.$message.error(error);
-            })
-          }, 500);
-        }
-      }
+      },
+      options:[]
     };
   },
   computed: {
@@ -79,10 +56,24 @@ export default {
   },
   created() {
     this.init()
+    this.gitGroups()
   },
   methods: {
     init(){
       this.form.groupId = this.fromGroupId
+    },
+
+     //获取分组数据
+    gitGroups(){
+      let type =  this.typeName == 'image' ? '0' : '1'
+      let query ={
+        type:type,
+      }
+      this._apis.file.getGroup(query).then((response)=>{
+        this.options = response
+      }).catch(error => {
+        this.$message.error(error);
+      })
     },
 
     submit() {
