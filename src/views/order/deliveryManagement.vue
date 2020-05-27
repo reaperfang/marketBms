@@ -4,11 +4,11 @@
             <el-tabs v-model="activeName">
                 <el-tab-pane v-permission="['订单', '发货管理', '订单发货']" label="订单发货" name="order">
                     <!-- <orderDelivery></orderDelivery> -->
-                    <component :is="current"></component>
+                    <component :is="activeName == 'order' ? current : ''"></component>
                 </el-tab-pane>
                 <el-tab-pane v-permission="['订单', '发货管理', '售后发货']" label="售后发货" name="service">
                     <!-- <afterSales></afterSales> -->
-                    <component :is="current"></component>
+                    <component :is="activeName == 'service' ? current : ''"></component>
                 </el-tab-pane>
             </el-tabs>
             <!-- <component :is="current"></component> -->
