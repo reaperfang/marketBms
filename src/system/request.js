@@ -45,9 +45,7 @@ class Ajax {
     this.service.interceptors.response.use(
       response => {
         const res = response.data
-        if (res.status === 0) {
-          return res
-        } else if (res.status === 'success' || res.status === 200) {
+        if (res.status === 'success' || res.status === 200) {
           if (res.accessToken) {
             return res;
           }
