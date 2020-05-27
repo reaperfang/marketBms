@@ -52,7 +52,7 @@
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
           >图片建议：626*280像素，小于3M，支持jpg、png、jpeg格式  (为了保证会员卡在C端呈现的效果最好，请按照建议尺寸上传)</span>
-          <div v-if="ruleForm.backgroundType == '1'" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`, backgroundSize: '100% 100%'}">
+          <div v-if="ruleForm.backgroundType == '1'" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
             <p class="c_level">{{ ruleForm.alias }}</p>
@@ -988,6 +988,7 @@ export default {
     right: 20px;
     top: -86px;
     border-radius: 8px;
+    background-size:100% 100%!important;
     .c_bh{
       font-size: 12px;
       margin: 4px 0 0 13px;
