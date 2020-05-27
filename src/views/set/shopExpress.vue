@@ -290,7 +290,7 @@ export default {
       isLoading: false,
       tempWeeks: [],
       ruleForm: {
-        radiusType: '1',  // 配送范围设置类型
+        radiusType: 1,  // 配送范围设置类型
         radius: null, //  配送半径
         lng: null, // 经度
         lat: null, // 纬度
@@ -909,7 +909,8 @@ export default {
       const id = this.cid
       const data = {
         id,
-        deliverRangeType: this.ruleForm.radiusType,
+        // deliverRangeType: this.ruleForm.radiusType,
+        deliverRangeType:0,
         deliverServiceRadius: this.ruleForm.radius,
         longitude: this.ruleForm.longitude,
         latitude: this.ruleForm.latitude
