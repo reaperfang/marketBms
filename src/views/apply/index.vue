@@ -49,6 +49,7 @@ export default {
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
+			// 营销需要，常用参数
             let bossProductId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).bossProductId)
             this.cid = shopInfo && shopInfo.id || ''
             console.log('路由',this.$route)
