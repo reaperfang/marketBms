@@ -35,35 +35,35 @@ export default [
 			},
 
 			//H5店铺
-			{
-				path: "m_h5ShopIndex",
-				component: () => import("@/views/shop/mobileShop/h5Shop/h5ShopIndex"),
-				name: "m_h5ShopIndex",
-				meta: { title: "移动H5", noCache: true, tabTitle: '移动店铺',navType:2}
-			},
-			{
-				path: "m_h5ShopNavIndex",
-				component: () => import("@/views/shop/mobileShop/h5Shop/h5ShopNavIndex"),
-				name: "m_shopNavIndex",
-				meta: { title: "店铺导航", noCache: true, tabTitle: '移动店铺',navType:2},
-				hidden:true
-			},
+			// {
+			// 	path: "m_h5ShopIndex",
+			// 	component: () => import("@/views/shop/mobileShop/h5Shop/h5ShopIndex"),
+			// 	name: "m_h5ShopIndex",
+			// 	meta: { title: "移动H5", noCache: true, tabTitle: '移动店铺',navType:2}
+			// },
+			// {
+			// 	path: "m_h5ShopNavIndex",
+			// 	component: () => import("@/views/shop/mobileShop/h5Shop/h5ShopNavIndex"),
+			// 	name: "m_shopNavIndex",
+			// 	meta: { title: "店铺导航", noCache: true, tabTitle: '移动店铺',navType:2},
+			// 	hidden:true
+			// },
 			
 
 			//移动装修模板相关
-			// {
-			// 	path: "m_templateManageIndex",
-			// 	component: () => import("@/views/shop/mobileDecorate/template/templateManageIndex"),
-			// 	name: "m_templateManageIndex",
-			// 	meta: { title: "模板管理", noCache: true, tabTitle: '移动装修',navType:2 }
-			// },
-			// {
-			// 	path: "m_templateEdit",
-			// 	component: () => import("@/views/shop/mobileDecorate/template/templateEdit"),
-			// 	name: "m_templateEdit",
-			// 	meta: { title: "模板编辑", noCache: true, tabTitle: '移动装修',navType:2 },
-			// 	hidden: true
-			// },
+			{
+				path: "m_templateManageIndex",
+				component: () => import("@/views/shop/mobileDecorate/template/templateManageIndex"),
+				name: "m_templateManageIndex",
+				meta: { title: "模板管理", noCache: true, tabTitle: '移动装修',navType:2 }
+			},
+			{
+				path: "m_templateEdit",
+				component: () => import("@/views/shop/mobileDecorate/template/templateEdit"),
+				name: "m_templateEdit",
+				meta: { title: "模板编辑", noCache: true, tabTitle: '移动装修',navType:2 },
+				hidden: true
+			},
 
 
 			//移动装修页面相关
