@@ -113,7 +113,7 @@
             </div>
             <div class="container-item">
                 <p>3.填写物流信息</p>
-                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 1">
+                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 1 || orderDetail.deliveryWay == null">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="配送方式">
                             <span>普通快递</span>
@@ -152,7 +152,7 @@
                     <span>商家配送</span>
                     </el-form-item>
                     <el-form-item label="配送时间">
-                    <span>2020-04-10 13:00~17:00</span>
+                    <span>{{orderDetail.deliveryDate}} {{orderDetail.deliveryTime}}</span>
                     </el-form-item>
                     <el-form-item label="配送员" prop="distributorValue">
                     <el-select v-model="ruleFormStore.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" ref="searchSelect" :filter-method="dataFilter" @visible-change="visibleChange" @focus="selectFocus" @blur="selectBlur" @change="selectChange">
@@ -167,7 +167,7 @@
                         <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
                     </div>
                     <div class="prompt" style="display:inline-block;" v-show="isDistributorShow">
-                        <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoRoleManage">创建配送员角色</span><span>并</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
+                        <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
                     </div>
                     </el-form-item>
                     <el-form-item label="联系方式" prop="phone">
@@ -373,20 +373,24 @@ export default {
             //获取配送员列表
         getDistributorList(){
             this._apis.order
-                .getDistributorList()
+                .getDistributorList({
+                    "shopInfoId": "",
+                    "roleName": "1011maq角色",
+                    "startIndex": 1,
+                    "pageSize": 1000
+                })
                 .then(res => {
-                res = [
-                    {"id":1,"name":"张三","phone":15910526104},
-                    {"id":2,"name":"李四","phone":15910526104},
-                    {"id":3,"name":"张四","phone":15910526104},
-                ]
-                //如果没有配送员，则提示去创建
-                if(res.length == 0){
+                  //如果没有配送员，则提示去创建
+                if(res.list.length == 0){
                     this.isDistributorShow = true;
                 }else{
                     this.isDistributorShow = false;
                 }
-                this.distributorListFilter = res;
+                res.list.forEach((item) => {
+                    item.name = item.userName;
+                    item.phone = item.mobile;
+                })
+                this.distributorListFilter = res.list;
                 //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
                 if(this.distributorName){
                     this.distributorList = this.distributorListFilter.filter((item) => {
@@ -395,15 +399,10 @@ export default {
                         }
                     })
                 }else{ //否则直接赋值全部配送员
-                    this.distributorList = res;
+                    this.distributorList = res.list;
                 }
                 })
                 .catch(error => {});
-        },
-        //新页面打开角色管理
-        gotoRoleManage() {
-            let routeData = this.$router.resolve({ path: '/set/roleManage' });
-            window.open(routeData.href, '_blank');
         },
         //新页面打开子帐号管理
         gotoSubaccountManage() {
@@ -587,9 +586,6 @@ export default {
         },
         getOrderDetail() {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.id]}).then((res) => {
-                console.log()
-                //模拟数据，最后去掉
-                res[0].deliveryWay = 2;
 
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo

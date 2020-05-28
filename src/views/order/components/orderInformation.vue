@@ -8,7 +8,7 @@
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
                     </div>
                     <!-- 开启了预约配送则显示C端用户下单时选定的配送时间 -->
-                    <div class="item" v-if="orderInfo.deliveryWay == 2">
+                    <div class="item" v-if="orderInfo.deliveryWay == 2 && orderInfo.deliveryDate">
                         <div class="label">配送时间</div>
                         <div class="value">{{orderInfo.deliveryDate}} {{orderInfo.deliveryTime}}</div>
                     </div>

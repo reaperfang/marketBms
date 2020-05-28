@@ -626,9 +626,9 @@ export function getTimeSlot(data) {
 //获取配送员列表
 export function getDistributorList(data) {
   return request({
-    target: 'PRODUCT-SELLING-CHIME-PROCESSOR',
+    target: 'MANAGER-API-143',
     method: 'post',
-    apiType: 'overview',
+    apiType: 'manager',
     data
   })
 }

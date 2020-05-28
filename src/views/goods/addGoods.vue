@@ -1668,7 +1668,7 @@ export default {
                 }
                 //如果商家配送未开启则提示去设置
                 if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
-                    this.isDeliverySet = false;
+                    this.isDeliverySet = false; 
                 }
             })
             .catch(error => {});

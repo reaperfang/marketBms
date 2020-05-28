@@ -226,7 +226,6 @@ export default {
                 orderIds: this.checkedList.map(val => val.id)
               })
             }
-
       this._apis.order
         .exportOrders(_params)
         .then(res => {

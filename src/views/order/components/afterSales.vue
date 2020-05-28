@@ -99,6 +99,11 @@
                     prop="updateTime"
                     label="取货时间"
                     width="170">
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.deliveryDate}} {{scope.row.deliveryTime}}
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="receivedName"
