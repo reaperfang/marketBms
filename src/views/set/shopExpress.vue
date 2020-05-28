@@ -123,7 +123,7 @@
           <div>
               <el-radio v-model="ruleForm.isReservationDelivery" :label="0">不开启预约配送</el-radio>
               <span class="prompt">
-                说明：仅支持当天配送，默认可配送时间为当天06:00:00~20:00:00。点击
+                说明：仅支持当天配送，默认可配送时间为当天06:00~20:00。点击
                 <el-popover
                   placement="top"
                   width="240"
@@ -156,7 +156,7 @@
             <div>
               <el-radio v-model="ruleForm.deliveryTimeType" :label="1">全天</el-radio>
               <span class="prompt">
-                说明：默认可配送时间为当天06:00:00~20:00:00。点击
+                说明：默认可配送时间为当天06:00~20:00。点击
                 <el-popover
                   placement="top"
                   width="240"
@@ -216,7 +216,7 @@
                   ]"
                 >
                   
-                  <el-time-picker placeholder="开始时间" v-model="item.start" style="width: 156px;"></el-time-picker>
+                  <el-time-picker format="HH:mm" placeholder="开始时间" v-model="item.start" style="width: 156px;"></el-time-picker>
                 </el-form-item>
                 <span class="line">~</span>
                 <el-form-item 
@@ -224,7 +224,7 @@
                   :rules="[{ required: true, message: '请选择时间', trigger: 'change' },
                     { validator: validateTimeRangesEnd, trigger: 'change'}]"
                 >
-                  <el-time-picker placeholder="结束时间" v-model="item.end" style="width: 156px;" :picker-options="{selectableRange: getSelectableRange(key)}"></el-time-picker>
+                  <el-time-picker format="HH:mm" placeholder="结束时间" v-model="item.end" style="width: 156px;" :picker-options="{selectableRange: getSelectableRange(key)}"></el-time-picker>
                 </el-form-item>
                 <el-button type="text" size="mini" v-if="key !== 0 && (ruleForm.timePeriods.length - 1 === key)" class="btn-del" @click="handleDelTimePeriod(key)">删除</el-button>
               </div>
@@ -608,7 +608,7 @@ export default {
           }
         }).catch(error =>{
           this.isOpen = false
-          this.$message.error(error);
+          this.$message.error('保存失败');
           // this.loading = false
         })
       }
@@ -642,7 +642,7 @@ export default {
             this.$message.success('保存成功！');
           }).catch(error =>{
             this.isOpen = true
-            this.$message.error(error);
+            this.$message.error('保存失败');
             // this.loading = false
           })
           // this.isOpen = false
@@ -720,7 +720,7 @@ export default {
         }
       }).catch(error =>{
         this.isOpen = false
-        this.$message.error(error);
+        this.$message.error('保存失败');
         // this.loading = false
       })
     },
@@ -746,7 +746,8 @@ export default {
           this.getLngLat(this.address)
         }
       }).catch(err => {
-        this.$message.error(err);
+        console.log('---getShopInfo--', err)
+        // this.$message.error(err && err.message || '查询失败');
       })
     },
     formatTime(date){
@@ -813,7 +814,8 @@ export default {
         this.ruleForm.weeks = weeks
         this.tempWeeks = weeks
       }).catch(err => {
-        this.$message.error(err);
+        console.log('---getOrderDeliverInfo--', err)
+        // this.$message.error(err && err.message || '');
       })
     },
     handleSubmit(formName) {
@@ -940,7 +942,7 @@ export default {
           });
         }
       }).catch(err => {
-        this.$message.error(err);
+        this.$message.error('保存失败');
       }).finally(() => {
         this.isLoading = false
       })
