@@ -844,13 +844,13 @@ export default {
        const date = new Date(start)
         let hour = date.getHours()
         let minute = date.getMinutes()
-        let second = date.getSeconds()
-        console.log('getHourMinuteSecond:before',hour,minute,second)
+        // let second = date.getSeconds()
+        // console.log('getHourMinuteSecond:before',hour,minute,second)
         hour = +hour >= 10 ? hour : `0${hour}`
         minute = +minute >= 10 ? minute : `0${minute}`
-        second = +second >= 10 ? second : `0${second}`
-        console.log('getHourMinuteSecond:after',hour,minute,second)
-        return `${hour}:${minute}:${second}`
+        // second = +second >= 10 ? second : `0${second}`
+        // console.log('getHourMinuteSecond:after',hour,minute,second)
+        return `${hour}:${minute}`
 
     },
     getSubscribeTimeHourRanges() {
