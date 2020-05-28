@@ -275,11 +275,13 @@ export default {
     };
     const validatePositiveInter = (rule, value, callback) => {
       const reg = /^[0-9]+$/
-      if (value && reg.test(value)) {
-        callback();
-      } else {
-        callback(new Error('必填项，请输入天数，仅支持输入正整数'));
+      if (!(value && reg.test(value))) {
+       return callback(new Error('必填项，请输入天数，仅支持输入正整数'));  
+      } 
+      if (Number(value) > 5) {
+        return callback(new Error('提前下单时间不能超过5天，请重新输入'));
       }
+      return callback()
     }
     return {
       isOpen: false, // 是否开启商家配送
