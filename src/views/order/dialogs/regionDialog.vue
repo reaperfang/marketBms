@@ -328,8 +328,8 @@ export default {
   display: flex;
   flex-wrap: wrap;
   // .el-checkbox.title{
-  // 	width: 90px;
-  // 	margin: 0 5px 10px 0 !important;
+  //  width: 90px;
+  //  margin: 0 5px 10px 0 !important;
   // }
   p.title {
     border: 1px solid transparent;
@@ -372,7 +372,7 @@ export default {
   text-align: center;
 }
 // p.title:hover + .citys{
-// 	display:block;
+//  display:block;
 // }
 /deep/ .el-tag {
   padding: 0 5px;
@@ -388,7 +388,3 @@ export default {
   }
 }
 </style>
-
-
-
-
