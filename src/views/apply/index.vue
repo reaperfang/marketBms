@@ -48,7 +48,7 @@ export default {
         init(){
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-            let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
+            let userName = JSON.parse(localStorage.getItem('shopInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
 			// 营销需要，常用参数
             let bossProductId = JSON.parse(localStorage.getItem('userInfo')).bossProductId
             this.cid = shopInfo && shopInfo.id || ''
