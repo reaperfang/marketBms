@@ -11,7 +11,7 @@
               <li class="tips1"><p>您已经对店铺装修有个大概的了解了，现在就让我跟您一起装修您的店铺吧！</p></li>
               <li class="tips2">
                 <p>先给您推荐一个简单快捷的方法吧！</p>
-                <p>1：在<span style="color: #655eff;">“店铺模板-模板管理”</span>中直接选用系统提供的已经装修好的店铺模板就行“立即使用”</p>
+                <p>1：在<span style="color: #655eff;">“店铺模板-模板管理”</span>中直接选用系统提供的已经装修好的店铺模板进行“立即使用”</p>
                 <p>2：对选用的模板页面按照自己店铺需要的信息和功能进行简单的编辑就可以了！</p>
                 <p>这是最快的装修方法哦！</p>
               </li>
@@ -174,7 +174,7 @@ export default {
       padding:34px 32px;
       box-sizing: border-box;
       width:518px;
-      height: 481px;
+      height: 650px;
       h3{
         font-size:16px;
         font-weight:700;

@@ -55,6 +55,23 @@ export default {
                 this.current = 'subCommission'
             }
         },
+        setGoodsImage(arr) {
+            arr.forEach((val, index) => {
+                if(val.image_rowspan && val.image_rowspan > 1) {
+                    if(!val.image && !val.image_hide) {
+                        let _arr = arr.slice(index, index + val.image_rowspan)
+                        
+                        if(_arr && _arr.length) {
+                            let imageArr = _arr.filter(val => val.image)
+
+                            if(imageArr && imageArr.length) {
+                                val.image = imageArr[0].image
+                            }
+                        }
+                    }
+                }
+            })
+        },
         getGoodsDetail() {
             let {id} = this.$route.query
 

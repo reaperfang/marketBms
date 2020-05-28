@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import componentUserCenter from '@/components/Decorate//comps/componentUserCenter';
-import propertyUserCenter from '@/components/Decorate//props/propertyUserCenter';
+import componentUserCenter from './editorComps/componentUserCenter';
+import propertyUserCenter from './editorComps/propertyUserCenter';
 import utils from "@/utils";
 export default {
   name: "personCenter",

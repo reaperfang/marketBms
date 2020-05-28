@@ -51,7 +51,7 @@
           <span
             v-if="ruleForm.backgroundType == '1'"
             style="margin-left:90px; color: #ccc;font-size: 12px;"
-          >像素大小控制在1000象素*600象素以下</span>
+          >图片建议：626*280像素，小于3M，支持jpg、png、jpeg格式  (为了保证会员卡在C端呈现的效果最好，请按照建议尺寸上传)</span>
           <div v-if="ruleForm.backgroundType == '1'" class="avatar cardImg" :style="{background: `url(${imgUrl}) 0 0 no-repeat`}">
             <p class="c_bh">3363197129819XXXXX</p>
             <p class="c_name">{{ ruleForm.name }}</p>
@@ -988,6 +988,7 @@ export default {
     right: 20px;
     top: -86px;
     border-radius: 8px;
+    background-size:100% 100%!important;
     .c_bh{
       font-size: 12px;
       margin: 4px 0 0 13px;
@@ -1004,26 +1005,27 @@ export default {
     }
   }
   .cardImg2 {
-    width: 323px;
+    width: 313px;
     height: 140px;
     position: absolute;
     right: 20px;
     top: -86px;
     border-radius: 8px;
     background: url('../../assets/images/client/bg_card.png') 0 0 no-repeat;
+    color: #fff;
     .c_bh{
       font-size: 12px;
-      margin: 4px 0 0 13px;
+      margin: 8px 0 0 24px;
     }
     .c_name{
       font-size: 20px;
-      text-align: center;
       font-weight: bold;
-      margin-top: 20px;
+      margin-top: -6px;
+      margin-left: 25px;
     }
     .c_level{
-      margin: 20px 0 0 15px;
-      font-size: 16px;
+      margin: 34px 0 0 26px;
+      font-size: 18px;
     }
   }
   .level_order {

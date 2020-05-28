@@ -4,18 +4,12 @@
             <el-tab-pane label="会员卡管理" name="first" v-permission="['用户', '会员卡', '会员卡管理']">
                 <div class="pane_container">
                     <div class="c_card">
+                        <p class="guide_text">
+                            <span>会员卡领取引导图</span>
+                            <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
+                        </p>
                         <img v-if="imgUrl" :src="imgUrl" class="cardImg" />
-                        <img v-else src="../../assets/images/client/card.png" alt class="cardImg" />
-                        <!-- <el-upload
-                            class="avatar-uploader"
-                            :action="uploadUrl"
-                            :show-file-list="false"
-                            :limit="1"
-                            :data="{json: JSON.stringify({cid: cid})}"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload"
-                        >
-                        </el-upload> -->
+                        <img v-else src="../../assets/images/client/guide_img.png" alt class="cardImg" />
                         <el-button v-if="!imgUrl" size="small" type="primary" class="upload_btn mini_1" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">待上传</el-button>
                         <el-button v-else size="small" type="primary" class="upload_btn mini_2" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更改</el-button>
                         <el-popover
@@ -25,12 +19,11 @@
                             v-model="popVisible"
                             trigger="hover"
                         >
-                            <p class="p_title">会员卡宣传图</p>
-                            <p class="p_over1">上传后将会出现在用户端的用户中心展示，更醒目地引导用户领取会员卡</p>
+                            <p class="p_title">会员卡领取引导图</p>
+                            <p class="p_over1">上传后将后出现在用户端的用户中心展示，更显目的引导用户领取会员卡，当用户领取会员卡后，则此引导图隐藏。</p>
                         </el-popover>
-                        <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                     </div>
-                    <p class="c_warn">建议上传图片尺寸1000*630像素，不超过3M，格式支持JPG、PNG、JPEG</p>
+                    <p class="c_warn">建议上传图片尺寸326*62像素，不超过3M，格式支持JPG、PNG、JPEG</p>
                 </div>
                 <cdTable></cdTable>
             </el-tab-pane>
@@ -190,17 +183,28 @@ export default {
     padding: 12px 20px;
     .c_card{
         width: 324px;
-        height: 140px;
+        height: 126px;
         background-position: 0 0;
         background-repeat: no-repeat;
         position: relative;
+        .guide_text{
+            position: relative;
+            font-size: 16px;
+            color: #655EFF;
+            margin-bottom: 28px;
+            .pop_img{
+                position: absolute;
+                left: 141px;
+                top: 0px;
+            }
+        }
         .mini_1{
             position: absolute;
             border-color: #655EFF;
             color:#655EFF;
             background: transparent;
             right: -79px;
-            bottom: 6px;
+            bottom: 18px;
         }
         .mini_2{
             position: absolute;
@@ -208,17 +212,11 @@ export default {
             color:#FD4C2B;
             background: transparent;
             right: -79px;
-            bottom: 6px;
-            padding: 5px 16px;
-        }
-        .pop_img{
-            position: absolute;
-            left: 291px;
-            top: 10px;
+            bottom: 18px;
         }
         .cardImg{
-            width: 324px;
-            height: 140px;
+            width: 326px;
+            height: 62px;
             border-radius: 10px;
         }
     }

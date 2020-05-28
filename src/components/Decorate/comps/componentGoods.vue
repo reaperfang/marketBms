@@ -27,10 +27,7 @@
     </div>
 </template>
 <script>
-import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
-import GOODS_LIST from '@/assets/json/goodsList.json'; 
-import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
     name:"componentGoods",
     mixins:[componentMixin],
@@ -62,9 +59,6 @@ export default {
             loading: false
         }
     },
-    components:{
-        componentButton
-    },
     created() {
         const _self = this;
         this._globalEvent.$on('goodsListOfGroupChange', (list, componentId)=>{
@@ -83,14 +77,34 @@ export default {
         this.decoration();
     },
     watch: {
-        currentComponentData(){
+        currentComponentData(newValue, oldValue){
             this.decoration();
         },
-        currentCatagoryId(newValue) {
-            this.fetch();
+        'currentComponentData.data.ids': {
+            handler(newValue, oldValue) {
+                if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                    this.fetch();
+                }
+            },
+            deep: true
         },
-        'ruleForm.currentCatagoryId'() {
-            this.fetch();
+        'currentComponentData.data.currentCatagoryId': {
+            handler(newValue, oldValue) {
+                if(newValue !== oldValue) {
+                    this.fetch();
+                }
+            },
+            deep: true
+        },
+        currentCatagoryId(newValue, oldValue) {
+            if(newValue !== oldValue) {
+                this.fetch();
+            }
+        },
+        'ruleForm.currentCatagoryId'(newValue, oldValue) {
+            if(newValue !== oldValue) {
+                this.fetch();
+            }
         },
     },
     computed: {
@@ -216,7 +230,7 @@ export default {
                         return;
                     }
                     params = {
-                        status: '1',
+                        // status: '1',
                         productCatalogInfoId: componentData.currentCatagoryId
                     };
                 }
@@ -250,12 +264,12 @@ export default {
                     }
                 }
                 params = {
-                    status: '1',
+                    // status: '1',
                     ids: allIds
                 }
             }else{
                 params = {
-                    status: '1',
+                    // status: '1',
                     ids: ids[this.currentCatagoryId],
                     productCatalogInfoId: this.currentCatagoryId
                 }
@@ -266,7 +280,7 @@ export default {
         /* 设置普通商品参数 */
         setNormalGoodsParams(ids) {
             return {
-                status: '1',
+                // status: '1',
                 ids: ids,
             }
         },

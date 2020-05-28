@@ -24,6 +24,7 @@ export default {
     return {
       loading: true,
       id: this.$route.query.id || '',
+      saveType: 'save',  //保存类型  save:保存到草稿箱   saveAndApply:保存并应用
       pageId: '',
       /* 装修编辑器配置 */
       config: {
@@ -38,6 +39,20 @@ export default {
             title: '保存草稿',
             function: this.saveData,
             type: 'primary',
+            show: () => true,
+            loading: false
+          },
+          saveAndApplyData: {
+            title: '保存并生效',
+            function: this.saveAndApplyData,
+            type: 'primary',
+            show: () => true,
+            loading: false
+          },
+          cancel: {
+            title: '取消',
+            function: this.cancelSave,
+            type: '',
             show: () => true,
             loading: false
           }
@@ -132,12 +147,25 @@ export default {
 
      /* 保存数据 */
     saveData() {
+      this.saveType = 'save';
       let resultData = this.$refs.Decorate.collectData();
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '1';
         if(this.checkInput(resultData)) {
           this.setLoading(true);
           this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存成功!'});
+        };
+      }
+    },
+    /* 保存并生效数据 */
+    saveAndApplyData() {
+      this.saveType = 'saveAndApply';
+      let resultData = this.$refs.Decorate.collectData();
+      if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
+        resultData['status'] = '0';
+        if(this.checkInput(resultData)) {
+          this.setLoading(true);
+          this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存并上架成功!'});
         };
       }
     },
@@ -192,7 +220,7 @@ export default {
     /* 发起请求 */
     sendRequest(params) {
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
-          this.$message.success(params.tipWord)
+          this.$message.success(params.tipWord);
           this.setLoading(false);
         }).catch((error)=>{
           this.$message.error(error);
@@ -202,7 +230,12 @@ export default {
 
     /* 设置loading */
     setLoading(status) {
-      this.config.buttons.saveData.loading = status;
+      if(this.saveType === 'saveAndApply') {
+        this.config.buttons.saveAndApplyData.loading = status;
+      }else{
+        this.config.buttons.saveData.loading = status;
+      }
+
     },
 
     tabClick(event, item) {
@@ -222,6 +255,17 @@ export default {
         }
         this.pageList = tempItems;
         this.pageId = item.id;
+      })
+    },
+    /* 取消保存 */
+    cancelSave() {
+      this.confirm({
+        title: '确认取消？', 
+        customClass: 'goods-custom', 
+        icon: true, 
+        text: `<h3 style="font-size:18px;color:rgba(68,61,74,1);margin-bottom:10px;">确认取消？</h3><span style="font-size:16px;color:rgba(110,110,114,1);">取消后，放弃当前编辑数据，且无法恢复。</span>`
+      }).then(() => {
+        this._routeTo('m_templateManageIndex');
       })
     }
   }

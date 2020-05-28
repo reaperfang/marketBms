@@ -27,7 +27,7 @@
         <template slot-scope="scope">
           <div class="clearfix iden_cont">
             <span class="fl">{{scope.row?scope.row.memberType:""}}</span>
-            <div class="fr">
+            <div class="fl" style="margin-left: 5px">
               <span>{{scope.row?scope.row.levelName:""}}</span>
               <span>{{scope.row?scope.row.cardLevelName:""}}</span>
             </div>

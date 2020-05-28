@@ -16,7 +16,7 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
-const env = require('../config/' + process.env.NODE_ENV + '.env')
+const env = require('../config/env.' + process.env.NODE_ENV)
 
 // For NamedChunksPlugin
 const seen = new Set()
@@ -25,14 +25,14 @@ const nameLength = 4
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.test.productionSourceMap,
+      sourceMap: config[process.env.NODE_ENV].productionSourceMap,
       extract: true,
       usePostCSS: true
     })
   },
-  devtool: config.test.productionSourceMap ? config.test.devtool : false,
+  devtool: config[process.env.NODE_ENV].productionSourceMap ? config[process.env.NODE_ENV].devtool : false,
   output: {
-    path: config.test.assetsRoot,
+    path: config[process.env.NODE_ENV].assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash:8].js'),
     chunkFilename: utils.assetsPath('js/[name].[chunkhash:8].js')
   },
@@ -56,13 +56,13 @@ const webpackConfig = merge(baseWebpackConfig, {
           warnings: false
         }
       },
-      sourceMap: config.test.productionSourceMap,
+      sourceMap: config[process.env.NODE_ENV].productionSourceMap,
       parallel: true
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
-      cssProcessorOptions: config.test.productionSourceMap
+      cssProcessorOptions: config[process.env.NODE_ENV].productionSourceMap
         ? { safe: true, map: { inline: false } }
         : { safe: true }
     }),
@@ -70,13 +70,13 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: config.test.index,
+      filename: config[process.env.NODE_ENV].index,
       template: 'index.html',
       inject: true,
       favicon: resolve('favicon.ico'),
       title: 'bms',
       templateParameters: {
-        BASE_URL: config.test.assetsPublicPath + config.test.assetsSubDirectory,
+        BASE_URL: config[process.env.NODE_ENV].assetsPublicPath + config[process.env.NODE_ENV].assetsSubDirectory,
       },
       minify: {
         removeComments: true,
@@ -150,14 +150,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
-        to: config.test.assetsSubDirectory,
+        to: config[process.env.NODE_ENV].assetsSubDirectory,
         ignore: ['.*']
       }
     ])
   ]
 })
 
-if (config.test.productionGzip) {
+if (config[process.env.NODE_ENV].productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
   webpackConfig.plugins.push(
@@ -166,7 +166,7 @@ if (config.test.productionGzip) {
       algorithm: 'gzip',
       test: new RegExp(
         '\\.(' +
-        config.test.productionGzipExtensions.join('|') +
+        config[process.env.NODE_ENV].productionGzipExtensions.join('|') +
         ')$'
       ),
       threshold: 10240,
@@ -175,7 +175,7 @@ if (config.test.productionGzip) {
   )
 }
 
-if (config.test.bundleAnalyzerReport) {
+if (config[process.env.NODE_ENV].bundleAnalyzerReport) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }

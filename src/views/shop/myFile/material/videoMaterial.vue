@@ -32,7 +32,8 @@
                 :src="item.filePath"
                 class="avatar video-avatar"
                 controls="controls">您的浏览器不支持视频播放</video>  -->
-                <img :src="item.fileCover" class="imgs">
+                <img :src="item.fileCover" class="imgs" v-if="item.fileCover">
+                <div v-else class="imgs_cover"></div>
                 <span class="btn" @click="openVideo(item)"></span>
               </div>
               <p class="img_bottom">
@@ -411,9 +412,14 @@ export default {
             height:150px;
             object-fit: contain;
           }
+          .imgs_cover{
+            width: 240px;
+            height:150px;
+            background: #44434B;
+          }
           .btn{
             position:absolute;
-            top:75px;
+            top:85px;
             left:110px;
             width: 40px;
             height: 40px;

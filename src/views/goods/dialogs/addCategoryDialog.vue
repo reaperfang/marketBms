@@ -1,7 +1,7 @@
 <template>
     <div>
         <DialogBase :visible.sync="visible" :title="title" width="659px" :showFooter="showFooter">
-            <el-form :model="basicForm" :rules="basicRules" ref="basicForm" label-width="140px" size="small">
+            <el-form :model="basicForm" :rules="basicRules" ref="basicForm" label-width="100px" size="small">
                 <!-- <el-form-item label="分类名称：" prop="parentId">
                     <el-select placeholder="请选择上级分类" class="formInput" v-model="basicForm.parentId">
                         <el-option label="顶级栏目" value="0" style="paddingLeft:1em"></el-option>
@@ -28,7 +28,7 @@
                 <template v-if="data.level == 0">
                     <el-form-item label="分类名称：" prop="name">
                         <el-input placeholder="请输入分类名称" class="formInput" v-model="basicForm.name"></el-input>
-                        <span class="description">仅支持展示最多5个字的文本标签</span>
+                        <span class="description">仅支持展示最多10个字的文本标签</span>
                     </el-form-item>
                 </template>
                 <template v-else>
@@ -37,14 +37,14 @@
                         <span class="description">仅支持展示最多10个字的文本标签</span>
                     </el-form-item>
                 </template>
-                <el-form-item label="状态：" prop="enable">
+                <el-form-item label="状态：" prop="enable" class="enable">
                     <el-radio v-model="basicForm.enable" :label="1">启用</el-radio>
                     <el-radio v-model="basicForm.enable" :label="0">禁用</el-radio>
                 </el-form-item>
-                <el-form-item label="排序：" prop="sort">
+                <el-form-item label="排序：" prop="sort" class="sort">
                     <el-input maxlength="6" class="formInput" v-model="basicForm.sort"></el-input>
                 </el-form-item>
-                <el-form-item label="分类描述：" prop="description">
+                <el-form-item label="分类描述：" prop="description" class="description">
                     <el-input
                         type="textarea"
                         :rows="5"
@@ -98,7 +98,7 @@ export default {
             basicRules:{
                 name: [
                     { required: true, message: '请输入分类名称', trigger: 'blur' },
-                    { max: 5, message: '最多支持5个字符', trigger: 'blur' }
+                    { max: 10, message: '最多支持10个字符', trigger: 'blur' }
                 ],
                 name23: [
                     { required: true, message: '请输入分类名称', trigger: 'blur' },
@@ -364,6 +364,26 @@ export default {
         text-align: center;
         margin-top: 60px;
         margin-bottom: 40px;
+    }
+    /deep/ .el-form .el-form-item {
+        &.enable {
+            float: left;
+        }
+        &.sort {
+            float: right;
+        }
+        &.description {
+            clear: both;
+        }
+        .el-form-item__label {
+            text-align: left;
+            &:before {
+                margin-right: 10px;
+            }
+        }
+    }
+    /deep/ .el-dialog__body {
+        padding: 25px 31px;
     }
 </style>
 

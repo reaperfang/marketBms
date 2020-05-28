@@ -193,10 +193,12 @@ export default {
     'ruleForm.ids': {
       handler(newValue, oldValue) {
         const _self = this;
-        this.echoList = [];
-        newValue.forEach((item)=>{
-          _self.echoList.push({activityId: item.activityId, spuId: item.spuId});
-        })
+        if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+          this.echoList = [];
+          newValue.forEach((item)=>{
+            _self.echoList.push({activityId: item.activityId, spuId: item.spuId});
+          })
+        }
       },
       deep: true
     }

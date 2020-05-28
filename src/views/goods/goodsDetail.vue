@@ -32,7 +32,7 @@
             <el-form-item label="商品描述" prop="description">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
             </el-form-item>
-            <el-form-item label="商品图片" prop="images">
+            <el-form-item label="商品主图" prop="images">
                 <!-- <img v-for="(item, key) of imageList" :key="key" :src="item.src" alt="" style="width:100px;height:100px"> -->
                 <!-- <el-upload
                     :disabled="!ruleForm.productCategoryInfoId"
@@ -62,6 +62,10 @@
                             <span class="image-item-actions">
                                 <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                 <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                                <span class="image-item-actions-footer">
+                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter el-icon-arrow-left"><</i>
+                                    <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter el-icon-arrow-right">></i>
+                                </span>
                             </span>
                         </div>
                         <div v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="upload-add">
@@ -76,13 +80,42 @@
                     <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
                 <!-- <span :style="{visibility: !ruleForm.productCategoryInfoId ? 'hidden' : 'visible'}" v-if="imagesLength < 6" @click="currentDialog = 'dialogSelectImageMaterial'; dialogVisible = true" class="material">素材库</span> -->
-                <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小2M以下。</p>
+                <p class="upload-prompt">最多支持上传6张商品图片，默认第一张为主图；尺寸建议750x750（正方形模式）或750×1000（长图模式）像素以上，大小3M以下。</p>
+            </el-form-item>
+            <el-form-item label="主图视频" prop="videoUrl">
+                <div class="upload-box">
+                    <div class="video-list image-list">
+                        <div :style="{backgroundImage: `url(${ruleForm.mainImage || (ruleForm.images && ruleForm.images.split(',') && ruleForm.images.split(',')[0])})`}" v-if="ruleForm.videoUrl" class="image-item">
+                            <label>
+                                <i class="el-icon-check"></i>
+                            </label>
+                            <span class="image-item-actions">
+                                <span @click="videoDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-caret-right"></i></span>
+                                <span @click="deleteVideo" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
+                                <!--<span class="image-item-actions-footer">
+                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter"><</i>
+                                    <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter">></i>
+                                </span>-->
+                            </span>
+                        </div>
+                        <div v-if="!ruleForm.videoUrl" @click="currentDialog = 'dialogSelectVideo'; dialogVisible = true; uploadVideo = true" class="upload-add">
+                            <i data-v-03229368="" class="el-icon-plus"></i>
+                            <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传视频</p>
+                        </div>
+                    </div>
+                </div>
+                <!--<el-dialog :visible.sync="imageDialogVisible"
+                :close-on-click-modal="false"
+                :close-on-press-escape="false">
+                    <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>-->
+                <p class="upload-prompt">最多支持上传1个视频素材，封面默认为第一张商品主图，突出展现商品1-2个核心卖点；视频大小不超过10mb，支持mp4格式。</p>
             </el-form-item>
             <el-form-item class="productCatalogInfoId" label="商品分类" prop="productCatalogInfoIds">
                 <div class="block" :class="{isIE: isIE}" style="display: inline-block;">
                     <el-cascader
                         ref="fenleiCascader"
-                        class="shop_classify_tag"
+						class="shop_classify_tag"
                         popper-class="fenlei-popper"
                         :disabled="!ruleForm.productCategoryInfoId"
                         :options="categoryOptions"
@@ -90,7 +123,9 @@
                         @change="handleChange"
                         :props="{ multiple: true, checkStrictly: true }"
                         placeholder="请输入关键字"
-                        filterable>
+                        filterable
+                        size="medium"
+                        :show-all-levels="true">
                     </el-cascader>
                 </div>
                 <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
@@ -544,17 +579,18 @@
         </section>
         <section class="form-section">
             <h2>物流/售后</h2>
-            <el-form-item v-show="!editor" label="上架时间" prop="status">
-                <span>定时上架的商品在上架前请到“仓库中的宝贝”里编辑商品。</span>
+            <el-form-item label="上架时间" prop="status">
+                <span style="font-size: 12px;">定时上架的商品在上架前为“下架”状态。</span>
+                <span v-if="ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品状态。</span>
                 <div>
-                    <el-radio-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
-                        <el-radio :disabled="editor" :label="0">放入仓库</el-radio>
-                        <el-radio :disabled="editor" :label="1">立即上架</el-radio>
+                    <el-radio-group @change="statusChange" :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
+                        <el-radio :label="1">上架</el-radio>
+                        <el-radio :disabled="editor && ruleForm.activity" :label="0">下架</el-radio>
                         <template v-if="editor">
-                            <span><el-radio disabled :label="2">定时上架</el-radio></span>
+                            <span><el-radio :disabled="ruleForm.activity" :label="2">定时上架</el-radio></span>
                         </template>
                         <template v-else>
-                            <span @click="timelyShelvingHandler"><el-radio :label="2">定时上架</el-radio></span>
+                            <span style="display: inline-block;"><el-radio @click.native="timelyShelvingHandler" :label="2">定时上架</el-radio></span>
                         </template>
                         <span v-if="ruleForm.status == 2" class="autoSaleTime">{{ruleForm.autoSaleTime}}</span>
                     </el-radio-group>
@@ -662,8 +698,23 @@
             </div>
         </section>
     </el-form>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList"></component>
     <component :is="selectSpecificationsCurrentDialog" :dialogVisible.sync="selectSpecificationsDialogVisible" @submit="submit" :data="currentData" :specsLength.sync="specsLength" :flatSpecsList="flatSpecsList"></component>
+    <el-dialog
+        title=""
+        :visible.sync="videoDialogVisible"
+        width="800px"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false">
+        <div class="video-box">
+            <video width="500" controls="controls">
+            <source :src="ruleForm.videoUrl" type="video/ogg">
+            <source :src="ruleForm.videoUrl" type="video/mp4">
+            <source :src="ruleForm.videoUrl" type="video/mov">
+            Your browser does not support the video tag.
+            </video>
+        </div>
+    </el-dialog>
 </div>
 </template>
 <script>
@@ -676,6 +727,7 @@ import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
+import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo'
 import Specs from '@/views/goods/components/specs'
 import anotherAuth from '@/mixins/anotherAuth'
 export default {
@@ -871,6 +923,9 @@ export default {
             callObjectSpanMethod: false,
             deleteSpecArr: [],
             leimuSelected: false,
+            uploadVideo: false,
+            fileCover: '',
+            videoDialogVisible: false
         }
     },
     created() {
@@ -1034,6 +1089,64 @@ export default {
         });
     },
     methods: {
+        statusChange() {
+            if(this.ruleForm.status == 2) {
+                this.currentDialog = 'TimelyShelvingDialog'
+                this.dialogVisible = true
+            }
+        },
+        deleteVideo() {
+            this.ruleForm.videoUrl = ''
+        },
+        videoSelected(video) {
+            if(!/\.mp4|\.ogg|\.mov$/.test(video.filePath)) {
+                this.$message({
+                message: '上传的文件格式不正确，请重新上传',
+                type: 'warning'
+                });
+                return
+            }
+            if(video.fileSize > 1024*1024*10) {
+                this.$message({
+                message: '上传视频不能超过10M',
+                type: 'warning'
+                });
+                return
+            }
+            this.ruleForm.videoUrl = video.filePath
+        },
+        moveImage(flag, index) {
+            var swapItems = function(arr, index1, index2){
+            　　arr[index1] = arr.splice(index2,1,arr[index1])[0]
+            　　return arr
+            }
+            var upData = function(arr, index) {
+            　　if (arr.length > 1 && index !== 0) {
+            　　　　return swapItems(arr, index, index - 1)
+            　　}
+                return arr
+            }
+            var downData = function(arr, index) {
+            　　if (arr.length > 1 && index !== (arr.length - 1)) {
+            　　　　return swapItems(arr, index, index + 1)
+            　　}
+                return arr
+            }
+
+            if(flag == 'left') {
+                let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
+
+                let resultArr = upData(arr, index)
+                
+                this.ruleForm.images = resultArr.join(',')
+            } else {
+                let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
+
+                let resultArr = downData(arr, index)
+                
+                this.ruleForm.images = resultArr.join(',')
+            }
+        },
         visibleChange(flag) {
             console.log(flag)
             if(flag) {
@@ -1056,6 +1169,9 @@ export default {
 
             imagesArr.splice(index, 1)
             this.ruleForm.images = imagesArr.join(',')
+        },
+        deleteVideo() {
+            this.ruleForm.videoUrl = ''
         },
         beforeUpload(file) {
             console.log(file)
@@ -1290,7 +1406,22 @@ export default {
                     specs: _specs,
                     image: '',
                     fileList: [],
-                    showCodeSpan: false
+                    showCodeSpan: false,
+
+                    showCostPriceError: false,
+                    costPriceErrorMessage: '',
+                    showSalePriceError: false,
+                    salePriceErrorMessage: '',
+                    showStockError: false,
+                    stockErrorMessage: '',
+                    showWarningStockError: false,
+                    warningStockErrorMessage: '',
+                    showWeightError: false,
+                    weightErrorMessage: '',
+                    showVolumeError: false,
+                    volumeErrorMessage: '',
+                    showCodeError: false,
+                    codeErrorMessage: '',
                 }
             })
             this.ruleForm.goodsInfos.forEach((val, index) => {
@@ -1790,13 +1921,13 @@ export default {
         emptySpec(index) {
             this.ruleForm.goodsInfos.splice(index, 1, Object.assign({}, this.ruleForm.goodsInfos[index], {
                 costPrice: '',
-                salePrice: '',
-                stock: '',
+                //salePrice: '',
+                //stock: '',
                 warningStock: '',
                 weight: '',
                 volume: '',
                 image: '',
-                code: ''
+                code: !(this.ruleForm.isSyncProduct == 1 && this.authHide) ? '' : this.ruleForm.goodsInfos[index].code
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
             console.log(this.ruleForm.goodsInfos)
@@ -2013,6 +2144,23 @@ export default {
                 })
             })
         },
+        setGoodsImage(arr) {
+            arr.forEach((val, index) => {
+                if(val.image_rowspan && val.image_rowspan > 1) {
+                    if(!val.image && !val.image_hide) {
+                        let _arr = arr.slice(index, index + val.image_rowspan)
+                        
+                        if(_arr && _arr.length) {
+                            let imageArr = _arr.filter(val => val.image)
+
+                            if(imageArr && imageArr.length) {
+                                val.image = imageArr[0].image
+                            }
+                        }
+                    }
+                }
+            })
+        },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
             var that = this
@@ -2051,6 +2199,7 @@ export default {
                 this.computedAddSpecs(res.productSpecs)
 
                 __goodsInfos = this.computedList(res.goodsInfos)
+                this.setGoodsImage(__goodsInfos)
                 res.goodsInfos = __goodsInfos
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
@@ -2078,6 +2227,7 @@ export default {
                 try {
                     this.getMarketActivity([res.id]).then((activityRes) => {
                         activityRes.forEach((val, index) => {
+                            res.activity = true
                             if(val.isParticipateActivity) {
                                 res.goodsInfos.forEach(val => {
                                     val.activity = true
@@ -2116,6 +2266,21 @@ export default {
                                     name: '',
                                     url: val.image
                                 }]
+
+                                val.showCostPriceError = false
+                                val.costPriceErrorMessage = ''
+                                val.showSalePriceError = false
+                                val.salePriceErrorMessage = ''
+                                val.showStockError = false
+                                val.stockErrorMessage = ''
+                                val.showWarningStockError = false
+                                val.warningStockErrorMessage = ''
+                                val.showWeightError = false
+                                val.weightErrorMessage = ''
+                                val.showVolumeError = false
+                                val.volumeErrorMessage = ''
+                                val.showCodeError = false
+                                val.codeErrorMessage = ''
                             })
                             this.ruleForm.goodsInfos = goodsInfos
                         }
@@ -2212,7 +2377,7 @@ export default {
         getSpecsList() {
             let productCategoryInfoId = this.ruleForm.productCategoryInfoId
             let rootId = this.getRootId(productCategoryInfoId)
-            this._apis.goodsOperate.fetchSpecsList2({productCategoryId: rootId, enable: 1}).then(res => {
+            this._apis.goodsOperate.fetchSpecsList({productCategoryId: rootId, enable: 1}).then(res => {
                 console.log(res)
                 res.forEach(val => {
                     val.level = '1'
@@ -2323,13 +2488,13 @@ export default {
                         //      });
                         //      return
                         // }
-                        if(this.ruleForm.goodsInfos[i].image == '') {
-                            this.$message({
-                                message: '请上传图片',
-                                type: 'warning'
-                            });
-                            return
-                        }
+                        // if(this.ruleForm.goodsInfos[i].image == '') {
+                        //     this.$message({
+                        //         message: '请上传图片',
+                        //         type: 'warning'
+                        //     });
+                        //     return
+                        // }
                         if(this.ruleForm.goodsInfos[i].costPrice == '') {
                             this.$message({
                                 message: '请输入成本价',
@@ -2743,6 +2908,9 @@ export default {
             this.ruleForm.productCatalogInfoIds = _value
         },
         timelyShelvingHandler() {
+            this.currentData = {
+                time: this.ruleForm.autoSaleTime
+            }
             this.currentDialog = 'TimelyShelvingDialog'
             this.dialogVisible = true
         },
@@ -2811,7 +2979,7 @@ export default {
                         volume: '',
                         specs: _specs,
                         image: '',
-                        fileList: []
+                        fileList: [],
                     }
                 })
                 this.ruleForm.goodsInfos.forEach((val, index) => {
@@ -2948,6 +3116,18 @@ export default {
             }
         },
         imageSelected(image) {
+            // if(this.uploadVideo) {
+            //     if(!/\.mp4|\.ogg|\.mov$/.test(image.filePath)) {
+            //         this.$message({
+            //         message: '上传的文件格式不正确，请重新上传',
+            //         type: 'warning'
+            //         });
+            //         return
+            //     }
+            //     this.ruleForm.videoUrl = image.filePath
+            //     this.uploadVideo = false
+            //     return
+            // }
             if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
@@ -2955,9 +3135,9 @@ export default {
                 });
                 return
             }
-            if(image.fileSize > 1024*1024*2) {
+            if(image.fileSize > 1024*1024*3) {
                 this.$message({
-                message: '上传图片不能超过2M',
+                message: '上传图片不能超过3M',
                 type: 'warning'
                 });
                 return
@@ -2978,7 +3158,7 @@ export default {
                     name: image.fileName,
                     url: image.filePath
                 }))
-                if(this.ruleForm.images != '') {
+                if(this.ruleForm.images) {
                     this.ruleForm.images += ',' + image.filePath
                 } else {
                     this.ruleForm.images = image.filePath
@@ -3013,7 +3193,8 @@ export default {
         AddTagDialog,
         dialogSelectImageMaterial,
         RichEditor,
-        Specs
+        Specs,
+        dialogSelectVideo
     }
 }
 </script>
@@ -3563,6 +3744,17 @@ $blue: #655EFF;
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        &.video-list {
+            .image-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /deep/ .el-icon-caret-right:before {
+                    color: #fff;
+                    font-size: 24px;
+                }
+            }
+        }
         .upload-add {
             &:hover {
                 border-color: #655EFF;
@@ -3632,7 +3824,8 @@ $blue: #655EFF;
                 &:hover {
                     opacity: 1;
                 }
-                display: flex;
+                padding-top: 15px;
+                //display: flex;
                 align-items: center;
                 justify-content: center;
                 position: absolute;
@@ -3648,6 +3841,30 @@ $blue: #655EFF;
                 background-color: rgba(0,0,0,.5);
                 -webkit-transition: opacity .3s;
                 transition: opacity .3s;
+                .image-item-actions-footer {
+                    display: block;
+                    height: 30px;
+                    position: relative;
+                    i {
+                        display: inline-block;
+                        width: 18px;
+                        height: 16px;
+                        line-height: 16px;
+                        background: #000;
+                        text-align: center;
+                        font-size: 14px;
+                        position: absolute;
+                        bottom: 0;
+                        &.lefter {
+                            float: left;
+                            left: 0;
+                        }
+                        &.righter {
+                            float: right;
+                            right: 0;
+                        }
+                    }
+                }
                 i {
                     font-family: element-icons!important;
                     speak: none;
@@ -3689,23 +3906,23 @@ $blue: #655EFF;
     }
 }
 /deep/ .shop_classify_tag{
-    .el-input__inner{
-        padding-right: 0!important;
-    }
+	.el-input__inner{
+		padding-right: 0!important;
+	}
 }
 /deep/ .shop_classify_tag .el-input{
-    .el-input--suffix .el-input__inner{
-        padding-right: 0;
-    }
-    .el-input__inner{
-        padding-right: 0;
-    }
-    input{
-        width: 211px;
-    }
-    .el-input__suffix{
+	.el-input--suffix .el-input__inner{
+		padding-right: 0;
+	}
+	.el-input__inner{
+		padding-right: 0;
+	}
+	input{
+		width: 211px;
+	}
+	.el-input__suffix{
 
-    }
+	}
 }
 /deep/ .el-form-item__label {
     color: #3D434A;
@@ -3744,5 +3961,31 @@ $blue: #655EFF;
         height: 16px;
         background: url('../../assets/images/goods/renovate.png');
     }
+}
+.activity-message {
+    font-size:14px;
+    font-weight:400;
+    color:rgba(245,88,88,1);
+    margin-left: 27px;
+}
+.video-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.shop_classify_tag {
+    width: 450px;
+    /deep/ .el-input {
+        width: 450px;
+        .el-input__inner {
+            width: 450px;
+        }
+    }
+}
+/deep/ .el-icon-arrow-left:before {
+    font-size: 12px;
+}
+/deep/ .el-icon-arrow-right:before {
+    font-size: 12px;
 }
 </style>

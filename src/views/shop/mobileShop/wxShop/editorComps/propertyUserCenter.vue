@@ -1,3 +1,4 @@
+/* 微信个人中心装修属性区 */
 <template>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-calcHeight="154+20">
         <div class="block header">

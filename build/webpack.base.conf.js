@@ -3,30 +3,12 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
 let getPublicPath = function() {
-  let publicPath = '';
-  switch(process.env.NODE_ENV) {
-    case 'testing':
-      publicPath = config.test.assetsPublicPath
-      break;
-    case 'testing2':
-      publicPath = config.test2.assetsPublicPath
-      break;
-    case 'pre':
-      publicPath = config.pre.assetsPublicPath
-      break;
-    case 'production':
-      publicPath = config.build.assetsPublicPath
-      break;
-      default:
-      publicPath = config.dev.assetsPublicPath
-  }
-  return publicPath
+  return config[process.env.NODE_ENV].assetsPublicPath || '';
 }
 
 module.exports = {
@@ -35,7 +17,7 @@ module.exports = {
     app: ["babel-polyfill", "./src/main.js"]
   },
   output: {
-    path: config.build.assetsRoot,
+    path: config.prod.assetsRoot,
     filename: '[name].js',
     publicPath: getPublicPath()
   },

@@ -19,7 +19,6 @@
     </div>
 </template>
 <script>
-import componentButton from './componentButton';
 import componentGoods from './componentGoods';
 import componentMixin from '../mixins/mixinComps';
 export default {
@@ -73,6 +72,14 @@ export default {
       currentComponentData(){
          this.calcScroll();
          this.decoration();
+      },
+      'currentComponentData.data.ids': {
+          handler(newValue, oldValue) {
+              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                  this.fetch();
+              }
+          },
+          deep: true
       }
     },
     computed: {

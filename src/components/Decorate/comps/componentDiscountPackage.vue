@@ -53,7 +53,6 @@
 
 </template>
 <script>
-import componentButton from './componentButton';
 import componentMixin from '../mixins/mixinComps';
 export default {
     name:"componentDiscountPackage",
@@ -83,9 +82,6 @@ export default {
             loading: false
         }
     },
-    components:{
-        componentButton
-    },
     created() {
         this.fetch();
         this._globalEvent.$on('fetchDiscountPackage', (componentData, componentId) => {
@@ -100,7 +96,15 @@ export default {
     watch: {
       currentComponentData(){
         this.decoration();
-      }
+      },
+      'currentComponentData.data.ids': {
+            handler(newValue, oldValue) {
+                if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                    this.fetch();
+                }
+            },
+            deep: true
+        }
     },
     computed: {
          /* 检测是否有数据 */

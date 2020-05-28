@@ -30,7 +30,37 @@
           </div>
         </div>
         <div v-show="item.showContent" class="content">
-          <el-table :data="item.goodsList" style="width: 100%">
+          <div class="message">
+            <div class="message-item-list">
+              <div class="message-item">收货信息：</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.receivedName}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.receivedPhone}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address ? 
+                item.address.receivedProvinceName + item.address.receivedCityName + item.address.receivedAreaName + item.address.receivedDetail : ''}}</div>
+            </div>
+          </div>
+          <div class="message message2">
+            <div class="message-item-list">
+              <div class="message-item">发货信息：</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.sendName}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.sendPhone}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address ? 
+                item.address.sendProvinceName + item.address.sendCityName + item.address.sendAreaName + item.address.sendDetail : ''}}</div>
+            </div>
+          </div>
+          <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
             <el-table-column label="商品" width="300">
               <template slot-scope="scope">
                 <div class="goods-detail">
@@ -164,25 +194,38 @@ export default {
     getOrderSendItems() {
       let arr = [];
 
-      for (let i in this.orderDetail.orderSendItemMap) {
-        if (this.orderDetail.orderSendItemMap.hasOwnProperty(i)) {
+      for (let i in this.orderDetail.sendItemAndAddress) {
+        if (this.orderDetail.sendItemAndAddress.hasOwnProperty(i)) {
           let obj = Object.assign(
             {},
             {
-              goodsList: this.orderDetail.orderSendItemMap[i],
+              address: this.orderDetail.sendItemAndAddress[i].address ? JSON.parse(this.orderDetail.sendItemAndAddress[i].address) : '',
+              goodsList: this.orderDetail.sendItemAndAddress[i].list,
               expressNo: i,
-              shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
+              shipperName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].expressCompany || '',
               showContent: true,
-              sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
-              sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendName || '',
-              id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+              sendRemark: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendRemark || '',
+              sendName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendName || '',
+              id: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].orderId || '',
+              createTime: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].createTime || '',
             }
           );
 
           arr.push(obj);
         }
       }
+      arr.sort((a, b) => {
+        let timeA = new Date(a.createTime).getTime()
+        let timeB = new Date(b.createTime).getTime()
 
+        if(timeA > timeB) {
+          return -1
+        } else if(timeA < timeB) {
+          return 1
+        } else if(timeA == timeB) {
+          return 0
+        } 
+      })
       this.orderSendItems = arr;
     },
     showLogistics(expressNo, expressCompanys, id) {
@@ -306,6 +349,34 @@ export default {
           padding-top: 20px;
         }
       }
+    }
+  }
+}
+.message {
+  font-size:14px;
+  color:rgba(68,67,75,1);
+  display: flex;
+  .message-item-list {
+    margin-right: 45px;
+    &:first-child {
+      margin-right: 14px;
+      flex-shrink: 0;
+    }
+    &:nth-child(2) {
+      flex-shrink: 0;
+      width: 112px;
+    }
+    .message-item {
+      margin-bottom: 17px;
+    }
+
+  }
+  &.message2 {
+    .message-item-list {
+      .message-item {
+        margin-bottom: 0;
+      }
+
     }
   }
 }

@@ -30,7 +30,7 @@
           @click="selectComponent(item)" 
           @dragstart.self="selectItem = item" 
           @dragend.self="selectItem = {}">
-            <component v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
+            <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
             <i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
           </div>
         </template>
@@ -62,7 +62,7 @@
 
 <script>
 import utils from '@/utils';
-import widget from './widgetConfig';
+import widget from './config/widgetConfig';
 import vuedraggable from "vuedraggable";
 
 export default {
