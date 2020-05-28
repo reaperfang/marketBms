@@ -31,20 +31,24 @@
         </div>
         <div v-show="item.showContent" class="content">
           <div class="message">
-            <p>收货信息：
-              <span class="message-name">{{item.address && item.address.receivedName}}</span>
-              <span class="message-phone">{{item.address && item.address.receivedPhone}}</span>
-              <span class="message-address">{{item.address ? 
-                item.address.receivedProvinceName + item.address.receivedCityName + item.address.receivedAreaName + item.address.receivedDetail : ''}}
-              </span>
-            </p>
-            <p class="message-send">发货信息：
-              <span class="message-name">{{item.address && item.address.sendName}}</span>
-              <span class="message-phone">{{item.address && item.address.sendPhone}}</span>
-              <span class="message-address">{{item.address ? 
-                item.address.sendProvinceName + item.address.sendCityName + item.address.sendAreaName + item.address.sendDetail : ''}}
-              </span>
-            </p>
+            <div class="message-item-list">
+              <div class="message-item">收货信息：</div>
+              <div class="message-item">发货信息：</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.receivedName}}</div>
+              <div class="message-item">{{item.address && item.address.sendName}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.receivedPhone}}</div>
+              <div class="message-item">{{item.address && item.address.sendPhone}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address ? 
+                item.address.receivedProvinceName + item.address.receivedCityName + item.address.receivedAreaName + item.address.receivedDetail : ''}}</div>
+              <div class="message-item">{{item.address ? 
+                item.address.sendProvinceName + item.address.sendCityName + item.address.sendAreaName + item.address.sendDetail : ''}}</div>
+            </div>
           </div>
           <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
             <el-table-column label="商品" width="300">
@@ -341,19 +345,11 @@ export default {
 .message {
   font-size:14px;
   color:rgba(68,67,75,1);
-  p {
-    &:first-child {
-      margin-bottom: 17px;
-    }
-    &.message-send {
-      padding-bottom: 26px;
-      border-bottom: 1px solid #CACFCB;
-    }
-  }
-  span {
+  display: flex;
+  .message-item-list {
     margin-right: 45px;
-    &.message-name {
-      margin-left: 14px;
+    .message-item {
+      margin-bottom: 17px;
     }
   }
 }
