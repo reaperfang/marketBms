@@ -831,11 +831,11 @@ export default {
             for(let i in _value) {
                 if(_value.hasOwnProperty(i)) {
                     str += i + '：'
-                    str += _value[i] + '，'
+                    str += _value[i] + '；'
                 }
             }
 
-            str = str.replace(/^(.*)\，$/, '$1')
+            str = str.replace(/^(.*)\；$/, '$1')
 
             return str
         },

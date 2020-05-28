@@ -23,6 +23,7 @@ export default{
       })
 
       this._globalEvent.$on('addGoodsEvent', (flag) => {
+        if(!this.isIE()) return
           if(flag) {
             this.hideFenlei = true
           } else {
@@ -48,7 +49,21 @@ export default{
     });
   },
   methods: {
-
+    isIE() {
+        var userAgent = navigator.userAgent;
+        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;
+        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+        if(isIE) {
+            return true;
+        } else if(isEdge) {
+            return true;
+        } else if(isIE11) {
+            return true;
+        }else{
+            return false
+        }
+    },
   }
 }
 </script>

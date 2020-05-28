@@ -33,19 +33,29 @@
           <div class="message">
             <div class="message-item-list">
               <div class="message-item">收货信息：</div>
-              <div class="message-item">发货信息：</div>
             </div>
             <div class="message-item-list">
               <div class="message-item">{{item.address && item.address.receivedName}}</div>
-              <div class="message-item">{{item.address && item.address.sendName}}</div>
             </div>
             <div class="message-item-list">
               <div class="message-item">{{item.address && item.address.receivedPhone}}</div>
-              <div class="message-item">{{item.address && item.address.sendPhone}}</div>
             </div>
             <div class="message-item-list">
               <div class="message-item">{{item.address ? 
                 item.address.receivedProvinceName + item.address.receivedCityName + item.address.receivedAreaName + item.address.receivedDetail : ''}}</div>
+            </div>
+          </div>
+          <div class="message message2">
+            <div class="message-item-list">
+              <div class="message-item">发货信息：</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.sendName}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.address && item.address.sendPhone}}</div>
+            </div>
+            <div class="message-item-list">
               <div class="message-item">{{item.address ? 
                 item.address.sendProvinceName + item.address.sendCityName + item.address.sendAreaName + item.address.sendDetail : ''}}</div>
             </div>
@@ -348,8 +358,25 @@ export default {
   display: flex;
   .message-item-list {
     margin-right: 45px;
+    &:first-child {
+      margin-right: 14px;
+      flex-shrink: 0;
+    }
+    &:nth-child(2) {
+      flex-shrink: 0;
+      width: 112px;
+    }
     .message-item {
       margin-bottom: 17px;
+    }
+
+  }
+  &.message2 {
+    .message-item-list {
+      .message-item {
+        margin-bottom: 0;
+      }
+
     }
   }
 }

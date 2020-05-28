@@ -5,7 +5,7 @@
                 <i class="icon-success"></i>
             </div>
             <p class="message">修改价格成功！</p>
-            <p>{{time}}S后自动跳转到订单列表页或 <a @click="$router.push('/order/query')" href="javascript:;">立即跳转</a>。</p>
+            <p>{{time}}S后自动跳转到订单列表页或 <a @click="jump" href="javascript:;">立即跳转</a>。</p>
         </div>
     </DialogBase>
 </template>
@@ -48,6 +48,10 @@ export default {
         },
         close() {
             clearTimeout(this.timer)
+        },
+        jump() {
+            clearTimeout(this.timer)
+            this.$router.push('/order/query')
         }
     },
     computed: {

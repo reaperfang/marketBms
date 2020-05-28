@@ -531,7 +531,7 @@ export default {
         this.getList()
         this.getCategoryList()
         this.getMiniappInfo()
-        this.getProductCatalogTreeList()
+        //this.getProductCatalogTreeList()
     },
     computed: {
         isIE() {
