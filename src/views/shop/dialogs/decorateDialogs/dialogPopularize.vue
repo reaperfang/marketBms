@@ -91,6 +91,7 @@
                 <el-input
                   :rows="5"
                   :max="10"
+                  :validate-event="false"
                   :placeholder="'请输入分享标题，不超过' + titlePlaceholder +'个汉字'"
                   v-model="ruleFormH5.title">
                 </el-input>
@@ -99,6 +100,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
+                  :validate-event="false"
                   :placeholder="'请输入分享描述，不超过' + describePlaceholder +'个汉字'"
                   v-model="ruleFormH5.describe">
                 </el-input>
@@ -135,6 +137,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
+                  :validate-event="false"
                   :placeholder="'请输入分享描述，不超过' + describePlaceholder +'个汉字'"
                   v-model="ruleFormMini.describe">
                 </el-input>
