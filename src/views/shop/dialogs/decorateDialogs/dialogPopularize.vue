@@ -91,7 +91,7 @@
                 <el-input
                   :rows="5"
                   :max="10"
-                  placeholder="请输入分享标题，不超过15个汉字"
+                  :placeholder="'请输入分享标题，不超过' + titlePlaceholder +'个汉字'"
                   v-model="ruleFormH5.title">
                 </el-input>
               </el-form-item>
@@ -99,7 +99,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
-                  placeholder="请输入分享描述，不超过30个汉字"
+                  :placeholder="'请输入分享描述，不超过' + describePlaceholder +'个汉字'"
                   v-model="ruleFormH5.describe">
                 </el-input>
               </el-form-item>
@@ -135,7 +135,7 @@
                 <el-input
                   :rows="5"
                   :max="18"
-                  placeholder="请输入分享描述，不超过30个汉字"
+                  :placeholder="'请输入分享描述，不超过' + describePlaceholder +'个汉字'"
                   v-model="ruleFormMini.describe">
                 </el-input>
               </el-form-item>
@@ -337,6 +337,30 @@ export default {
     shopInfo() {
       return this.$store.getters.shopInfo || {};
     },
+    titlePlaceholder() {
+      if(this.currentType === 'h5') {
+        if(this.shareStyle === 0) {
+          return 15;
+        }else if(this.shareStyle === 1){
+          return 25;
+        }
+      }
+    },
+    describePlaceholder() {
+      if(this.currentType === 'h5') {
+        if(this.shareStyle === 0) {
+          return 30;
+        }else if(this.shareStyle === 1){
+          return 30;
+        }else if(this.shareStyle === 2){
+          return 36;
+        }
+      }else if(this.currentType === 'mini') {
+        if(this.shareStyle2 === 1) {
+          return 30;
+        }
+      }
+    }
   },
   created() {
     this.fetch();
