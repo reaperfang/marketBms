@@ -2,7 +2,7 @@
 const utils = require('./utils')
 const config = require('../config')
 
-let sourceMap = config[process.env.NODE_ENV][process.env.NODE_ENV === 'dev' ? 'cssSourceMap' : 'productionSourceMap'] ||{};
+let sourceMap = config[process.env.NODE_ENV][process.env.NODE_ENV === 'dev' ? 'cssSourceMap' : 'productionSourceMap'] || false;
 let extract = process.env.NODE_ENV !== 'dev';
 let usePostCSS = true;
 
