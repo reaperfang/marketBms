@@ -33,7 +33,7 @@
         prop="triggerRule"
         label="推送规则">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="msgWechatPublic"
         label="公众号模版消息"
         align="center">
@@ -52,13 +52,13 @@
             <div slot="content" style="width:200px;">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
               <div class="preview_content" v-html="scope.row.wechatPublicPreview"></div>
-              <!-- <p class="checkInfo" v-if="scope.row.isGotoWechatPublicDetail == 1">详情</p> -->
+              <p class="checkInfo" v-if="scope.row.isGotoWechatPublicDetail == 1">详情</p>
               <p class="preview_id">模板ID:{{scope.row.wechatPublicId}}</p>
             </div>
             <el-link type="primary" v-permission="['设置', '消息设置', '默认页面', '预览']">{{!!scope.row.wechatPublicId?'预览':'--'}}</el-link>
           </el-tooltip>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <!-- <el-table-column
         prop="msgWechatApp"
         label="小程序模版消息"
