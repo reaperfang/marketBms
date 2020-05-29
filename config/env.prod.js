@@ -8,7 +8,7 @@ module.exports = merge(baseConfig, {
   SALE_API: '"/mkt-api"',
   UPLOAD_SERVER: '"//omo.aiyouyi.cn"',
   ZX_API: '"/cms-api"',
-  ZX_HELP: '"https://www.300.cn"',
+  ZX_HELP: '"//www.300.cn"',
 
   
 
