@@ -28,43 +28,26 @@ export default {
     center:{  
       type: Array,
       default: ()=>{
-        return appConfig.map.defaultCenter || [39.9046900000, 116.4071700000]
+        return appConfig.map.defaultCenter || [36.67489963858812, 102.76171874999999]
       }
     },
     scaleControl: {
       type: Boolean,
       default: true
     },
-    scaleControlOptions: {
-      type: Object,
-      default(){
-        return {
-        }
-      }
-    },
     zoomControl: {
       type: Boolean,
       default: true
-    },
-    zoomControlOptions: {
-      type: Object,
-      default(){
-        return {
-        }
-      }
     },
     panControl: {
       type: Boolean,
       default: true
     },
-    PanControlOptions: {
-      type: Object,
-      default(){
-        return {
-        }
-      }
-    },
     isInitSearch: {
+      type: Boolean,
+      default: true
+    },
+    disableDoubleClickZoom: {
       type: Boolean,
       default: true
     }
@@ -90,10 +73,12 @@ export default {
 
   mounted(){
     if(!this.mapLoaded) {
+      console.log(11111)
       this._globalEvent.$on('mapLoaded', ()=>{
         this.init();
       });
     }else{
+      console.log(22222)
       this.init();
     }
   },
@@ -109,11 +94,8 @@ export default {
         scaleControl: this.scaleControl,
         zoomControl: this.zoomControl,
         panControl: this.panControl,
-        PanControlOptions: this.PanControlOptions,
-        zoomControlOptions: this.zoomControlOptions,
-        scaleControlOptions:this.scaleControlOptions
+        disableDoubleClickZoom: this.disableDoubleClickZoom
       });
-
       //初始化事件
       this.inited();
 

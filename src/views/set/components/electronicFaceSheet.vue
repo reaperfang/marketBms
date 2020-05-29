@@ -71,7 +71,7 @@
             <template slot-scope="scope">
               <div class="operate-box">
                 <span v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
-                <span v-permission="['设置', '普通快递', '电子面单', '修改']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
+                <span v-permission="['设置', '普通快递', '电子面单', '编辑']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
                 <span v-permission="['设置', '普通快递', '电子面单', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
               </div>
             </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="result"  v-show="isShowMap">
+    <div class="result">
       <div class="search">
         <el-input class="search-input"
           placeholder="地图搜索"
@@ -32,7 +32,7 @@
           </el-pagination>
         </div>
       </div>
-      <div id="mapContainer"  v-show="isShowMap" ref="mapContainer"></div>
+      <div id="mapContainer" ref="mapContainer"></div>
     </div>
   </div>
 </template>
@@ -62,7 +62,6 @@ export default {
         pageCapacity: 10,
         autoExtend: true,
       },
-      isShowMap: false, // 是否显示地图
       lng: null,
       lat: null,
       info: null,
@@ -72,10 +71,19 @@ export default {
       pageSize: 10,
       totalNum: 0,
       keyword: '',
-      markerClusterer: null
+      markerClusterer: null,
+      isLoded: false
     };
   },
   methods: {
+    // 清空查询结果列表
+    clearSearchResultList() {
+      this.pois = []
+    },
+    // 清空关键词搜索
+    clearKeyword() {
+      this.keyword = ''
+    },
     handleCurrentChange(val) {
       this.page = val
       this.search()
@@ -84,6 +92,56 @@ export default {
     inited() {
       this.info = new qq.maps.InfoWindow({
         map: this.mapObj
+      })
+      // 初始化事件
+      this.initEvent()
+      this.mapObj.setOptions({
+        scaleControlOptions: {
+          position: qq.maps.ControlPosition.RIGHT_CENTER
+        },
+        zoomControlOptions: {
+          position: qq.maps.ControlPosition.RIGHT_CENTER
+        },
+        panControlOptions: {
+          position: qq.maps.ControlPosition.RIGHT_CENTER
+        }
+      })
+    },
+    //初始化事件
+    initEvent() {
+      const self = this
+      this.eventList["click"] = qq.maps.event.addListener(
+        this.mapObj,
+        "click",
+        function(event) {
+          const currZoom = self.mapObj.getZoom()
+          if (event && event.latLng && currZoom > 10 && !this.isLoded) {
+            this.isLoded = true
+            const latLng = event.latLng
+            self.getGeocoder({ location: `${latLng.lat},${latLng.lng}` }).then((res) => {
+              console.log('--getGeocoder---',res)
+              const poi = {
+                address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
+                location:res.result.location,
+                title: res.result.formatted_addresses.recommend
+              }
+              self.openInfoWindow(self.info, null, self.mapObj, poi)
+            }).catch((err) => {
+              console.log(err)
+            }).finally(() => {
+              this.isLoded = false
+            })
+          }
+        }
+      );
+    },
+    getGeocoder(data) {
+      return new Promise((resolve, reject) => {
+        this._apis.map.getGeocoder(data).then(response =>{
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+        })
       })
     },
     // clear maker
@@ -191,21 +249,19 @@ export default {
       this.setPanTo(pois[0].location.lng, pois[0].location.lat)
     },
     // 设置根据地区经纬度变化改变当前地图中心
-    setPanTo(lng, lat) {
+    setPanTo(lng, lat, zoom = 17) {
       console.log('-lng, lat---',lng, lat)
       const oLatLng = new qq.maps.LatLng(lat, lng)
       this.mapObj.panTo(oLatLng)
-      this.mapObj.zoomTo(17)
+      this.mapObj.zoomTo(zoom)
     },
-    // 通过address 获取经纬度 待api开发
+    // 通过address 获取经纬度
     getGeocoderByAddress() {
       console.log('-----获取经纬度----')
-      // const lng = 116.307015
-      // const lat = 39.982915
       this._apis.map.getGeocoderAddress({ address: this.address }).then((res) => {
         const lng = res.result.location.lng
         const lat = res.result.location.lat
-        this.setPanTo(lng, lat)
+        this.setPanTo(lng, lat, 12)
       }).catch((err) => {
         console.log(err)
       })
@@ -223,10 +279,7 @@ export default {
     address(curr) {
       console.log('----watch---',curr)
       if (curr) {
-        this.isShowMap = true
         this.getGeocoderByAddress()
-      } else {
-        this.isShowMap = false
       }
     }
   }

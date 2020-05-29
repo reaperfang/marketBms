@@ -24,6 +24,7 @@
       </el-form-item>
       <el-form-item
         label="创建日期:"
+        v-if="form.createTime"
       >{{new Date(form.createTime*1) | formatDate('yyyy-MM-dd hh:mm:ss')}}</el-form-item>
       <el-form-item label="商户LOGO:">
         <span v-if="form.logo" class="avatar">
@@ -76,7 +77,7 @@
         <!-- <el-cascader :options="cityLists" :props="cityProps" v-model="form.addressCode" expand-trigger="hover"/> -->
       </el-form-item>
       <el-form-item label="详细地址:" prop="address">
-        <el-input v-model="form.address" style="width:300px;" placeholder="详细地址" />
+        <el-input v-model="form.address" @change="handleChangeAddress" style="width:300px;" placeholder="详细地址" />
         <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button>
       </el-form-item>
       <el-form-item label="店铺简介:" prop="shopIntroduce">
@@ -100,7 +101,18 @@
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
-      <map-search class="map" ref="shopInfoMap" :address="getAddress" :boundary="city" :scaleControl="mapStyle.scaleControl" :zoom="mapStyle.zoom" :zoomControl="mapStyle.zoomControl" :panControl="mapStyle.panControl" :center="[39.9046900000,116.4071700000]" @getMapClickPoi="getMapClickPoi" :isInitSearch="false"></map-search>
+      <map-search 
+        class="map"
+        ref="shopInfoMap"
+        :address="provinceCityArea"
+        :boundary="boundary"
+        :scaleControl="mapStyle.scaleControl"
+        :zoom="mapStyle.zoom"
+        :zoomControl="mapStyle.zoomControl"
+        :panControl="mapStyle.panControl"
+        :center="[36.67489963858812, 102.76171874999999]"
+        @getMapClickPoi="getMapClickPoi"
+        :isInitSearch="false"></map-search>
     </el-form>
     <!-- map -->
     <!-- 动态弹窗 -->
@@ -138,6 +150,8 @@ export default {
       }
     };
     return {
+      provinceCityArea: '',
+      boundary: '',
       itemCatText: "",
       itemCatList: [],
       operateCategoryList: [],
@@ -172,10 +186,10 @@ export default {
           { validator: validatePass, trigger: "blur" }
         ],
         addressCode: [
-          { required: true, message: "请输入联系地址", trigger: "blur" }
+          { required: true, message: "请填写联系地址", trigger: "blur" }
         ],
         address: [
-          { required: true, message: "请输入详细地址", trigger: "blur" }
+          { required: true, message: "详细地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
         ],
         shopIntroduce: [
           {
@@ -207,17 +221,21 @@ export default {
       uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
       uploadUrlBase64: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`,
       mapStyle: {
-        zoom: 12,
-        zoomControl: false,
-        panControl: false,
-        scaleControl: false
-      } // 地图配置
+        zoom: 4,
+        zoomControl: true,
+        panControl: true,
+        scaleControl: true
+      }, // 地图配置
+      isMapChoose: false
       //canvas:{}
     };
   },
   components: { dialogSelectImageMaterial, mapSearch },
   watch: {},
   computed: {
+    mapLoaded() {
+      return this.$store.getters.mapLoaded;
+    },
     canvas() {
       return this.$refs.canvas1;
     },
@@ -234,8 +252,12 @@ export default {
       this.getShopInfo();
     });
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
+    handleChangeAddress() {
+      this.isMapChoose = false
+    },
     imageSelected(item) {
       this.form.logo = item.filePath;
       this.handleAvatarSuccess(item.filePath);
@@ -296,8 +318,13 @@ export default {
     // 获取类目
     getCategoryInfoIds(arr, id) {
       try {
-        let parentId = this.operateCategoryList.find(val => val.id == id).parentId;
-
+        console.log('--getCategoryInfoIds--', this.operateCategoryList.find(val => val.id == id))
+        let parentId
+        let parentIds = this.operateCategoryList.find(val => val.id == id)
+        if (!parentIds) {
+          return false
+        }
+        parentId = parentIds.parentId
         arr.unshift(id + "");
 
         if (parentId && parentId != 0) {
@@ -315,6 +342,8 @@ export default {
       this.area = this.$pcaa[this.form.addressCode[1]][
         this.form.addressCode[2]
       ];
+      // 省市区改变时
+      this.provinceCityArea = `${this.province}${this.city}${this.area}`
     },
 
     getShopInfo() {
@@ -343,9 +372,17 @@ export default {
           // 经纬度
           this.form.lat = response.latitude
           this.form.lng = response.longitude
+          // 没有经纬度的为历史数据，则默认显示全国地图，否则显示省市区地图
+          // if (!response.latitude || !response.longitude) {
+          //   this.provinceCityArea = ''
+          //   this.boundary = ''
+          // } else {
+          //   this.provinceCityArea = `${this.province}${this.city}${this.area}`
+          //   this.boundary = this.city
+          // }
         })
         .catch(error => {
-          this.$message.error(error);
+          this.$message.error('查询失败');
         });
     },
     // 格式化省市县
@@ -388,9 +425,12 @@ export default {
       }
       this._apis.set.updateShopInfo(data).then(response =>{
         this.setShopName()    
-        this.$store.dispatch('getShopInfo');          
+        this.$store.dispatch('getShopInfo');    
+        this.$refs.shopInfoMap.clearSearchResultList()
+        this.$refs.shopInfoMap.clearKeyword()
       }).catch(error =>{
-        this.$message.error(error);
+        console.log('updateShopInfo:error', error)
+        this.$message.error('保存失败');
       }).finally(() => {
         this.loading = false
       })
@@ -398,6 +438,12 @@ export default {
     onSubmit(formName){
       this.$refs[formName].validate((valid) => {
           if (valid) {
+            if (!this.isMapChoose) {
+              this.$message.error('保存失败')
+              this.form.address = ''
+              this.$refs.form.validateField('address')
+              return false
+            }
             this.loading = true
             this.getProvincesCities(this.form.address)
             if (!this.form.lng) {
@@ -494,7 +540,6 @@ export default {
     // 模糊搜索地址列表
     searchMap() {
       this.$refs.shopInfoMap.handlePropSearch(this.form.address)
-      this.$refs.shopInfoMap.isShowMap = true
     },
     getProvinceCode() {
       let provinces = this.$pcaa[86]
@@ -588,6 +633,7 @@ export default {
       this.form.address = poi.address
       this.form.lat = poi.location.lat
       this.form.lng = poi.location.lng
+      this.isMapChoose = true
       this.getProvincesCities(poi.address)
     }
   }
@@ -611,7 +657,7 @@ export default {
     right: -20px;
     top: 0;
     padding: 20px;
-    width: 800px;
+    width: calc(100% - 580px);
     height: 700px;
     // border-left: 1px solid #ccc;
   }
