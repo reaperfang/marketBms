@@ -13,7 +13,7 @@
     >
       <el-table-column type="selection" :reserve-selection="true"></el-table-column>
       <el-table-column prop="memberSn" label="用户ID"></el-table-column>
-      <el-table-column label="用户信息">
+      <el-table-column label="用户信息" :width="163">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
             <img v-if="scope.row.headIcon" :src="scope.row.headIcon" alt="" class="headIcon fl">
@@ -343,12 +343,12 @@ export default {
   text-align: center;
 }
 .icon_cont{
-  width: 130px;
+  width: 163px;
   span{
-    display: block;
-    width: 84px;
+    width: 130px;
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
     line-height: 36px;
   }
   .headIcon{
@@ -380,9 +380,9 @@ export default {
     }
   }
 }
-@media screen and (max-width: 1600px) {
-  .icon_cont{
-    width: 117px;
-  }
-}
+// @media screen and (max-width: 1600px) {
+//   .icon_cont{
+//     width: 117px;
+//   }
+// }
 </style>
