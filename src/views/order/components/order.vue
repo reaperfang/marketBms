@@ -70,8 +70,11 @@
                         <p>{{order.receivedPhone}}</p>
                     </div>
                     <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1}">
-                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span>{{order.deliveryWay | deliveryWayFilter}}
-                        <p class="store-time" v-if="storeMark && order.deliveryWay == 2">{{order.deliveryDate}} {{order.deliveryTime}}</p>
+                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order.deliveryWay | deliveryWayFilter}}</span>
+                        <div class="store-time" v-if="storeMark && order.deliveryWay == 2">
+                            <p>{{order.deliveryDate}}</p>
+                            <p>{{order.deliveryTime}}</p>
+                        </div>
                     </div>
                     <div class="item">{{order.orderStatus | orderStatusFilter}}</div>
                     <div class="item operate">
@@ -411,21 +414,26 @@ export default {
             }
         }
         .item-storew{
-            width: 165px !important;
+            width: 105px !important;
         }
         .icon-store{
             display: inline-block;
             width: 16px;
             height: 15px;
             margin-right: 5px;
-            vertical-align: -2px;
+            vertical-align: middle;
             background: url(~@/assets/images/order/icon_store.png) no-repeat;
         }
+        .icon-store-text{
+            vertical-align: middle;
+        }
         .store-time{
-            color: #999;
+            padding-top: 5px;
+            font-size: 12px;
+            color: #9FA29F;
         }
         .item-indent{
-            text-indent: 25px;
+            text-indent: 0px;
         }
     }
     .order-code {
