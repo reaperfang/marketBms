@@ -11,7 +11,7 @@
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">订单编号：{{item.orderAfterSaleSendInfo.orderAfterSaleCode}}</div>
                             <div class="item" style="width: 260px;">发货日期：{{item.orderAfterSaleSendInfo.sendTime}}</div>
-                            <div class="item" v-if="!!item.orderAfterSaleSendInfo.sendTime" style="white-space:nowrap;">配送时间：2020-4-10 13:00~17:00</div>
+                            <div class="item" v-if="!!item.orderAfterSaleSendInfo.deliveryDate" style="white-space:nowrap;">配送时间：{{item.orderAfterSaleSendInfo.deliveryDate}} {{item.orderAfterSaleSendInfo.deliveryTime}}</div>
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">用户ID：{{item.orderAfterSaleSendInfo.memberSn}}</div>
@@ -28,7 +28,7 @@
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">订单编号：{{item.orderCode}}</div>
                             <div class="item" style="width: 260px;">发货日期：{{item.updateTime}}</div>
-                            <div class="item" v-if="!!item.updateTime" style="white-space:nowrap;">配送时间：{{item.updateTime}}</div>
+                            <div class="item" v-if="!!item.deliveryDate" style="white-space:nowrap;">配送时间：{{item.deliveryDate}} {{item.deliveryTime}}</div>
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">用户ID：{{item.memberSn}}</div>

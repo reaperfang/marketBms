@@ -176,7 +176,7 @@
               <span>商家配送</span>
             </el-form-item>
             <el-form-item label="配送时间">
-              <span>2020-04-10 13:00~17:00</span>
+              <span>{{orderInfo.deliveryDate}} {{orderInfo.deliveryTime}}</span>
             </el-form-item>
             <el-form-item label="配送员" prop="distributorValue">
               <el-select v-model="ruleFormStore.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" ref="searchSelect" :filter-method="dataFilter" @visible-change="visibleChange" @focus="selectFocus" @blur="selectBlur" @change="selectChange">
@@ -438,34 +438,38 @@ export default {
     },
     //获取配送员列表
     getDistributorList(){
-      this._apis.order
-        .getDistributorList()
-        .then(res => {
-          res = [
-            {"id":1,"name":"张三","phone":15910526104},
-            {"id":2,"name":"李四","phone":15910526104},
-            {"id":3,"name":"张四","phone":15910526104},
-          ]
-          //如果没有配送员，则提示去创建
-          if(res.length == 0){
-            this.isDistributorShow = true;
-          }else{
-            this.isDistributorShow = false;
-          }
-          this.distributorListFilter = res;
-          //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
-          if(this.distributorName){
-            this.distributorList = this.distributorListFilter.filter((item) => {
-                if (item.name.includes(this.distributorName) || item.name.toUpperCase().includes(val.toUpperCase())) {
-                  return true
+            this._apis.order
+                .getDistributorList({
+                    "shopInfoId": this.cid,
+                    "roleName": "1011maq角色",
+                    "startIndex": 1,
+                    "pageSize": 1000
+                })
+                .then(res => {
+                  //如果没有配送员，则提示去创建
+                if(res.list.length == 0){
+                    this.isDistributorShow = true;
+                }else{
+                    this.isDistributorShow = false;
                 }
-            })
-          }else{ //否则直接赋值全部配送员
-            this.distributorList = res;
-          }
-        })
-        .catch(error => {});
-    },
+                res.list.forEach((item) => {
+                    item.name = item.userName;
+                    item.phone = item.mobile;
+                })
+                this.distributorListFilter = res.list;
+                //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
+                if(this.distributorName){
+                    this.distributorList = this.distributorListFilter.filter((item) => {
+                        if (item.name.includes(this.distributorName) || item.name.toUpperCase().includes(val.toUpperCase())) {
+                        return true
+                        }
+                    })
+                }else{ //否则直接赋值全部配送员
+                    this.distributorList = res.list;
+                }
+                })
+                .catch(error => {});
+        },
     //新页面打开角色管理
     gotoRoleManage() {
         let routeData = this.$router.resolve({ path: '/set/roleManage' });
@@ -679,15 +683,17 @@ export default {
 
           //如果是普通快递
           if(formName == 'ruleForm'){
+            obj.deliveryWay = 1;
             obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
             obj.expressNos = this.ruleForm.expressNos; // 快递单号
             obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
             obj.remark = this.ruleForm.remark; // 发货备注
             obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
+            obj.deliveryWay = 2;
             obj.distributorName = this.distributorName; //配送员名字
             //obj.distributorId = this.distributorId; //配送员id，自己输入的新的名字没有id
-            obj.distributorName = this.ruleFormStore.phone; //配送员手机号
+            obj.distributorPhone = this.ruleFormStore.phone; //配送员手机号
             obj.sendRemark = this.ruleFormStore.sendRemark; // 物流备注
           }
           params = {
@@ -695,10 +701,7 @@ export default {
               obj
             ]
           };
-          console.log(params)
-          this.sending = false
-          return;
-          this._apis.order
+           this._apis.order
             .orderSendGoods(params)
             .then(res => {
               this.$message.success('发货成功');
@@ -751,9 +754,6 @@ export default {
       this._apis.order
         .orderSendDetail({ ids: [+this.$route.query.id || +this.$route.query.ids] })
         .then(res => {
-          //模拟数据，最后去掉
-          res[0].deliveryWay = 2;
-
           res[0].orderItemList.forEach(val => {
             val.cacheSendCount = val.sendCount;
             val.sendCount = val.goodsCount - val.sendCount;

@@ -375,20 +375,24 @@ export default {
             //获取配送员列表
         getDistributorList(){
             this._apis.order
-                .getDistributorList()
+                .getDistributorList({
+                    "shopInfoId": this.cid,
+                    "roleName": "1011maq角色",
+                    "startIndex": 1,
+                    "pageSize": 1000
+                })
                 .then(res => {
-                res = [
-                    {"id":1,"name":"张三","phone":15910526104},
-                    {"id":2,"name":"李四","phone":15910526104},
-                    {"id":3,"name":"张四","phone":15910526104},
-                ]
-                //如果没有配送员，则提示去创建
-                if(res.length == 0){
+                  //如果没有配送员，则提示去创建
+                if(res.list.length == 0){
                     this.isDistributorShow = true;
                 }else{
                     this.isDistributorShow = false;
                 }
-                this.distributorListFilter = res;
+                res.list.forEach((item) => {
+                    item.name = item.userName;
+                    item.phone = item.mobile;
+                })
+                this.distributorListFilter = res.list;
                 //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
                 if(this.distributorName){
                     this.distributorList = this.distributorListFilter.filter((item) => {
@@ -397,7 +401,7 @@ export default {
                         }
                     })
                 }else{ //否则直接赋值全部配送员
-                    this.distributorList = res;
+                    this.distributorList = res.list;
                 }
                 })
                 .catch(error => {});
@@ -528,11 +532,13 @@ export default {
                     };
                     //如果是普通快递
                     if(formName == 'ruleForm'){
+                        obj.deliveryWay = 1;
                         obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
                         obj.expressNos = this.ruleForm.expressNos; // 快递单号
                         obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
                         obj.remark = this.ruleForm.remark; // 发货备注
                       }else if(formName == 'ruleFormStore'){ //如果是商家配送
+                        obj.deliveryWay = 2;
                         obj.distributorName = this.distributorName; //配送员名字
                         //obj.distributorId = this.distributorId; //配送员id，自己输入的新的名字没有id
                         obj.distributorPhone = this.ruleFormStore.phone; //配送员手机号
@@ -543,9 +549,6 @@ export default {
                             obj
                         ],
                     }
-                    console.log(params)
-                    this.sending = false
-                    return;
                     this._apis.order.orderSendGoods(params).then((res) => {
                         this.$message.success('补填物流成功');
                         this.sending = false
@@ -581,10 +584,6 @@ export default {
             let id = this.$route.query.id
 
             this._apis.order.orderSendDetail({ids: [this.$route.query.id]}).then((res) => {
-                //模拟数据，最后去掉
-                res[0].deliveryWay = 2;
-
-
                 res[0].orderItemList.forEach(val => {
                     val.sendCount =  val.goodsCount
                 })

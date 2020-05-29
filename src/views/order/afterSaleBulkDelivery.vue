@@ -79,7 +79,7 @@
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
                       <el-form-item label="配送时间">
-                        <span>2020-04-10 13:00~17:00</span>
+                        <span>{{item.deliveryDate}} {{item.deliveryTime}}</span>
                       </el-form-item>
                       <el-form-item label="配送员" prop="distributorValue">
                         <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">
@@ -324,16 +324,20 @@ export default {
     //获取配送员列表
     getDistributorList(length){
         this._apis.order
-            .getDistributorList()
+            .getDistributorList({
+                "shopInfoId": this.cid,
+                "roleName": "1011maq角色",
+                "startIndex": 1,
+                "pageSize": 1000
+            })
             .then(res => {
-            res = [
-                {"id":1,"name":"张三","phone":15910526104},
-                {"id":2,"name":"李四","phone":15910526105},
-                {"id":3,"name":"张四","phone":15910526106},
-            ]
-            this.distributorListFilter = res;
+            res.list.forEach((item) => {
+                item.name = item.userName;
+                item.phone = item.mobile;
+            })
+            this.distributorListFilter = res.list;
             for(let i = 0; i < length; i++){
-              this.distributorList.push(res);
+              this.distributorList.push(res.list);
             }
             
             })
@@ -472,12 +476,14 @@ export default {
                     };
                     //如果是普通快递，则添加快递公司与快递单号
                     if(item.deliveryWay == 1){
+                      obj.deliveryWay = 1;
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
                       obj.expressCompanyCodes = item.orderAfterSaleSendInfo.expressCompanyCodes;
                     }
                     //如果是商家配送，则添加配送员信息
                     if(item.deliveryWay == 2){
+                      obj.deliveryWay = 2;
                       obj.distributorName = item.distributorName;
                       //obj.distributorId = item.distributorId;
                       obj.distributorPhone = item.phone;
@@ -485,8 +491,6 @@ export default {
                     return obj
                 })
             }
-            console.log(params)
-            return;
             this._apis.order.orderAfterSaleSend(params).then((res) => {
                 this.$message.success('发货成功');
                 this.$router.push('/order/deliverGoodsSuccess?ids=' + this.$route.query.ids + '&type=afterSaleBulkDelivery')
@@ -600,12 +604,13 @@ export default {
 
           })
 
-          //获取配送员列表
-          this.getDistributorList(res.length);
 
-          //模拟数据，之后删除掉
-          res[0].deliveryWay = 2
-          res[1].deliveryWay = 2
+
+          //如果是商家配送，则需要请求拿到配送员列表
+          if(res[0].deliveryWay == 2){
+            //获取配送员列表
+            this.getDistributorList(res.length);
+          }
 
           this.list = res;
 

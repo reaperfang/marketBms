@@ -145,11 +145,6 @@ export default {
         },
         getDetail() {
             this._apis.order.getOrderAfterSaleDetail({id: this.$route.query.id}).then((res) => {
-                //如果不是商家配送，则默认为普通快递
-                if(res.deliveryWay != 2){
-                    res.deliveryWay = 1;
-                }
-                console.log(res)
                 this.deliveryWay = res.deliveryWay;
 
                 this.itemList = res.itemList

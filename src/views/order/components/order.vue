@@ -70,8 +70,8 @@
                         <p>{{order.receivedPhone}}</p>
                     </div>
                     <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1}">
-                        <span class="icon-store" v-if="storeMark"></span>{{order.deliveryWay | deliveryWayFilter}}
-                        <p class="store-time" v-if="storeMark">{{order.deliveryDate}} {{order.deliveryTime}}</p>
+                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span>{{order.deliveryWay | deliveryWayFilter}}
+                        <p class="store-time" v-if="storeMark && order.deliveryWay == 2">{{order.deliveryDate}} {{order.deliveryTime}}</p>
                     </div>
                     <div class="item">{{order.orderStatus | orderStatusFilter}}</div>
                     <div class="item operate">

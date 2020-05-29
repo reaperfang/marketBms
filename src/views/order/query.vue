@@ -193,7 +193,7 @@ export default {
           this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
           return
       }
-      if(this.$refs['shop'].list.some(val => val.deliveryWay == 1) && this.$refs['shop'].list.some(val => val.deliveryWay == 2)){
+      if(this.$refs['shop'].list.filter(val => val.checked).some(val => val.deliveryWay == 1) && this.$refs['shop'].list.filter(val => val.checked).some(val => val.deliveryWay == 2)){
           this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
           return;
       }

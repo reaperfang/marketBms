@@ -113,7 +113,7 @@
             </div>
             <div class="container-item">
                 <p>3.填写物流信息</p>
-                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 1 || orderDetail.deliveryWay == null">
+                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 1">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="配送方式">
                             <span>普通快递</span>
@@ -374,7 +374,7 @@ export default {
         getDistributorList(){
             this._apis.order
                 .getDistributorList({
-                    "shopInfoId": "",
+                    "shopInfoId": this.cid,
                     "roleName": "1011maq角色",
                     "startIndex": 1,
                     "pageSize": 1000
@@ -526,14 +526,16 @@ export default {
                             };
                     //如果是普通快递
                     if(formName == 'ruleForm'){
+                        obj.deliveryWay = 1;
                         obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
                         obj.expressNos = this.ruleForm.expressNos; // 快递单号
                         obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
                         obj.remark = this.ruleForm.remark; // 发货备注
                       }else if(formName == 'ruleFormStore'){ //如果是商家配送
+                        obj.deliveryWay = 2;
                         obj.distributorName = this.distributorName; //配送员名字
                         //obj.distributorId = this.distributorId; //配送员id，自己输入的新的名字没有id
-                        obj.distributorName = this.ruleFormStore.phone; //配送员手机号
+                        obj.distributorPhone = this.ruleFormStore.phone; //配送员手机号
                         obj.remark = this.ruleFormStore.remark; // 物流备注
                     }
                     params = {
@@ -541,9 +543,6 @@ export default {
                             obj
                         ],
                     }
-                    console.log(params)
-                    this.sending = false
-                    return;
                     this._apis.order.orderAfterSaleSend(params).then((res) => {
                         this.$message.success('发货成功');
                         this.sending = false
@@ -586,7 +585,6 @@ export default {
         },
         getOrderDetail() {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.id]}).then((res) => {
-
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 this.fetchOrderAddress();

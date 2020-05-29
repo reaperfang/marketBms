@@ -373,16 +373,20 @@ export default {
     //获取配送员列表
     getDistributorList(length){
         this._apis.order
-            .getDistributorList()
+            .getDistributorList({
+                "shopInfoId": this.cid,
+                "roleName": "1011maq角色",
+                "startIndex": 1,
+                "pageSize": 1000
+            })
             .then(res => {
-            res = [
-                {"id":1,"name":"张三","phone":15910526104},
-                {"id":2,"name":"李四","phone":15910526105},
-                {"id":3,"name":"张四","phone":15910526106},
-            ]
-            this.distributorListFilter = res;
+            res.list.forEach((item) => {
+              item.name = item.userName;
+              item.phone = item.mobile;
+            })
+            this.distributorListFilter = res.list;
             for(let i = 0; i < length; i++){
-              this.distributorList.push(res);
+              this.distributorList.push(res.list);
             }
             
             })
@@ -740,12 +744,14 @@ export default {
             };
             //如果是普通快递，则添加快递公司与快递单号
             if(item.deliveryWay == 1){
+              obj.deliveryWay = 1;
               obj.expressCompanys = expressCompanys;
               obj.expressNos = item.expressNos;
               obj.expressCompanyCodes = item.expressCompanyCodes;
             }
             //如果是商家配送，则添加配送员信息
             if(item.deliveryWay == 2){
+              obj.deliveryWay = 2;
               obj.distributorName = item.distributorName;
               //obj.distributorId = item.distributorId;
               obj.distributorPhone = item.phone;
@@ -753,9 +759,6 @@ export default {
             return obj;
           })
         };
-        console.log(params)
-        this.sending = false
-        return;
         this._apis.order
           .orderSendGoods(params)
           .then(res => {
@@ -894,14 +897,12 @@ export default {
           //   });
           // });
 
-          //获取配送员列表
-          this.getDistributorList(res.length);
 
-          //模拟数据，之后删除掉
-          res[0].deliveryWay = 2
-          res[1].deliveryWay = 2
-          res[2].deliveryWay = 2
-
+          //如果是商家配送，则需要请求拿到配送员列表
+          if(res[0].deliveryWay == 2){
+            //获取配送员列表
+            this.getDistributorList(res.length);
+          }
           this.list = res;
           this._apis.order
             .fetchOrderAddress({ id: this.cid, cid: this.cid })

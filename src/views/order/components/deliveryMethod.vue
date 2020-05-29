@@ -48,6 +48,11 @@
         methods: {
             //配送方式改变
             deliveryMethodChange(val){
+                //如果不是选择的商家配送，则清空配送日期与配送时间段字段
+                if(val !== 2){
+                    this.listQuery.deliveryDate = '';
+                    this.listQuery.deliveryTime = '';
+                }
                 //如果是商家配送，则显示配送时间
                 if(val === 2 && this.timeSlotArr.length == 0){
                     //如果还没有获取过时间段，则发送请求获取配置的自定义时间段，如果没有自定义，则用默认的时间段order.timeSlot
