@@ -113,7 +113,7 @@ export default {
         return;
       }
       this.init(pageData, data);
-      console.log('pageData', pageData);
+      // console.log('pageData', pageData);
     },
 
     //编辑器数据初始化
