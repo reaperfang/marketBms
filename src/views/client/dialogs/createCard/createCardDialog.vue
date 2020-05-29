@@ -76,6 +76,7 @@ export default {
                                 message: "高等级条件数值要大于低等级的条件数值",
                                 type: 'warning'
                             });
+                            this.btnLoading = false;
                         }else{
                             this.btnLoading = false;
                             this.visible = false;
@@ -108,6 +109,7 @@ export default {
                                 message: '高等级条件数值要大于低等级的条件数值',
                                 type: 'warning'
                             });
+                            this.btnLoading = false;
                         }else{
                             this.btnLoading = false;
                             this.visible = false;
