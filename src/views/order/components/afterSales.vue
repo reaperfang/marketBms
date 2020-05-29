@@ -91,7 +91,7 @@
                     <template slot-scope="scope">
                         <div>
                             <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
-                            {{scope.row.deliveryWay | deliveryWayFilter}}
+                            <span class="icon-store-text">{{scope.row.deliveryWay | deliveryWayFilter}}</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -101,7 +101,8 @@
                     width="170">
                     <template slot-scope="scope">
                         <div>
-                            {{scope.row.deliveryDate}} {{scope.row.deliveryTime}}
+                            <p>{{scope.row.deliveryDate}}</p> 
+                            <p>{{scope.row.deliveryTime}}</p>
                         </div>
                     </template>
                 </el-table-column>
@@ -432,8 +433,11 @@ export default {
         width: 16px;
         height: 15px;
         margin-right: 5px;
-        vertical-align: -2px;
+        vertical-align: middle;
         background: url(~@/assets/images/order/icon_store.png) no-repeat;
+    }
+    .icon-store-text{
+        vertical-align: middle;
     }
 </style>
 
