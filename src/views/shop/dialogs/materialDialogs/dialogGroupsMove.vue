@@ -6,8 +6,7 @@
           v-model="form.groupId"
           :options="options"
           :props="defaultProps"
-          class="w_300"
-          >
+          class="w_300">
           </el-cascader>
         </el-form-item>
       </el-form>
@@ -19,17 +18,6 @@ import DialogBase from "@/components/DialogBase";
 import utils from "@/utils";
 export default {
   name: "dialogGroupsMove",
-  components: {DialogBase},
-  props: {
-      data:{},
-      arrayData: {},
-      typeName:{},
-      fromGroupId:'',
-      dialogVisible: {
-          type: Boolean,
-          required: true
-      },
-  },
   data() {
     return {
       form:{
@@ -44,6 +32,20 @@ export default {
       options:[]
     };
   },
+
+  components: {DialogBase},
+
+  props: {
+    data:{},
+    arrayData: {},
+    typeName:{},
+    fromGroupId:'',
+    dialogVisible: {
+        type: Boolean,
+        required: true
+    },
+  },
+
   computed: {
     visible: {
       get() {
@@ -54,11 +56,14 @@ export default {
       }
     }
   },
+
   created() {
     this.init()
     this.gitGroups()
   },
+
   methods: {
+    //获取组id
     init(){
       this.form.groupId = this.fromGroupId
     },
@@ -76,6 +81,7 @@ export default {
       })
     },
 
+    //确定分组
     submit() {
       let leg = this.form.groupId.length
       if(this.arrayData.length){
