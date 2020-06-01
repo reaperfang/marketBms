@@ -21,7 +21,7 @@
                 <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos || orderAfterSaleSendInfo.distributorPhone)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component @submit="onSubmit" :is="currentView" :deliveryWay="deliveryWay" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
+        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
         <component :is="currentDialog" :data="currentData" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
@@ -37,7 +37,6 @@ export default {
         return {
             activeName: 'afterSalesInformation',
             currentView: 'afterSalesInformation',
-            deliveryWay: 0, //配送方式
             itemList: [],
             orderAfterSale: {},
             catchOrderAfterSale: {},
@@ -145,7 +144,6 @@ export default {
         },
         getDetail() {
             this._apis.order.getOrderAfterSaleDetail({id: this.$route.query.id}).then((res) => {
-                this.deliveryWay = res.deliveryWay;
 
                 this.itemList = res.itemList
                 if(res.orderAfterSale && res.orderAfterSale.descriptionImages) {

@@ -118,8 +118,8 @@
                     width="170">
                     <template slot-scope="scope">
                         <div>
-                            <p>{{scope.row.deliveryDate}}</p> 
-                            <p>{{scope.row.deliveryTime}}</p>
+                            <div>{{scope.row.deliveryDate}}</div> 
+                            <div>{{scope.row.deliveryTime}}</div>
                         </div>
                     </template>
                 </el-table-column>

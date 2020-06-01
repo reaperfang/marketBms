@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <!-- 普通快递 -->
-        <template v-if="deliveryWay == 1">
+        <template v-if="orderAfterSale.deliveryWay == 1">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             用户发货
         </div>
@@ -134,13 +134,13 @@
         </div>
         </template>
         <!-- 商家配送 -->
-        <template v-if="deliveryWay == 2">
+        <template v-if="orderAfterSale.deliveryWay == 2">
         <div class="delivery-information-header">
             用户退货
         </div>
         <div class="container">
             <div class="item" :class="{close: !showCustomerContent}">
-                <div class="header" v-if="!orderAfterSale.returnExpressNo">
+                <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
                         <div class="header-lefter-item ">商家自取</div>
@@ -148,23 +148,6 @@
                      </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | sotreCustomerFilter}}</div>
-                        <div class="header-righter-item">{{orderAfterSale.memberReturnGoodsTime}}</div>
-                        <div @click="showCustomerContent = !showCustomerContent">
-                            <i v-if="showCustomerContent" class="el-icon-caret-top pointer"></i>
-                            <i v-if="!showCustomerContent" class="el-icon-caret-bottom pointer"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="header" v-if="orderAfterSale.returnExpressNo">
-                    <div class="header-lefter">
-                        <div class="header-lefter-item number">1</div>
-                        <div class="header-lefter-item ">快递退货</div>
-                        <div class="header-lefter-item ">快递单号：{{orderAfterSale.returnExpressNo}}</div>
-                        <div @click="showLogistics(orderAfterSale.returnExpressNo, true, orderAfterSale.id)" class="header-lefter-item  blue pointer">查看物流</div>
-                    </div>
-                    <div class="header-righter">
-                        <div class="header-righter-item">{{orderAfterSale |  customerFilter}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSale.memberName}}</div>
                         <div class="header-righter-item">{{orderAfterSale.memberReturnGoodsTime}}</div>
                         <div @click="showCustomerContent = !showCustomerContent">
                             <i v-if="showCustomerContent" class="el-icon-caret-top pointer"></i>
@@ -442,10 +425,6 @@ export default {
         },
     },
     props: {
-        deliveryWay: {
-            type: Number,
-            default: 0
-        },
         sendItemList: {
             type: Array,
             default: []

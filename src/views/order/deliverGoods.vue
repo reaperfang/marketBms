@@ -431,7 +431,7 @@ export default {
       }else{
           let input = this.$refs.searchSelect.$children[0].$refs.input;
           let value = input.value;
-          this.$nextTick(() => {
+          this.$nextTick(() => {np
             input.value = value;
           })
       }

@@ -101,7 +101,7 @@
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
                       <el-form-item label="配送时间">
-                        <span>2020-04-10 13:00~17:00</span>
+                        <span>{{item.deliveryDate}} {{item.deliveryTime}}</span>
                       </el-form-item>
                       <el-form-item label="配送员" prop="distributorValue">
                         <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">
@@ -537,7 +537,10 @@ export default {
     sendGoodsHandler() {
       try {
         let params;
-
+        console.log(this.list
+            .reduce((total, val) => {
+              return total.concat(val.orderItemList);
+            }, []).filter(val => val.checked))
         if (
           !this.list
             .reduce((total, val) => {
@@ -615,12 +618,21 @@ export default {
         //   return;
         // }
          let isWrong = false
-        let _list = JSON.parse(JSON.stringify(this.list.filter(val => val.checked)))
-
-        _list.forEach((item, index) => {
+        //let _list = JSON.parse(JSON.stringify(this.list.filter(val => val.checked)))
+        let _list = [];
+        this.list.forEach((item, index) => {
           let orderItemList = item.orderItemList
-
+          //如果当前子级中没有选中的
+          let itemChecked = orderItemList.filter(val => val.checked)
+          if(itemChecked.length == 0){
+            return;
+          }
+          _list.push(item);
           orderItemList.forEach(goods => {
+            //如果不是选中的，则不用验证
+            if(!goods.checked){
+              return;
+            }
             if(!goods.sendCount) {
               isWrong = true
               goods.showError = true
@@ -632,6 +644,7 @@ export default {
               goods.errorMessage = '本次发货数量不能大于应发数量'
             }
           })
+          
 
           //如果是普通快递，则验证快递公司与快递单号
           if(item.deliveryWay == 1){
@@ -682,7 +695,7 @@ export default {
           
         })
         this.list = _list
-
+        console.log(_list)
         if(isWrong) {
           this.$nextTick(() => {
             document.querySelector('.error-message').scrollIntoView()
@@ -696,7 +709,7 @@ export default {
         this.sending = true
 
         params = {
-          sendInfoDtoList: this.list.filter(val => val.checked).map(item => {
+          sendInfoDtoList: _list.map(item => {
             let expressCompanys = "";
             console.log(this.expressCompanyList);
             if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
@@ -759,6 +772,7 @@ export default {
             return obj;
           })
         };
+
         this._apis.order
           .orderSendGoods(params)
           .then(res => {
