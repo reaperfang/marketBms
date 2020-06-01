@@ -295,6 +295,7 @@ export default {
     const validateRadius = (rule, value, callback) => {
       if (value && this.ruleForm.isOpenLadderFreight === 1) {
         this.$refs.ruleForm.validateField('distanceLt');
+        this.$refs.ruleForm.validateField('distancePlus');
       }
     }
     return {
