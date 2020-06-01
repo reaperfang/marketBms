@@ -28,26 +28,43 @@ export default {
     center:{  
       type: Array,
       default: ()=>{
-        return appConfig.map.defaultCenter || [36.67489963858812, 102.76171874999999]
+        return []
       }
     },
     scaleControl: {
       type: Boolean,
       default: true
     },
+    scaleControlOptions: {
+      type: Object,
+      default(){
+        return {
+        }
+      }
+    },
     zoomControl: {
       type: Boolean,
       default: true
+    },
+    zoomControlOptions: {
+      type: Object,
+      default(){
+        return {
+        }
+      }
     },
     panControl: {
       type: Boolean,
       default: true
     },
-    isInitSearch: {
-      type: Boolean,
-      default: true
+    PanControlOptions: {
+      type: Object,
+      default(){
+        return {
+        }
+      }
     },
-    disableDoubleClickZoom: {
+    isInitSearch: {
       type: Boolean,
       default: true
     }
@@ -73,12 +90,10 @@ export default {
 
   mounted(){
     if(!this.mapLoaded) {
-      console.log(11111)
       this._globalEvent.$on('mapLoaded', ()=>{
         this.init();
       });
     }else{
-      console.log(22222)
       this.init();
     }
   },
@@ -86,7 +101,18 @@ export default {
 
     //初始化
     init() {
-      this.centerObj = new qq.maps.LatLng(this.center[0], this.center[1]);
+      let Lat
+      let lng
+      if (this.center && this.center.length > 0) {   
+        Lat = this.center[0]
+        lng = this.center[1]
+      } else {
+        Lat = 39.9046900000
+        lng = 116.4071700000
+      }
+      console.log('-----init---', Lat, lng)
+      this.centerObj = new qq.maps.LatLng(Lat, lng);
+      console.log('-----this.centerObj---', this.centerObj)
       this.mapObj = new qq.maps.Map(this.$refs.mapContainer, {
         zoom: this.zoom,
         center: this.centerObj,
@@ -94,8 +120,11 @@ export default {
         scaleControl: this.scaleControl,
         zoomControl: this.zoomControl,
         panControl: this.panControl,
-        disableDoubleClickZoom: this.disableDoubleClickZoom
+        PanControlOptions: this.PanControlOptions,
+        zoomControlOptions: this.zoomControlOptions,
+        scaleControlOptions:this.scaleControlOptions
       });
+
       //初始化事件
       this.inited();
 

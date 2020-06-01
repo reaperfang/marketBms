@@ -32,7 +32,7 @@
           </div>
         </el-form-item>
         <div class="map">
-          <map-radius v-if="ruleForm.lat && ruleForm.lng" class="map-radius" :radius="ruleForm.radius" :center="[ruleForm.lat,ruleForm.lng]" :zoom="14" :address="address"></map-radius>
+          <map-radius class="map-radius" :radius="ruleForm.radius" :center="getCenter" :zoom="zoom" :address="address"></map-radius>
         </div>
         
       </section>
@@ -283,7 +283,23 @@ export default {
       }
       return callback()
     }
+    const validateExceedsRadiuo = (rule, value, callback) => {
+      const curr = parseFloat(value) * 100
+      const radius = parseFloat(this.ruleForm.radius) * 100
+      console.log(curr, radius)
+      if (curr > radius) {
+        return callback(new Error('已超出服务半径，请重新输入'))
+      }
+      return callback()
+    }
+    const validateRadius = (rule, value, callback) => {
+      if (value && this.ruleForm.isOpenLadderFreight === 1) {
+        this.$refs.ruleForm.validateField('distanceLt');
+        this.$refs.ruleForm.validateField('distancePlus');
+      }
+    }
     return {
+      zoom: 4,
       isOpen: false, // 是否开启商家配送
       address: null, // 默认取货地址
       visible: false,
@@ -323,7 +339,8 @@ export default {
       // (/(([0-9])+(.)(\d{1,2}))/)
       rules: {
         radius: [
-          { validator: validateFloat, trigger: 'blur' }
+          { validator: validateFloat, trigger: 'blur' },
+          { validator: validateRadius, trigger: 'blur' }
         ],
         price: [
           { validator: validateFloat, trigger: 'blur'}
@@ -332,13 +349,15 @@ export default {
           { validator: validateFloat, trigger: 'blur'}
         ],
         distanceLt: [
-          { validator: validateFloat, trigger: 'blur'}
+          { validator: validateFloat, trigger: 'blur'},
+          { validator: validateExceedsRadiuo, trigger: 'blur'}
         ],
         weightLt: [
           { validator: validateFloat2, trigger: 'blur'}
         ],
         distancePlus: [
-          { validator: validateFloat, trigger: 'blur'}
+          { validator: validateFloat, trigger: 'blur'},
+          { validator: validateExceedsRadiuo, trigger: 'blur'}
         ],
         distancePlusPrice: [
           { validator: validateFloat, trigger: 'blur'}
@@ -389,6 +408,12 @@ export default {
   },
 
   computed: {
+    getCenter() {
+      let latlng
+      latlng = (this.ruleForm.lat && this.ruleForm.lng) ?  [this.ruleForm.lat,this.ruleForm.lng] : []
+      console.log('---getCenter----',latlng)
+      return latlng
+    },
     getSwitchTxt() {
       return this.isOpen ? '已开启' : '已关闭'
     },
@@ -745,7 +770,7 @@ export default {
           const provinceCode = res.provinceCode
           isHasOtherWay = res.isOpenOrdinaryExpress === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
           this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
-          this.getLngLat(this.address)
+          // this.getLngLat(this.address)
         }
       }).catch(err => {
         console.log('---getShopInfo--', err)
