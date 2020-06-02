@@ -125,6 +125,7 @@ export default {
                 location:res.result.location,
                 title: res.result.formatted_addresses.recommend
               }
+              self.$emit('getMapClickPoi', poi)
               self.openInfoWindow(self.info, null, self.mapObj, poi)
             }).catch((err) => {
               console.log(err)
