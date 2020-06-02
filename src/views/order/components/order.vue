@@ -72,7 +72,7 @@
                     <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1}">
                         <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order.deliveryWay | deliveryWayFilter}}</span>
                         <div class="store-time" v-if="storeMark && order.deliveryWay == 2">
-                            <p>{{order.deliveryDate}}</p>
+                            <p>{{order.deliveryDate | formatDateRemoveZero}}</p>
                             <p>{{order.deliveryTime}}</p>
                         </div>
                     </div>

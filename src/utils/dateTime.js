@@ -263,3 +263,10 @@ export function globalTimePickerOption(editable = true) {
     }
   }
 }
+//格式化日期，去除00:00:00时分秒
+export function formatDateRemoveZero(value) {
+  if(!value){
+    return '';
+  }
+  return value.split(' ')[0]
+}

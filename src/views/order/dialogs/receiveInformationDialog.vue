@@ -9,7 +9,7 @@
                     <el-input v-model="ruleForm.sendPhone" placeholder="请输入"></el-input>
                 </el-form-item>
                 <el-form-item :class="{isIE: isIE}" label="发货地址" prop="deliveryAddress">
-                    <area-cascader type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
+                    <area-cascader :disabled="true" type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
                 </el-form-item>
                 <el-form-item label="详细地址" prop="sendDetail">
@@ -36,7 +36,7 @@
                     <el-input v-model="ruleForm.receivedPhone" placeholder="请输入"></el-input>
                 </el-form-item>
                 <el-form-item :class="{isIE: isIE}" label="收货地址" prop="deliveryAddress">
-                    <area-cascader type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
+                    <area-cascader :disabled="true" type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
                 </el-form-item>
                 <el-form-item label="详细地址" prop="receivedDetail">
@@ -237,7 +237,6 @@ export default {
                     let name0 = this.$pcaa[86][this.ruleForm.deliveryAddress[0]]
                     let name1 = this.$pcaa[this.ruleForm.deliveryAddress[0]][this.ruleForm.deliveryAddress[1]]
                     let name2 = this.$pcaa[this.ruleForm.deliveryAddress[1]][this.ruleForm.deliveryAddress[2]]
-
                     if(this.sendGoods && !this.ajax) {
                         let obj = {}
                         // console.log(this.ruleForm.deliveryAddress)
@@ -311,7 +310,6 @@ export default {
                         this.visible = false
                         return
                     }
-
                     this._apis.order.orderUpdateReceive({
                         id: (typeof this.data) == 'string' ?  this.data : (this.$route.query.orderId || this.$route.query.id),
                         //code: this.$route.query.orderId ? this.$route.query.orderId : '',

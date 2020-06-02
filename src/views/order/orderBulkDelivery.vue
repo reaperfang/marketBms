@@ -101,7 +101,7 @@
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
                       <el-form-item label="配送时间">
-                        <span>{{item.deliveryDate}} {{item.deliveryTime}}</span>
+                        <span>{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</span>
                       </el-form-item>
                       <el-form-item label="配送员" prop="distributorValue">
                         <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">

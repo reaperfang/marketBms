@@ -118,7 +118,7 @@
                     width="170">
                     <template slot-scope="scope">
                         <div>
-                            <div>{{scope.row.deliveryDate}}</div> 
+                            <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div> 
                             <div>{{scope.row.deliveryTime}}</div>
                         </div>
                     </template>

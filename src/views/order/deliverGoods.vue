@@ -176,7 +176,7 @@
               <span>商家配送</span>
             </el-form-item>
             <el-form-item label="配送时间">
-              <span>{{orderInfo.deliveryDate}} {{orderInfo.deliveryTime}}</span>
+              <span>{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</span>
             </el-form-item>
             <el-form-item label="配送员" prop="distributorValue">
               <el-select v-model="ruleFormStore.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" ref="searchSelect" :filter-method="dataFilter" @visible-change="visibleChange" @focus="selectFocus" @blur="selectBlur" @change="selectChange">

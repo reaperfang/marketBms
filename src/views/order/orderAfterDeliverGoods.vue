@@ -113,7 +113,7 @@
             </div>
             <div class="container-item">
                 <p>3.填写物流信息</p>
-                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 1">
+                <div class="logistics deliver-goods-logistics" v-if="orderAfterSaleSendInfo.deliveryWay == 1">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="配送方式">
                             <span>普通快递</span>
@@ -140,7 +140,7 @@
                     </el-form>
                 </div>
                 <!-- 配送方式为商家配送 -->
-                <div class="logistics deliver-goods-logistics" v-if="orderDetail.deliveryWay == 2">
+                <div class="logistics deliver-goods-logistics" v-if="orderAfterSaleSendInfo.deliveryWay == 2">
                 <el-form
                     :model="ruleFormStore"
                     :rules="rulesStore"
@@ -152,7 +152,7 @@
                     <span>商家配送</span>
                     </el-form-item>
                     <el-form-item label="配送时间">
-                    <span>{{orderDetail.deliveryDate}} {{orderDetail.deliveryTime}}</span>
+                    <span>{{orderAfterSaleSendInfo.deliveryDate | formatDateRemoveZero}} {{orderAfterSaleSendInfo.deliveryTime}}</span>
                     </el-form-item>
                     <el-form-item label="配送员" prop="distributorValue">
                     <el-select v-model="ruleFormStore.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" ref="searchSelect" :filter-method="dataFilter" @visible-change="visibleChange" @focus="selectFocus" @blur="selectBlur" @change="selectChange">
@@ -187,8 +187,8 @@
                 </div>
             </div>
             <div class="footer">
-                <el-button v-if="orderDetail.deliveryWay == 1" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
-                <el-button v-if="orderDetail.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
+                <el-button v-if="orderAfterSaleSendInfo.deliveryWay == 1" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+                <el-button v-if="orderAfterSaleSendInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
             </div>
         </div>
         <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title"></component>
@@ -591,7 +591,7 @@ export default {
 
                 this.orderDetail = res[0];
                 //如果是商家配送，则需要请求拿到配送员列表
-                if(this.orderDetail.deliveryWay == 2){
+                if(this.orderAfterSaleSendInfo.deliveryWay == 2){
                     this.getDistributorList();
                 }
             }).catch(error => {
