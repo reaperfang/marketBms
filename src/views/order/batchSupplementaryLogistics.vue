@@ -337,7 +337,7 @@ export default {
         this._apis.order
             .getDistributorList({
                 "shopInfoId": this.cid,
-                "roleName": "1011maq角色",
+                "roleName": "配送员",
                 "startIndex": 1,
                 "pageSize": 1000
             })

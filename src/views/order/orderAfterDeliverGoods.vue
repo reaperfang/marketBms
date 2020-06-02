@@ -375,7 +375,7 @@ export default {
             this._apis.order
                 .getDistributorList({
                     "shopInfoId": this.cid,
-                    "roleName": "1011maq角色",
+                    "roleName": "配送员",
                     "startIndex": 1,
                     "pageSize": 1000
                 })
@@ -394,7 +394,7 @@ export default {
                 //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
                 if(this.distributorName){
                     this.distributorList = this.distributorListFilter.filter((item) => {
-                        if (item.name.includes(this.distributorName) || item.name.toUpperCase().includes(val.toUpperCase())) {
+                        if (item.name.includes(this.distributorName) || item.name.toUpperCase().includes(this.distributorName.toUpperCase())) {
                         return true
                         }
                     })
