@@ -2,14 +2,17 @@
 <template>
   <div>
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
-      <el-tab-pane label="快递设置" v-permission="['设置','普通快递','快递设置']" name="courierSettings" >
-        <component v-if="currentTab === 'courierSettings'" :is="currentTab"></component>
+      <el-tab-pane name="courierSettings" >
+        <span slot="label" v-permission="['设置','普通快递','快递设置']">快递设置</span>
+        <component v-if="currentTab === 'courierSettings'"  v-permission="['设置','普通快递','快递设置']" :is="currentTab"></component>
       </el-tab-pane>
-      <el-tab-pane label="运费模版" v-permission="['设置','普通快递','运费模版']" name="quickDelivery">
-        <component v-if="currentTab === 'quickDelivery'" :is="currentTab"></component>
+      <el-tab-pane name="quickDelivery">
+        <span slot="label" v-permission="['设置','普通快递','运费模版']">运费模版</span>
+        <component v-if="currentTab === 'quickDelivery'"  v-permission="['设置','普通快递','运费模版']" :is="currentTab"></component>
       </el-tab-pane>
-      <el-tab-pane label="电子面单" v-permission="['设置','普通快递','电子面单']" name="electronicFaceSheet">
-        <component v-if="currentTab === 'electronicFaceSheet'" :is="currentTab"></component>
+      <el-tab-pane name="electronicFaceSheet">
+        <span slot="label" v-permission="['设置','普通快递','电子面单']">电子面单</span>
+        <component v-if="currentTab === 'electronicFaceSheet'" v-permission="['设置','普通快递','电子面单']" :is="currentTab"></component>
       </el-tab-pane>
     </el-tabs>
   </div>     
@@ -72,6 +75,12 @@ export default {
 .tabs{
   background:#fff; 
   padding:10px 20px 0 20px;
+  >>> .el-tabs__item {
+    padding: 0;
+    span {
+      padding: 0 20px;
+    }
+  }
 }
 .main{
   width: 100%;
