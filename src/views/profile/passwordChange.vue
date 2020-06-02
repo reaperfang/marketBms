@@ -74,7 +74,7 @@ export default {
   },
   computed:{
     userInfo(){
-      return JSON.parse(this.$store.getters.userInfo)
+      return JSON.parse(localStorage.getItem("userInfo"));
     }
   },
   created() {

@@ -4,7 +4,7 @@
 
 module.exports = {
     '/data-server/**': {
-      target: 'http://test3-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
+      target: 'http://test2-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
       changeOrigin: true,
       pathRewrite: {
         '^/data-server': ''
