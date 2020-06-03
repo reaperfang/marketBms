@@ -179,7 +179,7 @@
           </el-form-item>
           <div v-if="ruleForm.deliveryTimeType === 2">
             <el-form-item  class="repeatCycle" prop="repeatCycle">
-              <el-radio-group v-model="ruleForm.repeatCycle">
+              <el-radio-group v-model="ruleForm.repeatCycle" @change="handleRepeatCycleChange">
                 <el-radio :label="1"><span class="label">每天重复</span></el-radio>
                 <el-radio :label="2"><span class="label">每周重复<span class="err">{{errWeekMsg}}</span></span></el-radio>
                 <el-popover
@@ -468,6 +468,13 @@ export default {
   },
 
   methods: {
+    handleRepeatCycleChange(val) {
+      console.log('---val--', val)
+      if (val === 1) {
+        this.ruleForm.weeks = []
+        this.tempWeeks = []
+      }
+    },
     // 格式化省市县
     formatAddress(address, provinceCode, cityCode, areaCode) {
       const reg = /.+?(省|市|自治区|自治州|县|区)/g
