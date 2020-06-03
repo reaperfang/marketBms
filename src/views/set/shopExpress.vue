@@ -789,7 +789,8 @@ export default {
           const cityCode = res.cityCode
           const provinceCode = res.provinceCode
           isHasOtherWay = res.isOpenOrdinaryExpress === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
-          this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
+          // this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
+          this.address = `${res.sendAddress}${res.address}` || null
           // this.getLngLat(this.address)
         }
       }).catch(err => {

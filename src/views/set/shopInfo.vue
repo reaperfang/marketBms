@@ -64,7 +64,7 @@
       <el-form-item label="公司邮箱:" prop="companyEmail">
         <el-input v-model="form.companyEmail" placeholder="请输入公司邮箱" style="width:200px;"></el-input>
       </el-form-item>
-      <el-form-item label="联系地址:" prop="addressCode">
+      <!-- <el-form-item label="联系地址:" prop="addressCode">
         <area-cascader
           :level="1"
           :data="$pcaa"
@@ -74,11 +74,13 @@
           @change="handleChange"
           style="width:200px;"
         ></area-cascader>
-        <!-- <el-cascader :options="cityLists" :props="cityProps" v-model="form.addressCode" expand-trigger="hover"/> -->
+      </el-form-item> -->
+      <el-form-item label="联系地址:" prop="sendAddress">
+        <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:300px;" placeholder="请输入并点击搜索图标确定联系地址" />
+        <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button>
       </el-form-item>
       <el-form-item label="详细地址:" prop="address">
-        <el-input v-model="form.address" @change="handleChangeAddress" style="width:300px;" placeholder="详细地址" />
-        <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button>
+        <el-input v-model="form.address" style="width:300px;" placeholder="请输入补充地址信息，非必填项" />
       </el-form-item>
       <el-form-item label="店铺简介:" prop="shopIntroduce">
         <el-input
@@ -174,7 +176,8 @@ export default {
         companyName: "",
         companyEmail: "",
         lat: "",
-        lng: ""
+        lng: "",
+        sendAddress: ""
       },
       rules: {
         shopName: [
@@ -189,8 +192,11 @@ export default {
           { required: true, message: "请填写联系地址", trigger: "blur" }
         ],
         address: [
-          { required: true, message: "详细地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
+          { min: 1, max: 50,  message: "详细地址输入框超出50个字符后不可在输入", trigger: "blur" }
         ],
+        sendAddress: [
+          { required: true, message: "详细地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
+        ] ,
         shopIntroduce: [
           {
             min: 1,
@@ -343,7 +349,7 @@ export default {
         this.form.addressCode[2]
       ];
       // 省市区改变时
-      this.provinceCityArea = `${this.province}${this.city}${this.area}`
+      // this.provinceCityArea = `${this.province}${this.city}${this.area}`
     },
 
     getShopInfo() {
@@ -408,12 +414,13 @@ export default {
         logo:this.form.logo,
         logoCircle:this.form.logoCircle,
         phone:this.form.phone,
-        province: this.province,
-        city: this.city,
-        area: this.area,
-        provinceCode:this.form.addressCode[0],
-        cityCode:this.form.addressCode[1],
-        areaCode:this.form.addressCode[2],
+        // province: this.province,
+        // city: this.city,
+        // area: this.area,
+        // provinceCode:this.form.addressCode[0],
+        // cityCode:this.form.addressCode[1],
+        // areaCode:this.form.addressCode[2],
+        sendAddress: this.form.sendAddress,
         address: this.form.address,
         shopIntroduce:this.form.shopIntroduce,
         sellCategoryId: this.form.sellCategoryId,
@@ -440,26 +447,26 @@ export default {
           if (valid) {
             if (!this.isMapChoose) {
               this.$message.error('保存失败')
-              this.form.address = ''
-              this.$refs.form.validateField('address')
+              this.form.sendAddress = ''
+              this.$refs.form.validateField('sendAddress')
               return false
             }
             this.loading = true
-            this.getProvincesCities(this.form.address)
-            if (!this.form.lng) {
-              this._apis.map.getGeocoderAddress({ address: this.form.address }).then((res) => {
-                console.log('res',res)
-                this.form.lng = res.result.location.lng
-                this.form.lat = res.result.location.lat
-                this.updateShopInfo()
-              }).catch((err) => {
-                console.log('err',err)
-                this.$message.error('获取经纬度失败，请尝试通过地图查询详细地址');
-                this.loading = false
-              })
-            } else {
+            // this.getProvincesCities(this.form.address)
+            // if (!this.form.lng) {
+            //   this._apis.map.getGeocoderAddress({ address: this.form.address }).then((res) => {
+            //     console.log('res',res)
+            //     this.form.lng = res.result.location.lng
+            //     this.form.lat = res.result.location.lat
+            //     this.updateShopInfo()
+            //   }).catch((err) => {
+            //     console.log('err',err)
+            //     this.$message.error('获取经纬度失败，请尝试通过地图查询详细地址');
+            //     this.loading = false
+            //   })
+            // } else {
               this.updateShopInfo()
-            }
+            // }
             
             // this._apis.set.updateShopInfo(data).then(response =>{
             //   this.setShopName()    
@@ -539,7 +546,7 @@ export default {
     },
     // 模糊搜索地址列表
     searchMap() {
-      this.$refs.shopInfoMap.handlePropSearch(this.form.address)
+      this.$refs.shopInfoMap.handlePropSearch(this.form.sendAddress)
     },
     getProvinceCode() {
       let provinces = this.$pcaa[86]
@@ -630,11 +637,11 @@ export default {
     },
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
-      this.form.address = poi.address
+      this.form.sendAddress = poi.address
       this.form.lat = poi.location.lat
       this.form.lng = poi.location.lng
       this.isMapChoose = true
-      this.getProvincesCities(poi.address)
+      // this.getProvincesCities(poi.address)
     }
   }
 };
