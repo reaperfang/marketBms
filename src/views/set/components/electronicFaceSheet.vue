@@ -45,7 +45,7 @@
           </div> -->
         </div>
         <!-- <div>
-          <el-button v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
+          <el-button v-permission="['设置', '普通快递', '电子面单', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
         </div> -->
       </el-form>
     </section>
@@ -55,7 +55,7 @@
             全部
             <span>{{total}}</span>项
           </div>
-          <el-button v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
+          <el-button  v-if="!authHide" v-permission="['设置', '普通快递','电子面单', '新建']" @click="$router.push('/set/newElectronicFaceSheet')" class="border-button">新建</el-button>
       </div>
       <div class="table">
         <el-table
@@ -70,9 +70,9 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <div class="operate-box">
-                <span v-permission="['订单', '电子面单', '默认页', '查看']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
-                <span v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '修改']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
-                <span v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
+                <span v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
+                <span  v-if="!authHide" v-permission="['设置', '普通快递', '电子面单', '编辑']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
+                <span v-if="!authHide"  v-permission="['设置', '普通快递', '电子面单', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
               </div>
             </template>
           </el-table-column>

@@ -47,6 +47,7 @@
                         :picker-options="utils.globalTimePickerOption.call(this)"
                     ></el-date-picker>
                 </el-form-item>
+                <deliveryMethod :listQuery="listQuery" :isAfterSales="true"></deliveryMethod>
                 <el-form-item>
                     <el-button @click="search" type="primary">查询</el-button>
                     <el-button class="border-button" @click="resetForm('form')">重置</el-button>
@@ -82,6 +83,28 @@
                     prop="memberName"
                     label="用户昵称"
                     width="120">
+                </el-table-column>
+                <el-table-column
+                    prop="deliveryWay"
+                    label="退货方式"
+                    width="120">
+                    <template slot-scope="scope">
+                        <div>
+                            <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
+                            <span class="icon-store-text">{{scope.row.deliveryWay | deliveryWayFilter}}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="updateTime"
+                    label="取货时间"
+                    width="170">
+                    <template slot-scope="scope">
+                        <div>
+                            <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div> 
+                            <div>{{scope.row.deliveryTime}}</div>
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="receivedName"
@@ -124,6 +147,7 @@
 </template>
 <script>
 import Pagination from '@/components/Pagination'
+import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import utils from "@/utils";
 
 export default {
@@ -152,6 +176,9 @@ export default {
                 expressNos: '',
                 orderAfterSaleProductNames: '',
                 expressCompanys: '',
+                deliveryWay: "", // 配送方式:1普通快递,2商家配送
+                deliveryDate: "", //商家配送-日期
+                deliveryTime: "" //商家配送-时间段
             },
             tableData: [],
             loading: false,
@@ -185,6 +212,14 @@ export default {
                     return '已关闭'
             }
         },
+        deliveryWayFilter(code) {
+            switch(code) {
+                case 1:
+                    return '普通快递'
+                case 2:
+                    return '商家配送'
+            }
+        },
     },
     methods: {
         search() {
@@ -208,6 +243,10 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
                 return
+            }
+            if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+                return;
             }
             if(this.multipleSelection.some(val => val.status != 2)) {
             this.confirm({title: '提示', icon: true, text: '请选择待发货的售后单'})
@@ -255,6 +294,9 @@ export default {
                 expressNos: '',
                 orderAfterSaleProductNames: '',
                 expressCompanys: '',
+                deliveryWay: "", // 配送方式:1普通快递,2商家配送
+                deliveryDate: "", //商家配送-日期
+                deliveryTime: "" //商家配送-时间段
             }
             this.getList()
         },
@@ -291,7 +333,8 @@ export default {
         }
     },
     components: {
-        Pagination
+        Pagination,
+        DeliveryMethod
     }
 }
 </script>
@@ -385,6 +428,17 @@ export default {
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
 }
+.icon-store{
+        display: inline-block;
+        width: 16px;
+        height: 15px;
+        margin-right: 5px;
+        vertical-align: middle;
+        background: url(~@/assets/images/order/icon_store.png) no-repeat;
+    }
+    .icon-store-text{
+        vertical-align: middle;
+    }
 </style>
 
 
