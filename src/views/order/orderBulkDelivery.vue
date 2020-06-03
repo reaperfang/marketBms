@@ -69,7 +69,7 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.receivedName}}</p>
                     <p>联系电话: {{item.receivedPhone}}</p>
-                    <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}
+                    <p>收货地址: {{item.receiveAddress}}
                     </p>
                   </div>
                   <div class="col">
@@ -930,6 +930,7 @@ export default {
                 res.sendCityName = response.city;
                 res.sendAreaCode = response.areaCode;
                 res.sendAreaName = response.area;
+                res.sendAddress = response.sendAddress;
                 res.sendDetail = response.address;
               });
             })

@@ -82,7 +82,7 @@
                         </div>
                         <div class="item">
                             <div class="label">收货信息</div>
-                            <div class="value">{{orderAfterSaleSendInfo.receiveAddress}} {{orderAfterSaleSendInfo.receivedDetail}}</div>
+                            <div class="value">{{orderAfterSaleSendInfo.receiveAddress}}</div>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                             <i class="deliver-icon"></i>
                             <span>发货信息</span>
                         </div>
-                        <div @click="changeSendInfo" class="blue pointer">修改发货信息</div>
+                        <!-- <div @click="changeSendInfo" class="blue pointer">修改发货信息</div> -->
                     </div>
                     <div class="content">
                         <div class="item">
@@ -105,7 +105,7 @@
                         </div>
                         <div class="item">
                             <div class="label">发货信息</div>
-                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendAddress}} {{orderAfterSaleSendInfo.sendDetail}}</div>
+                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendAddress}}</div>
                             <div class="value" v-else>--</div>
                         </div>
                     </div>
@@ -421,6 +421,7 @@ export default {
           this.orderAfterSaleSendInfo.sendCityName = res.city;
           this.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
           this.orderAfterSaleSendInfo.sendAreaName = res.area;
+          this.orderAfterSaleSendInfo.sendAddress = res.sendAddress;
           this.orderAfterSaleSendInfo.sendDetail = res.address;
         })
         .catch(error => {

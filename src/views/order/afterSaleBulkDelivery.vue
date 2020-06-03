@@ -58,7 +58,7 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.orderAfterSaleSendInfo.receivedName}}</p>
                     <p>联系电话: {{item.orderAfterSaleSendInfo.receivedPhone}}</p>
-                    <p>收货地址: {{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receivedDetail}}</p>
+                    <p>收货地址: {{item.orderAfterSaleSendInfo.receiveAddress}}</p>
                   </div>
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
@@ -626,6 +626,7 @@ export default {
                 res.orderAfterSaleSendInfo.sendCityName = response.city;
                 res.orderAfterSaleSendInfo.sendAreaCode = response.areaCode;
                 res.orderAfterSaleSendInfo.sendAreaName = response.area;
+                res.orderAfterSaleSendInfo.sendAddress = res.sendAddress;
                 res.orderAfterSaleSendInfo.sendDetail = response.address;
               });
             })

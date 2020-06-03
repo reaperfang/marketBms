@@ -82,7 +82,7 @@
                         </div>
                         <div class="item">
                             <div class="label">收货信息</div>
-                            <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}
+                            <div class="value">{{orderInfo.receiveAddress}}
                             </div>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="item">
                             <div class="label">发货信息</div>
-                            <div class="value">{{orderInfo.sendAddress}} {{orderInfo.sendDetail}}
+                            <div class="value">{{orderInfo.sendAddress}}
                             </div>
                         </div>
                     </div>
@@ -456,6 +456,7 @@ export default {
                 this.orderInfo.sendCityName = res.city
                 this.orderInfo.sendAreaCode = res.areaCode
                 this.orderInfo.sendAreaName = res.area
+                this.orderInfo.sendAddress = res.sendAddress
                 this.orderInfo.sendDetail = res.address
             }).catch(error => {
                 this.visible = false
