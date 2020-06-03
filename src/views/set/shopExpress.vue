@@ -211,8 +211,8 @@
                 <el-form-item 
                   :prop="'timePeriods.'+key+'.start'"
                   :rules="[
-                    { required: true, message: '请选择时间', trigger: 'change' },
-                    { validator: validateTimeRangesStart, trigger: 'change'}
+                    { required: true, message: '请选择时间', trigger:  ['change', 'blur'] },
+                    { validator: validateTimeRangesStart, trigger: ['change', 'blur']}
                   ]"
                 >
                   
@@ -221,8 +221,8 @@
                 <span class="line">~</span>
                 <el-form-item 
                   :prop="'timePeriods.'+key+'.end'"
-                  :rules="[{ required: true, message: '请选择时间', trigger: 'change' },
-                    { validator: validateTimeRangesEnd, trigger: 'change'}]"
+                  :rules="[{ required: true, message: '请选择时间', trigger:  ['change', 'blur'] },
+                    { validator: validateTimeRangesEnd, trigger:  ['change', 'blur']}]"
                 >
                   <el-time-picker format="HH:mm" placeholder="结束时间" v-model="item.end" style="width: 156px;" :picker-options="{selectableRange: getSelectableRange(key)}"></el-time-picker>
                 </el-form-item>
@@ -524,7 +524,8 @@ export default {
       const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.start"
       const index = +arr[1] // 1
       const ruleForm = this.ruleForm.timePeriods
-      let curr = new Date(value)
+      let curr = this.formatDate(value)
+      curr = new Date(curr)
       curr = curr.getTime()
       const len = ruleForm.length
       const validateArr = []
@@ -532,8 +533,10 @@ export default {
       if (index > 0) {
         let prev = ruleForm[index - 1].start
         if (prev) {
+          prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
+          console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
           if (prev >= curr) {
             return callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
           }
@@ -542,8 +545,10 @@ export default {
       if (index + 1 < len) {
         let next = ruleForm[index + 1].start
         if (next) {
+          next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
+          console.log('---validateTimeRangesStart:next:curr---', prev, curr)
           if (next <= curr) {
             return callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
           }
@@ -561,11 +566,12 @@ export default {
     },
     // 校验时间区间 end
     validateTimeRangesEnd(rule, value, callback) {
-      console.log('---validateTimeRangesStart---',rule, value)
+      console.log('---validateTimeRangesEnd---',rule, value)
       const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.end"
       const index = +arr[1] // 1
       const ruleForm = this.ruleForm.timePeriods
-      let curr = new Date(value)
+      let curr = this.formatDate(value)
+      curr = new Date(curr)
       curr = curr.getTime()
       const len = ruleForm.length
       const validateArr = []
@@ -573,7 +579,10 @@ export default {
       if (index > 0) {
         let prev = ruleForm[index - 1].end
         if (prev) {
+          prev = this.formatDate(prev)
           prev = new Date(prev)
+          prev = prev.getTime()
+          console.log('---validateTimeRangesEnd:prev:curr---', prev, curr)
           if (prev >= curr) {
             return callback(new Error('时间段可以交叉，不能重叠。'))
           }
@@ -582,8 +591,10 @@ export default {
       if (index + 1 < len) {
         let next = ruleForm[index + 1].end
         if (next) {
+          next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
+          console.log('---validateTimeRangesEnd:next:curr---', prev, curr)
           if (next <= curr) {
             return callback(new Error('时间段可以交叉，不能重叠。'))
           }
@@ -779,6 +790,20 @@ export default {
     },
     formatTime(date){
       return date >= 10 ? date : `0${date}`
+    },
+    formatDate(val){
+      const date = new Date(val)
+      const year = date.getFullYear()
+      let month = date.getMonth() + 1
+      month = this.formatTime(month)
+      let day = date.getDate()
+      day = this.formatTime(day)
+      let hour = date.getHours()
+      hour = this.formatTime(hour)
+      let minute = date.getMinutes()
+      minute = this.formatTime(minute)
+      return `${year}-${month}-${day} ${hour}:${minute}:00`
+      
     },
     // 格式化 每天重复的小时时间段
     formatSubscribeTimeHourRanges(str) {
