@@ -71,7 +71,7 @@ export default {
       this.mapObj.zoomTo(zoom)
     },
     setRadius(val) {
-      if (this.center && this.center.length <= 0) return false
+      if ((this.center && this.center.length <= 0) || !val) return false
       const radius = (val || 0) * 1000 // 经测试图上半径为米来进行计算
       // this.visible = true
       
