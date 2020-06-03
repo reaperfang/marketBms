@@ -394,7 +394,7 @@ export default {
                 })
                 this.distributorListFilter = res.list;
                 //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
-                if(this.distributorName){
+                if(this.ruleFormStore.distributorValue){
                     this.distributorList = this.distributorListFilter.filter((item) => {
                         if (item.name.includes(this.distributorName) || item.name.toUpperCase().includes(this.distributorName.toUpperCase())) {
                         return true
