@@ -58,7 +58,7 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.orderAfterSaleSendInfo.receivedName}}</p>
                     <p>联系电话: {{item.orderAfterSaleSendInfo.receivedPhone}}</p>
-                    <p>收货地址: {{item.orderAfterSaleSendInfo.receivedProvinceName}} {{item.orderAfterSaleSendInfo.receivedCityName}} {{item.orderAfterSaleSendInfo.receivedAreaName}} {{item.orderAfterSaleSendInfo.receivedDetail}}</p>
+                    <p>收货地址: {{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receivedDetail}}</p>
                   </div>
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
@@ -127,7 +127,7 @@
               <div class="item">
                 <div class="label">发货信息</div>
                 <div class="value" v-if="list[0] && list[0].orderAfterSaleSendInfo">
-                  {{list[0].orderAfterSaleSendInfo.sendProvinceName}} {{list[0].orderAfterSaleSendInfo.sendCityName}} {{list[0].orderAfterSaleSendInfo.sendAreaName}} {{list[0].orderAfterSaleSendInfo.sendDetail}}</div>
+                  {{list[0].orderAfterSaleSendInfo.sendAddress}} {{list[0].orderAfterSaleSendInfo.sendDetail}}</div>
                 <div class="value" v-else>--</div>
               </div>
             </div>

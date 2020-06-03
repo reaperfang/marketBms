@@ -88,33 +88,6 @@
             <el-option label="优先发货" :value="3"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="订单状态">
-          <el-select v-model="listQuery.orderStatus" placeholder>
-            <el-option label="全部" value></el-option>
-            <el-option label="待付款" :value="0"></el-option>
-            <el-option label="待成团" :value="1"></el-option>
-            <el-option label="关闭" :value="2"></el-option>
-            <el-option label="待发货" :value="3"></el-option>
-            <el-option label="部分发货" :value="4"></el-option>
-            <el-option label="待收货" :value="5"></el-option>
-            <el-option label="完成" :value="6"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label  class="searchTimeType">
-          <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
-            <el-option label="下单时间" value="createTime"></el-option>
-            <el-option label="完成时间" value="complateTime"></el-option>
-            <el-option label="发货时间" value="sendTime"></el-option>
-          </el-select>
-          <el-date-picker
-            v-model="listQuery.orderTimeValue"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :picker-options="utils.globalTimePickerOption.call(this)"
-          ></el-date-picker>
-        </el-form-item>
         <deliveryMethod :listQuery="listQuery"></deliveryMethod>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>

@@ -69,7 +69,7 @@
                             <i class="take-in-icon"></i>
                             <span>收货信息</span>
                         </div>
-                        <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
+                        <!-- <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div> -->
                     </div>
                     <div class="content">
                         <div class="item">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="item">
                             <div class="label">收货信息</div>
-                            <div class="value">{{orderAfterSaleSendInfo.receivedProvinceName}} {{orderAfterSaleSendInfo.receivedCityName}} {{orderAfterSaleSendInfo.receivedAreaName}} {{orderAfterSaleSendInfo.receivedDetail}}</div>
+                            <div class="value">{{orderAfterSaleSendInfo.receiveAddress}} {{orderAfterSaleSendInfo.receivedDetail}}</div>
                         </div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="item">
                             <div class="label">发货信息</div>
-                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendProvinceName}} {{orderAfterSaleSendInfo.sendCityName}} {{orderAfterSaleSendInfo.sendAreaName}} {{orderAfterSaleSendInfo.sendDetail}}</div>
+                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendAddress}} {{orderAfterSaleSendInfo.sendDetail}}</div>
                             <div class="value" v-else>--</div>
                         </div>
                     </div>
@@ -513,6 +513,8 @@ export default {
                                 receivedCityName: this.orderAfterSaleSendInfo.receivedCityName,
                                 receivedAreaCode: this.orderAfterSaleSendInfo.receivedAreaCode,
                                 receivedAreaName: this.orderAfterSaleSendInfo.receivedAreaName,
+                                receiveAddress: this.orderAfterSaleSendInfo.receiveAddress,
+                                sendAddress: this.orderAfterSaleSendInfo.sendAddress,
                                 receivedDetail: this.orderAfterSaleSendInfo.receivedDetail,
                                 sendName: this.orderAfterSaleSendInfo.sendName,
                                 sendPhone: this.orderAfterSaleSendInfo.sendPhone,

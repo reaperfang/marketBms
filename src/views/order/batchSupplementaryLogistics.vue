@@ -60,7 +60,7 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.receivedName}}</p>
                     <p>联系电话: {{item.receivedPhone}}</p>
-                    <p>收货地址: {{item.receivedProvinceName}} {{item.receivedCityName}} {{item.receivedAreaName}} {{item.receivedDetail}}
+                    <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}
                     </p>
                   </div>
                   <div class="col">
@@ -120,7 +120,7 @@
                 <i class="deliver-icon"></i>
                 <span>发货信息</span>
               </div>
-              <div @click="changeSendInfo" class="blue pointer">修改发货信息</div>
+              <!-- <div @click="changeSendInfo" class="blue pointer">修改发货信息</div> -->
             </div>
             <div class="content">
               <div class="item">
@@ -135,7 +135,7 @@
                 <div class="label">发货信息</div>
                 <!-- <div class="value">{{list[0] && list[0].sendDetail}}</div> -->
                 <div class="value" v-if="list[0]">
-                  {{list[0].sendProvinceName}} {{list[0].sendCityName}} {{list[0].sendAreaName}} {{list[0].sendDetail}}</div>
+                  {{list[0].sendAddress}} {{list[0].sendDetail}}</div>
                 <div class="value" v-else>--</div>
               </div>
             </div>
@@ -558,6 +558,8 @@ export default {
                         receivedCityName: item.receivedCityName,
                         receivedAreaCode: item.receivedAreaCode,
                         receivedAreaName: item.receivedAreaName,
+                        receiveAddress: item.receiveAddress,
+                        sendAddress: item.sendAddress,
                         receivedDetail: item.receivedDetail,
                         sendName: item.sendName,
                         sendPhone: item.sendPhone,

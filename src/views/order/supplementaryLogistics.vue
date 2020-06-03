@@ -69,7 +69,7 @@
                             <i class="take-in-icon"></i>
                             <span>收货信息</span>
                         </div>
-                        <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
+                        <!-- <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div> -->
                     </div>
                     <div class="content">
                         <div class="item">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="item">
                             <div class="label">收货信息</div>
-                            <div class="value">{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}
+                            <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                             <i class="deliver-icon"></i>
                             <span>发货信息</span>
                         </div>
-                        <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
+                        <!-- <div class="blue pointer" @click="changeSendInfo">修改发货信息</div> -->
                     </div>
                     <div class="content">
                         <div class="item">
@@ -106,7 +106,7 @@
                         </div>
                         <div class="item">
                             <div class="label">发货信息</div>
-                            <div class="value">{{orderInfo.sendProvinceName}} {{orderInfo.sendCityName}} {{orderInfo.sendAreaName}} {{orderInfo.sendDetail}}
+                            <div class="value">{{orderInfo.sendAddress}} {{orderInfo.sendDetail}}
                             </div>
                         </div>
                     </div>
@@ -519,6 +519,8 @@ export default {
                         receivedCityName: this.orderInfo.receivedCityName,
                         receivedAreaCode: this.orderInfo.receivedAreaCode,
                         receivedAreaName: this.orderInfo.receivedAreaName,
+                        receiveAddress: this.orderInfo.receiveAddress,
+                        sendAddress: this.orderInfo.sendAddress,
                         receivedDetail: this.orderInfo.receivedDetail,
                         sendName: this.orderInfo.sendName, // 发货人名称
                         sendPhone: this.orderInfo.sendPhone, // 发货人手机号
