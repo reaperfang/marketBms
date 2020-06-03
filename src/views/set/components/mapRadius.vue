@@ -84,25 +84,23 @@ export default {
       this.circle.setVisible(true)
       this.circle.setRadius(radius)
       this.circle.setCenter(LatLng)
-      let zoom = 13
-      if (radius > 1000 * 1000) {
+      let zoom = 12
+      if (radius > 500 * 1000){
         zoom = 5
-      } else if (radius > 500 * 1000){
-        zoom = 6
       } else if (radius > 250 * 1000){
-        zoom = 7
+        zoom = 6
       } else if (radius > 100 * 1000){
-        zoom = 8
+        zoom = 7
       } else if (radius > 50 * 1000){
-        zoom = 9
+        zoom = 8
       } else if (radius > 25 * 1000){
-        zoom = 10
+        zoom = 9
       } else if (radius > 10 * 1000){
-        zoom = 11
+        zoom = 10
       } else if (radius > 5 * 1000){
+        zoom = 11
+      } else {
         zoom = 12
-      }else {
-        zoom = 13
       }
       console.log('---zoom---', zoom)
       this.setPanTo(this.center[1], this.center[0], zoom)

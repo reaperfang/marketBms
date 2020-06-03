@@ -13,9 +13,12 @@
                             <img :src="require('@/assets/images/star.png')" alt="">
                             开通且启用支付方式
                         </p>
-                        <p @click="linkTo({text:'设置店铺信息',url:'/set/shopInfo'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            设置店铺信息
+                            <span @click="linkTo({text:'设置店铺信息',url:'/set/shopInfo'})">设置店铺信息
+                            </span>
+                            <i>并</i>
+                            <span @click="linkTo({text:'设置配送方式',url:'/set/ordinaryExpress'})">设置配送方式</span>
                         </p>
                         <p @click="linkTo({text:'完善商品详情信息',url:'/goods/goodsList'})">
                             <img :src="require('@/assets/images/star.png')" alt="">
