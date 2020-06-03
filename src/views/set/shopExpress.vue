@@ -211,8 +211,8 @@
                 <el-form-item 
                   :prop="'timePeriods.'+key+'.start'"
                   :rules="[
-                    { required: true, message: '请选择时间', trigger:  ['change', 'blur'] },
-                    { validator: validateTimeRangesStart, trigger: ['change', 'blur']}
+                    { required: true, message: '请选择时间', trigger:  'change' },
+                    { validator: validateTimeRangesStart, trigger: 'change'}
                   ]"
                 >
                   
@@ -221,8 +221,8 @@
                 <span class="line">~</span>
                 <el-form-item 
                   :prop="'timePeriods.'+key+'.end'"
-                  :rules="[{ required: true, message: '请选择时间', trigger:  ['change', 'blur'] },
-                    { validator: validateTimeRangesEnd, trigger:  ['change', 'blur']}]"
+                  :rules="[{ required: true, message: '请选择时间', trigger:  'change' },
+                    { validator: validateTimeRangesEnd, trigger:  'change'}]"
                 >
                   <el-time-picker format="HH:mm" placeholder="结束时间" v-model="item.end" style="width: 156px;" :picker-options="{selectableRange: getSelectableRange(key)}"></el-time-picker>
                 </el-form-item>
@@ -288,15 +288,17 @@ export default {
       const radius = parseFloat(this.ruleForm.radius) * 100
       console.log(curr, radius)
       if (curr > radius) {
-        return callback(new Error('已超出服务半径，请重新输入'))
+        callback(new Error('已超出服务半径，请重新输入'))
+      } else {
+        callback()
       }
-      return callback()
     }
     const validateRadius = (rule, value, callback) => {
       if (value && this.ruleForm.isOpenLadderFreight === 1) {
         this.$refs.ruleForm.validateField('distanceLt');
         this.$refs.ruleForm.validateField('distancePlus');
-      }
+      } 
+      callback()
     }
     return {
       zoom: 4,
@@ -520,7 +522,7 @@ export default {
     },
     // 校验时间区间start
     validateTimeRangesStart(rule, value, callback) {
-      console.log('---validateTimeRangesStart---',rule, value)
+      // console.log('---validateTimeRangesStart---',rule, value)
       const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.start"
       const index = +arr[1] // 1
       const ruleForm = this.ruleForm.timePeriods
@@ -528,7 +530,7 @@ export default {
       curr = new Date(curr)
       curr = curr.getTime()
       const len = ruleForm.length
-      const validateArr = []
+      // const validateArr = []
       this.clearValidate('start')
       if (index > 0) {
         let prev = ruleForm[index - 1].start
@@ -536,7 +538,7 @@ export default {
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
-          console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
+          // console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
           if (prev >= curr) {
             return callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
           }
@@ -548,13 +550,13 @@ export default {
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
-          console.log('---validateTimeRangesStart:next:curr---', prev, curr)
+          // console.log('---validateTimeRangesStart:next:curr---', prev, curr)
           if (next <= curr) {
             return callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
           }
         } 
       }
-      console.log('validateArr', validateArr)
+      // console.log('validateArr', validateArr)
       callback()
       // callback()
       // const reg = /^[0-9]+$/
@@ -566,7 +568,7 @@ export default {
     },
     // 校验时间区间 end
     validateTimeRangesEnd(rule, value, callback) {
-      console.log('---validateTimeRangesEnd---',rule, value)
+      // console.log('---validateTimeRangesEnd---',rule, value)
       const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.end"
       const index = +arr[1] // 1
       const ruleForm = this.ruleForm.timePeriods
@@ -574,7 +576,7 @@ export default {
       curr = new Date(curr)
       curr = curr.getTime()
       const len = ruleForm.length
-      const validateArr = []
+      // const validateArr = []
       this.clearValidate('end')
       if (index > 0) {
         let prev = ruleForm[index - 1].end
@@ -582,7 +584,7 @@ export default {
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
-          console.log('---validateTimeRangesEnd:prev:curr---', prev, curr)
+          // console.log('---validateTimeRangesEnd:prev:curr---', prev, curr)
           if (prev >= curr) {
             return callback(new Error('时间段可以交叉，不能重叠。'))
           }
@@ -594,7 +596,7 @@ export default {
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
-          console.log('---validateTimeRangesEnd:next:curr---', prev, curr)
+          // console.log('---validateTimeRangesEnd:next:curr---', prev, curr)
           if (next <= curr) {
             return callback(new Error('时间段可以交叉，不能重叠。'))
           }
@@ -874,18 +876,23 @@ export default {
       this.isLoading = true
       let isValidWeeks = true
       this.errWeekMsg = ''
+      console.log('handleSubmit:before')
       if (this.ruleForm.repeatCycle === 2) {
         if (this.ruleForm.weeks.length <= 0) {
           this.errWeekMsg = '请点击编辑，选择重复日'
           isValidWeeks = false
         }
       }
+      console.log('handleSubmit:repeatCycle')
       this.$refs[formName].validate((valid) => {
+      console.log('handleSubmit:valid && isValidWeeks', valid, isValidWeeks)
         if (valid && isValidWeeks) {
+      console.log('handleSubmit:valid && isValidWeeks')
           this.updateOrderDeliverInfo()
           // alert('submit!');
           // this.isLoading = false
         } else {
+        console.log('handleSubmit:valid && isValidWeeks: else')
           // console.log('error submit!!');
           this.isLoading = false
           return false;
@@ -990,7 +997,6 @@ export default {
           }).then(()=> {
             this.openMerchantDeliver()
           }).catch((action) => {
-            
           });
         }
       }).catch(err => {
