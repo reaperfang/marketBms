@@ -75,7 +75,12 @@ export default {
       const radius = (val || 0) * 1000 // 经测试图上半径为米来进行计算
       // this.visible = true
       
-      if (radius <= 0) return false
+      if (radius <= 0) {
+        this.marker.setVisible(false)
+        this.marker2.setVisible(false)
+        this.circle.setVisible(false)
+        return false
+      }
       const LatLng = new qq.maps.LatLng(this.center[0], this.center[1])
       this.marker.setVisible(true)
       this.marker.setPosition(LatLng)
