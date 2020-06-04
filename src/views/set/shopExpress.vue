@@ -997,11 +997,13 @@ export default {
           const str = `<p style="text-align: center;"><i class="el-icon-success" style="    font-size: 40px;color: rgba(108,213,33,1);"></i><span style="ertical-align: super;">保存成功</span></p>
           <p style="text-align: center;color:#ccc;">您可以去开启商家配送了</p>
           `
-          this.$confirm(str, '', {
-            dangerouslyUseHTMLString: true,
+          this.$confirm('您可以去开启商家配送了', '保存成功', {
+            // dangerouslyUseHTMLString: true,
             distinguishCancelAndClose: true,
             confirmButtonText: '开启',
-            cancelButtonText: '暂不开启'
+            cancelButtonText: '暂不开启',
+            center: true,
+            type: 'success'
           }).then(()=> {
             this.openMerchantDeliver()
           }).catch((action) => {
