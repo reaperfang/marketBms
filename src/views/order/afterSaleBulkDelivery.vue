@@ -61,7 +61,7 @@
                     <p>收货地址: {{item.orderAfterSaleSendInfo.receiveAddress}}</p>
                   </div>
                   <div class="col">
-                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
+                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1">
                         <el-form-item label="快递公司" prop="expressCompanyCodes">
                             <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
@@ -77,9 +77,9 @@
                             <el-input :disabled="!item.express" v-model="item.orderAfterSaleSendInfo.expressNos"></el-input>
                         </el-form-item>
                     </el-form>
-                    <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
+                    <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 2">
                       <el-form-item label="配送时间">
-                        <span>{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</span>
+                        <span>{{item.orderAfterSaleSendInfo.deliveryDate | formatDateRemoveZero}} {{item.orderAfterSaleSendInfo.deliveryTime}}</span>
                       </el-form-item>
                       <el-form-item label="配送员" prop="distributorValue">
                         <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">
@@ -382,7 +382,7 @@ export default {
     },
       sendGoodsHandler() {
           //配送方式
-          const deliveryWay = this.list[0].deliveryWay; 
+          const deliveryWay = this.list[0].orderAfterSaleSendInfo.deliveryWay; 
           
           try {
               let params
@@ -407,9 +407,10 @@ export default {
               }
 
               let isWrong = false;
+
               this.list.forEach((item, index) => {
                 //如果是商家配送，则验证配送员信息
-                  if(item.deliveryWay == 2){
+                  if(item.orderAfterSaleSendInfo.deliveryWay == 2){
                     if(item.distributorName == ''){
                       isWrong = true;
                       item.showErrorDistributorName = true;
@@ -441,7 +442,7 @@ export default {
                 orderAfterSaleSendInfoDtoList: this.list.map(item => {
                     let expressCompanys = ''
                     
-                    if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
                       if (item.expressCompanyCodes == "other") {
                         expressCompanys = item.other;
                       } else {
@@ -462,6 +463,8 @@ export default {
                         receivedCityName: item.orderAfterSaleSendInfo.receivedCityName,
                         receivedAreaCode: item.orderAfterSaleSendInfo.receivedAreaCode,
                         receivedAreaName: item.orderAfterSaleSendInfo.receivedAreaName,
+                        receiveAddress: item.orderAfterSaleSendInfo.receiveAddress,
+                        sendAddress: item.orderAfterSaleSendInfo.sendAddress,
                         receivedDetail: item.orderAfterSaleSendInfo.receivedDetail,
                         sendName: item.orderAfterSaleSendInfo.sendName,
                         sendPhone: item.orderAfterSaleSendInfo.sendPhone,
@@ -475,14 +478,14 @@ export default {
                         remark: item.orderAfterSaleSendInfo.remark 
                     };
                     //如果是普通快递，则添加快递公司与快递单号
-                    if(item.deliveryWay == 1){
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1){
                       obj.deliveryWay = 1;
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
                       obj.expressCompanyCodes = item.orderAfterSaleSendInfo.expressCompanyCodes;
                     }
                     //如果是商家配送，则添加配送员信息
-                    if(item.deliveryWay == 2){
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 2){
                       obj.deliveryWay = 2;
                       obj.distributorName = item.distributorName;
                       //obj.distributorId = item.distributorId;
@@ -491,6 +494,7 @@ export default {
                     return obj
                 })
             }
+
             this._apis.order.orderAfterSaleSend(params).then((res) => {
                 this.$message.success('发货成功');
                 this.$router.push('/order/deliverGoodsSuccess?ids=' + this.$route.query.ids + '&type=afterSaleBulkDelivery')
@@ -607,7 +611,7 @@ export default {
 
 
           //如果是商家配送，则需要请求拿到配送员列表
-          if(res[0].deliveryWay == 2){
+          if(res[0].orderAfterSaleSendInfo.deliveryWay == 2){
             //获取配送员列表
             this.getDistributorList(res.length);
           }
@@ -626,7 +630,7 @@ export default {
                 res.orderAfterSaleSendInfo.sendCityName = response.city;
                 res.orderAfterSaleSendInfo.sendAreaCode = response.areaCode;
                 res.orderAfterSaleSendInfo.sendAreaName = response.area;
-                res.orderAfterSaleSendInfo.sendAddress = res.sendAddress;
+                res.orderAfterSaleSendInfo.sendAddress = response.sendAddress;
                 res.orderAfterSaleSendInfo.sendDetail = response.address;
               });
             })

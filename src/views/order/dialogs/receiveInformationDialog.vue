@@ -8,11 +8,18 @@
                 <el-form-item label="发货人电话" prop="sendPhone">
                     <el-input v-model="ruleForm.sendPhone" placeholder="请输入"></el-input>
                 </el-form-item>
-                <el-form-item :class="{isIE: isIE}" label="发货地址" prop="deliveryAddress">
-                    <area-cascader :disabled="true" type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
+                <el-form-item :class="{isIE: isIE}" label="发货地址" prop="sendAddress">
+                    <!-- <area-cascader :disabled="true" type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader> -->
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
+                    <el-input disabled v-model="ruleForm.sendAddress" placeholder="请输入"></el-input>
                 </el-form-item>
-                <el-form-item label="详细地址" prop="sendDetail">
+                <div class="pointer" style="display: inline-block; margin-left: 99px; margin-right: 10px;vertical-align:middle;" v-show="!ruleForm.sendAddress">
+                    <span class="shuaxin-fenlei" @click="fetchOrderAddress">刷新<i></i></span>
+                </div>
+                <div class="prompt" style="display:inline-block;font-size:12px;" v-show="!ruleForm.sendAddress">
+                    <span class="set-btn blue pointer font12" @click="gotoSetAddress">去设置地址</span>
+                </div>
+                <!-- <el-form-item label="详细地址" prop="sendDetail">
                     <el-input
                         type="textarea"
                         :rows="2"
@@ -20,8 +27,8 @@
                         maxlength="100"
                         v-model="ruleForm.sendDetail">
                     </el-input>
-                </el-form-item>
-                <div class="footer">
+                </el-form-item> -->
+                <div class="footer" style="margin-top: 20px;">
                     <el-button @click="visible = false">取消</el-button>
                     <el-button @click="submit('ruleForm')" type="primary">确定</el-button>
                 </div>
@@ -33,7 +40,7 @@
                     <el-input v-model="ruleForm.receivedName" placeholder="请选择" maxlength="15"></el-input>
                 </el-form-item>
                 <el-form-item label="收货人电话" prop="receivedPhone">
-                    <el-input v-model="ruleForm.receivedPhone" placeholder="请输入"></el-input>
+                    <el-input v-model="ruleForm.receivedPhone" placeholder=""></el-input>
                 </el-form-item>
                 <el-form-item :class="{isIE: isIE}" label="收货地址" prop="deliveryAddress">
                     <area-cascader :disabled="true" type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader>
@@ -149,6 +156,8 @@ export default {
                 sendCityName: '',
                 sendAreaCode: '',
                 sendAreaName: '',
+
+                sendAddress: '',
             },
             rules: {
                 receivedName: [
@@ -160,9 +169,9 @@ export default {
                 receivedDetail: [
                     { validator: receivedDetailValidator, trigger: 'blur' },
                 ],
-                deliveryAddress: [
-                    { required: true, message: '请选择收货地址', trigger: 'blur' },
-                ],
+                // deliveryAddress: [
+                //     { required: true, message: '请选择收货地址', trigger: 'blur' },
+                // ],
 
                 sendName: [
                     { validator: sendNameValidator, trigger: 'blur' },
@@ -170,9 +179,12 @@ export default {
                 sendPhone: [
                     { validator: sendPhoneValidator, trigger: 'blur' },
                 ],
-                sendDetail: [
-                    { validator: sendDetailValidator, trigger: 'blur' },
+                sendAddress: [
+                    { required: true, message: ' ', trigger: 'blur' },
                 ],
+                // sendDetail: [
+                //     { validator: sendDetailValidator, trigger: 'blur' },
+                // ],
             },
             showFooter: false
         }
@@ -189,6 +201,20 @@ export default {
         }
     },
     methods: {
+        gotoSetAddress(){
+            let routeData = this.$router.resolve({ path: '/set/shopInfo' });
+            window.open(routeData.href, '_blank');
+        },
+        fetchOrderAddress() {
+            this._apis.order
+                .fetchOrderAddress({ id: this.cid, cid: this.cid })
+                .then(res => {
+                this.ruleForm.sendAddress = res.sendAddress;
+                })
+                .catch(error => {
+                this.$message.error(error);
+                });
+        },
         getDetail() {
             let arr = []
             let obj1 = {}
@@ -205,6 +231,7 @@ export default {
                     arr.push(this.data.receivedAreaCode)
                 }
             } else {
+
                 if(this.data.sendProvinceCode && this.data.sendCityCode && this.data.sendAreaCode) {
                     // obj1[this.data.sendProvinceCode] = this.data.sendProvinceName
                     // obj2[this.data.sendCityCode] = this.data.sendCityName
@@ -230,13 +257,21 @@ export default {
                     // let name0 = codes[0][codes0]
                     // let name1 = codes[1][codes1]
                     // let name2 = codes[2][codes2]
+                    let codes0 = "",
+                        codes1 = "",
+                        codes2 = "",
+                        name0 = "",
+                        name1 = "",
+                        name2 = "";
+                    if(this.ruleForm.deliveryAddress.length != 0){
+                        codes0 = this.ruleForm.deliveryAddress[0]
+                        codes1 = this.ruleForm.deliveryAddress[1]
+                        codes2 = this.ruleForm.deliveryAddress[2]
+                        name0 = this.$pcaa[86][this.ruleForm.deliveryAddress[0]]
+                        name1 = this.$pcaa[this.ruleForm.deliveryAddress[0]][this.ruleForm.deliveryAddress[1]]
+                        name2 = this.$pcaa[this.ruleForm.deliveryAddress[1]][this.ruleForm.deliveryAddress[2]]
+                    }
                     
-                    let codes0 = this.ruleForm.deliveryAddress[0]
-                    let codes1 = this.ruleForm.deliveryAddress[1]
-                    let codes2 = this.ruleForm.deliveryAddress[2]
-                    let name0 = this.$pcaa[86][this.ruleForm.deliveryAddress[0]]
-                    let name1 = this.$pcaa[this.ruleForm.deliveryAddress[0]][this.ruleForm.deliveryAddress[1]]
-                    let name2 = this.$pcaa[this.ruleForm.deliveryAddress[1]][this.ruleForm.deliveryAddress[2]]
                     if(this.sendGoods && !this.ajax) {
                         let obj = {}
                         // console.log(this.ruleForm.deliveryAddress)
@@ -257,7 +292,7 @@ export default {
                                 receivedName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
                             }
                         } else if(this.sendGoods == 'send') {
-                            // obj = {
+                             // obj = {
                             //     sendProvinceCode: codes0,
                             //     sendProvinceName: name0,
                             //     sendCityCode: codes1,
@@ -278,8 +313,10 @@ export default {
                                 sendAreaName: name2,
                                 sendDetail: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
                                 sendPhone: this.sendGoods == 'send' ? this.ruleForm.sendPhone : this.ruleForm.receivedPhone,
-                                sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName
+                                sendName: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName,
+                                sendAddress: this.sendGoods == 'send' ? this.ruleForm.sendAddress : this.ruleForm.receivedAddress
                             }
+
 
                             this._apis.order.orderUpdateAddress({
                                 id: this.cid, // 和cid相同
@@ -462,6 +499,26 @@ export default {
         color: #666;
         font-size: 12px;
     }
+    .shuaxin-fenlei {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px !important;
+    width: 80px;
+    height: 34px;
+    color: #6ACEA8;
+    background-color: #e6fbf3;
+    i {
+        margin-left: 12px;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url('~@/assets/images/goods/renovate.png');
+    }
+}
+.set-btn:hover {
+    color: #444a51;
+    text-decoration: underline;
+}
 </style>
 
 

@@ -92,7 +92,7 @@
                             <i class="deliver-icon"></i>
                             <span>发货信息</span>
                         </div>
-                        <!-- <div @click="changeSendInfo" class="blue pointer">修改发货信息</div> -->
+                        <div @click="changeSendInfo" class="blue pointer">修改发货信息</div>
                     </div>
                     <div class="content">
                         <div class="item">

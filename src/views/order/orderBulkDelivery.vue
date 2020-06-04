@@ -743,6 +743,8 @@ export default {
               receivedCityName: item.receivedCityName,
               receivedAreaCode: item.receivedAreaCode,
               receivedAreaName: item.receivedAreaName,
+              receiveAddress: item.receiveAddress,
+              sendAddress: item.sendAddress,
               receivedDetail: item.receivedDetail,
               sendName: item.sendName,
               sendPhone: item.sendPhone,
