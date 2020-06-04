@@ -20,7 +20,14 @@
       :disabled='disable'
       :move='onMoveHandler'>
         <template v-for="(item, key) of componentDataIds">
-          <div 
+          <el-popover
+            :popper-class="currentMouseOverComponentId ? 'editor-view-popover active' : 'editor-view-popover'"
+            placement="right-start"
+            width="135"
+            trigger="hover">
+            <div @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)">{{getComponentData(item).title}}</div>
+            <div 
+             slot="reference"
             :title="getComponentData(item).title"
             class="component_wrapper" 
             :data-id="getComponentData(item).id"
@@ -28,8 +35,6 @@
             :key="key" 
             :class="{'actived': item === currentComponentId}"
             @click="selectComponent(item)" 
-            @mouseover="componentMouseover(item)"
-            @mouseout="componentMouseleave(item)"
             @dragstart.self="selectItem = item" 
             @dragend.self="selectItem = {}">
               <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
@@ -40,6 +45,7 @@
                 </div>
               </transition>
           </div>
+          </el-popover>
         </template>
       </vuedraggable>
 
