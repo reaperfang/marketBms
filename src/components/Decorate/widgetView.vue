@@ -3,8 +3,11 @@
       <div class="block" v-for="(item, key) of widgetList" :key="key">
         <!-- 隐藏的控件不显示 -->
         <template v-if="key != 'hiddenWidget'">
-          <div class="widget-title">{{item.title}}</div>
-          <div class="widget-list">
+          <div class="widget-title">
+            {{item.title}}
+            <i @click="spreadWidget(key)" class="widget-title-icon" :class="{'el-icon-caret-bottom': !item.spread, 'el-icon-caret-top': item.spread}"></i>
+          </div>
+          <div v-show="item.spread" class="widget-list">
             <ul class="tile-list n4">
               <li v-for="(item2, key2) of item.list" :key="key2" @click="addComponent(item2)" draggable="true" @dragstart="dragAddComponent($event, item2)">
                 <i :class="item2.iconClass"></i>
@@ -24,7 +27,7 @@ export default {
   components: {},
   data () {
     return {
-     widgetList: widget.widgetList
+      widgetList: widget.widgetList
     }
   },
   created() {
@@ -80,6 +83,9 @@ export default {
     dragAddComponent(ev, item) {
       const id = uuidv4();
       ev.dataTransfer.setData("dragAddComponent", JSON.stringify(Object.assign(item, {id})));
+    },
+    spreadWidget(key) {
+      this.widgetList[key].spread = !this.widgetList[key].spread
     }
   }
 }
@@ -96,6 +102,9 @@ export default {
       padding:10px 20px;
       box-sizing: border-box;
       background:rgba(230,228,255,1);
+      .widget-title-icon {
+        color: #3A4048;
+      }
     }
     .widget-list{
       padding:30px 20px;

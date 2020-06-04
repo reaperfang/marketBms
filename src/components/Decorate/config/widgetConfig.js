@@ -35,6 +35,7 @@ export default {
         //基础组件
         baseWidget: {
           title:'基础组件',
+          spread: true,
           list: [
             {
               type: 'richEditor',
@@ -106,6 +107,7 @@ export default {
         //营销组件
         saleWidget: {
           title: '营销组件',
+          spread: true,
           list: [
             {
               type: 'coupon',
@@ -170,6 +172,7 @@ export default {
         //其他组件
         otherWidget: {
           title: '其他组件',
+          spread: true,
           list: [
             {
               type: 'shopInfo',

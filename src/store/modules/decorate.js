@@ -2,6 +2,7 @@
 const decorate = {
 	state: {
 		currentComponentId: "",  //当前组件id
+		currentMouseOverComponentId: "",
 		basePropertyId: '',  //基础属性组件id
 		baseInfo: {},  //店铺装修页面基础信息
 		componentDataIds: [],  //组件列表id序列
@@ -12,6 +13,11 @@ const decorate = {
 		/* 设置当前组件id */
 		setCurrentComponentId: (state, id) => {
 			state.currentComponentId = id;
+		},
+
+		/* 设置鼠标移上当前组件id */
+		setCurrentMouseOverComponentId: (state, id) => {
+			state.currentMouseOverComponentId = id;
 		},
 
 		/* 设置基础属性组件id */

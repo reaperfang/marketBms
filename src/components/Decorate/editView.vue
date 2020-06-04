@@ -21,17 +21,24 @@
       :move='onMoveHandler'>
         <template v-for="(item, key) of componentDataIds">
           <div 
-          :title="getComponentData(item).title"
-          class="component_wrapper" 
-          :data-id="getComponentData(item).id"
-          v-if="!getComponentData(item).hidden"
-          :key="key" 
-          :class="{'actived': item === currentComponentId}"
-          @click="selectComponent(item)" 
-          @dragstart.self="selectItem = item" 
-          @dragend.self="selectItem = {}">
-            <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
-            <i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
+            :title="getComponentData(item).title"
+            class="component_wrapper" 
+            :data-id="getComponentData(item).id"
+            v-if="!getComponentData(item).hidden"
+            :key="key" 
+            :class="{'actived': item === currentComponentId}"
+            @click="selectComponent(item)" 
+            @mouseover="componentMouseover(item)"
+            @mouseout="componentMouseleave(item)"
+            @dragstart.self="selectItem = item" 
+            @dragend.self="selectItem = {}">
+              <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
+              <i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
+              <transition name="fade">
+                <div v-show="item === currentMouseOverComponentId" class="title-box">
+                  <div class="popper">{{getComponentData(item).title}}</div>
+                </div>
+              </transition>
           </div>
         </template>
       </vuedraggable>
@@ -98,6 +105,9 @@ export default {
     currentComponentId() {
       return this.$store.getters.currentComponentId;
     },
+    currentMouseOverComponentId() {
+      return this.$store.getters.currentMouseOverComponentId;
+    },
     componentDataIds() {
       return this.$store.getters.componentDataIds;
     },
@@ -155,6 +165,12 @@ export default {
       this.$store.commit('setCurrentComponentId', id);
     },
 
+    componentMouseover(id) {
+      this.$store.commit('setCurrentMouseOverComponentId', id);
+    },
+    componentMouseleave(id) {
+      this.$store.commit('setCurrentMouseOverComponentId', '');
+    },
     //删除组件
     deleteComponent(id) {
       
@@ -323,9 +339,10 @@ export default {
     .phone-body {
       box-shadow: 0 1px 10px rgba(0,0,0,0.1);
       width: 375px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    scrollbar-width: none;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      scrollbar-width: none;
+      overflow: visible;
 
       .component_wrapper{
         // min-height: 50px;
@@ -341,6 +358,30 @@ export default {
           top:0;
           right:0;
           cursor:pointer;
+        }
+      }
+      .drag-wrap {
+        .title-box {
+          position: absolute;
+          right: -160px;
+          top: 0px;
+          .popper {
+            width: 135px;
+            height: 56px;
+            background: #fff;
+            padding: 13px 8px;
+            border-radius: 7px;
+            color: #92929b;
+            &:before {
+              content: '';
+              position: absolute;
+              top: calc(50% - 8px);
+              left: -16px;
+              width: 16px;
+              height: 16px;
+              background: url('../../assets/images/shop/editor/arrow.png') no-repeat;
+            }
+          }
         }
       }
     }
@@ -402,5 +443,11 @@ export default {
         }
       }
     }
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>
