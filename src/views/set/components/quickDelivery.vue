@@ -9,8 +9,10 @@
         </div> -->
       </div>
       <div class="radio-box">
-        <el-radio :disabled="mode == 1" v-model="mode" :label="0">组合运费（推荐）</el-radio>
-        <el-radio :disabled="mode == 0" v-model="mode" :label="1">按商品累加运费</el-radio>
+        <el-radio-group v-model="mode" @change="handleChangeModel">
+          <el-radio :label="0">组合运费（推荐）</el-radio>
+          <el-radio :label="1">按商品累加运费</el-radio>
+        </el-radio-group>
         <span
           @click="currentDialog = 'FreightRulesDialog'; dialogVisible = true"
           class="blue pointer"
@@ -123,9 +125,15 @@ import FreightRulesDialog from "@/views/order/dialogs/freightRulesDialog";
 import utils from "@/utils";
 
 export default {
+  computed: {
+    cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        return shopInfo.id
+    }
+  },
   data() {
     return {
-      mode: "1",
+      mode: 1,
       formInline: {
         name: "",
         time: ""
@@ -162,6 +170,20 @@ export default {
     }
   },
   methods: {
+    // 计费方式变更
+    handleChangeModel() {
+      this.updateTransportationExpenseType()
+    },
+    updateTransportationExpenseType() {
+      let data = {
+        id:this.cid,
+        transportationExpenseType:this.mode
+      }
+      this._apis.set.updateShopInfo(data).then(response =>{
+      }).catch(error =>{
+        console.log('-----err-----', error)
+      })
+    },
     search() {
         this.listQuery = Object.assign({}, this.listQuery, {
             startIndex: 1,
