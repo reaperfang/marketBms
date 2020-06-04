@@ -260,7 +260,11 @@ export default {
     const validateFloat = (rule, value, callback) => {
       const reg = /^(([0-9]+).\d{2})$/ // 判断格式必须位*.**
       if (value && reg.test(value)) {
-        callback();
+        if (value * 1000 > 0) {
+          callback();
+        } else {
+          callback(new Error('必填项，请输入大于0的数字'));
+        }
       } else {
         callback(new Error('必填项，请输入非负数，支持小数点后两位'));
       }
@@ -268,7 +272,11 @@ export default {
     const validateFloat2 = (rule, value, callback) => {
       const reg = /^(([0-9]+).\d{3})$/ // 判断格式必须位*.**
       if (value && reg.test(value)) {
-        callback();
+        if (value * 1000 > 0) {
+          callback();
+        } else {
+          callback(new Error('必填项，请输入大于0的数字'));
+        }
       } else {
         callback(new Error('必填项，请输入非负数，支持小数点后三位'));
       }
@@ -612,6 +620,7 @@ export default {
       callback()
     },
     formatDecimals(val, key, digits = 2) {
+      console.log(val, Number.isNaN(+val))
       if (val) {
         if (Number.isNaN(+val)) {
           return false
