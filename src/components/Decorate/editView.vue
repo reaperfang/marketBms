@@ -348,7 +348,6 @@ export default {
       overflow-x: hidden;
       overflow-y: scroll;
       scrollbar-width: none;
-      overflow-x: visible;
 
       .component_wrapper{
         // min-height: 50px;
