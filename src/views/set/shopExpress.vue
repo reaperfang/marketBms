@@ -144,7 +144,7 @@
         </el-form-item>
         <div class="box" v-if="ruleForm.isReservationDelivery === 1">
           <div class="beforehand">
-            <span><em>*</em>支持卖家提前</span>
+            <span><em>*</em>支持买家提前</span>
             <el-form-item class="item" prop="advanceDays">
               <el-input type="text" v-model="ruleForm.advanceDays" style="width: 156px;"></el-input>
             </el-form-item>
@@ -201,7 +201,7 @@
                   </el-checkbox-group>
                   <el-button slot="reference" type="text" class="edit">编辑</el-button>
                 </el-popover>
-                <span class="prompt"> {{ getCheckedweeks }}</span>
+                <span class="prompt" v-show="ruleForm.repeatCycle === 2"> {{ getCheckedweeks }}</span>
               </el-radio-group>
             </el-form-item>
             <!-- 选择时间段 -->
@@ -274,9 +274,9 @@ export default {
       }
     };
     const validatePositiveInter = (rule, value, callback) => {
-      const reg = /^[0-9]+$/
+      const reg = /^[1-9]+$/
       if (!(value && reg.test(value))) {
-       return callback(new Error('必填项，请输入天数，仅支持输入正整数'));  
+       return callback(new Error('必填项，请输入天数，仅支持输入大于0的正整数'));  
       } 
       if (Number(value) > 5) {
         return callback(new Error('提前下单时间不能超过5天，请重新输入'));
@@ -470,10 +470,10 @@ export default {
   methods: {
     handleRepeatCycleChange(val) {
       console.log('---val--', val)
-      if (val === 1) {
-        this.ruleForm.weeks = []
-        this.tempWeeks = []
-      }
+      // if (val === 1) {
+      //   this.ruleForm.weeks = []
+      //   this.tempWeeks = []
+      // }
     },
     // 格式化省市县
     formatAddress(address, provinceCode, cityCode, areaCode) {
