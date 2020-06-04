@@ -21,7 +21,7 @@
       :move='onMoveHandler'>
         <template v-for="(item, key) of componentDataIds">
           <el-popover
-            :popper-class="currentMouseOverComponentId ? 'editor-view-popover active' : 'editor-view-popover'"
+            :popper-class="item === currentMouseOverComponentId ? 'editor-view-popover active' : 'editor-view-popover'"
             placement="right-start"
             width="135"
             trigger="hover">
