@@ -49,6 +49,8 @@ export default {
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
+			// 营销需要，常用参数
+            let bossProductId = JSON.parse(localStorage.getItem('shopInfos'))&&JSON.parse(localStorage.getItem('shopInfos')).bossProductId
             this.cid = shopInfo && shopInfo.id || ''
             console.log('路由',this.$route)
             if(this.$route.query.paths){
@@ -68,7 +70,7 @@ export default {
 			}
 
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
-            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}`
+            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}&bossProductId=${bossProductId}`
         },
 
         // iframe 刷新  -- 暂时不用
