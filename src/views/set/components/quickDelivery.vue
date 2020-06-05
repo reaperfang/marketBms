@@ -3,22 +3,24 @@
     <section class="operate">
       <div class="row justify-between operate-top">
         <div class="col">当前订单运费计费方式选择为</div>
-        <div class="col">
+        <!-- <div class="col">
           <span>您可以到交易设置中</span>
           <span class="change-mode pointer" @click="$router.push('/set/tradeSet')">更改订单运费计费方式</span>
-        </div>
+        </div> -->
       </div>
       <div class="radio-box">
-        <el-radio :disabled="mode == 1" v-model="mode" :label="0">组合运费（推荐）</el-radio>
-        <el-radio :disabled="mode == 0" v-model="mode" :label="1">按商品累加运费</el-radio>
+        <el-radio-group v-model="mode" @change="handleChangeModel">
+          <el-radio :label="0">组合运费（推荐）</el-radio>
+          <el-radio :label="1">按商品累加运费</el-radio>
+        </el-radio-group>
         <span
           @click="currentDialog = 'FreightRulesDialog'; dialogVisible = true"
           class="blue pointer"
         >计费规则说明</span>
       </div>
       <!-- <el-button
-        v-permission="['订单', '快递发货', '默认页面', '新建模板']"
-        @click="$router.push('/order/newTemplate?mode=new')"
+        v-permission="['设置', '普通快递', '运费模版', '新建模板']"
+        @click="$router.push('/set/newTemplate?mode=new')"
         class="border-button new-template"
       >新建模板</el-button> -->
     </section>
@@ -60,8 +62,8 @@
             <span>{{total}}</span>项
           </div>
           <el-button
-            v-permission="['订单', '快递发货', '默认页面', '新建模板']"
-            @click="$router.push('/order/newTemplate?mode=new')"
+            v-permission="['设置', '普通快递', '运费模版', '新建模板']"
+            @click="$router.push('/set/newTemplate?mode=new')"
             class="border-button new-template"
           >新建模板</el-button>
       </div>
@@ -85,20 +87,20 @@
             <template slot-scope="scope">
               <div class="operate-box">
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '查看']"
-                  @click="$router.push('/order/newTemplate?mode=look&id=' + scope.row.id)"
+                  v-permission="['设置', '普通快递', '运费模版', '查看']"
+                  @click="$router.push('/set/newTemplate?mode=look&id=' + scope.row.id)"
                 >查看</span>
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '复制']"
-                  @click="$router.push('/order/newTemplate?mode=copy&id=' + scope.row.id)"
+                  v-permission="['设置', '普通快递', '运费模版', '复制']"
+                  @click="$router.push('/set/newTemplate?mode=copy&id=' + scope.row.id)"
                 >复制</span>
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '修改']"
-                  @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)"
+                  v-permission="['设置', '普通快递', '运费模版', '编辑']"
+                  @click="$router.push('/set/newTemplate?mode=change&id=' + scope.row.id)"
                 >编辑</span>
                 <span
                   v-if="!scope.row.productCount"
-                  v-permission="['订单', '快递发货', '默认页面', '删除']"
+                  v-permission="['设置', '普通快递', '运费模版', '删除']"
                   @click="deletequickDelivery(scope.row.id)"
                 >删除</span>
               </div>
@@ -123,9 +125,15 @@ import FreightRulesDialog from "@/views/order/dialogs/freightRulesDialog";
 import utils from "@/utils";
 
 export default {
+  computed: {
+    cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        return shopInfo.id
+    }
+  },
   data() {
     return {
-      mode: "1",
+      mode: 1,
       formInline: {
         name: "",
         time: ""
@@ -162,6 +170,20 @@ export default {
     }
   },
   methods: {
+    // 计费方式变更
+    handleChangeModel() {
+      this.updateTransportationExpenseType()
+    },
+    updateTransportationExpenseType() {
+      let data = {
+        id:this.cid,
+        transportationExpenseType:this.mode
+      }
+      this._apis.set.updateShopInfo(data).then(response =>{
+      }).catch(error =>{
+        console.log('-----err-----', error)
+      })
+    },
     search() {
         this.listQuery = Object.assign({}, this.listQuery, {
             startIndex: 1,

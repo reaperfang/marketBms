@@ -224,4 +224,22 @@ export function getShopAuthList(data) {
   })
 }
 
+/* 同城配送|商家配送信息详情 */
+export function getOrderDeliverInfo(data) {
+  return request({
+    target: 'ORDER-DELIVER-INFO-DETAIL-PROCESS',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
 
+/* 订单同城配送|商家配送信息 设置 */
+export function updateOrderDeliverInfo(data) {
+  return request({
+    target: 'ORDER-DELIVER-INFO-SAVE-PROCESS',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}

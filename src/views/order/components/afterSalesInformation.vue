@@ -73,7 +73,7 @@
                         </div>
                         <div class="col list-righter">
                             <p>{{orderSendInfo.receivedName}} {{orderSendInfo.receivedPhone}}</p>
-                            <p>{{orderSendInfo.receivedProvinceName}} {{orderSendInfo.receivedCityName}} {{orderSendInfo.receivedAreaName}} {{orderSendInfo.receivedDetail}}</p>
+                            <p>{{orderSendInfo.receiveAddress}}</p>
                         </div>
                     </div>
                     <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="col list-righter">
                             <p>{{orderSendInfo.sendName}} {{orderSendInfo.sendPhone}}</p>
-                            <p>{{orderSendInfo.sendProvinceName}} {{orderSendInfo.sendCityName}} {{orderSendInfo.sendAreaName}} {{orderSendInfo.sendDetail}}</p>
+                            <p>{{orderSendInfo.sendAddress}}</p>
                         </div>
                     </div>
                 </div>

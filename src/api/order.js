@@ -613,6 +613,26 @@ export function editorScoreAmount(data) {
   })
 }
 
+//获取配送时间自定义的时间段
+export function getTimeSlot(data) {
+  return request({
+    target: 'ORDER-DELIVER-INFO-DETAIL-PROCESS',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+
+//获取配送员列表
+export function getDistributorList(data) {
+  return request({
+    target: 'MANAGER-API-143',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
 
 
 

@@ -123,7 +123,7 @@
                 </el-radio-group> 
             </el-form-item>-->
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <h2>
                 物流查询：
                 <span class="note">电子面单和物流轨迹查询服务是与第三方快递鸟合作，开启服务需注册<a href="//www.kdniao.com/reg" target="_blank" style="color:blue;">快递鸟</a>会员，相关费用直接与快递鸟结算</span>    
@@ -140,7 +140,7 @@
             <el-form-item label="请注册快递鸟并输入API Key:" prop="apiKey" v-if="form.isTrace == 1">
                 <el-input placeholder="请输入用户API Key" v-model="form.apiKey" style="width:260px;"></el-input>
             </el-form-item>
-        </div>
+        </div> -->
         <el-form-item>
             <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '交易设置', '售后相关', '保存']" v-loading="loading">保存</el-button>
         </el-form-item>
@@ -184,12 +184,12 @@ export default {
             memberAutoConfirmReceive: '',
             shopAutoConfirmReceive: '',
             orderAutoFinished: '',
-            orderComment:1,
+            orderComment:1, 
             orderCommentGood: '',
             invoiceOpen:1,
-            isTrace:0,
-            apiKey:'',
-            kdBusinessId:'',
+            // isTrace:0,
+            // apiKey:'',
+            // kdBusinessId:'',
             isMemberAutoConfirmReceive:0,
             isShopAutoConfirmReceive:0,
             isOrderAutoFinished:0
@@ -242,7 +242,7 @@ export default {
   },
   created() {
       this.getShopInfo()
-      this.getShopLogistics()
+      // this.getShopLogistics()
   },
 
   methods: {
@@ -266,16 +266,16 @@ export default {
       })
     },
     
-    getShopLogistics(){
-      let id = this.cid
-      this._apis.set.getShopLogistics({cid:id}).then(response =>{
-        this.form.isTrace = response.isTrace,
-        this.form.apiKey = response.apiKey,
-        this.form.kdBusinessId = response.kdBusinessId
-      }).catch(error =>{
-        console.log(error)
-      })
-    },
+    // getShopLogistics(){
+    //   let id = this.cid
+    //   this._apis.set.getShopLogistics({cid:id}).then(response =>{
+    //     this.form.isTrace = response.isTrace,
+    //     this.form.apiKey = response.apiKey,
+    //     this.form.kdBusinessId = response.kdBusinessId
+    //   }).catch(error =>{
+    //     console.log(error)
+    //   })
+    // },
 
     onSubmit(formName){
       this.loading = true
@@ -303,25 +303,27 @@ export default {
         }
         this._apis.set.updateShopInfo(data).then(response =>{
           this.loading = false
-          this.logistics()
+          this.$message.success('保存成功！');
+          // this.logistics()
         }).catch(error =>{
           this.loading = false
-      })
-    },
-    logistics(){
-      let id = this.cid
-      let data = {
-          id:id,
-          isTrace:this.form.isTrace,
-          apiKey:this.form.apiKey,
-          kdBusinessId:this.form.kdBusinessId
-      }
-      this._apis.set.updateShopLogistics(data).then(response =>{
-          this.$message.success('保存成功！');
-        }).catch(error =>{
           this.$message.error('保存失败 '+ error);
       })
     },
+    // logistics(){
+    //   let id = this.cid
+    //   let data = {
+    //       id:id,
+    //       isTrace:this.form.isTrace,
+    //       apiKey:this.form.apiKey,
+    //       kdBusinessId:this.form.kdBusinessId
+    //   }
+    //   this._apis.set.updateShopLogistics(data).then(response =>{
+    //       this.$message.success('保存成功！');
+    //     }).catch(error =>{
+    //       this.$message.error('保存失败 '+ error);
+    //   })
+    // },
   }
 }
 </script>

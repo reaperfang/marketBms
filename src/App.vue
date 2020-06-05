@@ -18,6 +18,7 @@ export default{
       this.$jsonp(appConfig.map.url,{
         key: appConfig.map.key
       }).then(()=>{
+        console.log('1-12121212,dsdads')
         this.$store.commit('SET_MAP_STATE', true);
         this._globalEvent.$emit('mapLoaded');
       })

@@ -50,7 +50,7 @@
                 后，订单自动关闭
             </el-form-item>
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <h2>发货方式：</h2>
             <el-form-item  prop="deliverGoodsType">
                 <el-checkbox v-model="deliverGoodsTypeCheckout">快递发货</el-checkbox>
@@ -99,7 +99,7 @@
                 商家自送（本期暂不支持）
                 </el-checkbox>
             </el-form-item>
-        </div>
+        </div> -->
         <div v-if="!authHide" class="item">
             <h2>自动发货：<span>开启后立即对所有订单生效，若需要关闭该功能则清空输入框数值</span></h2>
             <el-form-item  prop="orderAutoSend" label="下单">
@@ -188,8 +188,8 @@ export default {
       form: {
             autoCancelUnpayOrder: '',
             acuoType: 1,
-            deliverGoodsType:1,
-            transportationExpenseType: 1,
+            // deliverGoodsType:1, // 发货方式
+            // transportationExpenseType: 1, // 计费方式
             orderAutoSend: '',
             oasType: '',
             isAutoCancelUnpayOrder:0,
@@ -226,14 +226,14 @@ export default {
     }
   },
   computed:{
-      deliverGoodsTypeCheckout:{
-        get: function () {
-            return this.form.deliverGoodsType == 1 ? true : false
-        },
-        set: function (newValue) {
-            this.form.deliverGoodsType = newValue == true ? 1 : ''
-        }
-      },
+      // deliverGoodsTypeCheckout:{
+      //   get: function () {
+      //       return this.form.deliverGoodsType == 1 ? true : false
+      //   },
+      //   set: function (newValue) {
+      //       this.form.deliverGoodsType = newValue == true ? 1 : ''
+      //   }
+      // },
       cid(){
           let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
           return shopInfo.id
@@ -270,8 +270,8 @@ export default {
               id:id,
               autoCancelUnpayOrder:this.form.autoCancelUnpayOrder,
               acuoType:this.form.acuoType,
-              deliverGoodsType:this.form.deliverGoodsType,
-              transportationExpenseType:this.form.transportationExpenseType,
+              // deliverGoodsType:this.form.deliverGoodsType,
+              // transportationExpenseType:this.form.transportationExpenseType,
               orderAutoSend:this.form.orderAutoSend,
               oasType:this.form.oasType,
               isAutoCancelUnpayOrder:this.form.isAutoCancelUnpayOrder,
