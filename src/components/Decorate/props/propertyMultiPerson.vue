@@ -289,12 +289,17 @@ export default {
             }
 
             let hideStatus = 0;
-            if(componentData.hideType==1){
-                hideStatus=2;
+            if(!componentData.hideSaledGoods) {
+                hideStatus = 0;
+            }else {
+                if(componentData.hideType==1){
+                    hideStatus=2;
+                }
+                else{
+                    hideStatus=1;
+                }
             }
-            else{
-                hideStatus=1;
-            }
+
 
             if(componentData.addType == 2) {
                 params = {
