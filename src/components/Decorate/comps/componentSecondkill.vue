@@ -170,10 +170,19 @@ export default {
                 const ids = componentData.ids;
                 if(Array.isArray(ids) && ids.length){
                     this.loading = true;
+
+                    let hideStatus = 0;
+                    if(componentData.hideType==1){
+                        hideStatus=2;
+                    }
+                    else{
+                        hideStatus=1;
+                    }
+
                     this._apis.shop.getSecondkillListByIds({
                         rightsDiscount: 1, 
                         activityIds: ids.join(','),
-                        hideStatus: 0
+                        hideStatus: hideStatus
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;
