@@ -175,11 +175,19 @@ export default {
                         newParams = componentData.ids;
                     }
 
+                    let hideStatus = 0;
+                    if(componentData.hideType==1){
+                        hideStatus=2;
+                    }
+                    else{
+                        hideStatus=1;
+                    }
+
                     this.loading = true;
                     this._apis.shop.getDiscountListByIds({
                         rightsDiscount: 1, 
                         spuInfoJson: JSON.stringify(newParams),
-                        hideStatus: 0
+                        hideStatus: hideStatus
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;

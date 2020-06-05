@@ -212,11 +212,19 @@ export default {
                 newParams = componentData.ids;
                 }
             
+                let hideStatus = 0;
+                if(componentData.hideType==1){
+                    hideStatus=2;
+                }
+                else{
+                    hideStatus=1;
+                }
+
                 if(componentData.addType == 2) {
                     params = {
                         num: componentData.showNumber,
                         order: componentData.sortRule,
-                        hideStatus: 0
+                        hideStatus: hideStatus
                     };
                 }else{
                     const ids = componentData.ids;
@@ -224,7 +232,7 @@ export default {
                         params = {
                             order: componentData.sortRule,
                             activityList: newParams,
-                            hideStatus: 0
+                            hideStatus: hideStatus
                         };
                     }else{
                         this.list = [];
