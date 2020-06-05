@@ -1,6 +1,6 @@
 <template>
 	<div class="template_wrapper">
-		<ul class="clearFix" v-loading="loading">
+		<ul v-show="templateList.length > 0" class="clearFix" v-loading="loading">
 			<li v-if="!templateList.length">
 				<div class="inner">
 					<div class="view">
@@ -103,7 +103,7 @@
 			<div class="apply" @click="apply(currentTemplate)">立即应用</div>
 		</div>
 
-		<div class="pagination" v-if="templateList.length || (!templateList.length && startIndex != 1)">
+		<div v-show="templateList.length > 0" class="pagination" v-if="templateList.length || (!templateList.length && startIndex != 1)">
 			<el-pagination
 				@size-change="handleSizeChange"
 				@current-change="handleCurrentChange"
@@ -115,15 +115,17 @@
 			>
 			</el-pagination>
 		</div>
+		<empty-list v-show="templateList.length === 0"></empty-list>
 	</div>
 </template>
 
 <script>
 	import tableBase from '@/components/TableBase';
+	import emptyList from './components/emptyList';
 	export default {
 		name: 'templateManage',
 		extends: tableBase,
-		components: {},
+		components: {emptyList},
 		data () {
 			return {
 				pageSize: 12,

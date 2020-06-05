@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<div class="template_wrapper">
-			<ul class="clearFix" v-loading="loading">
+			<ul v-show="templateList.length > 0" class="clearFix" v-loading="loading">
 				<li v-if="!templateList.length">
 					<div class="inner">
 						<div class="view">
@@ -144,10 +144,10 @@
 					<i class="plus" @click="plus"></i>
 					<i class="reduce" @click="reduce"></i>
 				</div>
-				<div class="apply" @click="apply(currentTemplate)">立即应用</div>
+				<!--<div class="apply" @click="apply(currentTemplate)">立即应用</div>-->
 			</div>
 
-			<div class="pagination" v-if="templateList.length || (!templateList.length && startIndex != 1)">
+			<div v-show="templateList.length > 0" class="pagination" v-if="templateList.length || (!templateList.length && startIndex != 1)">
 				<el-pagination
 					@size-change="handleSizeChange"
 					@current-change="handleCurrentChange"
@@ -159,19 +159,25 @@
 				>
 				</el-pagination>
 			</div>
+			<empty-list v-show="templateList.length === 0"></empty-list>
+			<template-pay :dialogVisible="dialogVisible" :tempInfo="tempInfo"></template-pay>
 		</div>
 	</div>
 </template>
 
 <script>
 	import tableBase from '@/components/TableBase';
+	import emptyList from './components/emptyList';
+	import templatePay from './components/templatePay';
 	const cityOptions = ['上海', '北京', '广州', '深圳', 'xxx', 'xxx1', 'xxx2', 'xxx3', 'xxx4', 'xxx5', 'xxx6', 'xxx7', 'xxx8', 'xxx9', 'xxx10', 'xxx11', 'xxx18', 'xxx19', 'xxx110', 'xxx111', 'xxx28', 'xxx29', 'xxx210', 'xxx211'];
 	export default {
 		name: 'templateManage',
 		extends: tableBase,
-		components: {},
+		components: { templatePay, emptyList },
 		data () {
 			return {
+				tempInfo: {},
+				dialogVisible: false,
 				checkboxGroup1: [],
 				styleShow: {
 					flexFlow: 'row wrap'
@@ -309,14 +315,16 @@
 
 			/* 应用模板 */
 			apply(item) {
-				this.confirm({
-					title: '提示',
-					customClass: 'goods-custom',
-					icon: true,
-					text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
-				}).then(() => {
-					this._routeTo('m_templateEdit', {id: item.id});
-				})
+				this.dialogVisible = true
+				this.tempInfo = item
+				// this.confirm({
+				// 	title: '提示',
+				// 	customClass: 'goods-custom',
+				// 	icon: true,
+				// 	text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+				// }).then(() => {
+				// 	this._routeTo('m_templateEdit', {id: item.id});
+				// })
 			},
 			showAllIndustries() {
 				this.ifShowAll = !this.ifShowAll
