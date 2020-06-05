@@ -51,7 +51,7 @@
         <div class="block form">
           <template v-for="(item, key) in ruleForm.moduleList">
             <el-form-item
-              v-if=" item.name =='commission'?isOpenResell==1:(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
+               v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
               :key="key"
               :label="item.title"
               :prop="'moduleList.'+ key +'.titleValue'"
@@ -110,6 +110,7 @@ export default {
       dialogVisible: false,
       currentDialog: '',
       currentModule: null,
+      pathname:window.location.pathname,
       ruleForm: {
         backgroundImage: '',  //背景图
         backgroundGradients: 1,  //背景渐变

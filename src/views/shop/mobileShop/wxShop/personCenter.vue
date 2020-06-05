@@ -62,7 +62,7 @@ export default {
           return;
         }
         if(pageData && pageData.avatarPosition) {
-          if(pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1){
+          if(pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1&&window.location.pathname=='/bp/shop/m_wxShopIndex'){
             pageData.moduleList['commission'] = {
               name: 'commission',
               title: '分销中心',
