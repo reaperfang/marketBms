@@ -748,7 +748,7 @@ export default {
       this.confirm({
           title: "提示",
           icon: true,
-          text: '取货地址修改后，已设置的配送范围信息将被清空,请修改地址后记得重新配置配送范围。',
+          text: '修改取货地址后请重新确认其它商家配送设置项，如无修改将以新的取货地址为中心按原配送规则执行',
           confirmText: '去修改'
         }).then(() => {
           this.$router.push({ path:'/set/shopInfo' })

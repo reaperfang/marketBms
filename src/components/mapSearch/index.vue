@@ -9,7 +9,7 @@
         <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
       </el-input>
         <div class="info-div" v-if="pois.length > 0">
-          <ol>
+          <ol :style="{height: height + 'px'}">
             <li v-for="(item, index) in pois" @click="handleClickPoi(item, index)"
               :key="index">
               <p v-if="item.title" ><span>{{ index + 1 }}.</span>{{ item.title }}</p>
@@ -51,6 +51,10 @@ export default {
     boundary: {
       type: String,
       default: ''
+    },
+    height: {
+      type: Number,
+      default: 400
     }
   },
   data() {
@@ -205,6 +209,7 @@ export default {
       })
     },
     handlePropSearch(keyword) {
+      console.log('----keyword---', keyword)
       this.keyword = keyword
       this.search()
     },
@@ -308,9 +313,9 @@ export default {
     border:0;
   }
   .info-div{
+    position: relative;
     text-align: left;
     font-size: 14px;
-    max-height: 580px;
     padding: 10px;
     overflow: auto;
     margin-top: 10px;

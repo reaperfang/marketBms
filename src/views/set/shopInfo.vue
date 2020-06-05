@@ -77,7 +77,8 @@
       </el-form-item> -->
       <el-form-item label="联系地址:" prop="sendAddress">
         <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:300px;" placeholder="请输入并点击搜索图标确定联系地址" />
-        <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button>
+        <DialogMapSearch @getMapClickPoi="getMapClickPoi" :sendAddress="form.sendAddress"></DialogMapSearch>
+        <!-- <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button> -->
       </el-form-item>
       <el-form-item label="详细地址:" prop="address">
         <el-input v-model="form.address" style="width:300px;" placeholder="请输入补充地址信息，非必填项" />
@@ -103,7 +104,7 @@
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
-      <map-search 
+      <!-- <map-search 
         class="map"
         ref="shopInfoMap"
         :address="provinceCityArea"
@@ -114,7 +115,7 @@
         :panControl="mapStyle.panControl"
         :center="[36.67489963858812, 102.76171874999999]"
         @getMapClickPoi="getMapClickPoi"
-        :isInitSearch="false"></map-search>
+        :isInitSearch="false"></map-search> -->
     </el-form>
     <!-- map -->
     <!-- 动态弹窗 -->
@@ -127,7 +128,8 @@
   </div>
 </template>
 <script>
-import mapSearch from '@/components/mapSearch'
+// import mapSearch from '@/components/mapSearch'
+import DialogMapSearch from '@/components/mapSearchDialog'
 import dialogSelectImageMaterial from "@/views/shop/dialogs/dialogSelectImageMaterial";
 import axios from "axios";
 export default {
@@ -161,6 +163,7 @@ export default {
       dialogVisible: false,
       currentDialog: "",
       isInit: true,
+      tempSendAddress: null,
       form: {
         shopName: "",
         logo: "",
@@ -236,7 +239,7 @@ export default {
       //canvas:{}
     };
   },
-  components: { dialogSelectImageMaterial, mapSearch },
+  components: { dialogSelectImageMaterial, DialogMapSearch },
   watch: {},
   computed: {
     mapLoaded() {
@@ -408,6 +411,9 @@ export default {
     },
     updateShopInfo() {
       let id = this.cid
+      if (this.tempSendAddress !== this.form.sendAddress) {
+        deliverServiceRadius = ''
+      }
       let data = {
         id:id,
         shopName:this.form.shopName,
@@ -433,8 +439,10 @@ export default {
       this._apis.set.updateShopInfo(data).then(response =>{
         this.setShopName()    
         this.$store.dispatch('getShopInfo');    
-        this.$refs.shopInfoMap.clearSearchResultList()
-        this.$refs.shopInfoMap.clearKeyword()
+        this.$nextTick(()=> {
+          this.$refs.shopInfoMap.clearSearchResultList()
+          this.$refs.shopInfoMap.clearKeyword()
+        })
       }).catch(error =>{
         console.log('updateShopInfo:error', error)
         this.$message.error('保存失败');
@@ -638,6 +646,7 @@ export default {
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
       this.form.sendAddress = poi.address
+      this.tempSendAddress = poi.address
       this.form.lat = poi.location.lat
       this.form.lng = poi.location.lng
       this.isMapChoose = true
