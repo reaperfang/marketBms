@@ -209,12 +209,17 @@ export default {
                 this.loading = true;
 
                 let hideStatus = 0;
-                if(componentData.hideType==1){
-                    hideStatus=2;
+                if(!componentData.hideSaledGoods) {
+                    hideStatus = 0;
+                }else {
+                    if(componentData.hideType==1){
+                        hideStatus=2;
+                    }
+                    else{
+                        hideStatus=1;
+                    }
                 }
-                else{
-                    hideStatus=1;
-                }
+
 
                 this._apis.shop.getSecondkillListByIds({
                     rightsDiscount: 1, 
