@@ -439,10 +439,10 @@ export default {
       this._apis.set.updateShopInfo(data).then(response =>{
         this.setShopName()    
         this.$store.dispatch('getShopInfo');    
-        this.$nextTick(()=> {
-          this.$refs.shopInfoMap.clearSearchResultList()
-          this.$refs.shopInfoMap.clearKeyword()
-        })
+        // this.$nextTick(()=> {
+        //   this.$refs.shopInfoMap.clearSearchResultList()
+        //   this.$refs.shopInfoMap.clearKeyword()
+        // })
       }).catch(error =>{
         console.log('updateShopInfo:error', error)
         this.$message.error('保存失败');

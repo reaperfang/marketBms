@@ -185,6 +185,9 @@ export default {
     //执行搜索
     search() {
       this.clearAllMaker()
+      if (this.info) {
+        this.info.close();
+      }
       let boundary = this.getCities(this.keyword)
       if (!boundary) {
         boundary = this.boundary || '北京市'

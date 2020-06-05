@@ -72,6 +72,8 @@ import mapSearch from '@/components/mapSearch'
         })
       },
       handleSubmit() {
+        this.$refs.shopInfoMap.clearSearchResultList()
+        this.$refs.shopInfoMap.clearKeyword()
         this.centerDialogVisible = false
         this.$emit("getMapClickPoi", this.poi)
       },
