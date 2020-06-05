@@ -956,9 +956,12 @@ export default {
       const advanceSubscribeDays = this.ruleForm.advanceDays
       const isOpenLadderFreight = this.ruleForm.isOpenLadderFreight
       const isOpenSubscribeDeliver = this.ruleForm.isReservationDelivery
-      const subscribeTimeCustomizeType = this.ruleForm.repeatCycle
-      const subscribeTimeHourRanges = this.getSubscribeTimeHourRanges() // this.ruleForm.timePeriods
+      const subscribeTimeCustomizeType = this.ruleForm.repeatCycletimePeriods
       const subscribeTimeType = this.ruleForm.deliveryTimeType
+      let subscribeTimeHourRanges
+      if (subscribeTimeType === 2) {
+        subscribeTimeHourRanges = { subscribeTimeHourRanges: this.getSubscribeTimeHourRanges()} // this.ruleForm.
+      }
       const subscribeTimeWeekDays = this.ruleForm.weeks.sort().join(',')
       return {
         cid,
@@ -974,7 +977,7 @@ export default {
         isOpenLadderFreight,
         isOpenSubscribeDeliver,
         subscribeTimeCustomizeType,
-        subscribeTimeHourRanges,
+        ...subscribeTimeHourRanges,
         subscribeTimeType,
         subscribeTimeWeekDays
       }
