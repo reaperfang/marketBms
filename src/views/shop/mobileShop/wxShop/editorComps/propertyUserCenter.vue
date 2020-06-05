@@ -50,8 +50,8 @@
 
         <div class="block form">
           <template v-for="(item, key) in ruleForm.moduleList">
-            <el-form-item 
-              v-if="item.name !== 'integralMarket' && item.name !== 'messageCenter'"
+            <el-form-item
+              v-if=" item.name =='commission'?isOpenResell==1:(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
               :key="key"
               :label="item.title"
               :prop="'moduleList.'+ key +'.titleValue'"
@@ -101,7 +101,7 @@ import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyUserCenter',
   components: {dialogSelectImageMaterial, vuedraggable},
-  props: ['saveAndApply', 'save', 'resetData', 'data'],
+  props: ['saveAndApply', 'save', 'resetData', 'data', 'isOpenResell'],
   data () {
     return {
       resetLoading: false,  //重置loading
@@ -179,6 +179,14 @@ export default {
             titleValue: '收货地址',
             icon: '',
             defaultIcon: 'userCenter18',
+            color: '#000'
+          },
+          commission: {
+            name: 'commission',
+            title: '分销中心',
+            titleValue: '分销中心',
+            icon: '',
+            defaultIcon: 'userCenter21',
             color: '#000'
           },
         }
