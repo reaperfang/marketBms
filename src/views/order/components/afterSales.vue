@@ -215,9 +215,9 @@ export default {
         deliveryWayFilter(code) {
             switch(code) {
                 case 1:
-                    return '普通快递'
+                    return '快递退货'
                 case 2:
-                    return '商家配送'
+                    return '商家自取'
             }
         },
     },
