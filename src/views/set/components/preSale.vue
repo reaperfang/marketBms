@@ -176,7 +176,9 @@ export default {
         return callback(new Error('输入框不能为空'))
       }else if(this.form.orderAutoSend.toString().length > 9){
         return callback(new Error('输入10位以内有效数字'))
-      }else{
+      }else if (value && this.form.oasType === 2 && Number(value) < 30) {
+       return callback(new Error('自动发货时间不能低于30分钟'))
+     } else{
         callback()
       }
     }
