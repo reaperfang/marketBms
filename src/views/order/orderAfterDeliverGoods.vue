@@ -63,7 +63,7 @@
             </div>
             <div class="container-item">
                 <p>2.确认收发货信息</p>
-                <div class="container-item-content">
+                <div class="container-item-content deliver-goods-address">
                     <div class="title">
                         <div class="title-list">
                             <i class="take-in-icon"></i>
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="container-item-content">
+                <div class="container-item-content deliver-goods-address">
                     <div class="title">
                         <div class="title-list">
                             <i class="deliver-icon"></i>
