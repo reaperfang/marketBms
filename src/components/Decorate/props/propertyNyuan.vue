@@ -92,9 +92,9 @@
         <el-checkbox-group v-model="ruleForm.showContents">
           <el-checkbox label="1">活动名称</el-checkbox>
           <el-checkbox label="2">活动价格</el-checkbox>
-          <el-checkbox label="3">抢购倒计时</el-checkbox>
-          <el-checkbox label="4">限制规则</el-checkbox>
-          <el-checkbox label="5">活动内任选商品</el-checkbox>
+          <el-checkbox label="3" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">抢购倒计时</el-checkbox>
+          <el-checkbox label="4" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">限制规则</el-checkbox>
+          <el-checkbox label="5" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">活动内任选商品</el-checkbox>
           <el-checkbox label="6">已售件数</el-checkbox>
           <el-checkbox label="7" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
         </el-checkbox-group>
@@ -137,7 +137,7 @@ export default {
     return {
       ruleForm: {
         listStyle: 1,//列表样式
-        pageMargin: 15,//页面边距
+        pageMargin: 10,//页面边距
         goodsMargin: 10,//商品边距
         goodsStyle: 1,//商品样式
         goodsChamfer: 1,//商品倒角

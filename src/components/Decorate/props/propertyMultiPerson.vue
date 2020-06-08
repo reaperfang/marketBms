@@ -123,12 +123,12 @@
       <el-form-item label="显示内容" prop="showContents">
         <el-checkbox-group v-model="ruleForm.showContents">
           <el-checkbox label="1">商品名称</el-checkbox>
-          <el-checkbox label="2">商品描述</el-checkbox>
+          <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">商品描述</el-checkbox>
           <el-checkbox label="3">拼团价</el-checkbox>
           <el-checkbox label="4">单买价</el-checkbox>
-          <el-checkbox label="5">抢购倒计时</el-checkbox>
+          <el-checkbox label="5" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">抢购倒计时</el-checkbox>
           <el-checkbox label="6">已团人数</el-checkbox>
-          <el-checkbox label="7">限制规则</el-checkbox>
+          <el-checkbox label="7" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 4 ||ruleForm.listStyle === 6">限制规则</el-checkbox>
           <el-checkbox label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
         </el-checkbox-group>
         <el-radio-group v-if="ruleForm.showContents.includes('8') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
@@ -176,7 +176,7 @@ export default {
         showAllBtns: true,//查看全部按钮
         sortRule: 1,//排序规则
         listStyle: 1,//列表样式
-        pageMargin: 15,//	页面边距
+        pageMargin: 10,//	页面边距
         goodsMargin: 10,//	商品边距
         goodsStyle: 1,//	商品样式
         goodsChamfer: 1,// 商品倒角

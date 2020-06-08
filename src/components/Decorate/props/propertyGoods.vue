@@ -149,7 +149,7 @@ export default {
         source: 1,//商品来源
         showNumber: 30,//商品分类显示个数 
         listStyle: 1,//列表样式
-        pageMargin: 15,//页面边距
+        pageMargin: 10,//页面边距
         goodsMargin: 10,//商品边距
         goodsStyle: 1,//商品样式
         goodsChamfer: 1,//商品倒角
