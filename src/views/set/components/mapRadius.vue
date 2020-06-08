@@ -29,7 +29,6 @@ export default {
 
     //实例初始化结束
     inited() {
-      console.log('---inited--',this.center)
       // if (this.center && this.center.length <= 0) return false
       // this.initEvent();
       // if (!this.address) {
@@ -51,20 +50,13 @@ export default {
         }
         // const visible = this.address ? true : false
         this.circle = new qq.maps.Circle({
-            map: this.mapObj,
-            center: this.centerObj,
-            radius,
-            fillColor: new qq.maps.Color(0, 255, 0, 0.5),
-            strokeWeight: 5,
-            visible: this.visible
+          map: this.mapObj,
+          center: this.centerObj,
+          radius,
+          fillColor: new qq.maps.Color(0, 255, 0, 0.5),
+          strokeWeight: 5,
+          visible: this.visible
         });
-        // if (visible) {
-        // this.setRadius(radius)
-        // }
-      // }
-      
-      // this.circle.setRadius()
-      // circle.setFillColor("0, 255, 0, 0.5");
     },
     // 设置根据地区经纬度变化改变当前地图中心
     setPanTo(lng, lat, zoom = 17) {
@@ -117,27 +109,30 @@ export default {
   },
   components: {},
   watch: {
-    radius(curr) {
-      console.log(curr)
-      if (curr) {
-        if(!this.mapLoaded) {
-          this._globalEvent.$on('mapLoaded', ()=>{
+    'radius': {
+      handler(curr, old) {
+        console.log(curr, old)
+        if (curr && this.center && this.center.length > 0) {
+          if(!this.mapLoaded) {
+            this._globalEvent.$on('mapLoaded', ()=>{
+              this.setRadius(curr)
+            });
+          }else{
             this.setRadius(curr)
-          });
-        }else{
-          this.setRadius(curr)
+          }
         }
-      }
+      },
+      immediate: false
     },
     center(curr) {
       if (curr && curr.length > 0) {
-        if(!this.mapLoaded) {
-          this._globalEvent.$on('mapLoaded', ()=>{
-            this.setRadius(this.radius)
-          });
-        }else{
-          this.setRadius(this.radius)
-        }
+        // if(!this.mapLoaded) {
+        //   this._globalEvent.$on('mapLoaded', ()=>{
+        //     this.setRadius(this.radius)
+        //   });
+        // }else{
+        //   this.setRadius(this.radius)
+        // }
       }
     }
   }
