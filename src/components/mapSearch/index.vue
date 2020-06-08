@@ -288,7 +288,13 @@ export default {
     address(curr) {
       console.log('----watch---',curr)
       if (curr) {
-        this.getGeocoderByAddress()
+        if(!this.mapLoaded) {
+          this._globalEvent.$on('mapLoaded', ()=>{
+             this.getGeocoderByAddress()
+          });
+        }else{
+           this.getGeocoderByAddress()
+        }
       }
     }
   }

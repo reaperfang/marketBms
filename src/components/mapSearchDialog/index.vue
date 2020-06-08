@@ -1,6 +1,6 @@
 <template>
   <span>
-    <button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<i class="el-icon-search"></i></button>
+    <el-button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<i class="el-icon-search"></i></el-button>
 
     <el-dialog
       title="搜索地图"
@@ -51,6 +51,11 @@ import mapSearch from '@/components/mapSearch'
         default: ''
       }
     },
+    computed: {
+      mapLoaded() {
+        return this.$store.getters.mapLoaded;
+      }
+    },
     data() {
       return {
         centerDialogVisible: false,
@@ -66,10 +71,21 @@ import mapSearch from '@/components/mapSearch'
     methods: {
       handleOpen() {
         this.centerDialogVisible = true
-        this.$nextTick(()=> {
-        console.log('------',this.$refs.shopInfoMap)
-          this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
-        })
+        // this.$nextTick(()=> {
+        // console.log('------',this.$refs.shopInfoMap)
+        //   this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
+        // })
+        if(!this.mapLoaded) {
+          this._globalEvent.$on('mapLoaded', ()=>{
+            this.$nextTick(()=> {
+              this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
+            })
+          });
+        }else{
+          this.$nextTick(()=> {
+            this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
+          })
+        }
       },
       handleSubmit() {
         this.$refs.shopInfoMap.clearSearchResultList()
