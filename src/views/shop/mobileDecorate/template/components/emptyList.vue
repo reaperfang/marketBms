@@ -1,13 +1,21 @@
 <template>
 	<div class="empty-list">
 		<img src="@/assets/images/shop/noSearchImg.png"/>
-		<span>{{'您搜索的行业内当前没有可使用的模版，请您换个行业再次搜索！'}}</span>
+		<span>{{tipText}}</span>
 	</div>
 </template>
 
 <script>
     export default {
-        name: "emptyList"
+        name: "emptyList",
+		props: {
+			tipText: {
+				type: String,
+				default () {
+					return '当前搜索无结果，请您重新搜索！'
+				}
+			}
+		}
     }
 </script>
 
