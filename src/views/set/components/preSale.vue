@@ -171,12 +171,15 @@ export default {
         callback()
       }
     }
+    // 产品--孙可欣---设置-通用设置-交易设置-售前相关的自动发货  ，时间单位选择为“分钟”时，输入框数值不得小于30，当输入小于30的数值时，输入框变红，输入框下方出现红色字体提示：自动发货时间不能低于30分钟
     var checkOrderAutoSend = (rule,value,callback)=>{
       if(this.sendOrder && !value){
         return callback(new Error('输入框不能为空'))
       }else if(this.form.orderAutoSend.toString().length > 9){
         return callback(new Error('输入10位以内有效数字'))
-      }else{
+      }else if (value && this.form.oasType === 2 && Number(value) < 30) {
+       return callback(new Error('自动发货时间不能低于30分钟'))
+     } else{
         callback()
       }
     }
