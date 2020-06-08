@@ -20,32 +20,39 @@
       :disabled='disable'
       :move='onMoveHandler'>
         <template v-for="(item, key) of componentDataIds">
-          <el-popover
-            :popper-class="item === currentMouseOverComponentId ? 'editor-view-popover active' : 'editor-view-popover'"
+          <div>
+            <el-popover
+            :popper-class="'editor-view-popover active'"
             placement="right-start"
-            width="135"
+            width="76"
             trigger="hover">
-            <div @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)">{{getComponentData(item).title}}</div>
+            <div class="arrow-box" @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)" @click="deleteComponent(item)">
+              <span>{{getComponentData(item).title}}</span>
+              <i v-show="item !== basePropertyId" class="el-icon-delete"></i>
+            </div>
             <div 
-             slot="reference"
-            :title="getComponentData(item).title"
-            class="component_wrapper" 
-            :data-id="getComponentData(item).id"
-            v-if="!getComponentData(item).hidden"
-            :key="key" 
-            :class="{'actived': item === currentComponentId}"
-            @click="selectComponent(item)" 
-            @dragstart.self="selectItem = item" 
-            @dragend.self="selectItem = {}">
-              <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
-              <i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
-              <transition name="fade">
-                <div v-show="item === currentMouseOverComponentId" class="title-box">
-                  <div class="popper">{{getComponentData(item).title}}</div>
-                </div>
-              </transition>
-          </div>
+              slot="reference"
+              :title="getComponentData(item).title"
+              class="component_wrapper" 
+              :data-id="getComponentData(item).id"
+              v-if="!getComponentData(item).hidden"
+              :key="key" 
+              :class="{'actived': item === currentComponentId}"
+              @click="selectComponent(item)" 
+              @mouseover="componentMouseover(item)" 
+              @mouseout="componentMouseleave(item)"
+              @dragstart.self="selectItem = item" 
+              @dragend.self="selectItem = {}">
+                <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
+                <!--<i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
+                <transition name="fade">
+                  <div v-show="item === currentMouseOverComponentId" class="title-box">
+                    <div class="popper">{{getComponentData(item).title}}</div>
+                  </div>
+                </transition>-->
+            </div>
           </el-popover>
+          </div>
         </template>
       </vuedraggable>
 
@@ -96,7 +103,7 @@ export default {
       dragOptions: {
           animation: 300,
           group: "description",
-          ghostClass: "ghost"
+          ghostClass: "ghost",
       },
       drag: false,
       disable: false,
@@ -104,7 +111,8 @@ export default {
       allTemplateLoaded: false,  //所有模板加载结束
       templateList: {},  //模板对象列表
       defaultBtnShow: true,  //默认圈圈按钮可见
-      pageMoveBtnShow: false  //页面移动按钮可见
+      pageMoveBtnShow: false,  //页面移动按钮可见
+      visible: true,
     }
   },
   computed:{
