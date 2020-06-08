@@ -52,6 +52,7 @@
           <el-button @click="saveDataLoading = true; save()" :loading="saveDataLoading">保    存</el-button>
           <el-button type="primary" @click="saveAndApplyDataLoading = true; saveAndApply()" :loading="saveAndApplyDataLoading">保存并生效</el-button>
           <el-popover
+            v-if="showPreviewCode"
             ref="popover2"
             placement="bottom"
             title=""
@@ -88,7 +89,8 @@ export default {
       },
       rules: {},
       showCode: false,   //是否显示二维码
-      qrCode: ''
+      qrCode: '',
+      showPreviewCode: true  //预览二维码按钮是否可见
     }
   },
   watch:{
@@ -150,7 +152,7 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: location.protocol + this.ruleForm.shareUrl.split(':')[1].replace("&","[^]"),
+        url: 'https:' + this.ruleForm.shareUrl.split(':')[1].replace("&","[^]"),
         width: '150',
         height: '150',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo

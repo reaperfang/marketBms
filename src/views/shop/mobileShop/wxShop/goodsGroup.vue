@@ -56,7 +56,7 @@ export default {
         if(pageData && pageData.groupStyle) {
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
-          this.ruleForm['shareUrl'] = location.protocol + response.shareUrl.split(':')[1];
+          this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];
         }
         this.loading = false;
       }).catch((error)=>{
@@ -103,7 +103,7 @@ export default {
         if(pageData && pageData.groupStyle) {
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
-          this.ruleForm['shareUrl'] = location.protocol + response.shareUrl.split(':')[1];
+          this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];
         }
         this._globalEvent.$emit('goodsGroupPageSettingResetLoading', true);
       }).catch((error)=>{

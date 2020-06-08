@@ -875,3 +875,30 @@ textarea:-ms-input-placeholder {
 .el-dialog__headerbtn .el-dialog__close {
   font-size: 18px;
 }
+.editor-view-popover {
+  min-width: 76px!important;
+  padding: 7px 0!important;
+  text-align: center!important;
+  color: #96969f!important;
+  font-size: 12px!important;
+  cursor: pointer;
+  .popper__arrow::after {
+    display: none!important;
+  }
+  .popper__arrow {
+    border-width: 1px!important;
+    width: 8px!important;
+    height: 8px!important;
+    background: url('../assets/images/shop/editor/arrow.png') no-repeat;
+    left: -8px!important;
+    top: calc(50% - 4px)!important; 
+    border: none!important;
+  }
+  &.active {
+    background-color: #f05027;
+    color: #fff!important;
+    .popper__arrow {
+      background: url('../assets/images/shop/editor/arrow-active.png') no-repeat;
+    }
+  }
+}

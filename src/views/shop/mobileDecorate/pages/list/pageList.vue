@@ -129,7 +129,7 @@ export default {
     currentItem: {
       handler(newValue) {
         if(newValue && newValue.shareUrl) {
-          this.pageLink = location.protocol + newValue.shareUrl.split(':')[1]
+          this.pageLink = 'https:' + newValue.shareUrl.split(':')[1]
         }
       },
       deep: true

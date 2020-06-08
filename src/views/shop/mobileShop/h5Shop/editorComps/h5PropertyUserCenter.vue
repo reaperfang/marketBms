@@ -4,6 +4,11 @@
 import propertyUserCenter from '../../wxShop/editorComps/propertyUserCenter';
 export default {
   name: 'h5PropertyUserCenter',
-  extends: propertyUserCenter
+  extends: propertyUserCenter,
+  data() {
+    return {
+      showPreviewCode: false
+    }
+  }
 }
 </script>

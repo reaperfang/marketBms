@@ -120,6 +120,13 @@ export default {
       }
       this.fetch();
     },
+    /* 监听隐藏已抢完券 */
+    'ruleForm.hideScrambled'(newValue, oldValue) {
+      if(newValue === oldValue) {
+          return;
+      }
+      this.fetch();
+    },
     'currentComponentData.data.ids': {
         handler(newValue, oldValue) {
             if(!this.utils.isIdsUpdate(newValue, oldValue)) {
@@ -155,6 +162,12 @@ export default {
                 this.list = [];
                 return;
               }
+            }
+
+            if (componentData.hideScrambled) {
+              params.remainStockFlag = true
+            }else {
+              params.remainStockFlag =false
             }
 
             this.loading = true;
