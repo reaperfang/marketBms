@@ -158,7 +158,7 @@ export default {
       /* 获取二维码 */
     getQrcode(codeType, callback) {
       this._apis.shop.getQrcode({
-        url: location.protocol + this.decoratePageData.shareUrl.split(':')[1].replace("&","[^]"),
+        url: 'https:' + this.decoratePageData.shareUrl.split(':')[1].replace("&","[^]"),
         width: '250',
         height: '250',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo

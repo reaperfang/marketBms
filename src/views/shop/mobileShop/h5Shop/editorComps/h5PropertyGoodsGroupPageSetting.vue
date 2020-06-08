@@ -4,6 +4,11 @@
 import propertyGoodsGroupPageSetting from '../../wxShop/editorComps/propertyGoodsGroupPageSetting';
 export default {
   name: 'h5PropertyGoodsGroupPageSetting',
-  extends: propertyGoodsGroupPageSetting
+  extends: propertyGoodsGroupPageSetting,
+  data() {
+    return {
+      showPreviewCode: false
+    }
+  }
 }
 </script>

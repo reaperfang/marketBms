@@ -127,7 +127,7 @@ export default {
 
     getPageLink(row) {
       if(row.shareUrl) {
-        return location.protocol + row.shareUrl.split(':')[1]
+        return 'https:' + row.shareUrl.split(':')[1]
       }
     },
 
