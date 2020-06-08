@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<i class="el-icon-search"></i></el-button>
+    <button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<i class="el-icon-search"></i></button>
 
     <el-dialog
       title="搜索地图"
@@ -94,8 +94,14 @@ import mapSearch from '@/components/mapSearch'
     background:rgba(240,239,255,1);
     border-radius:4px;
     color:rgba(101,94,255,1);
+    cursor: pointer;
     i {
       padding-left: 6px;
+    }
+    &:hover {
+    background:rgba(240,239,255,1);
+    border-radius:4px;
+    color:rgba(101,94,255,1);
     }
   }
   .map {
