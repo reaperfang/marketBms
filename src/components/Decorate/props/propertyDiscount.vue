@@ -165,7 +165,7 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    this.fetch(false);
   },
   watch: {
     'items': {
@@ -178,7 +178,6 @@ export default {
           });
         }
         this.fetch();
-        this._globalEvent.$emit('fetchDiscount', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -188,6 +187,25 @@ export default {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
+    },
+
+    'ruleForm.hideSaledGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideEndGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideType'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
     },
 
     'ruleForm.ids': {
@@ -205,8 +223,10 @@ export default {
   },
   methods: {
       //根据ids拉取数据
-      fetch(componentData = this.ruleForm) {
+      fetch(bNeedUpdateMiddle = true) {
+        const componentData = this.ruleForm;
           if(componentData) {
+              bNeedUpdateMiddle && this._globalEvent.$emit('fetchDiscount', this.ruleForm, this.$parent.currentComponentId);
               if(Array.isArray(componentData.ids) && componentData.ids.length){
 
                   //兼容老数据

@@ -138,6 +138,24 @@ export default {
             }
             this.fetch();
         },
+        'ruleForm.hideSaledGoods'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
+        },
+        'ruleForm.hideEndGoods'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
+        },
+        'ruleForm.hideType'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
+        },
     },
     computed: {
 

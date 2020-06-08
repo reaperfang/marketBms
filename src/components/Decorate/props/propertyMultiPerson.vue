@@ -144,7 +144,7 @@
         <!-- <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input> -->
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonTextPrimary"></el-input>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideSaledGoods" v-if="ruleForm.addType == 1">
+      <el-form-item label="更多设置" prop="hideSaledGoods">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
         <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
@@ -204,7 +204,7 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    this.fetch(false);
   },
   watch: {
     'items': {
@@ -217,7 +217,6 @@ export default {
           });
         }
         this.fetch();
-        this._globalEvent.$emit('fetchMultiPerson', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -233,7 +232,6 @@ export default {
             return;
         }
         if(newValue == 2) {
-          this.ruleForm.hideSaledGoods = false;
           this.fetch();
         }else{
           this.list = [];
@@ -247,6 +245,24 @@ export default {
         this.fetch();
     },
     'ruleForm.sortRule'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideSaledGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideEndGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideType'(newValue, oldValue) {
         if(newValue === oldValue) {
             return;
         }
@@ -274,8 +290,10 @@ export default {
     },
 
     //根据ids拉取数据
-    fetch(componentData = this.ruleForm) {
+    fetch(bNeedUpdateMiddle = true) {
+      const componentData = this.ruleForm;
         if(componentData) {
+            bNeedUpdateMiddle && this._globalEvent.$emit('fetchMultiPerson', this.ruleForm, this.$parent.currentComponentId);
             let params = {};
 
             //兼容老数据
