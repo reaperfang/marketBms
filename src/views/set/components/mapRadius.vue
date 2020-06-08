@@ -45,7 +45,10 @@ export default {
             content:this.address,
             visible: this.visible
         });
-        const radius = (this.radius || 0) * 1000 // 经测试图上半径为米来进行计算
+        let radius = 0
+        if (!Number.isNaN(+this.radius)) {
+          radius = this.radius * 1000
+        }
         // const visible = this.address ? true : false
         this.circle = new qq.maps.Circle({
             map: this.mapObj,
@@ -71,7 +74,8 @@ export default {
       this.mapObj.zoomTo(zoom)
     },
     setRadius(val) {
-      if ((this.center && this.center.length <= 0) || !val) return false
+      if ((this.center && this.center.length <= 0) || (!val)) return false
+      if (Number.isNaN(+val)) return false
       const radius = (val || 0) * 1000 // 经测试图上半径为米来进行计算
       // this.visible = true
       
@@ -116,13 +120,24 @@ export default {
     radius(curr) {
       console.log(curr)
       if (curr) {
-        // this.inited()
-        this.setRadius(curr)
+        if(!this.mapLoaded) {
+          this._globalEvent.$on('mapLoaded', ()=>{
+            this.setRadius(curr)
+          });
+        }else{
+          this.setRadius(curr)
+        }
       }
     },
     center(curr) {
       if (curr && curr.length > 0) {
-        this.setRadius(this.radius)
+        if(!this.mapLoaded) {
+          this._globalEvent.$on('mapLoaded', ()=>{
+            this.setRadius(this.radius)
+          });
+        }else{
+          this.setRadius(this.radius)
+        }
       }
     }
   }
