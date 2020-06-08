@@ -258,27 +258,23 @@ export default {
   data () {
     // 校验数字格式为0.00的否则提示如下错误
     const validateFloat = (rule, value, callback) => {
-      const reg = /^(([0-9]+).\d{2})$/ // 判断格式必须位*.**
-      if (value && reg.test(value)) {
-        if (value * 1000 > 0) {
-          callback();
-        } else {
-          callback(new Error('必填项，请输入大于0的数字'));
-        }
+      if (Number.isNaN(+value)) {
+        return callback(new Error('必填项，请输入非负数，支持小数点后两位'));
+      }
+      if (+value * 1000 > 0) {
+        return callback();
       } else {
-        callback(new Error('必填项，请输入非负数，支持小数点后两位'));
+        return callback(new Error('必填项，请输入大于0的数字'));
       }
     };
     const validateFloat2 = (rule, value, callback) => {
-      const reg = /^(([0-9]+).\d{3})$/ // 判断格式必须位*.**
-      if (value && reg.test(value)) {
-        if (value * 1000 > 0) {
-          callback();
-        } else {
-          callback(new Error('必填项，请输入大于0的数字'));
-        }
+      if (Number.isNaN(+value)) {
+        return callback(new Error('必填项，请输入非负数，支持小数点后三位'));
+      }
+      if (+value * 1000 > 0) {
+        return callback();
       } else {
-        callback(new Error('必填项，请输入非负数，支持小数点后三位'));
+        return callback(new Error('必填项，请输入大于0的数字'));
       }
     };
     const validatePositiveInter = (rule, value, callback) => {
