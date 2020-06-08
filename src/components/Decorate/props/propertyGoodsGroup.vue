@@ -155,7 +155,7 @@ export default {
         menuStyle: 1,//菜单样式
         menuPosition: 1,//菜单位置
         listStyle: 1,//列表样式
-        pageMargin: 15,//页面边距
+        pageMargin: 10,//页面边距
         goodsMargin: 10,//商品边距
         goodsStyle: 1,//商品样式
         goodsChamfer: 1,//商品倒角
@@ -178,7 +178,7 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    this.fetch(false);
   },
   watch: {
     'items': {
@@ -192,7 +192,6 @@ export default {
         }
         this.ruleForm.ids = catagoryIds;
         this.fetch();
-        this._globalEvent.$emit('fetchGoodsGroup', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -209,8 +208,10 @@ export default {
   },
   methods: {
      //根据ids拉取数据
-    fetch(componentData = this.ruleForm) {
+    fetch(bNeedUpdateMiddle = true) {
+      const componentData = this.ruleForm;
       if(componentData) {
+          bNeedUpdateMiddle && this._globalEvent.$emit('fetchGoodsGroup', this.ruleForm, this.$parent.currentComponentId);
           if(componentData.ids) {
             let ids = [];
             for(let item in componentData.ids) {

@@ -547,7 +547,7 @@ export default {
                     @extend .ellipsis;
                 }
                 .priceLine{
-                    margin-top:12.5px;
+                    margin-top:13.5px;
                     overflow:hidden;
                     .price{
                         float:left;
@@ -741,7 +741,7 @@ export default {
                     margin-top:5px;
                 }
                 .priceLine{
-                    margin-top:10px;
+                    margin-top:22.5px;
                 }
             }
         }
@@ -776,7 +776,7 @@ export default {
                     margin-top:10px;
                 }
                 .priceLine{
-                    margin-top:35px;
+                    margin-top:62.5px;
                 }
             }
         }
@@ -794,7 +794,7 @@ export default {
                     margin-top:4px;
                 }
                 .priceLine{
-                    margin-top:4px;
+                    margin-top:12.5px;
                 }
             }
         }  
@@ -859,12 +859,6 @@ export default {
                 margin-top:15px;
                 width:170px;
                 overflow:hidden;
-                &:nth-of-type(1){
-                    margin-top:0 !important;
-                }
-                &:nth-of-type(2){
-                    margin-top:0 !important;
-                }
                 .img{
                     position:relative;
                     overflow:hidden;
