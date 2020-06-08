@@ -207,7 +207,7 @@ export default {
             justify-content: space-between;
             .countdown{
                 float:right;
-                width:155px;
+                width:189px;
                 height:43px;
                 padding:0 3.5px 0 15px;
                 .content{
@@ -233,10 +233,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
+                            min-width:29px;
+                            height:16px;
                             color:#fff;
-                            padding:0 8px;
+                            margin:0 4px;
                         }
                     }
                 }
@@ -328,10 +328,10 @@ export default {
                             }
                             .item {
                                 background:#333;
-                                width:58px;
-                                height:32px;
+                                min-width:29px;
+                                height:16px;
                                 color:#fff;
-                                padding:0 8px;
+                                margin:0 4px;
                             }
                         }
                     }
@@ -450,6 +450,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display:none;
                 }
             }
         }
@@ -512,10 +513,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
+                            min-width:29px;
+                            height:16px;
                             color:#fff;
-                            padding:0 8px;
+                            margin:0 4px;
                         }
                     }
                 }
@@ -656,7 +657,7 @@ export default {
                     justify-content: space-between;
                     .countdown{
                         float:right;
-                        width:155px;
+                        width:189px;
                         height:43px;
                         padding:0 3.5px 0 15px;
                         .content{
@@ -682,10 +683,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
+                                    min-width:29px;
+                                    height:16px;
                                     color:#fff;
-                                    padding:0 8px;
+                                    margin:0 4px;
                                 }
                             }
                         }
@@ -763,10 +764,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
+                                    min-width:29px;
+                                    height:16px;
                                     color:#fff;
-                                    padding:0 8px;
+                                    margin:0 4px;
                                 }
                             }
                         }
@@ -814,7 +815,7 @@ export default {
                     .button{
                         height:24px;
                         right:10px;
-                        // bottom:12.5px;
+                        bottom:0;
                     }
                     .activity_end{
                         right:10px;
@@ -867,10 +868,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
+                                    min-width:29px;
+                                    height:16px;
                                     color:#fff;
-                                    padding:0 8px;
+                                    margin:0 4px;
                                 }
                             }
                         }
@@ -983,6 +984,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display:none;
                 }
             }
         }
@@ -1061,10 +1063,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
+                            min-width:29px;
+                            height:16px;
                             color:#fff;
-                            padding:0 8px;
+                            margin:0 4px;
                         }
                     }
                 }
