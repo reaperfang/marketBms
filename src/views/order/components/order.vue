@@ -298,6 +298,7 @@ export default {
     .order {
         .order-header {
             display: flex;
+            min-width: 1000px;
             color: $globalMainColor;
             background-color: rgb(240, 239, 255);
             padding: 12px 20px;
