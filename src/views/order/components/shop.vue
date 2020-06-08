@@ -200,6 +200,7 @@ export default {
 <style lang="scss" scoped>
     .order-list {
         padding-bottom: 10px;
+        overflow-x: auto;
     }
     /deep/ .el-checkbox {
         margin-right: 8px;

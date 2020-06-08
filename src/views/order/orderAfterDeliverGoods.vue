@@ -82,7 +82,7 @@
                         </div>
                         <div class="item">
                             <div class="label">收货信息</div>
-                            <div class="value">{{orderAfterSaleSendInfo.receiveAddress}}</div>
+                            <div class="value">{{orderAfterSaleSendInfo.receiveAddress}} {{orderAfterSaleSendInfo.receiveDetail}}</div>
                         </div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="item">
                             <div class="label">发货信息</div>
-                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendAddress}}</div>
+                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendAddress}} {{orderAfterSaleSendInfo.sendDetail}}</div>
                             <div class="value" v-else>--</div>
                         </div>
                     </div>

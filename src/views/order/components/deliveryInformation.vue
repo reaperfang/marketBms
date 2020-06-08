@@ -81,7 +81,7 @@
               <div class="message-item">{{item.receivedPhone}}</div>
             </div>
             <div class="message-item-list">
-              <div class="message-item">{{item.receiveAddress}}</div>
+              <div class="message-item">{{item.receiveAddress}} {{item.receiveDetail}}</div>
             </div>
           </div>
           <div class="message message2">
@@ -95,7 +95,7 @@
               <div class="message-item">{{item.sendPhone}}</div>
             </div>
             <div class="message-item-list">
-              <div class="message-item">{{item.sendAddress}}</div>
+              <div class="message-item">{{item.sendAddress}} {{item.sendDetail}}</div>
             </div>
           </div>
           </template> 
@@ -257,7 +257,9 @@ export default {
                 deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
                 phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
                 receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
+                receiveDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveDetail || '',
                 sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
+                sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
                 receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
                 receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
                 sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || ''
