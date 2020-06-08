@@ -37,7 +37,7 @@
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.receivedName}}</div>
                             <div class="item" style="width: 260px;">联系电话：{{item.receivedPhone}}</div>
-                            <div class="item">收货地址：{{item.receivedDetail}}</div>
+                            <div class="item">收货地址：{{item.receiveAddress}} {{item.receivedDetail}}</div>
                         </div>
                     </template>
                 </div>
