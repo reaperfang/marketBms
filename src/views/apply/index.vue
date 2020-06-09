@@ -68,9 +68,11 @@ export default {
             } else if(localStorage.marketing_router_path_appId) {
 				applyId = localStorage.marketing_router_path_appId
 			}
-
+            let extraQuery = ''
+			let mkQuery = localStorage.getItem('marketing_router_path_query')&&JSON.parse(localStorage.getItem('marketing_router_path_query'))||{}
+			for(let item in mkQuery)
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
-            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}&bossProductId=${bossProductId}`
+            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}&bossProductId=${bossProductId}${extraQuery}`
         },
 
         // iframe 刷新  -- 暂时不用
@@ -97,6 +99,7 @@ export default {
                 this.path = message.params.path; // 营销路由
                 window.localStorage.setItem('marketing_router_path', this.path);
                 window.localStorage.setItem('marketing_router_path_appId', message.params.id);
+                window.localStorage.setItem('marketing_router_path_query', message.query);
                 this.isLoaded  = false;
             }
         },
