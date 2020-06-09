@@ -69,7 +69,7 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.receivedName}}</p>
                     <p>联系电话: {{item.receivedPhone}}</p>
-                    <p>收货地址: {{item.receiveAddress}} {{item.receiveDetail}}</p>
+                    <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
                   </div>
                   <div class="col">
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
