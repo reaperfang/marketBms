@@ -952,7 +952,7 @@ export default {
       const advanceSubscribeDays = this.ruleForm.advanceDays
       const isOpenLadderFreight = this.ruleForm.isOpenLadderFreight
       const isOpenSubscribeDeliver = this.ruleForm.isReservationDelivery
-      const subscribeTimeCustomizeType = this.ruleForm.repeatCycletimePeriods
+      const subscribeTimeCustomizeType = this.ruleForm.repeatCycle
       const subscribeTimeType = this.ruleForm.deliveryTimeType
       let subscribeTimeHourRanges
       if (subscribeTimeType === 2) {
