@@ -58,7 +58,7 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.orderAfterSaleSendInfo.receivedName}}</p>
                     <p>联系电话: {{item.orderAfterSaleSendInfo.receivedPhone}}</p>
-                    <p>收货地址: {{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receiveDetail}}</p>
+                    <p>收货地址: {{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receivedDetail}}</p>
                   </div>
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1">
