@@ -236,7 +236,7 @@
         </div>
       </section>
       <div class="btn">
-        <el-button type="primary" class="submit" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
+        <el-button type="primary" class="submit"  v-permission="['设置','同城配送','默认页面', '保存']" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
       </div>
      </el-form>
   </div>
