@@ -42,15 +42,22 @@
                 <el-checkbox label="启用独立分销比例"></el-checkbox>
             </el-checkbox-group>
             <div><p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分销员等级比例的默认设置限制</p></div>
+            <div class="commision totalCommission" v-if="enable">
+                <p>分佣总佣金：&nbsp;&nbsp;&nbsp;占分销商品利润</p>
+                <div class="commision-prent">
+                    <el-input type="number" v-model="resellRule.percentOfCommodityProfit" placeholder="0.00"></el-input><span>%</span>
+                </div>
+                <span class="prompt">商品利润=订单实付金额-成本价-运费</span>
+            </div>
             <div v-if="enable">
-                <div style="margin-top:45px;">
+                <div style="margin-top:25px;">
                     <p class="line-tip">建议参考商品的实际利润设置分销比例，设置后该spu下的所有sku将均按照此比例计算分销金额</p>
                     <!-- 分销比例设置 -->
                     <div class="commision">
                         <div class="commision-cell-left">
-                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分销员本人（三级）佣金与商品总利润占比</div>
+                            <div v-if="resellConfigInfo.resellGrade >=1" class="commision-title">分销员本人（一级）佣金与商品总利润占比</div>
                             <div v-if="resellConfigInfo.resellGrade >=2" class="commision-title">上级分销员（二级）佣金与商品总利润占比</div>
-                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分销员（一级）佣金与商品总利润占比</div>
+                            <div v-if="resellConfigInfo.resellGrade >=3" class="commision-title">上上级分销员（三级）佣金与商品总利润占比</div>
                         </div>
                         <div class="commision-cell-center">
                             <div v-if="resellConfigInfo.resellGrade >=1" class="commision-prent">
@@ -101,19 +108,19 @@
                             </el-table>
                         </div>
                         <p class="line-tip">&nbsp;</p>
-                        <!-- 分销佣金参考 -->
-                        <p v-if="resellGood.length" class="line-tip">（以下是我们根据您填写各层级分销比例计算出的商品各层级分销佣金，仅供参考。实际分销结果将以最终保存的比例计算）</p>
-                        <div v-if="resellGood.length">
+                        <!-- 分销佣金参考  按商品利润=订单实付金额-成本价-运费计算，以下部分隐藏--> 
+                        <p v-if="resellGood.length&&false" class="line-tip">（以下是我们根据您填写各层级分销比例计算出的商品各层级分销佣金，仅供参考。实际分销结果将以最终保存的比例计算）</p>
+                        <div v-if="resellGood.length&&false">
                             <el-table :data="resellGood" tooltip-effect="dark" style="width: 100%">
                                 <el-table-column prop="sku" label="SKU"></el-table-column>
                                 <el-table-column prop="specs" label="规格"></el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" label="分销员本人（三级）佣金金额" width="220">
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=1" label="分销员本人（一级）佣金金额" width="220">
                                     <template slot-scope="scope"><div>¥{{scope.row.one}}</div></template> 
                                 </el-table-column>
                                 <el-table-column v-if="resellConfigInfo.resellGrade >=2" label="上级分销员（二级）佣金金额" width="220">
                                     <template slot-scope="scope"><div>¥{{scope.row.two}}</div></template> 
                                 </el-table-column>
-                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分销员（一级）佣金金额" width="220">
+                                <el-table-column v-if="resellConfigInfo.resellGrade >=3" prop="three" label="上上级分销员（三级）佣金金额" width="220">
                                     <template slot-scope="scope"><div>¥{{scope.row.three}}</div></template> 
                                 </el-table-column>
                             </el-table>
@@ -147,7 +154,7 @@ export default {
             images: [], // 所有商品图
             sku: [], // 商品利润列表
             // 分销佣金比例
-            resellRule: { "percentOfCommissionOne": '' ,"percentOfCommissionTwo": '', "percentOfCommissionThree": '' }
+            resellRule: { "percentOfCommissionOne": '' ,"percentOfCommissionTwo": '', "percentOfCommissionThree": '',"percentOfCommodityProfit": '' }
         }
     },    
     watch: {
@@ -157,12 +164,17 @@ export default {
                 if(
                     (regPos.test(value.percentOfCommissionOne) || value.percentOfCommissionOne === '') &&
                     (regPos.test(value.percentOfCommissionTwo) || value.percentOfCommissionTwo === '') &&
-                    (regPos.test(value.percentOfCommissionThree) || value.percentOfCommissionThree === '') 
+                    (regPos.test(value.percentOfCommissionThree) || value.percentOfCommissionThree === '')&&
+                    (regPos.test(value.percentOfCommodityProfit) || value.percentOfCommodityProfit === '')
                 ) {
                     let total;
                     if(this.resellConfigInfo.resellGrade == 3) total = (value.percentOfCommissionOne - 0) + (value.percentOfCommissionTwo - 0) + (value.percentOfCommissionThree - 0);
                     if(this.resellConfigInfo.resellGrade == 2) total = (value.percentOfCommissionThree - 0) + (value.percentOfCommissionTwo - 0);
                     if(this.resellConfigInfo.resellGrade == 1) total = (value.percentOfCommissionThree - 0);
+                    if(value.percentOfCommodityProfit > 100) {
+                        this.$message({ message: '分销总佣金占商品总利润占比不能大于100%', type: 'warning' });
+                        return
+                    }
                     if(total <= 100) this.initResellGood();
                     else {
                         this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
@@ -240,6 +252,18 @@ export default {
 
             // 开启了独立分销
             if(this.status == 1 && this.enable) {
+                if(regPos.test(resellRule.percentOfCommodityProfit)){
+                    if(resellRule.percentOfCommodityProfit<=100) {
+                        resellRule.percentOfCommodityProfit = resellRule.percentOfCommodityProfit / 100;
+                        data.percentOfCommodityProfit = resellRule.percentOfCommodityProfit
+                    }else{
+                        this.$message({ message: '分销总佣金占商品总利润不能大于100%', type: 'warning' });
+                        return false;
+                    }
+                } else {
+                    this.$message({ message: '分销总佣金占商品总利润必须是正整数', type: 'warning' });
+                    return false;
+                }
                 if(resellConfigInfo.resellGrade == 1) {
                     resellRule.percentOfCommissionTwo = '';
                     resellRule.percentOfCommissionOne = '';
@@ -300,6 +324,8 @@ export default {
         // 保存
         submit() {
             let data = this.getSubmitData();
+            console.log('保存',data)
+            return
             if(data) {
                 data.id = this.detail.id;
                 // todo 保存商品分销设置
@@ -324,7 +350,7 @@ export default {
     created() {
         // 商品详情
         let detail = this.detail;
-
+        console.log('detail',detail)
         if(detail.isAloneResellRule == 1){ // 是否独立分销商品
             this.enable = true;
             
@@ -333,6 +359,7 @@ export default {
                 resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne ? (resellRule.percentOfCommissionOne * 100).toFixed(0) : '';
                 resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo ? (resellRule.percentOfCommissionTwo * 100).toFixed(0) : '';
                 resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree ? (resellRule.percentOfCommissionThree * 100).toFixed(0) : '';
+                resellRule.percentOfCommodityProfit = resellRule.percentOfCommodityProfit ? (resellRule.percentOfCommodityProfit * 100).toFixed(0) : '';
                 this.resellRule = resellRule;           
             }
         } 
@@ -505,6 +532,47 @@ export default {
             background: rgba(250,250,250,.62);
             /deep/ .el-table .el-table__row {
                 background: rgba(250,250,250,.62);
+            }
+        }
+        .totalCommission {
+            margin-left: -86px;
+            margin-top: 10px;
+            p {
+                margin-top: 12px;
+                height: 34px;
+                line-height: 34px;
+                text-align: left;
+                position: relative;
+                margin-right: 20px;
+                &:before {
+                    content: '*';
+                    display: block;
+                    color: #FD932B;
+                    position: absolute;
+                    left: -12px;
+                    top: 6px;
+                    font-size: 26px;
+                }
+            }
+            .prompt {
+                font-size: 13px;
+                margin-top: 12px;
+                height: 34px;
+                line-height: 34px;
+                text-align: left;
+                position: relative;
+                margin-left: 36px;
+                color: #FD932B;
+                &:before {
+                    content: '';
+                    width: 14px;
+                    height: 14px;
+                    position: absolute;
+                    background: url(../../../assets/images/commissionOfficerAlertIcon.png);
+                    background-size: 100% 100%;
+                    top: 10px;
+                    left: -18px;
+                }
             }
         }
         /deep/ .el-table th {
