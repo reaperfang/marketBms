@@ -95,7 +95,7 @@
             </div>
             <div class="item">
               <div class="label">收货信息</div>
-              <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receiveDetail}}</div>
+              <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</div>
             </div>
           </div>
         </div>

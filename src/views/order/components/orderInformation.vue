@@ -16,7 +16,7 @@
                         <div class="label">收货信息</div>
                         <div class="value">
                             <p>{{orderInfo.receivedName}} / {{orderInfo.receivedPhone}}</p>
-                            <p>{{orderInfo.receiveAddress}} {{orderInfo.receiveDetail}}</p>
+                            <p>{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
                     <!-- <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p> -->
