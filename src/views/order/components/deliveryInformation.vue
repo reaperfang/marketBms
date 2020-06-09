@@ -18,6 +18,7 @@
             <div class="header-lefter-item number">{{index + 1}}</div>
             <div class="header-lefter-item fb">{{item.deliveryWay | deliveryWayFilter}}</div>
             <template v-if="item.deliveryWay == 1">
+            <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
             <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
             </template>
