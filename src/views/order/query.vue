@@ -319,6 +319,8 @@ export default {
         });
     },
     onSubmit() {
+      this.checkedList = [];
+
       console.log(this.listQuery)
       this.listQuery = Object.assign({}, this.listQuery, {
         startIndex: 1,
@@ -331,6 +333,8 @@ export default {
       });
     },
     resetForm(formName) {
+      this.checkedList = [];
+
       let {orderType} = this.$route.query
 
       if(this.$route.query.orderType && this.$route.query.orderType == 5) {

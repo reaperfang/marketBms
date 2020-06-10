@@ -101,15 +101,15 @@
           </div>
           </template> 
           <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
-            <el-table-column label="商品" width="300">
+            <el-table-column label="商品" width="400">
               <template slot-scope="scope">
                 <div class="goods-detail">
                   <div class="goods-detail-item">
                     <img width="66" :src="scope.row.goodsImage" alt />
                   </div>
-                  <div class="goods-detail-item">
-                    <p>{{scope.row.goodsName}}</p>
-                    <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                  <div class="goods-detail-item" style="width:300px;text-align:left;">
+                    <p class="ellipsis">{{scope.row.goodsName}}</p>
+                    <p class="ellipsis">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                   </div>
                 </div>
               </template>
@@ -387,7 +387,7 @@ export default {
       .header {
         height: 60px;
         background-color: rgb(243, 244, 244);
-        border-radius: 10px;
+        border-radius: 10px 10px 0 0;
         padding: 0 20px;
         //line-height: 60px;
         display: flex;
@@ -430,12 +430,14 @@ export default {
           }
         }
         .remark {
-          border-top: 1px solid #cacfcb;
           padding-top: 20px;
         }
       }
     }
   }
+}
+/deep/ .el-table::before{
+  background-color: #cacfcb;
 }
 .message {
   font-size:14px;
