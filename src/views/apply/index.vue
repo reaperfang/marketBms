@@ -61,15 +61,23 @@ export default {
                 this.path = localStorage.getItem('marketing_router_path') || this.defultPath;
                 console.log('其他')
             }
-
             let applyId = '';
             if(this.$route.query.applyId){
                 applyId = this.$route.query.applyId
             } else if(localStorage.marketing_router_path_appId) {
-				applyId = localStorage.marketing_router_path_appId
-			}
+                applyId = localStorage.marketing_router_path_appId
+            }
             let extraQuery = ''
-			let mkQuery = localStorage.getItem('marketing_router_path_query')&&JSON.parse(localStorage.getItem('marketing_router_path_query'))||{}
+            let mkQuery = localStorage.getItem('marketing_router_path_query')&&JSON.parse(localStorage.getItem('marketing_router_path_query'))||{}
+            delete mkQuery.access
+            delete mkQuery.token
+            delete mkQuery.businessId
+            delete mkQuery.loginUserId
+            delete mkQuery.tenantId
+            delete mkQuery.cid
+            delete mkQuery.userName
+            delete mkQuery.bossProductId
+            delete mkQuery.id
 			for(let item in mkQuery){
                 extraQuery+= "&" + item+'='+mkQuery[item]
 			}
