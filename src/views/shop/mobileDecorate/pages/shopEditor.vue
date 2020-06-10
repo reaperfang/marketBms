@@ -245,4 +245,9 @@ export default {
 
 };
 </script>
+<style lang="scss">
+  .app-main .content-box .content-main.m_shopEditor {
+    padding: 0;
+  }
+</style>
 

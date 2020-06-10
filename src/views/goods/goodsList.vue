@@ -1,13 +1,13 @@
 <template>
     <div style="min-height: 100vh;" v-loading="loading">
-		<div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
+		<!--<div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
 			<div class="goods-list-empty-content">
 				<div class="image"></div>
 				<p>当前店铺没有商品，点击“新建商品”快去发布您的商品吧！</p>
 				<el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
 			</div>
-		</div>
-        <div class="goods-list" v-else>
+		</div>-->
+        <div class="goods-list">
             <header class="header">
                 <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
@@ -532,6 +532,19 @@ export default {
         this.getCategoryList()
         this.getMiniappInfo()
         //this.getProductCatalogTreeList()
+    },
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            vm._apis.goods.fetchSpuGoodsList().then((res) => {
+                let total = +res.total
+                
+                if(!total) {
+                    vm.$router.replace('/goods/goodsListEmpty')
+                }
+            }).catch(error => {
+                //this.loading = false
+            })
+        })
     },
     computed: {
         isIE() {

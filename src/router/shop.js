@@ -91,7 +91,7 @@ export default [
 				path: "m_shopEditor",
 				component: () => import("@/views/shop/mobileDecorate/pages/shopEditor"),
 				name: "m_shopEditor",
-				meta: { title: "微页面编辑", noCache: true, tabTitle: '移动装修',navType:2 },
+				meta: { title: "微页面编辑", noCache: true, tabTitle: '移动装修',navType:2, m_shopEditor: true },
 				hidden: true
 			},				
 			{

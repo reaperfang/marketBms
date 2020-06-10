@@ -188,6 +188,7 @@ export default {
   z-index: 1000;
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #f2f2f9;
   .hamburger-container {
     line-height: 58px;
     height: 50px;

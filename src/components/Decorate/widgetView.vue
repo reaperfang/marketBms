@@ -5,7 +5,7 @@
         <template v-if="key != 'hiddenWidget'">
           <div class="widget-title">
             {{item.title}}
-            <i @click="spreadWidget(key)" class="widget-title-icon" :class="{'el-icon-caret-bottom': !item.spread, 'el-icon-caret-top': item.spread}"></i>
+            <!--<i @click="spreadWidget(key)" class="widget-title-icon" :class="{'el-icon-caret-bottom': !item.spread, 'el-icon-caret-top': item.spread}"></i>-->
           </div>
           <div v-show="item.spread" class="widget-list">
             <ul class="tile-list n4">
@@ -101,7 +101,7 @@ export default {
       line-height:22px;
       padding:10px 20px;
       box-sizing: border-box;
-      background:rgba(230,228,255,1);
+      //background:rgba(230,228,255,1);
       .widget-title-icon {
         color: #3A4048;
       }
