@@ -19,7 +19,7 @@
         <el-input placeholder="请输入用户API Key" v-model="form.apiKey" style="width:302px; height:34px;"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" v-loading="loading" @click="handleOnSubmit('form')">保存</el-button>
+        <el-button type="primary" v-permission="['设置','普通快递','快递设置', '保存']" v-loading="loading" @click="handleOnSubmit('form')">保存</el-button>
       </el-form-item>
      </el-form>
    </div>
