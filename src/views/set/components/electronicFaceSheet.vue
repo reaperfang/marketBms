@@ -33,7 +33,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
+              <el-button type="primary" @click="onSubmit" v-permission="['设置','普通快递','电子面单', '查询']">查询</el-button>
               <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
             </el-form-item>
           </div>

@@ -32,10 +32,7 @@
                     <div class="info_box" v-if="showContents.length > 0">
                         <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">套餐包含商品{{item.totalGoodsNum}}件</p>
-                        <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&listStyle==4">
-                            <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
-                        </div>
-            <div class="limit_line" v-else-if="showContents.indexOf('5')!=-1&&listStyle==1&&item.joinLimit!=-1">
+                        <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&item.joinLimit!=-1">
                             <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
                         <div class="price_line">

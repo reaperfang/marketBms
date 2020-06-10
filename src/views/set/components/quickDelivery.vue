@@ -42,7 +42,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="search">查询</el-button>
+              <el-button type="primary" @click="search" v-permission="['设置','普通快递','运费模版', '查询']">查询</el-button>
               <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
             </el-form-item>
           </div>

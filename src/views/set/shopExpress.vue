@@ -236,7 +236,7 @@
         </div>
       </section>
       <div class="btn">
-        <el-button type="primary" class="submit" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
+        <el-button type="primary" class="submit"  v-permission="['设置','同城配送','默认页面', '保存']" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
       </div>
      </el-form>
   </div>
@@ -833,8 +833,12 @@ export default {
       day = day > 10 ? day : `0${day}`
       const timePeriods = arr.map(item => {
         const timeslot = item.split('~')
-        const start = `${year}-${month}-${day} ${timeslot[0]}`
-        const end = `${year}-${month}-${day} ${timeslot[1]}`
+        let start = `${year}-${month}-${day} ${timeslot[0]}`
+        let end = `${year}-${month}-${day} ${timeslot[1]}`
+        // 解决safari不兼容上面的时间格式问题
+        start = new Date(start.replace(/-/g, '/'))
+        end = new Date(end.replace(/-/g, '/'))
+        console.log(start, end)
         return {
           start,
           end
@@ -876,6 +880,7 @@ export default {
             end: ''
           }
         ]
+        console.log('-----res.subscribeTimeHourRanges--', res.subscribeTimeHourRanges)
         this.ruleForm.timePeriods = this.formatSubscribeTimeHourRanges(res.subscribeTimeHourRanges) || defaultVal // 每天重复的小时时间段(~和逗号分隔): 00:00:00~00:01:00,00:08:00~00:09:00,00:13:00~00:14:00
         const weeks = this.formatSubscribeTimeWeekDays(res.subscribeTimeWeekDays) || [] // 以天为单位，每周重复的时间值(逗号分隔)：1,2,3,4,5,6,7
         this.ruleForm.weeks = weeks
