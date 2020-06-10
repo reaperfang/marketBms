@@ -70,6 +70,15 @@ export default {
 			}
             let extraQuery = ''
 			let mkQuery = localStorage.getItem('marketing_router_path_query')&&JSON.parse(localStorage.getItem('marketing_router_path_query'))||{}
+            delete mkQuery.access
+            delete mkQuery.token
+            delete mkQuery.businessId
+            delete mkQuery.loginUserId
+            delete mkQuery.tenantId
+            delete mkQuery.cid
+            delete mkQuery.userName
+            delete mkQuery.bossProductId
+            delete mkQuery.id
 			for(let item in mkQuery){
                 extraQuery+= "&" + item+'='+mkQuery[item]
 			}
