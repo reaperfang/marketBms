@@ -1378,6 +1378,15 @@ export default {
                     this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
                         //this.getAllList()
+                        this._apis.goods.fetchSpuGoodsList().then((res) => {
+                            let total = +res.total
+                            
+                            if(!total) {
+                                this.$router.replace('/goods/goodsListEmpty')
+                            }
+                        }).catch(error => {
+                            //this.loading = false
+                        })
                         this.visible = false
                         this.$message({
                             message: '删除成功！',
