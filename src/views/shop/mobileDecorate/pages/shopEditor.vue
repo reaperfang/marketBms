@@ -248,6 +248,7 @@ export default {
 <style lang="scss">
   .app-main .content-box .content-main.m_shopEditor {
     padding: 0;
+    overflow: hidden;
   }
 </style>
 

@@ -1,20 +1,21 @@
 <template>
   <div class="module props">
+      <div v-calcHeight="168" class="props-content">
+        <!-- 头部标题栏 -->
+        <div class="block header">
+          <p class="title" v-if="componentDataMap[currentComponentId]">
+            {{componentDataMap[currentComponentId].title}}
+          </p>
+          <p class="title" v-else>
+            编辑
+          </p>
+        </div>
 
-      <!-- 头部标题栏 -->
-      <div class="block header">
-        <p class="title" v-if="componentDataMap[currentComponentId]">
-          {{componentDataMap[currentComponentId].title}}
-        </p>
-        <p class="title" v-else>
-          编辑
-        </p>
+        <!-- 属性渲染区 -->
+        <transition name="fade" :duration="{ enter: 200, leave: 100 }">
+          <component :is='currentComponent' @change="propsChange" v-bind="componentDataMap[currentComponentId]" key="components"></component>
+        </transition>
       </div>
-
-      <!-- 属性渲染区 -->
-      <transition name="fade" :duration="{ enter: 200, leave: 100 }">
-        <component :is='currentComponent' @change="propsChange" v-bind="componentDataMap[currentComponentId]" key="components"></component>
-      </transition>
 
       <!-- 底部按钮区 -->
       <div class="block button">
@@ -104,4 +105,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .props {
+    background-color: #fff;
+    .props-content {
+      overflow-y: auto;
+    }
+  }
+  .props-content::-webkit-scrollbar-thumb {
+      background: rgba(101,94,255,0.4) !important;
+  }
+  .props-content::-webkit-scrollbar {
+      width: 8px!important;
+      height: 8px!important;
+  }
+  .props-content::-webkit-scrollbar-thumb {
+    background-color: rgba(101,94,255,0.4) !important;
+    background-clip: padding-box;
+    min-height: 28px;
+    border-radius: 7px;
+}
 </style>

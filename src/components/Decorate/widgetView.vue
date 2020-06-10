@@ -1,20 +1,22 @@
 <template>
-   <div class="module widget" v-calcHeight="80">
-      <div class="block" v-for="(item, key) of widgetList" :key="key">
-        <!-- 隐藏的控件不显示 -->
-        <template v-if="key != 'hiddenWidget'">
+   <div class="module widget" v-calcHeight="66">
+      <!-- 隐藏的控件不显示 -->
+      <div v-if="key != 'hiddenWidget'" class="block" v-for="(item, key) of widgetList" :key="key">
+        <template>
           <div class="widget-title">
-            {{item.title}}
-            <!--<i @click="spreadWidget(key)" class="widget-title-icon" :class="{'el-icon-caret-bottom': !item.spread, 'el-icon-caret-top': item.spread}"></i>-->
+            <span>{{item.title}}</span>
+            <i @click="spreadWidget(key)" class="widget-title-icon" :class="{'el-icon-caret-bottom': !item.spread, 'el-icon-caret-top': item.spread}"></i>
           </div>
-          <div v-show="item.spread" class="widget-list">
-            <ul class="tile-list n4">
-              <li v-for="(item2, key2) of item.list" :key="key2" @click="addComponent(item2)" draggable="true" @dragstart="dragAddComponent($event, item2)">
-                <i :class="item2.iconClass"></i>
-                <p>{{item2.title}}</p>
-              </li>
-            </ul>
-          </div>
+          <transition name="widget-transition" class="widget-transition">
+              <div v-if="item.spread" class="widget-list">
+                <ul class="tile-list n4">
+                  <li v-for="(item2, key2) of item.list" :key="key2" @click="addComponent(item2)" draggable="true" @dragstart="dragAddComponent($event, item2)">
+                    <i :class="item2.iconClass"></i>
+                    <p>{{item2.title}}</p>
+                  </li>
+                </ul>
+              </div>
+          </transition>
         </template>
       </div>
     </div>
@@ -93,27 +95,42 @@ export default {
 
 <style lang="scss" scoped>
   .widget{
-    width: 320px;
+    width: 162px;
     height: 835px;
     overflow-y: auto;
+    background-color: #fff;
+    padding: 25px 20px;
+    .block {
+      margin-bottom: 20px;
+    }
     .widget-title{
-      height:40px;
       line-height:22px;
-      padding:10px 20px;
       box-sizing: border-box;
+      margin-bottom: 16px;
+      span {
+        border-left: 2px solid rgba(101,94,255,1);
+        padding-left: 4px;
+      }
       //background:rgba(230,228,255,1);
       .widget-title-icon {
         color: #3A4048;
       }
     }
     .widget-list{
-      padding:30px 20px;
+      //margin-top: 16px;
       ul{
+        &.n4 {
+          li {
+            width: 50%;
+            margin-right: 0;
+          }
+        }
         li{
           display:flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          margin-bottom: 12px;
           cursor: pointer;
           i{
             width:30px;
@@ -198,4 +215,23 @@ export default {
       }
     }
   }
+.widget-transition{ transition: all ease .2s; }
+.widget-transition-enter-active { animation: widgetEnter .2s; overflow: hidden; }
+.widget-transition-leave-active { animation: widgetLeave .2s ; overflow: hidden; }
+@keyframes widgetEnter {
+  from { 
+    height: 0;
+  }
+  to { 
+    height: 272px;
+  }
+}
+@keyframes widgetLeave {
+  from { 
+    height: 272px; 
+  }
+  to { 
+    height: 0; 
+  }
+}
 </style>
