@@ -6,6 +6,7 @@
       title="搜索地图"
       :visible.sync="centerDialogVisible"
       width="60%"
+      :close-on-click-modal="false"
       center>
       <div style="height: 580px;">
         <map-search 
