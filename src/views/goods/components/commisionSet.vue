@@ -347,6 +347,7 @@ export default {
     created() {
         // 商品详情
         let detail = this.detail;
+        console.log('商品详情detail',detail.isAloneResellRule)
         if(detail.isAloneResellRule == 1){ // 是否独立分销商品
             this.enable = true;
             
