@@ -4,9 +4,9 @@
             <el-tab-pane label="商品信息" name="goodsDetails">
                 <component :is="current"></component>
             </el-tab-pane>
-            <el-tab-pane v-if="editor && resellConfigInfo && goodsDetail" label="分销设置" name="subCommission">
+            <!-- <el-tab-pane v-if="editor && resellConfigInfo && goodsDetail" label="分销设置" name="subCommission">
                 <component :is="current" :resellConfigInfo="resellConfigInfo" :detail="goodsDetail"></component>
-            </el-tab-pane>
+            </el-tab-pane> -->
         </el-tabs>
     </div>
 </template>
