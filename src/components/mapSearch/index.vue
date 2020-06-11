@@ -80,6 +80,28 @@ export default {
     };
   },
   methods: {
+    getPoiDetail(poi) {
+      console.log(poi)
+      const tencentCode = poi.ad_info.adcode
+      const data = Object.assign({}, poi)
+      if (tencentCode) {
+        this._apis.map.getParentAreaCode({ tencentCode }).then(response =>{
+          console.log('---response--',response)
+          delete data.ad_info
+          data.provinceCode = response.provinceCode
+          data.cityCode = response.cityCode
+          data.areaCode = response.areaCode
+          data.provinceName = response.provinceName
+          data.cityName = response.cityName
+          data.areaName = response.areaName
+          this.$emit('getMapClickPoi', data)
+        }).catch(error =>{
+          console.log(error)
+          // reject(error)
+          this.$emit('getMapClickPoi', data)
+        })
+      }
+    },
     // 清空查询结果列表
     clearSearchResultList() {
       this.pois = []
@@ -127,9 +149,11 @@ export default {
               const poi = {
                 address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
                 location:res.result.location,
-                title: res.result.formatted_addresses.recommend
+                title: res.result.formatted_addresses.recommend,
+                ad_info: res.result.ad_info
               }
-              self.$emit('getMapClickPoi', poi)
+              console.log('----item----', poi)
+              self.getPoiDetail(poi)
               self.openInfoWindow(self.info, null, self.mapObj, poi)
             }).catch((err) => {
               console.log(err)
@@ -251,7 +275,9 @@ export default {
         qq.maps.event.addListener(makerAdd, 'click', function(e) {    
           self.info.close();
           self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
-          self.$emit('getMapClickPoi', poi)
+          console.log('-----item-----', poi)
+          self.getPoiDetail(poi)
+          // self.$emit('getMapClickPoi', poiInfo)
         })
         this.markers.push(makerAdd)
       }
@@ -281,7 +307,9 @@ export default {
         this.info.close();
       }
       this.openInfoWindow(this.info, this.markers[index], this.mapObj, item)
-      this.$emit('getMapClickPoi', item)
+      console.log('----item----', item)
+      this.getPoiDetail(item)
+      // this.$emit('getMapClickPoi', item)
     }
   },
   watch: {

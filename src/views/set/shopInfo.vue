@@ -420,12 +420,12 @@ export default {
         logo:this.form.logo,
         logoCircle:this.form.logoCircle,
         phone:this.form.phone,
-        // province: this.province,
-        // city: this.city,
-        // area: this.area,
-        // provinceCode:this.form.addressCode[0],
-        // cityCode:this.form.addressCode[1],
-        // areaCode:this.form.addressCode[2],
+        province: this.province,
+        city: this.city,
+        area: this.area,
+        provinceCode:this.form.addressCode[0],
+        cityCode:this.form.addressCode[1],
+        areaCode:this.form.addressCode[2],
         sendAddress: this.form.sendAddress,
         address: this.form.address,
         shopIntroduce:this.form.shopIntroduce,
@@ -650,6 +650,14 @@ export default {
       this.form.lat = poi.location.lat
       this.form.lng = poi.location.lng
       this.isMapChoose = true
+      const arr = [poi.provinceCode, poi.cityCode, poi.areaCode]
+      this.form.addressCode = arr;
+      this.province = poi.provinceName
+      this.city = poi.cityName
+      this.area = poi.areaName
+      this.$nextTick(() => {
+        this.isInit = true
+      })
       // this.getProvincesCities(poi.address)
     }
   }
