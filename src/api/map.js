@@ -31,3 +31,15 @@ export function getGeocoderAddress(data) {
     data
   })
 }
+
+// 通过code码查询省市区
+
+export function getParentAreaCode(data) {
+  return request({
+    target:'PUBLIC-AREA-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'goodsOperate',
+    noCid: true,
+    data
+  })
+}
