@@ -5,7 +5,7 @@
         <el-switch v-model="form.isOpen" @change="handleIsOpen"></el-switch>
         <span class="promit"><span>{{ getSwitchTxt }}</span>启用后，买家下单可以选择快递发货，由你安排快递送货上门</span>
       </el-form-item> -->
-      <el-form-item label="开启物流轨迹查询" prop="isTrace">
+      <el-form-item class="isTrace" label="开启物流轨迹查询" prop="isTrace">
         <el-radio-group v-model="form.isTrace">
           <el-radio :label="1" class="pr50">是</el-radio>
           <el-radio :label="0">否</el-radio>
@@ -202,6 +202,9 @@ export default {
 .courierSettings {
   background-color: #fff;
   padding: 6px 20px 50px 20px;
+  .isTrace {
+    margin-bottom: 0px;
+  }
   .promit {
     font-size:12px;
     font-weight:400;
@@ -216,15 +219,17 @@ export default {
     }
   }
   .explain {
+    padding-top: 4px;
     padding-left: 125px;
     padding-bottom: 20px;
     font-size:12px;
     font-weight:400;
-    color:rgba(61,67,74,1);
+    color:rgba(61,67,74,.5);
     line-height:17px;
   }
   .idKey {
     padding-left: 110px;
+    margin-bottom: 10px;
   }
   .pr50 {
     padding-right: 50px;
