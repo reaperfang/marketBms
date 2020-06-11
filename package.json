@@ -11,6 +11,7 @@
     "build:test3": "cross-env NODE_ENV=test3 node build/build.js",
     "build:test4": "cross-env NODE_ENV=test4 node build/build.js",
     "build:test5": "cross-env NODE_ENV=test5 node build/build.js",
+    "build:test6": "cross-env NODE_ENV=test6 node build/build.js",
     "build:pre": "cross-env NODE_ENV=pre node build/build.js",
     "build:prod": "cross-env NODE_ENV=prod node build/build.js"
   },
