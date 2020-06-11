@@ -203,6 +203,7 @@ export default {
         p{
             width:100%;
             margin:0;
+            white-space:normal;
         }
     }
     .componentGoodsGroup_tab.menuStyle1 {
@@ -211,6 +212,9 @@ export default {
       p {
         width: 100%;
         color:rgba(102,102,102,1);
+        line-height:20px;
+        @extend .flexCenterMiddle;
+        height:44px;
       }
       p.active {
           &:after {

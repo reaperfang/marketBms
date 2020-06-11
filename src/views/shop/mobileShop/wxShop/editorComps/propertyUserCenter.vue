@@ -177,8 +177,8 @@ export default {
           },
           address: {
             name: 'address',
-            title: '收货地址',
-            titleValue: '收货地址',
+            title: '地址管理',
+            titleValue: '地址管理',
             icon: '',
             defaultIcon: 'userCenter18',
             color: '#000'
