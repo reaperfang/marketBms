@@ -20,7 +20,7 @@
 						{{item.name}}
 					</div>
 				</div>
-				<div class="template_wrapper-head-industries-option" @click="showAllIndustries">
+				<div class="template_wrapper-head-industries-option" @click="showAllIndustries" v-show="showAllBtn">
 					{{ifShowAll ? '收起' : '全部显示'}}<i :class="ifShowAll ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
 				</div>
 			</div>
@@ -42,8 +42,8 @@
 							<el-checkbox v-model="checked">只看免费模板</el-checkbox>
 						</el-form-item>
 						<el-form-item label="" prop="name">
-							<el-input-number v-model="ruleForm.lowPrice" controls-position="right" :precision="2"></el-input-number><span> &nbsp;-</span>
-							<el-input-number v-model="ruleForm.highPrice" controls-position="right" :precision="2"></el-input-number>
+							<el-input-number v-model="ruleForm.lowPrice" controls-position="right" :precision="2" :disabled="checked" :min="0"></el-input-number><span> &nbsp;-</span>
+							<el-input-number v-model="ruleForm.highPrice" controls-position="right" :precision="2" :disabled="checked" :min="0"></el-input-number>
 						</el-form-item>
 					</el-form>
 				</div>
@@ -144,15 +144,17 @@
 		components: { templatePay, emptyList },
 		data () {
 			return {
+				showAllBtn: false,
 				tempInfo: {},
 				dialogVisible: false,
 				checkboxGroup1: [],
 				styleShow: {
-					flexFlow: 'row wrap'
+					maxHeight: '150px',
+					overflowY: 'scroll'
 				},
 				styleHidden: {
 					height: '50px',
-					overflow: 'hidden'
+					overflowY: 'hidden'
 				},
 				ifShowAll: false,
 				ruleForm: {
@@ -160,7 +162,7 @@
 					lowPrice: undefined,
 					highPrice: undefined,
 					industryIds: [],
-					chargeType: 0,
+					chargeType: '',
 					type: 1
 				},
 				num: 0,
@@ -202,6 +204,8 @@
 			'checked': function (v) {
 				if (v) {
 					this.ruleForm.chargeType = 1
+					this.ruleForm.lowPrice = undefined
+					this.ruleForm.highPrice = undefined
 				} else {
 					this.ruleForm.chargeType = 0
 				}
@@ -215,7 +219,7 @@
 					lowPrice: undefined,
 					highPrice: undefined,
 					industryIds: [],
-					chargeType: 0,
+					chargeType: '',
 					type: 1
 				}
 				this.checkboxGroup1 = []
@@ -236,7 +240,12 @@
 					this.preload(this.templateList, 'photoDetailsUrl');
 					this.loading = false;
 				}).catch((error)=>{
-					console.error(error);
+					this.$alert(error, '警告', {
+						confirmButtonText: '确定',
+						callback: action => {
+
+						}
+					});
 					this.templateList = [];
 					this.loading = false;
 				});
@@ -363,10 +372,17 @@
 			},
 			// 有效行业列表
 			effIndustryList(){
-				console.log(3243214321)
 				this._apis.industry.effIndustryList({}).then((response)=>{
-					console.log(response)
 					this.industries = response
+					let that = this
+					this.$nextTick(function () {
+						let height = document.getElementsByClassName('template_wrapper-head-industries-items')[0].scrollHeight
+						if (height > 50) {
+							this.showAllBtn = true
+						} else {
+							this.showAllBtn = false
+						}
+					})
 				}).catch((error)=>{
 					console.error(error);
 				});
@@ -460,6 +476,7 @@
 			}
 		}
 		&-conditions {
+			background: #ffffff;
 			width: 100%;
 			height: 100px;
 			margin-top: 16px;
