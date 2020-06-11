@@ -1,10 +1,10 @@
-/* 
+/*
  * 代理表配置文件
  */
 
 module.exports = {
     '/data-server/**': {
-      target: 'http://test-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
+      target: 'http://172.22.146.129:8082',//https://test-omo.aiyouyi.cn
       changeOrigin: true,
       pathRewrite: {
         '^/data-server': ''

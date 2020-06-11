@@ -5,11 +5,11 @@
 			<el-tab-pane label="活动模板" name="activeTemplate"></el-tab-pane>
 			<el-tab-pane label="我的模板" name="myTemplate"></el-tab-pane>
 			<div class="template-search" v-if="currentTab !== 'myTemplate' ">
-				<el-button size="small" class="template-search-reset">重置</el-button>
-				<el-button size="small" class="template-search-search">查询</el-button>
+				<el-button size="small" class="template-search-reset" @click="resetAndFetch">重置</el-button>
+				<el-button size="small" class="template-search-search" @click="fetchList">查询</el-button>
 			</div>
 		</el-tabs>
-		<component :is="currentTab"></component>
+		<component :is="currentTab" ref="templateChild"></component>
 	</div>
 </template>
 
@@ -29,6 +29,12 @@
 		methods: {
 			handleClick(comp) {
 				this.currentTab = comp.name;
+			},
+			resetAndFetch() {
+				this.$refs.templateChild.resetfetch()
+			},
+			fetchList() {
+				this.$refs.templateChild.fetch()
 			}
 		}
 	};

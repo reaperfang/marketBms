@@ -8,7 +8,7 @@
 					closable
 					@close="handleSelectItems(item)"
 					effect="plain">
-					{{ item }}
+					{{ getIndustryName(item) }}
 				</el-tag>
 			</div>
 			<div class="template_wrapper-head-industries">
@@ -16,8 +16,8 @@
 					<div class="template_wrapper-head-industries-item" @click="handleSelectAll" :style="{background: checkboxGroup1.length ===  industries.length ? '#655EFF' : '#ffffff',color: checkboxGroup1.length ===  industries.length ? '#ffffff' : '#B6B5C8'}">
 						全部
 					</div>
-					<div class="template_wrapper-head-industries-item" v-for="(item, index) of industries" :key="index + 'industries'" @click="handleSelectItems(item)" :style="{background: checkboxGroup1.indexOf(item) > -1 ? '#655EFF' : '#ffffff',color: checkboxGroup1.indexOf(item) > -1 ? '#ffffff' : '#B6B5C8'}">
-						{{item}}
+					<div class="template_wrapper-head-industries-item" v-for="(item, index) of industries" :key="index + 'industries'" @click="handleSelectItems(item.id)" :style="{background: checkboxGroup1.indexOf(item.id) > -1 ? '#655EFF' : '#ffffff',color: checkboxGroup1.indexOf(item.id) > -1 ? '#ffffff' : '#B6B5C8'}">
+						{{item.name}}
 					</div>
 				</div>
 				<div class="template_wrapper-head-industries-option" @click="showAllIndustries">
@@ -31,18 +31,19 @@
 				<div class="template_wrapper-head-conditions-center">
 					<el-form ref="ruleForm" :model="ruleForm" :inline="true">
 						<el-form-item label="" prop="name">
-							<el-radio-group v-model="orderType" size="small">
-								<el-radio-button label="综合排序"></el-radio-button>
-								<el-radio-button label="价格">价格<i class="el-icon-top"></i><i class="el-icon-bottom"></i></el-radio-button>
-								<el-radio-button label="人气从高到低"></el-radio-button>
+							<el-radio-group v-model="ruleForm.sortBy" size="small" @change="sortByChange">
+								<el-radio-button :value="0" :label="0">综合排序</el-radio-button>
+								<el-radio-button :value="1" :label="1">价格<i class="el-icon-top"></i></el-radio-button>
+								<el-radio-button :value="2" :label="2">价格<i class="el-icon-bottom"></i></el-radio-button>
+								<el-radio-button :value="3" :label="3">人气从高到低</el-radio-button>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="" prop="name">
 							<el-checkbox v-model="checked">只看免费模板</el-checkbox>
 						</el-form-item>
 						<el-form-item label="" prop="name">
-							<el-input-number v-model="num" controls-position="right" :min="1" :max="10"></el-input-number><span> &nbsp;-</span>
-							<el-input-number v-model="num" controls-position="right" :min="1" :max="10"></el-input-number>
+							<el-input-number v-model="ruleForm.lowPrice" controls-position="right" :precision="2"></el-input-number><span> &nbsp;-</span>
+							<el-input-number v-model="ruleForm.highPrice" controls-position="right" :precision="2"></el-input-number>
 						</el-form-item>
 					</el-form>
 				</div>
@@ -53,43 +54,11 @@
 		</div>
 		<div class="template_wrapper">
 			<ul v-show="templateList.length > 0" class="clearFix" v-loading="loading">
-				<li v-if="!templateList.length">
+				<li v-for="(item, key) of templateList" :key="key">
 					<div class="inner">
-						<div class="view">
-							<div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
-						</div>
-						<div class="info">
-							<div class="top">
-								<span>空白模板</span>
-							</div>
-							<div class="bottom">
-								<span class="price"></span>
-								<el-button type="primary" plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li v-for="(item, key) of templateList" :key="key" v-else>
-
-					<div class="inner" v-if="item.sort === 0">
-						<div class="view">
-							<div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
-						</div>
-						<div class="info">
-							<div class="top">
-								<span>空白模板</span>
-							</div>
-							<div class="bottom">
-								<span class="price"></span>
-								<el-button type="primary" plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
-							</div>
-						</div>
-					</div>
-
-					<div class="inner" v-else>
 						<div class="inner-tag">
 							<img src="@/assets/images/template-tag-icon.png"/>
-							<span>使用人数：9999</span>
+							<span>使用人数：{{item.useCount}}</span>
 						</div>
 						<div class="view">
 							<img :src="item.photoHalfUrl" alt="">
@@ -100,15 +69,15 @@
 						</div>
 						<div class="info">
 							<div class="top">
-								<div class="price" v-show="key < 5">
+								<div class="price"  v-show="item.chargeType !== 1">
 									<div class="price-left">
-										￥199<span style="color:rgba(146,146,155,1);">/</span>
+										￥{{item.price}}<span style="color:rgba(146,146,155,1);">/</span>
 									</div>
 									<div class="price-right">
-										90天
+										{{getChangeType(item.chargeType)}}
 									</div>
 								</div>
-								<div class="free"  v-show="key >= 5">
+								<div class="free"  v-show="item.chargeType === 1">
 									<div class="free-left">
 										免费
 									</div>
@@ -169,7 +138,6 @@
 	import tableBase from '@/components/TableBase';
 	import emptyList from './components/emptyList';
 	import templatePay from './components/templatePay';
-	const cityOptions = ['上海', '北京', '广州', '深圳', 'xxx', 'xxx1', 'xxx2', 'xxx3', 'xxx4', 'xxx5', 'xxx6', 'xxx7', 'xxx8', 'xxx9', 'xxx10', 'xxx11', 'xxx18', 'xxx19', 'xxx110', 'xxx111', 'xxx28', 'xxx29', 'xxx210', 'xxx211'];
 	export default {
 		name: 'templateManage',
 		extends: tableBase,
@@ -188,14 +156,16 @@
 				},
 				ifShowAll: false,
 				ruleForm: {
-					status: '0',
-					pageCategoryInfoId: '',
-					name: '',
-					dateSort: 0
+					sortBy: 0,
+					lowPrice: undefined,
+					highPrice: undefined,
+					industryIds: [],
+					chargeType: 0,
+					type: 1
 				},
 				num: 0,
 				orderType: '',
-				industries: cityOptions,
+				industries: [],
 				checked: false,
 				pageSize: 12,
 				loading: true,
@@ -210,6 +180,7 @@
 			}
 		},
 		created() {
+			this.effIndustryList()
 			this.fetch();
 			this.preLoadObj = new Image();
 		},
@@ -228,15 +199,36 @@
 					this.$refs.bigImage.style.height = '100%';
 				}
 			},
+			'checked': function (v) {
+				if (v) {
+					this.ruleForm.chargeType = 1
+				} else {
+					this.ruleForm.chargeType = 0
+				}
+			}
 		},
 		methods: {
+			resetfetch() {
+				this.checked = false
+				this.ruleForm = {
+					sortBy: 0,
+					lowPrice: undefined,
+					highPrice: undefined,
+					industryIds: [],
+					chargeType: 0,
+					type: 1
+				}
+				this.checkboxGroup1 = []
+				this.startIndex = 1
+				this.fetch()
+			},
 			fetch() {
 				this.loading = true;
-				console.log(11,this.startIndex);
-				console.log(22,this.pageSize);
-				this._apis.goodsOperate.getTemplateList({
+				this.ruleForm.industryIds = this.checkboxGroup1
+				this._apis.goodsOperate.getEffTemplateList({
 					startIndex: this.startIndex,
-					pageSize: this.pageSize
+					pageSize: this.pageSize,
+					...this.ruleForm
 				}).then((response)=>{
 					this.total = response.total;
 					this.templateList = response.list;
@@ -344,8 +336,50 @@
 					this.checkboxGroup1 = []
 				} else {
 					this.checkboxGroup1.length = 0
-					this.checkboxGroup1.push(...this.industries)
+					this.industries.map(item => {
+						this.checkboxGroup1.push(item.id)
+					})
 				}
+			},
+			getChangeType(code) {
+				if (code === 1) {
+					return ''
+				} else if (code === 1) {
+					return '永久免费'
+				} else if (code === 2) {
+					return '30天'
+				} else if (code === 3) {
+					return '90天'
+				} else if (code === 4) {
+					return '180天'
+				} else if (code === 5) {
+					return '360天'
+				} else if (code === 6) {
+
+				}
+			},
+			sortByChange(v) {
+				this.fetch()
+			},
+			// 有效行业列表
+			effIndustryList(){
+				console.log(3243214321)
+				this._apis.industry.effIndustryList({}).then((response)=>{
+					console.log(response)
+					this.industries = response
+				}).catch((error)=>{
+					console.error(error);
+				});
+			},
+			// 获取行业名称
+			getIndustryName(id) {
+				let name = ''
+				this.industries.map(item => {
+					if (item.id == id) {
+						name =  item.name
+					}
+				})
+				return name
 			}
 		}
 	}

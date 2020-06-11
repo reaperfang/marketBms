@@ -69,8 +69,8 @@ export function fetchPublicSensitiveList(data) {
         data,
         apiType: 'goodsOperate'
       })
-  }  
-  
+  }
+
   //修改会员协议
   export function setProtocol(data) {
       return request({
@@ -79,8 +79,8 @@ export function fetchPublicSensitiveList(data) {
         data,
         apiType: 'goodsOperate'
       })
-  }  
-  
+  }
+
   //获取系统内置图库组
   export function getSystemIconGroup(data) {
       return request({
@@ -89,8 +89,8 @@ export function fetchPublicSensitiveList(data) {
         data,
         apiType: 'goodsOperate'
       })
-  }  
-  
+  }
+
   //根据分组ID获取系统内置图片
   export function getSystemIconByGroupId(data) {
       return request({
@@ -99,8 +99,8 @@ export function fetchPublicSensitiveList(data) {
         data,
         apiType: 'goodsOperate'
       })
-  }   
-  
+  }
+
   //模板列表
   export function getTemplateList(data) {
       return request({
@@ -109,7 +109,7 @@ export function fetchPublicSensitiveList(data) {
         data,
         apiType: 'goodsOperate'
       })
-  } 
+  }
 
   //获取店铺装修某个模板的页面列表
 export function getPagesByTemplateId(data) {
@@ -121,3 +121,12 @@ export function getPagesByTemplateId(data) {
     })
 }
 
+//上架模板列表
+export function getEffTemplateList(data) {
+	return request({
+		target: 'PUBLIC-MB-PAGE-TEMPLATE-FIND-PROCESSOR',
+		method: 'post',
+		data,
+		apiType: 'goodsOperate'
+	})
+}
