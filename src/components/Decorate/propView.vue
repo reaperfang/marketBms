@@ -107,8 +107,15 @@ export default {
 <style lang="scss" scoped>
   .props {
     background-color: #fff;
+    padding: 12px 18px;
+    &.module {
+      width: 361px;
+    }
     .props-content {
       overflow-y: auto;
+    }
+    .help_blank {
+      background-color: #fff!important;
     }
   }
   .props-content::-webkit-scrollbar-thumb {

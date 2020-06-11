@@ -29,13 +29,14 @@
 .add_button {
       border: 2px dashed rgb(211, 211, 211);
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      width: 80px;
-      height: 80px;
-
+      width: 96px;
+      height: 96px;
+      color:rgba(68,67,75,1);
+      background:rgba(242,242,249,1);
       &:hover {
             transition: all 0.4s;
             border: 2px dashed $globalMainColor;
@@ -43,9 +44,10 @@
 
       .inner {
             display: block;
-            width: 16px;
-            height: 16px;
-            background: url("../assets/images/shop/editor/icon_+.png") no-repeat 0 0;
+            width: 32px;
+            height: 32px;
+            background: url("../assets/images/shop/editor/plus.svg") no-repeat 0 0;
+            background-size: 100% 100%;
       }
 }
 
@@ -456,7 +458,7 @@ ul.cube {
             .block {
                   margin-bottom: 10px;
                   &.header {
-                        padding: 10px;
+                        padding: 10px 0;
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
@@ -484,7 +486,7 @@ ul.cube {
                   }
 
                   &.form {
-                        padding: 30px 20px 20px 20px;
+                        padding: 0 0 20px 0;
                         .el-form-item{
                               &:last-child{
                                     margin:0;
@@ -579,8 +581,8 @@ ul.cube {
 }
 
 .hide_tips{
-      color: #d3d8df;
-      font-size:13px;
+      color:rgba(146,146,155,1);
+      font-size:12px;
 }
 
 /* 跳转链接预览样式 */
