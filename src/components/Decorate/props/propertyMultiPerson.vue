@@ -32,12 +32,16 @@
         <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
       </el-form-item>
       <el-form-item label="显示个数" v-if="ruleForm.addType === 2" prop="showNumber">
-        <el-input  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最大设置为30个</p>  
+        <div class="row align-center">
+          <el-input style="width: 101px;"  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
+          <p style="color: rgb(211, 211, 211);margin-left:6px;font-size: 12px;">建议最大设置为30个</p> 
+        </div>
       </el-form-item>
       <el-form-item label="" v-if="ruleForm.addType === 2" prop="showAllBtns">
-        <el-checkbox v-model="ruleForm.showAllBtns">查看全部按钮</el-checkbox>
-        <el-button type="text" @click="dialogVisible=true; currentDialog='dialogMultiPersonDemo'">查看示例</el-button>
+        <div class="row align-center">
+          <el-checkbox v-model="ruleForm.showAllBtns">查看全部按钮</el-checkbox>
+          <el-button style="margin-left: 6px;" type="text" @click="dialogVisible=true; currentDialog='dialogMultiPersonDemo'">查看示例</el-button>
+        </div>
       </el-form-item>
       <el-form-item label="排序规则" v-if="ruleForm.addType === 2" prop="sortRule">
         <el-select v-model="ruleForm.sortRule" placeholder="请选择排序规则">
@@ -49,12 +53,12 @@
       </el-form-item>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
-          <el-radio :label="1">大图模式</el-radio>
-          <el-radio :label="2">一行两个</el-radio>
-          <el-radio :label="3">一行三个</el-radio>
-          <el-radio :label="4">详细列表</el-radio>
-          <el-radio :label="5">一大两小</el-radio>
-          <el-radio :label="6">横向滑动</el-radio>
+          <div><el-radio :label="1">大图模式</el-radio></div>
+          <div><el-radio :label="2">一行两个</el-radio></div>
+          <div><el-radio :label="3">一行三个</el-radio></div>
+          <div><el-radio :label="4">详细列表</el-radio></div>
+          <div><el-radio :label="5">一大两小</el-radio></div>
+          <div><el-radio :label="6">横向滑动</el-radio></div>
         </el-radio-group>
       </el-form-item>
     </div>
@@ -78,10 +82,10 @@
     <div class="block form">
       <el-form-item label="商品样式" prop="goodsStyle">
         <el-radio-group v-model="ruleForm.goodsStyle">
-          <el-radio :label="1">无边白底</el-radio>
-          <el-radio :label="2">卡片投影</el-radio>
-          <el-radio :label="3">描边白底</el-radio>
-          <el-radio :label="4">无边透明底</el-radio>
+          <div><el-radio :label="1">无边白底</el-radio></div>
+          <div><el-radio :label="2">卡片投影</el-radio></div>
+          <div><el-radio :label="3">描边白底</el-radio></div>
+          <div><el-radio :label="4">无边透明底</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="商品倒角" prop="goodsChamfer">
@@ -92,10 +96,10 @@
       </el-form-item>
       <el-form-item label="图片比例" prop="goodsRatio">
         <el-radio-group v-model="ruleForm.goodsRatio">
-          <el-radio :label="1">3:2</el-radio>
-          <el-radio :label="2">1:1</el-radio>
-          <el-radio :label="3">3:4</el-radio>
-          <el-radio :label="4">16:9</el-radio>
+          <div><el-radio :label="1">3:2</el-radio></div>
+          <div><el-radio :label="2">1:1</el-radio></div>
+          <div><el-radio :label="3">3:4</el-radio></div>
+          <div><el-radio :label="4">16:9</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="图片填充" prop="goodsFill">
@@ -146,7 +150,7 @@
       </el-form-item>
       <el-form-item label="更多设置" prop="hideSaledGoods">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
+        <p class="hide_tips">隐藏后，活动商品将不在微商城显示</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
         <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <el-radio :label="1">24小时后隐藏</el-radio>
