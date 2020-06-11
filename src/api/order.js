@@ -618,7 +618,7 @@ export function getTimeSlot(data) {
   return request({
     target: 'ORDER-DELIVER-INFO-DETAIL-PROCESS',
     method: 'post',
-    apiType: 'order',
+    apiType: 'manager',
     data
   })
 }
