@@ -1085,6 +1085,7 @@ export default {
             left: 0;
             top: 0;
             line-height: 22px;
+            color:#FD4C2BFF;
           }
         }
       }
@@ -1260,6 +1261,7 @@ export default {
   }
   .timeslot-popover {
     position: relative;
+    padding-top: 15px;
     p, li {
       font-size: 14px;
       line-height: 20px;

@@ -53,7 +53,7 @@ export default {
           map: this.mapObj,
           center: this.centerObj,
           radius,
-          fillColor: new qq.maps.Color(0, 255, 0, 0.5),
+          fillColor: new qq.maps.Color(81, 128, 250, 0.2),
           strokeWeight: 5,
           visible: this.visible
         });
