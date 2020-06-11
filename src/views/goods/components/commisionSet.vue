@@ -50,8 +50,12 @@
                 <span class="prompt">商品利润=订单实付金额-成本价-运费</span>
             </div>
             <div v-if="enable">
-                <div style="margin-top:25px;">
-                    <p class="line-tip">建议参考商品的实际利润设置分销比例，设置后该spu下的所有sku将均按照此比例计算分销金额</p>
+                <div class="commision totalCommission">
+                    <p style="margin-right:0px">层级佣金占比</p>
+                    <span class="prompt">层级佣金比例总和为100%，金额对应上面的分销总佣金。设置后该spu下的所有sku将均按照此比例计算分销金额</span>
+                </div>
+                <div style="margin-top:18px;">
+                    <!-- <p class="line-tip">建议参考商品的实际利润设置分销比例，设置后该spu下的所有sku将均按照此比例计算分销金额</p> -->
                     <!-- 分销比例设置 -->
                     <div class="commision">
                         <div class="commision-cell-left">
@@ -422,7 +426,7 @@ export default {
         color: #3D434A;
         display: flex   ;
         .line-title {
-            width: 98px;
+            width: 108px;
             text-align: left;            
         }
         .line-tip {
@@ -515,6 +519,7 @@ export default {
                 margin: 14px 60px 0 55px;
                 display: flex;
                 align-items: center;
+                display: none;
             }
             /deep/ .el-input {
                 width: 160px;
@@ -532,7 +537,7 @@ export default {
             }
         }
         .totalCommission {
-            margin-left: -86px;
+            margin-left: -96px;
             margin-top: 10px;
             p {
                 margin-top: 12px;
@@ -558,7 +563,7 @@ export default {
                 line-height: 34px;
                 text-align: left;
                 position: relative;
-                margin-left: 36px;
+                margin-left: 32px;
                 color: #FD932B;
                 &:before {
                     content: '';
