@@ -340,6 +340,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.operate-box span {
+    margin-right: 0!important;
+}
 .search {
     /deep/ .el-form-item__label {
         padding-right: 8px;
