@@ -164,7 +164,7 @@ export default {
     watch: {
         resellRule: {
             handler(value, oldVal){
-                let  regPos = /^[1-9]\d*$/;
+                let  regPos = /^[0-9]\d*$/;
                 if(
                     (regPos.test(value.percentOfCommissionOne) || value.percentOfCommissionOne === '') &&
                     (regPos.test(value.percentOfCommissionTwo) || value.percentOfCommissionTwo === '') &&
@@ -252,7 +252,7 @@ export default {
             }
             data.isAloneResellRule = this.enable ? 1 : 0;
             let  resellRule = Object.assign({}, this.resellRule);
-            let  regPos = /^[1-9]\d*$/;
+            let  regPos = /^[0-9]\d*$/;
 
             // 开启了独立分销
             if(this.status == 1 && this.enable) {
@@ -275,10 +275,14 @@ export default {
                     ) {
                         resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
                         let total = (resellRule.percentOfCommissionOne - 0);
-                        if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
+                        if(total!=1) {
+                            this.$message({ message: '当分销层级只有一级时，层级分销比例应为100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
+                        // if(total > 1  || total < 0) {
+                        //     this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
+                        //     return false;
+                        // } else data.resellRule = resellRule;
                     } else {
                         this.$message({ message: '分销比例必须是正整数', type: 'warning' });
                         return false;
@@ -292,8 +296,12 @@ export default {
                         resellRule.percentOfCommissionOne = resellRule.percentOfCommissionOne / 100;
                         resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0);
-                        if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
+                        // if(total > 1  || total < 0) {
+                        //     this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
+                        //     return false;
+                        // } else data.resellRule = resellRule;
+                        if(total != 1) {
+                            this.$message({ message: '所有层级分销比例相加之和应为100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
@@ -310,8 +318,12 @@ export default {
                         resellRule.percentOfCommissionTwo = resellRule.percentOfCommissionTwo / 100;
                         resellRule.percentOfCommissionThree = resellRule.percentOfCommissionThree / 100;
                         let total = (resellRule.percentOfCommissionOne - 0) + (resellRule.percentOfCommissionTwo - 0) + (resellRule.percentOfCommissionThree - 0);
-                        if(total > 1  || total < 0) {
-                            this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
+                        // if(total > 1  || total < 0) {
+                        //     this.$message({ message: '所有层级分销比例相加之和不能大于100%', type: 'warning' });
+                        //     return false;
+                        // } else data.resellRule = resellRule;
+                        if(total != 1) {
+                            this.$message({ message: '所有层级分销比例相加之和应为100%', type: 'warning' });
                             return false;
                         } else data.resellRule = resellRule;
                     } else {
@@ -351,7 +363,7 @@ export default {
     created() {
         // 商品详情
         let detail = this.detail;
-        console.log('商品详情detail',detail.isAloneResellRule)
+        console.log('商品详情detail',detail)
         if(detail.isAloneResellRule == 1){ // 是否独立分销商品
             this.enable = true;
             
