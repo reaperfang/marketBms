@@ -47,31 +47,31 @@
               style="width: 100%"
               :class="{isIE: isIE}"
             >
-              <el-table-column prop="areaInfoList" label="配送到" width="180">
+              <el-table-column prop="areaInfoList" label="配送到" width="150">
                 <template slot-scope="scope">
                   <span>{{scope.row.areaInfoList.map(val => val.cityName).join(',') || '默认运费（全国）'}}</span>
                 </template>
               </el-table-column>
-              <el-table-column :label="one" width="180">
+              <el-table-column :label="one" width="250">
                 <template slot-scope="scope">
-                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
                 </template>
               </el-table-column>
-              <el-table-column label="运费（元）" width="100">
+              <el-table-column label="运费（元）" width="150">
                 <template slot-scope="scope">
-                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.freight"></el-input>
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.freight"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column :label="two" width="180">
+              <el-table-column :label="two" width="250">
                 <template slot-scope="scope">
                   每增加
-                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.superaddition"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.superaddition"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}
                 </template>
               </el-table-column>
-              <el-table-column label="续费（元）" width="180">
+              <el-table-column label="续费（元）" width="250">
                 <template slot-scope="scope">
                   运费增加
-                  <el-input :disabled="$route.query.mode == 'look'" type="number" min="0" v-model="scope.row.renew"></el-input>
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.renew"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
