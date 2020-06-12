@@ -130,7 +130,8 @@ export default {
         explain: data.explain,
         pageCategoryInfoId: data.pageCategoryInfoId,
         colorStyle: data.colorStyle,
-        pageKey: data.pageKey
+        pageKey: data.pageKey,
+        pageTemplateId: data.pageTemplateId
       }
     },
 

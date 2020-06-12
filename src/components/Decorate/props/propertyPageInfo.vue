@@ -43,7 +43,8 @@ export default {
         colorStyle: '#ffffff',
         pageKey: '',
         status: 0,
-        vError: false
+        vError: false,
+        pageTemplateId: '-1'
       },
       rules: {
         name: [
