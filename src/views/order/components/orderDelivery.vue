@@ -79,7 +79,7 @@
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="50">
                 </el-table-column>
                 <el-table-column
                     prop="isAutoSend"
@@ -115,7 +115,7 @@
                 <el-table-column
                     prop="updateTime"
                     label="配送时间"
-                    width="170">
+                    width="110">
                     <template slot-scope="scope">
                         <div>
                             <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div> 

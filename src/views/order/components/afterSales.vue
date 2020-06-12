@@ -69,7 +69,8 @@
                 :data="tableData"
                 tooltip-effect="dark"
                 style="width: 100%"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleSelectionChange"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
                 <el-table-column
                     type="selection"
                     width="55">
@@ -98,7 +99,7 @@
                 <el-table-column
                     prop="updateTime"
                     label="取货时间"
-                    width="170">
+                    width="110">
                     <template slot-scope="scope">
                         <div>
                             <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div> 
@@ -339,6 +340,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.operate-box span {
+    margin-right: 0!important;
+}
 .search {
     /deep/ .el-form-item__label {
         padding-right: 8px;

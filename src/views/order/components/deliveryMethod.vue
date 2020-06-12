@@ -1,5 +1,5 @@
 <template>
-    <div class="el-form-item">
+    <div class="el-form-item" style="margin-right: 0;">
         <el-form-item :label="isAfterSales ? '退货方式' : '配送方式'">
           <el-select v-model="listQuery.deliveryWay" @change="deliveryMethodChange">
             <el-option label="全部" value></el-option>

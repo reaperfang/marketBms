@@ -6,8 +6,9 @@
       title="搜索地图"
       :visible.sync="centerDialogVisible"
       width="60%"
+      :close-on-click-modal="false"
       center>
-      <div style="height: 580px;">
+      <div style="height: 480px;">
         <map-search 
         class="map"
         ref="shopInfoMap"

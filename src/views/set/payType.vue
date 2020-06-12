@@ -20,7 +20,7 @@
             <a class="wxinfo_set" @click="_routeTo('wxSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
           </div>
         </div>
-        <div class="pay_item">
+        <!-- <div class="pay_item">
           <div class="left_cont">
             <img src="@/assets/images/set/set-pay4.png"/>
             <div class="note">
@@ -38,7 +38,7 @@
             </el-switch>
             <a class="wxinfo_set" @click="_routeTo('zfbSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
           </div>
-        </div>
+        </div> -->
         <div class="pay_item">
           <div class="left_cont">
             <img src="@/assets/images/set/set-pay2.png"/>

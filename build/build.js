@@ -13,7 +13,7 @@ const spinner = ora(
 )
 spinner.start()
 
-let webpackConfig = require(`./webpack.${process.env.NODE_ENV === 'dev' ? 'dev' : 'pack'}.conf`) || {}; 
+let webpackConfig = require(`./webpack.${process.env.NODE_ENV === 'dev' ? 'dev' : 'pack'}.conf`) || {};
 let assetsRoot = config[process.env.NODE_ENV].assetsRoot || '';
 let assetsSubDirectory = config[process.env.NODE_ENV].assetsSubDirectory || '';
 
@@ -40,6 +40,6 @@ rm(path.join(assetsRoot, assetsSubDirectory), err => {
     console.log(chalk.yellow(
       '  Tip: built files are meant to be served over an HTTP server.\n' +
       '  Opening index.html over file:// won\'t work.\n'
-    ))
+    ))    
   })
 })

@@ -66,7 +66,8 @@
                 :data="tableData"
                 tooltip-effect="dark"
                 style="width: 100%"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleSelectionChange"
+                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
                 <el-table-column
                     type="selection"
                     width="55">
