@@ -6,7 +6,7 @@
           placeholder="地图搜索"
           clearable
           v-model="keyword">
-        <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
+        <el-button slot="append" class="btn" @click="search" icon="el-icon-search"></el-button>
       </el-input>
         <div class="info-div" v-if="pois.length > 0">
           <ol :style="{height: height + 'px'}">
@@ -344,7 +344,10 @@ export default {
     width: 360px;
     padding:15px;
     z-index: 2;
-    
+    .btn {
+      background: #655eff;
+      color: #fff;
+    }
   }
   .search /deep/ .el-input__inner {
     border:0;
@@ -376,7 +379,7 @@ export default {
       }
       p:first-child {
         position: relative;
-        color:#0059B3;
+        color:#655eff;
         span {
           position: absolute;
           top: 0;
