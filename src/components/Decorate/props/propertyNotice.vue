@@ -3,6 +3,8 @@
     <div class="block form">
       <el-form-item label="公告" prop="notice">
         <el-input
+          type="textarea"
+          :rows="2"
           placeholder="请填写内容，如果过长，将会在手机上滚动显示"
           v-model="ruleForm.notice">
         </el-input>

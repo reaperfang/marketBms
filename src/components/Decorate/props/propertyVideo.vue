@@ -1,10 +1,10 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="70px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="60px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="视频" prop="source">
         <el-radio-group v-model="source">
           <el-radio :label="1">选择视频</el-radio>
-          <el-radio :label="2">粘贴视频地址(小程序v2.15<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;及以上版本支持)</el-radio>
+          <el-radio :label="2">粘贴视频地址 <span class="prop-message">小程序v2.15及以上版本支持</span></el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="" v-if="source === 1" prop="videoUrl">
@@ -21,7 +21,7 @@
         <div class="add_button" v-else @click="dialogVisible=true; currentDialog='dialogSelectVideo'">
           <i class="inner"></i>
         </div>
-        <p style="color:rgb(211, 211, 211);margin-top:5px;">建议视频宽高比16：9</p>
+        <p class="prop-message" style="margin-top:5px;">建议视频宽高比16：9</p>
       </el-form-item>
       <el-form-item label="" v-if="source === 2" prop="videoUrl">
         <el-input  v-model="ruleForm.videoUrl" placeholder="此处粘贴视频播放地址"></el-input>
@@ -42,7 +42,7 @@
         <div v-else-if="coverType === 2" class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
         </div>
-        建议图片宽高比16:9
+        <p class="prop-message">建议图片宽高比16:9</p>
       </el-form-item>
     </div>
 

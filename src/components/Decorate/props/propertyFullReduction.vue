@@ -8,7 +8,13 @@
         </el-input>
       </el-form-item> -->
       <el-form-item label="选择活动" prop="promotions">
-        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectFullReduction'">选择活动</el-button>
+        <div class="row align-center">
+          <div class="add-button-x">
+            <i class="el-icon-plus"></i>
+            <span @click="dialogVisible=true; currentDialog='dialogSelectFullReduction'">选择活动</span>
+          </div>
+          <p class="message">建议最多添加5个活动</p>
+        </div>
         <div v-loading="loading">
           <el-tag
             v-for="tag in list"
@@ -19,7 +25,6 @@
             {{tag.name}}
           </el-tag>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加5个活动</p>
       </el-form-item>
       <el-form-item label="展示样式" prop="displayStyle">
         <el-radio-group v-model="ruleForm.displayStyle">
@@ -120,4 +125,9 @@ export default {
 </script>
 
 <style lang="scss">
+  .message {
+    margin-left: 6px!important;
+    font-size: 12px;
+    color:rgba(146,146,155,1);
+  }
 </style>
