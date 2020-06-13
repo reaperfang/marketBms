@@ -54,24 +54,24 @@
               </el-table-column>
               <el-table-column :label="one" width="250">
                 <template slot-scope="scope">
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
                 </template>
               </el-table-column>
-              <el-table-column label="运费（元）" width="150">
+              <el-table-column label="运费（元）" width="200">
                 <template slot-scope="scope">
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.freight"></el-input>
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.freight"></el-input>
                 </template>
               </el-table-column>
               <el-table-column :label="two" width="250">
                 <template slot-scope="scope">
                   每增加
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.superaddition"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.superaddition"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}
                 </template>
               </el-table-column>
               <el-table-column label="续费（元）" width="250">
                 <template slot-scope="scope">
                   运费增加
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 100px" type="number" min="0" v-model="scope.row.renew"></el-input>
+                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.renew"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
@@ -249,19 +249,33 @@ export default {
       this.$refs[formName].validate((valid) => {
           if (valid) {
             if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/.test(val.freight))) {
-                this.$message({
-                  message: '运费仅支持输入正数，允许小数点后两位',
-                  type: 'warning'
-                });
-                return
-              }
-              if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/.test(val.renew))) {
-                this.$message({
-                  message: '续费仅支持输入正数，允许小数点后两位',
-                  type: 'warning'
-                });
-                return
-              }
+              this.$message({
+                message: '运费仅支持输入正数，允许小数点后两位',
+                type: 'warning'
+              });
+              return
+            }
+            if (this.tableData.some(val => (val.freight * 100) > 99999999)) {
+              this.$message({
+                message: '运费仅支持小于等于999999.99',
+                type: 'warning'
+              });
+              return
+            }
+            if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/.test(val.renew))) {
+              this.$message({
+                message: '续费仅支持输入正数，允许小数点后两位',
+                type: 'warning'
+              });
+              return
+            }
+            if (this.tableData.some(val => (val.renew * 100) > 99999999)) {
+              this.$message({
+                message: '续费仅支持小于等于999999.99',
+                type: 'warning'
+              });
+              return
+            }
             if(this.ruleForm.calculationWay == 1) {
               if(this.tableData.some(val => !/^[1-9]\d*$/.test(val.theFirst))) {
                 this.$message({
@@ -270,9 +284,23 @@ export default {
                 });
                 return
               }
+              if (this.tableData.some(val => val.theFirst > 999999)) {
+                this.$message({
+                  message: '首件仅支持小于等于999999',
+                  type: 'warning'
+                });
+                return
+              }
               if(this.tableData.some(val => !/^[1-9]\d*$/.test(val.superaddition))) {
                 this.$message({
                   message: '续件仅支持正整数',
+                  type: 'warning'
+                });
+                return
+              }
+              if (this.tableData.some(val => val.superaddition  > 999999)) {
+                this.$message({
+                  message: '续件仅支持小于等于999999',
                   type: 'warning'
                 });
                 return
@@ -285,9 +313,23 @@ export default {
                 });
                 return
               }
+              if (this.tableData.some(val => (val.theFirst * 1000) > 999999999)) {
+                this.$message({
+                  message: '首重仅支持小于等于999999.999',
+                  type: 'warning'
+                });
+                return
+              }
               if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,3})?$/.test(val.superaddition))) {
                 this.$message({
                   message: '续重仅支持输入正数，允许小数点后三位',
+                  type: 'warning'
+                });
+                return
+              }
+              if (this.tableData.some(val => (val.superaddition * 1000) > 999999999)) {
+                this.$message({
+                  message: '续重仅支持小于等于999999.999',
                   type: 'warning'
                 });
                 return
@@ -300,9 +342,23 @@ export default {
                 });
                 return
               }
+              if (this.tableData.some(val => (val.theFirst * 1000) > 999999999)) {
+                this.$message({
+                  message: '首体积仅支持小于等于999999.999',
+                  type: 'warning'
+                });
+                return
+              }
               if(this.tableData.some(val => !/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,3})?$/.test(val.superaddition))) {
                 this.$message({
                   message: '续体积仅支持输入正数，允许小数点后三位',
+                  type: 'warning'
+                });
+                return
+              }
+              if (this.tableData.some(val => (val.superaddition * 1000) > 999999999)) {
+                this.$message({
+                  message: '续体积仅支持小于等于999999.999',
                   type: 'warning'
                 });
                 return
