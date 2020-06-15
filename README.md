@@ -8,7 +8,7 @@ http://test-omo.aiyouyi.cn/xiaoyaoji/doc/2ShuYz40m这个是接口地址
 
 
 ```bash
-git clone http://git.300.cn/NRCP/nrcp-web/bms.git    //项目克隆...
+git clone http://git.300.cn/NRCP/nrcp-web/bms.git    //项目克隆
 
 cd bms  //进入根目录
  
