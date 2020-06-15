@@ -1,7 +1,7 @@
 <template>
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
-      <el-form-item label="选择模板" prop="templateType">
+      <el-form-item class="form-item-select-template" label="选择模板" prop="templateType">
         <ul class="tile-list n2 template_type">
           <li @click="selectTemplate(1)" :class="{'active': ruleForm.templateType === 1}">
             <div class="type1">
@@ -43,7 +43,7 @@
     </div>
     <div class="block form">
       添加导航：
-      <p style="color:rgb(211, 211, 211);margin-top:5px;">最多添加10个导航，鼠标拖拽可调整导航顺序</p>
+      <p class="prop-message" style="margin-top:5px;">最多添加10个导航，鼠标拖拽可调整导航顺序</p>
       <!-- 可拖拽调整顺序 -->
       <vuedraggable 
       class="drag-wrap item_list"
@@ -60,12 +60,13 @@
               </div>
               <div v-else class="add_button" @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">
                 <i class="inner"></i>
+                <p>上传图片</p>
               </div>
             </div>
             <div class="right">
               <p>
-                <span v-if="ruleForm.templateType === 1">图片标题</span>
-                <span v-else-if="ruleForm.templateType === 2">导航文字</span>
+                <span class="span-title" v-if="ruleForm.templateType === 1">图片标题</span>
+                <span class="span-title" v-else-if="ruleForm.templateType === 2">导航文字</span>
                 <el-input v-model="item.title"></el-input>
               </p>
               <p style="display:flex;">
@@ -75,7 +76,7 @@
                 type="text"
                 @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
               </p>
-              <div class="link_overview clearFix" v-if="item.linkTo">
+              <div class="link_overview clearFix arrow" v-if="item.linkTo">
                 <div class="cont l">
                   <span class="l" :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
                   <i @click="removeLink(item)"></i>
@@ -83,11 +84,14 @@
                 <span class="modify r" @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">修改</span>
               </div>
             </div>
-            <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
+            <i class="delete_btn" :class="{'input-linkTo' : item.linkTo}" @click.stop="deleteItem(item)" title="移除"></i>
           </li>
       </vuedraggable>
-      <el-button type="info" plain style="width:100%" @click="addNav">添加一个图文导航</el-button>
-      <p style="margin-top:10px;color:rgb(211,211,211)">{{suggestSize}}</p>
+      <div @click="addNav" class="add-button-x add-image-ad">
+        <i class="el-icon-plus"></i>
+        <span>添加一个图文导航</span>
+      </div>
+      <p class="prop-message" style="margin-top:10px;">{{suggestSize}}</p>
       <!-- <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航，拖动选中的导航可对其排序小程序 v2.3.1 及以上版本支持</p> -->
     </div>
 
@@ -246,15 +250,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.form {
+  &:nth-child(2) {
+    padding-left: 17px!important;
+  }
+  .form-item-select-template {
+    /deep/ .el-form-item__content {
+      margin-left: 15px!important;
+      clear: both;
+    }
+  }
+  .add_button {
+    width: 80px;
+    height: 80px;
+  }
+  .add-image-ad {
+    text-align: center;
+  }
+  .img_preview {
+    .delete_btn {
+      right: -8px;
+      top: -8px;
+    }
+  }
+}
 ul.template_type{
   li{
-    width:94px!important;
-    margin-right:10px!important;
-    // height:100px;
+    width:90px!important;
+    margin-right:20px!important;
+    height:100px;
     border:1px solid rgb(228,227,235);
-    padding:10px;
+    padding:20px 10px 10px 10px;
     box-sizing: border-box;
     cursor:pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     &.active{
       border:1px solid $globalMainColor;
     }
@@ -296,6 +327,7 @@ ul.template_type{
     p{
       margin-top:6px;
       text-align:center;
+      line-height: 21px;
     }
   }
 }
@@ -309,7 +341,7 @@ ul.template_type{
     margin-bottom:20px;
     position:relative;
     .left{
-      margin-right:20px;
+      margin-right:12px;
     }
     .right{
       display: flex;
@@ -317,23 +349,30 @@ ul.template_type{
       justify-content: center;
       p{
         span{
-
+          &.span-title {
+            margin-right: 10px;
+          }
         }
         .el-input{
-          width: 130px;
+          width: 142px;
           display: inline-block;
         }
       }
     }
      i.delete_btn{
-      width:20px;
-      height:20px;
+      width:14px;
+      height:14px;
       border-radius:50%;
       background:url('../../../assets/images/shop/editor/delete.png') no-repeat 0 0;
       position:absolute;
-      top: -6px;
-      right: -10px;
-      cursor:pointer;
+      cursor: pointer;
+      background-size: 100% 100%;
+      right: 0;
+      top: -1px;
+      &.input-linkTo {
+        right: 0;
+        top: -7px;
+      }
     }
   }
 }

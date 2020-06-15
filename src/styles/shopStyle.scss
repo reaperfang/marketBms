@@ -52,6 +52,10 @@
             background: url("../assets/images/shop/editor/plus.svg") no-repeat 0 0;
             background-size: 100% 100%;
       }
+      p {
+            line-height: 21px;
+            margin-top: 12px!important;
+      }
 }
 
 .add-button-x {
@@ -152,6 +156,12 @@
                   margin-right: 20px;
                   margin-bottom: 20px;
                   position: relative;
+                  width: 96px;
+                  height: 96px;
+                  border: 1px solid #eae9e9;
+                  &.add_button {
+                        border: 1px dashed #655EFF;
+                  }
                   &:nth-of-type(2n) {
                         margin-right: 0;
                   }
@@ -473,6 +483,14 @@ ul.cube {
                                     background: $globalMainColor;
                               }
                         }
+                        .component_desc{
+                              font-size:12px;
+                              font-family:PingFangSC-Regular,PingFang SC;
+                              font-weight:400;
+                              color:rgba(153,153,153,1);
+                              display:block;
+                              margin-top:10px;
+                        }
 
                         .state {
                               color:$errorColor;
@@ -492,7 +510,7 @@ ul.cube {
                   }
 
                   &.button {
-                        width:346px;
+                        width: 325px;
                         position:absolute;
                         bottom:0;
                         margin-bottom: 0;
@@ -589,15 +607,34 @@ ul.cube {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      &.arrow {
+            .cont {
+                  position: relative;
+                  &:before {
+                        content: " ";
+                        position: absolute;
+                        width: 8px;
+                        height: 8px;
+                        background: rgba(248,248,250,1);
+                        left: 26px;
+                        top: -5px;
+                        transform: rotate(45deg);
+                        border: 1px solid rgba(182,181,200,1);
+                        border-right: none;
+                        border-bottom: none;
+                  } 
+            }  
+      }
       .cont{
-            margin-right:12px;
+            margin-right:10px;
             display:flex;
             flex-direction: row;
             justify-content: space-between;
             width:178px;
             height:26px;
-            background:rgba(230,228,255,0.5);
+            background:rgba(248,248,250,1);
             border:1px solid rgba(182,181,200,1);
+            border-radius: 4px;
             span{
                   font-size: 12px;
                   font-family: MicrosoftYaHei;
@@ -633,4 +670,11 @@ ul.cube {
       font-size:12px;
       color:rgba(182,181,200,1);
       line-height: 21px;
+}
+.el-radio-group {
+      &.radio-block {
+            .el-radio {
+                  display: block;
+            }
+      }
 }

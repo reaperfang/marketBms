@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form class="property-coupon" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
     <div class="block form">
       <el-form-item label="添加方式" prop="addType">
         <el-radio-group v-model="ruleForm.addType">
@@ -8,7 +8,13 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="" prop="addType">
-        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectCoupon'" v-if="ruleForm.addType === 1">添加优惠券</el-button>
+        <div class="row align-center">
+          <div class="add-button-x add-coupon" @click="dialogVisible=true; currentDialog='dialogSelectCoupon'" v-if="ruleForm.addType === 1">
+            <i class="el-icon-plus"></i>
+            <span>添加优惠券</span>
+          </div>
+          <p class="prop-message" v-if="ruleForm.addType === 1">建议最多添加10张优惠券</p>  
+        </div>
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
             v-for="tag in list"
@@ -19,7 +25,6 @@
             {{tag.title}}
           </el-tag>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加10张优惠券</p>  
       </el-form-item>
       <el-form-item label="券活动数" prop="couponNumberType" v-if="ruleForm.addType === 2">
         <el-radio-group v-model="ruleForm.couponNumberType">
@@ -35,7 +40,7 @@
         <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 2">建议最大设置为10个</p>  
       </el-form-item>
       <el-form-item label="样式" prop="couponStyle">
-        <el-radio-group v-model="ruleForm.couponStyle">
+        <el-radio-group class="radio-block" v-model="ruleForm.couponStyle">
           <el-radio :label="1">样式1</el-radio>
           <el-radio :label="2">样式2</el-radio>
           <el-radio :label="3">样式3</el-radio>
@@ -56,7 +61,7 @@
         <el-checkbox v-model="ruleForm.hideScrambled">隐藏已抢完劵</el-checkbox>
       </el-form-item>
       <el-form-item label="">
-        <p>当页面无可显示的优惠券时，优惠券区块将隐藏</p>
+        <p class="prop-message">当页面无可显示的优惠券时，优惠券区块将隐藏</p>
       </el-form-item>
     </div>
 
@@ -227,6 +232,17 @@ export default {
 </script>
 
 <style lang="scss">
+.property-coupon {
+  .add-coupon {
+    flex-shrink: 0;
+    margin-right: 6px;
+  }
+  .wx-compact-color-item {
+    width: 34px;
+    height: 34px;
+    margin-right: 6px;
+  }
+}
 .tag_wrapper{
   max-height:300px;
   overflow-y: auto;
