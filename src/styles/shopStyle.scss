@@ -473,6 +473,14 @@ ul.cube {
                                     background: $globalMainColor;
                               }
                         }
+                        .component_desc{
+                              font-size:12px;
+                              font-family:PingFangSC-Regular,PingFang SC;
+                              font-weight:400;
+                              color:rgba(153,153,153,1);
+                              display:block;
+                              margin-top:10px;
+                        }
 
                         .state {
                               color:$errorColor;
@@ -492,7 +500,7 @@ ul.cube {
                   }
 
                   &.button {
-                        width:346px;
+                        width: 325px;
                         position:absolute;
                         bottom:0;
                         margin-bottom: 0;

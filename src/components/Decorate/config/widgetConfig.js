@@ -5,6 +5,7 @@
  * hidden：组件在预览区是否隐藏
  * preLoad: 组件是否预加载
  * isBase: 是否是基础组件，用于记录装修页面信息
+ * describe： 组件描述
  */
 export default {
   widgetList: {
@@ -43,7 +44,8 @@ export default {
               title: '富文本',
               hidden: false,
               preLoad: false,
-              isBase: false
+              isBase: false,
+              describe: '富文本展示以实际效果为准，左侧预览仅供参考'
             },
             {
               type: 'goods',
