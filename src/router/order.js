@@ -23,7 +23,7 @@ export default [
         component: () => import('@/views/order/orderDetail'),
         name: 'orderDetail',
         hidden: true,
-        meta: { title: '订单详情', noCache: true, tabTitle: '订单管理',navType:5 },
+        meta: { title: '查看详情', noCache: true, tabTitle: '订单管理',navType:5 },
       },
       {
         path: 'deliverGoods',
