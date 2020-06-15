@@ -15,6 +15,7 @@ export default{
   },
   created() {
     console.log('-------加载腾讯地图库,jsonp回调------')
+    console.log('-------------')
      /* 加载腾讯地图库,jsonp回调 */
       this.$jsonp(appConfig.map.url,{
         key: appConfig.map.key
@@ -32,6 +33,7 @@ export default{
             this.hideFenlei = false
           }
       });
+      console.log('ceshi')
   },
   mounted() {
     const _self = this;
