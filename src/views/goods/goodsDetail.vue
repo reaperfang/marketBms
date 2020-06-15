@@ -2381,6 +2381,12 @@ export default {
                         if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
                             this.ruleForm.productLabelId = '0'
                         }
+
+                        if(!this.shippingTemplates.find(val => val.id == this.ruleForm.freightTemplateId)) {
+                            this.ruleForm.freightTemplateId = ""
+                        }
+                        
+
                         this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                         this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
                         if(!this.itemCatText) {
