@@ -230,6 +230,9 @@ export default {
           this.addMarkers(response)
         } else {
           this.$message.error('暂无查询结果')
+          const lng = this.center[1] || 116.4071700000
+          const lat = this.center[0] || 39.9046900000
+          this.setPanTo(lng, lat, 4)
         }
       }).catch((err) => {
         this.$message.error('查询失败')
