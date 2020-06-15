@@ -75,9 +75,9 @@ export default {
       },
       'currentComponentData.data.ids': {
           handler(newValue, oldValue) {
-              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+              // if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                   this.fetch();
-              }
+              // }
           },
           deep: true
       }
