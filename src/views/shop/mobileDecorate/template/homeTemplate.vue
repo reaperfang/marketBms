@@ -129,7 +129,7 @@
 				</el-pagination>
 			</div>
 			<empty-list v-show="templateList.length === 0"></empty-list>
-			<template-pay :dialogVisible="dialogVisible" :tempInfo="tempInfo"></template-pay>
+			<template-pay :dialogVisible="dialogVisible" :tempInfo="tempInfo" :qrCodeInfo="qrCodeInfo" @closePay="closePay"></template-pay>
 		</div>
 	</div>
 </template>
@@ -178,7 +178,8 @@
 				imgNow: 0,  //当前预加载的第几张
 				preLoadObj: null,  //预加载对象
 				maxWidth: 550,  //最大宽度
-				mode: null
+				mode: null,
+				qrCodeInfo: {}
 			}
 		},
 		created() {
@@ -316,26 +317,33 @@
 
 			/* 应用模板 */
 			apply(item) {
-				this._apis.templatePay.getOrcode({
-					orderSource: 1,
-					orderType: 1,
-					shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
-					templateChargeType: item.chargeType,
-					templateId: item.id,
-					templateName: item.name,
-					templatePrice: item.price
-				}).then(res => {
-					this.dialogVisible = true
-					this.tempInfo = item
-				})
-				// this.confirm({
-				// 	title: '提示',
-				// 	customClass: 'goods-custom',
-				// 	icon: true,
-				// 	text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
-				// }).then(() => {
-				// 	this._routeTo('m_templateEdit', {id: item.id});
-				// })
+				if (item.chargeType !== 1) {
+					this._apis.templatePay.getOrcode({
+						orderSource: 1,
+						orderType: 1,
+						shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+						templateChargeType: item.chargeType,
+						templateId: item.id,
+						templateName: item.name,
+						templatePrice: item.price
+					}).then(res => {
+						this.qrCodeInfo = res
+						this.dialogVisible = true
+						this.tempInfo = item
+					})
+				} else {
+					this.confirm({
+						title: '提示',
+						customClass: 'goods-custom',
+						icon: true,
+						text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+					}).then(() => {
+						this._routeTo('m_templateEdit', {id: item.id});
+					})
+				}
+			},
+			closePay() {
+				this.dialogVisible = false
 			},
 			showAllIndustries() {
 				this.ifShowAll = !this.ifShowAll

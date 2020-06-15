@@ -2,7 +2,7 @@
 	<el-dialog
 		title="模板缴费"
 		:visible.sync="dialogVisible"
-		:before-close="handleClose">
+		:before-close="closePay">
 		<div class="templage-pay-content">
 			<div class="templage-pay-content-left">
 				<img :src="tempInfo.photoDetailsUrl"/>
@@ -28,12 +28,15 @@
 				<div class="templage-pay-content-right-codeTitle">
 					手机扫描二维码支付
 				</div>
-				<div class="templage-pay-content-right-code">
-
+				<div class="templage-pay-content-right-code"  id="qrcode" ref="qrcode">
+					<div class="templage-pay-content-right-code-cover" v-show="!intervalFlag" @click="refreshQrCode">
+						<i class="el-icon-refresh"></i>
+						<span class="templage-pay-content-right-code-cover-tip">二维码过期，刷新重试！</span>
+					</div>
 				</div>
 				<div class="templage-pay-content-right-btn">
-					<el-button @click="dialogVisible = false" class="templage-pay-content-right-btn-left">取 消</el-button>
-					<el-button @click="dialogVisible = false" class="templage-pay-content-right-btn-right">使用模版</el-button>
+					<el-button @click="closePay" class="templage-pay-content-right-btn-left">取 消</el-button>
+					<el-button @click="apply" class="templage-pay-content-right-btn-right" :disabled="disabled" :style="{backgroundColor: disabled ? '#92929B' : '#655EFF'}">使用模版</el-button>
 				</div>
 			</div>
 		</div>
@@ -41,6 +44,7 @@
 </template>
 
 <script>
+	import QRCode from 'qrcodejs2'
     export default {
         name: "templatePay",
 		props: {
@@ -55,16 +59,104 @@
 				default () {
 					return {}
 				}
+			},
+			qrCodeInfo: {
+				type: Object,
+				default () {
+					return ''
+				}
 			}
 		},
 		data() {
         	return {
-
+				time: 0,
+				timeInterval: '',
+				intervalFlag: false,
+				disabled: true
 			}
 		},
 		methods: {
 			handleClose() {
 				this.dialogVisible = false
+			},
+			qrcode() {
+				let qrcode = new QRCode('qrcode',{
+					width: 150, // 设置宽度，单位像素
+					height: 150, // 设置高度，单位像素
+					text: this.qrCodeInfo.billQRCode // 设置二维码内容或跳转地址
+				})
+				this.time = 0
+				this.disabled = true
+				this.intervalFlag = true
+				this.getPayInfo()
+			},
+			getPayInfo() {
+				let that = this
+				this.timeInterval = window.setTimeout(function () {
+					that._apis.templatePay.getPayInfo({
+						billDate: that.qrCodeInfo.billDate,
+						billNo: that.qrCodeInfo.billNo,
+						orderCode: that.qrCodeInfo.orderCode
+					}).then(res => {
+						if (res.orderStatus === 1 && that.intervalFlag && that.time < 60) {
+							that.time = that.time + 3
+							that.getPayInfo()
+						} else if (res.orderStatus === 2){
+							that.disabled = false
+							that.time = 0
+							that.intervalFlag = true
+							window.clearTimeout(that.timeInterval)
+							that.confirm({
+								title: '支付成功',
+								icon: true,
+								text: `支付成功，您的装修模版已经重启启用！`
+							}).then(() => {
+								// that._routeTo('m_templateEdit', {id: item.id});
+							})
+						} else if (that.time > 60) {
+							that.disabled = false
+							that.time = 0
+							that.intervalFlag = false
+							window.clearTimeout(that.timeInterval)
+						}
+					})
+				}, 3000)
+			},
+			refreshQrCode() {
+				this.time = 0
+				this.intervalFlag = true
+				this.getPayInfo()
+			},
+			apply() {
+				this.confirm({
+					title: '提示',
+					customClass: 'goods-custom',
+					icon: true,
+					text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+				}).then(() => {
+					this._routeTo('m_templateEdit', {id: this.tempInfo.id});
+				})
+			},
+			closePay() {
+				this.$emit('closePay')
+			}
+		},
+		watch: {
+            'dialogVisible': function (v) {
+				if (v) {
+					this.$nextTick(() => {
+						this.qrcode()
+					})
+				} else {
+					this.time = 0
+					this.intervalFlag = false
+					this.disabled = true
+					var el = document.getElementById('qrcode');
+					var childs = el.childNodes;
+					for (var i = childs.length - 1; i >= 0; i--) {
+						el.removeChild(childs[i]);
+					}
+				}
 			}
 		}
     }
@@ -173,9 +265,30 @@
 			line-height:16px;
 		}
 		&-code {
-			width:182px;
+			width:150px;
 			height:150px;
 			margin-top: 8px;
+			position: relative;
+			&-cover {
+				position: absolute;
+				cursor: pointer;
+				width: 100%;
+				height: 100%;
+				background: rgba(0,0,0,0.65);
+				z-index: 100;
+				top: 0;
+				left: 0;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				font-size: 60px;
+				color: #ffffff;
+				&-tip {
+					font-size: 12px;
+					line-height: 20px;
+				}
+			}
 		}
 		&-btn {
 			margin-top: 162px;
