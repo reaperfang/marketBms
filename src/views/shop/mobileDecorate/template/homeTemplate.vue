@@ -316,8 +316,18 @@
 
 			/* 应用模板 */
 			apply(item) {
-				this.dialogVisible = true
-				this.tempInfo = item
+				this._apis.templatePay.getOrcode({
+					orderSource: 1,
+					orderType: 1,
+					shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+					templateChargeType: item.chargeType,
+					templateId: item.id,
+					templateName: item.name,
+					templatePrice: item.price
+				}).then(res => {
+					this.dialogVisible = true
+					this.tempInfo = item
+				})
 				// this.confirm({
 				// 	title: '提示',
 				// 	customClass: 'goods-custom',
