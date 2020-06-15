@@ -3,8 +3,8 @@
     <div class="block form">
       <el-form-item label="搜索热词" prop="">
         <!-- <p>鼠标拖拽调整热词顺序，搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中 -->
-        <p>搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中
-          <el-button type="text" @click="dialogVisible=true; currentDialog='dialogGoodsSearchDemo'">查看示例</el-button>
+        <p class="prop-message hot-word">搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中
+          <span @click="dialogVisible=true; currentDialog='dialogGoodsSearchDemo'">查看示例</span>
         </p>
         <el-tag
           :key="tag"
@@ -25,7 +25,10 @@
           @blur="handleInputConfirm"
         >
         </el-input>
-        <el-button v-else class="button-new-tag" type="primary" size="small" @click="showInput">+ 添加热词</el-button>
+        <div v-else  @click="showInput" class="add-button-x add-button-x-add-word">
+          <i class="el-icon-plus"></i>
+          <span>添加热词</span>
+        </div>
       </el-form-item>
       <el-form-item label="搜索样式" prop="borderStyle">
         <el-radio-group v-model="ruleForm.borderStyle">
@@ -154,5 +157,16 @@ export default {
   }
   /deep/.m-colorPicker .box.open {
       z-index: 10!important;
+  }
+  .hot-word {
+    span {
+      font-size:14px;
+      color:rgba(101,94,255,1);
+      margin-left: 6px;
+    }
+  }
+  .add-button-x-add-word {
+    text-align: center;
+    margin-top: 5px;
   }
 </style>

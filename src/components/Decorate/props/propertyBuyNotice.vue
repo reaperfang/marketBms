@@ -34,6 +34,7 @@
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
               <i class="inner"></i>
+              <p>添加商品</p>
             </li>
           </ul>
         </div>
