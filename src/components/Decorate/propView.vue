@@ -5,6 +5,7 @@
         <div class="block header">
           <p class="title" v-if="componentDataMap[currentComponentId]">
             {{componentDataMap[currentComponentId].title}}
+            <span class="component_desc" v-if="componentDataMap[currentComponentId].describe">{{componentDataMap[currentComponentId].describe}}</span>
           </p>
           <p class="title" v-else>
             编辑

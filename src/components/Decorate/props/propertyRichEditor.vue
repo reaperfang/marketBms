@@ -1,7 +1,6 @@
 <template>
 <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :inline="true" v-calcHeight="height">
   <div class="block form">
-    <p class="message">富文本展示以实际效果为准，左侧预览仅供参考</p>
     <el-form-item label="背景颜色">
       <div class="color_block">
         <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
@@ -80,14 +79,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.message {
-  font-size:12px;
-  font-weight:400;
-  color:rgba(146,146,155,1);
-  line-height:17px;
-  margin-bottom: 20px;
-  padding-left: 13px;
-}
 /deep/.edui-editor{
     z-index: initial!important;
 }
