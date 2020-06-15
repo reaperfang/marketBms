@@ -265,8 +265,25 @@ export default {
 
 <style lang="scss" scoped>
 .goods_groups{
+  margin-top: 10px;
   .el-tag{
-    margin-right:5px!important;
+    margin-right:12px!important;
+  }
+  /deep/ .el-tag {
+    border-radius:4px;
+    border:1px dashed rgba(101,94,255,1);
+    padding: 4px 8px;
+    height: 100%;
+    background-color: #fff;
+    color: rgba(101,94,255,1);
+    font-size: 14px;
+    .el-tag__close {
+      color: rgba(101,94,255,1);
+      font-size: 16px;
+      &:hover {
+        background: #fff;
+      }
+    }
   }
 }
 .add-goods-group {
