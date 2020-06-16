@@ -52,7 +52,7 @@
         </el-radio-group> -->
         <wxColor v-model="ruleForm.couponColor" @input="yuan"></wxColor>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideScrambled" v-if="ruleForm.addType == 1">
+      <el-form-item label="更多设置" prop="hideScrambled">
         <el-checkbox v-model="ruleForm.hideScrambled">隐藏已抢完劵</el-checkbox>
       </el-form-item>
       <el-form-item label="">
@@ -95,7 +95,7 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    this.fetch(false);
   },
    watch: {
     'items': {
@@ -105,7 +105,6 @@ export default {
           this.ruleForm.ids.push(item.id);
         }
         this.fetch();
-        this._globalEvent.$emit('fetchCoupon', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -115,7 +114,6 @@ export default {
           return;
       }
       if(newValue == 2) {
-        this.ruleForm.hideScrambled = false;
         this.fetch();
       }else{
         this.list = [];
@@ -138,6 +136,14 @@ export default {
       }
       this.fetch();
     },
+    
+    /* 监听隐藏已抢完券 */
+    'ruleForm.hideScrambled'(newValue, oldValue) {
+      if(newValue === oldValue) {
+          return;
+      }
+      this.fetch();
+    },
 
     'ruleForm.ids': {
       handler(newValue, oldValue) {
@@ -154,8 +160,10 @@ export default {
   },
   methods: {
     //根据ids拉取数据
-    fetch(componentData = this.ruleForm) {
+    fetch(bNeedUpdateMiddle = true) {
+      const componentData = this.ruleForm;
         if(componentData) {
+          bNeedUpdateMiddle && this._globalEvent.$emit('fetchCoupon', this.ruleForm, this.$parent.currentComponentId);
           let params = {};
             if(componentData.addType == 2) {
               if(componentData.couponNumberType === 1) {
@@ -178,6 +186,11 @@ export default {
                 this.list = [];
                 return;
               }
+            }
+            if (componentData.hideScrambled) {
+              params.remainStockFlag = true
+            }else {
+              params.remainStockFlag =false
             }
 
             this.loading = true;

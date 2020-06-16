@@ -91,12 +91,12 @@
       <el-form-item label="显示内容" prop="showContents">
         <el-checkbox-group v-model="ruleForm.showContents">
           <el-checkbox label="1">商品名称</el-checkbox>
-          <el-checkbox label="2">商品描述</el-checkbox>
+          <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">商品描述</el-checkbox>
           <el-checkbox label="3">商品价格</el-checkbox>
           <el-checkbox label="4">商品原价</el-checkbox>
-          <el-checkbox label="5">抢购倒计时</el-checkbox>
-          <el-checkbox label="6">剩余库存</el-checkbox>
-          <el-checkbox label="7">限制规则</el-checkbox>
+          <el-checkbox label="5" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">抢购倒计时</el-checkbox>
+          <el-checkbox label="6" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 4 || ruleForm.listStyle === 6">剩余库存</el-checkbox>
+          <el-checkbox label="7" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 4 || ruleForm.listStyle === 6">限制规则</el-checkbox>
           <el-checkbox label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
         </el-checkbox-group>
         <el-radio-group v-if="ruleForm.showContents.includes('8') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
@@ -138,7 +138,7 @@ export default {
     return {
       ruleForm: {
         listStyle: 1,//列表样式
-        pageMargin: 15,//页面边距
+        pageMargin: 10,//页面边距
         goodsMargin: 10,//商品边距
         goodsStyle: 1,//商品样式
         goodsChamfer: 1,// 商品倒角
@@ -165,7 +165,7 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    this.fetch(false);
   },
   watch: {
     'items': {
@@ -175,7 +175,6 @@ export default {
           this.ruleForm.ids.push(item.activityId);
         }
         this.fetch();
-        this._globalEvent.$emit('fetchSecondkill', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -185,6 +184,25 @@ export default {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
+    },
+
+    'ruleForm.hideSaledGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideEndGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideType'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
     },
 
     'ruleForm.ids': {
@@ -202,8 +220,10 @@ export default {
   },
   methods: {
      //根据ids拉取数据
-    fetch(componentData = this.ruleForm) {
+    fetch(bNeedUpdateMiddle = true) {
+      const componentData = this.ruleForm;
         if(componentData) {
+            bNeedUpdateMiddle && this._globalEvent.$emit('fetchSecondkill', this.ruleForm, this.$parent.currentComponentId);
             const ids = componentData.ids;
             if(Array.isArray(ids) && ids.length){
                 this.loading = true;

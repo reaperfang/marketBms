@@ -18,6 +18,7 @@
             <div class="header-lefter-item number">{{index + 1}}</div>
             <div class="header-lefter-item fb">{{item.deliveryWay | deliveryWayFilter}}</div>
             <template v-if="item.deliveryWay == 1">
+            <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
             <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
             </template>
@@ -81,7 +82,7 @@
               <div class="message-item">{{item.receivedPhone}}</div>
             </div>
             <div class="message-item-list">
-              <div class="message-item">{{item.receiveAddress}}</div>
+              <div class="message-item">{{item.receiveAddress}} {{item.receivedDetail}}</div>
             </div>
           </div>
           <div class="message message2">
@@ -95,20 +96,20 @@
               <div class="message-item">{{item.sendPhone}}</div>
             </div>
             <div class="message-item-list">
-              <div class="message-item">{{item.sendAddress}}</div>
+              <div class="message-item">{{item.sendAddress}} {{item.sendDetail}}</div>
             </div>
           </div>
           </template> 
           <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
-            <el-table-column label="商品" width="300">
+            <el-table-column label="商品" width="400">
               <template slot-scope="scope">
                 <div class="goods-detail">
                   <div class="goods-detail-item">
                     <img width="66" :src="scope.row.goodsImage" alt />
                   </div>
-                  <div class="goods-detail-item">
-                    <p>{{scope.row.goodsName}}</p>
-                    <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                  <div class="goods-detail-item" style="width:300px;text-align:left;">
+                    <p class="ellipsis">{{scope.row.goodsName}}</p>
+                    <p class="ellipsis">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                   </div>
                 </div>
               </template>
@@ -253,11 +254,14 @@ export default {
                 sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
                 sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
                 id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+                createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
                 deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
                 deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
                 phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
                 receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
+                receivedDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedDetail || '',
                 sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
+                sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
                 receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
                 receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
                 sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || ''
@@ -293,13 +297,15 @@ export default {
       }
       
       arr.sort((a, b) => {
-        let timeA = new Date(a.createTime).getTime()
-        let timeB = new Date(b.createTime).getTime()
+        const thisTimeA = a.createTime.replace(/-/g, '/')
+        const thisTimeB = b.createTime.replace(/-/g, '/')
+        let timeA = new Date(thisTimeA).getTime()
+        let timeB = new Date(thisTimeB).getTime()
 
         if(timeA > timeB) {
-          return -1
-        } else if(timeA < timeB) {
           return 1
+        } else if(timeA < timeB) {
+          return -1
         } else if(timeA == timeB) {
           return 0
         } 
@@ -384,7 +390,7 @@ export default {
       .header {
         height: 60px;
         background-color: rgb(243, 244, 244);
-        border-radius: 10px;
+        border-radius: 10px 10px 0 0;
         padding: 0 20px;
         //line-height: 60px;
         display: flex;
@@ -427,12 +433,14 @@ export default {
           }
         }
         .remark {
-          border-top: 1px solid #cacfcb;
           padding-top: 20px;
         }
       }
     }
   }
+}
+/deep/ .el-table::before{
+  background-color: #cacfcb;
 }
 .message {
   font-size:14px;

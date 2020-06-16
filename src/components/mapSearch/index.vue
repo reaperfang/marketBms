@@ -6,7 +6,7 @@
           placeholder="地图搜索"
           clearable
           v-model="keyword">
-        <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
+        <el-button slot="append" class="btn" @click="search" icon="el-icon-search"></el-button>
       </el-input>
         <div class="info-div" v-if="pois.length > 0">
           <ol :style="{height: height + 'px'}">
@@ -80,6 +80,28 @@ export default {
     };
   },
   methods: {
+    getPoiDetail(poi) {
+      console.log(poi)
+      const tencentCode = poi.ad_info.adcode
+      const data = Object.assign({}, poi)
+      if (tencentCode) {
+        this._apis.map.getParentAreaCode({ tencentCode }).then(response =>{
+          console.log('---response--',response)
+          delete data.ad_info
+          data.provinceCode = response.provinceCode
+          data.cityCode = response.cityCode
+          data.areaCode = response.areaCode
+          data.provinceName = response.provinceName
+          data.cityName = response.cityName
+          data.areaName = response.areaName
+          this.$emit('getMapClickPoi', data)
+        }).catch(error =>{
+          console.log(error)
+          // reject(error)
+          this.$emit('getMapClickPoi', data)
+        })
+      }
+    },
     // 清空查询结果列表
     clearSearchResultList() {
       this.pois = []
@@ -127,9 +149,11 @@ export default {
               const poi = {
                 address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
                 location:res.result.location,
-                title: res.result.formatted_addresses.recommend
+                title: res.result.formatted_addresses.recommend,
+                ad_info: res.result.ad_info
               }
-              self.$emit('getMapClickPoi', poi)
+              console.log('----item----', poi)
+              self.getPoiDetail(poi)
               self.openInfoWindow(self.info, null, self.mapObj, poi)
             }).catch((err) => {
               console.log(err)
@@ -206,6 +230,9 @@ export default {
           this.addMarkers(response)
         } else {
           this.$message.error('暂无查询结果')
+          const lng = this.center[1] || 116.4071700000
+          const lat = this.center[0] || 39.9046900000
+          this.setPanTo(lng, lat, 4)
         }
       }).catch((err) => {
         this.$message.error('查询失败')
@@ -251,7 +278,9 @@ export default {
         qq.maps.event.addListener(makerAdd, 'click', function(e) {    
           self.info.close();
           self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
-          self.$emit('getMapClickPoi', poi)
+          console.log('-----item-----', poi)
+          self.getPoiDetail(poi)
+          // self.$emit('getMapClickPoi', poiInfo)
         })
         this.markers.push(makerAdd)
       }
@@ -281,14 +310,22 @@ export default {
         this.info.close();
       }
       this.openInfoWindow(this.info, this.markers[index], this.mapObj, item)
-      this.$emit('getMapClickPoi', item)
+      console.log('----item----', item)
+      this.getPoiDetail(item)
+      // this.$emit('getMapClickPoi', item)
     }
   },
   watch: {
     address(curr) {
       console.log('----watch---',curr)
       if (curr) {
-        this.getGeocoderByAddress()
+        if(!this.mapLoaded) {
+          this._globalEvent.$on('mapLoaded', ()=>{
+             this.getGeocoderByAddress()
+          });
+        }else{
+           this.getGeocoderByAddress()
+        }
       }
     }
   }
@@ -310,7 +347,10 @@ export default {
     width: 360px;
     padding:15px;
     z-index: 2;
-    
+    .btn {
+      background: #655eff;
+      color: #fff;
+    }
   }
   .search /deep/ .el-input__inner {
     border:0;
@@ -342,7 +382,7 @@ export default {
       }
       p:first-child {
         position: relative;
-        color:#0059B3;
+        color:#655eff;
         span {
           position: absolute;
           top: 0;

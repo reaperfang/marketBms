@@ -15,7 +15,7 @@
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">用户ID：{{item.orderAfterSaleSendInfo.memberSn}}</div>
-                            <div class="item">用户昵称：{{item.orderAfterSaleSendInfo.nickName}}</div>
+                            <div class="item">用户昵称：{{item.orderAfterSaleSendInfo.memberName}}</div>
                         </div>
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.orderAfterSaleSendInfo.receivedName}}</div>
@@ -37,7 +37,7 @@
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.receivedName}}</div>
                             <div class="item" style="width: 260px;">联系电话：{{item.receivedPhone}}</div>
-                            <div class="item">收货地址：{{item.receivedDetail}}</div>
+                            <div class="item">收货地址：{{item.orderInfoView.receiveAddress}} {{item.orderInfoView.receivedDetail}}</div>
                         </div>
                     </template>
                 </div>

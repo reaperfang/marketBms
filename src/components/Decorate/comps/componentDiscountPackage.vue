@@ -32,10 +32,7 @@
                     <div class="info_box" v-if="showContents.length > 0">
                         <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
                         <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">套餐包含商品{{item.totalGoodsNum}}件</p>
-                        <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&listStyle==4">
-                            <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
-                        </div>
-            <div class="limit_line" v-else-if="showContents.indexOf('5')!=-1&&listStyle==1&&item.joinLimit!=-1">
+                        <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&item.joinLimit!=-1">
                             <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
                         </div>
                         <div class="price_line">
@@ -207,7 +204,7 @@ export default {
             justify-content: space-between;
             .countdown{
                 float:right;
-                width:155px;
+                width:189px;
                 height:43px;
                 padding:0 3.5px 0 15px;
                 .content{
@@ -233,10 +230,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
-                            color:#fff;
-                            padding:0 8px;
+                                min-width:29px;
+                                height:16px;
+                                color:#fff;
+                                margin:0 4px;
                         }
                     }
                 }
@@ -334,10 +331,10 @@ export default {
                             }
                             .item {
                                 background:#333;
-                                width:58px;
-                                height:32px;
+                                min-width:29px;
+                                height:16px;
                                 color:#fff;
-                                padding:0 8px;
+                                margin:0 4px;
                             }
                         }
                     }
@@ -457,6 +454,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display: none;
                 }
             }
         }
@@ -519,10 +517,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
-                            color:#fff;
-                            padding:0 8px;
+                                min-width:29px;
+                                height:16px;
+                                color:#fff;
+                                margin:0 4px;
                         }
                     }
                 }
@@ -550,7 +548,7 @@ export default {
                 }
             }
             .price_line{
-                margin-top:60px;
+                margin-top:15px;
                 .price{
                     line-height:1;
                 }
@@ -667,7 +665,7 @@ export default {
                     justify-content: space-between;
                     .countdown{
                         float:right;
-                        width:155px;
+                        width:189px;
                         height:43px;
                         padding:0 3.5px 0 15px;
                         .content{
@@ -693,10 +691,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
-                                    color:#fff;
-                                    padding:0 8px;
+                                min-width:29px;
+                                height:16px;
+                                color:#fff;
+                                margin:0 4px;
                                 }
                             }
                         }
@@ -780,10 +778,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
-                                    color:#fff;
-                                    padding:0 8px;
+                                min-width:29px;
+                                height:16px;
+                                color:#fff;
+                                margin:0 4px;
                                 }
                             }
                         }
@@ -885,10 +883,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
-                                    color:#fff;
-                                    padding:0 8px;
+                                min-width:29px;
+                                height:16px;
+                                color:#fff;
+                                margin:0 4px;
                                 }
                             }
                         }
@@ -1002,6 +1000,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display: none;
                 }
             }
         }
@@ -1081,10 +1080,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
-                            color:#fff;
-                            padding:0 8px;
+                                min-width:29px;
+                                height:16px;
+                                color:#fff;
+                                margin:0 4px;
                         }
                     }
                 }
@@ -1129,6 +1128,7 @@ export default {
                     color:#333;
                     margin-right:5px;
                     line-height:18px;
+		    height: 18px;								
                 }
                 .remainder{
                     float:left;

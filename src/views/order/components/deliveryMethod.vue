@@ -1,10 +1,10 @@
 <template>
-    <div class="el-form-item">
+    <div class="el-form-item" style="margin-right: 0;">
         <el-form-item :label="isAfterSales ? '退货方式' : '配送方式'">
           <el-select v-model="listQuery.deliveryWay" @change="deliveryMethodChange">
             <el-option label="全部" value></el-option>
-            <el-option label="普通快递" :value="1"></el-option>
-            <el-option label="商家配送" :value="2"></el-option>
+            <el-option :label="isAfterSales ? '快递退货' : '普通快递'" :value="1"></el-option>
+            <el-option :label="isAfterSales ? '商家自取' : '商家配送'" :value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="isAfterSales ? '取货时间' : '配送时间'" v-show="listQuery.deliveryWay == 2">

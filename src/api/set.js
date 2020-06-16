@@ -229,7 +229,7 @@ export function getOrderDeliverInfo(data) {
   return request({
     target: 'ORDER-DELIVER-INFO-DETAIL-PROCESS',
     method: 'post',
-    apiType: 'order',
+    apiType: 'manager',
     data
   })
 }
@@ -239,7 +239,7 @@ export function updateOrderDeliverInfo(data) {
   return request({
     target: 'ORDER-DELIVER-INFO-SAVE-PROCESS',
     method: 'post',
-    apiType: 'order',
+    apiType: 'manager',
     data
   })
 }

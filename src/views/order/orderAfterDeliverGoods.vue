@@ -63,7 +63,7 @@
             </div>
             <div class="container-item">
                 <p>2.确认收发货信息</p>
-                <div class="container-item-content">
+                <div class="container-item-content deliver-goods-address">
                     <div class="title">
                         <div class="title-list">
                             <i class="take-in-icon"></i>
@@ -82,11 +82,11 @@
                         </div>
                         <div class="item">
                             <div class="label">收货信息</div>
-                            <div class="value">{{orderAfterSaleSendInfo.receiveAddress}}</div>
+                            <div class="value">{{orderAfterSaleSendInfo.receiveAddress}} {{orderAfterSaleSendInfo.receivedDetail}}</div>
                         </div>
                     </div>
                 </div>
-                <div class="container-item-content">
+                <div class="container-item-content deliver-goods-address">
                     <div class="title">
                         <div class="title-list">
                             <i class="deliver-icon"></i>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="item">
                             <div class="label">发货信息</div>
-                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendAddress}}</div>
+                            <div class="value" v-if="orderAfterSaleSendInfo">{{orderAfterSaleSendInfo.sendAddress}} {{orderAfterSaleSendInfo.sendDetail}}</div>
                             <div class="value" v-else>--</div>
                         </div>
                     </div>

@@ -60,8 +60,7 @@
                   <div class="col" style="width: 180px;">
                     <p>收货人: {{item.receivedName}}</p>
                     <p>联系电话: {{item.receivedPhone}}</p>
-                    <p>收货地址: {{item.receiveAddress}}
-                    </p>
+                    <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
                   </div>
                   <div class="col">
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
@@ -86,9 +85,9 @@
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
                       <el-form-item label="配送时间">
-                        <span>2020-04-10 13:00~17:00</span>
+                        <span>{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</span>
                       </el-form-item>
-                      <el-form-item label="配送员" prop="distributorValue">
+                      <el-form-item class="is-required" label="配送员" prop="distributorValue">
                         <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">
                           <el-option
                             v-for="items in distributorList[index]"
@@ -99,7 +98,7 @@
                         </el-select>
                         <p v-if="item.showErrorDistributorName" class="error-message">{{item.errorMessageDistributorName}}</p>
                       </el-form-item>
-                      <el-form-item label="联系方式" prop="phone">
+                      <el-form-item class="is-required" label="联系方式" prop="phone">
                         <el-input placeholder="请输入配送员手机号码" v-model="item.phone" @blur="(e)=>{distributorPhoneBlur(e, index)}"></el-input>
                         <p v-if="item.showErrorPhone" class="error-message">{{item.errorMessagePhone}}</p>
                       </el-form-item>
@@ -763,7 +762,7 @@ export default {
   }
   .container {
     padding-top: 20px;
-    padding-left: 60px;
+    padding-left: 20px;
     section {
       .goods-item {
         margin-top: 20px;

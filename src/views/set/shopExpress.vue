@@ -236,7 +236,7 @@
         </div>
       </section>
       <div class="btn">
-        <el-button type="primary" class="submit" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
+        <el-button type="primary" class="submit"  v-permission="['设置','同城配送','默认页面', '保存']" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
       </div>
      </el-form>
   </div>
@@ -258,27 +258,23 @@ export default {
   data () {
     // 校验数字格式为0.00的否则提示如下错误
     const validateFloat = (rule, value, callback) => {
-      const reg = /^(([0-9]+).\d{2})$/ // 判断格式必须位*.**
-      if (value && reg.test(value)) {
-        if (value * 1000 > 0) {
-          callback();
-        } else {
-          callback(new Error('必填项，请输入大于0的数字'));
-        }
+      if (Number.isNaN(+value)) {
+        return callback(new Error('必填项，请输入非负数，支持小数点后两位'));
+      }
+      if (+value * 1000 > 0) {
+        return callback();
       } else {
-        callback(new Error('必填项，请输入非负数，支持小数点后两位'));
+        return callback(new Error('必填项，请输入大于0的数字'));
       }
     };
     const validateFloat2 = (rule, value, callback) => {
-      const reg = /^(([0-9]+).\d{3})$/ // 判断格式必须位*.**
-      if (value && reg.test(value)) {
-        if (value * 1000 > 0) {
-          callback();
-        } else {
-          callback(new Error('必填项，请输入大于0的数字'));
-        }
+      if (Number.isNaN(+value)) {
+        return callback(new Error('必填项，请输入非负数，支持小数点后三位'));
+      }
+      if (+value * 1000 > 0) {
+        return callback();
       } else {
-        callback(new Error('必填项，请输入非负数，支持小数点后三位'));
+        return callback(new Error('必填项，请输入大于0的数字'));
       }
     };
     const validatePositiveInter = (rule, value, callback) => {
@@ -537,7 +533,7 @@ export default {
     },
     // 校验时间区间start
     validateTimeRangesStart(rule, value, callback) {
-      // console.log('---validateTimeRangesStart---',rule, value)
+      console.log('---validateTimeRangesStart---', rule, value)
       const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.start"
       const index = +arr[1] // 1
       const ruleForm = this.ruleForm.timePeriods
@@ -546,10 +542,13 @@ export default {
       curr = curr.getTime()
       const len = ruleForm.length
       // const validateArr = []
-      this.clearValidate('start')
+      // this.clearValidate('start')
+        console.log('--index-------', index)
       if (index > 0) {
         let prev = ruleForm[index - 1].start
+        console.log('------prev---', prev,'---curr--', curr)
         if (prev) {
+          this.clearValidate('start')
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
@@ -557,11 +556,12 @@ export default {
           if (prev >= curr) {
             return callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
           }
-        }
+        } 
       }
       if (index + 1 < len) {
         let next = ruleForm[index + 1].start
         if (next) {
+          this.clearValidate('start')
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
@@ -569,7 +569,7 @@ export default {
           if (next <= curr) {
             return callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
           }
-        } 
+        }
       }
       // console.log('validateArr', validateArr)
       callback()
@@ -592,10 +592,11 @@ export default {
       curr = curr.getTime()
       const len = ruleForm.length
       // const validateArr = []
-      this.clearValidate('end')
+      // this.clearValidate('end')
       if (index > 0) {
         let prev = ruleForm[index - 1].end
         if (prev) {
+          this.clearValidate('end')
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
@@ -603,11 +604,14 @@ export default {
           if (prev >= curr) {
             return callback(new Error('时间段可以交叉，不能重叠。'))
           }
+        } else {
+           return callback(new Error('请选择时间'))
         }
       }
       if (index + 1 < len) {
         let next = ruleForm[index + 1].end
         if (next) {
+          this.clearValidate('end')
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
@@ -837,8 +841,12 @@ export default {
       day = day > 10 ? day : `0${day}`
       const timePeriods = arr.map(item => {
         const timeslot = item.split('~')
-        const start = `${year}-${month}-${day} ${timeslot[0]}`
-        const end = `${year}-${month}-${day} ${timeslot[1]}`
+        let start = `${year}-${month}-${day} ${timeslot[0]}`
+        let end = `${year}-${month}-${day} ${timeslot[1]}`
+        // 解决safari不兼容上面的时间格式问题
+        start = new Date(start.replace(/-/g, '/'))
+        end = new Date(end.replace(/-/g, '/'))
+        console.log(start, end)
         return {
           start,
           end
@@ -880,6 +888,7 @@ export default {
             end: ''
           }
         ]
+        console.log('-----res.subscribeTimeHourRanges--', res.subscribeTimeHourRanges)
         this.ruleForm.timePeriods = this.formatSubscribeTimeHourRanges(res.subscribeTimeHourRanges) || defaultVal // 每天重复的小时时间段(~和逗号分隔): 00:00:00~00:01:00,00:08:00~00:09:00,00:13:00~00:14:00
         const weeks = this.formatSubscribeTimeWeekDays(res.subscribeTimeWeekDays) || [] // 以天为单位，每周重复的时间值(逗号分隔)：1,2,3,4,5,6,7
         this.ruleForm.weeks = weeks
@@ -956,7 +965,7 @@ export default {
       const advanceSubscribeDays = this.ruleForm.advanceDays
       const isOpenLadderFreight = this.ruleForm.isOpenLadderFreight
       const isOpenSubscribeDeliver = this.ruleForm.isReservationDelivery
-      const subscribeTimeCustomizeType = this.ruleForm.repeatCycletimePeriods
+      const subscribeTimeCustomizeType = this.ruleForm.repeatCycle
       const subscribeTimeType = this.ruleForm.deliveryTimeType
       let subscribeTimeHourRanges
       if (subscribeTimeType === 2) {
@@ -1084,6 +1093,7 @@ export default {
             left: 0;
             top: 0;
             line-height: 22px;
+            color:#FD4C2BFF;
           }
         }
       }
@@ -1259,6 +1269,7 @@ export default {
   }
   .timeslot-popover {
     position: relative;
+    padding-top: 15px;
     p, li {
       font-size: 14px;
       line-height: 20px;

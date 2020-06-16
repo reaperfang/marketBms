@@ -149,7 +149,7 @@ export default {
         source: 1,//商品来源
         showNumber: 30,//商品分类显示个数 
         listStyle: 1,//列表样式
-        pageMargin: 15,//页面边距
+        pageMargin: 10,//页面边距
         goodsMargin: 10,//商品边距
         goodsStyle: 1,//商品样式
         goodsChamfer: 1,//商品倒角
@@ -178,7 +178,7 @@ export default {
   },
   created() {
     this.fetchCatagoryDetail();
-    this.fetch();
+    this.fetch(false);
   },
   watch: {
     'items': {
@@ -188,7 +188,6 @@ export default {
           this.ruleForm.ids.push(item.id);
         }
         this.fetch();
-        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -205,7 +204,6 @@ export default {
             return;
         }
         this.fetch();
-        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
     },
     'ruleForm.currentCatagoryId'(newValue, oldValue) {
         if(newValue === oldValue) {
@@ -213,7 +211,6 @@ export default {
         }
         this.fetchCatagoryDetail();
         this.fetch();
-        this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
     },
     'ruleForm.source'(newValue, oldValue) {
       if(newValue === oldValue) {
@@ -221,7 +218,6 @@ export default {
       }
       this.fetchCatagoryDetail();
       this.fetch();
-      this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
     },
 
     'ruleForm.ids': {
@@ -250,8 +246,10 @@ export default {
     },
 
     //根据ids拉取数据
-    fetch(componentData = this.ruleForm) {
+    fetch(bNeedUpdateMiddle = true) {
+      const componentData = this.ruleForm;
         if(componentData) {
+          bNeedUpdateMiddle && this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
             let params = {};
             if(!componentData.source || (componentData.source === 1)) {
                 const ids = componentData.ids;
@@ -260,30 +258,25 @@ export default {
                         params = this.setGroupGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
                             this.list = [];
-                            this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                             return;
                         }
                     }else if(Array.isArray(ids) && ids.length){
                         params = this.setNormalGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
                             this.list = [];
-                            this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                             return;
                         }
                     }else{
                       this.list = [];
-                      this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                         return;
                     }
                 }else{
                       this.list = [];
-                      this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                     return;
                 }
             }else if(componentData.source === 2){
               if(!this.ruleForm.currentCatagoryId) {
                 this.list = [];
-                this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
                 return;
               }
               params = {

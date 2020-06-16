@@ -98,6 +98,24 @@ export default {
                 }
             },
             deep: true
+        },
+        'ruleForm.hideSaledGoods'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
+        },
+        'ruleForm.hideEndGoods'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
+        },
+        'ruleForm.hideType'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
         }
     },
     created() {
@@ -258,7 +276,7 @@ export default {
             justify-content: space-between;
             .countdown{
                 float:right;
-                width:155px;
+                width:189px;
                 height:43px;
                 padding:0 3.5px 0 15px;
                 .content{
@@ -284,10 +302,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
+                            min-width:29px;
+                            height:16px;
                             color:#fff;
-                            padding:0 8px;
+                            margin:0 4px;
                         }
                     }
                 }
@@ -320,21 +338,25 @@ export default {
                 .jd_line{
                     width:100px;
                     height:6px;
+                    margin-top:1px;
                 }
                 p{
                     font-size:11px;
                     margin-left:9px;
+                    line-height:13px;
                 }
             }
             .button{
                 line-height:31px;
-                position:absolute;
-                right:10px;
-                bottom:15px;
+                float:right;
                 font-size:13px;
+                text-align:center;
                 height:31px;
                 margin-left:13px;
-            }
+                position:relative;
+                bottom:0;
+                right:0;            
+	    }	
             .activity_end{
                 right:10px;
                 bottom:15px;
@@ -400,10 +422,10 @@ export default {
                             }
                             .item {
                                 background:#333;
-                                width:58px;
-                                height:32px;
+                                min-width:29px;
+                                height:16px;
                                 color:#fff;
-                                padding:0 8px;
+                                margin:0 4px;
                             }
                         }
                     }
@@ -464,12 +486,12 @@ export default {
                     line-height:24px;
                     text-align:center;
                     position:absolute;
-                    right:10px;
+                    right:0;
                     bottom:12.5px;
                 }
                 .activity_end{
-                    right:10px;
-                    bottom:17.5px;
+                    right:0;
+                    bottom:12.5px;
                     line-height:1;
                     font-size:15px;
                 }
@@ -540,6 +562,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display:none;
                 }
             }
         }
@@ -602,10 +625,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
+                            min-width:29px;
+                            height:16px;
                             color:#fff;
-                            padding:0 8px;
+                            margin:0 4px;
                         }
                     }
                 }
@@ -758,7 +781,7 @@ export default {
                     justify-content: space-between;
                     .countdown{
                         float:right;
-                        width:155px;
+                        width:189px;
                         height:43px;
                         padding:0 3.5px 0 15px;
                         .content{
@@ -784,10 +807,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
+                                    min-width:29px;
+                                    height:16px;
                                     color:#fff;
-                                    padding:0 8px;
+                                    margin:0 4px;
                                 }
                             }
                         }
@@ -825,6 +848,17 @@ export default {
                             font-size:11px;
                             margin-left:9px;
                         }
+                    }
+                    .button{
+                        line-height:31px;
+                        float:right;
+                        font-size:13px;
+                        text-align:center;
+                        height:31px;
+                        margin-left:13px;
+                        position:relative;
+                        bottom:0;
+                        right:0;
                     }
                     .activity_end{
                         right:10px;
@@ -877,10 +911,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
+                                    min-width:29px;
+                                    height:16px;
                                     color:#fff;
-                                    padding:0 8px;
+                                    margin:0 4px;
                                 }
                             }
                         }
@@ -941,12 +975,12 @@ export default {
                         line-height:24px;
                         text-align:center;
                         position:absolute;
-                        right:10px;
-                        bottom:12.5px;
+                        right:0;
+                        bottom:7.5px;
                     }
                     .activity_end{
-                        right:10px;
-                        bottom:17.5px;
+                        right:0;
+                        bottom:12.5px;
                         line-height:1;
                         font-size:15px;
                     }
@@ -995,10 +1029,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
+                                    min-width:29px;
+                                    height:16px;
                                     color:#fff;
-                                    padding:0 8px;
+                                    margin:0 4px;
                                 }
                             }
                         }
@@ -1059,12 +1093,12 @@ export default {
                         line-height:24px;
                         text-align:center;
                         position:absolute;
-                        right:10px;
-                        bottom:12.5px;
+                        right:0;
+                        bottom:7.5px;
                     }
                     .activity_end{
-                        right:10px;
-                        bottom:17.5px;
+                        right:0;
+                        bottom:12.5px;
                         line-height:1;
                         font-size:15px;
                     }
@@ -1128,6 +1162,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display:none;
                 }
             }
         }
@@ -1206,10 +1241,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
+                            min-width:29px;
+                            height:16px;
                             color:#fff;
-                            padding:0 8px;
+                            margin:0 4px;
                         }
                     }
                 }

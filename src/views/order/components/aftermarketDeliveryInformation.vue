@@ -10,6 +10,8 @@
                 <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
+                        <div class="header-lefter-item">快递退货</div>
+                        <div class="header-lefter-item">快递公司：{{orderAfterSale.returnExpressName}}</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSale.returnExpressNo}}</div>
                         <div @click="showLogistics(orderAfterSale.returnExpressNo, true, orderAfterSale.id)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
@@ -77,6 +79,8 @@
                 <div class="header">
                     <div class="header-lefter">
                         <div class="header-lefter-item number">2</div>
+                        <div class="header-lefter-item">快递发货</div>
+                        <div class="header-lefter-item">快递公司：{{orderAfterSaleSendInfo.expressCompanys}}</div>
                         <div class="header-lefter-item ">快递单号：{{orderAfterSaleSendInfo.expressNos}}</div>
                         <div @click="showLogistics(orderAfterSaleSendInfo.expressNos, false, orderAfterSaleSendInfo.orderAfterSaleId)" class="header-lefter-item  blue pointer">查看物流</div>
                     </div>
@@ -144,7 +148,7 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
                         <div class="header-lefter-item ">商家自取</div>
-                        <div class="header-lefter-item ">取货时间：{{orderAfterSale.deliveryDate | formatDateRemoveZero}} {{orderAfterSale.deliveryTime}}</div>
+                        <div class="header-lefter-item " v-if="orderAfterSale.deliveryDate">取货时间：{{orderAfterSale.deliveryDate | formatDateRemoveZero}} {{orderAfterSale.deliveryTime}}</div>
                      </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | sotreCustomerFilter}}</div>

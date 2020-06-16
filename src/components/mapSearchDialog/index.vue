@@ -6,8 +6,9 @@
       title="搜索地图"
       :visible.sync="centerDialogVisible"
       width="60%"
+      :close-on-click-modal="false"
       center>
-      <div style="height: 580px;">
+      <div style="height: 480px;">
         <map-search 
         class="map"
         ref="shopInfoMap"
@@ -51,6 +52,11 @@ import mapSearch from '@/components/mapSearch'
         default: ''
       }
     },
+    computed: {
+      mapLoaded() {
+        return this.$store.getters.mapLoaded;
+      }
+    },
     data() {
       return {
         centerDialogVisible: false,
@@ -66,10 +72,21 @@ import mapSearch from '@/components/mapSearch'
     methods: {
       handleOpen() {
         this.centerDialogVisible = true
-        this.$nextTick(()=> {
-        console.log('------',this.$refs.shopInfoMap)
-          this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
-        })
+        // this.$nextTick(()=> {
+        // console.log('------',this.$refs.shopInfoMap)
+        //   this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
+        // })
+        if(!this.mapLoaded) {
+          this._globalEvent.$on('mapLoaded', ()=>{
+            this.$nextTick(()=> {
+              this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
+            })
+          });
+        }else{
+          this.$nextTick(()=> {
+            this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
+          })
+        }
       },
       handleSubmit() {
         this.$refs.shopInfoMap.clearSearchResultList()
@@ -94,8 +111,14 @@ import mapSearch from '@/components/mapSearch'
     background:rgba(240,239,255,1);
     border-radius:4px;
     color:rgba(101,94,255,1);
+    cursor: pointer;
     i {
       padding-left: 6px;
+    }
+    &:hover {
+    background:rgba(240,239,255,1);
+    border-radius:4px;
+    color:rgba(101,94,255,1);
     }
   }
   .map {
