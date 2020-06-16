@@ -3,13 +3,59 @@
     <div class="component_wrapper" v-loading="loading">
       <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data && hasContent">
           <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
-            <div class="scroll_wrapper">
+
+
+            <!-- 原来的 -->
+            <!-- <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
                 <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
                 <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" 
                 @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
               </div>
-            </div>
+            </div> -->
+             <!-- 原来的 -->
+
+
+            <template v-if="menuStyle==1">
+              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{color:activeGoodId=='all'?color1:''}">
+                  全部
+                  <font class="activeLine" :style="{background:color1}"></font>
+              </p>
+            </template>
+            <template v-else-if="menuStyle==2">
+              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
+                  全部
+              </p>
+            </template>
+            <template v-else-if="menuStyle==3">
+              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
+                  全部
+                  <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
+                  <font class="activeLine" v-else :style="{borderTop:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
+              </p>
+            </template>
+
+            <template v-if="menuStyle==1">
+              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{color:activeGoodId==item.id?color1:''}">
+                  {{item.name}}
+                  <font class="activeLine" :style="{background:color1}"></font>
+              </p>
+            </template>
+            <template v-else-if="menuStyle==2">
+              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+                  {{item.name}}
+              </p>
+            </template>
+            <template v-else-if="menuStyle==3">
+              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+                  {{item.name}}
+                  <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
+                  <font class="activeLine" v-else :style="{borderTop:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
+              </p>
+            </template>
+
+
+
           </div>
           <div class="componentGoodsGroup_content">
               <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? list[0] && list[0].id : 'all'"></componentGoods>
@@ -41,7 +87,7 @@ export default {
         currentCatagory: null,
         loading: false,
         // 当前分类id
-        activeGoodId:'',
+        activeGoodId:'all',
         // 商品请求分类id集合
         allGoodClassId:[],
         allGoodClassId1:[]
@@ -52,6 +98,7 @@ export default {
     },
     created() {
       this.fetch();
+      this.$store.dispatch('getShopStyle');
       this._globalEvent.$on('fetchGoodsGroup', (componentData, componentId) => {
         if(this.currentComponentId === componentId) {
           this.fetch(componentData);
@@ -75,9 +122,9 @@ export default {
       },
       'currentComponentData.data.ids': {
           handler(newValue, oldValue) {
-              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+              // if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                   this.fetch();
-              }
+              // }
           },
           deep: true
       }
@@ -90,7 +137,21 @@ export default {
                value = true;
             }
             return value;
+        },
+        colorStyle() {
+          return this.$store.getters.colorStyle || {colors:[]};
+        },
+        color1(){
+            return this.colorStyle.colors && this.colorStyle.colors[0]
+        },
+        color2(){
+            return this.colorStyle.colors && this.colorStyle.colors[1]
+        },
+        color3(){
+            return this.colorStyle.colors && this.colorStyle.colors[2]
         }
+
+        
     },
     // mounted: function() {
     //   window.addEventListener("scroll", this.handleScroll, true);
@@ -132,7 +193,7 @@ export default {
                     if(response && response[0] && _self.currentComponentData.data.showAllGroup == 2) {
                       _self.activeGoodId = response[0].id;
                     }else {
-                      _self.activeGoodId = '';
+                      _self.activeGoodId = 'all';
                     }
                     this.calcScroll();
                     this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
@@ -147,16 +208,23 @@ export default {
           }
           }
         },
-        getIdData(id){
+        // getIdData(id){
+        //   this.activeGoodId = id;
+        //   if(id!=''){
+        //     this.allGoodClassId = [];  
+        //     this.allGoodClassId.push(id);
+        //   }
+        //   else{
+        //     this.allGoodClassId = this.allGoodClassId1;
+        //   }
+        // },
+
+        /* 选择当前分类 */
+        selectCatagory(id) {
           this.activeGoodId = id;
-          if(id!=''){
-            this.allGoodClassId = [];  
-            this.allGoodClassId.push(id);
-          }
-          else{
-            this.allGoodClassId = this.allGoodClassId1;
-          }
+          this.currentCatagoryId = id;
         },
+
 
         // handleScroll(){
         //     let componentGoodsGroupHeight = document.getElementById("componentGoodsGroup").clientHeight;  
@@ -203,6 +271,7 @@ export default {
         p{
             width:100%;
             margin:0;
+            white-space:normal;
         }
     }
     .componentGoodsGroup_tab.menuStyle1 {
@@ -211,18 +280,23 @@ export default {
       p {
         width: 100%;
         color:rgba(102,102,102,1);
+        line-height:20px;
+        @extend .flexCenterMiddle;
+        height:44px;
       }
       p.active {
-          &:after {
-            content:"";
-            right: 0;
-            height: 44px;
-            width: 3px;
-            top: 50%;
-            margin-top: -22px;
-            margin-left: auto;
-            left: auto;
-          }
+        color:#fff;
+        .activeLine{
+          right: 0;
+          height: 44px;
+          width: 3px;
+          top: 50%;
+          margin-top: -22px;
+          margin-left: auto;
+          left: auto;
+          display:block;
+          background:#fc3d42;
+        }
       }
     }
     .componentGoodsGroup_tab.menuStyle2 {
@@ -231,24 +305,28 @@ export default {
         p {
           width: 100%;
           margin-top: 10px;
-          color:rgba(102,102,102,1);
-          &:first-child {
-            margin-top: 0;
-          }
-        }
-    }
-    .componentGoodsGroup_tab.menuStyle3 {
-        p {
-          width: 100%;
-          margin-top: 10px;
+          background:#efefef;
           color:rgba(102,102,102,1);
           &:first-child {
             margin-top: 0;
           }
         }
         p.active{
-          &:after {
-            content: "";
+          background:#fc3d42;
+        }
+    }
+    .componentGoodsGroup_tab.menuStyle3 {
+        p {
+          width: 100%;
+          margin-top: 10px;
+          background:#efefef;
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+        p.active{
+          background:#fc3d42;
+          .activeLine {
             position: absolute;
             right: -12px;
             left: auto;
@@ -259,42 +337,76 @@ export default {
             border: 6px solid transparent;
             border-right: 0;
             border-left: 6px solid #fc3d42;
+            display:block;
           }
         }
     }
-    .componentGoodsGroup{
-        overflow:hidden;
-        background:#fff;
-        .componentGoodsGroup_tab{
-            padding:0 5px;
-            display:flex;
-            display:-webkit-box;
-            overflow-x:scroll;
-            p{
-                font-size:14px;
-                padding:0 10px;
-                text-align:center;
-                position:relative;
-                margin:0 5px;
+    .componentGoodsGroup_content{
+      /deep/.componentGoods.listStyle4{
+        ul{
+            li.goodsRatio1{
+                .text{
+                    .title{
+                        height:17px;
+                        @include lineClamp(1);
+                        margin-top:2.5px;
+                    }
+                    .fTitle{
+                        margin-top:5px;
+                    }
+                    .priceLine{
+                        margin-top:10px;
+                    }
+                }
             }
-        }
-        p.active {
-            &:after {
-              content: "";
-              position: absolute;
-              right: -6px;
-              left: auto;
-              margin-left: auto;
-              top: 50%;
-              margin-top: -7px;
-              width: 6px;
-              height: 12px;
-              border: 6px solid transparent;
-              border-right: 0;
-              border-left: 6px solid #fc3d42;
+            li.goodsRatio2{
+                .text{
+                    .title{
+                        height:17px;
+                        @include lineClamp(1);
+                        margin-top:2.5px;
+                    }
+                    .fTitle{
+                        margin-top:7.5px;
+                    }
+                    .priceLine{
+                        margin-top:10px;
+                    }
+                }
             }
+            li.goodsRatio3{
+                .text{
+                    .title{
+                        height:34px;
+                        @include lineClamp(2);
+                    }
+                    .fTitle{
+                        margin-top:10px;
+                    }
+                    .priceLine{
+                        margin-top:18px;
+                    }
+                }
+            }
+            li.goodsRatio4{
+                .text{
+                    .title{
+                        margin-top:0;
+                        height:17px;
+                        @include lineClamp(1);
+                    }
+                    .fTitle{
+                        margin-top:4px;
+                    }
+                    .priceLine{
+                        margin-top:1.5px;
+                    }
+                }
+            }  
         }
+      }
     }
+      
 }
 .componentGoodsGroup {
   overflow: hidden;
@@ -311,7 +423,9 @@ export default {
             position: relative;
             margin: 0 5px;
             white-space:nowrap;
-            float:left;
+            .activeLine{
+              display:none;
+            }
         }
     }
     .componentGoodsGroup_tab.menuStyle1 {
@@ -323,7 +437,7 @@ export default {
         }
         p.active {
           color: #fc3d42;
-          &:after {
+          .activeLine {
             content: "";
             width: 50px;
             height: 3px;
@@ -332,6 +446,7 @@ export default {
             left: 50%;
             margin-left: -25px;
             bottom: 0;
+            display:block;
           }
         }
     }
@@ -342,16 +457,16 @@ export default {
         padding-top: 9px;
         padding-bottom: 9px;
         p {
-          min-width: 60px;
           background: rgba(236,236,236,1);
           font-weight:400;
           color:rgba(102,102,102,1);
+          min-width: 60px;
           line-height: 34px;
           @include borderRadius(50px);
         }
         p.active {
-          background: #fc3d42;
-          color: #fff;
+          background: #efefef;
+          color: #fff !important;
         }
     }
     .componentGoodsGroup_tab.menuStyle2.fixed ~ .componentGoodsGroup_content {
@@ -361,15 +476,15 @@ export default {
         padding-top: 9px;
         padding-bottom: 9px;
         p {
+          color:rgba(102,102,102,1);
           min-width: 60px;
           background: #ececec;
           line-height: 33px;
-          color:rgba(102,102,102,1);
         }
         p.active {
           background: #fc3d42;
           color: #fff;
-          &:after {
+          .activeLine {
             content: "";
             position: absolute;
             bottom: -6px;
@@ -380,6 +495,7 @@ export default {
             border: 6px solid transparent;
             border-bottom: 0;
             border-top: 6px solid #fc3d42;
+            display:block;
           }
         }
     }

@@ -18,7 +18,7 @@
           <div class="title_two">
             <span class="title_time">{{currentComponentData.data.date}}</span>
             <span class="title_author">{{currentComponentData.data.author}}</span>
-            <span class="title_link" @click="_routeTo('')">链接</span>
+            <span class="title_link" @click="_routeTo('')">{{currentComponentData.data.navName}}</span>
           </div>
         </div>
     </div>

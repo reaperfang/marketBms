@@ -6,7 +6,7 @@
           type="textarea"
           :rows="5"
           placeholder="请输入要说明的文字，最多100字"
-          v-model="ruleForm.textContent">
+          v-model="ruleForm.textContent" @blur="changeValidate">
         </el-input>
       </el-form-item>
       <el-form-item label="字体大小" prop="fontSize">
@@ -79,7 +79,15 @@ export default {
         showDivider: false// 显示底部分割线
       },
       rules: {
-
+        textContent: [
+          { required: true, message: "请输入内容", trigger: "blur" },
+          {
+            min: 1,
+            max: 100,
+            message: "请输入要说明的文字，最多100字",
+            trigger: "blur"
+          }
+        ],
       },
       dialogVisible: false,
       currentDialog: '',
@@ -96,6 +104,17 @@ export default {
     /* 移除链接 */
     removeLink() {
       this.$set(this.ruleForm, 'linkTo', null)
+    },
+
+    // 值改变
+    changeValidate(value) {
+      let self = this;
+      this.$refs.ruleForm.validate( valid => {
+        if(!valid) {
+          this.$message.warning('请输入要说明的文字，最多100字');
+        }
+        self.ruleForm.vError = !valid;
+      })
     }
   }
 }

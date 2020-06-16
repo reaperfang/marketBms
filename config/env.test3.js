@@ -9,8 +9,10 @@ module.exports = merge(baseConfig, {
 	ZX_API: '"//test3-omo.aiyouyi.cn/cms-api"',
 	ZX_HELP: '"//test-www.300.cn"',
 
-
-
 	/* ...其他需要覆写baseConfig的配置 */
   
+	// ENV_CONFIG: '"test3"',
+	WEBSOCKET_server:'"ws://127.0.0.1:9000"',
+	staticHost: '//test3-m-aiyouyi.yun300.cn/',
+	APPLY: '"//test3-omo.aiyouyi.cn"'
 })

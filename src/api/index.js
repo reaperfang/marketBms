@@ -15,6 +15,7 @@ import * as set from "./set"; //设置模块
 import * as profile from "./profile"; //帮助中心
 
 
+import * as map from "./map"
 
 export default {
 	demo,
@@ -31,5 +32,6 @@ export default {
 	data,
 	set,
 	overview,
-	profile
+	profile,
+	map
 };

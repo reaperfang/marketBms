@@ -150,6 +150,12 @@
               <p class="name" :style="{color: data.moduleList.address.color}">{{data.moduleList.address.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
+            <!--分销中心  -->
+            <li v-if='isOpenResell===1'>
+              <img :src="data.moduleList.commission.icon || require('../../../../../assets/images/shop/userCenter/userCenter21.png')" alt="" class="tb">
+              <p class="name" :style="{color: data.moduleList.commission.color}">{{data.moduleList.commission.titleValue}}</p>
+              <p class="more iconfont icon-tiaozhuan"></p>
+            </li>
           </ul>
         </div>
       </div>
@@ -162,7 +168,7 @@
 export default {
   name: "componentUserCenter",
   components: {},
-  props: ["data"],
+  props: ["data", 'isOpenResell'],
   data() {
     return {
       bg: {

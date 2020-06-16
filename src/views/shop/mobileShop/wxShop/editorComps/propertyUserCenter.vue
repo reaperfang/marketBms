@@ -50,8 +50,8 @@
 
         <div class="block form">
           <template v-for="(item, key) in ruleForm.moduleList">
-            <el-form-item 
-              v-if="item.name !== 'integralMarket' && item.name !== 'messageCenter'"
+            <el-form-item
+               v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
               :key="key"
               :label="item.title"
               :prop="'moduleList.'+ key +'.titleValue'"
@@ -76,6 +76,7 @@
             <el-button @click="userCenterSave()" :loading="saveDataLoading">保    存</el-button>
             <el-button type="primary" @click="userCenterSaveAndApply()" :loading="saveAndApplyDataLoading">保存并生效</el-button>
             <el-popover
+              v-if="showPreviewCode"
               ref="popover2"
               placement="bottom"
               title=""
@@ -101,7 +102,7 @@ import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyUserCenter',
   components: {dialogSelectImageMaterial, vuedraggable},
-  props: ['saveAndApply', 'save', 'resetData', 'data'],
+  props: ['saveAndApply', 'save', 'resetData', 'data', 'isOpenResell'],
   data () {
     return {
       resetLoading: false,  //重置loading
@@ -110,6 +111,7 @@ export default {
       dialogVisible: false,
       currentDialog: '',
       currentModule: null,
+      pathname:window.location.pathname,
       ruleForm: {
         backgroundImage: '',  //背景图
         backgroundGradients: 1,  //背景渐变
@@ -175,17 +177,26 @@ export default {
           },
           address: {
             name: 'address',
-            title: '收货地址',
-            titleValue: '收货地址',
+            title: '地址管理',
+            titleValue: '地址管理',
             icon: '',
             defaultIcon: 'userCenter18',
+            color: '#000'
+          },
+          commission: {
+            name: 'commission',
+            title: '分销中心',
+            titleValue: '分销中心',
+            icon: '',
+            defaultIcon: 'userCenter21',
             color: '#000'
           },
         }
       },
       rules: {},
       showCode: false,   //是否显示二维码
-      qrCode: ''
+      qrCode: '',
+      showPreviewCode: true  //预览二维码按钮是否可见
     }
   },
   watch:{
@@ -285,7 +296,7 @@ export default {
         return;
       }
       this._apis.shop.getQrcode({
-        url: location.protocol + this.ruleForm.shareUrl.split(':')[1].replace("&","[^]"),
+        url: 'https:' + this.ruleForm.shareUrl.split(':')[1].replace("&","[^]"),
         width: '150',
         height: '150',
         logoUrl: this.shopInfo.logoCircle || this.shopInfo.logo
