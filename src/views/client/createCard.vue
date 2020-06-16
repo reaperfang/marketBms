@@ -605,7 +605,7 @@ export default {
       }
     },
     save() {
-      if(this.ruleForm.name == "") {
+      if(!this.ruleForm.name) {
         this.$message({
           message: '请输入会员卡名称',
           type: 'warning'
