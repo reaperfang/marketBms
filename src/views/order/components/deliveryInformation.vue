@@ -254,6 +254,7 @@ export default {
                 sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
                 sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
                 id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+                createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
                 deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
                 deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
                 phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
@@ -296,13 +297,15 @@ export default {
       }
       
       arr.sort((a, b) => {
-        let timeA = new Date(a.createTime).getTime()
-        let timeB = new Date(b.createTime).getTime()
+        const thisTimeA = a.createTime.replace(/-/g, '/')
+        const thisTimeB = b.createTime.replace(/-/g, '/')
+        let timeA = new Date(thisTimeA).getTime()
+        let timeB = new Date(thisTimeB).getTime()
 
         if(timeA > timeB) {
-          return -1
-        } else if(timeA < timeB) {
           return 1
+        } else if(timeA < timeB) {
+          return -1
         } else if(timeA == timeB) {
           return 0
         } 

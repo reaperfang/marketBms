@@ -533,7 +533,7 @@ export default {
     },
     // 校验时间区间start
     validateTimeRangesStart(rule, value, callback) {
-      // console.log('---validateTimeRangesStart---',rule, value)
+      console.log('---validateTimeRangesStart---', rule, value)
       const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.start"
       const index = +arr[1] // 1
       const ruleForm = this.ruleForm.timePeriods
@@ -542,10 +542,13 @@ export default {
       curr = curr.getTime()
       const len = ruleForm.length
       // const validateArr = []
-      this.clearValidate('start')
+      // this.clearValidate('start')
+        console.log('--index-------', index)
       if (index > 0) {
         let prev = ruleForm[index - 1].start
+        console.log('------prev---', prev,'---curr--', curr)
         if (prev) {
+          this.clearValidate('start')
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
@@ -553,11 +556,12 @@ export default {
           if (prev >= curr) {
             return callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
           }
-        }
+        } 
       }
       if (index + 1 < len) {
         let next = ruleForm[index + 1].start
         if (next) {
+          this.clearValidate('start')
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
@@ -565,7 +569,7 @@ export default {
           if (next <= curr) {
             return callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
           }
-        } 
+        }
       }
       // console.log('validateArr', validateArr)
       callback()
@@ -588,10 +592,11 @@ export default {
       curr = curr.getTime()
       const len = ruleForm.length
       // const validateArr = []
-      this.clearValidate('end')
+      // this.clearValidate('end')
       if (index > 0) {
         let prev = ruleForm[index - 1].end
         if (prev) {
+          this.clearValidate('end')
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
@@ -599,11 +604,14 @@ export default {
           if (prev >= curr) {
             return callback(new Error('时间段可以交叉，不能重叠。'))
           }
+        } else {
+           return callback(new Error('请选择时间'))
         }
       }
       if (index + 1 < len) {
         let next = ruleForm[index + 1].end
         if (next) {
+          this.clearValidate('end')
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()

@@ -31,7 +31,7 @@
                     <div class="label">付款方式</div>
                     <div class="value">{{orderInfo.payWay | payWayFilter}}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="orderInfo.payComplateTime">
                     <div class="label">付款时间</div>
                     <div class="value">{{orderInfo.payComplateTime}}</div>
                 </div>
@@ -242,11 +242,11 @@
                 <section>
                     <div class="row">
                         <div class="col">商品总金额:</div>
-                        <div class="col">+ ¥ {{orderDetail.orderInfo.goodsAmount}}</div>
+                        <div class="col"> ¥ {{orderDetail.orderInfo.goodsAmount}}</div>
                     </div>
                     <div class="row">
                         <div class="col">运费:</div>
-                        <div class="col">+ ¥ {{orderDetail.orderInfo.freight}}</div>
+                        <div class="col"> ¥ {{orderDetail.orderInfo.freight}}</div>
                     </div>
                     <div class="row strong">
                         <div class="col">订单总金额:</div>
