@@ -1,15 +1,8 @@
 <template>
   <div>
-    <div v-if="pageList.length" v-loading="loading">
-      <div class="tabs">
-        <span type="primary" v-for="(item, key) of pageList" :key="key" :class="{'myActive': item.active === true}" @click="tabClick($event, item)" plain>{{item.name || '页面'}}</span>
-      </div>
-
+    <div v-loading="loading">
       <!-- 装修编辑器 -->
       <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
-    </div>
-    <div v-else v-loading="loading" style="padding:50px;">
-      暂无可用页面
     </div>
   </div>
 </template>
@@ -104,17 +97,17 @@ export default {
     getPageList() {
       this.loading = true;
       this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
-        this.pageList = response;
+        this.pageList = [response];
         this.loading = false;
-        if(!response || !response.length) {
+        if(!this.pageList || !this.pageList.length) {
           return;
         }
-        for(let item of response) {
+        for(let item of this.pageList) {
           this.pageMaps[item.id] = item;
         }
-        response[0]['active'] = true;
-        this.pageId = response[0].id;
-        this.fetch(response[0].id);
+		  this.pageList[0]['active'] = true;
+        this.pageId = this.pageList[0].id;
+        this.fetch(this.pageList[0].id);
       }).catch((error)=>{
         console.error(error);
         this.loading = false;

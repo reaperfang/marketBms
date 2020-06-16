@@ -128,7 +128,7 @@
 				>
 				</el-pagination>
 			</div>
-			<empty-list v-show="templateList.length === 0"></empty-list>
+			<empty-list v-show="templateList.length === 0" :tipText="tipText"></empty-list>
 			<template-pay :dialogVisible="dialogVisible" :tempInfo="tempInfo" :qrCodeInfo="qrCodeInfo" @closePay="closePay"></template-pay>
 		</div>
 	</div>
@@ -179,7 +179,8 @@
 				preLoadObj: null,  //预加载对象
 				maxWidth: 550,  //最大宽度
 				mode: null,
-				qrCodeInfo: {}
+				qrCodeInfo: {},
+				tipText: ''
 			}
 		},
 		created() {
@@ -230,6 +231,11 @@
 			fetch() {
 				this.loading = true;
 				this.ruleForm.industryIds = this.checkboxGroup1
+				if (this.ruleForm.industryIds.length === 0 ) {
+					this.tipText = '当前搜索无结果，请您重新搜索！'
+				} else {
+					this.tipText = '您搜索的行业内当前没有可使用的模版，请您换个行业再次搜索！'
+				}
 				this._apis.goodsOperate.getEffTemplateList({
 					startIndex: this.startIndex,
 					pageSize: this.pageSize,

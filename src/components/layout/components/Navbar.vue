@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="navbar">
-      <div class="navbar-item">{{shopName}}</div>
+		<div class="navbar-item"><i class="el-icon-arrow-left" @click="backToPre" v-if="$route.path === '/shop/m_templateEdit'"></i>{{shopName}}</div>
       <!-- <div class="navbar-item"></div> -->
       <div class="right-menu">
         <router-link to="/profile/upgrade" class="set_meal">套餐升级</router-link>
@@ -103,8 +103,8 @@ export default {
       }
       return false;
     },
-   
-    
+
+
   },
   created() {
     this.getShopName();
@@ -167,7 +167,11 @@ export default {
       window.open(
         `${this.zxLink}/cms/search?type=service&wd=${this.searchName}&dept=aiyouyi.cn&cat=yidongshangcheng`
       );
-    }
+    },
+    //返回到上一个页面
+	backToPre() {
+    	this.$router.go(-1)
+	}
   }
 };
 </script>
@@ -263,8 +267,17 @@ export default {
 }
 .navbar-item {
   font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   color: #333333;
   font-weight: bold;
+	.el-icon-arrow-left {
+		font-size: 20px;
+		margin-right: 10px;
+		cursor: pointer;
+	}
 }
 .search_int /deep/.el-input-group__append {
   background: #666666;
