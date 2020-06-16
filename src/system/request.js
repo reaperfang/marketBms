@@ -133,7 +133,7 @@ class Ajax {
     let head = {
         target: config.target,
         accessToken:'09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472',
-        // accessToken: store.getters.token || getToken('authToken'),
+        accessToken: store.getters.token || getToken('authToken'),
         client: CONST.CLIENT,
         version: CONST.VERSION,
         requestTime: utils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
