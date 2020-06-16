@@ -132,11 +132,7 @@ class Ajax {
     //拼接参数head
     let head = {
         target: config.target,
-<<<<<<< HEAD
-        accessToken:'09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472',
-=======
-        // accessToken:'09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472',
->>>>>>> 63313a7003a7d6a3e29f2884fc301d248846157a
+        //accessToken:'09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472',
         accessToken: store.getters.token || getToken('authToken'),
         client: CONST.CLIENT,
         version: CONST.VERSION,
