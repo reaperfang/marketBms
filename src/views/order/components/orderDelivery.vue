@@ -1,7 +1,7 @@
 <template>
     <div class="order-delivery">
         <div class="search">
-            <div class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到 <span @click="oderDeliver_decor" class="oderDeliver_decor">设置-交易设置</span> 中关闭自动发货 </div> 
+            <div v-show="isOrderAutoSend" class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到 <span @click="oderDeliver_decor" class="oderDeliver_decor">设置-交易设置</span> 中关闭自动发货 </div> 
             <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
@@ -193,7 +193,8 @@ export default {
             loading: false,
             express: false,
             checkedAll: false,
-            isIndeterminate: false
+            isIndeterminate: false,
+            isOrderAutoSend: false
         }
     },
     filters: {
@@ -229,6 +230,7 @@ export default {
       };
     })
     //this.checkExpress()
+    this.getShopInfo()
     },
     computed:{
         cid(){
@@ -237,6 +239,14 @@ export default {
         }
     },
     methods: {
+        getShopInfo() {
+            let id = this.cid
+            this._apis.set.getShopInfo({id:id}).then(response =>{
+                this.isOrderAutoSend = Boolean(response.isOrderAutoSend)
+            }).catch(error =>{
+                this.$message.error(error);
+            })
+        },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
                 startIndex: 1,
