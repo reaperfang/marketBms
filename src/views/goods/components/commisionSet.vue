@@ -47,7 +47,7 @@
                 <div class="commision-prent">
                     <el-input type="number" v-model="resellRule.percentOfCommodityProfit" placeholder="0.00"></el-input><span>%</span>
                 </div>
-                <span class="prompt">商品利润=订单实付金额-成本价-运费</span>
+                <span class="prompt">利润=订单实付金额-成本价-运费</span>
             </div>
             <div v-if="enable">
                 <div class="commision totalCommission">
@@ -393,7 +393,7 @@ export default {
         detail.goodsInfos.forEach(v => {
             let tmp = {};
             
-            tmp.sku = v.id;
+            tmp.sku = v.code;
             tmp.specs = Object.values(JSON.parse(v.specs)).join(' ');
             tmp.status = '';
             if(v.stock > 0) {
