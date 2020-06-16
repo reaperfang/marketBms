@@ -45,13 +45,13 @@
                                 </div>
                             </div>
                             <div class="price_line">
+                                <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6" class="kai button"></componentButton>
+                                <p class="activity_end" v-if="item.status==2">活动已结束</p>
+                                <p class="activity_end" v-if="item.status==0">活动未开始</p>
                                 <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice || 0}}</font></p>
                                 <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.salePrice || 0}}</p>
                             </div>
 
-                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6" class="kai button"></componentButton>
-                            <p class="activity_end" v-if="item.status==2">活动已结束</p>
-                            <p class="activity_end" v-if="item.status==0">活动未开始</p>
                         </div>
                     </li>
                 </template>
@@ -508,11 +508,14 @@ export default {
                     position:relative;
                     .price{
                         line-height:25px;
+                        float:none;
+                        overflow:hidden;
                     }
                     .yPrice{
-                        width:100%;
                         margin-left:0;
                         line-height:1;
+                        float:none;
+                        overflow:hidden;
                     }
                 }
                 .kai{
@@ -520,9 +523,10 @@ export default {
                     height:24px;
                     line-height:24px;
                     text-align:center;
-                    position:absolute;
+                    // position:absolute;
                     right:0;
                     bottom:7.5px;
+                    margin-top:5px;
                 }
                 .pin{
                     display:none;
@@ -530,8 +534,9 @@ export default {
                 .activity_end{
                     right:0;
                     bottom:12.5px;
-                    line-height:1;
+                    line-height:24px;
                     font-size:15px;
+                    margin-top:5px;
                 }
             }
         }
@@ -728,7 +733,7 @@ export default {
                 height:31px;
                 right:0;
                 bottom:0;
-                position:absolute;
+                // position:absolute;
             }
             .pin{
                 display:none;
@@ -872,7 +877,7 @@ export default {
                 .info_box{
                     overflow:hidden;
                     position:relative;
-                    padding:15px 0;
+                    padding:15px 10px;
                     .name{
                         line-height:18px;
                         height:18px;
@@ -889,10 +894,12 @@ export default {
                         .jd_line{
                             width:100px;
                             height:6px;
+                            margin-top:1px;
                         }
                         p{
                             font-size:11px;
                             margin-left:9px;
+                            line-height:13px;
                         }
                     }
 
@@ -971,6 +978,20 @@ export default {
                         width:84px;
                         position:absolute;
                     }
+                    .button{
+                        line-height:31px;
+                        float:right;
+                        font-size:13px;
+                        text-align:center;
+                        height:31px;
+                        margin-left:13px;
+                        position:relative;
+                        right:0;
+                        bottom:0;
+                    }
+                    .button.buttonStyle3{
+                        padding:0 30px;
+                    }
                     .activity_end{
                         right:10px;
                         bottom:15px;
@@ -979,7 +1000,7 @@ export default {
                     }
                 }
             }
-            &:nth-of-type(3n+2){
+            &:nth-of-type(3n+2),&:nth-of-type(3n+3){
                 .countdown_Bar{
                     height:31px;
                     margin-top:-31px;
@@ -1077,11 +1098,14 @@ export default {
                         position:relative;
                         .price{
                             line-height:25px;
+                            float:none;
+                            overflow:hidden;
                         }
                         .yPrice{
-                            width:100%;
                             margin-left:0;
                             line-height:1;
+                            float:none;
+                            overflow:hidden;
                         }
                     }
                     .kai{
@@ -1089,135 +1113,9 @@ export default {
                         height:24px;
                         line-height:24px;
                         text-align:center;
-                        position:absolute;
                         right:0px;
                         bottom:7.5px;
-                    }
-                    .pin{
-                        display:none;
-                    }
-                    .activity_end{
-                        right:0px;
-                        bottom:12.5px;
-                        line-height:1;
-                        font-size:15px;
-                    }
-                }
-            }
-            &:nth-of-type(3n+3){
-                .countdown_Bar{
-                    height:31px;
-                    margin-top:-31px;
-                    position:relative;
-                    .title{
-                        display:none;
-                    }
-                    .countdown{
-                        width:100%;
-                        height:100%;
-                        .bj{
-                            display:none;
-                        }
-                        .content{
-                            // @extend .flexCenterMiddle;
-                            display:flex;
-                            align-items:center;
-                            padding:0 10px;
-                            .caption{
-                                color:#fff;
-                                font-size:10px;
-                                line-height:31px;
-                                margin:0;
-                            }
-                            .time{
-                                margin-left:7.5px;
-                                height:16px;
-                                color:#fff;
-                                font{
-                                    width:16px;
-                                    height:16px;
-                                    color:#FC3D42;
-                                    font-size:9px;
-                                    line-height:16px;
-                                    background:#fff;
-                                    position:relative;
-                                    top:-2.5px;
-                                    margin:0 2px;
-                                    text-align:center;
-                                }
-                                .item {
-                                    background:#333;
-                                    min-width:29px;
-                                    height:16px;
-                                    color:#fff;
-                                    margin:0 4px;
-                                }
-                            }
-                        }
-                    }
-                }
-                .info_box{
-                    padding:3px 10px 9px 10px;
-                    .name{
-                        .label{  
-                            background:#FFF0C9;
-                            border:1px solid #FFAA4E;
-                            padding:0 6px;
-                            line-height:15px;
-                            display:inline-block;
-                            color:#FC3D42;
-                            font-size:10px;
-                            @include borderRadius(4px);
-                            position:relative;
-                            top:-1.5px;
-                            margin-right:7.5px;
-                        }
-                        line-height:22px;
-                        height:44px;
-                        font-size:14px;
-                        @include lineClamp(2);
-                    }
-                    .caption{
-                        display:none;
-                    }
-                    .remainder_box{
-                        display:flex;
-                        .jd_line{
-                            height:6px;
-                            flex:1;
-                        }
-                        p{
-                            font-size:11px;
-                            margin-left:9px;
-                        }
-                    }
-
-                    .caption{
-                        display:none;
-                    }
-                    .limit_line{
-                        display:none;
-                    }
-                    .price_line{
                         margin-top:5px;
-                        position:relative;
-                        .price{
-                            line-height:25px;
-                        }
-                        .yPrice{
-                            width:100%;
-                            margin-left:0;
-                            line-height:1;
-                        }
-                    }
-                    .kai{
-                        min-width:34px;
-                        height:24px;
-                        line-height:24px;
-                        text-align:center;
-                        position:absolute;
-                        right:0px;
-                        bottom:7.5px;
                     }
                     .pin{
                         display:none;
@@ -1225,8 +1123,9 @@ export default {
                     .activity_end{
                         right:0px;
                         bottom:12.5px;
-                        line-height:1;
+                        line-height:24px;
                         font-size:15px;
+                        margin-top:5px;
                     }
                 }
             }
@@ -1482,7 +1381,8 @@ export default {
             }
             .kai{
                 line-height:31px;
-                position:absolute;
+                // position:absolute;
+                float:right;
                 right:10px;
                 bottom:15px;
                 font-size:13px;
@@ -1500,7 +1400,7 @@ export default {
             .activity_end{
                 color:#999;
                 font-weight:bold;
-                position:absolute;
+                float:right;
             }
         }
     }
