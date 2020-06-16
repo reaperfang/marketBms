@@ -2,17 +2,17 @@
 <!--商户信息-->
 <template>
   <div class="app-container" v-loading="loading" v-calcHeight="160">
-    <div v-if="!webPageStatus || (webPageStatus === 0)" class="no_open">
+    <div v-if="!webStatus || (webStatus === 0) || (webStatus === 2)" class="no_open">
       <img src="../../../../assets/images/shop/no-open-h5.png" alt="">
       <p>您尚未开启移动H5店铺，请您去“应用中心-渠道应用”设置域名并开启店铺：</p>
       <div class="button" @click="linkToOpenH5"><span>渠道应用</span></div>
     </div>
-    <div v-if="webPageStatus === 2" class="no_bind">
+    <!-- <div v-if="webStatus === 2" class="no_bind">
       <img src="../../../../assets/images/shop/no-open-h5.png" alt="">
       <p>您尚未成功开启H5店铺，店铺域名未连接成功，请您去“渠道应用-H5店铺”重新设置：</p>
       <div class="button"  @click="linkToBindDomain"><span>移动</span>H5</div>
-    </div>
-    <template v-if="webPageStatus === 1">
+    </div> -->
+    <template v-if="webStatus === 1">
       <div class="inner">
         <div class="left">
           <div class="screen">
@@ -72,22 +72,32 @@ export default {
   extends: shopMainDefault,
   data() {
     return {
-      webPageStatus: 0  //未绑定过域名
+      loading: true,
+      webStatus: null  //未绑定过域名
+    }
+  },
+  props: {
+    webPageStatus: {
+      default: null
+    },
+    statusLoading: {
+      type: Boolean
+    }
+  },
+  created() {
+    this.webStatus = this.webPageStatus;
+    this.loading = this.statusLoading;
+  },
+  watch: {
+    webPageStatus(newValue) {
+      this.webStatus = newValue;
+    },
+    statusLoading(newValue) {
+      this.loading = newValue;
     }
   },
   methods: {
     ...mapMutations(['SETCURRENT']),
-    /* 获取H5店铺状态 */
-    getH5StoreStatus() {
-      this.loading = true;
-      this._apis.shop.getH5StoreStatus({}).then((response)=>{
-        this.webPageStatus = response.webPageStatus;
-        this.loading = false;
-      }).catch((error)=>{
-        console.error(error);
-        this.loading = false;
-      });
-    },
 
     /* 去开通H5店铺 */
     linkToOpenH5() {
@@ -103,7 +113,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .no_open,.no_bind{
   display:flex;
   flex-direction: column;
@@ -133,6 +143,7 @@ export default {
     box-sizing: border-box;
     text-align: center;
     border-radius: 4px;
+    line-height: 1.3;
     cursor: pointer;
     span{
       letter-spacing: 8px;
@@ -140,8 +151,8 @@ export default {
   }
 }
 .no_bind{
-  .button{
-    padding: 7px 30px 7px 32px;
+    .button{
+      padding: 7px 30px 7px 32px!important;
+    }
   }
-}
 </style>

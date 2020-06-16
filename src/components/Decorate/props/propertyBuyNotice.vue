@@ -72,7 +72,7 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    this.fetch(false);
   },
   watch: {
     'items': {
@@ -82,7 +82,6 @@ export default {
           this.ruleForm.ids.push(item.id);
         }
         this.fetch();
-        this._globalEvent.$emit('fetchBuyNotice', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -101,8 +100,10 @@ export default {
   },
   methods: {
     //根据ids拉取数据
-    fetch(componentData = this.ruleForm) {
+    fetch(bNeedUpdateMiddle = true) {
+      const componentData = this.ruleForm;
         if(componentData) {
+          bNeedUpdateMiddle && this._globalEvent.$emit('fetchBuyNotice', this.ruleForm, this.$parent.currentComponentId);
           if(Array.isArray(componentData.ids) && componentData.ids.length){
             this.loading = true;
             this._apis.goods.fetchAllSpuGoodsList({

@@ -9,7 +9,7 @@
             </div>
             <div class="item" style="width: 120px;">应收金额</div>
             <div class="item" style="width: 120px;">收货人及联系方式</div>
-            <div class="item">配送方式</div>
+            <div class="item" :class="{'item-storew': storeMark}">配送方式</div>
             <div class="item">状态</div>
             <div class="item">操作</div>
         </div>
@@ -69,7 +69,13 @@
                         <p>{{order.receivedName}}</p>
                         <p>{{order.receivedPhone}}</p>
                     </div>
-                    <div class="item">{{order.deliveryWay | deliveryWayFilter}}</div>
+                    <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1}">
+                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order.deliveryWay | deliveryWayFilter}}</span>
+                        <div class="store-time" v-if="storeMark && order.deliveryWay == 2">
+                            <p>{{order.deliveryDate | formatDateRemoveZero}}</p>
+                            <p>{{order.deliveryTime}}</p>
+                        </div>
+                    </div>
                     <div class="item">{{order.orderStatus | orderStatusFilter}}</div>
                     <div class="item operate">
                         <template v-if="order.orderStatus == 0">
@@ -134,14 +140,23 @@ export default {
             currentDialog: '',
             currentData: '',
             dialogVisible: false,
-            loading: false
+            loading: false,
+            storeMark: false //商家配送标记，如果列表中包含商家配送，则为true, 为了让配送方式标题宽度变宽
         }
     },
     created() {
         
     },
     watch: {
-
+        list: {
+            deep: true,
+            handler(newVal, objVal) {
+                //如果当前列表中包含商家配送方式，则配送方式标题需要加宽
+                if(newVal.some(item => item.deliveryWay == 2)){
+                    this.storeMark = true;
+                }
+            }
+        }
     },
     filters: {
         orderTypeFilter(code) {
@@ -165,7 +180,7 @@ export default {
                 case 1:
                     return '普通快递'
                 case 2:
-                    return '商家自送'
+                    return '商家配送'
             }
         },
         goodsSpecsFilter(value) {
@@ -283,6 +298,7 @@ export default {
     .order {
         .order-header {
             display: flex;
+            min-width: 1000px;
             color: $globalMainColor;
             background-color: rgb(240, 239, 255);
             padding: 12px 20px;
@@ -399,6 +415,28 @@ export default {
                     }
                 }
             }
+        }
+        .item-storew{
+            width: 105px !important;
+        }
+        .icon-store{
+            display: inline-block;
+            width: 16px;
+            height: 15px;
+            margin-right: 5px;
+            vertical-align: middle;
+            background: url(~@/assets/images/order/icon_store.png) no-repeat;
+        }
+        .icon-store-text{
+            vertical-align: middle;
+        }
+        .store-time{
+            padding-top: 5px;
+            font-size: 12px;
+            color: #9FA29F;
+        }
+        .item-indent{
+            text-indent: 0px;
         }
     }
     .order-code {

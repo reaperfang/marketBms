@@ -123,12 +123,12 @@
       <el-form-item label="显示内容" prop="showContents">
         <el-checkbox-group v-model="ruleForm.showContents">
           <el-checkbox label="1">商品名称</el-checkbox>
-          <el-checkbox label="2">商品描述</el-checkbox>
+          <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">商品描述</el-checkbox>
           <el-checkbox label="3">拼团价</el-checkbox>
           <el-checkbox label="4">单买价</el-checkbox>
-          <el-checkbox label="5">抢购倒计时</el-checkbox>
+          <el-checkbox label="5" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">抢购倒计时</el-checkbox>
           <el-checkbox label="6">已团人数</el-checkbox>
-          <el-checkbox label="7">限制规则</el-checkbox>
+          <el-checkbox label="7" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 4 ||ruleForm.listStyle === 6">限制规则</el-checkbox>
           <el-checkbox label="8" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
         </el-checkbox-group>
         <el-radio-group v-if="ruleForm.showContents.includes('8') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
@@ -144,7 +144,7 @@
         <!-- <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle)" v-model="ruleForm.buttonText"></el-input> -->
         <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonTextPrimary"></el-input>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideSaledGoods" v-if="ruleForm.addType == 1">
+      <el-form-item label="更多设置" prop="hideSaledGoods">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
         <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
@@ -176,7 +176,7 @@ export default {
         showAllBtns: true,//查看全部按钮
         sortRule: 1,//排序规则
         listStyle: 1,//列表样式
-        pageMargin: 15,//	页面边距
+        pageMargin: 10,//	页面边距
         goodsMargin: 10,//	商品边距
         goodsStyle: 1,//	商品样式
         goodsChamfer: 1,// 商品倒角
@@ -204,7 +204,7 @@ export default {
     }
   },
   created() {
-    this.fetch();
+    this.fetch(false);
   },
   watch: {
     'items': {
@@ -217,7 +217,6 @@ export default {
           });
         }
         this.fetch();
-        this._globalEvent.$emit('fetchMultiPerson', this.ruleForm, this.$parent.currentComponentId);
       },
       deep: true
     },
@@ -233,7 +232,6 @@ export default {
             return;
         }
         if(newValue == 2) {
-          this.ruleForm.hideSaledGoods = false;
           this.fetch();
         }else{
           this.list = [];
@@ -247,6 +245,24 @@ export default {
         this.fetch();
     },
     'ruleForm.sortRule'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideSaledGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideEndGoods'(newValue, oldValue) {
+        if(newValue === oldValue) {
+            return;
+        }
+        this.fetch();
+    },
+    'ruleForm.hideType'(newValue, oldValue) {
         if(newValue === oldValue) {
             return;
         }
@@ -274,8 +290,10 @@ export default {
     },
 
     //根据ids拉取数据
-    fetch(componentData = this.ruleForm) {
+    fetch(bNeedUpdateMiddle = true) {
+      const componentData = this.ruleForm;
         if(componentData) {
+            bNeedUpdateMiddle && this._globalEvent.$emit('fetchMultiPerson', this.ruleForm, this.$parent.currentComponentId);
             let params = {};
 
             //兼容老数据
@@ -288,11 +306,24 @@ export default {
               newParams = componentData.ids;
             }
 
+            let hideStatus = 0;
+            if(!componentData.hideSaledGoods) {
+                hideStatus = 0;
+            }else {
+                if(componentData.hideType==1){
+                    hideStatus=2;
+                }
+                else{
+                    hideStatus=1;
+                }
+            }
+
+
             if(componentData.addType == 2) {
                 params = {
                     num: componentData.showNumber,
                     order: componentData.sortRule,
-                    hideStatus: 0
+                    hideStatus: hideStatus
                 };
             }else{
                 const ids = componentData.ids;
@@ -300,7 +331,7 @@ export default {
                     params = {
                         order: componentData.sortRule,
                         activityList: newParams,
-                        hideStatus: 0
+                        hideStatus: hideStatus
                     };
                 }else{
                     this.list = [];
