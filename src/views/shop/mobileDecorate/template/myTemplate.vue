@@ -1,7 +1,7 @@
 <template>
 	<div class="template_wrapper">
-		<ul v-show="templateList.length > 0" class="clearFix" v-loading="loading">
-			<li v-if="!templateList.length">
+		<ul class="clearFix" v-loading="loading">
+			<li>
 				<div class="inner">
 					<div class="view">
 						<div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
@@ -17,24 +17,8 @@
 					</div>
 				</div>
 			</li>
-			<li v-for="(item, key) of templateList" :key="key" v-else>
-
-				<div class="inner" v-if="item.sort === 0">
-					<div class="view">
-						<div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
-					</div>
-					<div class="info">
-						<div class="top">
-							<span>空白模板</span>
-						</div>
-						<div class="bottom">
-							<span class="price"></span>
-							<el-button type="primary" plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
-						</div>
-					</div>
-				</div>
-
-				<div class="inner" v-else>
+			<li v-for="(item, key) of templateList" :key="key">
+				<div class="inner">
 					<div class="inner-tag">
 						<div class="inner-tag-tag">
 						</div>
@@ -448,7 +432,6 @@
 							display:flex;
 							flex-direction: row;
 							justify-content: space-between;
-							margin-top:10px;
 							align-items: center;
 							&-left {
 								display:flex;

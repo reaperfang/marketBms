@@ -27,8 +27,8 @@ class Ajax {
           tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
           merchantId: cid,
           loginUserId: 1,
-          // token: store.getters.token || getToken('authToken')
-		  token: '09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472'
+          token: store.getters.token || getToken('authToken')
+		  // token: '09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472'
         },
         config.headers
     );
@@ -132,8 +132,8 @@ class Ajax {
     //拼接参数head
     let head = {
         target: config.target,
-        accessToken:'09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472',
-        // accessToken: store.getters.token || getToken('authToken'),
+        // accessToken:'09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472',
+        accessToken: store.getters.token || getToken('authToken'),
         client: CONST.CLIENT,
         version: CONST.VERSION,
         requestTime: utils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
