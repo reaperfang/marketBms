@@ -163,10 +163,10 @@
                         :value="item.name">
                         </el-option>
                     </el-select>
-                    <div class="pointer" style="display: inline-block; margin-left: 20px; margin-right: 10px;vertical-align:middle;">
+                    <div class="pointer" v-show="distributorSet" style="display: inline-block; margin-left: 20px; margin-right: 10px;vertical-align:middle;">
                         <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
                     </div>
-                    <div class="prompt" style="display:inline-block;" v-show="isDistributorShow">
+                    <div class="prompt" style="display:inline-block;" v-show="isDistributorShow && distributorSet">
                         <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
                     </div>
                     </el-form-item>
@@ -198,6 +198,8 @@
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
 
 import { validatePhone } from "@/utils/validate.js"
+
+import { asyncRouterMap } from '@/router'
 
 export default {
     data() {
@@ -275,12 +277,14 @@ export default {
             distributorListFilter: [], //所有配送员数据
             distributorName: '', //配送员名字
             distributorId: '', //配送员id
-            isDistributorShow: false //尚未创建配送员信息提示控制
+            isDistributorShow: false, //尚未创建配送员信息提示控制
+            distributorSet: false
         }
     },
     created() {
         this.getOrderDetail()
         this.getExpressCompanyList()
+        this.checkSet()
     },
     computed: {
         afterSale() {
@@ -296,6 +300,20 @@ export default {
     }
     },
     methods: {
+        //检测是否有配置子帐号的权限
+        checkSet(){
+            const setConfig = asyncRouterMap.filter(item => item.name === 'set');
+            if(setConfig.length == 0){
+                this.distributorSet = false;
+                return;
+            }
+            const subaccountManage = setConfig[0].children.filter(item => item.name === 'subaccountManage');
+            if(subaccountManage.length == 0){
+                this.distributorSet = false;
+                return;
+            }
+            this.distributorSet = true;
+        },
         dataFilter() {
             //这里需要使用input本身的value，且过滤前后空格
             const input = this.$refs.searchSelect.$children[0].$refs.input;
@@ -390,6 +408,17 @@ export default {
                     item.name = item.userName;
                     item.phone = item.mobile;
                 })
+                //如果没有子帐号配置权限，则默认自己是配送员
+                if(!this.distributorSet){
+                    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                    res.list = [
+                        {
+                            "id": 1,
+                            "name": userInfo.userName,
+                            "phone": userInfo.mobile
+                        }
+                    ];
+                }
                 this.distributorListFilter = res.list;
                 //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
                 if(this.ruleFormStore.distributorValue){
