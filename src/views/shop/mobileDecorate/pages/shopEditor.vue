@@ -36,7 +36,9 @@ export default {
             title: '保存草稿',
             function: this.saveData,
             type: 'primary',
-            show: () => true,
+            show: () => {
+              return this.decorateData && this.decorateData.isHomePage !== 1;
+            },
             loading: false
           },
           saveAndApplyData: {

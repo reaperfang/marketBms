@@ -1,42 +1,88 @@
 <template>
   <!-- 组件-风格按钮 -->
-  <div class="componentButton" :class="buttonStyle">{{decorationText}}</div>
+  <div class="componentButton" :class="buttonStyle" :style="buttonStyleCss">
+    {{decorationText}}
+    <gwcIcon v-if="decorationStyle==9"></gwcIcon>
+  </div>
+  
 </template>
 <script>
+import gwcIcon from './gwcIcon'
 export default {
   name: "componentButton",
   data(){
     return{
-      buttonStyle:''
+      buttonStyle:'',
+      buttonStyleCss:{}
     }
   },
   props: ["decorationStyle","decorationText"],
+  components:{
+    gwcIcon
+  },
+  computed: {
+      colorStyle() {
+          return this.$store.getters.colorStyle || {colors:[]};
+        },
+        color1(){
+            return this.colorStyle.colors && this.colorStyle.colors[0]
+        },
+        color2(){
+            return this.colorStyle.colors && this.colorStyle.colors[1]
+        },
+        color3(){
+            return this.colorStyle.colors && this.colorStyle.colors[2]
+        }
+  },
   created(){
+    this.$store.dispatch('getShopStyle');
     this.decorate();
   },
   methods:{
     decorate(){
       if(this.decorationStyle==1){
         this.buttonStyle='buttonStyle' + this.decorationStyle + ' iconfont icon-gouwuche2';
+        this.buttonStyleCss = {background:this.color1}
       }
       else if(this.decorationStyle==2){
         this.buttonStyle='buttonStyle' + this.decorationStyle + ' iconfont icon-jiahao';
+        this.buttonStyleCss = {border:'1px solid '+this.color1,color:this.color1}
       }
-      else if(this.decorationStyle==3||this.decorationStyle==4||this.decorationStyle==7||this.decorationStyle==8){
+      else if(this.decorationStyle==3){
         this.buttonStyle='buttonStyle' + this.decorationStyle;
+        this.buttonStyleCss = {background:this.color1,color:'#fff'}
+      }
+      else if(this.decorationStyle==4){
+        this.buttonStyle='buttonStyle' + this.decorationStyle;
+        this.buttonStyleCss = {border:'1px solid '+this.color1,color:this.color1}
       }
       else if(this.decorationStyle==5){
         this.buttonStyle='buttonStyle' + this.decorationStyle + ' iconfont icon-jiahao';
+        this.buttonStyleCss = {background:this.color1,color:'#fff'}
       }
       else if(this.decorationStyle==6){
         this.buttonStyle='buttonStyle' + this.decorationStyle + ' iconfont icon-gouwuche2';
-      }else if(this.decorationStyle==9){
-        this.buttonStyle='buttonStyle' + this.decorationStyle + ' iconfont';
+        this.buttonStyleCss = {color:this.color1}
+      }
+      else if(this.decorationStyle==7){
+        this.buttonStyle='buttonStyle' + this.decorationStyle;
+        this.buttonStyleCss = {background:this.color1,color:'#fff'}
+      }
+      else if(this.decorationStyle==8){
+        this.buttonStyle='buttonStyle' + this.decorationStyle;
+        this.buttonStyleCss = {border:'1px solid '+this.color1,color:this.color1}
+      }
+      else if(this.decorationStyle==9){
+        this.buttonStyle='buttonStyle' + this.decorationStyle;
+        this.buttonStyleCss = {}
       }
     }
   },
   watch:{
     decorationStyle(){
+      this.decorate();
+    },
+    decorationText(){
       this.decorate();
     }
   }
@@ -47,8 +93,8 @@ export default {
   display:inline-block;
 }
 .componentButton.iconfont{
-  width:26px !important;
-  height:26px !important;
+  width:28px !important;
+  height:28px !important;
   @extend .flexCenterMiddle;
   font-size:0 !important;
   padding:0 !important;
@@ -79,7 +125,8 @@ export default {
   @include borderRadius(25px);
   @extend .flexCenterMiddle;
   background:#FF4444;
-  height:24px;
+  height:28px;
+  line-height:56px;
 }
 .componentButton.buttonStyle4{
   padding:0 7.5px;
@@ -89,9 +136,11 @@ export default {
   @extend .flexCenterMiddle;
   color:#FF4444;
   min-width:40px;
-  height:24px;
+  height:28px;
+  line-height:26px;
 }
 .componentButton.iconfont.buttonStyle5{
+  padding:0 7.5px;
   background:#FF4444;
   @include borderRadius(50%);
   color:#fff;
@@ -114,7 +163,8 @@ export default {
   @extend .flexCenterMiddle;
   background:#FF4444;
   @include borderRadius(4px);
-  height:24px;
+  height:28px;
+  line-height:28px;
 }
 .componentButton.buttonStyle8{
   padding:0 7.5px;
@@ -124,14 +174,12 @@ export default {
   @extend .flexCenterMiddle;
   color:#FF4444;
   min-width:40px;
-  height:24px;
+  height:28px;
+  line-height:26px;
 }
 .componentButton.buttonStyle9{
-  @include borderRadius(50%);
-  color:#fff;
-  &:before{
-    font-size:17px;
-  }
-  background:url('../../../assets/images/shop/guibocui-btn.png') no-repeat 0 0;
+  width:28px;
+  height:28px;
+  font-size:0 !important;
 }
 </style>
