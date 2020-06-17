@@ -10,7 +10,7 @@
       </el-input>
         <div class="info-div" v-if="pois.length > 0">
           <ol :style="{height: height + 'px'}">
-            <li v-for="(item, index) in pois" @click="handleClickPoi(item, index)"
+            <li v-for="(item, index) in pois" :class="[poi && poi.id === item.id ? 'curred' : '']" @click="handleClickPoi(item, index)"
               :key="index">
               <p v-if="item.title" ><span>{{ index + 1 }}.</span>{{ item.title }}</p>
               <p v-if="item.address">{{ item.address }}</p>
@@ -71,6 +71,7 @@ export default {
       info: null,
       markers: [],
       pois: [],
+      poi: null,
       page: 1,
       pageSize: 10,
       totalNum: 0,
@@ -82,6 +83,7 @@ export default {
   methods: {
     getPoiDetail(poi) {
       console.log(poi)
+      this.poi = poi
       const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
       const data = Object.assign({}, poi)
       if (tencentCode) {
@@ -374,9 +376,10 @@ export default {
       padding: 5px 5px 5px 20px;
       line-height: 16px;
       cursor: pointer;
-      &:hover {
+      &:hover, &.curred {
         background: #f3f1f1;
       }
+      
       p {
         color:#999999;font-size:12px;
       }
