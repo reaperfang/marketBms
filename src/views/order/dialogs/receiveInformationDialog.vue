@@ -11,7 +11,7 @@
                 <el-form-item :class="{isIE: isIE}" label="发货地址" prop="sendAddress">
                     <!-- <area-cascader :disabled="true" type="code" :level="1" :data='$pcaa' v-model='ruleForm.deliveryAddress'></area-cascader> -->
                     <!-- <div class="gray">{{ruleForm.deliveryAddress.map(val => Object.values(val)[0]).join(',')}}</div> -->
-                    <el-input disabled v-model="ruleForm.sendAddress" placeholder="请输入"></el-input>
+                    <el-input disabled v-model="ruleForm.sendAddress" placeholder=""></el-input>
                 </el-form-item>
                 <div class="pointer" style="display: inline-block; margin-left: 99px; margin-right: 10px;vertical-align:middle;" v-show="!ruleForm.sendAddress">
                     <span class="shuaxin-fenlei" @click="fetchOrderAddress">刷新<i></i></span>
@@ -19,15 +19,16 @@
                 <div class="prompt" style="display:inline-block;font-size:12px;" v-show="!ruleForm.sendAddress">
                     <span class="set-btn blue pointer font12" @click="gotoSetAddress">去设置地址</span>
                 </div>
-                <!-- <el-form-item label="详细地址" prop="sendDetail">
+                <el-form-item label="详细地址" prop="sendDetail">
                     <el-input
                         type="textarea"
                         :rows="2"
-                        placeholder="街道、楼牌号等"
+                        disabled
+                        placeholder=""
                         maxlength="100"
                         v-model="ruleForm.sendDetail">
                     </el-input>
-                </el-form-item> -->
+                </el-form-item>
                 <div class="footer" style="margin-top: 20px;">
                     <el-button @click="visible = false">取消</el-button>
                     <el-button @click="submit('ruleForm')" type="primary">确定</el-button>
