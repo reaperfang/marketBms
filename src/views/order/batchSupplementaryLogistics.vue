@@ -155,6 +155,8 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 
 import { validatePhone } from "@/utils/validate.js"
 
+import { asyncRouterMap } from '@/router'
+
 export default {
   data() {
     return {
@@ -172,11 +174,13 @@ export default {
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
+      distributorSet: false
     };
   },
   created() {
     this.getDetail();
     this.getExpressCompanyList()
+    this.checkSet()
   },
   computed: {
         cid(){
@@ -185,6 +189,20 @@ export default {
         }
     },
   methods: {
+    //检测是否有配置子帐号的权限
+    checkSet(){
+        const setConfig = asyncRouterMap.filter(item => item.name === 'set');
+        if(setConfig.length == 0){
+            this.distributorSet = false;
+            return;
+        }
+        const subaccountManage = setConfig[0].children.filter(item => item.name === 'subaccountManage');
+        if(subaccountManage.length == 0){
+            this.distributorSet = false;
+            return;
+        }
+        this.distributorSet = true;
+    },
     dataFilter(value, index) {
       //这里需要使用input本身的value，且过滤前后空格
       const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
@@ -345,6 +363,17 @@ export default {
               item.name = item.userName;
               item.phone = item.mobile;
             })
+            //如果没有子帐号配置权限，则默认自己是配送员
+            if(!this.distributorSet){
+                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                res.list = [
+                    {
+                        "id": 1,
+                        "name": userInfo.userName,
+                        "phone": userInfo.mobile
+                    }
+                ];
+            }
             this.distributorListFilter = res.list;
             for(let i = 0; i < length; i++){
               this.distributorList.push(res.list);
@@ -707,8 +736,6 @@ export default {
             })
           })
 
-          //模拟数据，之后删除掉
-          res[0].deliveryWay = 2
 
           //如果是商家配送，则需要请求拿到配送员列表
           if(res[0].deliveryWay == 2){

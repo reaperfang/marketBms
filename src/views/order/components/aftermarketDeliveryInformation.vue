@@ -148,6 +148,7 @@
                     <div class="header-lefter">
                         <div class="header-lefter-item number">1</div>
                         <div class="header-lefter-item ">商家自取</div>
+                        <div class="header-lefter-item " v-if="!orderAfterSale.deliveryDate">与商家电话约定取货时间</div>
                         <div class="header-lefter-item " v-if="orderAfterSale.deliveryDate">取货时间：{{orderAfterSale.deliveryDate | formatDateRemoveZero}} {{orderAfterSale.deliveryTime}}</div>
                      </div>
                     <div class="header-righter">
