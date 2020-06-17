@@ -348,8 +348,7 @@
 					} else {
 						if (res1 === null) {
 							this._apis.shop.getTemplateInfo({
-								pageTemplateId: item.id,
-								status: 1
+								pageTemplateId: item.id
 							}).then(response => {
 								this.confirm({
 									title: '提示',
