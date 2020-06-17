@@ -82,7 +82,7 @@ export default {
   methods: {
     getPoiDetail(poi) {
       console.log(poi)
-      const tencentCode = poi.ad_info.adcode
+      const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
       const data = Object.assign({}, poi)
       if (tencentCode) {
         this._apis.map.getParentAreaCode({ tencentCode }).then(response =>{
