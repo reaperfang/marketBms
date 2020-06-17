@@ -1009,6 +1009,7 @@ export default {
       // const p2 = this._apis.set.
       Promise.all([p1, p2]).then(res => {
         this.$store.dispatch('getShopInfo'); 
+        this.getOrderDeliverInfo()
         if (this.isOpen) {
           this.$message({
               message: '保存成功',
