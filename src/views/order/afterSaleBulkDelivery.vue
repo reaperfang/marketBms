@@ -363,6 +363,12 @@ export default {
                         "phone": userInfo.mobile
                     }
                 ];
+                this.distributorNameFirst = false;
+                this.list.forEach((item) => {
+                  item.distributorValue = userInfo.userName;
+                  item.distributorName = userInfo.userName;
+                  item.phone = userInfo.mobile;
+                })
             }
             this.distributorListFilter = res.list;
             for(let i = 0; i < length; i++){
