@@ -64,7 +64,7 @@
 							<img :src="item.photoHalfUrl" alt="">
 							<div class="cover_small">
 								<div class="cover_button" @click="preview(item)">预览模板</div>
-								<div class="cover_button_apply" @click="apply(item)">使用模板</div>
+								<el-button type="primary"  class="cover_button_apply" @click="apply(item)">使用模板</el-button>
 							</div>
 						</div>
 						<div class="info">
@@ -89,12 +89,6 @@
 							<div class="body">
 								<span>{{item.name || '页面模板'}}</span>
 							</div>
-							<!-- <div class="bottom">
-                              <el-button type="success" size="mini" v-if="item.price === 0" plain>免费</el-button>
-                              <span class="price" v-if="item.price !== 0">￥{{item.price}}</span>
-                              <el-button type="success" plain v-if="item.state === 2" @click="_routeTo('m_templateEdit', {id: scope.row.id})">立即应用</el-button>
-                              <el-button type="warning" plain v-if="item.state === 1">立即购买</el-button>
-                            </div> -->
 							<div class="bottom">
 								<i class="mini_program"></i>
 								<i class="wechat"></i>
@@ -323,33 +317,49 @@
 
 			/* 应用模板 */
 			apply(item) {
-				if (item.chargeType !== 1) {
-					this._apis.templatePay.getOrcode({
-						orderSource: 1,
-						orderType: 1,
-						shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
-						templateChargeType: item.chargeType,
-						templateId: item.id,
-						templateName: item.name,
-						templatePrice: item.price
-					}).then(res => {
-						this.qrCodeInfo = res
-						this.dialogVisible = true
-						this.tempInfo = item
-					})
-				} else {
-					this.confirm({
-						title: '提示',
-						customClass: 'goods-custom',
-						icon: true,
-						text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
-					}).then(() => {
-						this._routeTo('m_templateEdit', {id: item.id});
-					})
-				}
+				this._apis.shop.getTemplateInfo({
+					pageTemplateId: item.id
+				}).then(res1 => {
+					if (item.chargeType !== 1) {
+						if (res1 === null || res1.status === 2) {
+							this._apis.templatePay.getOrcode({
+								orderSource: 1,
+								orderType: 1,
+								shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+								templateChargeType: item.chargeType,
+								templateId: item.id,
+								templateName: item.name,
+								templatePrice: item.price
+							}).then(res => {
+								this.qrCodeInfo = res
+								this.dialogVisible = true
+								this.tempInfo = item
+							})
+						} else {
+							this.confirm({
+								title: '提示',
+								customClass: 'goods-custom',
+								icon: true,
+								text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+							}).then(() => {
+								this._routeTo('m_templateEdit', {id: item.id});
+							})
+						}
+					} else {
+						this.confirm({
+							title: '提示',
+							customClass: 'goods-custom',
+							icon: true,
+							text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+						}).then(() => {
+							this._routeTo('m_templateEdit', {id: item.id});
+						})
+					}
+				})
 			},
 			closePay() {
 				this.dialogVisible = false
+				this.fetch()
 			},
 			showAllIndustries() {
 				this.ifShowAll = !this.ifShowAll
@@ -615,11 +625,13 @@
 								opacity: 1;
 							}
 							.cover_button{
+								width:90px;
+								height:34px;
 								font-size:14px;
 								font-family:MicrosoftYaHei;
 								color:rgba(255,255,255,1);
-								line-height:19px;
-								padding:6px 17px;
+								line-height:34px;
+								text-align: center;
 								border-radius:4px;
 								border:1px solid rgba(255,255,255,1);
 								cursor: pointer;
@@ -630,21 +642,13 @@
 								}
 							}
 							.cover_button_apply {
+								width:90px;
+								height:34px;
 								margin-top: 16px;
 								font-size:14px;
 								font-family:MicrosoftYaHei;
 								color:rgba(255,255,255,1);
-								line-height:19px;
-								padding:6px 17px;
 								border-radius:4px;
-								background:rgba(101,94,255,1);
-								border:1px solid rgba(101,94,255,1);
-								cursor: pointer;
-								transition: all 0.4s;
-								&:hover{
-									background:rgba(101,94,255,1);
-									border:1px solid rgba(101,94,255,1);
-								}
 							}
 						}
 					}
@@ -825,18 +829,5 @@
 				}
 			}
 		}
-	}
-	/deep/.el-button--small{
-		padding:9px 12px!important;
-		background: #fff!important;
-		border-radius:4px!important;
-	}
-	/deep/.el-button--success{
-		border:1px solid rgba(62,180,136,1)!important;
-		color: rgba(62,180,136,1)!important;
-
-	}
-	/deep/.el-button--primary{
-		color: #655EFF!important;
 	}
 </style>

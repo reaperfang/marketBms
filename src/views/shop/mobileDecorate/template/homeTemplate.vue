@@ -64,7 +64,7 @@
 							<img :src="item.photoHalfUrl" alt="">
 							<div class="cover_small">
 								<div class="cover_button" @click="preview(item)">预览模板</div>
-								<div class="cover_button_apply" @click="apply(item)">使用模板</div>
+								<el-button type="primary"  class="cover_button_apply" @click="apply(item)">使用模板</el-button>
 							</div>
 						</div>
 						<div class="info">
@@ -625,11 +625,13 @@
 								opacity: 1;
 							}
 							.cover_button{
+								width:90px;
+								height:34px;
 								font-size:14px;
 								font-family:MicrosoftYaHei;
 								color:rgba(255,255,255,1);
-								line-height:19px;
-								padding:6px 17px;
+								line-height:34px;
+								text-align: center;
 								border-radius:4px;
 								border:1px solid rgba(255,255,255,1);
 								cursor: pointer;
@@ -640,21 +642,13 @@
 								}
 							}
 							.cover_button_apply {
+								width:90px;
+								height:34px;
 								margin-top: 16px;
 								font-size:14px;
 								font-family:MicrosoftYaHei;
 								color:rgba(255,255,255,1);
-								line-height:19px;
-								padding:6px 17px;
 								border-radius:4px;
-								background:rgba(101,94,255,1);
-								border:1px solid rgba(101,94,255,1);
-								cursor: pointer;
-								transition: all 0.4s;
-								&:hover{
-									background:rgba(101,94,255,1);
-									border:1px solid rgba(101,94,255,1);
-								}
 							}
 						}
 					}
@@ -835,18 +829,5 @@
 				}
 			}
 		}
-	}
-	/deep/.el-button--small{
-		padding:9px 12px!important;
-		background: #fff!important;
-		border-radius:4px!important;
-	}
-	/deep/.el-button--success{
-		border:1px solid rgba(62,180,136,1)!important;
-		color: rgba(62,180,136,1)!important;
-
-	}
-	/deep/.el-button--primary{
-		color: #655EFF!important;
 	}
 </style>

@@ -234,7 +234,7 @@
 						orderType: 1,
 						shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
 						templateChargeType: item.chargeType,
-						templateId: item.id,
+						templateId: item.pageTemplateId,
 						templateName: item.name,
 						templatePrice: item.price
 					}).then(res => {
@@ -249,7 +249,7 @@
 						icon: true,
 						text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
 					}).then(() => {
-						this._routeTo('m_templateEdit', {id: item.id});
+						this._routeTo('m_templateEdit', {id: item.pageTemplateId});
 					})
 				}
 			},
@@ -370,17 +370,15 @@
 								border:1px solid rgba(255,255,255,1);
 								cursor: pointer;
 								transition: all 0.4s;
-								/*&:hover{*/
-									/*background:rgba(101,94,255,1);*/
-									/*border:1px solid rgba(101,94,255,1);*/
-								/*}*/
 							}
 							.cover_button_pre{
+								width:90px;
+								height:34px;
 								font-size:14px;
 								font-family:MicrosoftYaHei;
 								color:rgba(255,255,255,1);
-								line-height:19px;
-								padding:6px 17px;
+								line-height:34px;
+								text-align: center;
 								border-radius:4px;
 								border:1px solid rgba(255,255,255,1);
 								cursor: pointer;
@@ -397,17 +395,7 @@
 								font-size:14px;
 								font-family:MicrosoftYaHei;
 								color:rgba(255,255,255,1);
-								line-height:19px;
-								padding:6px 17px;
 								border-radius:4px;
-								/*background:rgba(101,94,255,1);*/
-								/*border:1px solid rgba(101,94,255,1);*/
-								/*cursor: pointer;*/
-								/*transition: all 0.4s;*/
-								/*&:hover{*/
-									/*background:rgba(101,94,255,1);*/
-									/*border:1px solid rgba(101,94,255,1);*/
-								/*}*/
 							}
 						}
 					}
