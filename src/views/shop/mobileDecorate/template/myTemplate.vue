@@ -10,7 +10,7 @@
 						<div class="top">
 							<span>空白模板</span>
 						</div>
-						<div class="bottom">
+						<div class="bottom apply_now">
 							<span class="price"></span>
 							<el-button type="primary" plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
 						</div>
@@ -19,28 +19,31 @@
 			</li>
 			<li v-for="(item, key) of templateList" :key="key">
 				<div class="inner">
-					<div class="inner-tag">
-						<div class="inner-tag-tag">
+					<div class="inner-tag" v-show="item.status === 1 || item.status === 0">
+						<div class="inner-tag-tag" :style="{borderColor: item.status === 0 ? 'transparent #FD932B' : 'transparent #3EB488'}">
 						</div>
-						<span>已使用</span>
+						<span>{{item.status === 0 ? '未使用' : '已使用'}}</span>
 					</div>
 					<div class="view">
 						<img :src="item.photoHalfUrl" alt="">
 						<div class="cover_small">
-							<div class="cover_button">已过期</div>
+							<div class="cover_button" v-show="item.status === 2 && item.templateStatus === 1">已过期</div>
+							<div class="cover_button" v-show="item.templateStatus === 2">已下架</div>
+							<div class="cover_button_pre" @click="preview(item)" v-show="item.status !== 2 && item.templateStatus === 1">预览模板</div>
+							<el-button type="primary" class="cover_button_apply" @click="apply(item)" v-show="item.status !== 2 && item.templateStatus === 1">使用模板</el-button>
 						</div>
 					</div>
 					<div class="info">
 						<div class="top">
-							<div class="price" v-show="key < 5">
+							<div class="price" v-show="item.chargeType !== 1">
 								<div class="price-left">
-									￥199<span style="color:rgba(146,146,155,1);">/</span>
+									￥{{item.price}}<span style="color:rgba(146,146,155,1);">/</span>
 								</div>
 								<div class="price-right">
-									90天
+									{{getChangeType(item.chargeType)}}
 								</div>
 							</div>
-							<div class="free"  v-show="key >= 5">
+							<div class="free"  v-show="item.chargeType === 1">
 								<div class="free-left">
 									免费
 								</div>
@@ -48,25 +51,19 @@
 									永久使用
 								</div>
 							</div>
-							<div class="expiration">
-								到期日：2020-05-05
+							<div class="expiration" v-show="item.chargeType !== 1">
+								到期日：{{item.limitDate | formatDate('yyyy-MM-dd')}}
 							</div>
 						</div>
 						<div class="body">
 							<span>{{item.name || '页面模板'}}</span>
 						</div>
-						<!-- <div class="bottom">
-                          <el-button type="success" size="mini" v-if="item.price === 0" plain>免费</el-button>
-                          <span class="price" v-if="item.price !== 0">￥{{item.price}}</span>
-                          <el-button type="success" plain v-if="item.state === 2" @click="_routeTo('m_templateEdit', {id: scope.row.id})">立即应用</el-button>
-                          <el-button type="warning" plain v-if="item.state === 1">立即购买</el-button>
-                        </div> -->
 						<div class="bottom">
 							<div class="bottom-left">
 								<i class="mini_program"></i>
 								<i class="wechat"></i>
 							</div>
-							<div class="bottom-right">
+							<div class="bottom-right" v-show="item.status === 2" @click="apply(item)">
 								继续使用
 							</div>
 						</div>
@@ -99,19 +96,22 @@
 			>
 			</el-pagination>
 		</div>
-		<empty-list v-show="templateList.length === 0"></empty-list>
+		<template-pay :dialogVisible="dialogVisible" :tempInfo="tempInfo" :qrCodeInfo="qrCodeInfo" @closePay="closePay"></template-pay>
 	</div>
 </template>
 
 <script>
 	import tableBase from '@/components/TableBase';
-	import emptyList from './components/emptyList';
+	import templatePay from './components/templatePay';
 	export default {
 		name: 'templateManage',
 		extends: tableBase,
-		components: {emptyList},
+		components: {templatePay},
 		data () {
 			return {
+				dialogVisible: false,
+				tempInfo: {},
+				qrCodeInfo: {},
 				pageSize: 12,
 				loading: true,
 				templateList: [],
@@ -147,9 +147,7 @@
 		methods: {
 			fetch() {
 				this.loading = true;
-				console.log(11,this.startIndex);
-				console.log(22,this.pageSize);
-				this._apis.goodsOperate.getTemplateList({
+				this._apis.shop.getMyTemplateList({
 					startIndex: this.startIndex,
 					pageSize: this.pageSize
 				}).then((response)=>{
@@ -230,17 +228,51 @@
 
 			/* 应用模板 */
 			apply(item) {
-				this.confirm({
-					title: '提示',
-					customClass: 'goods-custom',
-					icon: true,
-					text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
-				}).then(() => {
-					this._routeTo('m_templateEdit', {id: item.id});
-				})
+				if (item.chargeType !== 1 && item.status === 2) {
+					this._apis.templatePay.getOrcode({
+						orderSource: 1,
+						orderType: 1,
+						shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+						templateChargeType: item.chargeType,
+						templateId: item.id,
+						templateName: item.name,
+						templatePrice: item.price
+					}).then(res => {
+						this.qrCodeInfo = res
+						this.dialogVisible = true
+						this.tempInfo = item
+					})
+				} else {
+					this.confirm({
+						title: '提示',
+						customClass: 'goods-custom',
+						icon: true,
+						text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+					}).then(() => {
+						this._routeTo('m_templateEdit', {id: item.id});
+					})
+				}
 			},
-			showAllIndustries() {
-				this.ifShowAll = !this.ifShowAll
+			getChangeType(code) {
+				if (code === 1) {
+					return ''
+				} else if (code === 1) {
+					return '永久免费'
+				} else if (code === 2) {
+					return '30天'
+				} else if (code === 3) {
+					return '90天'
+				} else if (code === 4) {
+					return '180天'
+				} else if (code === 5) {
+					return '360天'
+				} else if (code === 6) {
+
+				}
+			},
+			closePay() {
+				this.dialogVisible = false
+				this.fetch()
 			}
 		}
 	}
@@ -338,6 +370,40 @@
 								border:1px solid rgba(255,255,255,1);
 								cursor: pointer;
 								transition: all 0.4s;
+								/*&:hover{*/
+									/*background:rgba(101,94,255,1);*/
+									/*border:1px solid rgba(101,94,255,1);*/
+								/*}*/
+							}
+							.cover_button_pre{
+								font-size:14px;
+								font-family:MicrosoftYaHei;
+								color:rgba(255,255,255,1);
+								line-height:19px;
+								padding:6px 17px;
+								border-radius:4px;
+								border:1px solid rgba(255,255,255,1);
+								cursor: pointer;
+								transition: all 0.4s;
+								&:hover{
+									background:rgba(101,94,255,1);
+									border:1px solid rgba(101,94,255,1);
+								}
+							}
+							.cover_button_apply {
+								width:90px;
+								height:34px;
+								margin-top: 16px;
+								font-size:14px;
+								font-family:MicrosoftYaHei;
+								color:rgba(255,255,255,1);
+								line-height:19px;
+								padding:6px 17px;
+								border-radius:4px;
+								/*background:rgba(101,94,255,1);*/
+								/*border:1px solid rgba(101,94,255,1);*/
+								/*cursor: pointer;*/
+								/*transition: all 0.4s;*/
 								/*&:hover{*/
 									/*background:rgba(101,94,255,1);*/
 									/*border:1px solid rgba(101,94,255,1);*/
@@ -454,6 +520,7 @@
 							}
 							&-right {
 								text-align: center;
+								cursor: pointer;
 								width:80px;
 								height:30px;
 								border-radius:4px;
@@ -547,17 +614,19 @@
 			}
 		}
 	}
-	/deep/.el-button--small{
-		padding:9px 12px!important;
-		background: #fff!important;
-		border-radius:4px!important;
-	}
-	/deep/.el-button--success{
-		border:1px solid rgba(62,180,136,1)!important;
-		color: rgba(62,180,136,1)!important;
+	.apply_now {
+		.el-button--small{
+			padding:9px 12px!important;
+			background: #fff!important;
+			border-radius:4px!important;
+		}
+		.el-button--success{
+			border:1px solid rgba(62,180,136,1)!important;
+			color: rgba(62,180,136,1)!important;
 
-	}
-	/deep/.el-button--primary{
-		color: #655EFF!important;
+		}
+		.el-button--primary{
+			color: #655EFF!important;
+		}
 	}
 </style>

@@ -479,7 +479,7 @@ export function changeSwitchStatus(data) {
       return request({
         url: '/v1/b/app-coupon/home-page/page-list',
         method: 'post',
-        baseURL: process.env.SALE_API, 
+        baseURL: process.env.SALE_API,
         data
       })
   }
@@ -605,8 +605,8 @@ export function changeSwitchStatus(data) {
         params: data,
         apiType: 'decorate'
       })
-  }  
-  
+  }
+
   //获取资讯列表
   export function getInfoList(data) {
       return request({
@@ -615,8 +615,8 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }  
-  
+  }
+
   //批量删除资讯
   export function deleteInfos(data) {
       return request({
@@ -635,7 +635,7 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }   
+  }
   //根据ids批量获取资讯
   export function getInfoByIds(data) {
       return request({
@@ -644,8 +644,8 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }  
-  
+  }
+
   //修改资讯
   export function modifyInfo(data) {
       return request({
@@ -654,8 +654,8 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }  
-  
+  }
+
   //修改资讯状态
   export function modifyInfoType(data) {
       return request({
@@ -664,8 +664,8 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  } 
-  
+  }
+
   //创建资讯
   export function createInfo(data) {
       return request({
@@ -674,10 +674,10 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }   
-  
-  
-  
+  }
+
+
+
   //获取橱窗列表
   export function getWindowList(data) {
       return request({
@@ -686,8 +686,8 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }  
-  
+  }
+
   //修改橱窗内容
   export function modifyWindow(data) {
       return request({
@@ -696,8 +696,8 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }  
-  
+  }
+
   //获取橱窗内容
   export function getWindow(data) {
       return request({
@@ -706,7 +706,7 @@ export function changeSwitchStatus(data) {
         data,
         apiType: 'decorate'
       })
-  }   
+  }
 
     //获取H5店铺状态
   export function getH5StoreStatus(data) {
@@ -741,5 +741,24 @@ export function changeSwitchStatus(data) {
   }
 
 
-  
+//我的模板列表
+export function getMyTemplateList(data) {
+	return request({
+		target: 'DECORATION-MERCHANT-PAGE-TEMPLATE-FIND-PROCESSOR',
+		method: 'post',
+		data,
+		apiType: 'decorate'
+	})
+}
+
+//查询验证模板信息
+export function getTemplateInfo(data) {
+	return request({
+		target: 'DECORATION-MERCHANT-PAGE-TEMPLATE-VERIFY-PROCESSOR',
+		method: 'post',
+		data,
+		apiType: 'decorate'
+	})
+}
+
 

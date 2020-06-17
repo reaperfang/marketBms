@@ -89,12 +89,6 @@
 							<div class="body">
 								<span>{{item.name || '页面模板'}}</span>
 							</div>
-							<!-- <div class="bottom">
-                              <el-button type="success" size="mini" v-if="item.price === 0" plain>免费</el-button>
-                              <span class="price" v-if="item.price !== 0">￥{{item.price}}</span>
-                              <el-button type="success" plain v-if="item.state === 2" @click="_routeTo('m_templateEdit', {id: scope.row.id})">立即应用</el-button>
-                              <el-button type="warning" plain v-if="item.state === 1">立即购买</el-button>
-                            </div> -->
 							<div class="bottom">
 								<i class="mini_program"></i>
 								<i class="wechat"></i>
@@ -323,33 +317,49 @@
 
 			/* 应用模板 */
 			apply(item) {
-				if (item.chargeType !== 1) {
-					this._apis.templatePay.getOrcode({
-						orderSource: 1,
-						orderType: 1,
-						shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
-						templateChargeType: item.chargeType,
-						templateId: item.id,
-						templateName: item.name,
-						templatePrice: item.price
-					}).then(res => {
-						this.qrCodeInfo = res
-						this.dialogVisible = true
-						this.tempInfo = item
-					})
-				} else {
-					this.confirm({
-						title: '提示',
-						customClass: 'goods-custom',
-						icon: true,
-						text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
-					}).then(() => {
-						this._routeTo('m_templateEdit', {id: item.id});
-					})
-				}
+				this._apis.shop.getTemplateInfo({
+					pageTemplateId: item.id
+				}).then(res1 => {
+					if (item.chargeType !== 1) {
+						if (res1 === null || res1.status === 2) {
+							this._apis.templatePay.getOrcode({
+								orderSource: 1,
+								orderType: 1,
+								shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+								templateChargeType: item.chargeType,
+								templateId: item.id,
+								templateName: item.name,
+								templatePrice: item.price
+							}).then(res => {
+								this.qrCodeInfo = res
+								this.dialogVisible = true
+								this.tempInfo = item
+							})
+						} else {
+							this.confirm({
+								title: '提示',
+								customClass: 'goods-custom',
+								icon: true,
+								text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+							}).then(() => {
+								this._routeTo('m_templateEdit', {id: item.id});
+							})
+						}
+					} else {
+						this.confirm({
+							title: '提示',
+							customClass: 'goods-custom',
+							icon: true,
+							text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+						}).then(() => {
+							this._routeTo('m_templateEdit', {id: item.id});
+						})
+					}
+				})
 			},
 			closePay() {
 				this.dialogVisible = false
+				this.fetch()
 			},
 			showAllIndustries() {
 				this.ifShowAll = !this.ifShowAll
