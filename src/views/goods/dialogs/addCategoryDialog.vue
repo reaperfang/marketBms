@@ -385,6 +385,16 @@ export default {
     /deep/ .el-dialog__body {
         padding: 25px 31px;
     }
+    /deep/ .el-form {
+        .el-form-item.sort {
+            .el-form-item__label {
+                width: 74px!important;
+            }
+            .el-form-item__content {
+                margin-left: 74px!important;
+            }
+        }
+    }
 </style>
 
 
