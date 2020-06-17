@@ -99,6 +99,7 @@ export default {
       this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
       	if (response === null || response === undefined || response === '' || response.length === 0 || !response) {
 			this.$store.commit("clearAllData");
+			this.loading = false
 			return
 		}
         this.pageList = [response];
