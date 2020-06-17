@@ -97,6 +97,9 @@ export default {
     getPageList() {
       this.loading = true;
       this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
+      	if (response === null) {
+			this.$store.commit("clearAllData");
+		}
         this.pageList = [response];
         this.loading = false;
         if(!this.pageList || !this.pageList.length) {
