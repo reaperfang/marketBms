@@ -761,4 +761,12 @@ export function getTemplateInfo(data) {
 	})
 }
 
-
+//新增免费模板
+export function addFreeTemplate(data) {
+	return request({
+		target: 'DECORATION-MERCHANT-PAGE-TEMPLATE-INSERT-PROCESSOR',
+		method: 'post',
+		data,
+		apiType: 'decorate'
+	})
+}

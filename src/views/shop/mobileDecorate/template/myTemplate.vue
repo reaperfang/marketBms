@@ -1,8 +1,8 @@
 <template>
 	<div class="template_wrapper">
 		<ul class="clearFix" v-loading="loading">
-			<li>
-				<div class="inner">
+			<li v-for="(item, key) of templateList" :key="key">
+				<div class="inner" v-if="item.pageTemplateId === null">
 					<div class="view">
 						<div style="width:100%;height:100%;background:rgb(230,228,255)"></div>
 					</div>
@@ -16,9 +16,7 @@
 						</div>
 					</div>
 				</div>
-			</li>
-			<li v-for="(item, key) of templateList" :key="key">
-				<div class="inner">
+				<div class="inner" v-else>
 					<div class="inner-tag" v-show="item.status === 1 || item.status === 0">
 						<div class="inner-tag-tag" :style="{borderColor: item.status === 0 ? 'transparent #FD932B' : 'transparent #3EB488'}">
 						</div>
