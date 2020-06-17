@@ -484,6 +484,9 @@ export default {
                             "phone": userInfo.mobile
                         }
                     ];
+                    this.ruleFormStore.distributorValue = userInfo.userName;
+                    this.distributorName = userInfo.userName;
+                    this.ruleFormStore.phone = userInfo.mobile;
                 }
                 this.distributorListFilter = res.list;
                 //如果是刷新按钮触发 ，且已经有配送员名字，则重新过滤一下。
@@ -733,6 +736,7 @@ export default {
               obj
             ]
           };
+
            this._apis.order
             .orderSendGoods(params)
             .then(res => {
