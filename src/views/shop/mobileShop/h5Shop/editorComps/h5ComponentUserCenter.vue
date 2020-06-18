@@ -150,6 +150,12 @@
               <p class="name" :style="{color: data.moduleList.address.color}">{{data.moduleList.address.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
+            <!--分销中心  -->
+            <li>
+              <img :src="data.moduleList.commission.icon || require('../../../../../assets/images/shop/userCenter/userCenter21.png')" alt="" class="tb">
+              <p class="name" :style="{color: data.moduleList.commission.color}">{{data.moduleList.commission.titleValue}}</p>
+              <p class="more iconfont icon-tiaozhuan"></p>
+            </li>
             <!-- 安全中心 -->
             <li>
               <img :src="data.moduleList.myAssemble.icon || require('../../../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
