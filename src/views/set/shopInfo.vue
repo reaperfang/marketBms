@@ -656,6 +656,7 @@ export default {
       this.province = poi.provinceName
       this.city = poi.cityName
       this.area = poi.areaName
+      this.$refs.form.validateField('sendAddress')
       this.$nextTick(() => {
         this.isInit = true
       })
