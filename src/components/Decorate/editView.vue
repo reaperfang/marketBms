@@ -15,7 +15,7 @@
           name: "group"
       }'
       v-bind="dragOptions"
-      @start="drag=true"
+      @start="drag=true; popoverDisabled=true"
       @end="onEndHandler"
       :disabled='disable'
       :move='onMoveHandler'>
@@ -25,6 +25,7 @@
             :popper-class="'editor-view-popover active'"
             placement="right-start"
             width="76"
+            :disabled="popoverDisabled"
             trigger="hover">
             <div class="arrow-box" @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)" @click="deleteComponent(item)">
               <span>{{getComponentData(item).title}}</span>
@@ -113,7 +114,8 @@ export default {
       defaultBtnShow: true,  //默认圈圈按钮可见
       pageMoveBtnShow: false,  //页面移动按钮可见
       visible: true,
-      currentMouseOverComponentId: ''
+      currentMouseOverComponentId: '',
+      popoverDisabled: false
     }
   },
   computed:{
@@ -210,6 +212,7 @@ export default {
     onEndHandler() {
         this.drag = false;
         this.disable = false;
+        this.popoverDisabled = false
     },
 
     clickTitle(event) {
