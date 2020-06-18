@@ -95,7 +95,7 @@
                                 <el-table-column>
                                     <template slot="header">
                                         <el-tooltip placement="top">
-                                            <div slot="content">利润=商品售价-成本价;当商品利润小于0时，各级佣金为0。</div>
+                                            <div slot="content">利润=订单实付金额-成本价-运费;当商品利润小于0时，各级佣金为0。</div>
                                             <p>利润&nbsp;<i class="el-icon-warning" style="color:#655EFF;"></i></p>
                                         </el-tooltip>
                                     </template>
