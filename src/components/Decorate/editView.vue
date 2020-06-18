@@ -113,14 +113,12 @@ export default {
       defaultBtnShow: true,  //默认圈圈按钮可见
       pageMoveBtnShow: false,  //页面移动按钮可见
       visible: true,
+      currentMouseOverComponentId: ''
     }
   },
   computed:{
     currentComponentId() {
       return this.$store.getters.currentComponentId;
-    },
-    currentMouseOverComponentId() {
-      return this.$store.getters.currentMouseOverComponentId;
     },
     componentDataIds() {
       return this.$store.getters.componentDataIds;
@@ -180,10 +178,10 @@ export default {
     },
 
     componentMouseover(id) {
-      this.$store.commit('setCurrentMouseOverComponentId', id);
+      this.currentMouseOverComponentId = id
     },
     componentMouseleave(id) {
-      this.$store.commit('setCurrentMouseOverComponentId', '');
+      this.currentMouseOverComponentId = ''
     },
     //删除组件
     deleteComponent(id) {

@@ -15,7 +15,6 @@ const getters = {
   colorStyle: state => state.shop.colorStyle,   //店铺风格
   
   currentComponentId: state => state.decorate.currentComponentId,   //当前装修组件id
-  currentMouseOverComponentId: state => state.decorate.currentMouseOverComponentId,   //当前移上装修组件id
   componentDataIds: state => state.decorate.componentDataIds,   //装修组件顺序列表
   componentDataMap: state => state.decorate.componentDataMap,   //装修组件数据映射
   basePropertyId: state => state.decorate.basePropertyId,   //基础属性类型
