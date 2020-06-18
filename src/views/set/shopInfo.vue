@@ -198,7 +198,7 @@ export default {
           { min: 1, max: 50,  message: "详细地址输入框超出50个字符后不可在输入", trigger: "blur" }
         ],
         sendAddress: [
-          { required: true, message: "详细地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
+          { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
         ] ,
         shopIntroduce: [
           {
@@ -389,6 +389,7 @@ export default {
           //   this.provinceCityArea = `${this.province}${this.city}${this.area}`
           //   this.boundary = this.city
           // }
+          this.isMapChoose = true
         })
         .catch(error => {
           this.$message.error('查询失败');
@@ -411,9 +412,9 @@ export default {
     },
     updateShopInfo() {
       let id = this.cid
-      if (this.tempSendAddress !== this.form.sendAddress) {
-        deliverServiceRadius = ''
-      }
+      // if (this.tempSendAddress !== this.form.sendAddress) {
+      //   deliverServiceRadius = ''
+      // }
       let data = {
         id:id,
         shopName:this.form.shopName,

@@ -8,7 +8,7 @@
             <!-- <el-form-item label="店铺名称:" prop="shopName">
                 <el-input v-model="form.shopName" style="width:182px;" placeholder="10个汉字"></el-input>
             </el-form-item> -->
-            <el-form-item label="登录账号:" prop="userName">
+            <el-form-item label="姓名:" prop="userName">
                 <el-input v-model="form.userName" style="width:182px;" placeholder="10个汉字" :disabled="isEdit"></el-input>
             </el-form-item>
             <el-form-item label="手机号:" prop="mobile">
