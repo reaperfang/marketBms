@@ -120,6 +120,16 @@ export default {
           return;
         }
         if(pageData && pageData.avatarPosition) {
+          if(pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1){
+            pageData.moduleList['commission'] = {
+              name: 'commission',
+              title: '分销中心',
+              titleValue: '分销中心',
+              icon: '',
+              defaultIcon: 'userCenter21',
+              color: '#000'
+            }
+          }
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
           this.ruleForm['shareUrl'] = location.protocol + response.shareUrl.split(':')[1];
