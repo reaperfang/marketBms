@@ -18,7 +18,7 @@
         <section class="container">
             <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane v-permission="['订单', '售后详情', '售后信息']" label="售后信息" name="afterSalesInformation"></el-tab-pane>
-                <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
+                <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos || (orderAfterSale.deliveryWay == 2 && orderAfterSale.orderAfterSaleStatus > 1) || orderAfterSaleSendInfo.distributorPhone)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
         <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
@@ -144,7 +144,7 @@ export default {
         },
         getDetail() {
             this._apis.order.getOrderAfterSaleDetail({id: this.$route.query.id}).then((res) => {
-                console.log(res)
+
                 this.itemList = res.itemList
                 if(res.orderAfterSale && res.orderAfterSale.descriptionImages) {
                     res.orderAfterSale.descriptionImages = res.orderAfterSale.descriptionImages ? res.orderAfterSale.descriptionImages.split(',').map(val => ({

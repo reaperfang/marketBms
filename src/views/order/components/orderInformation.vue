@@ -7,14 +7,19 @@
                         <div class="label">配送方式</div>
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
                     </div>
+                    <!-- 开启了预约配送则显示C端用户下单时选定的配送时间 -->
+                    <div class="item" v-if="orderInfo.deliveryWay == 2 && orderInfo.deliveryDate">
+                        <div class="label">配送时间</div>
+                        <div class="value">{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</div>
+                    </div>
                     <div class="item">
                         <div class="label">收货信息</div>
                         <div class="value">
                             <p>{{orderInfo.receivedName}} / {{orderInfo.receivedPhone}}</p>
-                            <p>{{orderInfo.receivedProvinceName}} {{orderInfo.receivedCityName}} {{orderInfo.receivedAreaName}} {{orderInfo.receivedDetail}}</p>
+                            <p>{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
-                    <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p>
+                    <!-- <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p> -->
                 </div>
             </el-col>
             <el-col :span="8"><div class="grid-content center">
@@ -26,7 +31,7 @@
                     <div class="label">付款方式</div>
                     <div class="value">{{orderInfo.payWay | payWayFilter}}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="orderInfo.payComplateTime">
                     <div class="label">付款时间</div>
                     <div class="value">{{orderInfo.payComplateTime}}</div>
                 </div>
@@ -237,11 +242,11 @@
                 <section>
                     <div class="row">
                         <div class="col">商品总金额:</div>
-                        <div class="col">+ ¥ {{orderDetail.orderInfo.goodsAmount}}</div>
+                        <div class="col"> ¥ {{orderDetail.orderInfo.goodsAmount}}</div>
                     </div>
                     <div class="row">
                         <div class="col">运费:</div>
-                        <div class="col">+ ¥ {{orderDetail.orderInfo.freight}}</div>
+                        <div class="col"> ¥ {{orderDetail.orderInfo.freight}}</div>
                     </div>
                     <div class="row strong">
                         <div class="col">订单总金额:</div>
@@ -690,7 +695,7 @@ export default {
             if(code === 1) {
                 return '普通快递'
             } else if(code === 2) {
-                return '商家自送'
+                return '商家配送'
             }
         },
         payWayFilter(code) {

@@ -10,7 +10,7 @@
           <span @mouseover="showShop = true" @mouseout="showShop = false">查看样例</span>
         </p>
       </el-form-item>
-      <el-form-item label="主营类目:" prop="sellCategoryId">
+      <el-form-item label="主营类目:" prop="business">
         <!-- {{form.business}} -->
         <el-cascader
           :options="itemCatList"
@@ -20,10 +20,11 @@
           clearable
           filterable
         ></el-cascader>
-        <span class="category-display">您当前的选择是：{{itemCatText}}</span>
+        <div class="category-display" v-if="itemCatText">您当前的选择是：{{itemCatText}}</div>
       </el-form-item>
       <el-form-item
         label="创建日期:"
+        v-if="form.createTime"
       >{{new Date(form.createTime*1) | formatDate('yyyy-MM-dd hh:mm:ss')}}</el-form-item>
       <el-form-item label="商户LOGO:">
         <span v-if="form.logo" class="avatar">
@@ -63,17 +64,24 @@
       <el-form-item label="公司邮箱:" prop="companyEmail">
         <el-input v-model="form.companyEmail" placeholder="请输入公司邮箱" style="width:200px;"></el-input>
       </el-form-item>
-      <el-form-item label="联系地址:" prop="address">
+      <!-- <el-form-item label="联系地址:" prop="addressCode">
         <area-cascader
           :level="1"
           :data="$pcaa"
+          v-if="isInit"
           ref="cascaderAddr"
           v-model="form.addressCode"
           @change="handleChange"
           style="width:200px;"
         ></area-cascader>
-        <!-- <el-cascader :options="cityLists" :props="cityProps" v-model="form.addressCode" expand-trigger="hover"/> -->
-        <el-input v-model="form.address" style="width:300px; margin-top:10px;" placeholder="详细地址" />
+      </el-form-item> -->
+      <el-form-item label="联系地址:" prop="sendAddress">
+        <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:300px;" placeholder="请输入并点击搜索图标确定联系地址" />
+        <DialogMapSearch @getMapClickPoi="getMapClickPoi" :sendAddress="form.sendAddress"></DialogMapSearch>
+        <!-- <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button> -->
+      </el-form-item>
+      <el-form-item label="详细地址:" prop="address">
+        <el-input v-model="form.address" style="width:300px;" placeholder="请输入补充地址信息，非必填项" />
       </el-form-item>
       <el-form-item label="店铺简介:" prop="shopIntroduce">
         <el-input
@@ -92,11 +100,24 @@
           v-loading="loading"
         >保存</el-button>
       </el-form-item>
-      <div v-if="showShop" class="shop-set">
+      <div v-show="showShop" class="shop-set">
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
+      <!-- <map-search 
+        class="map"
+        ref="shopInfoMap"
+        :address="provinceCityArea"
+        :boundary="boundary"
+        :scaleControl="mapStyle.scaleControl"
+        :zoom="mapStyle.zoom"
+        :zoomControl="mapStyle.zoomControl"
+        :panControl="mapStyle.panControl"
+        :center="[36.67489963858812, 102.76171874999999]"
+        @getMapClickPoi="getMapClickPoi"
+        :isInitSearch="false"></map-search> -->
     </el-form>
+    <!-- map -->
     <!-- 动态弹窗 -->
     <component
       v-if="dialogVisible"
@@ -107,6 +128,8 @@
   </div>
 </template>
 <script>
+// import mapSearch from '@/components/mapSearch'
+import DialogMapSearch from '@/components/mapSearchDialog'
 import dialogSelectImageMaterial from "@/views/shop/dialogs/dialogSelectImageMaterial";
 import axios from "axios";
 export default {
@@ -131,18 +154,22 @@ export default {
       }
     };
     return {
+      provinceCityArea: '',
+      boundary: '',
       itemCatText: "",
       itemCatList: [],
       operateCategoryList: [],
       showShop: false,
       dialogVisible: false,
       currentDialog: "",
+      isInit: true,
+      tempSendAddress: null,
       form: {
         shopName: "",
         logo: "",
         logoCircle: "",
         phone: "",
-        addressCode: [],
+        addressCode: "",
         address: "",
         shopIntroduce: "",
         business: "",
@@ -150,7 +177,10 @@ export default {
         sellCategoryId: "",
         sellCategory: "",
         companyName: "",
-        companyEmail: ""
+        companyEmail: "",
+        lat: "",
+        lng: "",
+        sendAddress: ""
       },
       rules: {
         shopName: [
@@ -162,11 +192,14 @@ export default {
           { validator: validatePass, trigger: "blur" }
         ],
         addressCode: [
-          { required: true, message: "请输入联系地址", trigger: "blur" }
+          { required: true, message: "请填写联系地址", trigger: "blur" }
         ],
         address: [
-          { required: true, message: "请输入详细地址", trigger: "blur" }
+          { min: 1, max: 50,  message: "详细地址输入框超出50个字符后不可在输入", trigger: "blur" }
         ],
+        sendAddress: [
+          { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
+        ] ,
         shopIntroduce: [
           {
             min: 1,
@@ -175,8 +208,8 @@ export default {
             trigger: "blur"
           }
         ],
-        sellCategoryId: [
-          { required: true, message: "请选择主营类目", trigger: "blur" }
+        business: [
+          { required: true, message: "请选择主营类目", trigger: "change" }
         ],
         companyName: [
           { required: true, message: "请输入公司名称", trigger: "blur" },
@@ -195,19 +228,32 @@ export default {
       area: "",
       loading: false,
       uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
-      uploadUrlBase64: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`
+      uploadUrlBase64: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`,
+      mapStyle: {
+        zoom: 4,
+        zoomControl: true,
+        panControl: true,
+        scaleControl: true
+      }, // 地图配置
+      isMapChoose: false
       //canvas:{}
     };
   },
-  components: { dialogSelectImageMaterial },
+  components: { dialogSelectImageMaterial, DialogMapSearch },
   watch: {},
   computed: {
+    mapLoaded() {
+      return this.$store.getters.mapLoaded;
+    },
     canvas() {
       return this.$refs.canvas1;
     },
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
+    },
+    getAddress() {
+      return `${this.province}${this.city}${this.area}`
     }
   },
   created() {
@@ -215,8 +261,12 @@ export default {
       this.getShopInfo();
     });
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
+    handleChangeAddress() {
+      this.isMapChoose = false
+    },
     imageSelected(item) {
       this.form.logo = item.filePath;
       this.handleAvatarSuccess(item.filePath);
@@ -230,6 +280,7 @@ export default {
       this.itemCatText = arr.map(val => val.name).join(" > ");
       this.form.sellCategoryId = _value.pop();
       this.form.sellCategory = arr[arr.length - 1].name;
+      console.log('---itemCatHandleChange---')
     },
     // 获取商品类目列表
     getOperateCategoryList() {
@@ -276,9 +327,13 @@ export default {
     // 获取类目
     getCategoryInfoIds(arr, id) {
       try {
-        let parentId = this.operateCategoryList.find(val => val.id == id)
-          .parentId;
-
+        console.log('--getCategoryInfoIds--', this.operateCategoryList.find(val => val.id == id))
+        let parentId
+        let parentIds = this.operateCategoryList.find(val => val.id == id)
+        if (!parentIds) {
+          return false
+        }
+        parentId = parentIds.parentId
         arr.unshift(id + "");
 
         if (parentId && parentId != 0) {
@@ -288,7 +343,7 @@ export default {
         console.error(e);
       }
     },
-    handleChange() {
+    handleChange(val) {
       this.province = this.$pcaa[86][this.form.addressCode[0]];
       this.city = this.$pcaa[this.form.addressCode[0]][
         this.form.addressCode[1]
@@ -296,6 +351,8 @@ export default {
       this.area = this.$pcaa[this.form.addressCode[1]][
         this.form.addressCode[2]
       ];
+      // 省市区改变时
+      // this.provinceCityArea = `${this.province}${this.city}${this.area}`
     },
 
     getShopInfo() {
@@ -321,43 +378,112 @@ export default {
             arr.push(response.areaCode);
             this.form.addressCode = arr;
           }
+          // 经纬度
+          this.form.lat = response.latitude
+          this.form.lng = response.longitude
+          // 没有经纬度的为历史数据，则默认显示全国地图，否则显示省市区地图
+          // if (!response.latitude || !response.longitude) {
+          //   this.provinceCityArea = ''
+          //   this.boundary = ''
+          // } else {
+          //   this.provinceCityArea = `${this.province}${this.city}${this.area}`
+          //   this.boundary = this.city
+          // }
+          this.isMapChoose = true
         })
         .catch(error => {
-          this.$message.error(error);
+          this.$message.error('查询失败');
         });
     },
+    // 格式化省市县
+    formatAddress(address, provinceCode, cityCode, areaCode) {
+      const reg = /.+?(省|市|自治区|自治州|县|区)/g
+      const province = this.$pcaa[86][provinceCode];
+      const city = this.$pcaa[provinceCode][cityCode];
+      const area = this.$pcaa[cityCode][areaCode];
+      if (reg.test(address)) {
+        address = address.replace(reg, '')
+      }
+      console.log('--formatAddress---',address)
 
+      address = province === city ? `${province}${area}${address}`: `${province}${city}${area}${address}`
+      
+      return address
+    },
+    updateShopInfo() {
+      let id = this.cid
+      // if (this.tempSendAddress !== this.form.sendAddress) {
+      //   deliverServiceRadius = ''
+      // }
+      let data = {
+        id:id,
+        shopName:this.form.shopName,
+        logo:this.form.logo,
+        logoCircle:this.form.logoCircle,
+        phone:this.form.phone,
+        province: this.province,
+        city: this.city,
+        area: this.area,
+        provinceCode:this.form.addressCode[0],
+        cityCode:this.form.addressCode[1],
+        areaCode:this.form.addressCode[2],
+        sendAddress: this.form.sendAddress,
+        address: this.form.address,
+        shopIntroduce:this.form.shopIntroduce,
+        sellCategoryId: this.form.sellCategoryId,
+        sellCategory: this.form.sellCategory,
+        companyName: this.form.companyName,
+        companyEmail: this.form.companyEmail,
+        longitude: this.form.lng,
+        latitude: this.form.lat
+      }
+      this._apis.set.updateShopInfo(data).then(response =>{
+        this.setShopName()    
+        this.$store.dispatch('getShopInfo');    
+        // this.$nextTick(()=> {
+        //   this.$refs.shopInfoMap.clearSearchResultList()
+        //   this.$refs.shopInfoMap.clearKeyword()
+        // })
+      }).catch(error =>{
+        console.log('updateShopInfo:error', error)
+        this.$message.error('保存失败');
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     onSubmit(formName){
       this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.loading = true
-            let id = this.cid
-            let data = {
-              id:id,
-              shopName:this.form.shopName,
-              logo:this.form.logo,
-              logoCircle:this.form.logoCircle,
-              phone:this.form.phone,
-              province: this.province,
-              city: this.city,
-              area: this.area,
-              provinceCode:this.form.addressCode[0],
-              cityCode:this.form.addressCode[1],
-              areaCode:this.form.addressCode[2],
-              address:this.form.address,
-              shopIntroduce:this.form.shopIntroduce,
-              sellCategoryId: this.form.sellCategoryId,
-              sellCategory: this.form.sellCategory,
-              companyName: this.form.companyName,
-              companyEmail: this.form.companyEmail
+            if (!this.isMapChoose) {
+              this.$message.error('保存失败')
+              this.form.sendAddress = ''
+              this.$refs.form.validateField('sendAddress')
+              return false
             }
-            this._apis.set.updateShopInfo(data).then(response =>{
-              this.setShopName()    
-              this.$store.dispatch('getShopInfo');          
-            }).catch(error =>{
-              this.$message.error(error);
-              this.loading = false
-            })
+            this.loading = true
+            // this.getProvincesCities(this.form.address)
+            // if (!this.form.lng) {
+            //   this._apis.map.getGeocoderAddress({ address: this.form.address }).then((res) => {
+            //     console.log('res',res)
+            //     this.form.lng = res.result.location.lng
+            //     this.form.lat = res.result.location.lat
+            //     this.updateShopInfo()
+            //   }).catch((err) => {
+            //     console.log('err',err)
+            //     this.$message.error('获取经纬度失败，请尝试通过地图查询详细地址');
+            //     this.loading = false
+            //   })
+            // } else {
+              this.updateShopInfo()
+            // }
+            
+            // this._apis.set.updateShopInfo(data).then(response =>{
+            //   this.setShopName()    
+            //   this.$store.dispatch('getShopInfo');          
+            // }).catch(error =>{
+            //   this.$message.error(error);
+            //   this.loading = false
+            // })
         }
       });
     },
@@ -426,12 +552,121 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG || isJPEG || (isPNG && isLt2M);
+    },
+    // 模糊搜索地址列表
+    searchMap() {
+      this.$refs.shopInfoMap.handlePropSearch(this.form.sendAddress)
+    },
+    getProvinceCode() {
+      let provinces = this.$pcaa[86]
+      let provinceCode = null
+      for( const val in provinces) {
+        console.log(val, this.province)
+        if (provinces[val] === this.province) {
+          console.log('--province---',val, provinces[val])
+          provinceCode = val
+          break
+        }
+      }
+      return provinceCode
+    },
+    getCityCodeByProvinceCode(provinceCode) {
+      const citys = this.$pcaa[provinceCode]
+      let cityCode = null
+      for( const val in citys) {
+        if (citys[val] === this.city) {
+          cityCode = val
+          break
+        }
+      }
+      return cityCode
+    },
+    getAreaCodeByCityCode(cityCode) {
+      // this.area = this.$pcaa[this.form.addressCode[1]][
+      //   this.form.addressCode[2]
+      // ];
+       const areas = this.$pcaa[cityCode]
+      let areaCode = null
+      for( const val in areas) {
+        if (areas[val] === this.area) {
+          areaCode = val
+          break
+        }
+      }
+      return areaCode
+    },
+    // getCity() {
+
+    // },
+    setCode() {
+      const provinceCode =  this.getProvinceCode()
+      const cityCode = this.getCityCodeByProvinceCode(provinceCode)
+      const areaCode = this.getAreaCodeByCityCode(cityCode)
+      // isInit 解决area-cascader 组件只有在初始化时 更新问题
+      this.isInit = false
+      let arr = [];
+      arr.push(provinceCode);
+      arr.push(cityCode);
+      arr.push(areaCode);
+      this.form.addressCode = arr;
+      this.$nextTick(() => {
+        this.isInit = true
+      })
+    },
+    // 通过详细地址获取省市区
+    getProvincesCities(address){
+      const reg = /.+?(省|市|自治区|自治州|县|区)/g
+      const arr = address.match(reg)
+      console.log('---getProvincesCities---',arr)
+      if (arr && arr.length > 0) {
+        if (arr[0] !== '北京市' && arr[0] !== '上海市' && arr[0] !== '天津市' && arr[0] !== '重庆市') {
+          this.province = arr[0]
+          this.city = arr[1]
+          this.area = arr[2]
+        } else {
+          this.province = arr[0]
+          this.city = arr[0]
+          this.area = arr[1]
+        }
+        this.setCode()
+      }
+      // if (arr) {
+      //   if (arr.length == 2) {
+      //     this.province = arr[0]
+      //     this.city = arr[0]
+      //     this.area = arr[1]
+      //   }
+      //   if (arr.length >= 3) {
+      //     this.province = arr[0]
+      //     this.city = arr[1]
+      //     this.area = arr[2]
+      //   }
+      //   this.setCode()
+      // }
+    },
+    getMapClickPoi(poi) {
+      console.log('poi----getMapClickPoi', poi)
+      this.form.sendAddress = poi.address
+      this.tempSendAddress = poi.address
+      this.form.lat = poi.location.lat
+      this.form.lng = poi.location.lng
+      this.isMapChoose = true
+      const arr = [poi.provinceCode, poi.cityCode, poi.areaCode]
+      this.form.addressCode = arr;
+      this.province = poi.provinceName
+      this.city = poi.cityName
+      this.area = poi.areaName
+      this.$nextTick(() => {
+        this.isInit = true
+      })
+      // this.getProvincesCities(poi.address)
     }
   }
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+
 .shopInfo {
   width: 100%;
   background: #fff;
@@ -441,6 +676,28 @@ export default {
     color: #3d434a;
     font-weight: 500;
     margin-bottom: 30px;
+  }
+  .map {
+    position:absolute;
+    right: -20px;
+    top: 0;
+    padding: 20px;
+    width: calc(100% - 580px);
+    height: 700px;
+    // border-left: 1px solid #ccc;
+  }
+  .search-map {
+    margin-left: 17px;
+    width:106px;
+    height:34px;
+    border: 0;
+    padding: 7px 12px;
+    background:rgba(240,239,255,1);
+    border-radius:4px;
+    color:rgba(101,94,255,1);
+    i {
+      padding-left: 6px;
+    }
   }
 }
 /deep/ .area-select .area-selected-trigger {
@@ -534,6 +791,7 @@ export default {
     background-size: 100% 100%;
     right: 60px;
     top: 0;
+    z-index: 3;
     .top {
       position: absolute;
       left: 50%;
@@ -554,7 +812,6 @@ export default {
   }
 }
 .category-display {
-  margin-left: 10px;
   font-size: 12px;
 }
 </style>

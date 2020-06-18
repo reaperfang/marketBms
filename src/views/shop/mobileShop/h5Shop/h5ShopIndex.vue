@@ -14,9 +14,27 @@ export default {
   data() {
     return {
       ruleForm: {
-        pageTag: 1
-      }
+        pageTag: 1,
+      },
+      statusLoading: true,
+      webPageStatus: null //未绑定过域名
     }
+  },
+  created() {
+    this.getH5StoreStatus();
+  },
+  methods: {
+    /* 获取H5店铺状态 */
+    getH5StoreStatus() {
+      this.statusLoading = true;
+      this._apis.shop.getH5StoreStatus({}).then((response)=>{
+        this.webPageStatus = response.webPageStatus;
+        this.statusLoading = false;
+      }).catch((error)=>{
+        console.error(error);
+        this.statusLoading = false;
+      });
+    },
   }
 }
 </script>

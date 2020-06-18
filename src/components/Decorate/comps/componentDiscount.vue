@@ -41,13 +41,13 @@
                             </div>
                         </div>
                         <div class="price_line">
+                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button s1" v-if="showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6 && (item.status==1 ||item.status==0)"></componentButton>
+
+                            <p class="activity_end" v-if="item.status==2">已结束</p>
+                            <!-- <p class="activity_end" v-if="item.status==0">活动未开始</p> -->
                             <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{getReducePrice(item)}}</font></p>
                             <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button s1" v-if="showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6 && (item.status==1 ||item.status==0)"></componentButton>
-
-                        <p class="activity_end" v-if="item.status==2">活动已结束</p>
-                        <!-- <p class="activity_end" v-if="item.status==0">活动未开始</p> -->
                     </div>
                 </li>
             </ul>
@@ -105,6 +105,24 @@ export default {
                 }
             },
             deep: true
+        },
+        'ruleForm.hideSaledGoods'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
+        },
+        'ruleForm.hideEndGoods'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
+        },
+        'ruleForm.hideType'(newValue, oldValue) {
+            if(newValue === oldValue) {
+                return;
+            }
+            this.fetch();
         }
     },
     computed: {
@@ -175,11 +193,24 @@ export default {
                         newParams = componentData.ids;
                     }
 
+                    let hideStatus = 0;
+                    if(!componentData.hideSaledGoods) {
+                        hideStatus = 0;
+                    }else {
+                        if(componentData.hideType==1){
+                            hideStatus=2;
+                        }
+                        else{
+                            hideStatus=1;
+                        }
+                    }
+
+
                     this.loading = true;
                     this._apis.shop.getDiscountListByIds({
                         rightsDiscount: 1, 
                         spuInfoJson: JSON.stringify(newParams),
-                        hideStatus: 0
+                        hideStatus: hideStatus
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;
@@ -250,7 +281,7 @@ export default {
             justify-content: space-between;
             .countdown{
                 float:right;
-                width:158px;
+                width:189px;
                 height:43px;
                 padding:0 3.5px 0 15px;
                 .content{
@@ -276,10 +307,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
+                            min-width:29px;
+                            height:16px;
                             color:#fff;
-                            padding:0 8px;
+                            margin:0 4px;
                         }
 
                     }
@@ -316,22 +347,23 @@ export default {
                 .jd_line{
                     width:100px;
                     height:6px;
+                    margin-top:1px;
                 }
                 p{
                     font-size:11px;
                     margin-left:9px;
+                    line-height:13px;
                 }
             }
             .button{
                 line-height:31px;
-                position:absolute;
-                right:10px;
-                bottom:15px;
                 font-size:13px;
                 text-align:center;
                 height:31px;
                 margin-left:13px;
-            }
+                position:relative;
+                bottom:0;
+                right:0;            }
             .activity_end{
                 right:10px;
                 bottom:15px;
@@ -397,10 +429,10 @@ export default {
                             }
                             .item {
                                 background:#333;
-                                width:58px;
-                                height:32px;
+                                min-width:29px;
+                                height:16px;
                                 color:#fff;
-                                padding:0 8px;
+                                margin:0 4px;
                             }
 
                         }
@@ -453,26 +485,30 @@ export default {
                     position:relative;
                     .price{
                         line-height:25px;
+                        float:none;
+                        overflow:hidden;
                     }
                     .yPrice{
-                        width:100%;
                         margin-left:0;
                         line-height:1;
+                        float:none;
+                        overflow:hidden;
                     }
                 }
                 .button{
                     height:24px;
                     line-height:24px;
                     text-align:center;
-                    position:absolute;
-                    right:10px;
+                    right:0;
                     bottom:12.5px;
+                     margin-top:5px;
                 }
                 .activity_end{
-                    right:10px;
-                    bottom:17.5px;
+                    right:0;
+                    bottom:12.5px;
                     line-height:1;
                     font-size:15px;
+                    margin-top:5px;
                 }
             }
         }
@@ -540,6 +576,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display:none;
                 }
             }
         }
@@ -605,10 +642,10 @@ export default {
                         }
                         .item {
                             background:#333;
-                            width:58px;
-                            height:32px;
-                            color:#fff;
-                            padding:0 8px;
+	                        min-width:29px;
+	                        height:16px;
+	                        color:#fff;
+	                        margin:0 4px;
                         }
 
                     }
@@ -763,7 +800,7 @@ export default {
                     justify-content: space-between;
                     .countdown{
                         float:right;
-                        width:155px;
+                        width:189px;
                         height:43px;
                         padding:0 3.5px 0 15px;
                         .content{
@@ -829,13 +866,13 @@ export default {
                     }
                     .button{
                         line-height:31px;
-                        position:absolute;
-                        right:10px;
-                        bottom:15px;
                         font-size:13px;
                         text-align:center;
                         height:31px;
-                        margin-left:13px;
+                        margin-left:14px;
+                        position:relative;
+                        bottom:0;
+                        right:0;
                     }
                     .activity_end{
                         right:10px;
@@ -845,7 +882,7 @@ export default {
                     }
                 }
             }
-            &:nth-of-type(3n+2){
+            &:nth-of-type(3n+2),&:nth-of-type(3n+3){
                 .countdown_Bar{
                     height:31px;
                     margin-top:-31px;
@@ -888,10 +925,10 @@ export default {
                                 }
                                 .item {
                                     background:#333;
-                                    width:58px;
-                                    height:32px;
-                                    color:#fff;
-                                    padding:0 8px;
+                                min-width:29px;
+                                height:16px;
+                                color:#fff;
+                                margin:0 4px;
                                 }
 
                             }
@@ -944,148 +981,30 @@ export default {
                         position:relative;
                         .price{
                             line-height:25px;
+                            float:none;
+                            overflow:hidden;
                         }
                         .yPrice{
-                            width:100%;
                             margin-left:0;
                             line-height:1;
+                            float:none;
+                            overflow:hidden;
                         }
                     }
                     .button{
                         height:24px;
                         line-height:24px;
                         text-align:center;
-                        position:absolute;
-                        right:10px;
-                        bottom:12.5px;
-                    }
-                    .activity_end{
-                        right:10px;
-                        bottom:17.5px;
-                        line-height:1;
-                        font-size:15px;
-                    }
-                }
-            }
-            &:nth-of-type(3n+3){
-                .countdown_Bar{
-                    height:31px;
-                    margin-top:-31px;
-                    position:relative;
-                    .title{
-                        display:none;
-                    }
-                    .countdown{
-                        width:100%;
-                        height:100%;
-                        .bj{
-                            display:none;
-                        }
-                        .content{
-                            // @extend .flexCenterMiddle;
-                            display:flex;
-                            align-items:center;
-                            padding:0 10px;
-                            .caption{
-                                color:#fff;
-                                font-size:10px;
-                                line-height:31px;
-                                margin:0;
-                            }
-                            .time{
-                                margin-left:7.5px;
-                                height:16px;
-                                color:#fff;
-                                font{
-                                    width:16px;
-                                    height:16px;
-                                    color:#FC3D42;
-                                    font-size:9px;
-                                    line-height:16px;
-                                    background:#fff;
-                                    position:relative;
-                                    top:-2.5px;
-                                    margin:0 2px;
-                                    text-align:center;
-                                }
-                                .item {
-                                    background:#333;
-                                    width:58px;
-                                    height:32px;
-                                    color:#fff;
-                                    padding:0 8px;
-                                }
-
-                            }
-                        }
-                    }
-                }
-                .info_box{
-                    padding:3px 7.5px 9px 7.5px;
-                    .name{
-                        .label{  
-                            background:#FFF0C9;
-                            border:1px solid #FFAA4E;
-                            padding:0 6px;
-                            line-height:15px;
-                            display:inline-block;
-                            color:#FC3D42;
-                            font-size:10px;
-                            @include borderRadius(4px);
-                            position:relative;
-                            top:-1.5px;
-                            margin-right:7.5px;
-                        }
-                        line-height:22px;
-                        height:44px;
-                        font-size:14px;
-                        @include lineClamp(2);
-                    }
-                    .caption{
-                        display:none;
-                    }
-                    .limit_line{
-                        margin-top:10px;
-                        .limit{
-                            display:none;
-                        }
-                    }
-                    .remainder_box{
-                        display:flex;
-                        .jd_line{
-                            height:6px;
-                            flex:1;
-                        }
-                        p{
-                            font-size:11px;
-                            margin-left:9px;
-                        }
-                    }
-                    .price_line{
+                        right:0;
+                        bottom:7.5px;
                         margin-top:5px;
-                        position:relative;
-                        .price{
-                            line-height:25px;
-                        }
-                        .yPrice{
-                            width:100%;
-                            margin-left:0;
-                            line-height:1;
-                        }
-                    }
-                    .button{
-                        height:24px;
-                        line-height:24px;
-                        text-align:center;
-                        position:absolute;
-                        right:10px;
-                        bottom:12.5px;
                     }
                     .activity_end{
-                        right:10px;
-                        bottom:17.5px;
+                        right:0;
+                        bottom:12.5px;
                         line-height:1;
                         font-size:15px;
+                        margin-top:5px;
                     }
                 }
             }
@@ -1147,6 +1066,7 @@ export default {
                     bottom:15px;
                     line-height:1;
                     font-size:9px;
+                    display:none;
                 }
             }
         }
@@ -1319,7 +1239,7 @@ export default {
             }
             .button{
                 line-height:31px;
-                position:absolute;
+                float:right;
                 right:10px;
                 bottom:15px;
                 font-size:13px;
@@ -1329,7 +1249,7 @@ export default {
             .activity_end{
                 color:#999;
                 font-weight:bold;
-                position:absolute;
+                float:right;
             }
         }
     }

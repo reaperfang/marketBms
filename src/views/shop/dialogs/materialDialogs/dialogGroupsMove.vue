@@ -4,9 +4,9 @@
         <el-form-item label="分组名称：">
           <el-cascader
           v-model="form.groupId"
-          :props="props"
-          class="w_300"
-          >
+          :options="options"
+          :props="defaultProps"
+          class="w_300">
           </el-cascader>
         </el-form-item>
       </el-form>
@@ -18,55 +18,34 @@ import DialogBase from "@/components/DialogBase";
 import utils from "@/utils";
 export default {
   name: "dialogGroupsMove",
-  components: {DialogBase},
-  props: {
-      data:{},
-      arrayData: {},
-      typeName:{},
-      fromGroupId:'',
-      dialogVisible: {
-          type: Boolean,
-          required: true
-      },
-  },
   data() {
-    let self = this
     return {
       form:{
         groupId:['-1']
       },
-      props: {
-        lazy: true,
+      defaultProps: {
+        children: 'childFileGroupInfoList',
+        label: 'name',
+        value:'id',
         checkStrictly: true,
-        lazyLoad (node, resolve) {
-          const {level} = node;
-          setTimeout(() => {
-            let id = node.level == 0 ? '0' : node.data.value
-            let type =  self.typeName == 'image' ? '0' : '1'
-            let query ={
-              type:type,
-              parentId:id
-            }
-            self._apis.file.getGroup(query).then((response)=>{
-              if(response == null){
-                return resolve([]);
-              }else{
-                const nodes = response.map(item => ({
-                  value: item.id,
-                  label: item.name,
-                  leaf: level >=2
-                }));
-                // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-                resolve(nodes)
-              }
-            }).catch((error)=>{
-              self.$message.error(error);
-            })
-          }, 500);
-        }
-      }
+      },
+      options:[]
     };
   },
+
+  components: {DialogBase},
+
+  props: {
+    data:{},
+    arrayData: {},
+    typeName:{},
+    fromGroupId:'',
+    dialogVisible: {
+        type: Boolean,
+        required: true
+    },
+  },
+
   computed: {
     visible: {
       get() {
@@ -77,14 +56,32 @@ export default {
       }
     }
   },
+
   created() {
     this.init()
+    this.gitGroups()
   },
+
   methods: {
+    //获取组id
     init(){
       this.form.groupId = this.fromGroupId
     },
 
+     //获取分组数据
+    gitGroups(){
+      let type =  this.typeName == 'image' ? '0' : '1'
+      let query ={
+        type:type,
+      }
+      this._apis.file.getGroup(query).then((response)=>{
+        this.options = response
+      }).catch(error => {
+        this.$message.error(error);
+      })
+    },
+
+    //确定分组
     submit() {
       let leg = this.form.groupId.length
       if(this.arrayData.length){

@@ -556,3 +556,86 @@ helloWorld.vue
  <!-- 动态弹窗 -->
 <component :is="currentDialog" :data="editorData" @dialogClose="dialogClose" :refresh="fetch"></component>
 ```
+
+
+## auth
+
+```
+// 新增
+{
+  name: '设置',
+  navType: 1,
+  children: [
+   {
+    name: '普通快递',
+    navType: 2,
+    children: [
+      {
+        name: '快递设置',
+        navType: 3
+      },
+      {
+        name: '运费模版',
+        navType: 3,
+        children: [
+          {
+            name:'查看',
+            navType: 5
+          },
+          {
+            name:'复制',
+            navType: 5
+          },
+          {
+            name:'修改',
+            navType: 5
+          },
+          {
+            name:'删除',
+            navType: 5
+          },
+          {
+            name:'新建模板',
+            navType: 5
+          }
+        ]        ]
+      },
+      {
+        name: '电子面单',
+        navType: 3,
+        children: [
+          {
+            name:'查看',
+            navType: 5
+          },
+          {
+            name:'修改',
+            navType: 5
+          },
+          {
+            name:'删除',
+            navType: 5
+          },
+          {
+            name:'新建',
+            navType: 5
+          }
+        ]
+      }
+    ]
+   },
+   {
+    name: '商家配送',
+    navType: 2
+   }
+ ]
+}
+ 
+// 去掉
+[
+  {
+    name: '商家配送',
+    navType: 2
+  }
+]
+```

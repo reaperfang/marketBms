@@ -50,7 +50,7 @@
                 后，订单自动关闭
             </el-form-item>
         </div>
-        <div class="item">
+        <!-- <div class="item">
             <h2>发货方式：</h2>
             <el-form-item  prop="deliverGoodsType">
                 <el-checkbox v-model="deliverGoodsTypeCheckout">快递发货</el-checkbox>
@@ -99,7 +99,7 @@
                 商家自送（本期暂不支持）
                 </el-checkbox>
             </el-form-item>
-        </div>
+        </div> -->
         <div v-if="!authHide" class="item">
             <h2>自动发货：<span>开启后立即对所有订单生效，若需要关闭该功能则清空输入框数值</span></h2>
             <el-form-item  prop="orderAutoSend" label="下单">
@@ -171,12 +171,15 @@ export default {
         callback()
       }
     }
+    // 产品--孙可欣---设置-通用设置-交易设置-售前相关的自动发货  ，时间单位选择为“分钟”时，输入框数值不得小于30，当输入小于30的数值时，输入框变红，输入框下方出现红色字体提示：自动发货时间不能低于30分钟
     var checkOrderAutoSend = (rule,value,callback)=>{
       if(this.sendOrder && !value){
         return callback(new Error('输入框不能为空'))
       }else if(this.form.orderAutoSend.toString().length > 9){
         return callback(new Error('输入10位以内有效数字'))
-      }else{
+      }else if (value && this.form.oasType === 2 && Number(value) < 30) {
+       return callback(new Error('自动发货时间不能低于30分钟'))
+     } else{
         callback()
       }
     }
@@ -188,8 +191,8 @@ export default {
       form: {
             autoCancelUnpayOrder: '',
             acuoType: 1,
-            deliverGoodsType:1,
-            transportationExpenseType: 1,
+            // deliverGoodsType:1, // 发货方式
+            // transportationExpenseType: 1, // 计费方式
             orderAutoSend: '',
             oasType: '',
             isAutoCancelUnpayOrder:0,
@@ -226,14 +229,14 @@ export default {
     }
   },
   computed:{
-      deliverGoodsTypeCheckout:{
-        get: function () {
-            return this.form.deliverGoodsType == 1 ? true : false
-        },
-        set: function (newValue) {
-            this.form.deliverGoodsType = newValue == true ? 1 : ''
-        }
-      },
+      // deliverGoodsTypeCheckout:{
+      //   get: function () {
+      //       return this.form.deliverGoodsType == 1 ? true : false
+      //   },
+      //   set: function (newValue) {
+      //       this.form.deliverGoodsType = newValue == true ? 1 : ''
+      //   }
+      // },
       cid(){
           let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
           return shopInfo.id
@@ -270,8 +273,8 @@ export default {
               id:id,
               autoCancelUnpayOrder:this.form.autoCancelUnpayOrder,
               acuoType:this.form.acuoType,
-              deliverGoodsType:this.form.deliverGoodsType,
-              transportationExpenseType:this.form.transportationExpenseType,
+              // deliverGoodsType:this.form.deliverGoodsType,
+              // transportationExpenseType:this.form.transportationExpenseType,
               orderAutoSend:this.form.orderAutoSend,
               oasType:this.form.oasType,
               isAutoCancelUnpayOrder:this.form.isAutoCancelUnpayOrder,
@@ -286,7 +289,7 @@ export default {
             })
           }else{
             this.loading = false
-            this.$message.error('输入框不能为空，保存失败');
+            // this.$message.error('输入框不能为空，保存失败');
           }
       })
     },

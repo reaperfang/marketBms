@@ -49,6 +49,8 @@ export default {
             this.token = getToken('authToken')
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
+			// 营销需要，常用参数
+            let bossProductId = JSON.parse(localStorage.getItem('shopInfos'))&&JSON.parse(localStorage.getItem('shopInfos')).bossProductId
             this.cid = shopInfo && shopInfo.id || ''
             console.log('路由',this.$route)
             if(this.$route.query.paths){
@@ -59,16 +61,28 @@ export default {
                 this.path = localStorage.getItem('marketing_router_path') || this.defultPath;
                 console.log('其他')
             }
-
             let applyId = '';
             if(this.$route.query.applyId){
                 applyId = this.$route.query.applyId
             } else if(localStorage.marketing_router_path_appId) {
-				applyId = localStorage.marketing_router_path_appId
+                applyId = localStorage.marketing_router_path_appId
+            }
+            let extraQuery = ''
+            let mkQuery = localStorage.getItem('marketing_router_path_query')&&JSON.parse(localStorage.getItem('marketing_router_path_query'))||{}
+            delete mkQuery.access
+            delete mkQuery.token
+            delete mkQuery.businessId
+            delete mkQuery.loginUserId
+            delete mkQuery.tenantId
+            delete mkQuery.cid
+            delete mkQuery.userName
+            delete mkQuery.bossProductId
+            delete mkQuery.id
+			for(let item in mkQuery){
+                extraQuery+= "&" + item+'='+mkQuery[item]
 			}
-
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
-            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}`
+            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}&bossProductId=${bossProductId}${extraQuery}`
         },
 
         // iframe 刷新  -- 暂时不用
@@ -95,6 +109,7 @@ export default {
                 this.path = message.params.path; // 营销路由
                 window.localStorage.setItem('marketing_router_path', this.path);
                 window.localStorage.setItem('marketing_router_path_appId', message.params.id);
+                window.localStorage.setItem('marketing_router_path_query', message.query);
                 this.isLoaded  = false;
             }
         },

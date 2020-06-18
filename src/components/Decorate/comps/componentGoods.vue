@@ -8,17 +8,17 @@
                         <div class="imgAbsolute">
                             <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                         </div>
-                        <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1">{{item.productLabelInfo.name}}</div>
+                        <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
                         <p class="nothing" v-if="calcSotck(item)<1">售罄</p>
                         <div class="nothingLayer" v-if="calcSotck(item)<1"></div>
                     </div>
                     <div class="text" v-if="showContents.length>0">
                         <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
                         <p class="fTitle" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('3')!=-1">{{item.description}}</p>
-                        <div class="priceLine" v-if="showContents.indexOf('2')!=-1">
-                            <p class="price">￥<font>{{getPrice(item)}}</font></p>
+                        <div class="priceLine">
+                            <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{getPrice(item)}}</font></p>
+                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&calcSotck(item)>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                         </div>
-                        <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&calcSotck(item)>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
                     </div>
                 </li>
             </ul>
@@ -61,6 +61,7 @@ export default {
     },
     created() {
         const _self = this;
+        this.$store.dispatch('getShopStyle');
         this._globalEvent.$on('goodsListOfGroupChange', (list, componentId)=>{
             if(this.currentComponentId === componentId) {
                 this.list = list;
@@ -115,6 +116,18 @@ export default {
                value = true;
             }
             return value;
+        },
+        colorStyle() {
+          return this.$store.getters.colorStyle || {colors:[]};
+        },
+        color1(){
+            return this.colorStyle.colors && this.colorStyle.colors[0]
+        },
+        color2(){
+            return this.colorStyle.colors && this.colorStyle.colors[1]
+        },
+        color3(){
+            return this.colorStyle.colors && this.colorStyle.colors[2]
         }
     },
     methods:{
@@ -128,6 +141,7 @@ export default {
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
             var scrollWidth = window && this.utils.isIE() ? 18 : 0;
             var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
+            bodyWidth = this.$refs.componentContent && (this.currentComponentData.type === 'goodsGroup') && this.showTemplate==2 ? bodyWidth + 100 : bodyWidth;
             if(this.listStyle=='1'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
                 this.goodWidth = "100%";
@@ -153,7 +167,7 @@ export default {
                 if('showTemplate' in this.currentComponentData.data){
                     this.showTemplate= this.currentComponentData.data.showTemplate;
                     if(this.showTemplate!=1){
-                        this.goodWidth = {width:(bodyWidth - this.pageMargin * 2 - this.goodsMargin*2 - 100) / 3 + 'px'}
+                        this.goodWidth = {width:((bodyWidth - this.pageMargin * 2 - this.goodsMargin*2 - 100) / 3 - 2) + 'px'}
                     }
                     else{
                         this.goodWidth = {width:(bodyWidth - this.pageMargin * 2 - this.goodsMargin*2) / 3 + 'px'}
@@ -402,7 +416,8 @@ export default {
                     }
                 }
                 .button{
-                    position:absolute;
+                    float:right;
+                    //position:absolute;
                     right:10px;
                     bottom:10px;
                 }
@@ -547,7 +562,7 @@ export default {
                     @extend .ellipsis;
                 }
                 .priceLine{
-                    margin-top:12.5px;
+                    margin-top:13.5px;
                     overflow:hidden;
                     .price{
                         float:left;
@@ -759,7 +774,7 @@ export default {
                     margin-top:17px;
                 }
                 .priceLine{
-                    margin-top:30px;
+                    margin-top:20px;
                 }
             }
         }
@@ -776,7 +791,7 @@ export default {
                     margin-top:10px;
                 }
                 .priceLine{
-                    margin-top:35px;
+                    margin-top:50px;
                 }
             }
         }
@@ -794,7 +809,7 @@ export default {
                     margin-top:4px;
                 }
                 .priceLine{
-                    margin-top:4px;
+                    margin-top:1.5px;
                 }
             }
         }  
@@ -809,7 +824,6 @@ export default {
         li{
             &:first-child{
                 margin-top:0 !important;
-                width:100% !important;
             }
             &:nth-of-type(3n+1){
                 overflow:hidden;
@@ -859,12 +873,6 @@ export default {
                 margin-top:15px;
                 width:170px;
                 overflow:hidden;
-                &:nth-of-type(1){
-                    margin-top:0 !important;
-                }
-                &:nth-of-type(2){
-                    margin-top:0 !important;
-                }
                 .img{
                     position:relative;
                     overflow:hidden;
@@ -910,12 +918,6 @@ export default {
                 margin-top:15px;
                 width:170px;
                 overflow:hidden;
-                &:nth-of-type(1){
-                    margin-top:0 !important;
-                }
-                &:nth-of-type(2){
-                    margin-top:0 !important;
-                }
                 .img{
                     position:relative;
                     overflow:hidden;
@@ -1000,7 +1002,7 @@ export default {
             }
             .text{
                 overflow:hidden;
-                padding:10px;
+                padding:7.5px 4px;
                 position:relative;
                 .title{
                     font-size:13px;

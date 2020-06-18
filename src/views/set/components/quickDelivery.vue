@@ -1,58 +1,64 @@
 <template>
   <div class="quick-delivery">
-    <section class="operate">
-      <div class="row justify-between operate-top">
-        <div class="col">当前订单运费计费方式选择为</div>
-        <div class="col">
-          <span>您可以到交易设置中</span>
-          <span class="change-mode pointer" @click="$router.push('/set/tradeSet')">更改订单运费计费方式</span>
+    <div class="head">
+      <section class="operate">
+        <div class="row justify-between operate-top">
+          <div class="col">当前订单运费计费方式选择为</div>
+          <!-- <div class="col">
+            <span>您可以到交易设置中</span>
+            <span class="change-mode pointer" @click="$router.push('/set/tradeSet')">更改订单运费计费方式</span>
+          </div> -->
         </div>
-      </div>
-      <div class="radio-box">
-        <el-radio :disabled="mode == 1" v-model="mode" :label="0">组合运费（推荐）</el-radio>
-        <el-radio :disabled="mode == 0" v-model="mode" :label="1">按商品累加运费</el-radio>
-        <span
-          @click="currentDialog = 'FreightRulesDialog'; dialogVisible = true"
-          class="blue pointer"
-        >计费规则说明</span>
-      </div>
-      <!-- <el-button
-        v-permission="['订单', '快递发货', '默认页面', '新建模板']"
-        @click="$router.push('/order/newTemplate?mode=new')"
-        class="border-button new-template"
-      >新建模板</el-button> -->
-    </section>
-    <section class="search">
-      <el-form ref="inline" :inline="true" :model="listQuery" class="form-inline">
-        <div class="row justify-between">
-          <div class="col">
-            <el-form-item label="模板名称">
-              <el-input v-model="listQuery.name" placeholder="请输入"></el-input>
-            </el-form-item>
-            <el-form-item label="编辑时间">
-              <el-date-picker
-                v-model="listQuery.time"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :picker-options="utils.globalTimePickerOption.call(this)"
-              ></el-date-picker>
-            </el-form-item>
+        <div class="radio-box">
+          <el-radio-group v-model="mode" @change="handleChangeModel">
+            <el-radio :label="0">组合运费（推荐）</el-radio>
+            <el-radio :label="1">按商品累加运费</el-radio>
+          </el-radio-group>
+          <span
+            @click="currentDialog = 'FreightRulesDialog'; dialogVisible = true"
+            class="blue pointer"
+          >计费规则说明</span>
+        </div>
+        <!-- <el-button
+          v-permission="['设置', '普通快递', '运费模版', '新建模板']"
+          @click="$router.push('/set/newTemplate?mode=new')"
+          class="border-button new-template"
+        >新建模板</el-button> -->
+      </section>
+      <section class="search">
+        <el-form ref="inline" :inline="true" :model="listQuery" class="form-inline">
+          <div class="row justify-between">
+            <div class="col">
+              <el-form-item label="模板名称">
+                <el-input v-model="listQuery.name" placeholder="请输入"></el-input>
+              </el-form-item>
+              <el-form-item label="编辑时间">
+                <el-date-picker
+                  v-model="listQuery.time"
+                  type="datetimerange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="utils.globalTimePickerOption.call(this)"
+                ></el-date-picker>
+              </el-form-item>
+            </div>
+            <!-- <div class="col">
+              <el-form-item>
+                <el-button type="primary" @click="getList">搜索</el-button>
+                <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
+              </el-form-item>
+            </div> -->
+          </div>
+          <div>
             <el-form-item>
-              <el-button type="primary" @click="search">查询</el-button>
+              <el-button type="primary" @click="search" v-permission="['设置','普通快递','运费模版', '查询']">查询</el-button>
               <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
             </el-form-item>
           </div>
-          <!-- <div class="col">
-            <el-form-item>
-              <el-button type="primary" @click="getList">搜索</el-button>
-              <el-button class="border-button" @click="resetForm('inline')">重置</el-button>
-            </el-form-item>
-          </div> -->
-        </div>
-      </el-form>
-    </section>
+        </el-form>
+      </section>
+    </div>
     <section class="table-box">
       <div class="content-header">
           <div class="table-title">
@@ -60,8 +66,8 @@
             <span>{{total}}</span>项
           </div>
           <el-button
-            v-permission="['订单', '快递发货', '默认页面', '新建模板']"
-            @click="$router.push('/order/newTemplate?mode=new')"
+            v-permission="['设置', '普通快递', '运费模版', '新建模板']"
+            @click="$router.push('/set/newTemplate?mode=new')"
             class="border-button new-template"
           >新建模板</el-button>
       </div>
@@ -70,7 +76,7 @@
           v-loading="loading"
           :data="tableData"
           style="width: 100%"
-          empty-text="暂未设置运费模板"
+          empty-text="暂无数据"
           :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         >
           <el-table-column prop="name" label="模板名称" width="180"></el-table-column>
@@ -85,20 +91,20 @@
             <template slot-scope="scope">
               <div class="operate-box">
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '查看']"
-                  @click="$router.push('/order/newTemplate?mode=look&id=' + scope.row.id)"
+                  v-permission="['设置', '普通快递', '运费模版', '查看']"
+                  @click="$router.push('/set/newTemplate?mode=look&id=' + scope.row.id)"
                 >查看</span>
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '复制']"
-                  @click="$router.push('/order/newTemplate?mode=copy&id=' + scope.row.id)"
+                  v-permission="['设置', '普通快递', '运费模版', '复制']"
+                  @click="$router.push('/set/newTemplate?mode=copy&id=' + scope.row.id)"
                 >复制</span>
                 <span
-                  v-permission="['订单', '快递发货', '默认页面', '修改']"
-                  @click="$router.push('/order/newTemplate?mode=change&id=' + scope.row.id)"
+                  v-permission="['设置', '普通快递', '运费模版', '编辑']"
+                  @click="$router.push('/set/newTemplate?mode=change&id=' + scope.row.id)"
                 >编辑</span>
                 <span
                   v-if="!scope.row.productCount"
-                  v-permission="['订单', '快递发货', '默认页面', '删除']"
+                  v-permission="['设置', '普通快递', '运费模版', '删除']"
                   @click="deletequickDelivery(scope.row.id)"
                 >删除</span>
               </div>
@@ -123,9 +129,15 @@ import FreightRulesDialog from "@/views/order/dialogs/freightRulesDialog";
 import utils from "@/utils";
 
 export default {
+  computed: {
+    cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        return shopInfo.id
+    }
+  },
   data() {
     return {
-      mode: "1",
+      mode: 1,
       formInline: {
         name: "",
         time: ""
@@ -162,6 +174,20 @@ export default {
     }
   },
   methods: {
+    // 计费方式变更
+    handleChangeModel() {
+      this.updateTransportationExpenseType()
+    },
+    updateTransportationExpenseType() {
+      let data = {
+        id:this.cid,
+        transportationExpenseType:this.mode
+      }
+      this._apis.set.updateShopInfo(data).then(response =>{
+      }).catch(error =>{
+        console.log('-----err-----', error)
+      })
+    },
     search() {
         this.listQuery = Object.assign({}, this.listQuery, {
             startIndex: 1,
@@ -253,11 +279,15 @@ export default {
     }
 }
 .quick-delivery {
-  section {
+  .head {
     background-color: #fff;
-    padding: 20px;
+    padding: 20px 20px 2px 20px;
     margin-bottom: 20px;
+  }
+  section {
     &.operate {
+      padding: 20px;
+      background:rgba(249,249,249,1);
       .change-mode {
         color: $globalMainColor;
         margin-left: 10px;
@@ -270,11 +300,16 @@ export default {
       }
     }
     &.search {
+      padding-top:40px;
       .resetting {
         margin-right: 7px;
       }
     }
   }
+}
+.table-box {
+  background: #fff;
+  padding: 20px;
 }
 .table-box .table {
     margin-left: 0;
@@ -286,7 +321,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .table-box .table-title {
     margin-bottom: 0;

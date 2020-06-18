@@ -152,14 +152,14 @@
             </li>
             <!-- 安全中心 -->
             <li>
-              <img :src="data.moduleList.myAssemble.icon || require('../../../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.myAssemble.color}">安全中心</p>
+              <img :src="require('../../../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
+              <p class="name">安全中心</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
             <!--退出登录  -->
             <li>
-              <img :src="data.moduleList.address.icon || require('../../../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.address.color}">退出登录</p>
+              <img :src="require('../../../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
+              <p class="name">退出登录</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
           </ul>
