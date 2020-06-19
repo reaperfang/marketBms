@@ -305,6 +305,8 @@ export default {
       callback()
     }
     return {
+      prevIndex: null,
+      nextIndex: null,
       zoom: 4,
       isOpen: false, // 是否开启商家配送
       address: null, // 默认取货地址
@@ -538,21 +540,26 @@ export default {
       console.log(form,index, key)
       if (index < 0) return null
       let prev =  form && form[index] && form[index][key]
-      if (!prev) {
+      // if (!prev) {
+      //   index--
+      //   prev = this.getPrevVal(form, index, key)
+      // }
+      while(index >= 0 && !prev) {
         index--
-        prev = this.getPrevVal(form, index, key)
+        prev = form && form[index] && form[index][key]
       }
-      
+      this.prevIndex = index
       return prev
     },
     getNextVal(form, index, key) {
       console.log(form,index, key)
-      if (index > form.length) return null
+      if (index >= form.length) return null
       let next = form && form[index] && form[index][key]
-      if (!next) {
+      while(index < form.length && !next) {
         index++
-        next = this.getNextVal(form, index, key)
+        next = form && form[index] && form[index][key]
       }
+      this.nextIndex = index
       return next
     },
     // 校验时间区间start
@@ -578,6 +585,7 @@ export default {
 
       curr = curr.getTime()
       const len = ruleForm.length
+      let isValidated = true
       // const validateArr = []
       // this.clearValidate('start')
         console.log('--index-------', index)
@@ -588,14 +596,16 @@ export default {
         console.log('------prev---', prev,'---curr--', curr)
         if (prev) {
           // this.clearValidate('start')
-          // this.$refs.ruleForm.validateField(`timePeriods.${oPrev.index}.${oPrev.key}`);
+          this.$refs.ruleForm.clearValidate(`timePeriods.${this.prevIndex}.start`)
+          // this.$refs.ruleForm.validateField(`timePeriods.${this.prevIndex}.start`);
           console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
           console.log('---validateTimeRangesStart:prev:curr:time---', prev, curr)
           if (prev >= curr) {
-            return callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
+            isValidated = false
+            callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
           }
         } 
       }
@@ -606,18 +616,22 @@ export default {
         console.log('---next--',next)
         if (next) {
           // this.clearValidate('start')
-          // this.$refs.ruleForm.validateField(`timePeriods.${oNext.index}.${oNext.key}`);
+          this.$refs.ruleForm.clearValidate(`timePeriods.${this.nextIndex}.start`)
+          // this.$refs.ruleForm.validateField(`timePeriods.${this.nextIndex}.start`);
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
-          // console.log('---validateTimeRangesStart:next:curr---', prev, curr)
+          console.log('---validateTimeRangesStart:next:curr:time---', next, curr)
           if (next <= curr) {
-            return callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
+            isValidated = false
+            callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
           }
         }
       }
       // console.log('validateArr', validateArr)
-      callback()
+      if (isValidated) {
+        callback()
+      }
       // callback()
       // const reg = /^[0-9]+$/
       // if (value && reg.test(value)) {
@@ -653,19 +667,22 @@ export default {
       const len = ruleForm.length
       // const validateArr = []
       // this.clearValidate('end')
+      let isValidated = true
       if (index > 0) {
         // let prev = ruleForm[index - 1].end
         let prev = this.getPrevVal(ruleForm, index - 1, 'end')
         console.log('---validateTimeRangesEnd:prev---', prev)
         if (prev) {
-          this.clearValidate('end')
+          // this.clearValidate('end')
+          this.$refs.ruleForm.clearValidate(`timePeriods.${this.prevIndex}.end`)
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
           console.log('---validateTimeRangesEnd:prev:curr:time---', prev, curr, prev >= curr)
           if (prev >= curr) {
             console.log('12121212')
-            return callback(new Error('时间段可以交叉，不能重叠。'))
+            isValidated = false
+            callback(new Error('时间段可以交叉，不能重叠。'))
           }
         }
         //  else {
@@ -677,17 +694,21 @@ export default {
         let next = this.getNextVal(ruleForm, index + 1, 'end')
         console.log('---next--',next)
         if (next) {
-          this.clearValidate('end')
+          // this.clearValidate('end')
+          this.$refs.ruleForm.clearValidate(`timePeriods.${this.nextIndex}.end`)
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
           // console.log('---validateTimeRangesEnd:next:curr---', prev, curr)
           if (next <= curr) {
-            return callback(new Error('时间段可以交叉，不能重叠。'))
+            isValidated = false
+            callback(new Error('时间段可以交叉，不能重叠。'))
           }
         }
       }
-      callback()
+      if (isValidated) {
+        callback()
+      }
     },
     formatDecimals(val, key, digits = 2) {
       console.log(val, Number.isNaN(+val))
