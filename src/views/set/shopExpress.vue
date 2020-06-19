@@ -212,7 +212,7 @@
                   :prop="'timePeriods.'+key+'.start'"
                   :rules="[
                     { required: true, message: '请选择时间', trigger:  'change' },
-                    { validator: validateTimeRangesStart, trigger: 'change'}
+                    { validator: validateTimeRangesStart, trigger:  'change'}
                   ]"
                 >
                   
@@ -222,9 +222,9 @@
                 <el-form-item 
                   :prop="'timePeriods.'+key+'.end'"
                   :rules="[{ required: true, message: '请选择时间', trigger:  'change' },
-                    { validator: validateTimeRangesEnd, trigger:  'change'}]"
+                    { validator: validateTimeRangesEnd, trigger: 'change'}]"
                 >
-                  <el-time-picker format="HH:mm" placeholder="结束时间" v-model="item.end" style="width: 156px;" :picker-options="{selectableRange: getSelectableRange(key)}"></el-time-picker>
+                  <el-time-picker format="HH:mm" placeholder="结束时间" v-model="item.end" style="width: 156px;" :picker-options="{selectableRange: getSelectableRange(key), format:'HH:mm'}"></el-time-picker>
                 </el-form-item>
                 <el-button type="text" size="mini" v-if="key !== 0 && (ruleForm.timePeriods.length - 1 === key)" class="btn-del" @click="handleDelTimePeriod(key)">删除</el-button>
               </div>
@@ -514,6 +514,9 @@ export default {
       const ruleForm = this.ruleForm.timePeriods
       const timePeriod = ruleForm[key]
       let { start } = timePeriod
+      if (!start) {
+        return `00:00:00 - 23:59:59`
+      }
       start = new Date(start)
       let hour = start.getHours()
       let minute = start.getMinutes()
@@ -530,6 +533,27 @@ export default {
         arr.push(`timePeriods.${index}.${key}`)
       })
       this.$refs.ruleForm.clearValidate(arr)
+    },
+    getPrevVal(form, index, key) {
+      console.log(form,index, key)
+      if (index < 0) return null
+      let prev =  form && form[index] && form[index][key]
+      if (!prev) {
+        index--
+        prev = this.getPrevVal(form, index, key)
+      }
+      
+      return prev
+    },
+    getNextVal(form, index, key) {
+      console.log(form,index, key)
+      if (index > form.length) return null
+      let next = form && form[index] && form[index][key]
+      if (!next) {
+        index++
+        next = this.getNextVal(form, index, key)
+      }
+      return next
     },
     // 校验时间区间start
     validateTimeRangesStart(rule, value, callback) {
@@ -558,10 +582,13 @@ export default {
       // this.clearValidate('start')
         console.log('--index-------', index)
       if (index > 0) {
-        let prev = ruleForm[index - 1].start
+        // prev prev = ruleForm[index - 1].start
+        let prev = this.getPrevVal(ruleForm, index - 1, 'start')
+        // let prev = oPrev && oPrev.value
         console.log('------prev---', prev,'---curr--', curr)
         if (prev) {
-          this.clearValidate('start')
+          // this.clearValidate('start')
+          // this.$refs.ruleForm.validateField(`timePeriods.${oPrev.index}.${oPrev.key}`);
           console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
           prev = this.formatDate(prev)
           prev = new Date(prev)
@@ -573,9 +600,13 @@ export default {
         } 
       }
       if (index + 1 < len) {
-        let next = ruleForm[index + 1].start
+        // let next = ruleForm[index + 1].start
+        let next = this.getNextVal(ruleForm, index + 1, 'start')
+        // let next = oNext && oNext.value
+        console.log('---next--',next)
         if (next) {
-          this.clearValidate('start')
+          // this.clearValidate('start')
+          // this.$refs.ruleForm.validateField(`timePeriods.${oNext.index}.${oNext.key}`);
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
@@ -614,6 +645,7 @@ export default {
       const minutes = this.formatTime(curr.getMinutes())
       const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
 
+        console.log('---validateTimeRangesEnd:curr---', curr)
       console.log(newValue)
       curr = new Date(newValue)
       
@@ -622,22 +654,28 @@ export default {
       // const validateArr = []
       // this.clearValidate('end')
       if (index > 0) {
-        let prev = ruleForm[index - 1].end
+        // let prev = ruleForm[index - 1].end
+        let prev = this.getPrevVal(ruleForm, index - 1, 'end')
+        console.log('---validateTimeRangesEnd:prev---', prev)
         if (prev) {
           this.clearValidate('end')
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
-          // console.log('---validateTimeRangesEnd:prev:curr---', prev, curr)
+          console.log('---validateTimeRangesEnd:prev:curr:time---', prev, curr, prev >= curr)
           if (prev >= curr) {
+            console.log('12121212')
             return callback(new Error('时间段可以交叉，不能重叠。'))
           }
-        } else {
-           return callback(new Error('请选择时间'))
         }
+        //  else {
+        //    return callback(new Error('请选择时间'))
+        // }
       }
       if (index + 1 < len) {
-        let next = ruleForm[index + 1].end
+        // let next = ruleForm[index + 1].end
+        let next = this.getNextVal(ruleForm, index + 1, 'end')
+        console.log('---next--',next)
         if (next) {
           this.clearValidate('end')
           next = this.formatDate(next)
