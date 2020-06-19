@@ -14,6 +14,6 @@ module.exports = merge(baseConfig, {
 
   /* ...其他需要覆写baseConfig的配置 */
 
-	productionSourceMap: true,   //是否开启sourceMap
-	devtool: 'inline-cheap-module-source-map'  //sourceMap模式
+	productionSourceMap: false,   //是否开启sourceMap
+	devtool: 'nosources-source-map'  //sourceMap模式
 })
