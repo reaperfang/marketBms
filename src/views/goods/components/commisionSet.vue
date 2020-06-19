@@ -78,7 +78,7 @@
                             <p class="line-tip">（注：所有层级分销比例相加之和不能大于100%）</p>
                         </div>
                     </div>
-                    <div class="consult">
+                    <div class="consult" style="display:none">
                         <!-- 商品利润参考 -->
                         <div class="line-title" style="margin-bottom:18px;">参考数据：</div>
                         <div>
