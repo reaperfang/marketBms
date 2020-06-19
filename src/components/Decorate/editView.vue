@@ -22,9 +22,11 @@
         <template v-for="(item, key) of componentDataIds">
           <div>
             <el-popover
+            ref="popover"
             :popper-class="'editor-view-popover active'"
             placement="right-start"
             width="76"
+            :popper-options="{boundariesElement: 'viewport', boundariesPadding: 130}"
             :disabled="popoverDisabled"
             trigger="hover">
             <div class="arrow-box" @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)" @click="deleteComponent(item)">
@@ -212,7 +214,12 @@ export default {
     onEndHandler() {
         this.drag = false;
         this.disable = false;
-        this.popoverDisabled = false
+        this.$nextTick(() => {
+          this.$refs.popover.forEach(item => {
+            item.updatePopper()
+            this.popoverDisabled = false
+          })
+        })
     },
 
     clickTitle(event) {
