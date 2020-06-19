@@ -43,7 +43,7 @@
             </el-checkbox-group>
             <div><p class="line-tip">启用独立佣金设置，此商品拥有独自的佣金比例,不受分销员等级比例的默认设置限制</p></div>
             <div class="commision totalCommission" v-if="enable">
-                <p>分佣总佣金：&nbsp;&nbsp;&nbsp;占分销商品利润</p>
+                <p>分销总佣金：&nbsp;&nbsp;&nbsp;占分销商品利润</p>
                 <div class="commision-prent">
                     <el-input type="number" v-model="resellRule.percentOfCommodityProfit" placeholder="0.00"></el-input><span>%</span>
                 </div>
