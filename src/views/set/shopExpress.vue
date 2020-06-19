@@ -539,6 +539,19 @@ export default {
       const ruleForm = this.ruleForm.timePeriods
       let curr = this.formatDate(value)
       curr = new Date(curr)
+
+      // 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期
+      let date = new Date()
+      const year = date.getFullYear()
+      const month = this.formatTime(date.getMonth() + 1)
+      const day = this.formatTime(date.getDate())
+      const hours = this.formatTime(curr.getHours())
+      const minutes = this.formatTime(curr.getMinutes())
+      const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
+
+      console.log(newValue)
+      curr = new Date(newValue)
+
       curr = curr.getTime()
       const len = ruleForm.length
       // const validateArr = []
@@ -549,10 +562,11 @@ export default {
         console.log('------prev---', prev,'---curr--', curr)
         if (prev) {
           this.clearValidate('start')
+          console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
-          // console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
+          console.log('---validateTimeRangesStart:prev:curr:time---', prev, curr)
           if (prev >= curr) {
             return callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
           }
@@ -589,6 +603,20 @@ export default {
       const ruleForm = this.ruleForm.timePeriods
       let curr = this.formatDate(value)
       curr = new Date(curr)
+
+      // 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期获取当前最新时间
+
+      let date = new Date()
+      const year = date.getFullYear()
+      const month = this.formatTime(date.getMonth() + 1)
+      const day = this.formatTime(date.getDate())
+      const hours = this.formatTime(curr.getHours())
+      const minutes = this.formatTime(curr.getMinutes())
+      const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
+
+      console.log(newValue)
+      curr = new Date(newValue)
+      
       curr = curr.getTime()
       const len = ruleForm.length
       // const validateArr = []
@@ -825,7 +853,7 @@ export default {
       hour = this.formatTime(hour)
       let minute = date.getMinutes()
       minute = this.formatTime(minute)
-      return `${year}-${month}-${day} ${hour}:${minute}:00`
+      return `${year}/${month}/${day} ${hour}:${minute}:00`
       
     },
     // 格式化 每天重复的小时时间段
