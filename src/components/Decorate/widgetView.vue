@@ -133,78 +133,79 @@ export default {
           margin-bottom: 12px;
           cursor: pointer;
           i{
-            width:30px;
-            height:30px;
+            width:40px;
+            height:40px;
+            background-size: 100% 100%!important;
             &{
-              background:url('../../assets/images/shop/editor/fuwenben.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/fuwenben.png') no-repeat 0 0;
             }
             &.goods{
-              background:url('../../assets/images/shop/editor/shangpin.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/shangpin.png') no-repeat 0 0;
             }
             &.goods-group{
-              background:url('../../assets/images/shop/editor/shangpinfenzu.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/shangpinfenzu.png') no-repeat 0 0;
             }
             &.article-ad{
-              background:url('../../assets/images/shop/editor/tuwenguanggao.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/tuwenguanggao.png') no-repeat 0 0;
             }
             &.cube{
-              background:url('../../assets/images/shop/editor/mofang.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/mofang.png') no-repeat 0 0;
             }
             &.article-nav{
-              background:url('../../assets/images/shop/editor/tuwendaohang.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/tuwendaohang.png') no-repeat 0 0;
             }
             &.text{
-              background:url('../../assets/images/shop/editor/wenben.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/wenben.png') no-repeat 0 0;
             }
             &.title{
-              background:url('../../assets/images/shop/editor/biaoti.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/biaoti.png') no-repeat 0 0;
             }
 
             &.coupon{
-              background:url('../../assets/images/shop/editor/youhuiquanzu.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/youhuiquanzu.png') no-repeat 0 0;
             }
             &.multi-person{
-              background:url('../../assets/images/shop/editor/duorenpintuan.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/duorenpintuan.png') no-repeat 0 0;
             }
             &.second-kill{
-              background:url('../../assets/images/shop/editor/miaoshazu.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/miaoshazu.png') no-repeat 0 0;
             }
             &.discount{
-              background:url('../../assets/images/shop/editor/xianshizhekou.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/xianshizhekou.png') no-repeat 0 0;
             }
             &.discount-package{
-              background:url('../../assets/images/shop/editor/youhuitaocan.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/youhuitaocan.png') no-repeat 0 0;
             }
             &.full-reduction{
-              background:url('../../assets/images/shop/editor/manjianmanzhe.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/manjianmanzhe.png') no-repeat 0 0;
             }
             &.nyuan{
-              background:url('../../assets/images/shop/editor/NyuanNjian.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/NyuanNjian.png') no-repeat 0 0;
             }
 
             &.shop-info{
-              background:url('../../assets/images/shop/editor/dianpuxinxi.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/dianpuxinxi.png') no-repeat 0 0;
             }
             &.enter-shop{
-              background:url('../../assets/images/shop/editor/jinrudianpu.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/jinrudianpu.png') no-repeat 0 0;
             }
             &.goods-search{
-              background:url('../../assets/images/shop/editor/shangpinsousuo.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/shangpinsousuo.png') no-repeat 0 0;
             }
             &.notice{
-              background:url('../../assets/images/shop/editor/gonggao.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/gonggao.png') no-repeat 0 0;
             }
             &.help-line{
-              background:url('../../assets/images/shop/editor/fuzhuxian.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/fuzhuxian.png') no-repeat 0 0;
             }
             &.video{
-              background:url('../../assets/images/shop/editor/shipin.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/shipin.png') no-repeat 0 0;
             }
             &.help-blank{
-              background:url('../../assets/images/shop/editor/fuzhukongbai.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/fuzhukongbai.png') no-repeat 0 0;
             }
             &.buy-notice{
-              background:url('../../assets/images/shop/editor/goumaigonggao.png') no-repeat 0 0;
+              background:url('../../assets/images/shop/editor/widget/goumaigonggao.png') no-repeat 0 0;
             }
           }
           p{
