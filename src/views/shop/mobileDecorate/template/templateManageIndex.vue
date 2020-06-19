@@ -22,7 +22,7 @@
 		components: { myTemplate, homeTemplate, activeTemplate},
 		data() {
 			return {
-				currentTab: "homeTemplate"
+				currentTab: "myTemplate"
 			};
 		},
 		created() {},
