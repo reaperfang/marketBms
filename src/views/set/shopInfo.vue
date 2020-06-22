@@ -368,7 +368,7 @@ export default {
           });
           this.itemCatText = _arr.map(val => val.name).join(" > ");
 
-          this.form = Object.assign({}, response, {
+          this.form = Object.assign({}, this.form, response, {
             business: itemCatAr
           });
           if (response.provinceCode) {
@@ -553,10 +553,6 @@ export default {
       }
       return isJPG || isJPEG || (isPNG && isLt2M);
     },
-    // 模糊搜索地址列表
-    searchMap() {
-      this.$refs.shopInfoMap.handlePropSearch(this.form.sendAddress)
-    },
     getProvinceCode() {
       let provinces = this.$pcaa[86]
       let provinceCode = null
@@ -656,9 +652,9 @@ export default {
       this.province = poi.provinceName
       this.city = poi.cityName
       this.area = poi.areaName
-      this.$refs.form.validateField('sendAddress')
       this.$nextTick(() => {
         this.isInit = true
+        this.$refs.form.validateField('sendAddress')
       })
       // this.getProvincesCities(poi.address)
     }
