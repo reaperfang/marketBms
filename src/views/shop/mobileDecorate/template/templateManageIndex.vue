@@ -43,11 +43,14 @@
 <style lang="scss" scoped>
 	.el-tabs {
 		background: #fff;
-		padding: 20px;
+		padding: 20px 20px 0 20px;
 		position: relative;
 	}
 	/deep/ .el-tabs__content {
 		position: static;
+	}
+	/deep/ .el-tabs__header {
+		margin: 0;
 	}
 	.template-search {
 		position: absolute;
