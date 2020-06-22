@@ -151,7 +151,7 @@
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
             <!--分销中心  -->
-            <li>
+            <li v-if='this.isOpenResell===1'>
               <img :src="data.moduleList.commission.icon || require('../../../../../assets/images/shop/userCenter/userCenter21.png')" alt="" class="tb">
               <p class="name" :style="{color: data.moduleList.commission.color}">{{data.moduleList.commission.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan"></p>
@@ -180,6 +180,7 @@
 import componentUserCenter from '../../wxShop/editorComps/componentUserCenter';
 export default {
   name: 'h5ComponentUserCenter',
-  extends: componentUserCenter
+  props: ['isOpenResell'],
+  extends: componentUserCenter,
 }
 </script>
