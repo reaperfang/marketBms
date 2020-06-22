@@ -50,8 +50,9 @@
 
         <div class="block form">
           <template v-for="(item, key) in ruleForm.moduleList">
+            <!-- v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"/  h5隐藏分销入口 -->
             <el-form-item
-               v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
+               v-if=" item.name =='commission'?isOpenResell==1:(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
               :key="key"
               :label="item.title"
               :prop="'moduleList.'+ key +'.titleValue'"

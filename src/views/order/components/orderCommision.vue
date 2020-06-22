@@ -30,7 +30,7 @@
             </template>
         </el-table-column>
         <el-table-column label="分销比例">
-            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{item.resellerSettlementScale * 100}}%</p></template>  
+            <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">{{(item.resellerSettlementScale * 100).toFixed(0)}}%</p></template>  
         </el-table-column>
         <el-table-column label="分销金额">
             <template><p class="line-height" v-for="item in orderDetail.resellerInfoList">¥{{item.resellerSettlementMoney}}</p></template>  

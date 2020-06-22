@@ -638,4 +638,4 @@ helloWorld.vue
     navType: 2
   }
 ]
-```
+```boom_merge_com1.2boom_merge_com1.2boom_merge_com1.2
