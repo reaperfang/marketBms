@@ -203,7 +203,7 @@
 					this.ruleForm.lowPrice = undefined
 					this.ruleForm.highPrice = undefined
 				} else {
-					this.ruleForm.chargeType = 0
+					this.ruleForm.chargeType = ""
 				}
 			}
 		},
