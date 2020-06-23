@@ -71,7 +71,7 @@
 import shopMainDecorated from '../wxShop/shopMainDecorated';
 import { mapMutations } from 'vuex'
 export default {
-  name: "h5ShopMainDecorated",  
+  name: "h5ShopMainDecorated",
   extends: shopMainDecorated,
   data() {
     return {
@@ -161,7 +161,7 @@ export default {
 </script>
 <style lang="scss">
 .shop_index_wrapper{
-
+   min-height: 500px!important;
   .no_open,.no_bind{
     display:flex;
     flex-direction: column;

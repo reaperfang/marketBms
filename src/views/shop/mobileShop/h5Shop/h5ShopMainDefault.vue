@@ -35,7 +35,7 @@
                 <li class="tips3"><p>好的，不过我想把我的页面装得个性化一点，可以实现吗？</p></li>
               </ul>
               <img src="../../../../assets/images/shop/guide/13@2xcopy2.png" alt="">
-            </div> 
+            </div>
             <div class="block">
               <img src="../../../../assets/images/shop/guide/13@2x(1).png" alt="">
               <ul class="tips_list">
@@ -113,7 +113,11 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.app-container{
+	min-height: 510px!important;
+	background: #fff;
+}
 .no_open,.no_bind{
   display:flex;
   flex-direction: column;
