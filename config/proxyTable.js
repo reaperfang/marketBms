@@ -15,14 +15,14 @@ module.exports = {
 
     /* 营销服务 */
     '/sale_server/**': {
-      target: 'https://test3-omo.aiyouyi.cn/mkt-api/',
+      target: 'https://test5-omo.aiyouyi.cn/mkt-api/',
       changeOrigin: true,
       pathRewrite: {
         '^/sale_server': ''
       }
     },
     '/upload_server/**': {
-      target: 'http://test3-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
+      target: 'http://test5-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
       changeOrigin: true,
       pathRewrite: {
         '^/upload_server': ''

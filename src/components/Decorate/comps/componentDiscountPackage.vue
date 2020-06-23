@@ -2,7 +2,19 @@
 <!-- 组件-优惠套装 -->
     <div class="component_wrapper" v-loading="loading">
         <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data && hasContent">
-            <ul>
+
+            <ul v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
+                <li v-for="(item,key) of currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio, 'fakeData']">
+                    <div class="img_box"  v-if="listStyle != 4">
+                        <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                    </div>
+                    <div v-else class="img_box">
+                        <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                    </div>
+                </li>
+            </ul>
+            
+            <ul v-else>
                 <li v-for="(item,key) of list" :key="key" v-if="!(item.status==2&&currentComponentData.data.hideSaledGoods==true|| utils.dateDifference(item.endTime)<1&&currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&currentComponentData.data.hideSaledGoods==true)" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
                         <div class="label">已售{{item.participateActivityNum}}套</div>
@@ -76,7 +88,8 @@ export default {
             goodWidth:'',
             goodMargin:'',
             list: [],
-            loading: false
+            loading: false,
+            showFakeData: true
         }
     },
     created() {
@@ -101,13 +114,18 @@ export default {
                 }
             },
             deep: true
+        },
+        'list': {
+            handler(newValue) {
+                this.showFakeData = !newValue.length;
+            }
         }
     },
     computed: {
          /* 检测是否有数据 */
         hasContent() {
             let value = false;
-            if(this.list && this.list.length) {
+            if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
                 value = true;
             }
             return value;
@@ -471,6 +489,15 @@ export default {
             float:left;
             margin-right:10px;
             width:36%;
+        }
+        &.fakeData{
+            padding: 0;
+            .img_box{
+                width:100%;
+                img{
+                    object-fit: initial!important;
+                }
+            }
         }
         .countdown_Bar{
             width:33%;

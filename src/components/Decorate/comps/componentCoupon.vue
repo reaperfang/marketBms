@@ -2,8 +2,12 @@
   <!-- 优惠券 -->
   <div class="component_wrapper" v-loading="loading">
     <div v-if="currentComponentData && currentComponentData.data && hasContent" class="componentCoupon">
+      <div class="coupon_first componentCoupon" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
+        <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
+      </div>
+
       <!-- 样式一 -->
-      <div class="coupon_first componentCoupon">
+      <div class="coupon_first componentCoupon" v-else>
         <ul ref="scrollContent" class="clearfix">
           <!-- status:true时候是已领取,hideScrambled:false, -->
           <template v-for="(item, key) in list">
@@ -35,7 +39,8 @@ export default {
     return {
       allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       list: [],
-      loading: false
+      loading: false,
+      showFakeData: true
     }
   },
   created() {
@@ -85,7 +90,7 @@ export default {
      /* 检测是否有数据 */
     hasContent() {
         let value = false;
-        if(this.list && this.list.length) {
+        if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
             value = true;
         }
         return value;
@@ -134,6 +139,11 @@ export default {
             }
         },
         deep: true
+    },
+    'list': {
+        handler(newValue) {
+            this.showFakeData = !newValue.length;
+        }
     }
   },
   methods: {

@@ -101,7 +101,7 @@
             <span>{{ruleForm.pageMargin}}像素</span>
           </div>
         </el-form-item>
-        <el-form-item label="图片间距" prop="imgMargin" v-if="hasContent">
+        <el-form-item label="图片间距" prop="imgMargin">
             <div class="slider-wrapper">
             <el-slider v-model="ruleForm.imgMargin" :min="0" :max="30"></el-slider>
             <span>{{ruleForm.imgMargin}}像素</span>

@@ -26,7 +26,7 @@
           <el-radio :label="2">横向滑动</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="背景颜色" prop="backgroundColor" v-if="hasContent">
+      <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
           <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#fff"></colorPicker >

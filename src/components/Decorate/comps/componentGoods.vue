@@ -2,7 +2,21 @@
 <!-- 组件-商品列表 -->
     <div class="component_wrapper" v-loading="loading">
         <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data && hasContent" ref="componentContent">
-            <ul>
+
+            <ul v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
+                <li v-for="(item,key) in currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio, 'fakeData']">
+                    <div class="img"  v-if="listStyle != 4">
+                        <div class="imgAbsolute">
+                            <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                        </div>
+                    </div>
+                    <div v-else class="img">
+                        <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                    </div>
+                </li>
+            </ul>
+
+            <ul  v-else>
                 <li v-for="(item,key) in list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img" >
                         <div class="imgAbsolute">
@@ -56,7 +70,8 @@ export default {
             goodListLoading: false,
             goodListFinished: false,
             list: [],
-            loading: false
+            loading: false,
+            showFakeData: true
         }
     },
     created() {
@@ -107,12 +122,17 @@ export default {
                 this.fetch();
             }
         },
+        'list': {
+            handler(newValue) {
+                this.showFakeData = !newValue.length;
+            }
+        }
     },
     computed: {
          /* 检测是否有数据 */
         hasContent() {
             let value = false;
-            if(this.list && this.list.length) {
+            if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
                value = true;
             }
             return value;
@@ -704,6 +724,20 @@ export default {
                 position:relative;
                 //@include borderRadius(8px);
                 overflow:hidden;
+            }
+            &.fakeData{
+                padding:0;
+                .img{
+                    width:100%;
+                    height:126px;
+                    position:relative;
+                    overflow:hidden;
+                    img{
+                        width:100%;
+                        height:100%;
+                        object-fit: initial!important;
+                    }
+                }
             }
             .text{
                 overflow:hidden;

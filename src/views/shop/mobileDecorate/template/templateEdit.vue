@@ -28,20 +28,20 @@ export default {
           title: '页面信息'
         },
         buttons: {
-          saveData: {
-            title: '保存草稿',
-            function: this.saveData,
-            type: 'primary',
-            show: () => true,
-            loading: false
-          },
-          saveAndApplyData: {
-            title: '保存并生效',
-            function: this.saveAndApplyData,
-            type: 'primary',
-            show: () => true,
-            loading: false
-          },
+          // saveData: {
+          //   title: '保存草稿',
+          //   function: this.saveData,
+          //   type: 'primary',
+          //   show: () => true,
+          //   loading: false
+          // },
+          // saveAndApplyData: {
+          //   title: '保存并生效',
+          //   function: this.saveAndApplyData,
+          //   type: 'primary',
+          //   show: () => true,
+          //   loading: false
+          // },
           cancel: {
             title: '取消',
             function: this.cancelSave,

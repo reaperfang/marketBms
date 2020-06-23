@@ -20,7 +20,7 @@
             <img
               class="default_image"
               :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-              src="../../../assets/images/shop/defaultImage/ad1.png"
+              src="../../../assets/images/shop/defaultImage/ad1.jpg"
               alt
             />
           </template>
@@ -44,7 +44,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad2.png"
+                src="../../../assets/images/shop/defaultImage/ad2.jpg"
                 alt
               />
           </template>
@@ -70,7 +70,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad3.png"
+                src="../../../assets/images/shop/defaultImage/ad3.jpg"
                 alt
               />
           </template>
@@ -94,7 +94,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad4.png"
+                src="../../../assets/images/shop/defaultImage/ad4.jpg"
                 alt
               />
           </template>
@@ -128,7 +128,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad5.png"
+                src="../../../assets/images/shop/defaultImage/ad5.jpg"
                 alt
               />
           </template>

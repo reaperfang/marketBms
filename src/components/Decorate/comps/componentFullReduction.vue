@@ -2,7 +2,12 @@
   <!-- 满减瞒折 -->
   <div class="component_wrapper" v-loading="loading">
     <div class="componentFullReduction" v-if="currentComponentData && currentComponentData.data && hasContent">
-        <div class="reduction"  v-for="(item, key) in list" :key="key">
+
+        <div class="coupon_first componentFullReduction" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
+          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
+        </div>
+
+        <div class="reduction"  v-for="(item, key) in list" :key="key"  v-else>
           <div class="reduction_first">
             <span>减</span>
             <span>{{item.name}}</span>
@@ -39,7 +44,8 @@ export default {
     return {
       allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       list: [],
-      loading: false
+      loading: false,
+      showFakeData: true
     };
   },
   created() {
@@ -58,6 +64,11 @@ export default {
             }
         },
         deep: true
+    },
+    'list': {
+        handler(newValue) {
+            this.showFakeData = !newValue.length;
+        }
     }
   },
   computed: {
@@ -67,7 +78,7 @@ export default {
     /* 检测是否有数据 */
     hasContent() {
         let value = false;
-        if(this.list && this.list.length) {
+        if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
             value = true;
         }
         return value;

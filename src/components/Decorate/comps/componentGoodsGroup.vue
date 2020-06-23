@@ -2,7 +2,13 @@
 <!-- 组件-商品分类 -->
     <div class="component_wrapper" v-loading="loading">
       <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data && hasContent">
-          <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
+
+          <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
+            <img :src="currentComponentData.data.fakeList[listStyle - 1].fileUrl" alt="" style="width:100%;">
+          </div>
+
+
+          <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}"  v-else>
 
 
             <!-- 原来的 -->
@@ -90,7 +96,8 @@ export default {
         activeGoodId:'all',
         // 商品请求分类id集合
         allGoodClassId:[],
-        allGoodClassId1:[]
+        allGoodClassId1:[],
+        showFakeData: true
       }
     },
     components: {
@@ -127,13 +134,18 @@ export default {
               // }
           },
           deep: true
+      },
+      'list': {
+          handler(newValue) {
+              this.showFakeData = !newValue.length;
+          }
       }
     },
     computed: {
         /* 检测是否有数据 */
         hasContent() {
             let value = false;
-            if(this.list && this.list.length) {
+            if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
                value = true;
             }
             return value;

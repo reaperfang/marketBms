@@ -21,7 +21,7 @@
                   <img
                     class="default_image"
                     :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                    src="../../../assets/images/shop/defaultImage/nav1.png"
+                    src="../../../assets/images/shop/defaultImage/nav1.jpg"
                     alt
                   />
                 </template>
@@ -42,7 +42,7 @@
                   <img
                     class="default_image"
                     :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                    src="../../../assets/images/shop/defaultImage/nav2.png"
+                    src="../../../assets/images/shop/defaultImage/nav2.jpg"
                     alt
                   />
                 </template>
@@ -63,7 +63,7 @@
                 <img
                   class="default_image"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  src="../../../assets/images/shop/defaultImage/nav3.png"
+                  src="../../../assets/images/shop/defaultImage/nav3.jpg"
                   alt
                 />
               </template>
@@ -81,7 +81,7 @@
                 <img
                   class="default_image"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  src="../../../assets/images/shop/defaultImage/nav4.png"
+                  src="../../../assets/images/shop/defaultImage/nav4.jpg"
                   alt
                 />
               </template>

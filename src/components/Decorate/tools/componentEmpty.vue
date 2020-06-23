@@ -1,7 +1,7 @@
 <template>
   <div class="empty_data">
-      <img class="empty_data_img" src="../../../assets/images/shop/emptyData.png" alt="">
-      <p>暂无数据-{{componentData && (componentData.title || componentData.name)}}</p>
+      <img class="empty_data_img" :src="require('../../Decorate/defImg/'+componentData.title+'.jpg')" alt="">
+      <p>点击编辑{{componentData && (componentData.title || componentData.name)}}</p>
   </div>
 </template>
 
@@ -26,8 +26,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background:rgba(248,248,248,1);
-  padding:12px 0;
+  background:#fff;
+  padding:20px 0;
   img{
 
   }

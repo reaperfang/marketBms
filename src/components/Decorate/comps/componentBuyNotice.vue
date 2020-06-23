@@ -2,7 +2,10 @@
   <!-- 购买公告 -->
   <div class="component_wrapper" v-loading="loading">
     <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
-      <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}">
+      <div v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
+        <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;">
+      </div>
+      <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-else>
         <li>
           <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
         </li>
@@ -34,7 +37,8 @@ export default {
       animate: true, 
       list: [],
       timer: null ,
-      loading: false
+      loading: false,
+      showFakeData: true
     };
   },
   created() {
@@ -53,7 +57,12 @@ export default {
               }
           },
           deep: true
-      }
+      },
+    'list': {
+        handler(newValue) {
+            this.showFakeData = !newValue.length;
+        }
+    }
   },
   methods: {
     scroll() {

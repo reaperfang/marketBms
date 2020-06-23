@@ -1,7 +1,7 @@
 <template>
   <!-- 视频 -->
   <div class="component_wrapper">
-    <div class="componentVideo" v-if="currentComponentData && currentComponentData.data">
+    <div class="componentVideo" v-if="currentComponentData && currentComponentData.data && hasContent">
       <div>
         <video
           v-if="show"
@@ -12,6 +12,7 @@
         >您的浏览器不支持 video 标签。</video>
       </div>
     </div>
+    <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
   </div>
 </template>
 
@@ -30,7 +31,14 @@ export default {
 
   },
   computed: {
-   
+    /* 检测是否有数据 */
+    hasContent() {
+        let value = false;
+        if(this.currentComponentData.data.videoUrl) {
+            value = true;
+        }
+        return value;
+    }
   },
   watch: {
     'currentComponentData.data.coverType': {
