@@ -119,13 +119,13 @@ export default {
 
     /* 去开通H5店铺 */
     linkToOpenH5() {
-      this.$router.push({path:'/apply',query:{paths:'/application/channelapp', applyId:3}})
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp', menuId:3}})
       this.SETCURRENT(8)
     },
 
     /* 去绑定H5店铺域名 */
     linkToBindDomain() {
-      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', applyId:3}})
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', menuId:3}})
       this.SETCURRENT(8)
     },
 

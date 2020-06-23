@@ -69,6 +69,9 @@ export default {
             }
             let extraQuery = ''
             let mkQuery = localStorage.getItem('marketing_router_path_query')&&JSON.parse(localStorage.getItem('marketing_router_path_query'))||{}
+            if(this.$route.query.menuId){
+                mkQuery.menuId = this.$route.query.menuId
+            }
             delete mkQuery.access
             delete mkQuery.token
             delete mkQuery.businessId
