@@ -324,7 +324,7 @@
 						if (res1 === null || res1.status === 2) {
 							this._apis.templatePay.getOrcode({
 								orderSource: 1,
-								orderType: 1,
+								orderType: 2,
 								shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
 								templateChargeType: item.chargeType,
 								templateId: item.id,
