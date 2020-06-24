@@ -38,7 +38,7 @@
 									￥{{item.price}}<span style="color:rgba(146,146,155,1);">/</span>
 								</div>
 								<div class="price-right">
-									{{getChangeType(item.chargeType)}}
+									{{chargeTypeConstant[item.chargeType]}}
 								</div>
 							</div>
 							<div class="free"  v-show="item.chargeType === 1">
@@ -50,7 +50,7 @@
 								</div>
 							</div>
 							<div class="expiration" v-show="item.chargeType !== 1">
-								到期日：{{item.limitDate | formatDate('yyyy-MM-dd')}}
+								到期日：{{item.limitDate ? item.limitDate.substring(0, 10) : '-'}}
 							</div>
 						</div>
 						<div class="body">
@@ -101,10 +101,16 @@
 <script>
 	import tableBase from '@/components/TableBase';
 	import templatePay from './components/templatePay';
+	import templateConstant from '@/system/constant/template';
 	export default {
 		name: 'templateManage',
 		extends: tableBase,
 		components: {templatePay},
+    computed: {
+      chargeTypeConstant() {
+		    return templateConstant.chargeType
+      }
+    },
 		data () {
 			return {
 				dialogVisible: false,
@@ -180,8 +186,6 @@
 					}
 				}
 				this.preLoadObj.onload = function () {
-					console.log(this.clientWidth)
-					console.log(this.clientHeight)
 					_self.imgNow++;
 					if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
 						_self.preload(data, name);          //  递归调用自己
@@ -251,28 +255,12 @@
 					})
 				}
 			},
-			getChangeType(code) {
-				if (code === 1) {
-					return ''
-				} else if (code === 1) {
-					return '永久免费'
-				} else if (code === 2) {
-					return '30天'
-				} else if (code === 3) {
-					return '90天'
-				} else if (code === 4) {
-					return '180天'
-				} else if (code === 5) {
-					return '360天'
-				} else if (code === 6) {
 
-				}
-			},
 			closePay() {
 				this.dialogVisible = false
 				this.fetch()
 			}
-		}
+		},
 	}
 </script>
 

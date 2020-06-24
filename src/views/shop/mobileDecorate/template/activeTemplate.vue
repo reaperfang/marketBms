@@ -14,7 +14,7 @@
 			<div class="template_wrapper-head-industries">
 				<div class="template_wrapper-head-industries-items" :style="ifShowAll ? styleShow : styleHidden">
 					<div class="template_wrapper-head-industries-item" @click="handleSelectAll" :style="{background: checkboxGroup1.length ===  industries.length ? '#655EFF' : '#ffffff',color: checkboxGroup1.length ===  industries.length ? '#ffffff' : '#B6B5C8'}">
-						全部
+						全部行业
 					</div>
 					<div class="template_wrapper-head-industries-item" v-for="(item, index) of industries" :key="index + 'industries'" @click="handleSelectItems(item.id)" :style="{background: checkboxGroup1.indexOf(item.id) > -1 ? '#655EFF' : '#ffffff',color: checkboxGroup1.indexOf(item.id) > -1 ? '#ffffff' : '#B6B5C8'}">
 						{{item.name}}
@@ -74,7 +74,7 @@
 										￥{{item.price}}<span style="color:rgba(146,146,155,1);">/</span>
 									</div>
 									<div class="price-right">
-										{{getChangeType(item.chargeType)}}
+                    {{chargeTypeConstant[item.chargeType]}}
 									</div>
 								</div>
 								<div class="free"  v-show="item.chargeType === 1">
@@ -86,7 +86,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="body">
+							<div class="body" :title="item.name">
 								<span>{{item.name || '页面模板'}}</span>
 							</div>
 							<div class="bottom">
@@ -132,10 +132,16 @@
 	import tableBase from '@/components/TableBase';
 	import emptyList from './components/emptyList';
 	import templatePay from './components/templatePay';
+  import templateConstant from '@/system/constant/template';
 	export default {
 		name: 'templateManage',
 		extends: tableBase,
 		components: { templatePay, emptyList },
+    computed: {
+      chargeTypeConstant() {
+        return templateConstant.chargeType
+      }
+    },
 		data () {
 			return {
 				showAllBtn: false,
@@ -163,6 +169,7 @@
 				orderType: '',
 				industries: [],
 				checked: false,
+        startIndex: 1,
 				pageSize: 12,
 				loading: true,
 				templateList: [],
@@ -203,7 +210,7 @@
 					this.ruleForm.lowPrice = undefined
 					this.ruleForm.highPrice = undefined
 				} else {
-					this.ruleForm.chargeType = 0
+					this.ruleForm.chargeType = ''
 				}
 			}
 		},
@@ -230,11 +237,17 @@
 				} else {
 					this.tipText = '您搜索的行业内当前没有可使用的模版，请您换个行业再次搜索！'
 				}
-				this._apis.goodsOperate.getEffTemplateList({
-					startIndex: this.startIndex,
-					pageSize: this.pageSize,
-					...this.ruleForm
-				}).then((response)=>{
+        const reqParams = {
+          startIndex: this.startIndex,
+          pageSize: this.pageSize,
+          sortBy: this.ruleForm.sortBy,
+          lowPrice: this.ruleForm.lowPrice,
+          highPrice: this.ruleForm.highPrice,
+          industryIds: this.ruleForm.industryIds,
+          chargeType: this.ruleForm.chargeType,
+          type: this.ruleForm.type
+        };
+				this._apis.goodsOperate.getEffTemplateList(reqParams).then((response)=>{
 					this.total = response.total;
 					this.templateList = response.list;
 					this.imgNow = 0;
@@ -251,6 +264,21 @@
 					this.loading = false;
 				});
 			},
+
+      query() {
+        this.startIndex = 1;
+        this.fetch();
+      },
+
+      handleCurrentChange(val) {
+        this.startIndex = val;
+        this.fetch();
+      },
+
+      handleSizeChange(val) {
+        this.startIndex = val;
+        this.fetch();
+      },
 
 			/* 预加载 */
 			preload(data, name) {
@@ -399,23 +427,6 @@
 					})
 				}
 			},
-			getChangeType(code) {
-				if (code === 1) {
-					return ''
-				} else if (code === 1) {
-					return '永久免费'
-				} else if (code === 2) {
-					return '30天'
-				} else if (code === 3) {
-					return '90天'
-				} else if (code === 4) {
-					return '180天'
-				} else if (code === 5) {
-					return '360天'
-				} else if (code === 6) {
-
-				}
-			},
 			sortByChange(v) {
 				this.fetch()
 			},
@@ -451,6 +462,14 @@
 </script>
 
 <style lang="scss" scoped>
+
+  /deep/ .el-tag--small .el-icon-close {
+    transform: scale(1.1);
+  }
+  /deep/ .el-tag .el-icon-close {
+    top: -2px;
+  }
+
 	.template_wrapper-head {
 		background: #fff;
 		padding-bottom:20px;
@@ -498,6 +517,7 @@
 				justify-content: start;
 				align-items: start;
 				flex-flow:row wrap;
+        cursor: pointer;
 			}
 			&-option {
 				margin-top: 16px;
@@ -507,6 +527,8 @@
 				justify-content: center;
 				align-items: center;
 				flex-flow:row wrap;
+        color: $contentColor;
+        cursor: pointer;
 			}
 			&-item {
 				min-width:80px;
@@ -584,21 +606,21 @@
 					height:421px!important;
 					padding: 15px;
 					background: #fff;
-					box-shadow:0px 2px 10px 0px rgba(232,231,255,1);
+					box-shadow:0 2px 10px 0 rgba(232,231,255,1);
 					position:relative;
 					&-tag {
-						width:117px;
-						height:26px;
-						position: absolute;
-						top: 0;
-						right: 0;
-						z-index: 100;
-						line-height: 26px;
-						text-align: center;
-						font-size:12px;
-						font-family:PingFangSC-Medium,PingFang SC;
-						font-weight:500;
-						color:rgba(255,255,255,1);
+            width: 137px;
+            height: 26px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 100;
+            line-height: 26px;
+            text-align: right;
+            font-size: 12px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
 						img {
 							position: absolute;
 							height: 100%;
@@ -607,22 +629,21 @@
 							z-index: 101;
 						}
 						span {
-							position: absolute;
-							height: 100%;
-							top: 0;
-							right: 10px;
-							z-index: 102;
+              margin-right: 10px;
+              position: relative;
+              z-index: 102;
 						}
 					}
 					.view{
-						width:100%;
-						height:300px;
-						position: relative;
-						img{
-							width:100%;
-							height:100%;
-							object-fit: cover;
-						}
+            width: 100%;
+            height: 300px;
+            position: relative;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
 						.cover_small{
 							width:100%;
 							height:100%;
