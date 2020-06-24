@@ -109,7 +109,9 @@
 							that.confirm({
 								title: '支付成功',
 								icon: true,
-								text: `支付成功，您的装修模版已经重启启用！`
+                showCancelButton: false,
+                confirmText: '我知道了',
+								text: `支付成功，您的装修模版已经重新启用！`
 							}).then(() => {
 								// that._routeTo('m_templateEdit', {id: item.id});
 							})

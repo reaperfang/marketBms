@@ -271,6 +271,13 @@
        *  查询
        */
       query() {
+        if((this.ruleForm.lowPrice && !this.ruleForm.highPrice) || (this.ruleForm.highPrice && !this.ruleForm.lowPrice) || (this.ruleForm.lowPrice*1 > this.ruleForm.highPrice*1)) {
+          this.$alert('当前价格区间输入有误、请您重新输入查询', '警告', {
+            confirmButtonText: '确定'
+          });
+          return
+        }
+
         this.startIndex = 1;
         this.fetchList();
       },
@@ -418,6 +425,8 @@
 				}else {
 					this.checkboxGroup1.push(value)
 				}
+        this.startIndex = 1;
+        this.fetchList()
 			},
 			// 全选
 			handleSelectAll() {
@@ -429,8 +438,11 @@
 						this.checkboxGroup1.push(item.id)
 					})
 				}
+        this.startIndex = 1;
+        this.fetchList()
 			},
 			sortByChange(v) {
+			  this.startIndex = 1;
 				this.fetchList()
 			},
 			// 有效行业列表

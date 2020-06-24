@@ -64,6 +64,7 @@ export default {
     };
   },
   created() {
+    this.fetchTemplateStatus();
     this.getPageList();
   },
   computed: {
@@ -93,27 +94,43 @@ export default {
   },
   methods: {
 
+    /* 模板是否已过期 */
+    fetchTemplateStatus() {
+      this._apis.shop.getTemplateInfo({pageTemplateId: this.id}).then(res => {
+        if(res && res.status === 2){ // 已过期2
+          this.confirm({
+            title: '提示',
+            icon: true,
+            showCancelButton: false,
+            confirmText: '我知道了',
+            text: `模板已过期`
+          });
+        }
+      })
+    },
+
     /* 获取模板下的页面列表 */
     getPageList() {
       this.loading = true;
-      this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
-      	if (response === null || response === undefined || response === '' || response.length === 0 || !response) {
-			this.$store.commit("clearAllData");
-			this.loading = false
-			return
-		}
+      this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response) => {
+        if (response === null || response === undefined || response === '' || response.length === 0 || !response) {
+          this.$store.commit("clearAllData");
+          this.loading = false
+          return
+        }
+
         this.pageList = [response];
         this.loading = false;
-        if(!this.pageList || !this.pageList.length) {
+        if (!this.pageList || !this.pageList.length) {
           return;
         }
-        for(let item of this.pageList) {
+        for (let item of this.pageList) {
           this.pageMaps[item.id] = item;
         }
-		  this.pageList[0]['active'] = true;
+        this.pageList[0]['active'] = true;
         this.pageId = this.pageList[0].id;
         this.fetch(this.pageList[0].id);
-      }).catch((error)=>{
+      }).catch((error) => {
         console.error(error);
         this.loading = false;
       });

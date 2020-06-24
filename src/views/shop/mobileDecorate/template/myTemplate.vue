@@ -167,6 +167,16 @@
 				});
 			},
 
+      handleCurrentChange(val) {
+        this.startIndex = val;
+        this.fetch();
+      },
+
+      handleSizeChange(val) {
+        this.startIndex = 1;
+        this.fetch();
+      },
+
 			/* 预加载 */
 			preload(data, name) {
 				const _self = this;
