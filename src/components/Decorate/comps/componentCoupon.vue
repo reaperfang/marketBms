@@ -45,11 +45,6 @@ export default {
   },
   created() {
     this.fetch();
-    this._globalEvent.$on('fetchCoupon', (componentData, componentId) => {
-      if(this.currentComponentId === componentId) {
-        this.fetch(componentData);
-      }
-    });
   },
   computed: {
     style1() {
@@ -143,7 +138,8 @@ export default {
     'list': {
         handler(newValue) {
             this.showFakeData = !newValue.length;
-        }
+        },
+        deep: true
     }
   },
   methods: {
@@ -214,11 +210,7 @@ export default {
     getContent(item) {
       return item.useType==0?'元':'折';
     }
-  },
-  beforeDestroy() {
-      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-      this._globalEvent.$off('fetchCoupon');
-  },
+  }
 }
 </script>
 

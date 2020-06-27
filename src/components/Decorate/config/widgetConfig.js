@@ -6,6 +6,8 @@
  * preLoad: 组件是否预加载
  * isBase: 是否是基础组件，用于记录装修页面信息
  * describe： 组件描述
+ * needFakeData: 是否需要渲染假数据
+ * hiddenWidget: 左侧控件是否隐藏(可在此配置表配置，也可在页面渲染入口异步设置)
  */
 export default {
   widgetList: {
@@ -53,7 +55,8 @@ export default {
               title: '商品',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'goodsGroup',
@@ -61,7 +64,8 @@ export default {
               title: '商品分类',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'articleAD',
@@ -117,7 +121,8 @@ export default {
               title: '优惠券',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'multiPerson',
@@ -125,7 +130,8 @@ export default {
               title: '多人拼团',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'secondkill',
@@ -133,7 +139,8 @@ export default {
               title: '限时秒杀',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'discount',
@@ -141,7 +148,8 @@ export default {
               title: '限时折扣',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'discountPackage',
@@ -149,7 +157,8 @@ export default {
               title: '优惠套装',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'fullReduction',
@@ -157,7 +166,8 @@ export default {
               title: '满减满折',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             },
             {
               type: 'nyuan',
@@ -165,7 +175,8 @@ export default {
               title: 'N元N件',
               hidden: false,
               preLoad: true,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             }
           ]
         },
@@ -238,7 +249,8 @@ export default {
               title: '购买公告',
               hidden: false,
               preLoad: false,
-              isBase: false
+              isBase: false,
+              needFakeData: true
             }
           ]
         },
@@ -250,6 +262,18 @@ export default {
         for(let k in this.widgetList){
           for(let item of this.widgetList[k].list) {
             widgetList.push(item);
+          }
+        }
+        return widgetList;
+    },
+
+    getNeedFakeDataWidget() {
+      const widgetList = [];
+        for(let k in this.widgetList){
+          for(let item of this.widgetList[k].list) {
+            if(item.needFakeData) {
+              widgetList.push(item);
+            }
           }
         }
         return widgetList;

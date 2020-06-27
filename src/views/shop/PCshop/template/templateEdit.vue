@@ -16,6 +16,7 @@
 
 <script>
 import Decorate from '@/components/Decorate';
+import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
 import utils from "@/utils";
 export default {
   name: "templateEdit",
@@ -137,6 +138,7 @@ export default {
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '1';
         if(this.checkInput(resultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存成功!'});
         };
@@ -192,6 +194,8 @@ export default {
 
     /* 发起请求 */
     sendRequest(params) {
+      let pageData = params.resultData.pageData;
+      params.resultData.pageData = this.utils.compileStr(JSON.stringify(pageData));
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord)
           this.setLoading(false);
@@ -224,6 +228,20 @@ export default {
         this.pageList = tempItems;
         this.pageId = item.id;
       })
+    },
+
+    /* 清洗数据 */
+    washData(data) {
+      let copyData = {...data.pageData};
+      for(let k in copyData) {
+        const keys = Object.keys(copyData[k].data);
+        for(let item of keys) {
+          if(SAVE_BLACK_LIST.includes(item)) {
+            delete copyData[k].data[item];
+          }
+        }
+      }
+      return copyData;
     }
   }
 };

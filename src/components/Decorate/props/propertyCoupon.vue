@@ -17,7 +17,7 @@
         </div>
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
-            v-for="tag in list"
+            v-for="tag in ruleForm.list"
             :key="tag.title"
             :closable="ruleForm.addType === 1"
             style="margin-right:5px;"
@@ -87,12 +87,12 @@ export default {
         couponStyle: 1,//优惠券样式
         couponColor: 1,//优惠券颜色类型
         hideScrambled: false,//隐藏已抢完券
-        ids: []//优惠券id列表
+        ids: [],//优惠券id列表
+        list: []
       },
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -168,7 +168,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-          bNeedUpdateMiddle && this._globalEvent.$emit('fetchCoupon', this.ruleForm, this.$parent.currentComponentId);
+          bNeedUpdateMiddle && this.syncToMiddle();
           let params = {};
             if(componentData.addType == 2) {
               if(componentData.couponNumberType === 1) {
@@ -188,7 +188,7 @@ export default {
                   ids: componentData.ids
                 };
               }else{
-                this.list = [];
+                this.ruleForm.list = [];
                 return;
               }
             }
@@ -199,13 +199,13 @@ export default {
             }
 
             this.loading = true;
-            this.list = [];
+            this.ruleForm.list = [];
             this._apis.shop.getCouponListByIds(params).then((response)=>{
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.ruleForm.list = [];
                 this.loading = false;
             });
         }
@@ -213,7 +213,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-       this.list = datas;
+       this.ruleForm.list = datas;
     },
 
     yuan(value) {

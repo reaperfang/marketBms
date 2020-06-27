@@ -11,7 +11,7 @@
         </div>
         <div class="goods_groups">
           <el-tag
-            v-for="(tag, key) in list"
+            v-for="(tag, key) in ruleForm.list"
             :key="key"
             closable
             type="success" @close="deleteItem(tag)">
@@ -141,7 +141,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="list"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="ruleForm.list"></component>
   </el-form>
 </template>
 
@@ -171,12 +171,12 @@ export default {
         showContents: ['1', '2', '3', '4'],//显示内容
         buttonStyle: 1,//购买按钮样式
         ids: [],//商品分类列表 
-        buttonText: '加入购物车'//按钮文字
+        buttonText: '加入购物车',//按钮文字
+        list: {}
       },
       rules: {
 
       },
-      list: {},
       dialogVisible: false,
       currentDialog: '',
 
@@ -216,14 +216,14 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
       if(componentData) {
-          bNeedUpdateMiddle && this._globalEvent.$emit('fetchGoodsGroup', this.ruleForm, this.$parent.currentComponentId);
+          bNeedUpdateMiddle && this.syncToMiddle();
           if(componentData.ids) {
             let ids = [];
             for(let item in componentData.ids) {
               ids.push(item);
             }
             if(!ids.length) {
-              this.list = {};
+              this.ruleForm.list = {};
               return;
             }
             this.loading = true;
@@ -235,12 +235,12 @@ export default {
                     goods: this.ruleForm.ids[item.id]
                   };
                 }
-                this.list = data;
-                this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+                this.ruleForm.list = data;
+                this.syncToMiddle('goods');
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = {};
+                this.ruleForm.list = {};
                 this.loading = false;
             });
       }
@@ -253,9 +253,9 @@ export default {
         this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
         return;
       }
-      const tempItems = {...this.list};
+      const tempItems = {...this.ruleForm.list};
       delete tempItems[item.catagoryData.id];
-      this.list = tempItems;
+      this.ruleForm.list = tempItems;
       this.items = tempItems;
     },
 

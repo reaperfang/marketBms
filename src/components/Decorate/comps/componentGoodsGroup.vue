@@ -106,11 +106,6 @@ export default {
     created() {
       this.fetch();
       this.$store.dispatch('getShopStyle');
-      this._globalEvent.$on('fetchGoodsGroup', (componentData, componentId) => {
-        if(this.currentComponentId === componentId) {
-          this.fetch(componentData);
-        }
-      });
     },
     mounted() {
         this.decoration();
@@ -136,10 +131,11 @@ export default {
           deep: true
       },
       'list': {
-          handler(newValue) {
-              this.showFakeData = !newValue.length;
-          }
-      }
+        handler(newValue) {
+            this.showFakeData = !newValue.length;
+        },
+        deep: true
+    }
     },
     computed: {
         /* 检测是否有数据 */
@@ -196,7 +192,7 @@ export default {
                 }
                 if(!ids.length) {
                   this.list = [];
-                  this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                  this.syncToOther('goods', componentData);
                   return;
                 }
                 this.loading = true;
@@ -208,13 +204,13 @@ export default {
                       _self.activeGoodId = 'all';
                     }
                     this.calcScroll();
-                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                    this.syncToOther('goods', componentData);
                     this.loading = false;
                     this.allLoaded = true;
                 }).catch((error)=>{
                     console.error(error);
                     this.list = [];
-                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                    this.syncToOther('goods', componentData);
                     this.loading = false;
                 });
           }
@@ -266,11 +262,7 @@ export default {
           })
         }
 
-    },
-    beforeDestroy() {
-        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-        this._globalEvent.$off('fetchGoodsGroup');
-    },
+    }
 }
 </script>
 <style lang="scss" scoped>

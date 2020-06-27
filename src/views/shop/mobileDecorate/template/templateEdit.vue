@@ -10,6 +10,7 @@
 <script>
 import Decorate from '@/components/Decorate';
 import utils from "@/utils";
+import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
 export default {
   name: "templateEdit",
   components: { Decorate },
@@ -28,20 +29,20 @@ export default {
           title: '页面信息'
         },
         buttons: {
-          // saveData: {
-          //   title: '保存草稿',
-          //   function: this.saveData,
-          //   type: 'primary',
-          //   show: () => true,
-          //   loading: false
-          // },
-          // saveAndApplyData: {
-          //   title: '保存并生效',
-          //   function: this.saveAndApplyData,
-          //   type: 'primary',
-          //   show: () => true,
-          //   loading: false
-          // },
+          saveData: {
+            title: '保存草稿',
+            function: this.saveData,
+            type: 'primary',
+            show: () => true,
+            loading: false
+          },
+          saveAndApplyData: {
+            title: '保存并生效',
+            function: this.saveAndApplyData,
+            type: 'primary',
+            show: () => true,
+            loading: false
+          },
           cancel: {
             title: '取消',
             function: this.cancelSave,
@@ -168,6 +169,7 @@ export default {
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '1';
         if(this.checkInput(resultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存成功!'});
         };
@@ -180,6 +182,7 @@ export default {
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '0';
         if(this.checkInput(resultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存并上架成功!'});
         };
@@ -211,22 +214,20 @@ export default {
           });
           return false;
         }else{
-          // for(let item of this.componentDataIds) {
-          //   const componentData = this.componentDataMap[item];
-          //   if(componentData.type === 'goods') {
-          //     if(componentData.data.ids && !componentData.data.ids.length) {
-          //       this.$alert('请在右侧选择真实商品后重试', '提示', {
-          //         confirmButtonText: '确定',
-          //         callback: action => {
-          //           //打开基础信息面板
-          //           this.$store.commit('setCurrentComponentId', componentData.id);
-          //           this.setLoading(false);
-          //         }
-          //       });
-          //       return false;
-          //     }
-          //   }
-          // }
+          for(let item of this.componentDataIds) {
+            const componentData = this.componentDataMap[item];
+            if(componentData.data.list && !componentData.data.list.length) {
+              this.$alert(`${componentData.title}组件【${componentData.id.substring(componentData.id.length - 6)}】尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  //打开基础信息面板
+                  this.$store.commit('setCurrentComponentId', componentData.id);
+                  this.setLoading(false);
+                }
+              });
+              return false;
+            }
+          }
           return true;
         }
       }
@@ -235,6 +236,8 @@ export default {
 
     /* 发起请求 */
     sendRequest(params) {
+      let pageData = params.resultData.pageData;
+      params.resultData.pageData = this.utils.compileStr(JSON.stringify(pageData));
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord);
           this.setLoading(false);
@@ -283,6 +286,20 @@ export default {
       }).then(() => {
         this._routeTo('m_templateManageIndex');
       })
+    },
+
+    /* 清洗数据 */
+    washData(data) {
+      let copyData = {...data.pageData};
+      for(let k in copyData) {
+        const keys = Object.keys(copyData[k].data);
+        for(let item of keys) {
+          if(SAVE_BLACK_LIST.includes(item)) {
+            delete copyData[k].data[item];
+          }
+        }
+      }
+      return copyData;
     }
   }
 };

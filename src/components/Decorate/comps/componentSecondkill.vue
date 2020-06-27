@@ -133,16 +133,12 @@ export default {
         'list': {
             handler(newValue) {
                 this.showFakeData = !newValue.length;
-            }
+            },
+            deep: true
         }
     },
     created() {
         this.fetch();
-        this._globalEvent.$on('fetchSecondkill', (componentData, componentId) => {
-            if(this.currentComponentId === componentId) {
-                this.fetch(componentData);
-            }
-        });
     },
     computed: {
          /* 检测是否有数据 */
@@ -276,11 +272,7 @@ export default {
             return 0;
         }
 
-    },
-    beforeDestroy() {
-        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-        this._globalEvent.$off('fetchSecondkill');
-    },
+    }
 }
 </script>
 <style lang="scss" scoped>

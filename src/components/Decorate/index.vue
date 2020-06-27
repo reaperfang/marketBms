@@ -22,7 +22,7 @@ import widgetView from "./widgetView";
 import editView from "./editView";
 import propView from "./propView";
 import utils from "@/utils";
-import widget from './config/widgetConfig'
+import widget from './config/widgetConfig';
 export default {
   name: "decorate",
   components: { widgetView, editView, propView },
@@ -120,12 +120,19 @@ export default {
     init(pageData, originData) {
       let componentDataIds = [];
       let componentDataMap = {};
+      let needFakeDataWidget = [];
+      widget.getNeedFakeDataWidget().forEach((item)=>{
+        needFakeDataWidget.push(item.type);
+      })
 
 
       //转换为组件顺序表和map数据结构
       for (let item of pageData) {
         componentDataIds.push(item.id);
         componentDataMap[item.id] = item;
+        if(componentDataMap[item.id]['data'] && needFakeDataWidget.includes(componentDataMap[item.id].type)) {
+          componentDataMap[item.id]['data']['list'] = [];
+        }
         if(item.isBase) {  //设置为基础信息组件
           this.$store.commit('setBasePropertyId', item.id);
         }
@@ -152,13 +159,13 @@ export default {
       let result = this.baseInfo;
       let pageData = [];
       for(let item of this.componentDataIds) {
-        const componentData = this.componentDataMap[item];
+        let componentData = this.componentDataMap[item];
         if(componentData) {
           pageData.push(componentData);
         }
       }
 
-      result['pageData'] = utils.compileStr(JSON.stringify(pageData));;
+      result['pageData'] = pageData;
       return result;
     }
   }

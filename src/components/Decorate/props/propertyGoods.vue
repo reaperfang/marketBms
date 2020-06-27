@@ -10,7 +10,7 @@
       <el-form-item label="选择商品" v-if="ruleForm.source === 1" prop="goods">
         <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of list" :key="key" :title="item.name">
+            <li v-for="(item, key) of ruleForm.list" :key="key" :title="item.name">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -141,8 +141,6 @@ import propertyMixin from '../mixins/mixinProps';
 import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
-import GOODS_LIST from '@/assets/json/goodsList.json'; 
-import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
   name: 'propertyGoods',
   mixins: [propertyMixin],
@@ -165,12 +163,12 @@ export default {
         buttonStyle: 1,// 购买按钮样式
         ids: [],//商品id列表
         currentCatagoryId: '',  //选中的商品分类id
-        buttonText: '加入购物车'
+        buttonText: '加入购物车',
+        list: []
       },
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -253,7 +251,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-          bNeedUpdateMiddle && this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+          bNeedUpdateMiddle && this.syncToMiddle();
             let params = {};
             if(!componentData.source || (componentData.source === 1)) {
                 const ids = componentData.ids;
@@ -261,26 +259,26 @@ export default {
                    if(Object.prototype.toString.call(ids) === '[object Object]') {
                         params = this.setGroupGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.list = [];
+                            this.ruleForm.list = [];
                             return;
                         }
                     }else if(Array.isArray(ids) && ids.length){
                         params = this.setNormalGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.list = [];
+                            this.ruleForm.list = [];
                             return;
                         }
                     }else{
-                      this.list = [];
+                      this.ruleForm.list = [];
                         return;
                     }
                 }else{
-                      this.list = [];
+                      this.ruleForm.list = [];
                     return;
                 }
             }else if(componentData.source === 2){
               if(!this.ruleForm.currentCatagoryId) {
-                this.list = [];
+                this.ruleForm.list = [];
                 return;
               }
               params = {
@@ -295,7 +293,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.ruleForm.list = [];
                 this.loading = false;
             });
         }
@@ -303,9 +301,9 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      this.list = datas;
+      this.ruleForm.list = datas;
       if(this.currentComponentData.data.source === 2) {
-          this._globalEvent.$emit('goodsListOfGroupChange', datas, this.$parent.currentComponentId);  //告知中央组件list数据更改
+          this.syncToMiddle('goodsListOfGroupChange', datas);
       }
     },
 

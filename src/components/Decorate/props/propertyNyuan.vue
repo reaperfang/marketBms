@@ -5,7 +5,7 @@
         <p class="prop-message">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of list" :key="key" :title="item.name">
+            <li v-for="(item, key) of ruleForm.list" :key="key" :title="item.name">
               <img :src="item.activityPic" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -152,12 +152,12 @@ export default {
         hideEndGoods: false,//隐藏活动结束活动 
         hideType: 2,//隐藏类型
         ids: [],//活动id列表
-        buttonText: '查看活动'//按钮文字
+        buttonText: '查看活动',//按钮文字
+        list: []
       },
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -204,7 +204,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-           bNeedUpdateMiddle && this._globalEvent.$emit('fetchNyuan', this.ruleForm, this.$parent.currentComponentId);
+           bNeedUpdateMiddle && this.syncToMiddle();
             const ids = componentData.ids;
             if(Array.isArray(ids) && ids.length){
                 this.loading = true;
@@ -215,18 +215,18 @@ export default {
                     this.loading = false;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
+                    this.ruleForm.list = [];
                     this.loading = false;
                 });
             }else{
-                this.list = [];
+                this.ruleForm.list = [];
             }
         }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.list = datas;
+        this.ruleForm.list = datas;
     },
   }
 }

@@ -110,11 +110,6 @@ export default {
     },
     created() {
         this.fetch();
-        this._globalEvent.$on('fetchMultiPerson', (componentData, componentId) => {
-            if(this.currentComponentId === componentId) {
-                this.fetch(componentData);
-            }
-        });
     },
     mounted() {
         this.decoration();
@@ -175,7 +170,8 @@ export default {
         'list': {
             handler(newValue) {
                 this.showFakeData = !newValue.length;
-            }
+            },
+            deep: true
         }
     },
     computed: {
@@ -303,11 +299,7 @@ export default {
             this.allLoaded = true;
         }
 
-    },
-    beforeDestroy() {
-        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-        this._globalEvent.$off('fetchMultiPerson');
-    },
+    }
 }
 </script>
 <style lang="scss" scoped>

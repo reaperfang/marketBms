@@ -43,11 +43,6 @@ export default {
   },
   created() {
     this.fetch();
-    this._globalEvent.$on('fetchBuyNotice', (componentData, componentId) => {
-      if(this.currentComponentId === componentId) {
-        this.fetch(componentData);
-      }
-    });
   },
   watch: {
     'currentComponentData.data.ids': {
@@ -61,7 +56,8 @@ export default {
     'list': {
         handler(newValue) {
             this.showFakeData = !newValue.length;
-        }
+        },
+        deep: true
     }
   },
   methods: {
@@ -110,10 +106,6 @@ export default {
   },
   mounted() {
     this.timer = setInterval(this.scroll, 2000);
-  },
-  beforeDestroy() {
-      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-      this._globalEvent.$off('fetchBuyNotice');
   },
   destroyed() {
     clearInterval(this.timer);

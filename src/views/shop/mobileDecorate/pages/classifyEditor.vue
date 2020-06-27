@@ -12,6 +12,7 @@
 import utils from "@/utils";
 import Decorate from '@/components/Decorate';
 import dialogDecoratePreview from '@/views/shop/dialogs/decorateDialogs/dialogDecoratePreview';
+import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
 export default {
   name: "classifyEditor",
   components: {Decorate, dialogDecoratePreview},
@@ -113,6 +114,7 @@ export default {
         const copyResultData = {...resultData};
         copyResultData['explain'] = utils.compileStr(copyResultData.explain);
         if(this.checkInput(copyResultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           if(this.id) {
             this.sendRequest({methodName: 'editClassifyInfo', resultData: copyResultData, tipWord: '编辑成功!'});
@@ -156,6 +158,8 @@ export default {
 
     /* 发起请求 */
     sendRequest(params) {
+      let pageData = params.resultData.pageData;
+      params.resultData.pageData = this.utils.compileStr(JSON.stringify(pageData));
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord);
           this.setLoading(false);
@@ -186,6 +190,20 @@ export default {
       }).then(() => {
         this._routeTo('m_pageManageIndex');
       })
+    },
+
+    /* 清洗数据 */
+    washData(data) {
+      let copyData = {...data.pageData};
+      for(let k in copyData) {
+        const keys = Object.keys(copyData[k].data);
+        for(let item of keys) {
+          if(SAVE_BLACK_LIST.includes(item)) {
+            delete copyData[k].data[item];
+          }
+        }
+      }
+      return copyData;
     }
 
   }

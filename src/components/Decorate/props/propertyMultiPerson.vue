@@ -11,7 +11,7 @@
         <div class="goods_list" prop="goods" v-loading="loading">
           <ul>
             <template>
-              <template v-for="(item, key) of list">
+              <template v-for="(item, key) of ruleForm.list">
                 <li :key="key" :title="item.activeName">
                   <img :src="item.mainImage" alt="">
                   <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
@@ -196,11 +196,11 @@ export default {
         ids: [],//商品id列表 
         buttonText: '拼团',// 次要按钮文字
         buttonTextPrimary: '开团',//主要按钮文字
+        list: []
       },
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -238,7 +238,7 @@ export default {
         if(newValue == 2) {
           this.fetch();
         }else{
-          this.list = [];
+          this.ruleForm.list = [];
           this.fetch();
         }
     },
@@ -297,7 +297,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-            bNeedUpdateMiddle && this._globalEvent.$emit('fetchMultiPerson', this.ruleForm, this.$parent.currentComponentId);
+            bNeedUpdateMiddle && this.syncToMiddle();
             let params = {};
 
             //兼容老数据
@@ -338,7 +338,7 @@ export default {
                         hideStatus: hideStatus
                     };
                 }else{
-                    this.list = [];
+                    this.ruleForm.list = [];
                     return;
                 }
             }
@@ -349,7 +349,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.ruleForm.list = [];
                 this.loading = false;
             });
         }
@@ -357,7 +357,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-        this.list = datas;
+        this.ruleForm.list = datas;
     },
   }
 }

@@ -5,7 +5,8 @@ const decorate = {
 		basePropertyId: '',  //基础属性组件id
 		baseInfo: {},  //店铺装修页面基础信息
 		componentDataIds: [],  //组件列表id序列
-		componentDataMap: {}   //组件数据集合映射
+		componentDataMap: {},   //组件数据集合映射
+		decorateEvents: []   //事件列表
 	},
 	mutations: {
 
@@ -111,6 +112,21 @@ const decorate = {
 			state.baseInfo = {};
 			state.componentDataIds = [];
 			state.componentDataMap = {};
+		},
+
+		/* 添加事件 */
+		addEvent(state, componentType) {
+			if(!state.decorateEvents.includes(componentType)) {
+				state.decorateEvents.push(componentType);
+			}
+		},
+
+		/* 移除事件 */
+		removeEvent(state, componentType) {
+			let index = state.decorateEvents.indexOf(componentType);
+			let events = [...state.decorateEvents];
+			decorateEvents.splice(index, 1);
+			state.decorateEvents = events;
 		}
 	},
 	actions: {}

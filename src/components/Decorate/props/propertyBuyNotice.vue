@@ -28,7 +28,7 @@
        <el-form-item label="公告商品" prop="goods">
         <div class="goods_list">
           <ul>
-            <li v-for="(item, key) of list" :key="key">
+            <li v-for="(item, key) of ruleForm.list" :key="key">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -61,12 +61,12 @@ export default {
         intervalEnd: 60,// 间隔时间结束 
         backgroundColor: 'rgb(255,248,233)',//背景颜色
         fontColor: 'rgb(102,102,102)',//字体颜色
-        ids: []//商品id列表
+        ids: [],//商品id列表
+        list: []
       },
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: ''
@@ -104,7 +104,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-          bNeedUpdateMiddle && this._globalEvent.$emit('fetchBuyNotice', this.ruleForm, this.$parent.currentComponentId);
+          bNeedUpdateMiddle && this.syncToMiddle();
           if(Array.isArray(componentData.ids) && componentData.ids.length){
             this.loading = true;
             this._apis.goods.fetchAllSpuGoodsList({
@@ -115,17 +115,17 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.ruleForm.list = [];
                 this.loading = false;
             });
           }else{
-            this.list = [];
+            this.ruleForm.list = [];
           }
         }
     },
       /* 创建数据 */
     createList(datas) {
-      this.list = datas;
+      this.ruleForm.list = datas;
     },
   }
 }

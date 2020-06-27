@@ -77,17 +77,10 @@ export default {
     created() {
         const _self = this;
         this.$store.dispatch('getShopStyle');
-        this._globalEvent.$on('goodsListOfGroupChange', (list, componentId)=>{
-            if(this.currentComponentId === componentId) {
-                this.list = list;
-            }
-        })
-        this.fetch();
-        this._globalEvent.$on('fetchGoods', (componentData, componentId) => {
-            if(_self.currentComponentId === componentId) {
-                _self.fetch(componentData);
-            }
+        this.receivePropDataChange('goodsListOfGroupChange', (list) => {
+            this.list = list;
         });
+        this.fetch();
     },
     mounted() {
         this.decoration();
@@ -98,6 +91,10 @@ export default {
         },
         'currentComponentData.data.ids': {
             handler(newValue, oldValue) {
+                if(!Array.isArray(newValue)) {
+                    this.fetch();
+                    return;
+                }
                 if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                     this.fetch();
                 }
@@ -125,7 +122,8 @@ export default {
         'list': {
             handler(newValue) {
                 this.showFakeData = !newValue.length;
-            }
+            },
+            deep: true
         }
     },
     computed: {
@@ -336,12 +334,7 @@ export default {
             return totalStock;
         }
 
-    },
-    beforeDestroy() {
-        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-        this._globalEvent.$off('fetchGoods');
-        this._globalEvent.$off('goodsListOfGroupChange');
-    },
+    }
 }
 </script>
 

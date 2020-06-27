@@ -8,7 +8,7 @@
             <span class="title_Title1">{{currentComponentData.data.mainTitle}}</span>
             <span class="title_Title2"> {{currentComponentData.data.navName}}</span>
           </div>
-          <div class="title_vice" @click="_routeTo('')">{{currentComponentData.data.subTitle}}</div>
+          <div class="title_vice">{{currentComponentData.data.subTitle}}</div>
         </div>
         <!-- 2、模仿微信图文页样式 -->
         <div v-if="currentComponentData.data.titleTemplate===2" :class="'title'+currentComponentData.data.displayPosition">
@@ -18,7 +18,7 @@
           <div class="title_two">
             <span class="title_time">{{currentComponentData.data.date}}</span>
             <span class="title_author">{{currentComponentData.data.author}}</span>
-            <span class="title_link" @click="_routeTo('')">{{currentComponentData.data.navName}}</span>
+            <span class="title_link">{{currentComponentData.data.navName}}</span>
           </div>
         </div>
     </div>
