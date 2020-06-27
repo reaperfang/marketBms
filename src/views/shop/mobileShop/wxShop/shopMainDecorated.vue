@@ -87,6 +87,9 @@ export default {
           hidden: true,
           title: '页面信息'
         },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
         callbacks: {
           setBaseInfo: this.setBaseInfo
         },

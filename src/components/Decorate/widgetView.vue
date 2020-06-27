@@ -28,6 +28,11 @@
 import widget from './config/widgetConfig';
 export default {
   name: 'widgetView',
+  props: {
+    componentsConfig: {
+      type: Object
+    }
+  },
   components: {},
   data () {
     return {
@@ -35,6 +40,7 @@ export default {
     }
   },
   created() {
+    this.initConfig(this.componentsConfig);
   },
   mounted() {
   },
@@ -49,7 +55,31 @@ export default {
       return this.$store.getters.componentDataIds;
     },
   },
+  watch: {
+    componentsConfig: {
+      handler(newValue) {
+        this.initConfig(newValue);
+      },
+      deep: true
+    }
+  },
   methods: {
+
+    /* 初始化控件配置表 */
+    initConfig(config) {
+      let copyConfig = {...this.widgetList};
+        for(let k in copyConfig) {
+          for(let k2 =0; k2<copyConfig[k].list.length;k2++) {
+            const type = copyConfig[k].list[k2].type;
+            for(let k3 in config) {
+              delete config[k3].type;  //禁止更改type，会导致渲染崩溃
+              if(type === k3) {
+                this.widgetList[k].list[k2] = Object.assign(copyConfig[k].list[k2], config[k3]);
+              }
+            }
+          }
+        }
+    },
 
     /* 选中控件 */
     addComponent(item) {

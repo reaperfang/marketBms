@@ -32,6 +32,9 @@ export default {
         pageBase: {  //装修页面基础信息
           type: 'pageInfo'
         },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
         buttons: {  //按钮组
           saveData: {
             title: '保存草稿',

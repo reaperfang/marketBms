@@ -32,6 +32,9 @@ export default {
         pageBase: {
           type: 'pageInfo'
         },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
         callbacks: {
           setBaseInfo: this.setBaseInfo
         },

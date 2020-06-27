@@ -1,6 +1,6 @@
 <template>
   <div class="editor-wrapper">
-    <widgetView v-if="config.showWidget"></widgetView>
+    <widgetView v-if="config.showWidget" :componentsConfig="config.components"></widgetView>
     <editView v-if="height > 0" :dragable="config.dragable" :height="height"></editView>
     <propView v-if="config.showProp" :buttons="buttonList"></propView>
     <!-- <div style="width:600px;">

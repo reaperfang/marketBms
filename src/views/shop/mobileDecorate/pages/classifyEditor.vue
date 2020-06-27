@@ -27,6 +27,9 @@ export default {
         pageBase: {
           type: 'classify'
         },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
         buttons: {
           saveData: {
             title: '保存',
