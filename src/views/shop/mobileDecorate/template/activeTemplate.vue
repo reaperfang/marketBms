@@ -25,31 +25,24 @@
 				</div>
 			</div>
 			<div class="template_wrapper-head-conditions">
-				<div class="template_wrapper-head-conditions-left">
-
-				</div>
-				<div class="template_wrapper-head-conditions-center">
-					<el-form ref="ruleForm" :model="ruleForm" :inline="true">
-						<el-form-item label="" prop="name">
-							<el-radio-group v-model="ruleForm.sortBy" size="small" @change="sortByChange">
-								<el-radio-button :value="0" :label="0">综合排序</el-radio-button>
-								<el-radio-button :value="1" :label="1">价格<i class="el-icon-top"></i></el-radio-button>
-								<el-radio-button :value="2" :label="2">价格<i class="el-icon-bottom"></i></el-radio-button>
-								<el-radio-button :value="3" :label="3">人气从高到低</el-radio-button>
-							</el-radio-group>
-						</el-form-item>
-						<el-form-item label="" prop="name">
-							<el-checkbox v-model="checked">只看免费模板</el-checkbox>
-						</el-form-item>
-						<el-form-item label="" prop="name">
-							<el-input-number v-model="ruleForm.lowPrice" controls-position="right" :precision="2" :disabled="checked" :min="0"></el-input-number><span> &nbsp;-</span>
-							<el-input-number v-model="ruleForm.highPrice" controls-position="right" :precision="2" :disabled="checked" :min="0"></el-input-number>
-						</el-form-item>
-					</el-form>
-				</div>
-				<div class="template_wrapper-head-conditions-left">
-
-				</div>
+        <el-form ref="ruleForm" :model="ruleForm" :inline="true">
+          <el-form-item label="" prop="name">
+            <el-radio-group v-model="ruleForm.sortBy" size="small" @change="sortByChange">
+              <el-radio-button :value="0" :label="0">综合排序</el-radio-button>
+              <el-radio-button :value="1" :label="1" :disabled="checked">价格<i class="el-icon-top"></i></el-radio-button>
+              <el-radio-button :value="2" :label="2" :disabled="checked">价格<i class="el-icon-bottom"></i></el-radio-button>
+              <el-radio-button :value="3" :label="3">人气从高到低</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="" prop="name">
+            <el-checkbox v-model="checked" :disabled="freeDisabled">只看免费模板</el-checkbox>
+          </el-form-item>
+          <el-form-item label="" prop="name">
+            <el-input-number v-model="ruleForm.lowPrice" controls-position="right" :precision="2" :disabled="checked" :min="0" placeholder="最低金额（元）"></el-input-number>
+            <span style="color: #B6B5C8"> &nbsp;- &nbsp; </span>
+            <el-input-number v-model="ruleForm.highPrice" controls-position="right" :precision="2" :disabled="checked" :min="0" placeholder="最高金额（元）"></el-input-number>
+          </el-form-item>
+        </el-form>
 			</div>
 		</div>
 		<div class="template_wrapper">
@@ -129,17 +122,19 @@
 </template>
 
 <script>
-	import tableBase from '@/components/TableBase';
 	import emptyList from './components/emptyList';
 	import templatePay from './components/templatePay';
   import templateConstant from '@/system/constant/template';
 	export default {
 		name: 'templateManage',
-		extends: tableBase,
 		components: { templatePay, emptyList },
     computed: {
       chargeTypeConstant() {
         return templateConstant.chargeType
+      },
+      freeDisabled() {
+        if(this.ruleForm.lowPrice && this.ruleForm.highPrice) return true;
+        else return false
       }
     },
 		data () {
@@ -206,9 +201,10 @@
 			},
 			'checked': function (v) {
 				if (v) {
-					this.ruleForm.chargeType = 1
-					this.ruleForm.lowPrice = undefined
-					this.ruleForm.highPrice = undefined
+					this.ruleForm.chargeType = 1;
+					this.ruleForm.lowPrice = undefined;
+					this.ruleForm.highPrice = undefined;
+          this.ruleForm.sortBy = 0;
 				} else {
 					this.ruleForm.chargeType = ''
 				}
@@ -266,8 +262,15 @@
 			},
 
       query() {
-        if((this.ruleForm.lowPrice && !this.ruleForm.highPrice) || (this.ruleForm.highPrice && !this.ruleForm.lowPrice) || (this.ruleForm.lowPrice*1 > this.ruleForm.highPrice*1)) {
+        if((this.ruleForm.lowPrice && !this.ruleForm.highPrice) || (this.ruleForm.highPrice && !this.ruleForm.lowPrice)) {
           this.$alert('当前价格区间输入有误、请您重新输入查询', '警告', {
+            confirmButtonText: '确定'
+          });
+          return
+        }
+
+        if(this.ruleForm.lowPrice*1 >= this.ruleForm.highPrice*1) {
+          this.$alert('您输入的价格有误、请您重新输入查询', '警告', {
             confirmButtonText: '确定'
           });
           return
@@ -382,7 +385,7 @@
 						}
 					} else {
 						if (res1 === null) {
-							this._apis.shop.getTemplateInfo({
+							this._apis.shop.addFreeTemplate({
 								pageTemplateId: item.id
 							}).then(response => {
 								this.confirm({
@@ -422,8 +425,8 @@
 				}else {
 					this.checkboxGroup1.push(value)
 				}
-				this.startIndex = 1;
-				this.fetch()
+				// this.startIndex = 1;
+				// this.fetch()
 			},
 			// 全选
 			handleSelectAll() {
@@ -435,8 +438,8 @@
 						this.checkboxGroup1.push(item.id)
 					})
 				}
-        this.startIndex = 1;
-        this.fetchList()
+        // this.startIndex = 1;
+        // this.fetchList()
 			},
 			sortByChange(v) {
 			  this.startIndex =1;
@@ -514,6 +517,7 @@
 			}
 		}
 		&-industries {
+      position: relative;
 			padding-left: 20px;
 			padding-right: 20px;
 			display: flex;
@@ -529,11 +533,28 @@
 				justify-content: start;
 				align-items: start;
 				flex-flow:row wrap;
-        cursor: pointer;
+        padding-right: 110px;
+        &::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        &::-webkit-scrollbar-track {
+          border-radius: 0 !important;
+          background: #fff !important;
+        }
+        &::-webkit-scrollbar-thumb {
+          border-radius: 10px !important;
+          background: rgba(101,94,255,0.4) !important;
+        }
+        &::-webkit-scrollbar-track-piece {
+          background-color: #fff;
+        }
 			}
 			&-option {
-				margin-top: 16px;
-				width: 170px;
+        position: absolute;
+        top: 22px;
+        right: 20px;
+        width: 100px;
 				display: flex;
 				flex-direction: row;
 				justify-content: center;
@@ -556,43 +577,38 @@
 				text-align: center;
 				color:rgba(182,181,200,1);
 				line-height:34px;
+        cursor: pointer;
 			}
 		}
 		&-conditions {
 			background: #ffffff;
 			width: 100%;
-			height: 100px;
-			margin-top: 16px;
+      margin: 16px 20px 0;
+      padding-top: 20px;
 			display: flex;
 			flex-direction: row;
 			justify-content: start;
 			align-items: center;
 			flex-flow:row wrap;
-			.el-radio-group label:last-child {
-				margin-left: 0!important;
-			}
-			/deep/ .is-active span{
-				background: #ffffff;
-				color: rgba(24,144,255,1);;
-			}
-			/deep/ .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-				border-color: #1890FF;
-				-webkit-box-shadow: -1px 0 0 0 #1890FF;
-			}
-			&-left {
-				width: 15px;
-				height: 100px;
-			}
-			&-center {
-				flex: 1;
-				height: 100px;
-				display: flex;
-				flex-direction: row;
-				justify-content: start;
-				align-items: center;
-				flex-flow:row wrap;
-				border-top: 1px solid rgba(242,242,249,1);
-			}
+      border-top: 1px solid rgba(242, 242, 249, 1);
+
+      /deep/ .is-active .el-radio-button__inner {
+        background: #fff;
+        border-width: 2px;
+        border-left: 1px solid $globalMainColor;
+        color: $globalMainColor;
+        border-color: $globalMainColor;
+        box-shadow: -1px 0 0 0 $globalMainColor;
+      }
+      /deep/ .el-radio-button__inner {
+        font-size: 14px;
+      }
+      /deep/ .el-radio-button:first-child .el-radio-button__inner {
+        border-width: 2px;
+      }
+      /deep/ .el-input-number--small {
+        width: 162px;
+      }
 		}
 	}
 	.template_wrapper{
@@ -621,11 +637,12 @@
 					box-shadow:0 2px 10px 0 rgba(232,231,255,1);
 					position:relative;
 					&-tag {
-            width: 137px;
+            min-width: 137px;
             height: 26px;
             position: absolute;
             top: 0;
             right: 0;
+            padding-left: 36px;
             z-index: 100;
             line-height: 26px;
             text-align: right;
@@ -633,11 +650,21 @@
             font-family: PingFangSC-Medium, PingFang SC;
             font-weight: 500;
             color: rgba(255, 255, 255, 1);
+            &:after {
+              content: '';
+              display: block;
+              position: absolute;
+              right: 0;
+              top: 0;
+              width: 90px;
+              height: 26px;
+              background: $warningColor;
+            }
 						img {
 							position: absolute;
 							height: 100%;
 							top: 0;
-							right: 0;
+							left: 0;
 							z-index: 101;
 						}
 						span {
