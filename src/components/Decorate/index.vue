@@ -109,11 +109,18 @@ export default {
         return;
       }
       let pageData = JSON.parse(string);
-      if(!Array.isArray(pageData)) {
+      let result = [];
+      if(Object.prototype.toString.call(pageData) === '[object Object]') {
+        for(let k in pageData) {
+          result.push(pageData[k]);
+        }
+      }else {
+        result = pageData;
+      }
+      if(!Array.isArray(result)) {
         return;
       }
-      this.init(pageData, data);
-      // console.log('pageData', pageData);
+      this.init(result, data);
     },
 
     //编辑器数据初始化

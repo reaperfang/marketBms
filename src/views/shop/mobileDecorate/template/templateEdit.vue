@@ -220,7 +220,7 @@ export default {
           for(let item of this.componentDataIds) {
             const componentData = this.componentDataMap[item];
             if(componentData.data.list && !componentData.data.list.length) {
-              this.$alert(`${componentData.title}组件【${componentData.id.substring(componentData.id.length - 6)}】尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
+              this.$alert(`【${componentData.title} - ${componentData.id.substring(componentData.id.length - 6)}】组件尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
                 confirmButtonText: '确定',
                 callback: action => {
                   //打开基础信息面板
@@ -293,16 +293,16 @@ export default {
 
     /* 清洗数据 */
     washData(data) {
-      let copyData = {...data.pageData};
-      for(let k in copyData) {
-        const keys = Object.keys(copyData[k].data);
-        for(let item of keys) {
-          if(SAVE_BLACK_LIST.includes(item)) {
-            delete copyData[k].data[item];
+      let copyData = [...data.pageData];
+      for(let item of copyData) {
+        const keys = Object.keys(item.data);
+        for(let item2 of keys) {
+          if(SAVE_BLACK_LIST.includes(item2)) {
+            delete item.data[item2];
           }
         }
       }
-      return copyData;
+      data.pageData = copyData;
     }
   }
 };

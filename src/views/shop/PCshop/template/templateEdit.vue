@@ -235,16 +235,16 @@ export default {
 
     /* 清洗数据 */
     washData(data) {
-      let copyData = {...data.pageData};
-      for(let k in copyData) {
-        const keys = Object.keys(copyData[k].data);
-        for(let item of keys) {
-          if(SAVE_BLACK_LIST.includes(item)) {
-            delete copyData[k].data[item];
+      let copyData = [...data.pageData];
+      for(let item of copyData) {
+        const keys = Object.keys(item.data);
+        for(let item2 of keys) {
+          if(SAVE_BLACK_LIST.includes(item2)) {
+            delete item.data[item2];
           }
         }
       }
-      return copyData;
+      data.pageData = copyData;
     }
   }
 };
