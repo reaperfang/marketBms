@@ -121,7 +121,13 @@ export default {
     .main {
         width: 100%;
         height: 100%;
-        margin-left:-20px;
+      //  margin-left:-20px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 11111;
         iframe{
             width:100%;
             height: 100%;
