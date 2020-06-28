@@ -61,7 +61,7 @@
 								<i class="mini_program"></i>
 								<i class="wechat"></i>
 							</div>
-							<div class="bottom-right" v-show="item.status === 2" @click="apply(item)">
+							<div class="bottom-right" v-show="item.status === 2 && item.templateStatus === 1" @click="apply(item)">
 								继续使用
 							</div>
 						</div>
@@ -99,12 +99,10 @@
 </template>
 
 <script>
-	import tableBase from '@/components/TableBase';
 	import templatePay from './components/templatePay';
 	import templateConstant from '@/system/constant/template';
 	export default {
 		name: 'templateManage',
-		extends: tableBase,
 		components: {templatePay},
     computed: {
       chargeTypeConstant() {
