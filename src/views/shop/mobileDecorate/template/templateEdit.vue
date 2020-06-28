@@ -220,11 +220,11 @@ export default {
           for(let item of this.componentDataIds) {
             const componentData = this.componentDataMap[item];
             if(componentData.data.list && !componentData.data.list.length) {
+              this.$store.commit('setCurrentComponentId', componentData.id);
               this.$alert(`【${componentData.title} - ${componentData.id.substring(componentData.id.length - 6)}】组件尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
                 confirmButtonText: '确定',
                 callback: action => {
                   //打开基础信息面板
-                  this.$store.commit('setCurrentComponentId', componentData.id);
                   this.setLoading(false);
                 }
               });

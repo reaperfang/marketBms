@@ -10,7 +10,7 @@
       <el-form-item label="选择商品" v-if="ruleForm.source === 1" prop="goods">
         <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of ruleForm.list" :key="key" :title="item.name">
+            <li v-for="(item, key) of ruleForm.displayList" :key="key" :title="item.name">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -164,7 +164,7 @@ export default {
         ids: [],//商品id列表
         currentCatagoryId: '',  //选中的商品分类id
         buttonText: '加入购物车',
-        list: []
+        displayList: []
       },
       rules: {
 
@@ -259,26 +259,26 @@ export default {
                    if(Object.prototype.toString.call(ids) === '[object Object]') {
                         params = this.setGroupGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.ruleForm.list = [];
+                            this.ruleForm.displayList = [];
                             return;
                         }
                     }else if(Array.isArray(ids) && ids.length){
                         params = this.setNormalGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.ruleForm.list = [];
+                            this.ruleForm.displayList = [];
                             return;
                         }
                     }else{
-                      this.ruleForm.list = [];
+                      this.ruleForm.displayList = [];
                         return;
                     }
                 }else{
-                      this.ruleForm.list = [];
+                      this.ruleForm.displayList = [];
                     return;
                 }
             }else if(componentData.source === 2){
               if(!this.ruleForm.currentCatagoryId) {
-                this.ruleForm.list = [];
+                this.ruleForm.displayList = [];
                 return;
               }
               params = {
@@ -293,7 +293,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.list = [];
+                this.ruleForm.displayList = [];
                 this.loading = false;
             });
         }
@@ -301,7 +301,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      this.ruleForm.list = datas;
+      this.ruleForm.displayList = datas;
       if(this.currentComponentData.data.source === 2) {
           this.syncToMiddle('goodsListOfGroupChange', datas);
       }

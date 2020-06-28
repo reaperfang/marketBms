@@ -3,5 +3,5 @@
  */
 export default [
       'fakeList',
-      'list'
+      'displayList'
 ]

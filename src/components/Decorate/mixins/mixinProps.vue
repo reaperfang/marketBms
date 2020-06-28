@@ -46,7 +46,7 @@ export default {
         this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
         return;
       }
-      const tempItems = [...this.ruleForm.list];
+      const tempItems = [...this.ruleForm.displayList];
       for(let i=0;i<tempItems.length;i++) {
         if(item === tempItems[i]) {
           tempItems.splice(i, 1);

@@ -28,7 +28,7 @@
        <el-form-item label="公告商品" prop="goods">
         <div class="goods_list">
           <ul>
-            <li v-for="(item, key) of ruleForm.list" :key="key">
+            <li v-for="(item, key) of ruleForm.displayList" :key="key">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -62,7 +62,7 @@ export default {
         backgroundColor: 'rgb(255,248,233)',//背景颜色
         fontColor: 'rgb(102,102,102)',//字体颜色
         ids: [],//商品id列表
-        list: []
+        displayList: []
       },
       rules: {
 
@@ -115,17 +115,17 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.list = [];
+                this.ruleForm.displayList = [];
                 this.loading = false;
             });
           }else{
-            this.ruleForm.list = [];
+            this.ruleForm.displayList = [];
           }
         }
     },
       /* 创建数据 */
     createList(datas) {
-      this.ruleForm.list = datas;
+      this.ruleForm.displayList = datas;
     },
   }
 }

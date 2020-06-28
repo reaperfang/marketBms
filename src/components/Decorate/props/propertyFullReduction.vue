@@ -17,7 +17,7 @@
         </div>
         <div v-loading="loading">
           <el-tag
-            v-for="tag in ruleForm.list"
+            v-for="tag in ruleForm.displayList"
             :key="tag.name"
             closable
             style="margin-right:5px;"
@@ -53,7 +53,7 @@ export default {
         title: '满减/满折',//显示标题
         displayStyle: 1,//展示样式
         ids: [],//满减满折活动id列表
-        list: []
+        displayList: []
       },
       loading: false,
       rules: {
@@ -107,18 +107,18 @@ export default {
                   this.loading = false;
               }).catch((error)=>{
                   console.error(error);
-                  this.ruleForm.list = [];
+                  this.ruleForm.displayList = [];
                   this.loading = false;
               });
           }else{
-              this.ruleForm.list = [];
+              this.ruleForm.displayList = [];
           }
       }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.ruleForm.list = datas;
+        this.ruleForm.displayList = datas;
     },
   }
 }

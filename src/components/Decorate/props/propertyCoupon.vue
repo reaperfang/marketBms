@@ -17,7 +17,7 @@
         </div>
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
-            v-for="tag in ruleForm.list"
+            v-for="tag in ruleForm.displayList"
             :key="tag.title"
             :closable="ruleForm.addType === 1"
             style="margin-right:5px;"
@@ -88,7 +88,7 @@ export default {
         couponColor: 1,//优惠券颜色类型
         hideScrambled: false,//隐藏已抢完券
         ids: [],//优惠券id列表
-        list: []
+        displayList: []
       },
       rules: {
 
@@ -121,7 +121,7 @@ export default {
       if(newValue == 2) {
         this.fetch();
       }else{
-        this.list = [];
+        this.displayList = [];
         this.fetch();
       }
     },
@@ -188,7 +188,7 @@ export default {
                   ids: componentData.ids
                 };
               }else{
-                this.ruleForm.list = [];
+                this.ruleForm.displayList = [];
                 return;
               }
             }
@@ -199,13 +199,13 @@ export default {
             }
 
             this.loading = true;
-            this.ruleForm.list = [];
+            this.ruleForm.displayList = [];
             this._apis.shop.getCouponListByIds(params).then((response)=>{
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.list = [];
+                this.ruleForm.displayList = [];
                 this.loading = false;
             });
         }
@@ -213,7 +213,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-       this.ruleForm.list = datas;
+       this.ruleForm.displayList = datas;
     },
 
     yuan(value) {

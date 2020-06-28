@@ -11,7 +11,7 @@
         <div class="goods_list" prop="goods" v-loading="loading">
           <ul>
             <template>
-              <template v-for="(item, key) of ruleForm.list">
+              <template v-for="(item, key) of ruleForm.displayList">
                 <li :key="key" :title="item.activeName">
                   <img :src="item.mainImage" alt="">
                   <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
@@ -196,7 +196,7 @@ export default {
         ids: [],//商品id列表 
         buttonText: '拼团',// 次要按钮文字
         buttonTextPrimary: '开团',//主要按钮文字
-        list: []
+        displayList: []
       },
       rules: {
 
@@ -238,7 +238,7 @@ export default {
         if(newValue == 2) {
           this.fetch();
         }else{
-          this.ruleForm.list = [];
+          this.ruleForm.displayList = [];
           this.fetch();
         }
     },
@@ -338,7 +338,7 @@ export default {
                         hideStatus: hideStatus
                     };
                 }else{
-                    this.ruleForm.list = [];
+                    this.ruleForm.displayList = [];
                     return;
                 }
             }
@@ -349,7 +349,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.list = [];
+                this.ruleForm.displayList = [];
                 this.loading = false;
             });
         }
@@ -357,7 +357,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-        this.ruleForm.list = datas;
+        this.ruleForm.displayList = datas;
     },
   }
 }

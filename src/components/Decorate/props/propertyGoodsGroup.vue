@@ -11,7 +11,7 @@
         </div>
         <div class="goods_groups">
           <el-tag
-            v-for="(tag, key) in ruleForm.list"
+            v-for="(tag, key) in ruleForm.displayList"
             :key="key"
             closable
             type="success" @close="deleteItem(tag)">
@@ -141,7 +141,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="ruleForm.list"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="ruleForm.displayList"></component>
   </el-form>
 </template>
 
@@ -172,7 +172,7 @@ export default {
         buttonStyle: 1,//购买按钮样式
         ids: [],//商品分类列表 
         buttonText: '加入购物车',//按钮文字
-        list: {}
+        displayList: {}
       },
       rules: {
 
@@ -223,7 +223,7 @@ export default {
               ids.push(item);
             }
             if(!ids.length) {
-              this.ruleForm.list = {};
+              this.ruleForm.displayList = {};
               return;
             }
             this.loading = true;
@@ -235,12 +235,12 @@ export default {
                     goods: this.ruleForm.ids[item.id]
                   };
                 }
-                this.ruleForm.list = data;
+                this.ruleForm.displayList = data;
                 this.syncToMiddle('goods');
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.list = {};
+                this.ruleForm.displayList = {};
                 this.loading = false;
             });
       }
@@ -253,9 +253,9 @@ export default {
         this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
         return;
       }
-      const tempItems = {...this.ruleForm.list};
+      const tempItems = {...this.ruleForm.displayList};
       delete tempItems[item.catagoryData.id];
-      this.ruleForm.list = tempItems;
+      this.ruleForm.displayList = tempItems;
       this.items = tempItems;
     },
 
