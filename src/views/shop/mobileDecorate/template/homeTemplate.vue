@@ -12,7 +12,7 @@
 				</el-tag>
 			</div>
 			<div class="template_wrapper-head-industries">
-				<div class="template_wrapper-head-industries-items" :style="ifShowAll ? styleShow : styleHidden">
+				<div class="template_wrapper-head-industries-items" ref="industriesScroll" :style="ifShowAll ? styleShow : styleHidden">
 					<div class="template_wrapper-head-industries-item" @click="handleSelectAll" :style="{background: checkboxGroup1.length ===  industries.length ? '#655EFF' : '#ffffff',color: checkboxGroup1.length ===  industries.length ? '#ffffff' : '#B6B5C8'}">
             全部行业
 					</div>
@@ -57,7 +57,7 @@
 							<img :src="item.photoHalfUrl" alt="">
 							<div class="cover_small">
 								<div class="cover_button" @click="preview(item)">预览模板</div>
-								<el-button type="primary"  class="cover_button_apply" @click="apply(item)">使用模板</el-button>
+								<el-button type="primary" class="cover_button_apply" @click="apply(item)">使用模板</el-button>
 							</div>
 						</div>
 						<div class="info">
@@ -418,7 +418,8 @@
 				this.fetchList()
 			},
 			showAllIndustries() {
-				this.ifShowAll = !this.ifShowAll
+				this.ifShowAll = !this.ifShowAll;
+				this.$refs.industriesScroll.scrollTop = 0;
 			},
 			// 选择
 			handleSelectItems(value) {
@@ -483,6 +484,9 @@
 
   /deep/ .el-tag--small .el-icon-close {
     transform: scale(1.1);
+  }
+  .el-radio-group label:last-child {
+    margin-left: 0;
   }
 
 	.template_wrapper-head {
@@ -595,8 +599,8 @@
 
       /deep/ .is-active .el-radio-button__inner {
         background: #fff;
-        border-width: 2px;
-        border-left: 1px solid $globalMainColor;
+        /*border-width: 2px;*/
+        /*border-left: 1px solid $globalMainColor;*/
         color: $globalMainColor;
         border-color: $globalMainColor;
         box-shadow: -1px 0 0 0 $globalMainColor;
@@ -604,9 +608,9 @@
       /deep/ .el-radio-button__inner {
         font-size: 14px;
       }
-      /deep/ .el-radio-button:first-child .el-radio-button__inner {
-        border-width: 2px;
-      }
+      /*/deep/ .el-radio-button:first-child .el-radio-button__inner {*/
+      /*  border-width: 2px;*/
+      /*}*/
 
       /deep/ .el-input-number--small {
         width: 162px;
