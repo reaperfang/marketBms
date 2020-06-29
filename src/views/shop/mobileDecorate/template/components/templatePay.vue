@@ -11,9 +11,9 @@
 				<div class="templage-pay-content-right-title">
 					{{tempInfo.name}}
 				</div>
-				<div class="templage-pay-content-right-industry">
-					水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬
-				</div>
+<!--				<div class="templage-pay-content-right-industry">-->
+<!--					水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬-->
+<!--				</div>-->
 				<div class="templage-pay-content-right-scope">
 					<img src="@/assets/images/shop/xiaochengxu.png"/><img src="@/assets/images/shop/weixin.png"/>
 				</div>
@@ -120,6 +120,7 @@
 							that.time = 0
 							that.intervalFlag = false
 							window.clearTimeout(that.timeInterval)
+            //  https://qr.95516.com/48020000/54222006298084224161486027
 						}
 					})
 				}, 3000)
@@ -128,6 +129,7 @@
 				this.time = 0
 				this.intervalFlag = true
 				this.getPayInfo()
+        // this.qrcode()
 			},
 			apply() {
 				this.confirm({

@@ -17,14 +17,14 @@
 					</div>
 				</div>
 				<div class="inner" v-else>
-					<div class="inner-tag" v-show="item.status === 1 || item.status === 0">
+					<div class="inner-tag" v-if="item.templateStatus !== 2" v-show="item.status === 1 || item.status === 0">
 						<div class="inner-tag-tag" :style="{borderColor: item.status === 0 ? 'transparent #FD932B' : 'transparent #3EB488'}">
 						</div>
 						<span>{{item.status === 0 ? '未使用' : '已使用'}}</span>
 					</div>
 					<div class="view">
 						<img :src="item.photoHalfUrl" alt="">
-						<div class="cover_small">
+						<div class="cover_small" :class="{'cover_small_show': item.templateStatus === 2 || (item.status === 2 && item.templateStatus === 1)}">
 							<div class="cover_button" v-show="item.status === 2 && item.templateStatus === 1">已过期</div>
 							<div class="cover_button" v-show="item.templateStatus === 2">已下架</div>
 							<div class="cover_button_pre" @click="preview(item)" v-show="item.status !== 2 && item.templateStatus === 1">预览模板</div>
@@ -53,7 +53,7 @@
 								到期日：{{item.limitDate ? item.limitDate.substring(0, 10) : '-'}}
 							</div>
 						</div>
-						<div class="body">
+						<div class="body" :title="item.name">
 							<span>{{item.name || '页面模板'}}</span>
 						</div>
 						<div class="bottom">
@@ -123,7 +123,9 @@
 				imgNow: 0,  //当前预加载的第几张
 				preLoadObj: null,  //预加载对象
 				maxWidth: 550,  //最大宽度
-				mode: null
+				mode: null,
+        startIndex: 1,
+        total: 0,
 			}
 		},
 		created() {
@@ -351,6 +353,9 @@
 							&:hover{
 								opacity: 1;
 							}
+              &.cover_small_show {
+                opacity: 1;
+              }
 							.cover_button{
 								width:78px;
 								height:78px;

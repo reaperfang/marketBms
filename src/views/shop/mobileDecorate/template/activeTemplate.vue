@@ -12,7 +12,7 @@
 				</el-tag>
 			</div>
 			<div class="template_wrapper-head-industries">
-				<div class="template_wrapper-head-industries-items" :style="ifShowAll ? styleShow : styleHidden">
+				<div class="template_wrapper-head-industries-items" ref="industriesScroll" :style="ifShowAll ? styleShow : styleHidden">
 					<div class="template_wrapper-head-industries-item" @click="handleSelectAll" :style="{background: checkboxGroup1.length ===  industries.length ? '#655EFF' : '#ffffff',color: checkboxGroup1.length ===  industries.length ? '#ffffff' : '#B6B5C8'}">
 						全部行业
 					</div>
@@ -415,7 +415,8 @@
 				this.fetch()
 			},
 			showAllIndustries() {
-				this.ifShowAll = !this.ifShowAll
+				this.ifShowAll = !this.ifShowAll;
+        this.$refs.industriesScroll.scrollTop = 0;
 			},
 			// 选择
 			handleSelectItems(value) {
@@ -484,10 +485,13 @@
   /deep/ .el-tag .el-icon-close {
     top: -2px;
   }
+  .el-radio-group label:last-child {
+    margin-left: 0;
+  }
 
 	.template_wrapper-head {
 		background: #fff;
-		padding-bottom:20px;
+		padding-bottom: 5px;
 		display: flex;
 		flex-direction: row;
 		justify-content: start;
@@ -594,8 +598,8 @@
 
       /deep/ .is-active .el-radio-button__inner {
         background: #fff;
-        border-width: 2px;
-        border-left: 1px solid $globalMainColor;
+        /*border-width: 2px;*/
+        /*border-left: 1px solid $globalMainColor;*/
         color: $globalMainColor;
         border-color: $globalMainColor;
         box-shadow: -1px 0 0 0 $globalMainColor;
@@ -603,9 +607,9 @@
       /deep/ .el-radio-button__inner {
         font-size: 14px;
       }
-      /deep/ .el-radio-button:first-child .el-radio-button__inner {
-        border-width: 2px;
-      }
+      /*/deep/ .el-radio-button:first-child .el-radio-button__inner {*/
+      /*  border-width: 2px;*/
+      /*}*/
       /deep/ .el-input-number--small {
         width: 162px;
       }
