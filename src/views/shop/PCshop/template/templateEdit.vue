@@ -17,6 +17,7 @@
 <script>
 import Decorate from '@/components/Decorate';
 import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
+import widget from '@/components/Decorate/config/widgetConfig';
 import utils from "@/utils";
 export default {
   name: "templateEdit",
@@ -150,49 +151,12 @@ export default {
 
     /* 检查输入正确性 */
     checkInput(resultData) {
-      if (this.baseInfo.vError) {
-        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-        // this.$message({ message: '请填写正确信息', type: 'warning' });
+      const baseFlag = this.checkBaseInfo(resultData);
+      if(baseFlag) {
+        return this.checkFakeData(resultData);
+      }else {
         return false;
-      }else{
-        if(!resultData.name || !resultData.title || !resultData.explain) {
-          this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-          return false;
-        }else{
-          for(let item of this.componentDataIds) {
-            const componentData = this.componentDataMap[item];
-            if(componentData.type === 'goods') {
-              if(componentData.data.ids && !componentData.data.ids.length) {
-                this.$alert('请在右侧选择真实商品后重试', '提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                    //打开基础信息面板
-                    this.$store.commit('setCurrentComponentId', componentData.id);
-                    this.setLoading(false);
-                  }
-                });
-                return false;
-              }
-            }
-          }
-          return true;
-        }
       }
-      return true;
     },
 
     /* 发起请求 */
@@ -245,6 +209,49 @@ export default {
         }
       }
       data.pageData = copyData;
+    },
+
+    /* 检测基础信息 */
+    checkBaseInfo(data) {
+      if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+          confirmButtonText: '确定',
+          callback: action => {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+            this.setLoading(false);
+          }
+        });
+        return false;
+      }
+      return true;
+    },
+
+    /* 检测假数据 */
+    checkFakeData(data) {
+      let needFakeDataWidget = [];
+      widget.getNeedFakeDataWidget().forEach((item)=>{
+        needFakeDataWidget.push(item.type);
+      });
+
+      for(let item of this.componentDataIds) {
+        const componentData = this.componentDataMap[item];
+        if(needFakeDataWidget.includes(componentData.type)) {
+          const list = componentData.data.displayList || componentData.data.list;
+          if(list && !list.length) {
+            this.$store.commit('setCurrentComponentId', componentData.id);
+            this.$alert(`【${componentData.title} - ${componentData.id.substring(componentData.id.length - 6)}】组件尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                //打开基础信息面板
+                this.setLoading(false);
+              }
+            });
+            return false;
+          }
+        }
+      }
+      return true;
     }
   }
 };

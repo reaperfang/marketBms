@@ -14,6 +14,7 @@ import Decorate from '@/components/Decorate';
 import utils from '@/utils';
 import dialogDecoratePreview from '@/views/shop/dialogs/decorateDialogs/dialogDecoratePreview';
 import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
+import widget from '@/components/Decorate/config/widgetConfig';
 export default {
   name: "shopEditor",
   props: ["pageId"],
@@ -181,33 +182,7 @@ export default {
 
     /* 检查输入正确性 */
     checkInput(resultData) {
-      if (this.baseInfo.vError) {
-        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-        // this.$message({ message: '请填写正确信息', type: 'warning' });
-        return false;
-      }else{
-        if(!resultData.name || !resultData.title || !resultData.explain) {
-          this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-          return false;
-        }else{
-          return true;
-        }
-      }
-      return true;
+      return this.checkBaseInfo(resultData);
     },
 
     /* 发起请求 */
@@ -264,6 +239,22 @@ export default {
         }
       }
       data.pageData = copyData;
+    },
+
+    /* 检测基础信息 */
+    checkBaseInfo(data) {
+      if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+          confirmButtonText: '确定',
+          callback: action => {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+            this.setLoading(false);
+          }
+        });
+        return false;
+      }
+      return true;
     }
 
   },
