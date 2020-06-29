@@ -138,7 +138,7 @@ export default {
         componentDataIds.push(item.id);
         componentDataMap[item.id] = item;
         if(componentDataMap[item.id]['data'] && needFakeDataWidget.includes(componentDataMap[item.id].type)) {
-          componentDataMap[item.id]['data']['list'] = [];
+          componentDataMap[item.id]['data']['displayList'] = [];
         }
         if(item.isBase) {  //设置为基础信息组件
           this.$store.commit('setBasePropertyId', item.id);
