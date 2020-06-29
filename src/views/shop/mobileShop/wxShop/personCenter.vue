@@ -8,6 +8,7 @@
       <div class="phone-body" v-calcHeight="220+20">
         <componentUserCenter 
         :data="ruleForm" 
+        :isOpenResell="shopInfo.isOpenResell"
         v-if="ruleForm"
         ></componentUserCenter>
       </div>
@@ -18,6 +19,7 @@
       :data="ruleForm" 
       :save="save" 
       :resetData="resetData"
+      :isOpenResell="shopInfo.isOpenResell"
       @userCenterDataChanged="emitChangeRuleForm"
       ></propertyUserCenter>
     </div>
@@ -38,8 +40,14 @@ export default {
   },
   created() {
     this.fetch();
+    this.$store.dispatch('getShopInfo');
   },
   mounted() {
+  },
+  computed:{
+    shopInfo() {
+      return this.$store.getters.shopInfo || {};
+    }
   },
   methods: {
     fetch() {
@@ -54,6 +62,17 @@ export default {
           return;
         }
         if(pageData && pageData.avatarPosition) {
+          // h5隐藏分销入口 pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1&&window.location.pathname=='/bp/shop/m_wxShopIndex'
+          if(pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1){
+            pageData.moduleList['commission'] = {
+              name: 'commission',
+              title: '分销中心',
+              titleValue: '分销中心',
+              icon: '',
+              defaultIcon: 'userCenter21',
+              color: '#000'
+            }
+          }
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
           this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];
@@ -101,6 +120,16 @@ export default {
           return;
         }
         if(pageData && pageData.avatarPosition) {
+          if(pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1){
+            pageData.moduleList['commission'] = {
+              name: 'commission',
+              title: '分销中心',
+              titleValue: '分销中心',
+              icon: '',
+              defaultIcon: 'userCenter21',
+              color: '#000'
+            }
+          }
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
           this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];

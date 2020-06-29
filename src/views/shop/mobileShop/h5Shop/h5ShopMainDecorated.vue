@@ -71,7 +71,7 @@
 import shopMainDecorated from '../wxShop/shopMainDecorated';
 import { mapMutations } from 'vuex'
 export default {
-  name: "h5ShopMainDecorated",  
+  name: "h5ShopMainDecorated",
   extends: shopMainDecorated,
   data() {
     return {
@@ -119,13 +119,13 @@ export default {
 
     /* 去开通H5店铺 */
     linkToOpenH5() {
-      this.$router.push({path:'/apply',query:{paths:'/application/channelapp', applyId:3}})
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp', menuId:3}})
       this.SETCURRENT(8)
     },
 
     /* 去绑定H5店铺域名 */
     linkToBindDomain() {
-      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', applyId:3}})
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', menuId:3}})
       this.SETCURRENT(8)
     },
 
@@ -161,7 +161,7 @@ export default {
 </script>
 <style lang="scss">
 .shop_index_wrapper{
-
+   min-height: 500px!important;
   .no_open,.no_bind{
     display:flex;
     flex-direction: column;

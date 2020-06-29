@@ -741,7 +741,7 @@ export default {
                     }
                 }
             }
-            &:nth-of-type(3n+2){
+            &:nth-of-type(3n+2),&:nth-of-type(3n+3){
                 .countdown_Bar{
                     height:31px;
                     margin-top:-31px;
@@ -836,110 +836,6 @@ export default {
                         height:24px;
                         right:10px;
                         bottom:0;
-                    }
-                    .activity_end{
-                        right:10px;
-                        bottom:17.5px;
-                        line-height:1;
-                        font-size:15px;
-                    }
-                }
-            }
-            &:nth-of-type(3n+3){
-                .countdown_Bar{
-                    height:31px;
-                    margin-top:-31px;
-                    position:relative;
-                    .title{
-                        display:none;
-                    }
-                    .countdown{
-                        width:100%;
-                        height:100%;
-                        .bj{
-                            display:none;
-                        }
-                        .content{
-                            // @extend .flexCenterMiddle;
-                            display:flex;
-                            align-items:center;
-                            padding:0 10px;
-                            .caption{
-                                color:#fff;
-                                font-size:10px;
-                                line-height:31px;
-                                margin:0;
-                            }
-                            .time{
-                                margin-left:7.5px;
-                                height:16px;
-                                color:#fff;
-                                font{
-                                    width:16px;
-                                    height:16px;
-                                    color:#FC3D42;
-                                    font-size:9px;
-                                    line-height:16px;
-                                    background:#fff;
-                                    position:relative;
-                                    top:-2.5px;
-                                    margin:0 2px;
-                                    text-align:center;
-                                }
-                                .item {
-                                    background:#333;
-                                    min-width:29px;
-                                    height:16px;
-                                    color:#fff;
-                                    margin:0 4px;
-                                }
-                            }
-                        }
-                    }
-                }
-                .info_box{
-                    padding:3px 10px 9px 10px;
-                    .name{
-                        .label{  
-                            background:#FFF0C9;
-                            border:1px solid #FFAA4E;
-                            padding:0 6px;
-                            line-height:15px;
-                            display:inline-block;
-                            color:#FC3D42;
-                            font-size:10px;
-                            @include borderRadius(4px);
-                            position:relative;
-                            top:-1.5px;
-                            margin-right:7.5px;
-                        }
-                        line-height:22px;
-                        height:44px;
-                        font-size:14px;
-                        @include lineClamp(2);
-                    }
-                    .caption{
-                        display:none;
-                    }
-                    .limit_line{
-                        display:none;
-                    }
-                    .price_line{
-                        margin-top:5px;
-                        position:relative;
-                        .price{
-                            line-height:25px;
-                        }
-                        .yPrice{
-                            width:100%;
-                            margin-left:0;
-                            line-height:1;
-                        }
-                    }
-                    .button{
-                        height:24px;
-                        right:10px;
-                        bottom:0px;
                     }
                     .activity_end{
                         right:10px;
@@ -1161,7 +1057,8 @@ export default {
                 }
             }
             .button{
-                position:absolute;
+                // position:absolute;
+                float:right;
                 right:10px;
                 bottom:15px;
                 font-size:13px;
@@ -1170,7 +1067,8 @@ export default {
             .activity_end{
                 color:#999;
                 font-weight:bold;
-                position:absolute;
+                // position:absolute;
+                float:right;
             }
         }
     }

@@ -35,7 +35,7 @@
                 <li class="tips3"><p>好的，不过我想把我的页面装得个性化一点，可以实现吗？</p></li>
               </ul>
               <img src="../../../../assets/images/shop/guide/13@2xcopy2.png" alt="">
-            </div> 
+            </div>
             <div class="block">
               <img src="../../../../assets/images/shop/guide/13@2x(1).png" alt="">
               <ul class="tips_list">
@@ -101,19 +101,23 @@ export default {
 
     /* 去开通H5店铺 */
     linkToOpenH5() {
-      this.$router.push({path:'/apply',query:{paths:'/application/channelapp', applyId:3}})
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp', menuId:3}})
       this.SETCURRENT(8)
     },
 
     /* 去绑定H5店铺域名 */
     linkToBindDomain() {
-      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', applyId:3}})
+      this.$router.push({path:'/apply',query:{paths:'/application/channelapp/mobileHFive', menuId:3}})
       this.SETCURRENT(8)
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.app-container{
+	min-height: 510px!important;
+	background: #fff;
+}
 .no_open,.no_bind{
   display:flex;
   flex-direction: column;

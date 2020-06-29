@@ -420,6 +420,7 @@
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
+			:weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -526,6 +527,7 @@
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
+			:weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -621,7 +623,19 @@
                     <el-radio :label="0">否</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="运费设置" prop="isFreeFreight">
+            <el-form-item label="配送方式" prop="deliveryWay">
+                <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
+                    <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
+                    <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:195px;">商家配送</el-checkbox>
+                </el-checkbox-group>
+                <div>
+                    <div style="display:inline-block;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
+                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
+                    </div>
+                    <span class="prompt" v-show="!isDeliverySet">“商家配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                </div>
+            </el-form-item>
+            <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryWay.includes(1)">
                 <div>
                     <el-radio :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isFreeFreight" :label="0">选择运费模板</el-radio>
                     <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.freightTemplateId" placeholder="请选择">
@@ -784,7 +798,9 @@ export default {
             productLabelList: [], // 商品标签列表
             specIds: [],
             add: true,
-            ruleForm: {
+	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
+            isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
+	    ruleForm: {
                 productCategoryInfoId: '', // 商品类目id
                 //productCatalogInfoId: '', // 商品商家分类ID
                 productCatalogInfoIds: '', // 商品商家分类ID
@@ -808,6 +824,7 @@ export default {
                 other: false,
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
+		deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
                 isFreeFreight: 0, // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
@@ -860,6 +877,9 @@ export default {
                 ],
                 isCashOnDelivery: [
                     { required: true, message: '请选择', trigger: 'blur' },
+              ],
+                deliveryWay: [
+                    { required: true, message: '请选择', trigger: 'change' },
                 ],
                 isFreeFreight: [
                     { validator: isFreeFreightValidator, trigger: 'blur' },
@@ -1753,6 +1773,55 @@ export default {
         changeUpload() {
             this.hideUpload = this.imagesLength >= 6
         },
+	//v1.5.4
+        //新页面打开普通快递设置
+        gotoExpressSet() {
+            let routeData = this.$router.resolve({ path: '/set/ordinaryExpress' });
+            window.open(routeData.href, '_blank');
+        },
+        //新页面打开商家配送设置
+        gotoDeliverySet() {
+            let routeData = this.$router.resolve({ path: '/set/shopExpress' });
+            window.open(routeData.href, '_blank');
+        },
+        //获取普通快递在店铺是否设置开启状态
+        getExpressAndDeliverySet(name){
+            const params = {
+                "id": this.cid
+            };
+            this._apis.goods
+            .getExpressAndDeliverySet(params)
+            .then(res => {
+                //如果普通快递未开启则提示去设置
+                if(name == 'express' && res.isOpenOrdinaryExpress == 0){
+                    this.isExpressSet = false;
+                }
+                //如果商家配送未开启则提示去设置
+                if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
+                    this.isDeliverySet = false; 
+                }
+            })
+            .catch(error => {});
+        },
+        //配送方式选择
+        deliveryWayChange(val, index){
+            //普通快递
+            if(index === '1'){
+                if(val){ //如果选中，则验证店铺中是否开启，未开启则提示去设置
+                    this.getExpressAndDeliverySet('express');
+                }else{ //不选中，则直接隐藏提示即可
+                    this.isExpressSet = true;
+                }
+            }
+            //商家配送
+            if(index === '2'){
+                if(val){ //如果选中，则验证店铺中是否开启，未开启则提示去设置
+                    this.getExpressAndDeliverySet('delivery');
+                }else{ //不选中，则直接隐藏提示即可
+                    this.isDeliverySet = true;
+                }
+            }
+        },
         addCategory() {
             // this.currentDialog = 'AddCategoryDialog'
             // this.currentData = {level: 0, add: true}
@@ -1764,7 +1833,7 @@ export default {
         },
         addTemplate() {
             localStorage.setItem('addGoods', JSON.stringify(this.ruleForm))
-            let routeData = this.$router.resolve({ path: '/order/newTemplate', query: {mode: 'new'} });
+            let routeData = this.$router.resolve({ path: '/set/newTemplate', query: {mode: 'new'} });
             window.open(routeData.href, '_blank');
             // this.$nextTick(() => {
             //     let a = document.createElement('a')
@@ -2166,6 +2235,13 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 console.log(res)
+		//配送方式(根据选中去请求是否在店铺开启)
+                let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
+                if(res.businessDispatchType == 1){ //如果开启了商家配送
+                    deliveryWayArr.push(2);
+                    this.getExpressAndDeliverySet('delivery');
+                }
+                res.deliveryWay = deliveryWayArr;
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
@@ -2305,6 +2381,12 @@ export default {
                         if(!this.productLabelList.find(val => val.id == this.ruleForm.productLabelId)) {
                             this.ruleForm.productLabelId = '0'
                         }
+
+                        if(!this.shippingTemplates.find(val => val.id == this.ruleForm.freightTemplateId)) {
+                            this.ruleForm.freightTemplateId = ""
+                        }
+                        
+
                         this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                         this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
                         if(!this.itemCatText) {
@@ -2572,6 +2654,16 @@ export default {
                             });
                             return
                         }
+			//如果配送方式勾选了商家配送，则重量为必填项
+                        if(this.ruleForm.deliveryWay.includes(2)){
+                            if(!this.ruleForm.goodsInfos[i].weight) {
+                                this.$message({
+                                    message: '请输入重量',
+                                    type: 'warning'
+                                });
+                                return
+                            }
+                        }
                         // if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
                         //     this.$message({
                         //         message: '重量必须大于0',
@@ -2765,6 +2857,15 @@ export default {
                             productUnit: item && item.name || ''
                         })
                     }
+		    //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
+                    params.generalExpressType = 1; //普通快递
+                    params.businessDispatchType = 0; //商家配送
+                    if(this.ruleForm.deliveryWay.includes(2)){
+                        params.businessDispatchType = 1;
+                    }
+                    delete params.deliveryWay;
+
+                    console.log(params)
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
@@ -3987,5 +4088,9 @@ $blue: #655EFF;
 }
 /deep/ .el-icon-arrow-right:before {
     font-size: 12px;
+}
+.set-btn:hover {
+    color: #444a51;
+    text-decoration: underline;
 }
 </style>

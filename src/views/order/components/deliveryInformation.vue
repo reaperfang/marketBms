@@ -16,8 +16,16 @@
         <div class="header">
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
+            <div class="header-lefter-item fb">{{item.deliveryWay | deliveryWayFilter}}</div>
+            <template v-if="item.deliveryWay == 1">
+            <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
             <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
+            </template>
+            <template v-if="item.deliveryWay == 2">
+            <div class="header-lefter-item">配送员：{{item.deliveryName}}</div>
+            <div class="header-lefter-item">联系方式：{{item.phone}}</div>
+            </template>
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
@@ -30,6 +38,7 @@
           </div>
         </div>
         <div v-show="item.showContent" class="content">
+          <template v-if="item.address"> 
           <div class="message">
             <div class="message-item-list">
               <div class="message-item">收货信息：</div>
@@ -60,16 +69,47 @@
                 item.address.sendProvinceName + item.address.sendCityName + item.address.sendAreaName + item.address.sendDetail : ''}}</div>
             </div>
           </div>
+          </template>
+          <template v-if="!item.address"> 
+          <div class="message">
+            <div class="message-item-list">
+              <div class="message-item">收货信息：</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.receivedName}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.receivedPhone}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.receiveAddress}} {{item.receivedDetail}}</div>
+            </div>
+          </div>
+          <div class="message message2">
+            <div class="message-item-list">
+              <div class="message-item">发货信息：</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.sendName}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.sendPhone}}</div>
+            </div>
+            <div class="message-item-list">
+              <div class="message-item">{{item.sendAddress}} {{item.sendDetail}}</div>
+            </div>
+          </div>
+          </template> 
           <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
-            <el-table-column label="商品" width="300">
+            <el-table-column label="商品" width="400">
               <template slot-scope="scope">
                 <div class="goods-detail">
                   <div class="goods-detail-item">
                     <img width="66" :src="scope.row.goodsImage" alt />
                   </div>
-                  <div class="goods-detail-item">
-                    <p>{{scope.row.goodsName}}</p>
-                    <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                  <div class="goods-detail-item" style="width:300px;text-align:left;">
+                    <p class="ellipsis">{{scope.row.goodsName}}</p>
+                    <p class="ellipsis">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                   </div>
                 </div>
               </template>
@@ -151,6 +191,14 @@ export default {
 
         return str
     },
+    deliveryWayFilter(code) {
+        switch(code) {
+            case 1:
+                return '普通快递'
+            case 2:
+                return '商家配送'
+        }
+    },
   },
   watch: {
     orderDetail: {
@@ -193,35 +241,71 @@ export default {
     },
     getOrderSendItems() {
       let arr = [];
-
-      for (let i in this.orderDetail.sendItemAndAddress) {
-        if (this.orderDetail.sendItemAndAddress.hasOwnProperty(i)) {
-          let obj = Object.assign(
-            {},
-            {
-              address: this.orderDetail.sendItemAndAddress[i].address ? JSON.parse(this.orderDetail.sendItemAndAddress[i].address) : '',
-              goodsList: this.orderDetail.sendItemAndAddress[i].list,
-              expressNo: i,
-              shipperName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].expressCompany || '',
-              showContent: true,
-              sendRemark: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendRemark || '',
-              sendName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendName || '',
-              id: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].orderId || '',
-              createTime: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].createTime || '',
-            }
-          );
-
-          arr.push(obj);
+      if(this.orderDetail.orderSendItemMap && Object.keys(this.orderDetail.orderSendItemMap).length){
+        for (let i in this.orderDetail.orderSendItemMap) {
+          if (this.orderDetail.orderSendItemMap.hasOwnProperty(i)) {
+            let obj = Object.assign(
+              {},
+              {
+                goodsList: this.orderDetail.orderSendItemMap[i],
+                expressNo: i,
+                shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
+                showContent: true,
+                sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
+                sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
+                id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+                createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
+                deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
+                deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
+                phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
+                receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
+                receivedDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedDetail || '',
+                sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
+                sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
+                receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
+                receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
+                sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || ''
+              }
+            );
+            arr.push(obj);
+          }
+        }
+      }else{
+        for (let i in this.orderDetail.sendItemAndAddress) {
+          if (this.orderDetail.sendItemAndAddress.hasOwnProperty(i)) {
+            let obj = Object.assign(
+              {},
+              {
+                address: this.orderDetail.sendItemAndAddress[i].address ? JSON.parse(this.orderDetail.sendItemAndAddress[i].address) : '',
+                goodsList: this.orderDetail.sendItemAndAddress[i].list,
+                expressNo: i,
+                shipperName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].expressCompany || '',
+                showContent: true,
+                sendRemark: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendRemark || '',
+                sendName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendName || '',
+                id: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].orderId || '',
+                createTime: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].createTime || '',
+                deliveryWay: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].deliveryWay || '',
+                deliveryName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].distributorName || '',
+                phone: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].distributorPhone || ''
+              
+              }
+            );
+            arr.push(obj);
+          }
         }
       }
+      
       arr.sort((a, b) => {
-        let timeA = new Date(a.createTime).getTime()
-        let timeB = new Date(b.createTime).getTime()
+        const thisTimeA = a.createTime.replace(/-/g, '/')
+        const thisTimeB = b.createTime.replace(/-/g, '/')
+        let timeA = new Date(thisTimeA).getTime()
+        let timeB = new Date(thisTimeB).getTime()
 
         if(timeA > timeB) {
-          return -1
-        } else if(timeA < timeB) {
           return 1
+        } else if(timeA < timeB) {
+          return -1
         } else if(timeA == timeB) {
           return 0
         } 
@@ -282,6 +366,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.fb{
+  font-weight: 500;
+  font-family:PingFangSC-Medium,PingFang SC;
+}
 .delivery-information {
   .blue {
     color: $globalMainColor;
@@ -302,7 +390,7 @@ export default {
       .header {
         height: 60px;
         background-color: rgb(243, 244, 244);
-        border-radius: 10px;
+        border-radius: 10px 10px 0 0;
         padding: 0 20px;
         //line-height: 60px;
         display: flex;
@@ -345,12 +433,14 @@ export default {
           }
         }
         .remark {
-          border-top: 1px solid #cacfcb;
           padding-top: 20px;
         }
       }
     }
   }
+}
+/deep/ .el-table::before{
+  background-color: #cacfcb;
 }
 .message {
   font-size:14px;

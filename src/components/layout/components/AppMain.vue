@@ -5,7 +5,7 @@
         <!-- <sidebar class="sidebar-righter" /> -->
         <righter-bar></righter-bar>
       </div>
-      <div class="content-main" :class="{'content-main-classify': $route.meta.classify, m_shopEditor: $route.meta.m_shopEditor}">
+      <div class="content-main content-info" :class="{'content-main-classify': $route.meta.classify, m_shopEditor: $route.meta.m_shopEditor}">
         <!-- <transition name="fade-transform" mode="out-in"> -->
           <keep-alive :include="cachedViews">
             <router-view :key="key"/>

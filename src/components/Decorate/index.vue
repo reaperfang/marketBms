@@ -66,6 +66,7 @@ export default {
 
     //设置基础组件id
     this.$store.commit('setBasePropertyId', id);
+    this.$store.dispatch('getShopStyle');
   },
   computed: {
     baseInfo() {

@@ -50,8 +50,9 @@
 
         <div class="block form">
           <template v-for="(item, key) in ruleForm.moduleList">
-            <el-form-item 
-              v-if="item.name !== 'integralMarket' && item.name !== 'messageCenter'"
+            <!-- v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"/  h5隐藏分销入口 -->
+            <el-form-item
+               v-if=" item.name =='commission'?isOpenResell==1:(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
               :key="key"
               :label="item.title"
               :prop="'moduleList.'+ key +'.titleValue'"
@@ -86,7 +87,7 @@
               content="">
               <img v-if="showCode" :src="qrCode" alt="">
               <span v-else>无分享地址</span>
-              <el-button slot="reference" @click="showCode=true">预    览</el-button>
+              <el-button slot="reference" @click="getQrcode();showCode=true">预    览</el-button>
             </el-popover>
           </div>
         </div>
@@ -102,7 +103,7 @@ import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyUserCenter',
   components: {dialogSelectImageMaterial, vuedraggable},
-  props: ['saveAndApply', 'save', 'resetData', 'data'],
+  props: ['saveAndApply', 'save', 'resetData', 'data', 'isOpenResell'],
   data () {
     return {
       resetLoading: false,  //重置loading
@@ -111,6 +112,7 @@ export default {
       dialogVisible: false,
       currentDialog: '',
       currentModule: null,
+      pathname:window.location.pathname,
       ruleForm: {
         backgroundImage: '',  //背景图
         backgroundGradients: 1,  //背景渐变
@@ -180,6 +182,14 @@ export default {
             titleValue: '地址管理',
             icon: '',
             defaultIcon: 'userCenter18',
+            color: '#000'
+          },
+          commission: {
+            name: 'commission',
+            title: '分销中心',
+            titleValue: '分销中心',
+            icon: '',
+            defaultIcon: 'userCenter21',
             color: '#000'
           },
         }

@@ -1,7 +1,7 @@
 <template>
   <div class="electronic-face-sheet">
     <section class="search">
-      <p class="title">
+      <!-- <p class="title">
         电子面单 
         <i class="el-icon-warning" v-popover:popover></i>
         <el-popover
@@ -15,7 +15,7 @@
               <p>电子面单服务和物流轨迹查询服务是与第三方快递鸟合作，开启服务需注册快递鸟会员，相关费用直接与快递鸟结算。</p>
               <p>目前快递鸟电子面单仅支持以下快递公司：顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、国通快递、天天快递、跨越速运、邮政快递包裹、中铁快运、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。</p>
           </el-popover>
-      </p>
+      </p> -->
       <el-form :inline="true" :model="formInline" class="form-inline">
         <div class="row justify-between">
           <div class="col">
@@ -32,10 +32,6 @@
                 :picker-options="utils.globalTimePickerOption.call(this)"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
-              <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
-            </el-form-item>
           </div>
           <!-- <div class="col">
             <el-form-item>
@@ -44,8 +40,14 @@
             </el-form-item>
           </div> -->
         </div>
+        <div>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit" v-permission="['设置','普通快递','电子面单', '查询']">查询</el-button>
+            <el-button class="border-button" @click="resetForm('formInline')">重置</el-button>
+          </el-form-item>
+        </div>
         <!-- <div>
-          <el-button v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
+          <el-button v-permission="['设置', '普通快递', '电子面单', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
         </div> -->
       </el-form>
     </section>
@@ -55,7 +57,7 @@
             全部
             <span>{{total}}</span>项
           </div>
-          <el-button v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '新建']" @click="$router.push('/order/newElectronicFaceSheet')" class="border-button">新建</el-button>
+          <el-button  v-if="!authHide" v-permission="['设置', '普通快递','电子面单', '新建']" @click="$router.push('/set/newElectronicFaceSheet')" class="border-button">新建</el-button>
       </div>
       <div class="table">
         <el-table
@@ -70,9 +72,9 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <div class="operate-box">
-                <span v-permission="['订单', '电子面单', '默认页', '查看']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
-                <span v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '修改']" @click="$router.push('/order/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
-                <span v-if="!authHide" v-permission="['订单', '电子面单', '默认页', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
+                <span v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
+                <span  v-if="!authHide" v-permission="['设置', '普通快递', '电子面单', '编辑']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
+                <span v-if="!authHide"  v-permission="['设置', '普通快递', '电子面单', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
               </div>
             </template>
           </el-table-column>
@@ -193,13 +195,13 @@ export default {
 .electronic-face-sheet {
   section {
     background-color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 25px 20px 0 20px;
     .title {
       font-size: 16px;
       margin-bottom: 10px;
     }
     &.search {
+      margin-bottom: 20px;
       .resetting {
         margin-right: 7px;
       }
@@ -209,6 +211,9 @@ export default {
 /deep/ .el-icon-warning:before {
   color: $grayColor;
 }
+.table-box {
+  padding-bottom: 20px;
+}
 .table-box .table {
     margin-left: 0;
 }
@@ -216,7 +221,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 /deep/ input:-ms-input-placeholder{
   color:#92929B;

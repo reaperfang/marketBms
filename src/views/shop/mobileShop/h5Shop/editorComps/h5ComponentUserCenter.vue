@@ -150,16 +150,22 @@
               <p class="name" :style="{color: data.moduleList.address.color}">{{data.moduleList.address.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
+            <!--分销中心  -->
+            <li v-if='this.isOpenResell===1'>
+              <img :src="data.moduleList.commission.icon || require('../../../../../assets/images/shop/userCenter/userCenter21.png')" alt="" class="tb">
+              <p class="name" :style="{color: data.moduleList.commission.color}">{{data.moduleList.commission.titleValue}}</p>
+              <p class="more iconfont icon-tiaozhuan"></p>
+            </li>
             <!-- 安全中心 -->
             <li>
-              <img :src="data.moduleList.myAssemble.icon || require('../../../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.myAssemble.color}">安全中心</p>
+              <img :src="require('../../../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
+              <p class="name">安全中心</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
             <!--退出登录  -->
             <li>
-              <img :src="data.moduleList.address.icon || require('../../../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.address.color}">退出登录</p>
+              <img :src="require('../../../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
+              <p class="name">退出登录</p>
               <p class="more iconfont icon-tiaozhuan"></p>
             </li>
           </ul>
@@ -174,6 +180,7 @@
 import componentUserCenter from '../../wxShop/editorComps/componentUserCenter';
 export default {
   name: 'h5ComponentUserCenter',
-  extends: componentUserCenter
+  props: ['isOpenResell'],
+  extends: componentUserCenter,
 }
 </script>

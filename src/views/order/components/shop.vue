@@ -152,6 +152,9 @@ export default {
                 orderTimeValue: "",
                 startIndex: 1,
                 pageSize: 20,
+                deliveryWay: "", // 配送方式:1普通快递,2商家配送
+                deliveryDate: "", //商家配送-日期
+                deliveryTime: "", //商家配送-时间段
                }) 
             }
             this.loading = true
@@ -200,6 +203,7 @@ export default {
 <style lang="scss" scoped>
     .order-list {
         padding-bottom: 10px;
+        overflow-x: auto;
     }
     /deep/ .el-checkbox {
         margin-right: 8px;

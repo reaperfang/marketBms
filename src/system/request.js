@@ -95,7 +95,7 @@ class Ajax {
         }else if (res.errno === 0) {
           return res.data;
         }else {
-          return Promise.reject(res.msg)
+          return Promise.reject(res.msg || res)
         }
       },
       error => {

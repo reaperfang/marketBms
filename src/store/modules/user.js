@@ -91,6 +91,12 @@ const user = {
           removeToken()
           localStorage.removeItem('userInfo')
           localStorage.removeItem('shopInfos')
+          localStorage.removeItem('marketing_router_path_query')
+          localStorage.removeItem('marketing_router_path_appId')
+          localStorage.removeItem('marketing_router_path')
+          localStorage.removeItem('siderBarCurrent')
+          localStorage.removeItem('shopInfo')
+          localStorage.removeItem('anotherAuthEnable')
           resolve()
         }).catch(error => {
           reject(error)

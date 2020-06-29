@@ -14,6 +14,7 @@ export default{
     }
   },
   created() {
+    console.log('-------加载腾讯地图库,jsonp回调------')
      /* 加载腾讯地图库,jsonp回调 */
       this.$jsonp(appConfig.map.url,{
         key: appConfig.map.key

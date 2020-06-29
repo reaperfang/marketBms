@@ -48,3 +48,9 @@ export  function GetDateStr(AddDayCount) {
    var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
    return y+"-"+m+"-"+d; 
 }
+
+/* 合法手机号*/
+export function validatePhone(str) {
+  const reg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|16[6]|17[0|6|7|8]|18[0-9]|19[8|9])\d{8}$/ 
+  return reg.test(str)
+}
