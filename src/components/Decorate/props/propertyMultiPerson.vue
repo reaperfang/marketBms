@@ -166,8 +166,8 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectMultiPerson from '@/views/shop/dialogs/decorateDialogs/dialogSelectMultiPerson';
-import dialogMultiPersonDemo from '@/views/shop/dialogs/decorateDialogs/dialogMultiPersonDemo';
+import dialogSelectMultiPerson from '@/components/Decorate/dialogs/dialogSelectMultiPerson';
+import dialogMultiPersonDemo from '@/components/Decorate/dialogs/dialogMultiPersonDemo';
 export default {
   name: 'propertyMultiPerson',
   mixins: [mixinPropsData],

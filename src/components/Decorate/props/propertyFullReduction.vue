@@ -42,7 +42,7 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectFullReduction from '@/views/shop/dialogs/decorateDialogs/dialogSelectFullReduction';
+import dialogSelectFullReduction from '@/components/Decorate/dialogs/dialogSelectFullReduction';
 export default {
   name: 'propertyFullReduction',
   mixins: [mixinPropsData],

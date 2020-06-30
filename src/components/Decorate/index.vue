@@ -1,7 +1,7 @@
 <template>
   <div class="editor-wrapper">
     <widgetView v-if="config.showWidget" :componentsConfig="config.components"></widgetView>
-    <editView v-if="height > 0" :dragable="config.dragable" :height="height"></editView>
+    <renderView v-if="height > 0" :dragable="config.dragable" :height="height"></renderView>
     <propView v-if="config.showProp" :buttons="buttonList"></propView>
     <!-- <div style="width:600px;">
       页面基础数据：
@@ -19,13 +19,13 @@
 
 <script>
 import widgetView from "./widgetView";
-import editView from "./editView";
+import renderView from "./renderView";
 import propView from "./propView";
 import utils from "@/utils";
 import widget from './config/widgetConfig';
 export default {
   name: "decorate",
-  components: { widgetView, editView, propView },
+  components: { widgetView, renderView, propView },
   props: {
     decorateData: {
       type: Object

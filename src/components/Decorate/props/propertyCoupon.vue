@@ -72,7 +72,7 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectCoupon from '@/views/shop/dialogs/decorateDialogs/dialogSelectCoupon';
+import dialogSelectCoupon from '@/components/Decorate/dialogs/dialogSelectCoupon';
 import wxColor from '@/components/Wxcolor';
 export default {
   name: 'propertyCoupon',

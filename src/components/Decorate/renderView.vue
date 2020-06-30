@@ -89,7 +89,7 @@ import widget from './config/widgetConfig';
 import vuedraggable from "vuedraggable";
 
 export default {
-  name: 'editView',
+  name: 'renderView',
   props: {
     dragable: {
       type: Boolean,

@@ -1,10 +1,10 @@
-/* 选择N元N件弹框 */
+/* 选择优惠套装弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择N元N件活动'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套装'" @submit="submit">
     <div class="head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label="" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入活动名称" clearable></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入套餐名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="" prop="name">
           <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜  索</el-button>
@@ -14,19 +14,19 @@
       </el-form>
     </div>
     <el-table
-    stripe
-    :data="tableData"
-    :row-key="getRowKey"
-    ref="multipleTable"
-    @selection-change="handleSelectionChange"
-    v-loading="loading">
+      stripe
+      :data="tableData"
+      :row-key="getRowKey"
+      ref="multipleTable"
+      @selection-change="handleSelectionChange"
+      v-loading="loading">
         <el-table-column
           type="selection"  
           :selectable="itemSelectable"
           :reserve-selection="true"
-          width="55">
+          width="30">
         </el-table-column>
-        <el-table-column prop="name" label="活动标题">
+        <el-table-column prop="name" label="优惠活动标题" :width="300">
           <template slot-scope="scope">
             <div class="name_wrapper">
               <img :src="scope.row.activityPic" alt="失败">
@@ -34,17 +34,22 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态">  <!-- 0是未生效  1是生效中 2是已失效-->
+        <el-table-column prop="packagePrice" label="套餐价格"></el-table-column>
+         <el-table-column prop="status" label="状态" :width="70">  <!-- 0是未生效  1是生效中 2是已失效-->
            <template slot-scope="scope">
             <span v-if="scope.row.status === 0">未生效</span>
             <span v-else-if="scope.row.status === 1">生效中</span>
             <span v-else-if="scope.row.status === 2">已失效</span>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column prop="" label="活动时间">
+          <template slot-scope="scope">
+            {{scope.row.startTime}} 至 {{scope.row.endTime}}
+          </template>
+        </el-table-column>
         <div slot="empty" class="table_empty">
-          <img src="../../../../assets/images/table_empty.png" alt="失败">
-          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addPackbuy', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
+          <img src="../../../assets/images/table_empty.png" alt="失败">
+          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addPackage', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
         </div>
       </el-table>
       <div class="multiple_selection" v-if="tableData.length">
@@ -71,7 +76,7 @@ import tableBase from '@/components/TableBase';
 import utils from "@/utils";
 import { getToken } from '@/system/auth'
 export default {
-  name: "dialogSelectNyuan",
+  name: "dialogSelectPackage",
   extends: tableBase,
   components: {DialogBase},
   props: {
@@ -135,7 +140,7 @@ export default {
         tempForm.name = '';
         this.ruleForm.name = '';
       }
-      this._apis.shop.getNyuanList(loadAll? tempForm: this.ruleForm).then((response)=>{
+      this._apis.shop.getDiscountPackageList(loadAll? tempForm: this.ruleForm).then((response)=>{
         this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
@@ -153,11 +158,11 @@ export default {
       this.fetch()
     },
 
+
     /* 向父组件提交选中的数据 */
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
-
     itemSelectable(row, index) {
       if(row.status !== 2) {
         return true;
@@ -208,5 +213,8 @@ export default {
     p{
       width: calc(100% - 50px);
     }
+}
+/deep/.el-table__empty-block{
+  width:initial!important;
 }
 </style>

@@ -130,7 +130,7 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectSecondkill from '@/views/shop/dialogs/decorateDialogs/dialogSelectSecondkill';
+import dialogSelectSecondkill from '@/components/Decorate/dialogs/dialogSelectSecondkill';
 export default {
   name: 'propertySecondkill',
   mixins: [mixinPropsData],

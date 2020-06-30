@@ -11,7 +11,7 @@
 <script>
 import utils from "@/utils";
 import Decorate from '@/components/Decorate';
-import dialogDecoratePreview from '@/views/shop/dialogs/decorateDialogs/dialogDecoratePreview';
+import dialogDecoratePreview from '@/components/Decorate/dialogs/dialogDecoratePreview';
 import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
 import widget from '@/components/Decorate/config/widgetConfig';
 export default {

@@ -129,7 +129,7 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectNyuan from '@/views/shop/dialogs/decorateDialogs/dialogSelectNyuan';
+import dialogSelectNyuan from '@/components/Decorate/dialogs/dialogSelectNyuan';
 export default {
   name: 'propertyNyuan',
   mixins: [mixinPropsData],

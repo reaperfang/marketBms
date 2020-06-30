@@ -147,7 +147,7 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectGoodsGroup from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoodsGroup';
+import dialogSelectGoodsGroup from '@/components/Decorate/dialogs/dialogSelectGoodsGroup';
 export default {
   name: 'propertyGoodsGroup',
   mixins: [mixinPropsData],

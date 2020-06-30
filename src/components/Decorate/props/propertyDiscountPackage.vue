@@ -128,7 +128,7 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectPackage from '@/views/shop/dialogs/decorateDialogs/dialogSelectPackage';
+import dialogSelectPackage from '@/components/Decorate/dialogs/dialogSelectPackage';
 export default {
   name: 'propertyDiscountPackage',
   mixins: [mixinPropsData],

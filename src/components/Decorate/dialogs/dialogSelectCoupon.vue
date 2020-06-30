@@ -1,10 +1,10 @@
-/* 选择优惠套装弹框 */
+/* 选择优惠券弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套装'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠券'" @submit="submit">
     <div class="head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
         <el-form-item label="" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入套餐名称" clearable></el-input>
+          <el-input v-model="ruleForm.name" placeholder="请输入优惠券名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="" prop="name">
           <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜  索</el-button>
@@ -13,43 +13,42 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table
-      stripe
-      :data="tableData"
-      :row-key="getRowKey"
-      ref="multipleTable"
-      @selection-change="handleSelectionChange"
-      v-loading="loading">
+    <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :row-key="getRowKey">
         <el-table-column
-          type="selection"  
+          type="selection"
           :selectable="itemSelectable"
           :reserve-selection="true"
-          width="30">
+          width="55">
         </el-table-column>
-        <el-table-column prop="name" label="优惠活动标题" :width="300">
+        <el-table-column prop="name" label="优惠券名称"></el-table-column>
+        <el-table-column prop="goodsType" label="适用商品">
+           <template slot-scope="scope">
+            {{scope.row.goodsType === 0 ? '全部' : '指定商品'}} 
+          </template>
+        </el-table-column>  <!-- 0是全部  1是指定商品 -->
+        <el-table-column prop="" label="优惠内容">
           <template slot-scope="scope">
-            <div class="name_wrapper">
-              <img :src="scope.row.activityPic" alt="失败">
-              <p>{{scope.row.name}}</p>
-            </div>
+            <span v-if="scope.row.useCondition > -1">满{{scope.row.useCondition}},减{{scope.row.useTypeFullcut}}</span>
+            <span v-else>减{{scope.row.useTypeFullcut}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="packagePrice" label="套餐价格"></el-table-column>
-         <el-table-column prop="status" label="状态" :width="70">  <!-- 0是未生效  1是生效中 2是已失效-->
+        <!-- <el-table-column prop="receiveLimitCount" label="领取人限制"></el-table-column> -->
+        <el-table-column prop="receiveLimitCount" label="限领次数">
+           <template slot-scope="scope">
+            {{scope.row.receiveLimitCount >-1 ? scope.row.receiveLimitCount : '无限制'}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="remainStock" label="剩余库存"></el-table-column>
+        <el-table-column prop="status" label="状态">  <!-- 0是未生效  1是生效中 2是已失效-->
            <template slot-scope="scope">
             <span v-if="scope.row.status === 0">未生效</span>
             <span v-else-if="scope.row.status === 1">生效中</span>
             <span v-else-if="scope.row.status === 2">已失效</span>
           </template>
         </el-table-column>
-        <el-table-column prop="" label="活动时间">
-          <template slot-scope="scope">
-            {{scope.row.startTime}} 至 {{scope.row.endTime}}
-          </template>
-        </el-table-column>
         <div slot="empty" class="table_empty">
-          <img src="../../../../assets/images/table_empty.png" alt="失败">
-          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addPackage', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
+          <img src="../../../assets/images/table_empty.png" alt="">
+          <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addCoupon', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
         </div>
       </el-table>
       <div class="multiple_selection" v-if="tableData.length">
@@ -74,9 +73,8 @@
 import DialogBase from "@/components/DialogBase";
 import tableBase from '@/components/TableBase';
 import utils from "@/utils";
-import { getToken } from '@/system/auth'
 export default {
-  name: "dialogSelectPackage",
+  name: "dialogSelectCoupon",
   extends: tableBase,
   components: {DialogBase},
   props: {
@@ -93,12 +91,10 @@ export default {
   data() {
     return {
       pageSize: 5,
-      tableData: [],
-      multipleSelection: [],
-      pageNum: 1,
       ruleForm: {
         pageNum: 1,
         name: '',
+        couponType: 0
       },
       rules: {},
       disableStatus: [2]  //不可选状态值
@@ -129,8 +125,6 @@ export default {
       })
     })
   },
-  mounted() {
-  },
   methods: {
     fetch(ev, loadAll) {
       this.loading = true;
@@ -140,7 +134,7 @@ export default {
         tempForm.name = '';
         this.ruleForm.name = '';
       }
-      this._apis.shop.getDiscountPackageList(loadAll? tempForm: this.ruleForm).then((response)=>{
+      this._apis.shop.getCouponList(loadAll? tempForm: this.ruleForm).then((response)=>{
         this.tableData = response.list;
         this.total = response.total;
         this.loading = false;
@@ -158,16 +152,17 @@ export default {
       this.fetch()
     },
 
-
     /* 向父组件提交选中的数据 */
     submit() {
       this.$emit('dialogDataSelected',  this.multipleSelection);
     },
+
     itemSelectable(row, index) {
       if(row.status !== 2) {
         return true;
       }
     },
+
     getRowKey(row) {
       return row.id
     },
@@ -197,24 +192,5 @@ export default {
 /deep/ thead th{
   background: rgba(230,228,255,1)!important;
   color:#837DFF!important;
-}
-.name_wrapper{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    img{
-      width: 50px;
-      height: 50px;
-      display: block;
-      margin-right: 10px;
-      border: 1px solid #ddd;
-      object-fit: contain;
-    }
-    p{
-      width: calc(100% - 50px);
-    }
-}
-/deep/.el-table__empty-block{
-  width:initial!important;
 }
 </style>

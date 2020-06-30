@@ -89,7 +89,7 @@
 
 <script>
 import mixinPropsBase from '../mixins/mixinPropsBase';
-import dialogGoodsSearchDemo from '@/views/shop/dialogs/decorateDialogs/dialogGoodsSearchDemo';
+import dialogGoodsSearchDemo from '@/components/Decorate/dialogs/dialogGoodsSearchDemo';
 export default {
   name: 'propertyGoodsSearch',
   mixins: [mixinPropsBase],

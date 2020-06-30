@@ -130,7 +130,7 @@
 
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
-import dialogSelectDiscount from '@/views/shop/dialogs/decorateDialogs/dialogSelectDiscount';
+import dialogSelectDiscount from '@/components/Decorate/dialogs/dialogSelectDiscount';
 export default {
   name: 'propertyDiscount',
   mixins: [mixinPropsData],

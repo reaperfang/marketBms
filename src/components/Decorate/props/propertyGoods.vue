@@ -139,7 +139,7 @@
 <script>
 import mixinPropsData from '../mixins/mixinPropsData';
 import DialogBase from "@/components/DialogBase";
-import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
+import dialogSelectGoods from '@/components/Decorate/dialogs/dialogSelectGoods';
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
 export default {
   name: 'propertyGoods',

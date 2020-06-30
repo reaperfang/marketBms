@@ -2,7 +2,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="(baseInfo.name || '页面名称') + '预览'">
     <div class="preview_wrapper">
-      <editView :dragable="false" :height="1000"></editView>
+      <renderView :dragable="false" :height="1000"></renderView>
       <div class="shop_info">
         <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
         <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
@@ -18,11 +18,11 @@
 
 <script>
 import DialogBase from "@/components/DialogBase";
-import editView from "@/components/Decorate/editView";
+import renderView from "@/components/Decorate/renderView";
 import utils from "@/utils";
 export default {
   name: "dialogDecoratePreview",
-  components: {DialogBase, editView},
+  components: {DialogBase, renderView},
   props: {
       data: {},
       dialogVisible: {

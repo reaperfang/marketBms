@@ -57,7 +57,7 @@
       </el-table-column> -->
       <el-table-column prop="startTime" label="创建时间"></el-table-column>
       <div slot="empty" class="table_empty">
-        <img src="../../../../assets/images/table_empty.png" alt="">
+        <img src="../../../assets/images/table_empty.png" alt="">
         <div class="tips">暂无数据<span @click="utils.addNewApply('/application/promotion/addFullreduce', 3)">去创建？</span><i>创建后，请回到此页面选择数据</i></div>
       </div>
     </el-table>
