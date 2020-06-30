@@ -132,6 +132,7 @@
         // this.qrcode()
 			},
 			apply() {
+			  if(this.disabled) return;
 				this.confirm({
 					title: '提示',
 					customClass: 'goods-custom',

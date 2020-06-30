@@ -102,6 +102,15 @@ export default {
     /* 模板是否已过期 */
     fetchTemplateStatus() {
       this._apis.shop.getTemplateInfo({pageTemplateId: this.id}).then(res => {
+        if(res && res.templateStatus === 2){ // 已下架
+          this.confirm({
+            title: '提示',
+            icon: true,
+            showCancelButton: false,
+            confirmText: '我知道了',
+            text: `模板已下架`
+          });
+        }
         if(res && res.status === 2){ // 已过期2
           this.confirm({
             title: '提示',
