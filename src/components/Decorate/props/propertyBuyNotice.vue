@@ -28,7 +28,7 @@
        <el-form-item label="公告商品" prop="goods">
         <div class="goods_list">
           <ul>
-            <li v-for="(item, key) of ruleForm.displayList" :key="key">
+            <li v-for="(item, key) of displayList" :key="key">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -47,11 +47,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
 export default {
   name: 'propertyBuyNotice',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectGoods},
   data () {
     return {
@@ -62,8 +62,9 @@ export default {
         backgroundColor: 'rgb(255,248,233)',//背景颜色
         fontColor: 'rgb(102,102,102)',//字体颜色
         ids: [],//商品id列表
-        displayList: []
+        showFakeData: false
       },
+      displayList: [],
       rules: {
 
       },
@@ -72,9 +73,7 @@ export default {
       currentDialog: ''
     }
   },
-  created() {
-    this.fetch(false);
-  },
+
   watch: {
     'items': {
       handler(newValue) {
@@ -97,6 +96,12 @@ export default {
         }
       },
       deep: true
+    },
+    displayList: {
+      handler(newValue, oldValue) {
+        this.ruleForm.showFakeData = !newValue.length;
+      },
+      deep: true
     }
   },
   methods: {
@@ -115,17 +120,17 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.displayList = [];
+                this.displayList = [];
                 this.loading = false;
             });
           }else{
-            this.ruleForm.displayList = [];
+            this.displayList = [];
           }
         }
     },
       /* 创建数据 */
     createList(datas) {
-      this.ruleForm.displayList = datas;
+      this.displayList = datas;
     },
   }
 }

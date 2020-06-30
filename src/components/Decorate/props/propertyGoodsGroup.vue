@@ -11,7 +11,7 @@
         </div>
         <div class="goods_groups">
           <el-tag
-            v-for="(tag, key) in ruleForm.displayList"
+            v-for="(tag, key) in displayList"
             :key="key"
             closable
             type="success" @close="deleteItem(tag)">
@@ -141,16 +141,16 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="ruleForm.displayList"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="displayList"></component>
   </el-form>
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectGoodsGroup from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoodsGroup';
 export default {
   name: 'propertyGoodsGroup',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectGoodsGroup},
   data () {
     return {
@@ -172,8 +172,9 @@ export default {
         buttonStyle: 1,//购买按钮样式
         ids: [],//商品分类列表 
         buttonText: '加入购物车',//按钮文字
-        displayList: {}
+        showFakeData: false
       },
+      displayList: {},
       rules: {
 
       },
@@ -181,9 +182,6 @@ export default {
       currentDialog: '',
 
     }
-  },
-  created() {
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -209,6 +207,21 @@ export default {
       if(this.ruleForm.showTemplate == 2 && [2,4,5].includes(newValue) && ![2,4,5].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
+    },
+
+    displayList: {
+      handler(newValue, oldValue) {
+        if(newValue) {
+          if(Object.prototype.toString.call(newValue) === '[object Object]') {
+            this.ruleForm.showFakeData = !Object.keys(newValue).length;
+          }else if(Array.isArray(newValue)) {
+            this.ruleForm.showFakeData = !newValue.length;
+          }
+        }else {
+          this.ruleForm.showFakeData = true;
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -223,7 +236,7 @@ export default {
               ids.push(item);
             }
             if(!ids.length) {
-              this.ruleForm.displayList = {};
+              this.displayList = {};
               return;
             }
             this.loading = true;
@@ -235,27 +248,23 @@ export default {
                     goods: this.ruleForm.ids[item.id]
                   };
                 }
-                this.ruleForm.displayList = data;
+                this.displayList = data;
                 this.syncToMiddle('goods');
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.displayList = {};
+                this.displayList = {};
                 this.loading = false;
             });
       }
       }
     },
 
-     /* 删除数据项 */
+     /* 删除数据项  覆盖mixin里面的逻辑 */
     deleteItem(item) {
-      if(item.fakeData) {  //如果是假数据
-        this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
-        return;
-      }
-      const tempItems = {...this.ruleForm.displayList};
+      const tempItems = {...this.displayList};
       delete tempItems[item.catagoryData.id];
-      this.ruleForm.displayList = tempItems;
+      this.displayList = tempItems;
       this.items = tempItems;
     },
 

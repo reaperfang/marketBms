@@ -61,11 +61,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 export default {
   name: 'propertyText',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectJumpPage},
   data () {
     return {

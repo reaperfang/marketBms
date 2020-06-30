@@ -10,7 +10,7 @@
       <el-form-item label="选择商品" v-if="ruleForm.source === 1" prop="goods">
         <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of ruleForm.displayList" :key="key" :title="item.name">
+            <li v-for="(item, key) of displayList" :key="key" :title="item.name">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -137,13 +137,13 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
 export default {
   name: 'propertyGoods',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {DialogBase, dialogSelectGoods, goodsGroup},
   data () {
     return {
@@ -164,8 +164,9 @@ export default {
         ids: [],//商品id列表
         currentCatagoryId: '',  //选中的商品分类id
         buttonText: '加入购物车',
-        displayList: []
+        showFakeData: false
       },
+      displayList: [],
       rules: {
 
       },
@@ -180,7 +181,6 @@ export default {
   },
   created() {
     this.fetchCatagoryDetail();
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -233,6 +233,13 @@ export default {
         }
       },
       deep: true
+    },
+
+    displayList: {
+      handler(newValue, oldValue) {
+        this.ruleForm.showFakeData = !newValue.length;
+      },
+      deep: true
     }
   },
   methods: {
@@ -259,26 +266,26 @@ export default {
                    if(Object.prototype.toString.call(ids) === '[object Object]') {
                         params = this.setGroupGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.ruleForm.displayList = [];
+                            this.displayList = [];
                             return;
                         }
                     }else if(Array.isArray(ids) && ids.length){
                         params = this.setNormalGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.ruleForm.displayList = [];
+                            this.displayList = [];
                             return;
                         }
                     }else{
-                      this.ruleForm.displayList = [];
+                      this.displayList = [];
                         return;
                     }
                 }else{
-                      this.ruleForm.displayList = [];
+                      this.displayList = [];
                     return;
                 }
             }else if(componentData.source === 2){
               if(!this.ruleForm.currentCatagoryId) {
-                this.ruleForm.displayList = [];
+                this.displayList = [];
                 return;
               }
               params = {
@@ -293,7 +300,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.displayList = [];
+                this.displayList = [];
                 this.loading = false;
             });
         }
@@ -301,7 +308,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      this.ruleForm.displayList = datas;
+      this.displayList = datas;
       if(this.currentComponentData.data.source === 2) {
           this.syncToMiddle('goodsListOfGroupChange', datas);
       }

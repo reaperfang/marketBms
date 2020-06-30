@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';;
+import mixinPropsBase from '../mixins/mixinPropsBase';;
 export default {
   name: 'propertyHelpBlank',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {},
   data () {
     return {

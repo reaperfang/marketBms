@@ -7,7 +7,7 @@
           <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
         </div>
 
-        <div class="reduction"  v-for="(item, key) in list" :key="key"  v-else>
+        <div class="reduction"  v-for="(item, key) in displayList" :key="key"  v-else>
           <div class="reduction_first">
             <span>减</span>
             <span>{{item.name}}</span>
@@ -35,21 +35,18 @@
 </template>
 
 <script>
-import componentMixin from "../mixins/mixinComps";
+import mixinCompsData from "../mixins/mixinCompsData";
 export default {
   name: "componentFullReduction",
-  mixins: [componentMixin],
+  mixins: [mixinCompsData],
   components: {},
   data() {
     return {
       allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
-      list: [],
+      displayList: [],
       loading: false,
       showFakeData: true
     };
-  },
-  created() {
-    this.fetch();
   },
   watch: {
     'currentComponentData.data.ids': {
@@ -60,7 +57,7 @@ export default {
         },
         deep: true
     },
-    'list': {
+    'displayList': {
         handler(newValue) {
             this.showFakeData = !newValue.length;
         },
@@ -74,7 +71,7 @@ export default {
     /* 检测是否有数据 */
     hasContent() {
         let value = false;
-        if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
+        if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
             value = true;
         }
         return value;
@@ -101,18 +98,18 @@ export default {
                   this.loading = false;
               }).catch((error)=>{
                   console.error(error);
-                  this.list = [];
+                  this.displayList = [];
                   this.loading = false;
               });
           }else{
-              this.list = [];
+              this.displayList = [];
           }
       }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.list = datas;
+        this.displayList = datas;
         this.allLoaded = true;
     },
   }

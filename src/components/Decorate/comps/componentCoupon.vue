@@ -10,7 +10,7 @@
       <div class="coupon_first componentCoupon" v-else>
         <ul ref="scrollContent" class="clearfix">
           <!-- status:true时候是已领取,hideScrambled:false, -->
-          <template v-for="(item, key) in list">
+          <template v-for="(item, key) in displayList">
             <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
               <div class="first_money">
                 <span :class="style1">{{getTitle(item)}}</span>
@@ -30,21 +30,18 @@
 
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
   name: 'componentCoupon',
-  mixins:[componentMixin],
+  mixins:[mixinCompsData],
   components: {},
   data () {
     return {
       allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
-      list: [],
+      displayList: [],
       loading: false,
       showFakeData: true
     }
-  },
-  created() {
-    this.fetch();
   },
   computed: {
     style1() {
@@ -85,7 +82,7 @@ export default {
      /* 检测是否有数据 */
     hasContent() {
         let value = false;
-        if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
+        if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
             value = true;
         }
         return value;
@@ -100,7 +97,7 @@ export default {
       if(newValue == 2) {
         this.fetch();
       }else{
-        this.list = [];
+        this.displayList = [];
         this.fetch();
       }
     },
@@ -135,7 +132,7 @@ export default {
         },
         deep: true
     },
-    'list': {
+    'displayList': {
         handler(newValue) {
             this.showFakeData = !newValue.length;
         },
@@ -165,7 +162,7 @@ export default {
                   ids: componentData.ids
                 };
               }else{
-                this.list = [];
+                this.displayList = [];
                 return;
               }
             }
@@ -177,13 +174,13 @@ export default {
             }
 
             this.loading = true;
-            this.list = [];
+            this.displayList = [];
             this._apis.shop.getCouponListByIds(params).then((response)=>{
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.displayList = [];
                 this.loading = false;
             });
         }
@@ -191,10 +188,10 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-       this.list = datas;
+       this.displayList = datas;
        this.allLoaded = true;
        this.$nextTick(()=>{
-          let width = (this.list.length + 1) * (128 + 10);
+          let width = (this.displayList.length + 1) * (128 + 10);
           if(this.$refs.scrollContent) {
             this.$refs.scrollContent.style.width = width + "px";  
           }

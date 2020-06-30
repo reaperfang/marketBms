@@ -18,10 +18,10 @@
     </div>
 </template>
 <script> 
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
     name:"componentGoodsSearch",
-    mixins:[componentMixin],
+    mixins:[mixinCompsBase],
     data(){
         return{
             "hotWords": [

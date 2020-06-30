@@ -12,7 +12,7 @@
         <li class="ellipsis">
           <div class="nwwest-roll" id="nwwest-roll">
             <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
-              <li ref="rollul" v-for="(item, key) in list" :key="key" class="ellipsis" :class="{anim:animate===true}">
+              <li ref="rollul" v-for="(item, key) in displayList" :key="key" class="ellipsis" :class="{anim:animate===true}">
                 <img :src="item.member" alt="">
                 <span class="name">{{item.content}}</span>
               </li>
@@ -26,23 +26,20 @@
 </template>
 
 <script>
-import componentMixin from "../mixins/mixinComps";
+import mixinCompsData from "../mixins/mixinCompsData";
 export default {
   name: "componentBuyNotice",
-  mixins: [componentMixin],
+  mixins: [mixinCompsData],
   components: {},
   data() {
     return { 
       allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       animate: true, 
-      list: [],
+      displayList: [],
       timer: null ,
       loading: false,
       showFakeData: true
     };
-  },
-  created() {
-    this.fetch();
   },
   watch: {
     'currentComponentData.data.ids': {
@@ -53,7 +50,7 @@ export default {
           },
           deep: true
       },
-    'list': {
+    'displayList': {
         handler(newValue) {
             this.showFakeData = !newValue.length;
         },
@@ -62,14 +59,17 @@ export default {
   },
   methods: {
     scroll() {
+      if(!this.$refs.rollul) {
+        return;
+      }
       let con1 = this.$refs.rollul;
       if (con1.length>0) {
         con1[0].style.marginTop = "30px";
         this.animate = !this.animate;
         var that = this; // 在异步函数中会出现this的偏移问题，此处一定要先保存好this的指向
         setTimeout(function() {
-          that.list.push(that.list[0]);
-          that.list.shift();
+          that.displayList.push(that.displayList[0]);
+          that.displayList.shift();
           con1[0].style.marginTop = "0px";
           that.animate = !that.animate; // 这个地方如果不把animate 取反会出现消息回滚的现象，此时把ul 元素的过渡属性取消掉就可以完美实现无缝滚动的效果了
         }, 0);
@@ -88,18 +88,18 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.displayList = [];
                 this.loading = false;
             });
           }else{
-            this.list = [];
+            this.displayList = [];
           }
         }
     },
 
       /* 创建数据 */
     createList(datas) {
-      this.list = datas;
+      this.displayList = datas;
       this.allLoaded = true;
     },
 

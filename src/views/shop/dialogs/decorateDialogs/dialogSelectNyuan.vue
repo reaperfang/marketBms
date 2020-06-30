@@ -120,9 +120,7 @@ export default {
   created() {
     this.goodsList.forEach((row, index) => {
       this.$nextTick(() => {
-        if(!row.fakeData) {  //假数据不允许添加选中状态
-          this.$refs.multipleTable.toggleRowSelection(row, true);
-        }
+        this.$refs.multipleTable.toggleRowSelection(row, true);
       })
     })
   },
@@ -172,7 +170,7 @@ export default {
      /* 清除失效数据 */
     clearInvalidData() {
       this.tableData.forEach((row, index) => {
-        if(!row.fakeData && row.status === 2) {  //假数据不允许添加选中状态
+        if(row.status === 2) {  //假数据不允许添加选中状态
           this.$refs.multipleTable.toggleRowSelection(row, false);
         }
       })

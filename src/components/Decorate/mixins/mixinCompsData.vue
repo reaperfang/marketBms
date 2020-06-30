@@ -1,42 +1,28 @@
 <script>
-import componentEmpty from '../tools/componentEmpty';
 import componentButton from '../tools/componentButton';
+import mixinCompsBase from './mixinCompsBase';
 export default {
   name: "componentMixin",
-  components: {componentEmpty, componentButton},
-  props: ["data"],
+  extends: mixinCompsBase,
+  components: {componentButton},
   data() {
     return {
-      allLoaded: true,  //全部加载完成
       events: []  //事件列表
     }
   },
-  computed: {
-    currentComponentId() {
-      return this.data.id;
-    },
-    componentDataMap() {
-      return this.$store.getters.componentDataMap || {};
-    },
-    currentComponentData() {
-      return this.componentDataMap[this.currentComponentId] || {};
-    }
-  },
   created(){
+      this.fetch();
       this.receivePropDataChange('', (componentData)=>{
         this.fetch(componentData);
       });
       this.decoration && this.decoration();
   },
+  mounted() {
+        this.decoration && this.decoration();
+  },
   watch: {
       currentComponentData(){
          this.decoration && this.decoration();
-      },
-      allLoaded (newValue) {
-        this.$emit("loadStatusChange", {
-          id: this.data.id,
-          loadStatus: newValue
-        });
       }
   },
   methods: {

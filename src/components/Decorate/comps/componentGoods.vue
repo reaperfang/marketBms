@@ -17,7 +17,7 @@
             </ul>
 
             <ul  v-else>
-                <li v-for="(item,key) in list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                <li v-for="(item,key) in displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img" >
                         <div class="imgAbsolute">
                             <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -41,10 +41,10 @@
     </div>
 </template>
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
     name:"componentGoods",
-    mixins:[componentMixin],
+    mixins:[mixinCompsData],
     props: ['currentCatagoryId', 'origin'],
     data(){
         return{
@@ -69,7 +69,7 @@ export default {
             // 上拉加载
             goodListLoading: false,
             goodListFinished: false,
-            list: [],
+            displayList: [],
             loading: false,
             showFakeData: true
         }
@@ -78,17 +78,10 @@ export default {
         const _self = this;
         this.$store.dispatch('getShopStyle');
         this.receivePropDataChange('goodsListOfGroupChange', (list) => {
-            this.list = list;
+            this.displayList = list;
         });
-        this.fetch();
-    },
-    mounted() {
-        this.decoration();
     },
     watch: {
-        currentComponentData(newValue, oldValue){
-            this.decoration();
-        },
         'currentComponentData.data.ids': {
             handler(newValue, oldValue) {
                 if(!Array.isArray(newValue)) {
@@ -119,7 +112,7 @@ export default {
                 this.fetch();
             }
         },
-        'list': {
+        'displayList': {
             handler(newValue) {
                 this.showFakeData = !newValue.length;
             },
@@ -130,7 +123,7 @@ export default {
          /* 检测是否有数据 */
         hasContent() {
             let value = false;
-            if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
+            if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
                value = true;
             }
             return value;
@@ -239,26 +232,26 @@ export default {
                         if(Object.prototype.toString.call(ids) === '[object Object]') {
                             params = this.setGroupGoodsParams(ids);
                             if(!params.ids || !params.ids.length) {
-                                this.list = [];
+                                this.displayList = [];
                                 return;
                             }
                         }else if(Array.isArray(ids) && ids.length){
                             params = this.setNormalGoodsParams(ids);
                             if(!params.ids || !params.ids.length) {
-                                this.list = [];
+                                this.displayList = [];
                                 return;
                             }
                         }else{
-                            this.list = [];
+                            this.displayList = [];
                             return;
                         }
                     }else{
-                        this.list = [];
+                        this.displayList = [];
                         return;
                     }
                 }else if(componentData.source === 2){
                     if(!componentData.currentCatagoryId) {
-                        this.list = [];
+                        this.displayList = [];
                         return;
                     }
                     params = {
@@ -273,7 +266,7 @@ export default {
                     this.loading = false;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
+                    this.displayList = [];
                     this.loading = false;
                 });
             }
@@ -281,7 +274,7 @@ export default {
 
         /* 创建数据 */
         createList(datas, componentData) {
-            this.list = datas;
+            this.displayList = datas;
             this.allLoaded = true;
         },
 

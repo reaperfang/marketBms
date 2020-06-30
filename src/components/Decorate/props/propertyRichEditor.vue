@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';;
+import mixinPropsBase from '../mixins/mixinPropsBase';;
 import RichEditor from '@/components/RichEditor';
 export default {
   name: 'propertyRichEditor',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {RichEditor},
   data () {
     return {

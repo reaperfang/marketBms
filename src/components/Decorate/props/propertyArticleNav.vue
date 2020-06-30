@@ -101,13 +101,13 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleNav',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectJumpPage, dialogSelectImageMaterial, vuedraggable},
   data () {
     return {

@@ -65,7 +65,8 @@ export default {
       decorateData: null,
       pageList: [],  //页面列表
       pageMaps: {},  //页面数据集合
-      decorateRender: false  //装修是否渲染
+      decorateRender: false,  //装修是否渲染
+      templateUnder: false   //模板已下架
     };
   },
   created() {
@@ -95,6 +96,16 @@ export default {
           this.fetch(newValue);
         })
       })
+    },
+
+    templateUnder(newValue) {
+      if(newValue) {  //如果已下架或过期则不显示保存按钮
+        this.config.buttons.saveData.show = () => false;
+        this.config.buttons.saveAndApplyData.show = () => false;
+      }else {
+        this.config.buttons.saveData.show = () => true;
+        this.config.buttons.saveAndApplyData.show = () => true;
+      }
     }
   },
   methods: {
@@ -103,6 +114,7 @@ export default {
     fetchTemplateStatus() {
       this._apis.shop.getTemplateInfo({pageTemplateId: this.id}).then(res => {
         if(res && res.templateStatus === 2){ // 已下架
+          this.templateUnder = true;
           this.confirm({
             title: '提示',
             icon: true,
@@ -112,6 +124,7 @@ export default {
           });
         }
         if(res && res.status === 2){ // 已过期2
+          this.templateUnder = true;
           this.confirm({
             title: '提示',
             icon: true,
@@ -128,6 +141,12 @@ export default {
       this.loading = true;
       this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response) => {
         if (response === null || response === undefined || response === '' || response.length === 0 || !response) {
+          this.$store.commit("clearAllData");
+          this.loading = false
+          return
+        }
+
+        if(this.templateUnder) {
           this.$store.commit("clearAllData");
           this.loading = false
           return
@@ -298,16 +317,11 @@ export default {
 
     /* 检测假数据 */
     checkFakeData(data) {
-      let needFakeDataWidget = [];
-      widget.getNeedFakeDataWidget().forEach((item)=>{
-        needFakeDataWidget.push(item.type);
-      });
 
       for(let item of this.componentDataIds) {
         const componentData = this.componentDataMap[item];
-        if(needFakeDataWidget.includes(componentData.type)) {
-          const list = componentData.data.displayList || componentData.data.list;
-          if(list && !list.length) {
+        if(widget.getNeedFakeDataWidgetTypes().includes(componentData.type)) {
+          if(componentData.data.showFakeData) {
             this.$store.commit('setCurrentComponentId', componentData.id);
             this.$alert(`【${componentData.title} - ${componentData.id.substring(componentData.id.length - 6)}】组件尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
               confirmButtonText: '确定',

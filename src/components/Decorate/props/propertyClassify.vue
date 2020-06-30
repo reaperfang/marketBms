@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import RichEditor from '@/components/RichEditor';
 import DialogBase from "@/components/DialogBase";
 export default {
   name: 'propertyTitle',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {DialogBase, RichEditor},
   data () {
     return {

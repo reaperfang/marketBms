@@ -17,7 +17,7 @@
         </div>
         <div v-loading="loading">
           <el-tag
-            v-for="tag in ruleForm.displayList"
+            v-for="tag in displayList"
             :key="tag.name"
             closable
             style="margin-right:5px;"
@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectFullReduction from '@/views/shop/dialogs/decorateDialogs/dialogSelectFullReduction';
 export default {
   name: 'propertyFullReduction',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectFullReduction},
   data () {
     return {
@@ -53,8 +53,9 @@ export default {
         title: '满减/满折',//显示标题
         displayStyle: 1,//展示样式
         ids: [],//满减满折活动id列表
-        displayList: []
+        showFakeData: false
       },
+      displayList: [],
       loading: false,
       rules: {
 
@@ -63,9 +64,6 @@ export default {
       dialogVisible: false,
       currentDialog: ''
     }
-  },
-  created() {
-    this.fetch(false);
   },
    watch: {
     'items': {
@@ -90,6 +88,13 @@ export default {
         }
       },
       deep: true
+    },
+
+    displayList: {
+      handler(newValue, oldValue) {
+        this.ruleForm.showFakeData = !newValue.length;
+      },
+      deep: true
     }
   },
   methods: {
@@ -107,18 +112,18 @@ export default {
                   this.loading = false;
               }).catch((error)=>{
                   console.error(error);
-                  this.ruleForm.displayList = [];
+                  this.displayList = [];
                   this.loading = false;
               });
           }else{
-              this.ruleForm.displayList = [];
+              this.displayList = [];
           }
       }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.ruleForm.displayList = datas;
+        this.displayList = datas;
     },
   }
 }

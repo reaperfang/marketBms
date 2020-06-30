@@ -17,7 +17,7 @@
         </div>
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
-            v-for="tag in ruleForm.displayList"
+            v-for="tag in displayList"
             :key="tag.title"
             :closable="ruleForm.addType === 1"
             style="margin-right:5px;"
@@ -71,12 +71,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectCoupon from '@/views/shop/dialogs/decorateDialogs/dialogSelectCoupon';
 import wxColor from '@/components/Wxcolor';
 export default {
   name: 'propertyCoupon',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectCoupon, wxColor},
   data () {
     return {
@@ -88,8 +88,9 @@ export default {
         couponColor: 1,//优惠券颜色类型
         hideScrambled: false,//隐藏已抢完券
         ids: [],//优惠券id列表
-        displayList: []
+        showFakeData: false
       },
+      displayList: [],
       rules: {
 
       },
@@ -98,9 +99,6 @@ export default {
       currentDialog: '',
       loading: false
     }
-  },
-  created() {
-    this.fetch(false);
   },
    watch: {
     'items': {
@@ -161,6 +159,13 @@ export default {
         }
       },
       deep: true
+    },
+
+    displayList: {
+      handler(newValue, oldValue) {
+        this.ruleForm.showFakeData = !newValue.length;
+      },
+      deep: true
     }
   },
   methods: {
@@ -188,7 +193,7 @@ export default {
                   ids: componentData.ids
                 };
               }else{
-                this.ruleForm.displayList = [];
+                this.displayList = [];
                 return;
               }
             }
@@ -199,13 +204,13 @@ export default {
             }
 
             this.loading = true;
-            this.ruleForm.displayList = [];
+            this.displayList = [];
             this._apis.shop.getCouponListByIds(params).then((response)=>{
                 this.createList(response);
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.displayList = [];
+                this.displayList = [];
                 this.loading = false;
             });
         }
@@ -213,7 +218,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-       this.ruleForm.displayList = datas;
+       this.displayList = datas;
     },
 
     yuan(value) {

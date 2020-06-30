@@ -250,12 +250,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: 'propertyCube',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectJumpPage, dialogSelectImageMaterial},
   data () {
     return {

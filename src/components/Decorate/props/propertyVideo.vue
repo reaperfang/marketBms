@@ -52,12 +52,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: 'propertyVideo',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectVideo, dialogSelectImageMaterial},
   data () {
     return {

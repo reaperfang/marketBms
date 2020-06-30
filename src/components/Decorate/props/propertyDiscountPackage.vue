@@ -5,7 +5,7 @@
         <p class="prop-message" style="margin: 7px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of ruleForm.displayList" :key="key" :title="item.name">
+            <li v-for="(item, key) of displayList" :key="key" :title="item.name">
               <img :src="item.activityPic" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -127,11 +127,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectPackage from '@/views/shop/dialogs/decorateDialogs/dialogSelectPackage';
 export default {
   name: 'propertyDiscountPackage',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectPackage},
   data () {
     return {
@@ -152,8 +152,9 @@ export default {
         hideType: 2,//隐藏类型
         ids: [],//优惠套装id列表
         buttonText: '查看活动',//按钮文字
-        displayList: []
+        showFakeData: false
       },
+      displayList: [],
       rules: {
 
       },
@@ -163,9 +164,6 @@ export default {
       loading: false
 
     }
-  },
-  created() {
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -197,6 +195,13 @@ export default {
         }
       },
       deep: true
+    },
+
+    displayList: {
+      handler(newValue, oldValue) {
+        this.ruleForm.showFakeData = !newValue.length;
+      },
+      deep: true
     }
   },
   methods: {
@@ -214,18 +219,18 @@ export default {
                     this.loading = false;
                 }).catch((error)=>{
                     console.error(error);
-                    this.ruleForm.displayList = [];
+                    this.displayList = [];
                     this.loading = false;
                 });
             }else{
-                this.ruleForm.displayList = [];
+                this.displayList = [];
             }
         }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.ruleForm.displayList = datas;
+        this.displayList = datas;
     },
   }
 }

@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentHelpLine',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {

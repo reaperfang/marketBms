@@ -7,7 +7,7 @@
  * isBase: 是否是基础组件，用于记录装修页面信息
  * describe： 组件描述
  * needFakeData: 是否需要渲染假数据
- * hiddenWidget: 左侧控件是否隐藏(可在此配置表配置，也可在页面渲染入口异步设置)
+ * hideWidget: 左侧控件是否隐藏(可在此配置表配置，也可在页面渲染入口异步设置，默认为不隐藏)
  */
 export default {
   widgetList: {
@@ -257,6 +257,7 @@ export default {
 
       },
 
+      /* 获取所有控件列表 */
       getWidgetList() {
         const widgetList = [];
         for(let k in this.widgetList){
@@ -267,6 +268,7 @@ export default {
         return widgetList;
     },
 
+    /* 获取需要假数据的控件列表 */
     getNeedFakeDataWidget() {
       const widgetList = [];
         for(let k in this.widgetList){
@@ -277,5 +279,14 @@ export default {
           }
         }
         return widgetList;
+    },
+
+    /* 获取需要假数据的控件类型列表 */
+    getNeedFakeDataWidgetTypes() {
+      let needFakeDataWidget = [];
+      this.getNeedFakeDataWidget().forEach((item)=>{
+        needFakeDataWidget.push(item.type);
+      });
+      return needFakeDataWidget;
     }
 };

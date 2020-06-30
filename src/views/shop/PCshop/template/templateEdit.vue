@@ -57,7 +57,7 @@ export default {
       decorateData: null,
       pageList: [],  //页面列表
       pageMaps: {},  //页面数据集合
-      decorateRender: false  //装修是否渲染
+      decorateRender: false,  //装修是否渲染
     };
   },
   created() {
@@ -229,16 +229,11 @@ export default {
 
     /* 检测假数据 */
     checkFakeData(data) {
-      let needFakeDataWidget = [];
-      widget.getNeedFakeDataWidget().forEach((item)=>{
-        needFakeDataWidget.push(item.type);
-      });
 
       for(let item of this.componentDataIds) {
         const componentData = this.componentDataMap[item];
-        if(needFakeDataWidget.includes(componentData.type)) {
-          const list = componentData.data.displayList || componentData.data.list;
-          if(list && !list.length) {
+        if(widget.getNeedFakeDataWidgetTypes().includes(componentData.type)) {
+          if(componentData.data.showFakeData) {
             this.$store.commit('setCurrentComponentId', componentData.id);
             this.$alert(`【${componentData.title} - ${componentData.id.substring(componentData.id.length - 6)}】组件尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
               confirmButtonText: '确定',

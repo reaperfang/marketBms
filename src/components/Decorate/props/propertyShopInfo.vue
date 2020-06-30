@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: 'propertyShopInfo',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectImageMaterial},
   data () {
     return {

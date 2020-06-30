@@ -5,7 +5,7 @@
         <p class="prop-message" style="margin: 7px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of ruleForm.displayList" :key="key" :title="item.activityName">
+            <li v-for="(item, key) of displayList" :key="key" :title="item.activityName">
               <img :src="item.goodsImgUrl" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
@@ -129,11 +129,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectDiscount from '@/views/shop/dialogs/decorateDialogs/dialogSelectDiscount';
 export default {
   name: 'propertyDiscount',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectDiscount},
   data () {
     return {
@@ -154,8 +154,9 @@ export default {
         hideSaledGoods: false,
         hideEndGoods: false,
         hideType: 2,
-        displayList: []
+        showFakeData: false
       },
+      displayList: [],
       rules: {
 
       },
@@ -164,9 +165,6 @@ export default {
       currentDialog: '',
       loading: false
     }
-  },
-  created() {
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -220,6 +218,13 @@ export default {
         }
       },
       deep: true
+    },
+
+    displayList: {
+      handler(newValue, oldValue) {
+        this.ruleForm.showFakeData = !newValue.length;
+      },
+      deep: true
     }
   },
   methods: {
@@ -263,18 +268,18 @@ export default {
                       this.loading = false;
                   }).catch((error)=>{
                       console.error(error);
-                      this.ruleForm.displayList = [];
+                      this.displayList = [];
                       this.loading = false;
                   });
               }else{
-                  this.ruleForm.displayList = [];
+                  this.displayList = [];
               }
           }
       },
 
       /* 创建数据 */
     createList(datas) {
-      this.ruleForm.displayList = datas;
+      this.displayList = datas;
     },
   }
 }

@@ -15,7 +15,7 @@
             <!-- <div class="scroll_wrapper">
               <div class="scroll_inner clearfix" ref="scrollContent">
                 <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-                <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" 
+                <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" 
                 @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
               </div>
             </div> -->
@@ -42,18 +42,18 @@
             </template>
 
             <template v-if="menuStyle==1">
-              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{color:activeGoodId==item.id?color1:''}">
+              <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{color:activeGoodId==item.id?color1:''}">
                   {{item.name}}
                   <font class="activeLine" :style="{background:color1}"></font>
               </p>
             </template>
             <template v-else-if="menuStyle==2">
-              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+              <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
                   {{item.name}}
               </p>
             </template>
             <template v-else-if="menuStyle==3">
-              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+              <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
                   {{item.name}}
                   <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
                   <font class="activeLine" v-else :style="{borderTop:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
@@ -64,7 +64,7 @@
 
           </div>
           <div class="componentGoodsGroup_content">
-              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? list[0] && list[0].id : 'all'"></componentGoods>
+              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
           </div> 
       </div>
       <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
@@ -72,17 +72,17 @@
 </template>
 <script>
 import componentGoods from './componentGoods';
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
     name:"componentGoodsGroup",
-    mixins:[componentMixin],
+    mixins:[mixinCompsData],
     data() {
       return {
         allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
         // 商品列表
         componentGoodsItemData: {},
         // 商品分类列表
-        list: [],
+        displayList: [],
         // 样式属性
         listStyle: "",
         showAllGroup: "",
@@ -104,11 +104,7 @@ export default {
       componentGoods
     },
     created() {
-      this.fetch();
       this.$store.dispatch('getShopStyle');
-    },
-    mounted() {
-        this.decoration();
     },
     watch: {
       data: {
@@ -130,9 +126,17 @@ export default {
           },
           deep: true
       },
-      'list': {
+      'displayList': {
         handler(newValue) {
-            this.showFakeData = !newValue.length;
+          if(newValue) {
+            if(Object.prototype.toString.call(newValue) === '[object Object]') {
+              this.showFakeData = !Object.keys(newValue).length;
+            }else if(Array.isArray(newValue)) {
+              this.showFakeData = !newValue.length;
+            }
+          }else {
+            this.showFakeData = true;
+          }
         },
         deep: true
     }
@@ -141,7 +145,7 @@ export default {
         /* 检测是否有数据 */
         hasContent() {
             let value = false;
-            if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
+            if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
                value = true;
             }
             return value;
@@ -191,13 +195,13 @@ export default {
                   ids.push(item);
                 }
                 if(!ids.length) {
-                  this.list = [];
+                  this.displayList = [];
                   this.syncToOther('goods', componentData);
                   return;
                 }
                 this.loading = true;
                 this._apis.goods.fetchCategoryList({ids}).then((response)=>{
-                    this.list = response;
+                    this.displayList = response;
                     if(response && response[0] && _self.currentComponentData.data.showAllGroup == 2) {
                       _self.activeGoodId = response[0].id;
                     }else {
@@ -209,7 +213,7 @@ export default {
                     this.allLoaded = true;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
+                    this.displayList = [];
                     this.syncToOther('goods', componentData);
                     this.loading = false;
                 });

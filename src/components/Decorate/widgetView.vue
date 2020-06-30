@@ -11,7 +11,7 @@
               <div v-if="item.spread" class="widget-list">
                 <ul class="tile-list n4">
                   <li v-for="(item2, key2) of item.list" :key="key2" @click="addComponent(item2)" draggable="true" @dragstart="dragAddComponent($event, item2)">
-                    <template v-if="!item2.hiddenWidget">
+                    <template v-if="!item2.hideWidget">
                       <i :class="item2.iconClass"></i>
                       <p>{{item2.title}}</p>
                     </template>

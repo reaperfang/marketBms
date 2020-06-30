@@ -11,7 +11,7 @@
         <div class="goods_list" prop="goods" v-loading="loading">
           <ul>
             <template>
-              <template v-for="(item, key) of ruleForm.displayList">
+              <template v-for="(item, key) of displayList">
                 <li :key="key" :title="item.activeName">
                   <img :src="item.mainImage" alt="">
                   <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
@@ -165,12 +165,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectMultiPerson from '@/views/shop/dialogs/decorateDialogs/dialogSelectMultiPerson';
 import dialogMultiPersonDemo from '@/views/shop/dialogs/decorateDialogs/dialogMultiPersonDemo';
 export default {
   name: 'propertyMultiPerson',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectMultiPerson, dialogMultiPersonDemo},
   data () {
     return {
@@ -196,8 +196,9 @@ export default {
         ids: [],//商品id列表 
         buttonText: '拼团',// 次要按钮文字
         buttonTextPrimary: '开团',//主要按钮文字
-        displayList: []
+        showFakeData: false
       },
+      displayList: [],
       rules: {
 
       },
@@ -206,9 +207,6 @@ export default {
       currentDialog: '',
       loading: false
     }
-  },
-  created() {
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -238,7 +236,7 @@ export default {
         if(newValue == 2) {
           this.fetch();
         }else{
-          this.ruleForm.displayList = [];
+          this.displayList = [];
           this.fetch();
         }
     },
@@ -282,6 +280,13 @@ export default {
             _self.echoList.push({activityId: item.activityId, spuId: item.spuId});
           })
         }
+      },
+      deep: true
+    },
+
+    displayList: {
+      handler(newValue, oldValue) {
+        this.ruleForm.showFakeData = !newValue.length;
       },
       deep: true
     }
@@ -338,7 +343,7 @@ export default {
                         hideStatus: hideStatus
                     };
                 }else{
-                    this.ruleForm.displayList = [];
+                    this.displayList = [];
                     return;
                 }
             }
@@ -349,7 +354,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.ruleForm.displayList = [];
+                this.displayList = [];
                 this.loading = false;
             });
         }
@@ -357,7 +362,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-        this.ruleForm.displayList = datas;
+        this.displayList = datas;
     },
   }
 }

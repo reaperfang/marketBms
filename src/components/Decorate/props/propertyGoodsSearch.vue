@@ -88,11 +88,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogGoodsSearchDemo from '@/views/shop/dialogs/decorateDialogs/dialogGoodsSearchDemo';
 export default {
   name: 'propertyGoodsSearch',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogGoodsSearchDemo},
   data () {
     return {

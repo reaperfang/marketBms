@@ -128,18 +128,13 @@ export default {
     init(pageData, originData) {
       let componentDataIds = [];
       let componentDataMap = {};
-      let needFakeDataWidget = [];
-      widget.getNeedFakeDataWidget().forEach((item)=>{
-        needFakeDataWidget.push(item.type);
-      })
-
 
       //转换为组件顺序表和map数据结构
       for (let item of pageData) {
         componentDataIds.push(item.id);
         componentDataMap[item.id] = item;
-        if(componentDataMap[item.id]['data'] && needFakeDataWidget.includes(componentDataMap[item.id].type)) {
-          componentDataMap[item.id]['data']['displayList'] = [];
+        if(componentDataMap[item.id]['data'] && widget.getNeedFakeDataWidgetTypes().includes(componentDataMap[item.id].type)) {
+          componentDataMap[item.id]['data']['showFakeData'] = true;
         }
         if(item.isBase) {  //设置为基础信息组件
           this.$store.commit('setBasePropertyId', item.id);

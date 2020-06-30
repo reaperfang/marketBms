@@ -16,7 +16,7 @@
 
 
             <ul  v-else>
-                <li v-for="(item,key) of list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                <li v-for="(item,key) of displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                     <div class="img_box">
                         <div class="label" v-if="showContents.indexOf('6')!=-1">已售{{item.packageNum}}件</div>
                         <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -65,10 +65,10 @@
 
 </template>
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
     name:"componentNyuan",
-    mixins:[componentMixin],
+    mixins:[mixinCompsData],
     data(){
         return{
             allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
@@ -90,21 +90,12 @@ export default {
             // 自己定义的
             goodWidth:'',
             goodMargin:'',
-            list: [],
+            displayList: [],
             loading: false,
             showFakeData: true
         }
     },
-    created() {
-        this.fetch();
-    },
-    mounted() {
-        this.decoration();
-    },
     watch: {
-      currentComponentData(){
-        this.decoration();
-      },
       'currentComponentData.data.ids': {
             handler(newValue, oldValue) {
                 if(!this.utils.isIdsUpdate(newValue, oldValue)) {
@@ -113,7 +104,7 @@ export default {
             },
             deep: true
         },
-        'list': {
+        'displayList': {
             handler(newValue) {
                 this.showFakeData = !newValue.length;
             },
@@ -124,7 +115,7 @@ export default {
          /* 检测是否有数据 */
         hasContent() {
             let value = false;
-            if((this.list && this.list.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
+            if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
                 value = true;
             }
             return value;
@@ -189,18 +180,18 @@ export default {
                         this.loading = false;
                     }).catch((error)=>{
                         console.error(error);
-                        this.list = [];
+                        this.displayList = [];
                         this.loading = false;
                     });
                 }else{
-                    this.list = [];
+                    this.displayList = [];
                 }
             }
         },
 
         /* 创建数据 */
         createList(datas) {
-            this.list = datas;
+            this.displayList = datas;
             this.allLoaded = true;
         },
 
