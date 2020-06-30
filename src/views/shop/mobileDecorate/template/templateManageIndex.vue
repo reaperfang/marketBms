@@ -2,7 +2,7 @@
 	<div id="templateManage">
 		<el-tabs v-model="currentTab" @tab-click="handleClick">
 			<el-tab-pane label="首页模板" name="homeTemplate"></el-tab-pane>
-			<el-tab-pane label="活动模板" name="activeTemplate"></el-tab-pane>
+			<el-tab-pane label="活动页模板" name="activeTemplate"></el-tab-pane>
 			<el-tab-pane label="我的模板" name="myTemplate"></el-tab-pane>
 			<div class="template-search" v-if="currentTab !== 'myTemplate' ">
 				<el-button class="template-search-reset" @click="resetAndFetch">重 &nbsp;&nbsp; 置</el-button>

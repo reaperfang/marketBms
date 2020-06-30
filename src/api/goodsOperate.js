@@ -130,3 +130,12 @@ export function getEffTemplateList(data) {
 		apiType: 'goodsOperate'
 	})
 }
+
+export function getTemplateIndustries(data) {
+  return request({
+    target: 'PUBLIC-MB-PAGE-TEMPLATE-DETAIL-PROCESSOR',
+    method: 'post',
+    data,
+    apiType: 'goodsOperate'
+  })
+}

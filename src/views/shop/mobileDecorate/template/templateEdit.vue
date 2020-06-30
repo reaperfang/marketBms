@@ -113,24 +113,35 @@ export default {
     /* 模板是否已过期 */
     fetchTemplateStatus() {
       this._apis.shop.getTemplateInfo({pageTemplateId: this.id}).then(res => {
-        if(res && res.templateStatus === 2){ // 已下架
+        if (res) {
+          if (res.templateStatus === 2) { // 已下架
+            this.templateUnder = true;
+            this.confirm({
+              title: '提示',
+              icon: true,
+              showCancelButton: false,
+              confirmText: '我知道了',
+              text: `模板已下架`
+            });
+          }
+          if (res.status === 2) { // 已过期2
+            this.templateUnder = true;
+            this.confirm({
+              title: '提示',
+              icon: true,
+              showCancelButton: false,
+              confirmText: '我知道了',
+              text: `模板已过期`
+            });
+          }
+        } else {  // res == null，未购买 / 不在我的模板里
           this.templateUnder = true;
           this.confirm({
             title: '提示',
             icon: true,
             showCancelButton: false,
             confirmText: '我知道了',
-            text: `模板已下架`
-          });
-        }
-        if(res && res.status === 2){ // 已过期2
-          this.templateUnder = true;
-          this.confirm({
-            title: '提示',
-            icon: true,
-            showCancelButton: false,
-            confirmText: '我知道了',
-            text: `模板已过期`
+            text: `模板未付费`
           });
         }
       })

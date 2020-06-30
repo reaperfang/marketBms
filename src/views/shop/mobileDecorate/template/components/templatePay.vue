@@ -11,15 +11,18 @@
 				<div class="templage-pay-content-right-title">
 					{{tempInfo.name}}
 				</div>
-<!--				<div class="templage-pay-content-right-industry">-->
-<!--					水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬水果生蔬-->
-<!--				</div>-->
+				<div class="templage-pay-content-right-industry">
+          <template v-if="industriesNames.length">
+            <span v-for="(industry, index) in industriesNames" :key="index">  {{industry.name}}  </span>
+          </template>
+          <template v-else> 暂无所属行业 </template>
+				</div>
 				<div class="templage-pay-content-right-scope">
 					<img src="@/assets/images/shop/xiaochengxu.png"/><img src="@/assets/images/shop/weixin.png"/>
 				</div>
 				<div class="templage-pay-content-right-price">
 					<span class="templage-pay-content-right-price-left">
-						一口价：
+						{{tempInfo.chargeType === 2 ? '一口价' : chargeTypeConstant[tempInfo.chargeType]}}:
 					</span>
 					<span class="templage-pay-content-right-price-right">
 						￥{{tempInfo.price}}元
@@ -44,127 +47,144 @@
 </template>
 
 <script>
-	import QRCode from 'qrcodejs2'
-    export default {
-        name: "templatePay",
-		props: {
-			dialogVisible: {
-				type: Boolean,
-				default () {
-					return false
-				}
-			},
-			tempInfo: {
-				type: Object,
-				default () {
-					return {}
-				}
-			},
-			qrCodeInfo: {
-				type: Object,
-				default () {
-					return ''
-				}
-			}
-		},
-		data() {
-        	return {
-				time: 0,
-				timeInterval: '',
-				intervalFlag: false,
-				disabled: true
-			}
-		},
-		methods: {
-			handleClose() {
-				this.dialogVisible = false
-			},
-			qrcode() {
-				let qrcode = new QRCode('qrcode',{
-					width: 150, // 设置宽度，单位像素
-					height: 150, // 设置高度，单位像素
-					text: this.qrCodeInfo.billQRCode // 设置二维码内容或跳转地址
-				})
-				this.time = 0
-				this.disabled = true
-				this.intervalFlag = true
-				this.getPayInfo()
-			},
-			getPayInfo() {
-				let that = this
-				this.timeInterval = window.setTimeout(function () {
-					that._apis.templatePay.getPayInfo({
-						billDate: that.qrCodeInfo.billDate,
-						billNo: that.qrCodeInfo.billNo,
-						orderCode: that.qrCodeInfo.orderCode
-					}).then(res => {
-						if (res.orderStatus === 1 && that.intervalFlag && that.time < 60) {
-							that.time = that.time + 3
-							that.getPayInfo()
-						} else if (res.orderStatus === 2){
-							that.disabled = false
-							that.time = 0
-							that.intervalFlag = true
-							window.clearTimeout(that.timeInterval)
-							that.confirm({
-								title: '支付成功',
-								icon: true,
+  import QRCode from 'qrcodejs2'
+  import templateConstant from '@/system/constant/template';
+  export default {
+    name: "templatePay",
+    props: {
+      dialogVisible: {
+        type: Boolean,
+        default() {
+          return false
+        }
+      },
+      tempInfo: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      qrCodeInfo: {
+        type: Object,
+        default() {
+          return ''
+        }
+      }
+    },
+    data() {
+      return {
+        time: 0,
+        timeInterval: '',
+        intervalFlag: false,
+        disabled: true,
+        industriesNames: [], // 需要从模板详情接口获取
+      }
+    },
+    computed: {
+      chargeTypeConstant() {
+        return templateConstant.chargeType
+      },
+    },
+    methods: {
+      handleClose() {
+        this.dialogVisible = false
+      },
+      qrcode() {
+        let qrcode = new QRCode('qrcode', {
+          width: 150, // 设置宽度，单位像素
+          height: 150, // 设置高度，单位像素
+          text: this.qrCodeInfo.billQRCode // 设置二维码内容或跳转地址
+        })
+        this.time = 0
+        this.disabled = true
+        this.intervalFlag = true
+        this.getPayInfo()
+      },
+      getPayInfo() {
+        let that = this
+        this.timeInterval = window.setTimeout(function () {
+          that._apis.templatePay.getPayInfo({
+            billDate: that.qrCodeInfo.billDate,
+            billNo: that.qrCodeInfo.billNo,
+            orderCode: that.qrCodeInfo.orderCode
+          }).then(res => {
+            if (res.orderStatus === 1 && that.intervalFlag && that.time < 60) {
+              that.time = that.time + 3
+              that.getPayInfo()
+            } else if (res.orderStatus === 2) {
+              that.disabled = false
+              that.time = 0
+              that.intervalFlag = true
+              window.clearTimeout(that.timeInterval)
+              that.confirm({
+                title: '支付成功',
+                icon: true,
                 showCancelButton: false,
                 confirmText: '我知道了',
-								text: `支付成功，您的装修模版已经重新启用！`
-							}).then(() => {
-								// that._routeTo('m_templateEdit', {id: item.id});
-							})
-						} else if (that.time > 60) {
-							that.disabled = false
-							that.time = 0
-							that.intervalFlag = false
-							window.clearTimeout(that.timeInterval)
-            //  https://qr.95516.com/48020000/54222006298084224161486027
-						}
-					})
-				}, 3000)
-			},
-			refreshQrCode() {
-				this.time = 0
-				this.intervalFlag = true
-				this.getPayInfo()
+                text: `支付成功，您的装修模版已经重新启用！`
+              }).then(() => {
+                // that._routeTo('m_templateEdit', {id: item.id});
+              })
+            } else if (that.time > 60) {
+              that.disabled = false
+              that.time = 0
+              that.intervalFlag = false
+              window.clearTimeout(that.timeInterval)
+            }
+          })
+        }, 3000)
+      },
+      refreshQrCode() {
+        this.time = 0
+        this.intervalFlag = true
+        this.getPayInfo()
         // this.qrcode()
-			},
-			apply() {
-			  if(this.disabled) return;
-				this.confirm({
-					title: '提示',
-					customClass: 'goods-custom',
-					icon: true,
-					text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
-				}).then(() => {
-					this._routeTo('m_templateEdit', {id: this.tempInfo.id});
-				})
-			},
-			closePay() {
-				this.$emit('closePay')
-			}
-		},
-		watch: {
-            'dialogVisible': function (v) {
-				if (v) {
-					this.$nextTick(() => {
-						this.qrcode()
-					})
-				} else {
-					this.time = 0
-					this.intervalFlag = false
-					this.disabled = true
-					var el = document.getElementById('qrcode');
-					var childs = el.childNodes;
-					for (var i = childs.length - 1; i >= 0; i--) {
-						el.removeChild(childs[i]);
-					}
-				}
-			}
-		}
+      },
+      apply() {
+        if (this.disabled) return;
+        this.confirm({
+          title: '提示',
+          customClass: 'goods-custom',
+          icon: true,
+          text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
+        }).then(() => {
+          this._routeTo('m_templateEdit', {id: this.tempInfo.id});
+        })
+      },
+      closePay() {
+        this.$emit('closePay')
+      },
+
+      /* 获取当前模板所属行业 */
+      getIndustries() {
+        if(!this.tempInfo.id) return;
+         this._apis.goodsOperate.getTemplateIndustries({id: this.tempInfo.id}).then(res => {
+          this.industriesNames = res.industrys;
+        }).catch(error => {
+          console.error(error)
+         })
+      },
+    },
+    watch: {
+      'dialogVisible': function (v) {
+        if (v) {
+          this.$nextTick(() => {
+            this.qrcode();
+            this.getIndustries();
+          })
+        } else {
+          this.time = 0
+          this.intervalFlag = false
+          this.disabled = true
+          var el = document.getElementById('qrcode');
+          var childs = el.childNodes;
+          for (var i = childs.length - 1; i >= 0; i--) {
+            el.removeChild(childs[i]);
+          }
+        }
+      }
     }
+  }
 </script>
 
 <style scoped lang="scss">
@@ -206,66 +226,69 @@
 	&-right {
 		width: 182px;
 		height: 500px;
-		&-title {
-			width:182px;
-			height:16px;
-			font-size:14px;
-			font-family:MicrosoftYaHei;
-			color:rgba(68,67,75,1);
-			line-height:16px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			display: -webkit-box;
-			-webkit-line-clamp: 1;
-			-webkit-box-orient: vertical;
-			word-wrap:break-word;
-		}
-		&-industry {
-			width:182px;
-			height:16px;
-			font-size:12px;
-			font-family:MicrosoftYaHei;
-			color:rgba(146,146,155,1);
-			line-height:16px;
-			margin-top: 10px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			display: -webkit-box;
-			-webkit-line-clamp: 1;
-			-webkit-box-orient: vertical;
-			word-wrap:break-word;
-		}
-		&-scope {
-			width:182px;
-			height:20px;
-			margin-top: 10px;
-			img {
-				margin-right: 10px;
-				width: 20px;
-				height: 20px;
-			}
-		}
-		&-price {
-			width: 182px;
-			height:20px;
-			line-height:20px;
-			&-left {
-				font-size:12px;
-				font-family:MicrosoftYaHei;
-				color:rgba(146,146,155,1);
-			}
-			&-right {
-				font-size:18px;
-				font-family:MicrosoftYaHei;
-				color:rgba(240,80,39,1);
-			}
-		}
+
+    &-title {
+      width: 182px;
+      height: 16px;
+      color: $contentColor;
+      line-height: 14px;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      word-wrap: break-word;
+    }
+
+    &-industry {
+      width: 182px;
+      height: 16px;
+      font-size: 12px;
+      color: $grayColor;
+      line-height: 12px;
+      margin-top: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      word-wrap: break-word;
+    }
+
+    &-scope {
+      width: 182px;
+      height: 20px;
+      margin-top: 10px;
+
+      img {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &-price {
+      width: 182px;
+      height: 20px;
+      line-height: 20px;
+      margin-top: 10px;
+
+      &-left {
+        font-size: 12px;
+        color: $grayColor;
+      }
+
+      &-right {
+        font-size: 18px;
+        color: #F05027;
+      }
+    }
 		&-codeTitle {
 			margin-top: 40px;
 			width: 182px;
 			height:16px;
 			font-size:12px;
-			font-family:MicrosoftYaHei;
 			color:rgba(146,146,155,1);
 			line-height:16px;
 		}
