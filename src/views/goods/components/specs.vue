@@ -542,8 +542,7 @@ export default {
     table th.salePrice span,
     table th.stock span,
     table th.warningStock span,
-    table th.weight span,
-    table th.image span {
+    table th.weight span {
         position: relative;
         &:before {
             content: '*';
