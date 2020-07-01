@@ -133,7 +133,7 @@ export default {
     getH5StoreDomainList() {
       this.loading = true;
       this._apis.shop.getH5StoreDomainList({status: 1}).then((response)=>{
-        this.h5ShareUrl = Array.isArray(response) && response[0] && response[0].domainName ? location.protocol + '//' + response[0].domainName : '';
+        this.h5ShareUrl = Array.isArray(response) && response[0] && response[0].domainName ? 'https:' + '//' + response[0].domainName : '';
         this.getQrcode();
         this.loading = false;
       }).catch((error)=>{
