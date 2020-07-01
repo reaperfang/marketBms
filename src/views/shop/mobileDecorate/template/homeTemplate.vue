@@ -29,8 +29,8 @@
           <el-form-item label="" prop="name">
             <el-radio-group v-model="ruleForm.sortBy" size="small" @change="sortByChange">
               <el-radio-button :value="0" :label="0">综合排序</el-radio-button>
-              <el-radio-button :value="1" :label="1" :disabled="checked">价格<i class="el-icon-top"></i></el-radio-button>
-              <el-radio-button :value="2" :label="2" :disabled="checked">价格<i class="el-icon-bottom"></i></el-radio-button>
+              <el-radio-button :value="1" :label="1">价格<i class="el-icon-top"></i></el-radio-button>
+              <el-radio-button :value="2" :label="2">价格<i class="el-icon-bottom"></i></el-radio-button>
               <el-radio-button :value="3" :label="3">人气从高到低</el-radio-button>
             </el-radio-group>
           </el-form-item>
