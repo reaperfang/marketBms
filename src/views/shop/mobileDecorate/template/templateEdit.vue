@@ -65,13 +65,12 @@ export default {
       decorateData: null,
       pageList: [],  //页面列表
       pageMaps: {},  //页面数据集合
-      decorateRender: false,  //装修是否渲染
-      templateUnder: false   //模板已下架
+      decorateRender: false  //装修是否渲染
     };
   },
   created() {
+    this.$store.commit("clearAllData");
     this.fetchTemplateStatus();
-    this.getPageList();
   },
   computed: {
     baseInfo() {
@@ -96,26 +95,31 @@ export default {
           this.fetch(newValue);
         })
       })
-    },
-
-    templateUnder(newValue) {
-      if(newValue) {  //如果已下架或过期则不显示保存按钮
-        this.config.buttons.saveData.show = () => false;
-        this.config.buttons.saveAndApplyData.show = () => false;
-      }else {
-        this.config.buttons.saveData.show = () => true;
-        this.config.buttons.saveAndApplyData.show = () => true;
-      }
     }
   },
   methods: {
 
     /* 模板是否已过期 */
     fetchTemplateStatus() {
+      this.loading = true;
       this._apis.shop.getTemplateInfo({pageTemplateId: this.id}).then(res => {
         if (res) {
-          if (res.templateStatus === 2) { // 已下架
-            this.templateUnder = true;
+          if(res.templateStatus === 1) {
+            if(res.status !== 2) {
+              this.getPageList();
+            }else {
+              this.confirm({
+                title: '提示',
+                icon: true,
+                showCancelButton: false,
+                confirmText: '我知道了',
+                text: `模板已过期`
+              });
+              this.config.buttons.saveData.show = () => false;
+              this.config.buttons.saveAndApplyData.show = () => false;
+              this.loading = false;
+            }
+          }else if(res.templateStatus === 2) {
             this.confirm({
               title: '提示',
               icon: true,
@@ -123,19 +127,12 @@ export default {
               confirmText: '我知道了',
               text: `模板已下架`
             });
+            this.config.buttons.saveData.show = () => false;
+            this.config.buttons.saveAndApplyData.show = () => false;
+            this.loading = false;
           }
-          if (res.status === 2) { // 已过期2
-            this.templateUnder = true;
-            this.confirm({
-              title: '提示',
-              icon: true,
-              showCancelButton: false,
-              confirmText: '我知道了',
-              text: `模板已过期`
-            });
-          }
+          
         } else {  // res == null，未购买 / 不在我的模板里
-          this.templateUnder = true;
           this.confirm({
             title: '提示',
             icon: true,
@@ -143,22 +140,20 @@ export default {
             confirmText: '我知道了',
             text: `模板未付费`
           });
+          this.config.buttons.saveData.show = () => false;
+          this.config.buttons.saveAndApplyData.show = () => false;
+          this.loading = false;
         }
+      }).catch((error)=>{
+        console.error(error);
+        this.loading = false;
       })
     },
 
     /* 获取模板下的页面列表 */
     getPageList() {
-      this.loading = true;
       this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response) => {
-        if (response === null || response === undefined || response === '' || response.length === 0 || !response) {
-          this.$store.commit("clearAllData");
-          this.loading = false
-          return
-        }
-
-        if(this.templateUnder) {
-          this.$store.commit("clearAllData");
+        if (!response || response.length === 0) {
           this.loading = false
           return
         }
