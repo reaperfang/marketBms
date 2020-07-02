@@ -11,7 +11,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
+const CSSSplitWebpackPlugin =require('css-split-webpack-plugin').default
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -43,12 +43,17 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: utils.assetsPath('css/[name].[contenthash:8].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
       // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
-      allChunks: true,
+      // 由于项目过大后css文件过大，因此allChunks设置为false,在需要的时候在加载
+      allChunks: false,
+    }),
+    new CSSSplitWebpackPlugin({
+      size: 2000,
+      filename: 'static/css/[name][part].css'
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
