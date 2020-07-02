@@ -45,7 +45,7 @@
               content="">
               <img v-if="showCode" :src="miniAppcode" alt="" style="width:150px;height:170px;">
               <span v-else>无分享地址</span>
-              <el-button slot="reference" @click="showCode=true" type="primary" plain>
+              <el-button slot="reference" @click="getMiniAppQrcode();showCode=true" type="primary" plain>
                 <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
                   <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
                 </el-tooltip>

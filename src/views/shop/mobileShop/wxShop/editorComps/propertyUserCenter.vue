@@ -87,7 +87,7 @@
               content="">
               <img v-if="showCode" :src="qrCode" alt="">
               <span v-else>无分享地址</span>
-              <el-button slot="reference" @click="showCode=true">预    览</el-button>
+              <el-button slot="reference" @click="getQrcode();showCode=true">预    览</el-button>
             </el-popover>
           </div>
         </div>
