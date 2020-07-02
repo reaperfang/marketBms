@@ -12,6 +12,7 @@ export default {
         return{
             src:'',
             path: '',
+            menuId:'',
             defultPath: '/application/appIndex',
             refreshPath:'',
             token:'',
@@ -67,6 +68,11 @@ export default {
             } else if(localStorage.marketing_router_path_appId) {
                 applyId = localStorage.marketing_router_path_appId
             }
+            if(this.$route.query.menuId){
+               this.menuId = this.$route.query.menuId
+            }else{
+              this.menuId=''
+            }
             let extraQuery = ''
             let mkQuery = localStorage.getItem('marketing_router_path_query')&&JSON.parse(localStorage.getItem('marketing_router_path_query'))||{}
             delete mkQuery.access
@@ -78,11 +84,12 @@ export default {
             delete mkQuery.userName
             delete mkQuery.bossProductId
             delete mkQuery.id
+            delete mkQuery.menuId
 			for(let item in mkQuery){
                 extraQuery+= "&" + item+'='+mkQuery[item]
 			}
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
-            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}&bossProductId=${bossProductId}${extraQuery}`
+            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}&menuId=${this.menuId}&bossProductId=${bossProductId}${extraQuery}`
         },
 
         // iframe 刷新  -- 暂时不用
