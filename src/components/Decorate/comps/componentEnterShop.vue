@@ -82,8 +82,8 @@ export default {
           width: 6px;
           height: 12px;
           display: inline-block;
-          margin-left: 8px;
-          margin-top: 14px;
+          margin-left: 7.5px;
+          margin-top: 13.5px;
         }
       }
     }

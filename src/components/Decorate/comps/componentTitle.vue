@@ -66,7 +66,6 @@ export default {
       color: #1c1d1f;
     }
     & > .title_Title2 {
-      display: inline-block;
       color: #655eff;
       font-size: 14px;
       padding-left: 5px;
