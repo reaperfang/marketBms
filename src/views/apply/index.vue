@@ -82,7 +82,6 @@ export default {
             delete mkQuery.bossProductId
             delete mkQuery.id
             delete mkQuery.menuId
-            delete mkQuery.isMenuId
 			for(let item in mkQuery){
                 extraQuery+= "&" + item+'='+mkQuery[item]
 			}
