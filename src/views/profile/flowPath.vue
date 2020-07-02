@@ -147,40 +147,40 @@ export default {
                 window.open(routeData.href, '_blank');
             }
         },
-        //常用功能跳转
+        //常用功能跳转 
         linkTo(item){
             if(item.text == '绑定微信公众号'){
-                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum',applyId:'3'}})
                 this.SETCURRENT(8)
             }else if(item.text == '绑定微信小程序'){
-                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp',applyId:'3'}})
                 this.SETCURRENT(8)
             }else if(item.text == '开通短信包'){
-                this.$router.push({path:'/apply',query:{paths:'/application/toolapp/paySms',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/toolapp/paySms',applyId:'2'}})
                 this.SETCURRENT(8)
             }else if(item.text == '设置模版和签名'){
-                this.$router.push({path:'/apply',query:{paths:'/application/toolapp/paySms',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/toolapp/paySms',applyId:'2'}})
                 this.SETCURRENT(8)
             }else if(item.text == '超级海报'){
-                this.$router.push({path:'/apply/',query:{paths:'/application/feature/posterList',isMenuId:'222'}})
+                this.$router.push({path:'/apply/',query:{paths:'/application/feature/posterList',applyId:'5'}})
                 this.SETCURRENT(8)
             }else if(item.text == '限时折扣'){
-                this.$router.push({path:'/apply',query:{paths:'/application/promotion/time',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/promotion/time',applyId:'4'}})
                 this.SETCURRENT(8)
             }else if(item.text == 'N元N件'){
-                this.$router.push({path:'/apply',query:{paths:'/application/promotion/packbuy',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/promotion/packbuy',applyId:'4'}})
                 this.SETCURRENT(8)
             }else if(item.text == '多人拼团'){
-                this.$router.push({path:'/apply',query:{paths:'/application/feature/group',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/feature/group',applyId:'5'}})
                 this.SETCURRENT(8)
             }else if(item.text == '节日有礼'){
-                this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival',applyId:'6'}})
                 this.SETCURRENT(8)
             }else if(item.text == '满减满折'){
-                this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce',applyId:'4'}})
                 this.SETCURRENT(8)
             }else if(item.text == '更多'){
-                this.$router.push({path:'/apply',query:{paths:'/application/appIndex',isMenuId:'222'}})
+                this.$router.push({path:'/apply',query:{paths:'/application/appIndex'}})
                 this.SETCURRENT(8)
             }else{
                 this.$router.push({path:item.url})
