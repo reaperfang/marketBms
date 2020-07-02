@@ -49,8 +49,8 @@
 									永久使用
 								</div>
 							</div>
-							<div class="expiration" v-show="item.chargeType !== 1">
-								到期日：{{item.limitDate ? item.limitDate.substring(0, 10) : '-'}}
+							<div class="expiration" v-if="item.chargeType !== 1">
+								{{item.limitDate && `到期日：${item.limitDate.substring(0, 10)}`}}
 							</div>
 						</div>
 						<div class="body" :title="item.name">
