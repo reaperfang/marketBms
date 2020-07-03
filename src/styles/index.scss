@@ -882,6 +882,9 @@ textarea:-ms-input-placeholder {
   color: #96969f!important;
   font-size: 12px!important;
   cursor: pointer;
+  .el-icon-delete {
+    color: #f05027;
+  }
   .popper__arrow::after {
     display: none!important;
   }
@@ -895,10 +898,10 @@ textarea:-ms-input-placeholder {
     border: none!important;
   }
   &.active {
-    background-color: #f05027;
-    color: #fff!important;
+    //background-color: #f05027;
+    //color: #fff!important;
     .popper__arrow {
-      background: url('../assets/images/shop/editor/arrow-active.png') no-repeat;
+      //background: url('../assets/images/shop/editor/arrow-active.png') no-repeat;
     }
   }
 }
