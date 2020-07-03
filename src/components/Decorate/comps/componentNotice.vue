@@ -3,11 +3,13 @@
   <div class="component_wrapper">
     <div class="componentNotice" v-if="currentComponentData && currentComponentData.data">
       <van-notice-bar
+        v-if="currentComponentData.data.notice"
         :text="currentComponentData.data.notice"
         left-icon="volume-o"
         :color="currentComponentData.data.fontColor "
         :background="currentComponentData.data.backgroundColor"
       />
+      <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
   </div>
 </template>

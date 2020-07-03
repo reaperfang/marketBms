@@ -2,25 +2,28 @@
   <!-- 购买公告 -->
   <div class="component_wrapper" v-loading="loading">
     <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
-      <div v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-        <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;">
-      </div>
-      <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-else>
-        <li>
-          <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
-        </li>
-        <li class="ellipsis">
-          <div class="nwwest-roll" id="nwwest-roll">
-            <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
-              <li ref="rollul" v-for="(item, key) in displayList" :key="key" class="ellipsis" :class="{anim:animate===true}">
-                <img :src="item.member" alt="">
-                <span class="name">{{item.content}}</span>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li :style="{'color':currentComponentData.data.fontColor}">刚刚</li>
-      </ul>
+      <template v-if="(currentComponentData.data.fakeList && currentComponentData.data.fakeList.length) || displayList.length">
+        <div v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
+          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;">
+        </div>
+        <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-else>
+          <li>
+            <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
+          </li>
+          <li class="ellipsis">
+            <div class="nwwest-roll" id="nwwest-roll">
+              <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
+                <li ref="rollul" v-for="(item, key) in displayList" :key="key" class="ellipsis" :class="{anim:animate===true}">
+                  <img :src="item.member" alt="">
+                  <span class="name">{{item.content}}</span>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li :style="{'color':currentComponentData.data.fontColor}">刚刚</li>
+        </ul>
+      </template>
+      <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
   </div>
 </template>
