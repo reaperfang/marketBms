@@ -22,10 +22,12 @@
 		components: { myTemplate, homeTemplate, activeTemplate},
 		data() {
 			return {
-				currentTab: "myTemplate"
+				currentTab: "homeTemplate"
 			};
 		},
-		created() {},
+		created() {
+		  if(this.$route.query.tab) this.currentTab = this.$route.query.tab;
+    },
 		methods: {
 			handleClick(comp) {
 				this.currentTab = comp.name;

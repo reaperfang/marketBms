@@ -16,7 +16,7 @@
         </el-form-item>
       </el-form>
       <div class="btns">
-        <el-button type="primary" @click="_routeTo('m_templateManageIndex')">新建页面</el-button>
+        <el-button type="primary" @click="_routeTo('m_templateManageIndex', {'tab': 'myTemplate'})">新建页面</el-button>
       </div>
     </div>
     <div class="table" v-calcHeight="300">
@@ -141,9 +141,9 @@ export default {
     copyPage(item) {
       this.currentItem = item;
       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: `确定复制 [ ${item.name} ] 吗？`
       }).then(() => {
           this._apis.shop.copyPage({id: item.id}).then((response)=>{
@@ -159,9 +159,9 @@ export default {
     deletePage(item) {
        this.currentItem = item;
        this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: `确定删除 [ ${item.name} ] 吗？`
       }).then(() => {
           this._apis.shop.deletePages({ids: [item.id]}).then((response)=>{
@@ -176,9 +176,9 @@ export default {
     /* 批量删除页面 */
     batchDeletePage(item) {
        this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: `确定删除吗？`
       }).then(() => {
           const ids = [];
@@ -197,7 +197,7 @@ export default {
     /* 推广 */
     spread(item) {
        this.currentItem = item;
-       this.dialogVisible=true; 
+       this.dialogVisible=true;
        this.currentDialog='dialogPopularize';
     },
 
@@ -205,9 +205,9 @@ export default {
     setIndex(item) {
       this.currentItem = item;
       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: `确定将 [ ${item.name} ] 设为首页吗？`
       }).then(() => {
           this._apis.shop.setIndex({id: item.id}).then((response)=>{
@@ -231,7 +231,7 @@ export default {
       });
     },
 
-    
+
     //获取分类列表
     getClassifyList() {
       this._apis.shop.selectAllClassify({}).then((response)=>{
@@ -271,7 +271,7 @@ export default {
       }else if(val && val.order == 'descending'){
         this.ruleForm.dateSort = 0
       }else{
-        return 
+        return
       }
       this.fetch()
     },
