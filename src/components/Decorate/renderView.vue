@@ -35,7 +35,6 @@
             </div>
             <div 
               slot="reference"
-              :title="getComponentData(item).title"
               class="component_wrapper" 
               :data-id="getComponentData(item).id"
               v-if="!getComponentData(item).hidden"
