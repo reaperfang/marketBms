@@ -118,19 +118,17 @@ export default {
 
 <style lang="scss" scoped>
 .componentFullReduction {
+  padding: 0 10px;
   & > .reduction {
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 5px;
-    margin-bottom: 10px;
     margin: 10px;
-    box-shadow: 0px 0px 9px rgba(0,0,0,0.1);
+    box-shadow: 0 0 4.5px rgba(0,0,0,.1);
     & > .reduction_first {
       position: relative;
+      overflow:hidden;
       & > span {
-        margin-right: 8px;
-        margin-right: 8px;
-        color: rgba(171,171,171,1);
-        font-size: 11px;
+        margin-right: 7.5px;
       }
       & > span:first-child {
         width: 19px;
@@ -141,19 +139,23 @@ export default {
         color: #fff;
         font-size: 12px;
         background: #fc3d42;
-        display: inline-block;
-        position: absolute;
-        top: 2px;
+        display:block;
+        float:left;
       }
       & > span:nth-child(2) {
         font-size: 16px;
         color: #333;
-        padding-left: 28px;
+        line-height:19px;
+        display:block;
+        float:left;
       }
-      & > span:last-child(3) {
+      & > span:nth-child(3) {
         font-size: 11px;
         transform: scale(0.92);
         color: #7c7c7c;
+        display:block;
+        line-height:19px;
+        float:left;
       }
     }
     & > .reduction_two {
@@ -163,16 +165,15 @@ export default {
         flex-direction: row;
         flex-wrap: wrap;
         & > li {
-          width: 78px;
           height: 20px;
           line-height: 20px;
           background: rgba(255, 255, 255, 1);
           text-align: center;
           color: #fc3d42;
-          margin-right: 18px;
+          margin-right: 17.5px;
           margin-bottom: 10px;
-          font-size: 11px;
-          transform: scale(0.92);
+          padding:0 5px;
+          font-size:11px;
         }
         & > .style1 {
           border: 1px solid #fc3d42;

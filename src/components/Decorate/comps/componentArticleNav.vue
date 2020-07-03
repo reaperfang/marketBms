@@ -123,15 +123,7 @@ export default {
           if(Object.prototype.toString.call(this.currentComponentData.data.itemList) === '[object Object]') {
             this.currentComponentData.data.itemList = [...this.currentComponentData.data.itemList];
           }
-          for(let item of this.currentComponentData.data.itemList) {
-            if(this.currentComponentData.data.templateType===1 && item.url) {
-              value = true;
-              break;
-            }else if(this.currentComponentData.data.templateType===2 && item.title){
-              value = true;
-              break;
-            }
-          }
+          return !!this.currentComponentData.data.itemList.length
         }
         return value;
     }
@@ -184,7 +176,7 @@ export default {
       }
       & > p {
         font-size: 14px;
-        padding: 5px 0px;
+        margin-top: 2.5px;
         text-align:center;
       }
     }
@@ -231,17 +223,11 @@ export default {
   // }
   //   横向滑动
   .img_nav2 {
-    // display: -webkit-box;
-    // display: -moz-box;
-    // display: -ms-flexbox;
-    // display: -o-box;
-    // display: box;
-    // overflow-x: scroll;
+    display: -webkit-box;
+    overflow-x: scroll;
     & > li {
-      // width: 20%;
       width: 80px;
       text-align: center;
-      float:left;
       & > div {
         margin: 0 auto;
         & > img {
@@ -327,22 +313,15 @@ export default {
   }
   // 文字导航横向滑动
   .img_nav5 {
-    // display: -webkit-box;
-    // display: -moz-box;
-    // display: -ms-flexbox;
-    // display: -o-box;
-    // display: box;
+    display: -webkit-box;
     width: 100%;
-    // overflow-x: scroll;
+    overflow-x: scroll;
     height: 42px;
     & > li {
-      // width: 20%;
-      width: 75px;
-      height: 100%;
+      width: 20%;
       text-align: center;
       box-sizing: border-box;
       position: relative;
-      float:left;
       & > span {
         font-size: 14px;
         position: absolute;

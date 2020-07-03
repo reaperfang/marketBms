@@ -87,7 +87,7 @@
             <i class="delete_btn" :class="{'input-linkTo' : item.linkTo}" @click.stop="deleteItem(item)" title="移除"></i>
           </li>
       </vuedraggable>
-      <div @click="addNav" class="add-button-x add-image-ad">
+      <div @click="addNav" class="add-button-x add-image-ad" v-if="canAdd">
         <i class="el-icon-plus"></i>
         <span>添加一个图文导航</span>
       </div>
@@ -116,12 +116,7 @@ export default {
         slideType: 1,//滑动类型
         backgroundColor: '#fff',//背景颜色
         fontColor: '#000',//文字颜色
-        itemList: [{//图文列表
-          title: '',
-          url: '',
-          linkTo: null,
-          id: uuidv4()
-        }],
+        itemList: [],
       },
       rules: {},
       currentNav: null,  //当前操作的图文导航
@@ -133,7 +128,16 @@ export default {
           group: "description",
           ghostClass: "ghost"
       },
-      drag: false
+      drag: false,
+      canAdd: true
+    }
+  },
+   watch: {
+    'ruleForm.itemList': {
+      handler(newValue) {
+        this.canAdd = newValue.length < 10;
+      },
+      deep: true
     }
   },
   computed: {
@@ -144,15 +148,7 @@ export default {
           if(Object.prototype.toString.call(this.ruleForm.itemList) === '[object Object]') {
             this.ruleForm.itemList = [...this.ruleForm.itemList];
           }
-          for(let item of this.ruleForm.itemList) {
-            if(this.ruleForm.templateType===1 && item.url) {
-              value = true;
-              break;
-            }else if(this.ruleForm.templateType===2 && item.title){
-              value = true;
-              break;
-            }
-          }
+          return !!this.ruleForm.itemList.length;
         }
         return value;
     }
@@ -172,22 +168,15 @@ export default {
     },
 
     addNav() {
-      if(this.ruleForm.itemList.length <10) {
-        if(!this.ruleForm.itemList[0].title) {
-          const tempList = [...this.ruleForm.itemList];
-          tempList[0].title = '导航';
-          this.ruleForm.itemList = tempList;
-        }
-        this.ruleForm.itemList.push({
-          title: '导航',
-          url: '',
-          linkTo: null,
-          id: uuidv4()
-        });
-        this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
-        // this.dialogVisible=true; 
-        // this.currentDialog='dialogSelectImageMaterial';
-      }
+      this.ruleForm.itemList.push({
+        title: '导航',
+        url: '',
+        linkTo: null,
+        id: uuidv4()
+      });
+      this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
+      // this.dialogVisible=true; 
+      // this.currentDialog='dialogSelectImageMaterial';
     },
 
     /* 弹框选中图片 */
@@ -202,10 +191,6 @@ export default {
     },
 
     deleteItem(item) {
-      if(this.ruleForm.itemList.length < 2) {
-        this.$message.warning('最后一个不允许删除')
-        return;           
-      }
       this.confirm({
         title: '提示', 
         customClass: 'goods-custom', 

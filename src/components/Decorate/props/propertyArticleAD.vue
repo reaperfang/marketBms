@@ -87,7 +87,7 @@
       </vuedraggable>
       <!-- <ul class="item_list">
       </ul> -->
-      <div @click="addNav" class="add-button-x add-image-ad">
+      <div @click="addNav" class="add-button-x add-image-ad" v-if="canAdd">
         <i class="el-icon-plus"></i>
         <span>添加一个广告图</span>
       </div>
@@ -149,12 +149,7 @@ export default {
         imgMargin: 10,  //图片间距
         imgStyle: 1,  //图片样式
         imgChamfer: 1,  //图片倒角
-        itemList: [{  //图片列表
-          title: '图片广告',
-          url: '',
-          linkTo: null,
-          id: uuidv4()
-        }],
+        itemList: [],
       },
       rules: {},
       currentAD: null,  //当前操作的图文导航
@@ -164,7 +159,8 @@ export default {
           group: "description",
           ghostClass: "ghost"
       },
-      drag: false
+      drag: false,
+      canAdd: true
     }
   },
   watch: {
@@ -177,6 +173,7 @@ export default {
           }
         })
         newValue = list
+        this.canAdd = newValue.length < 10;
       },
       deep: true
     }
@@ -190,12 +187,7 @@ export default {
         if(Object.prototype.toString.call(this.ruleForm.itemList) === '[object Object]') {
           this.ruleForm.itemList = [...this.ruleForm.itemList];
         }
-        for(let item of this.ruleForm.itemList) {
-          if(item.url) {
-            value = true;
-            break;
-          }
-        }
+        return !!this.ruleForm.itemList.length;
       }
       return value;
     }
@@ -238,7 +230,7 @@ export default {
 
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.currentAD.title= '',
+      this.currentAD.title= dialogData.name,
       this.currentAD.url= dialogData.filePath;
     },
 
@@ -248,10 +240,6 @@ export default {
     },
 
     deleteItem(item) {
-      if(this.ruleForm.itemList.length < 2) {
-        this.$message.warning('最后一个不允许删除');
-        return;
-      }
       this.confirm({
         title: '提示',
         customClass: 'goods-custom',

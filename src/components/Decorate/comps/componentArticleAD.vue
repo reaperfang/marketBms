@@ -160,12 +160,7 @@ export default {
         if(Object.prototype.toString.call(this.currentComponentData.data.itemList) === '[object Object]') {
           this.currentComponentData.data.itemList = [...this.currentComponentData.data.itemList];
         }
-        for(let item of this.currentComponentData.data.itemList) {
-          if(item.url) {
-            value = true;
-            break;
-          }
-        }
+        return !!this.currentComponentData.data.itemList.length
       }
       return value;
     }

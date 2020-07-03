@@ -166,7 +166,7 @@ export default {
           font-size: 18px;
           font-weight: 500;
           color: #fff;
-          padding-top: 13px;
+          padding-top: 12.5px;
         }
         & > .shopinfo_explain {
           color: #fff;
@@ -230,7 +230,7 @@ export default {
         justify-content: flex-start;
         align-items: center;
         & > span:nth-child(1) {
-          color: #999999;
+          color: #000;
           font-size: 11px;
           transform: scale(0.92);
           display: inline-block;
@@ -246,7 +246,7 @@ export default {
           // margin-left: 5px;
         }
         & > span:nth-child(3) {
-          color: #999999;
+          color: #000;
           font-size: 11px;
           transform: scale(0.92);
           display: inline-block;
@@ -280,7 +280,7 @@ export default {
           font-size: 18px;
           font-weight: 500;
           color: #fff;
-          padding-top: 13px;
+          padding-top: 12.5px;
         }
         & > div {
           color: #ffffff;

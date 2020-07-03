@@ -149,6 +149,8 @@ export default {
         flex:1;
         align-items:center;
         padding:0 10px;
+        background:#eff1f0;
+        border:1px solid #eff1f0;
         .fdj{
             width:14px;
             height:14px;

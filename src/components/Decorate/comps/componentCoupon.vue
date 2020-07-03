@@ -213,27 +213,17 @@ export default {
 
 <style lang="scss" scoped>
 .componentCoupon {
-  // background: #f1f1f1;
   .coupon_first {
-    overflow-x: auto;
     & > ul {
-      // display: -webkit-box;
-      // display: -moz-box;
-      // display: -ms-flexbox;
-      // display: -o-box;
-      // display: box;
-      // overflow-x: scroll;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      margin: 10px;
-      box-shadow: 0px 0px 9px rgba(0,0,0,0.1);
+      display: -webkit-box;
+      overflow-x: scroll;
+      padding: 0 15px;
       & > li {
         width: 128px;
         height: 92px;
+        margin:10px 0;
         margin-right: 10px;
         text-align: center;
-        float:left;
         & > .first_money {
           padding-top: 17px;
           & > span:first-child {
@@ -243,12 +233,11 @@ export default {
           }
           & > span:last-child {
             font-size: 9px;
-			transform: scale(0.75);
             color: rgba(255, 255, 255, 1);
           }
         }
         & > .first_present {
-          padding-top: 8px;
+          padding-top: 7.5px;
           font-size: 10px;
 		   transform: scale(0.83);
           color: rgba(255, 255, 255, 1);

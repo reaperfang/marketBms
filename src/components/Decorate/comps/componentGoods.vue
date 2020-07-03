@@ -4,7 +4,7 @@
         <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data && hasContent" ref="componentContent">
 
             <ul v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-                <li v-for="(item,key) in currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio, 'fakeData']">
+                <li v-for="(item,key) in currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]" class="fakeData">
                     <div class="img"  v-if="listStyle != 4">
                         <div class="imgAbsolute">
                             <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -719,6 +719,7 @@ export default {
                     height:126px;
                     position:relative;
                     overflow:hidden;
+                    padding:0!important;
                     img{
                         width:100%;
                         height:100%;
