@@ -19,11 +19,18 @@
         <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
           <el-table-column prop="" label="选择" :width="50">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.active" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>
+              <el-checkbox v-model="scope.row.active" :disabled="scope.row.status === 2 || scope.row.appType == 405" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column prop="appActivityName" label="活动名称"></el-table-column>
           <el-table-column prop="appTypeName" label="活动类型"></el-table-column>
+          <el-table-column prop="status" label="状态">
+            <template slot-scope="scope">
+              <span v-if="scope.row.status === 0">未生效</span>
+              <span v-else-if="scope.row.status === 1">生效中</span>
+              <span v-else-if="scope.row.status === 2">已失效</span>
+            </template>
+          </el-table-column>
           <!-- <el-table-column prop="visitor" label="访客数"></el-table-column>
           <el-table-column prop="browse" label="浏览数"></el-table-column> -->
         </el-table>
