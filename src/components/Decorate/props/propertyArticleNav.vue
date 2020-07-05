@@ -181,7 +181,7 @@ export default {
 
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.currentNav.title= dialogData.fileName,
+      this.currentNav.title= dialogData.name ||  dialogData.fileName || dialogData.original,
       this.currentNav.url= dialogData.filePath;
     },
 

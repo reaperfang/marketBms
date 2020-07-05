@@ -24,7 +24,12 @@
             </el-table-column>
             <el-table-column prop="name" label="页面名称" :width="200"></el-table-column>
             <el-table-column prop="title" label="页面标题" :width="200"></el-table-column>
-            <el-table-column prop="pageCategoryName" label="所属分类" ></el-table-column>
+            <el-table-column prop="pageCategoryName" label="所属分类" >
+              <template slot-scope="scope">
+                <span v-if="scope.row.pageCategoryInfoId == '-1'">未分类</span>
+                <span v-else>{{scope.row.pageCategoryName}}</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="vv" label="访客数"></el-table-column>
             <el-table-column prop="pv" label="浏览数"></el-table-column>
         </el-table>

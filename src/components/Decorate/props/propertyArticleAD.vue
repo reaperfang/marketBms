@@ -230,7 +230,7 @@ export default {
 
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.currentAD.title= dialogData.name,
+      this.currentAD.title= dialogData.name || dialogData.fileName || dialogData.original,
       this.currentAD.url= dialogData.filePath;
     },
 
