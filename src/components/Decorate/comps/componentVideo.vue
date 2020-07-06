@@ -58,9 +58,11 @@ export default {
 
 <style lang="scss" scoped>
 .componentVideo {
+  height: 210px;
   .video {
     width: 100%;
     height: 210px;
+    object-fit: fill;
   }
 }
 </style>
