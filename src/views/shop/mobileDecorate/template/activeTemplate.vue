@@ -524,12 +524,11 @@
         min-width: 67px;
         height: 24px;
         border-radius: 2px;
-        border: 1px dashed rgba(101, 94, 255, 1);
+        border: 1px dashed $globalMainColor;
         font-size: 14px;
         margin-right: 16px;
         margin-top: 15px;
-        font-family: MicrosoftYaHei;
-        color: rgba(101, 94, 255, 1);
+        color: $globalMainColor;
         line-height: 24px;
         padding-right: 10px;
         padding-left: 10px;
@@ -596,25 +595,25 @@
         padding-right: 10px;
         height: 34px;
         border-radius: 2px;
-        border: 1px solid rgba(182, 181, 200, 1);
+        border: 1px solid $borderColor;
         margin-right: 16px;
         margin-top: 14px;
         font-size: 14px;
         text-align: center;
-        color: #B6B5C8;
+        color: $borderColor;
         line-height: 34px;
         cursor: pointer;
         background: #fff;
 
         &.checked {
-          background: #655EFF;
+          background: $globalMainColor;
           color: #fff;
         }
       }
     }
 
     &-conditions {
-      background: #ffffff;
+      background: #fff;
       width: 100%;
       margin: 0 20px 0;
       padding-top: 20px;
@@ -686,7 +685,6 @@
             line-height: 26px;
             text-align: right;
             font-size: 12px;
-            font-family: PingFangSC-Medium, PingFang SC;
             font-weight: 500;
             color: rgba(255, 255, 255, 1);
 
@@ -749,18 +747,17 @@
                 width: 90px;
                 height: 34px;
                 font-size: 14px;
-                font-family: MicrosoftYaHei;
-                color: rgba(255, 255, 255, 1);
+                color: #fff;
                 line-height: 34px;
                 text-align: center;
                 border-radius: 4px;
-                border: 1px solid rgba(255, 255, 255, 1);
+                border: 1px solid #fff;
                 cursor: pointer;
                 transition: all 0.4s;
 
                 &:hover {
-                  background: rgba(101, 94, 255, 1);
-                  border: 1px solid rgba(101, 94, 255, 1);
+                  background: $globalMainColor;
+                  border: 1px solid $globalMainColor;
                 }
               }
 
@@ -769,8 +766,7 @@
                 height: 34px;
                 margin-top: 16px;
                 font-size: 14px;
-                font-family: MicrosoftYaHei;
-                color: rgba(255, 255, 255, 1);
+                color: #fff;
                 border-radius: 4px;
               }
             }
@@ -796,7 +792,6 @@
 
               .price-left {
                 font-size: 18px;
-                font-family: MicrosoftYaHei;
                 color: rgba(240, 80, 39, 1);
                 height: 18px;
                 line-height: 18px;
@@ -804,7 +799,6 @@
 
               .price-right {
                 font-size: 12px;
-                font-family: MicrosoftYaHei;
                 color: rgba(146, 146, 155, 1);
                 height: 13px;
                 line-height: 13px;
@@ -828,8 +822,7 @@
                 border-radius: 4px 0 0 4px;
                 background: rgba(62, 180, 136, 1);
                 font-size: 14px;
-                font-family: MicrosoftYaHei;
-                color: rgba(255, 255, 255, 1);
+                color: #fff;
                 line-height: 22px;
               }
 
@@ -839,7 +832,6 @@
                 height: 22px;
                 border-radius: 0 4px 4px 0;
                 font-size: 14px;
-                font-family: MicrosoftYaHei;
                 color: rgba(62, 180, 136, 1);
                 line-height: 22px;
               }
@@ -849,7 +841,6 @@
               width: 225px;
               height: 16px;
               font-size: 14px;
-              font-family: MicrosoftYaHei;
               color: rgba(68, 67, 75, 1);
               line-height: 16px;
               overflow: hidden;
@@ -965,8 +956,7 @@
         bottom: 60px;
         right: 40px;
         font-size: 15px;
-        font-family: PingFangSC-Medium, PingFang SC;
-        color: rgba(255, 255, 255, 1);
+        color: #fff;
         padding: 9px 10px;
         background: rgba(255, 255, 255, 0.3);
         border-radius: 4px;

@@ -285,8 +285,7 @@
 			justify-content: flex-start;
 			flex-wrap: wrap;
 			background: #fff;
-			padding: 20px;
-			padding-right:0;
+			padding: 20px 0 20px 20px;
 			box-sizing: border-box;
 			li{
 				width:255px;
@@ -297,7 +296,7 @@
 					height:421px!important;
 					padding: 15px;
 					background: #fff;
-					box-shadow:0px 2px 10px 0px rgba(232,231,255,1);
+					box-shadow:0 2px 10px 0 rgba(232,231,255,1);
 					position:relative;
 					&-tag {
 						position: absolute;
@@ -323,9 +322,8 @@
 							z-index: 102;
 							font-size:12px;
 							position: absolute;
-							font-family:PingFangSC-Regular,PingFang SC;
 							font-weight:400;
-							color:rgba(255,255,255,1);
+							color: #fff;
 						}
 					}
 					.view{
@@ -357,43 +355,42 @@
                 opacity: 1;
               }
 							.cover_button{
-								width:78px;
-								height:78px;
-								background:rgba(255,255,255,1);
-								font-size:14px;
-								border-radius: 78px;
-								font-family:MicrosoftYaHei;
-								color:rgba(68,67,75,1);
-								line-height:70px;
-								padding:6px 17px;
-								border:1px solid rgba(255,255,255,1);
-								cursor: pointer;
-								transition: all 0.4s;
+                width: 78px;
+                height: 78px;
+                background: #fff;
+                font-size: 14px;
+                border-radius: 78px;
+                color: $contentColor;
+                line-height: 70px;
+                padding: 6px 17px;
+                border: 1px solid #fff;
+                cursor: pointer;
+                transition: all 0.4s;
 							}
-							.cover_button_pre{
-								width:90px;
-								height:34px;
-								font-size:14px;
-								font-family:MicrosoftYaHei;
-								color:rgba(255,255,255,1);
-								line-height:34px;
-								text-align: center;
-								border-radius:4px;
-								border:1px solid rgba(255,255,255,1);
-								cursor: pointer;
-								transition: all 0.4s;
-								&:hover{
-									background:rgba(101,94,255,1);
-									border:1px solid rgba(101,94,255,1);
-								}
-							}
+
+              .cover_button_pre {
+                width: 90px;
+                height: 34px;
+                font-size: 14px;
+                color: #fff;
+                line-height: 34px;
+                text-align: center;
+                border-radius: 4px;
+                border: 1px solid #fff;
+                cursor: pointer;
+                transition: all 0.4s;
+
+                &:hover {
+                  background: $globalMainColor;
+                  border: 1px solid $globalMainColor;
+                }
+              }
 							.cover_button_apply {
 								width:90px;
 								height:34px;
 								margin-top: 16px;
 								font-size:14px;
-								font-family:MicrosoftYaHei;
-								color:rgba(255,255,255,1);
+								color:#fff;
 								border-radius:4px;
 							}
 						}
@@ -415,15 +412,13 @@
 							}
 							.price-left {
 								font-size:18px;
-								font-family:MicrosoftYaHei;
 								color:rgba(240,80,39,1);
 								height: 18px;
 								line-height: 18px;
 							}
 							.price-right {
 								font-size:12px;
-								font-family:MicrosoftYaHei;
-								color:rgba(146,146,155,1);
+								color:$grayColor;
 								height: 13px;
 								line-height: 13px;
 							}
@@ -444,8 +439,7 @@
 								border-radius: 4px 0 0 4px;
 								background: rgba(62,180,136,1);
 								font-size:14px;
-								font-family:MicrosoftYaHei;
-								color:rgba(255,255,255,1);
+								color:#fff;
 								line-height: 22px;
 							}
 							.free-right {
@@ -454,15 +448,13 @@
 								height: 22px;
 								border-radius: 0 4px 4px 0;
 								font-size:14px;
-								font-family:MicrosoftYaHei;
 								color:rgba(62,180,136,1);
 								line-height: 22px;
 							}
 							.expiration {
 								height:10px;
 								font-size:10px;
-								font-family:MicrosoftYaHei;
-								color:rgba(146,146,155,1);
+								color:$grayColor;
 								line-height:10px;
 							}
 						}
@@ -470,7 +462,6 @@
 							width: 225px;
 							height:16px;
 							font-size:14px;
-							font-family:MicrosoftYaHei;
 							color:rgba(68,67,75,1);
 							line-height:16px;
 							overflow: hidden;
@@ -513,7 +504,6 @@
 								border-radius:4px;
 								border:1px solid rgba(253,147,43,1);
 								font-size:14px;
-								font-family:MicrosoftYaHei;
 								color:rgba(253,147,43,1);
 								line-height:30px;
 							}
@@ -588,8 +578,7 @@
 				bottom:60px;
 				right:40px;
 				font-size:15px;
-				font-family:PingFangSC-Medium,PingFang SC;
-				color:rgba(255,255,255,1);
+				color:#fff;
 				padding:9px 10px;
 				background:rgba(255,255,255,0.3);
 				border-radius:4px;
@@ -613,7 +602,7 @@
 
 		}
 		.el-button--primary{
-			color: #655EFF!important;
+			color: $globalMainColor!important;
 		}
 	}
 </style>

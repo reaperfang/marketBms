@@ -70,19 +70,17 @@
       height: 34px;
       border-radius: 4px;
       font-size: 14px;
-      font-family: MicrosoftYaHei;
-      color: rgba(255, 255, 255, 1);
+      color: #fff;
     }
 
     &-reset {
       width: 80px;
       height: 34px;
       border-radius: 4px;
-      border: 1px solid rgba(101, 94, 255, 1);
+      border: 1px solid $globalMainColor;
       font-size: 14px;
-      font-family: MicrosoftYaHei;
-      color: rgba(101, 94, 255, 1);
-      background: rgba(255, 255, 255, 1);
+      color: $globalMainColor;
+      background: #fff;
     }
 	}
 </style>
