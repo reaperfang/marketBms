@@ -10,7 +10,7 @@
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   v-for="(item, key) of currentComponentData.data.itemList"
                   :key="key"
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.jpg')"
                   :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
                   alt
                 />
@@ -31,7 +31,7 @@
             <van-swipe :autoplay="3000" indicator-color="white"  @change="type3Change">
               <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.jpg')"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   alt
                   ref="imgOption"
@@ -55,7 +55,7 @@
             <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="340 + currentComponentData.data.imgMargin" :height="'auto'" class="big_image" @change="type3Change">
               <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.jpg')"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
                   alt
@@ -81,7 +81,7 @@
             <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="118 + currentComponentData.data.imgMargin" :height="110">
               <van-swipe-item class="pdr_16" v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty4.png')"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
                   alt
@@ -116,7 +116,7 @@
               <img
                 v-for="(item, key) of currentComponentData.data.itemList"
                 :key="key" 
-                :src="item.url"
+                :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.jpg')"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                 alt
                 :style="{'marginLeft':currentComponentData.data.imgMargin + 'px'}"
