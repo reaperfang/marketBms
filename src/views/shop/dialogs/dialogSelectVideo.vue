@@ -305,7 +305,7 @@ export default {
 
      /* 上传超过个数的处理 */
     uploadLimit() {
-      this.$message.warning('最多支持上传6个视频！');
+      this.$message.warning('最多支持上传100个视频！');
     },
 
      //进度条
