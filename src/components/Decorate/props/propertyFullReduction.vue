@@ -9,9 +9,9 @@
       </el-form-item> -->
       <el-form-item label="选择活动" prop="promotions">
         <div class="row align-center">
-          <div class="add-button-x">
+          <div class="add-button-x" @click="dialogVisible=true; currentDialog='dialogSelectFullReduction'">
             <i class="el-icon-plus"></i>
-            <span @click="dialogVisible=true; currentDialog='dialogSelectFullReduction'">选择活动</span>
+            <span>选择活动</span>
           </div>
           <p class="message">建议最多添加5个活动</p>
         </div>
