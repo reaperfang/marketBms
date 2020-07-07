@@ -11,11 +11,11 @@
             <!-- <el-form-item label="微信商户名称:" prop="mchName">
                 <el-input v-model="form.mchName" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item> -->
-            <el-form-item prop="appId">
+            <el-form-item class="customize" prop="appId">
                 <span class="require">公众号（AppId）:</span>
                 <el-input v-model="form.appId" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item prop="mpAppId">
+            <el-form-item class="customize" prop="mpAppId">
                 <span class="require">小程序（AppId）:</span>
                 <el-input v-model="form.mpAppId" style="width:250px;" placeholder="请输入"></el-input>
             </el-form-item>
@@ -85,6 +85,13 @@
 export default {
   name: 'wxSet',
   data() {
+    const checkIsHasSpace = (rule, value, callback) => {
+      const reg = /\s+/g
+      if (value && reg.test(value)) {
+        return callback(new Error('输入内容有空格请检查'));
+      }
+      return callback()
+    }
     return {
       loading:false,
       form: {
@@ -107,22 +114,29 @@ export default {
         // ],
         channelMchId:[
           { required: true, message: '请输入微信商户号', trigger: 'blur' },
+          { validator: checkIsHasSpace, trigger: 'blur' }
         ],
-        // appId:[
-        //   { required: true, message: '请输入公众号AppId', trigger: 'blur' },
-        // ],
-        // mpAppId:[
-        //   { required: true, message: '请输入小程序AppId', trigger: 'blur' },
-        // ],
+        appId:[
+          // { required: true, message: '请输入公众号AppId', trigger: 'blur' },
+          { validator: checkIsHasSpace, trigger: 'blur' }
+        ],
+        mpAppId:[
+          // { required: true, message: '请输入小程序AppId', trigger: 'blur' },
+          { validator: checkIsHasSpace, trigger: 'blur' }
+        ],
         key:[
           { required: true, message: '请输入密钥', trigger: 'blur' },
+          { validator: checkIsHasSpace, trigger: 'blur' }
         ],
         // certLocalPath:[
         //   { required: true, message: '请输入CERT证书文件', trigger: 'blur' },
         // ],
         certBase64Content:[
-          { required: true, message: '请输入CERT证书文件', trigger: 'blur' },
+          { required: true, message: '请输入CERT证书文件', trigger: 'blur' }
         ],
+        certPassword: [
+          { validator: checkIsHasSpace, trigger: 'blur' }
+        ]
         // keyLocalPath:[
         //   { required: true, message: '请输入KEY秘钥文件', trigger: 'blur' },
         // ]
@@ -303,6 +317,11 @@ export default {
         font-size: 16px;
         margin-bottom: 30px;
     }
+    .customize {
+      /deep/ .el-form-item__error {
+        padding-left: 180px;
+      }
+    }
 }
  .upload_file{
     width: 637px;
@@ -339,4 +358,5 @@ export default {
       color: #ff4246;
     }
   }
+ 
 </style>

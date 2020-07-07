@@ -143,7 +143,7 @@
       <div class="p_r_item p_r_kefu">
         <p class="p_title warn">
           <span>
-            <img :src="require('@/assets/images/profile/icon_07.png')" alt />
+            <img :src="require('@/assets/images/profile/icon_09.png')" alt />
             产品动态
           </span>
           <el-link
@@ -550,6 +550,7 @@ export default {
     img {
       vertical-align: middle;
       margin-right: 5px;
+      width: 22px;
     }
   }
   i {
