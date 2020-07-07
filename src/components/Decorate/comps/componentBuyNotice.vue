@@ -4,7 +4,7 @@
     <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
       <template v-if="(currentComponentData.data.fakeList && currentComponentData.data.fakeList.length) || displayList.length">
         <div v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;">
+          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;vertical-align: bottom;">
         </div>
         <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-else>
           <li>
