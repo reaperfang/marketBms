@@ -88,7 +88,7 @@ export default {
       this._apis.file.getWxImage(query).then((response)=>{
         this.list = []
         response.item.map(item => {
-          let urls = `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+ item.url
+          let urls = location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+ item.url
           let data = Object.assign({checked:false,urls:urls}, item)
           this.list.push(data)
         })
@@ -106,7 +106,7 @@ export default {
             mediaId:item.media_id,
             sourceMaterialType:'0',
             fileName:'微信同步图片',
-            filePath:escape(`${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+ item.url),
+            filePath:escape(location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+ item.url),
             imgPixelWidth:'',
             imgPixelHeight:'',
             fileSize:'',
