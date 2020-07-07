@@ -213,10 +213,15 @@ export default {
     onSubmit(formName){
       this.loading = true
       this.$refs[formName].validate((valid) => {
-        if (valid && this.form.appId || this.form.mpAppId) {
-          this.id ? this.updateShopPayInfo() : this.addShopPayInfo()
-        }else{
-          this.$message.error('如果开通支付，公众号和小程序的appid依据自己开通的售卖渠道必须填写一项');
+        if (valid) {
+          if (this.form.appId || this.form.mpAppId) {
+            this.id ? this.updateShopPayInfo() : this.addShopPayInfo()
+          } else{
+            this.loading = false
+            this.$message.error('如果开通支付，公众号和小程序的appid依据自己开通的售卖渠道必须填写一项');
+          }
+        } else {
+          this.loading = false
         }
       })   
     },
