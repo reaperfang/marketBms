@@ -41,8 +41,12 @@ export default {
     }
   },
   watch: {
-    'currentComponentData.data.coverType': {
-      handler(newValue) {
+    'currentComponentData.data.coverUrl': {
+      handler(newValue, oldValue) {
+        console.log(newValue)
+        if(newValue === oldValue){
+          return;
+        }
         this.show = false;
         this.$nextTick(()=>{
           this.show = true;

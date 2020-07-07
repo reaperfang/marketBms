@@ -11,6 +11,13 @@ export function validateURL(textval) {
   return urlregex.test(textval)
 }
 
+/* mp4*/
+export function validateMP4(str) {
+  const reg = /^.*\.(mp|MP)4$/
+  const regUrl = /(http|https):\/\/([\w.]+\/?)\S*/
+  return reg.test(str) && regUrl.test(str)
+}
+
 /* 小写字母*/
 export function validateLowerCase(str) {
   const reg = /^[a-z]+$/
