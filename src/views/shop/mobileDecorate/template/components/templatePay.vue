@@ -189,19 +189,18 @@
 
 <style scoped lang="scss">
 /deep/ .el-dialog {
-	background:rgba(255,255,255,1);
-	box-shadow:0px 5px 20px 0px rgba(208,214,228,1);
+	background: #fff;
+	box-shadow:0 5px 20px 0 rgba(208,214,228,1);
 	border-radius:10px;
 	border:1px solid rgba(204,204,204,1);
 	width: 510px;
 	.el-dialog__header {
 		height:60px;
 		background:rgba(101,94,255,0.09);
-		border-radius:10px 10px 0px 0px;
+		border-radius:10px 10px 0 0;
 		/*opacity:0.09;*/
 		.el-dialog__title {
 			font-size:22px;
-			font-family:PingFangSC-Regular,PingFang SC;
 			font-weight:400;
 			color:rgba(68,67,75,1);
 		}
@@ -246,7 +245,7 @@
       height: 16px;
       font-size: 12px;
       color: $grayColor;
-      line-height: 12px;
+      line-height: 16px;
       margin-top: 10px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -326,11 +325,10 @@
 			align-items: start;
 			flex-flow:row wrap;
 			&-left {
-				background:rgba(255,255,255,1);
+				background: #fff;
 				border-radius:4px;
 				border:1px solid rgba(146,146,155,1);
 				font-size:14px;
-				font-family:PingFangSC-Regular,PingFang SC;
 				font-weight:400;
 				color:rgba(68,67,75,1);
 			}
@@ -339,9 +337,8 @@
 				background:rgba(146,146,155,1);
 				border-radius:4px;
 				font-size:14px;
-				font-family:PingFangSC-Regular,PingFang SC;
 				font-weight:400;
-				color:rgba(255,255,255,1);
+				color: #fff;
 			}
 		}
 	}
