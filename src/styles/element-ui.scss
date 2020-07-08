@@ -55,3 +55,17 @@
 .el-upload-list__item-status-label{
   background: #655EFF !important;
 }
+
+// 单选按钮
+.el-radio__input.is-checked .el-radio__inner{
+  background: none!important;
+}
+.el-radio__inner{
+  width: 16px!important;
+  height: 16px!important;
+}
+.el-radio__inner::after{
+  width: 8px!important;
+  height: 8px!important;
+  background-color: #655EFF!important;
+}

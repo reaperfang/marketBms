@@ -312,13 +312,14 @@ ul.template_type{
   li{
     width: 90px!important;
     height: 100px!important;
-    border: 1px solid #e4e3eb;
+    border: 1px dashed rgba(219,218,228,1);;
     padding: 10px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     margin-right: 13px!important;
     cursor: pointer;
     font-size:12px;
+    border-radius:4px;
     &.active{
       border:1px solid $globalMainColor;
     }

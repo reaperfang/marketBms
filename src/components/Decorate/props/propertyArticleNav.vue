@@ -276,9 +276,9 @@ ul.template_type{
     }
     .fill_block{
       height:100%;
-      background:rgb(230,228,255);
+      background:rgb(242,242,249);
       margin-right:2px;
-      color:rgb(188,187,255);
+      color:rgba(182,181,200,1);
       width: 50%;
       height: 15px;
       margin-top: 3px;
@@ -296,7 +296,7 @@ ul.template_type{
       .fill_block{
         width:33.3%;
         height: 20px;
-        background:rgb(230,228,255) url('../../../assets/images/shop/editor/pic.png') no-repeat 2px 3px;
+        background: rgb(242,242,249) url('../../../assets/images/shop/editor/pic.png') no-repeat 2px 3px;
       }
     }
     .type2{
