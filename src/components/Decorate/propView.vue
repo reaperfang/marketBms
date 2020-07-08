@@ -111,24 +111,20 @@ export default {
     &.module {
       width: 361px;
     }
-    .props-content {
-      overflow-y: auto;
-    }
     .help_blank {
       background-color: #fff!important;
     }
   }
-  .props-content::-webkit-scrollbar-thumb {
-      background: rgba(101,94,255,0.4) !important;
-  }
-  .props-content::-webkit-scrollbar {
-      width: 8px!important;
-      height: 8px!important;
-  }
-  .props-content::-webkit-scrollbar-thumb {
-    background-color: rgba(101,94,255,0.4) !important;
-    background-clip: padding-box;
-    min-height: 28px;
-    border-radius: 7px;
+.props-content form{
+  padding-right: 5px;
+}
+.props-content {
+  overflow-y: auto;
+}
+.props-content form::-webkit-scrollbar {
+  width: 6px!important;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #DEDEE0;
 }
 </style>
