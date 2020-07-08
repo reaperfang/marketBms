@@ -1,10 +1,10 @@
 <template>
-  <div class="module view" :style="{backgroundColor: baseInfo&&baseInfo.colorStyle}">
+  <div class="module view" :style="{backgroundColor: baseInfo&&baseInfo.colorStyle || '#fff'}" v-calcHeight="renderCalcHeight">
     <div class="phone-head" @click="clickTitle(null)" title="点击编辑页面信息">
       <img src="@/assets/images/shop/editor/phone_head.png" alt="">
       <span>{{baseInfo.title || baseInfo.name || '页面标题'}}</span>
     </div>
-    <div class="phone-body" ref="view_container" @click="clickTitle($event)" v-calcHeight="height" @drop="dropAddComponent($event)" @dragover="dragover($event)" @dragleave="dragleave($event)">
+    <div class="phone-body" ref="view_container" @click="clickTitle($event)" v-calcHeight="renderCalcHeight + 64 + 10" @drop="dropAddComponent($event)" @dragover="dragover($event)" @dragleave="dragleave($event)">
 
       <!-- 可拖拽调整顺序 -->
       <vuedraggable 
@@ -62,7 +62,7 @@
       <template v-else>
         <template v-for="(item, key) of componentDataIds">
           <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentData(item).hidden">
-            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" ></component>
+            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :dragable="dragable"></component>
           </div>
         </template>
       </template>
@@ -94,7 +94,7 @@ export default {
       type: Boolean,
       default: true
     },
-    height: {
+    renderCalcHeight: {
       type: Number
     }
   },
@@ -165,11 +165,13 @@ export default {
           loadedLength ++;
           if(loadedLength >= widgetList.length) {
             this.allTemplateLoaded = true;
+            this.$emit('renderInited', this);
           }
         }).catch(e => {
           loadedLength ++;
           if(loadedLength >= widgetList.length) {
             this.allTemplateLoaded = true;
+            this.$emit('renderInited', this);
           }
         })
       }
@@ -357,8 +359,10 @@ export default {
 <style lang="scss" scoped>
  .view {
    position:relative;
+   -webkit-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 10px rgba(0,0,0,0.1);
     .phone-body {
-      box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+      // box-shadow: 0 1px 10px rgba(0,0,0,0.1);
       width: 375px;
       overflow-x: hidden;
       overflow-y: scroll;

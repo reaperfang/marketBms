@@ -55,13 +55,13 @@ export default [
 				path: "m_templateManageIndex",
 				component: () => import("@/views/shop/mobileDecorate/template/templateManageIndex"),
 				name: "m_templateManageIndex",
-				meta: { title: "模板管理", noCache: true, tabTitle: '移动装修',navType:2 }
+				meta: { title: "模板管理", noCache: true, tabTitle: '移动装修',navType:2, m_shopEditor: true }
 			},
 			{
 				path: "m_templateEdit",
 				component: () => import("@/views/shop/mobileDecorate/template/templateEdit"),
 				name: "m_templateEdit",
-				meta: { title: "模板编辑", noCache: true, tabTitle: '移动装修',navType:2 },
+				meta: { title: "模板编辑", noCache: true, tabTitle: '移动装修',navType:2, m_shopEditor: true },
 				hidden: true
 			},
 
@@ -77,14 +77,14 @@ export default [
 				path: "m_classifyEditor",
 				component: () => import("@/views/shop/mobileDecorate/pages/classifyEditor"),
 				name: "m_classifyEditor",
-				meta: { title: "微页面分类编辑", noCache: true, tabTitle: '移动装修',navType:2 },
+				meta: { title: "微页面分类编辑", noCache: true, tabTitle: '移动装修',navType:2, m_shopEditor: true },
 				hidden: true
 			},
 			{
 				path: "m_decorateClassifyPreview",
 				component: () => import("@/views/shop/mobileDecorate/pages/decorateClassifyPreview"),
 				name: "m_decorateClassifyPreview",
-				meta: { title: "微页面分类预览", noCache: true, tabTitle: '移动装修',navType:2 },
+				meta: { title: "微页面分类预览", noCache: true, tabTitle: '移动装修',navType:2, m_shopEditor: true },
 				hidden: true
 			},
 			{
@@ -98,7 +98,7 @@ export default [
 				path: "m_decoratePreview",
 				component: () => import("@/views/shop/mobileDecorate/pages/decoratePreview"),
 				name: "m_decoratePreview",
-				meta: { title: "微页面预览", noCache: true, tabTitle: '移动装修',navType:2 },
+				meta: { title: "微页面预览", noCache: true, tabTitle: '移动装修',navType:2, m_shopEditor: true },
 				hidden: true
 			},		
 

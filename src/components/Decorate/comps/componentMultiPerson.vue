@@ -1,6 +1,6 @@
 <template>
 <!-- 组件-多人拼团 -->
-    <div class="component_wrapper" v-loading="loading">
+    <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
         <div class="componentMultiPerson" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data && hasContent">
 
             <ul v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">

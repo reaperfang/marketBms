@@ -1,5 +1,5 @@
 <template>
-   <div class="module widget" v-calcHeight="66">
+   <div class="module widget" v-calcHeight="widgetCalcHeight">
       <!-- 隐藏的控件不显示 -->
       <div v-if="key != 'hiddenWidget'" class="block" v-for="(item, key) of widgetList" :key="key">
         <template>
@@ -31,7 +31,10 @@ export default {
   props: {
     componentsConfig: {
       type: Object
-    }
+    },
+    widgetCalcHeight: {
+      type: Number
+    },
   },
   components: {},
   data () {
@@ -43,6 +46,7 @@ export default {
     this.initConfig(this.componentsConfig);
   },
   mounted() {
+    this.$emit('widgetInited');
   },
   computed: {
     currentComponentId() {

@@ -1,5 +1,5 @@
 <template>
-  <el-form class="property-coupon" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form class="property-coupon" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="添加方式" prop="addType">
         <el-radio-group v-model="ruleForm.addType">

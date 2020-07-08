@@ -1,8 +1,23 @@
 <template>
   <div class="editor-wrapper">
-    <widgetView v-if="config.showWidget" :componentsConfig="config.components"></widgetView>
-    <renderView v-if="height > 0" :dragable="config.dragable" :height="height"></renderView>
-    <propView v-if="config.showProp" :buttons="buttonList"></propView>
+    <widgetView 
+      v-if="config.showWidget" 
+      :widgetCalcHeight="config.widgetCalcHeight"
+      :componentsConfig="config.components" 
+      @widgetInited="widgetInited"
+    ></widgetView>
+    <renderView 
+      :renderCalcHeight="config.renderCalcHeight" 
+      :dragable="config.dragable" 
+      @renderInited="renderInited"
+    ></renderView>
+    <propView 
+      v-if="config.showProp" 
+      :propCalcHeight="config.propCalcHeight"
+      :buttons="config.buttons"
+      @propsInited="propsInited"
+      @dataChanged="dataChanged"
+    ></propView>
     <!-- <div style="width:600px;">
       页面基础数据：
       <el-tag type="primary" style="width: 100%;overflow-x: auto;">{{baseInfo}}</el-tag>
@@ -32,15 +47,10 @@ export default {
     },
     config: {
       type: Object
-    },
-    height: {
-      type: Number,
-      default: 145 - 10
     }
   },
   data() {
     return {
-      buttonList: this.config.buttons,
       decoratePageData:this.decorateData
     };
   },
@@ -67,6 +77,7 @@ export default {
     //设置基础组件id
     this.$store.commit('setBasePropertyId', id);
     this.$store.dispatch('getShopStyle');
+    this.$emit('baseComponentInited', this);
   },
   computed: {
     baseInfo() {
@@ -83,12 +94,6 @@ export default {
     }
   },
   watch: {
-    'config.buttons': {
-      handler(newValue) {
-        this.buttonList = newValue;
-      },
-      deep: true
-    },
     'decorateData': {
       handler(newValue) {
         this.decoratePageData = newValue;
@@ -155,6 +160,7 @@ export default {
 
       //设置选中高亮的组件id
       this.$store.commit('setCurrentComponentId', this.basePropertyId);
+      this.$emit('dataInited', this);
     },
 
     /* 保存前收集装修数据 */
@@ -170,6 +176,26 @@ export default {
 
       result['pageData'] = pageData;
       return result;
+    },
+
+     /* 控件面板初始化 */
+    widgetInited() {
+      this.$emit('widgetInited', this);
+    },
+    
+    /* 渲染面板初始化 */
+    renderInited() {
+      this.$emit('renderInited', this);
+    },
+    
+    /* 属性面板初始化 */
+    propsInited() {
+      this.$emit('propsInited', this);
+    },
+
+    /* 组件数据发生改变 */
+    dataChanged(id, data) {
+      this.$emit('dataChanged', this, id, data);
     }
   }
 

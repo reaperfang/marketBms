@@ -3,7 +3,15 @@ import componentEmpty from '../tools/componentEmpty';
 export default {
   name: "mixinCompsBase",
   components: {componentEmpty},
-  props: ["data"],
+  props: {
+    data: {
+      type: Object
+    },
+    dragable: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       allLoaded: true  //全部加载完成

@@ -2,7 +2,16 @@
 <template>
   <div class="preview_wrapper">
     <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
+    <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetInited="widgetInited"
+      @renderInited="renderInited"
+      @propsInited="propsInited"
+      @baseComponentInited="baseComponentInited"
+      @dataInited="dataInited"
+    ></Decorate>
     <div class="shop_info">
       <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
       <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
@@ -40,7 +49,8 @@ export default {
         },
         showWidget: false,
         showProp: false,
-        dragable: false
+        dragable: false,
+        renderCalcHeight: 66+10+20  //渲染区扣减高度
       },
       decorateData: null,
       id: this.pageId || this.$route.query.pageId
@@ -127,6 +137,31 @@ export default {
         console.error(error);
       });
     },
+
+    /* 控件面板初始化 */
+    widgetInited(scope) {
+      console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderInited(scope) {
+      console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsInited(scope) {
+      console.log('属性面板初始化结束');
+    },
+
+    /* 基础组件初始化 */
+    baseComponentInited(scope) {
+      console.log('基础组件初始化结束');
+    },
+
+    /* 数据初始化结束 */
+    dataInited(scope) {
+      console.log('数据初始化结束');
+    }
   }
 };
 </script>

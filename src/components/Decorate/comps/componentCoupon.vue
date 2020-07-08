@@ -1,6 +1,6 @@
 <template>
   <!-- 优惠券 -->
-  <div class="component_wrapper" v-loading="loading">
+  <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div v-if="currentComponentData && currentComponentData.data && hasContent" class="componentCoupon">
       <div class="coupon_first componentCoupon" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
         <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">

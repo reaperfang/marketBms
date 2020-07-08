@@ -1,6 +1,6 @@
 <template>
 <!-- 组件-商品分类 -->
-    <div class="component_wrapper" v-loading="loading">
+    <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
       <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data && hasContent">
 
           <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">

@@ -1,6 +1,6 @@
 <template>
   <!-- 文本 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div
       class="componentText"
       :style="{'backgroundColor':currentComponentData.data.backgroundColor}"

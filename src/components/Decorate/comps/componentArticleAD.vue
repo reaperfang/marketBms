@@ -1,6 +1,6 @@
 <template>
   <!-- 图片广告 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentArticleAD" v-if="currentComponentData && currentComponentData.data">
         <!-- 1、一行一个 -->
         <div v-if="currentComponentData.data.templateType==1" :style="{'padding':currentComponentData.data.pageMargin+'px'}">

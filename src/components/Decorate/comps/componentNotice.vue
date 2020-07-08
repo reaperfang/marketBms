@@ -1,6 +1,6 @@
 <template>
   <!-- 公告 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentNotice" v-if="currentComponentData && currentComponentData.data">
       <van-notice-bar
         v-if="currentComponentData.data.notice"

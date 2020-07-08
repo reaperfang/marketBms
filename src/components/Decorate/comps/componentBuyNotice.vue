@@ -1,6 +1,6 @@
 <template>
   <!-- 购买公告 -->
-  <div class="component_wrapper" v-loading="loading">
+  <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
       <template v-if="(currentComponentData.data.fakeList && currentComponentData.data.fakeList.length) || displayList.length">
         <div v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">

@@ -1,6 +1,6 @@
 <template>
   <!-- 满减瞒折 -->
-  <div class="component_wrapper" v-loading="loading">
+  <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentFullReduction" v-if="currentComponentData && currentComponentData.data && hasContent">
 
         <div class="coupon_first componentFullReduction" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">

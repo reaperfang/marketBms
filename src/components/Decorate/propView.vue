@@ -1,6 +1,6 @@
 <template>
-  <div class="module props">
-      <div v-calcHeight="168" class="props-content">
+  <div class="module props" v-calcHeight="propCalcHeight">
+      <div class="props-content">
         <!-- 头部标题栏 -->
         <div class="block header">
           <p class="title" v-if="componentDataMap[currentComponentId]">
@@ -13,14 +13,16 @@
         </div>
 
         <!-- 属性渲染区 -->
-        <transition name="fade" :duration="{ enter: 200, leave: 100 }">
-          <component :is='currentComponent' @change="propsChange" v-bind="componentDataMap[currentComponentId]" key="components"></component>
-        </transition>
+        <div v-calcHeight="componentDataMap[currentComponentId].describe ? propCalcHeight + 24+64+92 : propCalcHeight + 64+92" class="props_form">
+          <transition name="fade" :duration="{ enter: 200, leave: 100 }">
+            <component :is='currentComponent' @change="propsChange" v-bind="componentDataMap[currentComponentId]" key="components"></component>
+          </transition>
+        </div>
       </div>
 
       <!-- 底部按钮区 -->
       <div class="block button">
-        <div class="help_blank"></div>
+        <!-- <div class="help_blank"></div> -->
         <div class="buttons">
           <template v-for="(item, key) in buttonList">
             <el-button v-if="item.show() && item.function" :key="key" @click="item.function" :loading="item.loading" :type="item.type">{{item.title}}</el-button>
@@ -37,6 +39,9 @@ export default {
   props: {
     buttons: {
       type: Object
+    },
+    propCalcHeight: {
+      type: Number
     }
   },
   data () {
@@ -89,6 +94,7 @@ export default {
           this.currentComponent = '';
           this.$nextTick(()=>{  //清除缓存组件以后下一帧处理
             this.currentComponent = loadedComponent.default
+            this.$emit('propsInited', this);
           })
         }).catch(e => {
           console.error(e);
@@ -99,6 +105,7 @@ export default {
     /* 更新组件数据 */
     propsChange(params) {
       this.$store.commit('updateComponent', params);
+      this.$emit('dataChanged', params.id, params.data)
     }
   }
 }
@@ -118,13 +125,13 @@ export default {
 .props-content form{
   padding-right: 5px;
 }
-.props-content {
+.props_form{
   overflow-y: auto;
 }
-.props-content form::-webkit-scrollbar {
+.props_form::-webkit-scrollbar {
   width: 6px!important;
 }
 ::-webkit-scrollbar-thumb{
-  background-color: #DEDEE0;
+  background-color: #B6B5C8;
 }
 </style>

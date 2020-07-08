@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="60px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="60px">
     <div class="block form">
       <el-form-item label="视频" prop="source">
         <el-radio-group v-model="source">

@@ -2,7 +2,17 @@
   <div>
 
     <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decorateData" :config="config" :height="66 + 64 + 20"></Decorate>
+    <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetInited="widgetInited"
+      @renderInited="renderInited"
+      @propsInited="propsInited"
+      @baseComponentInited="baseComponentInited"
+      @dataInited="dataInited"
+      @dataChanged="dataChanged"
+    ></Decorate>
 
     <!-- 动态弹窗 预览 -->
     <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :decorateData="decorateData"></component>
@@ -80,7 +90,10 @@ export default {
         },
         showWidget: true,  //是否显示左侧控件面板
         showProp: true,  //是否显示右侧属性面板
-        dragable: true   //是否可拖拽排序
+        dragable: true,   //是否可拖拽排序
+        widgetCalcHeight: 66, //控件区扣减高度
+        renderCalcHeight: 66+10,  //渲染区扣减高度
+        propCalcHeight: 66 //属性区扣减高度
       },
       decorateData: null
     };
@@ -274,6 +287,36 @@ export default {
         return false;
       }
       return true;
+    },
+
+    /* 控件面板初始化 */
+    widgetInited(scope) {
+      console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderInited(scope) {
+      console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsInited(scope) {
+      console.log('属性面板初始化结束');
+    },
+
+    /* 基础组件初始化 */
+    baseComponentInited(scope) {
+      console.log('基础组件初始化结束');
+    },
+
+    /* 数据初始化结束 */
+    dataInited(scope) {
+      console.log('数据初始化结束');
+    },
+
+    /* 组件数据发生改变 */
+    dataChanged(scope, id, value) {
+      console.log('组件数据发生改变', id, value);
     }
 
   },
@@ -281,9 +324,5 @@ export default {
 };
 </script>
 <style lang="scss">
-  .app-main .content-box .content-main.m_shopEditor {
-    padding: 0;
-    overflow: hidden;
-  }
 </style>
 

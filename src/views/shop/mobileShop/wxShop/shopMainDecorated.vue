@@ -1,8 +1,17 @@
 <template>
   <div class="preview_wrapper">
     <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config" :height="175+7+64"></Decorate>
-    <div class="shop_info" v-calcHeight="175+10">
+    <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetInited="widgetInited"
+      @renderInited="renderInited"
+      @propsInited="propsInited"
+      @baseComponentInited="baseComponentInited"
+      @dataInited="dataInited"
+    ></Decorate>
+    <div class="shop_info" v-calcHeight="200+10">
       <div class="shop_code">
         <h3>店铺微信预览</h3>
         <h4>使用微信扫描二维码，预览店铺效果</h4>
@@ -95,7 +104,8 @@ export default {
         },
         showWidget: false,
         showProp: false,
-        dragable: false
+        dragable: false,
+        renderCalcHeight: 212+10  //渲染区扣减高度
       },
       decoratePageData: this.decorateData
     };
@@ -218,6 +228,31 @@ export default {
         this.$message({ message: error, type: 'error' });
       });
     },
+
+    /* 控件面板初始化 */
+    widgetInited(scope) {
+      console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderInited(scope) {
+      console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsInited(scope) {
+      console.log('属性面板初始化结束');
+    },
+
+    /* 基础组件初始化 */
+    baseComponentInited(scope) {
+      console.log('基础组件初始化结束');
+    },
+
+    /* 数据初始化结束 */
+    dataInited(scope) {
+      console.log('数据初始化结束');
+    }
 
   }
 };

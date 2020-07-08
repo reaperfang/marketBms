@@ -1,6 +1,6 @@
 <template>
   <!-- 店铺信息 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentShoplnfo" v-if="currentComponentData && currentComponentData.data">
       <!-- 样式一 -->
       <div v-if="displayStyle1" class="shopinfo1" :style="background">

@@ -1,6 +1,6 @@
 <template>
   <!-- 进入店铺 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentEnterShop" v-if="currentComponentData && currentComponentData.data">
       <div class="group_shop">
         <ul>

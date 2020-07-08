@@ -1,5 +1,5 @@
 <template>
-    <div class="component_wrapper">
+    <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
       <div v-if="currentComponentData && currentComponentData.data">
           <ul class="cube cube_preview">
 

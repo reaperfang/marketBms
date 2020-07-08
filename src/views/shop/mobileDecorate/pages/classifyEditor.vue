@@ -1,7 +1,16 @@
 <template>
     <div>
       <!-- 装修编辑器 -->
-      <Decorate ref="Decorate" :decorateData="decorateData" :config="config" :height="146+10"></Decorate>
+      <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetInited="widgetInited"
+      @renderInited="renderInited"
+      @propsInited="propsInited"
+      @baseComponentInited="baseComponentInited"
+      @dataInited="dataInited"
+    ></Decorate>
 
       <!-- 动态弹窗 预览 -->
       <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :decorateData="decorateData"></component>
@@ -59,7 +68,10 @@ export default {
         },
         showWidget: true,
         showProp: true,
-        dragable: true
+        dragable: true,
+        widgetCalcHeight: 66, //控件区扣减高度
+        renderCalcHeight: 66+10+24,  //渲染区扣减高度
+        propCalcHeight: 66 //属性区扣减高度
       },
       decorateData: null
     };
@@ -216,6 +228,31 @@ export default {
         return false;
       }
       return true;
+    },
+
+    /* 控件面板初始化 */
+    widgetInited(scope) {
+      console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderInited(scope) {
+      console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsInited(scope) {
+      console.log('属性面板初始化结束');
+    },
+
+    /* 基础组件初始化 */
+    baseComponentInited(scope) {
+      console.log('基础组件初始化结束');
+    },
+
+    /* 数据初始化结束 */
+    dataInited(scope) {
+      console.log('数据初始化结束');
     }
 
   }

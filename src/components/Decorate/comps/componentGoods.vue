@@ -1,6 +1,6 @@
 <template>
 <!-- 组件-商品列表 -->
-    <div class="component_wrapper" v-loading="loading">
+    <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
         <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data && hasContent" ref="componentContent">
 
             <ul v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">

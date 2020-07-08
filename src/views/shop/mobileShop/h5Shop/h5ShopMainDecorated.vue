@@ -21,8 +21,17 @@
       </div>
       <div class="preview_wrapper">
         <!-- 装修编辑器 -->
-        <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config" :height="175+7+64"></Decorate>
-        <div class="shop_info" v-calcHeight="175+10">
+        <Decorate 
+          ref="Decorate" 
+          :decorateData="decorateData" 
+          :config="config" 
+          @widgetInited="widgetInited"
+          @renderInited="renderInited"
+          @propsInited="propsInited"
+          @baseComponentInited="baseComponentInited"
+          @dataInited="dataInited"
+        ></Decorate>
+        <div class="shop_info" v-calcHeight="260+10">
           <div class="shop_code">
             <h3>H5店铺手机预览</h3>
             <h4>请您使用手机内自带浏览器扫描二维码，预览店铺效果</h4>
@@ -77,7 +86,27 @@ export default {
     return {
       loading: true,
       webStatus: null,  //未绑定过域名
-      h5ShareUrl: ''  //h5店铺分享地址
+      h5ShareUrl: '',  //h5店铺分享地址
+
+       /* 装修编辑器配置 */
+      config: {
+        pageBase: {
+          type: 'pageInfo',
+          isBase: true,
+          hidden: true,
+          title: '页面信息'
+        },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
+        callbacks: {
+          setBaseInfo: this.setBaseInfo
+        },
+        showWidget: false,
+        showProp: false,
+        dragable: false,
+        renderCalcHeight: 260+10  //渲染区扣减高度
+      },
     }
   },
   props: {
@@ -155,7 +184,7 @@ export default {
       }).catch((error)=>{
         console.error(error);
       });
-    },
+    }
   }
 }
 </script>

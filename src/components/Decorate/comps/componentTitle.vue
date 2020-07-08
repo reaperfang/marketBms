@@ -1,6 +1,6 @@
 <template>
   <!-- 标题 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentTitle" :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="currentComponentData && currentComponentData.data && hasContent">
         <!-- 1、传统样式 -->
         <div v-if="currentComponentData.data.titleTemplate===1" :class="'title'+currentComponentData.data.displayPosition">

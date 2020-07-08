@@ -1,5 +1,5 @@
 <template>
-<el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :inline="true" v-calcHeight="height">
+<el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :inline="true">
   <div class="block form">
     <el-form-item label="背景颜色">
       <div class="color_block">

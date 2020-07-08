@@ -6,7 +6,18 @@
       </div>
 
       <!-- 装修编辑器 -->
-      <Decorate ref="Decorate" :decorateData="decorateData" :config="config" v-if="decorateRender"></Decorate>
+      <Decorate 
+        v-if="decorateRender"
+        ref="Decorate" 
+        :decorateData="decorateData" 
+        :config="config" 
+        @widgetInited="widgetInited"
+        @renderInited="renderInited"
+        @propsInited="propsInited"
+        @baseComponentInited="baseComponentInited"
+        @dataInited="dataInited"
+        @dataChanged="dataChanged"
+      ></Decorate>
     </div>
     <div v-else v-loading="loading" style="padding:50px;">
       暂无可用页面
@@ -52,7 +63,10 @@ export default {
         },
         showWidget: true,
         showProp: true,
-        dragable: true
+        dragable: true,
+        widgetCalcHeight: 66, //控件区扣减高度
+        renderCalcHeight: 66+10,  //渲染区扣减高度
+        propCalcHeight: 66 //属性区扣减高度
       },
       decorateData: null,
       pageList: [],  //页面列表
@@ -266,6 +280,36 @@ export default {
         }
       }
       return true;
+    },
+
+    /* 控件面板初始化 */
+    widgetInited(scope) {
+      console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderInited(scope) {
+      console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsInited(scope) {
+      console.log('属性面板初始化结束');
+    },
+
+    /* 基础组件初始化 */
+    baseComponentInited(scope) {
+      console.log('基础组件初始化结束');
+    },
+
+    /* 数据初始化结束 */
+    dataInited(scope) {
+      console.log('数据初始化结束');
+    },
+
+    /* 组件数据发生改变 */
+    dataChanged(scope, id, value) {
+      console.log('组件数据发生改变', id, value);
     }
   }
 };

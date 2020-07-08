@@ -2,7 +2,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="(baseInfo.name || '页面名称') + '预览'">
     <div class="preview_wrapper">
-      <renderView :dragable="false" :height="1000"></renderView>
+      <renderView :dragable="false" :renderCalcHeight="1000"></renderView>
       <div class="shop_info">
         <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
         <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>

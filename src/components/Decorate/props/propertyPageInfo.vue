@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="页面名称" prop="name">
         <el-input v-model="ruleForm.name" placeholder="请输入页面名称" @blur="changeValidate"></el-input>
