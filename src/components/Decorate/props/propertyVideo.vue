@@ -21,12 +21,12 @@
         <div class="add_button" v-else @click="dialogVisible=true; currentDialog='dialogSelectVideo'">
           <i class="inner"></i>
         </div>
-        <p class="prop-message" style="margin-top:5px;">视频大小不超过10mb，支持mp4格式</p>
+        <p class="prop-message" style="margin-top:5px;">视频大小不超过10mb；仅支持.mp4格式的播放地址</p>
       </el-form-item>
       <el-form-item label="" v-if="source === 2" prop="videoUrl">
         <el-input  v-model="ruleForm.videoUrl" placeholder="此处粘贴视频播放地址"></el-input>
         <p v-show="videoUrlError" style="color:#fd4c2b;margin-top:5px;font-size:12px;line-height:1;">您输入的视频格式有误，请您重新输入</p>
-        <p style="color:rgb(211, 211, 211);margin-top:5px;">仅支持.mp4格式的播放地址</p>
+        <p style="color:rgb(211, 211, 211);margin-top:5px;line-height:1.5;">视频大小不超过10mb；仅支持.mp4格式的播放地址</p>
       </el-form-item>
       <el-form-item label="封面图" v-if="ruleForm.videoUrl">
         <el-radio-group v-model="coverType">
