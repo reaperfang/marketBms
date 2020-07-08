@@ -30,7 +30,8 @@
     },
 		methods: {
 			handleClick(comp) {
-				this.currentTab = comp.name;
+				// this.currentTab = comp.name;
+        this._routeTo('m_templateManageIndex', {'tab': comp.name})
 			},
 			resetAndFetch() {
 				this.$refs.templateChild.resetfetch();

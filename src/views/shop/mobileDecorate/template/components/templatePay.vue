@@ -5,7 +5,7 @@
 		:before-close="closePay">
 		<div class="templage-pay-content">
 			<div class="templage-pay-content-left">
-				<img :src="tempInfo.photoDetailsUrl"/>
+				<img :src="tempInfo.photoDetailsUrl" alt="预览图"/>
 			</div>
 			<div class="templage-pay-content-right">
 				<div class="templage-pay-content-right-title">
@@ -220,6 +220,8 @@
 		overflow-y: scroll;
 		img {
 			width: 100%;
+      min-height: 100%;
+      object-fit: cover;
 		}
 	}
 	&-right {
