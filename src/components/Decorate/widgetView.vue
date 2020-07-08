@@ -242,7 +242,7 @@ export default {
           }
           p{
             color:rgba(58,64,72,1);
-            margin-top:10px;
+            margin-top:8px;
           }
         }
       }
@@ -251,6 +251,12 @@ export default {
 .widget-transition{ transition: all ease .2s; }
 .widget-transition-enter-active { animation: widgetEnter .2s; overflow: hidden; }
 .widget-transition-leave-active { animation: widgetLeave .2s ; overflow: hidden; }
+.widget::-webkit-scrollbar {
+  width: 6px!important;
+}
+::-webkit-scrollbar-thumb{
+  background-color: #B6B5C8;
+}
 @keyframes widgetEnter {
   from { 
     height: 0;
