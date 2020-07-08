@@ -55,7 +55,7 @@ export default [
 				path: "m_templateManageIndex",
 				component: () => import("@/views/shop/mobileDecorate/template/templateManageIndex"),
 				name: "m_templateManageIndex",
-				meta: { title: "模板管理", noCache: true, tabTitle: '移动装修',navType:2, m_shopEditor: true }
+				meta: { title: "模板管理", noCache: true, tabTitle: '移动装修',navType:2}
 			},
 			{
 				path: "m_templateEdit",
