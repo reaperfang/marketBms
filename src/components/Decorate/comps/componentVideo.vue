@@ -66,7 +66,6 @@ export default {
   .video {
     width: 100%;
     height: 210px;
-    object-fit: fill;
   }
 }
 </style>
