@@ -1,68 +1,69 @@
 <template>
 <!-- 组件-限时秒杀 -->
     <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
-        <div class="componentDiscount" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data && hasContent" ref="componentContent">
-
-            <ul v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-                <li v-for="(item,key) of currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio, 'fakeData']">
-                    <div class="img_box" v-if="listStyle != 4">
-                        <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
-                    </div>
-                    <div v-else class="img_box">
-                        <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
-                    </div>
-                </li>
-            </ul>
-
-            <ul v-else>
-                <li v-for="(item,key) of displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
-                    <div class="img_box">
-                        <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
-                    </div>
-                    <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                        <h1 class="title">限时折扣</h1>
-                        <div class="countdown">
-                            <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
-                            <div class="content">
-                                <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                                <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
-                                <!-- <p class="time">{{item.endTime}}</p> -->
-                                <!-- <van-count-down :time="
-                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
-                                " class="time">
-                                    <template v-slot="timeData">
-                                        <span class="item">{{ utils.addZero(timeData.days) }}</span>
-                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
-                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
-                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
-                                    </template>
-                                </van-count-down> -->
-                            </div>
+        <div class="componentDiscount" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data" ref="componentContent">
+            <template v-if="hasRealData || hasFakeData">
+                <ul v-if="hasRealData">
+                    <li v-for="(item,key) of displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                        <div class="img_box">
+                            <img :src="item.goodsImgUrl" alt="" :class="{goodsFill:goodsFill!=1}">
                         </div>
-                    </div>
-                    <div class="info_box" v-if="showContents.length > 0">
-                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{getReduce(item)}}元</font>{{item.goodsName}}</p>
-                        <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
-                        <div class="limit_line" v-if="showContents.indexOf('6')!=-1||showContents.indexOf('7')!=-1">
-                            <p class="limit" v-if="showContents.indexOf('7')!=-1">{{item.activityJoinLimit==-1?'不限':'限'+item.activityJoinLimit+'件/人'}}</p>
-                        <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
-                                <div class="jd_line">
-                                    <div class="current_line" :style="{width: getProgress(item)}"></div>
+                        <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
+                            <h1 class="title">限时折扣</h1>
+                            <div class="countdown">
+                                <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
+                                <div class="content">
+                                    <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
+                                    <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                    <!-- <p class="time">{{item.endTime}}</p> -->
+                                    <!-- <van-count-down :time="
+                                    item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                    " class="time">
+                                        <template v-slot="timeData">
+                                            <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                            <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                            <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                            <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                        </template>
+                                    </van-count-down> -->
                                 </div>
-                                <p>仅剩<font>{{item.remainStock?item.remainStock:0}}</font>件</p>
                             </div>
                         </div>
-                        <div class="price_line">
-                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button s1" v-if="showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6 && (item.status==1 ||item.status==0)"></componentButton>
+                        <div class="info_box" v-if="showContents.length > 0">
+                            <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">减{{getReduce(item)}}元</font>{{item.goodsName}}</p>
+                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.description}}</p>
+                            <div class="limit_line" v-if="showContents.indexOf('6')!=-1||showContents.indexOf('7')!=-1">
+                                <p class="limit" v-if="showContents.indexOf('7')!=-1">{{item.activityJoinLimit==-1?'不限':'限'+item.activityJoinLimit+'件/人'}}</p>
+                            <div class="remainder_box" v-if="showContents.indexOf('6')!=-1">
+                                    <div class="jd_line">
+                                        <div class="current_line" :style="{width: getProgress(item)}"></div>
+                                    </div>
+                                    <p>仅剩<font>{{item.remainStock?item.remainStock:0}}</font>件</p>
+                                </div>
+                            </div>
+                            <div class="price_line">
+                                <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button s1" v-if="showContents.indexOf('8')!=-1&& listStyle != 3 && listStyle != 6 && (item.status==1 ||item.status==0)"></componentButton>
 
-                            <p class="activity_end" v-if="item.status==2">已结束</p>
-                            <!-- <p class="activity_end" v-if="item.status==0">活动未开始</p> -->
-                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{getReducePrice(item)}}</font></p>
-                            <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
+                                <p class="activity_end" v-if="item.status==2">已结束</p>
+                                <!-- <p class="activity_end" v-if="item.status==0">活动未开始</p> -->
+                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{getReducePrice(item)}}</font></p>
+                                <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
+                            </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+                <ul v-else>
+                    <li v-for="(item,key) of currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio, 'fakeData']">
+                        <div class="img_box" v-if="listStyle != 4">
+                            <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                        </div>
+                        <div v-else class="img_box">
+                            <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                        </div>
+                    </li>
+                </ul>
+            </template>
+            <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
         </div>
         <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
@@ -92,8 +93,7 @@ export default {
             goodWidth:'',
             goodMargin:'',
             displayList: [],
-            loading: false,
-            showFakeData: true
+            loading: false
         }
     },
     watch: {
@@ -122,22 +122,6 @@ export default {
                 return;
             }
             this.fetch();
-        },
-        'displayList': {
-            handler(newValue) {
-                this.showFakeData = !newValue.length;
-            },
-            deep: true
-        }
-    },
-    computed: {
-         /* 检测是否有数据 */
-        hasContent() {
-            let value = false;
-            if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
-                value = true;
-            }
-            return value;
         }
     },
     methods:{
@@ -266,6 +250,24 @@ export default {
                 return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice || 0;
             };
             return 0;
+        },
+
+        /* 检查真数据 */
+        checkRealData(newValue) {
+            this.hasRealData = !!newValue.length;
+            this.upadteComponentData();
+        },
+
+        /* 检查假数据 */
+        checkFakeData(newValue) {
+            this.hasFakeData = false;
+            for(let item of newValue) {
+                if(item && item.length) {
+                    this.hasFakeData = true;
+                    break;
+                }
+            }
+            this.upadteComponentData();
         }
 
     }

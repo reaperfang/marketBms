@@ -87,8 +87,7 @@ export default {
         couponStyle: 1,//优惠券样式
         couponColor: 1,//优惠券颜色类型
         hideScrambled: false,//隐藏已抢完券
-        ids: [],//优惠券id列表
-        showFakeData: false
+        ids: []//优惠券id列表
       },
       displayList: [],
       rules: {
@@ -157,13 +156,6 @@ export default {
             _self.echoList.push({id: item});
           })
         }
-      },
-      deep: true
-    },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
       },
       deep: true
     }

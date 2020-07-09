@@ -61,8 +61,7 @@ export default {
         intervalEnd: 60,// 间隔时间结束 
         backgroundColor: 'rgb(255,248,233)',//背景颜色
         fontColor: 'rgb(102,102,102)',//字体颜色
-        ids: [],//商品id列表
-        showFakeData: false
+        ids: []//商品id列表
       },
       displayList: [],
       rules: {
@@ -96,12 +95,6 @@ export default {
         }
       },
       deep: true
-    },
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
-      },
-      deep: true
     }
   },
   methods: {
@@ -131,7 +124,7 @@ export default {
       /* 创建数据 */
     createList(datas) {
       this.displayList = datas;
-    },
+    }
   }
 }
 </script>

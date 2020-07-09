@@ -1,41 +1,43 @@
 <template>
 <!-- 组件-商品列表 -->
     <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
-        <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data && hasContent" ref="componentContent">
-
-            <ul v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-                <li v-for="(item,key) in currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]" class="fakeData">
-                    <div class="img"  v-if="listStyle != 4">
-                        <div class="imgAbsolute">
+        <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data" ref="componentContent">
+            <template v-if="hasRealData || hasFakeData">
+                <ul  v-if="hasRealData">
+                    <li v-for="(item,key) in displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                        <div class="img" >
+                            <div class="imgAbsolute">
+                                <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
+                            </div>
+                            <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
+                            <p class="nothing" v-if="calcSotck(item)<1">售罄</p>
+                            <div class="nothingLayer" v-if="calcSotck(item)<1"></div>
+                        </div>
+                        <div class="text" v-if="showContents.length>0">
+                            <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
+                            <p class="fTitle" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('3')!=-1">{{item.description}}</p>
+                            <div class="priceLine">
+                                <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{getPrice(item)}}</font></p>
+                                <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&calcSotck(item)>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                
+                <ul v-else>
+                    <li v-for="(item,key) in currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]" class="fakeData">
+                        <div class="img"  v-if="listStyle != 4">
+                            <div class="imgAbsolute">
+                                <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                            </div>
+                        </div>
+                        <div v-else class="img">
                             <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
                         </div>
-                    </div>
-                    <div v-else class="img">
-                        <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
-                    </div>
-                </li>
-            </ul>
-
-            <ul  v-else>
-                <li v-for="(item,key) in displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
-                    <div class="img" >
-                        <div class="imgAbsolute">
-                            <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
-                        </div>
-                        <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
-                        <p class="nothing" v-if="calcSotck(item)<1">售罄</p>
-                        <div class="nothingLayer" v-if="calcSotck(item)<1"></div>
-                    </div>
-                    <div class="text" v-if="showContents.length>0">
-                        <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
-                        <p class="fTitle" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('3')!=-1">{{item.description}}</p>
-                        <div class="priceLine">
-                            <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{getPrice(item)}}</font></p>
-                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&calcSotck(item)>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </template>
+            <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
         </div>
         <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
@@ -70,8 +72,7 @@ export default {
             goodListLoading: false,
             goodListFinished: false,
             displayList: [],
-            loading: false,
-            showFakeData: true
+            loading: false
         }
     },
     created() {
@@ -111,23 +112,9 @@ export default {
             if(newValue !== oldValue) {
                 this.fetch();
             }
-        },
-        'displayList': {
-            handler(newValue) {
-                this.showFakeData = !newValue.length;
-            },
-            deep: true
         }
     },
     computed: {
-         /* 检测是否有数据 */
-        hasContent() {
-            let value = false;
-            if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
-               value = true;
-            }
-            return value;
-        },
         colorStyle() {
           return this.$store.getters.colorStyle || {colors:[]};
         },
@@ -326,6 +313,24 @@ export default {
                 }
             }
             return totalStock;
+        },
+
+        /* 检查真数据 */
+        checkRealData(newValue) {
+            this.hasRealData = !!newValue.length;
+            this.upadteComponentData();
+        },
+
+        /* 检查假数据 */
+        checkFakeData(newValue) {
+            this.hasFakeData = false;
+            for(let item of newValue) {
+                if(item && item.length) {
+                    this.hasFakeData = true;
+                    break;
+                }
+            }
+            this.upadteComponentData();
         }
 
     }

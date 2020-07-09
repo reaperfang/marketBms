@@ -138,9 +138,6 @@ export default {
       for (let item of pageData) {
         componentDataIds.push(item.id);
         componentDataMap[item.id] = item;
-        if(componentDataMap[item.id]['data'] && widget.getNeedFakeDataWidgetTypes().includes(componentDataMap[item.id].type)) {
-          componentDataMap[item.id]['data']['showFakeData'] = true;
-        }
         if(item.isBase) {  //设置为基础信息组件
           this.$store.commit('setBasePropertyId', item.id);
         }

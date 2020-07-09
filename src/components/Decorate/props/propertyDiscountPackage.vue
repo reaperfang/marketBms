@@ -151,8 +151,7 @@ export default {
         hideEndGoods: false,//隐藏活动结束套餐
         hideType: 2,//隐藏类型
         ids: [],//优惠套装id列表
-        buttonText: '查看活动',//按钮文字
-        showFakeData: false
+        buttonText: '查看活动'//按钮文字
       },
       displayList: [],
       rules: {
@@ -193,13 +192,6 @@ export default {
             _self.echoList.push({id: item});
           })
         }
-      },
-      deep: true
-    },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
       },
       deep: true
     }

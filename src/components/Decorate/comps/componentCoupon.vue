@@ -1,27 +1,29 @@
 <template>
   <!-- 优惠券 -->
   <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
-    <div v-if="currentComponentData && currentComponentData.data && hasContent" class="componentCoupon">
-      <div class="coupon_first componentCoupon" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-        <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
-      </div>
-
-      <!-- 样式一 -->
-      <div class="coupon_first componentCoupon" v-else>
-        <ul ref="scrollContent" class="clearfix">
-          <!-- status:true时候是已领取,hideScrambled:false, -->
-          <template v-for="(item, key) in displayList">
-            <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
-              <div class="first_money">
-                <span :class="style1">{{getTitle(item)}}</span>
-                <span :class="style1">{{getContent(item)}}</span>
-              </div>
-              <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
-              <div :class="style2" class="first_present" v-else>无门槛限制</div>
-            </li>
-          </template>
-        </ul>
-      </div>
+    <div v-if="currentComponentData && currentComponentData.data" class="componentCoupon">
+      <template v-if="hasRealData || hasFakeData">
+        <!-- 样式一 -->
+        <div class="coupon_first componentCoupon" v-if="hasRealData">
+          <ul ref="scrollContent" class="clearfix">
+            <!-- status:true时候是已领取,hideScrambled:false, -->
+            <template v-for="(item, key) in displayList">
+              <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
+                <div class="first_money">
+                  <span :class="style1">{{getTitle(item)}}</span>
+                  <span :class="style1">{{getContent(item)}}</span>
+                </div>
+                <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
+                <div :class="style2" class="first_present" v-else>无门槛限制</div>
+              </li>
+            </template>
+          </ul>
+        </div>
+        <div class="coupon_first componentCoupon" v-else>
+          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
+        </div>
+      </template>
+      <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
     <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
   </div>
@@ -39,8 +41,7 @@ export default {
     return {
       allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       displayList: [],
-      loading: false,
-      showFakeData: true
+      loading: false
     }
   },
   computed: {
@@ -77,15 +78,6 @@ export default {
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100%"
       }
-    },
-
-     /* 检测是否有数据 */
-    hasContent() {
-        let value = false;
-        if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
-            value = true;
-        }
-        return value;
     }
   },
   watch: {
@@ -129,12 +121,6 @@ export default {
             if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                 this.fetch();
             }
-        },
-        deep: true
-    },
-    'displayList': {
-        handler(newValue) {
-            this.showFakeData = !newValue.length;
         },
         deep: true
     }
@@ -206,6 +192,21 @@ export default {
     /* 获取内容 */
     getContent(item) {
       return item.useType==0?'元':'折';
+    },
+
+    /* 检查真数据 */
+    checkRealData(newValue) {
+      this.hasRealData = !!newValue.length;
+      this.upadteComponentData();
+    },
+
+    /* 检查假数据 */
+    checkFakeData(newValue) {
+      this.hasFakeData = false;
+        if(newValue && newValue.length) {
+          this.hasFakeData = true;
+        }
+      this.upadteComponentData();
     }
   }
 }

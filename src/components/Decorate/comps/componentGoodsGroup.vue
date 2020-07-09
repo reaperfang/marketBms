@@ -1,71 +1,70 @@
 <template>
 <!-- 组件-商品分类 -->
     <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
-      <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data && hasContent">
-
-          <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-            <img :src="currentComponentData.data.fakeList[listStyle - 1].fileUrl" alt="" style="width:100%;">
-          </div>
-
-
-          <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}"  v-else>
+      <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data">
+          <template v-if="hasRealData || hasFakeData">
+            <template v-if="hasRealData">
+              <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
 
 
-            <!-- 原来的 -->
-            <!-- <div class="scroll_wrapper">
-              <div class="scroll_inner clearfix" ref="scrollContent">
-                <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-                <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" 
-                @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
-              </div>
-            </div> -->
-             <!-- 原来的 -->
+                <!-- 原来的 -->
+                <!-- <div class="scroll_wrapper">
+                  <div class="scroll_inner clearfix" ref="scrollContent">
+                    <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" 
+                    @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
+                  </div>
+                </div> -->
+                <!-- 原来的 -->
 
 
-            <template v-if="menuStyle==1">
-              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{color:activeGoodId=='all'?color1:''}">
-                  全部
-                  <font class="activeLine" :style="{background:color1}"></font>
-              </p>
+                  <template v-if="menuStyle==1">
+                    <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{color:activeGoodId=='all'?color1:''}">
+                        全部
+                        <font class="activeLine" :style="{background:color1}"></font>
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==2">
+                    <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
+                        全部
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==3">
+                    <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
+                        全部
+                        <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
+                        <font class="activeLine" v-else :style="{borderTop:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
+                    </p>
+                  </template>
+
+                  <template v-if="menuStyle==1">
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{color:activeGoodId==item.id?color1:''}">
+                        {{item.name}}
+                        <font class="activeLine" :style="{background:color1}"></font>
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==2">
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+                        {{item.name}}
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==3">
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+                        {{item.name}}
+                        <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
+                        <font class="activeLine" v-else :style="{borderTop:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
+                    </p>
+                  </template>
+                </div>
+              <div class="componentGoodsGroup_content">
+                  <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
+              </div> 
             </template>
-            <template v-else-if="menuStyle==2">
-              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
-                  全部
-              </p>
-            </template>
-            <template v-else-if="menuStyle==3">
-              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
-                  全部
-                  <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
-                  <font class="activeLine" v-else :style="{borderTop:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
-              </p>
-            </template>
-
-            <template v-if="menuStyle==1">
-              <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{color:activeGoodId==item.id?color1:''}">
-                  {{item.name}}
-                  <font class="activeLine" :style="{background:color1}"></font>
-              </p>
-            </template>
-            <template v-else-if="menuStyle==2">
-              <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
-                  {{item.name}}
-              </p>
-            </template>
-            <template v-else-if="menuStyle==3">
-              <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
-                  {{item.name}}
-                  <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
-                  <font class="activeLine" v-else :style="{borderTop:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
-              </p>
-            </template>
-
-
-
-          </div>
-          <div class="componentGoodsGroup_content">
-              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
-          </div> 
+            <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}" v-else>
+              <img :src="currentComponentData.data.fakeList[listStyle - 1].fileUrl" alt="" style="width:100%;">
+            </div>
+          </template>
+          <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
       </div>
       <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
@@ -96,8 +95,7 @@ export default {
         activeGoodId:'all',
         // 商品请求分类id集合
         allGoodClassId:[],
-        allGoodClassId1:[],
-        showFakeData: true
+        allGoodClassId1:[]
       }
     },
     components: {
@@ -125,31 +123,9 @@ export default {
               // }
           },
           deep: true
-      },
-      'displayList': {
-        handler(newValue) {
-          if(newValue) {
-            if(Object.prototype.toString.call(newValue) === '[object Object]') {
-              this.showFakeData = !Object.keys(newValue).length;
-            }else if(Array.isArray(newValue)) {
-              this.showFakeData = !newValue.length;
-            }
-          }else {
-            this.showFakeData = true;
-          }
-        },
-        deep: true
-    }
+      }
     },
     computed: {
-        /* 检测是否有数据 */
-        hasContent() {
-            let value = false;
-            if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
-               value = true;
-            }
-            return value;
-        },
         colorStyle() {
           return this.$store.getters.colorStyle || {colors:[]};
         },
@@ -264,6 +240,32 @@ export default {
               }
             }
           })
+        },
+
+        /* 检查真数据 */
+        checkRealData(newValue) {
+            if(newValue) {
+              if(Object.prototype.toString.call(newValue) === '[object Object]') {
+                this.hasRealData = !Object.keys(newValue).length;
+              }else if(Array.isArray(newValue)) {
+                this.hasRealData = !newValue.length;
+              }
+            }else {
+              this.hasRealData = true;
+            }
+            this.upadteComponentData();
+        },
+
+        /* 检查假数据 */
+        checkFakeData(newValue) {
+            this.hasFakeData = false;
+            for(let item of newValue) {
+                if(item && item.length) {
+                    this.hasFakeData = true;
+                    break;
+                }
+            }
+            this.upadteComponentData();
         }
 
     }

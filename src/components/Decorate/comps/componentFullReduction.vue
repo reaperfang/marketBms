@@ -1,34 +1,37 @@
 <template>
   <!-- 满减瞒折 -->
   <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
-    <div class="componentFullReduction" v-if="currentComponentData && currentComponentData.data && hasContent">
-
-        <div class="coupon_first componentFullReduction" v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
-        </div>
-
-        <div class="reduction"  v-for="(item, key) in displayList" :key="key"  v-else>
-          <div class="reduction_first">
-            <span>减</span>
-            <span>{{item.name}}</span>
-            <span>{{item.startTime.slice(0,10)}}至{{item.endTime.slice(0,10)}}</span>
+    <div class="componentFullReduction" v-if="currentComponentData && currentComponentData.data">
+        <template v-if="hasRealData || hasFakeData">
+          <template v-if="hasRealData">
+            <div class="reduction"  v-for="(item, key) in displayList" :key="key">
+              <div class="reduction_first">
+                <span>减</span>
+                <span>{{item.name}}</span>
+                <span>{{item.startTime.slice(0,10)}}至{{item.endTime.slice(0,10)}}</span>
+              </div>
+              <div class="reduction_two">
+                <ul>
+                  <template v-for="(item2, key2) in item.typeList ">
+                    <li
+                    :key="key2"
+                    v-if="item2.orderRewardType"
+                      class="ellipsis"
+                      :class="reductionStyle"
+                    >
+                      <span v-if="item2.orderRewardType == 1" :title="reduceData(item2)">{{reduceData(item2)}}</span>
+                      <span v-else-if="item2.orderRewardType == 2" :title="discountData(item2)">{{discountData(item2)}}</span>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+          </template>
+          <div class="coupon_first componentFullReduction" v-else>
+            <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
           </div>
-          <div class="reduction_two">
-            <ul>
-              <template v-for="(item2, key2) in item.typeList ">
-                <li
-                :key="key2"
-                v-if="item2.orderRewardType"
-                  class="ellipsis"
-                  :class="reductionStyle"
-                >
-                  <span v-if="item2.orderRewardType == 1" :title="reduceData(item2)">{{reduceData(item2)}}</span>
-                  <span v-else-if="item2.orderRewardType == 2" :title="discountData(item2)">{{discountData(item2)}}</span>
-                </li>
-              </template>
-            </ul>
-          </div>
-        </div>
+        </template>
+        <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
     <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
   </div>
@@ -44,8 +47,7 @@ export default {
     return {
       allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       displayList: [],
-      loading: false,
-      showFakeData: true
+      loading: false
     };
   },
   watch: {
@@ -56,25 +58,11 @@ export default {
             }
         },
         deep: true
-    },
-    'displayList': {
-        handler(newValue) {
-            this.showFakeData = !newValue.length;
-        },
-        deep: true
     }
   },
   computed: {
     reductionStyle() {
       return `style${this.currentComponentData.data.displayStyle}`;
-    },
-    /* 检测是否有数据 */
-    hasContent() {
-        let value = false;
-        if((this.displayList && this.displayList.length) || (this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length)) {
-            value = true;
-        }
-        return value;
     }
   },
   methods: {
@@ -112,6 +100,21 @@ export default {
         this.displayList = datas;
         this.allLoaded = true;
     },
+
+    /* 检查真数据 */
+    checkRealData(newValue) {
+        this.hasRealData = !!newValue.length;
+        this.upadteComponentData();
+    },
+
+    /* 检查假数据 */
+    checkFakeData(newValue) {
+        this.hasFakeData = false;
+        if(newValue && newValue.length) {
+            this.hasFakeData = true;
+        }
+        this.upadteComponentData();
+    }
   }
 };
 </script>

@@ -153,8 +153,7 @@ export default {
         hideEndGoods: false,//隐藏活动结束活动
         hideType: 2,//隐藏类型
         ids: [],//商品id列表
-        buttonText: '立即抢购',//按钮文字
-        showFakeData: false
+        buttonText: '立即抢购'//按钮文字
       },
       displayList: [],
       rules: {
@@ -213,13 +212,6 @@ export default {
             _self.echoList.push({activityId: item});
           })
         }
-      },
-      deep: true
-    },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
       },
       deep: true
     }

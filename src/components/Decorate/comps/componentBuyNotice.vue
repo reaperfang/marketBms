@@ -2,11 +2,8 @@
   <!-- 购买公告 -->
   <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
-      <template v-if="(currentComponentData.data.fakeList && currentComponentData.data.fakeList.length) || displayList.length">
-        <div v-if="showFakeData && currentComponentData.data.fakeList && currentComponentData.data.fakeList.length">
-          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;vertical-align: bottom;">
-        </div>
-        <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-else>
+      <template v-if="hasRealData || hasFakeData">
+        <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="hasRealData">
           <li>
             <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
           </li>
@@ -22,6 +19,9 @@
           </li>
           <li :style="{'color':currentComponentData.data.fontColor}">刚刚</li>
         </ul>
+        <div v-else>
+          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;vertical-align: bottom;">
+        </div>
       </template>
       <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
@@ -40,9 +40,11 @@ export default {
       animate: true, 
       displayList: [],
       timer: null ,
-      loading: false,
-      showFakeData: true
+      loading: false
     };
+  },
+  mounted() {
+    this.timer = setInterval(this.scroll, 2000);
   },
   watch: {
     'currentComponentData.data.ids': {
@@ -53,12 +55,6 @@ export default {
           },
           deep: true
       },
-    'displayList': {
-        handler(newValue) {
-            this.showFakeData = !newValue.length;
-        },
-        deep: true
-    }
   },
   methods: {
     scroll() {
@@ -106,9 +102,21 @@ export default {
       this.allLoaded = true;
     },
 
-  },
-  mounted() {
-    this.timer = setInterval(this.scroll, 2000);
+    /* 检查真数据 */
+    checkRealData(newValue) {
+      this.hasRealData = !!newValue.length;
+      this.upadteComponentData();
+    },
+
+    /* 检查假数据 */
+    checkFakeData(newValue) {
+      this.hasFakeData = false;
+        if(newValue && newValue.length) {
+          this.hasFakeData = true;
+        }
+      this.upadteComponentData();
+    }
+
   },
   destroyed() {
     clearInterval(this.timer);

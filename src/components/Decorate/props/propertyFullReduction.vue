@@ -52,8 +52,7 @@ export default {
       ruleForm: {
         title: '满减/满折',//显示标题
         displayStyle: 1,//展示样式
-        ids: [],//满减满折活动id列表
-        showFakeData: false
+        ids: []//满减满折活动id列表
       },
       displayList: [],
       loading: false,
@@ -86,13 +85,6 @@ export default {
             _self.echoList.push({id: item});
           })
         }
-      },
-      deep: true
-    },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
       },
       deep: true
     }

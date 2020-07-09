@@ -153,8 +153,7 @@ export default {
         buttonText: '加入购物车',//按钮文字
         hideSaledGoods: false,
         hideEndGoods: false,
-        hideType: 2,
-        showFakeData: false
+        hideType: 2
       },
       displayList: [],
       rules: {
@@ -218,13 +217,6 @@ export default {
         }
       },
       deep: true
-    },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
-      },
-      deep: true
     }
   },
   methods: {
@@ -280,7 +272,7 @@ export default {
       /* 创建数据 */
     createList(datas) {
       this.displayList = datas;
-    },
+    }
   }
 }
 </script>

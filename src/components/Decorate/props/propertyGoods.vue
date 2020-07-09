@@ -163,8 +163,7 @@ export default {
         buttonStyle: 1,// 购买按钮样式
         ids: [],//商品id列表
         currentCatagoryId: '',  //选中的商品分类id
-        buttonText: '加入购物车',
-        showFakeData: false
+        buttonText: '加入购物车'
       },
       displayList: [],
       rules: {
@@ -231,13 +230,6 @@ export default {
             _self.echoList.push({id: item});
           })
         }
-      },
-      deep: true
-    },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
       },
       deep: true
     }

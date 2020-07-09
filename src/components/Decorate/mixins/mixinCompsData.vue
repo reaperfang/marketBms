@@ -7,7 +7,9 @@ export default {
   components: {componentButton},
   data() {
     return {
-      events: []  //事件列表
+      events: [],  //事件列表
+      hasRealData: false,  //组件内有真数据
+      hasFakeData: false   //组件内有假数据
     }
   },
   created(){
@@ -18,11 +20,32 @@ export default {
       this.decoration && this.decoration();
   },
   mounted() {
+        this.checkRealData(this.displayList);
+        this.checkFakeData(this.currentComponentData.data.fakeList);
         this.decoration && this.decoration();
   },
   watch: {
       currentComponentData(){
          this.decoration && this.decoration();
+      },
+      /* 真数据变更 */
+      'displayList': {
+          handler(newValue, oldValue) {
+            if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+              this.checkRealData(newValue);
+            }
+          },
+          deep: true
+      },
+
+      /* 假数据变更 */
+      'currentComponentData.data.fakeList': {
+          handler(newValue, oldValue) {
+            if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+              this.checkFakeData(newValue);
+            }
+          },
+          deep: true
       }
   },
   methods: {
@@ -43,6 +66,16 @@ export default {
       data = data || this.ruleForm || {};
       this._globalEvent.$emit(`fetch${this.utils.titleCase(componentType)}`, data, this.currentComponentId);
       this.$store.commit('addEvent', `fetch${this.utils.titleCase(componentType)}`);
+    },
+
+    /* 更新是否需要替换真实数据标识给组件信息 */
+    upadteComponentData() {
+      this.$store.commit('updateComponent',{
+        id: this.currentComponentData.id,
+        data: Object.assign(this.currentComponentData.data, {
+          needReplace: this.hasFakeData && !this.hasRealData
+        })
+      })
     }
 
   },

@@ -195,8 +195,7 @@ export default {
         buttonStyle: 3,// 购买按钮样式
         ids: [],//商品id列表 
         buttonText: '拼团',// 次要按钮文字
-        buttonTextPrimary: '开团',//主要按钮文字
-        showFakeData: false
+        buttonTextPrimary: '开团'//主要按钮文字
       },
       displayList: [],
       rules: {
@@ -280,13 +279,6 @@ export default {
             _self.echoList.push({activityId: item.activityId, spuId: item.spuId});
           })
         }
-      },
-      deep: true
-    },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        this.ruleForm.showFakeData = !newValue.length;
       },
       deep: true
     }

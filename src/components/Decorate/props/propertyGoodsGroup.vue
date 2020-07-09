@@ -171,8 +171,7 @@ export default {
         showContents: ['1', '2', '3', '4'],//显示内容
         buttonStyle: 1,//购买按钮样式
         ids: [],//商品分类列表 
-        buttonText: '加入购物车',//按钮文字
-        showFakeData: false
+        buttonText: '加入购物车'//按钮文字
       },
       displayList: {},
       rules: {
@@ -208,21 +207,6 @@ export default {
         this.ruleForm.buttonStyle = 1;
       }
     },
-
-    displayList: {
-      handler(newValue, oldValue) {
-        if(newValue) {
-          if(Object.prototype.toString.call(newValue) === '[object Object]') {
-            this.ruleForm.showFakeData = !Object.keys(newValue).length;
-          }else if(Array.isArray(newValue)) {
-            this.ruleForm.showFakeData = !newValue.length;
-          }
-        }else {
-          this.ruleForm.showFakeData = true;
-        }
-      },
-      deep: true
-    }
   },
   methods: {
      //根据ids拉取数据
