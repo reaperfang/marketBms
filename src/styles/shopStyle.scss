@@ -447,14 +447,13 @@ ul.cube {
             width: 346px;
 
             form {
-                  overflow-y: auto;
                   display: block!important;
+                  max-height: 100%;
             }
 
             .el-button--text{
                 font-size:14px!important;    
                 span{
-                  width: 220px!important;
                   overflow-x: hidden!important;
                   text-overflow: ellipsis!important;
                   white-space: nowrap!important;
@@ -685,3 +684,15 @@ ul.cube {
     padding: 0!important;
     overflow: hidden!important;
   }
+
+/* 微信店铺、移动H5、启动广告右侧编辑器公共样式 */
+.group-wrapper {
+      .module.props {
+            .block.header {
+                  padding: 10px;
+            }
+            .block.form {
+                  padding: 30px 20px 20px 20px;
+            }
+      }
+}

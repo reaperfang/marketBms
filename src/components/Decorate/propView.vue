@@ -127,7 +127,6 @@ export default {
 .props-content form{
   padding-right: 5px;
   box-sizing: border-box;
-  overflow-x: hidden;
 }
 .props_form{
   overflow-y: auto;
