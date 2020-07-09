@@ -273,7 +273,7 @@
       },
 
       query() {
-        if ((this.ruleForm.lowPrice && !this.ruleForm.highPrice) || (this.ruleForm.highPrice && !this.ruleForm.lowPrice)) {
+        if (this.ruleForm.lowPrice !== 0 && ((this.ruleForm.lowPrice && !this.ruleForm.highPrice) || (this.ruleForm.highPrice && !this.ruleForm.lowPrice))) {
           this.templateList = [];
           this.total = 0;
           this.$alert('当前价格区间输入有误、请您重新输入查询', '警告', {
