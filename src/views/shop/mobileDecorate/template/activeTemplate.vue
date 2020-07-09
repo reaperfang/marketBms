@@ -274,6 +274,8 @@
 
       query() {
         if ((this.ruleForm.lowPrice && !this.ruleForm.highPrice) || (this.ruleForm.highPrice && !this.ruleForm.lowPrice)) {
+          this.templateList = [];
+          this.total = 0;
           this.$alert('当前价格区间输入有误、请您重新输入查询', '警告', {
             confirmButtonText: '确定'
           });
@@ -281,6 +283,8 @@
         }
 
         if (this.ruleForm.lowPrice * 1 >= this.ruleForm.highPrice * 1) {
+          this.templateList = [];
+          this.total = 0;
           this.$alert('您输入的价格有误、请您重新输入查询', '警告', {
             confirmButtonText: '确定'
           });
@@ -454,8 +458,9 @@
         // this.fetchList()
       },
       sortByChange(v) {
-        this.startIndex = 1;
-        this.fetch()
+        // this.startIndex = 1;
+        // this.fetch()
+        this.query();
       },
       // 有效行业列表
       effIndustryList() {
