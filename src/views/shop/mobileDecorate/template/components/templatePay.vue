@@ -213,19 +213,21 @@
 	justify-content: space-between;
 	align-items: start;
 	flex-flow:row wrap;
-	&-left {
-		width: 271px;
-		height: 500px;
-		background:rgba(0,0,0,0.19);
-		overflow-y: scroll;
-		img {
-			width: 100%;
+
+  &-left {
+    width: 271px;
+    height: 500px;
+    overflow-y: scroll;
+
+    img {
+      width: 100%;
       min-height: 100%;
-		}
-	}
-	&-right {
-		width: 182px;
-		height: 500px;
+    }
+  }
+
+  &-right {
+    width: 182px;
+    height: 500px;
 
     &-title {
       width: 182px;
