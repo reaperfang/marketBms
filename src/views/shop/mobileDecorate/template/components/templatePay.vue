@@ -39,7 +39,7 @@
 				</div>
 				<div class="templage-pay-content-right-btn">
 					<el-button @click="closePay" class="templage-pay-content-right-btn-left">取 消</el-button>
-					<el-button @click="apply" class="templage-pay-content-right-btn-right" :disabled="disabled" :style="{backgroundColor: disabled ? '#92929B' : '#655EFF'}">使用模版</el-button>
+					<el-button @click="apply" type="primary" class="templage-pay-content-right-btn-right" :disabled="disabled">使用模版</el-button>
 				</div>
 			</div>
 		</div>
@@ -118,7 +118,7 @@
               window.clearTimeout(that.timeInterval)
               that.confirm({
                 title: '支付成功',
-                icon: true,
+                // icon: true,
                 showCancelButton: false,
                 confirmText: '我知道了',
                 text: `支付成功，您的装修模版已经重新启用！`
@@ -145,7 +145,7 @@
         this.confirm({
           title: '提示',
           customClass: 'goods-custom',
-          icon: true,
+          // icon: true,
           text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
         }).then(() => {
           this._routeTo('m_templateEdit', {id: this.tempInfo.id});
@@ -221,7 +221,6 @@
 		img {
 			width: 100%;
       min-height: 100%;
-      object-fit: cover;
 		}
 	}
 	&-right {
@@ -320,27 +319,30 @@
 			}
 		}
 		&-btn {
-			margin-top: 162px;
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: start;
-			flex-flow:row wrap;
-			&-left {
-				background: #fff;
-				border-radius:4px;
-				border:1px solid rgba(146,146,155,1);
-				font-size:14px;
-				font-weight:400;
-				color:rgba(68,67,75,1);
-			}
+      margin-top: 162px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: start;
+      flex-flow: row wrap;
+
+      &-left {
+        background: #fff;
+        border-radius: 4px;
+        border: 1px solid rgba(146, 146, 155, 1);
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(68, 67, 75, 1);
+      }
+
+      .el-button.is-disabled, .el-button.is-disabled:focus, .el-button.is-disabled:hover {
+        color: #fff;
+        background-color: #92929B;
+      }
+
 			&-right {
-				border: 1px solid rgba(146,146,155,1);
-				background:rgba(146,146,155,1);
-				border-radius:4px;
-				font-size:14px;
-				font-weight:400;
-				color: #fff;
+        border-radius: 4px;
+        font-size: 14px;
 			}
 		}
 	}
