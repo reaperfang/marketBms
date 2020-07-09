@@ -170,7 +170,7 @@ export default {
 <style lang="scss" scoped>
 .block{
   &.button{
-    padding: 30px 0;
+    padding: 30px 0 !important;
     display: flex;
     flex-direction: row;
     justify-content: center;
