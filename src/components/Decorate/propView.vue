@@ -115,8 +115,10 @@ export default {
   .props {
     background-color: #fff;
     padding: 12px 18px;
+    padding-right: 1px;
     &.module {
       width: 361px;
+      margin-right:0;
     }
     .help_blank {
       background-color: #fff!important;
@@ -124,6 +126,8 @@ export default {
   }
 .props-content form{
   padding-right: 5px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 .props_form{
   overflow-y: auto;
