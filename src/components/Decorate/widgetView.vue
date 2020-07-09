@@ -131,11 +131,11 @@ export default {
 
 <style lang="scss" scoped>
   .widget{
-    width: 162px;
+    width: 210px;
     height: 835px;
     overflow-y: auto;
     background-color: #fff;
-    padding: 25px 20px;
+    padding: 25px 15px;
     .block {
       margin-bottom: 20px;
     }
@@ -166,7 +166,7 @@ export default {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          margin-bottom: 12px;
+          margin-bottom: 20px;
           cursor: pointer;
           i{
             width:40px;
