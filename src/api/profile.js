@@ -12,11 +12,20 @@ export function getIndustry(data) {
       data
     })
   }
-  export function getNews(data) {
-    return request({
-      url: '/news?dept=aiyouyi.cn&cat=news&pagenum=3',
-      method: 'get',
-      baseURL: process.env.ZX_API,
-      data
-    })
-  }
+export function getNews(data) {
+  return request({
+    url: '/news?dept=aiyouyi.cn&cat=news&pagenum=3',
+    method: 'get',
+    baseURL: process.env.ZX_API,
+    data
+  })
+}
+// 产品动态
+export function getProductNews(data) {
+  return request({
+    url: '/news?dept=aiyouyi.cn&cat=shushangdongtai&pagenum=8',
+    method: 'get',
+    baseURL: process.env.ZX_API,
+    data
+  })
+}
