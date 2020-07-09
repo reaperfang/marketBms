@@ -221,7 +221,6 @@
 
     img {
       width: 100%;
-      min-height: 100%;
     }
   }
 
@@ -231,9 +230,8 @@
 
     &-title {
       width: 182px;
-      height: 16px;
       color: $contentColor;
-      line-height: 14px;
+      line-height: 16px;
       font-size: 14px;
       overflow: hidden;
       text-overflow: ellipsis;
