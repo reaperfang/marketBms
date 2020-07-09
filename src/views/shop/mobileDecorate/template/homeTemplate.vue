@@ -391,7 +391,7 @@
               this.confirm({
                 title: '提示',
                 customClass: 'goods-custom',
-                icon: true,
+                // icon: true,
                 text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
               }).then(() => {
                 this._routeTo('m_templateEdit', {id: item.id});
@@ -405,7 +405,7 @@
                 this.confirm({
                   title: '提示',
                   customClass: 'goods-custom',
-                  icon: true,
+                  // icon: true,
                   text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
                 }).then(() => {
                   this._routeTo('m_templateEdit', {id: item.id});
@@ -415,7 +415,7 @@
               this.confirm({
                 title: '提示',
                 customClass: 'goods-custom',
-                icon: true,
+                // icon: true,
                 text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
               }).then(() => {
                 this._routeTo('m_templateEdit', {id: item.id});
