@@ -240,7 +240,10 @@ export function isIdsUpdate(newValue, oldValue) {
     if(!newValue || !oldValue){
       return newValue === oldValue;
     }
-    return newValue.length==oldValue.length && newValue.every(function(v,i) { return JSON.stringify(v) === JSON.stringify(oldValue[i])});
+    if(Array.isArray(newValue)) {
+      return newValue.length==oldValue.length && newValue.every(function(v,i) { return JSON.stringify(v) === JSON.stringify(oldValue[i])});
+    }
+    return JSON.stringify(newValue) === JSON.stringify(oldValue)
 }
 
 
