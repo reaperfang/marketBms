@@ -246,12 +246,12 @@ export default {
         checkRealData(newValue) {
             if(newValue) {
               if(Object.prototype.toString.call(newValue) === '[object Object]') {
-                this.hasRealData = !Object.keys(newValue).length;
+                this.hasRealData = !!Object.keys(newValue).length;
               }else if(Array.isArray(newValue)) {
-                this.hasRealData = !newValue.length;
+                this.hasRealData = !!newValue.length;
               }
             }else {
-              this.hasRealData = true;
+              this.hasRealData = false;
             }
             this.upadteComponentData();
         },

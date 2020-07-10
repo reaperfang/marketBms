@@ -21,7 +21,9 @@ export default {
   },
   mounted() {
         this.checkRealData(this.displayList);
-        this.checkFakeData(this.currentComponentData.data.fakeList);
+        if(this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length) {
+          this.checkFakeData(this.currentComponentData.data.fakeList);
+        }
         this.decoration && this.decoration();
   },
   watch: {
@@ -41,8 +43,10 @@ export default {
       /* 假数据变更 */
       'currentComponentData.data.fakeList': {
           handler(newValue, oldValue) {
-            if(!this.utils.isIdsUpdate(newValue, oldValue)) {
-              this.checkFakeData(newValue);
+            if(newValue && newValue.length) {
+              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+                this.checkFakeData(newValue);
+              }
             }
           },
           deep: true
