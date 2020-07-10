@@ -35,11 +35,12 @@
           <el-form-item label="" prop="name">
             <el-radio-group v-model="ruleForm.sortBy" size="small" @change="sortByChange">
               <el-radio-button :value="0" :label="0">综合排序</el-radio-button>
-              <el-radio-button :value="1" :label="1">价格<i class="el-icon-top"></i></el-radio-button>
-              <el-radio-button :value="2" :label="2">价格<i class="el-icon-bottom"></i></el-radio-button>
+<!--              <el-radio-button :value="1" :label="1">价格<i class="el-icon-top"></i></el-radio-button>-->
+<!--              <el-radio-button :value="2" :label="2">价格<i class="el-icon-bottom"></i></el-radio-button>-->
               <el-radio-button :value="3" :label="3">人气从高到低</el-radio-button>
             </el-radio-group>
           </el-form-item>
+<!--      付费相关 先注释
           <el-form-item label="" prop="name">
             <el-checkbox v-model="checked" :disabled="freeDisabled">只看免费模板</el-checkbox>
           </el-form-item>
@@ -50,6 +51,7 @@
             <el-input-number v-model="ruleForm.highPrice" controls-position="right" :precision="2" :disabled="checked"
                              :min="0" :max="9999" width="150" placeholder="最高金额（元）"></el-input-number>
           </el-form-item>
+-->
         </el-form>
       </div>
     </div>
@@ -111,7 +113,7 @@
         <!--<div class="apply" @click="apply(currentTemplate)">立即应用</div>-->
       </div>
 
-      <div v-show="templateList.length > 0" class="pagination"
+      <div v-show="Number(total) > 0" class="pagination"
            v-if="templateList.length || (!templateList.length && startIndex != 1)">
         <el-pagination
           @size-change="handleSizeChange"
