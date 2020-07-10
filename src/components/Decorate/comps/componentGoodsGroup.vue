@@ -118,9 +118,9 @@ export default {
       },
       'currentComponentData.data.ids': {
           handler(newValue, oldValue) {
-              // if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                   this.fetch();
-              // }
+              }
           },
           deep: true
       }
@@ -260,7 +260,13 @@ export default {
         checkFakeData(newValue) {
             this.hasFakeData = false;
             for(let item of newValue) {
-                if(item && item.length) {
+                if(item && Object.prototype.toString.call(item) === '[object Object]' && !!Object.keys(item).length) {
+                  this.hasFakeData = true;
+                  break;
+                }else if(item && Array.isArray(item) && !!item.length) {
+                  this.hasFakeData = true;
+                  break;
+                }else if(item && item.length) {
                     this.hasFakeData = true;
                     break;
                 }

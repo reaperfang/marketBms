@@ -134,6 +134,10 @@ export default {
             if(!this.currentComponentData || !this.currentComponentData.data) {
               return;
             }
+            //因计算bodyWidth用到了this.showTemplate，所以这里提前获取
+            if('showTemplate' in this.currentComponentData.data){
+                this.showTemplate= this.currentComponentData.data.showTemplate;
+            }
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
@@ -146,9 +150,8 @@ export default {
             }
             else if(this.listStyle=='2'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
-                
                 if('showTemplate' in this.currentComponentData.data){
-                    this.showTemplate= this.currentComponentData.data.showTemplate;
+                    //this.showTemplate= this.currentComponentData.data.showTemplate;
                     if(this.showTemplate!=1){
                         this.goodWidth = {width:(bodyWidth - this.pageMargin * 2 - this.goodsMargin - 100) / 2 + 'px'}
                     }
