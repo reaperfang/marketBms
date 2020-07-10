@@ -118,6 +118,7 @@
               window.clearTimeout(that.timeInterval)
               that.confirm({
                 title: '支付成功',
+                customClass: 'know-custom',
                 // icon: true,
                 showCancelButton: false,
                 confirmText: '我知道了',
@@ -131,6 +132,8 @@
               that.intervalFlag = false
               window.clearTimeout(that.timeInterval)
             }
+          }).catch(error => {
+            console.error(error)
           })
         }, 3000)
       },
