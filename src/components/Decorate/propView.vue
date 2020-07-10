@@ -13,7 +13,7 @@
         </div>
 
         <!-- 属性渲染区 -->
-        <div v-calcHeight="componentDataMap[currentComponentId].describe ? propCalcHeight + 24+64+92 : propCalcHeight + 64+92" class="props_form">
+        <div v-calcHeight="!!componentDataMap[currentComponentId] && componentDataMap[currentComponentId].describe ? propCalcHeight + 24+64+92 : propCalcHeight + 64+92" class="props_form">
           <transition name="fade" :duration="{ enter: 200, leave: 100 }">
             <component :is='currentComponent' @change="propsChange" v-bind="componentDataMap[currentComponentId]" key="components"></component>
           </transition>
