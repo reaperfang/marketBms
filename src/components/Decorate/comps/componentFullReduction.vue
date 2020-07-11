@@ -45,7 +45,6 @@ export default {
   components: {},
   data() {
     return {
-      allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       displayList: [],
       loading: false
     };
@@ -84,13 +83,16 @@ export default {
               }).then((response)=>{
                   this.createList(response);
                   this.loading = false;
+                  this.dataLoaded = true;
               }).catch((error)=>{
                   console.error(error);
                   this.displayList = [];
                   this.loading = false;
+                  this.dataLoaded = true;
               });
           }else{
               this.displayList = [];
+              this.dataLoaded = true;
           }
       }
     },
@@ -98,7 +100,6 @@ export default {
       /* 创建数据 */
     createList(datas) {
         this.displayList = datas;
-        this.allLoaded = true;
     },
 
     /* 检查真数据 */

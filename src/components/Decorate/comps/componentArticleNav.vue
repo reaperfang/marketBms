@@ -103,6 +103,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.dataLoaded = true;
     this.calcScroll();
   },
   watch: {

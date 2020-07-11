@@ -45,7 +45,7 @@
               @mouseout="componentMouseleave(item)"
               @dragstart.self="selectItem = item" 
               @dragend.self="selectItem = {}">
-                <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @loadStatusChange="loadStatusChange"></component>
+                <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @componentDataLoaded="componentDataLoaded"></component>
                 <!--<i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
                 <transition name="fade">
                   <div v-show="item === currentMouseOverComponentId" class="title-box">
@@ -78,7 +78,11 @@
         </div>
       </div>
     </div>
-
+    <!-- <transition name="fade" :duration="{ enter: 200, leave: 100 }">
+      <div class="progress" v-if="loadPercent < 100">
+        <el-progress type="circle" :percentage="loadPercent"></el-progress>
+      </div>
+    </transition> -->
   </div>
 </template>
 
@@ -116,7 +120,9 @@ export default {
       pageMoveBtnShow: false,  //页面移动按钮可见
       visible: true,
       currentMouseOverComponentId: '',
-      popoverDisabled: false
+      popoverDisabled: false,
+      loadedComponents: [],  //数据加载完成的组件列表
+      loadPercent: 0
     }
   },
   computed:{
@@ -165,13 +171,13 @@ export default {
           loadedLength ++;
           if(loadedLength >= widgetList.length) {
             this.allTemplateLoaded = true;
-            this.$emit('renderInited', this);
+            this.$emit('renderPanelInited', this);
           }
         }).catch(e => {
           loadedLength ++;
           if(loadedLength >= widgetList.length) {
             this.allTemplateLoaded = true;
-            this.$emit('renderInited', this);
+            this.$emit('renderPanelInited', this);
           }
         })
       }
@@ -302,11 +308,6 @@ export default {
       this.pageMoveBtnShow = false;
     },
 
-    /* 组件加载状态改变 */
-    loadStatusChange(data) {
-      //console.log(data);
-    },
-
     /* 允许拖拽进来 */
     dragover(ev) {
       ev.preventDefault();
@@ -351,6 +352,28 @@ export default {
           this.scrollToBottom();
         })
       }
+    },
+
+    /* 组件数据加载结束 */
+    componentDataLoaded(componentData) {
+      for(let item of this.componentDataIds) {
+        if(item === componentData.id) {
+          this.loadedComponents.push(componentData);
+          this.updateLoadProgress(componentData);
+          if(this.loadedComponents.length === this.componentDataIds.length - 1) {  //减1是因为，要过滤掉基础组件，基础组件是不渲染的
+            this.$emit('allDataLoaded');  //发送所有数据加载完毕状态给编辑器
+            break;
+          }
+        }
+      }
+      // console.log(componentData.title + '-组件加载完毕')
+    },
+
+    /* 更新加载进度 */
+    updateLoadProgress(componentData) {
+      const percent = (this.loadedComponents.length / (this.componentDataIds.length - 1)).toFixed(2)*100;
+      this.loadPercent = percent;
+      this.$emit('dataLoadProgress', percent, componentData);  //发送进度数据给编辑器
     }
   }
 }
@@ -466,6 +489,17 @@ export default {
           }
         }
       }
+    }
+    .progress{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255,255,255,0.8)
     }
   }
   .fade-enter-active, .fade-leave-active {

@@ -25,7 +25,9 @@ export default {
   },
   created() {},
   computed: {},
-  mounted() {},
+  mounted() {
+    this.dataLoaded = true;
+  },
   methods: {}
 };
 </script>

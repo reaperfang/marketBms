@@ -94,10 +94,11 @@ export default {
           this.currentComponent = '';
           this.$nextTick(()=>{  //清除缓存组件以后下一帧处理
             this.currentComponent = loadedComponent.default
-            this.$emit('propsInited', this);
+            this.$emit('propsPanelInited', this);
           })
         }).catch(e => {
           console.error(e);
+          this.$emit('propsPanelInited', this);
         })
       }
     },
@@ -105,7 +106,7 @@ export default {
     /* 更新组件数据 */
     propsChange(params) {
       this.$store.commit('updateComponent', params);
-      this.$emit('dataChanged', params.id, params.data)
+      this.$emit('propDataChanged', params.id, params.data)
     }
   }
 }

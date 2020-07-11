@@ -267,6 +267,9 @@ export default {
   created() {
     const _self = this;
   },
+  mounted() {
+    this.dataLoaded = true;
+  },
   computed: {
 
     /* 检测是否数据 */

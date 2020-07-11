@@ -40,6 +40,9 @@ export default {
   created() {
 
   },
+  mounted() {
+    this.dataLoaded = true;
+  },
   computed: {
     /* 检测是否有数据 */
     hasContent() {

@@ -4,8 +4,7 @@ export default {
   props: ["data"],
   data() {
     return {
-      currentComponentData: {},
-      height: 128+116+20
+      currentComponentData: {}
     }
   },
   created() {

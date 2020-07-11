@@ -287,6 +287,9 @@ Vue.directive('calcHeight', {
     },
     componentUpdated: function (el, binding, vnode) {
        el.style.height = document.body.clientHeight - (binding.value || 0) + 'px'
+       vnode.context._globalEvent.$on('resize', ()=> {
+           el.style.height = document.body.clientHeight - (binding.value || 0) + 'px';
+       })
     }
 })
 

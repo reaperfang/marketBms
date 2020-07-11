@@ -103,6 +103,9 @@ export default {
   created() {
     this.$store.dispatch('getShopInfo');
   },
+  mounted() {
+    this.dataLoaded = true;
+  },
   computed: {
     displayStyle1() {
       return this.currentComponentData.data.displayStyle == 1;

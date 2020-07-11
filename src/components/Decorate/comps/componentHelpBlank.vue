@@ -21,6 +21,9 @@ export default {
   created() {
 
   },
+  mounted() {
+    this.dataLoaded = true;
+  },
   computed: {
    
   },

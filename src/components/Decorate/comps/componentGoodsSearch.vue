@@ -41,6 +41,9 @@ export default {
     created(){
         this.decoration();
     },
+    mounted() {
+        this.dataLoaded = true;
+    },
     watch: {
       data: {
         handler(newValue) {

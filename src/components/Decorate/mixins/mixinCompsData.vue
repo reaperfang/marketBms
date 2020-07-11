@@ -27,7 +27,9 @@ export default {
         this.decoration && this.decoration();
   },
   watch: {
-      currentComponentData(){
+
+      /* 装修数据发生改变 */
+      'currentComponentData'(){
          this.decoration && this.decoration();
       },
       /* 真数据变更 */

@@ -46,7 +46,7 @@ export default {
     this.initConfig(this.componentsConfig);
   },
   mounted() {
-    this.$emit('widgetInited');
+    this.$emit('widgetPanelInited');
   },
   computed: {
     currentComponentId() {
@@ -100,7 +100,6 @@ export default {
         after: true
       });
 
-      //组件添加自动滚动到组件位置
       //组件添加自动滚动到组件位置
       let index = this.componentDataIds.indexOf(this.currentComponentId);
       if(index > 0) {

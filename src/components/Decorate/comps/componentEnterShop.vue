@@ -32,6 +32,9 @@ export default {
   created() {
     this.$store.dispatch('getShopInfo');
   },
+  mounted() {
+    this.dataLoaded = true;
+  },
   computed: {
     shopInfo() {
       return this.$store.getters.shopInfo || {};

@@ -108,7 +108,7 @@ const decorate = {
 		},
 
 		//清除所有装修数据
-		clearAllData(state) {
+		clearEditor(state) {
 			state.baseInfo = {};
 			state.componentDataIds = [];
 			state.componentDataMap = {};

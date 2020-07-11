@@ -6,13 +6,15 @@
       ref="Decorate" 
       :decorateData="decorateData" 
       :config="config" 
-      @widgetInited="widgetInited"
-      @renderInited="renderInited"
-      @propsInited="propsInited"
-      @baseComponentInited="baseComponentInited"
-      @dataInited="dataInited"
+      @widgetPanelInited="widgetPanelInited"
+      @renderPanelInited="renderPanelInited"
+      @propsPanelInited="propsPanelInited"
+      @responseDataInited="responseDataInited"
+      @propDataChanged="propDataChanged"
+      @dataLoadProgress="dataLoadProgress"
+      @finished="finished"
     ></Decorate>
-    <div class="shop_info">
+    <div class="shop_info" v-calcHeight="66+30">
       <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
       <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
       <div class="shop_code">
@@ -75,7 +77,7 @@ export default {
   },
   created() {
     this.$store.dispatch('getShopInfo');
-    this.$store.commit("clearAllData");
+    this.$store.commit("clearEditor");
     this.fetch();
   },
   mounted() {
@@ -137,28 +139,38 @@ export default {
     },
 
     /* 控件面板初始化 */
-    widgetInited(scope) {
-      console.log('控件面板初始化结束');
+    widgetPanelInited(scope) {
+      // console.log('控件面板初始化结束');
     },
     
     /* 渲染面板初始化 */
-    renderInited(scope) {
-      console.log('渲染面板初始化结束');
+    renderPanelInited(scope) {
+      // console.log('渲染面板初始化结束');
     },
     
     /* 属性面板初始化 */
-    propsInited(scope) {
-      console.log('属性面板初始化结束');
+    propsPanelInited(scope) {
+      // console.log('属性面板初始化结束');
     },
 
-    /* 基础组件初始化 */
-    baseComponentInited(scope) {
-      console.log('基础组件初始化结束');
+    /* 请求数据转换初始化事件 */
+    responseDataInited(scope) {
+      // console.log('请求数据转换初始化结束');
     },
 
-    /* 数据初始化结束 */
-    dataInited(scope) {
-      console.log('数据初始化结束');
+    /* 组件数据发生改变事件 */
+    propDataChanged(scope, id, data) {
+      // console.log('组件数据发生改变');
+    },
+
+    /* 组件数据加载进度事件 */
+    dataLoadProgress(scope, value, component) {
+      // console.log('组件数据加载进度');
+    },
+
+    /* 编辑器整体加载完毕事件 */
+    finished(scope) {
+      // console.log('编辑器整体加载完毕');
     }
   }
 };
@@ -181,6 +193,7 @@ export default {
     .shop_info{
       width:336px;
       margin-left:64px;
+      overflow-y: auto;
       .shop_logo{
         height:100px;
         width:100%;

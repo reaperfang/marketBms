@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      allLoaded: true  //全部加载完成
+      dataLoaded: false  //组件数据加载完成
     }
   },
   computed: {
@@ -29,11 +29,9 @@ export default {
     }
   },
   watch: {
-      allLoaded (newValue) {
-        this.$emit("loadStatusChange", {
-          id: this.data.id,
-          loadStatus: newValue
-        });
+    /* 组件数据加载结束 */
+      'dataLoaded' (newValue) {
+        this.$emit("componentDataLoaded", this.currentComponentData);
       }
   }
 };

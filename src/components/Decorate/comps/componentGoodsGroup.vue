@@ -77,7 +77,6 @@ export default {
     mixins:[mixinCompsData],
     data() {
       return {
-        allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
         // 商品列表
         componentGoodsItemData: {},
         // 商品分类列表
@@ -173,6 +172,7 @@ export default {
                 if(!ids.length) {
                   this.displayList = [];
                   this.syncToOther('goods', componentData);
+                  this.dataLoaded = true;
                   return;
                 }
                 this.loading = true;
@@ -186,12 +186,13 @@ export default {
                     this.calcScroll();
                     this.syncToOther('goods', componentData);
                     this.loading = false;
-                    this.allLoaded = true;
+                    this.dataLoaded = true;
                 }).catch((error)=>{
                     console.error(error);
                     this.displayList = [];
                     this.syncToOther('goods', componentData);
                     this.loading = false;
+                    this.dataLoaded = true;
                 });
           }
           }

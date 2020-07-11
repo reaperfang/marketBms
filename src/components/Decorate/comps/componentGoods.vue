@@ -50,7 +50,6 @@ export default {
     props: ['currentCatagoryId', 'origin'],
     data(){
         return{
-            allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
             // 样式属性
             listStyle:'',
             pageMargin:'',
@@ -223,25 +222,30 @@ export default {
                             params = this.setGroupGoodsParams(ids);
                             if(!params.ids || !params.ids.length) {
                                 this.displayList = [];
+                                this.dataLoaded = true;
                                 return;
                             }
                         }else if(Array.isArray(ids) && ids.length){
                             params = this.setNormalGoodsParams(ids);
                             if(!params.ids || !params.ids.length) {
                                 this.displayList = [];
+                                this.dataLoaded = true;
                                 return;
                             }
                         }else{
                             this.displayList = [];
+                            this.dataLoaded = true;
                             return;
                         }
                     }else{
                         this.displayList = [];
+                        this.dataLoaded = true;
                         return;
                     }
                 }else if(componentData.source === 2){
                     if(!componentData.currentCatagoryId) {
                         this.displayList = [];
+                        this.dataLoaded = true;
                         return;
                     }
                     params = {
@@ -254,10 +258,12 @@ export default {
                 this._apis.goods.fetchAllSpuGoodsList(params).then((response)=>{
                     this.createList(response, componentData);
                     this.loading = false;
+                    this.dataLoaded = true;
                 }).catch((error)=>{
                     console.error(error);
                     this.displayList = [];
                     this.loading = false;
+                    this.dataLoaded = true;
                 });
             }
         },
@@ -265,7 +271,6 @@ export default {
         /* 创建数据 */
         createList(datas, componentData) {
             this.displayList = datas;
-            this.allLoaded = true;
         },
 
          /* 设置分类商品参数 */

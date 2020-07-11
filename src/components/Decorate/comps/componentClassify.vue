@@ -27,11 +27,13 @@ export default {
   components: {},
   data () {
     return {
-      
+      dataLoaded: true
     }
   },
   created() {
     
+  },
+  mounted() {
   },
   computed: {
     
