@@ -33,7 +33,7 @@
             <el-option label="小程序" :value="1"></el-option>
             <el-option label="公众号" :value="2"></el-option>
             <el-option label="PC" :value="3"></el-option>
-            <el-option label="WAP" :value="4"></el-option>
+            <el-option label="H5" :value="4"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
@@ -46,6 +46,13 @@
             <el-option label="部分发货" :value="4"></el-option>
             <el-option label="待收货" :value="5"></el-option>
             <el-option label="完成" :value="6"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="发票">
+          <el-select v-model="listQuery.isInvoice" placeholder>
+            <el-option label="全部" value></el-option>
+            <el-option label="是" :value="1"></el-option>
+            <el-option label="否" :value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label>
@@ -169,7 +176,8 @@ export default {
         deliveryTime: "", //商家配送-时间段
         orderTimeValue: "",
         startIndex: 1,
-        pageSize: 20
+        pageSize: 20,
+        isInvoice: ""
       },
       activeName: "shop",
       resellConfigInfo: null,
