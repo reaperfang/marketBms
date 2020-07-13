@@ -27,7 +27,7 @@
                 <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
             </el-form-item>
             <el-form-item label="商品名称" prop="name">
-                <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || editor" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
             </el-form-item>
             <el-form-item label="商品描述" prop="description">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
@@ -237,10 +237,16 @@
                                 <span>{{item.name}}</span>
                                 <!--<el-button @click="deleteAddedSpec(index)">移除</el-button>-->
                             </div>
-                            <ul class="spec-value-ul">
+                            <ul class="spec-value-ul" v-if="!editor">
                                 <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
                                     {{spec.name}}
                                     <i @click="deleteAddedSpecValue(index, specValueIndex)" data-v-03229368="" class="icon-circle-close"></i>
+                                </li>
+                            </ul>
+                            <ul class="spec-value-ul1" v-if="editor">
+                                <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
+                                    {{spec.name}}
+                                    <i data-v-03229368="" class="icon-circle-close"></i>
                                 </li>
                             </ul>
                             <div class="add-specs-button">
@@ -268,7 +274,7 @@
                                             <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
                                         </div>
                                     </div>
-                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)">添加规格值</el-button>
+                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)" :disabled="editor">添加规格值</el-button>
                                 </el-popover>
                             </div>
                         </li>
@@ -524,6 +530,7 @@
                     </el-table> -->
                     <Specs v-if="ruleForm.productSpecs" :list.sync="ruleForm.goodsInfos"
                         :specsLabel="specsLabel"
+                        :editor="editor"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
@@ -586,10 +593,10 @@
                 <span v-if="ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品状态。</span>
                 <div>
                     <el-radio-group @change="statusChange" :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
-                        <el-radio :label="1">上架</el-radio>
-                        <el-radio :disabled="editor && ruleForm.activity" :label="0">下架</el-radio>
+                        <el-radio :label="1" :disabled="editor">上架</el-radio>
+                        <el-radio :disabled="editor || ruleForm.activity" :label="0">下架</el-radio>
                         <template v-if="editor">
-                            <span><el-radio :disabled="ruleForm.activity" :label="2">定时上架</el-radio></span>
+                            <span><el-radio :disabled="editor || ruleForm.activity" :label="2">定时上架</el-radio></span>
                         </template>
                         <template v-else>
                             <span style="display: inline-block;"><el-radio @click.native="timelyShelvingHandler" :label="2">定时上架</el-radio></span>
@@ -3791,6 +3798,26 @@ $blue: #655EFF;
                 height: 14px;
                 background: url('../../assets/images/goods/icon_close.png') no-repeat;
                 cursor: pointer;
+            }
+        }
+    }
+    .spec-value-ul1 {
+        margin-top: 10px;
+        margin-bottom: 14px;
+        padding-left: 20px;
+      li {
+            border: 1px solid #DCDFE6;
+            background-color: #f2f2f2;
+            color: #B6B5C8;
+            padding: 5px 10px;
+            i {
+                margin-left: 2px;
+                display: inline-block;
+                vertical-align: middle;
+                width: 14px;
+                height: 14px;
+                background: url('../../assets/images/goods/icon_close2.png') no-repeat;
+                cursor: not-allowed;
             }
         }
     }
