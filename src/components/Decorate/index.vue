@@ -80,6 +80,8 @@ export default {
       handler(newValue) {
         this.decoratePageData = newValue;
         this.convertDecorateData(this.decoratePageData);
+        //设置选中高亮的组件id
+        this.$store.commit('setCurrentComponentId', this.basePropertyId);
       },
       deep: true
     },
