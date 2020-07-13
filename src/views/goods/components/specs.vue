@@ -321,7 +321,6 @@ export default {
         // }
     },
     mounted () {
-        console.log('editor', this.editor);
     },
     methods: {
         specsChange(index, str) {
