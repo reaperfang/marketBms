@@ -9,7 +9,7 @@
         <el-form-item label="" prop="">
           <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜  索</el-button>
           <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
-          <el-button type="text" style="width:34px;" @click="clearInvalidData">清除失效数据</el-button>
+          <el-button type="text" @click="clearInvalidData">清除失效数据</el-button>
         </el-form-item>
       </el-form>
     </div>

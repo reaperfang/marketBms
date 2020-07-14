@@ -5,7 +5,11 @@
 let mixin = {
     data() {
         return {
-            selectDisabled: false
+			selectDisabled: false, //控制全选可不可用
+			selectKeyArr: [
+				'id',
+				'spuId'
+			] //不同接口返回的唯一标识白名单数组
         }
     },
 	watch: {
@@ -28,9 +32,19 @@ let mixin = {
 		selectAll(val) {
 			const selectedTable = this.tableData.filter(item => !item.disabled);
 			let nowPageSelectedLength = 0;
+			let key;
+			if(this.multipleSelection.length != 0){
+				for(let i = 0; i < this.selectKeyArr.length; i++){
+					const nowKey = this.selectKeyArr[i];
+					if(!!this.multipleSelection[0][nowKey]){
+						key = this.selectKeyArr[i];
+						break;
+					}
+				}
+			}
 			this.multipleSelection.forEach((item) => {
-				const id = item.id;
-				nowPageSelectedLength = nowPageSelectedLength + selectedTable.filter(items => items.id === id).length;
+				const id = item[key];
+				nowPageSelectedLength = nowPageSelectedLength + selectedTable.filter(items => items[key] === id).length;
             })
 			if (nowPageSelectedLength && nowPageSelectedLength == selectedTable.length) {
 				selectedTable.forEach((row) => {
@@ -55,10 +69,21 @@ let mixin = {
                 this.selectDisabled = false;
             }
 			let nowPageSelectedLength = 0;
+			let key;
+			if(this.multipleSelection.length != 0){
+				for(let i = 0; i < this.selectKeyArr.length; i++){
+					const nowKey = this.selectKeyArr[i];
+					if(!!this.multipleSelection[0][nowKey]){
+						key = this.selectKeyArr[i];
+						break;
+					}
+				}
+			}
 			this.multipleSelection.forEach((item) => {
-				const id = item.id;
-				nowPageSelectedLength = nowPageSelectedLength + selectedTable.filter(items => items.id === id).length;
-			})
+				const id = item[key];
+				nowPageSelectedLength = nowPageSelectedLength + selectedTable.filter(items => items[key] === id).length;
+            })
+			console.log(nowPageSelectedLength, selectedTable)
 			if (nowPageSelectedLength && nowPageSelectedLength == selectedTable.length) {
 				this.selectStatus = true;
 			} else {
