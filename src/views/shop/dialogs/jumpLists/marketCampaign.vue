@@ -19,7 +19,8 @@
         <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
           <el-table-column prop="" label="选择" :width="50">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.active" :disabled="scope.row.status === 2 || scope.row.appType == 405" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>
+              <!-- <el-checkbox v-model="scope.row.active" :disabled="scope.row.status === 2 || scope.row.appType == 405" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox> -->
+              <el-checkbox v-model="scope.row.active" :disabled="scope.row.status === 2" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column prop="appActivityName" label="活动名称"></el-table-column>
@@ -82,9 +83,9 @@ export default {
       this._apis.shop.getActivitiesList({}).then((response)=>{
         const list = [];
         for(let item of response) {
-          if(item[0].includes('405')) {
-            continue;
-          }
+          // if(item[0].includes('405')) {
+          //   continue;
+          // }
           list.push({
             code: item[0].split(',')[0],
             name: item[0].split(',')[1]
