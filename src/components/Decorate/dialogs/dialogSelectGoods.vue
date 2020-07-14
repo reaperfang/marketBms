@@ -62,7 +62,7 @@
       <!-- <el-table-column prop="createTime" label="创建时间"></el-table-column> -->
     </el-table>
     <div class="multiple_selection" v-if="tableData.length">
-      <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+      <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus" :disabled="selectDisabled">全选</el-checkbox>
     </div>
     <div class="pagination" v-if="tableData.length">
       <el-pagination
@@ -81,10 +81,12 @@
 <script>
 import DialogBase from "@/components/DialogBase";
 import tableBase from "@/components/TableBase";
+import dialogTableSelect from "@/mixins/dialogTableSelect";
 import utils from "@/utils";
 export default {
   name: "dialogSelectGoods",
   extends: tableBase,
+  mixins: [dialogTableSelect],
   components: { DialogBase },
   props: {
     data: {},
@@ -173,6 +175,7 @@ export default {
       if(row.status !== 0 && row.status !== -1) {
         return true;
       }
+      row.disabled = true;
     },
     getRowKey(row) {
       return row.id
