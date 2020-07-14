@@ -52,7 +52,16 @@ export default {
             }
           },
           deep: true
-      }
+      },
+
+      'currentComponentData.data.listStyle'(newValue, oldValue) {
+          if(newValue === oldValue) {
+              return;
+          }
+          this.$nextTick(()=>{
+              this.upadteComponentData();
+          })
+      },
   },
   methods: {
     /* 接收来自属性面板的数据变更 */
@@ -78,7 +87,7 @@ export default {
     upadteComponentData() {
       this.$store.commit('updateComponent',{
         id: this.currentComponentData.id,
-        data: Object.assign(this.currentComponentData.data, {
+        data: Object.assign({...this.currentComponentData.data}, {
           needReplace: this.hasFakeData && !this.hasRealData
         })
       })

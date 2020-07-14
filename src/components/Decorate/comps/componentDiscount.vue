@@ -104,19 +104,19 @@ export default {
             },
             deep: true
         },
-        'ruleForm.hideSaledGoods'(newValue, oldValue) {
+        'currentComponentData.data.hideSaledGoods'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
             this.fetch();
         },
-        'ruleForm.hideEndGoods'(newValue, oldValue) {
+        'currentComponentData.data.hideEndGoods'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
             this.fetch();
         },
-        'ruleForm.hideType'(newValue, oldValue) {
+        'currentComponentData.data.hideType'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }

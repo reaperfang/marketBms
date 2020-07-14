@@ -83,7 +83,6 @@ let mixin = {
 				const id = item[key];
 				nowPageSelectedLength = nowPageSelectedLength + selectedTable.filter(items => items[key] === id).length;
             })
-			console.log(nowPageSelectedLength, selectedTable)
 			if (nowPageSelectedLength && nowPageSelectedLength == selectedTable.length) {
 				this.selectStatus = true;
 			} else {
