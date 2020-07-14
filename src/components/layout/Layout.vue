@@ -120,6 +120,9 @@ export default {
     },
     menuHandler(index) {
       if(index == 8){
+        // 默认进入到应用模块的首页，相关：apply/index.vue
+        localStorage.removeItem('marketing_router_path');
+
         this.$router.push({name:'apply',params:{id:this.num++}});
       }else{
         this.SETCURRENT(index)
