@@ -470,9 +470,9 @@ export function getJdLive(data) {
 // 分销商品设置
 export function commisionGoodsSet(data) {
   return request({
-    apiType: 'goods',
+    apiType: 'commission',
     method: 'post',
-    target: 'PRODUCT-RESELL-EDIT-PROCESSOR',
+    target: 'COMMISSION-PRODUCT-CONFIG-EDIT-PROCESSOR',
     data,
     token
   })
@@ -486,7 +486,16 @@ export function getExpressAndDeliverySet(data) {
     data
   })
 }
-
+// 分销商品设置详情
+export function commisionGoodsDetails(data) {
+  return request({
+    apiType: 'commission',
+    method: 'post',
+    target: 'COMMISSION-PRODUCT-CONFIG-DETAIL-PROCESSOR',
+    data,
+    token
+  })
+}
 
 
 

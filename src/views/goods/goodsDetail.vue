@@ -4052,7 +4052,7 @@ $blue: #655EFF;
     display: inline-flex;
     align-items: center;
     padding: 12px;
-    width: 80px;
+    width: 85px;
     height: 34px;
     background-color: #e6fbf3;
     i {
