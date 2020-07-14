@@ -62,7 +62,7 @@
       <template v-else>
         <template v-for="(item, key) of componentDataIds">
           <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentData(item).hidden">
-            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :dragable="dragable"></component>
+            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :dragable="dragable"  @componentDataLoaded="componentDataLoaded"></component>
           </div>
         </template>
       </template>
