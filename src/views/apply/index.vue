@@ -81,11 +81,12 @@ export default {
             delete mkQuery.userName
             delete mkQuery.bossProductId
             delete mkQuery.id
+            delete mkQuery.menuId
 			for(let item in mkQuery){
                 extraQuery+= "&" + item+'='+mkQuery[item]
 			}
             // this.src = `http://test-omo.aiyouyi.cn/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}`
-            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&id=${applyId}&bossProductId=${bossProductId}${extraQuery}`
+            this.src = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${this.path}?access=1&token=${this.token}&businessId=1&loginUserId=1&tenantId=${this.tenantId}&cid=${this.cid}&userName=${userName}&menuId=${applyId}&bossProductId=${bossProductId}${extraQuery}`
         },
 
         // iframe 刷新  -- 暂时不用
