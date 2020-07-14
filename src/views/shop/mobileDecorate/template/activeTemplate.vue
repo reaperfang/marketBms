@@ -6,8 +6,9 @@
           v-for="(item, index) of checkboxGroup1"
           :key="index + 'checkboxGroup1'"
           closable
+          :disable-transitions="true"
           @close="handleSelectItems(item)"
-          effect="plain">
+         >
           {{ getIndustryName(item) }}
         </el-tag>
       </div>
@@ -15,7 +16,7 @@
         <div class="template_wrapper-head-industries-items" ref="industriesScroll"
              :style="ifShowAll ? styleShow : styleHidden">
           <div class="template_wrapper-head-industries-item" @click="handleSelectAll"
-               :class="{'checked' : checkboxGroup1.length ===  industries.length && industries.length > 0}"
+               :class="{'checked' : checkboxGroup1.length === 0}"
           >
             {{industries.length ? '全部行业' : '暂无行业'}}
           </div>
@@ -113,6 +114,9 @@
         <!--<div class="apply" @click="apply(currentTemplate)">立即应用</div>-->
       </div>
 
+      <!--   空数据   -->
+      <empty-list v-show="templateList.length === 0" :tipText="tipText"></empty-list>
+
       <div v-show="Number(total) > 0" class="pagination"
            v-if="templateList.length || (!templateList.length && startIndex != 1)">
         <el-pagination
@@ -126,7 +130,7 @@
         >
         </el-pagination>
       </div>
-      <empty-list v-show="templateList.length === 0" :tipText="tipText"></empty-list>
+
       <template-pay :dialogVisible="dialogVisible" :tempInfo="tempInfo" :qrCodeInfo="qrCodeInfo"
                     @closePay="closePay"></template-pay>
     </div>
@@ -438,8 +442,7 @@
       // 选择
       handleSelectItems(value) {
         if (this.checkboxGroup1.indexOf(value) > -1) {
-          var index = this.checkboxGroup1.indexOf(value)
-          this.checkboxGroup1.splice(index, 1);
+          this.checkboxGroup1.splice(this.checkboxGroup1.indexOf(value), 1);
         } else {
           this.checkboxGroup1.push(value)
         }
@@ -448,16 +451,7 @@
       },
       // 全选
       handleSelectAll() {
-        if (this.checkboxGroup1.length === this.industries.length) {
-          this.checkboxGroup1 = []
-        } else {
-          this.checkboxGroup1.length = 0
-          this.industries.map(item => {
-            this.checkboxGroup1.push(item.id)
-          })
-        }
-        // this.startIndex = 1;
-        // this.fetchList()
+        this.checkboxGroup1.splice(0);
       },
       sortByChange(v) {
         // this.startIndex = 1;
@@ -467,14 +461,14 @@
       // 有效行业列表
       effIndustryList() {
         this._apis.industry.effIndustryList({}).then((response) => {
-          this.industries = response
-          let that = this
+          this.industries = response;
+          let that = this;
           this.$nextTick(function () {
             let height = document.getElementsByClassName('template_wrapper-head-industries-items')[0].scrollHeight
             if (height > 50) {
-              this.showAllBtn = true
+              that.showAllBtn = true
             } else {
-              this.showAllBtn = false
+              that.showAllBtn = false
             }
           })
         }).catch((error) => {
@@ -529,7 +523,6 @@
 
       .el-tag {
         min-width: 67px;
-        height: 24px;
         border-radius: 2px;
         border: 1px dashed $globalMainColor;
         font-size: 14px;
@@ -539,6 +532,7 @@
         line-height: 24px;
         padding-right: 10px;
         padding-left: 10px;
+        box-sizing: border-box;
       }
     }
 
@@ -600,7 +594,6 @@
         min-width: 80px;
         padding-left: 10px;
         padding-right: 10px;
-        height: 34px;
         border-radius: 2px;
         border: 1px solid $borderColor;
         margin-right: 16px;
@@ -611,8 +604,10 @@
         line-height: 34px;
         cursor: pointer;
         background: #fff;
+        box-sizing: border-box;
 
         &.checked {
+          border: none;
           background: $globalMainColor;
           color: #fff;
         }
