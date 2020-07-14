@@ -11,6 +11,7 @@ let timePickerId = '';
  */
 export function formatDate(value, fmt) {
   if (!(value instanceof Date)) {
+    value = value && value.replace(/-/g, '/') // safari 仅支持 年/月/日 格式，不支持 年-月-日 
     value = new Date(value);
   }
   var o = {
