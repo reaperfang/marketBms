@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     handleOpen(row) {
-      this._apis.client.levelEnable({id: row.id, status: 1}).then((response) => {
+      this._apis.client.enableLevel({id: row.id, status: 1}).then((response) => {
         if(response == 1) {
           this.getLevelsList();
           this.$message({
@@ -172,7 +172,7 @@ export default {
       }else{
         let arr = [];
         rows.map((v) => {arr.push(v.id);});
-        this._apis.client.batchEnableLevel({levelIds: arr, status: '0'}).then((response) => {
+        this._apis.client.enableLevel({levelIds: arr, status: '0'}).then((response) => {
           this.$message({
             message: '批量禁用成功',
             type: 'success'

@@ -82,7 +82,9 @@
 <script type="es6">
 import utils from "@/utils";
 import Blob from '@/assets/js/excel/Blob'
-import Export2Excel from '@/assets/js/excel/Export2Excel.js'
+// import Export2Excel from '@/assets/js/excel/Export2Excel.js'
+const Export2Excel = () =>
+  import(/* webpackChunkName: "Export2Excel" */ '@/assets/js/excel/Export2Excel.js')
 import ciTable from './components/clientImport/ciTable';
 import addChannelDialog from './dialogs/clientImport/addChannelDialog';
 export default {
