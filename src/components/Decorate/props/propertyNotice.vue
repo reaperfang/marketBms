@@ -37,8 +37,8 @@ export default {
     return {
       ruleForm: {
         notice: '',//公告文本
-        backgroundColor: 'rgb(255,248,233)',//背景颜色 
-        fontColor: 'rgb(102,102,102)'//文字颜色 
+        backgroundColor: 'rgba(255,229,202,0.4)',//背景颜色 
+        fontColor: 'rgba(51,51,51,1)'//文字颜色 
       },
       rules: {
 

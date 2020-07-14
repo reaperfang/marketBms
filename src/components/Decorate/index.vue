@@ -57,7 +57,6 @@ export default {
     };
   },
   created() {
-
     this.init();
     this.$store.dispatch('getShopStyle');
   },
@@ -78,8 +77,7 @@ export default {
   watch: {
     'decorateData': {
       handler(newValue) {
-        this.decoratePageData = newValue;
-        this.convertDecorateData(this.decoratePageData);
+        this.updateDecorateData(newValue);
       },
       deep: true
     },
@@ -92,7 +90,10 @@ export default {
       const id = uuidv4();
 
       //转换接口数据为可识别格式
-      this.convertDecorateData(this.decoratePageData);
+      const result = this.convertDecorateData(this.decoratePageData);
+
+      //初始化编辑器数据
+      this.initData(result, this.decoratePageData);
 
       //创建基础组件-页面根组件
       this.createBaseComponent(id);
@@ -130,11 +131,14 @@ export default {
       if(!Array.isArray(result)) {
         return;
       }
-      this.initData(result, data);
+      return result;
     },
 
     //初始化编辑器数据
     initData(pageData, originData) {
+      if(!pageData) {
+        return;
+      }
       let componentDataIds = [];
       let componentDataMap = {};
 
@@ -172,6 +176,20 @@ export default {
           }
         })())
       });
+    },
+
+    /* 更新装修数据 */
+    updateDecorateData(newValue) {
+      this.decoratePageData = newValue;
+
+      //转换接口数据为可识别格式
+      const result = this.convertDecorateData(this.decoratePageData);
+
+      //初始化编辑器数据
+      this.initData(result, this.decoratePageData);
+
+      //设置选中高亮的组件id
+      this.$store.commit('setCurrentComponentId', this.basePropertyId);
     },
 
     /* 保存前收集装修数据 */

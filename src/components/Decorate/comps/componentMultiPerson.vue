@@ -7,7 +7,7 @@
                     <template  v-for="(item,key) of displayList">
                         <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                             <div class="img_box">
-                                <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.sold > -1 ? item.sold : 0}}人已团</p>
+                                <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.joinedActivityPeopleNum > -1 ? item.joinedActivityPeopleNum : 0}}人已团</p>
                                 <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                             </div>
                             <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
@@ -138,19 +138,19 @@ export default {
             }
             this.fetch();
         },
-        'ruleForm.hideSaledGoods'(newValue, oldValue) {
+        'currentComponentData.data.hideSaledGoods'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
             this.fetch();
         },
-        'ruleForm.hideEndGoods'(newValue, oldValue) {
+        'currentComponentData.data.hideEndGoods'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
             this.fetch();
         },
-        'ruleForm.hideType'(newValue, oldValue) {
+        'currentComponentData.data.hideType'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
@@ -981,7 +981,7 @@ export default {
                         right:10px;
                         bottom:15px;
                         font-size:13px;
-                        width:84px;
+                        //width:84px;
                         height:31px;
                     }
                     .pin{
@@ -989,7 +989,7 @@ export default {
                         height:31px;
                         right:102.5px;
                         bottom:15px;
-                        width:84px;
+                        //width:84px;
                         position:absolute;
                     }
                     .button{
@@ -1400,7 +1400,7 @@ export default {
                 right:10px;
                 bottom:15px;
                 font-size:13px;
-                width:84px;
+                //width:84px;
                 height:31px;
             }
             .pin{
@@ -1408,7 +1408,7 @@ export default {
                 height:31px;
                 right:102.5px;
                 bottom:15px;
-                width:84px;
+                //width:84px;
                 position:absolute;
             }
             .activity_end{

@@ -586,7 +586,7 @@ export default {
                             query: {
                                 id: this.$route.query.id,
                                 type: 'orderAfterDeliverGoods',
-                                print: this.express
+                                print: this.express + ''
                             }
                         })
                     }).catch(error => {

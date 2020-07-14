@@ -4,20 +4,17 @@
     <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
       <template v-if="hasRealData || hasFakeData">
         <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="hasRealData">
-          <li>
-            <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
-          </li>
           <li class="ellipsis">
             <div class="nwwest-roll" id="nwwest-roll">
               <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
                 <li ref="rollul" v-for="(item, key) in displayList" :key="key" class="ellipsis" :class="{anim:animate===true}">
                   <img :src="item.member" alt="">
+		              <p :style="{'color':currentComponentData.data.fontColor}">刚刚</p>
                   <span class="name">{{item.content}}</span>
                 </li>
               </ul>
             </div>
           </li>
-          <li :style="{'color':currentComponentData.data.fontColor}">刚刚</li>
         </ul>
         <div v-else>
           <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;vertical-align: bottom;">
@@ -56,6 +53,7 @@ export default {
       },
   },
   methods: {
+  
     scroll() {
       if(!this.$refs.rollul) {
         return;
@@ -127,22 +125,16 @@ export default {
 
 <style lang="scss" scoped>
 .nwwest-roll {
-  padding-left: 15px;
+  padding-left: 7.5px;
   margin: 0 auto;
   overflow: hidden;
   transition: all 0.5s;
   & > ul {
-    height: 35px;
+    height: 17.5px;
     overflow: hidden;
     & > li {
-      height: 35px;
-      line-height: 35px;
-      display:flex;
-      img{
-        width:35px;
-        height:35px;
-        margin-right:10px;
-      }
+      height: 17.5px;
+      line-height: 17.5px;
     }
   }
 }
@@ -150,27 +142,37 @@ export default {
   transition: all 0.5s;
 }
 .componentBuyNotice {
-  // height: 29px;
-  // line-height: 29px;
   & > ul {
-    padding: 0px 10px;
+    height: 29px;
+    line-height: 29px;
+    padding: 0px 10px 0 5px;
     display: flex;
     align-items: center;
-    & > li:nth-child(1) {
-      width: 22px;
+    li{
       height: 22px;
-      & > img {
-        width: 100%;
-        height: 100%;
+      width: 100%;
+      img {
+        height: 17px;
+        width:17px;
         border-radius: 50%;
+        float:left;
+        margin-top:2.5px;
+        margin-right:5px;
       }
-    }
-    & > li:nth-child(2) {
-      flex: 1;
-    }
-    & > li:nth-child(3) {
-      flex: 0 0 50px;
-      text-align: right;
+      span{
+        line-height:22px;
+        overflow:hidden;
+        display:block;
+        @extend .ellipsis;
+        font-size:12px;
+      }
+      p{
+        float:right;
+        margin-right:5px;
+        line-height:22px;
+        text-align:right;
+        font-size:12px;
+      }
     }
   }
   .van-notice-bar {
