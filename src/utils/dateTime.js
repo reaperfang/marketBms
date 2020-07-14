@@ -1,6 +1,6 @@
 /* 日期和时间相关工具 */
 let timePickerId = '';
-
+import { isSafariBrowser } from './base'
 /**
  *格式化日期和时间
  *
@@ -11,7 +11,8 @@ let timePickerId = '';
  */
 export function formatDate(value, fmt) {
   if (!(value instanceof Date)) {
-    value = value && value.replace(/-/g, '/') // safari 仅支持 年/月/日 格式，不支持 年-月-日 
+    // // safari 仅支持 年/月/日 格式，不支持 年-月-日 
+    value = isSafariBrowser() ? value && value.replace(/-/g, '/') : value
     value = new Date(value);
   }
   var o = {

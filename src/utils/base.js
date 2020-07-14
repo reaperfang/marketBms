@@ -256,3 +256,9 @@ export function debounce(func, wait) {
 }
 
 
+// is safari
+export function isSafariBrowser() {
+  const ua = navigator.userAgent;
+  const isSafariBrowser = /Safari\/([\d.]+)/.test(ua) && !/Chrome\/([\d.]+)/.test(ua);
+  return isSafariBrowser
+}
