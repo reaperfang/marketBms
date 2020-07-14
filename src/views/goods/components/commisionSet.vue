@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="line">
+    <div class="line" v-if="status == 1">
       <div class="line-title">海报图片：</div>
       <div class="line-content">
         <el-radio-group v-model="picSorce">
