@@ -1,7 +1,10 @@
 <template>
   <DialogBase :visible.sync="visible" width="500px" :title="'移动分组'" @submit="submit">
     <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="分组名称：">
+         <el-form-item label="当前分组：">
+           分组名称
+         </el-form-item>
+        <el-form-item label="转移分组：">
           <el-cascader
           v-model="form.groupId"
           :options="options"
