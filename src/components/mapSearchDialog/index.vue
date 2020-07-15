@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="mapSearch">
     <el-button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<i class="el-icon-search"></i></el-button>
 
     <el-dialog
@@ -7,6 +7,7 @@
       :visible.sync="centerDialogVisible"
       width="60%"
       :close-on-click-modal="false"
+      custom-class="dialog"
       center>
       <div style="height: 480px;">
         <map-search 
@@ -16,6 +17,7 @@
         :zoom="mapStyle.zoom"
         :zoomControl="mapStyle.zoomControl"
         :panControl="mapStyle.panControl"
+        :height="height"
         :center="[36.67489963858812, 102.76171874999999]"
         @getMapClickPoi="getMapClickPoi"
         :isInitSearch="false"></map-search>
@@ -102,6 +104,25 @@ import mapSearch from '@/components/mapSearch'
   };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+.mapSearch {
+  /deep/ .dialog {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+    .el-dialog__header {
+      height: 60px;
+      box-sizing: border-box;
+      padding: 15px 20px;
+      background-color: #F1F0FF;
+      text-align: left;
+      .el-dialog__title {
+        font-size: 22px;
+        line-height: 30px;
+        color:#44434B;
+      }
+    }
+  }
+}
 .search-map {
     margin-left: 17px;
     width:106px;
