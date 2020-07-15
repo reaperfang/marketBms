@@ -113,6 +113,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.props >>> .el-slider__runway{
+  background-color: #F2F2F9;
+}
   .props {
     background-color: #fff;
     padding: 12px 18px;

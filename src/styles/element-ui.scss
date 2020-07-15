@@ -1,71 +1,84 @@
- //覆盖一些element-ui样式
+//覆盖一些element-ui样式
 
- .el-breadcrumb__inner, .el-breadcrumb__inner a{
-  font-weight: 400!important;
+.el-breadcrumb__inner, .el-breadcrumb__inner a {
+  font-weight: 400 !important;
 }
 
- .el-upload {
-   input[type="file"] {
-     display: none !important;
-   }
- }
-
- .el-upload__input {
-   display: none;
- }
- .el-input__inner{
-   padding: 0 8px;
- }
- .el-textarea__inner{
-   padding: 5px 8px;
- }
-
- .el-button--warning.is-plain {
-    color:rgba(253,147,43,1);
-    background: #fff;
-    border-color: rgba(253,147,43,1);
- }
- .el-button--warning.is-plain:focus, .el-button--warning.is-plain:hover {
-    color:rgba(253,147,43,1);
-    background:rgba(253,147,43,1);
-    color: #fff;
+.el-upload {
+  input[type="file"] {
+    display: none !important;
+  }
 }
+
+.el-upload__input {
+  display: none;
+}
+
+.el-input__inner {
+  padding: 0 8px;
+}
+
+.el-textarea__inner {
+  padding: 5px 8px;
+}
+
+.el-button--warning.is-plain {
+  color: rgba(253, 147, 43, 1);
+  background: #fff;
+  border-color: rgba(253, 147, 43, 1);
+}
+
+.el-button--warning.is-plain:focus, .el-button--warning.is-plain:hover {
+  color: rgba(253, 147, 43, 1);
+  background: rgba(253, 147, 43, 1);
+  color: #fff;
+}
+
 .el-button--warning.is-plain:active {
-    background: #e48427;
-    border-color: #e48427;
-    color: #fff;
-    outline: 0;
+  background: #e48427;
+  border-color: #e48427;
+  color: #fff;
+  outline: 0;
 }
+
 .el-button--warning.is-plain.is-disabled, .el-button--warning.is-plain.is-disabled:active, .el-button--warning.is-plain.is-disabled:focus, .el-button--warning.is-plain.is-disabled:hover {
-    color: #febe80;
-    background-color: #fff;
-    border-color: #ffe9d5;
+  color: #febe80;
+  background-color: #fff;
+  border-color: #ffe9d5;
 }
 
-.el-checkbox__input.is-checked+.el-checkbox__label {  //复选框文字颜色不用变
-    color: #44434B!important;
-}
-.el-radio__input.is-checked+.el-radio__label {  //单选框文字颜色不用变
-    color: #44434B !important;
+.el-checkbox__input.is-checked + .el-checkbox__label { //复选框文字颜色不用变
+  color: #44434B !important;
 }
 
-.el-cascader-node__postfix{
-  top:11px;
+.el-radio__input.is-checked + .el-radio__label { //单选框文字颜色不用变
+  color: #44434B !important;
 }
-.el-upload-list__item-status-label{
+
+.el-cascader-node__postfix {
+  top: 11px;
+}
+
+.el-upload-list__item-status-label {
   background: #655EFF !important;
 }
 
 // 单选按钮
-.el-radio__input.is-checked .el-radio__inner{
-  background: none!important;
+.el-radio__input.is-checked .el-radio__inner {
+  background: none !important;
 }
-.el-radio__inner{
-  width: 16px!important;
-  height: 16px!important;
+
+.el-radio__inner {
+  width: 16px !important;
+  height: 16px !important;
 }
-.el-radio__inner::after{
-  width: 8px!important;
-  height: 8px!important;
-  background-color: #655EFF!important;
+
+.el-radio__inner::after {
+  width: 8px !important;
+  height: 8px !important;
+  background-color: #655EFF !important;
+}
+
+.el-radio-button:focus:not(.is-focus):not(:active):not(.is-disabled) {
+  box-shadow: none !important;
 }
