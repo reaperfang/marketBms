@@ -5,7 +5,7 @@
         <template>
           <div class="widget-title">
             <span>{{item.title}}</span>
-            <i @click="spreadWidget(key)" class="widget-title-icon" :class="{'el-icon-caret-bottom': !item.spread, 'el-icon-caret-top': item.spread}"></i>
+            <i @click="spreadWidget(key)" class="widget-title-icon" :class="{'icon-bottom': !item.spread, 'icon-top': item.spread}"></i>
           </div>
           <transition name="widget-transition" class="widget-transition">
               <div v-if="item.spread" class="widget-list">
@@ -100,19 +100,20 @@ export default {
         after: true
       });
 
-      //组件添加自动滚动到组件位置
-      let index = this.componentDataIds.indexOf(this.currentComponentId);
-      if(index > 0) {
-        index--;
-      }
-      let prev = this.componentDataIds[index];
-      this._globalEvent.$emit('autoScrollToComponent', prev);
-
-      //只有根组件的情况下直接定位到底部
+      
+      //如果当前是最后一个组件，则直接定位到底部
       if(this.currentComponentId === this.componentDataIds[this.componentDataIds.length - 1]) {
         this.$nextTick(()=>{
           this._globalEvent.$emit('scrollToBottom');
         })
+      }else{
+        //组件添加自动滚动到组件位置
+        let index = this.componentDataIds.indexOf(this.currentComponentId);
+        if(index > 0) {
+          index--;
+        }
+        let prev = this.componentDataIds[index];
+        this._globalEvent.$emit('autoScrollToComponent', prev);
       }
     },
 
@@ -143,12 +144,34 @@ export default {
       box-sizing: border-box;
       margin-bottom: 16px;
       span {
-        border-left: 2px solid rgba(101,94,255,1);
-        padding-left: 4px;
+        &:before {
+            content: "";
+            position: relative;
+            display: inline-block;
+            width: 1px;
+            height: 12px;
+            margin-right: 4px;
+            top: 1px;
+            border-radius: 2px;
+            background: $globalMainColor;
+        }
       }
+      
       //background:rgba(230,228,255,1);
       .widget-title-icon {
-        color: #3A4048;
+        display: inline-block;
+        width: 9px;
+        height: 6px;
+        margin-left: 2px;
+        vertical-align: middle;        
+      }
+      .icon-top {
+          background: url(~@/assets/images/shop/editor/top.png) no-repeat;
+          background-size: 9px 6px;
+      }
+      .icon-bottom {
+          background: url(~@/assets/images/shop/editor/bottom.png) no-repeat;
+          background-size: 9px 6px;
       }
     }
     .widget-list{

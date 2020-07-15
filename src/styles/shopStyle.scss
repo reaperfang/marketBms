@@ -479,7 +479,9 @@ ul.cube {
                                     position: absolute;
                                     display: block;
                                     width: 2px;
-                                    height: 100%;
+                                    height: 13px;
+                                    top: 2px;
+                                    border-radius: 1px;
                                     background: $globalMainColor;
                               }
                         }

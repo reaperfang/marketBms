@@ -122,7 +122,8 @@ export default {
       currentMouseOverComponentId: '',
       popoverDisabled: false,
       loadedComponents: [],  //数据加载完成的组件列表
-      loadPercent: 0
+      loadPercent: 0,
+      scrollBottomMark: false, //只有当点击或者拖拽新添加组件时为true，等新的组件加载完成，需要触发滚动至底部事件的标记，然后初始为false
     }
   },
   computed:{
@@ -145,6 +146,8 @@ export default {
   created() {
     this.loadTemplateLists();
     this._globalEvent.$on('scrollToBottom', ()=>{
+      console.log('123456')
+      this.scrollBottomMark = true;
       this.scrollToBottom();
     }) 
     
@@ -258,9 +261,11 @@ export default {
 
     /* 滚动到底部 */
     scrollToBottom () {
+      console.log('至底部')
         this.$nextTick(() => {
             var container = this.$el.querySelector(".phone-body");
             let tempScrollHeight = container.scrollHeight;
+            
             setTimeout(()=>{
               if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
                 container.scrollTop = tempScrollHeight
@@ -276,6 +281,7 @@ export default {
 
     /* 自动跟踪组件添加滚动到组件位置 */
     autoScrollToComponent(id) {
+      console.log('组件位置')
       // this.$nextTick(()=>{
       //   var container = this.$el.querySelector(".phone-body");
       //   let blocks = this.$refs.view_container.querySelectorAll('.component_wrapper');
@@ -338,26 +344,33 @@ export default {
         after: true
       });
 
-      //组件添加自动滚动到组件位置
-      let index = this.componentDataIds.indexOf(this.currentComponentId);
-      if(index > 0) {
-        index--;
-      }
-      let prev = this.componentDataIds[index];
-      this.autoScrollToComponent(prev);
 
-      //只有根组件的情况下直接定位到底部
+      //如果当前是最后一个组件，则直接定位到底部
       if(this.currentComponentId === this.componentDataIds[this.componentDataIds.length - 1]) {
         this.$nextTick(()=>{
+          this.scrollBottomMark = true;
           this.scrollToBottom();
         })
+      }else{
+        //组件添加自动滚动到组件位置
+        let index = this.componentDataIds.indexOf(this.currentComponentId);
+        if(index > 0) {
+          index--;
+        }
+        let prev = this.componentDataIds[index];
+        this.autoScrollToComponent(prev);
       }
     },
 
     /* 组件数据加载结束 */
     componentDataLoaded(componentData) {
+      
       for(let item of this.componentDataIds) {
         if(item === componentData.id) {
+          if(this.scrollBottomMark){
+            this.scrollBottomMark = false;
+            this.scrollToBottom();
+          }
           this.loadedComponents.push(componentData);
           this.updateLoadProgress(componentData);
           if(this.loadedComponents.length === this.componentDataIds.length - 1) {  //减1是因为，要过滤掉基础组件，基础组件是不渲染的
