@@ -529,7 +529,7 @@
         margin-right: 16px;
         margin-top: 15px;
         color: $globalMainColor;
-        line-height: 24px;
+        line-height: 22px;
         padding-right: 10px;
         padding-left: 10px;
         box-sizing: border-box;
