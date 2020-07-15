@@ -12,7 +12,7 @@
 						</div>
 						<div class="bottom apply_now">
 							<span class="price"></span>
-							<el-button type="primary" plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
+							<el-button plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
 						</div>
 					</div>
 				</div>
@@ -592,9 +592,11 @@
 	}
 	.apply_now {
 		.el-button--small{
-			padding:9px 12px!important;
+      margin-top: 8px;
+			padding: 9px 11px!important;
 			background: #fff!important;
-			border-radius:4px!important;
+			border-radius: 4px!important;
+      font-size: 14px;
 		}
 		.el-button--success{
 			border:1px solid rgba(62,180,136,1)!important;

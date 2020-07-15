@@ -193,7 +193,7 @@
 <style scoped lang="scss">
 /deep/ .el-dialog {
 	background: #fff;
-	box-shadow:0 5px 20px 0 rgba(208,214,228,1);
+	/*box-shadow:0 5px 20px 0 rgba(208,214,228,1);*/
 	border-radius:10px;
 	border:1px solid rgba(204,204,204,1);
 	width: 510px;

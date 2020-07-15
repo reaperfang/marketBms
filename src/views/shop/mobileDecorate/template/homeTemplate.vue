@@ -506,7 +506,8 @@
 <style lang="scss" scoped>
 
   /deep/ .el-tag--small .el-icon-close {
-    transform: scale(1.1);
+    transform: scale(1);
+    font-size: 14px;
   }
 
   .el-radio-group label:last-child {
