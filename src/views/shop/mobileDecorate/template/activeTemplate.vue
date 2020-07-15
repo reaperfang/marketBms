@@ -492,11 +492,8 @@
 <style lang="scss" scoped>
 
   /deep/ .el-tag--small .el-icon-close {
-    transform: scale(1.1);
-  }
-
-  /deep/ .el-tag .el-icon-close {
-    top: -2px;
+    transform: scale(1);
+    font-size: 14px;
   }
 
   .el-radio-group label:last-child {
