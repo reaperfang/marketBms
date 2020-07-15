@@ -36,6 +36,19 @@ export default [
                 name: 'memberSet',
                 meta: { title: '会员设置', noCache: true, tabTitle: '通用设置' , navType:2 }
             },
+            // 地址库
+            {
+                path: 'address',
+                component: () => import('@/views/set/address'),
+                name: 'address',
+                meta: { title: '地址库', noCache: true, tabTitle: '通用设置' , navType:2 }
+            },
+            {
+                path: 'addressUpdate',
+                component: () => import('@/views/set/addressUpdate'),
+                name: 'addressUpdate',
+                meta: { title: '更新地址', noCache: true, tabTitle: '通用设置' , navType:4 }
+            },
             {
                 path: 'ordinaryExpress',
                 component: () => import('@/views/set/ordinaryExpress'),

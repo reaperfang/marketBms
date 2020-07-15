@@ -1,6 +1,6 @@
 <template>
    <div class="address">
-     <h2>地址库/{{title}}</h2>
+     <h2>地址库/{{ setTitle }}</h2>
      <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="102px">
        <div class="form-area">
         <el-form-item label="联系人" prop="contactPerson">
@@ -74,9 +74,9 @@ export default {
       }
     };
     return {
-      title: '新建地址',
       isMapChoose: false,
       ruleForm: {
+        id: null,
         contactPerson: null, // 联系人
         mobile: null, // 手机号
         sendAddress: '', // 联系地址
@@ -114,21 +114,92 @@ export default {
     },
     isReturn() {
       return this.hasChecked(2)
+    },
+    setTitle() {
+      return this.ruleForm.id ? '编辑地址' : '新建地址'
     }
   },
 
-  watch: {},
+  watch: {
+    '$route'(curr) {
+      console.log(curr)
+    }
+  },
 
   created() {},
 
-  mounted() {},
+  mounted() {
+    this.init()
+  },
 
   methods: {
+    getAddressById(id) {
+      return {
+        id: 1,
+        contactPerson: 'bill', // 联系人
+        mobile: '15712899623', // 手机号
+        sendAddress: '数码庄园', // 联系地址
+        address: '', // 详细地址
+        type: 3, // 地址类型
+        lat: null,
+        lng: null,
+        addressCode: null, // code码
+        province: null, // 省
+        city: null, // 市
+        area: null, // 区
+        defaultDeliveryAddress: 1,
+        defaultReturnAddress: 1
+      }
+    },
+    // 处理编辑时，回显数据
+    handleEchoData(data) {
+      if (!data) return
+      this.isMapChoose = true
+      this.ruleForm.contactPerson = data.contactPerson || null
+      this.ruleForm.mobile = data.mobile || null
+      this.ruleForm.sendAddress = data.sendAddress || ''
+      this.ruleForm.address = data.address || null
+      this.ruleForm.type = this.formateEchoAddressType({
+        type: data.type,
+        defaultDeliveryAddress: data.defaultDeliveryAddress,
+        defaultReturnAddress: data.defaultReturnAddress
+      })
+      this.ruleForm.lat = data.lat || null
+      this.ruleForm.lng = data.lng || null
+      this.ruleForm.addressCode = data.addressCode || []
+      this.ruleForm.province = data.province || null
+      this.ruleForm.city = data.city || null
+      this.ruleForm.area = data.area || null
+    },
     init() {
-
+      this.ruleForm.id = this.$route.query && this.$route.query.id
+      if (this.ruleForm.id) {
+        const data = this.getAddressById()
+        this.handleEchoData(data)
+      }
+    },
+    // 格式化回显地址类型数据
+    formateEchoAddressType({ type, defaultDeliveryAddress, defaultReturnAddress }) {
+      const arr = []
+      if (type === 3) {
+        arr.push(1, 2)
+        defaultDeliveryAddress && arr.push(3)
+        defaultReturnAddress && arr.push(4)
+        return arr
+      }
+      if (type === 1) {
+        arr.push(1)
+        defaultDeliveryAddress && arr.push(3)
+        return arr
+      }
+      if (type === 2) {
+        arr.push(2)
+        defaultReturnAddress && arr.push(4)
+        return arr
+      }
     },
     // 格式化地址类型数据
-    formateAddressType(types) {
+    formateAddressType() {
       const defaultDeliveryAddress = 1
       const defaultReturnAddress = 1
       // obj.type 1 发货地址 2 退货地址 3 发货地址、退货地址都选中
@@ -156,11 +227,46 @@ export default {
       const type = this.formateAddressType()
       console.log(type)
       delete data.type
-
       return { data, ...type }
     },
     hasChecked(val) {
       return this.ruleForm.type.includes(val)
+    },
+    // 处理保存成功的逻辑
+    handleSaveSuccess() {
+      this.confirm({
+        title: "提示",
+        iconSuccess: true,
+        text: '保存成功',
+        confirmText: '返回地址列表',
+        cancelButtonText: '继续新建地址'
+      }).then(() => {
+        this.$router.push({ path: '/set/address' })
+      }).catch(()=> {
+        this.$router.push({ path: '/set/addressUpdate' })
+      });
+    },
+    // 处理数据重复问题
+    handleDataRepeatErr() {},
+    // 处理开启商家配送提醒
+    hanldeIsOpenDelivery() {},
+    // 数据保存之后的处理逻辑
+    handleAfterSave(res) {
+      // 数据重复
+      if (res.code === 1) {
+        this.handleDataRepeatErr()
+        return false
+      }
+      // 是否开启商家配送
+      if (res.code === 2) {
+        this.hanldeIsOpenDelivery()
+        return false
+      }
+      // 保存成功
+      if (res.code === 0) {
+        this.handleSaveSuccess()
+        return false
+      }
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
@@ -173,6 +279,13 @@ export default {
           }
           const req = this.getReqData()
           console.log('req',req)
+          const res = {
+            code: 0
+          }
+          this.handleAfterSave(res)
+          // // 数据重复错误提示
+          // this.handleDataRepeatErr(id)
+          // this.$router.push({ path: '/set/addressUpdate', query: { id: 1 }})
         } else {
           console.log('error submit!!');
           return false;
