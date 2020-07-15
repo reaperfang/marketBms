@@ -641,7 +641,6 @@
         /*border-left: 1px solid $globalMainColor;*/
         color: $globalMainColor;
         border-color: $globalMainColor;
-        box-shadow: -1px 0 0 0 $globalMainColor;
       }
 
       /deep/ .el-radio-button__inner {
