@@ -65,7 +65,7 @@
         </div>
         <div class="groups">
           <p class="groups_head">全部视频</p>
-          <groups :typeName="typeName"></groups>
+          <groups :typeName="typeName" @submit="handleSubmit"></groups>
         </div>
         <!-- <div class="groups">
           <p class="groups_head">全部视频</p>
@@ -179,7 +179,7 @@ export default {
       for(let key in data){
         switch (key) {
           case 'getGroupVideo':
-            this.getList(data.getGroupImage.groupId)
+            this.getList(data.getGroupVideo.groupId)
           break;
           case 'moveGroup':
             this.handleMoveGroup(data.moveGroup.imageId,data.moveGroup.groupId)
