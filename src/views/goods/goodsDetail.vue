@@ -2064,6 +2064,7 @@ export default {
         },
         handleEdit(index, row) {
             this.tableData.splice(index, 1)
+            this.ruleForm.relationProductInfoIds = this.tableData.map(val => val.id)
         },
         getCategoryIds(arr, id) {
             try {
