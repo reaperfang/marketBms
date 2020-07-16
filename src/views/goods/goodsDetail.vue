@@ -165,8 +165,8 @@
             </el-form-item>
         </section>
         <section class="form-section spec-form-section">
-            <h2>销售信息</h2>
-            <span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span>
+            <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
+            
             <el-form-item label="规格信息" prop="goodsInfos">
 
             </el-form-item>
@@ -537,6 +537,7 @@
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
+                        :activity="ruleForm.activity"
 			:weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
