@@ -134,7 +134,7 @@ export default {
       return result;
     },
 
-    //初始化编辑器数据
+    //编辑器数据初始化
     initData(pageData, originData) {
       if(!pageData) {
         return;

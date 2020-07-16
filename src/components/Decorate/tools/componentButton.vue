@@ -126,7 +126,7 @@ export default {
   @extend .flexCenterMiddle;
   background:#FF4444;
   height:28px;
-  line-height:56px;
+  line-height:28px;
 }
 .componentButton.buttonStyle4{
   padding:0 7.5px;
@@ -137,7 +137,7 @@ export default {
   color:#FF4444;
   min-width:40px;
   height:28px;
-  line-height:26px;
+  line-height:28px;
 }
 .componentButton.iconfont.buttonStyle5{
   padding:0 7.5px;
