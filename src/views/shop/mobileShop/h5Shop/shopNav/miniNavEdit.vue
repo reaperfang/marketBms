@@ -275,7 +275,7 @@ export default {
             navigationKey: '',
             status: '0',
             navigation_type: '1',
-            navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
+            navigation_json: utils.compileStr(JSON.stringify(this.checkIcon()))
           }, (status) => {
             this.saveAndApplyLoading = false;
           })
@@ -292,7 +292,7 @@ export default {
             navigationKey: '',
             status: '1',
             navigation_type: '1',
-            navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
+            navigation_json: utils.compileStr(JSON.stringify(this.checkIcon()))
           }, (status) => {
             this.saveLoading = false;
           })
