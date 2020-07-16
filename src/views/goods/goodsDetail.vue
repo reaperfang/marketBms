@@ -791,6 +791,17 @@ export default {
                 callback();
             }
         };
+        var isShowRelationProductValidator = (rule, value, callback) => {
+            if(this.ruleForm.isShowRelationProduct == 1) {
+                if(!this.tableData.length) {
+                    callback(new Error('请选择关联商品'));
+                } else {
+                    callback();
+                }
+            } else {
+                callback();
+            }
+        };
         return {
             itemCatText: '',
             categoryValue: [],
@@ -890,8 +901,11 @@ export default {
                 isJoinDiscount: [
                     { required: true, message: '请选择', trigger: 'blur' },
                 ],
+                // isShowRelationProduct: [
+                //     { required: true, message: '请选择', trigger: 'blur' },
+                // ],
                 isShowRelationProduct: [
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { validator: isShowRelationProductValidator, trigger: 'blur' },
                 ],
             },
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
