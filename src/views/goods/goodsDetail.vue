@@ -27,7 +27,8 @@
                 <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
             </el-form-item>
             <el-form-item label="商品名称" prop="name">
-                <el-input :disabled="!ruleForm.productCategoryInfoId || editor" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || (editor && ruleForm.activity)" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
+                <span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品名称</span>
             </el-form-item>
             <el-form-item label="商品描述" prop="description">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
@@ -165,6 +166,7 @@
         </section>
         <section class="form-section spec-form-section">
             <h2>销售信息</h2>
+            <span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span>
             <el-form-item label="规格信息" prop="goodsInfos">
 
             </el-form-item>
@@ -237,13 +239,13 @@
                                 <span>{{item.name}}</span>
                                 <!--<el-button @click="deleteAddedSpec(index)">移除</el-button>-->
                             </div>
-                            <ul class="spec-value-ul" v-if="!editor">
+                            <ul class="spec-value-ul" v-if="!(editor && ruleForm.activity)">
                                 <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
                                     {{spec.name}}
                                     <i @click="deleteAddedSpecValue(index, specValueIndex)" data-v-03229368="" class="icon-circle-close"></i>
                                 </li>
                             </ul>
-                            <ul class="spec-value-ul1" v-if="editor">
+                            <ul class="spec-value-ul1" v-if="editor && ruleForm.activity">
                                 <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
                                     {{spec.name}}
                                     <i data-v-03229368="" class="icon-circle-close"></i>
@@ -426,6 +428,7 @@
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
+                        :activity="ruleForm.activity"
 			:weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
@@ -593,10 +596,10 @@
                 <span v-if="ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品状态。</span>
                 <div>
                     <el-radio-group @change="statusChange" :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
-                        <el-radio :label="1" :disabled="editor">上架</el-radio>
-                        <el-radio :disabled="editor || ruleForm.activity" :label="0">下架</el-radio>
+                        <el-radio :label="1" :disabled="editor && ruleForm.activity">上架</el-radio>
+                        <el-radio :disabled="editor && ruleForm.activity" :label="0">下架</el-radio>
                         <template v-if="editor">
-                            <span><el-radio :disabled="editor || ruleForm.activity" :label="2">定时上架</el-radio></span>
+                            <span><el-radio :disabled="editor && ruleForm.activity" :label="2">定时上架</el-radio></span>
                         </template>
                         <template v-else>
                             <span style="display: inline-block;"><el-radio @click.native="timelyShelvingHandler" :label="2">定时上架</el-radio></span>
@@ -813,7 +816,11 @@ export default {
             if(this.ruleForm.selfSaleCount < 0) {
                 callback(new Error('已售出数量不能为负数'));
             } else {
-                callback();
+                if(!/^\d+$/.test(this.ruleForm.selfSaleCount)) {
+                    callback(new Error('已售出数量不能为小数'));
+                } else {
+                    callback();
+                }
             }
         };
         return {
@@ -980,6 +987,7 @@ export default {
         }
     },
     created() {
+        console.log('activity', this.ruleForm.activity);
         var that = this
         // this.getOperateCategoryList().then(res => {
         //     this.getCategoryList()
@@ -2657,6 +2665,13 @@ export default {
                             });
                             return
                         }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].stock)) {
+                            this.$message({
+                                message: '库存不能为小数',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(+this.ruleForm.goodsInfos[i].stock  < 0) {
                             this.$message({
                                 message: '不能为负值',
@@ -2674,6 +2689,13 @@ export default {
                         if(!this.ruleForm.goodsInfos[i].warningStock) {
                             this.$message({
                                 message: '请输入库存预警',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].warningStock)) {
+                            this.$message({
+                                message: '库存预警不能为小数',
                                 type: 'warning'
                             });
                             return
