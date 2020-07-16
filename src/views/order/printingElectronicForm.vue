@@ -96,7 +96,7 @@ export default {
 <style>
     /* 针对中通模板处理 */
     .print_paper{
-        width: 365px !important;
+        width: 370px !important;
         table-layout: auto !important;
     }
     .print_paper:last-child>tbody>tr:last-child>td{
