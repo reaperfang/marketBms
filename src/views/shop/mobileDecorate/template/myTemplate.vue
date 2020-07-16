@@ -12,7 +12,7 @@
 						</div>
 						<div class="bottom apply_now">
 							<span class="price"></span>
-							<el-button plain  @click="_routeTo('m_shopEditor')">立即创建</el-button>
+							<el-button plain type="primary" @click="_routeTo('m_shopEditor')">立即创建</el-button>
 						</div>
 					</div>
 				</div>
@@ -601,10 +601,9 @@
 		.el-button--success{
 			border:1px solid rgba(62,180,136,1)!important;
 			color: rgba(62,180,136,1)!important;
-
 		}
 		.el-button--primary{
-			color: $globalMainColor!important;
+      color: #655EFF!important;
 		}
 	}
 </style>
