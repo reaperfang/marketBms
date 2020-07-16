@@ -124,6 +124,7 @@ export default {
       loadedComponents: [],  //数据加载完成的组件列表
       loadPercent: 0,
       scrollBottomMark: false, //只有当点击或者拖拽新添加组件时为true，等新的组件加载完成，需要触发滚动至底部事件的标记，然后初始为false
+      scrollAutoMark: false, //只有当点击或者拖拽新添加组件时为true，等新的组件加载完成，需要触发滚动至组件位置事件的标记，然后初始为false
     }
   },
   computed:{
@@ -146,12 +147,12 @@ export default {
   created() {
     this.loadTemplateLists();
     this._globalEvent.$on('scrollToBottom', ()=>{
-      console.log('123456')
       this.scrollBottomMark = true;
       this.scrollToBottom();
     }) 
     
     this._globalEvent.$on('autoScrollToComponent', (id)=>{
+      this.scrollAutoMark =  true;
       this.autoScrollToComponent(id);
     })
   },
@@ -261,7 +262,6 @@ export default {
 
     /* 滚动到底部 */
     scrollToBottom () {
-      console.log('至底部')
         this.$nextTick(() => {
             var container = this.$el.querySelector(".phone-body");
             let tempScrollHeight = container.scrollHeight;
@@ -281,25 +281,26 @@ export default {
 
     /* 自动跟踪组件添加滚动到组件位置 */
     autoScrollToComponent(id) {
-      console.log('组件位置')
-      // this.$nextTick(()=>{
-      //   var container = this.$el.querySelector(".phone-body");
-      //   let blocks = this.$refs.view_container.querySelectorAll('.component_wrapper');
-      //   for(let i=0;i< blocks.length;i++) {
-      //     if(id === blocks[i].getAttribute('data-id')) {
-      //       const offsetTop = blocks[i].offsetTop;
-      //       const offsetHeight = blocks[i].offsetHeight;
-      //       if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
-      //         container.scrollTop = offsetTop + offsetHeight
-      //       }else {
-      //         container.scrollTo({
-      //           top: offsetTop + offsetHeight,
-      //           behavior: "smooth"
-      //         });
-      //       }
-      //     }
-      //   }
-      // })
+      this.$nextTick(()=>{
+        var container = this.$el.querySelector(".phone-body");
+        const headH = this.$el.querySelector('.phone-head').clientHeight;
+        let blocks = this.$refs.view_container.querySelectorAll('.component_wrapper');
+        for(let i=0;i< blocks.length;i++) {
+          if(id === blocks[i].getAttribute('data-id')) {
+            const offsetTop = blocks[i].offsetTop;
+            const offsetHeight = blocks[i].offsetHeight;
+            if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+              container.scrollTop = offsetTop + offsetHeight - headH
+            }else {
+              container.scrollTo({
+                top: offsetTop + offsetHeight - headH,
+                behavior: "smooth"
+              });
+            }
+            break;
+          }
+        }
+      })
     },
 
     /* 按钮鼠标移入 */
@@ -352,6 +353,7 @@ export default {
           this.scrollToBottom();
         })
       }else{
+        this.scrollAutoMark = true;
         //组件添加自动滚动到组件位置
         let index = this.componentDataIds.indexOf(this.currentComponentId);
         if(index > 0) {
@@ -367,10 +369,22 @@ export default {
       
       for(let item of this.componentDataIds) {
         if(item === componentData.id) {
+
           if(this.scrollBottomMark){
             this.scrollBottomMark = false;
             this.scrollToBottom();
           }
+          if(this.scrollAutoMark && item === this.currentComponentId){ //因存在添加新组件会引起之后的组件重新加载的问题，会存在一些问题，后期考虑优化
+            this.scrollAutoMark = false;
+            //组件添加自动滚动到组件位置
+            let index = this.componentDataIds.indexOf(this.currentComponentId);
+            if(index > 0) {
+              index--;
+            }
+            let prev = this.componentDataIds[index];
+            this.autoScrollToComponent(prev);
+          }
+          
           this.loadedComponents.push(componentData);
           this.updateLoadProgress(componentData);
           if(this.loadedComponents.length === this.componentDataIds.length - 1) {  //减1是因为，要过滤掉基础组件，基础组件是不渲染的
