@@ -113,8 +113,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input::placeholder{
+  color: red!important;
+}
+input::-webkit-input-placeholder{
+  color: red!important;
+}
+input:-ms-input-placeholder{
+  color: red!important;
+}
+input::-moz-placeholder{
+  color: red!important;
+}
 .props >>> .el-slider__runway{
   background-color: #F2F2F9;
+}
+.props >>> .el-input__inner{
+  border: 1px solid #B6B5C8;
+}
+.props >>> .el-radio__inner{
+  border: 1px solid #B6B5C8;
+}
+.props >>> .el-checkbox__inner{
+  border: 1px solid #B6B5C8;
+}
+.props >>> .el-textarea__inner{
+  border: 1px solid #B6B5C8;
 }
   .props {
     background-color: #fff;
@@ -141,4 +165,5 @@ export default {
 ::-webkit-scrollbar-thumb{
   background-color: #B6B5C8;
 }
+
 </style>

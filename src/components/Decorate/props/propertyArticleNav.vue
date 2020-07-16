@@ -264,11 +264,12 @@ ul.template_type{
     width:90px!important;
     margin-right:20px!important;
     height:100px;
-    border:1px solid rgb(228,227,235);
+    border:1px dashed #B6B5C8;
     padding:20px 10px 10px 10px;
     box-sizing: border-box;
     cursor:pointer;
     display: flex;
+    border-radius: 4px;
     flex-direction: column;
     justify-content: space-between;
     &.active{

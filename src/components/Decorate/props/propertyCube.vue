@@ -345,7 +345,7 @@ export default {
 }
 ul.cube.template_type{
   li{
-    border:1px dashed rgba(182,181,200,1);
+    border:1px dashed #B6B5C8;
     padding:10px;
     cursor:pointer;
     margin-right: 18px;

@@ -228,7 +228,17 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+/deep/ .el-tag.el-tag--success{
+  color: #fff;
+  width: 56px;
+  height: 26px;
+  background: url('../../../assets/images/shop/coupon/coupon_rightbg.png') 0 0 no-repeat;
+  background-size: 100% 100%;
+  text-align: center;
+  line-height: 26px;
+  border: none;
+}
 .property-coupon {
   .add-coupon {
     flex-shrink: 0;
@@ -256,4 +266,5 @@ export default {
       background: rgba(101,94,255,.1)!important;
   }
 }
+
 </style>
