@@ -813,7 +813,11 @@ export default {
             if(this.ruleForm.selfSaleCount < 0) {
                 callback(new Error('已售出数量不能为负数'));
             } else {
-                callback();
+                if(!/^\d+$/.test(this.ruleForm.selfSaleCount)) {
+                    callback(new Error('已售出数量不能为小数'));
+                } else {
+                    callback();
+                }
             }
         };
         return {
@@ -2657,6 +2661,13 @@ export default {
                             });
                             return
                         }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].stock)) {
+                            this.$message({
+                                message: '库存不能为小数',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(+this.ruleForm.goodsInfos[i].stock  < 0) {
                             this.$message({
                                 message: '不能为负值',
@@ -2674,6 +2685,13 @@ export default {
                         if(!this.ruleForm.goodsInfos[i].warningStock) {
                             this.$message({
                                 message: '请输入库存预警',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].warningStock)) {
+                            this.$message({
+                                message: '库存预警不能为小数',
                                 type: 'warning'
                             });
                             return
