@@ -95,6 +95,10 @@ export default {
 </script>
 <style>
     /* 针对中通模板处理 */
+    .print_paper{
+        width: 370px !important;
+        table-layout: auto !important;
+    }
     .print_paper:last-child>tbody>tr:last-child>td{
         height: 50px !important;
     }
