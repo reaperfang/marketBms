@@ -294,7 +294,6 @@ export default {
 
 <style lang="scss" scoped>
 .default_image{
-  object-fit: none;
   width:100%;
 }
 .cube_preview{
