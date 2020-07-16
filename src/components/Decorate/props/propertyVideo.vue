@@ -20,6 +20,7 @@
         </div>
         <div class="add_button" v-else @click="dialogVisible=true; currentDialog='dialogSelectVideo'">
           <i class="inner"></i>
+          <p>添加视频</p>
         </div>
         <p class="prop-message" style="margin-top:5px;">视频大小不超过10mb；仅支持.mp4格式的播放地址</p>
       </el-form-item>
@@ -42,6 +43,7 @@
         </div>
         <div v-else-if="coverType === 2" class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
+          <p>添加图片</p>
         </div>
         <p class="prop-message">建议图片宽高比16:9</p>
       </el-form-item>
