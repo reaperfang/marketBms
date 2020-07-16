@@ -28,7 +28,7 @@
             </el-form-item>
             <el-form-item label="商品名称" prop="name">
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (editor && ruleForm.activity)" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
-                <span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品名称</span>
+                <div v-if="editor && ruleForm.activity" class="activity-message" style="margin-left:0">当前商品正在参与营销活动、待活动结束/失效才能编辑商品名称</div>
             </el-form-item>
             <el-form-item label="商品描述" prop="description">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
