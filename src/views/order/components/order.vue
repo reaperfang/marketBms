@@ -23,7 +23,7 @@
                                 <i class="auto"></i>
                             </el-tooltip>
                             <el-tooltip content="用户催发货，请尽快发货" placement="bottom" effect="dark">
-                                <i v-if="order.isUrge == 0" class="el-icon-message-solid"></i>
+                                <i v-if="order.isUrge == 0" class="urge"></i>
                             </el-tooltip>
                             订单编号：{{order.code}}/下单时间：{{order.createTime}}
                         </span>
@@ -450,11 +450,11 @@ export default {
     }
     .auto {
         display: inline-block;
-        width: 28px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         background: url(../../../assets/images/order/auto.png) no-repeat;
         position: relative;
-        top: 3px;
+        top: 4px;
         margin-right: 5px;
     }
     @media (max-width: 1440px) {
