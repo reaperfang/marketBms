@@ -113,18 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input::placeholder{
-  color: red!important;
-}
-input::-webkit-input-placeholder{
-  color: red!important;
-}
-input:-ms-input-placeholder{
-  color: red!important;
-}
-input::-moz-placeholder{
-  color: red!important;
-}
+
 .props >>> .el-slider__runway{
   background-color: #F2F2F9;
 }
