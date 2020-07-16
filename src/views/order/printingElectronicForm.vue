@@ -2,8 +2,8 @@
     <div class="printing-electronic-form">
         <div class="printing-electronic-form-title">打印电子面单预览</div>
         <div class="printing-electronic-form-content print-content">
-            <div style="width: 375px; margin: 0 auto;">
-                <div v-for="(item, index) in tableData" :class="`printing-electronic-form-item printing-electronic-form-item_${index}`" :key="index" style="page-break-after:always;" v-html="item.content"></div>
+            <div style="width: 375px;min-height:700px; margin: 0 auto;position:relative;">
+                <div v-for="(item, index) in tableData" :class="`printing-electronic-form-item printing-electronic-form-item_${index}`" :key="index" style="position:relative;height: 700px;page-break-after:always;" v-html="item.content"></div>
             </div>
         </div>
         <div class="tc" style="margin-top: 20px;">
@@ -46,7 +46,7 @@ export default {
                     }
                 </style>`;
 
-                window.document.body.innerHTML = document.getElementsByClassName("print-content")[0].innerHTML + printStyle; 
+                window.document.body.innerHTML = document.getElementsByClassName("print-content")[0].innerHTML; 
 
                 window.print();
 
@@ -90,10 +90,7 @@ export default {
             margin-bottom: 20px;
         }
         .printing-electronic-form-item {
-            display: none;
-            &.printing-electronic-form-item_0 {
-                display: block;
-            }
+            display: block;
         }
     }
 </style>
