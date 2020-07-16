@@ -813,7 +813,7 @@ export default {
             if(this.ruleForm.selfSaleCount < 0) {
                 callback(new Error('已售出数量不能为负数'));
             } else {
-                if(!/^\d+$/.test(this.ruleForm.selfSaleCount)) {
+                if(this.ruleForm.selfSaleCount && !/^\d+$/.test(this.ruleForm.selfSaleCount)) {
                     callback(new Error('已售出数量不能为小数'));
                 } else {
                     callback();
