@@ -46,7 +46,7 @@ export default {
                     }
                 </style>`;
 
-                window.document.body.innerHTML = document.getElementsByClassName("print-content")[0].innerHTML + printStyle; 
+                window.document.body.innerHTML = document.getElementsByClassName("print-content")[0].innerHTML; 
 
                 window.print();
 
