@@ -148,7 +148,7 @@ export default {
             content: "";
             position: relative;
             display: inline-block;
-            width: 1px;
+            width: 2px;
             height: 12px;
             margin-right: 4px;
             top: 1px;
