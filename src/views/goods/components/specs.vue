@@ -68,16 +68,16 @@
                                 <label>
                                     <i class="el-icon-check"></i>
                                 </label>
-                                <span class="image-item-actions" v-if="!editor">
+                                <span class="image-item-actions" v-if="!(editor && activity)">
                                     <span @click="dialogImageUrl = item.image; materialIndex = index; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                     <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
                                 </span>
                             </div>
-                            <div v-if="!item.image && !editor" @click="currentDialog = 'dialogSelectImageMaterial';  materialIndex = index; dialogVisible = true" class="upload-add">
+                            <div v-if="!item.image && !(editor && activity)" @click="currentDialog = 'dialogSelectImageMaterial';  materialIndex = index; dialogVisible = true" class="upload-add">
                                 <i data-v-03229368="" class="el-icon-plus"></i>
                                 <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传图片</p>
                             </div>
-                            <div v-if="!item.image && editor" class="upload-add">
+                            <div v-if="!item.image && (editor && activity)" class="upload-add">
                                 <i data-v-03229368="" class="el-icon-plus"></i>
                                 <p data-v-03229368="" style="line-height: 21px; margin-top: -39px; color: rgb(146, 146, 155);">上传图片</p>
                             </div>
@@ -85,35 +85,35 @@
                     </div>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'costPrice')" type="number" min="0" v-model="item.costPrice" :disabled="editor" placeholder="请输入价格(元)"></el-input>
+                    <el-input @blur="specsChange(index, 'costPrice')" type="number" min="0" v-model="item.costPrice" :disabled="editor && activity" placeholder="请输入价格(元)"></el-input>
                     <span class="message-span" v-if="item.showCostPriceError">{{item.costPriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled || editor" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input @blur="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled || (editor && activity)" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
                     <span class="message-span" v-if="item.showSalePriceError">{{item.salePriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled || editor" v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <el-input @blur="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled || (editor && activity)" v-model="item.stock" placeholder="请输入库存"></el-input>
                     <span class="message-span" v-if="item.showStockError">{{item.stockErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'warningStock')" type="number" min="0" v-model="item.warningStock" :disabled="editor" placeholder="请输入库存预警"></el-input>
+                    <el-input @blur="specsChange(index, 'warningStock')" type="number" min="0" v-model="item.warningStock" :disabled="editor && activity" placeholder="请输入库存预警"></el-input>
                     <span class="message-span" v-if="item.showWarningStockError">{{item.warningStockErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'weight')" type="number" min="0" v-model="item.weight" placeholder="请输入重量(kg)" :disabled="editor"></el-input>
+                    <el-input @blur="specsChange(index, 'weight')" type="number" min="0" v-model="item.weight" placeholder="请输入重量(kg)" :disabled="editor && activity"></el-input>
                     <span class="message-span" v-if="item.showWeightError">{{item.weightErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'volume')" type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)" :disabled="editor"></el-input>
+                    <el-input @blur="specsChange(index, 'volume')" type="number" min="0" v-model="item.volume" placeholder="请输入体积(m³)" :disabled="editor && activity"></el-input>
                     <span class="message-span" v-if="item.showVolumeError">{{item.volumeErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'code')" :disabled="hideDelete || editor" v-model="item.code" placeholder="请输入SKU编码"></el-input>
+                    <el-input @blur="specsChange(index, 'code')" :disabled="hideDelete || (editor && activity)" v-model="item.code" placeholder="请输入SKU编码"></el-input>
                     <span class="message-span" v-if="item.showCodeError">{{item.codeErrorMessage}}</span>
                 </td>
                 <td>
-                    <div class="spec-operate" v-if="!editor">
+                    <div class="spec-operate" v-if="!(editor && activity)">
                         <span @click="function() {
                             $emit('emptySpec', index)
                         }">清空</span>
@@ -121,7 +121,7 @@
                             $emit('deleteSpec', index)
                         }">删除</span>
                     </div>
-                    <div class="spec-operate2" v-if="editor">
+                    <div class="spec-operate2" v-if="editor && activity">
                         <span>清空</span>
                         <span v-if="!hideDelete">删除</span>
                     </div>
@@ -321,6 +321,7 @@ export default {
         // }
     },
     mounted () {
+        console.log(this.activity);
     },
     methods: {
         specsChange(index, str) {
@@ -506,7 +507,8 @@ export default {
         editor: { //是否是编辑状态
             type: Boolean,
             default: false
-        }
+        },
+        activity: {}
     },
     components: {
         dialogSelectImageMaterial
