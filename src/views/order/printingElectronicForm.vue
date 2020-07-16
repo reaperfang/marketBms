@@ -93,6 +93,16 @@ export default {
     }
 }
 </script>
+<style>
+    /* 针对中通模板处理 */
+    .print_paper:last-child>tbody>tr:last-child>td{
+        height: 50px !important;
+    }
+    .print_paper:last-child>tbody>tr:last-child>td .f8{
+        height: 53px !important;
+        overflow: hidden;
+    }
+</style>
 <style lang="scss" scoped>
     .printing-electronic-form {
         background-color: #fff;
@@ -105,6 +115,7 @@ export default {
             display: block;
         }
     }
+    
 </style>
 
 
