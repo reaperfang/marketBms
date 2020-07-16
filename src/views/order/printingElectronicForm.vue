@@ -42,7 +42,7 @@ export default {
                 const printStyle = `<style media="print">
                     @page {
                         size: auto;  /* auto is the initial value */
-                        margin: 3mm; /* this affects the margin in the printer settings */
+                        margin: 0mm; /* this affects the margin in the printer settings */
                     }
                 </style>`;
 
