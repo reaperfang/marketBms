@@ -194,7 +194,6 @@ export default {
 <style lang="scss" scoped>
 .componentArticleAD {
   .default_image{
-    object-fit: none;
     width:100%;
   }
 
