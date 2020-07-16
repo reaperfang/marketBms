@@ -2,8 +2,8 @@
     <div class="printing-electronic-form">
         <div class="printing-electronic-form-title">打印电子面单预览</div>
         <div class="printing-electronic-form-content print-content">
-            <div style="width: 375px;min-height:700px; margin: 0 auto;position:relative;">
-                <div v-for="(item, index) in tableData" :class="`printing-electronic-form-item printing-electronic-form-item_${index}`" :key="index" style="position:relative;height: 700px;page-break-after:always;" v-html="item.content"></div>
+            <div style="width: 375px; margin: 0 auto;position:relative;">
+                <div v-for="(item, index) in tableData" :class="`printing-electronic-form-item printing-electronic-form-item_${index}`" :key="index" style="position:relative;page-break-after:always;" v-html="item.content"></div>
             </div>
         </div>
         <div class="tc" style="margin-top: 20px;">
@@ -42,8 +42,20 @@ export default {
                 const printStyle = `<style media="print">
                     @page {
                         size: auto;  /* auto is the initial value */
-                        margin: 3mm; /* this affects the margin in the printer settings */
+                        margin: 0mm; /* this affects the margin in the printer settings */
                     }
+                    .guge {
+                        word-spacing:0;
+                        letter-spacing:0;
+                        line-height:20px;
+                        font-size:12px;
+                        height:72px;
+                        margin-top:-19px;
+                        -webkit-transform-origin-x:0;
+                        -webkit-transform:scaleX(0.70);
+                        -webkit-transform:scaleY(0.65);
+                    }
+
                 </style>`;
 
                 window.document.body.innerHTML = document.getElementsByClassName("print-content")[0].innerHTML + printStyle; 
