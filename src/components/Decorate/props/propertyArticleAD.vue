@@ -312,7 +312,7 @@ ul.template_type{
   li{
     width: 90px!important;
     height: 100px!important;
-    border: 1px dashed rgba(219,218,228,1);;
+    border: 1px dashed #B6B5C8;
     padding: 10px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;

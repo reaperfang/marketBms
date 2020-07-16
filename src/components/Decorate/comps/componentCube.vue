@@ -266,6 +266,7 @@ export default {
   },
   created() {
     const _self = this;
+    console.log(this.currentComponentData.data.list['2'])
   },
   mounted() {
     this.dataLoaded = true;
