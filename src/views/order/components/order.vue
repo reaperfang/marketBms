@@ -19,10 +19,10 @@
                     <div class="item">
                         <el-checkbox v-if="!authHide" :disabled="order.orderStatus == 2 || order.orderStatus == 6" @change="checkedChange" v-model="order.checked"></el-checkbox>
                         <span class="order-code">
-                            <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="light">
+                            <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="dark">
                                 <i class="auto"></i>
                             </el-tooltip>
-                            <el-tooltip :content="`${order.memberSn}催发货，请尽快发货`" placement="bottom" effect="light">
+                            <el-tooltip content="用户催发货，请尽快发货" placement="bottom" effect="dark">
                                 <i v-if="order.isUrge == 0" class="el-icon-message-solid"></i>
                             </el-tooltip>
                             订单编号：{{order.code}}/下单时间：{{order.createTime}}
