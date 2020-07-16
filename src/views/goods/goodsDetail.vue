@@ -985,8 +985,7 @@ export default {
         this.getProductLabelList()
         this.getUnitList()
         this.getBrandList()
-        this.getTemplateList()
-        Promise.all([this.getOperateCategoryList(), this.getCategoryList()]).then(() => {
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }

@@ -22,10 +22,11 @@
                             <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="dark">
                                 <i class="auto"></i>
                             </el-tooltip>
-                            <el-tooltip content="用户催发货，请尽快发货" placement="bottom" effect="dark">
-                                <i v-if="order.isUrge == 0" class="urge"></i>
+                            <el-tooltip v-if="order.isUrge == 0" content="用户催发货，请尽快发货" placement="bottom" effect="dark">
+                                <i class="urge"></i>
                             </el-tooltip>
-                            订单编号：{{order.code}}/下单时间：{{order.createTime}}
+                            <span class="order-code-inner">订单编号：{{order.code}}</span>
+                            <span class="createTime">下单时间：{{order.createTime}}</span>
                         </span>
                     </div>
                     <div class="item righter">
@@ -299,9 +300,12 @@ export default {
         .order-header {
             display: flex;
             min-width: 1000px;
-            color: $globalMainColor;
-            background-color: rgb(240, 239, 255);
-            padding: 12px 20px;
+            color:#44434B;
+            padding: 12px 0;
+            padding-top: 17px;
+            height: 46px;
+            background:rgba(208,214,228,.2);
+            font-weight:500;
             .item {
                 width: 80px;
                 margin-right: 20px;
@@ -310,6 +314,11 @@ export default {
                 }
                 &.goods {
                     flex: 1;
+                    .row {
+                        .col:first-child {
+                            padding-left: 69px;
+                        }
+                    }
                 }
             }
         }
@@ -338,17 +347,30 @@ export default {
                 .container-item-header {
                     display: flex;
                     justify-content: space-between;
-                    background-color: rgb(243, 244, 244);
-                    height: 60px;
-                    line-height: 60px;
+                    background:rgba(208,214,228,.2);
+                    height: 50px;
                     padding: 0 20px;
-                    color: $contentColor;
+                    color:#44434B;
+                    font-weight:400;
                     border-radius: 10px 10px 0 0;
+                    .order-code {
+                       .order-code-inner {
+                           padding-right: 12px;
+                           border-right: 1px solid rgba(218,218,227,1);
+                       } 
+                       .createTime {
+                           padding-left: 12px;
+                       }
+                    }
                     .righter {
-                        color: rgb(173, 174, 177);
                         span {
                             margin-right: 20px;
                         }
+                    }
+                    .item {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
                     }
                 }
                 .container-item-content {
@@ -369,7 +391,26 @@ export default {
                     }
                     >.item {
                         width: 80px;
-                        margin-right: 20px;
+                        margin-right: 17px;
+                        &:nth-child(2) {
+                            padding-left: 5px;
+                            p {
+                                margin-left: 16px;
+                            }
+                        }
+                        &:nth-child(3) {
+                            text-align: center;
+                            padding-left: 32px;
+                        }
+                        &:nth-child(4) {
+                            padding-left: 23px;
+                        }
+                        &:nth-child(5) {
+                            padding-left: 22px;
+                        }
+                        &:nth-child(6) {
+                            padding-left: 19px;
+                        }
                         p {
                             line-height: 21px;
                         }
@@ -440,21 +481,12 @@ export default {
         }
     }
     .order-code {
-        margin-left: 4px;
+        margin-left: 5px;
     }
     .memberLevelImg {
         display: inline-block;
         width: 14px;
         height: 13px;
-        margin-right: 5px;
-    }
-    .auto {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        background: url(../../../assets/images/order/auto.png) no-repeat;
-        position: relative;
-        top: 4px;
         margin-right: 5px;
     }
     @media (max-width: 1440px) {
@@ -464,6 +496,27 @@ export default {
     .goods-box .col:first-child {
         width: 100%!important;
     }
+    }
+    .order-code {
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
+        .auto {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: url(../../../assets/images/order/auto.png) no-repeat;
+            position: relative;
+            margin-right: 5px;
+        }
+        .urge {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: url(../../../assets/images/order/urge.png) no-repeat;
+            background-size: 100% 100%;
+            margin-right: 10px;
+        }
     }
 </style>
 
