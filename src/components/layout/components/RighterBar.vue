@@ -206,6 +206,7 @@ export default {
     width: 122px;
     height: 100%;
     .item {
+      position: static;
       border-top: 1px solid #f2f2f5;
       padding-top: 23px;
       padding-bottom: 20px;

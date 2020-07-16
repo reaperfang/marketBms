@@ -558,7 +558,7 @@
                 </div>
             </el-form-item> -->
             <el-form-item label="已售出数量" prop="selfSaleCount">
-                <el-input :disabled="!ruleForm.productCategoryInfoId" type="number" v-model="ruleForm.selfSaleCount"></el-input>
+                <el-input min="0" :max="ruleForm.stock" :disabled="!ruleForm.productCategoryInfoId" type="number" v-model="ruleForm.selfSaleCount"></el-input>
                 <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情显示已售出数量</el-checkbox>
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
             </el-form-item>
@@ -801,6 +801,28 @@ export default {
                 callback();
             }
         };
+        var isShowRelationProductValidator = (rule, value, callback) => {
+            if(this.ruleForm.isShowRelationProduct == 1) {
+                if(!this.tableData.length) {
+                    callback(new Error('请选择关联商品'));
+                } else {
+                    callback();
+                }
+            } else {
+                callback();
+            }
+        };
+        var selfSaleCountValidator = (rule, value, callback) => {
+            if(this.ruleForm.selfSaleCount < 0) {
+                callback(new Error('已售出数量不能为负数'));
+            } else {
+                if(!/^\d+$/.test(this.ruleForm.selfSaleCount)) {
+                    callback(new Error('已售出数量不能为小数'));
+                } else {
+                    callback();
+                }
+            }
+        };
         return {
             itemCatText: '',
             categoryValue: [],
@@ -900,8 +922,14 @@ export default {
                 isJoinDiscount: [
                     { required: true, message: '请选择', trigger: 'blur' },
                 ],
+                // isShowRelationProduct: [
+                //     { required: true, message: '请选择', trigger: 'blur' },
+                // ],
                 isShowRelationProduct: [
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { validator: isShowRelationProductValidator, trigger: 'blur' },
+                ],
+                selfSaleCount: [
+                    { validator: selfSaleCountValidator, trigger: 'blur' },
                 ],
             },
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
@@ -982,8 +1010,7 @@ export default {
         this.getProductLabelList()
         this.getUnitList()
         this.getBrandList()
-        this.getTemplateList()
-        Promise.all([this.getOperateCategoryList(), this.getCategoryList()]).then(() => {
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
@@ -2061,6 +2088,7 @@ export default {
         },
         handleEdit(index, row) {
             this.tableData.splice(index, 1)
+            this.ruleForm.relationProductInfoIds = this.tableData.map(val => val.id)
         },
         getCategoryIds(arr, id) {
             try {
@@ -2637,6 +2665,13 @@ export default {
                             });
                             return
                         }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].stock)) {
+                            this.$message({
+                                message: '库存不能为小数',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(+this.ruleForm.goodsInfos[i].stock  < 0) {
                             this.$message({
                                 message: '不能为负值',
@@ -2654,6 +2689,13 @@ export default {
                         if(!this.ruleForm.goodsInfos[i].warningStock) {
                             this.$message({
                                 message: '请输入库存预警',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].warningStock)) {
+                            this.$message({
+                                message: '库存预警不能为小数',
                                 type: 'warning'
                             });
                             return

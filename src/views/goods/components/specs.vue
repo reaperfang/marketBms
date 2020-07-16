@@ -350,7 +350,7 @@ export default {
                     }))
                 }
             } else if(str == 'stock') {
-                if(+this.list[index].stock < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].stock)) {
+                if(+this.list[index].stock < 0 || !/^\d+$/.test(this.list[index].stock)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showStockError: true,
                         stockErrorMessage: '请输入正确的数字'
@@ -362,7 +362,7 @@ export default {
                     }))
                 }
             } else if(str == 'warningStock') {
-                if(+this.list[index].warningStock < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].warningStock)) {
+                if(+this.list[index].warningStock < 0 || !/^\d+$/.test(this.list[index].warningStock)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showWarningStockError: true,
                         warningStockErrorMessage: '请输入正确的数字'
