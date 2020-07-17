@@ -89,7 +89,7 @@ export default {
       searchName: "", //搜索名称
       helpLink: "",
       zxLink: `${process.env.ZX_HELP}`, //链接
-      guideType:''//版本类型
+      guideType:'基础版'//版本类型
     };
   },
   components: {
