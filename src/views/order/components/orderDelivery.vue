@@ -85,8 +85,8 @@
                     prop="isAutoSend"
                     label=""
                     width="40">
-                    <template slot-scope="scope">
-                        <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="light">
+                    <template v-if="scope.row.isAutoSend" slot-scope="scope">
+                        <el-tooltip content="自动发货" placement="bottom" effect="light">
                             <i class="auto"></i>
                         </el-tooltip>
                     </template>
@@ -94,7 +94,10 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="120">
+                    width="180">
+                    <template slot-scope="scope">
+                        {{scope.row.orderCode}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
@@ -464,10 +467,13 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .order-delivery {
@@ -534,8 +540,8 @@ export default {
 }
 .auto {
         display: inline-block;
-        width: 28px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         background: url(../../../assets/images/order/auto.png) no-repeat;
         position: relative;
         top: 3px;
@@ -572,6 +578,12 @@ export default {
     }
     .icon-store-text{
         vertical-align: middle;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(2) {
+            text-align: left;
+        }
     }
 </style>
 

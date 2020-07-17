@@ -417,10 +417,13 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .query {
@@ -484,6 +487,9 @@ export default {
 /deep/ .el-form-item__label {
   color: rgba(68,67,75,1);
   font-weight: normal!important;
+}
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 20px;
 }
 </style>
 
