@@ -4,6 +4,9 @@
     <div class="container">
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
+        <!-- <div class="checkbox-box">
+          <i class="checkbox"></i>商品清单
+        </div> -->
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
             <span>商品清单</span>
@@ -1020,19 +1023,6 @@ export default {
         }
         .item-content {
           padding: 20px;
-          .checkbox {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background: url(../../assets/images/order/checkbox.png) no-repeat;
-          }
-          .checkbox.checked {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background: url(../../assets/images/order/checkbox-checked.png)
-              no-repeat;
-          }
           .row-margin > .col {
             margin-right: 25px;
             p {
@@ -1165,5 +1155,18 @@ export default {
       }
     }
   }
+}
+.checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(../../assets/images/order/checkbox.png) no-repeat;
+}
+.checkbox.checked {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(../../assets/images/order/checkbox-checked.png)
+    no-repeat;
 }
 </style>

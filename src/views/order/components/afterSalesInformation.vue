@@ -107,12 +107,12 @@
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div style="margin-right: 5px;" class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p :title="scope.row.goodsName" class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
@@ -811,6 +811,16 @@ export default {
                 width: 100px;
             }
         }
+    }
+    .image-box {
+        margin-right: 10px;
+    }
+    .goods-specs {
+        color: #9FA29F;
+    }
+    .title-section-header {
+        height: 50px;
+        line-height: 50px;
     }
 </style>
 
