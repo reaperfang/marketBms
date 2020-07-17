@@ -17,7 +17,6 @@
         :zoom="mapStyle.zoom"
         :zoomControl="mapStyle.zoomControl"
         :panControl="mapStyle.panControl"
-        :height="height"
         :center="[36.67489963858812, 102.76171874999999]"
         @getMapClickPoi="getMapClickPoi"
         :isInitSearch="false"></map-search>
