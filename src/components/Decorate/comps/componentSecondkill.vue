@@ -44,8 +44,8 @@
                             </div>
                             <div class="price_line">
                                 <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('8')!=-1&&(item.remainStock>0&& (item.status==1 || item.status==0))"></componentButton>
-                                <p class="activity_end" v-if="item.status==2">活动已结束</p>
-                                <!-- <p class="activity_end" v-if="item.status==0">活动未开始</p> -->
+                                <p class="activity_end" v-if="item.status==2">已结束</p>
+                                <!-- <p class="activity_end" v-if="item.status==0">未开始</p> -->
                                 <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{getReducePrice(item)}}</font></p>
                                 <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{getYprice(item)}}</p>
                             </div>
