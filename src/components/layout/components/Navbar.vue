@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="navbar">
-		<div class="navbar-item"><i class="el-icon-arrow-left" @click="backToPre" v-if="$route.path === '/shop/m_templateEdit'"></i>{{shopName}}</div>
+      <div class="navbar-item">
+        <i class="el-icon-arrow-left" @click="backToPre" v-if="$route.path === '/shop/m_templateEdit'"></i>
+        <span class="shop_name">{{shopName}}</span>
+        <span class="edition">{{guideType}}</span>
+        <el-button class="border_btn guide">开店引导</el-button>
+      </div>
       <!-- <div class="navbar-item"></div> -->
       <div class="right-menu">
         <router-link to="/profile/upgrade" class="set_meal">套餐升级</router-link>
@@ -83,7 +88,8 @@ export default {
       shopName: "",
       searchName: "", //搜索名称
       helpLink: "",
-      zxLink: `${process.env.ZX_HELP}` //链接
+      zxLink: `${process.env.ZX_HELP}`, //链接
+      guideType:''//版本类型
     };
   },
   components: {
@@ -108,6 +114,7 @@ export default {
   },
   created() {
     this.getShopName();
+    this.getGuide();
   },
   methods: {
     onHelp() {
@@ -169,18 +176,31 @@ export default {
       );
     },
     //返回到上一个页面
-	backToPre() {
-    	this.$router.go(-1)
-	}
+    backToPre() {
+        this.$router.go(-1)
+    },
+
+    //获取版本类型
+     getGuide(){
+       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+          if(data.isOpenResell == 1){
+            this.guideType = '专业版'
+          }else{
+            this.guideType = '基础版'
+          }
+      }).catch((error) => {
+          console.error(error);
+      });
+    },
   }
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 66px;
+  height: 49px;
   width: calc(100% - 120px);
-  line-height: 64px;
+  line-height: 49px;
   border-radius: 0px !important;
   background: #fff;
   color: #92929b;
@@ -193,12 +213,6 @@ export default {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #f2f2f9;
-  .hamburger-container {
-    line-height: 58px;
-    height: 50px;
-    float: left;
-    padding: 0 10px;
-  }
   .breadcrumb-container {
     float: left;
   }
@@ -216,7 +230,6 @@ export default {
     }
     .set_meal {
       margin-right: 20px;
-      // margin-left: 20px;
       font-size: 14px;
       color: #44434b;
       cursor: pointer;
@@ -258,7 +271,7 @@ export default {
         .el-icon-caret-bottom {
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 18px;
           font-size: 12px;
         }
       }
@@ -290,5 +303,31 @@ export default {
 .search_int /deep/ .el-input__inner {
   line-height: 22px;
   height: 22px;
+}
+.shop_name{
+  font-size: 20px;
+  color: #161617;
+  font-family:PingFangSC-Medium,PingFang SC;
+  font-weight:500;
+}
+.edition{
+  width: 48px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 4px;
+  border:1px solid rgba(151,151,151,1);
+  color:#979797;
+  font-size: 12px;
+  text-align: center;
+  margin-left: 15px;
+}
+.guide{
+  width: 80px;
+  height: 26px;
+  line-height: 26px;
+  border-radius:4px;
+  border:1px solid rgba(101,94,255,1);
+  margin-left: 15px;
+  padding: 0;
 }
 </style>
