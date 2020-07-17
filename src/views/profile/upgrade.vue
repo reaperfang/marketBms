@@ -87,7 +87,7 @@
               <i class="icon_start"></i>
               <span class="color_orange">分销裂变：</span>
               <div>
-                <p class="color_orange">完善的三级分销系统，让你的顾客都帮你卖货，快速扩大规模，提效创收。</p>
+                <p class="color_orange">完善的二级分销系统，让你的顾客都帮你卖货，快速扩大规模，提效创收。</p>
               </div>
             </div>
             <div class="con_box">
