@@ -2,7 +2,7 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="选择套装" prop="packages">
-        <p class="prop-message" style="margin: 7px 0 8px 0;">建议最多添加30个活动</p>
+        <p class="prop-message" style="margin: 9px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
           <ul>
             <li v-for="(item, key) of displayList" :key="key" :title="item.name">
@@ -112,7 +112,7 @@
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <p class="hide_tips prop-message">隐藏后，活动商品将不在微商城显示</p>
+        <p class="hide_tips prop-message" style="margin-top: -5px;">隐藏后，活动商品将不在微商城显示</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
         <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <!-- <el-radio :label="1">24小时后隐藏</el-radio> -->

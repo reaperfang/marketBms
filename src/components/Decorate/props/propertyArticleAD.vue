@@ -40,7 +40,7 @@
     <div class="block form">
       <div class="row align-center">
         添加图片
-        <p class="prop-message prop-message-add-image" style="margin-top:5px;">最多添加10个广告，鼠标拖拽可调整广告顺序</p>
+        <p class="prop-message prop-message-add-image" style="margin-top:3px;">最多添加10个广告，鼠标拖拽可调整广告顺序</p>
       </div>
 
       <!-- 可拖拽调整顺序 -->

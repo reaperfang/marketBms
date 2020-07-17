@@ -2,7 +2,7 @@
   <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="选择活动" prop="promotions">
-        <p class="prop-message">建议最多添加30个活动</p>
+        <p class="prop-message" style="margin: 9px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
           <ul>
             <li v-for="(item, key) of displayList" :key="key" :title="item.name">
