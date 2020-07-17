@@ -276,7 +276,7 @@
                                             <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
                                         </div>
                                     </div>
-                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)" :disabled="editor">添加规格值</el-button>
+                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)" :disabled="editor && ruleForm.activity">添加规格值</el-button>
                                 </el-popover>
                             </div>
                         </li>
