@@ -76,12 +76,12 @@
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
                     width="50">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     prop="isAutoSend"
                     label=""
                     width="40">
@@ -90,12 +90,20 @@
                             <i class="auto"></i>
                         </el-tooltip>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="180">
+                    width="215"
+                    :class-name="haveAuto ? 'orderCode haveAuto' : 'orderCode'">
                     <template slot-scope="scope">
+                        <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
+                            <i class="auto"></i>
+                        </el-tooltip>
+                        <el-tooltip v-if="scope.row.isUrge == 0" content="用户催发货，请尽快发货" placement="bottom" effect="dark">
+                            <i class="urge"></i>
+                        </el-tooltip>
+                        <i class="unauto" v-if="!scope.row.isAutoSend && (scope.row.isUrge != 0) && haveAuto"></i>
                         {{scope.row.orderCode}}
                     </template>
                 </el-table-column>
@@ -156,7 +164,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="120">
+                <el-table-column label="操作" width="130">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>
@@ -274,6 +282,9 @@ export default {
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             return shopInfo.id
+        },
+        haveAuto() {
+            return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
         }
     },
     methods: {
@@ -518,7 +529,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 15px;
+            padding-left: 22px;
         }
     }
 }
@@ -545,7 +556,15 @@ export default {
         background: url(../../../assets/images/order/auto.png) no-repeat;
         position: relative;
         top: 3px;
-        margin-right: 5px;
+        margin-right: 10px;
+    }
+    .unauto {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        position: relative;
+        top: 3px;
+        margin-right: 10px;
     }
     /deep/ .searchTimeType .date-picker-select .el-input {
         width: 100px;
@@ -583,6 +602,49 @@ export default {
         text-align: center;
         &:nth-child(2) {
             text-align: left;
+        }
+    }
+    /deep/ .el-table-column--selection .cell {
+        padding-left: 20px;
+        padding-right: 10px;
+    }
+    /deep/ .el-table thead .orderCode {
+        &.haveAuto {
+            padding-left: 32px;
+        }
+    }
+    .operate-box {
+        text-align: left;
+        span {
+            border-right: 1px solid rgba(218,218,227,1);
+            padding-right: 5px;
+            &:last-child {
+                border-right: none;
+                padding-right: 0;
+            }
+        }
+    }
+    .urge {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url(../../../assets/images/order/urge.png) no-repeat;
+        background-size: 100% 100%;
+        margin-right: 10px;
+    }
+    /deep/ .el-table th.is-leaf {
+        border-bottom: none!important;
+    }
+    /deep/ .el-table thead tr {
+        height: 46px;
+    }
+    .border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
         }
     }
 </style>

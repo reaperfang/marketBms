@@ -11,10 +11,10 @@
        <!-- 配送范围 -->
       <section class="section dashed delivery-area">
         <h2><em>*</em> 配送范围</h2>
-        <el-form-item label="取货地址：" class="item">
+        <el-form-item label="发货地址：" class="item">
           <!-- <label>取货地址：</label> -->
-          {{ address }}
-          <el-button type="text" @click="handleToShopInfo">修改</el-button>
+          <template v-if="address">{{ address }}</template>
+          <el-button type="text" @click="handleToShopInfo">{{ btnTxt }}</el-button>
         </el-form-item>
         <el-form-item label="配送范围设置：" prop="radiusType" class="item">
           <!-- <label>配送范围设置：</label> -->
@@ -310,6 +310,7 @@ export default {
       zoom: 4,
       isOpen: false, // 是否开启商家配送
       address: null, // 默认取货地址
+      addressId: null,
       visible: false,
       visible2: false,
       visible3: false,
@@ -416,6 +417,9 @@ export default {
   },
 
   computed: {
+    btnTxt() {
+      return this.address ? '修改': '新建'
+    },
     getCenter() {
       let latlng
       latlng = (this.ruleForm.lat && this.ruleForm.lng) ?  [this.ruleForm.lat,this.ruleForm.lng] : []
@@ -465,6 +469,7 @@ export default {
     // if (this.shopInfo) {
     //   this.getShopInfo(this.shopInfo)
     // }
+    this.getDeliveryAddress()
     this.getShopInfo()
     this.getOrderDeliverInfo()
   },
@@ -474,6 +479,12 @@ export default {
   },
 
   methods: {
+    // 获取发货地址
+    getDeliveryAddress() {
+      // addressId address
+      // this.address = 'test'
+      // this.addressId = 1
+    },
     handleRepeatCycleChange(val) {
       console.log('---val--', val)
       // if (val === 1) {
@@ -836,15 +847,20 @@ export default {
       this.ruleForm.timePeriods.push(timePeriod)
     },
     handleToShopInfo() {
-      this.confirm({
+      if (this.addressId) {
+        this.confirm({
           title: "提示",
           icon: true,
-          text: '修改取货地址后请重新确认其它商家配送设置项，如无修改将以新的取货地址为中心按原配送规则执行',
+          text: '修改发货地址后请重新确认其它商家配送设置项，如无修改将以新的发货地址为中心按原配送规则执行',
           confirmText: '去修改'
         }).then(() => {
-          this.$router.push({ path:'/set/shopInfo' })
+          // source 1 商家配送
+          this.$router.push({ path:'/set/addressUpdate', query: {id: this.addressId, source: 1 } })
         }).catch(()=> {
         });
+      } else {
+          this.$router.push({ path:'/set/addressUpdate', query: { source: 1 } })
+      }
     },
     // 开启商家配送 api
     openMerchantDeliver() {
@@ -889,9 +905,7 @@ export default {
           const cityCode = res.cityCode
           const provinceCode = res.provinceCode
           isHasOtherWay = res.isOpenOrdinaryExpress === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
-          // this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
-          this.address = `${res.sendAddress}${res.address}` || null
-          // this.getLngLat(this.address)
+          // this.address = `${res.sendAddress}${res.address}` || null // 取地址库的
         }
       }).catch(err => {
         console.log('---getShopInfo--', err)

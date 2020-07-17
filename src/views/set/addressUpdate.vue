@@ -27,7 +27,7 @@
         <el-form-item label="地址类型" prop="type">
           <el-checkbox-group v-model="ruleForm.type">
             <div class="address-group">
-              <el-checkbox class="address-item" :label="1" name="type">发货地址</el-checkbox>
+              <el-checkbox class="address-item" :disabled="isDisabled" :label="1" name="type">发货地址</el-checkbox>
               <el-checkbox class="address-item" v-if="isDelivery" :label="3">默认发货地址</el-checkbox>
             </div>
             <div class="address-group">
@@ -41,6 +41,7 @@
         <el-button
           type="primary"
           class="submit"
+          :loading="isLoading"
           @click="onSubmit('ruleForm')"
         >保 存</el-button>
       </div>
@@ -75,6 +76,8 @@ export default {
     };
     return {
       isMapChoose: false,
+      isLoading: false,
+      isDisabled: false,
       ruleForm: {
         id: null,
         contactPerson: null, // 联系人
@@ -117,7 +120,11 @@ export default {
     },
     setTitle() {
       return this.ruleForm.id ? '编辑地址' : '新建地址'
-    }
+    },
+    cid(){
+      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      return shopInfo.id
+    },
   },
 
   watch: {
@@ -173,9 +180,12 @@ export default {
     },
     init() {
       this.ruleForm.id = this.$route.query && this.$route.query.id
+      this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         const data = this.getAddressById()
         this.handleEchoData(data)
+      } else {
+        this.ruleForm.type.push(1) // 1为勾选发货地址
       }
     },
     // 格式化回显地址类型数据
@@ -247,19 +257,49 @@ export default {
       });
     },
     // 处理数据重复问题
-    handleDataRepeatErr() {},
+    handleDataRepeatErr(res) {
+      this.confirm({
+        title: "提示",
+        iconWarning: true,
+        text: '地址信息重复，点击可直接查看或编辑已创建的地址信息。',
+        confirmText: '查看'
+      }).then(() => {
+        this.$router.push({ path: '/set/addressUpdate', query: { id: 1 } })
+      });
+    },
     // 处理开启商家配送提醒
-    hanldeIsOpenDelivery() {},
+    hanldeIsOpenDelivery() {
+      this.confirm({
+        title: "提示",
+        iconWarning: true,
+        text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
+        confirmText: '确定',
+        showCancelButton: true,
+        customClass: 'address-update'
+      }).then(() => {
+        this.saveAddress()
+      }).catch(() => {
+        this.isLoading = false
+      });
+    },
+    // 是否开启商家配送
+    isOpenMerchantDeliver() {
+      const id = this.cid
+      return new Promise((resolve, reject) => {
+        this._apis.set.getShopInfo({ id }).then(res => {
+          console.log("----",res)
+          const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
+          resolve(isOpenMerchantDeliver)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
     // 数据保存之后的处理逻辑
     handleAfterSave(res) {
       // 数据重复
       if (res.code === 1) {
-        this.handleDataRepeatErr()
-        return false
-      }
-      // 是否开启商家配送
-      if (res.code === 2) {
-        this.hanldeIsOpenDelivery()
+        this.handleDataRepeatErr(res)
         return false
       }
       // 保存成功
@@ -267,6 +307,16 @@ export default {
         this.handleSaveSuccess()
         return false
       }
+    },
+    saveAddress() {
+      const req = this.getReqData()
+      console.log('req',req)
+      const res = {
+        code: 0
+      }
+      // 保存后
+      this.isLoading = false
+      this.handleAfterSave(res)
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
@@ -277,15 +327,19 @@ export default {
             this.$refs.ruleForm.validateField('sendAddress')
             return false
           }
-          const req = this.getReqData()
-          console.log('req',req)
-          const res = {
-            code: 0
-          }
-          this.handleAfterSave(res)
-          // // 数据重复错误提示
-          // this.handleDataRepeatErr(id)
-          // this.$router.push({ path: '/set/addressUpdate', query: { id: 1 }})
+          this.isLoading = true
+          const isOpenMerchantDeliver = this.isOpenMerchantDeliver()
+          isOpenMerchantDeliver.then((isOpen) => {
+            console.log('dev',isOpen)
+            // 是否打开
+            if (isOpen) {
+              this.hanldeIsOpenDelivery()
+            } else {
+              this.saveAddress()
+            }
+          }).catch(() => {
+            this.isLoading = false
+          })
         } else {
           console.log('error submit!!');
           return false;
@@ -315,6 +369,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/.address-update {
+  color:red;
+}
 .address {
   padding: 15px 0 0 20px;
   box-sizing: border-box;

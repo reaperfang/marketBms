@@ -26,6 +26,18 @@
                     </div>
                 </div>
                 <div v-if="showCustomerContent" class="content">
+                    <div class="message">
+                        <p>
+                            <span>收货信息</span>
+                            <span>小张 / 13800000000</span>
+                            <span>北京市 大兴区 亦庄开发区地盛西路一号 </span>
+                        </p>
+                        <p>
+                            <span>发货信息</span>
+                            <span>小张 / 13800000000</span>
+                            <span>北京市 大兴区 亦庄开发区地盛西路一号 </span>
+                        </p>
+                    </div>
                     <el-table
                         :data="itemList"
                         style="width: 100%">
@@ -34,12 +46,12 @@
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
@@ -103,12 +115,12 @@
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
@@ -169,12 +181,12 @@
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
@@ -236,12 +248,12 @@
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
@@ -474,11 +486,11 @@ export default {
                     }
                 }
                 .header {
-                    height: 60px;
+                    height: 50px;
                     background-color: rgb(243, 244, 244);
                     border-radius: 10px 10px 0 0;
                     padding: 0 20px;
-                    line-height: 60px;
+                    line-height: 50px;
                     display: flex;
                     justify-content: space-between;
                     .header-lefter {
@@ -520,6 +532,30 @@ export default {
                 }
             }
         }
+    }
+    .message {
+        font-size:14px;
+        font-weight:400;
+        color:rgba(146,146,155,1);
+        padding-bottom: 12px;
+        padding-left: 40px;
+        p {
+            span {
+                &:nth-child(2) {
+                    margin-left: 30px;
+                    margin-right: 15px;
+                }
+            }
+            &:first-child {
+                margin-bottom: 10px;
+            }
+        }
+    }
+    .image-box {
+        margin-right: 10px;
+    }
+    .goods-specs {
+        color: #9FA29F;
     }
 </style>
 

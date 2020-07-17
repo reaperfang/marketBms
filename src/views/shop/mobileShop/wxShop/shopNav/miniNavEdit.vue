@@ -275,7 +275,7 @@ export default {
             navigationKey: '',
             status: '0',
             navigation_type: '1',
-            navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
+            navigation_json: utils.compileStr(JSON.stringify(this.checkIcon()))
           }, (status) => {
             this.saveAndApplyLoading = false;
           })
@@ -292,7 +292,7 @@ export default {
             navigationKey: '',
             status: '1',
             navigation_type: '1',
-            navigation_json: utils.compileStr(JSON.stringify(this.ruleForm))
+            navigation_json: utils.compileStr(JSON.stringify(this.checkIcon()))
           }, (status) => {
             this.saveLoading = false;
           })
@@ -334,6 +334,21 @@ export default {
         }
       }
       return result;
+    },
+
+    /* 检查图标 */
+    checkIcon() {
+      let copyData = {...this.ruleForm};
+      for(let k in copyData.navMap) {
+        for(let k2 in copyData.navMap[k]) {
+          if(k2 === 'navIcon' || k2 === 'navIconActive') {
+            if(this.utils.validate.isBase64(copyData.navMap[k][k2])) {
+              copyData.navMap[k][k2] = '';
+            }
+          }
+        }
+      }
+      return copyData;
     }
   },
 

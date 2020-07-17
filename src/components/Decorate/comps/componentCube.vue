@@ -266,6 +266,7 @@ export default {
   },
   created() {
     const _self = this;
+    console.log(this.currentComponentData.data.list['2'])
   },
   mounted() {
     this.dataLoaded = true;
@@ -293,7 +294,6 @@ export default {
 
 <style lang="scss" scoped>
 .default_image{
-  object-fit: none;
   width:100%;
 }
 .cube_preview{
