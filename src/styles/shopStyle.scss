@@ -62,8 +62,8 @@
 .add-button-x {
       background:rgba(248,248,250,1);
       border-radius:4px;
-      border:1px dashed rgba(182,181,200,1);
-      color:rgba(68,67,75,1);
+      border:1px dashed #B6B5C8;
+      color:#44434B;
       font-size: 12px;
       line-height: 19px;
       padding: 5px 15px;
@@ -71,6 +71,7 @@
       i {
             font-size: 16px;
             margin-right: 6px;
+            color: #B6B5C8;
       }
       &:hover {
             transition: all 0.4s;
@@ -161,7 +162,10 @@
                   height: 96px;
                   border: 1px solid #eae9e9;
                   &.add_button {
-                        border: 1px dashed #655EFF;
+                        border: 1px dashed #B6B5C8;
+                        &:hover{
+                              border-color: #655EFF;
+                        }
                   }
                   &:nth-of-type(2n) {
                         margin-right: 0;
@@ -479,7 +483,9 @@ ul.cube {
                                     position: absolute;
                                     display: block;
                                     width: 2px;
-                                    height: 100%;
+                                    height: 13px;
+                                    top: 2px;
+                                    border-radius: 1px;
                                     background: $globalMainColor;
                               }
                         }
@@ -487,7 +493,7 @@ ul.cube {
                               font-size:12px;
                               font-family:PingFangSC-Regular,PingFang SC;
                               font-weight:400;
-                              color:rgba(153,153,153,1);
+                              color:#92929B;
                               display:block;
                               margin-top:10px;
                         }
@@ -669,8 +675,8 @@ ul.cube {
 }
 .prop-message {
       font-size:12px;
-      color:rgba(182,181,200,1);
-      line-height: 21px;
+      color:#92929B;
+      line-height: 16px;
 }
 .el-radio-group {
       &.radio-block {
