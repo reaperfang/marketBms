@@ -54,17 +54,13 @@ export default {
 
             if(this.checkedAll) {
                 arr.forEach(val => {
-                    if(val.orderStatus != 2 && val.orderStatus != 6) {
-                        val.checked = true
-                    }
+                    val.checked = true;
                 })
 
                 this.list = arr
             } else {
                 arr.forEach(val => {
-                    if(val.orderStatus != 2 && val.orderStatus != 6) {
-                        val.checked = false
-                    }
+                    val.checked = false;
                 })
 
                 this.list = arr

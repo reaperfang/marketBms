@@ -86,3 +86,8 @@ export  function isURL (url) {
 export function isPic(url) {
   return /\.(gif|jpg|jpeg|png|GIF|JPEG|JPG|PNG)$/.test(url)
 }
+
+export function isBase64(string) {
+  var reg = /^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\/?%\s]*?)\s*$/i;
+    return reg.test(string)
+}
