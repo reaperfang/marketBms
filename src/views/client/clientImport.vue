@@ -15,15 +15,15 @@
                                 </el-option>
                             </el-select>
                         </div>
-                        <span class="addMainColor pointer marL20" @click="handleNew">新建</span>
+                        <span class="addMainColor pointer marL10" @click="handleNew">新建</span>
                     </el-form-item>
-                    <el-form-item label="身份：" prop="memberType">
+                    <!-- <el-form-item label="身份：" prop="memberType">
                         <div class="input_wrap">
                             <el-radio v-model="ruleForm.memberType" label="1">会员</el-radio>
                             <el-radio v-model="ruleForm.memberType" label="0">非会员</el-radio>
                         </div>
-                    </el-form-item>
-                    <el-form-item label="上传文件：">
+                    </el-form-item> -->
+                    <el-form-item label="上传文件：" style="margin-left:9px">
                         <div class="input_wrap marL">
                             <el-upload
                                 class="upload-block"
@@ -94,15 +94,11 @@ export default {
         return {
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
             ruleForm: {
-                channelId:"",
-                memberType: "1"
+                channelId:""
             },
             rules: {
                 channelId: [
                     { required: true, message: "请选择渠道", trigger:'blur' }
-                ],
-                memberType: [
-                    { required: true, message: "请选择身份", trigger:'blur' }
                 ]
             },
             channelName:"",
@@ -188,7 +184,6 @@ export default {
                 let params = {
                     channelId: this.ruleForm.channelId,
                     channelName: this.channelName,
-                    memberType: this.ruleForm.memberType,
                     importUrl: this.importUrl
                 }
                 this._apis.client.importMemberFile(params).then((response) => {
@@ -239,6 +234,9 @@ export default {
 .marL20{
     margin-left: 20px;
 }
+.marL10{
+    margin-left: 7px;
+}
 .c_container{
     background-color: #fff;
     padding: 16px 20px;
@@ -250,6 +248,7 @@ export default {
         padding-top: 17px;
         border-bottom: 1px dashed #D3D3D3;
         .form_container{
+            margin-left: 20px;
             .input_wrap{
                 position: relative;
                 display: inline-block;
@@ -259,7 +258,7 @@ export default {
                 }
                 .download_btn{
                     position: absolute;
-                    right: -9px;
+                    right: 9px;
                     top: 0;
                 }
             }
@@ -270,7 +269,7 @@ export default {
             }
         }
         .btns{
-            margin-left: 100px;
+            margin-left: 111px;
         }
     }
     .table_container{
