@@ -8,6 +8,7 @@
         </el-radio-group>
       </el-form-item>
      <el-form-item :label="ruleForm.addType === 1 ? '选择活动' : ''" prop="goods">
+        <p class="prop-message" style="margin: 9px 0 8px 0;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
         <div class="goods_list" prop="goods" v-loading="loading">
           <ul>
             <template>
@@ -29,12 +30,11 @@
             </li>
           </ul>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
       </el-form-item>
       <el-form-item label="显示个数" v-if="ruleForm.addType === 2" prop="showNumber">
         <div class="row align-center">
           <el-input style="width: 101px;"  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
-          <p style="color: rgb(211, 211, 211);margin-left:6px;font-size: 12px;">建议最大设置为30个</p> 
+          <p class="prop-message" style="margin-left:6px;font-size: 12px;">建议最大设置为30个</p> 
         </div>
       </el-form-item>
       <el-form-item label="" v-if="ruleForm.addType === 2" prop="showAllBtns">
@@ -150,7 +150,7 @@
       </el-form-item>
       <el-form-item label="更多设置" prop="hideSaledGoods">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <p class="hide_tips">隐藏后，活动商品将不在微商城显示</p>
+        <p class="prop-message" style="margin-top: -5px;">隐藏后，活动商品将不在微商城显示</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
         <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <el-radio :label="1">24小时后隐藏</el-radio>

@@ -107,7 +107,7 @@ export default {
                 this.fetch();
             }
         },
-        'ruleForm.currentCatagoryId'(newValue, oldValue) {
+        'currentComponentData.data.currentCatagoryId'(newValue, oldValue) {
             if(newValue !== oldValue) {
                 this.fetch();
             }

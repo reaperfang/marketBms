@@ -194,7 +194,6 @@ export default {
 <style lang="scss" scoped>
 .componentArticleAD {
   .default_image{
-    object-fit: none;
     width:100%;
   }
 
@@ -231,7 +230,7 @@ export default {
     height: auto;
   }
   .pdr_16 {
-    padding-right: 8px;
+    // padding-right: 8px;
   }
   .sle:last-child {
     margin-right: 0px;

@@ -26,7 +26,7 @@
             :popper-class="'editor-view-popover active'"
             placement="right-start"
             width="76"
-            :popper-options="{boundariesElement: 'viewport', boundariesPadding: 130}"
+            :popper-options="{boundariesElement: 'viewport', boundariesPadding: 64}"
             :disabled="popoverDisabled"
             trigger="hover">
             <div class="arrow-box" @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)" @click="deleteComponent(item)">
@@ -62,7 +62,7 @@
       <template v-else>
         <template v-for="(item, key) of componentDataIds">
           <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentData(item).hidden">
-            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :dragable="dragable"></component>
+            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :dragable="dragable"  @componentDataLoaded="componentDataLoaded"></component>
           </div>
         </template>
       </template>
@@ -122,7 +122,9 @@ export default {
       currentMouseOverComponentId: '',
       popoverDisabled: false,
       loadedComponents: [],  //数据加载完成的组件列表
-      loadPercent: 0
+      loadPercent: 0,
+      scrollBottomMark: false, //只有当点击或者拖拽新添加组件时为true，等新的组件加载完成，需要触发滚动至底部事件的标记，然后初始为false
+      scrollAutoMark: false, //只有当点击或者拖拽新添加组件时为true，等新的组件加载完成，需要触发滚动至组件位置事件的标记，然后初始为false
     }
   },
   computed:{
@@ -145,10 +147,12 @@ export default {
   created() {
     this.loadTemplateLists();
     this._globalEvent.$on('scrollToBottom', ()=>{
+      this.scrollBottomMark = true;
       this.scrollToBottom();
     }) 
     
     this._globalEvent.$on('autoScrollToComponent', (id)=>{
+      this.scrollAutoMark =  true;
       this.autoScrollToComponent(id);
     })
   },
@@ -261,6 +265,7 @@ export default {
         this.$nextTick(() => {
             var container = this.$el.querySelector(".phone-body");
             let tempScrollHeight = container.scrollHeight;
+            
             setTimeout(()=>{
               if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
                 container.scrollTop = tempScrollHeight
@@ -276,24 +281,26 @@ export default {
 
     /* 自动跟踪组件添加滚动到组件位置 */
     autoScrollToComponent(id) {
-      // this.$nextTick(()=>{
-      //   var container = this.$el.querySelector(".phone-body");
-      //   let blocks = this.$refs.view_container.querySelectorAll('.component_wrapper');
-      //   for(let i=0;i< blocks.length;i++) {
-      //     if(id === blocks[i].getAttribute('data-id')) {
-      //       const offsetTop = blocks[i].offsetTop;
-      //       const offsetHeight = blocks[i].offsetHeight;
-      //       if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
-      //         container.scrollTop = offsetTop + offsetHeight
-      //       }else {
-      //         container.scrollTo({
-      //           top: offsetTop + offsetHeight,
-      //           behavior: "smooth"
-      //         });
-      //       }
-      //     }
-      //   }
-      // })
+      this.$nextTick(()=>{
+        var container = this.$el.querySelector(".phone-body");
+        const headH = this.$el.querySelector('.phone-head').clientHeight;
+        let blocks = this.$refs.view_container.querySelectorAll('.component_wrapper');
+        for(let i=0;i< blocks.length;i++) {
+          if(id === blocks[i].getAttribute('data-id')) {
+            const offsetTop = blocks[i].offsetTop;
+            const offsetHeight = blocks[i].offsetHeight;
+            if(!container.scrollTo && typeof container.scrollTo !== 'function') {  //无滚动效果，直接到制定位置
+              container.scrollTop = offsetTop + offsetHeight - headH
+            }else {
+              container.scrollTo({
+                top: offsetTop + offsetHeight - headH,
+                behavior: "smooth"
+              });
+            }
+            break;
+          }
+        }
+      })
     },
 
     /* 按钮鼠标移入 */
@@ -338,26 +345,46 @@ export default {
         after: true
       });
 
-      //组件添加自动滚动到组件位置
-      let index = this.componentDataIds.indexOf(this.currentComponentId);
-      if(index > 0) {
-        index--;
-      }
-      let prev = this.componentDataIds[index];
-      this.autoScrollToComponent(prev);
 
-      //只有根组件的情况下直接定位到底部
+      //如果当前是最后一个组件，则直接定位到底部
       if(this.currentComponentId === this.componentDataIds[this.componentDataIds.length - 1]) {
         this.$nextTick(()=>{
+          this.scrollBottomMark = true;
           this.scrollToBottom();
         })
+      }else{
+        this.scrollAutoMark = true;
+        //组件添加自动滚动到组件位置
+        let index = this.componentDataIds.indexOf(this.currentComponentId);
+        if(index > 0) {
+          index--;
+        }
+        let prev = this.componentDataIds[index];
+        this.autoScrollToComponent(prev);
       }
     },
 
     /* 组件数据加载结束 */
     componentDataLoaded(componentData) {
+      
       for(let item of this.componentDataIds) {
         if(item === componentData.id) {
+
+          if(this.scrollBottomMark){
+            this.scrollBottomMark = false;
+            this.scrollToBottom();
+          }
+          if(this.scrollAutoMark && item === this.currentComponentId){ //因存在添加新组件会引起之后的组件重新加载的问题，会存在一些问题，后期考虑优化
+            this.scrollAutoMark = false;
+            //组件添加自动滚动到组件位置
+            let index = this.componentDataIds.indexOf(this.currentComponentId);
+            if(index > 0) {
+              index--;
+            }
+            let prev = this.componentDataIds[index];
+            this.autoScrollToComponent(prev);
+          }
+          
           this.loadedComponents.push(componentData);
           this.updateLoadProgress(componentData);
           if(this.loadedComponents.length === this.componentDataIds.length - 1) {  //减1是因为，要过滤掉基础组件，基础组件是不渲染的

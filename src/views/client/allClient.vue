@@ -155,14 +155,14 @@
                 </div>
                 <el-form-item class="padR40 marT20">
                     <span class="shou" @click="handleMore" v-if="showFold">收起<i class="el-icon-arrow-up margetClientListL10"></i></span>
-                    <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
+                    <el-button class="fr marL10" @click="resetForm('form')">重置</el-button>
                     <el-button type="primary" class="fr" @click="getClientList" :loading="btnloading">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
         </div>
         <div class="all_container2">
-            <div class="btn_container" style="float: right; margin: 9px 118px 24px 0px">
+            <div class="btn_container" style="float: right; margin: 9px 106px 24px 0px">
                 <el-button type="primary" @click="_routeTo('importClient')" v-permission="['用户', '全部用户', '默认页面', '用户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
@@ -537,6 +537,9 @@ export default {
 }
 .marL20{
     margin-left: 20px;
+}
+.marL10{
+    margin-left: 10px;
 }
 .all_container{
     padding: 20px;

@@ -4,7 +4,7 @@
 
 module.exports = {
     '/data-server/**': {
-      target: 'http://test2-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
+      target: 'http://test3-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
       // target: 'http://172.22.146.1:8082',// 梅志文
       // target: 'http://172.22.146.129:8082',// 李文飞
       changeOrigin: true,

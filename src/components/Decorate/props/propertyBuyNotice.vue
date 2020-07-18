@@ -59,8 +59,8 @@ export default {
         buyType: 1,// 购买公告类型
         intervalStart: 10,//间隔时间开始
         intervalEnd: 60,// 间隔时间结束 
-        backgroundColor: 'rgb(255,248,233)',//背景颜色
-        fontColor: 'rgb(102,102,102)',//字体颜色
+        backgroundColor: 'rgba(0,0,0,0.4)',//背景颜色
+        fontColor: 'rgba(255,255,255,1)',//字体颜色
         ids: []//商品id列表
       },
       displayList: [],

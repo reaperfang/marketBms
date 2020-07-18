@@ -45,7 +45,7 @@
       添加导航：
       <p class="prop-message" style="margin-top:5px;">最多添加10个导航，鼠标拖拽可调整导航顺序</p>
       <!-- 可拖拽调整顺序 -->
-      <vuedraggable 
+      <vuedraggable
       class="drag-wrap item_list"
       :list='ruleForm.itemList'
       v-bind="dragOptions"
@@ -160,10 +160,10 @@ export default {
       switch(Number(templateType)) {
         case 1:
           this.suggestSize = '建议上传尺寸160*160像素(或其他1: 1尺寸)且小于3M的图片（当尺寸不匹配时图片会被压缩或拉伸至变形）';
-          break; 
+          break;
         case 2:
           this.suggestSize = '建议：不超过5个汉字';
-          break; 
+          break;
       }
     },
 
@@ -175,7 +175,7 @@ export default {
         id: uuidv4()
       });
       this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
-      // this.dialogVisible=true; 
+      // this.dialogVisible=true;
       // this.currentDialog='dialogSelectImageMaterial';
     },
 
@@ -192,9 +192,9 @@ export default {
 
     deleteItem(item) {
       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: '确定删除此图文导航吗？'
       }).then(() => {
         const tempItems = [...this.ruleForm.itemList];
@@ -264,11 +264,12 @@ ul.template_type{
     width:90px!important;
     margin-right:20px!important;
     height:100px;
-    border:1px solid rgb(228,227,235);
+    border:1px dashed #B6B5C8;
     padding:20px 10px 10px 10px;
     box-sizing: border-box;
     cursor:pointer;
     display: flex;
+    border-radius: 4px;
     flex-direction: column;
     justify-content: space-between;
     &.active{
@@ -296,7 +297,7 @@ ul.template_type{
       .fill_block{
         width:33.3%;
         height: 20px;
-        background: rgb(242,242,249) url('../../../assets/images/shop/editor/pic.png') no-repeat 2px 3px;
+        background: rgb(242,242,249) url('../../../assets/images/shop/editor/pic.png') no-repeat center center;
       }
     }
     .type2{

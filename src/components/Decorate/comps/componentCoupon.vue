@@ -109,7 +109,7 @@ export default {
       this.fetch();
     },
     /* 监听隐藏已抢完券 */
-    'ruleForm.hideScrambled'(newValue, oldValue) {
+    'currentComponentData.data.hideScrambled'(newValue, oldValue) {
       if(newValue === oldValue) {
           return;
       }
