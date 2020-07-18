@@ -2232,6 +2232,7 @@ export default {
         },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
+            debugger
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 console.log(res)
@@ -2767,7 +2768,9 @@ export default {
                         categoryValue.forEach(val => {
                             arr.push(val.pop())
                         })
-
+                        console.log('categoryValue');
+                        console.log(categoryValue);
+                        debugger;
                         this.ruleForm.productCatalogInfoIds = arr
                     }
                     //if(!this.editor) {
@@ -2992,11 +2995,13 @@ export default {
         getCategoryList() {
             return new Promise((resolve, reject) => {
                 this._apis.goods.fetchCategoryList({enable: 1}).then((res) => {
+                    debugger;
                     this.flatCategoryList = res
                     let arr = this.transTreeData(res, 0)
                     let _arr = this.sort(arr)
 
                     this.categoryOptions = _arr
+                    debugger;
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -3006,6 +3011,7 @@ export default {
         handleChange(value) {
             let _value = [...value]
             //this.ruleForm.productCatalogInfoId = _value.pop()
+            debugger;
             this.ruleForm.productCatalogInfoIds = _value
         },
         timelyShelvingHandler() {
