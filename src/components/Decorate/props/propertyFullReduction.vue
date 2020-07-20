@@ -15,7 +15,7 @@
           </div>
           <p class="message">建议最多添加5个活动</p>
         </div>
-        <div v-loading="loading">
+        <div v-loading="loading" class="goods_groups">
           <el-tag
             v-for="tag in displayList"
             :key="tag.name"
@@ -126,5 +126,29 @@ export default {
     margin-left: 6px!important;
     font-size: 12px;
     color:rgba(146,146,155,1);
+  }
+  .goods_groups{
+    margin-top: 10px;
+    .el-tag{
+      margin-right:12px!important;
+    }
+    /deep/ .el-tag {
+      border-radius:4px;
+      border:1px dashed rgba(101,94,255,1);
+      padding: 4px 8px;
+      height: 100%;
+      margin-bottom: 10px;
+      background-color: #fff;
+      color: rgba(101,94,255,1);
+      font-size: 14px;
+      .el-tag__close {
+        color: rgba(101,94,255,1);
+        font-size: 16px;
+        &:hover {
+          color: rgba(101,94,255,1);
+          background: #fff;
+        }
+      }
+    }
   }
 </style>
