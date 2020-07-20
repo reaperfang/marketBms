@@ -28,7 +28,7 @@
               <div class="col">
                 <div class="row align-center row-margin">
                   <div class="col" style="width: 180px;">收货信息</div>
-                  <div class="col">物流信息</div>
+                  <div class="col" style="width: 281px; text-align: center;">物流信息</div>
                 </div>
               </div>
             </div>
@@ -75,7 +75,7 @@
                     <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
                   </div>
                   <div class="col">
-                    <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
+                    <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
                       <el-form-item label="快递公司" prop="expressCompanys">
                         <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                           <el-option
@@ -581,6 +581,14 @@ export default {
           val.checked = false;
         });
       }
+
+      let _arr = this.list.reduce((pre, cur) => pre.concat(cur.orderItemList), [])
+      
+      if(_arr.every(val => val.checked)) {
+        this.allchecked = true
+      } else {
+        this.allchecked = false
+      }
     },
     // 订单详情 orderId
     // 电子面单 orderId
@@ -882,6 +890,14 @@ export default {
           this.list[index].checked = true;
         } else {
           this.list[index].checked = false;
+        }
+
+        let _arr = _list.reduce((pre, cur) => pre.concat(cur.orderItemList), [])
+        
+        if(_arr.every(val => val.checked)) {
+          this.allchecked = true
+        } else {
+          this.allchecked = false
         }
       } catch (e) {}
     },

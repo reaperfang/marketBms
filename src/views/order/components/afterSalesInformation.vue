@@ -842,6 +842,11 @@ export default {
             text-align: left;
         }
     }
+    /deep/ .el-table table tbody tr:first-child {
+        .cell {
+            padding-left: 20px;
+        }
+    }
 </style>
 
 
