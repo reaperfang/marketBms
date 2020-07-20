@@ -24,7 +24,7 @@
           <el-radio :label="1">展示</el-radio>
           <el-radio :label="2">不展示</el-radio>
         </el-radio-group>
-        <p class="prop-message">全部分类为商品的集合分类，增加消费者逛的体验</p>
+        <p class="prop-message" style="margin-top:-8px;">全部分类为商品的集合分类，增加消费者逛的体验</p>
       </el-form-item>
       <el-form-item label="展示模板" prop="showTemplate">
         <el-radio-group v-model="ruleForm.showTemplate">
@@ -281,7 +281,7 @@ export default {
 }
 .add-goods-group {
   width: 116px;
-  padding: 5px 10px;
+  padding: 0 10px;
   i {
     margin-right: 2px;
   }

@@ -29,7 +29,7 @@
       <el-form-item label="券活动数" prop="couponNumberType" v-if="ruleForm.addType === 2">
         <el-radio-group v-model="ruleForm.couponNumberType">
           <el-radio :label="1">全部</el-radio>
-          <el-radio :label="2">
+          <el-radio :label="2" style="margin-bottom:4px;">
             <el-input
               style="width:200px;"
               placeholder="请输入显示的券活动数"
@@ -37,7 +37,7 @@
             </el-input>
           </el-radio>
         </el-radio-group>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;" v-if="ruleForm.addType === 2">建议最大设置为10个</p>  
+        <p class="prop-message" v-if="ruleForm.addType === 2">建议最大设置为10个</p>  
       </el-form-item>
       <el-form-item label="样式" prop="couponStyle">
         <el-radio-group class="radio-block" v-model="ruleForm.couponStyle">
@@ -57,7 +57,7 @@
         </el-radio-group> -->
         <wxColor v-model="ruleForm.couponColor" @input="yuan"></wxColor>
       </el-form-item>
-      <el-form-item label="更多设置" prop="hideScrambled">
+      <el-form-item label="更多设置" prop="hideScrambled" style="margin-bottom: -5px;">
         <el-checkbox v-model="ruleForm.hideScrambled">隐藏已抢完劵</el-checkbox>
       </el-form-item>
       <el-form-item label="">

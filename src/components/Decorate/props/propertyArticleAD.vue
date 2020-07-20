@@ -40,7 +40,7 @@
     <div class="block form">
       <div class="row align-center">
         添加图片
-        <p class="prop-message prop-message-add-image" style="margin-top:5px;">最多添加10个广告，鼠标拖拽可调整广告顺序</p>
+        <p class="prop-message prop-message-add-image" style="margin-top:3px;">最多添加10个广告，鼠标拖拽可调整广告顺序</p>
       </div>
 
       <!-- 可拖拽调整顺序 -->
@@ -57,7 +57,7 @@
                 <i class="delete_btn" @click.stop="deleteImage(item)"></i>
                 <span @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
               </div>
-              <div v-else class="add_button" @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">
+              <div v-else class="add_button add_button_img" @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">
                 <i class="inner"></i>
                 <p>上传图片</p>
               </div>

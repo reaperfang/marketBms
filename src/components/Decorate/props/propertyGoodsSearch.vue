@@ -3,7 +3,7 @@
     <div class="block form">
       <el-form-item label="搜索热词" prop="">
         <!-- <p>鼠标拖拽调整热词顺序，搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中 -->
-        <p class="prop-message hot-word">搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中
+        <p class="prop-message hot-word" style="margin-top: 7px;">搜索框默认展示第一个热词，其他搜索词将以标签形式显示在搜索页中
           <span @click="dialogVisible=true; currentDialog='dialogGoodsSearchDemo'">查看示例</span>
         </p>
         <el-tag
@@ -41,7 +41,7 @@
             <el-slider v-model="ruleForm.borderHeight" :min="28" :max="40"></el-slider>
             <span>{{ruleForm.borderHeight}}像素</span>
           </div>
-          <p style="color:rgb(211, 211, 211);margin-top:5px;">小程序V2.17及以上版本支持</p>
+          <p class="prop-message" style="margin-top:-4px;">小程序V2.17及以上版本支持</p>
         </el-form-item>
       <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">
@@ -163,6 +163,7 @@ export default {
       font-size:14px;
       color:rgba(101,94,255,1);
       margin-left: 6px;
+      cursor: pointer;
     }
   }
   .add-button-x-add-word {

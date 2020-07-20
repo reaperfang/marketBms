@@ -36,12 +36,12 @@
                 切换店铺
               </span>
             </el-dropdown-item>
-            <el-dropdown-item divided>
+            <!-- <el-dropdown-item divided>
               <router-link to="/profile/accountInfo">
                 <i class="el-icon-s-order"></i>
                 账号信息
               </router-link>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <el-dropdown-item divided v-if="!userType">
               <router-link to="/profile/passwordChange">
                 <i class="el-icon-lock"></i>

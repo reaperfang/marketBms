@@ -58,19 +58,28 @@
             margin-top: 12px!important;
       }
 }
+.add_button_img{
+      .inner {
+            width: 26px;
+            height: 26px;
+      }   
+}
 
 .add-button-x {
       background:rgba(248,248,250,1);
       border-radius:4px;
       border:1px dashed #B6B5C8;
-      color:#B6B5C8;
+      color:#44434B;
       font-size: 12px;
-      line-height: 19px;
-      padding: 5px 15px;
+      height: 34px;;
+      line-height: 34px;
+      padding: 0 15px;
       cursor: pointer;
       i {
             font-size: 16px;
             margin-right: 6px;
+            color: #B6B5C8;
+            vertical-align: -1px;
       }
       &:hover {
             transition: all 0.4s;
@@ -492,7 +501,7 @@ ul.cube {
                               font-size:12px;
                               font-family:PingFangSC-Regular,PingFang SC;
                               font-weight:400;
-                              color:rgba(153,153,153,1);
+                              color:#92929B;
                               display:block;
                               margin-top:10px;
                         }
@@ -510,6 +519,9 @@ ul.cube {
                         .el-form-item{
                               &:last-child{
                                     margin:0;
+                              }
+                              .el-form-item__label{
+                                    text-align: left;
                               }
                         }
                   }
@@ -656,6 +668,7 @@ ul.cube {
             i{
                   display:block;
                   background: url('../assets/images/shop/close2.png') no-repeat 0 0;
+                  background-size: 12px 12px;
                   width: 12px;
                   height: 12px;
                   margin-top: 6px;
@@ -674,8 +687,8 @@ ul.cube {
 }
 .prop-message {
       font-size:12px;
-      color:rgba(182,181,200,1);
-      line-height: 21px;
+      color:#92929B;
+      line-height: 16px;
 }
 .el-radio-group {
       &.radio-block {

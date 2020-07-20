@@ -20,7 +20,7 @@
           <i class="inner"></i>
           <p>添加图片</p>
         </div>
-        <p style="color:rgb(211, 211, 211);margin-top:5px;font-size: 12px;line-height: 17px;">建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
+        <p class="prop-message" style="margin-top:5px;">建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
       </el-form-item>
     </div>
 

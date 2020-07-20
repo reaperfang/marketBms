@@ -27,7 +27,8 @@
                 <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
             </el-form-item>
             <el-form-item label="商品名称" prop="name">
-                <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || (editor && ruleForm.activity)" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
+                <div v-if="editor && ruleForm.activity" class="activity-message" style="margin-left:0">当前商品正在参与营销活动、待活动结束/失效才能编辑商品名称</div>
             </el-form-item>
             <el-form-item label="商品描述" prop="description">
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
@@ -164,7 +165,8 @@
             </el-form-item>
         </section>
         <section class="form-section spec-form-section">
-            <h2>销售信息</h2>
+            <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
+            
             <el-form-item label="规格信息" prop="goodsInfos">
 
             </el-form-item>
@@ -237,10 +239,16 @@
                                 <span>{{item.name}}</span>
                                 <!--<el-button @click="deleteAddedSpec(index)">移除</el-button>-->
                             </div>
-                            <ul class="spec-value-ul">
+                            <ul class="spec-value-ul" v-if="!(editor && ruleForm.activity)">
                                 <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
                                     {{spec.name}}
                                     <i @click="deleteAddedSpecValue(index, specValueIndex)" data-v-03229368="" class="icon-circle-close"></i>
+                                </li>
+                            </ul>
+                            <ul class="spec-value-ul1" v-if="editor && ruleForm.activity">
+                                <li v-for="(spec, specValueIndex) in item.valueList" :key="specValueIndex">
+                                    {{spec.name}}
+                                    <i data-v-03229368="" class="icon-circle-close"></i>
                                 </li>
                             </ul>
                             <div class="add-specs-button">
@@ -268,7 +276,7 @@
                                             <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
                                         </div>
                                     </div>
-                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)">添加规格值</el-button>
+                                    <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)" :disabled="editor && ruleForm.activity">添加规格值</el-button>
                                 </el-popover>
                             </div>
                         </li>
@@ -420,6 +428,7 @@
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
+                        :activity="ruleForm.activity"
 			:weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
@@ -524,9 +533,11 @@
                     </el-table> -->
                     <Specs v-if="ruleForm.productSpecs" :list.sync="ruleForm.goodsInfos"
                         :specsLabel="specsLabel"
+                        :editor="editor"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
+                        :activity="ruleForm.activity"
 			:weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
@@ -548,7 +559,7 @@
                 </div>
             </el-form-item> -->
             <el-form-item label="已售出数量" prop="selfSaleCount">
-                <el-input :disabled="!ruleForm.productCategoryInfoId" type="number" v-model="ruleForm.selfSaleCount"></el-input>
+                <el-input min="0" :max="ruleForm.stock" :disabled="!ruleForm.productCategoryInfoId" type="number" v-model="ruleForm.selfSaleCount"></el-input>
                 <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情显示已售出数量</el-checkbox>
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
             </el-form-item>
@@ -586,10 +597,10 @@
                 <span v-if="ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品状态。</span>
                 <div>
                     <el-radio-group @change="statusChange" :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.status">
-                        <el-radio :label="1">上架</el-radio>
+                        <el-radio :label="1" :disabled="editor && ruleForm.activity">上架</el-radio>
                         <el-radio :disabled="editor && ruleForm.activity" :label="0">下架</el-radio>
                         <template v-if="editor">
-                            <span><el-radio :disabled="ruleForm.activity" :label="2">定时上架</el-radio></span>
+                            <span><el-radio :disabled="editor && ruleForm.activity" :label="2">定时上架</el-radio></span>
                         </template>
                         <template v-else>
                             <span style="display: inline-block;"><el-radio @click.native="timelyShelvingHandler" :label="2">定时上架</el-radio></span>
@@ -791,6 +802,28 @@ export default {
                 callback();
             }
         };
+        var isShowRelationProductValidator = (rule, value, callback) => {
+            if(this.ruleForm.isShowRelationProduct == 1) {
+                if(!this.tableData.length) {
+                    callback(new Error('请选择关联商品'));
+                } else {
+                    callback();
+                }
+            } else {
+                callback();
+            }
+        };
+        var selfSaleCountValidator = (rule, value, callback) => {
+            if(this.ruleForm.selfSaleCount < 0) {
+                callback(new Error('已售出数量不能为负数'));
+            } else {
+                if(this.ruleForm.selfSaleCount && !/^\d+$/.test(this.ruleForm.selfSaleCount)) {
+                    callback(new Error('已售出数量不能为小数'));
+                } else {
+                    callback();
+                }
+            }
+        };
         return {
             itemCatText: '',
             categoryValue: [],
@@ -890,8 +923,14 @@ export default {
                 isJoinDiscount: [
                     { required: true, message: '请选择', trigger: 'blur' },
                 ],
+                // isShowRelationProduct: [
+                //     { required: true, message: '请选择', trigger: 'blur' },
+                // ],
                 isShowRelationProduct: [
-                    { required: true, message: '请选择', trigger: 'blur' },
+                    { validator: isShowRelationProductValidator, trigger: 'blur' },
+                ],
+                selfSaleCount: [
+                    { validator: selfSaleCountValidator, trigger: 'blur' },
                 ],
             },
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
@@ -949,6 +988,7 @@ export default {
         }
     },
     created() {
+        console.log('activity', this.ruleForm.activity);
         var that = this
         // this.getOperateCategoryList().then(res => {
         //     this.getCategoryList()
@@ -971,8 +1011,7 @@ export default {
         this.getProductLabelList()
         this.getUnitList()
         this.getBrandList()
-        this.getTemplateList()
-        Promise.all([this.getOperateCategoryList(), this.getCategoryList()]).then(() => {
+        Promise.all([this.getOperateCategoryList(), this.getCategoryList(), this.getTemplateList()]).then(() => {
             if(this.$route.query.id && this.$route.query.goodsInfoId) {
                 this.getGoodsDetail()
             }
@@ -2050,6 +2089,7 @@ export default {
         },
         handleEdit(index, row) {
             this.tableData.splice(index, 1)
+            this.ruleForm.relationProductInfoIds = this.tableData.map(val => val.id)
         },
         getCategoryIds(arr, id) {
             try {
@@ -2626,6 +2666,13 @@ export default {
                             });
                             return
                         }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].stock)) {
+                            this.$message({
+                                message: '库存不能为小数',
+                                type: 'warning'
+                            });
+                            return
+                        }
                         if(+this.ruleForm.goodsInfos[i].stock  < 0) {
                             this.$message({
                                 message: '不能为负值',
@@ -2643,6 +2690,13 @@ export default {
                         if(!this.ruleForm.goodsInfos[i].warningStock) {
                             this.$message({
                                 message: '请输入库存预警',
+                                type: 'warning'
+                            });
+                            return
+                        }
+                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].warningStock)) {
+                            this.$message({
+                                message: '库存预警不能为小数',
                                 type: 'warning'
                             });
                             return
@@ -3791,6 +3845,26 @@ $blue: #655EFF;
                 height: 14px;
                 background: url('../../assets/images/goods/icon_close.png') no-repeat;
                 cursor: pointer;
+            }
+        }
+    }
+    .spec-value-ul1 {
+        margin-top: 10px;
+        margin-bottom: 14px;
+        padding-left: 20px;
+      li {
+            border: 1px solid #DCDFE6;
+            background-color: #f2f2f2;
+            color: #B6B5C8;
+            padding: 5px 10px;
+            i {
+                margin-left: 2px;
+                display: inline-block;
+                vertical-align: middle;
+                width: 14px;
+                height: 14px;
+                background: url('../../assets/images/goods/icon_close2.png') no-repeat;
+                cursor: not-allowed;
             }
         }
     }
