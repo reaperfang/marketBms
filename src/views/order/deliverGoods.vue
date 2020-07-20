@@ -18,6 +18,7 @@
           </div>
           <div class="content">
             <el-table
+              :row-key="getRowKeys"
               :class="{isIE: isIE}"
               ref="table"
               :data="tableData"
@@ -29,6 +30,7 @@
                 type="selection" 
                 width="55"
                 :selectable="selectable"
+                :reserve-selection="true"
               ></el-table-column>
               <el-table-column label="序号" width="180">
                 <template slot-scope="scope">
@@ -872,7 +874,10 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-    }
+    },
+    getRowKeys(row){
+  		return row.id;
+  	}
   },
   components: {
     ReceiveInformationDialog
