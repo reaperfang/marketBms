@@ -38,15 +38,18 @@ export function uncompileStr(code) {
  * @returns
  */
 export function aesEncryption(key= '', string=''){
-      var key = CryptoJS.enc.Utf8.parse(key);
-      // ECB加密
-      var options={
-          mode: CryptoJS.mode.ECB,
-          padding: CryptoJS.pad.Pkcs7
-      }
-      var encryptedData = CryptoJS.AES.encrypt(string, key, options);
-      var encryptedBase64Str = encryptedData.toString();
-      return encryptedBase64Str;
+    if(!string) {
+        return '';
+    }
+    var key = CryptoJS.enc.Utf8.parse(key);
+    // ECB加密
+    var options={
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7,
+    }
+    var encryptedData = CryptoJS.AES.encrypt(string, key, options);
+    var encryptedBase64Str = encryptedData.toString();
+    return encryptedBase64Str;
 }
 
 /**
@@ -57,10 +60,63 @@ export function aesEncryption(key= '', string=''){
  * @returns
  */
 export function aesDecryption(key= '', string=''){
+    if(!string) {
+        return '';
+    }
     var encryptedBase64Str = string;
     var options = {
       mode: CryptoJS.mode.ECB,
       padding: CryptoJS.pad.Pkcs7
+    };
+    var key = CryptoJS.enc.Utf8.parse(key);
+    // 解密
+    var decryptedData = CryptoJS.AES.decrypt(encryptedBase64Str, key, options);
+    // 解密后，需要按照Utf8的方式将明文转位字符串
+    var decryptedStr = decryptedData.toString(CryptoJS.enc.Utf8);
+    return decryptedStr;
+}
+
+/**
+ * AES加密(256)
+ *
+ * @export
+ * @param {*} string
+ * @returns
+ */
+export function aesEncryption256(key= '', string='', iv=''){
+      if(!string) {
+          return '';
+      }
+      var key = CryptoJS.enc.Utf8.parse(key);
+      iv = CryptoJS.enc.Utf8.parse(iv);
+      // CBC加密
+      var options={
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7,
+          iv
+      }
+      var encryptedData = CryptoJS.AES.encrypt(string, key, options);
+      var encryptedBase64Str = encryptedData.toString();
+      return encryptedBase64Str;
+}
+
+/**
+ * AES解密(256)
+ *
+ * @export
+ * @param {*} string
+ * @returns
+ */
+export function aesDecryption256(key= '', string='', iv=''){
+    if(!string) {
+        return '';
+    }
+    var encryptedBase64Str = string;
+    iv = CryptoJS.enc.Utf8.parse(iv);
+    var options = {
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+      iv
     };
     var key = CryptoJS.enc.Utf8.parse(key);
     // 解密
