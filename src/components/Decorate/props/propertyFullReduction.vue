@@ -121,7 +121,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .message {
     margin-left: 6px!important;
     font-size: 12px;
