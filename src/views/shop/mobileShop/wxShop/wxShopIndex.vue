@@ -62,6 +62,8 @@ export default {
           this.currentTab = 'shopMainDecorated';
           this.decorateData = response;
         }
+        this.currentTab = 'personCenter';
+        
         this.loading = false;
       }).catch((error)=>{
         console.error(error);

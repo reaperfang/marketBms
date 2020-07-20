@@ -101,7 +101,8 @@
                 <div class="content">
                     <el-table
                         :data="itemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
@@ -353,7 +354,8 @@
             <p class="section-header">操作记录</p>
             <el-table
                 :data="recordList"
-                style="width: 100%">
+                style="width: 100%"
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     prop="operationType"
                     label="操作"
@@ -821,6 +823,29 @@ export default {
     .title-section-header {
         height: 50px;
         line-height: 50px;
+        background-color: #F6F7FA;
+        color: #44434B;
+    }
+    .title-section .content {
+        padding-top: 29px;
+    }
+    /deep/ .el-table th>.cell {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    /deep/ .el-table th:first-child>.cell {
+        padding-left: 20px;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+        }
+    }
+    /deep/ .el-table table tbody tr:first-child {
+        .cell {
+            padding-left: 20px;
+        }
     }
 </style>
 

@@ -19,7 +19,8 @@
                             ref="table"
                             :data="tableData"
                             style="width: 100%"
-                            @selection-change="handleSelectionChange">
+                            @selection-change="handleSelectionChange"
+                            :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                             <el-table-column
                                 label="序号"
                                 width="180">
@@ -695,9 +696,10 @@ export default {
                     .title {
                         display: flex;
                         justify-content: space-between;
-                        height: 60px;
-                        line-height: 60px;
-                        background-color: rgb(243, 244, 244);
+                        height: 56px;
+                        line-height: 56px;
+                        background-color: #F6F7FA;
+                        color: #44434B;
                         border-radius: 5px 5px 0 0;
                         padding: 0 20px;
                         .title-list {
@@ -746,8 +748,13 @@ export default {
     .goods-detail {
         display: flex;
         .goods-detail-item {
+            margin-right: 10px;
             p {
                 margin-bottom: 6px!important;
+                &:last-child {
+                    color: #92929B;
+                    font-size: 12px;
+                }
             }
         }
     }
@@ -802,6 +809,18 @@ export default {
 .set-btn:hover {
     color: #444a51;
     text-decoration: underline;
+}
+/deep/ .el-table table thead th {
+    font-weight: normal;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table table thead tr th {
+    border-bottom: none;
 }
 </style>
 
