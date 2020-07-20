@@ -45,7 +45,7 @@
             </div>
             <div class="btn_container btns">
                 <el-button type="primary" @click="importMemberFile">导入</el-button>
-                <el-button @click="cancel">取消</el-button>
+                <el-button class="marL5" @click="cancel">取消</el-button>
             </div>
         </div>
         <div class="table_container clearfix">
@@ -54,10 +54,11 @@
                 <span>导入时间：</span>
                 <el-date-picker
                     v-model="importTime"
+                    class="marL2"
                     type="datetimerange"
                     range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
+                    start-placeholder="开始时间"
+                    end-placeholder="结束时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     :picker-options="utils.globalTimePickerOption.call(this)"
                 >
@@ -237,6 +238,12 @@ export default {
 .marL10{
     margin-left: 7px;
 }
+.marL5{
+    margin-left: 5px;
+}
+.marL2{
+    margin-left: -2px;
+}
 .c_container{
     background-color: #fff;
     padding: 16px 20px;
@@ -273,7 +280,7 @@ export default {
         }
     }
     .table_container{
-        padding-top: 18px;
+        padding-top: 30px;
     }
 }
 </style>
