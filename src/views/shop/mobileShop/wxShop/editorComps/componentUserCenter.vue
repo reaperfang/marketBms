@@ -66,12 +66,12 @@
                 <!-- 优惠券 -->
                 <li>
                   <p class="number">5</p>
-                  <p class="name" :style="{color: data.moduleList.coupon.color}">{{data.moduleList.coupon.titleValue}}</p>
+                  <p class="name">优惠券</p>
                 </li>
                 <!-- 优惠码 -->
                 <li>
                   <p class="number">5</p>
-                  <p class="name" :style="{color: data.moduleList.couponCode.color}">{{data.moduleList.couponCode.titleValue}}</p>
+                  <p class="name">优惠码</p>
                 </li>
                 <li>
                   <p class="number">1285</p>
