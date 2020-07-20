@@ -163,6 +163,7 @@ export default {
       font-size:14px;
       color:rgba(101,94,255,1);
       margin-left: 6px;
+      cursor: pointer;
     }
   }
   .add-button-x-add-word {

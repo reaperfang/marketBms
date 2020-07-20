@@ -42,8 +42,8 @@
 
                             <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6"></componentButton>
 
-                            <p class="activity_end" v-if="item.status==2">活动已结束</p>
-                            <p class="activity_end" v-if="item.status==0">活动未开始</p>
+                            <p class="activity_end" v-if="item.status==2">已结束</p>
+                            <p class="activity_end" v-if="item.status==0">未开始</p>
                         </div>
                     </li>
                 </ul>

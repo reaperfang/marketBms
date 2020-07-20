@@ -315,10 +315,9 @@ export default {
   .img_nav5 {
     display: -webkit-box;
     width: 100%;
-    overflow-x: scroll;
     height: 42px;
     & > li {
-      width: 20%;
+      width: 75px;
       text-align: center;
       box-sizing: border-box;
       position: relative;
