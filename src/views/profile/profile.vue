@@ -2,9 +2,12 @@
   <div class="p_container">
     <div class="p_l">
       <div class="p_l_item p_l_top">
-        <p class="p_title">
-          实时概况：
-          <span>今日数据更新时间：{{new Date() | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
+        <p class="realTime_survey">
+          <span class="title">
+            <span class="title1">实时概况：</span>
+            <span class="title2">今日数据更新时间：{{new Date() | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
+          </span>
+          <span class="look_info">查看详情</span>
         </p>
         <div class="p_p">
           <div class="p_p_l">
@@ -46,14 +49,51 @@
         </div>
       </div>
       <div class="p_l_item p_l_main">
-        <p class="p_title">
-          智能助手：
-          <span>
-            您需要在开通店铺前做以下准备工作（带
-            <img :src="require('@/assets/images/star.png')" alt /> 为必备事项）
-          </span>
-        </p>
-        <flowPath></flowPath>
+        <div class="dealt">
+           <p class="p_title warn">
+            <span>
+              <!-- <img :src="require('@/assets/images/profile/icon_01.png')" alt /> -->
+              帮助中心
+            </span>
+            <i class="el-icon-refresh" @click="refresh"></i>
+          </p>
+          <div class="p_r_list">
+            <p>
+              商品售罄
+              <router-link to="/goods/goodsList?status=-1">
+                <span>({{toBeSoldOut || 0}})</span>
+              </router-link>
+            </p>
+            <p>
+              待发货订单
+              <router-link to="/order/deliveryManagement?status=3">
+                <span>({{staySendCount || 0}})</span>
+              </router-link>
+            </p>
+            <p>
+              售后待处理
+              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                <span>({{stayProcessedCount || 0}})</span>
+              </router-link>
+            </p>
+            <p>
+              售后待审核
+              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+                <span>({{stayAuthCount || 0}})</span>
+              </router-link>
+            </p>
+          </div>
+        </div>
+        <div class="helper">
+          <p class="p_title">
+            智能助手：
+            <span>
+              您需要在开通店铺前做以下准备工作（带
+              <img :src="require('@/assets/images/star.png')" alt /> 为必备事项）
+            </span>
+          </p>
+          <flowPath></flowPath>
+        </div>
       </div>
       <div class="p_l_item p_l_bottom">
         <p class="p_title">常用功能：</p>
@@ -94,11 +134,70 @@
       </div>
     </div>
     <div class="p_r">
+       <!-- 客服中心 -->
+      <div class="p_r_item p_r_kefu">
+        <p class="p_title warn">
+          <span>
+            <img :src="require('@/assets/images/profile/icon_02.png')" alt />
+            客服中心
+          </span>
+        </p>
+        <p class="p_email">客服电话：400-660-5555</p>
+        <p class="p_email">客服邮箱：service4006@300.cn</p>
+      </div>
+      <!-- 客户工作台 -->
+      <div class="p_r_item p_r_more">
+        <p class="p_title warn">
+          <span>
+            <img :src="require('@/assets/images/profile/icon_04.png')" alt />
+            更多工具
+          </span>
+        </p>
+        <p class="title_h5">商户工作台H5</p>
+        <p class="link_h5">
+          <span ref="linkH5">{{protocol}}//omo.aiyouyi.cn/bh</span>
+          <img
+            :src="require('@/assets/images/profile/icon_05.png')"
+            alt
+            v-clipboard:copy="pageLink"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError"
+          />
+        </p>
+        <img :src="qrCode" alt />
+        <p class="erweima">扫描二维码，随时随地做生意</p>
+      </div>
+      <!-- 产品动态 -->
+      <div class="p_r_item p_r_kefu">
+        <p class="p_title warn">
+          <span>
+            <!-- <img :src="require('@/assets/images/profile/icon_09.png')" alt /> -->
+            产品动态
+          </span>
+          <el-link
+            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=shushangdongtai'"
+            target="_blank"
+            :underline="false"
+          >
+            <i class="icon_more"></i>
+          </el-link>
+        </p>
+        <p class="p_email no_data" v-if="productNews.length == 0">暂无产品动态</p>
+        <ul class="info_box" v-else>
+          <template v-for="(item, key) in productNews">
+            <li class="info_list" :key="key">
+              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <span>{{item.publish_at | formatDate('MM/dd')}}</span>
+            </li>
+          </template>
+        </ul>
+      </div>
+      <!-- 帮助中心 -->
       <div class="p_r_item p_r_top">
         <p class="p_title warn">
           <span>
-            <img :src="require('@/assets/images/profile/icon_01.png')" alt />
-            待办提醒
+            <!-- <img :src="require('@/assets/images/profile/icon_01.png')" alt /> -->
+            帮助中心
           </span>
           <i class="el-icon-refresh" @click="refresh"></i>
         </p>
@@ -129,62 +228,8 @@
           </p>
         </div>
       </div>
-      <div class="p_r_item p_r_kefu">
-        <p class="p_title warn">
-          <span>
-            <img :src="require('@/assets/images/profile/icon_02.png')" alt />
-            客服中心
-          </span>
-        </p>
-        <p class="p_email">客服电话：400-660-5555</p>
-        <p class="p_email">客服邮箱：service4006@300.cn</p>
-      </div>
-      <!-- 产品公告 -->
-      <div class="p_r_item p_r_kefu">
-        <p class="p_title warn">
-          <span>
-            <img :src="require('@/assets/images/profile/icon_09.png')" alt />
-            产品动态
-          </span>
-          <el-link
-            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=shushangdongtai'"
-            target="_blank"
-            :underline="false"
-          >
-            <i class="icon_more"></i>
-          </el-link>
-        </p>
-        <p class="p_email no_data" v-if="productNews.length == 0">暂无产品动态</p>
-        <ul class="info_box" v-else>
-          <template v-for="(item, key) in productNews">
-            <li class="info_list" :key="key">
-              <p @click="onDetail(item.id)">{{item.title}}</p>
-              <span>{{item.publish_at | formatDate('MM/dd')}}</span>
-            </li>
-          </template>
-        </ul>
-      </div>
-      <div class="p_r_item p_r_more">
-        <p class="p_title warn">
-          <span>
-            <img :src="require('@/assets/images/profile/icon_04.png')" alt />
-            更多工具
-          </span>
-        </p>
-        <p class="title_h5">商户工作台H5</p>
-        <p class="link_h5">
-          <span ref="linkH5">{{protocol}}//omo.aiyouyi.cn/bh</span>
-          <img
-            :src="require('@/assets/images/profile/icon_05.png')"
-            alt
-            v-clipboard:copy="pageLink"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onError"
-          />
-        </p>
-        <img :src="qrCode" alt />
-        <p class="erweima">扫描二维码，随时随地做生意</p>
-      </div>
+
+      
     </div>
   </div>
 </template>
@@ -420,6 +465,15 @@ export default {
     }
     .p_l_main {
       margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      .dealt{
+        width:20%;
+      }
+      .helper{
+        width: 66%;
+        margin-left: 20px;
+      }
     }
     .p_l_bottom {
       margin-top: 15px;
@@ -451,6 +505,7 @@ export default {
       border-radius: 5px;
     }
     .p_r_top {
+      margin-top: 10px;
       .p_r_list {
         p {
           margin-top: 20px;
@@ -462,7 +517,7 @@ export default {
       }
     }
     .p_r_kefu {
-      margin: 15px 0px 10px 20px;
+      margin-top:10px;
       .p_email {
         font-size: 14px;
         color: #3d434aff;
@@ -471,6 +526,7 @@ export default {
       }
     }
     .p_r_more {
+      margin-top: 10px;
       .title_h5 {
         font-size: 14px;
         color: #3d434aff;
@@ -536,6 +592,30 @@ export default {
     color: #92929bff;
     margin-left: 10px;
     font-size: 12px;
+  }
+}
+
+.realTime_survey{
+  display: flex;
+  justify-content: space-between;
+  font-family:PingFangSC-Medium,PingFang SC;
+  .title{
+    .title1{
+      font-size:16px; 
+      font-weight:500;
+      color:rgba(22,22,23,1);
+    }
+    .title2{
+      font-size:12px;
+      font-weight:400;
+      color:rgba(146,146,155,1);
+    }
+  }
+  .look_info{
+    font-size:12px;
+    font-weight:400;
+    color:rgba(101,94,255,1);
+    cursor: pointer;
   }
 }
 
