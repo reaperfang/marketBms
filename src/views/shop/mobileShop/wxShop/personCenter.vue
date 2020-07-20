@@ -35,7 +35,8 @@ export default {
   components: {componentUserCenter, propertyUserCenter},
   data() {
     return {
-     ruleForm: null
+     ruleForm: null,
+     initRuleForm: null, //兼容老数据时、分销中心、重置时使用
     };
   },
   created() {
@@ -52,27 +53,32 @@ export default {
   methods: {
     fetch() {
       this.loading = true;
-      this._apis.shop.getUserCenterPage({}).then((response)=>{
+      //pageTag: 0 微店店铺
+      this._apis.shop.getUserCenterPage({pageTag: 0}).then((response)=>{
+        //response.pageData = null;
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('moduleList') < 0) {
           return;
         }
         let pageData = JSON.parse(string);
+        
         if(Object.prototype.toString.call(pageData) !== '[object Object]') {
           return;
         }
         if(pageData && pageData.avatarPosition) {
           // h5隐藏分销入口 pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1&&window.location.pathname=='/bp/shop/m_wxShopIndex'
-          if(pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1){
-            pageData.moduleList['commission'] = {
-              name: 'commission',
-              title: '分销中心',
-              titleValue: '分销中心',
-              icon: '',
-              defaultIcon: 'userCenter21',
-              color: '#000'
-            }
+          //如果不是数组，则是老数据，moduleList需要兼容最新数据格式
+          if(!Array.isArray(pageData.moduleList)){
+            this.initRuleForm = Object.assign({}, this.ruleForm);
+            pageData.moduleList = this.comparePageData(pageData.moduleList);
           }
+          console.log(pageData)
+          //如果之前保存的数据中没有分销中心，并且开启了分销中心，则注入分销中心初始化数据
+          if(pageData.moduleList.filter(item => item.title === '分销中心').length == 0 && this.shopInfo.isOpenResell===1){
+            this.initRuleForm = Object.assign({}, this.ruleForm);
+            pageData.moduleList.push(this.initRuleForm[this.initRuleForm.length - 1]);
+          }
+          
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
           this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];
@@ -82,6 +88,26 @@ export default {
         console.error(error);
         this.loading = false;
       });
+    },
+
+    comparePageData(moduleList) {
+      let arr = [];
+      Object.keys(moduleList).forEach((key) => {
+        if(key !== 'coupon' && key !== 'couponCode'){
+          const item = moduleList[key];
+          const defaultItem = this.initRuleForm.moduleList.filter((val) => val.title === item.title)[0];
+          delete item.name;
+          delete item.defaultIcon;
+          if(!item.icon){
+            item.icon = defaultItem.icon;
+          }
+          item.id = defaultItem.id;
+          item.linkTo = defaultItem.linkTo;
+          item.disabled = defaultItem.disabled;
+          arr.push(item);
+        }
+      })
+      return arr;
     },
 
     /* 表单数据发生改变 */
@@ -109,7 +135,7 @@ export default {
 
     /* 重置 */
     resetData() {
-      this._apis.shop.resetPersonalInfo({}).then((response)=>{
+      this._apis.shop.resetPersonalInfo({pageTag: 0}).then((response)=>{
         this.$message.success('重置成功！')
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('moduleList') < 0) {
@@ -120,15 +146,14 @@ export default {
           return;
         }
         if(pageData && pageData.avatarPosition) {
-          if(pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1){
-            pageData.moduleList['commission'] = {
-              name: 'commission',
-              title: '分销中心',
-              titleValue: '分销中心',
-              icon: '',
-              defaultIcon: 'userCenter21',
-              color: '#000'
-            }
+          //如果不是数组，则是老数据，moduleList需要兼容最新数据格式
+          if(!Array.isArray(pageData.moduleList)){
+            pageData.moduleList = this.comparePageData(pageData.moduleList);
+          }
+          //如果之前保存的数据中没有分销中心，并且开启了分销中心，则注入分销中心初始化数据
+          if(pageData.moduleList.filter(item => item.title === '分销中心').length == 0 && this.shopInfo.isOpenResell===1){
+            this.initRuleForm = Object.assign({}, this.ruleForm);
+            pageData.moduleList.push(this.initRuleForm[this.initRuleForm.length - 1]);
           }
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;

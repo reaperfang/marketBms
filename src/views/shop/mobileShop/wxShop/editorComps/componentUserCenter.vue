@@ -126,37 +126,17 @@
               <p class="name" :style="{color:data.moduleList.integralMarket.color}">{{data.moduleList.messageCenter.titleValue}}</p>
               <p class="more iconfont icon-tiaozhuan">{{infoNot==0?'没有新消息':infoNot}}</p>
             </li> -->
-            <!-- 会员等级id:会员id,levelId:会员等级id -->
-            <li>
-              <img :src="data.moduleList.memberRank.icon || require('../../../../../assets/images/shop/userCenter/userCenter13.png')" alt class="tb" />
-              <p class="name" :style="{color: data.moduleList.memberRank.color}">{{data.moduleList.memberRank.titleValue}}</p>
-              <p class="more iconfont icon-tiaozhuan">Lv5</p>
-            </li>
-            <!--赠品包  -->
-            <li>
-              <img  :src="data.moduleList.gift.icon || require('../../../../../assets/images/shop/userCenter/userCenter16.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.gift.color}">{{data.moduleList.gift.titleValue}}</p>
-              <p class="more iconfont icon-tiaozhuan">待领取5件</p>
-            </li>
-            <!-- 我的拼团 -->
-            <li>
-              <img :src="data.moduleList.myAssemble.icon || require('../../../../../assets/images/shop/userCenter/userCenter17.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.myAssemble.color}">{{data.moduleList.myAssemble.titleValue}}</p>
-              <p class="more iconfont icon-tiaozhuan">拼团中1个</p>
-            </li>
-            <!--收货地址  -->
-            <li>
-              <img :src="data.moduleList.address.icon || require('../../../../../assets/images/shop/userCenter/userCenter18.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.address.color}">{{data.moduleList.address.titleValue}}</p>
-              <p class="more iconfont icon-tiaozhuan"></p>
-            </li>
-            <!--分销中心  -->
-            <li v-if='isOpenResell===1'>
-              <img :src="data.moduleList.commission.icon || require('../../../../../assets/images/shop/userCenter/userCenter21.png')" alt="" class="tb">
-              <p class="name" :style="{color: data.moduleList.commission.color}">{{data.moduleList.commission.titleValue}}</p>
-              <p class="more iconfont icon-tiaozhuan"></p>
-            </li>
-          </ul>
+            <template v-for="(item, index) in data.moduleList">
+              <li v-show="item.disabled === 2">
+                <img :src="item.icon" alt class="tb" />
+                <p class="name" :style="{color: item.color}">{{item.titleValue}}</p>
+                <p class="more iconfont icon-tiaozhuan" v-if="item.title === '会员等级'">Lv5</p>
+                <p class="more iconfont icon-tiaozhuan" v-else-if="item.title === '赠品包'">待领取5件</p>
+                <p class="more iconfont icon-tiaozhuan" v-else-if="item.title === '我的拼团'">拼团中1个</p>
+                <p class="more iconfont icon-tiaozhuan" v-else></p>
+              </li>
+            </template>
+           </ul>
         </div>
       </div>
     </div>
