@@ -4,9 +4,9 @@
     <div class="container">
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
-        <!-- <div class="checkbox-box">
-          <i class="checkbox"></i>商品清单
-        </div> -->
+        <div class="checkbox-box">
+          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked}"></i>商品清单
+        </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
             <span>商品清单</span>
@@ -53,7 +53,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
+                  <div class="col send-count" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
                     <el-input
                       type="number"
@@ -195,7 +195,8 @@ export default {
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
-      distributorSet: false
+      distributorSet: false,
+      allchecked: true
     };
   },
   created() {
@@ -229,6 +230,20 @@ export default {
     }
   },
   methods: {
+    allcheckHandler() {
+      this.allchecked = !this.allchecked
+
+      let _list = JSON.parse(JSON.stringify(this.list))
+
+      _list.forEach(val => {
+        val.checked = this.allchecked;
+        val.orderItemList.forEach(goods => {
+          goods.checked = this.allchecked;
+        });
+      });
+
+      this.list = _list
+    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -916,11 +931,11 @@ export default {
           res.forEach(val => {
             val.express = true
             val.other = "";
-            val.checked = false;
+            val.checked = true;
             val.expressNos = "";
             val.expressCompanyCodes = "";
             val.orderItemList.forEach(goods => {
-              goods.checked = false;
+              goods.checked = true;
               goods.cacheSendCount = +goods.sendCount
               goods.sendCount = goods.goodsCount - goods.cacheSendCount;
               goods.showError = false
@@ -1013,7 +1028,7 @@ export default {
         }
       }
       .goods-item {
-        margin-top: 20px;
+        margin-top: 15px;
         border-radius: 10px;
         border: 1px solid rgba(211, 211, 211, 1);
         .item-title {
@@ -1024,7 +1039,7 @@ export default {
         .item-content {
           padding: 20px;
           .row-margin > .col {
-            margin-right: 25px;
+            margin-right: 15px;
             p {
               line-height: 21px;
             }
@@ -1035,13 +1050,13 @@ export default {
   }
 
   .table-title {
-    background: #ebeafa;
-    color: #655eff;
+    background: #F6F7FA;
+    color: #44434B;
     height: 46px;
-    padding-left: 15px;
+    padding-left: 20px;
   }
   .table-container {
-    padding-left: 15px;
+    padding-left: 20px;
     padding-top: 20px;
     .col:first-child {
       margin-right: 40px;
@@ -1168,5 +1183,16 @@ export default {
   height: 20px;
   background: url(../../assets/images/order/checkbox-checked.png)
     no-repeat;
+}
+.checkbox-box {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  .checkbox {
+    margin-right: 15px;
+  }
+}
+.send-count {
+  text-align: center;
 }
 </style>
