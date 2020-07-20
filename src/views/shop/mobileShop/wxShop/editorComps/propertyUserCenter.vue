@@ -48,26 +48,43 @@
           </el-form-item>
         </div>
 
-        <div class="block form">
-          <template v-for="(item, key) in ruleForm.moduleList">
-            <!-- v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"/  h5隐藏分销入口 -->
-            <el-form-item
-               v-if=" item.name =='commission'?isOpenResell==1:(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
-              :key="key"
-              :label="item.title"
-              :prop="'moduleList.'+ key +'.titleValue'"
-              :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]">
-              <div class="module_block color_block">
-                  <el-input v-model="item.titleValue"></el-input>
-                  <div class="img_preview">
-                    <img :src="item.icon || require('@/assets/images/shop/userCenter/' + item.defaultIcon + '.png')" alt="" title="点击更换">
-                    <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
+        <div class="block form custom">
+          <div>
+            <span class="add-btn">添加自定义</span>
+          </div>
+          <!-- v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"/  h5隐藏分销入口 -->
+          <ul class="custom-list">
+            <li v-for="(item, key) in ruleForm.moduleList" :key="key">
+              <div class="clearfix">
+                <el-checkbox v-model="item.disabled"></el-checkbox>
+                <el-form-item
+                  class="custom-form"
+                   v-if=" item.name =='commission'?isOpenResell==1:(item.name !== 'integralMarket' && item.name !== 'messageCenter')"
+                  :key="key"
+                  :label="item.title"
+                  label-width="72px"
+                  :prop="'moduleList.'+ key +'.titleValue'"
+                  :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]">
+                  <div class="module_block color_block">
+                      <el-input v-model="item.titleValue"></el-input>
+                      <div class="img_preview">
+                        <img :src="item.icon" alt="" title="点击更换">
+                        <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
+                      </div>
+                      <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
+                      <div class="custom-do">
+                        <div class="custom-center">
+                          <span class="icon top"></span>
+                          <span class="icon bottom"></span>
+                        </div>
+                      </div>
+                      <!-- <el-button type="text">重置</el-button> -->
                   </div>
-                  <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
-                  <!-- <el-button type="text">重置</el-button> -->
+                </el-form-item>
               </div>
-            </el-form-item>
-          </template>
+              <div></div>
+            </li>
+          </ul>
         </div>  
 
         <div class="block button">
@@ -137,28 +154,15 @@ export default {
           //   color: '#000'
           // },
           memberRank: {
-            name: 'memberRank',
             title: '会员等级',
             titleValue: '会员等级',
-            icon: '',
-            defaultIcon: 'userCenter13',
-            color: '#000'
-          },
-          coupon: {
-            name: 'coupon',
-            title: '优惠券',
-            titleValue: '优惠券',
-            icon: '',
-            defaultIcon: 'userCenter14',
-            color: '#000'
-          },
-          couponCode: {
-            name: 'couponCode',
-            title: '优惠码',
-            titleValue: '优惠码',
-            icon: '',
-            defaultIcon: 'userCenter15',
-            color: '#000'
+            icon: 'data:image/png;base64,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',
+            color: '#000',
+            disabled: 2,
+            linkTo: {
+              pageType: 'memberRank',
+              id: 8
+            }
           },
           gift: {
             name: 'gift',
@@ -320,6 +324,90 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .custom {
+    padding: 10px 15px 20px 15px !important;
+    .add-btn {
+      line-height: 20px;
+      color: #655EFF;
+      cursor: pointer;
+    }
+    .custom-list {
+      li {
+        .el-checkbox {
+          float: left;
+        }
+        /deep/ .el-checkbox__input {
+          padding-top: 9px;
+        }
+        .custom-form{
+          float: left;
+          margin-bottom: 18px !important;
+          .module_block {
+            margin-bottom: 0;
+          }
+          /deep/ .el-form-item__label {
+            padding: 0 10px 0 0;
+          }
+          /deep/ .el-form-item__label::before {
+            display: none;
+          }
+          .el-input {
+            width: 100px !important;
+          }
+          /deep/ .el-input__inner {
+            height: 34px;
+            line-height: 34px;
+          }
+          .img_preview {
+            width: 34px !important;
+            height: 34px !important;
+          }
+          .m-colorPicker {
+            padding: 4px;
+            margin-right: 5px;
+            border:1px solid rgba(204,204,204,1);
+            border-radius: 1px;
+          }
+          /deep/ .colorBtn{
+            width: 24px !important;
+            height: 24px !important;
+            margin: 0;
+          }
+          .custom-do {
+            display: flex;
+            width: 34px;
+            justify-content: center;
+            align-items: center;
+            .custom-center {
+              display: inline-block;
+              width: 20px;
+            }
+            .icon {
+              display: block;
+              width: 20px;
+              height: 13px;
+              background-repeat: no-repeat;
+              background-position: center center;
+              background-size: 14px 9px;
+              cursor: pointer;
+            }
+            .top {
+              background-image: url(~@/assets/images/common/icon-caret-top.png);
+            }
+            .bottom {
+              background-image: url(~@/assets/images/common/icon-caret-bottom.png);
+            }
+            .top:hover {
+              background-image: url(~@/assets/images/common/icon-caret-top-press.png);
+            }
+            .bottom:hover {
+              background-image: url(~@/assets/images/common/icon-caret-bottom-press.png);
+            }
+          }
+        }
+      }
+    }
+  }
   .module_block{
     display:flex;
     flex-direction: row;

@@ -281,7 +281,7 @@ export default {
 }
 .add-goods-group {
   width: 116px;
-  padding: 5px 10px;
+  padding: 0 10px;
   i {
     margin-right: 2px;
   }
