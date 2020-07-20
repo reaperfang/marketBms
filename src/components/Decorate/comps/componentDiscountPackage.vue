@@ -4,7 +4,7 @@
         <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data">
             <template v-if="hasRealData || hasFakeData">
                  <ul v-if="hasRealData">
-                    <li v-for="(item,key) of displayList" :key="key" v-if="!(item.status==2&&currentComponentData.data.hideSaledGoods==true|| utils.dateDifference(item.endTime)<1&&currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&currentComponentData.data.hideSaledGoods==true)" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                    <li v-for="(item,key) of displayList" :key="key" v-if="item.show" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <div class="label">已售{{item.participateActivityNum}}套</div>
                             <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -99,6 +99,13 @@ export default {
                 }
             },
             deep: true
+        },
+        'currentComponentData.data.hideSaledGoods': {
+            handler(newValue) {
+                const result = this.checkHideStatus(this.displayList);
+                this.displayList = result;
+            },
+            deep: true
         }
     },
     methods:{
@@ -173,12 +180,14 @@ export default {
 
         /* 创建数据 */
         createList(datas) {
-            this.displayList = datas;
+            const result = this.checkHideStatus(datas);
+            this.displayList = result;
         },
 
         /* 检查真数据 */
         checkRealData(newValue) {
-            this.hasRealData = !!newValue.length;
+            const showList = newValue.filter((item)=>{return !!item.show})
+            this.hasRealData = !!newValue.length && !!showList.length;
             this.upadteComponentData();
         },
 
@@ -192,6 +201,19 @@ export default {
                 }
             }
             this.upadteComponentData();
+        },
+
+        /* 检查隐藏状态 */
+        checkHideStatus(datas) {
+            let templateDatas = JSON.parse(JSON.stringify([...datas]));
+            for(let item of templateDatas) {
+                if(!(item.status==2&&this.currentComponentData.data.hideSaledGoods==true|| this.utils.dateDifference(item.endTime)<1&&this.currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&this.currentComponentData.data.hideSaledGoods==true)) {
+                    item['show'] = true;
+                }else {
+                    item['show'] = false;
+                }
+            }
+            return templateDatas;
         }
 
     }
