@@ -40,7 +40,8 @@
                     </div>
                     <el-table
                         :data="itemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
@@ -58,8 +59,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
@@ -109,7 +109,8 @@
                 <div v-if="showContent" class="content">
                     <el-table
                         :data="sendItemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
@@ -127,8 +128,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="sendCount"
@@ -175,7 +175,8 @@
                 <div v-if="showCustomerContent" class="content">
                     <el-table
                         :data="itemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
@@ -193,8 +194,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
@@ -242,7 +242,8 @@
                 <div v-if="showContent" class="content">
                     <el-table
                         :data="sendItemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
@@ -260,8 +261,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="sendCount"
@@ -487,7 +487,8 @@ export default {
                 }
                 .header {
                     height: 50px;
-                    background-color: rgb(243, 244, 244);
+                    background-color: #F6F7FA;
+                    color: #44434B;
                     border-radius: 10px 10px 0 0;
                     padding: 0 20px;
                     line-height: 50px;
@@ -556,6 +557,12 @@ export default {
     }
     .goods-specs {
         color: #9FA29F;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+        }
     }
 </style>
 
