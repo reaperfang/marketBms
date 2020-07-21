@@ -164,7 +164,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="130">
+                <el-table-column label="操作" width="130" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>

@@ -98,7 +98,7 @@ export default {
         let params = {
           id: this.data.id,
           currentScore: this.data.score,
-          adjustmentScore: this.adjustmentScore,
+          adjustmentScore: this.adjustScore == "1" ?　Number(this.adjustmentScore):Number(-this.adjustmentScore),
           adjustmentAfterScore: this.adjustmentAfterScore,
           remark: this.remark
         };
