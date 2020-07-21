@@ -126,7 +126,7 @@
                     prop="updateTime"
                     label="最新发货时间">
                 </el-table-column>
-                <el-table-column label="操作" width="100px">
+                <el-table-column label="操作" width="100px" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
@@ -352,6 +352,9 @@ export default {
         .el-button+.el-button {
             margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .after-sales {

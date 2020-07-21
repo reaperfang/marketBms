@@ -150,7 +150,7 @@
         <el-table
           :data="recordList"
           style="width: 100%"
-          :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+          :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         >
           <el-table-column prop="type" label="操作">
             <template slot-scope="scope">
@@ -582,6 +582,12 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+    }
+    /deep/ .el-table tr th {
+        border-bottom: none;
     }
 </style>
 <style lang="scss">

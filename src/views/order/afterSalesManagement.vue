@@ -67,33 +67,29 @@
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
                     width="55">
                 </el-table-column>
                 <el-table-column
                     prop="code"
-                    label="售后单编号"
-                    width="120">
+                    label="售后单编号">
                 </el-table-column>
                 <el-table-column
                     prop="type"
-                    label="售后类型"
-                    width="120">
+                    label="售后类型">
                     <template slot-scope="scope">
                         <span>{{scope.row.type | typeFilter}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="orderCode"
-                    label="订单编号"
-                    width="120">
+                    label="订单编号">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
-                    label="用户昵称"
-                    width="120">
+                    label="用户昵称">
                 </el-table-column>
                 <el-table-column
                     prop="orderAfterSaleStatus"
@@ -106,15 +102,17 @@
                     prop="createTime"
                     label="申请时间">
                 </el-table-column>
-                <el-table-column label="操作" width="220">
+                <el-table-column label="操作" width="220" fixed="right">
                     <template slot-scope="scope">
-                        <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 && scope.row.deliveryWay == 1">查看物流</span>
-                        <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.exchangeConfirmation ==1  &&  (scope.row.isSellerReceived == 0)">确认收货</span><!-- scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 -->
-                        <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
-                        <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
+                        <div class="operate-box">
+                            <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 && scope.row.deliveryWay == 1">查看物流</span>
+                            <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.exchangeConfirmation ==1  &&  (scope.row.isSellerReceived == 0)">确认收货</span><!-- scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 -->
+                            <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
+                            <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -464,10 +462,13 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .after-sales {
@@ -529,6 +530,39 @@ export default {
 }
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table tr th {
+    border-bottom: none;
+}
+.operate-box {
+    text-align: left;
+    span {
+        border-right: 1px solid rgba(218,218,227,1);
+        padding-right: 5px;
+        &:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+    }
+}
+/deep/ .el-table-column--selection .cell {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+.border-button {
+    border:1px solid rgba(218,218,227,1)!important;
+    color: #44434B!important;
+    &:hover {
+        border:1px solid #655EFF!important;
+        color: #655EFF!important;
+        background-color: #fff;
+    }
 }
 </style>
 
