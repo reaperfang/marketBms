@@ -496,6 +496,16 @@ export function commisionGoodsDetails(data) {
     token
   })
 }
+// 查看-分销店铺（默认）设置详情
+export function commisionSetDetail(data) {
+  return request({
+    apiType: 'commission',
+    method: 'post',
+    target: 'COMMISSION-SHOP-CONFIG-DETAIL-PROCESSOR',
+    data,
+    token
+  })
+}
 
 
 

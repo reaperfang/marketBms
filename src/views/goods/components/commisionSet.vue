@@ -215,7 +215,8 @@ export default {
         percentOfCommissionTwo: "",
         percentOfCommissionThree: "",
         percentOfCommodityProfit: ""
-      }
+      },
+      resellConfigInfo:""
     };
   },
   watch: {
@@ -265,13 +266,7 @@ export default {
         }
       },
       deep: true
-    },
-    detail: {
-      handler(value, oldVal) {
-      console.log(value,'fsdfsdfsafda')
-      },
-      deep: true
-    },
+    }
   },
   components: { dialogSelectImageMaterial },
   methods: {
@@ -284,7 +279,6 @@ export default {
      *
      */
     goodDetails() {
-      console.log(this.detail.id, "是发送到发送到发防守打法");
       this._apis.goods
         .commisionGoodsDetails({ productInfoId: this.detail.id })
         .then(res => {
@@ -328,6 +322,19 @@ export default {
               this.resellRule = resellRule;
             }
           }
+        })
+        .catch(error => {
+          this.$message({ message: error, type: "warning" });
+        });
+    },
+    /**
+     * 查看-分销店铺（默认）设置详情 commisionSetDetail
+     */
+    goodsSetDetail(){
+      this._apis.goods
+        .commisionSetDetail()
+        .then(res => {
+          this.resellConfigInfo=JSON.parse(res.resellConfigInfo);
         })
         .catch(error => {
           this.$message({ message: error, type: "warning" });
@@ -543,11 +550,11 @@ export default {
   created() {
     if(this.detail.id){
       this.goodDetails();
+      this.goodsSetDetail();
     }
 
     // 商品详情
     let detail = this.detail;
-    // console.log("商品详情detail", detail);
     // if (detail.isAloneResellRule == 1) {
     //   // 是否独立分销商品
     //   // this.enable = true;
@@ -616,12 +623,6 @@ export default {
         return {
           goodsInfos: []
         };
-      }
-    },
-    resellConfigInfo: {
-      type: Object,
-      default: function() {
-        return {};
       }
     }
   }
