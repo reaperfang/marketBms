@@ -57,17 +57,19 @@
             <template v-for="(item, index) in ruleForm.moduleList">
               <li :key="index" v-if="item.title.includes('分销中心') ? isOpenResell==1 : (item.title !== '积分商城' && item.title !== '消息中心')">
                 <div class="clearfix">
-                  <el-checkbox @change="disabledChange(index)" v-if="!item.title.includes('自定义')" v-model="item.disabled" :true-label="2" :false-label="1"></el-checkbox>
+                  <el-checkbox @change="disabledChange(item.disabled, index)" v-if="!item.title.includes('自定义')" v-model="item.disabled" :true-label="2" :false-label="1"></el-checkbox>
                   <i v-else class="el-icon-delete" @click="deleteCustom(item, index)"></i>
                   <el-form-item
+                    :ref="'customFormItem'+index"
                     class="custom-form"
                     :key="index"
                     :label="item.title"
                     label-width="72px"
                     :prop="'moduleList['+ index +'].titleValue'"
                     :rules="item.disabled === 2 ? [{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }] : []">
-                    <div class="module_block color_block">
-                        <el-input v-model="item.titleValue" placeholder="请输入"></el-input>
+                    <div class="module_block color_block" style="position:relative;">
+                        <div class="custom-disabled" v-show="item.disabled === 1"></div>
+                        <el-input :disabled="item.disabled === 1" v-model="item.titleValue" placeholder="请输入"></el-input>
                         <div class="img_preview">
                           <img :src="item.icon" alt="" title="点击更换">
                           <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
@@ -151,7 +153,6 @@ export default {
       currentModule: null,
       currentNav: null,  //当前操作的自定义菜单栏
       pathname:window.location.pathname,
-      initRuleForm: null, //复制一份ruleForm初始化内容，永远不会改变，以备需要用到相关初始化数据时使用
       ruleForm: {
         backgroundImage: '',  //背景图
         backgroundGradients: 1,  //背景渐变
@@ -266,8 +267,6 @@ export default {
     
   },
   created() {
-    this.initRuleForm = this.utils.deepClone(this.ruleForm);
-
     const _self = this;
 
     /* 监听接口操作结束事件，用来响应loading  保存按钮*/
@@ -297,13 +296,14 @@ export default {
       }
   },
   methods: {
-    disabledChange(index) {
-      console.log(index)
-      this.$nextTick(() => {
-        this.$refs['ruleForm'].validate();
-        this.$refs['form'].fields[index].validateMessage = 'error message'
-        this.$refs['form'].fields[index].validateState = 'error'
-      })
+    disabledChange(disabled, index) {
+      if(disabled === 2){ //选中时触发验证
+        this.$nextTick(() => {
+          this.$refs['ruleForm'].validate();
+        })
+      }else{ //不选中时清除当前的错误
+        this.$refs['customFormItem'+index][0].clearValidate();
+      }
     },
 
     //添加自定义栏
@@ -396,7 +396,6 @@ export default {
           if(linkToMark){ //如果存在自定义且其未选择跳转链接，则不可保存
             return;
           }
-          return;
           self.saveDataLoading = true;
           self.save();
         } else {
@@ -540,6 +539,16 @@ export default {
             .bottom:hover {
               background-image: url(~@/assets/images/common/icon-caret-bottom-press.png);
             }
+          }
+          .custom-disabled {
+            z-index: 10;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: not-allowed;
+            filter: grayscale(90%);
           }
         }
       }

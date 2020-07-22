@@ -120,23 +120,39 @@ export default {
       }
     },
 
+    //处理未勾选的固定菜单数据moduleList恢复初始化状态
+    initDisabledData() {
+      const data = utils.deepClone(this.ruleForm);
+      data.moduleList.forEach((item) => {
+        if(item.disabled === 1){
+          const defaultItem = this.initRuleForm.moduleList.filter((val) => val.title === item.title)[0];
+          item.titleValue = defaultItem.titleValue;
+          item.icon = defaultItem.icon;
+          item.color = defaultItem.color;
+        }
+      })
+      return data;
+    },
+
     /* 保存并生效 */
     saveAndApply() {
+      const data = this.initDisabledData();
       this.submit({
         status: '0',
         pageKey: '',
         pageTag: 0,
-        pageData: utils.compileStr(JSON.stringify(this.ruleForm))
+        pageData: utils.compileStr(JSON.stringify(data))
       }, 'saveAndApply');
     },
 
     /* 保存 */
     save() {
-       this.submit({
+      const data = this.initDisabledData();
+      this.submit({
         status: '1',
         pageKey: '',
         pageTag: 0,
-        pageData: utils.compileStr(JSON.stringify(this.ruleForm))
+        pageData: utils.compileStr(JSON.stringify(data))
       });
     },
 

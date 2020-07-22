@@ -48,17 +48,39 @@
           </div>
         </div>
       </div>
-      <div class="p_l_item p_l_main">
-        <div class="dealt">
-           <p class="p_title warn">
-            <span>
-              <!-- <img :src="require('@/assets/images/profile/icon_01.png')" alt /> -->
-              帮助中心
-            </span>
-            <i class="el-icon-refresh" @click="refresh"></i>
-          </p>
-          <div class="p_r_list">
-            <p>
+      <div class="p_l_main">
+        <div class="p_l_item dealt">
+          <p class="title1">待办提醒：</p>
+          <div class="dealt_list">
+            <div class="dealt_list_l">
+              <p>
+                <span class="name">待发货订单</span>
+                <router-link to="/order/deliveryManagement?status=3">
+                  <span class="num">{{staySendCount || 0}}</span>
+                </router-link>
+              </p>
+              <p>
+                <span class="name">商品售罄</span>
+                <router-link to="/goods/goodsList?status=-1">
+                  <span class="num">{{toBeSoldOut || 0}}</span>
+                </router-link>
+              </p>
+            </div>
+            <div class="dealt_list_r">
+              <p>
+                <span class="name">维权待审核</span>
+                <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+                  <span class="num">{{stayAuthCount || 0}}</span>
+                </router-link>
+              </p>
+              <p>
+                <span class="name">维权中订单</span>
+                <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                  <span class="num">{{stayProcessedCount || 0}}</span>
+                </router-link>
+              </p>
+            </div>
+            <!-- <p>
               商品售罄
               <router-link to="/goods/goodsList?status=-1">
                 <span>({{toBeSoldOut || 0}})</span>
@@ -81,10 +103,10 @@
               <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
                 <span>({{stayAuthCount || 0}})</span>
               </router-link>
-            </p>
+            </p> -->
           </div>
         </div>
-        <div class="helper">
+        <div class="p_l_item helper">
           <p class="p_title">
             智能助手：
             <span>
@@ -136,7 +158,7 @@
     <div class="p_r">
        <!-- 客服中心 -->
       <div class="p_r_item p_r_kefu">
-        <p class="p_title warn">
+        <p class="p_title">
           <span>
             <img :src="require('@/assets/images/profile/icon_02.png')" alt />
             客服中心
@@ -147,7 +169,7 @@
       </div>
       <!-- 客户工作台 -->
       <div class="p_r_item p_r_more">
-        <p class="p_title warn">
+        <p class="p_title">
           <span>
             <img :src="require('@/assets/images/profile/icon_04.png')" alt />
             更多工具
@@ -420,6 +442,11 @@ export default {
 <style lang="scss" scoped>
 .p_container {
   display: flex;
+  .title1{
+    font-size:16px; 
+    font-weight:500;
+    color:rgba(22,22,23,1);
+  }
   .p_l {
     flex: 1;
     .p_l_item {
@@ -436,11 +463,21 @@ export default {
           float: left;
           border-right: 1px solid #f2f2f9ff;
           padding-left: 20px;
+          div:nth-of-type(2) {
+            font-size: 18px;
+            color: #655effff;
+            font-weight: bold;
+          }
         }
         .p_p_r {
           width: 45%;
           float: left;
           padding-left: 75px;
+          div:nth-of-type(2) {
+            font-size: 18px;
+            color:#161617;
+            font-weight: bold;
+          }
         }
         span {
           margin-top: 20px;
@@ -450,15 +487,10 @@ export default {
           font-family: PingFangSC-Regular, PingFang SC;
           div:nth-of-type(1) {
             font-size: 12px;
-            color: #333330ff;
+            color: #92929B;
             height: 40px;
             line-height: 40px;
             font-weight: 400;
-          }
-          div:nth-of-type(2) {
-            font-size: 18px;
-            color: #655effff;
-            font-weight: bold;
           }
         }
       }
@@ -466,12 +498,63 @@ export default {
     .p_l_main {
       margin-top: 15px;
       display: flex;
-      justify-content: space-between;
       .dealt{
-        width:20%;
+        width: 246px;
+        .dealt_list{
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+          p{
+            padding:15px;
+            span{
+              display: block;
+            }
+            .name{
+              font-size: 12px;
+              color: #161617;
+            }
+            .num{
+              font-size: 24px;
+              color: #161617;
+              line-height: 40px;
+              height: 40px;
+              display: block;
+            }
+          }
+          .dealt_list_l{  
+            p:nth-of-type(1){
+              width: 94px;
+              height: 110px;
+              background:#FEEDE9;
+              border-radius:8px;
+            }
+            p:nth-of-type(2){
+              width:94px;
+              height:78px;
+              background:#E8FAF5;
+              border-radius:8px;
+              margin-top:10px;
+            }
+          }
+          .dealt_list_r{
+            p:nth-of-type(1){
+              width: 94px;
+              height: 78px;
+              background:rgba(101,94,255,.1);
+              border-radius:8px;
+            }
+            p:nth-of-type(2){
+              width:94px;
+              height:110px;
+              background:#FEEDE9;
+              border-radius:8px;
+              margin-top: 10px;
+            }
+          }
+        }
       }
       .helper{
-        width: 66%;
+        flex: 1;
         margin-left: 20px;
       }
     }
@@ -495,7 +578,7 @@ export default {
   }
 
   .p_r {
-    width: 300px;
+    width: 260px;
     .p_r_item {
       background-color: #fff;
       padding: 24px 21px;
@@ -600,11 +683,6 @@ export default {
   justify-content: space-between;
   font-family:PingFangSC-Medium,PingFang SC;
   .title{
-    .title1{
-      font-size:16px; 
-      font-weight:500;
-      color:rgba(22,22,23,1);
-    }
     .title2{
       font-size:12px;
       font-weight:400;

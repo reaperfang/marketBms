@@ -158,10 +158,13 @@ export default {
                     this.imgUrl = response.imgUrl;
                     this.imgId = response.id;
                     if(!this.imgUrl) {
+                        let _this = this;
                         setTimeout(() => {
-                            this.imgLoading = false;
+                            _this.imgLoading = false;
                         },5000);
                     }
+                }else{
+                    this.imgLoading = false;
                 }
             }).catch((error) => {
                 this.imgLoading = false;
