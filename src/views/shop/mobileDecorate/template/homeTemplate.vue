@@ -475,14 +475,15 @@
       // 有效行业列表
       effIndustryList() {
         this._apis.industry.effIndustryList({}).then((response) => {
-          this.industries = response
-          let that = this
+          if(!response) return;
+          this.industries = response; // 当后台返回response:null的时候，会报错typeError,length of null
+          let that = this;
           this.$nextTick(function () {
             let height = document.getElementsByClassName('template_wrapper-head-industries-items')[0].scrollHeight
             if (height > 50) {
-              this.showAllBtn = true
+              that.showAllBtn = true
             } else {
-              this.showAllBtn = false
+              that.showAllBtn = false
             }
           })
         }).catch((error) => {

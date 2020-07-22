@@ -903,7 +903,7 @@ export default {
                     }
                 }
             }
-            &:nth-of-type(3n+2){
+            &:nth-of-type(3n+2),&:nth-of-type(3n+3){
                 margin-top:15px;
                 width:170px;
                 overflow:hidden;
@@ -915,7 +915,7 @@ export default {
                 }
                 .text{
                     overflow:hidden;
-                    padding:10px;
+                    padding:10px 10px 15px 10px;
                     position:relative;
                     .title{
                         font-size:13px;
@@ -931,7 +931,7 @@ export default {
                         @extend .ellipsis;
                     }
                     .priceLine{
-                        margin-top:12.5px;
+                        margin-top:13.5px;
                         overflow:hidden;
                         .price{
                             float:left;
@@ -944,52 +944,7 @@ export default {
                     }
                     .button{
                         right:10px;
-                        bottom:10px;
-                    }
-                }
-            }
-            &:nth-of-type(3n+3){
-                margin-top:15px;
-                width:170px;
-                overflow:hidden;
-                .img{
-                    position:relative;
-                    overflow:hidden;
-                    padding-bottom:100%;
-                    height:0;
-                }
-                .text{
-                    overflow:hidden;
-                    padding:10px;
-                    position:relative;
-                    .title{
-                        font-size:13px;
-                        line-height:16px;
-                        height:15px;
-                        @include lineClamp(1);
-                    }
-                    .fTitle{
-                        font-size:12px;
-                        line-height:15px;
-                        height:15px;
-                        margin-top:5px;
-                        @extend .ellipsis;
-                    }
-                    .priceLine{
-                        margin-top:12.5px;
-                        overflow:hidden;
-                        .price{
-                            float:left;
-                            font-size:11px;
-                            margin-right:12.5px;
-                            font{
-                                font-size:16px;
-                            }
-                        }
-                    }
-                    .button{
-                        right:10px;
-                        bottom:10px;
+                        bottom:15px;
                     }
                 }
             }
