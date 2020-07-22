@@ -1,6 +1,6 @@
 <template>
   <div class="new-template">
-    <h2 class="">新建模版</h2>
+    <h2 class="">{{ setTitle }}</h2>
     <section>
       <div class="title">基础信息设置：</div>
       <div class="content">
@@ -50,7 +50,7 @@
             >
               <el-table-column prop="areaInfoList" label="配送到" width="150">
                 <template slot-scope="scope">
-                  <span>{{scope.row.areaInfoList.map(val => val.cityName).join(',') || '默认运费（全国）'}}</span>
+                  <span>{{scope.row.areaInfoList.map(val => val.name).join(',') || '默认运费（全国）'}}</span>
                 </template>
               </el-table-column>
               <el-table-column :label="one" width="250" align="center">
@@ -182,6 +182,10 @@ export default {
     }
   },
   computed: {
+    setTitle() {
+      const id = this.$router.query && this.$router.query.id
+      return !id ? '新建模版' : '编辑模版'
+    },
     one() {
       if(this.ruleForm.calculationWay == 1) {
         return '首件'
@@ -388,14 +392,16 @@ export default {
     },
     onSubmit(value) {
       console.log(value);
+      const areaInfoList = value
       this.tableData = [
         ...this.tableData,
         {
-          areaInfoList: value.map(val => ({
-            receivedProvinceCode: val.code,
-            receivedCityCode: val.city.code,
-            cityName: val.city.name
-          })),
+          // areaInfoList: value.map(val => ({
+          //   receivedProvinceCode: val.code,
+          //   receivedCityCode: val.city.code,
+          //   cityName: val.city.name
+          // })),
+          areaInfoList,
           theFirst: "",
           freight: "",
           superaddition: "",
@@ -432,15 +438,24 @@ export default {
               areaInfoList.forEach(areaInfo => {
                 let receivedProvinceCode = areaInfo.receivedProvinceCode
                 let receivedCityCode = areaInfo.receivedCityCode
-                let cityName = ''
+                let receivedAreaCode = areaInfo.receivedAreaCode
+                let name = ''
 
-                if(receivedProvinceCode == '' && receivedCityCode == '') {
-                  cityName = '默认运费（全国）'
+                if(receivedProvinceCode == '' && receivedCityCode == '' && receivedAreaCode == '') {
+                  name = '默认运费（全国）'
                 } else {
-                  cityName = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                  console.log('areaList',areaList)
+                  if (receivedAreaCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).areas.find(area => area.code === receivedAreaCode).name
+                  } else if (receivedCityCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                  } else if (receivedProvinceCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).name
+                  }
+                  
                 }
 
-                areaInfo.cityName = cityName
+                areaInfo.name = name
               })
             })
             this.tableData = templateContents;
@@ -484,7 +499,7 @@ export default {
     }
     &.regional-setting {
       // margin-top: 20px;
-      padding: 30px 20px 0 0;
+      padding: 30px 20px 20px 0;
       margin: 0 20px;
       border-top: 1px dashed rgba(211, 211, 211, 1);
       .table {
