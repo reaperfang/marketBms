@@ -20,7 +20,7 @@
       :disabled='disable'
       :move='onMoveHandler'>
         <template v-for="(item, key) of componentDataIds">
-          <div>
+          <div :key="key">
             <el-popover
             ref="popover"
             :popper-class="'editor-view-popover active'"
