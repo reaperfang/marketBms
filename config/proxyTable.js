@@ -29,7 +29,7 @@ module.exports = {
       }
     },
     '/zx_server/**': {
-      target: 'https://test-cms-api.300.cn',
+      target: 'https://pre-cms-api.300.cn',
       changeOrigin: true,
       pathRewrite: {
         '^/zx_server': ''
