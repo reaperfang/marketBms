@@ -863,14 +863,14 @@ export default {
                     }
                     .button{
                         height:24px;
-                        position:absolute;
+                        // position:absolute;
                         right:10px;
                         bottom:12.5px;
                     }
                     .activity_end{
                         right:10px;
                         bottom:17.5px;
-                        line-height:1;
+                        line-height:24px;
                         font-size:15px;
                     }
                 }
