@@ -127,7 +127,7 @@
               <p class="more iconfont icon-tiaozhuan">{{infoNot==0?'没有新消息':infoNot}}</p>
             </li> -->
             <template v-for="(item, index) in data.moduleList">
-              <li v-show="item.disabled === 2">
+              <li :key="index" v-if="item.title.includes('分销中心') ? isOpenResell==1 : (item.title !== '积分商城' && item.title !== '消息中心')" v-show="item.disabled === 2">
                 <img :src="item.icon" alt class="tb" />
                 <p class="name" :style="{color: item.color}">{{item.titleValue}}</p>
                 <p class="more iconfont icon-tiaozhuan" v-if="item.title === '会员等级'">Lv5</p>

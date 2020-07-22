@@ -69,16 +69,18 @@ export default {
           // h5隐藏分销入口 pageData.moduleList.commission==undefined&&this.shopInfo.isOpenResell===1&&window.location.pathname=='/bp/shop/m_wxShopIndex'
           //如果不是数组，则是老数据，moduleList需要兼容最新数据格式
           if(!Array.isArray(pageData.moduleList)){
-            this.initRuleForm = Object.assign({}, this.ruleForm);
             pageData.moduleList = this.comparePageData(pageData.moduleList);
           }
-          console.log(pageData)
           //如果之前保存的数据中没有分销中心，并且开启了分销中心，则注入分销中心初始化数据
           if(pageData.moduleList.filter(item => item.title === '分销中心').length == 0 && this.shopInfo.isOpenResell===1){
-            this.initRuleForm = Object.assign({}, this.ruleForm);
-            pageData.moduleList.push(this.initRuleForm[this.initRuleForm.length - 1]);
+            const obj = utils.deepClone(this.initRuleForm.moduleList[this.initRuleForm.moduleList.length - 1]);
+            pageData.moduleList.push(obj);
           }
-          
+          //如果之前保存的数据中有分销中心，但是分销中心已失效，则需要清除分销中心
+          if(pageData.moduleList.filter(item => item.title === '分销中心').length == 1 && this.shopInfo.isOpenResell!==1){
+            pageData.moduleList = pageData.moduleList.filter(item => item.title !== '分销中心');
+          }
+
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
           this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];
@@ -113,23 +115,44 @@ export default {
     /* 表单数据发生改变 */
     emitChangeRuleForm(value) {
       this.ruleForm = value
+      if(!this.initRuleForm) {
+        this.initRuleForm = utils.deepClone(this.ruleForm);
+      }
+    },
+
+    //处理未勾选的固定菜单数据moduleList恢复初始化状态
+    initDisabledData() {
+      const data = utils.deepClone(this.ruleForm);
+      data.moduleList.forEach((item) => {
+        if(item.disabled === 1){
+          const defaultItem = this.initRuleForm.moduleList.filter((val) => val.title === item.title)[0];
+          item.titleValue = defaultItem.titleValue;
+          item.icon = defaultItem.icon;
+          item.color = defaultItem.color;
+        }
+      })
+      return data;
     },
 
     /* 保存并生效 */
     saveAndApply() {
+      const data = this.initDisabledData();
       this.submit({
         status: '0',
         pageKey: '',
-        pageData: utils.compileStr(JSON.stringify(this.ruleForm))
+        pageTag: 0,
+        pageData: utils.compileStr(JSON.stringify(data))
       }, 'saveAndApply');
     },
 
     /* 保存 */
     save() {
-       this.submit({
+      const data = this.initDisabledData();
+      this.submit({
         status: '1',
         pageKey: '',
-        pageData: utils.compileStr(JSON.stringify(this.ruleForm))
+        pageTag: 0,
+        pageData: utils.compileStr(JSON.stringify(data))
       });
     },
 
@@ -137,6 +160,10 @@ export default {
     resetData() {
       this._apis.shop.resetPersonalInfo({pageTag: 0}).then((response)=>{
         this.$message.success('重置成功！')
+        //如果还未保存过，则重置后应变为初始化
+        if(!response.pageData) {
+          this.ruleForm = utils.deepClone(this.initRuleForm);
+        }
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('moduleList') < 0) {
           return;
@@ -152,8 +179,12 @@ export default {
           }
           //如果之前保存的数据中没有分销中心，并且开启了分销中心，则注入分销中心初始化数据
           if(pageData.moduleList.filter(item => item.title === '分销中心').length == 0 && this.shopInfo.isOpenResell===1){
-            this.initRuleForm = Object.assign({}, this.ruleForm);
-            pageData.moduleList.push(this.initRuleForm[this.initRuleForm.length - 1]);
+            const obj = utils.deepClone(this.initRuleForm.moduleList[this.initRuleForm.moduleList.length - 1]);
+            pageData.moduleList.push(obj);
+          }
+          //如果之前保存的数据中有分销中心，但是分销中心已失效，则需要清除分销中心
+          if(pageData.moduleList.filter(item => item.title === '分销中心').length == 1 && this.shopInfo.isOpenResell!==1){
+            pageData.moduleList = pageData.moduleList.filter(item => item.title !== '分销中心');
           }
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;

@@ -461,6 +461,7 @@
       // 有效行业列表
       effIndustryList() {
         this._apis.industry.effIndustryList({}).then((response) => {
+          if(!response) return;
           this.industries = response;
           let that = this;
           this.$nextTick(function () {

@@ -267,6 +267,7 @@ export default {
     border:1px dashed rgba(101,94,255,1);
     padding: 4px 8px;
     height: 100%;
+    margin-bottom: 10px;
     background-color: #fff;
     color: rgba(101,94,255,1);
     font-size: 14px;

@@ -50,56 +50,61 @@
 
         <div class="block form custom">
           <div>
-            <span class="add-btn">添加自定义</span>
+            <span class="add-btn" @click="customAdd">添加自定义</span>
           </div>
           <!-- v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"/  h5隐藏分销入口 -->
           <ul class="custom-list">
-            <li v-for="(item, index) in ruleForm.moduleList" :key="index">
-              <div class="clearfix">
-                <el-checkbox v-model="item.disabled" :true-label="2" :false-label="1"></el-checkbox>
-                <el-form-item
-                  class="custom-form"
-                   v-if=" item.title.includes('分销中心') ? isOpenResell==1 : (item.title !== 'title' && item.title !== '消息中心')"
-                  :key="index"
-                  :label="item.title"
-                  label-width="72px"
-                  :prop="'moduleList['+ index +'].titleValue'"
-                  :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]">
-                  <div class="module_block color_block">
-                      <el-input v-model="item.titleValue"></el-input>
-                      <div class="img_preview">
-                        <img :src="item.icon" alt="" title="点击更换">
-                        <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
-                      </div>
-                      <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
-                      <div class="custom-do">
-                        <div class="custom-center">
-                          <span class="icon top" v-if="index != 0"></span>
-                          <span class="icon bottom" v-if="index != ruleForm.moduleList.length - 1"></span>
+            <template v-for="(item, index) in ruleForm.moduleList">
+              <li :key="index" v-if="item.title.includes('分销中心') ? isOpenResell==1 : (item.title !== '积分商城' && item.title !== '消息中心')">
+                <div class="clearfix">
+                  <el-checkbox @change="disabledChange(item.disabled, index)" v-if="!item.title.includes('自定义')" v-model="item.disabled" :true-label="2" :false-label="1"></el-checkbox>
+                  <i v-else class="el-icon-delete" @click="deleteCustom(item, index)"></i>
+                  <el-form-item
+                    :ref="'customFormItem'+index"
+                    class="custom-form"
+                    :key="index"
+                    :label="item.title"
+                    label-width="72px"
+                    :prop="'moduleList['+ index +'].titleValue'"
+                    :rules="item.disabled === 2 ? [{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }] : []">
+                    <div class="module_block color_block" style="position:relative;">
+                        <div class="custom-disabled" v-show="item.disabled === 1"></div>
+                        <el-input :disabled="item.disabled === 1" v-model="item.titleValue" placeholder="请输入"></el-input>
+                        <div class="img_preview">
+                          <img :src="item.icon" alt="" title="点击更换">
+                          <span @click="currentModule=item;dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更换</span>
                         </div>
-                      </div>
-                      <!-- <el-button type="text">重置</el-button> -->
-                  </div>
-                </el-form-item>
-              </div>
-              <div class="custom-link" v-if="item.title.includes('自定义')">
-                <div class="el-form-item__error" style="left: 158px;top: 15px;">
-                  请选择跳转页面
+                        <colorPicker  v-model="item.color" defaultColor="#000"></colorPicker >
+                        <div class="custom-do">
+                          <div class="custom-center">
+                            <span class="icon top" v-if="index != 0" @click="sortTop(item, index)"></span>
+                            <span class="icon bottom" v-if="index != ruleForm.moduleList.length - 1" @click="sortBottom(item, index)"></span>
+                          </div>
+                        </div>
+                        <!-- <el-button type="text">重置</el-button> -->
+                    </div>
+                  </el-form-item>
                 </div>
-                <span class="title">跳转链接</span>
-                <el-button
-                type="text"
-                style="padding-top: 0;"
-                @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
-                <div class="link_overview clearFix arrow" v-if="item.linkTo && item.linkTo.typeName">
-                  <div class="cont l">
-                    <span class="l" :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
-                    <i @click="removeLink(item)"></i>
+                <div class="custom-link" v-if="item.title.includes('自定义')">
+                  <div v-show="item.linkTo === null" class="el-form-item__error" style="left: 158px;top: 15px;">
+                    请选择跳转页面
                   </div>
-                  <span class="modify r" @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">修改</span>
+                  <span class="title">跳转链接</span>
+                  <el-button
+                  v-if="!item.linkTo"
+                  type="text"
+                  style="padding-top: 0;"
+                  @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
+                  <div class="link_overview clearFix arrow" v-if="item.linkTo && item.linkTo.typeName">
+                    <div class="cont l">
+                      <span class="l" :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
+                      <i @click="removeLink(item, index)"></i>
+                    </div>
+                    <span class="modify r" @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">修改</span>
+                  </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            </template>
           </ul>
         </div>  
 
@@ -291,6 +296,62 @@ export default {
       }
   },
   methods: {
+    disabledChange(disabled, index) {
+      if(disabled === 2){ //选中时触发验证
+        this.$nextTick(() => {
+          this.$refs['ruleForm'].validate();
+        })
+      }else{ //不选中时清除当前的错误
+        this.$refs['customFormItem'+index][0].clearValidate();
+      }
+    },
+
+    //添加自定义栏
+    customAdd() {
+      const length = this.ruleForm.moduleList.filter((item) => item.title.includes('自定义')).length + 1;
+      //自定义初始数据格式
+      const obj = {
+        id: uuidv4(),
+        title: '自定义' + length,
+        titleValue: '',
+        icon: 'data:image/png;base64,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',
+        color: '#000',
+        disabled: 2
+      };
+      this.ruleForm.moduleList.push(obj);
+    },
+
+    //删除自定义
+    deleteCustom(val, index) {
+      this.confirm({title: '提示', icon: true, text: '是否确认删除'}).then(() => {
+          const delNum = parseInt(val.title.substring(3));
+          this.ruleForm.moduleList.splice(index, 1);
+          this.ruleForm.moduleList.forEach((item) => {
+            const title = item.title;
+            if(title.includes('自定义') && parseInt(title.substring(3)) > delNum) {
+              const num = parseInt(title.substring(3)) - 1;
+              item.title = '自定义' + num;
+            }
+          })
+          //this.$message.success('删除成功！');
+      }).catch(error => {
+          
+      })
+    },
+
+    //向上移动
+    sortTop(item, index) {
+      const prevItem = this.ruleForm.moduleList[index - 1];
+      this.$set(this.ruleForm.moduleList, index - 1, item);
+      this.$set(this.ruleForm.moduleList, index, prevItem);
+    },
+
+    //向下移动
+    sortBottom(item, index) {
+      const nextItem = this.ruleForm.moduleList[index + 1];
+      this.$set(this.ruleForm.moduleList, index + 1, item);
+      this.$set(this.ruleForm.moduleList, index, nextItem);
+    },
 
      /* 弹框选中图片 */
     imageSelected(dialogData) {
@@ -307,40 +368,34 @@ export default {
       this.currentNav.linkTo = linkTo;
     },
 
-    deleteItem(item) {
-      this.confirm({
-        title: '提示',
-        customClass: 'goods-custom',
-        icon: true,
-        text: '确定删除此图文导航吗？'
-      }).then(() => {
-        const tempItems = [...this.ruleForm.itemList];
-        for(let i=0;i<tempItems.length;i++) {
-          if(item === tempItems[i]) {
-            tempItems.splice(i, 1);
-          }
-        }
-        this.ruleForm.itemList = tempItems;
-      })
+    /* 移除链接 */
+    removeLink(item, index) {
+      item.linkTo = null;
+      this.$set(this.ruleForm.moduleList, index, item);
     },
 
-    /* 移除链接 */
-    removeLink(item) {
-      const tempList = [...this.ruleForm.itemList];
-      for(let item2 of tempList) {
-        if(item.id === item2.id) {
-          item2.linkTo = null;
-          break;
+    //验证自定义的跳转链接
+    validLinkTo() {
+      let linkToMark = false;
+      this.ruleForm.moduleList.forEach((item, index) => {
+        if(item.title.includes('自定义') && !item.linkTo){
+          linkToMark = true;
+          item.linkTo = null;
+          this.$set(this.ruleForm.moduleList, index, item);
         }
-      }
-      this.ruleForm.itemList = tempList;
+      })
+      return linkToMark;
     },
 
     // 保存
     userCenterSave() {
       let self = this;
+      const linkToMark = this.validLinkTo();
       self.$refs['ruleForm'].validate( valid => {
         if(valid) {
+          if(linkToMark){ //如果存在自定义且其未选择跳转链接，则不可保存
+            return;
+          }
           self.saveDataLoading = true;
           self.save();
         } else {
@@ -353,8 +408,12 @@ export default {
     // 保存并生效
     userCenterSaveAndApply() {
       let self = this;
+      const linkToMark = this.validLinkTo();
       self.$refs['ruleForm'].validate( valid => {
         if(valid) {
+          if(linkToMark){ //如果存在自定义且其未选择跳转链接，则不可保存
+            return;
+          }
           self.saveAndApplyDataLoading = true;
           self.saveAndApply();
         } else {
@@ -405,6 +464,12 @@ export default {
       li {
         .el-checkbox {
           float: left;
+        }
+        .el-icon-delete{
+          float: left;
+          margin-top: 9px;
+          color: #F55858;
+          cursor: pointer;
         }
         /deep/ .el-checkbox__input {
           padding-top: 9px;
@@ -475,6 +540,16 @@ export default {
               background-image: url(~@/assets/images/common/icon-caret-bottom-press.png);
             }
           }
+          .custom-disabled {
+            z-index: 10;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: not-allowed;
+            filter: grayscale(90%);
+          }
         }
       }
     }
@@ -486,6 +561,9 @@ export default {
     .title {
       margin-right: 10px;
       color: #44434B;
+    }
+    .link_overview {
+      padding-top: 10px;
     }
   }
   .module_block{
