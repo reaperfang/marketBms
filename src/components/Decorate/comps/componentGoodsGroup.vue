@@ -60,8 +60,8 @@
                   <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
               </div> 
             </template>
-            <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}" v-else>
-              <img :src="currentComponentData.data.fakeList[listStyle - 1].fileUrl" alt="" style="width:100%;">
+            <div v-else style="padding: 10px;">
+              <img :src="currentComponentData.data.fakeList[showTemplate - 1].fileUrl" alt="" style="width:100%;">
             </div>
           </template>
           <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
@@ -302,7 +302,6 @@ export default {
         height:44px;
       }
       p.active {
-        color:#fff;
         .activeLine{
           right: 0;
           height: 44px;
@@ -482,7 +481,7 @@ export default {
           @include borderRadius(50px);
         }
         p.active {
-          background: #efefef;
+          background:#fc3d42;
           color: #fff !important;
         }
     }
