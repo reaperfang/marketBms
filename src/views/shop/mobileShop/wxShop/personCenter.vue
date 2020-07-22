@@ -125,6 +125,7 @@ export default {
       this.submit({
         status: '0',
         pageKey: '',
+        pageTag: 0,
         pageData: utils.compileStr(JSON.stringify(this.ruleForm))
       }, 'saveAndApply');
     },
@@ -134,6 +135,7 @@ export default {
        this.submit({
         status: '1',
         pageKey: '',
+        pageTag: 0,
         pageData: utils.compileStr(JSON.stringify(this.ruleForm))
       });
     },
@@ -142,6 +144,10 @@ export default {
     resetData() {
       this._apis.shop.resetPersonalInfo({pageTag: 0}).then((response)=>{
         this.$message.success('重置成功！')
+        //如果还未保存过，则重置后应变为初始化
+        if(!response.pageData) {
+          this.ruleForm = utils.deepClone(this.initRuleForm);
+        }
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('moduleList') < 0) {
           return;
