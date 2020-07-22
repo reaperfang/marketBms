@@ -271,6 +271,26 @@ export default {
     openChildNode(e) {
       console.log('openChildNode')
     },
+    pushAll() {
+      let i = 0;
+      const region = this.region
+      let len = region.length;
+      while(i < len) {
+        const data = region[i]
+        const index = this.checkCheckedListIsHasProvinceNode(data)
+        if (data.checked) {
+          data.isIndeterminate = false
+          // 添加到checkedlist
+          if (index === -1) {
+            const node = this.getCurrCheckedProvinceNode(data, data.isIndeterminate)
+            if (node) {
+              this.checkedList.push(node)
+            }
+          }
+        }
+        i++
+      }
+    },
     checkedAllChange() {
       let region
       
@@ -283,6 +303,7 @@ export default {
         this.region.forEach(val => {
           val.checked = true
         })
+        this.pushAll()
         // this.region.forEach((val, index) => {
         //   this.checkboxChange(val)
         // })
@@ -302,6 +323,7 @@ export default {
         // })
         // this.region = region
       }
+      this.setAllCheckedStatus()
     },
     // 获取当前选中区、县节点
     getCurrCheckedAreaNode(node, indeterminate) {
@@ -362,6 +384,15 @@ export default {
     },
     // 检查区、县级是否在选中列表中
     checkCheckedListIsHasAreaNode(node) {
+      // let code = node.receivedAreaCode
+      // if (!code) {
+      //   const newNode = this.getCurrCheckedAreaNode(node)
+      //   code = newNode.receivedAreaCode
+      // }
+      // const index = this.checkedList.findIndex(item => {
+      //   return item.receivedAreaCode === code
+      // })
+      // return index
       const index = this.checkedList.findIndex(item => {
         return item.receivedAreaCode === node.code
       })
@@ -369,16 +400,25 @@ export default {
     },
     // 检查市级是否在选中列表中
     checkCheckedListIsHasCityNode(node) {
+      let code = node.receivedCityCode
+      if (!code) {
+        const newNode = this.getCurrCheckedCityNode(node)
+        code = newNode.receivedCityCode
+      }
       const index = this.checkedList.findIndex(item => {
-        return item.city && item.city.code === node.code
+        return item.city && item.city.code === code
       })
       return index
     },
     // 检查省级是否在选中列表中
     checkCheckedListIsHasProvinceNode(node) {
-      // console.log('--checkCheckedListIsHasProvinceNode---', node)
+      let code = node.receivedProvinceCode
+      if (!code) {
+        const newNode = this.getCurrCheckedProvinceNode(node)
+        code = newNode.receivedProvinceCode
+      }
       const index = this.checkedList.findIndex(item => {
-        return item.province && item.province.code === node.code
+        return item.province && item.province.code === code
       })
       // console.log('---index-', index)
       return index
@@ -389,7 +429,8 @@ export default {
     // 存储 city 节点
     pushCityNode(node, currOneNode = this.currOneNode) {
       if (node) {
-        this.checkedList.push(node)
+        const cityNodeIndex = this.checkCheckedListIsHasCityNode(node)
+        if (cityNodeIndex === -1) this.checkedList.push(node)
         const areas = node.city && node.city.areas
         const receivedProvinceCode = currOneNode && currOneNode.code
         const receivedCityCode = node.receivedCityCode
@@ -406,7 +447,8 @@ export default {
     // 存储 Province 节点
     pushProvinceNode(node) {
       if (node) {
-        this.checkedList.push(node)
+        const index = this.checkCheckedListIsHasProvinceNode(node)
+        if (index === -1) this.checkedList.push(node)
         const citys = node.province && node.province.citys
         const receivedProvinceCode = node.receivedProvinceCode
         let receivedCityCode = ''
@@ -414,13 +456,13 @@ export default {
         for(let i = 0; i < citys.length; i++) {
           let receivedCityCode = citys[i].code
           let name = citys[i].name
-          const cityNodeIndex = this.checkCheckedListIsHasCityNode(citys[i])
-          if (cityNodeIndex === -1) {
+          // const cityNodeIndex = this.checkCheckedListIsHasCityNode(citys[i])
+          // if (cityNodeIndex === -1) {
             let city = citys[i]
             let newNode = { city, receivedProvinceCode, receivedCityCode, receivedAreaCode, name, isIndeterminate: false }
             // this.checkedList.push( { city, receivedProvinceCode, receivedCityCode, receivedAreaCode, name, isIndeterminate: false })
             this.pushCityNode(newNode, node.province)
-          }
+          // }
         }
       }
     },
@@ -550,8 +592,6 @@ export default {
       this.isAllIndeterminate = count === 0 || count === this.region.length ? false : true
     },
     checkListchange(data, checked, indeterminate) {
-      console.log(data, checked, indeterminate)
-      console.log(this.$refs.areaTree[0].getHalfCheckedNodes())
       // 当前节点是否为市节点
       if (!data.areas) {
         const areaNodeIndex = this.checkCheckedListIsHasAreaNode(data)
@@ -593,25 +633,26 @@ export default {
       this.setAllCheckedStatus()
     },
     checkboxChange(data) {
-      const index = this.checkCheckedListIsHasProvinceNode(data)
+      this.currOneNode = data
+      // const index = this.checkCheckedListIsHasProvinceNode(data)
       if (data.checked) {
         data.isIndeterminate = false
         // 添加到checkedlist
-        if (index === -1) {
+        // if (index === -1) {
           const node = this.getCurrCheckedProvinceNode(data, data.isIndeterminate)
-          if (node) {
+          // if (node) {
             this.pushProvinceNode(node)
             this.defaultCheckedCode = this.getDefaultCheckedCodeByNode(data)
-          }
-        }
+          // }
+        // }
       } else {
         // 删除checkedlist
-        if (index !== -1) {
+        // if (index !== -1) {
           this.removeCheckedListProvinceNodeByNode(data, data.isIndeterminate)
           // this.defaultCheckedCode = []
           const areaTree = this.$refs.areaTree
           if (areaTree && areaTree.length > 0 ) this.$refs.areaTree[0].setCheckedKeys([]);
-        }
+        // }
       }
       this.setAllCheckedStatus()
     },
@@ -809,6 +850,8 @@ export default {
       }
       this.region = tempItem;
       this.currOneNode = item
+      console.log('titleMouseover',item)
+      this.checkboxChange(item)
       this.defaultCheckedCode = this.getDefaultCheckedCodeByNode(item)
     },
 
