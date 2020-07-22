@@ -57,7 +57,7 @@
             <template v-for="(item, index) in ruleForm.moduleList">
               <li :key="index" v-if="item.title.includes('分销中心') ? isOpenResell==1 : (item.title !== '积分商城' && item.title !== '消息中心')">
                 <div class="clearfix">
-                  <el-checkbox v-if="!item.title.includes('自定义')" v-model="item.disabled" :true-label="2" :false-label="1"></el-checkbox>
+                  <el-checkbox @change="disabledChange(index)" v-if="!item.title.includes('自定义')" v-model="item.disabled" :true-label="2" :false-label="1"></el-checkbox>
                   <i v-else class="el-icon-delete" @click="deleteCustom(item, index)"></i>
                   <el-form-item
                     class="custom-form"
@@ -65,7 +65,7 @@
                     :label="item.title"
                     label-width="72px"
                     :prop="'moduleList['+ index +'].titleValue'"
-                    :rules="[{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }]">
+                    :rules="item.disabled === 2 ? [{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }] : []">
                     <div class="module_block color_block">
                         <el-input v-model="item.titleValue" placeholder="请输入"></el-input>
                         <div class="img_preview">
@@ -84,7 +84,7 @@
                   </el-form-item>
                 </div>
                 <div class="custom-link" v-if="item.title.includes('自定义')">
-                  <div v-show="!item.linkTo" class="el-form-item__error" style="left: 158px;top: 15px;">
+                  <div v-show="item.linkTo === null" class="el-form-item__error" style="left: 158px;top: 15px;">
                     请选择跳转页面
                   </div>
                   <span class="title">跳转链接</span>
@@ -151,6 +151,7 @@ export default {
       currentModule: null,
       currentNav: null,  //当前操作的自定义菜单栏
       pathname:window.location.pathname,
+      initRuleForm: null, //复制一份ruleForm初始化内容，永远不会改变，以备需要用到相关初始化数据时使用
       ruleForm: {
         backgroundImage: '',  //背景图
         backgroundGradients: 1,  //背景渐变
@@ -233,14 +234,6 @@ export default {
               pageType: 'commissionCenter',
               id: 13
             }
-          },
-          {
-            id: uuidv4(),
-            title: '自定义1',
-            titleValue: '',
-            icon: 'data:image/png;base64,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',
-            color: '#000',
-            disabled: 2
           }
         ]
       },
@@ -273,6 +266,8 @@ export default {
     
   },
   created() {
+    this.initRuleForm = this.utils.deepClone(this.ruleForm);
+
     const _self = this;
 
     /* 监听接口操作结束事件，用来响应loading  保存按钮*/
@@ -302,6 +297,15 @@ export default {
       }
   },
   methods: {
+    disabledChange(index) {
+      console.log(index)
+      this.$nextTick(() => {
+        this.$refs['ruleForm'].validate();
+        this.$refs['form'].fields[index].validateMessage = 'error message'
+        this.$refs['form'].fields[index].validateState = 'error'
+      })
+    },
+
     //添加自定义栏
     customAdd() {
       const length = this.ruleForm.moduleList.filter((item) => item.title.includes('自定义')).length + 1;
@@ -370,11 +374,29 @@ export default {
       this.$set(this.ruleForm.moduleList, index, item);
     },
 
+    //验证自定义的跳转链接
+    validLinkTo() {
+      let linkToMark = false;
+      this.ruleForm.moduleList.forEach((item, index) => {
+        if(item.title.includes('自定义') && !item.linkTo){
+          linkToMark = true;
+          item.linkTo = null;
+          this.$set(this.ruleForm.moduleList, index, item);
+        }
+      })
+      return linkToMark;
+    },
+
     // 保存
     userCenterSave() {
       let self = this;
+      const linkToMark = this.validLinkTo();
       self.$refs['ruleForm'].validate( valid => {
         if(valid) {
+          if(linkToMark){ //如果存在自定义且其未选择跳转链接，则不可保存
+            return;
+          }
+          return;
           self.saveDataLoading = true;
           self.save();
         } else {
@@ -387,8 +409,12 @@ export default {
     // 保存并生效
     userCenterSaveAndApply() {
       let self = this;
+      const linkToMark = this.validLinkTo();
       self.$refs['ruleForm'].validate( valid => {
         if(valid) {
+          if(linkToMark){ //如果存在自定义且其未选择跳转链接，则不可保存
+            return;
+          }
           self.saveAndApplyDataLoading = true;
           self.saveAndApply();
         } else {
