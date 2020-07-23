@@ -5,7 +5,7 @@
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>个人中心</span>
       </div>
-      <div class="phone-body" v-calcHeight="220+20">
+      <div ref="body" class="phone-body" v-calcHeight="220+20">
         <componentUserCenter 
         :data="ruleForm" 
         :isOpenResell="shopInfo.isOpenResell"
@@ -21,6 +21,7 @@
       :resetData="resetData"
       :isOpenResell="shopInfo.isOpenResell"
       @userCenterDataChanged="emitChangeRuleForm"
+      @scrollToBottom="scrollToBottom"
       ></propertyUserCenter>
     </div>
   </div>
@@ -51,6 +52,18 @@ export default {
     }
   },
   methods: {
+    /* 滚动到底部 */
+    scrollToBottom () {
+        this.$nextTick(() => {
+            const container = this.$refs.body;
+            const top = container.scrollHeight;
+            container.scrollTo({
+              top: top,
+              behavior: "smooth"
+            });
+        })
+    },
+
     fetch() {
       this.loading = true;
       //pageTag: 0 微店店铺
