@@ -22,6 +22,7 @@
         <template v-for="(item, key) of componentDataIds">
           <div :key="item">
             <el-popover
+            :key="item+key"
             ref="popover"
             :popper-class="'editor-view-popover active'"
             placement="right-start"
