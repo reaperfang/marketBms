@@ -1,4 +1,5 @@
 
+import utils from '@/utils'
 const decorate = {
 	state: {
 		currentComponentId: "",  //当前组件id
@@ -81,12 +82,12 @@ const decorate = {
 				state.baseInfo = params.data;
 			}
 			//对列表组件处理(一定要深拷贝，否则会出现同类型组件数据污染现象)
-			const tempComponentDataMap = { ...state.componentDataMap };
+			const tempComponentDataMap = utils.deepClone(state.componentDataMap);
 			const componentData = tempComponentDataMap[params.id];
 			if (componentData) {
-				const newComponentData = {...componentData};
+				const newComponentData = utils.deepClone(componentData);
 				delete tempComponentDataMap[params.id];
-				newComponentData['data'] = {...params.data};
+				newComponentData['data'] = utils.deepClone(params.data);
 				tempComponentDataMap[params.id] = newComponentData;
 				state.componentDataMap = tempComponentDataMap;
 			}

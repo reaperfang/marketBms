@@ -4,7 +4,7 @@
 
 module.exports = {
     '/data-server/**': {
-      target: 'http://test5-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
+      target: 'http://test-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
       // target: 'http://172.22.146.1:8082',// 梅志文
       // target: 'http://172.22.146.129:8082',// 李文飞
       changeOrigin: true,
@@ -29,7 +29,7 @@ module.exports = {
       }
     },
     '/zx_server/**': {
-      target: 'https://test-cms-api.300.cn',
+      target: 'https://pre-cms-api.300.cn',
       changeOrigin: true,
       pathRewrite: {
         '^/zx_server': ''

@@ -3,7 +3,7 @@
     <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
       <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data">
           <template v-if="hasRealData || hasFakeData">
-            <template v-if="hasRealData">
+            <div v-if="hasRealData" class="componentGoodsGroup_tab_wrap">
               <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
 
 
@@ -59,7 +59,7 @@
               <div class="componentGoodsGroup_content">
                   <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
               </div> 
-            </template>
+            </div>
             <div v-else style="padding: 10px;">
               <img :src="currentComponentData.data.fakeList[showTemplate - 1].fileUrl" alt="" style="width:100%;">
             </div>
@@ -424,9 +424,11 @@ export default {
     }
       
 }
+.componentGoodsGroup_tab_wrap {
+  background:#fff;
+}
 .componentGoodsGroup {
   overflow: hidden;
-  background:#fff;
     .componentGoodsGroup_tab {
         padding: 0 5px;
         display: flex;

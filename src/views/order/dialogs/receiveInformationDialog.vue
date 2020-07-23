@@ -184,7 +184,8 @@ export default {
         address: "",
         addressCode: "",
         lat: "",
-        lng: ""
+        lng: "",
+        tencentCode: ""
       },
       rules: {
         receivedName: [{ validator: receivedNameValidator, trigger: "blur" }],
@@ -231,7 +232,7 @@ export default {
     changeAddress(){
       this.submitFlag = false;
     },
-    getMapClickPoi(poi) {
+    getMapClickPoi(poi, tencentCode) {
       console.log(poi);
       this.submitFlag = true
       this.ruleForm.provinceCode = poi.provinceCode;
@@ -243,6 +244,7 @@ export default {
       this.ruleForm.address = poi.address;
       this.ruleForm.lat = poi.location.lat;
       this.ruleForm.lng = poi.location.lng;
+      this.ruleForm.tencentCode = tencentCode;
     },
     searshMap(poi) {
       this.$refs.mapSearch.handlePropSearch(this.ruleForm.address);
@@ -251,7 +253,7 @@ export default {
       console.log(this.data)
       //如果是发货，则回显对应发货的信息
       if (this.sendGoods == "send") {
-        this.submitFlag = !!this.data.sendLng;
+        this.submitFlag = !!this.data.sendLongitude;
         this.ruleForm = {
           provinceCode: this.data.sendProvinceCode,
           provinceName: this.data.sendProvinceName,
@@ -263,18 +265,18 @@ export default {
           sendPhone: this.data.sendPhone,
           sendDetail: this.data.sendDetail,
           address: this.data.sendAddress,
-          lat: this.data.sendLat,
-          lng: this.data.sendLng
+          lat: this.data.sendLatitude,
+          lng: this.data.sendLongitude
         }
-        if(this.data.sendLng){
-          this.center = [this.data.sendLat, this.data.sendLng];
+        if(this.data.sendLongitude){
+          this.center = [this.data.sendLatitude, this.data.sendLongitude];
           this.$nextTick(() => {
             this.searshMap();
           })
         }
         
       } else { //如果是收货，订单详情处也是收货
-        this.submitFlag = !!this.data.receivedLng;
+        this.submitFlag = !!this.data.receivedLongitude;
         this.ruleForm = {
           provinceCode: this.data.receivedProvinceCode,
           provinceName: this.data.receivedProvinceName,
@@ -286,11 +288,11 @@ export default {
           receivedPhone: this.data.receivedPhone,
           receivedDetail: this.data.receivedDetail,
           address: this.data.receiveAddress,
-          lat: this.data.receivedLat,
-          lng: this.data.receivedLng
+          lat: this.data.receivedLatitude,
+          lng: this.data.receivedLongitude
         }
-        if(this.data.receivedLng){
-          this.center = [this.data.receivedLat, this.data.receivedLng];
+        if(this.data.receivedLongitude){
+          this.center = [this.data.receivedLatitude, this.data.receivedLongitude];
           this.$nextTick(() => {
             this.searshMap();
           })
@@ -369,25 +371,33 @@ export default {
           }
           
           this._apis.order
-            .orderUpdateReceive({
-              id:
-                typeof this.data == "string"
-                  ? this.data
-                  : this.$route.query.orderId || this.$route.query.id,
-                receivedProvinceCode: this.ruleForm.provinceCode,
-                receivedProvinceName: this.ruleForm.provinceName,
-                receivedCityCode: this.ruleForm.cityCode,
-                receivedCityName: this.ruleForm.cityName,
-                receivedAreaCode: this.ruleForm.areaCode,
-                receivedAreaName: this.ruleForm.areaName,
-                receiveAddress: this.ruleForm.address,
-                receivedDetail: this.ruleForm.receivedDetail,
-                receivedPhone: this.ruleForm.receivedPhone,
-                receivedName: this.ruleForm.receivedName,
-                receivedLat: this.ruleForm.lat,
-                receivedLng: this.ruleForm.lng
+            .updateReceiveAndSend({
+              // id:
+              //   typeof this.data == "string"
+              //     ? this.data
+              //     : this.$route.query.orderId || this.$route.query.id,
+              //   receivedProvinceCode: this.ruleForm.provinceCode,
+              //   receivedProvinceName: this.ruleForm.provinceName,
+              //   receivedCityCode: this.ruleForm.cityCode,
+              //   receivedCityName: this.ruleForm.cityName,
+              //   receivedAreaCode: this.ruleForm.areaCode,
+              //   receivedAreaName: this.ruleForm.areaName,
+              //   receiveAddress: this.ruleForm.address,
+              //   receivedDetail: this.ruleForm.receivedDetail,
+              //   receivedPhone: this.ruleForm.receivedPhone,
+              //   receivedName: this.ruleForm.receivedName,
+              //   receivedLat: this.ruleForm.lat,
+              //   receivedLng: this.ruleForm.lng
+              orderIds: this.$route.query.ids.split(',').map(id => +id),
+              orderSendInfoIds: this.$route.query._ids.split(',').map(id => +id),
+              tencentCode: this.ruleForm.tencentCode,  
+              [this.sendGoods == 'send' ? 'sendAddress' : 'receiveAddress']: this.ruleForm.address,
+              [this.sendGoods == 'send' ? 'sendDetail' : 'receivedDetail']: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
+              [this.sendGoods == 'send' ? 'sendLatitude': 'receivedLatitude']: this.ruleForm.lat,
+              [this.sendGoods == 'send' ? 'sendLongitude': 'receivedLongitude']: this.ruleForm.lng
             })
             .then(res => {
+              this.$emit('getDetail')
               this.$emit("submit");
               this.visible = false;
               this.$message.success("修改成功！");

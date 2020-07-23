@@ -20,8 +20,9 @@
       :disabled='disable'
       :move='onMoveHandler'>
         <template v-for="(item, key) of componentDataIds">
-          <div>
+          <div :key="item">
             <el-popover
+            :key="item+key"
             ref="popover"
             :popper-class="'editor-view-popover active'"
             placement="right-start"
@@ -45,7 +46,7 @@
               @mouseout="componentMouseleave(item)"
               @dragstart.self="selectItem = item" 
               @dragend.self="selectItem = {}">
-                <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" @componentDataLoaded="componentDataLoaded"></component>
+                <component class="animated fadeIn" v-if="allTemplateLoaded && getComponentData(item).data" :is='templateList[getComponentData(item).type]' :key="item" :data="getComponentData(item)" @componentDataLoaded="componentDataLoaded"></component>
                 <!--<i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
                 <transition name="fade">
                   <div v-show="item === currentMouseOverComponentId" class="title-box">

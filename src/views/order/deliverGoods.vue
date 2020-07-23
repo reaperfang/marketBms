@@ -225,6 +225,8 @@
       @submit="onSubmit"
       :sendGoods="sendGoods"
       :title="title"
+      :ajax="ajax"
+      @getDetail="getDetail"
     ></component>
   </div>
 </template>
@@ -312,7 +314,8 @@ export default {
       distributorName: '', //配送员名字
       distributorId: '', //配送员id
       isDistributorShow: false, //尚未创建配送员信息提示控制
-      distributorSet: false
+      distributorSet: false,
+      ajax: true
     };
   },
   created() {
@@ -802,8 +805,9 @@ export default {
           })
           this.tableData = res[0].orderItemList;
           this.orderInfo = res[0];
-
-          this.fetchOrderAddress();
+          if(!this.orderInfo.sendAddress) {
+            this.fetchOrderAddress();
+          }
 
           //如果是商家配送，则需要请求拿到配送员列表
           if(this.orderInfo.deliveryWay == 2){

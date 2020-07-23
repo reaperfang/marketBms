@@ -41,12 +41,9 @@
       </el-form-item>
       <el-form-item label="排列样式" prop="listStyle">
         <el-radio-group class="radio-block" v-model="ruleForm.listStyle">
-          <el-radio :label="1">大图模式</el-radio>
-          <el-radio :label="2">一行两个</el-radio>
-          <el-radio :label="3">一行三个</el-radio>
-          <el-radio :label="4">详细列表</el-radio>
-          <el-radio :label="5">一大两小</el-radio>
-          <el-radio :label="6">横向滑动</el-radio>
+          <el-radio :label="1">横向滑动</el-radio>
+          <el-radio :label="2">一行三个</el-radio>
+          <el-radio :label="3">大图模式</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="卡片样式" prop="couponStyle">
