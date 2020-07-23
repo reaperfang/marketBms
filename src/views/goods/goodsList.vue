@@ -84,6 +84,28 @@
                     label="SPU编码"
                     width="124">
                     </el-table-column> -->
+                    <el-table-column label="排序" width="100">
+            <template slot-scope="scope">
+              <template v-if="!isEdit">
+                <span>{{scope.row.stock}}</span>
+                <i slot="suffix" class="el-icon-edit" @click="editGoodIndex"></i>
+              </template>
+              <template v-if="isEdit">
+                <el-tooltip class="item" effect="light" placement="top">
+                <div slot="content">输入框内只能输入≥1的有效数字，不能输入特殊字符、<br/>
+                    空格、中英文字符、负数、0等，统一校验文案为<br/>
+                    “请您输入正确的数字”；最大可输入数字“999999”<br/>  
+                </div>
+                <el-input
+                  v-model="scope.row.stock"
+                  autosize
+                  class="goodIndex"
+                  @change="saveGoodIndex(scope.row.stock)">
+                  </el-input>
+                 </el-tooltip>
+              </template>
+            </template>
+            </el-table-column>
                     <el-table-column
                         label="商品主图"
                         width="80">
@@ -148,7 +170,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                    <el-table-column
                         sortable="custom"
                         :sort-method="stockSortMethod"
                         prop="stock"
@@ -206,12 +227,13 @@
                     <el-button @click="shareMore" class="border-button">批量推广</el-button>
                     <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
                     <el-button @click="copyUrl" class="border-button">复制链接</el-button>
+                    <el-button @click="editCategory" class="border-button">编辑分类</el-button>
                 </div>
             </div>
             <div class="footer">
                 <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
             </div>
-            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
+            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit" @changeGoodCategory="changeGoodCategory"></component>
         </div>
         <!-- <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
@@ -342,6 +364,7 @@
         }
     }
 }
+
 /deep/ .el-form-item__label {
     font-weight: normal;
 }
@@ -474,11 +497,13 @@ import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
 import PriceChangeDialog from "@/views/goods/dialogs/priceChangeDialog";
 import anotherAuth from '@/mixins/anotherAuth'
 import copyUrlDialog from "@/views/goods/dialogs/copyUrlDialog";
+import editCategoryDialog from "@/views/goods/dialogs/editCategoryDialog";
 
 export default {
     mixins: [anotherAuth],
     data() {
         return {
+            isEdit: false,
             checkedAll: false,
             isIndeterminate: false,
             visibleArrow: false,
@@ -689,7 +714,33 @@ export default {
         }
     },
     methods: {
-        sortChange({column, prop, order}) {
+        saveGoodIndex(data) {
+            this.isEdit = false;      
+            if (/^([1-9][0-9]*)$/.test(data) && data <= 999999) {
+                this.$message({
+                message: "保存成功",
+                type: "success"
+                });
+            } else {
+                this.$message({
+                message: "请输入合法数字",
+                type: "warning"
+                });
+            }
+
+            console.log("获取到的input值是");
+            console.log(data);
+            },
+            editGoodIndex() {
+            this.isEdit = true;
+            },
+            changeGoodCategory(datas){
+                alert('是否会传值过来');
+                console.log(datas);
+                console.log('当前上品信息如下');
+                console.log(this.currentData);
+            },
+            sortChange({column, prop, order}) {
             if(prop == 'salePrice') {
                 if(order == 'descending') {
                     this.listQuery.sortType = 4
@@ -820,6 +871,19 @@ export default {
                         type: 'error'
                     });
                 });
+        },
+        editCategory(){
+          if(!this.multipleSelection.length) {
+                this.$message({
+                    message: '请选择商品',
+                    type: 'warning'
+                });
+                return
+            }
+            this.currentData = JSON.parse(JSON.stringify(this.multipleSelection));
+            debugger;
+            this.currentDialog = 'editCategoryDialog'
+            this.dialogVisible = true
         },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
@@ -1422,7 +1486,8 @@ export default {
         EditorUpperAndLowerRacksSpu,
         ShareSelect,
         PriceChangeDialog,
-        copyUrlDialog
+        copyUrlDialog,
+        editCategoryDialog
     }
 }
 </script>

@@ -1,25 +1,30 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="商品分类" prop="goodsGroups">
-        <el-button type="text"  @click="dialogVisible=true; currentDialog='dialogSelectGoodsGroup'">添加商品分类</el-button>
+        <div class="row align-center">
+          <div @click="dialogVisible=true; currentDialog='dialogSelectGoodsGroup'" class="add-button-x add-goods-group">
+            <i class="el-icon-plus"></i>
+            <span>添加商品分类</span>
+          </div>
+          <p class="prop-message prop-message-select">建议最多添加15个分类</p>
+        </div>
         <div class="goods_groups">
           <el-tag
-            v-for="(tag, key) in list"
+            v-for="(tag, key) in displayList"
             :key="key"
             closable
             type="success" @close="deleteItem(tag)">
             {{tag.catagoryData.name}}
           </el-tag>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加15个分类</p>
       </el-form-item>
       <el-form-item label="全部分类" prop="showAllGroup">
-        全部分类为商品的集合分类，增加消费者逛的体验
         <el-radio-group v-model="ruleForm.showAllGroup">
           <el-radio :label="1">展示</el-radio>
           <el-radio :label="2">不展示</el-radio>
         </el-radio-group>
+        <p class="prop-message" style="margin-top:-8px;">全部分类为商品的集合分类，增加消费者逛的体验</p>
       </el-form-item>
       <el-form-item label="展示模板" prop="showTemplate">
         <el-radio-group v-model="ruleForm.showTemplate">
@@ -42,12 +47,12 @@
       </el-form-item> -->
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
-          <el-radio :label="1">大图模式</el-radio>
-          <el-radio :label="2">一行两个</el-radio>
-          <el-radio :label="3">一行三个</el-radio>
-          <el-radio :label="4">详细列表</el-radio>
-          <el-radio :label="5">一大两小</el-radio>
-          <el-radio :label="6">横向滑动</el-radio>
+          <div><el-radio :label="1">大图模式</el-radio></div>
+          <div><el-radio :label="2">一行两个</el-radio></div>
+          <div><el-radio :label="3">一行三个</el-radio></div>
+          <div><el-radio :label="4">详细列表</el-radio></div>
+          <div><el-radio :label="5">一大两小</el-radio></div>
+          <div><el-radio :label="6">横向滑动</el-radio></div>
         </el-radio-group>
       </el-form-item>
     </div>
@@ -71,10 +76,10 @@
     <div class="block form">
       <el-form-item label="商品样式" prop="goodsStyle">
         <el-radio-group v-model="ruleForm.goodsStyle">
-          <el-radio :label="1">无边白底</el-radio>
-          <el-radio :label="2">卡片投影</el-radio>
-          <el-radio :label="3">描边白底</el-radio>
-          <el-radio :label="4">无边透明底</el-radio>
+          <div><el-radio :label="1">无边白底</el-radio></div>
+          <div><el-radio :label="2">卡片投影</el-radio></div>
+          <div><el-radio :label="3">描边白底</el-radio></div>
+          <div><el-radio :label="4">无边透明底</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="商品倒角" prop="goodsChamfer">
@@ -85,10 +90,10 @@
       </el-form-item>
       <el-form-item label="图片比例" prop="goodsRatio">
         <el-radio-group v-model="ruleForm.goodsRatio">
-          <el-radio :label="1">3:2</el-radio>
-          <el-radio :label="2">1:1</el-radio>
-          <el-radio :label="3">3:4</el-radio>
-          <el-radio :label="4">16:9</el-radio>
+          <div><el-radio :label="1">3:2</el-radio></div>
+          <div><el-radio :label="2">1:1</el-radio></div>
+          <div><el-radio :label="3">3:4</el-radio></div>
+          <div><el-radio :label="4">16:9</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="图片填充" prop="goodsFill">
@@ -115,10 +120,10 @@
     <div class="block form">
       <el-form-item label="显示内容" prop="showContents">
         <el-checkbox-group v-model="ruleForm.showContents">
-          <el-checkbox label="1">商品名称</el-checkbox>
-          <el-checkbox label="2">商品价格</el-checkbox>
-          <el-checkbox label="3">商品描述</el-checkbox>
-          <el-checkbox label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
+          <div><el-checkbox label="1">商品名称</el-checkbox></div>
+          <div><el-checkbox label="2">商品价格</el-checkbox></div>
+          <div><el-checkbox label="3">商品描述</el-checkbox></div>
+          <div><el-checkbox label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox></div>
         </el-checkbox-group>
         <el-radio-group v-if="ruleForm.showContents.includes('4') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
           <el-radio :label="1">样式1</el-radio>
@@ -131,21 +136,21 @@
           <el-radio :label="8" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式8</el-radio>
           <el-radio :label="9">样式9</el-radio>
         </el-radio-group>
-        <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
+        <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
       </el-form-item>
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="list"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @goodsGroupDataSelected="dialogDataSelected" :seletedGroupInfo="displayList"></component>
   </el-form>
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
-import dialogSelectGoodsGroup from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoodsGroup';
+import mixinPropsData from '../mixins/mixinPropsData';
+import dialogSelectGoodsGroup from '@/components/Decorate/dialogs/dialogSelectGoodsGroup';
 export default {
   name: 'propertyGoodsGroup',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectGoodsGroup},
   data () {
     return {
@@ -168,17 +173,14 @@ export default {
         ids: [],//商品分类列表 
         buttonText: '加入购物车'//按钮文字
       },
+      displayList: {},
       rules: {
 
       },
-      list: {},
       dialogVisible: false,
       currentDialog: '',
 
     }
-  },
-  created() {
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -204,21 +206,21 @@ export default {
       if(this.ruleForm.showTemplate == 2 && [2,4,5].includes(newValue) && ![2,4,5].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
       }
-    }
+    },
   },
   methods: {
      //根据ids拉取数据
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
       if(componentData) {
-          bNeedUpdateMiddle && this._globalEvent.$emit('fetchGoodsGroup', this.ruleForm, this.$parent.currentComponentId);
+          bNeedUpdateMiddle && this.syncToMiddle();
           if(componentData.ids) {
             let ids = [];
             for(let item in componentData.ids) {
               ids.push(item);
             }
             if(!ids.length) {
-              this.list = {};
+              this.displayList = {};
               return;
             }
             this.loading = true;
@@ -230,27 +232,23 @@ export default {
                     goods: this.ruleForm.ids[item.id]
                   };
                 }
-                this.list = data;
-                this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+                this.displayList = data;
+                this.syncToMiddle('goods');
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = {};
+                this.displayList = {};
                 this.loading = false;
             });
       }
       }
     },
 
-     /* 删除数据项 */
+     /* 删除数据项  覆盖mixin里面的逻辑 */
     deleteItem(item) {
-      if(item.fakeData) {  //如果是假数据
-        this.$message.error('示例数据不支持删除操作，请在右侧替换真实数据后重试!');
-        return;
-      }
-      const tempItems = {...this.list};
+      const tempItems = {...this.displayList};
       delete tempItems[item.catagoryData.id];
-      this.list = tempItems;
+      this.displayList = tempItems;
       this.items = tempItems;
     },
 
@@ -258,10 +256,38 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .goods_groups{
+  margin-top: 10px;
   .el-tag{
-    margin-right:5px!important;
+    margin-right:12px!important;
   }
+  /deep/ .el-tag {
+    border-radius:4px;
+    border:1px dashed rgba(101,94,255,1);
+    padding: 4px 8px;
+    height: 100%;
+    margin-bottom: 10px;
+    background-color: #fff;
+    color: rgba(101,94,255,1);
+    font-size: 14px;
+    .el-tag__close {
+      color: rgba(101,94,255,1);
+      font-size: 16px;
+      &:hover {
+        background: #fff;
+      }
+    }
+  }
+}
+.add-goods-group {
+  width: 116px;
+  padding: 0 10px;
+  i {
+    margin-right: 2px;
+  }
+}
+.prop-message-select {
+  margin-left: 6px;
 }
 </style>

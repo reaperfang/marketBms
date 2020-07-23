@@ -70,7 +70,7 @@
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
                     width="55">
@@ -78,7 +78,7 @@
                 <el-table-column
                     prop="orderAfterSaleCode"
                     label="售后单编号"
-                    width="120">
+                    width="180">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
@@ -126,7 +126,7 @@
                     prop="updateTime"
                     label="最新发货时间">
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" width="100px" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
@@ -348,10 +348,13 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .after-sales {
@@ -442,6 +445,42 @@ export default {
     }
     .icon-store-text{
         vertical-align: middle;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(2) {
+            text-align: left;
+        }
+    }
+    /deep/ .el-table-column--selection .cell {
+        padding-left: 20px;
+        padding-right: 10px;
+    }
+    .operate-box {
+        text-align: left;
+        span {
+            border-right: 1px solid rgba(218,218,227,1);
+            padding-right: 5px;
+            &:last-child {
+                border-right: none;
+                padding-right: 0;
+            }
+        }
+    }
+    /deep/ .el-table th.is-leaf {
+        border-bottom: none!important;
+    }
+    /deep/ .el-table thead tr {
+        height: 46px;
+    }
+    .border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
+        }
     }
 </style>
 

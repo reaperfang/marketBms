@@ -269,15 +269,7 @@ export default {
       selectedReds: [],
       levelConditionValueDto: {},
       colors: [],
-      currentColor: "#63b359",
-      canSubmit1: true,
-      canSubmit2: true,
-      canSubmit3: true,
-      canSubmit4: true,
-      canSubmit5: true,
-      canSubmit6: true,
-      canSubmit7: true,
-      canSubmit8: true
+      currentColor: "#63b359"
     };
   },
   computed: {
@@ -610,17 +602,23 @@ export default {
           message: '请输入会员卡名称',
           type: 'warning'
         });
-      }else if (!this.right1 && !this.right2) {
+        return;
+      }
+      if (!this.right1 && !this.right2) {
         this.$message({
           message: '请选择一项等级权益',
           type: 'warning'
         });
-      }else if(this.ruleForm.explain == "") {
+        return;
+      }
+      if(!this.ruleForm.explain) {
         this.$message({
           message: '请输入特权说明',
           type: 'warning'
         });
-      }else if(this.ruleForm.isSyncWechat == "1") {
+        return;
+      }
+      if(this.ruleForm.isSyncWechat == "1") {
         if(this.ruleForm.notice == "") {
           this.$message({
             message: '请输入使用须知',
@@ -666,24 +664,21 @@ export default {
                 message: '请选择特定条件',
                 type: 'warning'
               });
-              this.canSubmit1 = false;
-            }else{
-              if(this.levelConditionValueDto.label == "消费金额满") {
-                this.canSubmit1 = true;
-                formObj.receiveConditionsRemarks =
-                "" +
-                this.levelConditionValueDto.label +
-                this.levelConditionValueDto.conditionValue + '元';
-              }else if(this.levelConditionValueDto.label == "消费次数满"){
-                this.canSubmit1 = true;
-                formObj.receiveConditionsRemarks =
-                "" +
-                this.levelConditionValueDto.label +
-                this.levelConditionValueDto.conditionValue + '次';
-              }
-              formObj.levelConditionValueDto = this.levelConditionValueDto;
-              delete formObj.levelConditionValueDto.label;
+              return;
             }
+            if(this.levelConditionValueDto.label == "消费金额满") {
+              formObj.receiveConditionsRemarks =
+              "" +
+              this.levelConditionValueDto.label +
+              this.levelConditionValueDto.conditionValue + '元';
+            }else if(this.levelConditionValueDto.label == "消费次数满"){
+              formObj.receiveConditionsRemarks =
+              "" +
+              this.levelConditionValueDto.label +
+              this.levelConditionValueDto.conditionValue + '次';
+            }
+            formObj.levelConditionValueDto = this.levelConditionValueDto;
+            delete formObj.levelConditionValueDto.label;
           }
           if (this.ruleForm.backgroundType == "0") {
             let colorArr = [];
@@ -698,21 +693,17 @@ export default {
                 message: '请选择背景色',
                 type: 'warning'
               });
-              this.canSubmit2 = false;
-            }else{
-              this.canSubmit2 = true;
+              return;
             }
           } else if (this.ruleForm.backgroundType == "1") {
-            if (this.imgUrl) {
-              this.canSubmit3 = true;
-              formObj.background = this.imgUrl;
-            } else {
+            if(!this.imgUrl) {
               this.$message({
                 message: '请上传背景图片',
                 type: 'warning'
               });
-              this.canSubmit3 = false;
+              return;
             }
+            formObj.background = this.imgUrl;
           }
           let rightsDtoList = [];
           if (this.right1) {
@@ -728,19 +719,17 @@ export default {
                 message: '请输入积分回馈倍率数',
                 type: 'warning'
               });
-              this.canSubmit4 = false;
-            } else {
-              this.canSubmit4 = true;
-              let rightParam2 = {};
-              rightParam2.rightsInfoId = this.getId(
-                this.rightsList,
-                "积分回馈倍率"
-              );
-              rightParam2.levelType = 1;
-              rightParam2.rightsValue = this.jfhkbl;
-              rightParam2.label = "积分回馈倍率";
-              rightsDtoList.push(rightParam2);
+              return;
             }
+            let rightParam2 = {};
+            rightParam2.rightsInfoId = this.getId(
+              this.rightsList,
+              "积分回馈倍率"
+            );
+            rightParam2.levelType = 1;
+            rightParam2.rightsValue = this.jfhkbl;
+            rightParam2.label = "积分回馈倍率";
+            rightsDtoList.push(rightParam2);
           }
           let rights = "";
           rightsDtoList.map(v => {
@@ -759,21 +748,19 @@ export default {
                 message: '请输入赠送积分数',
                 type: 'warning'
               });
-              this.canSubmit5 = false;
-            } else {
-              this.canSubmit5 = true;
-              let upgradeParams1 = {};
-              upgradeParams1.upgradeRewardInfoId = this.getId(
-                this.rewardList,
-                "赠送积分"
-              );
-              upgradeParams1.levelType = 1;
-              upgradeParams1.giftNumber = this.zsjf;
-              upgradeParams1.label = "赠送积分";
-              upgradeParams1.giftName = "赠送积分";
-              upgradeRewardDtoList.push(upgradeParams1);
-              upgradePackage = upgradePackage + "赠送" + this.zsjf + "个积分,";
+              return;
             }
+            let upgradeParams1 = {};
+            upgradeParams1.upgradeRewardInfoId = this.getId(
+              this.rewardList,
+              "赠送积分"
+            );
+            upgradeParams1.levelType = 1;
+            upgradeParams1.giftNumber = this.zsjf;
+            upgradeParams1.label = "赠送积分";
+            upgradeParams1.giftName = "赠送积分";
+            upgradeRewardDtoList.push(upgradeParams1);
+            upgradePackage = upgradePackage + "赠送" + this.zsjf + "个积分,";
           }
           if (this.upgrade2) {
             if (this.zshb == "") {
@@ -781,20 +768,18 @@ export default {
                 message: '请输入赠送红包金额',
                 type: 'warning'
               });
-              this.canSubmit6 = false;
-            } else {
-              this.canSubmit6 = true;
-              let upgradeParams2 = {};
-              upgradeParams2.upgradeRewardInfoId = this.getId(
-                this.rewardList,
-                "赠送红包"
-              );
-              upgradeParams2.giftNumber = this.zshb;
-              upgradeParams2.label = "赠送红包";
-              upgradeParams2.giftName = "赠送红包";
-              upgradeRewardDtoList.push(upgradeParams2);
-              upgradePackage = upgradePackage + "赠送" + this.zshb + "元红包,";
+              return;
             }
+            let upgradeParams2 = {};
+            upgradeParams2.upgradeRewardInfoId = this.getId(
+              this.rewardList,
+              "赠送红包"
+            );
+            upgradeParams2.giftNumber = this.zshb;
+            upgradeParams2.label = "赠送红包";
+            upgradeParams2.giftName = "赠送红包";
+            upgradeRewardDtoList.push(upgradeParams2);
+            upgradePackage = upgradePackage + "赠送" + this.zshb + "元红包,";
           }
           if (this.upgrade3) {
             let zpNum = 0;
@@ -803,25 +788,22 @@ export default {
                 message: '请选择赠品',
                 type: 'warning'
               });
-              this.canSubmit7 = false;
-            } else {
-              this.canSubmit7 = true;
-              this.selectedGifts.map(v => {
-                let obj = {};
-                obj.upgradeRewardInfoId = this.getId(
-                  this.rewardList,
-                  "赠送赠品"
-                );
-                obj.giftProduct = v.id;
-                obj.levelType = 1;
-                obj.giftName = v.goodsName;
-                obj.label = "赠送赠品";
-                obj.giftNumber = v.number;
-                zpNum = zpNum + v.number;
-                upgradeRewardDtoList.push(obj);
-              });
-              upgradePackage = upgradePackage + "赠送" + zpNum + "个赠品,";
             }
+            this.selectedGifts.map(v => {
+              let obj = {};
+              obj.upgradeRewardInfoId = this.getId(
+                this.rewardList,
+                "赠送赠品"
+              );
+              obj.giftProduct = v.id;
+              obj.levelType = 1;
+              obj.giftName = v.goodsName;
+              obj.label = "赠送赠品";
+              obj.giftNumber = v.number;
+              zpNum = zpNum + v.number;
+              upgradeRewardDtoList.push(obj);
+            });
+            upgradePackage = upgradePackage + "赠送" + zpNum + "个赠品,";
           }
           if (this.upgrade4) {
             var yhzNum = 0;
@@ -830,25 +812,23 @@ export default {
                 message: '请选择优惠券',
                 type: 'warning'
               });
-              this.canSubmit8 = false;
-            } else {
-              this.canSubmit8 = true;
-              this.selectedCoupons.map(v => {
-                let obj = {};
-                obj.upgradeRewardInfoId = this.getId(
-                  this.rewardList,
-                  "赠送优惠券"
-                );
-                obj.giftProduct = v.id;
-                obj.levelType = 1;
-                obj.giftNumber = v.number;
-                yhzNum = yhzNum + v.number;
-                obj.giftName = v.name;
-                obj.label = "赠送优惠券";
-                upgradeRewardDtoList.push(obj);
-              });
-              upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
+              return;
             }
+            this.selectedCoupons.map(v => {
+              let obj = {};
+              obj.upgradeRewardInfoId = this.getId(
+                this.rewardList,
+                "赠送优惠券"
+              );
+              obj.giftProduct = v.id;
+              obj.levelType = 1;
+              obj.giftNumber = v.number;
+              yhzNum = yhzNum + v.number;
+              obj.giftName = v.name;
+              obj.label = "赠送优惠券";
+              upgradeRewardDtoList.push(obj);
+            });
+            upgradePackage = upgradePackage + "赠送" + yhzNum + "张优惠券";
           }
           upgradeRewardDtoList.map(v => {
             if (v.label) {
@@ -868,22 +848,18 @@ export default {
           if(formObj.receiveSetting == '0') {
             this._apis.client.checkCardValue({level: formObj.level, levelConditionValueDto: null}).then((response) => {
               if(response) {
-                if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8) {
-                  this._apis.client
-                    .editCard(formObj)
-                    .then(response => {
-                      this._routeTo('cardManage');
-                      this.$message({
-                        message: response,
-                        type: 'success'
-                      });
-                    })
-                    .catch(error => {
-                      console.log(error);
+                this._apis.client
+                  .editCard(formObj)
+                  .then(response => {
+                    this._routeTo('cardManage');
+                    this.$message({
+                      message: response,
+                      type: 'success'
                     });
-                }else{
-                  
-                }
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
               }else{
                 this.$message({
                   message: '高等级条件数值要大于低等级的条件数值',
@@ -894,22 +870,18 @@ export default {
               console.log(error);
             })
           }else{
-            if(this.canSubmit1 && this.canSubmit2 && this.canSubmit3 && this.canSubmit4 && this.canSubmit5 && this.canSubmit6 && this.canSubmit7 && this.canSubmit8) {
-              this._apis.client
-                .editCard(formObj)
-                .then(response => {
-                  this._routeTo('cardManage');
-                  this.$message({
-                    message: response,
-                    type: 'success'
-                  });
-                })
-                .catch(error => {
-                  console.log(error);
+            this._apis.client
+              .editCard(formObj)
+              .then(response => {
+                this._routeTo('cardManage');
+                this.$message({
+                  message: response,
+                  type: 'success'
                 });
-            }else{
-              console.log('error');
-            }
+              })
+              .catch(error => {
+                console.log(error);
+              });
           }
         }
     },

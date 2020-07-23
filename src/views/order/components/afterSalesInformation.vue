@@ -101,26 +101,26 @@
                 <div class="content">
                     <el-table
                         :data="itemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div style="margin-right: 5px;" class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p :title="scope.row.goodsName" class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
@@ -353,19 +353,19 @@
             <p class="section-header">操作记录</p>
             <el-table
                 :data="recordList"
-                style="width: 100%">
+                style="width: 100%"
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
+                class="operate">
                 <el-table-column
                     prop="operationType"
-                    label="操作"
-                    width="180">
+                    label="操作">
                     <template slot-scope="scope">
                         <span>{{scope.row.operationType | operationTypeFilter}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="createUserName"
-                    label="操作人"
-                    width="180">
+                    label="操作人">
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
@@ -811,6 +811,48 @@ export default {
                 width: 100px;
             }
         }
+    }
+    .image-box {
+        margin-right: 10px;
+    }
+    .goods-specs {
+        color: #9FA29F;
+    }
+    .title-section-header {
+        height: 50px;
+        line-height: 50px;
+        background-color: #F6F7FA;
+        color: #44434B;
+    }
+    .title-section .content {
+        padding-top: 29px;
+    }
+    /deep/ .el-table th>.cell {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    /deep/ .el-table th:first-child>.cell {
+        padding-left: 20px;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+        }
+    }
+    /deep/ .el-table.operate td, /deep/ .el-table.operate th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: center;
+        }
+    }
+    /deep/ .el-table table tbody tr {
+        .cell {
+            padding-left: 20px;
+        }
+    }
+    /deep/ .el-table tr th {
+        border-bottom: none;
     }
 </style>
 

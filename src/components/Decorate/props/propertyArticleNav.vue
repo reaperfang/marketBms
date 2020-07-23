@@ -1,7 +1,7 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
-      <el-form-item label="选择模板" prop="templateType">
+      <el-form-item class="form-item-select-template" label="选择模板" prop="templateType">
         <ul class="tile-list n2 template_type">
           <li @click="selectTemplate(1)" :class="{'active': ruleForm.templateType === 1}">
             <div class="type1">
@@ -26,7 +26,7 @@
           <el-radio :label="2">横向滑动</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="背景颜色" prop="backgroundColor" v-if="hasContent">
+      <el-form-item label="背景颜色" prop="backgroundColor">
         <div class="color_block">
           <el-input v-model="ruleForm.backgroundColor" :disabled="true"></el-input>
           <colorPicker  v-model="ruleForm.backgroundColor" defaultColor="#fff"></colorPicker >
@@ -43,9 +43,9 @@
     </div>
     <div class="block form">
       添加导航：
-      <p style="color:rgb(211, 211, 211);margin-top:5px;">最多添加10个导航，鼠标拖拽可调整导航顺序</p>
+      <p class="prop-message" style="margin-top:5px;">最多添加10个导航，鼠标拖拽可调整导航顺序</p>
       <!-- 可拖拽调整顺序 -->
-      <vuedraggable 
+      <vuedraggable
       class="drag-wrap item_list"
       :list='ruleForm.itemList'
       v-bind="dragOptions"
@@ -58,14 +58,15 @@
                 <i class="delete_btn" @click.stop="deleteImage(item)"></i>
                 <span @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
               </div>
-              <div v-else class="add_button" @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">
+              <div v-else class="add_button add_button_img" @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">
                 <i class="inner"></i>
+                <p>上传图片</p>
               </div>
             </div>
             <div class="right">
               <p>
-                <span v-if="ruleForm.templateType === 1">图片标题</span>
-                <span v-else-if="ruleForm.templateType === 2">导航文字</span>
+                <span class="span-title" v-if="ruleForm.templateType === 1">图片标题</span>
+                <span class="span-title" v-else-if="ruleForm.templateType === 2">导航文字</span>
                 <el-input v-model="item.title"></el-input>
               </p>
               <p style="display:flex;">
@@ -75,7 +76,7 @@
                 type="text"
                 @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
               </p>
-              <div class="link_overview clearFix" v-if="item.linkTo">
+              <div class="link_overview clearFix arrow" v-if="item.linkTo">
                 <div class="cont l">
                   <span class="l" :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
                   <i @click="removeLink(item)"></i>
@@ -83,11 +84,14 @@
                 <span class="modify r" @click="dialogVisible=true; currentNav = item; currentDialog='dialogSelectJumpPage'">修改</span>
               </div>
             </div>
-            <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
+            <i class="delete_btn" :class="{'input-linkTo' : item.linkTo}" @click.stop="deleteItem(item)" title="移除"></i>
           </li>
       </vuedraggable>
-      <el-button type="info" plain style="width:100%" @click="addNav">添加一个图文导航</el-button>
-      <p style="margin-top:10px;color:rgb(211,211,211)">{{suggestSize}}</p>
+      <div @click="addNav" class="add-button-x add-image-ad" v-if="canAdd">
+        <i class="el-icon-plus"></i>
+        <span>添加一个图文导航</span>
+      </div>
+      <p class="prop-message" style="margin-top:10px;">{{suggestSize}}</p>
       <!-- <p style="margin-top:10px;color:rgb(211,211,211)">最多添加 10 个导航，拖动选中的导航可对其排序小程序 v2.3.1 及以上版本支持</p> -->
     </div>
 
@@ -97,13 +101,13 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleNav',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectJumpPage, dialogSelectImageMaterial, vuedraggable},
   data () {
     return {
@@ -112,12 +116,7 @@ export default {
         slideType: 1,//滑动类型
         backgroundColor: '#fff',//背景颜色
         fontColor: '#000',//文字颜色
-        itemList: [{//图文列表
-          title: '',
-          url: '',
-          linkTo: null,
-          id: uuidv4()
-        }],
+        itemList: [],
       },
       rules: {},
       currentNav: null,  //当前操作的图文导航
@@ -129,7 +128,16 @@ export default {
           group: "description",
           ghostClass: "ghost"
       },
-      drag: false
+      drag: false,
+      canAdd: true
+    }
+  },
+   watch: {
+    'ruleForm.itemList': {
+      handler(newValue) {
+        this.canAdd = newValue.length < 10;
+      },
+      deep: true
     }
   },
   computed: {
@@ -140,15 +148,7 @@ export default {
           if(Object.prototype.toString.call(this.ruleForm.itemList) === '[object Object]') {
             this.ruleForm.itemList = [...this.ruleForm.itemList];
           }
-          for(let item of this.ruleForm.itemList) {
-            if(this.ruleForm.templateType===1 && item.url) {
-              value = true;
-              break;
-            }else if(this.ruleForm.templateType===2 && item.title){
-              value = true;
-              break;
-            }
-          }
+          return !!this.ruleForm.itemList.length;
         }
         return value;
     }
@@ -160,35 +160,28 @@ export default {
       switch(Number(templateType)) {
         case 1:
           this.suggestSize = '建议上传尺寸160*160像素(或其他1: 1尺寸)且小于3M的图片（当尺寸不匹配时图片会被压缩或拉伸至变形）';
-          break; 
+          break;
         case 2:
           this.suggestSize = '建议：不超过5个汉字';
-          break; 
+          break;
       }
     },
 
     addNav() {
-      if(this.ruleForm.itemList.length <10) {
-        if(!this.ruleForm.itemList[0].title) {
-          const tempList = [...this.ruleForm.itemList];
-          tempList[0].title = '导航';
-          this.ruleForm.itemList = tempList;
-        }
-        this.ruleForm.itemList.push({
-          title: '导航',
-          url: '',
-          linkTo: null,
-          id: uuidv4()
-        });
-        this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
-        // this.dialogVisible=true; 
-        // this.currentDialog='dialogSelectImageMaterial';
-      }
+      this.ruleForm.itemList.push({
+        title: '导航',
+        url: '',
+        linkTo: null,
+        id: uuidv4()
+      });
+      this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
+      // this.dialogVisible=true;
+      // this.currentDialog='dialogSelectImageMaterial';
     },
 
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.currentNav.title= dialogData.fileName,
+      this.currentNav.title= dialogData.name ||  dialogData.fileName || dialogData.original,
       this.currentNav.url= dialogData.filePath;
     },
 
@@ -198,14 +191,10 @@ export default {
     },
 
     deleteItem(item) {
-      if(this.ruleForm.itemList.length < 2) {
-        this.$message.warning('最后一个不允许删除')
-        return;           
-      }
       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: '确定删除此图文导航吗？'
       }).then(() => {
         const tempItems = [...this.ruleForm.itemList];
@@ -246,23 +235,51 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.form {
+  &:nth-child(2) {
+    padding-left: 17px!important;
+  }
+  .form-item-select-template {
+    /deep/ .el-form-item__content {
+      margin-left: 15px!important;
+      clear: both;
+    }
+  }
+  .add_button {
+    width: 80px;
+    height: 80px;
+  }
+  .add-image-ad {
+    text-align: center;
+  }
+  .img_preview {
+    .delete_btn {
+      right: -8px;
+      top: -8px;
+    }
+  }
+}
 ul.template_type{
   li{
-    width:94px!important;
-    margin-right:10px!important;
-    // height:100px;
-    border:1px solid rgb(228,227,235);
-    padding:10px;
+    width:90px!important;
+    margin-right:20px!important;
+    height:100px;
+    border:1px dashed #B6B5C8;
+    padding:20px 10px 10px 10px;
     box-sizing: border-box;
     cursor:pointer;
+    display: flex;
+    border-radius: 4px;
+    flex-direction: column;
+    justify-content: space-between;
     &.active{
       border:1px solid $globalMainColor;
     }
     .fill_block{
       height:100%;
-      background:rgb(230,228,255);
+      background:rgb(242,242,249);
       margin-right:2px;
-      color:rgb(188,187,255);
+      color:rgba(182,181,200,1);
       width: 50%;
       height: 15px;
       margin-top: 3px;
@@ -280,7 +297,7 @@ ul.template_type{
       .fill_block{
         width:33.3%;
         height: 20px;
-        background:rgb(230,228,255) url('../../../assets/images/shop/editor/pic.png') no-repeat 2px 3px;
+        background: rgb(242,242,249) url('../../../assets/images/shop/editor/pic.png') no-repeat center center;
       }
     }
     .type2{
@@ -296,6 +313,7 @@ ul.template_type{
     p{
       margin-top:6px;
       text-align:center;
+      line-height: 21px;
     }
   }
 }
@@ -309,7 +327,7 @@ ul.template_type{
     margin-bottom:20px;
     position:relative;
     .left{
-      margin-right:20px;
+      margin-right:12px;
     }
     .right{
       display: flex;
@@ -317,23 +335,30 @@ ul.template_type{
       justify-content: center;
       p{
         span{
-
+          &.span-title {
+            margin-right: 10px;
+          }
         }
         .el-input{
-          width: 130px;
+          width: 142px;
           display: inline-block;
         }
       }
     }
      i.delete_btn{
-      width:20px;
-      height:20px;
+      width:14px;
+      height:14px;
       border-radius:50%;
       background:url('../../../assets/images/shop/editor/delete.png') no-repeat 0 0;
       position:absolute;
-      top: -6px;
-      right: -10px;
-      cursor:pointer;
+      cursor: pointer;
+      background-size: 100% 100%;
+      right: 0;
+      top: -1px;
+      &.input-linkTo {
+        right: 0;
+        top: -7px;
+      }
     }
   }
 }

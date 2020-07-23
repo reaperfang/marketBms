@@ -157,7 +157,7 @@ export default {
         this.$emit('invalidChange', true)
       }
 
-    }
+    },
 
   }
 };

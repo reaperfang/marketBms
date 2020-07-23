@@ -1,6 +1,6 @@
 <template>
   <!-- 图片广告 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentArticleAD" v-if="currentComponentData && currentComponentData.data">
         <!-- 1、一行一个 -->
         <div v-if="currentComponentData.data.templateType==1" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
@@ -10,7 +10,7 @@
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   v-for="(item, key) of currentComponentData.data.itemList"
                   :key="key"
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.png')"
                   :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
                   alt
                 />
@@ -20,7 +20,7 @@
             <img
               class="default_image"
               :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-              src="../../../assets/images/shop/defaultImage/ad1.png"
+              src="../../../assets/images/shop/defaultImage/ad1.jpg"
               alt
             />
           </template>
@@ -31,7 +31,7 @@
             <van-swipe :autoplay="3000" indicator-color="white"  @change="type3Change">
               <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.png')"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   alt
                   ref="imgOption"
@@ -44,7 +44,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad2.png"
+                src="../../../assets/images/shop/defaultImage/ad2.jpg"
                 alt
               />
           </template>
@@ -55,7 +55,7 @@
             <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="340 + currentComponentData.data.imgMargin" :height="'auto'" class="big_image" @change="type3Change">
               <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.png')"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
                   alt
@@ -70,7 +70,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad3.png"
+                src="../../../assets/images/shop/defaultImage/ad3.jpg"
                 alt
               />
           </template>
@@ -81,7 +81,7 @@
             <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="118 + currentComponentData.data.imgMargin" :height="110">
               <van-swipe-item class="pdr_16" v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
-                  :src="item.url"
+                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty4.png')"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                   :style="{'paddingRight':currentComponentData.data.imgMargin+'px'}"
                   alt
@@ -94,7 +94,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad4.png"
+                src="../../../assets/images/shop/defaultImage/ad4.jpg"
                 alt
               />
           </template>
@@ -116,7 +116,7 @@
               <img
                 v-for="(item, key) of currentComponentData.data.itemList"
                 :key="key" 
-                :src="item.url"
+                :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty5.png')"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                 alt
                 :style="{'marginLeft':currentComponentData.data.imgMargin + 'px'}"
@@ -128,7 +128,7 @@
             <img
                 class="default_image"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                src="../../../assets/images/shop/defaultImage/ad5.png"
+                src="../../../assets/images/shop/defaultImage/ad5.jpg"
                 alt
               />
           </template>
@@ -138,10 +138,10 @@
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentArticleAD',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {
@@ -150,6 +150,9 @@ export default {
   },
   created() {
 
+  },
+  mounted() {
+    this.dataLoaded = true;
   },
   computed: {
      /* 检测是否有数据 */
@@ -160,12 +163,7 @@ export default {
         if(Object.prototype.toString.call(this.currentComponentData.data.itemList) === '[object Object]') {
           this.currentComponentData.data.itemList = [...this.currentComponentData.data.itemList];
         }
-        for(let item of this.currentComponentData.data.itemList) {
-          if(item.url) {
-            value = true;
-            break;
-          }
-        }
+        return !!this.currentComponentData.data.itemList.length
       }
       return value;
     }
@@ -196,7 +194,6 @@ export default {
 <style lang="scss" scoped>
 .componentArticleAD {
   .default_image{
-    object-fit: none;
     width:100%;
   }
 
@@ -233,7 +230,7 @@ export default {
     height: auto;
   }
   .pdr_16 {
-    padding-right: 8px;
+    // padding-right: 8px;
   }
   .sle:last-child {
     margin-right: 0px;

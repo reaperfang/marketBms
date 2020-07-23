@@ -24,11 +24,11 @@
               :data="tableData"
               style="width: 100%"
               @selection-change="handleSelectionChange"
-              :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+              :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
              >
               <el-table-column 
                 type="selection" 
-                width="55"
+                width="51"
                 :selectable="selectable"
                 :reserve-selection="true"
               ></el-table-column>
@@ -84,7 +84,7 @@
               <i class="take-in-icon"></i>
               <span>收货信息</span>
             </div>
-            <!-- <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div> -->
+            <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
           </div>
           <div class="content">
             <div class="item">
@@ -911,8 +911,8 @@ export default {
         .title {
           display: flex;
           justify-content: space-between;
-          height: 60px;
-          line-height: 60px;
+          height: 50px;
+          line-height: 50px;
           background-color: rgb(243, 244, 244);
           border-radius: 5px 5px 0 0;
           padding: 0 20px;
@@ -1026,6 +1026,29 @@ export default {
 .set-btn:hover {
     color: #444a51;
     text-decoration: underline;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+    &:nth-child(3) {
+        text-align: left;
+    }
+}
+.el-table-column--selection .cell {
+    padding-left: 20px;
+    padding-right: 15px;
+}
+/deep/ .el-table table .cell {
+  padding-left: 0;
+  padding-right: 0;
+}
+/deep/ .el-table table tbody tr td:nth-child(2) {
+  padding-left: 10px;
+}
+/deep/ .el-table thead tr th {
+  border-bottom: none;
 }
 </style>
 

@@ -55,7 +55,7 @@ export function percent(value, fmt) {
  * @export
  * @param {*} name
  */
-export function titleCase(name) {
+export function titleCase(name = '') {
   let str = name.replace(/\b\w+\b/g, function (word) {
     return word.substring(0, 1).toUpperCase() + word.substring(1);
   });

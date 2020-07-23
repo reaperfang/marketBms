@@ -35,7 +35,7 @@
             <el-table
                 :data="orderDetail.orderOperationRecordList"
                 style="width: 100%"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     label="操作">
                     <template slot-scope="scope">
@@ -473,6 +473,9 @@ export default {
     }
     /deep/ .el-table .cell {
         text-align: center;
+    }
+    /deep/ .el-table tr th {
+        border-bottom: none;
     }
 </style>
 

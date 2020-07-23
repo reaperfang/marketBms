@@ -1,11 +1,13 @@
 
+import utils from '@/utils'
 const decorate = {
 	state: {
 		currentComponentId: "",  //当前组件id
 		basePropertyId: '',  //基础属性组件id
 		baseInfo: {},  //店铺装修页面基础信息
 		componentDataIds: [],  //组件列表id序列
-		componentDataMap: {}   //组件数据集合映射
+		componentDataMap: {},   //组件数据集合映射
+		decorateEvents: []   //事件列表
 	},
 	mutations: {
 
@@ -13,6 +15,7 @@ const decorate = {
 		setCurrentComponentId: (state, id) => {
 			state.currentComponentId = id;
 		},
+
 
 		/* 设置基础属性组件id */
 		setBasePropertyId: (state, id) => {
@@ -79,12 +82,12 @@ const decorate = {
 				state.baseInfo = params.data;
 			}
 			//对列表组件处理(一定要深拷贝，否则会出现同类型组件数据污染现象)
-			const tempComponentDataMap = { ...state.componentDataMap };
+			const tempComponentDataMap = utils.deepClone(state.componentDataMap);
 			const componentData = tempComponentDataMap[params.id];
 			if (componentData) {
-				const newComponentData = {...componentData};
+				const newComponentData = utils.deepClone(componentData);
 				delete tempComponentDataMap[params.id];
-				newComponentData['data'] = {...params.data};
+				newComponentData['data'] = utils.deepClone(params.data);
 				tempComponentDataMap[params.id] = newComponentData;
 				state.componentDataMap = tempComponentDataMap;
 			}
@@ -106,10 +109,25 @@ const decorate = {
 		},
 
 		//清除所有装修数据
-		clearAllData(state) {
+		clearEditor(state) {
 			state.baseInfo = {};
 			state.componentDataIds = [];
 			state.componentDataMap = {};
+		},
+
+		/* 添加事件 */
+		addEvent(state, componentType) {
+			if(!state.decorateEvents.includes(componentType)) {
+				state.decorateEvents.push(componentType);
+			}
+		},
+
+		/* 移除事件 */
+		removeEvent(state, componentType) {
+			let index = state.decorateEvents.indexOf(componentType);
+			let events = [...state.decorateEvents];
+			decorateEvents.splice(index, 1);
+			state.decorateEvents = events;
 		}
 	},
 	actions: {}

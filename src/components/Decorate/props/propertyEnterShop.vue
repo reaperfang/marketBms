@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="文案" prop="words">
         <el-input
@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';;
+import mixinPropsBase from '../mixins/mixinPropsBase';;
 export default {
   name: 'propertyEnterShop',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {},
   data () {
     return {

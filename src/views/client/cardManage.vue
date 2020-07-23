@@ -8,8 +8,9 @@
                             <span>会员卡领取引导图</span>
                             <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                         </p>
-                        <img v-if="imgUrl" :src="imgUrl" class="cardImg" />
-                        <img v-else src="../../assets/images/client/guide_img.png" alt class="cardImg" />
+                        <div v-if="!imgUrl" class="cardImg" v-loading="imgLoading"></div>
+                        <img v-else :src="imgUrl" class="cardImg"/>
+                        <!-- <img v-else src="../../assets/images/client/guide_img.png" alt class="cardImg" /> -->
                         <el-button v-if="!imgUrl" size="small" type="primary" class="upload_btn mini_1" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">待上传</el-button>
                         <el-button v-else size="small" type="primary" class="upload_btn mini_2" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">更改</el-button>
                         <el-popover
@@ -83,7 +84,8 @@ export default {
             isLoading: true,
             loading: false,
             dialogVisible: false,
-            currentDialog:""
+            currentDialog:"",
+            imgLoading: false
         }
     },
     computed:{
@@ -149,12 +151,23 @@ export default {
         },
         //检测是否有背景图片
         checkCardBg() {
+            this.imgLoading = true;
             this._apis.client.checkCardBg({}).then((response) => {
                 if(response) {
+                    this.imgLoading = false;
                     this.imgUrl = response.imgUrl;
                     this.imgId = response.id;
+                    if(!this.imgUrl) {
+                        let _this = this;
+                        setTimeout(() => {
+                            _this.imgLoading = false;
+                        },5000);
+                    }
+                }else{
+                    this.imgLoading = false;
                 }
             }).catch((error) => {
+                this.imgLoading = false;
                 console.log(error);
             })
         }
@@ -218,6 +231,8 @@ export default {
             width: 326px;
             height: 62px;
             border-radius: 10px;
+            background: url(../../assets/images/client/guide_img.png) 0 0 no-repeat;
+            background-size: 100% 100%;
         }
     }
     .c_warn{

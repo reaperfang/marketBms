@@ -1,8 +1,25 @@
 <template>
   <div class="editor-wrapper">
-    <widgetView v-if="config.showWidget"></widgetView>
-    <editView v-if="height > 0" :dragable="config.dragable" :height="height"></editView>
-    <propView v-if="config.showProp" :buttons="buttonList"></propView>
+    <widgetView 
+      v-if="config.showWidget" 
+      :widgetCalcHeight="config.widgetCalcHeight"
+      :componentsConfig="config.components" 
+      @widgetPanelInited="widgetPanelInited"
+    ></widgetView>
+    <renderView 
+      :renderCalcHeight="config.renderCalcHeight" 
+      :dragable="config.dragable" 
+      @renderPanelInited="renderPanelInited"
+      @dataLoadProgress="dataLoadProgress"
+      @allDataLoaded="finished"
+    ></renderView>
+    <propView 
+      v-if="config.showProp" 
+      :propCalcHeight="config.propCalcHeight"
+      :buttons="config.buttons"
+      @propsPanelInited="propsPanelInited"
+      @propDataChanged="propDataChanged"
+    ></propView>
     <!-- <div style="width:600px;">
       页面基础数据：
       <el-tag type="primary" style="width: 100%;overflow-x: auto;">{{baseInfo}}</el-tag>
@@ -19,53 +36,28 @@
 
 <script>
 import widgetView from "./widgetView";
-import editView from "./editView";
+import renderView from "./renderView";
 import propView from "./propView";
 import utils from "@/utils";
-import widget from './config/widgetConfig'
+import widget from './config/widgetConfig';
 export default {
   name: "decorate",
-  components: { widgetView, editView, propView },
+  components: { widgetView, renderView, propView },
   props: {
     decorateData: {
       type: Object
     },
     config: {
       type: Object
-    },
-    height: {
-      type: Number,
-      default: 145 - 10
     }
   },
   data() {
     return {
-      buttonList: this.config.buttons,
       decoratePageData:this.decorateData
     };
   },
   created() {
-
-    //创建组件id
-    const id = uuidv4();
-
-    //转换接口数据为可识别格式
-    this.convertDecorateData(this.decoratePageData);
-
-    //创建基础组件-页面根组件
-    this.$store.commit('addComponent', {
-      component: Object.assign({id}, (()=>{
-        for(let item of widget.getWidgetList()) { 
-          if(item.type === this.config.pageBase.type) {
-            return Object.assign(item, this.config.pageBase);
-            break;
-          }
-        }
-      })())
-    });
-
-    //设置基础组件id
-    this.$store.commit('setBasePropertyId', id);
+    this.init();
     this.$store.dispatch('getShopStyle');
   },
   computed: {
@@ -83,21 +75,39 @@ export default {
     }
   },
   watch: {
-    'config.buttons': {
-      handler(newValue) {
-        this.buttonList = newValue;
-      },
-      deep: true
-    },
     'decorateData': {
       handler(newValue) {
-        this.decoratePageData = newValue;
-        this.convertDecorateData(this.decoratePageData);
+        this.updateDecorateData(newValue);
       },
       deep: true
     },
   },
   methods: {
+
+    init() {
+
+      //创建组件id
+      const id = uuidv4();
+
+      //转换接口数据为可识别格式
+      const result = this.convertDecorateData(this.decoratePageData);
+
+      //初始化编辑器数据
+      this.initData(result, this.decoratePageData);
+
+      //创建基础组件-页面根组件
+      this.createBaseComponent(id);
+
+      //设置基础组件id
+      this.$store.commit('setBasePropertyId', id);
+
+      //设置选中高亮的组件id
+      this.$store.commit('setCurrentComponentId', this.basePropertyId);
+
+      //发送请求数据初始化事件
+      this.responseDataInited();
+    },
+
     /* 转换接口获取的装修数据 */
     convertDecorateData(data) {
       if(!data) {
@@ -110,18 +120,27 @@ export default {
         return;
       }
       let pageData = JSON.parse(string);
-      if(!Array.isArray(pageData)) {
+      let result = [];
+      if(Object.prototype.toString.call(pageData) === '[object Object]') {
+        for(let k in pageData) {
+          result.push(pageData[k]);
+        }
+      }else {
+        result = pageData;
+      }
+      if(!Array.isArray(result)) {
         return;
       }
-      this.init(pageData, data);
-      // console.log('pageData', pageData);
+      return result;
     },
 
     //编辑器数据初始化
-    init(pageData, originData) {
+    initData(pageData, originData) {
+      if(!pageData) {
+        return;
+      }
       let componentDataIds = [];
       let componentDataMap = {};
-
 
       //转换为组件顺序表和map数据结构
       for (let item of pageData) {
@@ -143,6 +162,31 @@ export default {
         id: this.basePropertyId,
         data: this.config.callbacks.setBaseInfo(originData)
       });
+    },
+
+    /*创建基础组件-页面根组件 */
+    createBaseComponent(id) {
+      this.$store.commit('addComponent', {
+        component: Object.assign({id}, (()=>{
+          for(let item of widget.getWidgetList()) { 
+            if(item.type === this.config.pageBase.type) {
+              return Object.assign(item, this.config.pageBase);
+              break;
+            }
+          }
+        })())
+      });
+    },
+
+    /* 更新装修数据 */
+    updateDecorateData(newValue) {
+      this.decoratePageData = newValue;
+
+      //转换接口数据为可识别格式
+      const result = this.convertDecorateData(this.decoratePageData);
+
+      //初始化编辑器数据
+      this.initData(result, this.decoratePageData);
 
       //设置选中高亮的组件id
       this.$store.commit('setCurrentComponentId', this.basePropertyId);
@@ -153,14 +197,50 @@ export default {
       let result = this.baseInfo;
       let pageData = [];
       for(let item of this.componentDataIds) {
-        const componentData = this.componentDataMap[item];
+        let componentData = this.componentDataMap[item];
         if(componentData) {
           pageData.push(componentData);
         }
       }
 
-      result['pageData'] = utils.compileStr(JSON.stringify(pageData));;
+      result['pageData'] = pageData;
       return result;
+    },
+
+     /* 控件面板初始化事件 */
+    widgetPanelInited() {
+      this.$emit('widgetPanelInited', this);
+    },
+    
+    /* 渲染面板初始化事件 */
+    renderPanelInited() {
+      this.$emit('renderPanelInited', this);
+    },
+    
+    /* 属性面板初始化事件 */
+    propsPanelInited() {
+      this.$emit('propsPanelInited', this);
+    },
+
+    /* 请求数据转换初始化事件 */
+    responseDataInited() {
+      this.$emit('responseDataInited', this);
+    },
+
+    /* 组件数据发生改变事件 */
+    propDataChanged(id, data) {
+      this.$emit('propDataChanged', this, id, data);
+    },
+
+    /* 组件数据加载进度事件 */
+    dataLoadProgress(value, component) {
+      this.$emit('dataLoadProgress', this, value, component);
+    },
+
+    /* 编辑器整体加载完毕事件 */
+    finished() {
+      this.$emit('finished', this);
+      console.log('编辑器整体加载完毕！')
     }
   }
 

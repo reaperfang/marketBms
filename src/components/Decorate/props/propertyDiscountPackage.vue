@@ -1,22 +1,23 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="选择套装" prop="packages">
+        <p class="prop-message" style="margin: 9px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of list" :key="key" :title="item.name">
+            <li v-for="(item, key) of displayList" :key="key" :title="item.name">
               <img :src="item.activityPic" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectPackage'">
               <i class="inner"></i>
+              <p>添加套装</p>
             </li>
           </ul>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       </el-form-item>
       <el-form-item label="列表样式" prop="listStyle">
-        <el-radio-group v-model="ruleForm.listStyle">
+        <el-radio-group class="radio-block" v-model="ruleForm.listStyle">
           <el-radio :label="1">大图模式</el-radio>
           <el-radio :label="2">一行两个</el-radio>
           <el-radio :label="3">一行三个</el-radio>
@@ -45,7 +46,7 @@
 
     <div class="block form">
       <el-form-item label="商品样式" prop="goodsStyle">
-        <el-radio-group v-model="ruleForm.goodsStyle">
+        <el-radio-group class="radio-block" v-model="ruleForm.goodsStyle">
           <el-radio :label="1">无边白底</el-radio>
           <el-radio :label="2">卡片投影</el-radio>
           <el-radio :label="3">描边白底</el-radio>
@@ -59,7 +60,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="图片比例" prop="goodsRatio">
-        <el-radio-group v-model="ruleForm.goodsRatio">
+        <el-radio-group class="radio-block" v-model="ruleForm.goodsRatio">
           <el-radio :label="1">3:2</el-radio>
           <el-radio :label="2">1:1</el-radio>
           <el-radio :label="3">3:4</el-radio>
@@ -107,11 +108,11 @@
           <el-radio :label="7">样式7</el-radio>
           <el-radio :label="8">样式8</el-radio>
         </el-radio-group>
-        <el-input v-if="ruleForm.showContents.includes('6') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
+        <el-input v-if="ruleForm.showContents.includes('6') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
-        <p class="hide_tips">(隐藏后，活动商品将不在微商城显示)</p>
+        <p class="hide_tips prop-message" style="margin-top: -5px;">隐藏后，活动商品将不在微商城显示</p>
         <!-- <el-checkbox v-model="ruleForm.hideEndGoods">隐藏活动结束商品</el-checkbox> -->
         <el-radio-group v-model="ruleForm.hideType" v-if="ruleForm.hideSaledGoods">
           <!-- <el-radio :label="1">24小时后隐藏</el-radio> -->
@@ -126,11 +127,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
-import dialogSelectPackage from '@/views/shop/dialogs/decorateDialogs/dialogSelectPackage';
+import mixinPropsData from '../mixins/mixinPropsData';
+import dialogSelectPackage from '@/components/Decorate/dialogs/dialogSelectPackage';
 export default {
   name: 'propertyDiscountPackage',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectPackage},
   data () {
     return {
@@ -152,19 +153,16 @@ export default {
         ids: [],//优惠套装id列表
         buttonText: '查看活动'//按钮文字
       },
+      displayList: [],
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
 
     }
-  },
-  created() {
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -203,7 +201,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-            bNeedUpdateMiddle && this._globalEvent.$emit('fetchDiscountPackage', this.ruleForm, this.$parent.currentComponentId);
+            bNeedUpdateMiddle && this.syncToMiddle();
             if(Array.isArray(componentData.ids) && componentData.ids.length){
                 this.loading = true;
                 this._apis.shop.getDiscountPackageListByIds({
@@ -213,18 +211,18 @@ export default {
                     this.loading = false;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
+                    this.displayList = [];
                     this.loading = false;
                 });
             }else{
-                this.list = [];
+                this.displayList = [];
             }
         }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.list = datas;
+        this.displayList = datas;
     },
   }
 }

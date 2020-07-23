@@ -1,7 +1,7 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
-      <el-form-item label="选择模板" prop="templateType">
+      <el-form-item class="form-item-select-template" label="选择模板" prop="templateType">
         <ul class="tile-list n2 template_type">
           <li @click="selectTemplate(1)" :class="{'active': ruleForm.templateType === 1}">
             <div class="type type1">
@@ -38,8 +38,10 @@
     </div>
 
     <div class="block form">
-      添加图片:
-      <p style="color:rgb(211, 211, 211);margin-top:5px;">最多添加10个广告，鼠标拖拽可调整广告顺序</p>
+      <div class="row align-center">
+        添加图片
+        <p class="prop-message prop-message-add-image" style="margin-top:3px;">最多添加10个广告，鼠标拖拽可调整广告顺序</p>
+      </div>
 
       <!-- 可拖拽调整顺序 -->
       <vuedraggable
@@ -55,13 +57,14 @@
                 <i class="delete_btn" @click.stop="deleteImage(item)"></i>
                 <span @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
               </div>
-              <div v-else class="add_button" @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">
+              <div v-else class="add_button add_button_img" @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">
                 <i class="inner"></i>
+                <p>上传图片</p>
               </div>
             </div>
             <div class="right">
               <p>
-                <span>图片标题</span>
+                <span class="span-title">图片标题</span>
                 <el-input v-model="item.title"></el-input>
               </p>
               <p style="display:flex;">
@@ -71,7 +74,7 @@
                 type="text"
                 @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'">选择跳转到的页面</el-button>
               </p>
-              <div class="link_overview clearFix" v-if="item.linkTo">
+              <div class="link_overview clearFix arrow" v-if="item.linkTo">
                 <div class="cont l">
                   <span class="l" :title="item.linkTo.typeName + '-' + (item.linkTo.data.title || item.linkTo.data.name)">{{item.linkTo.typeName + ' | ' + (item.linkTo.data.title || item.linkTo.data.name)}}</span>
                   <i @click="removeLink(item)"></i>
@@ -79,13 +82,16 @@
                 <span class="modify r" @click="dialogVisible=true; currentAD = item; currentDialog='dialogSelectJumpPage'">修改</span>
               </div>
             </div>
-            <i class="delete_btn" @click.stop="deleteItem(item)" title="移除"></i>
+            <i class="delete_btn" :class="{'input-linkTo' : item.linkTo}" @click.stop="deleteItem(item)" title="移除"></i>
           </li>
       </vuedraggable>
       <!-- <ul class="item_list">
       </ul> -->
-      <el-button type="info" plain style="width:100%" @click="addNav">添加一个广告图</el-button>
-      <p style="margin-top:10px;color:rgb(211,211,211)">{{suggestSize}}</p>
+      <div @click="addNav" class="add-button-x add-image-ad" v-if="canAdd">
+        <i class="el-icon-plus"></i>
+        <span>添加一个广告图</span>
+      </div>
+      <p class="prop-message" style="margin-top:10px;">{{suggestSize}}</p>
     </div>
 
      <div class="block form">
@@ -95,7 +101,7 @@
             <span>{{ruleForm.pageMargin}}像素</span>
           </div>
         </el-form-item>
-        <el-form-item label="图片间距" prop="imgMargin" v-if="hasContent">
+        <el-form-item label="图片间距" prop="imgMargin">
             <div class="slider-wrapper">
             <el-slider v-model="ruleForm.imgMargin" :min="0" :max="30"></el-slider>
             <span>{{ruleForm.imgMargin}}像素</span>
@@ -125,13 +131,13 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleAD',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectJumpPage, dialogSelectImageMaterial, vuedraggable},
   data () {
     return {
@@ -143,12 +149,7 @@ export default {
         imgMargin: 10,  //图片间距
         imgStyle: 1,  //图片样式
         imgChamfer: 1,  //图片倒角
-        itemList: [{  //图片列表
-          title: '图片广告',
-          url: '',
-          linkTo: null,
-          id: uuidv4()
-        }],
+        itemList: [],
       },
       rules: {},
       currentAD: null,  //当前操作的图文导航
@@ -158,7 +159,8 @@ export default {
           group: "description",
           ghostClass: "ghost"
       },
-      drag: false
+      drag: false,
+      canAdd: true
     }
   },
   watch: {
@@ -171,6 +173,7 @@ export default {
           }
         })
         newValue = list
+        this.canAdd = newValue.length < 10;
       },
       deep: true
     }
@@ -184,12 +187,7 @@ export default {
         if(Object.prototype.toString.call(this.ruleForm.itemList) === '[object Object]') {
           this.ruleForm.itemList = [...this.ruleForm.itemList];
         }
-        for(let item of this.ruleForm.itemList) {
-          if(item.url) {
-            value = true;
-            break;
-          }
-        }
+        return !!this.ruleForm.itemList.length;
       }
       return value;
     }
@@ -232,7 +230,7 @@ export default {
 
     /* 弹框选中图片 */
     imageSelected(dialogData) {
-      this.currentAD.title= '',
+      this.currentAD.title= dialogData.name || dialogData.fileName || dialogData.original,
       this.currentAD.url= dialogData.filePath;
     },
 
@@ -242,10 +240,6 @@ export default {
     },
 
     deleteItem(item) {
-      if(this.ruleForm.itemList.length < 2) {
-        this.$message.warning('最后一个不允许删除');
-        return;
-      }
       this.confirm({
         title: '提示',
         customClass: 'goods-custom',
@@ -290,20 +284,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.form {
+  &:nth-child(2), &:nth-child(3), &:nth-child(4) {
+    padding-left: 17px!important;
+  }
+  .prop-message-add-image {
+    margin-left: 6px;
+  }
+  .add_button {
+    width: 80px;
+    height: 80px;
+  }
+  .add-image-ad {
+    text-align: center;
+  }
+  .form-item-select-template {
+    /deep/ .el-form-item__content {
+      margin-left: 15px!important;
+      clear: both;
+    }
+  }
+}
 /deep/.el-form-item__label{
   text-align: left;
 }
 ul.template_type{
   li{
-    width: 85px!important;
-    height: 100px90px!important;
-    border: 1px solid #e4e3eb;
+    width: 90px!important;
+    height: 100px!important;
+    border: 1px dashed #B6B5C8;
     padding: 10px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    margin-right: 18px!important;
+    margin-right: 13px!important;
     cursor: pointer;
     font-size:12px;
+    border-radius:4px;
     &.active{
       border:1px solid $globalMainColor;
     }
@@ -342,7 +358,7 @@ ul.template_type{
     margin-bottom:20px;
     position:relative;
     .left{
-      margin-right:20px;
+      margin-right:12px;
     }
     .right{
       display: flex;
@@ -350,23 +366,30 @@ ul.template_type{
       justify-content: center;
       p{
         span{
-
+          &.span-title {
+            margin-right: 10px;
+          }
         }
         .el-input{
-          width: 130px;
+          width: 142px;
           display: inline-block;
         }
       }
     }
     i.delete_btn{
-      width:20px;
-      height:20px;
+      width:14px;
+      height:14px;
       border-radius:50%;
       background:url('../../../assets/images/shop/editor/delete.png') no-repeat 0 0;
       position:absolute;
-      top: -6px;
-      right: -10px;
-      cursor:pointer;
+      right: 0;
+      top: -1px;
+      &.input-linkTo {
+        right: 0;
+        top: -7px;
+      }
+      cursor: pointer;
+      background-size: 100% 100%;
     }
   }
 }

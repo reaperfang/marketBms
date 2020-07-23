@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="显示样式" prop="displayStyle">
         <el-radio-group v-model="ruleForm.displayStyle">
@@ -18,8 +18,9 @@
         </div>
         <div class="add_button" v-if="!ruleForm.backgroundImage" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
+          <p>添加图片</p>
         </div>
-        <p style="color:rgb(211, 211, 211);margin-top:5px;">建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
+        <p class="prop-message" style="margin-top:5px;">建议尺寸：750*370像素，尺寸不匹配时，图片将被压缩或拉伸以铺满四周</p>
       </el-form-item>
     </div>
 
@@ -29,11 +30,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: 'propertyShopInfo',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectImageMaterial},
   data () {
     return {

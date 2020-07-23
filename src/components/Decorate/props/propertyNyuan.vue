@@ -1,28 +1,29 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="选择活动" prop="promotions">
+        <p class="prop-message" style="margin: 9px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of list" :key="key" :title="item.name">
+            <li v-for="(item, key) of displayList" :key="key" :title="item.name">
               <img :src="item.activityPic" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectNyuan'">
               <i class="inner"></i>
+              <p>添加活动</p>
             </li>
           </ul>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加30个活动</p>
       </el-form-item>
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
-          <el-radio :label="1">大图模式</el-radio>
-          <el-radio :label="2">一行两个</el-radio>
-          <el-radio :label="3">一行三个</el-radio>
-          <el-radio :label="4">详细列表</el-radio>
-          <el-radio :label="5">一大两小</el-radio>
-          <el-radio :label="6">横向滑动</el-radio>
+          <div><el-radio :label="1">大图模式</el-radio></div>
+          <div><el-radio :label="2">一行两个</el-radio></div>
+          <div><el-radio :label="3">一行三个</el-radio></div>
+          <div><el-radio :label="4">详细列表</el-radio></div>
+          <div><el-radio :label="5">一大两小</el-radio></div>
+          <div><el-radio :label="6">横向滑动</el-radio></div>
         </el-radio-group>
       </el-form-item>
     </div>
@@ -46,10 +47,10 @@
     <div class="block form">
       <el-form-item label="商品样式" prop="goodsStyle">
         <el-radio-group v-model="ruleForm.goodsStyle">
-          <el-radio :label="1">无边白底</el-radio>
-          <el-radio :label="2">卡片投影</el-radio>
-          <el-radio :label="3">描边白底</el-radio>
-          <el-radio :label="4">无边透明底</el-radio>
+          <div><el-radio :label="1">无边白底</el-radio></div>
+          <div><el-radio :label="2">卡片投影</el-radio></div>
+          <div><el-radio :label="3">描边白底</el-radio></div>
+          <div><el-radio :label="4">无边透明底</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="商品倒角" prop="goodsChamfer">
@@ -60,10 +61,10 @@
       </el-form-item>
       <el-form-item label="图片比例" prop="goodsRatio">
         <el-radio-group v-model="ruleForm.goodsRatio">
-          <el-radio :label="1">3:2</el-radio>
-          <el-radio :label="2">1:1</el-radio>
-          <el-radio :label="3">3:4</el-radio>
-          <el-radio :label="4">16:9</el-radio>
+          <div><el-radio :label="1">3:2</el-radio></div>
+          <div><el-radio :label="2">1:1</el-radio></div>
+          <div><el-radio :label="3">3:4</el-radio></div>
+          <div><el-radio :label="4">16:9</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="图片填充" prop="goodsFill">
@@ -108,7 +109,7 @@
           <el-radio :label="7">样式7</el-radio>
           <el-radio :label="8">样式8</el-radio>
         </el-radio-group>
-        <el-input v-if="ruleForm.showContents.includes('7') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
+        <el-input v-if="ruleForm.showContents.includes('7') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
       </el-form-item>
       <!-- <el-form-item label="更多设置"> -->
         <!-- <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox> -->
@@ -127,11 +128,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
-import dialogSelectNyuan from '@/views/shop/dialogs/decorateDialogs/dialogSelectNyuan';
+import mixinPropsData from '../mixins/mixinPropsData';
+import dialogSelectNyuan from '@/components/Decorate/dialogs/dialogSelectNyuan';
 export default {
   name: 'propertyNyuan',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectNyuan},
   data () {
     return {
@@ -153,18 +154,15 @@ export default {
         ids: [],//活动id列表
         buttonText: '查看活动'//按钮文字
       },
+      displayList: [],
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
       loading: false
     }
-  },
-  created() {
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -203,7 +201,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-           bNeedUpdateMiddle && this._globalEvent.$emit('fetchNyuan', this.ruleForm, this.$parent.currentComponentId);
+           bNeedUpdateMiddle && this.syncToMiddle();
             const ids = componentData.ids;
             if(Array.isArray(ids) && ids.length){
                 this.loading = true;
@@ -214,18 +212,18 @@ export default {
                     this.loading = false;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
+                    this.displayList = [];
                     this.loading = false;
                 });
             }else{
-                this.list = [];
+                this.displayList = [];
             }
         }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.list = datas;
+        this.displayList = datas;
     },
   }
 }

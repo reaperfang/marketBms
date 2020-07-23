@@ -1,13 +1,14 @@
 <template>
   <div class="new-template">
+    <h2 class="">{{ setTitle }}</h2>
     <section>
-      <div class="title">基础信息设置</div>
+      <div class="title">基础信息设置：</div>
       <div class="content">
         <el-form
           :model="ruleForm"
           :rules="rules"
           ref="ruleForm"
-          label-width="100px"
+          label-width="123px"
           class="demo-ruleForm"
           :disabled="$route.query.mode == 'look'"
         >
@@ -23,13 +24,13 @@
       </div>
     </section>
     <section class="regional-setting">
-      <div class="title">区域设置</div>
+      <div class="title">区域设置：</div>
       <div class="content">
         <div class="content-item">
           <div class="content-item-title">
             <div class="row justify-between">
               <div class="col">
-                <span>配送区域</span>
+                <span style="font-size:14px;font-weight:400;color:rgba(68,67,75,1);">配送区域</span>
                 <span class="des">说明：除指定区域外，其余区域按默认计算。</span>
               </div>
               <div
@@ -42,39 +43,51 @@
           <div>
             <el-table
               :data="tableData"
-              border
-              :header-cell-style="{background:'#f3f4f3', color:'#132215'}"
+              class="table"
+              :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '400'}"
               style="width: 100%"
               :class="{isIE: isIE}"
             >
               <el-table-column prop="areaInfoList" label="配送到" width="150">
                 <template slot-scope="scope">
-                  <span>{{scope.row.areaInfoList.map(val => val.cityName).join(',') || '默认运费（全国）'}}</span>
+                  <p v-if="isDefaultNationwide(scope.row.areaInfoList)">默认运费（全国）</p>
+                  <template v-if="!isDefaultNationwide(scope.row.areaInfoList)">
+                    <p v-for="(item, key) in getFirstFew(scope.row.areaInfoList, 4)" :key="key">
+                      {{ item.name }}
+                    </p>
+                  </template>
+                  <el-button type="text" class="more" @click="showMoreAreaInfoList(scope.row)" v-if="scope.row.areaInfoList && scope.row.areaInfoList.length > 4">更多</el-button>
                 </template>
               </el-table-column>
-              <el-table-column :label="one" width="250">
+              <el-table-column :label="one" width="250" align="center">
                 <template slot-scope="scope">
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.theFirst"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}或以内
+                  <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.theFirst"></el-input> -->
+                  <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.theFirst" controls-position="right" :min="0" ></el-input-number>
+                  {{ruleForm.calculationWay | calculationWayFilter}}或以内
                 </template>
               </el-table-column>
-              <el-table-column label="运费（元）" width="200">
+              <el-table-column label="运费（元）" width="200" align="center">
                 <template slot-scope="scope">
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.freight"></el-input>
+                  <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.freight"></el-input> -->
+                  <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.freight" controls-position="right" :min="0" ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column :label="two" width="250">
+              <el-table-column :label="two" width="250" align="center">
                 <template slot-scope="scope">
                   每增加
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.superaddition"></el-input>{{ruleForm.calculationWay | calculationWayFilter}}
+                  <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.superaddition"></el-input> -->
+                  <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.superaddition" controls-position="right" :min="0" ></el-input-number>
+                  {{ruleForm.calculationWay | calculationWayFilter}}
                 </template>
               </el-table-column>
-              <el-table-column label="续费（元）" width="250">
+              <el-table-column label="续费（元）" width="250" align="center">
                 <template slot-scope="scope">
                   运费增加
-                  <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.renew"></el-input>
+                  <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.renew"></el-input> -->
+                  <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.renew" controls-position="right" :min="0" ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column label="操作">
+              <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                   <span @click="deleteRow(scope.$index)" v-if="scope.$index != 0 && $route.query.mode != 'look'" class="blue">删除</span>
                 </template>
@@ -106,11 +119,12 @@
         <el-button @click="submit('ruleForm')" type="primary">确 定</el-button>
       </div>
     </section>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :data="currTemplate"></component>
   </div>
 </template>
 <script>
 import RegionDialog from "@/views/order/dialogs/regionDialog";
+import DialogAreaShow from "./dialogs/dialogAreaShow";
 
 export default {
   data() {
@@ -143,7 +157,8 @@ export default {
         },
       tableData: [],
       currentDialog: "",
-      dialogVisible: false
+      dialogVisible: false,
+      currTemplate: null
     };
   },
   created() {
@@ -154,12 +169,12 @@ export default {
         "areaInfoList": [{
 				"receivedProvinceCode": "",
 				"receivedCityCode": "",
-				"cityName": ""
+				"name": ""
 			}],
-			"theFirst": "",
-			"freight": "",
-			"superaddition": "",
-			"renew": ""
+			"theFirst": undefined,
+			"freight": undefined,
+			"superaddition": undefined,
+			"renew": undefined
       })
     }
   },
@@ -175,6 +190,10 @@ export default {
     }
   },
   computed: {
+    setTitle() {
+      const id = this.$route.query && this.$route.query.id
+      return !id ? '新建模版' : '编辑模版'
+    },
     one() {
       if(this.ruleForm.calculationWay == 1) {
         return '首件'
@@ -210,6 +229,28 @@ export default {
         }
   },
   methods: {
+    showMoreAreaInfoList(item) {
+      this.currTemplate = item.areaInfoList
+      this.currentDialog = 'DialogAreaShow'; 
+      this.dialogVisible = true
+    },
+    getFirstFew(list = [], len) {
+      let arr = []
+      let i = 0;
+      while(i < len && i < list.length) {
+         arr.push(list[i])
+         i++
+      }
+      return arr
+    },
+    isDefaultNationwide(list) {
+      if (list && list.length > 0) {
+        if (!list[0].name) {
+          return true
+        }
+      }
+      return false
+    },
     deleteRow(index) {
       this.tableData.splice(index, 1)
     },
@@ -381,18 +422,15 @@ export default {
     },
     onSubmit(value) {
       console.log(value);
+      const areaInfoList = value
       this.tableData = [
         ...this.tableData,
         {
-          areaInfoList: value.map(val => ({
-            receivedProvinceCode: val.code,
-            receivedCityCode: val.city.code,
-            cityName: val.city.name
-          })),
-          theFirst: "",
-          freight: "",
-          superaddition: "",
-          renew: ""
+          areaInfoList,
+          theFirst: undefined,
+          freight: undefined,
+          superaddition: undefined,
+          renew: undefined
         }
       ];
     },
@@ -425,15 +463,24 @@ export default {
               areaInfoList.forEach(areaInfo => {
                 let receivedProvinceCode = areaInfo.receivedProvinceCode
                 let receivedCityCode = areaInfo.receivedCityCode
-                let cityName = ''
+                let receivedAreaCode = areaInfo.receivedAreaCode
+                let name = ''
 
-                if(receivedProvinceCode == '' && receivedCityCode == '') {
-                  cityName = '默认运费（全国）'
+                if(receivedProvinceCode == '' && receivedCityCode == '' && receivedAreaCode == '') {
+                  name = '默认运费（全国）'
                 } else {
-                  cityName = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                  console.log('areaList',areaList)
+                  if (receivedAreaCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).areas.find(area => area.code === receivedAreaCode).name
+                  } else if (receivedCityCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                  } else if (receivedProvinceCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).name
+                  }
+                  
                 }
 
-                areaInfo.cityName = cityName
+                areaInfo.name = name
               })
             })
             this.tableData = templateContents;
@@ -449,26 +496,62 @@ export default {
     }
   },
   components: {
-    RegionDialog
+    RegionDialog,
+    DialogAreaShow
   }
 };
 </script>
 <style lang="scss" scoped>
 .new-template {
+  background-color: #fff;
+  h2 {
+    padding: 18px 0 10px 20px;
+    font-size:14px;
+    font-weight:500;
+    color:rgba(68,67,75,1);
+    line-height:20px;
+  }
   section {
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     background-color: #fff;
     .title {
       margin-bottom: 20px;
-      font-size: 16px;
+      font-size:14px;
+      font-weight:400;
+      color:rgba(68,67,75,1);
+      line-height:20px;
+      width: 123px;
+      text-align: right;
     }
     &.regional-setting {
-      margin-top: 20px;
+      // margin-top: 20px;
+      padding: 30px 20px 20px 0;
+      margin: 0 20px;
+      border-top: 1px dashed rgba(211, 211, 211, 1);
+      .table {
+        border: 1px solid #D0D6E4;
+        border-bottom: 0;
+        /deep/ th.is-leaf {
+          border:0;
+        }
+        /deep/ td {
+          border-bottom: 1px solid #D0D6E4;
+        }
+        /deep/ th>.cell {
+          line-height: 30px;
+        }
+        &::before {
+          height: 0;
+        }
+        .more {
+
+        }
+      }
       .content {
-        margin-left: 60px;
+        margin-left: 55px;
         .content-item {
           &:last-child {
-            margin-top: 40px;
+            margin-top: 20px;
             .no-distribution-box {
               margin-left: 20px;
             }
@@ -495,6 +578,12 @@ export default {
               font-size: 14px;
               margin-left: 20px;
             }
+            .pointer {
+              font-size:12px;
+              font-weight:400;
+              color:rgba(146,146,155,1);
+              text-decoration: underline;
+            }
           }
         }
       }
@@ -502,11 +591,15 @@ export default {
         text-align: center;
         margin-top: 30px;
       }
-      /deep/ .el-input {
-        width: 62px;
-        margin-right: 10px;
-        margin-left: 10px;
+      /deep/ .el-input__inner {
+        border-radius: 0;
       }
+      // 更换组件
+      // /deep/ .el-input {
+      //   width: 62px;
+      //   margin-right: 10px;
+      //   margin-left: 10px;
+      // }
     }
   }
 }

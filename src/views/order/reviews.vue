@@ -61,7 +61,7 @@
                     tooltip-effect="dark"
                     style="width: 100%"
                     @selection-change="handleSelectionChange"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                    :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                     <el-table-column
                         type="selection"
                         width="55">
@@ -80,12 +80,11 @@
                     <el-table-column
                         prop="goodsName"
                         label="商品名称"
-                        width="120">
+                        width="180">
                     </el-table-column>
                     <el-table-column
                         prop="starNum"
                         label="评价星级"
-                        width="120"
                         :filters="[{ text: '1星', value: 1 }, { text: '2星', value: 2 }, { text: '3星', value: 3 }, { text: '4星', value: 4 }, { text: '5星', value: 5 }]"
                         :filter-method="filterStar"
                         filter-placement="bottom-end">
@@ -123,7 +122,7 @@
                         prop="createTime"
                         label="评价时间">
                     </el-table-column>
-                    <el-table-column label="操作" width="150px">
+                    <el-table-column label="操作" width="150px" fixed="right">
                         <template slot-scope="scope">
                             <div class="operate-box">
                                 <span v-permission="['订单', '评价管理', '默认页面', '审核']" v-if="scope.row.auditStatus == 0" class="blue" @click="currentDialog = 'AuditDialog'; title='审核'; batch = false; currentData = scope.row; dialogVisible = true">审核</span>
@@ -406,10 +405,13 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .reviews {
@@ -478,6 +480,35 @@ export default {
 }
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table tr th {
+    border-bottom: none;
+}
+.operate-box {
+    text-align: left;
+    span {
+        border-right: 1px solid rgba(218,218,227,1);
+        padding-right: 5px;
+        &:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+    }
+}
+.border-button {
+    border:1px solid rgba(218,218,227,1)!important;
+    color: #44434B!important;
+    &:hover {
+        border:1px solid #655EFF!important;
+        color: #655EFF!important;
+        background-color: #fff;
+    }
 }
 </style>
 

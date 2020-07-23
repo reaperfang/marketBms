@@ -416,7 +416,7 @@ export default {
 
     /* 上传超过个数的处理 */
     uploadLimit() {
-      this.$message.warning('最多支持上传6张！');
+      this.$message.warning('最多支持上传100张！');
     },
 
       /* 清除缓存 */
