@@ -38,15 +38,18 @@ export function uncompileStr(code) {
  * @returns
  */
 export function aesEncryption(key= '', string=''){
-      var key = CryptoJS.enc.Utf8.parse(key);
-      // ECB加密
-      var options={
-          mode: CryptoJS.mode.ECB,
-          padding: CryptoJS.pad.Pkcs7,
-      }
-      var encryptedData = CryptoJS.AES.encrypt(string, key, options);
-      var encryptedBase64Str = encryptedData.toString();
-      return encryptedBase64Str;
+    if(!string) {
+        return '';
+    }
+    var key = CryptoJS.enc.Utf8.parse(key);
+    // ECB加密
+    var options={
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7,
+    }
+    var encryptedData = CryptoJS.AES.encrypt(string, key, options);
+    var encryptedBase64Str = encryptedData.toString();
+    return encryptedBase64Str;
 }
 
 /**
@@ -57,6 +60,9 @@ export function aesEncryption(key= '', string=''){
  * @returns
  */
 export function aesDecryption(key= '', string=''){
+    if(!string) {
+        return '';
+    }
     var encryptedBase64Str = string;
     var options = {
       mode: CryptoJS.mode.ECB,
@@ -78,6 +84,9 @@ export function aesDecryption(key= '', string=''){
  * @returns
  */
 export function aesEncryption256(key= '', string='', iv=''){
+      if(!string) {
+          return '';
+      }
       var key = CryptoJS.enc.Utf8.parse(key);
       iv = CryptoJS.enc.Utf8.parse(iv);
       // CBC加密
@@ -99,6 +108,9 @@ export function aesEncryption256(key= '', string='', iv=''){
  * @returns
  */
 export function aesDecryption256(key= '', string='', iv=''){
+    if(!string) {
+        return '';
+    }
     var encryptedBase64Str = string;
     iv = CryptoJS.enc.Utf8.parse(iv);
     var options = {

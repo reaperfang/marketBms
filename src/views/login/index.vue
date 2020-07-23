@@ -156,7 +156,9 @@ export default {
 
     login() {
       this.loading = true
-      this.$store.dispatch('login', this.loginForm).then((response) => {
+      let tempParams = {...this.loginForm};
+      tempParams['password'] = this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.loginForm.password, 'EhYKNoYmZ7rXa1aE');
+      this.$store.dispatch('login', tempParams).then((response) => {
         this.loading = false
         this.autoLoginLoading = false
         this.shopList = []
@@ -192,24 +194,7 @@ export default {
         window.eventHub.$emit('onGetShopAuthList')
       })
     },
-    // login(userName, password) {
-    //   this.loading = true
-    //   this.loginForm = Object.assign({}, this.loginForm, {userName, password})
-    //   this.$store.dispatch('login', this.loginForm).then(() => {
-    //     this.loading = false
-    //     this.$router.push({ path: '/profile/profile' })
-    //   }).catch(error => {
-        // this.$message.error(error);
-    //     this.loading = false
-    //   })
-    // },
-    // autoLogin() {
-    //   let userName = this.$route.query.name
-    //   let password = this.$route.query.password
-    //   if(userName!=undefined && password!=undefined) {
-    //     this.login('admin-lqx', '111111')
-    //   }
-    // },
+    
     handleCloses(){
       this.dialogVisible = false
     },
@@ -217,9 +202,6 @@ export default {
       this.showShopsDialog = false
       this.loginForm.userName = ''
       this.loginForm.password = ''
-      // if(this.showClose) {  //自动登录模式
-      //   removeToken();
-      // }
     }
   },
 }
