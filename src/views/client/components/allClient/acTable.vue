@@ -7,7 +7,7 @@
       :row-key="getRowKeys"
       ref="allClientTable"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       v-loading="loading"
       @sort-change="changeSort"
     >
@@ -327,6 +327,16 @@ export default {
     }
   }
 }
+/deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(2) {
+            text-align: left;
+        }
+    }
+/deep/ .el-table-column--selection .cell {
+        padding-left: 20px;
+        padding-right: 10px;
+    }
 .acTable_container{
   position: relative;
   margin-top: 60px;
@@ -350,6 +360,8 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 36px;
+    text-align: left;
+    padding-left: 20px;
   }
   .headIcon{
     display: block;
