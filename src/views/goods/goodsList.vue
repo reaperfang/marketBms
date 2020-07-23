@@ -100,7 +100,8 @@
                   v-model="scope.row.stock"
                   autosize
                   class="goodIndex"
-                  @change="saveGoodIndex(scope.row.stock)">
+                  @blur="changeEdit"
+                  @input="saveGoodIndex(scope.row.stock)">
                   </el-input>
                  </el-tooltip>
               </template>
@@ -714,6 +715,9 @@ export default {
         }
     },
     methods: {
+        changeEdit(){
+            this.isEdit = false;
+        },
         saveGoodIndex(data) {
             this.isEdit = false;      
             if (/^([1-9][0-9]*)$/.test(data) && data <= 999999) {
@@ -728,14 +732,12 @@ export default {
                 });
             }
 
-            console.log("获取到的input值是");
-            console.log(data);
             },
             editGoodIndex() {
             this.isEdit = true;
             },
             changeGoodCategory(datas){
-                alert('是否会传值过来');
+                console.log('是否会传值过来');
                 console.log(datas);
                 console.log('当前上品信息如下');
                 console.log(this.currentData);
@@ -873,15 +875,13 @@ export default {
                 });
         },
         editCategory(){
-          if(!this.multipleSelection.length) {
-                this.$message({
-                    message: '请选择商品',
-                    type: 'warning'
-                });
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后在进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+
+                })
                 return
             }
             this.currentData = JSON.parse(JSON.stringify(this.multipleSelection));
-            debugger;
             this.currentDialog = 'editCategoryDialog'
             this.dialogVisible = true
         },
