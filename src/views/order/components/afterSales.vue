@@ -130,7 +130,7 @@
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
-                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push('/order/orderAfterDeliverGoods?id=' + scope.row.orderAfterSaleId + '&afterSale=' + true)">发货</span>
+                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push(`/order/orderAfterDeliverGoods?ids=${scope.row.orderAfterSaleId}&afterSale=true&_ids=${scope.row.id}`)">发货</span>
                         </div>
                     </template>
                 </el-table-column>

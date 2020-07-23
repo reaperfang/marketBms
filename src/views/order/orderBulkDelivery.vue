@@ -169,6 +169,8 @@
       @submit="onSubmit"
       :sendGoods="sendGoods"
       :title="title"
+      :ajax="ajax"
+      @getDetail="getDetail"
     ></component>
   </div>
 </template>
@@ -196,7 +198,8 @@ export default {
       distributorNameFirst: true, //配送员名字第一次输入标记
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
       distributorSet: false,
-      allchecked: true
+      allchecked: true,
+      ajax: true
     };
   },
   created() {
@@ -991,16 +994,18 @@ export default {
             .fetchOrderAddress({ id: this.cid, cid: this.cid })
             .then(response => {
               this.list.forEach(res => {
-                res.sendName = response.senderName;
-                res.sendPhone = response.senderPhone;
-                res.sendProvinceCode = response.provinceCode;
-                res.sendProvinceName = response.province;
-                res.sendCityCode = response.cityCode;
-                res.sendCityName = response.city;
-                res.sendAreaCode = response.areaCode;
-                res.sendAreaName = response.area;
-                res.sendAddress = response.sendAddress;
-                res.sendDetail = response.address;
+                if(!res.sendAddress) {
+                  res.sendName = response.senderName;
+                  res.sendPhone = response.senderPhone;
+                  res.sendProvinceCode = response.provinceCode;
+                  res.sendProvinceName = response.province;
+                  res.sendCityCode = response.cityCode;
+                  res.sendCityName = response.city;
+                  res.sendAreaCode = response.areaCode;
+                  res.sendAreaName = response.area;
+                  res.sendAddress = response.sendAddress;
+                  res.sendDetail = response.address;
+                }
               });
             })
             .catch(error => {
