@@ -105,10 +105,10 @@ export default {
           data.provinceName = response.provinceName
           data.cityName = response.cityName
           data.areaName = response.areaName
-          this.$emit('getMapClickPoi', data)
+          this.$emit('getMapClickPoi', data, tencentCode)
         }).catch(error =>{
           // reject(error)
-          this.$emit('getMapClickPoi', data)
+          this.$emit('getMapClickPoi', data, tencentCode)
         })
       }
     },

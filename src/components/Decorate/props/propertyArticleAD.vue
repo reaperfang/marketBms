@@ -57,7 +57,7 @@
                 <i class="delete_btn" @click.stop="deleteImage(item)"></i>
                 <span @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
               </div>
-              <div v-else class="add_button" @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">
+              <div v-else class="add_button add_button_img" @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">
                 <i class="inner"></i>
                 <p>上传图片</p>
               </div>

@@ -153,7 +153,8 @@ export default {
 
      /* 保存数据 */
     saveData() {
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '1';
         if(this.checkInput(resultData)) {

@@ -1,6 +1,6 @@
 <template>
   <div class="new-template">
-    <h2 class="">新建模版</h2>
+    <h2 class="">{{ setTitle }}</h2>
     <section>
       <div class="title">基础信息设置：</div>
       <div class="content">
@@ -50,7 +50,13 @@
             >
               <el-table-column prop="areaInfoList" label="配送到" width="150">
                 <template slot-scope="scope">
-                  <span>{{scope.row.areaInfoList.map(val => val.cityName).join(',') || '默认运费（全国）'}}</span>
+                  <p v-if="isDefaultNationwide(scope.row.areaInfoList)">默认运费（全国）</p>
+                  <template v-if="!isDefaultNationwide(scope.row.areaInfoList)">
+                    <p v-for="(item, key) in getFirstFew(scope.row.areaInfoList, 4)" :key="key">
+                      {{ item.name }}
+                    </p>
+                  </template>
+                  <el-button type="text" class="more" @click="showMoreAreaInfoList(scope.row)" v-if="scope.row.areaInfoList && scope.row.areaInfoList.length > 4">更多</el-button>
                 </template>
               </el-table-column>
               <el-table-column :label="one" width="250" align="center">
@@ -113,11 +119,12 @@
         <el-button @click="submit('ruleForm')" type="primary">确 定</el-button>
       </div>
     </section>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :data="currTemplate"></component>
   </div>
 </template>
 <script>
 import RegionDialog from "@/views/order/dialogs/regionDialog";
+import DialogAreaShow from "./dialogs/dialogAreaShow";
 
 export default {
   data() {
@@ -150,7 +157,8 @@ export default {
         },
       tableData: [],
       currentDialog: "",
-      dialogVisible: false
+      dialogVisible: false,
+      currTemplate: null
     };
   },
   created() {
@@ -161,12 +169,12 @@ export default {
         "areaInfoList": [{
 				"receivedProvinceCode": "",
 				"receivedCityCode": "",
-				"cityName": ""
+				"name": ""
 			}],
-			"theFirst": "",
-			"freight": "",
-			"superaddition": "",
-			"renew": ""
+			"theFirst": undefined,
+			"freight": undefined,
+			"superaddition": undefined,
+			"renew": undefined
       })
     }
   },
@@ -182,6 +190,10 @@ export default {
     }
   },
   computed: {
+    setTitle() {
+      const id = this.$route.query && this.$route.query.id
+      return !id ? '新建模版' : '编辑模版'
+    },
     one() {
       if(this.ruleForm.calculationWay == 1) {
         return '首件'
@@ -217,6 +229,28 @@ export default {
         }
   },
   methods: {
+    showMoreAreaInfoList(item) {
+      this.currTemplate = item.areaInfoList
+      this.currentDialog = 'DialogAreaShow'; 
+      this.dialogVisible = true
+    },
+    getFirstFew(list = [], len) {
+      let arr = []
+      let i = 0;
+      while(i < len && i < list.length) {
+         arr.push(list[i])
+         i++
+      }
+      return arr
+    },
+    isDefaultNationwide(list) {
+      if (list && list.length > 0) {
+        if (!list[0].name) {
+          return true
+        }
+      }
+      return false
+    },
     deleteRow(index) {
       this.tableData.splice(index, 1)
     },
@@ -388,18 +422,15 @@ export default {
     },
     onSubmit(value) {
       console.log(value);
+      const areaInfoList = value
       this.tableData = [
         ...this.tableData,
         {
-          areaInfoList: value.map(val => ({
-            receivedProvinceCode: val.code,
-            receivedCityCode: val.city.code,
-            cityName: val.city.name
-          })),
-          theFirst: "",
-          freight: "",
-          superaddition: "",
-          renew: ""
+          areaInfoList,
+          theFirst: undefined,
+          freight: undefined,
+          superaddition: undefined,
+          renew: undefined
         }
       ];
     },
@@ -432,15 +463,24 @@ export default {
               areaInfoList.forEach(areaInfo => {
                 let receivedProvinceCode = areaInfo.receivedProvinceCode
                 let receivedCityCode = areaInfo.receivedCityCode
-                let cityName = ''
+                let receivedAreaCode = areaInfo.receivedAreaCode
+                let name = ''
 
-                if(receivedProvinceCode == '' && receivedCityCode == '') {
-                  cityName = '默认运费（全国）'
+                if(receivedProvinceCode == '' && receivedCityCode == '' && receivedAreaCode == '') {
+                  name = '默认运费（全国）'
                 } else {
-                  cityName = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                  console.log('areaList',areaList)
+                  if (receivedAreaCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).areas.find(area => area.code === receivedAreaCode).name
+                  } else if (receivedCityCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).name
+                  } else if (receivedProvinceCode) {
+                    name = areaList.find(area => area.code == receivedProvinceCode).name
+                  }
+                  
                 }
 
-                areaInfo.cityName = cityName
+                areaInfo.name = name
               })
             })
             this.tableData = templateContents;
@@ -456,7 +496,8 @@ export default {
     }
   },
   components: {
-    RegionDialog
+    RegionDialog,
+    DialogAreaShow
   }
 };
 </script>
@@ -484,7 +525,7 @@ export default {
     }
     &.regional-setting {
       // margin-top: 20px;
-      padding: 30px 20px 0 0;
+      padding: 30px 20px 20px 0;
       margin: 0 20px;
       border-top: 1px dashed rgba(211, 211, 211, 1);
       .table {
@@ -501,6 +542,9 @@ export default {
         }
         &::before {
           height: 0;
+        }
+        .more {
+
         }
       }
       .content {

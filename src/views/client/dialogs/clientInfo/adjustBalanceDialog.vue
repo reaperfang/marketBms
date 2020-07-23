@@ -12,7 +12,7 @@
             </el-radio-group>
           </div>
           <div class="input_wrap">
-              <el-input placeholder="请输入增加余额" v-model.trim="adjustmentBalance" @blur="handleBlur" @keyup.native="number($event,adjustmentBalance,'adjustmentBalance')"></el-input>
+              <el-input :placeholder="placeholder" v-model.trim="adjustmentBalance" @blur="handleBlur" @keyup.native="number($event,adjustmentBalance,'adjustmentBalance')"></el-input>
           </div>
           <p class="errMsg" v-if="showError">减少数值不得大于当前余额</p>
       </div>
@@ -46,12 +46,13 @@ export default {
       remark: "",
       btnLoading: false,
       adjustBalance: "1",
-      showError: false
+      showError: false,
+      placeholder: "请输入增加余额"
     };
   },
   methods: {
     number(event,val,ele) {
-      val = val.replace(/[^\d]/g,'');
+      val = val.replace(/[^\.\d]/g,'');
       this[ele] = val;
     },
     submit() {
@@ -82,9 +83,9 @@ export default {
       }
       let params = {
         id: this.data.id,
-        currentBalance: this.data.balance,
-        adjustmentBalance: this.adjustmentBalance,
-        adjustmentAfterBalance: this.adjustmentAfterBalance,
+        currentBalance: Number(this.data.balance),
+        adjustmentBalance: this.adjustBalance == "1" ? Number(this.adjustmentBalance):Number(-this.adjustmentBalance),
+        adjustmentAfterBalance: Number(this.adjustmentAfterBalance),
         remark: this.remark
       }
       this._apis.client.manualChangeBalance(params).then((response) => {
@@ -118,7 +119,9 @@ export default {
     handleAdjust(val) {
       if(val == "1") {
         this.showError = false;
+        this.placeholder = "请输入增加余额";
       }else{
+        this.placeholder = "请输入减少余额";
         if(Number(this.adjustmentBalance) > Number(this.data.balance)) {
           this.showError = true;
         }
@@ -136,9 +139,9 @@ export default {
     },
     adjustmentAfterBalance() {
       if(this.adjustBalance == "1") {
-        return Number(this.data.balance) + Number(this.adjustmentBalance);
+        return (Number(this.data.balance) + Number(this.adjustmentBalance)).toFixed(2);
       }else{
-        return Number(this.data.balance) - Number(this.adjustmentBalance);
+        return (Number(this.data.balance) - Number(this.adjustmentBalance)).toFixed(2);
       }
     }
   },

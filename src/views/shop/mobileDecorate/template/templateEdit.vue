@@ -216,8 +216,10 @@ export default {
 
      /* 保存数据 */
     saveData() {
+      
       this.saveType = 'save';
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '1';
         if(this.checkInput(resultData)) {
@@ -230,7 +232,8 @@ export default {
     /* 保存并生效数据 */
     saveAndApplyData() {
       this.saveType = 'saveAndApply';
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '0';
         if(this.checkInput(resultData)) {

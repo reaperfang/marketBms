@@ -4,9 +4,9 @@
     <div class="container">
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
-        <!-- <div class="checkbox-box">
-          <i class="checkbox"></i>商品清单
-        </div> -->
+        <div class="checkbox-box">
+          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked}"></i>商品清单
+        </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
             <span>商品清单</span>
@@ -28,7 +28,7 @@
               <div class="col">
                 <div class="row align-center row-margin">
                   <div class="col" style="width: 180px;">收货信息</div>
-                  <div class="col">物流信息</div>
+                  <div class="col" style="width: 281px; text-align: center;">物流信息</div>
                 </div>
               </div>
             </div>
@@ -53,7 +53,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
+                  <div class="col send-count" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
                     <el-input
                       type="number"
@@ -75,7 +75,7 @@
                     <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
                   </div>
                   <div class="col">
-                    <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
+                    <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
                       <el-form-item label="快递公司" prop="expressCompanys">
                         <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                           <el-option
@@ -169,6 +169,8 @@
       @submit="onSubmit"
       :sendGoods="sendGoods"
       :title="title"
+      :ajax="ajax"
+      @getDetail="getDetail"
     ></component>
   </div>
 </template>
@@ -195,7 +197,9 @@ export default {
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
-      distributorSet: false
+      distributorSet: false,
+      allchecked: true,
+      ajax: true
     };
   },
   created() {
@@ -229,6 +233,20 @@ export default {
     }
   },
   methods: {
+    allcheckHandler() {
+      this.allchecked = !this.allchecked
+
+      let _list = JSON.parse(JSON.stringify(this.list))
+
+      _list.forEach(val => {
+        val.checked = this.allchecked;
+        val.orderItemList.forEach(goods => {
+          goods.checked = this.allchecked;
+        });
+      });
+
+      this.list = _list
+    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -566,6 +584,14 @@ export default {
           val.checked = false;
         });
       }
+
+      let _arr = this.list.reduce((pre, cur) => pre.concat(cur.orderItemList), [])
+      
+      if(_arr.every(val => val.checked)) {
+        this.allchecked = true
+      } else {
+        this.allchecked = false
+      }
     },
     // 订单详情 orderId
     // 电子面单 orderId
@@ -868,6 +894,14 @@ export default {
         } else {
           this.list[index].checked = false;
         }
+
+        let _arr = _list.reduce((pre, cur) => pre.concat(cur.orderItemList), [])
+        
+        if(_arr.every(val => val.checked)) {
+          this.allchecked = true
+        } else {
+          this.allchecked = false
+        }
       } catch (e) {}
     },
     getExpressCompanyList() {
@@ -916,11 +950,11 @@ export default {
           res.forEach(val => {
             val.express = true
             val.other = "";
-            val.checked = false;
+            val.checked = true;
             val.expressNos = "";
             val.expressCompanyCodes = "";
             val.orderItemList.forEach(goods => {
-              goods.checked = false;
+              goods.checked = true;
               goods.cacheSendCount = +goods.sendCount
               goods.sendCount = goods.goodsCount - goods.cacheSendCount;
               goods.showError = false
@@ -960,16 +994,18 @@ export default {
             .fetchOrderAddress({ id: this.cid, cid: this.cid })
             .then(response => {
               this.list.forEach(res => {
-                res.sendName = response.senderName;
-                res.sendPhone = response.senderPhone;
-                res.sendProvinceCode = response.provinceCode;
-                res.sendProvinceName = response.province;
-                res.sendCityCode = response.cityCode;
-                res.sendCityName = response.city;
-                res.sendAreaCode = response.areaCode;
-                res.sendAreaName = response.area;
-                res.sendAddress = response.sendAddress;
-                res.sendDetail = response.address;
+                if(!res.sendAddress) {
+                  res.sendName = response.senderName;
+                  res.sendPhone = response.senderPhone;
+                  res.sendProvinceCode = response.provinceCode;
+                  res.sendProvinceName = response.province;
+                  res.sendCityCode = response.cityCode;
+                  res.sendCityName = response.city;
+                  res.sendAreaCode = response.areaCode;
+                  res.sendAreaName = response.area;
+                  res.sendAddress = response.sendAddress;
+                  res.sendDetail = response.address;
+                }
               });
             })
             .catch(error => {
@@ -1013,7 +1049,7 @@ export default {
         }
       }
       .goods-item {
-        margin-top: 20px;
+        margin-top: 15px;
         border-radius: 10px;
         border: 1px solid rgba(211, 211, 211, 1);
         .item-title {
@@ -1024,7 +1060,7 @@ export default {
         .item-content {
           padding: 20px;
           .row-margin > .col {
-            margin-right: 25px;
+            margin-right: 15px;
             p {
               line-height: 21px;
             }
@@ -1035,13 +1071,13 @@ export default {
   }
 
   .table-title {
-    background: #ebeafa;
-    color: #655eff;
+    background: #F6F7FA;
+    color: #44434B;
     height: 46px;
-    padding-left: 15px;
+    padding-left: 20px;
   }
   .table-container {
-    padding-left: 15px;
+    padding-left: 20px;
     padding-top: 20px;
     .col:first-child {
       margin-right: 40px;
@@ -1168,5 +1204,16 @@ export default {
   height: 20px;
   background: url(../../assets/images/order/checkbox-checked.png)
     no-repeat;
+}
+.checkbox-box {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  .checkbox {
+    margin-right: 15px;
+  }
+}
+.send-count {
+  text-align: center;
 }
 </style>

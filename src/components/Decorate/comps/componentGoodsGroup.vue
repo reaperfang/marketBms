@@ -3,7 +3,7 @@
     <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
       <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data">
           <template v-if="hasRealData || hasFakeData">
-            <template v-if="hasRealData">
+            <div v-if="hasRealData" class="componentGoodsGroup_tab_wrap">
               <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
 
 
@@ -59,9 +59,9 @@
               <div class="componentGoodsGroup_content">
                   <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
               </div> 
-            </template>
-            <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}" v-else>
-              <img :src="currentComponentData.data.fakeList[listStyle - 1].fileUrl" alt="" style="width:100%;">
+            </div>
+            <div v-else style="padding: 10px;">
+              <img :src="currentComponentData.data.fakeList[showTemplate - 1].fileUrl" alt="" style="width:100%;">
             </div>
           </template>
           <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
@@ -302,7 +302,6 @@ export default {
         height:44px;
       }
       p.active {
-        color:#fff;
         .activeLine{
           right: 0;
           height: 44px;
@@ -425,9 +424,11 @@ export default {
     }
       
 }
+.componentGoodsGroup_tab_wrap {
+  background:#fff;
+}
 .componentGoodsGroup {
   overflow: hidden;
-  background:#fff;
     .componentGoodsGroup_tab {
         padding: 0 5px;
         display: flex;
@@ -482,7 +483,7 @@ export default {
           @include borderRadius(50px);
         }
         p.active {
-          background: #efefef;
+          background:#fc3d42;
           color: #fff !important;
         }
     }

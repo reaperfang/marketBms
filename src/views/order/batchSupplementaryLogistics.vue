@@ -17,14 +17,14 @@
                     <i class="checkbox"></i>
                   </div> -->
                   <div class="col" style="width: 380px;">商品</div>
-                  <div class="col" style="width: 60px;">应发数量</div>
+                  <div class="col send-count" style="width: 60px;">应发数量</div>
                   <div class="col">本次发货数量</div>
                 </div>
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
                   <div class="col" style="width: 180px;">收货信息</div>
-                  <div class="col">查看物流</div>
+                  <div class="col" style="width: 281px; text-align: center;">查看物流</div>
                 </div>
               </div>
             </div>
@@ -49,7 +49,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col" style="width: 60px;">{{goods.goodsCount}}</div>
+                  <div class="col send-count" style="width: 60px;">{{goods.goodsCount}}</div>
                   <div class="col" style="width: 100px;">
                     <el-input :disabled="true" v-model="goods.sendCount" placeholder="请输入"></el-input>
                   </div>
@@ -63,7 +63,7 @@
                     <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
                   </div>
                   <div class="col">
-                    <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
+                    <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
                         <el-form-item label="快递公司" prop="expressCompanys">
                             <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
@@ -147,7 +147,7 @@
           <el-button :loading="sending" @click="sendGoodsHandler" type="primary">确定</el-button>
       </div>
     </div>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title" :ajax="ajax" @getDetail="getDetail"></component>
   </div>
 </template>
 <script>
@@ -174,7 +174,8 @@ export default {
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
-      distributorSet: false
+      distributorSet: false,
+      ajax: true
     };
   },
   created() {
@@ -756,16 +757,18 @@ export default {
             .fetchOrderAddress({ id: this.cid, cid: this.cid })
             .then(response => {
               this.list.forEach(res => {
-                res.sendName = response.senderName
-                res.sendPhone = response.senderPhone
-                res.sendProvinceCode = response.provinceCode
-                res.sendProvinceName = response.province
-                res.sendCityCode = response.cityCode
-                res.sendCityName = response.city
-                res.sendAreaCode = response.areaCode
-                res.sendAreaName = response.area
-                res.sendAddress = response.sendAddress
-                res.sendDetail = response.address
+                if(!res.sendAddress) {
+                  res.sendName = response.senderName
+                  res.sendPhone = response.senderPhone
+                  res.sendProvinceCode = response.provinceCode
+                  res.sendProvinceName = response.province
+                  res.sendCityCode = response.cityCode
+                  res.sendCityName = response.city
+                  res.sendAreaCode = response.areaCode
+                  res.sendAreaName = response.area
+                  res.sendAddress = response.sendAddress
+                  res.sendDetail = response.address
+                }
               })
             })
             .catch(error => {
@@ -802,9 +805,12 @@ export default {
         border-radius: 10px;
         border: 1px solid rgba(211, 211, 211, 1);
         .item-title {
-          background-color: rgb(243, 244, 244);
-          padding: 20px;
+          background-color: #F6F7FA;
+          color: #44434B;
+          padding: 0 20px;
           border-radius: 10px 10px 0 0;
+          height: 56px;
+          line-height: 56px;
         }
         .item-content {
           padding: 20px;
@@ -828,8 +834,8 @@ export default {
     }
   }
   .table-title {
-    background: #ebeafa;
-    color: #655eff;
+    background: #F6F7FA;
+    color: #44434B;
     height: 46px;
     padding-left: 15px;
   }
@@ -837,7 +843,7 @@ export default {
     padding-left: 15px;
     padding-top: 20px;
     .col:first-child {
-      margin-right: 40px;
+      margin-right: 10px;
     }
   }
   .goodsItem {
@@ -931,5 +937,8 @@ export default {
       }
     }
   }
+}
+.send-count {
+  text-align: center;
 }
 </style>

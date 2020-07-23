@@ -180,7 +180,7 @@
             <el-table
                 :data="orderDetail.orderItems"
                 style="width: 100%"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     label="商品"
                     width="380">
@@ -1013,6 +1013,7 @@ export default {
     .goods-detail {
             display: flex;
             align-items: center;
+            text-align: left;
         }
         .image-box {
             margin-right: 5px;
@@ -1078,6 +1079,18 @@ export default {
 }
 .nowrap {
     white-space: nowrap;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(1) {
+        text-align: left;
+    }
+}
+/deep/ .el-table .cell {
+    text-align: center;
+    &:first-child {
+        text-align: left;
+    }
 }
 </style>
 

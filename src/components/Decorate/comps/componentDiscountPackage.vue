@@ -4,7 +4,7 @@
         <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data">
             <template v-if="hasRealData || hasFakeData">
                  <ul v-if="hasRealData">
-                    <li v-for="(item,key) of displayList" :key="key" v-if="!(item.status==2&&currentComponentData.data.hideSaledGoods==true|| utils.dateDifference(item.endTime)<1&&currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&currentComponentData.data.hideSaledGoods==true)" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                    <li v-for="(item,key) of displayList" :key="key" v-if="item.show" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <div class="label">已售{{item.participateActivityNum}}套</div>
                             <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
@@ -39,8 +39,8 @@
                             <div class="price_line">
                                 <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice || 0}}</font></p>
                                 <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.status==1&&utils.dateDifference(item.endTime) && listStyle != 3 && listStyle != 6"></componentButton>
-                                <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
-                                <p class="activity_end" v-if="item.status==0">活动未开始</p>
+                                <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">已结束</p>
+                                <p class="activity_end" v-if="item.status==0">未开始</p>
                             </div>
                         </div>
                     </li>
@@ -97,6 +97,13 @@ export default {
                 if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                     this.fetch();
                 }
+            },
+            deep: true
+        },
+        'currentComponentData.data.hideSaledGoods': {
+            handler(newValue) {
+                const result = this.checkHideStatus(this.displayList);
+                this.displayList = result;
             },
             deep: true
         }
@@ -173,12 +180,14 @@ export default {
 
         /* 创建数据 */
         createList(datas) {
-            this.displayList = datas;
+            const result = this.checkHideStatus(datas);
+            this.displayList = result;
         },
 
         /* 检查真数据 */
         checkRealData(newValue) {
-            this.hasRealData = !!newValue.length;
+            const showList = newValue.filter((item)=>{return !!item.show})
+            this.hasRealData = !!newValue.length && !!showList.length;
             this.upadteComponentData();
         },
 
@@ -192,6 +201,19 @@ export default {
                 }
             }
             this.upadteComponentData();
+        },
+
+        /* 检查隐藏状态 */
+        checkHideStatus(datas) {
+            let templateDatas = JSON.parse(JSON.stringify([...datas]));
+            for(let item of templateDatas) {
+                if(!(item.status==2&&this.currentComponentData.data.hideSaledGoods==true|| this.utils.dateDifference(item.endTime)<1&&this.currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&this.currentComponentData.data.hideSaledGoods==true)) {
+                    item['show'] = true;
+                }else {
+                    item['show'] = false;
+                }
+            }
+            return templateDatas;
         }
 
     }
@@ -716,7 +738,7 @@ export default {
                 .info_box{
                     padding:15px 10px;
                     .name{
-                        height:22px;
+                        height:23px;
                         font-size:16px;
                         line-height:22px;
                         @extend .ellipsis;
@@ -841,14 +863,14 @@ export default {
                     }
                     .button{
                         height:24px;
-                        position:absolute;
+                        // position:absolute;
                         right:10px;
                         bottom:12.5px;
                     }
                     .activity_end{
                         right:10px;
                         bottom:17.5px;
-                        line-height:1;
+                        line-height:24px;
                         font-size:15px;
                     }
                 }
