@@ -56,7 +56,7 @@ export default {
     }
     .content-main {
       flex: 1;
-      padding: 15px 20px;
+      padding: 10px;
       overflow-y: auto;
       overflow-x: scroll;
       width: 0;
