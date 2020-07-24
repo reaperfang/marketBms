@@ -910,3 +910,30 @@ textarea:-ms-input-placeholder {
     }
   }
 }
+
+
+.scope-cascader-popper {
+  background-color: #fff;
+  background: rgba(255,255,255,1);
+  box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.06);
+  border: 1px solid rgba(208,214,228,1);
+  .el-cascader-menu__wrap {
+    height: 290px;
+  }
+  .el-cascader-node {
+    width: 208px;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(68,67,75,1);
+    .el-icon-arrow-right, .el-icon-check {
+      display: none;
+    }
+    &.in-active-path, &:hover, &.is-active {
+      background:rgba(246,247,250,1);
+      font-size:14px;
+      font-weight:400;
+      color:rgba(21,30,55,1);
+    }
+  }
+  
+}
