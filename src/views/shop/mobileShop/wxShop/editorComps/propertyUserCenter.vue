@@ -49,8 +49,10 @@
         </div>
 
         <div class="block form custom">
-          <div>
-            <span class="add-btn" @click="customAdd">添加自定义</span>
+          <div class="add-btn-wrap" ref="customAddWrap">
+            <div class="add-btn" :style="customAddStyle">
+              <span @click="customAdd">添加自定义</span>
+            </div>
           </div>
           <!-- v-if=" item.name =='commission'?isOpenResell==1&&pathname=='/bp/shop/m_wxShopIndex':(item.name !== 'integralMarket' && item.name !== 'messageCenter')"/  h5隐藏分销入口 -->
           <ul class="custom-list">
@@ -153,6 +155,7 @@ export default {
       currentModule: null,
       currentNav: null,  //当前操作的自定义菜单栏
       pathname:window.location.pathname,
+      customAddStyle: null, //添加自定义固定样式
       ruleForm: {
         backgroundImage: '',  //背景图
         backgroundGradients: 1,  //背景渐变
@@ -289,6 +292,7 @@ export default {
     this.$emit('userCenterDataChanged', this.ruleForm);
   },
   mounted() {
+    this.$refs.ruleForm.$el.addEventListener('scroll', this.scrollHandler, false)
   },
   computed: {
       shopInfo() {
@@ -296,6 +300,22 @@ export default {
       }
   },
   methods: {
+    //监听form区域滚动
+    scrollHandler() {
+      const ruleForm = this.$refs.ruleForm.$el;
+      const customAddTop = this.$refs.customAddWrap.offsetTop - ruleForm.offsetTop;
+      const scrollTop = ruleForm.scrollTop;
+      if(scrollTop >= customAddTop){
+        this.customAddStyle = {
+          'z-index': 10,
+          'position': 'absolute',
+          'top': (scrollTop-customAddTop)+'px'
+        };
+      }else{
+        this.customAddStyle = null;
+      }
+    },
+
     disabledChange(disabled, index) {
       if(disabled === 2){ //选中时触发验证
         this.$nextTick(() => {
@@ -319,6 +339,15 @@ export default {
         disabled: 2
       };
       this.ruleForm.moduleList.push(obj);
+      this.$emit('scrollToBottom');
+      this.$nextTick(() => {
+        const container = this.$refs.ruleForm.$el;
+        const top = container.scrollHeight;
+         container.scrollTo({
+          top: top,
+          behavior: "smooth"
+        });
+      })
     },
 
     //删除自定义
@@ -453,14 +482,21 @@ export default {
 
 <style lang="scss" scoped>
   .custom {
-    padding: 10px 15px 20px 15px !important;
+    padding: 0 15px 20px 15px !important;
+    .add-btn-wrap {
+      position: relative;
+      height: 40px;
+      line-height: 40px;
+    }
     .add-btn {
-      line-height: 20px;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
       color: #655EFF;
+      background: #fff;
       cursor: pointer;
     }
     .custom-list {
-      padding-top: 10px;
       li {
         .el-checkbox {
           float: left;

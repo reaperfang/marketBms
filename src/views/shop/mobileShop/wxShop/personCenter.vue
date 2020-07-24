@@ -5,7 +5,7 @@
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>个人中心</span>
       </div>
-      <div class="phone-body" v-calcHeight="220+20">
+      <div ref="body" class="phone-body" v-calcHeight="220+20">
         <componentUserCenter 
         :data="ruleForm" 
         :isOpenResell="shopInfo.isOpenResell"
@@ -21,6 +21,7 @@
       :resetData="resetData"
       :isOpenResell="shopInfo.isOpenResell"
       @userCenterDataChanged="emitChangeRuleForm"
+      @scrollToBottom="scrollToBottom"
       ></propertyUserCenter>
     </div>
   </div>
@@ -51,6 +52,18 @@ export default {
     }
   },
   methods: {
+    /* 滚动到底部 */
+    scrollToBottom () {
+        this.$nextTick(() => {
+            const container = this.$refs.body;
+            const top = container.scrollHeight;
+            container.scrollTo({
+              top: top,
+              behavior: "smooth"
+            });
+        })
+    },
+
     fetch() {
       this.loading = true;
       //pageTag: 0 微店店铺
@@ -123,7 +136,13 @@ export default {
     //处理未勾选的固定菜单数据moduleList恢复初始化状态
     initDisabledData() {
       const data = utils.deepClone(this.ruleForm);
-      data.moduleList.forEach((item) => {
+      data.moduleList.forEach((item, index) => {
+        //如果是分销中心且已失效，则删除(只有在新店铺从未保存过时初始数据中有分销中心，但没开启分销中心，这里判断去除)
+        if(item.title === '分销中心' && this.shopInfo.isOpenResell!==1){
+          data.moduleList.splice(index, 1);
+          return;
+        }
+        
         if(item.disabled === 1){
           const defaultItem = this.initRuleForm.moduleList.filter((val) => val.title === item.title)[0];
           item.titleValue = defaultItem.titleValue;

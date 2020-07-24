@@ -4,7 +4,7 @@
     <el-table
       :data="lklist"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       v-loading="loading"
       >
@@ -114,6 +114,13 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+    }
 /deep/ .cell{
             .btns{
                 span{

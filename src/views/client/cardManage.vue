@@ -41,7 +41,7 @@
                             ></el-option>
                         </el-select>
                     </div>
-                    <span style="margin-left: 30px;">领取时间：</span>
+                    <span style="margin-left: 20px;">领取时间：</span>
                     <el-date-picker
                         type="datetimerange"
                         v-model="getTime"
@@ -52,7 +52,7 @@
                         :picker-options="utils.globalTimePickerOption.call(this)"
                     >
                     </el-date-picker>
-                    <el-button type="primary" class="marL30" @click="handleFind">查 询</el-button>
+                    <el-button type="primary" class="marL20" @click="handleFind">查 询</el-button>
                     <el-button class="border_btn" @click="reset">重 置</el-button>
                 </div>
                 <lkTable style="margin-top: 39px" :lkParams="lkParams"></lkTable>
@@ -179,6 +179,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-button+.el-button{
+    margin-left: 8px;
+}
 /deep/ .el-date-editor .el-range-separator{
     width: 10%;
 }
@@ -189,8 +192,8 @@ export default {
     padding: 20px;
     background-color: #fff;
 }
-.marL30{
-    margin-left: 30px;
+.marL20{
+    margin-left: 20px;
 }
 .pane_container{
     padding: 12px 20px;

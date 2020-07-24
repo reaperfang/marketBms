@@ -2,7 +2,6 @@
   <DialogBase
     :visible.sync="visible"
     width="785px"
-    height="900px"
     :showFooter="showFooter"
     title="编辑分类">
     <span class="msgInfo">您要进行</span>
@@ -155,13 +154,14 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog {
   height: 500px;
+  .el-dialog__title {
+    font-size: 22px;
+    color: rgba(68, 67, 75, 1);
+  }
 }
 .msgInfo {
   display: inline-block;
-  margin-left: 24px;
-  margin-right:37px;
-  margin-top: 20px;
-  font-size:18px;
+  margin:20px 37px 0 24px;
   color:rgba(68,67,75,1);
 }
 

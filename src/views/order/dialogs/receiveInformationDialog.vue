@@ -369,33 +369,40 @@ export default {
             this.visible = false;
             return;
           }
-          
-          this._apis.order
-            .updateReceiveAndSend({
-              // id:
-              //   typeof this.data == "string"
-              //     ? this.data
-              //     : this.$route.query.orderId || this.$route.query.id,
-              //   receivedProvinceCode: this.ruleForm.provinceCode,
-              //   receivedProvinceName: this.ruleForm.provinceName,
-              //   receivedCityCode: this.ruleForm.cityCode,
-              //   receivedCityName: this.ruleForm.cityName,
-              //   receivedAreaCode: this.ruleForm.areaCode,
-              //   receivedAreaName: this.ruleForm.areaName,
-              //   receiveAddress: this.ruleForm.address,
-              //   receivedDetail: this.ruleForm.receivedDetail,
-              //   receivedPhone: this.ruleForm.receivedPhone,
-              //   receivedName: this.ruleForm.receivedName,
-              //   receivedLat: this.ruleForm.lat,
-              //   receivedLng: this.ruleForm.lng
-              orderIds: this.$route.query.ids.split(',').map(id => +id),
-              orderSendInfoIds: this.$route.query._ids.split(',').map(id => +id),
-              tencentCode: this.ruleForm.tencentCode,  
-              [this.sendGoods == 'send' ? 'sendAddress' : 'receiveAddress']: this.ruleForm.address,
-              [this.sendGoods == 'send' ? 'sendDetail' : 'receivedDetail']: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
-              [this.sendGoods == 'send' ? 'sendLatitude': 'receivedLatitude']: this.ruleForm.lat,
-              [this.sendGoods == 'send' ? 'sendLongitude': 'receivedLongitude']: this.ruleForm.lng
+          let params
+
+          params = {
+            // id:
+            //   typeof this.data == "string"
+            //     ? this.data
+            //     : this.$route.query.orderId || this.$route.query.id,
+            //   receivedProvinceCode: this.ruleForm.provinceCode,
+            //   receivedProvinceName: this.ruleForm.provinceName,
+            //   receivedCityCode: this.ruleForm.cityCode,
+            //   receivedCityName: this.ruleForm.cityName,
+            //   receivedAreaCode: this.ruleForm.areaCode,
+            //   receivedAreaName: this.ruleForm.areaName,
+            //   receiveAddress: this.ruleForm.address,
+            //   receivedDetail: this.ruleForm.receivedDetail,
+            //   receivedPhone: this.ruleForm.receivedPhone,
+            //   receivedName: this.ruleForm.receivedName,
+            //   receivedLat: this.ruleForm.lat,
+            //   receivedLng: this.ruleForm.lng
+            isOrderAfter: this.$route.query.afterSale ? true : false,
+            [this.$route.query.afterSale ? 'orderAfterSaleSendInfoIds' : 'orderSendInfoIds']: this.$route.query._ids.split(',').map(id => +id),
+            tencentCode: this.ruleForm.tencentCode,  
+            [this.sendGoods == 'send' ? 'sendAddress' : 'receiveAddress']: this.ruleForm.address,
+            [this.sendGoods == 'send' ? 'sendDetail' : 'receivedDetail']: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
+            [this.sendGoods == 'send' ? 'sendLatitude': 'receivedLatitude']: this.ruleForm.lat,
+            [this.sendGoods == 'send' ? 'sendLongitude': 'receivedLongitude']: this.ruleForm.lng
+          }
+          if(!this.$route.query.afterSale) {
+            params = Object.assign({}, params, {
+              orderIds: this.$route.query.ids.split(',').map(id => +id)
             })
+          }
+          this._apis.order
+            .updateReceiveAndSend(params)
             .then(res => {
               this.$emit('getDetail')
               this.$emit("submit");
