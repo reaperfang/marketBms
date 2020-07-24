@@ -10,6 +10,13 @@
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
+                <!-- currentDialog = 'chooseGoodCategoryDialog';dialogVisible = true -->
+                 <span class="goodCategory" @click="addGoodCategory"> 
+                     {{goodCategoryNames}}
+                     <i class="el-icon-caret-bottom"></i>
+                 </span>
+            </el-form-item>
+            <!-- <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
                     popper-class="leimu-popper"
                     @focus="leimuFocus"
@@ -25,7 +32,7 @@
                 </el-cascader>
                 <span class="category-display">您当前的选择是：{{itemCatText}}</span>
                 <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="商品名称" prop="name">
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (editor && ruleForm.activity)" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
                 <div v-if="editor && ruleForm.activity" class="activity-message" style="margin-left:0">当前商品正在参与营销活动、待活动结束/失效才能编辑商品名称</div>
@@ -64,7 +71,7 @@
                                 <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                 <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
                                 <span class="image-item-actions-footer">
-                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter el-icon-arrow-left"><</i>
+                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter el-icon-arrow-left"></i>
                                     <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter el-icon-arrow-right">></i>
                                 </span>
                             </span>
@@ -723,7 +730,7 @@
             </div>
         </section>
     </el-form>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList" @getGoodCategory="getGoodCategory"></component>
     <component :is="selectSpecificationsCurrentDialog" :dialogVisible.sync="selectSpecificationsDialogVisible" @submit="submit" :data="currentData" :specsLength.sync="specsLength" :flatSpecsList="flatSpecsList"></component>
     <el-dialog
         title=""
@@ -751,10 +758,11 @@ import TimelyShelvingDialog from '@/views/goods/dialogs/timelyShelvingDialog'
 import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
+import dialogSelectImageMaterial from '@/views/goods/dialogs/dialogSelectImageMaterial'
 import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo'
 import Specs from '@/views/goods/components/specs'
 import anotherAuth from '@/mixins/anotherAuth'
+import chooseGoodCategoryDialog from '@/views/goods/dialogs/chooseGoodCategoryDialog'
 export default {
     name: 'addGoods',
     mixins: [anotherAuth],
@@ -830,6 +838,7 @@ export default {
             categoryOptions: [],
             productLabelList: [], // 商品标签列表
             specIds: [],
+            goodCategoryNames: '',
             add: true,
 	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
             isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
@@ -1148,6 +1157,13 @@ export default {
         });
     },
     methods: {
+        addGoodCategory(){
+            this.currentDialog = 'chooseGoodCategoryDialog';
+            this.dialogVisible = true;
+        },
+        getGoodCategory(data){
+            this.goodCategoryNames = data.name + ' > '+data.children.categoryName;
+        },
         statusChange() {
             if(this.ruleForm.status == 2) {
                 this.currentDialog = 'TimelyShelvingDialog'
@@ -2272,7 +2288,6 @@ export default {
         },
         getGoodsDetail() {
             let {id, goodsInfoId} = this.$route.query
-            debugger
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 console.log(res)
@@ -2822,9 +2837,6 @@ export default {
                         categoryValue.forEach(val => {
                             arr.push(val.pop())
                         })
-                        console.log('categoryValue');
-                        console.log(categoryValue);
-                        debugger;
                         this.ruleForm.productCatalogInfoIds = arr
                     }
                     //if(!this.editor) {
@@ -3049,13 +3061,11 @@ export default {
         getCategoryList() {
             return new Promise((resolve, reject) => {
                 this._apis.goods.fetchCategoryList({enable: 1}).then((res) => {
-                    debugger;
                     this.flatCategoryList = res
                     let arr = this.transTreeData(res, 0)
                     let _arr = this.sort(arr)
 
                     this.categoryOptions = _arr
-                    debugger;
                     resolve()
                 }).catch(error => {
                     reject(error)
@@ -3065,7 +3075,6 @@ export default {
         handleChange(value) {
             let _value = [...value]
             //this.ruleForm.productCatalogInfoId = _value.pop()
-            debugger;
             this.ruleForm.productCatalogInfoIds = _value
         },
         timelyShelvingHandler() {
@@ -3355,7 +3364,8 @@ export default {
         dialogSelectImageMaterial,
         RichEditor,
         Specs,
-        dialogSelectVideo
+        dialogSelectVideo,
+        chooseGoodCategoryDialog
     }
 }
 </script>
@@ -4172,5 +4182,27 @@ $blue: #655EFF;
 .set-btn:hover {
     color: #444a51;
     text-decoration: underline;
+}
+.goodCategory{
+    position:relative;
+    display:inline-block;
+    width:210px;
+    height:32px;
+    line-heiGHT:32PX;
+    border-radius:4px;
+    border:1px solid rgba(218,218,227,1);
+    padding:0 10px;
+    font-size:12px;
+    color:rgba(68,67,75,1);
+    /deep/ .el-icon-caret-bottom{
+        color: #92929B;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    &:hover{
+        cursor: pointer;
+    }
 }
 </style>
