@@ -162,10 +162,34 @@ export default {
             .btns{
                 span{
                     color: #655EFF;
-                    margin-right: 5px;
                     cursor: pointer;
+                    &:first-child{
+                      padding-right: 5px;
+                      border-right: 1px solid #dadae3;
+                    }
                 }
             }
         }
+/deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+    }
+/deep/ .el-table td{
+  &:nth-child(3) {
+    text-align: right;
+    padding-right: 75px;
+  }
+  &:nth-child(4) {
+    text-align: right;
+    padding-right: 75px;
+  }
+  &:nth-child(5) {
+    text-align: right;
+    padding-right: 75px;
+  }
+}
 
 </style>
