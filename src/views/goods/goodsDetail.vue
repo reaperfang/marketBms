@@ -16,7 +16,7 @@
                      <i class="el-icon-caret-bottom"></i>
                  </span>
             </el-form-item>
-            <!-- <el-form-item label="商品类目" prop="productCategoryInfoId">
+            <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <el-cascader
                     popper-class="leimu-popper"
                     @focus="leimuFocus"
@@ -32,7 +32,7 @@
                 </el-cascader>
                 <span class="category-display">您当前的选择是：{{itemCatText}}</span>
                 <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
-            </el-form-item> -->
+            </el-form-item>
             <el-form-item label="商品名称" prop="name">
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (editor && ruleForm.activity)" style="width: 840px;" v-model="ruleForm.name" maxlength="60" show-word-limit></el-input>
                 <div v-if="editor && ruleForm.activity" class="activity-message" style="margin-left:0">当前商品正在参与营销活动、待活动结束/失效才能编辑商品名称</div>
@@ -758,7 +758,7 @@ import TimelyShelvingDialog from '@/views/goods/dialogs/timelyShelvingDialog'
 import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
-import dialogSelectImageMaterial from '@/views/goods/dialogs/dialogSelectImageMaterial'
+import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
 import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo'
 import Specs from '@/views/goods/components/specs'
 import anotherAuth from '@/mixins/anotherAuth'
@@ -2290,7 +2290,7 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                console.log(res)
+                console.log(res)               
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
