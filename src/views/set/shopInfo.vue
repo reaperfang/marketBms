@@ -16,9 +16,9 @@
           :options="itemCatList"
           v-model="form.business"
           @change="itemCatHandleChange"
-          :props="{ multiple: false, checkStrictly: true }"
           clearable
           filterable
+          popper-class="scope-cascader-popper"
         ></el-cascader>
         <div class="category-display" v-if="itemCatText">您当前的选择是：{{itemCatText}}</div>
       </el-form-item>

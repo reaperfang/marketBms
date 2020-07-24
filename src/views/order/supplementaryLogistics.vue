@@ -194,7 +194,7 @@
                 <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">确定</el-button>
             </div>
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :ajax="ajax" @getDetail="getOrderDetail"></component>
     </div>
 </template>
 <script>
@@ -280,7 +280,8 @@ export default {
             distributorName: '', //配送员名字
             distributorId: '', //配送员id
             isDistributorShow: false, //尚未创建配送员信息提示控制
-            distributorSet: false
+            distributorSet: false,
+            ajax: true
         }
     },
     created() {
@@ -538,7 +539,7 @@ export default {
 
                     this.sending = true
                     let obj = {
-                        orderId: this.$route.query.orderId || this.$route.query.id, // 订单id
+                        orderId: this.$route.query.orderId || this.$route.query.ids, // 订单id
                         memberInfoId: this.orderInfo.memberInfoId,
                         orderCode: this.orderInfo.orderCode,
                         orderItems: this.tableData.map(val => ({
@@ -620,9 +621,9 @@ export default {
             this.orderInfo = Object.assign({}, this.orderInfo, value)
         },
         _orderDetail() {
-            let id = this.$route.query.id
+            let id = this.$route.query.ids
 
-            this._apis.order.orderSendDetail({ids: [this.$route.query.id]}).then((res) => {
+            this._apis.order.orderSendDetail({ids: [this.$route.query.ids]}).then((res) => {
                 res[0].orderItemList.forEach(val => {
                     val.sendCount =  val.goodsCount
                 })
@@ -631,7 +632,9 @@ export default {
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
 
-                this.fetchOrderAddress()
+                if(!this.orderInfo.sendAddress) {
+                    this.fetchOrderAddress()
+                }
 
                 //如果是商家配送，则需要请求拿到配送员列表
                 if(this.orderInfo.deliveryWay == 2){
@@ -642,7 +645,7 @@ export default {
             })
         },
         afterSaleOrderDetail() {
-            let id = this.$route.query.id
+            let id = this.$route.query.ids
 
             this._apis.order.getOrderAfterSaleDetail({id}).then((res) => {
                 this.orderDetail = res

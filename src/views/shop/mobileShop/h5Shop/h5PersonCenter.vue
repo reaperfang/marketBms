@@ -126,7 +126,7 @@ export default {
 
     /* 重置 */
     resetData() {
-      this._apis.shop.resetPersonalInfo({}).then((response)=>{
+      this._apis.shop.resetPersonalInfo({pageTag: 1}).then((response)=>{
         this.$message.success('重置成功！')
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('moduleList') < 0) {

@@ -9,8 +9,8 @@
               <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
                 <li ref="rollul" v-for="(item, key) in displayList" :key="key" class="ellipsis" :class="{anim:animate===true}">
                   <img :src="item.member" alt="">
-		              <p :style="{'color':currentComponentData.data.fontColor}">刚刚</p>
-                  <span class="name">{{item.content}}</span>
+		              <p :style="{'color':currentComponentData.data.fontColor}" :class="['font_size'+currentComponentData.data.fontSize]">刚刚</p>
+                  <span class="name" :class="['font_size'+currentComponentData.data.fontSize]">{{item.content}}</span>
                 </li>
               </ul>
             </div>
@@ -130,11 +130,12 @@ export default {
   overflow: hidden;
   transition: all 0.5s;
   & > ul {
-    height: 17.5px;
+    // height: 17.5px;
+    height: 20px;
     overflow: hidden;
     & > li {
-      height: 17.5px;
-      line-height: 17.5px;
+      height: 20px;
+      line-height: 20px;
     }
   }
 }
@@ -172,6 +173,16 @@ export default {
         line-height:22px;
         text-align:right;
         font-size:12px;
+      }
+      .font_size1 {
+        font-size: 16px;
+      }
+      .font_size2 {
+        font-size: 12px;
+      }
+      .font_size3 {
+        font-size: 10px;
+        transform: scale(0.83);
       }
     }
   }
