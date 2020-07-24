@@ -62,7 +62,7 @@ export default {
           this.currentTab = 'shopMainDecorated';
           this.decorateData = response;
         }
-        this.currentTab = 'personCenter';
+        //this.currentTab = 'personCenter';
         
         this.loading = false;
       }).catch((error)=>{

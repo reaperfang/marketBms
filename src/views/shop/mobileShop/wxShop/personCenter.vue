@@ -136,7 +136,13 @@ export default {
     //处理未勾选的固定菜单数据moduleList恢复初始化状态
     initDisabledData() {
       const data = utils.deepClone(this.ruleForm);
-      data.moduleList.forEach((item) => {
+      data.moduleList.forEach((item, index) => {
+        //如果是分销中心且已失效，则删除(只有在新店铺从未保存过时初始数据中有分销中心，但没开启分销中心，这里判断去除)
+        if(item.title === '分销中心' && this.shopInfo.isOpenResell!==1){
+          data.moduleList.splice(index, 1);
+          return;
+        }
+        
         if(item.disabled === 1){
           const defaultItem = this.initRuleForm.moduleList.filter((val) => val.title === item.title)[0];
           item.titleValue = defaultItem.titleValue;
