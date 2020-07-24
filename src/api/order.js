@@ -92,6 +92,16 @@ export function orderUpdateReceive(data) {
   })
 }
 
+// 修改收发货地址
+export function updateReceiveAndSend(data) {
+  return request({
+    apiType: 'order',
+    method: 'post',
+    target: 'ORDER-SENDINFO-UPDATE-ADDRESS-PROCESSOR',
+    data
+  })
+}
+
 // 订单改价
 export function orderPriceChange(data) {
   return request({

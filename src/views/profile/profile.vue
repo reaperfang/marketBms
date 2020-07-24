@@ -80,34 +80,10 @@
                 </router-link>
               </p>
             </div>
-            <!-- <p>
-              商品售罄
-              <router-link to="/goods/goodsList?status=-1">
-                <span>({{toBeSoldOut || 0}})</span>
-              </router-link>
-            </p>
-            <p>
-              待发货订单
-              <router-link to="/order/deliveryManagement?status=3">
-                <span>({{staySendCount || 0}})</span>
-              </router-link>
-            </p>
-            <p>
-              售后待处理
-              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
-                <span>({{stayProcessedCount || 0}})</span>
-              </router-link>
-            </p>
-            <p>
-              售后待审核
-              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
-                <span>({{stayAuthCount || 0}})</span>
-              </router-link>
-            </p> -->
           </div>
         </div>
         <div class="p_l_item helper">
-          <p class="p_title">
+          <p class="p_title title1">
             智能助手：
             <span>
               您需要在开通店铺前做以下准备工作（带
@@ -117,84 +93,103 @@
           <flowPath></flowPath>
         </div>
       </div>
-      <div class="p_l_item p_l_bottom">
-        <p class="p_title">常用功能：</p>
-        <div class="functions">
-          <a @click="linkTo({text:'新建商品',url:'/goods/addGoods'})">
-            <img :src="require('@/assets/images/profile/icon_fun_01.png')" alt />
-            <span>新建商品</span>
-          </a>
-          <a @click="linkTo({text:'店铺装修',url:'/shop/m_templateManageIndex'})">
-            <img :src="require('@/assets/images/profile/icon_fun_02.png')" alt />
-            <span>店铺装修</span>
-          </a>
-          <a @click="linkTo({text:'用户管理',url:'/client/allClient'})">
-            <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
-            <span>用户管理</span>
-          </a>
-          <a @click="linkTo({text:'发货管理',url:'/order/deliveryManagement'})">
-            <img :src="require('@/assets/images/profile/icon_fun_04.png')" alt />
-            <span>发货管理</span>
-          </a>
-          <a @click="linkTo({text:'店铺促销'})">
-            <img :src="require('@/assets/images/profile/icon_fun_05.png')" alt />
-            <span>店铺促销</span>
-          </a>
-          <a @click="linkTo({text:'特色玩法'})">
-            <img :src="require('@/assets/images/profile/icon_fun_06.png')" alt />
-            <span>特色玩法</span>
-          </a>
-          <a @click="linkTo({text:'互动营销'})">
-            <img :src="require('@/assets/images/profile/icon_fun_07.png')" alt />
-            <span>互动营销</span>
-          </a>
-          <a @click="linkTo({text:'用户营销'})">
-            <img :src="require('@/assets/images/profile/icon_fun_08.png')" alt />
-            <span>用户营销</span>
-          </a>
+      <div class="p_l_bottom">
+        <div class="p_l_item p_l_bottom_l">
+          <p class="title1">常用功能：</p>
+          <div class="functions">
+            <div class="jcgl">
+              <p class="title3">基础管理</p>
+              <a @click="linkTo({text:'新建商品',url:'/goods/addGoods'})">
+                <img :src="require('@/assets/images/profile/icon_fun_01.png')" alt />
+                <span>新建商品</span>
+              </a>
+              <a @click="linkTo({text:'发货管理',url:'/order/deliveryManagement'})">
+                <img :src="require('@/assets/images/profile/icon_fun_04.png')" alt />
+                <span>发货管理</span>
+              </a>
+              <a @click="linkTo({text:'店铺装修',url:'/shop/m_templateManageIndex'})">
+                <img :src="require('@/assets/images/profile/icon_fun_02.png')" alt />
+                <span>店铺装修</span>
+              </a>
+            </div>
+            <div class="yhyy">
+              <p class="title3">用户运营</p>
+              <a @click="linkTo({text:'用户管理',url:'/client/allClient'})">
+                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+                <span>用户管理</span>
+              </a>
+              <a @click="linkTo({text:'积分管理',url:'/client/allClient'})">
+                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+                <span>积分管理</span>
+              </a>
+              <a @click="linkTo({text:'用户标签',url:'/client/allClient'})">
+                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+                <span>用户标签</span>
+              </a>
+            </div>
+            <div class="scyx">
+              <p class="title3">商城营销</p>
+              <a @click="linkTo({text:'互动营销'})">
+                <img :src="require('@/assets/images/profile/icon_fun_07.png')" alt />
+                <span>互动营销</span>
+              </a>
+              <a @click="linkTo({text:'用户营销'})">
+                <img :src="require('@/assets/images/profile/icon_fun_08.png')" alt />
+                <span>用户营销</span>
+              </a>
+              <a @click="linkTo({text:'特色玩法'})">
+                <img :src="require('@/assets/images/profile/icon_fun_06.png')" alt />
+                <span>特色玩法</span>
+              </a>
+            </div>
+            <!-- <a @click="linkTo({text:'店铺促销'})">
+              <img :src="require('@/assets/images/profile/icon_fun_05.png')" alt />
+              <span>店铺促销</span>
+            </a> -->
+          </div>
+        </div>
+        <div class="p_l_item p_l_bottom_r">
+          <p class="title1">微信商城：</p>
         </div>
       </div>
     </div>
     <div class="p_r">
        <!-- 客服中心 -->
       <div class="p_r_item p_r_kefu">
-        <p class="p_title">
-          <span>
-            <img :src="require('@/assets/images/profile/icon_02.png')" alt />
-            客服中心
-          </span>
-        </p>
-        <p class="p_email">客服电话：400-660-5555</p>
-        <p class="p_email">客服邮箱：service4006@300.cn</p>
+        <div class="p_r_kefu_l">
+          <img :src="require('@/assets/images/profile/icon_kf.png')" alt class="icon_kf"/>
+        </div>
+        <div>
+          <p class="title1">客服中心:</p>
+          <p class="p_email">客服电话：400-660-5555</p>
+          <p class="p_email">客服邮箱：</p>
+          <p>service4006@300.cn</p>
+        </div>
       </div>
       <!-- 客户工作台 -->
-      <div class="p_r_item p_r_more">
-        <p class="p_title">
-          <span>
-            <img :src="require('@/assets/images/profile/icon_04.png')" alt />
-            更多工具
-          </span>
-        </p>
-        <p class="title_h5">商户工作台H5</p>
-        <p class="link_h5">
-          <span ref="linkH5">{{protocol}}//omo.aiyouyi.cn/bh</span>
-          <img
-            :src="require('@/assets/images/profile/icon_05.png')"
-            alt
-            v-clipboard:copy="pageLink"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onError"
-          />
-        </p>
-        <img :src="qrCode" alt />
-        <p class="erweima">扫描二维码，随时随地做生意</p>
+      <div class="p_r_item p_r_sjgzt">
+        <div>
+          <img :src="qrCode" alt />
+        </div>
+        <div class="p_r_sjgzt_r">
+          <p class="title1 gzt">
+            客户工作台:
+          </p>
+          <p class="title2">
+            商户工作台H5
+          </p>
+          <p class="operation">
+            <a @click="downs(qrCode,'商户工作台H5二维码')">下载</a>
+            <a v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</a>
+          </p>
+        </div>
       </div>
       <!-- 产品动态 -->
-      <div class="p_r_item p_r_kefu">
+      <div class="p_r_item p_r_dt">
         <p class="p_title warn">
           <span>
-            <!-- <img :src="require('@/assets/images/profile/icon_09.png')" alt /> -->
-            产品动态
+            <img :src="require('@/assets/images/profile/icon_dt.png')" alt />
+            <span class="title1">产品动态</span>
           </span>
           <el-link
             :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=shushangdongtai'"
@@ -215,43 +210,30 @@
         </ul>
       </div>
       <!-- 帮助中心 -->
-      <div class="p_r_item p_r_top">
+      <div class="p_r_item p_r_dt">
         <p class="p_title warn">
           <span>
-            <!-- <img :src="require('@/assets/images/profile/icon_01.png')" alt /> -->
-            帮助中心
+            <img :src="require('@/assets/images/profile/icon_bz.png')" alt />
+            <span class="title1">帮助中心</span>
           </span>
-          <i class="el-icon-refresh" @click="refresh"></i>
+          <el-link
+            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=shushangdongtai'"
+            target="_blank"
+            :underline="false"
+          >
+            <i class="icon_more"></i>
+          </el-link>
         </p>
-        <div class="p_r_list">
-          <p>
-            商品售罄
-            <router-link to="/goods/goodsList?status=-1">
-              <span>({{toBeSoldOut || 0}})</span>
-            </router-link>
-          </p>
-          <p>
-            待发货订单
-            <router-link to="/order/deliveryManagement?status=3">
-              <span>({{staySendCount || 0}})</span>
-            </router-link>
-          </p>
-          <p>
-            售后待处理
-            <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
-              <span>({{stayProcessedCount || 0}})</span>
-            </router-link>
-          </p>
-          <p>
-            售后待审核
-            <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
-              <span>({{stayAuthCount || 0}})</span>
-            </router-link>
-          </p>
-        </div>
+        <p class="p_email no_data" v-if="productNews.length == 0">暂无产品动态</p>
+        <ul class="info_box" v-else>
+          <template v-for="(item, key) in productNews">
+            <li class="info_list" :key="key">
+              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <span>{{item.publish_at | formatDate('MM/dd')}}</span>
+            </li>
+          </template>
+        </ul>
       </div>
-
-      
     </div>
   </div>
 </template>
@@ -334,6 +316,14 @@ export default {
         .catch(error => {
           console.error(error);
         });
+    },
+
+    //下载
+    downs(url,name) {
+      var alink = document.createElement("a");
+      alink.href = url; //图片地址
+      alink.download = name; //图片名
+      alink.click();
     },
 
     // 实时概况
@@ -442,6 +432,7 @@ export default {
 <style lang="scss" scoped>
 .p_container {
   display: flex;
+  width:100%;
   .title1{
     font-size:16px; 
     font-weight:500;
@@ -451,7 +442,7 @@ export default {
     flex: 1;
     .p_l_item {
       background-color: #fff;
-      padding: 26px;
+      padding: 20px;
       border-radius: 5px;
     }
     .p_l_top {
@@ -560,34 +551,101 @@ export default {
     }
     .p_l_bottom {
       margin-top: 15px;
-      .functions {
-        clear: both;
-        overflow: hidden;
-        a {
-          float: left;
-          width: 24%;
-          height: 30px;
-          display: inline-block;
-          margin-top: 20px;
-          img {
-            vertical-align: middle;
+      display: flex;
+      .p_l_bottom_l{
+        flex: 1;
+        .functions {
+          display: flex;
+          justify-content: space-between;
+          .title3{
+            font-size: 15px;
+            color: #161617;
+            font-weight:500;
+            line-height: 45px;
+            margin-top: 10px;
+            padding-left:5px;
+          }
+          a{
+            display: block;
+            margin-bottom:10px;
+            img {
+              vertical-align: middle;
+            }
+          }
+          span{
+            font-size: 14px;
+            color: #161617;
           }
         }
+      }
+      .p_l_bottom_r{
+        flex: 1;
+        margin-left: 10px;
       }
     }
   }
 
   .p_r {
     width: 260px;
+    margin-left: 10px;
     .p_r_item {
       background-color: #fff;
-      padding: 24px 21px;
-      width: 285px;
-      margin-left: 20px;
+      padding: 20px 16px;
+      // width: 215px;
       color: #3d434a;
       border-radius: 5px;
     }
-    .p_r_top {
+    //客服中心
+    .p_r_kefu {
+      display: flex;
+      .p_r_kefu_l{
+        width: 66px;
+        .icon_kf{
+          width: 46px;
+          height: 35px;
+        }
+      }
+      .p_email {
+        font-size: 14px;
+        color: #3d434aff;
+        line-height: 20px;
+        margin-top: 10px;
+      }
+    }
+    //商家工作台
+    .p_r_sjgzt {
+      margin-top: 10px;
+      display: flex;
+      padding-left:5px;
+      .p_r_sjgzt_r{
+        margin-left: 5px;
+        .gzt{
+          margin-top: 10px;
+        }
+        .title2{
+          font-size: 14px;
+          color: #3D434A;
+          line-height: 30px;
+        }
+        .operation{
+          font-size: 12px;
+          color: #655EFF;
+          margin-top: 10px;
+        }
+      }
+    }
+    //产品动态
+    .p_r_dt{
+      margin-top: 10px;
+      .p_email {
+        font-size: 14px;
+        color: #3d434aff;
+        line-height: 20px;
+        margin-top: 10px;
+      }
+    }
+    //帮助中心
+    .p_r_bz {
       margin-top: 10px;
       .p_r_list {
         p {
@@ -597,37 +655,6 @@ export default {
             float: right;
           }
         }
-      }
-    }
-    .p_r_kefu {
-      margin-top:10px;
-      .p_email {
-        font-size: 14px;
-        color: #3d434aff;
-        line-height: 20px;
-        margin-top: 10px;
-      }
-    }
-    .p_r_more {
-      margin-top: 10px;
-      .title_h5 {
-        font-size: 14px;
-        color: #3d434aff;
-        line-height: 20px;
-        margin-top: 10px;
-      }
-      .link_h5 {
-        font-size: 13px;
-        color: #92929bff;
-        line-height: 20px;
-        img {
-          margin-left: 40px;
-          cursor: pointer;
-        }
-      }
-      .erweima {
-        font-size: 12px;
-        color: #92929bff;
       }
     }
     .icon_more {

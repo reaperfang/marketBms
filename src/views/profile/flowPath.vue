@@ -228,7 +228,7 @@ export default {
             border-radius:0px 2px 2px 0px;
         }
         .el-tabs__item{
-            width:248px;
+            width:200px;
             height: 34px;
             line-height: 34px;
             background-color: #FFFFFFFF;

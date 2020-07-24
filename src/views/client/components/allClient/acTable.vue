@@ -309,28 +309,51 @@ export default {
     span {
       display: block;
       float: left;
-      height: 41px;
-      font-size: 12px;
-      padding-top: 10px;
+      font-size: 14px;
       text-align: center;
-      margin-right: 5px;
       cursor: pointer;
       &.s1 {
         color: #655eff;
+        padding-right: 5px;
+        border-right: 1px solid #dadae3;
       }
       &.s2 {
         color: #655eff;
+        padding: 0 5px;
+        border-right: 1px solid #dadae3;
       }
       &.s3 {
+        padding-left: 5px;
         color: #fd4c2b;
       }
     }
   }
 }
+/deep/ .el-table .cell{
+  line-height: none;
+}
 /deep/ .el-table td, /deep/ .el-table th {
         text-align: center;
         &:nth-child(2) {
             text-align: left;
+        }
+        &:nth-child(5) {
+            text-align: left;
+        }
+        &:nth-child(6) {
+            text-align: right;
+        }
+        &:nth-child(7) {
+            text-align: right;
+        }
+        &:nth-child(8) {
+            text-align: right;
+        }
+        &:nth-child(9) {
+            text-align: right;
+        }
+        &:nth-child(10) {
+            text-align: right;
         }
     }
 /deep/ .el-table-column--selection .cell {
