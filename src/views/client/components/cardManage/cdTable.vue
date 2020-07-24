@@ -4,7 +4,7 @@
     <el-table
       :data="cardList"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       v-loading="loading"
       >
@@ -54,7 +54,7 @@
             <div class="btns clearfix">
                 <span v-if="!!scope.row.name" @click="goToEdit(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '查看']">编辑</span>
                 <span v-if="scope.row.enableShow == true  && scope.row.name" @click="handleAble($event, scope.row, 0)">启用</span>
-                <span v-if="scope.row.disableShow == true" @click="handleAble($event, scope.row, 1)" style="color:#FD4C2B">禁用</span>
+                <span v-if="scope.row.disableShow == true" @click="handleAble($event, scope.row, 1)" style="color:#FD4C2B; padding-right: 5px; border-right: 1px solid #dadae3;">禁用</span>
                 <span v-if="!!scope.row.name" @click="sendCard(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '发卡']">发卡</span>
                 <span v-if="!scope.row.name" :style="{color: scope.row.isGray ? '#eee':'#655EFF'}" @click="handleConfig(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '待配置']">待配置</span>
             </div>
@@ -153,12 +153,28 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+    }
+/deep/ .el-table td{
+  &:nth-child(5) {
+    text-align: left;
+  }
+}
 /deep/ .cell{
             .btns{
                 span{
                     color: #655EFF;
-                    margin-right: 15px;
+                    margin-right: 2px;
                     cursor: pointer;
+                    &:first-child{
+                      padding-right: 5px;
+                      border-right: 1px solid #dadae3;
+                    }
                 }
             }
         }

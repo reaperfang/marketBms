@@ -273,7 +273,7 @@ export default {
         }
     }
     .marR20{
-        margin-right: 20px;
+        margin: 0 20px;
     }
 }
 </style>
