@@ -5,7 +5,7 @@
       :data="tagList"
       style="width: 100%"
       ref="clientLabelTable"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
     >
