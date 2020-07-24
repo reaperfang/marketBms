@@ -156,7 +156,9 @@ export default {
 
     login() {
       this.loading = true
-      this.$store.dispatch('login', this.loginForm).then((response) => {
+      let tempParams = {...this.loginForm};
+      tempParams['password'] = this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.loginForm.password, 'EhYKNoYmZ7rXa1aE');
+      this.$store.dispatch('login', tempParams).then((response) => {
         this.loading = false
         this.autoLoginLoading = false
         this.shopList = []

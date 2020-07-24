@@ -229,8 +229,11 @@ export default {
 /deep/ .el-upload-list__item{
     width: 300px !important;
 }
-/deep/.el-date-editor .el-range-separator{
+/deep/ .el-date-editor .el-range-separator{
     width: 8%;
+}
+/deep/ .el-button+.el-button{
+    margin-left: 8px;
 }
 .marL20{
     margin-left: 20px;
