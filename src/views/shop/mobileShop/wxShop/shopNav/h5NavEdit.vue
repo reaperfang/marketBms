@@ -60,12 +60,37 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
-          <div class="block header">
+        <div class="block header">
             <p class="title">导航设置</p>
-            <p class="state" @click="deleteNav" style="cursor:pointer;">删除导航</p>
+        </div>
+        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
+          <div class="block form" style="padding-top: 10px;">
+            <div class="form-header clearfix">
+              <span class="form-title">全局设置</span>
+            </div>
+            <el-form-item label="导航风格" prop="navStyle">
+              <div class="nav_style_type">
+                <span>{{ruleForm.navStyle.name || 'APP导航样式'}}</span>
+                <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
+              </div>
+            </el-form-item>
+            <el-form-item label="应用页面" prop="applyPage">
+              <el-checkbox-group v-model="ruleForm.applyPage">
+                <el-checkbox label="1">主页</el-checkbox>
+                <el-checkbox label="2">个人中心</el-checkbox>
+                <el-checkbox label="3">商品搜索</el-checkbox>
+                <el-checkbox label="4">商品分类</el-checkbox>
+                <el-checkbox label="5">微页面及分类</el-checkbox>
+                <el-checkbox label="6">购物车</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
           </div>
-          <div class="block form">
+
+          <div class="block form" style="padding-top: 10px;">
+            <div class="form-header clearfix">
+              <span class="form-title">基础信息</span>
+              <span class="form-state" @click="deleteNav" style="cursor:pointer;">删除导航</span>
+            </div>
             <el-form-item label="导航名称" prop="navName">
               <el-input @input="setNavName" :value="currentNav.navName" placeholder="请输入导航名称(请勿超过4个汉字或8个字母)"></el-input>
             </el-form-item>
@@ -128,29 +153,6 @@
             </el-form-item>
           </div>
 
-
-          <div class="block header">
-            <p class="title">全局设置</p>
-            <p class="state"></p>
-          </div>
-          <div class="block form">
-            <el-form-item label="导航风格" prop="navStyle">
-              <div class="nav_style_type">
-                <span>{{ruleForm.navStyle.name || 'APP导航样式'}}</span>
-                <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
-              </div>
-            </el-form-item>
-            <el-form-item label="应用页面" prop="applyPage">
-              <el-checkbox-group v-model="ruleForm.applyPage">
-                <el-checkbox label="1">主页</el-checkbox>
-                <el-checkbox label="2">个人中心</el-checkbox>
-                <el-checkbox label="3">商品搜索</el-checkbox>
-                <el-checkbox label="4">商品分类</el-checkbox>
-                <el-checkbox label="5">微页面及分类</el-checkbox>
-                <el-checkbox label="6">购物车</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </div>
 
           <div class="block button">
             <div class="help_blank"></div>
@@ -853,5 +855,21 @@ export default {
 //导航装修tips样式
 .nav_tips{
   color:rgba(211,216,223,1);line-height:20px;margin-top:10px;
+}
+.form-header {
+  padding-bottom: 20px;
+}
+.form-title {
+  float: left;
+  height: 20px;
+  padding: 0 10px;
+  line-height: 20px;
+  margin-left: -20px;
+  background:rgba(182,181,200,0.2);
+  color: #44434B;
+}
+.form-state {
+  float: right;
+  color: #FD4C2B;
 }
 </style>

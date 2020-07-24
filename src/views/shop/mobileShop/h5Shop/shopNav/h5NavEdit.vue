@@ -548,6 +548,21 @@ export default {
         }
       }
       return result;
+    },
+
+    /* 检查图标 */
+    checkIcon() {
+      let copyData = {...this.ruleForm};
+      for(let k in copyData.navMap) {
+        for(let k2 in copyData.navMap[k]) {
+          if(k2 === 'navIcon' || k2 === 'navIconActive') {
+            if(this.utils.validate.isBase64(copyData.navMap[k][k2])) {
+              copyData.navMap[k][k2] = '';
+            }
+          }
+        }
+      }
+      return copyData;
     }
   },
 
