@@ -1,6 +1,13 @@
 /* 图片素材 */
 <template>
       <div>
+        <div class="material_head">
+          <div class="select">
+            <el-cascader :props="cascaderProps" @change="cascaderChange" placeholder="全部"></el-cascader>
+          </div>
+          <el-input v-model="materialName" placeholder="请输入图片名称" clearable></el-input>
+          <el-button type="primary" @click="search">搜 索</el-button>
+        </div>
         <div class="material_wrapper" ref="materialWrapper" v-loading="materialLoading" :style="{'overflow-y': materialLoading ? 'hidden' : 'auto'}">
             <template v-if="materialResultList.length">
               <waterfall :col='3' :width="245" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!materialLoading">
@@ -37,14 +44,12 @@
 <script>
 import utils from "@/utils";
 export default {
-  name: "material",
-  props: ['max', 'isHave', 'currentTab', 'isCheckbox', 'cid'],
+  name: "dialogSelectImageMaterials",
+  props: ['max', 'isHave', 'isCheckbox', 'cid'],
   data() {
     return {
-      uploadAble: true,  //上传是否可用(用来清上传器缓存)
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
-      isIE: false,  //是否是IE
 
       /* 素材库 */
       materialLoading: true,  //获取图片列表的loading
@@ -63,55 +68,12 @@ export default {
       materialSelectedItem: null, //素材库选中的图片对象（最终发送给调用页面的结果）
     };
   },
-  watch:{
-    /* 当前tab类型变化 */
-    currentTab(newValue) {
-      this.imgNow = 0;
-      if(newValue == 'material') {
-        if(!this.materialTabInited) {
-          this.materialTabInited = true;
-          this.materialGroupId = '0';
-          this.fetchMaterial();
-        }
-      }else if(newValue == 'system') {
-        if(!this.systemTabInited) {
-          this.systemTabInited = true;
-          this.getSystemIconGroups();
-          this.fetchSystemIcon();
-        }
-      }else if(newValue === 'local') {
-        if(!this.localTabInited) {
-          this.localTabInited = true;
-          this.uploadLoading = true;
-          const tempSaveFile = localStorage.getItem('localUploadFile');
-          if (tempSaveFile) {
-            if(tempSaveFile=="[null]"){
-              this.fileList = [];
-            }else{
-              this.fileList = JSON.parse(tempSaveFile);
-            }
-          }else{
-            this.fileList = [];
-          }
-          this.preload(this.fileList, 'url');
-        }
-      }
-    },
-
-  },
+  
   created() {
     this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
   },
   mounted() {
-    const _self = this;
     this.preLoadObj = new Image();
-    this.$nextTick(() => {
-      if(this.$parent.$refs.dialog) {
-        let zIndex = this.$el.style.zIndex;
-        zIndex = Number(zIndex) + 2;
-        this.$parent.$el.style.zIndex = zIndex + '';
-      }
-    })
   },
   methods: {
 
@@ -124,6 +86,18 @@ export default {
     },
 
     /**************************** 列表数据拉取相关 *******************************/
+    initHandler() {
+      this.imgNow = 0;
+      if(!this.materialTabInited) {
+        this.materialTabInited = true;
+        this.materialGroupId = '0';
+        this.fetchMaterial();
+      }
+      //如果是单选，则每次切换后当前选中的数据变为当前tab下的
+      if(!this.isCheckbox){
+        this.$emit('selectedItemUpdate', this.materialSelectedItem, 'filePath');
+      }
+    },
 
     /* 查询素材库图片 */
     fetchMaterial(startIndex, pageSize) {
@@ -137,6 +111,7 @@ export default {
         fileName: this.materialName
       }).then((response)=>{
         this.materialSelectedItem = null;
+        this.$emit('selectedItemUpdate', null, 'filePath');
         this.materialResultList = response.list;
         this.preload(response.list, 'filePath');
         this.materialTotal = response.total;
@@ -165,16 +140,8 @@ export default {
       if(this.isCheckbox){
         return;
       }
-
-      if(this.currentTab == 'material') {
-       this.materialSelectedItem = item;
-      }else if(this.currentTab == 'system') {
-        this.systemSelectedItem = item;
-        this.systemRecordMap[''] = item; 
-        this.systemRecordMap[item.groupId] = item;
-      }else if(this.currentTab === 'local') {
-        this.localSelectedItem = item;
-      }
+      this.materialSelectedItem = item;
+      this.$emit('selectedItemUpdate', item, 'filePath');
     },
 
     /* 预加载 */
@@ -183,8 +150,6 @@ export default {
       if(!data.length) {
         //全部加载失败 
         _self.materialLoading = false;
-        _self.uploadLoading = false;
-        _self.localLoading = false;
         return;
       }
       this.preLoadObj.src = data[this.imgNow][name];
@@ -196,8 +161,6 @@ export default {
             } else {                            //  已经加载到最后一张
                 //全部加载完成 
                 _self.materialLoading = false;
-                _self.uploadLoading = false;
-                _self.localLoading = false;
                 return;
             }
       }
@@ -208,75 +171,24 @@ export default {
             } else {                            //  已经加载到最后一张
                 //全部加载完成 
                 _self.materialLoading = false;
-                _self.uploadLoading = false;
-                _self.localLoading = false;
                 return;
             }
         };
 
     },
 
-
-    /**************************** 弹窗相关 *******************************/
-
-    /* 向父组件提交选中的数据 */
-    submit() {
-      let copyItem = {};
-
-      if(this.currentTab == 'material') {
-        if(!this.materialSelectedItem) {
-          this.$message.warning('请选择图片后重试！');
-          return;
-        }
-        copyItem = {...this.materialSelectedItem};
-        copyItem['filePath'] = copyItem.filePath;
-      }else if(this.currentTab == 'system') {
-        if(!this.systemSelectedItem) {
-          this.$message.warning('请选择图片后重试！');
-          return;
-        }
-        copyItem = {...this.systemSelectedItem};
-        copyItem['filePath'] = copyItem.address;
-      }else if(this.currentTab === 'local') {
-        if(!this.localSelectedItem) {
-          this.$message.warning('请选择图片后重试！');
-          return;
-        }
-        copyItem = {...this.localSelectedItem};
-        copyItem['filePath'] = copyItem.url;
-      }
-      this.$emit('imageSelected',  copyItem);
-      this.close();
-    },
-
-    /* 关闭弹窗 */
-    close() {
-      this.dialogVisible = false;
-      this.visible = false;
-    },
-
     /*************************** 分页相关  ****************************/
 
     /* 分页大小改变 */
     handleSizeChange(val){
-      if(this.currentTab == 'material') {
-        this.materialPageSize = val || this.materialPageSize;
-        this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
-      }else if(this.currentTab == 'system') {
-        this.systemPageSize = val || this.systemPageSize;
-        this.fetchSystemIcon();
-      }
+      this.materialPageSize = val || this.materialPageSize;
+      this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
     },
 
     /* 当前页改变 */
     handleCurrentChange(pIndex){
-      if(this.currentTab == 'material') {
-        this.materialCurrentPage = pIndex || this.materialCurrentPage;
-        this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
-      }else if(this.currentTab == 'system') {
-        this.systemCurrentPage = pIndex || this.systemCurrentPage;
-        this.fetchSystemIcon();
-      }
+      this.materialCurrentPage = pIndex || this.materialCurrentPage;
+      this.fetchMaterial(this.materialCurrentPage, this.materialPageSize);
     },
 
     /************************ 素材库分组，级联选择器分相关   **********************/
@@ -322,6 +234,18 @@ export default {
 
 <style lang="scss" scoped>
 /* *******************************素材库样式*********************************** */
+.pages{
+  text-align: center;
+  margin-top: 45px;
+  /deep/ .el-pagination__editor.el-input {
+    width: 50px;
+  }
+}
+.empty{
+  text-align: center;
+  margin-top: 100px;
+  color: #b6b5c8;
+}
 .material_head{
   margin-bottom:20px;
   display: flex;
