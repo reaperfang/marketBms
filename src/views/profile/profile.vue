@@ -104,26 +104,26 @@
                 <span>新建商品</span>
               </a>
               <a @click="linkTo({text:'发货管理',url:'/order/deliveryManagement'})">
-                <img :src="require('@/assets/images/profile/icon_fun_04.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_02.png')" alt />
                 <span>发货管理</span>
               </a>
               <a @click="linkTo({text:'店铺装修',url:'/shop/m_templateManageIndex'})">
-                <img :src="require('@/assets/images/profile/icon_fun_02.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
                 <span>店铺装修</span>
               </a>
             </div>
             <div class="yhyy">
               <p class="title3">用户运营</p>
               <a @click="linkTo({text:'用户管理',url:'/client/allClient'})">
-                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_04.png')" alt />
                 <span>用户管理</span>
               </a>
-              <a @click="linkTo({text:'积分管理',url:'/client/allClient'})">
-                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+              <a @click="linkTo({text:'积分管理',url:'/client/creditsManage'})">
+                <img :src="require('@/assets/images/profile/icon_fun_05.png')" alt />
                 <span>积分管理</span>
               </a>
-              <a @click="linkTo({text:'用户标签',url:'/client/allClient'})">
-                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+              <a @click="linkTo({text:'用户标签',url:'/client/clientLabel'})">
+                <img :src="require('@/assets/images/profile/icon_fun_06.png')" alt />
                 <span>用户标签</span>
               </a>
             </div>
@@ -138,18 +138,63 @@
                 <span>用户营销</span>
               </a>
               <a @click="linkTo({text:'特色玩法'})">
-                <img :src="require('@/assets/images/profile/icon_fun_06.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_09.png')" alt />
                 <span>特色玩法</span>
               </a>
             </div>
-            <!-- <a @click="linkTo({text:'店铺促销'})">
-              <img :src="require('@/assets/images/profile/icon_fun_05.png')" alt />
-              <span>店铺促销</span>
-            </a> -->
           </div>
         </div>
         <div class="p_l_item p_l_bottom_r">
           <p class="title1">微信商城：</p>
+          <div class="main">
+            <div>
+              <p class="title3">微信小程序商城</p>
+              <!-- <div>
+                <img  class="erweima"/>
+                <p class="opt">
+                  <el-button>下载</el-button>
+                </p>
+              </div> -->
+              <!-- <div>
+                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
+                <p class="title4">您当前还未授权小程序</p>
+                <p class="opt">
+                  <el-button>立即授权</el-button>
+                </p>
+              </div> -->
+              <div>
+                <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="erweima" alt/>
+                <p class="title4">您当前还未发布小程序</p>
+                <p class="opt">
+                  <el-button>立即发布</el-button>
+                </p>
+              </div>
+            </div>
+            <div>
+              <p class="title3">微信公众号商城</p>
+              <!-- <div>
+                <img  class="erweima"/>
+                <p class="opt">
+                  <el-button>下载</el-button>
+                  <el-button>复制链接</el-button>
+                </p>
+              </div> -->
+              <!-- <div>
+                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
+                <p class="title4">您当前还未授权公众号</p>
+                <p class="opt">
+                  <el-button>立即授权</el-button>
+                </p>
+              </div> -->
+              <div>
+                <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="erweima" alt/>
+                <p class="title4">您当前还未设置商城首页</p>
+                <p class="opt">
+                  <el-button>立即发布</el-button>
+                </p>
+              </div>
+            </div>
+          </div>  
         </div>
       </div>
     </div>
@@ -570,6 +615,8 @@ export default {
             margin-bottom:10px;
             img {
               vertical-align: middle;
+              width: 36px;
+              height: 37px;
             }
           }
           span{
@@ -581,6 +628,31 @@ export default {
       .p_l_bottom_r{
         flex: 1;
         margin-left: 10px;
+        .main{
+          display: flex;
+          justify-content: space-between;
+          div{
+            flex: 1;
+            text-align: center;
+            .title3{
+              font-size: 14px;
+              color: #161617;
+              font-weight:500;
+              line-height: 70px;
+            }
+            .title4{
+              font-size: 12px;
+              color: #92929B;
+            }
+            .erweima{
+              width: 60px;
+              height: 60px;
+            }
+            .opt{
+              margin-top: 20px;
+            }
+          }
+        }
       }
     }
   }
