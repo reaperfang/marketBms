@@ -1,14 +1,14 @@
 /* 本地上传 */
 <template>
-  <div>
+  <div class="imageMaterial">
     <!-- 本地上传 -->
-    <div class="material_wrapper material_wrapper_2" ref="localWrapper" :style="{'overflow-y': uploadLoading ? 'hidden' : 'auto'}">
+    <div class="material_wrapper material_wrapper_2" ref="wrapper" :style="{'overflow-y': loading ? 'hidden' : 'auto'}">
       <el-upload
         v-if="uploadAble"
         :multiple="multipleUpload"
         class="avatar-uploader"
-        :title="uploadLoading ? '请加载完成后重试' : '点击上传'"
-        :disabled="uploadLoading"
+        :title="loading ? '请加载完成后重试' : '点击上传'"
+        :disabled="loading"
         :action="uploadUrl"
         :show-file-list="false"
         :data="{json: JSON.stringify({cid: cid})}"
@@ -20,10 +20,10 @@
         :on-exceed="uploadLimit">
         <i class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-      <div v-loading="uploadLoading">
-        <waterfall :col='3' :width="245" :gutterWidth="10" v-if="!uploadLoading" :data="fileList" :isTransition="false" >
+      <div v-loading="loading">
+        <waterfall :col='3' :width="245" :gutterWidth="10" v-if="!loading" :data="fileList" :isTransition="false" >
           <template >
-            <div class="cell-item" :class="{'img_active': localSelectedItem && localSelectedItem.title === item.title}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
+            <div class="cell-item" :class="{'img_active': selectedItem && selectedItem.title === item.title}" v-for="(item,key) in fileList" :key="key" @click="selectImg(item)">
               <img :src="item.url" alt="加载错误"/> 
               <div class="item-body">
                   <div class="item-desc">{{item.original}}</div>
@@ -36,21 +36,21 @@
         </waterfall>
       </div>
   </div>
-  <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <span v-if="!uploadLoading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
+  <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <span v-if="!loading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
   </div>
 </template>
 
 <script>
 
 import utils from "@/utils";
+import mixinBase from './mixinBase';
 export default {
-  name: "dialogSelectImageLocal",
-  props: ['multipleUpload', 'max', 'isHave', 'isCheckbox', 'cid'],
+  name: "local",
+  mixins: [mixinBase],
+  props: ['multipleUpload'],
   data() {
     return {
       uploadAble: true,  //上传是否可用(用来清上传器缓存)
-      imgNow: 0,  //当前预加载的第几张
-      preLoadObj: null,  //预加载对象
 
       /* 本地上传 */
       uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
@@ -58,20 +58,29 @@ export default {
       addList: [],  //添加的文件列表（上传前）
       successList: [],  //上传成功的文件列表(上传后)
       failedList: [],  //上传失败的文件列表（上传后）
-      uploadLoading: false,  //上传时的loading
-      localTabInited: false,  //本地上传点击tab初始化
-      localSelectedItem: null, //本地上传选中的图片对象（最终发送给调用页面的结果）
+
+      imgSrcKey: 'url', //接口返回的图片地址路径的参数名称
     };
   },
   created() {
+    const tempSaveFile = localStorage.getItem('localUploadFile');
+    if (tempSaveFile) {
+      if(tempSaveFile=="[null]"){
+        this.fileList = [];
+      }else{
+        this.fileList = JSON.parse(tempSaveFile);
+      }
+    }else{
+      this.fileList = [];
+    }
+    this.preload(this.fileList, this.imgSrcKey);
+  },
+  activated() {
     
   },
-  mounted() {
-    this.preLoadObj = new Image();
-  },
   methods: {
 
-    /**************************** 多选相关 *******************************/
+    /**************************** 选择相关 *******************************/
 
     //选择切换
     checkboxChange(item) {
@@ -79,29 +88,15 @@ export default {
       console.log(item)
     },
 
-    initHandler() {
-      this.imgNow = 0;
-      if(!this.localTabInited) {
-        this.localTabInited = true;
-        this.uploadLoading = true;
-        const tempSaveFile = localStorage.getItem('localUploadFile');
-        if (tempSaveFile) {
-          if(tempSaveFile=="[null]"){
-            this.fileList = [];
-          }else{
-            this.fileList = JSON.parse(tempSaveFile);
-          }
-        }else{
-          this.fileList = [];
-        }
-        this.preload(this.fileList, 'url');
+    /* 选中图片 */
+    selectImg(item) {
+      //如果是多选，则不可选中图片，只能通过checkbox选择
+      if(this.isCheckbox){
+        return;
       }
-      //如果是单选，则每次切换后当前选中的数据变为当前tab下的
-      if(!this.isCheckbox){
-        this.$emit('selectedItemUpdate', this.localSelectedItem, 'url');
-      }
+      this.selectedItem = item;
+      this.$emit('selectedItemUpdate', item, this.imgSrcKey);
     },
-
 
     /**************************** 上传相关 *******************************/
 
@@ -116,10 +111,10 @@ export default {
       if (!(isJPG || isJPEG || isPNG) || !isLt2M || !isNameRight) {
         this.$message.error('上传图片仅支持jpg,jpeg,png格式! 且上传图片大小不能超过 3MB!');
         this.failedList.push(file);
-        this.uploadLoading = false;
+        this.loading = false;
       }
       if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.preload(this.fileList, 'url');
+        this.preload(this.fileList, this.imgSrcKey);
         this.addList = [];
         this.successList = [];
         this.failedList = [];
@@ -145,7 +140,7 @@ export default {
 
     /* 上传失败 */
     handleError(err, file, fileList) {
-      this.uploadLoading = true;
+      this.loading = true;
       if(file.status === 'fail') {
         this.failedList.push(file);
       }
@@ -162,7 +157,7 @@ export default {
 
     /* 上传文件改变 */
     handleChange(file, fileList) {
-      this.uploadLoading = true;
+      this.loading = true;
       this.imgNow = 0;
       if(file.status === 'ready') {
         this.addList.push(file);
@@ -172,7 +167,7 @@ export default {
       }
 
       if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.preload(this.fileList, 'url');
+        this.preload(this.fileList, this.imgSrcKey);
         this.addList = [];
         this.successList = [];
         this.failedList = [];
@@ -190,122 +185,13 @@ export default {
       this.fileList = [];
       this.imgNow = 0;
     },
-
-
-    /**************************** 瀑布流相关 *******************************/
-
-    /* 选中图片 */
-    selectImg(item) {
-      //如果是多选，则不可选中图片，只能通过checkbox选择
-      if(this.isCheckbox){
-        return;
-      }
-      this.localSelectedItem = item;
-      this.$emit('selectedItemUpdate', item, 'url');
-    },
-
-    /* 预加载 */
-    preload(data, name) {
-      const _self = this;
-      if(!data.length) {
-        //全部加载失败 
-        _self.uploadLoading = false;
-        return;
-      }
-      this.preLoadObj.src = data[this.imgNow][name];
-      this.preLoadObj.onerror = function () {
-          console.log("图片加载失败");
-          _self.imgNow++;              
-            if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
-                _self.preload(data, name);          //  递归调用自己
-            } else {                            //  已经加载到最后一张
-                //全部加载完成 
-                _self.uploadLoading = false;
-                return;
-            }
-      }
-      this.preLoadObj.onload = function () { 
-            _self.imgNow++;              
-            if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
-                _self.preload(data, name);          //  递归调用自己
-            } else {                            //  已经加载到最后一张
-                //全部加载完成 
-                _self.uploadLoading = false;
-                return;
-            }
-        };
-
-    },
+    
 
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.material_wrapper{
-  max-height:390px;
-  min-height:200px;
-  overflow-y: auto;
-  .cell-item {
-    width: 100%;
-    background: #fff;
-    border: 1px solid #efeaea;
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    cursor: pointer;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    img{
-      max-width: 100%;
-      @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
-        /* 兼容IE10和IE11 */
-        height:100%;
-      }
-    }
-    .item-body{
-      padding: 10px 0;
-      position: relative;
-      width: 100%;
-      height: 18px;
-      background: rgba(0,0,0,0.39);
-      .item-desc{
-        width: 100%;
-        padding: 0 10px;
-        box-sizing: border-box;
-        height: 100%;
-        color: #fff;
-        text-align: center;
-        line-height: 18px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        overflow:hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
-    .item-checkbox {
-      width: 100%;
-      height: 30px;
-      padding-left: 5px;
-      line-height: 30px;
-      text-align: left;
-    }
-  }
-  .cell-item-checkbox {
-    cursor: default;
-  }
-  .img_active{
-    border: 2px dashed $globalMainColor!important;
-  }
-  .img-checked-active {
-    border: 2px solid $globalMainColor!important;
-  }
-}
 /* *******************************本地上传样式*********************************** */
 /deep/ .avatar-uploader{
   width: 80px;

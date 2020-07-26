@@ -3,21 +3,21 @@
   <div>
     <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
 
-     <el-tabs v-model="currentTab"  style="margin-bottom:40px;">
-       <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.name">
-         <component
-          :ref="item.name+'Component'"
-          :is="item.name"
-          :multipleUpload="multipleUpload"
-          :max="max" 
-          :isHave="isHave"
-          :currentTab="currentTab"
-          :isCheckbox="isCheckbox"
-          :cid="cid"
-          @selectedItemUpdate="selectedItemUpdate"
-        ></component>
-       </el-tab-pane>
+     <el-tabs v-model="currentTab">
+       <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
+    <keep-alive>
+      <component
+        ref="tab"
+        :is="currentTab"
+        :multipleUpload="multipleUpload"
+        :max="max" 
+        :isHave="isHave"
+        :isCheckbox="isCheckbox"
+        :cid="cid"
+        @selectedItemUpdate="selectedItemUpdate"
+      ></component>
+    </keep-alive>
     <span class="dialog-footer fcc">
         <el-button type="primary" @click="submit">确 认</el-button>
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -74,12 +74,6 @@ export default {
     return {
       currentTab: 'material',  //来源类型 =>  material:素材库 / local:本地上传  /  system:系统图片
       tabList: [],
-
-      uploadAble: true,  //上传是否可用(用来清上传器缓存)
-      imgNow: 0,  //当前预加载的第几张
-      preLoadObj: null,  //预加载对象
-      isIE: false,  //是否是IE
-
       selectedData: null, //单 多选的数据
     };
   },
@@ -101,12 +95,10 @@ export default {
     }
   },
   watch:{
-    /* 当前tab类型变化 */
     currentTab(newValue) {
-      console.log(newValue)
-      this.$refs[newValue+'Component'][0].initHandler();
-    },
-
+      //切换时先记录其wrapper容器的scrollTop，以便在切换回来时保持滚动到的位置
+      this.$refs.tab.scrollTop = this.$refs.tab.$refs.wrapper.scrollTop;
+    }
   },
   created() {
     const tabList = [
@@ -176,6 +168,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .dialog-footer {
+    margin-top:40px;
+  }
   .dialog-footer .el-button{
     padding: 9px 20px;
     margin-left: 30px;
