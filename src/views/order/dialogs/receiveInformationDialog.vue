@@ -15,13 +15,13 @@
         class="demo-ruleForm"
       >
         <el-form-item label="发货人姓名" prop="sendName">
-          <el-input v-model="ruleForm.sendName" placeholder="请选择"></el-input>
+          <el-input v-model="ruleForm.sendName" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="发货人电话" prop="sendPhone">
-          <el-input v-model="ruleForm.sendPhone" placeholder="请输入"></el-input>
+          <el-input v-model="ruleForm.sendPhone" placeholder="请输入联系电话"></el-input>
         </el-form-item>
         <el-form-item label="发货地址" prop="address">
-          <el-input v-model="ruleForm.address" placeholder="请输入" @input="changeAddress">
+          <el-input v-model="ruleForm.address" placeholder="请输入并点击搜索图标确定发货地址" @input="changeAddress">
             <i slot="suffix" class="el-input__icon el-icon-search" @click="searshMap"></i>
           </el-input>
         </el-form-item>
@@ -29,7 +29,7 @@
           <el-input
             type="textarea"
             :rows="2"
-            placeholder="街道、楼牌号等"
+            placeholder="请输入补充地址信息，非必填项"
             maxlength="100"
             v-model="ruleForm.sendDetail"
           ></el-input>
@@ -61,13 +61,13 @@
         class="demo-ruleForm"
       >
         <el-form-item label="收货人姓名" prop="receivedName">
-          <el-input v-model="ruleForm.receivedName" placeholder="请选择"></el-input>
+          <el-input v-model="ruleForm.receivedName" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="收货人电话" prop="receivedPhone">
-          <el-input v-model="ruleForm.receivedPhone" placeholder="请输入"></el-input>
+          <el-input v-model="ruleForm.receivedPhone" placeholder="请输入联系电话"></el-input>
         </el-form-item>
         <el-form-item label="收货地址" prop="address">
-          <el-input v-model="ruleForm.address" placeholder="请输入" @input="changeAddress">
+          <el-input v-model="ruleForm.address" placeholder="请输入并点击搜索图标确定收货地址" @input="changeAddress">
             <i slot="suffix" class="el-input__icon el-icon-search" @click="searshMap"></i>
           </el-input>
         </el-form-item>
@@ -75,7 +75,7 @@
           <el-input
             type="textarea"
             :rows="2"
-            placeholder="街道、楼牌号等"
+            placeholder="请输入补充地址信息，非必填项"
             maxlength="100"
             v-model="ruleForm.receivedDetail"
           ></el-input>
@@ -266,7 +266,8 @@ export default {
           sendDetail: this.data.sendDetail,
           address: this.data.sendAddress,
           lat: this.data.sendLatitude,
-          lng: this.data.sendLongitude
+          lng: this.data.sendLongitude,
+          tencentCode: this.data.sendAreaCode
         }
         if(this.data.sendLongitude){
           this.center = [this.data.sendLatitude, this.data.sendLongitude];
@@ -289,7 +290,8 @@ export default {
           receivedDetail: this.data.receivedDetail,
           address: this.data.receiveAddress,
           lat: this.data.receivedLatitude,
-          lng: this.data.receivedLongitude
+          lng: this.data.receivedLongitude,
+          tencentCode: this.data.receivedAreaCode
         }
         if(this.data.receivedLongitude){
           this.center = [this.data.receivedLatitude, this.data.receivedLongitude];
@@ -388,8 +390,9 @@ export default {
             //   receivedName: this.ruleForm.receivedName,
             //   receivedLat: this.ruleForm.lat,
             //   receivedLng: this.ruleForm.lng
+            [this.sendGoods == 'send' ? 'sendName' : 'receivedName']: this.sendGoods == 'send' ? this.ruleForm.sendName : this.ruleForm.receivedName,
+            [this.sendGoods == 'send' ? 'sendPhone' : 'receivedPhone']: this.sendGoods == 'send' ? this.ruleForm.sendPhone : this.ruleForm.receivedPhone,
             isOrderAfter: this.$route.query.afterSale ? true : false,
-            [this.$route.query.afterSale ? 'orderAfterSaleSendInfoIds' : 'orderSendInfoIds']: this.$route.query._ids.split(',').map(id => +id),
             tencentCode: this.ruleForm.tencentCode,  
             [this.sendGoods == 'send' ? 'sendAddress' : 'receiveAddress']: this.ruleForm.address,
             [this.sendGoods == 'send' ? 'sendDetail' : 'receivedDetail']: this.sendGoods == 'send' ? this.ruleForm.sendDetail : this.ruleForm.receivedDetail,
@@ -398,7 +401,12 @@ export default {
           }
           if(!this.$route.query.afterSale) {
             params = Object.assign({}, params, {
-              orderIds: this.$route.query.ids.split(',').map(id => +id)
+              orderIds: this.$route.query.ids.split(',').map(id => id),
+              orderSendInfoIds: this.$route.query._ids.split(',').map(id => id),
+            })
+          } else {
+            params = Object.assign({}, params, {
+              orderAfterIds: this.$route.query.ids.split(',').map(id => id)
             })
           }
           this._apis.order
@@ -541,5 +549,23 @@ export default {
 }
 /deep/.el-form-item {
   margin-bottom: 24px;
+}
+/deep/ .el-dialog__header {
+    background: #F6F7FA!important;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 20px;
+    color: #44434B;
+}
+/deep/ .el-dialog {
+  border-radius:3px!important;
+  border:1px solid rgba(204,204,204,1);
+}
+.footer /deep/ .el-button {
+  order: 1;
+  &.el-button--primary {
+    order: 0;
+    margin: 0 10px 0 0;
+  }
 }
 </style>
