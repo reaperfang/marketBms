@@ -58,21 +58,21 @@
       </el-form-item> -->
       <h2>店铺渠道</h2>
       
-      <el-form-item prop="channel">
-        <el-checkbox-group v-model="form.channel">
-          <el-checkbox :label="1" disabled name="channel">微信公众号</el-checkbox>
-          <el-checkbox :label="2" name="channel">微信小程序</el-checkbox>
+      <el-form-item prop="businessChannel">
+        <el-checkbox-group v-model="form.businessChannel">
+          <el-checkbox :label="2" style="margin-right:78px;" disabled name="businessChannel">微信公众号</el-checkbox>
+          <el-checkbox :label="1" name="businessChannel">微信小程序</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item class="btn">
-        <el-button class="prev">上一步</el-button> 
+      <div class="btn">
+        <el-button class="prev" @click="goPrev">上一步</el-button> 
         <el-button
           class="next"
           type="primary"
           @click="onSubmit('form')"
           v-loading="loading"
         >下一步</el-button>
-      </el-form-item>
+      </div>
       <div v-show="showShop" class="shop-set">
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
@@ -102,9 +102,6 @@ export default {
   mixins: [shopInfo],
   data() {
     return {
-      form: {
-        channel: [1]
-      }
     };
   },
   components: { Steps },
@@ -117,6 +114,89 @@ export default {
   mounted() {
   },
   methods: {
+    goPrev() {
+      this.$emit('getStep', 1)
+    },
+    updateStep() {
+      const cid = this.cid;
+      const step = 3
+      return new Promise((resolve, reject) => {
+        this._apis.shop
+          .updateStep({ cid, step })
+          .then(response => {
+            setTimeout(() => {
+              this.$emit('getStep', step)
+            }, 500)
+            resolve(response)
+          }).catch((err) => {
+            reject(err)
+          })
+      })
+    },
+    setShopName() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let name = shopInfo.shopName;
+      if (name != this.form.shopName) {
+        shopInfo.shopName = this.form.shopName;
+      }
+      this.$store
+        .dispatch("setShopInfos", shopInfo)
+        .then(() => {
+          // this.$message.success("保存成功！");
+          // this.loading = false;
+        })
+        .catch(error => {});
+    },
+    updateShopInfo() {
+      // if (this.tempSendAddress !== this.form.sendAddress) {
+      //   deliverServiceRadius = ''
+      // }
+      const data = this.getReqData()
+      return new Promise((resolve, reject) => {
+        this._apis.set.updateShopInfo(data).then(response =>{
+          this.setShopName()    
+          this.$store.dispatch('getShopInfo');    
+          // this.$nextTick(()=> {
+          //   this.$refs.shopInfoMap.clearSearchResultList()
+          //   this.$refs.shopInfoMap.clearKeyword()
+          // })
+          resolve(response)
+        }).catch(error =>{
+          console.log('updateShopInfo:error', error)
+          // this.$message.error('保存失败');
+          reject(reject)
+        }).finally(() => {
+          // this.loading = false
+        })
+      })
+      
+    },
+    onSubmit(formName){
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (!this.isMapChoose) {
+            this.$message.error('保存失败')
+            this.form.sendAddress = ''
+            this.$refs.form.validateField('sendAddress')
+            return false
+          }
+          this.loading = true
+          const p1 = this.updateShopInfo()
+          const p2 = this.updateStep()
+          // .then(response => {
+          //   this.$emit('getStep', step)
+          // }).catch((err) => {
+          //   console.log(err)
+          // })
+          Promise.all([p1, p2]).then((res) => {
+            this.$message.success("保存成功！");
+          }).catch(() => {
+            this.$message.error('保存失败');
+          })
+          
+        }
+      });
+    },
   }
 };
 </script>
@@ -237,7 +317,7 @@ export default {
     cursor: pointer;
   }
 }
-/deep/ .el-form {
+.form {
   position: relative;
   padding-top: 42px;
   h2 {
@@ -275,11 +355,16 @@ export default {
       font-weight: 600;
     }
   }
-  .btn {
+  >.btn {
     padding-top:66px;
     text-align: center;
     .prev {
       margin-right: 45px;
+      border-radius:4px;
+      border:1px solid rgba(101,94,255,1);
+      font-size:12px;
+      font-weight:400;
+      color:rgba(101,94,255,1);
     }
   }
 }
