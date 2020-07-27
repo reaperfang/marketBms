@@ -214,8 +214,7 @@ export default {
   justify-content: space-between;
   border-bottom: 1px solid #f2f2f9;
   &.navbar-hide-left {
-    width: 100%;
-    left: 0;
+    display: none;
   }
   .breadcrumb-container {
     float: left;
