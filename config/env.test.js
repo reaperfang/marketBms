@@ -12,7 +12,4 @@ module.exports = merge(baseConfig, {
 
 	/* ...其他需要覆写baseConfig的配置 */
 
-	staticHost: '//test-m-aiyouyi.yun300.cn/',
-	WEBSOCKET_server: '"ws://127.0.0.1:9000"',
-	APPLY: '"//test-omo.aiyouyi.cn"',
 })

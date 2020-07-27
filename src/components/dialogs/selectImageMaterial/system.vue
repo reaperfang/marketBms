@@ -20,10 +20,18 @@
       <template v-if="systemResultList.length">
           <div style="display:none">{{selectedItem}}</div>
           <ul v-if="!loading">
-            <li class="cell-item" :class="{'img_active': systemGroupId === systemLoadedGroupId ?  (systemRecordMap[systemGroupId] && systemRecordMap[systemGroupId].id === item.id) : (systemRecordMap[''] && systemRecordMap[''].id === item.id)}" v-for="(item,key) in systemResultList" :key="key" @click="selectImg(item)">
-              <img :src="item.address" alt="加载错误"/> 
-              <!-- <p class="item-desc">{{item.id}}</p> -->
-            </li>
+            <template v-for="(item,key) in systemResultList">
+              <li v-if="isCheckbox" style="display: none;">{{JSON.stringify(selectedData).includes(item.address) ? item.checked = true : item.checked = false}}</li>
+              <li class="cell-item" :key="key" :class="{'img_active': systemGroupId === systemLoadedGroupId ?  (systemRecordMap[systemGroupId] && systemRecordMap[systemGroupId].id === item.id) : (systemRecordMap[''] && systemRecordMap[''].id === item.id), 'img-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" @click="selectImg(item)">
+                <div>
+                  <img :src="item.address" alt="加载错误"/>
+                  <div class="item-checkbox" v-if="isCheckbox">
+                    <el-checkbox :disabled="!item.checked && selectedData.length >= max - isHave ? true : false" v-model="item.checked" @change="checkboxChange(item)">{{item.checked ? '已选择' : '选择'}}</el-checkbox>
+                  </div> 
+                </div>
+                <!-- <p class="item-desc">{{item.id}}</p> -->
+              </li>
+            </template>
           </ul>
       </template>
       <p class="empty" v-else>暂无数据</p>
@@ -81,12 +89,6 @@ export default {
 
     /**************************** 选择相关 *******************************/
 
-    //选择切换
-    checkboxChange(item) {
-      console.log(item.checked)
-      console.log(item)
-    },
-
     /* 选中图片 */
     selectImg(item) {
       //如果是多选，则不可选中图片，只能通过checkbox选择
@@ -94,7 +96,6 @@ export default {
         return;
       }
       this.selectedItem = item;
-      console.log(item)
       this.systemRecordMap[''] = item; 
       this.systemRecordMap[item.groupId] = item;
       this.$emit('selectedItemUpdate', item, this.imgSrcKey);
