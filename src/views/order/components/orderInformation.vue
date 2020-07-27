@@ -229,7 +229,7 @@
                     label="商品状态"
                     class-name="goods-status">
                     <template slot-scope="scope">
-                        <template v-if="scope.row.afterSaleStatus">
+                        <template v-if="scope.row.afterSaleStatus || scope.row.afterSaleStatus === 0">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
                         </template>
                         <template v-else>
@@ -702,11 +702,11 @@ export default {
             if(code === 1) {
                 return '微信支付'
             } else if(code === 2) {
-                return '货到付款'
+                return '线下支付-货到付款'
             } else if(code === 3) {
                 return '找人代付'
             } else if(code === 4) {
-                return '线下支付'
+                return '线下支付-确认收款'
             } else if(code === 5) {
                 return '线上支付'
             } else if(code === 6) {

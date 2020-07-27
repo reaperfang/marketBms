@@ -1,7 +1,7 @@
 <template>
   <section class="app-main">
     <div class="content-box">
-      <div class="content-menu">
+      <div v-if="!$route.meta.hideLeft" class="content-menu">
         <!-- <sidebar class="sidebar-righter" /> -->
         <righter-bar></righter-bar>
       </div>
