@@ -91,9 +91,9 @@
     <div class="block form">
       <el-form-item label="显示内容" prop="showContents">
         <el-checkbox-group v-model="ruleForm.showContents">
-          <el-checkbox label="1">套餐名称</el-checkbox>
-          <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">套餐内含商品</el-checkbox>
-          <el-checkbox label="3">套餐价格</el-checkbox>
+          <el-checkbox label="1">套装名称</el-checkbox>
+          <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">套装内含商品</el-checkbox>
+          <el-checkbox label="3">套装价格</el-checkbox>
           <el-checkbox label="4" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">抢购倒计时</el-checkbox>
           <el-checkbox label="5" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 4 || ruleForm.listStyle === 6">限制规则</el-checkbox>
           <el-checkbox label="6" :disabled="ruleForm.listStyle === 3 || ruleForm.listStyle === 6">购买按钮</el-checkbox>
@@ -147,8 +147,8 @@ export default {
         textAlign: 1,//文本对齐
         showContents: ['1', '2', '3', '4', '5', '6'],//显示内容
         buttonStyle: 1,//购买按钮样式
-        hideSaledGoods: false,// 隐藏已售罄套餐
-        hideEndGoods: false,//隐藏活动结束套餐
+        hideSaledGoods: false,// 隐藏已售罄套装
+        hideEndGoods: false,//隐藏活动结束套装
         hideType: 2,//隐藏类型
         ids: [],//优惠套装id列表
         buttonText: '查看活动'//按钮文字
