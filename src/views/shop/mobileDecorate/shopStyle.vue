@@ -100,7 +100,7 @@ export default {
         }, 
         {
           type: 13,
-          colors: ['#03555C', '#D5A58B', 'rgba(255,255,255,1)'],
+          colors: ['rgba(3,85,92,1)', 'rgba(213,165,139,1)', 'rgba(255,255,255,1)'],
         }
       ],
       selectedItem: null  //当前选中的样式
