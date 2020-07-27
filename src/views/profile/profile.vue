@@ -604,7 +604,7 @@ export default {
       }
       .helper{
         flex: 1;
-        margin-left: 20px;
+        margin-left: 10px;
       }
     }
     .p_l_bottom {

@@ -23,7 +23,7 @@ export function getNews(data) {
 // 产品动态
 export function getProductNews(data) {
   return request({
-    url: '/news?dept=aiyouyi.cn&cat=shushangdongtai&pagenum=8',
+    url: '/news?dept=aiyouyi.cn&cat=shushangdongtai&pagenum=6',
     method: 'get',
     baseURL: process.env.ZX_API,
     data
