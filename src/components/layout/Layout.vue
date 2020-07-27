@@ -2,7 +2,7 @@
   <div :class="classObj" class="app-wrapper">
     <!-- <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/> -->
     <!-- <sidebar class="sidebar-container"/> -->
-    <div class="sidebar-lefter">
+    <div v-if="!$route.meta.hideLeft" class="sidebar-lefter">
       <div class="logo-con">
         <img :src="shopInfo.logo" class="logo" v-if="shopInfo.logo">
         <img :src="require('@/assets/images/logo.png')" class="logo" v-else>
@@ -21,7 +21,7 @@
         </li>
       </ul>
     </div>
-    <div class="main-container">
+    <div class="main-container" :class="{'hide-left': $route.meta.hideLeft}">
       <navbar/>
       <!-- <tags-view/> -->
       <!-- :class="{[item.meta.icon]: true, 'el-icon-setting': true}" -->

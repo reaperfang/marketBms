@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="navbar">
+    <div class="navbar" :class="{'navbar-hide-left': $route.meta.hideLeft}">
       <div class="navbar-item">
         <i class="el-icon-arrow-left" @click="backToPre" v-if="$route.path === '/shop/m_templateEdit'"></i>
         <span class="shop_name">{{shopName}}</span>
@@ -213,6 +213,10 @@ export default {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #f2f2f9;
+  &.navbar-hide-left {
+    width: 100%;
+    left: 0;
+  }
   .breadcrumb-container {
     float: left;
   }
