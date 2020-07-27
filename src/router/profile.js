@@ -20,6 +20,13 @@ export default [
         meta: { title: '概况首页', noCache: true, tabTitle: '概况',navType:2 }
       },
       {
+        path: 'guidePrompt',
+        component: () => import('@/views/profile/guidePrompt'),
+        name: 'guidePrompt',
+        hidden: false,
+        meta: { title: '开店引导', noCache: true, tabTitle: '开店引导',navType:2 }
+      },
+      {
         path: 'upgrade',
         component: () => import('@/views/profile/upgrade'),
         name: 'upgrade',

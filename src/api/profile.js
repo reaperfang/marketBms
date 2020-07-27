@@ -39,3 +39,12 @@ export function getHelpNews(data) {
     data
   })
 }
+// 获取签名列表 不分页
+export function getSignatureList (params) {
+  return request({
+    url: `/v1/b/sms/signature/pagelist`,
+    baseURL: process.env.SALE_API,
+    method: 'get',
+    params
+  })
+}
