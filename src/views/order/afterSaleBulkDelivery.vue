@@ -138,7 +138,7 @@
           <el-button @click="sendGoodsHandler" type="primary">批量发货</el-button>
       </div>
     </div>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title"></component>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title" :ajax="ajax" @getDetail="getDetail"></component>
   </div>
 </template>
 <script>
@@ -164,7 +164,8 @@ export default {
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
-      distributorSet: false
+      distributorSet: false,
+      ajax: true
     };
   },
   created() {
@@ -657,16 +658,18 @@ export default {
             .fetchOrderAddress({ id: this.cid, cid: this.cid })
             .then(response => {
               this.list.forEach(res => {
-                res.orderAfterSaleSendInfo.sendName = response.senderName;
-                res.orderAfterSaleSendInfo.sendPhone = response.senderPhone;
-                res.orderAfterSaleSendInfo.sendProvinceCode = response.provinceCode;
-                res.orderAfterSaleSendInfo.sendProvinceName = response.province;
-                res.orderAfterSaleSendInfo.sendCityCode = response.cityCode;
-                res.orderAfterSaleSendInfo.sendCityName = response.city;
-                res.orderAfterSaleSendInfo.sendAreaCode = response.areaCode;
-                res.orderAfterSaleSendInfo.sendAreaName = response.area;
-                res.orderAfterSaleSendInfo.sendAddress = response.sendAddress;
-                res.orderAfterSaleSendInfo.sendDetail = response.address;
+                if(!res.orderAfterSaleSendInfo.sendAddress) {
+                  res.orderAfterSaleSendInfo.sendName = response.senderName;
+                  res.orderAfterSaleSendInfo.sendPhone = response.senderPhone;
+                  res.orderAfterSaleSendInfo.sendProvinceCode = response.provinceCode;
+                  res.orderAfterSaleSendInfo.sendProvinceName = response.province;
+                  res.orderAfterSaleSendInfo.sendCityCode = response.cityCode;
+                  res.orderAfterSaleSendInfo.sendCityName = response.city;
+                  res.orderAfterSaleSendInfo.sendAreaCode = response.areaCode;
+                  res.orderAfterSaleSendInfo.sendAreaName = response.area;
+                  res.orderAfterSaleSendInfo.sendAddress = response.sendAddress;
+                  res.orderAfterSaleSendInfo.sendDetail = response.address;
+                }
               });
             })
             .catch(error => {
