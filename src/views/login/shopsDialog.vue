@@ -59,7 +59,7 @@ export default {
             this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
-            this.$router.push({ path: '/profile/guidePrompt' })
+            this.$router.push({ path: '/profile/profile' })
           }).catch(error => {
             this.$message.error(error);
           })

@@ -46,10 +46,6 @@ export default {
   },
 
   computed: {
-    cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.id;
-    },
     isDisabled() {
       return !this.isHasGoods || !this.isHasSms
     }
@@ -155,21 +151,21 @@ export default {
     },
     getIsHasSms() {
       // 查询签名
-      // this._apis.profile.getSignatureList({
-      //   pageNum: 1,
-      //   pageSize: 1,
-      //   orderBy: "create_time desc",
-      //   appid: 52
-      // }).then(data => {
-      //   if (data && data.length > 0) {
+      this._apis.profile.getSignatureList({
+        pageNum: 1,
+        pageSize: 1,
+        orderBy: "create_time desc",
+        appid: 52
+      }).then(data => {
+        if (data && data.length > 0) {
           this.isHasSms = true
-      //   } else {
-      //     this.isHasSms = false
-      //   }
-      // })
-      // .catch(errMsg => {
-      //   this.isHasSms = false
-      // });
+        } else {
+          this.isHasSms = false
+        }
+      })
+      .catch(errMsg => {
+        this.isHasSms = false
+      });
     },
     submit() {
       this.updateStep().then(() => {
