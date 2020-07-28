@@ -89,7 +89,7 @@
 
     
     <div class="block form">
-      <el-form-item label="显示内容" prop="showContents">
+      <el-form-item label="显示内容" prop="buttonText">
         <el-checkbox-group v-model="ruleForm.showContents">
           <el-checkbox label="1">套装名称</el-checkbox>
           <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">套装内含商品</el-checkbox>
@@ -155,7 +155,15 @@ export default {
       },
       displayList: [],
       rules: {
-
+        buttonText: [
+          { required: true, message: "请输入标题", trigger: "change" },
+          {
+            min: 1,
+            max: 5,
+            message: "请输入标题，最多5个字",
+            trigger: "change"
+          }
+        ]
       },
       echoList: [],
       dialogVisible: false,
