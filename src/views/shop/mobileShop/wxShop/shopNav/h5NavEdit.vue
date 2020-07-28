@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import dialogSelectNavTemplate from '@/views/shop/dialogs/decorateDialogs/dialogSelectNavTemplate';
 
 import DialogBase from "@/components/DialogBase";
