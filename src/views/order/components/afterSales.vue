@@ -126,7 +126,7 @@
                     prop="updateTime"
                     label="最新发货时间">
                 </el-table-column>
-                <el-table-column label="操作" width="100px" fixed="right">
+                <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
@@ -194,6 +194,13 @@ export default {
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             return shopInfo.id
+        },
+        computeWidth() {
+            if(this.tableData.some(item => item.status == 2)) {
+                return '90'
+            } else {
+                return '50'
+            }
         }
     },
     filters: {
