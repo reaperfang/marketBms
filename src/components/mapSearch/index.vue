@@ -81,13 +81,22 @@ export default {
     };
   },
   methods: {
+    getParentAreaCode(tencentCode) {
+      return new Promise((resolve, reject) => {
+        this._apis.map.getParentAreaCode({ tencentCode }).then(response =>{
+          resolve(response)
+        }).catch(error =>{
+          resolve(reject)
+        })
+      })
+    },
     getPoiDetail(poi) {
       console.log(poi)
       this.poi = poi
       const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
       const data = Object.assign({}, poi)
       if (tencentCode) {
-        this._apis.map.getParentAreaCode({ tencentCode }).then(response =>{
+        this.getParentAreaCode(tencentCode).then(response =>{
           console.log('---response--',response)
           delete data.ad_info
           data.provinceCode = response.provinceCode
@@ -98,7 +107,6 @@ export default {
           data.areaName = response.areaName
           this.$emit('getMapClickPoi', data)
         }).catch(error =>{
-          console.log(error)
           // reject(error)
           this.$emit('getMapClickPoi', data)
         })
@@ -279,9 +287,30 @@ export default {
         console.log('makerAdd', makerAdd)
         qq.maps.event.addListener(makerAdd, 'click', function(e) {    
           self.info.close();
-          self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
           console.log('-----item-----', poi)
-          self.getPoiDetail(poi)
+          
+          const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
+          if (tencentCode) {
+            self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
+            self.getPoiDetail(poi)
+          } else {
+            self.getGeocoder({ location: `${poi.location.lat},${poi.location.lng}` }).then((res) => {
+              console.log('--getGeocoder---',res)
+              const poi = {
+                address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
+                location:res.result.location,
+                title: res.result.formatted_addresses.recommend,
+                ad_info: res.result.ad_info
+              }
+              self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
+              console.log('--------', poi)
+              self.getPoiDetail(poi)
+            }).catch((err) => {
+              console.log(err)
+            }).finally(() => {
+            })
+          }
+          // self.getPoiDetail(poi)
           // self.$emit('getMapClickPoi', poiInfo)
         })
         this.markers.push(makerAdd)
@@ -311,9 +340,31 @@ export default {
       if (this.info) {
         this.info.close();
       }
-      this.openInfoWindow(this.info, this.markers[index], this.mapObj, item)
-      console.log('----item----', item)
-      this.getPoiDetail(item)
+
+      // this.openInfoWindow(this.info, this.markers[index], this.mapObj, item)
+      // this.getPoiDetail(poi)
+      const poi = item
+      const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
+      if (tencentCode) {
+        this.openInfoWindow(this.info, this.markers[index], this.mapObj, poi)
+        this.getPoiDetail(poi)
+      } else {
+        this.getGeocoder({ location: `${poi.location.lat},${poi.location.lng}` }).then((res) => {
+          console.log('--getGeocoder---',res)
+          const poi = {
+            address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
+            location:res.result.location,
+            title: res.result.formatted_addresses.recommend,
+            ad_info: res.result.ad_info
+          }
+          this.openInfoWindow(this.info, this.markers[index], this.mapObj, poi)
+          console.log('--------', poi)
+          this.getPoiDetail(poi)
+        }).catch((err) => {
+          console.log(err)
+        }).finally(() => {
+        })
+      }
       // this.$emit('getMapClickPoi', item)
     }
   },

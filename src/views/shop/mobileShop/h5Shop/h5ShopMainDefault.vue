@@ -114,9 +114,169 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.button{
+    cursor: pointer;
+    height: 34px;
+    border-radius: 20px;
+    border: 1px solid #655eff;
+    font-size: 14px;
+    color: #655eff;
+    line-height: 34px;
+    text-align: center;
+  &.left_btn{
+    width:242px;
+    margin: 0 0 18px auto;
+  }
+  &.right_btn{
+    width:218px;
+    text-align: center;
+  }
+}
 .app-container{
 	min-height: 510px!important;
 	background: #fff;
+  padding:55px 25px 0;
+  background:url('../../../../assets/images/shop/guide/big_back.png') no-repeat 0 0;
+  min-width:1300px;
+  .inner{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    .left{
+      background:url('../../../../assets/images/shop/guide/iPhone-7-Mockup.png') no-repeat 0 0;
+      width:388px;
+      margin-right:40px;
+      padding: 77px 25px 77px;
+      box-sizing: border-box;
+      .screen{
+        padding:15px;
+        box-sizing: border-box;
+        h3{
+          font-size:14px;
+          color:rgba(68,67,75,1);
+          line-height:20px;
+          font-weight:700;
+          text-align: center;
+          margin-bottom:15px;
+        }
+        .block{
+          display:flex;
+          flex-direction: row;
+          justify-content: space-between;
+          img{
+            width:36px;
+            height:49px;
+          }
+          ul.tips_list{
+            li{
+              margin-bottom:7px;
+              width:250px;
+              // height:56px;
+              padding:13px 17px;
+              box-sizing: border-box;
+              p{
+                font-size: 12px;
+                color:rgba(68,67,75,1);
+                line-height:14px;
+                margin-bottom:20px;
+                // transform: scale(0.8);
+              }
+              &.tips1{
+                 background:url('../../../../assets/images/shop/guide/Rectangle2.png') no-repeat 0 0;
+              }
+              &.tips2{
+                 background:url('../../../../assets/images/shop/guide/Rectangle2Copy.png') no-repeat 0 0;
+                 p{
+                   margin-bottom:5px;
+                 }
+              }
+              &.tips3{
+                 background:url('../../../../assets/images/shop/guide/Rectangle2Copy2.png') no-repeat 0 0;
+              } 
+              &.tips4{
+                 background:url('../../../../assets/images/shop/guide/Rectangle2(1).png') no-repeat 0 0;
+              }
+            }
+          }
+        }
+        .button{
+
+        }
+      }
+    }
+    .right{
+      margin-top:32px;
+      box-shadow:0px 2px 4px 0px rgba(0,0,0,0.25);
+      border-radius:30px;
+      padding:34px 32px;
+      box-sizing: border-box;
+      width:518px;
+      height: 650px;
+      h3{
+        font-size:16px;
+        font-weight:700;
+        color:rgba(68,67,75,1);
+        line-height:1;
+        margin-bottom:24px;
+      }
+      h4{
+        font-size:16px;
+        color:rgba(68,67,75,1);
+        line-height:1;
+        margin-bottom:10px;
+      }
+      p{
+        font-size:14px;
+        font-weight:300;
+        color:rgba(68,67,75,1);
+        line-height:20px;
+        margin-bottom:15px;
+      }
+      .btns{
+        // margin-top: 10px;
+        // margin-bottom: 10px;
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top:30px;
+        margin-bottom:30px;
+        .button{
+          display:flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          padding-left:24px;
+          height:40px;
+          line-height: 40px;
+          font-size:15px;
+          i{
+            width:18px;
+            height:16px;
+            display:block;
+            margin-right:5px;
+          }
+          &.wechat_gzh{
+            i{
+              background:url('../../../../assets/images/shop/guide/wechat_gzh.png') no-repeat 0 0;
+            }
+          }
+          &.wechat_xcx{
+            i{
+              background:url('../../../../assets/images/shop/guide/wechat_xcx.png') no-repeat 0 0;
+            }
+          }
+          &.pay_type{
+            color:rgba(255,118,77,1);
+            border:1px solid rgba(255,118,77,1);
+            i{
+              background:url('../../../../assets/images/shop/guide/pay_type.png') no-repeat 0 0;
+              height:20px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 .no_open,.no_bind{
   display:flex;

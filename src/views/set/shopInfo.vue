@@ -642,6 +642,7 @@ export default {
     },
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
+      if (!poi) return false 
       this.form.sendAddress = poi.address
       this.tempSendAddress = poi.address
       this.form.lat = poi.location.lat
