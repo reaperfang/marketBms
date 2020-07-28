@@ -46,6 +46,11 @@ export default {
   },
 
   computed: {
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    },
+
     isDisabled() {
       return !this.isHasGoods || !this.isHasSms
     }
