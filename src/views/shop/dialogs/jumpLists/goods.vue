@@ -1,17 +1,25 @@
 <template>
   <div class="head-wrapper">
-       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true" style="overflow-y: initial;">
+       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="65px" :inline="true" style="overflow-y: initial;">
           <div class="inline-head">
+            <el-form-item label="商品状态" prop="status">
+              <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
+                <el-option label="全部" :value="null"></el-option>
+                <el-option label="上架" :value="1"></el-option>
+                <el-option label="下架" :value="0"></el-option>
+                <el-option label="售罄" :value="-1"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="" prop="name">
               <treeselect
-                style="width:300px"
+                style="width:150px"
                 :multiple="false"
                 :options="categoryData"
                 placeholder="请选择分类"
                 v-model="seletedClassify"></treeselect>
             </el-form-item>
             <el-form-item label="" prop="name">
-              <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable></el-input>
+              <el-input v-model="ruleForm.name" placeholder="请输入名称" clearable style="width:120px;"></el-input>
             </el-form-item>
             <!-- <el-form-item label="" prop="id">
               <el-input v-model="ruleForm.id" placeholder="请输入编码"></el-input>
@@ -20,11 +28,13 @@
               <el-button type="primary" @click="fetch">搜  索</el-button>
             </el-form-item>
           </div>
+          <div class="inline-head">
+          </div>
         </el-form>
         <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading">
           <el-table-column prop="" label="选择" :width="50">
             <template slot-scope="scope">
-              <el-checkbox v-model="scope.row.active" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>
+              <el-checkbox v-model="scope.row.active" :disabled="scope.row.status !== 1" @change="seletedChange(scope.row, scope.row.active)"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="商品名称" :width="500">
@@ -74,7 +84,7 @@ export default {
       ruleForm: {
         name: '',
         // id: '',
-        status: '1',
+        status: null,
       },
       rules: {},
       invalid: true,  //数据是否无效
