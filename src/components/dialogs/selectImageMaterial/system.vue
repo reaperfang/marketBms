@@ -14,16 +14,24 @@
             </el-option>
         </el-select>
       </div>
-      <el-button type="primary" @click="fetch">搜 索</el-button>
+      <el-button type="primary" @click="search">搜 索</el-button>
     </div>
     <div class="icon_wrapper" ref="wrapper" v-loading="loading">
       <template v-if="systemResultList.length">
           <div style="display:none">{{selectedItem}}</div>
           <ul v-if="!loading">
-            <li class="cell-item" :class="{'img_active': systemGroupId === systemLoadedGroupId ?  (systemRecordMap[systemGroupId] && systemRecordMap[systemGroupId].id === item.id) : (systemRecordMap[''] && systemRecordMap[''].id === item.id)}" v-for="(item,key) in systemResultList" :key="key" @click="selectImg(item)">
-              <img :src="item.address" alt="加载错误"/> 
-              <!-- <p class="item-desc">{{item.id}}</p> -->
-            </li>
+            <template v-for="(item,key) in systemResultList">
+              <li v-if="isCheckbox" style="display: none;">{{JSON.stringify(selectedData).includes(item.address) ? item.checked = true : item.checked = false}}</li>
+              <li class="cell-item" :key="key" :class="{'img_active': selectedItem && selectedItem.id === item.id, 'img-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" @click="selectImg(item)">
+                <div>
+                  <img :src="item.address" alt="加载错误"/>
+                  <div class="item-checkbox" v-if="isCheckbox">
+                    <el-checkbox :disabled="!item.checked && selectedData.length >= max - isHave ? true : false" v-model="item.checked" @change="checkboxChange(item)">{{item.checked ? '已选择' : '选择'}}</el-checkbox>
+                  </div> 
+                </div>
+                <!-- <p class="item-desc">{{item.id}}</p> -->
+              </li>
+            </template>
           </ul>
       </template>
       <p class="empty" v-else>暂无数据</p>
@@ -56,19 +64,9 @@ export default {
       pageSize:48,    //系统图库一页条数
       systemGroupId:'',  //系统图库分组id
       systemGroupList:[],  //系统图库分组列表
-      systemRecordMap: {},  //系统图标库选中记录表,
-      systemLoadedGroupId: '',  //加载后确认的系统图标分组Id
 
       imgSrcKey: 'address', //接口返回的图片地址路径的参数名称
     };
-  },
-  watch:{
-    //切换系统图标分组分页重置
-    systemGroupId(newValue) {
-      this.currentPage = 1;
-      this.total = 0;
-    }
-
   },
   created() {
     this.getSystemIconGroups();
@@ -78,27 +76,6 @@ export default {
     
   },
   methods: {
-
-    /**************************** 选择相关 *******************************/
-
-    //选择切换
-    checkboxChange(item) {
-      console.log(item.checked)
-      console.log(item)
-    },
-
-    /* 选中图片 */
-    selectImg(item) {
-      //如果是多选，则不可选中图片，只能通过checkbox选择
-      if(this.isCheckbox){
-        return;
-      }
-      this.selectedItem = item;
-      console.log(item)
-      this.systemRecordMap[''] = item; 
-      this.systemRecordMap[item.groupId] = item;
-      this.$emit('selectedItemUpdate', item, this.imgSrcKey);
-    },
 
     /**************************** 列表数据拉取相关 *******************************/
 
@@ -113,14 +90,6 @@ export default {
       }).then((response)=>{
         this.systemResultList = response.list
         this.total = response.total
-        this.systemLoadedGroupId = this.systemGroupId;
-
-        if(!this.isCheckbox){ //如果是单选时
-          this.selectedItem = this.systemRecordMap[this.systemGroupId];
-          this.$emit('selectedItemUpdate', this.selectedItem, this.imgSrcKey);
-        }
-        
-
         this.preload(this.systemResultList, this.imgSrcKey);
       }).catch((error)=>{
         this.$message.error(error);
@@ -135,9 +104,7 @@ export default {
       }).catch((error)=>{
         this.$message.error(error);
       })
-    },
-
-    
+    }    
   }
 };
 </script>

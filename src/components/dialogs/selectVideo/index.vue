@@ -1,7 +1,7 @@
-/* 选择图片素材弹框 */
+/* 选择视频素材弹框 */
 <template>
   <div>
-    <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
+    <DialogBase :visible.sync="visible" width="816px" :title="'选择视频'" @submit="submit" @close="close" :showFooter="false">
      <el-tabs v-model="currentTab">
        <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
@@ -10,8 +10,8 @@
         ref="tab"
         :is="currentTab"
         :multipleUpload="multipleUpload"
-        :max="imageMax" 
-        :isHave="isImageHave"
+        :max="videoMax" 
+        :isHave="isVideoHave"
         :isCheckbox="isCheckbox"
         :cid="cid"
         :selectedData="selectedData"
@@ -31,16 +31,14 @@
 import DialogBase from "@/components/DialogBase";
 
 import material from "./material";
-import system from "./system";
 import local from "./local";
 
 import utils from "@/utils";
 export default {
-  name: "dialogSelectImageMaterial",
+  name: "dialogSelectVideo",
   components: {
     DialogBase,
     material,
-    system,
     local
   },
   props: {
@@ -49,22 +47,17 @@ export default {
           type: Boolean,
           required: true
       },
-      showSystemIcon: {
-          type: Boolean,
-          default: false,
-          required: false
-      },
       multipleUpload: {
           type: Boolean,
           required: false,
           default: true,
       },
-      imageMax: { //最大支持上传数量
+      videoMax: { //最大支持上传数量
         type: Number,
         required: false,
         default: 1
       },
-      isImageHave: { //已经存在的数量
+      isVideoHave: { //已经存在的数量
         type: Number,
         required: false,
         default: 0
@@ -72,7 +65,7 @@ export default {
   },
   data() {
     return {
-      currentTab: 'material',  //来源类型 =>  material:素材库 / local:本地上传  /  system:系统图片
+      currentTab: 'material',  //来源类型 =>  material:素材库 / local:本地上传
       tabList: [],
       selectedData: null, //单 多选的数据
     };
@@ -87,7 +80,7 @@ export default {
       }
     },
     isCheckbox() { //是否多选
-      return this.imageMax > 1
+      return this.videoMax > 1
     },
     cid(){
         let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
@@ -103,7 +96,7 @@ export default {
   created() {
     const tabList = [
       {
-        "label": "素材图片",
+        "label": "素材视频",
         "name": "material"
       },
       {
@@ -111,12 +104,6 @@ export default {
         "name": "local"
       }
     ];
-    if(this.showSystemIcon) {
-      tabList.splice(1, 0, {
-        "label": "系统图标",
-        "name": "system"
-      })
-    }
     this.tabList = tabList;
 
     //如果是多选，则selectedData初始化为空数组
@@ -136,7 +123,7 @@ export default {
   methods: {
     /**************************** 弹窗相关 *******************************/
     //数据更新
-    selectedItemUpdate(item, pathKey, checked) {
+    selectedItemUpdate(item, keyObj, checked) {
 
       //单选数据更新
       if(!this.isCheckbox){
@@ -145,7 +132,8 @@ export default {
         let copyItem;
         if(item){
           copyItem = {...item};
-          copyItem['filePath'] = copyItem[pathKey];
+          copyItem['filePath'] = copyItem[keyObj.pathKey];
+          copyItem['fileCover'] = copyItem[keyObj.coverKey];
         }else{
           copyItem = item;
         }
@@ -153,13 +141,14 @@ export default {
       }else{ //多选数据更新
         if(checked){ //如果是选中
           let copyItem = {...item};
-          copyItem['filePath'] = copyItem[pathKey];
+          copyItem['filePath'] = copyItem[keyObj.pathKey];
+          copyItem['fileCover'] = copyItem[keyObj.coverKey];
           this.selectedData.push(copyItem);
         }else{ //如果不选中
           if(item.id){
             this.selectedData = this.selectedData.filter((val) => val.id !== item.id)
           }else{
-            this.selectedData = this.selectedData.filter((val) => val.filePath !== item[pathKey])
+            this.selectedData = this.selectedData.filter((val) => val.filePath !== item[keyObj.pathKey])
           }
         }
       }
@@ -170,12 +159,12 @@ export default {
     submit() {
 
       if((this.isCheckbox && this.selectedData.length == 0) || (!this.isCheckbox && !this.selectedData)) {
-        this.$message.warning('请选择图片后重试！');
+        this.$message.warning('请选择视频后重试！');
         return;
       }
 
       const data = utils.deepClone(this.selectedData);
-      this.$emit('imageSelected',  data);
+      this.$emit('videoSelected',  data);
       this.close();
     },
 

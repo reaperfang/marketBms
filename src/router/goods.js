@@ -44,6 +44,13 @@ export default [
         hidden: true,
         meta: { title: '新建商品', noCache: true, tabTitle: '商品管理' ,navType:2},
       },
+      {
+        path: 'addGoodsOnly',
+        component: () => import('@/views/goods/addGoods'),
+        name: 'addGoodsOnly',
+        hidden: true,
+        meta: { title: '新建商品', noCache: true, tabTitle: '商品管理' ,navType:2, hideLeft: true},
+      },
       // {
       //   path: 'classify',
       //   component: () => import('@/views/goods/classify'),

@@ -269,9 +269,9 @@
             <i class="icon_more"></i>
           </el-link>
         </p>
-        <p class="p_email no_data" v-if="productNews.length == 0">暂无产品动态</p>
+        <p class="p_email no_data" v-if="helpNews.length == 0">暂无产品动态</p>
         <ul class="info_box" v-else>
-          <template v-for="(item, key) in productNews">
+          <template v-for="(item, key) in helpNews">
             <li class="info_list" :key="key">
               <p @click="onDetail(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
@@ -301,7 +301,8 @@ export default {
       qrCode: "",
       protocol: location.protocol,
       zxLink: `${process.env.ZX_HELP}`, //链接
-      productNews: []
+      productNews: [],
+      helpNews: []
     };
   },
   computed: {
@@ -325,6 +326,7 @@ export default {
     this.getOerviewRemind();
     this.getOverviewSelling();
     this.getProductNews();
+    this.getHelpNews();
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
@@ -459,6 +461,7 @@ export default {
         type: "warning"
       });
     },
+    //获取产品动态
     getProductNews() {
       this._apis.profile
         .getProductNews()
@@ -467,6 +470,16 @@ export default {
         })
         .catch(error => {});
     },
+    //获取帮助中心
+    getHelpNews(){
+      this._apis.profile
+        .getHelpNews()
+        .then(response => {
+          this.helpNews = response.list;
+        })
+        .catch(error => {});
+    },
+
     //点击资讯/公告详情
     onDetail(id) {
       window.open(`${this.zxLink}/cms/news/${id}.html`);
@@ -591,7 +604,7 @@ export default {
       }
       .helper{
         flex: 1;
-        margin-left: 20px;
+        margin-left: 10px;
       }
     }
     .p_l_bottom {
@@ -745,8 +758,9 @@ export default {
       line-height: 20px;
       padding: 3px 0;
       font-size: 14px;
+      color: #44434B;
       &:first-child {
-        color: red;
+        color:#FD4C2B;
       }
       p {
         white-space: nowrap;
@@ -757,7 +771,8 @@ export default {
         width: 165px;
       }
       &:hover {
-        color: #fd932b;
+        // color: #fd932b;
+        color: #FD4C2B;
       }
     }
     .no_data {

@@ -177,8 +177,22 @@
         left:0;
       }
     }
+    .cell-item-checkbox {
+      height: 120px;
+      cursor: default;
+      img {
+        height: 80px;
+      }
+      .el-checkbox {
+        margin-left: 5px;
+        margin-right: 0;
+      }
+    }
     .img_active{
       border: 2px dashed $globalMainColor!important;
+    }
+    .img-checked-active {
+      border: 2px solid $globalMainColor!important;
     }
   }
   }

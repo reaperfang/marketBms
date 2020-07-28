@@ -770,3 +770,22 @@ export function addFreeTemplate(data) {
 		apiType: 'decorate'
 	})
 }
+
+// 开店引导-加载引导步骤（获取引导步骤）
+export function getStep(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'SHOP-GUIDE-LOAD-RECORD-PROCESSOR',
+    data
+  })
+}
+// 开店引导-记录引导步骤（更新引导步骤）
+export function updateStep(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'SHOP-GUIDE-ADD-PROCESSOR',
+    data
+  })
+}
