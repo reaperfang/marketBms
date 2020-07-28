@@ -175,7 +175,7 @@ export default {
           if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
             this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
               this.getShopAuthList()
-              this.$router.push({ path: '/profile/profile' })
+              this.$router.push({ path: '/profile/guidePrompt' })
             }).catch(error => {
               this.$message.error(error);
             })
@@ -199,7 +199,7 @@ export default {
     //   this.loginForm = Object.assign({}, this.loginForm, {userName, password})
     //   this.$store.dispatch('login', this.loginForm).then(() => {
     //     this.loading = false
-    //     this.$router.push({ path: '/profile/profile' })
+    //     this.$router.push({ path: '/profile/guidePrompt' })
     //   }).catch(error => {
         // this.$message.error(error);
     //     this.loading = false
