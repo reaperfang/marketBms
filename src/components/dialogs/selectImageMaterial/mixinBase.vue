@@ -8,7 +8,7 @@ export default {
       imgNow: 0,  //当前预加载的第几张
       preLoadObj: null,  //预加载对象
       scrollTop: 0, //记录滚动条位置
-      loading: true,  //获取图片列表的loading
+      loading: false,  //获取图片列表的loading
       currentPage:1,  //当前页
       total:0,  //素材库总条数
 
@@ -33,8 +33,6 @@ export default {
 
     //选择切换
     checkboxChange(item) {
-      console.log(item.checked)
-      console.log(item)
       this.$emit('selectedItemUpdate', item, this.imgSrcKey, item.checked);
     },
 
@@ -59,6 +57,12 @@ export default {
     /* 当前页改变 */
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage;
+      this.fetch();
+    },
+
+    //搜索
+    search() {
+      this.currentPage = 1;
       this.fetch();
     },
 

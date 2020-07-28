@@ -80,7 +80,7 @@ export default {
       }
     },
     isCheckbox() { //是否多选
-      return this.imageMax > 1
+      return this.videoMax > 1
     },
     cid(){
         let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
@@ -145,7 +145,11 @@ export default {
           copyItem['fileCover'] = copyItem[keyObj.coverKey];
           this.selectedData.push(copyItem);
         }else{ //如果不选中
-          this.selectedData = this.selectedData.filter((val) => val.filePath !== item[pathKey])
+          if(item.id){
+            this.selectedData = this.selectedData.filter((val) => val.id !== item.id)
+          }else{
+            this.selectedData = this.selectedData.filter((val) => val.filePath !== item[keyObj.pathKey])
+          }
         }
       }
       

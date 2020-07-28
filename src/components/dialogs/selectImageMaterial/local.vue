@@ -6,6 +6,7 @@
       <el-upload
         v-if="uploadAble"
         :multiple="multipleUpload"
+        accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
         class="avatar-uploader"
         :title="loading ? '请加载完成后重试' : '点击上传'"
         :disabled="loading"
@@ -188,7 +189,9 @@ export default {
 
       /* 清除缓存 */
     clearTempSave() {
-      this.removeCheckedData();
+      if(this.isCheckbox){
+        this.removeCheckedData();
+      }
       localStorage.removeItem('localUploadFile');
       this.fileList = [];
       this.imgNow = 0;

@@ -156,7 +156,11 @@ export default {
           copyItem['filePath'] = copyItem[pathKey];
           this.selectedData.push(copyItem);
         }else{ //如果不选中
-          this.selectedData = this.selectedData.filter((val) => val.filePath !== item[pathKey])
+          if(item.id){
+            this.selectedData = this.selectedData.filter((val) => val.id !== item.id)
+          }else{
+            this.selectedData = this.selectedData.filter((val) => val.filePath !== item[pathKey])
+          }
         }
       }
       
@@ -171,7 +175,6 @@ export default {
       }
 
       const data = utils.deepClone(this.selectedData);
-      console.log(data)
       this.$emit('imageSelected',  data);
       this.close();
     },

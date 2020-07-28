@@ -12,7 +12,7 @@
             <template v-if="materialResultList.length">
               <waterfall :col='3' :width="245" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!loading">
                 <template v-for="(item,key) in materialResultList">
-                  <div v-if="isCheckbox" style="display: none;">{{JSON.stringify(selectedData).includes(item.filePath) ? item.checked = true : item.checked = false}}</div>
+                  <div v-if="isCheckbox" style="display: none;">{{JSON.stringify(selectedData).includes(item.id) ? item.checked = true : item.checked = false}}</div>
                   <div class="cell-item" :key="key" :class="{'img_active':  selectedItem && selectedItem.id === item.id, 'img-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" @click="selectImg(item)">
                     <img :src="item.filePath" alt="加载错误"/> 
                     <div class="item-body">
@@ -86,12 +86,6 @@ export default {
         sourceMaterialType:"0",
         fileName: this.materialName
       }).then((response)=>{
-        
-        if(!this.isCheckbox){ //如果是单选时
-          this.selectedItem = null;
-          this.$emit('selectedItemUpdate', null, this.imgSrcKey);
-        }
-
         this.materialResultList = response.list;
         this.preload(response.list, this.imgSrcKey);
         this.total = response.total;
@@ -147,11 +141,6 @@ export default {
         // 通过调用resolve将子节点数据返回，通知组件数据加载完成
         resolve(nodes);
       });
-    },
-    //搜索
-    search() {
-      this.currentPage = 1;
-      this.fetch();
     }
   }
 };

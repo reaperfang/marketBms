@@ -11,24 +11,27 @@
         <div class="material_wrapper" ref="wrapper" v-loading="loading" :style="{'overflow-y': loading ? 'hidden' : 'auto'}">
             <template v-if="materialResultList.length">
               <ul class="tile-list n3 video_list" v-if="materialResultList.length">
-                <li v-for="(item, key) of materialResultList" :key="key" class="cell-item" @click="selectVideo($event, item)">
-                  <div class="video_head">
-                    <span>{{item.createTime}}</span>
-                    <span>{{(item.fileSize ? Math.floor(item.fileSize / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB')}}</span>
-                  </div>
-                  <div class="video_body">
-                    <p>{{item.name}}</p>
-                    <video
-                      :src="item.filePath"
-                      controls="controls"
-                      class="video"
-                      :poster="item.fileCover"
-                    >您的浏览器不支持 video 标签。</video>
-                  </div>
-                  <div class="item-checkbox" v-if="isCheckbox">
-                    <el-checkbox :disabled="!item.checked && selectedData.length >= max - isHave ? true : false" v-model="item.checked" @change="checkboxChange(item)">{{item.checked ? '已选择' : '选择'}}</el-checkbox>
-                  </div>
-                </li>
+                <template v-for="(item, key) of materialResultList">  
+                  <li v-if="isCheckbox" style="display: none;">{{JSON.stringify(selectedData).includes(item.id) ? item.checked = true : item.checked = false}}</li>
+                  <li :key="key" class="cell-item" :class="{'video_active': selectedItem && selectedItem.id === item.id, 'video-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" @click="selectVideo(item)">
+                    <div class="video_head">
+                      <span>{{item.createTime}}</span>
+                      <span>{{(item.fileSize ? Math.floor(item.fileSize / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB')}}</span>
+                    </div>
+                    <div class="video_body">
+                      <p>{{item.name}}</p>
+                      <video
+                        :src="item.filePath"
+                        controls="controls"
+                        class="video"
+                        :poster="item.fileCover"
+                      >您的浏览器不支持 video 标签。</video>
+                    </div>
+                    <div class="item-checkbox" v-if="isCheckbox">
+                      <el-checkbox :disabled="!item.checked && selectedData.length >= max - isHave ? true : false" v-model="item.checked" @change="checkboxChange(item)">{{item.checked ? '已选择' : '选择'}}</el-checkbox>
+                    </div>
+                  </li>
+                </template>
               </ul>
             </template>
             <p class="empty" v-else>暂无数据</p>
@@ -84,7 +87,7 @@ export default {
 
     /**************************** 列表数据拉取相关 *******************************/
 
-    /* 查询素材库图片 */
+    /* 查询素材库视频 */
     fetch() {
       this.loading = true;
       this._apis.file.getMaterialList({
@@ -96,6 +99,7 @@ export default {
       }).then((response)=>{
         this.materialResultList = response.list;
         this.total = response.total;
+        this.loading = false;
       }).catch((error)=>{
         this.$message.error(error);
         this.loading = false;
@@ -148,11 +152,6 @@ export default {
         // 通过调用resolve将子节点数据返回，通知组件数据加载完成
         resolve(nodes);
       });
-    },
-    //搜索
-    search() {
-      this.currentPage = 1;
-      this.fetch();
     }
   }
 };

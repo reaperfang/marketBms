@@ -6,7 +6,7 @@ export default {
   data() {
     return {
       scrollTop: 0, //记录滚动条位置
-      loading: true,  //获取图片列表的loading
+      loading: false,  //获取图片列表的loading
       currentPage:1,  //当前页
       total:0,  //素材库总条数
 
@@ -27,13 +27,11 @@ export default {
 
     //选择切换
     checkboxChange(item) {
-      console.log(item.checked)
-      console.log(item)
       this.$emit('selectedItemUpdate', item, this.keyObj, item.checked);
     },
 
-    /* 选中图片 */
-    selectImg(item) {
+    /* 选中视频 */
+    selectVideo(item) {
       //如果是多选，则不可选中视频，只能通过checkbox选择
       if(this.isCheckbox){
         return;
@@ -54,6 +52,13 @@ export default {
     handleCurrentChange(pIndex){
       this.currentPage = pIndex || this.currentPage;
       this.fetch();
+    },
+
+    //搜索
+    search() {
+      this.currentPage = 1;
+      this.fetch();
     }
-};
-</script>	
+  }
+}
+</script>
