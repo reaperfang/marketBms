@@ -171,8 +171,8 @@ export default {
                     return '特权价'
                 case 4:
                     return '赠品订单'
-                case 5:
-                    return '分销订单'
+                // case 5:
+                //wyyfx删除     return '分销订单'
             }
         },
         deliveryWayFilter(code) {
