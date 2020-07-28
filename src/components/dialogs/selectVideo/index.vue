@@ -164,7 +164,6 @@ export default {
       }
 
       const data = utils.deepClone(this.selectedData);
-      console.log(data)
       this.$emit('videoSelected',  data);
       this.close();
     },

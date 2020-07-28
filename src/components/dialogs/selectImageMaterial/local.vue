@@ -37,7 +37,7 @@
         </waterfall>
       </div>
   </div>
-  <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <span v-if="!loading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
+  <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;line-height:16px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <span v-if="!loading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
   </div>
 </template>
 
