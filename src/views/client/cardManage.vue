@@ -66,7 +66,7 @@
 import utils from "@/utils";
 import cdTable from './components/cardManage/cdTable';
 import lkTable from './components/cardManage/lkTable';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 export default {
     name: "cardManage",
     components: { cdTable, lkTable, dialogSelectImageMaterial },

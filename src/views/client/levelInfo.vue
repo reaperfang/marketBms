@@ -167,7 +167,7 @@ import levelInfoDialog from "./dialogs/levelInfo/levelInfoDialog";
 import giftListDialog from "./dialogs/levelInfo/giftListDialog";
 import couponListDialog from "./dialogs/levelInfo/couponListDialog";
 import redListDialog from "./dialogs/levelInfo/redListDialog";
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 export default {
   name: "levelInfo",
   components: {

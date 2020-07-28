@@ -142,7 +142,7 @@
 </div>    
 </template>
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import { mapMutations } from 'vuex'
 export default {
     data() {

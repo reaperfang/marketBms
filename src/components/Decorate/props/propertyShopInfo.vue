@@ -31,7 +31,7 @@
 
 <script>
 import mixinPropsBase from '../mixins/mixinPropsBase';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 export default {
   name: 'propertyShopInfo',
   mixins: [mixinPropsBase],

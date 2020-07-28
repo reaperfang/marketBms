@@ -1,6 +1,6 @@
 
 import DialogMapSearch from '@/components/mapSearchDialog'
-import dialogSelectImageMaterial from "@/views/shop/dialogs/dialogSelectImageMaterial";
+import dialogSelectImageMaterial from "@/components/dialogs/selectImageMaterial/index";
 const mixin = {
   data() {
     var validatePass = (rule, value, callback) => {
