@@ -1,12 +1,12 @@
 /* 本地上传 */
 <template>
-  <div class="imageMaterial">
+  <div class="videoMaterial">
     <!-- 本地上传 -->
     <div class="material_wrapper material_wrapper_2" ref="wrapper" :style="{'overflow-y': loading ? 'hidden' : 'auto'}">
       <el-upload
         v-if="uploadAble"
         :multiple="multipleUpload"
-        accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+        accept=".mp4,.MP4"
         class="avatar-uploader"
         :title="loading ? '请加载完成后重试' : '点击上传'"
         :disabled="loading"
@@ -17,27 +17,35 @@
         :before-upload="beforeUpload" 
         :on-success="handleSuccess"
         :on-change="handleChange"
-        :limit="100"
+        :on-progress="uploadVideoProcess"
+        :limit="6"
         :on-exceed="uploadLimit">
         <i class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
+      <p class="note" style="color: #d3d8df;margin: 8px 0;height: 16px;line-height:16px;">大小不超过10mb，支持mp4格式 <span v-if="!loading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
       <div v-loading="loading">
-        <waterfall :col='3' :width="245" :gutterWidth="10" v-if="!loading" :data="fileList" :isTransition="false" >
-          <template v-for="(item,key) in fileList">
-            <div class="cell-item" :key="key" :class="{'img_active': selectedItem && selectedItem.title === item.title, 'img-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" @click="selectImg(item)">
-              <img :src="item.url" alt="加载错误"/> 
-              <div class="item-body">
-                  <div class="item-desc">{{item.original}}</div>
+          <ul class="tile-list n3 video_list" v-if="fileList.length">
+            <li v-for="(item, key) of fileList" :key="key" class="cell-item" :class="{'video_active': selectedItem && selectedItem.title === item.title, 'video-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" @click="selectVideo(item)">
+              <div class="video_head">
+                <span>{{item.createTime}}</span>
+                <span>{{item.size ? Math.floor(item.size / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB'}}</span>
+              </div>
+              <div class="video_body"> 
+                <p>{{item.original}}</p>
+                <video
+                  :src="item.url"
+                  controls="controls"
+                  class="video"
+                  :poster="item.frameUrl"
+                >您的浏览器不支持 video 标签。</video>
               </div>
               <div class="item-checkbox" v-if="isCheckbox">
                 <el-checkbox :disabled="!item.checked && selectedData.length >= max - isHave ? true : false" v-model="item.checked" @change="checkboxChange(item)">{{item.checked ? '已选择' : '选择'}}</el-checkbox>
               </div>
-            </div>
-          </template>
-        </waterfall>
+            </li>
+          </ul>
       </div>
-  </div>
-  <p class="note" style="color: #d3d8df;margin-top:10px;height: 16px;line-height:16px;">仅支持jpg,jpeg,png格式，大小不超过3.0MB <span v-if="!loading && fileList.length" type="text" style="margin-left:10px;font-size:14px;color:rgb(101,94,255);cursor:pointer;" @click="clearTempSave">清除上传记录</span></p>
+    </div>
   </div>
 </template>
 
@@ -60,21 +68,17 @@ export default {
       successList: [],  //上传成功的文件列表(上传后)
       failedList: [],  //上传失败的文件列表（上传后）
 
-      imgSrcKey: 'url', //接口返回的图片地址路径的参数名称
+      keyObj: { //接口返回的视频地址路径和封面图片路径的参数名称
+        pathKey: 'url',
+        coverKey: 'frameUrl'
+      }, 
     };
   },
   created() {
-    const tempSaveFile = localStorage.getItem('localUploadFile');
-    if (tempSaveFile) {
-      if(tempSaveFile=="[null]"){
-        this.fileList = [];
-      }else{
-        this.fileList = JSON.parse(tempSaveFile);
-      }
-    }else{
-      this.fileList = [];
+    const tempSaveFile = localStorage.getItem('localUploadVideoFile');
+    if(tempSaveFile) {
+      this.fileList = JSON.parse(tempSaveFile);
     }
-    this.preload(this.fileList, this.imgSrcKey);
   },
   activated() {
     
@@ -85,24 +89,15 @@ export default {
 
     /* 上传前钩子 */
     beforeUpload(file) {
-
-      const isJPG = file.type === 'image/jpg';
-      const isJPEG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 3;
-      const isNameRight = /\.jpg|\.jpeg|\.png|\.JPG|\.JPEG|\.PNG$/.test(file.name);
-      if (!(isJPG || isJPEG || isPNG) || !isLt2M || !isNameRight) {
-        this.$message.error('上传图片仅支持jpg,jpeg,png格式! 且上传图片大小不能超过 3MB!');
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      // if (!['video/mp4', 'video/mov', 'video/m4v', 'video/flv', 'video/x-flv', 'video/mkv', 'video/wmv', 'video/avi', 'video/rmvb', 'video/3gp'].includes(file.type) || !isLt10M) {
+      if (!['video/mp4'].includes(file.type) || !isLt10M) {
+        this.$message.error('请上传正确的视频格式! 且上传视频大小不能超过 10MB!');
         this.failedList.push(file);
         this.loading = false;
+        return false;
       }
-      if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.preload(this.fileList, this.imgSrcKey);
-        this.addList = [];
-        this.successList = [];
-        this.failedList = [];
-      }
-      return (isJPG || isJPEG || isPNG) && isLt2M && isNameRight;
+      return true;
     },
 
     /* 上传成功钩子 */
@@ -117,7 +112,6 @@ export default {
           list.push(item.response.data);
         }
       }
-
       if(this.isCheckbox){
         let copyList = utils.deepClone(list);
         const num = this.max - this.isHave - this.selectedData.length;
@@ -131,16 +125,14 @@ export default {
         if(fileList.length == copyList.length){
           copyList.forEach((item, index) => {
             if(item.checked){
-              this.$emit('selectedItemUpdate', item, this.imgSrcKey, true);
+              this.$emit('selectedItemUpdate', item, this.keyObj, true);
             }
           })
         }
       }else{
         this.fileList = list;
       }
-
-      localStorage.setItem('localUploadFile', JSON.stringify(list));
-
+      localStorage.setItem('localUploadVideoFile', JSON.stringify(list));
     },
 
     /* 上传失败 */
@@ -157,7 +149,6 @@ export default {
     /* 上传文件改变 */
     handleChange(file, fileList) {
       this.loading = true;
-      this.imgNow = 0;
       if(file.status === 'ready') {
         this.addList.push(file);
       }
@@ -166,7 +157,7 @@ export default {
       }
 
       if(this.successList.length + this.failedList.length === this.addList.length) {
-        this.preload(this.fileList, this.imgSrcKey);
+        this.loading = false;
         this.addList = [];
         this.successList = [];
         this.failedList = [];
@@ -175,14 +166,20 @@ export default {
 
     /* 上传超过个数的处理 */
     uploadLimit() {
-      this.$message.warning('最多支持上传100张！');
+      this.$message.warning('最多支持上传6个视频！');
+    },
+
+    //进度条
+	  uploadVideoProcess (event, file, fileList) {
+        // this.videoFlag = true;
+        // this.videoUploadPercent = file.percentage.toFixed(0) * 1;
     },
 
     //删除已选择的本地上传数据
     removeCheckedData() {
       this.fileList.forEach((item) => {
         if(item.checked){
-          this.$emit('selectedItemUpdate', item, this.imgSrcKey, false);
+          this.$emit('selectedItemUpdate', item, this.keyObj, false);
         }
       })
     },
@@ -192,11 +189,10 @@ export default {
       if(this.isCheckbox){
         this.removeCheckedData();
       }
-      localStorage.removeItem('localUploadFile');
+      
+      localStorage.removeItem('localUploadVideoFile');
       this.fileList = [];
-      this.imgNow = 0;
-    },
-    
+    }
 
   }
 };
@@ -209,7 +205,6 @@ export default {
   height: 80px;
   display: inline-block;
   vertical-align: middle;
-  margin-bottom:20px;
   // margin-top:20px;
 }
 /deep/ .avatar-uploader .el-upload {

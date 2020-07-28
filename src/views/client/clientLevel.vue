@@ -9,7 +9,8 @@
             </el-select>
             <el-button type="primary" class="marL20" @click="checkLevel">查 询</el-button>
         </div>
-        <cvTable style="margin-top: 36px" :params="params"></cvTable>
+        <div style="color: #FD4C2B; font-size: 12px; margin: 30px 0 10px 0">请注意：会员等级被启用后，随意变更升级条件容易导致升级条件混乱，影响用户体验，请谨慎操作。</div>
+        <cvTable :params="params"></cvTable>
     </div>
 </template>
 <script>
