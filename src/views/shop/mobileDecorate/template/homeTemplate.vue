@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="isLoading">
     <div class="template_wrapper-head">
       <div class="template_wrapper-head-tags">
         <el-tag
@@ -155,6 +155,7 @@
     },
     data() {
       return {
+        isLoading: false,
         showAllBtn: false,
         tempInfo: {},
         dialogVisible: false,
@@ -199,6 +200,10 @@
       this.effIndustryList()
       this.fetchList();
       this.preLoadObj = new Image();
+      const shopObj = JSON.parse(localStorage.getItem('shopInfos'));
+      shopObj.id = 51;
+
+      localStorage.setItem('shopInfos', JSON.stringify(shopObj));
     },
     watch: {
       zoomRatio(newValue) {
@@ -378,6 +383,7 @@
 
       /* 应用模板 */
       apply(item) {
+        this.isLoading = true;
         this._apis.shop.getTemplateInfo({
           pageTemplateId: item.id
         }).then(res1 => {
@@ -392,10 +398,10 @@
                 templateName: item.name,
                 templatePrice: item.price
               }).then(res => {
-                this.qrCodeInfo = res
-                this.dialogVisible = true
+                this.qrCodeInfo = res;
+                this.dialogVisible = true;
                 this.tempInfo = item
-              })
+              }).finally(() => {this.isLoading = false})
             } else {
               this.confirm({
                 title: '提示',
@@ -431,10 +437,12 @@
               })
             }
           }
-        })
+        }).finally(() => {this.isLoading = false})
       },
+
+      /* 关闭支付模板 */
       closePay() {
-        this.dialogVisible = false
+        this.dialogVisible = false;
         this.fetchList()
       },
       showAllIndustries() {
