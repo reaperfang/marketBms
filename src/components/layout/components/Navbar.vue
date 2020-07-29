@@ -5,7 +5,7 @@
         <i class="el-icon-arrow-left" @click="backToPre" v-if="$route.path === '/shop/m_templateEdit'"></i>
         <span class="shop_name">{{shopName}}</span>
         <span class="edition">{{guideType}}</span>
-        <el-button class="border_btn guide">开店引导</el-button>
+        <el-button class="border_btn guide" v-if="isCompleteGuide" @click="goShopGulde">开店引导</el-button>
       </div>
       <!-- <div class="navbar-item"></div> -->
       <div class="right-menu">
@@ -89,7 +89,8 @@ export default {
       searchName: "", //搜索名称
       helpLink: "",
       zxLink: `${process.env.ZX_HELP}`, //链接
-      guideType:'基础版'//版本类型
+      guideType:'基础版',//版本类型
+      isCompleteGuide: false // 是否完成开店引导
     };
   },
   components: {
@@ -97,6 +98,10 @@ export default {
     shopsDialog
   },
   computed: {
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    },
     ...mapGetters(["sidebar", "device"]),
     userInfo() {
       return JSON.parse(localStorage.getItem("userInfo"));
@@ -115,8 +120,22 @@ export default {
   created() {
     this.getShopName();
     this.getGuide();
+    this.getShopInfo()
   },
   methods: {
+     goShopGulde() {
+      this.$router.push({ path: '/profile/shopGuide'})
+    },
+    getShopInfo() {
+      let id = this.cid;
+      this._apis.set
+        .getShopInfo({ id: id })
+        .then(response => {
+          console.log('21212',  response.storeGuide, response)
+          
+          this.isCompleteGuide = this.userType && response && response.storeGuide !== 1
+        })
+    },
     onHelp() {
       let link =
           "/cms/search?type=service&dept=aiyouyi.cn&cat=yidongshangcheng",

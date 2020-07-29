@@ -63,11 +63,11 @@ export default {
       isDisabled: false,
       swiperOption: {
         allowSlidePrev : false,
-        slidesPerView: 4,
+        slidesPerView: 5,
         spaceBetween: 20,
-        slidesPerGroup: 4,
+        slidesPerGroup: 5,
         loop: true,
-        loopedSlides: 4,
+        loopedSlides: 5,
         loopFillGroupWithBlank: true,
         noSwiping : true,
         noSwipingClass : 'item',
@@ -153,6 +153,24 @@ export default {
           this.$router.push({ path: '/profile/profile'})
         });
       }
+    },
+    setStoreGuide(storeGuide) {
+      let id = this.cid
+      let data = {
+        id,
+        storeGuide
+      }
+      return new Promise((resolve, reject) => {
+        this._apis.set.updateShopInfo(data).then(response =>{
+          this.$store.dispatch('getShopInfo');
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+          console.log('updateShopInfo:error', error)
+          // this.$message.error('保存失败');
+        })
+      })
+      
     },
     updateStep() {
       const cid = this.cid;
@@ -318,7 +336,9 @@ export default {
 
     },
     hasBeenComplete(id) {
-      this.updateStep().then(() => {
+      const p1 = this.updateStep()
+      const p2 = this.setStoreGuide(1)
+      Promise.all([p1, p2]).then(() => {
         this._routeTo('m_templateEdit', { id });
       }).catch(() => {
          this.$message.error('保存失败');
