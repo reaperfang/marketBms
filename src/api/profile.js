@@ -49,7 +49,7 @@ export function getSignatureList (params) {
   })
 }
 
-// 获取小程序太阳码
+//获取小程序太阳码
 export function getWXQrcode(data) {
   return request({
     target: 'SHOP-API-APPMAURL-PROCESSOR',
@@ -59,10 +59,30 @@ export function getWXQrcode(data) {
   })
 }
 
-//判断移动商城是否授权 
+//获取小程序和公众号的绑定状态
+export function getwxBindStatus (data) {
+  return request({
+    target: 'SHOP-API-WXBIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+//获取小程序和公众号的绑定状态
 export function isEmpower(data) {
   return request({
     target: 'SHOP-API-WXBIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+//获取小程序太阳码
+export function getSmallQRcode (data) {
+  return request({
+    target: 'SHOP-API-APPMAURL-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data

@@ -33,7 +33,7 @@
 <script>
 import DialogBase from '@/components/DialogBase'
 import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
-import DialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
+import DialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index'
 
 function getByteLen(val) {
     var len = 0;

@@ -90,13 +90,16 @@ export default {
   mounted() {},
 
   methods: {
-    getGzhIsAuth() {
+    getIsAuth() {
       // 需要调用微信是否授权接口
-      this.isBindGzh = true
-    },
-    getXcxIsAuth() {
-      // 需要调用小程序是否授权接口
-      this.isBindXcx = true
+      const id = this.cid
+      this._apis.profile.getwxBindStatus({ id }).then(response => {
+        console.log('getwxBindStatus',response)
+        this.isBindGzh = response && response.bindWechatAccount === 1 || false
+        this.isBindXcx = response && response.bindWechatApplet === 1 || false
+      }).catch((err) => {
+        console.log(err)
+      })
     },
     goGzh() {
       this.utils.addNewApply('/application/channelapp/publicnum', 3)
@@ -107,7 +110,7 @@ export default {
         confirmText: '确定',
         cancelButtonText: '取消'
       }).then(() => {
-        this.getGzhIsAuth()
+        this.getIsAuth()
       }).catch(() => {
         
       });
@@ -121,7 +124,7 @@ export default {
         confirmText: '确定',
         cancelButtonText: '取消'
       }).then(() => {
-        this.getXcxIsAuth()
+        this.getIsAuth()
       }).catch(() => {
         
       });

@@ -26,6 +26,7 @@
                     </div>
                     <p class="c_warn">建议上传图片尺寸326*62像素，不超过3M，格式支持JPG、PNG、JPEG</p>
                 </div>
+                <div style="color: #FD4C2B; font-size: 12px; margin-bottom: 10px">请注意：会员卡等级被启用后，随意变更升级条件容易导致升级条件混乱，影响用户体验，请谨慎操作。</div>
                 <cdTable></cdTable>
             </el-tab-pane>
             <el-tab-pane label="领卡记录" name="second" v-permission="['用户', '会员卡', '领卡记录']">
@@ -66,7 +67,7 @@
 import utils from "@/utils";
 import cdTable from './components/cardManage/cdTable';
 import lkTable from './components/cardManage/lkTable';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 export default {
     name: "cardManage",
     components: { cdTable, lkTable, dialogSelectImageMaterial },

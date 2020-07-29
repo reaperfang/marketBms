@@ -25,7 +25,7 @@ const ChannelBindAndPay = () =>
 const OperativeDealConfig = () =>
   import(/* webpackChunkName: "operativeDealConfig" */ './components/operativeDealConfig')
 // 店铺装修 decoration
-const Decoration = () =>
+const decoration = () =>
   import(/* webpackChunkName: "decoration" */ './components/decoration')
 export default {
   components: {
@@ -33,7 +33,7 @@ export default {
     ChannelBindAndPay,
     EasyShopInfo,
     // GuidePrompt,
-    Decoration,
+    decoration,
     Scope
   },
 
@@ -96,7 +96,10 @@ export default {
           this.currentComponent = 'OperativeDealConfig'
           break
         case 5:
-          this.currentComponent = 'Decoration'
+          this.currentComponent = 'decoration'
+          break
+        case 6:
+          this.currentComponent = 'decoration'
           break
         // default:
         //   this.currentComponent = 'GuidePrompt'

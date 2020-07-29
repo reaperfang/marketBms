@@ -122,7 +122,7 @@
                         prop="createTime"
                         label="评价时间">
                     </el-table-column>
-                    <el-table-column label="操作" width="150px" fixed="right">
+                    <el-table-column label="操作" :width="computeWidth" fixed="right">
                         <template slot-scope="scope">
                             <div class="operate-box">
                                 <span v-permission="['订单', '评价管理', '默认页面', '审核']" v-if="scope.row.auditStatus == 0" class="blue" @click="currentDialog = 'AuditDialog'; title='审核'; batch = false; currentData = scope.row; dialogVisible = true">审核</span>
@@ -220,6 +220,17 @@ export default {
     },
     created() {
         this.getList()
+    },
+    computed: {
+        computeWidth() {
+            if(this.tableData.some(item => item.auditStatus == 1)) {
+                return '120'
+            } else if(this.tableData.some(item => item.auditStatus == 0)){
+                return '90'
+            } else {
+                return '50'
+            }
+        }
     },
     filters: {
         isChoicenessFilter(code) {
