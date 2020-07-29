@@ -28,7 +28,7 @@
               </el-form-item> 
               <el-form-item label prop="name">
                 <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">查 询</el-button>
-                <el-button @click="fetch($event, true)">刷 新</el-button>
+                <el-button @click="startIndex = 1;ruleForm.startIndex = 1;fetch($event, true)">刷 新</el-button>
               </el-form-item>
           </div>
         </el-form>
@@ -133,15 +133,23 @@ export default {
   },
   methods: {
 
-    fetch() {
+    fetch(ev, loadAll) {
       this.loading = true;
+
+      let tempForm = {};
+      if(loadAll) {
+        tempForm = {...this.ruleForm};
+        tempForm.name = '';
+        this.ruleForm.name = '';
+      }
+
       let params = {};
       if(this.seletedClassify && typeof this.seletedClassify === 'string') {
-        params = Object.assign(this.ruleForm, {
+        params = Object.assign(loadAll? tempForm: this.ruleForm, {
           productCatalogInfoId: this.seletedClassify || ''
         })
       }else{
-        params = this.ruleForm;
+        params = loadAll? tempForm: this.ruleForm;
         if(!!params.productCatalogInfoId) {
           delete params.productCatalogInfoId;
         }

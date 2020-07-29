@@ -17,7 +17,7 @@
           </el-form-item>
           <el-form-item label prop="name">
             <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜 索</el-button>
-            <el-button @click="fetch($event, true)">刷 新</el-button>
+            <el-button @click="startIndex = 1;ruleForm.startIndex = 1;fetch($event, true)">刷 新</el-button>
           </el-form-item>
         </el-form>
       </div>
