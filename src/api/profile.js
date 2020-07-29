@@ -48,3 +48,23 @@ export function getSignatureList (params) {
     params
   })
 }
+
+// 获取小程序太阳码
+export function getWXQrcode(data) {
+  return request({
+    target: 'SHOP-API-APPMAURL-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+//判断移动商城是否授权 
+export function isEmpower(data) {
+  return request({
+    target: 'SHOP-API-WXBIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}

@@ -7,7 +7,7 @@
             <span class="title1">实时概况：</span>
             <span class="title2">今日数据更新时间：{{new Date() | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
           </span>
-          <span class="look_info">查看详情</span>
+          <span class="look_info" @click="linkTo({text:'订单管理',url:'/order/query'})">查看详情</span>
         </p>
         <div class="p_p">
           <div class="p_p_l">
@@ -149,50 +149,50 @@
           <div class="main">
             <div>
               <p class="title3">微信小程序商城</p>
-              <!-- <div>
-                <img  class="erweima"/>
+              <div v-if="wxQrcode">
+                <img  class="erweima" :src="wxQrcode" alt/>
                 <p class="opt">
-                  <el-button>下载</el-button>
+                  <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
                 </p>
-              </div> -->
-              <!-- <div>
+              </div>
+              <div v-if="isEmpowerWX">
                 <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
                 <p class="title4">您当前还未授权小程序</p>
                 <p class="opt">
                   <el-button>立即授权</el-button>
                 </p>
-              </div> -->
-              <div>
+              </div>
+              <!-- <div>
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="erweima" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
                   <el-button>立即发布</el-button>
                 </p>
-              </div>
+              </div> -->
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
-              <!-- <div>
-                <img  class="erweima"/>
+              <div v-if="gzQrcode">
+                <img  class="erweima" :src="gzQrcode" alt>
                 <p class="opt">
-                  <el-button>下载</el-button>
-                  <el-button>复制链接</el-button>
+                  <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
+                  <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
                 </p>
-              </div> -->
-              <!-- <div>
+              </div>
+              <div v-if="isEmpowerGZ">
                 <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
                 <p class="title4">您当前还未授权公众号</p>
                 <p class="opt">
                   <el-button>立即授权</el-button>
                 </p>
-              </div> -->
-              <div>
+              </div>
+              <!-- <div>
                 <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="erweima" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
                   <el-button>立即发布</el-button>
                 </p>
-              </div>
+              </div> -->
             </div>
           </div>  
         </div>
@@ -269,7 +269,7 @@
             <i class="icon_more"></i>
           </el-link>
         </p>
-        <p class="p_email no_data" v-if="helpNews.length == 0">暂无产品动态</p>
+        <p class="p_email no_data" v-if="helpNews.length == 0">暂无帮助信息</p>
         <ul class="info_box" v-else>
           <template v-for="(item, key) in helpNews">
             <li class="info_list" :key="key">
@@ -297,8 +297,13 @@ export default {
       stayProcessedCount: "",
       staySendCount: "",
       stayAuthCount: "",
-      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",
-      qrCode: "",
+      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",//客户工作台地址
+      gzLink:location.protocol + "//omo.aiyouyi.cn/cp/?cid=" + this.cid,//公众号商城地址
+      qrCode: "",//客户工作台二维码
+      wxQrcode:"",//小程序二维码
+      gzQrcode:"",//公众号二维码
+      isEmpowerWX:false,//微信小程序是否授权
+      isEmpowerGZ:false,//微信公众号是否授权
       protocol: location.protocol,
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
@@ -327,6 +332,8 @@ export default {
     this.getOverviewSelling();
     this.getProductNews();
     this.getHelpNews();
+    this.getWXQrcode();
+    this.getGZQrcode();
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
@@ -349,7 +356,7 @@ export default {
         });
     },
 
-    //获取二维码
+    //获取客户工作台二维码
     getQrcode() {
       this._apis.shop
         .getQrcode({
@@ -365,7 +372,7 @@ export default {
         });
     },
 
-    //下载
+    //下载二维码
     downs(url,name) {
       var alink = document.createElement("a");
       alink.href = url; //图片地址
@@ -483,7 +490,47 @@ export default {
     //点击资讯/公告详情
     onDetail(id) {
       window.open(`${this.zxLink}/cms/news/${id}.html`);
-    }
+    },
+
+    //判断是否授权
+    isEmpower(){
+      this._apis.profile
+        .isEmpower({id:this.cid}).then(response => {
+          this.isEmpowerWX = response.bindWechatApplet ? false : true
+          this.isEmpowerGZ = response.bindWechatAccount ? false : true
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+    //获取小程序二维码
+    getWXQrcode(){
+      this._apis.profile
+        .getWXQrcode({id:this.cid}).then(response => {
+          this.wxQrcode = `data:image/png;base64,${response}`;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    
+    //获取公众号二维码
+    getGZQrcode(){
+      this._apis.shop
+        .getQrcode({
+          url: this.gzLink,
+          width: "80",
+          height: "80"
+        })
+        .then(response => {
+          this.gzQrcode = `data:image/png;base64,${response}`;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
   }
 };
 </script>
