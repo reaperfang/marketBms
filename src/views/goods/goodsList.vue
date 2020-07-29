@@ -730,15 +730,10 @@ export default {
                 //保存修改后的商品序号
                 this._apis.goods.editGoodSortId(param)
                 .then((res)=>{
-                    // debugger
-                    this.$message({
-                    message: "保存成功",
-                    type: "success"
-                    });
                     this.getList();
                 }).catch(error=>{
                     this.$message({
-                    message: "保存失败",
+                    message: "序号保存失败",
                     type: "warning"
                     });
                 }) 
