@@ -176,7 +176,7 @@ export default {
     submit() {
       if (this.commonCat && this.commonCat.child) {
         //关闭窗口，将值传到添加商品页面
-        this.$emit("getGoodCategory", this.commonCat);
+        this.$emit("getProductCategoryInfoId", this.commonCat);
         this.visible = false;
         this.isWarning=false;
       } else {

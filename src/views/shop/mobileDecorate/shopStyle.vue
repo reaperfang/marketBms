@@ -1,6 +1,6 @@
 <template>
   <div class="shop_style_wrapper">
-    <h3>风格配色<span class="tips">设置成功后将替换小程序和公众号现有风格（全部页面）</span></h3>
+    <h3>风格配色<span class="tips">设置成功后将替换小程序、公众号和移动H5现有风格（全部页面）</span></h3>
     <div class="style_btns">
       <span>选择店铺整体配色： </span>
       <ul class="style_list" ref="styleList">
