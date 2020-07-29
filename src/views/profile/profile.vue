@@ -495,7 +495,7 @@ export default {
     //判断是否授权
     isEmpower(){
       this._apis.profile
-        .isEmpower({id:this.cid}).then(response => {
+        .getwxBindStatus({id:this.cid}).then(response => {
           this.isEmpowerWX = response.bindWechatApplet ? false : true
           this.isEmpowerGZ = response.bindWechatAccount ? false : true
         })
@@ -507,7 +507,7 @@ export default {
     //获取小程序二维码
     getWXQrcode(){
       this._apis.profile
-        .getWXQrcode({id:this.cid}).then(response => {
+        .getSmallQRcode({id:this.cid}).then(response => {
           this.wxQrcode = `data:image/png;base64,${response}`;
         })
         .catch(error => {
