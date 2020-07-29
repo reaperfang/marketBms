@@ -1,10 +1,10 @@
 <template>
   <div class="beingRenovated">
     <steps class="steps" :step="step"></steps>
-    <h2 class="clearfix">线上生意又进一步，完善下面的工作吧!<el-button v-if="templateList.length <= 0" class="next" @click="next">不喜欢，换一组</el-button></h2>
-    <swiper ref="mySwiper" class="list" :options="swiperOption">
+    <h2 class="clearfix">线上生意又进一步，完善下面的工作吧!<el-button v-if="templateList.length > 0" class="next" @click="next">不喜欢，换一组</el-button></h2>
+    <swiper v-if="templateList.length > 0" ref="mySwiper" class="list" :options="swiperOption">
       <swiper-slide class="item" v-for="(item, key) of templateList" :key="key" :class="[isCurrentCheckedTemplate(item.id) ? 'active': '']">
-        <ul @click="choose">
+        <ul @click="choose(item)">
           <li class="img">
             <img :src="item.photoHalfUrl" alt="">
           </li>
@@ -15,21 +15,6 @@
           </li>
           <li class="btn">
             <el-button class="preview" @click="preview(item)">预览</el-button>
-          </li>
-        </ul>
-      </swiper-slide>
-       <swiper-slide class="item">
-        <ul @click="test()">
-          <li class="img">
-            <img src="https://test5-omo.aiyouyi.cn/web-file/0/image/30fb5/f225a847364b43269a45d70a4f37dc17.jpeg">
-          </li>
-          <li class="desc">
-            <span>免费模版</span>
-            <i class="mini_program"></i>
-            <i class="wechat"></i>
-          </li>
-          <li class="btn">
-            <el-button class="preview" @click.stop="test2()">预览</el-button>
           </li>
         </ul>
       </swiper-slide>
@@ -77,12 +62,15 @@ export default {
       loading: false,
       isDisabled: false,
       swiperOption: {
-        slidesPerView: 5,
+        allowSlidePrev : false,
+        slidesPerView: 4,
         spaceBetween: 20,
-        slidesPerGroup: 5,
+        slidesPerGroup: 4,
         loop: true,
-        loopedSlides: 5,
+        loopedSlides: 4,
         loopFillGroupWithBlank: true,
+        noSwiping : true,
+        noSwipingClass : 'item',
         // pagination: {
         //   el: '.swiper-pagination',
         //   clickable: true
@@ -105,7 +93,9 @@ export default {
       zoomRatio: 1,
       qrCodeInfo: null,
       mode: null,
-      isOtherEnterCompleted: false
+      isOtherEnterCompleted: false,
+      maxWidth: 550,
+      imgNow: 0
     }
   },
 
@@ -195,6 +185,7 @@ export default {
     /* 放大 */
     plus() {
       this.mode = 'plus';
+      console.log(this.$refs.bigImage, this.$refs.bigImage.clientWidth)
       if (this.$refs.bigImage.clientWidth <= this.maxWidth * 0.9) {
         this.zoomRatio += 0.1;
       }
@@ -289,6 +280,7 @@ export default {
         this._apis.goodsOperate.getEffTemplateList(reqParams).then((response) => {
           this.totalPage = Math.ceil(response.total / this.form.pageSize);
           this.templateList = this.templateList.concat(response.list);
+          this.imgNow = 0;
           this.preload(this.templateList, 'photoDetailsUrl');
           resolve(response)
         }).catch((err) => {
@@ -376,6 +368,7 @@ export default {
           } else {
             this.currPage = 0
           }
+          this.swiper.update()
           // this.swiper.slideTo(this.currPage, 1000, false)
           this.swiper.slideNext()
         })
@@ -425,7 +418,8 @@ export default {
       }
       li {
         &.img {
-          width: 100%;
+          max-width: 100%;
+          height: 254px;
           img {
             width: 100%;
             height: 100%;
