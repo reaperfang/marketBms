@@ -789,7 +789,7 @@
             </div>
         </section>
     </el-form>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList" @getProductCategoryInfoId="getProductCategoryInfoId"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" :imageMax="6" :isImageHave="ruleForm.images ? ruleForm.images.split(',').length : 0"  @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList" @getProductCategoryInfoId="getProductCategoryInfoId"></component>
     <component :is="selectSpecificationsCurrentDialog" :dialogVisible.sync="selectSpecificationsDialogVisible" @submit="submit" :data="currentData" :specsLength.sync="specsLength" :flatSpecsList="flatSpecsList"></component>
     <el-dialog
         title=""
@@ -1407,7 +1407,7 @@ export default {
             this.dialogVisible = true;
         },
         getProductCategoryInfoId(data){
-            debugger;
+            // debugger;
             this.ruleForm.productCategoryInfoId=data.child.id;
             this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
@@ -2538,6 +2538,7 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 console.log(res)  
+                // debugger;
                 this.specRadio = res.specsType;
                 // debugger;             
 		//配送方式(根据选中去请求是否在店铺开启)
@@ -2581,11 +2582,11 @@ export default {
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)
                     res.goodsInfos = __goodsInfos
-                }else if(res.specsType===0){ //单一规格
+                    }else if(res.specsType===0){ //单一规格
                     this.singleSpec = Object.assign({}, this.singleSpec, res.goodsInfos[0], {
                             //goodsInfos: [res.goodsInfo]
                         })
-                }
+                    }
                 
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
@@ -3543,7 +3544,7 @@ export default {
                 this.index = 3
             }
         },
-        imageSelected(image) {
+        imageSelected(images) {
             // if(this.uploadVideo) {
             //     if(!/\.mp4|\.ogg|\.mov$/.test(image.filePath)) {
             //         this.$message({
@@ -3556,6 +3557,21 @@ export default {
             //     this.uploadVideo = false
             //     return
             // }
+            images.forEach((image,index)=>{
+                if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
+                this.$message({
+                message: '上传的文件格式不正确，请重新上传',
+                type: 'warning'
+                });
+                return
+                }
+            if(image.fileSize > 1024*1024*3) {
+                this.$message({
+                message: '上传图片不能超过3M',
+                type: 'warning'
+                });
+                return
+            }
             if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
@@ -3593,6 +3609,7 @@ export default {
                 }
                 this.hideUpload = this.imagesLength >= 6
             }
+        })
         }
     },
     mounted() {
