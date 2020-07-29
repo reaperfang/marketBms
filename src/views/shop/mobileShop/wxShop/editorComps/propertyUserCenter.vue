@@ -139,7 +139,7 @@
 
 <script>
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyUserCenter',

@@ -1,6 +1,6 @@
 
 import DialogMapSearch from '@/components/mapSearchDialog'
-import dialogSelectImageMaterial from "@/views/shop/dialogs/dialogSelectImageMaterial";
+import dialogSelectImageMaterial from "@/components/dialogs/selectImageMaterial/index";
 const mixin = {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -49,7 +49,7 @@ const mixin = {
         lat: "",
         lng: "",
         sendAddress: "",
-        channel: []
+        businessChannel: [2]
       },
       rules: {
         shopName: [
@@ -164,6 +164,7 @@ const mixin = {
             this.form.addressCode = arr;
           }
           // 经纬度
+          this.form.businessChannel = this.setBusinessChannel(response.businessChannel)
           this.form.lat = response.latitude
           this.form.lng = response.longitude
           this.isMapChoose = true
@@ -186,6 +187,18 @@ const mixin = {
       address = province === city ? `${province}${area}${address}`: `${province}${city}${area}${address}`
       
       return address
+    },
+    getBusinessChannel() {
+      let channel = null
+      if (this.form.businessChannel.length === 2) channel = 0
+      if (this.form.businessChannel.length === 1) channel = this.form.businessChannel[0]
+      return channel
+    },
+    setBusinessChannel(val) {
+      let businessChannel = [2]
+      if(val === 0) businessChannel = [1,2]
+      if(val === 1) businessChannel = [1]
+      return businessChannel
     },
     getReqData() {
       let id = this.cid
@@ -210,7 +223,7 @@ const mixin = {
         companyEmail: this.form.companyEmail,
         longitude: this.form.lng,
         latitude: this.form.lat,
-        channel: this.form.channel.join(',')
+        businessChannel: this.getBusinessChannel()
       }
       return data
     },

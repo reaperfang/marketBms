@@ -164,7 +164,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="130" fixed="right">
+                <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>
@@ -285,6 +285,13 @@ export default {
         },
         haveAuto() {
             return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
+        },
+        computeWidth() {
+            if(this.tableData.some(item => item.status == 4 || (item.status == 3 && item.isFillUp))) {
+                return '120'
+            } else {
+                return '90'
+            }
         }
     },
     methods: {

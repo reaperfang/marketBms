@@ -11,14 +11,15 @@
         <div class="material_wrapper" ref="wrapper" v-loading="loading" :style="{'overflow-y': loading ? 'hidden' : 'auto'}">
             <template v-if="materialResultList.length">
               <waterfall :col='3' :width="245" :gutterWidth="10" :data="materialResultList" :isTransition="false" v-if="!loading">
-                <template >
-                  <div class="cell-item" :class="{'img_active':  selectedItem && selectedItem.id === item.id, 'img-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" v-for="(item,key) in materialResultList" :key="key" @click="selectImg(item)">
+                <template v-for="(item,key) in materialResultList">
+                  <div v-if="isCheckbox" style="display: none;">{{JSON.stringify(selectedData).includes(item.id) ? item.checked = true : item.checked = false}}</div>
+                  <div class="cell-item" :key="key" :class="{'img_active':  selectedItem && selectedItem.id === item.id, 'img-checked-active': item.checked, 'cell-item-checkbox': isCheckbox}" @click="selectImg(item)">
                     <img :src="item.filePath" alt="加载错误"/> 
                     <div class="item-body">
                         <div class="item-desc">{{item.fileName}}</div>
                     </div>
                     <div class="item-checkbox" v-if="isCheckbox">
-                      <el-checkbox v-model="item.checked" @change="checkboxChange(item)">{{item.checked ? '已选择' : '选择'}}</el-checkbox>
+                      <el-checkbox :disabled="!item.checked && selectedData.length >= max - isHave ? true : false" v-model="item.checked" @change="checkboxChange(item)">{{item.checked ? '已选择' : '选择'}}</el-checkbox>
                     </div>
                   </div>
                 </template>
@@ -72,24 +73,6 @@ export default {
   },
   methods: {
 
-    /**************************** 选择相关 *******************************/
-
-    //选择切换
-    checkboxChange(item) {
-      console.log(item.checked)
-      console.log(item)
-    },
-
-    /* 选中图片 */
-    selectImg(item) {
-      //如果是多选，则不可选中图片，只能通过checkbox选择
-      if(this.isCheckbox){
-        return;
-      }
-      this.selectedItem = item;
-      this.$emit('selectedItemUpdate', item, this.imgSrcKey);
-    },
-
     /**************************** 列表数据拉取相关 *******************************/
 
     /* 查询素材库图片 */
@@ -103,8 +86,6 @@ export default {
         sourceMaterialType:"0",
         fileName: this.materialName
       }).then((response)=>{
-        this.selectedItem = null;
-        this.$emit('selectedItemUpdate', null, this.imgSrcKey);
         this.materialResultList = response.list;
         this.preload(response.list, this.imgSrcKey);
         this.total = response.total;
@@ -160,16 +141,7 @@ export default {
         // 通过调用resolve将子节点数据返回，通知组件数据加载完成
         resolve(nodes);
       });
-    },
-    //搜索
-    search() {
-      this.currentPage = 1;
-      this.fetch();
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

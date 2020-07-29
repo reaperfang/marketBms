@@ -70,8 +70,23 @@ export default {
   mounted() {},
 
   methods: {
+    updateStep() {
+      const cid = this.cid;
+      const step = 2
+      return new Promise((resolve, reject) => {
+        this._apis.shop
+          .updateStep({ cid, step })
+          .then(response => {
+            setTimeout(() => {
+              this.$emit('getStep', step)
+            }, 500)
+            resolve(response)
+          }).catch((err) => {
+            reject(err)
+          })
+      })
+    },
     updateShopInfo() {
-      this.loading = true
       let id = this.cid
       // if (this.tempSendAddress !== this.form.sendAddress) {
       //   deliverServiceRadius = ''
@@ -81,19 +96,34 @@ export default {
         sellCategoryId: this.form.sellCategoryId,
         sellCategory: this.form.sellCategory
       }
-      this._apis.set.updateShopInfo(data).then(response =>{
-        this.$store.dispatch('getShopInfo');  
-        // 需要同步调用步骤接口
-        this.$message.success("保存成功！");
-      }).catch(error =>{
-        this.$message.error('保存失败');
-      }).finally(() => {
-        this.loading = false
+      return new Promise((resolve, reject) => {
+        this._apis.set.updateShopInfo(data).then(response =>{
+          this.$store.dispatch('getShopInfo');  
+          // // 需要同步调用步骤接口
+          // this.$message.success("保存成功！");
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+        })
       })
+      
     },
     submit() {
       if (!this.isDisabled) {
-        this.updateShopInfo()
+        const p1 = this.updateShopInfo()
+        const p2 = this.updateStep()
+        // .then(response => {
+        //   this.$emit('getStep', step)
+        // }).catch((err) => {
+        //   console.log(err)
+        // })
+        Promise.all([p1, p2]).then((res) => {
+          this.$message.success("保存成功！");
+          
+          // location.reload()
+        }).catch(() => {
+          this.$message.error('保存失败');
+        })
       }
     },
     // 获取类目

@@ -31,11 +31,12 @@
 				<div class="templage-pay-content-right-codeTitle">
 					手机扫描二维码支付
 				</div>
-				<div class="templage-pay-content-right-code"  id="qrcode" ref="qrcode">
+				<div class="templage-pay-content-right-code" id="qrcode" ref="qrcode">
 					<div class="templage-pay-content-right-code-cover" v-show="!intervalFlag" @click="refreshQrCode">
 						<i class="el-icon-refresh"></i>
 						<span class="templage-pay-content-right-code-cover-tip">二维码过期，刷新重试！</span>
 					</div>
+          <img class="templage-pay-content-right-code-pic" :src="qrCodeInfo.billQRCode" alt="支付码">
 				</div>
 				<div class="templage-pay-content-right-btn">
 					<el-button @click="closePay" class="templage-pay-content-right-btn-left">取 消</el-button>
@@ -47,7 +48,6 @@
 </template>
 
 <script>
-  import QRCode from 'qrcodejs2'
   import templateConstant from '@/system/constant/template';
   export default {
     name: "templatePay",
@@ -67,7 +67,7 @@
       qrCodeInfo: {
         type: Object,
         default() {
-          return ''
+          return {}
         }
       }
     },
@@ -90,47 +90,41 @@
         this.dialogVisible = false
       },
       qrcode() {
-        let qrcode = new QRCode('qrcode', {
-          width: 150, // 设置宽度，单位像素
-          height: 150, // 设置高度，单位像素
-          text: this.qrCodeInfo.billQRCode // 设置二维码内容或跳转地址
-        })
-        this.time = 0
-        this.disabled = true
-        this.intervalFlag = true
+        this.time = 0;
+        this.disabled = true;
+        this.intervalFlag = true;
         this.getPayInfo()
       },
       getPayInfo() {
-        let that = this
+        let that = this;
         this.timeInterval = window.setTimeout(function () {
           that._apis.templatePay.getPayInfo({
             billDate: that.qrCodeInfo.billDate,
             billNo: that.qrCodeInfo.billNo,
             orderCode: that.qrCodeInfo.orderCode
           }).then(res => {
-            if (res.orderStatus === 1 && that.intervalFlag && that.time < 60) {
-              that.time = that.time + 3
-              that.getPayInfo()
+            if (res.orderStatus === 1) {
+              if(that.intervalFlag && that.time < 60) {
+                that.time = that.time + 3;
+                that.getPayInfo()
+              }else {
+                that.disabled = false;
+                that.time = 0;
+                that.intervalFlag = false;
+                window.clearTimeout(that.timeInterval)
+              }
             } else if (res.orderStatus === 2) {
-              that.disabled = false
-              that.time = 0
-              that.intervalFlag = true
-              window.clearTimeout(that.timeInterval)
+              that.disabled = false;
+              that.time = 0;
+              that.intervalFlag = true;
+              window.clearTimeout(that.timeInterval);
               that.confirm({
                 title: '支付成功',
                 customClass: 'know-custom',
-                // icon: true,
                 showCancelButton: false,
                 confirmText: '我知道了',
                 text: `支付成功，您的装修模版已经重新启用！`
-              }).then(() => {
-                // that._routeTo('m_templateEdit', {id: item.id});
-              })
-            } else if (that.time > 60) {
-              that.disabled = false
-              that.time = 0
-              that.intervalFlag = false
-              window.clearTimeout(that.timeInterval)
+              }).then(() => {})
             }
           }).catch(error => {
             console.error(error)
@@ -138,10 +132,9 @@
         }, 3000)
       },
       refreshQrCode() {
-        this.time = 0
-        this.intervalFlag = true
-        this.getPayInfo()
-        // this.qrcode()
+        this.time = 0;
+        this.intervalFlag = true;
+        this.getPayInfo();
       },
       apply() {
         if (this.disabled) return;
@@ -176,14 +169,9 @@
             this.getIndustries();
           })
         } else {
-          this.time = 0
-          this.intervalFlag = false
-          this.disabled = true
-          var el = document.getElementById('qrcode');
-          var childs = el.childNodes;
-          for (var i = childs.length - 1; i >= 0; i--) {
-            el.removeChild(childs[i]);
-          }
+          this.time = 0;
+          this.intervalFlag = false;
+          this.disabled = true;
         }
       }
     }
@@ -320,6 +308,10 @@
 					line-height: 20px;
 				}
 			}
+      &-pic {
+        width: 100%;
+        height: 100%;
+      }
 		}
 		&-btn {
       margin-top: 162px;

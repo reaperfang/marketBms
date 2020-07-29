@@ -9,15 +9,15 @@
               <el-option label="全部" :value="''"></el-option>
               <el-option label="未生效" :value="0"></el-option>
               <el-option label="生效中" :value="1"></el-option>
-              <el-option label="已失效" :value="2"></el-option>
+              <!-- <el-option label="已失效" :value="2"></el-option> -->
             </el-select>
           </el-form-item>
           <el-form-item label="套装名称" prop="name">
             <el-input v-model="ruleForm.name" placeholder="请输入套装名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="" prop="name">
-            <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜  索</el-button>
-            <el-button type="text" style="width:34px;" @click="fetch($event, true)">刷 新</el-button>
+            <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">查 询</el-button>
+            <el-button @click="fetch($event, true)">刷 新</el-button>
           </el-form-item>
         </el-form>
       </div>

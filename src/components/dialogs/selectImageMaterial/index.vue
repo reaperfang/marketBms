@@ -2,7 +2,6 @@
 <template>
   <div>
     <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
-
      <el-tabs v-model="currentTab">
        <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.name"></el-tab-pane>
     </el-tabs>
@@ -11,16 +10,17 @@
         ref="tab"
         :is="currentTab"
         :multipleUpload="multipleUpload"
-        :max="max" 
-        :isHave="isHave"
+        :max="imageMax" 
+        :isHave="isImageHave"
         :isCheckbox="isCheckbox"
         :cid="cid"
+        :selectedData="selectedData"
         @selectedItemUpdate="selectedItemUpdate"
       ></component>
     </keep-alive>
     <span class="dialog-footer fcc">
         <el-button type="primary" @click="submit">确 认</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="visible = false">取 消</el-button>
     </span>
   </DialogBase>
   </div>
@@ -59,15 +59,15 @@ export default {
           required: false,
           default: true,
       },
-      max: { //最大支持上传数量
+      imageMax: { //最大支持上传数量
         type: Number,
         required: false,
         default: 1
       },
-      isHave: { //已经存在的数量
+      isImageHave: { //已经存在的数量
         type: Number,
         required: false,
-        default: 1
+        default: 0
       }
   },
   data() {
@@ -87,7 +87,7 @@ export default {
       }
     },
     isCheckbox() { //是否多选
-      return this.max > 1
+      return this.imageMax > 1
     },
     cid(){
         let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
@@ -118,6 +118,11 @@ export default {
       })
     }
     this.tabList = tabList;
+
+    //如果是多选，则selectedData初始化为空数组
+    if(this.isCheckbox){
+      this.selectedData = [];
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -130,18 +135,35 @@ export default {
   },
   methods: {
     /**************************** 弹窗相关 *******************************/
-    //单选数据更新
-    selectedItemUpdate(item, pathKey) {
-      //pathKey为接口返回的各自不同tab下的图片路径的key名称
-      //如果有选中，则克隆，并添加filePath
-      let copyItem;
-      if(item){
-        copyItem = {...item};
-        copyItem['filePath'] = copyItem[pathKey];
-      }else{
-        copyItem = item;
+    //数据更新
+    selectedItemUpdate(item, pathKey, checked) {
+
+      //单选数据更新
+      if(!this.isCheckbox){
+        //pathKey为接口返回的各自不同tab下的图片路径的key名称
+        //如果有选中，则克隆，并添加filePath
+        let copyItem;
+        if(item){
+          copyItem = {...item};
+          copyItem['filePath'] = copyItem[pathKey];
+        }else{
+          copyItem = item;
+        }
+        this.selectedData = copyItem;
+      }else{ //多选数据更新
+        if(checked){ //如果是选中
+          let copyItem = {...item};
+          copyItem['filePath'] = copyItem[pathKey];
+          this.selectedData.push(copyItem);
+        }else{ //如果不选中
+          if(item.id){
+            this.selectedData = this.selectedData.filter((val) => val.id !== item.id)
+          }else{
+            this.selectedData = this.selectedData.filter((val) => val.filePath !== item[pathKey])
+          }
+        }
       }
-      this.selectedData = copyItem;
+      
     },
 
     /* 向父组件提交选中的数据 */
@@ -153,14 +175,12 @@ export default {
       }
 
       const data = utils.deepClone(this.selectedData);
-      console.log(data)
       this.$emit('imageSelected',  data);
       this.close();
     },
 
     /* 关闭弹窗 */
     close() {
-      this.dialogVisible = false;
       this.visible = false;
     },
   }

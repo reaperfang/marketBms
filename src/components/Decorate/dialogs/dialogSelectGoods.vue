@@ -1,6 +1,6 @@
 /* 选择商品弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="1000px" :title="categoryName ? '选择 ['+categoryName+'] 分类下的商品' : '选择商品'" @submit="submit">
+  <DialogBase :visible.sync="visible" :appendToBody="true" width="1000px" :title="categoryName ? '选择 ['+categoryName+'] 分类下的商品' : '选择商品'" @submit="submit">
     <div class="select_dialog">
       <div class="head-wrapper">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules"  :inline="true">
