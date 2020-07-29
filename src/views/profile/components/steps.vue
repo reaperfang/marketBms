@@ -53,7 +53,8 @@ export default {
         'step2-actived': this.step === 2,
         'step3-actived':  this.step === 3,
         'step4-actived':  this.step === 4,
-        'step5-actived':  this.step === 5
+        'step5-actived':  this.step === 5,
+        'step6-actived':  this.step === 6
       }
     }
   },
@@ -215,6 +216,22 @@ $threeColor: #fff;
           width: 885px;
         }
         .step1, .step2, .step3, .step4 {
+          i {
+            display: inline-block;
+          }
+        }
+        .step1, .step2, .step3, .step4, .step5 {
+          color:$threeColor;
+          &:after {
+            border-bottom-color:$mainColor;
+          }
+        }
+      }
+      &.step6-actived {
+        &:before {
+          width: 885px;
+        }
+        .step1, .step2, .step3, .step4, .step5 {
           i {
             display: inline-block;
           }

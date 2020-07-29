@@ -48,3 +48,21 @@ export function getSignatureList (params) {
     params
   })
 }
+// 获取微信公众号、小程序绑定状态
+export function getwxBindStatus (data) {
+  return request({
+    target: 'SHOP-API-WXBIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 获取微信小程序二维码
+export function getSmallQRcode (data) {
+  return request({
+    target: 'SHOP-API-APPMAURL-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
