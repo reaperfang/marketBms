@@ -817,8 +817,8 @@ import TimelyShelvingDialog from '@/views/goods/dialogs/timelyShelvingDialog'
 import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
-import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo'
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index'
+import dialogSelectVideo from '@/components/dialogs/selectVideo/index'
 import Specs from '@/views/goods/components/specs'
 import anotherAuth from '@/mixins/anotherAuth'
 import chooseGoodCategoryDialog from '@/views/goods/dialogs/chooseGoodCategoryDialog'
@@ -4436,7 +4436,7 @@ $blue: #655EFF;
     display: inline-flex;
     align-items: center;
     padding: 12px;
-    width: 80px;
+    width: 85px;
     height: 34px;
     background-color: #e6fbf3;
     i {

@@ -1,15 +1,23 @@
 <template>
   <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="65px" :inline="true">
           <div class="inline-head">
+            <el-form-item label="活动状态" prop="status">
+              <el-select label="活动状态" v-model="ruleForm.status" placeholder="请选择活动状态">
+                <el-option label="全部" :value="''"></el-option>
+                <el-option label="未生效" :value="0"></el-option>
+                <el-option label="生效中" :value="1"></el-option>
+                <!-- <el-option label="已失效" :value="2"></el-option> -->
+              </el-select>
+            </el-form-item>
             <el-form-item label="" prop="">
-              <el-select v-if="activities.length" v-model="ruleForm.appType" placeholder="请选择活动类型">
+              <el-select v-if="activities.length" v-model="ruleForm.appType" placeholder="请选择活动类型" style="width:150px;">
                 <el-option label="全部类型" value=""></el-option>
                 <el-option v-for="(item, key) of activities" :key="key" :label="item.name" :value="item.code"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="" prop="idOrName">
-              <el-input v-model="ruleForm.idOrName" placeholder="请输入活动名称" clearable></el-input>
+              <el-input v-model="ruleForm.idOrName" placeholder="请输入名称" clearable style="width:120px;"></el-input>
             </el-form-item>
             <el-form-item label="" prop="">
               <el-button type="primary" @click="fetch">搜  索</el-button>
@@ -66,6 +74,7 @@ export default {
         idOrName: '',
         appType: '',
         pageNum: 1,
+        status: ''
       },
       pageNum: 1,
       rules: {},

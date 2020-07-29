@@ -26,6 +26,7 @@
                     </div>
                     <p class="c_warn">建议上传图片尺寸326*62像素，不超过3M，格式支持JPG、PNG、JPEG</p>
                 </div>
+                <div style="color: #FD4C2B; font-size: 12px; margin-bottom: 10px">请注意：会员卡等级被启用后，随意变更升级条件容易导致升级条件混乱，影响用户体验，请谨慎操作。</div>
                 <cdTable></cdTable>
             </el-tab-pane>
             <el-tab-pane label="领卡记录" name="second" v-permission="['用户', '会员卡', '领卡记录']">
@@ -41,7 +42,7 @@
                             ></el-option>
                         </el-select>
                     </div>
-                    <span style="margin-left: 30px;">领取时间：</span>
+                    <span style="margin-left: 20px;">领取时间：</span>
                     <el-date-picker
                         type="datetimerange"
                         v-model="getTime"
@@ -52,7 +53,7 @@
                         :picker-options="utils.globalTimePickerOption.call(this)"
                     >
                     </el-date-picker>
-                    <el-button type="primary" class="marL30" @click="handleFind">查 询</el-button>
+                    <el-button type="primary" class="marL20" @click="handleFind">查 询</el-button>
                     <el-button class="border_btn" @click="reset">重 置</el-button>
                 </div>
                 <lkTable style="margin-top: 39px" :lkParams="lkParams"></lkTable>
@@ -66,7 +67,7 @@
 import utils from "@/utils";
 import cdTable from './components/cardManage/cdTable';
 import lkTable from './components/cardManage/lkTable';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 export default {
     name: "cardManage",
     components: { cdTable, lkTable, dialogSelectImageMaterial },
@@ -179,6 +180,9 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-button+.el-button{
+    margin-left: 8px;
+}
 /deep/ .el-date-editor .el-range-separator{
     width: 10%;
 }
@@ -189,8 +193,8 @@ export default {
     padding: 20px;
     background-color: #fff;
 }
-.marL30{
-    margin-left: 30px;
+.marL20{
+    margin-left: 20px;
 }
 .pane_container{
     padding: 12px 20px;

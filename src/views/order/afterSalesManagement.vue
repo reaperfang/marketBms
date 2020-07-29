@@ -102,7 +102,7 @@
                     prop="createTime"
                     label="申请时间">
                 </el-table-column>
-                <el-table-column label="操作" width="220" fixed="right">
+                <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
@@ -206,6 +206,19 @@ export default {
             this.listQuery = Object.assign({}, this.listQuery, {orderAfterSaleStatus: this.$route.query.orderAfterSaleStatus})
         }
         this.getList()
+    },
+    computed: {
+        computeWidth() {
+            if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && (item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0)) && item.orderAfterSaleStatus == 2)) {
+                return '222'
+            } else if(this.tableData.some(item => item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0))){
+                return '120'
+            } else if(this.tableData.some(item => item.orderAfterSaleStatus == 0 || item.orderAfterSaleStatus == 2)){
+                return '90'
+            } else {
+                return '50'
+            }
+        }
     },
     filters: {
         typeFilter(code) {

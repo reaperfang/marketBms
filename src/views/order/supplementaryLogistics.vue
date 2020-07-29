@@ -165,7 +165,7 @@
                         </el-option>
                     </el-select>
                     <div class="pointer" v-show="distributorSet" style="display: inline-block; margin-left: 20px; margin-right: 10px;vertical-align:middle;">
-                        <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
+                        <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
                     </div>
                     <div class="prompt" style="display:inline-block;" v-show="isDistributorShow && distributorSet">
                         <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
@@ -774,9 +774,9 @@ export default {
     border: 1px solid #DCDFE6;
   }
 }
-/deep/ .logistics .el-input {
-    // width: 226px;
-}
+// /deep/ .logistics .el-input {
+//     // width: 226px;
+// }
 .ellipsis {
     width: 311px;
     display: inline-block;

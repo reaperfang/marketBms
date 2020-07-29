@@ -60,13 +60,38 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
-          <div class="block header">
+        <div class="block header">
             <p class="title">导航设置</p>
-            <p class="state" @click="deleteNav" style="cursor:pointer;">删除导航</p>
+        </div>
+        <el-form :model="currentNav" :rules="ruleForm.navStyle.id == 2 ? {} : rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
+          <div class="block form" style="padding-top: 10px;">
+            <div class="form-header clearfix">
+              <span class="form-title">全局设置</span>
+            </div>
+            <el-form-item label="导航风格" prop="navStyle">
+              <div class="nav_style_type">
+                <span>{{ruleForm.navStyle.name || 'APP导航样式'}}</span>
+                <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
+              </div>
+            </el-form-item>
+            <el-form-item label="应用页面" prop="applyPage">
+              <el-checkbox-group v-model="ruleForm.applyPage">
+                <el-checkbox label="1">主页</el-checkbox>
+                <el-checkbox label="2">个人中心</el-checkbox>
+                <el-checkbox label="3">商品搜索</el-checkbox>
+                <el-checkbox label="4">商品分类</el-checkbox>
+                <el-checkbox label="5">微页面及分类</el-checkbox>
+                <el-checkbox label="6">购物车</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
           </div>
-          <div class="block form">
-            <el-form-item label="导航名称" prop="navName">
+
+          <div class="block form" style="padding-top: 10px;">
+            <div class="form-header clearfix">
+              <span class="form-title">基础信息</span>
+              <span class="form-state" @click="deleteNav" style="cursor:pointer;">删除导航</span>
+            </div>
+            <el-form-item label="导航名称" prop="navName" ref="navNameItem">
               <el-input @input="setNavName" :value="currentNav.navName" placeholder="请输入导航名称(请勿超过4个汉字或8个字母)"></el-input>
             </el-form-item>
             <el-form-item label="导航图标" prop="">
@@ -129,29 +154,6 @@
           </div>
 
 
-          <div class="block header">
-            <p class="title">全局设置</p>
-            <p class="state"></p>
-          </div>
-          <div class="block form">
-            <el-form-item label="导航风格" prop="navStyle">
-              <div class="nav_style_type">
-                <span>{{ruleForm.navStyle.name || 'APP导航样式'}}</span>
-                <el-button type="text" @click="dialogVisible=true; currentDialog='dialogSelectNavTemplate'">修改</el-button>
-              </div>
-            </el-form-item>
-            <el-form-item label="应用页面" prop="applyPage">
-              <el-checkbox-group v-model="ruleForm.applyPage">
-                <el-checkbox label="1">主页</el-checkbox>
-                <el-checkbox label="2">个人中心</el-checkbox>
-                <el-checkbox label="3">商品搜索</el-checkbox>
-                <el-checkbox label="4">商品分类</el-checkbox>
-                <el-checkbox label="5">微页面及分类</el-checkbox>
-                <el-checkbox label="6">购物车</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </div>
-
           <div class="block button">
             <div class="help_blank"></div>
             <div class="buttons">
@@ -174,7 +176,7 @@
 </template>
 
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import dialogSelectNavTemplate from '@/views/shop/dialogs/decorateDialogs/dialogSelectNavTemplate';
 
 import DialogBase from "@/components/DialogBase";
@@ -304,7 +306,7 @@ export default {
     this._globalEvent.$on('apiNavDataChange', (data, navType)=> {
       if(navType === '0') {
         this.ruleForm = data;
-        this.selectNav(data.navIds[0]);
+        this.selectNav(data.navIds[0], true);
       }
     })
     this.initnavMap();
@@ -325,6 +327,9 @@ export default {
     /* 选中导航样式 */
     navTypeSelected(navType) {
       this.ruleForm.navStyle = navType;
+      if(navType.id == 2){ //如果选中的是APP导航样式2，则隐藏导航名称的错误验证信息
+        this.$refs.navNameItem.clearValidate();
+      }
     },
 
     /* 初始化导航列表 */
@@ -389,7 +394,7 @@ export default {
     },
 
     /* 选中一个导航来编辑 */
-    selectNav(id) {
+    selectNav(id, first) {
       this.currentNav = this.ruleForm.navMap[id];
       let curentActiveNav = null;
       for(let k in this.ruleForm.navMap) {
@@ -401,6 +406,12 @@ export default {
         this.$set(curentActiveNav, 'active', false);
       }
       this.$set(this.ruleForm.navMap[id], 'active', true);
+
+      if(!first){ //如果是手动点击触发则执行验证
+        this.$nextTick(() => {
+          this.$refs['ruleForm'].validate();
+        })
+      }
     },
 
     /* 添加一个新导航 */
@@ -853,5 +864,21 @@ export default {
 //导航装修tips样式
 .nav_tips{
   color:rgba(211,216,223,1);line-height:20px;margin-top:10px;
+}
+.form-header {
+  padding-bottom: 20px;
+}
+.form-title {
+  float: left;
+  height: 20px;
+  padding: 0 10px;
+  line-height: 20px;
+  margin-left: -20px;
+  background:rgba(182,181,200,0.2);
+  color: #44434B;
+}
+.form-state {
+  float: right;
+  color: #FD4C2B;
 }
 </style>

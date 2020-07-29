@@ -69,6 +69,9 @@ export default {
       //pageTag: 0 微店店铺
       this._apis.shop.getUserCenterPage({pageTag: 0}).then((response)=>{
         //response.pageData = null;
+        if(!response){
+          return;
+        }
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('moduleList') < 0) {
           return;

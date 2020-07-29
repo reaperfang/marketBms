@@ -7,7 +7,7 @@
             <span class="title1">实时概况：</span>
             <span class="title2">今日数据更新时间：{{new Date() | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
           </span>
-          <span class="look_info">查看详情</span>
+          <span class="look_info" @click="linkTo({text:'订单管理',url:'/order/query'})">查看详情</span>
         </p>
         <div class="p_p">
           <div class="p_p_l">
@@ -104,26 +104,26 @@
                 <span>新建商品</span>
               </a>
               <a @click="linkTo({text:'发货管理',url:'/order/deliveryManagement'})">
-                <img :src="require('@/assets/images/profile/icon_fun_04.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_02.png')" alt />
                 <span>发货管理</span>
               </a>
               <a @click="linkTo({text:'店铺装修',url:'/shop/m_templateManageIndex'})">
-                <img :src="require('@/assets/images/profile/icon_fun_02.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
                 <span>店铺装修</span>
               </a>
             </div>
             <div class="yhyy">
               <p class="title3">用户运营</p>
               <a @click="linkTo({text:'用户管理',url:'/client/allClient'})">
-                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_04.png')" alt />
                 <span>用户管理</span>
               </a>
-              <a @click="linkTo({text:'积分管理',url:'/client/allClient'})">
-                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+              <a @click="linkTo({text:'积分管理',url:'/client/creditsManage'})">
+                <img :src="require('@/assets/images/profile/icon_fun_05.png')" alt />
                 <span>积分管理</span>
               </a>
-              <a @click="linkTo({text:'用户标签',url:'/client/allClient'})">
-                <img :src="require('@/assets/images/profile/icon_fun_03.png')" alt />
+              <a @click="linkTo({text:'用户标签',url:'/client/clientLabel'})">
+                <img :src="require('@/assets/images/profile/icon_fun_06.png')" alt />
                 <span>用户标签</span>
               </a>
             </div>
@@ -138,18 +138,63 @@
                 <span>用户营销</span>
               </a>
               <a @click="linkTo({text:'特色玩法'})">
-                <img :src="require('@/assets/images/profile/icon_fun_06.png')" alt />
+                <img :src="require('@/assets/images/profile/icon_fun_09.png')" alt />
                 <span>特色玩法</span>
               </a>
             </div>
-            <!-- <a @click="linkTo({text:'店铺促销'})">
-              <img :src="require('@/assets/images/profile/icon_fun_05.png')" alt />
-              <span>店铺促销</span>
-            </a> -->
           </div>
         </div>
         <div class="p_l_item p_l_bottom_r">
           <p class="title1">微信商城：</p>
+          <div class="main">
+            <div>
+              <p class="title3">微信小程序商城</p>
+              <div v-if="wxQrcode">
+                <img  class="erweima" :src="wxQrcode" alt/>
+                <p class="opt">
+                  <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
+                </p>
+              </div>
+              <div v-if="isEmpowerWX">
+                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
+                <p class="title4">您当前还未授权小程序</p>
+                <p class="opt">
+                  <el-button>立即授权</el-button>
+                </p>
+              </div>
+              <!-- <div>
+                <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="erweima" alt/>
+                <p class="title4">您当前还未发布小程序</p>
+                <p class="opt">
+                  <el-button>立即发布</el-button>
+                </p>
+              </div> -->
+            </div>
+            <div>
+              <p class="title3">微信公众号商城</p>
+              <div v-if="gzQrcode">
+                <img  class="erweima" :src="gzQrcode" alt>
+                <p class="opt">
+                  <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
+                  <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
+                </p>
+              </div>
+              <div v-if="isEmpowerGZ">
+                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
+                <p class="title4">您当前还未授权公众号</p>
+                <p class="opt">
+                  <el-button>立即授权</el-button>
+                </p>
+              </div>
+              <!-- <div>
+                <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="erweima" alt/>
+                <p class="title4">您当前还未设置商城首页</p>
+                <p class="opt">
+                  <el-button>立即发布</el-button>
+                </p>
+              </div> -->
+            </div>
+          </div>  
         </div>
       </div>
     </div>
@@ -224,9 +269,9 @@
             <i class="icon_more"></i>
           </el-link>
         </p>
-        <p class="p_email no_data" v-if="productNews.length == 0">暂无产品动态</p>
+        <p class="p_email no_data" v-if="helpNews.length == 0">暂无帮助信息</p>
         <ul class="info_box" v-else>
-          <template v-for="(item, key) in productNews">
+          <template v-for="(item, key) in helpNews">
             <li class="info_list" :key="key">
               <p @click="onDetail(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
@@ -252,11 +297,17 @@ export default {
       stayProcessedCount: "",
       staySendCount: "",
       stayAuthCount: "",
-      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",
-      qrCode: "",
+      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",//客户工作台地址
+      gzLink:location.protocol + "//omo.aiyouyi.cn/cp/?cid=" + this.cid,//公众号商城地址
+      qrCode: "",//客户工作台二维码
+      wxQrcode:"",//小程序二维码
+      gzQrcode:"",//公众号二维码
+      isEmpowerWX:false,//微信小程序是否授权
+      isEmpowerGZ:false,//微信公众号是否授权
       protocol: location.protocol,
       zxLink: `${process.env.ZX_HELP}`, //链接
-      productNews: []
+      productNews: [],
+      helpNews: []
     };
   },
   computed: {
@@ -280,6 +331,9 @@ export default {
     this.getOerviewRemind();
     this.getOverviewSelling();
     this.getProductNews();
+    this.getHelpNews();
+    this.getWXQrcode();
+    this.getGZQrcode();
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
@@ -302,7 +356,7 @@ export default {
         });
     },
 
-    //获取二维码
+    //获取客户工作台二维码
     getQrcode() {
       this._apis.shop
         .getQrcode({
@@ -318,7 +372,7 @@ export default {
         });
     },
 
-    //下载
+    //下载二维码
     downs(url,name) {
       var alink = document.createElement("a");
       alink.href = url; //图片地址
@@ -414,6 +468,7 @@ export default {
         type: "warning"
       });
     },
+    //获取产品动态
     getProductNews() {
       this._apis.profile
         .getProductNews()
@@ -422,10 +477,60 @@ export default {
         })
         .catch(error => {});
     },
+    //获取帮助中心
+    getHelpNews(){
+      this._apis.profile
+        .getHelpNews()
+        .then(response => {
+          this.helpNews = response.list;
+        })
+        .catch(error => {});
+    },
+
     //点击资讯/公告详情
     onDetail(id) {
       window.open(`${this.zxLink}/cms/news/${id}.html`);
-    }
+    },
+
+    //判断是否授权
+    isEmpower(){
+      this._apis.profile
+        .getwxBindStatus({id:this.cid}).then(response => {
+          this.isEmpowerWX = response.bindWechatApplet ? false : true
+          this.isEmpowerGZ = response.bindWechatAccount ? false : true
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+    //获取小程序二维码
+    getWXQrcode(){
+      this._apis.profile
+        .getSmallQRcode({id:this.cid}).then(response => {
+          this.wxQrcode = `data:image/png;base64,${response}`;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    
+    //获取公众号二维码
+    getGZQrcode(){
+      this._apis.shop
+        .getQrcode({
+          url: this.gzLink,
+          width: "80",
+          height: "80"
+        })
+        .then(response => {
+          this.gzQrcode = `data:image/png;base64,${response}`;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
   }
 };
 </script>
@@ -546,7 +651,7 @@ export default {
       }
       .helper{
         flex: 1;
-        margin-left: 20px;
+        margin-left: 10px;
       }
     }
     .p_l_bottom {
@@ -570,6 +675,8 @@ export default {
             margin-bottom:10px;
             img {
               vertical-align: middle;
+              width: 36px;
+              height: 37px;
             }
           }
           span{
@@ -581,6 +688,31 @@ export default {
       .p_l_bottom_r{
         flex: 1;
         margin-left: 10px;
+        .main{
+          display: flex;
+          justify-content: space-between;
+          div{
+            flex: 1;
+            text-align: center;
+            .title3{
+              font-size: 14px;
+              color: #161617;
+              font-weight:500;
+              line-height: 70px;
+            }
+            .title4{
+              font-size: 12px;
+              color: #92929B;
+            }
+            .erweima{
+              width: 60px;
+              height: 60px;
+            }
+            .opt{
+              margin-top: 20px;
+            }
+          }
+        }
       }
     }
   }
@@ -673,8 +805,9 @@ export default {
       line-height: 20px;
       padding: 3px 0;
       font-size: 14px;
+      color: #44434B;
       &:first-child {
-        color: red;
+        color:#FD4C2B;
       }
       p {
         white-space: nowrap;
@@ -685,7 +818,8 @@ export default {
         width: 165px;
       }
       &:hover {
-        color: #fd932b;
+        // color: #fd932b;
+        color: #FD4C2B;
       }
     }
     .no_data {

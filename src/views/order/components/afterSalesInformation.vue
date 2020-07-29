@@ -131,13 +131,16 @@
                             prop="salePrice"
                             label="商品单价">
                             <template  slot-scope="scope">
-                                {{scope.row.salePrice}}
+                                ¥{{scope.row.salePrice}}
                             </template>
                         </el-table-column>
                         <el-table-column
                             v-if="orderAfterSale.type != 2"
                             prop="subtotalMoney"
                             label="小计">
+                            <template  slot-scope="scope">
+                                ¥{{scope.row.subtotalMoney}}
+                            </template>
                         </el-table-column>
                         <!-- <el-table-column
                             prop="afterSaleLimitTime"
@@ -460,7 +463,12 @@ export default {
             //} else if(code == 2) {
             //    return '原支付方式返还'
             //}
-            return '原支付方式返还'
+            //1微信支付,2线下支付-货到付款,3找人代付,4线下支付-确认收款,5线上支付(余额支付或积分支付或两者组合支付),6支付宝支付
+            if(code == 2 || code == 4) {
+                return '商户手动确认收款或用户选择货到付款的订单，实退金额都会退到用户余额中'
+            } else {
+                return '原支付方式返还'
+            }
         },
         channelTypeFilter(code) {
             if(code == 1) {
@@ -843,7 +851,15 @@ export default {
     /deep/ .el-table.operate td, /deep/ .el-table.operate th {
         text-align: center;
         &:nth-child(1) {
-            text-align: center;
+            text-align: left;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+    }
+    /deep/ .el-table.operate th {
+        &:nth-child(3) {
+            padding-right: 50px;
         }
     }
     /deep/ .el-table table tbody tr {

@@ -28,10 +28,10 @@
         <template slot-scope="scope">
           <span
             class="edit_span"
+            style="margin-right: 5px; padding-right: 1px; border-right: 1px solid #dadae3;"
             @click="edit(scope.row)"
             v-permission="['用户', '用户标签', '默认页面', '查看标签']"
           >
-            <!-- <i class="edit_i"></i> -->
             编辑
           </span>
           <span class="edit_span" @click="deleteRow(scope.row)" style="color: #FD4C2B">删除</span>
@@ -192,21 +192,28 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(2) {
+            text-align: left;
+            padding-left: 20px;
+        }
+    }
+/deep/ .el-table td{
+  &:nth-child(4) {
+    text-align: right;
+    padding-right: 90px;
+  }
+  &:nth-child(5) {
+    text-align: left;
+  }
+}
 .marL20 {
   margin-left: 20px;
 }
 .edit_span {
   color: #655eff;
-  margin-right: 20px;
   cursor: pointer;
-  .edit_i {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-right: 8px;
-    background: url("../../../../assets/images/client/icon_edit.png") 0 0
-      no-repeat;
-  }
 }
 .a_line {
   padding-left: 17px;

@@ -75,7 +75,7 @@
       ></el-pagination>
     </div>
     <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
+      <el-checkbox v-model="checkAll" @change="handleChange" style="margin-right: 20px">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
       <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['用户', '全部用户', '默认页面', '打标签']">打标签</el-button>
       <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
@@ -289,6 +289,9 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-button+.el-button{
+  margin-left: 8px;
+}
 /deep/ .el-form-item__label{
   width: 86px;
   text-align: right;

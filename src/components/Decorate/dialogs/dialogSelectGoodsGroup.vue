@@ -1,64 +1,62 @@
 /* 选择商品组弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择商品分类'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
-        <!-- <el-form-item label prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
-        </el-form-item>
-        <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
-        </el-form-item> -->
-      </div>
-    </el-form>
-
-    <div class="goodsClassify">
-      <div class="categoryTh" style="background:'#ebeafa'; color:'#655EFF';">
-        <div class="treeRow th">
-          <span class="td">分类名称</span>
-          <span class="td">已选择商品数量</span>
-          <span class="td">操作</span>
+    <div class="select_dialog">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+        <div class="inline-head">
+          <!-- <el-form-item label prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
+          </el-form-item>
+          <el-form-item label prop="name">
+            <el-button type="primary" @click="fetch">搜 索</el-button>
+          </el-form-item> -->
         </div>
+      </el-form>
+
+      <div class="goodsClassify">
+        <div class="categoryTh" style="background:'#ebeafa'; color:'#655EFF';">
+          <div class="treeRow th">
+            <span class="td">分类名称</span>
+            <span class="td">已选择商品数量</span>
+            <span class="td">操作</span>
+          </div>
+        </div>
+        <el-tree
+          v-loading="loading"
+          class="goodsCategory"
+          :data="categoryData"
+          :props="defaultProps"
+          node-key="id"
+          ref="category"
+          :check-strictly="true"
+          :default-expand-all="true"
+          :expand-on-click-node="false"
+          :render-content="renderContent"
+        ></el-tree>
       </div>
-      <el-tree
-        v-loading="loading"
-        class="goodsCategory"
-        :data="categoryData"
-        :props="defaultProps"
-        node-key="id"
-        ref="category"
-        :check-strictly="true"
-        :default-expand-all="true"
-        :expand-on-click-node="false"
-        :render-content="renderContent"
-      ></el-tree>
+      <!-- 动态弹窗 -->
+      <component
+        v-if="dialogVisible2"
+        :is="currentDialog"
+        :dialogVisible.sync="dialogVisible2"
+        @dialogDataSelected="dialogDataSelected"
+        :categoryId="currentCategory.id"
+        :categoryName="currentCategory.categoryName"
+        :goodsEcho.sync="echoList"
+      ></component>
     </div>
-    <!-- 动态弹窗 -->
-    <component
-      v-if="dialogVisible2"
-      :is="currentDialog"
-      :dialogVisible.sync="dialogVisible2"
-      @dialogDataSelected="dialogDataSelected"
-      :categoryId="currentCategory.id"
-      :categoryName="currentCategory.categoryName"
-      :goodsEcho.sync="echoList"
-    ></component>
   </DialogBase>
 </template>
 
 <script>
-import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from "./dialogSelectGoods";
+import mixinSelectDialogs from '../mixins/mixinSelectDialogs';
 import utils from "@/utils";
 export default {
   name: "dialogSelectGoodsGroup",
-  components: { DialogBase, dialogSelectGoods },
+  mixins: [mixinSelectDialogs],
+  components: { dialogSelectGoods },
   props: {
-    data: {},
-    dialogVisible: {
-      type: Boolean,
-      required: true
-    },
     seletedGroupInfo: {}
   },
   data() {
@@ -77,7 +75,6 @@ export default {
         enable: "1"
       },
       echoList: [],
-      rules: {},
       dialogVisible2: false, //子弹窗是否显示
       currentDialog: "", //当前弹窗
       currentCategory: {}, //当前选中的分类
@@ -85,19 +82,8 @@ export default {
       seletedGroupGoodsLengths: {}  //已选中的商品分类里的商品个数
     };
   },
-  computed: {
-    visible: {
-      get() {
-        return this.dialogVisible;
-      },
-      set(val) {
-        this.$emit("update:dialogVisible", val);
-      }
-    }
-  },
   created() {
     this.convertGoodsLengths();
-    this.fetch();
   },
   methods: {
     fetch() {
@@ -285,22 +271,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.name_wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  img {
-    width: 50px;
-    height: 50px;
-    display: block;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    object-fit: contain;
-  }
-  p{
-    width: calc(100% - 50px);
-  }
-}
 
 .blue {
   color: $globalMainColor;

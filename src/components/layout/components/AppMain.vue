@@ -1,7 +1,7 @@
 <template>
-  <section class="app-main">
+  <section class="app-main" :class="{'app-main-hide-left': $route.meta.hideLeft}">
     <div class="content-box">
-      <div class="content-menu">
+      <div v-if="!$route.meta.hideLeft" class="content-menu">
         <!-- <sidebar class="sidebar-righter" /> -->
         <righter-bar></righter-bar>
       </div>
@@ -45,6 +45,10 @@ export default {
     position: relative;
     overflow: hidden;
     margin-top: 49px;
+    &.app-main-hide-left {
+      height: 100%;
+      margin-top: 0;
+    }
   .content-box {
     display: flex;
     height: 100%;
