@@ -1407,7 +1407,7 @@ export default {
             this.dialogVisible = true;
         },
         getProductCategoryInfoId(data){
-            debugger;
+            // debugger;
             this.ruleForm.productCategoryInfoId=data.child.id;
             this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
@@ -2538,7 +2538,7 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 console.log(res)  
-                debugger;
+                // debugger;
                 this.specRadio = res.specsType;
                 // debugger;             
 		//配送方式(根据选中去请求是否在店铺开启)
