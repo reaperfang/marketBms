@@ -101,7 +101,8 @@ export default {
       alipayBinding:0,
       dialogVisible:false,
       pageName:'',
-      protocol: location.protocol
+      protocol: location.protocol,
+      isOnlyOpenAkindPayWay: false // 是否仅打开一种支付方式
     }
   },
   components: {},
@@ -118,18 +119,85 @@ export default {
   },
 
   methods: {    
+    // 是否仅打开一种支付方式
+    // isOnlyOpenAkindPayWay() {
+    //   let count = 0
+    //   if (this.wechatPay) count++
+    //   if (this.aliPay) count++
+    //   if (this.balanceOfAccountPay) count++
+    //   if (this.payOnDelivery) count++
+    //   if (count <= 1) {
+    //     return true
+    //   }
+    //   return false
+    // },
     getShopInfo(){
       let id = this.cid
       this._apis.set.getShopInfo({id:id}).then(response =>{
+        let count = 0
+        if (response.wechatPay) count++
+        if (response.alipayPay) count++
+        if (response.balanceOfAccountPay) count++
+        if (response.payOnDelivery) count++
+        this.isOnlyOpenAkindPayWay = count > 1 ? false : true
         this.wechatPay = response.wechatPay == 1 ? true : false
         this.aliPay = response.alipayPay == 1 ? true : false
         this.balanceOfAccountPay = response.balanceOfAccountPay == 1 ? true : false
         this.payOnDelivery = response.payOnDelivery == 1 ? true : false
         this.wechatBinding = response.wechatBinding
         this.alipayBinding = response.alipayBinding
+        
       }).catch(error =>{
         this.$message.error(error);
       })
+    },
+    // 处理打开微信支付开关逻辑
+    handleOpenWechatPay() {
+      // this.confirm({
+      //   title: '提示', 
+      //   customClass: 'goods-custom', 
+      //   icon: true, 
+      //   text: '此操作将设置微信支付开关, 是否继续?'
+      // }).then(() => {
+        let data = {
+          wechatPay:this.wechatPay == true ? 1 : 0,
+        }
+        this.onSubmit(data)          
+      // }).catch(() => {
+      //   this.getShopInfo()        
+      // });
+    },
+    // 处理关闭微信支付开关逻辑
+    handleCloseWechatPay() {
+      if (this.isOnlyOpenAkindPayWay) {
+        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: html,
+          confirmText: '我知道了',
+          showCancelButton: false
+        }).finally(() => {
+          this.wechatPay = true
+        });
+      } else {
+        const html = '<p>您确定要关闭微信支付吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;">关闭后买家将无法使用微信支付完成订单付款。</p>'
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: html,
+          // confirmText: '我知道了',
+          // showCancelButton: false
+        }).then(() => {
+          const data = {
+            wechatPay:this.wechatPay == true ? 1 : 0,
+          }
+          this.onSubmit(data) 
+        }).catch(() => {
+          this.wechatPay = true
+        });
+         
+      }
     },
     //微信支付开关
     handleWechatPay(val){
@@ -138,23 +206,62 @@ export default {
         this.wechatPay = false
         this.dialogVisible = true
         this.pageName = 'wxSet'
-      }else{
-        this.confirm({
-          title: '提示', 
-          customClass: 'goods-custom', 
-          icon: true, 
-          text: '此操作将设置微信支付开关, 是否继续?'
-        }).then(() => {
-          let data = {
-            wechatPay:this.wechatPay == true ? 1 : 0,
-          }
-          this.onSubmit(data)          
-        }).catch(() => {
-          this.getShopInfo()        
-        });
+      } else {
+        if (!val) {
+          // 关闭的逻辑处理
+          this.handleCloseWechatPay()
+        } else {
+          // 开启的逻辑处理
+          this.handleOpenWechatPay()
+        }
       }
     },
-
+    handleCloseAliPay() {
+      if (this.isOnlyOpenAkindPayWay) {
+        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: html,
+          confirmText: '我知道了',
+          showCancelButton: false
+        }).finally(() => {
+          this.aliPay = true
+        });
+      } else {
+        const html = '<p>您确定要关闭支付宝支付吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;">关闭后买家将无法使用支付宝支付完成订单付款。</p>'
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: html,
+          // confirmText: '我知道了',
+          // showCancelButton: false
+        }).then(() => {
+          const data = {
+            alipayPay:this.aliPay == true ? 1 : 0
+          }
+          this.onSubmit(data) 
+        }).catch(() => {
+          this.aliPay = true
+        });
+         
+      }
+    },
+    handleOpenAliPay() {
+      // this.confirm({
+      //   title: '提示', 
+      //   customClass: 'goods-custom', 
+      //   icon: true, 
+      //   text: '此操作将设置支付宝支付开关, 是否继续?'
+      // }).then(() => {
+        let data = {
+          alipayPay:this.aliPay == true ? 1 : 0,
+        }
+        this.onSubmit(data)          
+      // }).catch(() => {
+      //   this.getShopInfo()        
+      // });
+    },
     //支付宝支付开关
     handleAliPay(val){
       if(val == true && this.alipayBinding == 0){
@@ -162,53 +269,125 @@ export default {
         this.dialogVisible = true
         this.pageName = 'zfbSet'
       }else{
+        if (!val) {
+          // 关闭的逻辑处理
+          this.handleCloseAliPay()
+        } else {
+          // 开启的逻辑处理
+          this.handleOpenAliPay()
+        }
+      }
+    },
+    handleCloseBalanceOfAccountPay() {
+      if (this.isOnlyOpenAkindPayWay) {
+        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
         this.confirm({
           title: '提示', 
-          customClass: 'goods-custom', 
-          icon: true, 
-          text: '此操作将设置支付宝支付开关, 是否继续?'
+          iconWarning: true, 
+          text: html,
+          confirmText: '我知道了',
+          showCancelButton: false
+        }).finally(() => {
+          this.balanceOfAccountPay = true
+        });
+      } else {
+        const html = '<p>您确定要关闭账户余额吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;">关闭后买家将无法使用余额支付完成订单付款。</p>'
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: html,
+          // confirmText: '我知道了',
+          // showCancelButton: false
         }).then(() => {
-          let data = {
-            alipayPay:this.aliPay == true ? 1 : 0,
+          const data = {
+            balanceOfAccountPay:this.balanceOfAccountPay == true ? 1 : 0,
           }
-          this.onSubmit(data)          
+          this.onSubmit(data) 
         }).catch(() => {
-          this.getShopInfo()        
+          this.balanceOfAccountPay = true
+        });
+         
+      }
+    },
+    handleOpenBalanceOfAccountPay() {
+      // this.confirm({
+      //   title: '提示', 
+      //   customClass: 'goods-custom', 
+      //   icon: true, 
+      //   text: '此操作将设置余额支付开关, 是否继续?'
+      // }).then(() => {
+        let data = {
+          balanceOfAccountPay:this.balanceOfAccountPay == true ? 1 : 0,
+        }
+        this.onSubmit(data)        
+      // }).catch(() => {
+      //   this.getShopInfo()        
+      // });
+    },
+    //账户余额支付开关 
+    handleBalanceOfAccountPay(val){
+      if (!val) {
+        // 关闭的逻辑处理
+        this.handleCloseBalanceOfAccountPay()
+      } else {
+        // 开启的逻辑处理
+        this.handleOpenBalanceOfAccountPay()
+      }
+    },
+    handleClosePayOnDelivery() {
+      if (this.isOnlyOpenAkindPayWay) {
+        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: html,
+          confirmText: '我知道了',
+          showCancelButton: false
+        }).finally(() => {
+          this.payOnDelivery = true
+        });
+      } else {
+        const html = '<p>您确定要关闭账户余额吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;">关闭后买家将无法使用余额支付完成订单付款。</p>'
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: html,
+          // confirmText: '我知道了',
+          // showCancelButton: false
+        }).then(() => {
+          const data = {
+            payOnDelivery:this.payOnDelivery == true ? 1 : 0,
+          }
+          this.onSubmit(data) 
+        }).catch(() => {
+          this.payOnDelivery = true
         });
       }
     },
-
-    //账户余额支付开关 
-    handleBalanceOfAccountPay(){
-       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
-        text: '此操作将设置余额支付开关, 是否继续?'
-      }).then(() => {
-          let data = {
-            balanceOfAccountPay:this.balanceOfAccountPay == true ? 1 : 0,
-          }
-          this.onSubmit(data)        
-        }).catch(() => {
-          this.getShopInfo()        
-        });
+    handleOpenPayOnDelivery() {
+      // this.confirm({
+      //   title: '提示', 
+      //   customClass: 'goods-custom', 
+      //   icon: true, 
+      //   text: '此操作将设置货到付款开关, 是否继续?'
+      // }).then(() => {
+        let data = {
+          payOnDelivery:this.payOnDelivery == true ? 1 : 0,
+        }
+        this.onSubmit(data)     
+      // }).catch(() => {
+      //   this.getShopInfo()        
+      // });
     },
     //货到付款开关
-    handlePayOnDelivery(){
-       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
-        text: '此操作将设置货到付款开关, 是否继续?'
-      }).then(() => {
-          let data = {
-            payOnDelivery:this.payOnDelivery == true ? 1 : 0,
-          }
-          this.onSubmit(data)     
-        }).catch(() => {
-          this.getShopInfo()        
-        });
+    handlePayOnDelivery(val){
+      if (!val) {
+        // 关闭的逻辑处理
+        this.handleClosePayOnDelivery()
+      } else {
+        // 开启的逻辑处理
+        this.handleOpenPayOnDelivery()
+      }
     },
 
     onSubmit(data){
