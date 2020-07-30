@@ -238,6 +238,7 @@ export default {
   text-align: center;
   line-height: 26px;
   border: none;
+  padding: 0px 5px;
 }
 .property-coupon {
   .add-coupon {

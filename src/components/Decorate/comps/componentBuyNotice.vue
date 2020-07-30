@@ -130,11 +130,12 @@ export default {
   overflow: hidden;
   transition: all 0.5s;
   & > ul {
-    height: 17.5px;
+    // height: 17.5px;
+    height: 20px;
     overflow: hidden;
     & > li {
-      height: 17.5px;
-      line-height: 17.5px;
+      height: 20px;
+      line-height: 20px;
     }
   }
 }

@@ -329,7 +329,6 @@ export default {
                         display:none;
                     }
                     .content{
-                        // @extend .flexCenterMiddle;
                         display:flex;
                         align-items:center;
                         padding:0 10px;
@@ -785,7 +784,6 @@ export default {
                             display:none;
                         }
                         .content{
-                            // @extend .flexCenterMiddle;
                             display:flex;
                             align-items:center;
                             padding:0 10px;
@@ -863,7 +861,7 @@ export default {
                     }
                     .button{
                         height:24px;
-                        // position:absolute;
+                        position:absolute;
                         right:10px;
                         bottom:12.5px;
                     }
@@ -884,6 +882,7 @@ export default {
         display:flex;
         display:-webkit-flex;
         overflow-x:scroll;
+        -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 100px;
             &:first-child{

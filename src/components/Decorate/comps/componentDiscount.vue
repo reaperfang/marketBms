@@ -624,10 +624,7 @@ export default {
                     display:none;
                 }
                 .content{
-                    // @extend .flexCenterMiddle;
-                    display:flex;
-                    align-items:center;
-                    padding:0 10px;
+                    @extend .flexCenterMiddle;
                     .caption{
                         float:left;
                         color:#fff;
@@ -910,7 +907,6 @@ export default {
                             display:none;
                         }
                         .content{
-                            // @extend .flexCenterMiddle;
                             display:flex;
                             align-items:center;
                             padding:0 10px;
@@ -1030,6 +1026,7 @@ export default {
         display:flex;
         display:-webkit-flex;
         overflow-x:scroll;
+        -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 100px;
             &:first-child{

@@ -383,7 +383,7 @@ export default {
                 .button{
                     height:24px;
                     right:10px;
-                    bottom:12.5px;
+                    bottom:0;
                 }
                 .activity_end{
                     right:10px;
@@ -847,6 +847,7 @@ export default {
         display:flex;
         display:-webkit-flex;
         overflow-x:scroll;
+        -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 100px;
             &:first-child{

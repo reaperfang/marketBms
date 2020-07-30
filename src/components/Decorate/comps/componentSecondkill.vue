@@ -839,7 +839,7 @@ export default {
                 .info_box{
                     padding:15px 10px;
                     .name{
-                        height:23px;
+                        height:22px;
                         font-size:16px;
                         line-height:22px;
                         @extend .ellipsis;
