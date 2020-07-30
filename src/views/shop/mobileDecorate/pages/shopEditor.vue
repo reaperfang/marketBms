@@ -208,7 +208,7 @@ export default {
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord);
           this.setLoading(false);
-          this._routeTo('m_pageManageIndex');
+          // this._routeTo('m_pageManageIndex');
         }).catch((error)=>{
           this.$message.error(error);
           this.setLoading(false);
