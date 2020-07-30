@@ -439,7 +439,7 @@ ul.cube {
                   line-height: 64px;
                   background: #fff;
                   position: relative;
-                  cursor: pointer;
+                  // cursor: pointer;
                   box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
 
                   img {
@@ -838,4 +838,9 @@ ul.cube {
       .el-form-item__label{
             float:left !important;
       }
+}
+
+.props_form .edui-editor-bottomContainer {
+    overflow: hidden;
+    display:none!important;
 }

@@ -470,9 +470,9 @@ export function getJdLive(data) {
 // 分销商品设置
 export function commisionGoodsSet(data) {
   return request({
-    apiType: 'goods',
+    apiType: 'commission',
     method: 'post',
-    target: 'PRODUCT-RESELL-EDIT-PROCESSOR',
+    target: 'COMMISSION-PRODUCT-CONFIG-EDIT-PROCESSOR',
     data,
     token
   })
@@ -486,7 +486,46 @@ export function getExpressAndDeliverySet(data) {
     data
   })
 }
+//修改商品排列序号
+export function editGoodSortId(data) {
+  return request({
+    target: 'PRODUCT-EDIT-BY-SORTID-PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+//商品转移分类和新增分类
+export function editProductsCatalogs(data) {
+  return request({
+    target: 'PRODUCT-CATALOG-BATCH-EDIT-PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
 
+
+// 分销商品设置详情
+export function commisionGoodsDetails(data) {
+  return request({
+    apiType: 'commission',
+    method: 'post',
+    target: 'COMMISSION-PRODUCT-CONFIG-DETAIL-PROCESSOR',
+    data,
+    token
+  })
+}
+// 查看-分销店铺（默认）设置详情
+export function commisionSetDetail(data) {
+  return request({
+    apiType: 'commission',
+    method: 'post',
+    target: 'COMMISSION-SHOP-CONFIG-DETAIL-PROCESSOR',
+    data,
+    token
+  })
+}
 
 
 

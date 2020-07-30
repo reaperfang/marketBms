@@ -343,6 +343,11 @@ export default {
                         showSalePriceError: true,
                         salePriceErrorMessage: '请输入正确的数字'
                     }))
+                } else if(+this.list[index].costPrice > +this.list[index].salePrice){
+                        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showSalePriceError: true,
+                        salePriceErrorMessage: '售卖价不得低于成本价'
+                    }))
                 } else {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showSalePriceError: false,

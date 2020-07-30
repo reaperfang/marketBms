@@ -82,8 +82,7 @@ export default {
 
   created() {
     this.getShopInfo()
-    this.getGzhIsAuth()
-    this.getXcxIsAuth()
+    this.getIsAuth()
     this.getIsOpenPay()
   },
 

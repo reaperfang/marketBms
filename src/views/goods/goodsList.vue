@@ -86,22 +86,22 @@
                     </el-table-column> -->
                     <el-table-column label="排序" width="100">
             <template slot-scope="scope">
-              <template v-if="!isEdit">
-                <span>{{scope.row.stock}}</span>
-                <i slot="suffix" class="el-icon-edit" @click="editGoodIndex"></i>
+              <template v-if="!scope.row.isEdit">
+                <span>{{scope.row.sortId}}</span>
+                <i slot="suffix" class="el-icon-edit" @click="editGoodIndex(scope.row)"></i>
               </template>
-              <template v-if="isEdit">
+              <template v-if="scope.row.isEdit">
                 <el-tooltip class="item" effect="light" placement="top">
                 <div slot="content">输入框内只能输入≥1的有效数字，不能输入特殊字符、<br/>
                     空格、中英文字符、负数、0等，统一校验文案为<br/>
                     “请您输入正确的数字”；最大可输入数字“999999”<br/>  
                 </div>
                 <el-input
-                  v-model="scope.row.stock"
+                  v-model="scope.row.sortId"
                   autosize
                   class="goodIndex"
-                  @blur="changeEdit"
-                  @input="saveGoodIndex(scope.row.stock)">
+                  @blur="changeEdit(scope.row)"
+                  @change="saveGoodIndex(scope.row)">
                   </el-input>
                  </el-tooltip>
               </template>
@@ -234,7 +234,7 @@
             <div class="footer">
                 <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
             </div>
-            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit" @changeGoodCategory="changeGoodCategory"></component>
+            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit" @changeProductCatalogs="changeProductCatalogs"></component>
         </div>
         <!-- <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
@@ -498,7 +498,7 @@ import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
 import PriceChangeDialog from "@/views/goods/dialogs/priceChangeDialog";
 import anotherAuth from '@/mixins/anotherAuth'
 import copyUrlDialog from "@/views/goods/dialogs/copyUrlDialog";
-import editCategoryDialog from "@/views/goods/dialogs/editCategoryDialog";
+import editCatalogDialog from "@/views/goods/dialogs/editCatalogDialog";
 
 export default {
     mixins: [anotherAuth],
@@ -715,16 +715,29 @@ export default {
         }
     },
     methods: {
-        changeEdit(){
-            this.isEdit = false;
+        changeEdit(item){
+            item.isEdit = false;
         },
         saveGoodIndex(data) {
-            this.isEdit = false;      
-            if (/^([1-9][0-9]*)$/.test(data) && data <= 999999) {
-                this.$message({
-                message: "保存成功",
-                type: "success"
-                });
+            // debugger
+            data.isEdit = false;
+            let param = {
+                        id:data.id,
+                        cid:+data.cid,
+                        sortId:data.sortId
+                        }      
+            if (/^([1-9][0-9]*)$/.test(data.sortId) && data.sortId <= 999999) {
+                //保存修改后的商品序号
+                this._apis.goods.editGoodSortId(param)
+                .then((res)=>{
+                    this.getList();
+                }).catch(error=>{
+                    this.$message({
+                    message: "序号保存失败",
+                    type: "warning"
+                    });
+                }) 
+
             } else {
                 this.$message({
                 message: "请输入合法数字",
@@ -733,14 +746,24 @@ export default {
             }
 
             },
-            editGoodIndex() {
-            this.isEdit = true;
+            editGoodIndex(item) {
+                item.isEdit = true;
             },
-            changeGoodCategory(datas){
-                console.log('是否会传值过来');
-                console.log(datas);
-                console.log('当前上品信息如下');
-                console.log(this.currentData);
+            changeProductCatalogs(datas){
+                let productInfoIds =this.currentData.map(val=>val.id);
+                let param={
+                    cid:+this.currentData[0].cid,
+                    productInfoIds:this.currentData.map(val=>val.id),
+                    productCatalogInfoIds:datas.list,
+                    operateType:datas.type
+                }
+                this._apis.goods.editProductsCatalogs(param)
+                .then(res=>{
+                    this.getList()
+                })
+                .catch(err=>{
+                    console.log("编辑分类出错啦。。。")
+                })
             },
             sortChange({column, prop, order}) {
             if(prop == 'salePrice') {
@@ -882,7 +905,7 @@ export default {
                 return
             }
             this.currentData = JSON.parse(JSON.stringify(this.multipleSelection));
-            this.currentDialog = 'editCategoryDialog'
+            this.currentDialog = 'editCatalogDialog'
             this.dialogVisible = true
         },
         search() {
@@ -1361,19 +1384,19 @@ export default {
         getList(param) {
             this.loading = true
             let _param
-
+            // debugger
             _param = Object.assign({}, this.listQuery, param)
             _param = Object.assign({}, _param, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
+                // debugger;
                 this.allTotal = +res.total
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id
-                        let goods = res.list.find(val => val.id == id)
-
+                        let goods = res.list.find(val => val.id == id)                      
                         goods.activity = true
                         if(val.isParticipateActivity) {
                             goods.goodsInfos.forEach(val => {
@@ -1395,6 +1418,7 @@ export default {
                     this.total = +res.total
                     //this.getCategoryName(res.list)
                     res.list.forEach(item => {
+                        item.isEdit = false;
                         if(item.status === 1) {
                             item.switchStatus = true
                         } else if(item.status === 0 || item.status === 2) {
@@ -1402,6 +1426,7 @@ export default {
                         }
                     })
                     this.list = res.list
+                    // debugger;
                     this.loading = false
                     // if(this.allTotal && !this.total) {
                     //     this.$router.push('/goods/goodsListEmpty')
@@ -1487,7 +1512,7 @@ export default {
         ShareSelect,
         PriceChangeDialog,
         copyUrlDialog,
-        editCategoryDialog
+        editCatalogDialog
     }
 }
 </script>

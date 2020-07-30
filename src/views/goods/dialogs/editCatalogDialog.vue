@@ -90,11 +90,11 @@ export default {
         categoryInfo;
       for (var i = 0; i < data.length; i++) {
         if (data[i].parentId == pid) {
-          this.data.forEach(item => {
-            categoryInfo = item.productCatalogInfoIds.find(
-              d => d === data[i].id
-            );
-          });
+          // this.data.forEach(item => {
+          //   categoryInfo = item.productCatalogInfoIds.find(
+          //     d => d === data[i].id
+          //   );
+          // });
           var obj = {
             categoryName: data[i].name,
             id: data[i].id,
@@ -105,7 +105,7 @@ export default {
             enable: data[i].enable,
             label: data[i].name,
             value: data[i].id,
-            disabled: categoryInfo ? true : false
+            // disabled: categoryInfo ? true : false
           };
           temp = this.transTreeData(data, data[i].id);
           if (temp.length > 0) {
@@ -117,14 +117,18 @@ export default {
       return result;
     },
     handleChange(value) {
-      this.values.push(value);
-      console.log("arr");
-      console.log(this.values);
-      debugger;
+      this.values=[];
+      let _value=JSON.parse(JSON.stringify(value));
+      _value.forEach(item=>{
+          this.values.push(item.pop());
+      })
     },
     submit() {
-      alert("是否会调用");
-      this.$emit("changeGoodCategory", this.values);
+      let data={
+        type:this.radio,
+        list:this.values
+      }
+      this.$emit("changeProductCatalogs", data);
       this.visible = false;
     }
   },

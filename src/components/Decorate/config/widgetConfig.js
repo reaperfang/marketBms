@@ -7,6 +7,8 @@
  * isBase: 是否是基础组件，基础组件专门用来记录装修页面信息
  * needFakeData: 是否需要渲染假数据
  * hideWidget: 左侧控件是否隐藏(可在此配置表配置，也可在页面渲染入口异步设置，默认为不隐藏)
+ * canDelete: 组件是否可删除
+ * limit: 组件限制个数(最多可渲染几个此类组件, null代表无限制)
  */
 export default {
   widgetList: {
@@ -22,7 +24,9 @@ export default {
               hidden: true,
               isBase: true,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: false,
+              limit: 1
             },
             {
               type: 'classify',
@@ -31,7 +35,9 @@ export default {
               hidden: false,
               isBase: true,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: false,
+              limit: 1
             }
           ]
         },
@@ -48,7 +54,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '富文本展示以实际效果为准，左侧预览仅供参考',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: false,
+              limit: 1
             },
             {
               type: 'goods',
@@ -57,7 +65,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: false,
+              limit: null
             },
             {
               type: 'goodsGroup',
@@ -66,7 +76,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'articleAD',
@@ -75,7 +87,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'cube',
@@ -84,7 +98,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'articleNav',
@@ -93,7 +109,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'text',
@@ -102,7 +120,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'title',
@@ -111,7 +131,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             }
           ]
         },
@@ -128,7 +150,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'multiPerson',
@@ -137,7 +161,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'secondkill',
@@ -146,7 +172,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'discount',
@@ -155,7 +183,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'discountPackage',
@@ -164,7 +194,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'fullReduction',
@@ -173,7 +205,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'nyuan',
@@ -182,7 +216,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: true
+              needFakeData: true,
+              canDelete: true,
+              limit: null
             }
           ]
         },
@@ -200,7 +236,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'enterShop',
@@ -209,7 +247,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'goodsSearch',
@@ -218,7 +258,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'notice',
@@ -227,7 +269,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'helpLine',
@@ -236,7 +280,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'video',
@@ -245,7 +291,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'helpBlank',
@@ -254,7 +302,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             },
             {
               type: 'buyNotice',
@@ -263,7 +313,9 @@ export default {
               hidden: false,
               isBase: false,
               describe: '',
-              needFakeData: false
+              needFakeData: false,
+              canDelete: true,
+              limit: null
             }
           ]
         },

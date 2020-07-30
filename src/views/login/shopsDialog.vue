@@ -36,6 +36,16 @@ import DialogBase from "@/components/DialogBase";
 import { removeToken } from '@/system/auth'
 export default {
   name: 'shopsDialog',
+  computed: {
+    isAdminUser(){
+      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      console.log('userInfo', userInfo)
+      if(userInfo && userInfo.type == "admin") {
+        return true
+      }
+      return false
+    }
+  },
   data() {
       return {
           shopName:'',
@@ -59,7 +69,12 @@ export default {
             this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
-            this.$router.push({ path: '/profile/profile' })
+            console.log('shop.storeGuide',this.isAdminUser,shop.storeGuide)
+            if (this.isAdminUser && shop.storeGuide === -1) {
+                this.$router.push({ path: '/profile/guidePrompt' })
+              } else {
+                this.$router.push({ path: '/profile/profile' })
+              }
           }).catch(error => {
             this.$message.error(error);
           })

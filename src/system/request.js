@@ -28,7 +28,6 @@ class Ajax {
           merchantId: cid,
           loginUserId: 1,
           token: store.getters.token || getToken('authToken')
-		  // token: '09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472'
         },
         config.headers
     );
@@ -37,7 +36,7 @@ class Ajax {
     if(config.isDev) {
       headers = Object.assign(headers, {isDev: 'zhongqi',})
     }
-
+    
     config.headers = headers;
   }
 
@@ -132,8 +131,8 @@ class Ajax {
     //拼接参数head
     let head = {
         target: config.target,
-		//accessToken:'09255c7724fe9b8df952aa2f7e3ec718bd65b35d761aedefc0743c9507121472',
-		accessToken: store.getters.token || getToken('authToken'),
+        // accessToken:'09255c7724fe9b8df952aa2f7e3ec718eb753655b3975a50a4f6307bc84718bd',
+        accessToken: store.getters.token || getToken('authToken'),
         client: CONST.CLIENT,
         version: CONST.VERSION,
         requestTime: utils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"),
@@ -216,6 +215,9 @@ class Ajax {
             break;
           case 'uploadImage':  //图片上传
             config.baseURL = `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`;
+            break;
+          case 'commission': //分销模块
+            config.baseURL = `${process.env.DATA_API}/api-commission-web/commission/api.do`;
             break;
           case 'matrix':  //智能运营数据查询条件来源
             config.baseURL = `${process.env.DATA_API}/matrix-admin/matrix/api.do`;
