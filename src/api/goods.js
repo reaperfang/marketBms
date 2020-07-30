@@ -505,6 +505,33 @@ export function editProductsCatalogs(data) {
   })
 }
 
+//添加商品常用类目
+export function addProCommonCategory(data) {
+  return request({
+    target: 'PRODUCT-ADD-CATEGORY-RECORD-PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+//查询商品常用类目
+export function getProCommonCategory(data) {
+  return request({
+    target: 'PRODUCT-FIND-CATEGORY-RECORD-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+//删除商品常用类目
+export function delProCommonCategory(data) {
+  return request({
+    target: 'PRODUCT-DEL-CATEGORY-RECORD-PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
 
 // 分销商品设置详情
 export function commisionGoodsDetails(data) {

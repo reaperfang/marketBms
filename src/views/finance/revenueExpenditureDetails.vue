@@ -88,6 +88,8 @@
           prop="tradeDetailSn"
           label="交易流水号"
           :render-header="renderTradeDetailSn"
+          :show-overflow-tooltip="true"
+          style="text-align:left;"
           >
         </el-table-column>
         <el-table-column
@@ -109,7 +111,8 @@
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
-          :render-header="renderRelationSn">
+          :render-header="renderRelationSn"
+          :show-overflow-tooltip="true">
         </el-table-column>
         <el-table-column
           prop="payWay"
@@ -136,7 +139,10 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable="custom">
+          sortable="custom"
+          fixed="right"
+          style="white-space:nowrap;"
+          >
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -421,7 +427,18 @@ export default {
   width: 100%; 
   margin-top:20px;
 }
+
 /deep/.el-table .cell{
   text-align: center;
 }
+
+// /deep/.el-table .el-table_1_column_1{
+//   text-align: left;
+//   width:200px;
+// }
+
+// /deep/.el-table .el-table_1_column_9{
+//   width:200px;
+//   white-space: pre-line;
+// }
 </style>
