@@ -18,7 +18,9 @@ export default {
 
   data () {
     return {
-      isFirstLogin: false
+      isFirstLogin: false,
+      storeGuide: null,
+      isClick: false, // 为了解决在初始化设置引导状态时，后端未返回结果的情况，用户直接操作后，导致bug
     }
   },
 
@@ -27,27 +29,49 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
     },
-    storeGuide() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.storeGuide || null;
-    }
+    // storeGuide() {
+    //   let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+    //   return shopInfo.storeGuide || null;
+    // }
   },
 
   watch: {},
 
   created() {
-    if (this.storeGuide) {
-      console.log('---2121-', this.storeGuide)
-      this.isFirstLogin = this.storeGuide && this.storeGuide === -1
-      if (!this.isFirstLogin) this.$router.push({ path: '/profile/profile'})
-    } else {
-      his.getShopInfo()
-    }
+    this.getShopInfo()
   },
 
   mounted() {},
 
   methods: {
+    setStoreGuide(storeGuide) {
+      let id = this.cid
+      let data = {
+        id,
+        storeGuide
+      }
+      this._apis.set.updateShopInfo(data).then(response =>{
+        this.$store.dispatch('getShopInfo');
+        this.storeGuide = response && response.storeGuide || storeGuide
+        this.isClick = true
+        // this.$nextTick(()=> {
+        //   this.$refs.shopInfoMap.clearSearchResultList()
+        //   this.$refs.shopInfoMap.clearKeyword()
+        // })
+      }).catch(error =>{
+        console.log('updateShopInfo:error', error)
+        // this.$message.error('保存失败');
+      })
+    },
+    init() {
+      this.isFirstLogin = this.storeGuide && this.storeGuide === -1
+      if (!this.isFirstLogin) {
+        this.isClick = true
+        this.$router.push({ path: '/profile/profile'}) 
+      } else {
+        this.setStoreGuide(0)
+      }
+    },
     updateStep() {
       const cid = this.cid;
       const step = 1
@@ -64,17 +88,16 @@ export default {
       this._apis.set
         .getShopInfo({ id: id })
         .then(response => {
-          console.log('---',response && response.storeGuide === -1)
-          this.isFirstLogin = response && response.storeGuide === -1
-          if (!this.isFirstLogin) this.$router.push({ path: '/profile/profile'})
+          this.storeGuide = response && response.storeGuide
+          this.init()
         })
     },
     goPage() {
-      this.$router.push({ path: '/profile/profile'})
+      if (this.isClick) this.$router.push({ path: '/profile/profile'}) 
     },
     goStep() {
       // 设置tep 1
-      this.updateStep()
+      if (this.isClick) this.updateStep()
       
     }
   }

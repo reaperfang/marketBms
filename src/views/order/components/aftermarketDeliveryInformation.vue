@@ -3,7 +3,7 @@
         <!-- 普通快递 -->
         <template v-if="orderAfterSale.deliveryWay == 1">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
-            用户发货
+            用户退货
         </div>
         <div class="container">
             <div v-if="orderAfterSale.returnExpressNo" class="item" :class="{close: !showCustomerContent}">
@@ -107,6 +107,18 @@
                     </div>
                 </div>
                 <div v-if="showContent" class="content">
+                    <div class="message">
+                        <p>
+                            <span>收货信息</span>
+                            <span>{{orderAfterSaleSendInfo.receivedName}} / {{orderAfterSaleSendInfo.receivedPhone}}</span>
+                            <span>北京市 大兴区 亦庄开发区地盛西路一号 </span>
+                        </p>
+                        <p>
+                            <span>发货信息</span>
+                            <span>小张 / 13800000000</span>
+                            <span>{{orderAfterSaleSendInfo.receivedProvinceName}} {{orderAfterSaleSendInfo.receivedCityName}} {{orderAfterSaleSendInfo.receivedAreaName}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
+                        </p>
+                    </div>
                     <el-table
                         :data="sendItemList"
                         style="width: 100%"
