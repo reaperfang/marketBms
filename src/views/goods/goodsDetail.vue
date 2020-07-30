@@ -939,7 +939,6 @@ export default {
         return {
             specRadio:0,//商品规格信息，1:单一规格，2:多规格
             singleSpec:{
-                    
                     costPrice:"",
                     salePrice:"",
                     stock:"",
@@ -1161,6 +1160,7 @@ export default {
         document.querySelector('body').addEventListener('click', function(e) {
             //e.stopPropagation()
             this.hideFenlei = false
+            if(this.specRadio===2){//多规格
             if(e.target.parentNode.parentNode.className != 'add-specs') {
                 that.showSpecsList = false
             }
@@ -1174,7 +1174,7 @@ export default {
                 })
                 that.addedSpecs = addedSpecs
             }
-
+        }
             if(that.editor) {
                 that._globalEvent.$emit('addGoodsEvent', false);
             }
