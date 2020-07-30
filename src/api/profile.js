@@ -68,3 +68,13 @@ export function getSmallQRcode (data) {
     data
   })
 }
+
+//判断小程序是否发布 
+export function getSmallRelease (data) {
+  return request({
+    target: 'SHOP-GETAPP-STATUS-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}

@@ -62,7 +62,7 @@ export default {
           this.currentTab = 'shopMainDecorated';
           this.decorateData = response;
         }
-        this.currentTab = 'shopNavIndex';
+        //this.currentTab = 'shopNavIndex';
         
         this.loading = false;
       }).catch((error)=>{

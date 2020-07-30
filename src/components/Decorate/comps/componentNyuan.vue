@@ -15,18 +15,17 @@
                                 <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                                 <div class="content">
                                     <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                                    <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                    <!-- <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p> -->
                                     <!-- <p class="time">{{item.endTime}}</p> -->
-                                    <!-- <van-count-down :time="
-                                    item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                    <van-count-down :time="item.status==0?utils.dateDifference(item.startTime):utils.dateDifference(item.endTime)
                                     " class="time">
                                         <template v-slot="timeData">
-                                            <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                            <!-- <span class="item">{{ utils.addZero(timeData.days) }}</span> -->
                                             <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
                                             <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
                                             <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
                                         </template>
-                                    </van-count-down> -->
+                                    </van-count-down>
                                 </div>
                             </div>
                         </div>
@@ -228,14 +227,7 @@ export default {
                         font-size:14px;
                         color:#333;
                         line-height:16px;
-                        font{
-                            background:#333;
-                            width:29px;
-                            height:16px;
-                            color:#fff;
-                            margin:0 4px;
-                        }
-                        .item {
+                        .item{
                             background:#333;
                             min-width:29px;
                             height:16px;
@@ -304,7 +296,6 @@ export default {
                         display:none;
                     }
                     .content{
-                        // @extend .flexCenterMiddle;
                         display:flex;
                         align-items:center;
                         padding:0 10px;
@@ -318,7 +309,7 @@ export default {
                             margin-left:7.5px;
                             height:16px;
                             color:#fff;
-                            font{
+                            .item{
                                 width:16px;
                                 height:16px;
                                 color:#FC3D42;
@@ -329,13 +320,6 @@ export default {
                                 top:-2.5px;
                                 margin:0 2px;
                                 text-align:center;
-                            }
-                            .item {
-                                background:#333;
-                                min-width:29px;
-                                height:16px;
-                                color:#fff;
-                                margin:0 4px;
                             }
                         }
                     }
@@ -383,7 +367,7 @@ export default {
                 .button{
                     height:24px;
                     right:10px;
-                    bottom:12.5px;
+                    bottom:0;
                 }
                 .activity_end{
                     right:10px;
@@ -513,7 +497,7 @@ export default {
                         line-height:12px;
                         font-size:9px;
                         margin-left:2px;
-                        font{
+                        .item{
                             min-width:12px;
                             height:12px;
                             color:#FC3D42;
@@ -523,13 +507,6 @@ export default {
                             position:relative;
                             margin:0 2px;
                             text-align:center;
-                        }
-                        .item {
-                            background:#333;
-                            min-width:29px;
-                            height:16px;
-                            color:#fff;
-                            margin:0 4px;
                         }
                     }
                 }
@@ -687,16 +664,9 @@ export default {
                                 font-size:14px;
                                 color:#333;
                                 line-height:16px;
-                                font{
-                                    background:#333;
-                                    width:29px;
-                                    height:16px;
-                                    color:#fff;
-                                    margin:0 4px;
-                                }
                                 .item {
                                     background:#333;
-                                    min-width:29px;
+                                    width:29px;
                                     height:16px;
                                     color:#fff;
                                     margin:0 4px;
@@ -749,7 +719,6 @@ export default {
                             display:none;
                         }
                         .content{
-                            // @extend .flexCenterMiddle;
                             display:flex;
                             align-items:center;
                             padding:0 10px;
@@ -763,7 +732,7 @@ export default {
                                 margin-left:7.5px;
                                 height:16px;
                                 color:#fff;
-                                font{
+                                .item{
                                     width:16px;
                                     height:16px;
                                     color:#FC3D42;
@@ -774,13 +743,6 @@ export default {
                                     top:-2.5px;
                                     margin:0 2px;
                                     text-align:center;
-                                }
-                                .item {
-                                    background:#333;
-                                    min-width:29px;
-                                    height:16px;
-                                    color:#fff;
-                                    margin:0 4px;
                                 }
                             }
                         }
@@ -847,6 +809,7 @@ export default {
         display:flex;
         display:-webkit-flex;
         overflow-x:scroll;
+        -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 100px;
             &:first-child{
@@ -960,22 +923,12 @@ export default {
                     position:relative;
                     z-index:1;
                     overflow:hidden;
-                    .caption{
-                       
-                    }
                     .time{
                         overflow:hidden;
                         text-align:center;
-                        font{
+                        .item{
                             display:inline-block;
                             @include borderRadius(2px);
-                        }
-                        .item {
-                            background:#333;
-                            min-width:29px;
-                            height:16px;
-                            color:#fff;
-                            margin:0 4px;
                         }
                     }
                 }

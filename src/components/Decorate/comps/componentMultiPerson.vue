@@ -17,18 +17,17 @@
                                     <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                                     <div class="content">
                                         <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                                        <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                        <!-- <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p> -->
                                         <!-- <p class="time">{{item.endTime}}</p> -->
-                                        <!-- <van-count-down :time="
-                                    item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                        <van-count-down :time="item.status==0?utils.dateDifference(item.startTime):utils.dateDifference(item.endTime)
                                     " class="time">
                                         <template v-slot="timeData">
-                                            <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                            <!-- <span class="item">{{ utils.addZero(timeData.days) }}</span> -->
                                             <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
                                             <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
                                             <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
                                         </template>
-                                    </van-count-down> -->
+                                    </van-count-down>
                                     </div>
                                 </div>
                             </div>
@@ -42,7 +41,7 @@
                                         <div class="jd_line">
                                             <div class="current_line" :style="{width:(item.stock - item.remainStock)/item.stock*100+'%'}"></div>
                                         </div>
-                                        <p>仅剩{{item.remainStock}}件</p>
+                                        <p>仅剩<font>{{item.remainStock}}</font>件</p>
                                     </div>
                                 </div>
                                 <div class="price_line">
@@ -329,13 +328,6 @@ export default {
                         font-size:12px;
                         color:#333;
                         line-height:16px;
-                        font{
-                            background:#333;
-                            width:29px;
-                            height:16px;
-                            color:#fff;
-                            margin:0 4px;
-                        }
                         .item {
                             background:#333;
                             min-width:29px;
@@ -370,7 +362,7 @@ export default {
                     line-height:13px;
                 }
             }
-            .kai{
+            .button{
                 line-height:31px;
                 float:right;
                 font-size:13px;
@@ -380,18 +372,10 @@ export default {
                 position:relative;
                 right:0;
                 bottom:0;
-                font-size:13px;
-                //width:84px;
-                //height:31px;
             }
-            //.pin{
-                //line-height:30px;
-                //height:31px;
-                //right:102.5px;
-                //bottom:15px;
-                //width:84px;
-                //position:absolute;
-            //}
+            .button.buttonStyle3{
+                padding:0 30px;
+            }
             .activity_end{
                 right:10px;
                 bottom:15px;
@@ -429,7 +413,6 @@ export default {
                         display:none;
                     }
                     .content{
-                        // @extend .flexCenterMiddle;
                         display:flex;
                         align-items:center;
                         padding:0 10px;
@@ -443,7 +426,7 @@ export default {
                             margin-left:7.5px;
                             height:16px;
                             color:#fff;
-                            font{
+                            .item{
                                 min-width:16px;
                                 height:16px;
                                 color:#FC3D42;
@@ -454,13 +437,6 @@ export default {
                                 top:-2.5px;
                                 margin:0 2px;
                                 text-align:center;
-                            }
-                            .item {
-                                background:#333;
-                                min-width:29px;
-                                height:16px;
-                                color:#fff;
-                                margin:0 4px;
                             }
                         }
                     }
@@ -501,13 +477,16 @@ export default {
                         margin-left:9px;
                     }
                 }
-
-                .caption{
-                    display:none;
-                }
                 .limit_line{
-                    display:none;
+                    margin-top:10px;
+                    .label{
+                        display:none;
+                    }
+                    .limit{
+                        display:none;
+                    }
                 }
+
                 .price_line{
                     margin-top:5px;
                     position:relative;
@@ -528,7 +507,6 @@ export default {
                     height:24px;
                     line-height:24px;
                     text-align:center;
-                    // position:absolute;
                     right:0;
                     bottom:7.5px;
                     margin-top:5px;
@@ -671,7 +649,7 @@ export default {
                         line-height:12px;
                         font-size:9px;
                         margin-left:2px;
-                        font{
+                        .item{
                             min-width:12px;
                             height:12px;
                             color:#FC3D42;
@@ -681,13 +659,6 @@ export default {
                             position:relative;
                             margin:0 2px;
                             text-align:center;
-                        }
-                        .item {
-                            background:#333;
-                            min-width:29px;
-                            height:16px;
-                            color:#fff;
-                            margin:0 4px;
                         }
                     }
                 }
@@ -730,7 +701,12 @@ export default {
             }
 
             .limit_line{
-                display:none;
+                .label{
+                    display:none;
+                }
+                .limit{
+                    display:none;
+                }
             }
             .price_line{
                 margin-top:49px;
@@ -747,7 +723,6 @@ export default {
                 height:31px;
                 right:0;
                 bottom:0;
-                // position:absolute;
             }
             .pin{
                 display:none;
@@ -870,13 +845,6 @@ export default {
                                 font-size:12px;
                                 color:#333;
                                 line-height:16px;
-                                font{
-                                    background:#333;
-                                    width:29px;
-                                    height:16px;
-                                    color:#fff;
-                                    margin:0 4px;
-                                }
                                 .item {
                                     background:#333;
                                     min-width:29px;
@@ -889,16 +857,12 @@ export default {
                     }
                 }
                 .info_box{
-                    overflow:hidden;
-                    position:relative;
                     padding:15px 10px;
                     .name{
-                        line-height:18px;
                         height:18px;
+			font-size:15px;
                         @extend .ellipsis;
-                        font-size:15px;
-                        color:#333;
-                        .label{
+                        .label{  
                             display:none;
                         }
                     }
@@ -915,82 +879,6 @@ export default {
                             margin-left:9px;
                             line-height:13px;
                         }
-                    }
-
-                    .caption{
-                        margin-top:6.5px;
-                        line-height:14px;
-                        font-size:12px;
-                        color:#7c7c7c;
-                    }
-                    .limit_line{
-                        margin-top:8.5px;
-                        overflow:hidden;
-                        .label{
-                            width:44px;
-                            height:19px;
-                            border:1px solid #ffaa4e;
-                            background:#FFF0C9;
-                            @include borderRadius(4px);
-                            text-align:center;
-                            line-height:18px;
-                            color:#FC3D42;
-                            font-size:11px;
-                            float:left;
-                            margin-right:15px;
-                        }
-                        .limit{
-                            float:left;
-                            font-size:11px;
-                            color:#7c7c7c;
-                            margin-right:15px;
-                            line-height:19px;
-                        }
-                    }
-                    .price_line{
-                        margin-top:14px;
-                        overflow:hidden;
-                        .price{
-                            line-height:31px;
-                            float:left;
-                            color:#FC3D42;
-                            font-size:14px;
-                            font{
-                                font-size:18px;
-                            }
-                        }
-                        .yPrice{
-                            line-height:31px;
-                            float:left;
-                            margin-left:12px;
-                            color:#7c7c7c;
-                            font-size:12px;
-                            text-decoration:line-through;
-                        }
-                        .activity_end{
-                            line-height:31px;
-                            color:#999;
-                            font-size:18px;
-                            float:right;
-                            font-weight:bold;
-                        }
-                    }
-                    .kai{
-                        line-height:31px;
-                        position:absolute;
-                        right:10px;
-                        bottom:15px;
-                        font-size:13px;
-                        //width:84px;
-                        height:31px;
-                    }
-                    .pin{
-                        line-height:30px;
-                        height:31px;
-                        right:102.5px;
-                        bottom:15px;
-                        //width:84px;
-                        position:absolute;
                     }
                     .button{
                         line-height:31px;
@@ -1029,7 +917,6 @@ export default {
                             display:none;
                         }
                         .content{
-                            // @extend .flexCenterMiddle;
                             display:flex;
                             align-items:center;
                             padding:0 10px;
@@ -1043,8 +930,8 @@ export default {
                                 margin-left:7.5px;
                                 height:16px;
                                 color:#fff;
-                                font{
-                                    width:16px;
+                                .item{
+                                    min-width:16px;
                                     height:16px;
                                     color:#FC3D42;
                                     font-size:9px;
@@ -1054,13 +941,6 @@ export default {
                                     top:-2.5px;
                                     margin:0 2px;
                                     text-align:center;
-                                }
-                                .item {
-                                    background:#333;
-                                    min-width:29px;
-                                    height:16px;
-                                    color:#fff;
-                                    margin:0 4px;
                                 }
                             }
                         }
@@ -1101,11 +981,14 @@ export default {
                             margin-left:9px;
                         }
                     }
-                    .caption{
-                        display:none;
-                    }
                     .limit_line{
-                        display:none;
+                        margin-top:10px;
+                        .label{
+                            display:none;
+                        }
+                        .limit{
+                            display:none;
+                        }
                     }
                     .price_line{
                         margin-top:5px;
@@ -1152,6 +1035,7 @@ export default {
         display:flex;
         display:-webkit-flex;
         overflow-x:scroll;
+         -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 100px;
             &:first-child{
@@ -1171,10 +1055,10 @@ export default {
                         display:none;
                     }
                 }
-                .remainder_box{
+                .caption{
                     display:none;
                 }
-                .caption{
+                .remainder_box{
                     display:none;
                 }
                 .limit_line{
@@ -1228,7 +1112,7 @@ export default {
                 position:absolute;
                 left:0;
                 top:0;
-                font-size:11px;
+                font-size:10px;
                 @include borderRadius(8px 0 8px 0);
                 z-index:1;
             }
@@ -1245,16 +1129,8 @@ export default {
             }
         }
         .countdown_Bar{
-            height:43px;
             background:linear-gradient(90deg,rgba(252,61,66,1) 0%,rgba(252,106,61,1) 100%);
             overflow:hidden;
-            .title{
-                float:left;
-                line-height:43px;
-                color:#fff;
-                font-size:21px;
-                margin-left:13.5px;
-            }
             .countdown{
                 position:relative;
                 .bj{
@@ -1268,22 +1144,12 @@ export default {
                     position:relative;
                     z-index:1;
                     overflow:hidden;
-                    .caption{
-                       
-                    }
                     .time{
                         overflow:hidden;
                         text-align:center;
-                        font{
+                        .item{
                             display:inline-block;
                             @include borderRadius(2px);
-                        }
-                        .item {
-                            background:#333;
-                            width:58px;
-                            height:32px;
-                            color:#fff;
-                            padding:0 8px;
                         }
                     }
                 }
@@ -1300,37 +1166,7 @@ export default {
                     font-weight:normal;
                 }
             }
-             .remainder_box{
-                overflow:hidden;
-                .jd_line{
-                    overflow:hidden;
-                    background:#FFC9CA;
-                    position:relative;
-                    overflow:hidden;
-                    float:left;
-                    margin-top:1px;
-                    @include borderRadius(25px);
-                    .current_line{
-                        position:absolute;
-                        top:0;
-                        left:0;
-                        height:100%;
-                        background:#FC3D42;
-                        width:50%;
-                        @include borderRadius(25px);
-                    }
-                }
-                p{
-                    float:left;
-                    color:#7c7c7c;
-                    line-height:1;
-                    font{
-                        color:#FC3D42;
-                    }
-                }
-            }
-
-            .name.textStyle{
+	    .name.textStyle{
                 font-weight:bold;
             }
             .name.textAlign{
@@ -1372,6 +1208,35 @@ export default {
                     line-height:19px;
                 }
             }
+             .remainder_box{
+                overflow:hidden;
+                .jd_line{
+                    overflow:hidden;
+                    background:#FFC9CA;
+                    position:relative;
+                    overflow:hidden;
+                    float:left;
+                    margin-top:1px;
+                    @include borderRadius(25px);
+                    .current_line{
+                        position:absolute;
+                        top:0;
+                        left:0;
+                        height:100%;
+                        background:#FC3D42;
+                        width:50%;
+                        @include borderRadius(25px);
+                    }
+                }
+                p{
+                    float:left;
+                    color:#7c7c7c;
+                    line-height:1;
+                    font{
+                        color:#FC3D42;
+                    }
+                }
+            }
             .price_line{
                 margin-top:19px;
                 overflow:hidden;
@@ -1400,7 +1265,6 @@ export default {
                 right:10px;
                 bottom:15px;
                 font-size:13px;
-                //width:84px;
                 height:31px;
             }
             .pin{
@@ -1408,7 +1272,6 @@ export default {
                 height:31px;
                 right:102.5px;
                 bottom:15px;
-                //width:84px;
                 position:absolute;
             }
             .activity_end{

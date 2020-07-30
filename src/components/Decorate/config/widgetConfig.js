@@ -7,7 +7,7 @@
  * isBase: 是否是基础组件，基础组件专门用来记录装修页面信息
  * needFakeData: 是否需要渲染假数据
  * hideWidget: 左侧控件是否隐藏(可在此配置表配置，也可在页面渲染入口异步设置，默认为不隐藏)
- * canDelete: 组件是否可删除
+ * noDelete: 组件不可删除
  * limit: 组件限制个数(最多可渲染几个此类组件, null代表无限制)
  */
 export default {
@@ -25,7 +25,7 @@ export default {
               isBase: true,
               describe: '',
               needFakeData: false,
-              canDelete: false,
+              noDelete: true,
               limit: 1
             },
             {
@@ -36,7 +36,7 @@ export default {
               isBase: true,
               describe: '',
               needFakeData: false,
-              canDelete: false,
+              noDelete: true,
               limit: 1
             }
           ]
@@ -55,8 +55,8 @@ export default {
               isBase: false,
               describe: '富文本展示以实际效果为准，左侧预览仅供参考',
               needFakeData: false,
-              canDelete: false,
-              limit: 1
+              noDelete: false,
+              limit: null
             },
             {
               type: 'goods',
@@ -66,7 +66,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: false,
+              noDelete: false,
               limit: null
             },
             {
@@ -77,7 +77,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -88,7 +88,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -99,7 +99,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -110,7 +110,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -121,7 +121,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -132,7 +132,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             }
           ]
@@ -151,7 +151,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -162,7 +162,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -173,7 +173,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -184,7 +184,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -195,7 +195,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -206,7 +206,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -217,7 +217,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: true,
-              canDelete: true,
+              noDelete: false,
               limit: null
             }
           ]
@@ -237,7 +237,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -248,7 +248,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -259,7 +259,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -270,7 +270,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -281,7 +281,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -292,7 +292,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -303,7 +303,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             },
             {
@@ -314,7 +314,7 @@ export default {
               isBase: false,
               describe: '',
               needFakeData: false,
-              canDelete: true,
+              noDelete: false,
               limit: null
             }
           ]

@@ -26,9 +26,9 @@
             ref="popover"
             :popper-class="'editor-view-popover active'"
             placement="right-start"
-            :width="getComponentData(item).canDelete ? 76 : 0"
+            :width="getComponentData(item).noDelete ? 0 : 76"
             :popper-options="{boundariesElement: 'viewport', boundariesPadding: 64}"
-            :disabled="!getComponentData(item).canDelete || popoverDisabled"
+            :disabled="getComponentData(item).noDelete || popoverDisabled"
             trigger="hover">
             <div class="arrow-box" @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)" @click="deleteComponent(item)">
               <span>{{getComponentData(item).title}}</span>
