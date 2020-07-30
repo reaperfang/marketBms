@@ -383,7 +383,7 @@
 
       /* 应用模板 */
       apply(item) {
-        this.isLoading = true;
+        // this.isLoading = true;
         this._apis.shop.getTemplateInfo({
           pageTemplateId: item.id
         }).then(res1 => {
