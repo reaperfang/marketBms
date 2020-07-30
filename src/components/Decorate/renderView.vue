@@ -1,6 +1,6 @@
 <template>
   <div class="module view" :style="{backgroundColor: baseInfo&&baseInfo.colorStyle || '#fff'}" v-calcHeight="renderCalcHeight">
-    <div class="phone-head" @click="clickTitle(null)" title="点击编辑页面信息">
+    <div class="phone-head" @click="clickTitle(null)" :title="dragable ? '点击编辑页面信息' : ''" :style="{'cursor': dragable ? 'pointer' : 'text'}">
       <img src="@/assets/images/shop/editor/phone_head.png" alt="">
       <span>{{baseInfo.title || baseInfo.name || '页面标题'}}</span>
     </div>
@@ -26,9 +26,9 @@
             ref="popover"
             :popper-class="'editor-view-popover active'"
             placement="right-start"
-            width="76"
+            :width="getComponentData(item).canDelete ? 76 : 0"
             :popper-options="{boundariesElement: 'viewport', boundariesPadding: 64}"
-            :disabled="popoverDisabled"
+            :disabled="!getComponentData(item).canDelete || popoverDisabled"
             trigger="hover">
             <div class="arrow-box" @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)" @click="deleteComponent(item)">
               <span>{{getComponentData(item).title}}</span>

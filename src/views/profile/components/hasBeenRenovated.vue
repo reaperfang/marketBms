@@ -137,7 +137,24 @@ export default {
     goPrev() {
       this.$emit('getStep', 4)
     },
-
+    setStoreGuide(storeGuide) {
+      let id = this.cid
+      let data = {
+        id,
+        storeGuide
+      }
+      return new Promise((resolve, reject) => {
+        this._apis.set.updateShopInfo(data).then(response =>{
+          this.$store.dispatch('getShopInfo');
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+          console.log('updateShopInfo:error', error)
+          // this.$message.error('保存失败');
+        })
+      })
+      
+    },
     updateStep() {
       const cid = this.cid;
       const step = 6
@@ -155,7 +172,9 @@ export default {
       })
     },
     submit() {
-      this.updateStep().then(() => {
+      const p1 = this.updateStep()
+      const p2 = this.setStoreGuide(1)
+      Promise.all([p1, p2]).then(() => {
         this.$router.push({ path: '/profile/profile'})
       }).catch(() => {
          this.$message.error('保存失败');

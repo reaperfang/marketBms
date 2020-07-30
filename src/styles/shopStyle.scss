@@ -439,7 +439,7 @@ ul.cube {
                   line-height: 64px;
                   background: #fff;
                   position: relative;
-                  cursor: pointer;
+                  // cursor: pointer;
                   box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
 
                   img {
@@ -622,8 +622,31 @@ ul.cube {
       }
 }
 
+.icon-info-popover {
+      padding: 6px !important;
+      color: #44434B !important;
+      font-size: 12px !important;
+      border-color: #DADAE3 !important;
+      box-shadow: none !important;
+      border-radius: 2px !important;
+}
+.icon-info-popover[x-placement^=top]{
+      .popper__arrow {
+            border-top-color: #DADAE3 !important;
+      }
+}
+
 .multiple_selection {
       margin: 20px 0 0 14px;
+
+      .icon-info {
+            position: relative;
+            display: inline-block;
+            top: -8px;
+            width: 14px;
+            height: 14px;
+            background: url('~@/assets/images/common/icon-info.png') no-repeat;
+      }
 }
 
 .el-table__header-wrapper .el-checkbox {
@@ -815,4 +838,9 @@ ul.cube {
       .el-form-item__label{
             float:left !important;
       }
+}
+
+.props_form .edui-editor-bottomContainer {
+    overflow: hidden;
+    display:none!important;
 }

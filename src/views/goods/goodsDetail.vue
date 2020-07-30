@@ -15,8 +15,9 @@
                      {{goodCategoryNames}}
                      <i class="el-icon-caret-bottom"></i>
                  </span>
+                <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
             </el-form-item>
-            <el-form-item label="商品类目" prop="productCategoryInfoId">
+            <el-form-item label="商品类目" prop="productCategoryInfoId" style="display:none">
                 <el-cascader
                     popper-class="leimu-popper"
                     @focus="leimuFocus"
@@ -167,16 +168,73 @@
                     </div>
                 </div>
             </el-form-item>
+
             <el-form-item label="商品编码" prop="code">
+                <el-tooltip class="item" effect="light" placement="top">
+                    <div slot="content">商品编码：商品编码即为SPU编码，SPU = Standard<br/>
+                    Product Unit （标准产品单位）SPU是商品信息聚合的<br/>
+                    最小单位，是一组可复用、易检索的标准化信息的集<br/>
+                    合，该集合描述了一个产品的特性,<br/>
+                    例如：iPhone X 可以确定一个产品即为一个SPU。
+                    </div>
+                    <i class="el-icon-warning-outline"></i>
+                </el-tooltip>
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
+           
         </section>
         <section class="form-section spec-form-section">
             <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
             
-            <el-form-item label="规格信息" prop="goodsInfos">
-
-            </el-form-item>
+            <!-- <el-form-item label="规格信息" prop="goodsInfos">
+               
+            </el-form-item> -->
+            <el-form-item >  
+                <el-radio-group v-model="specRadio">
+                    <template v-if="!editor">
+                        <el-radio :label="0" >单一规格</el-radio>
+                        <el-radio :label="1">多规格</el-radio>
+                    </template>  
+                   <template v-else>
+                       <el-radio :label="0" :disabled="specRadio!==0">单一规格</el-radio>
+                      <el-radio :label="1" :disabled="specRadio!==1">多规格</el-radio>
+                   </template>
+                </el-radio-group>
+            </el-form-item> 
+            <template v-if="specRadio===0">
+             <div class="sku-template" >
+                <el-form-item label="SKU编码" prop="code">
+                    <el-tooltip class="item" effect="light" placement="top">
+                        <div slot="content">SKU编码：SKU(Stock Keeping Unit)库存量单元 --- <br/>
+                            SKU是商品下的一个分类属性（商品下一个颜色或者尺<br/>
+                            码），单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
+                            iPhone6s、粉色iPhone6s。
+                        </div>
+                        <i class="el-icon-warning-outline sku-code"></i>
+                    </el-tooltip>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
+                </el-form-item>
+                <el-form-item label="成本价" prop="costPrice">
+                    <el-input v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
+                </el-form-item>
+                <el-form-item label="售卖价" prop="salePrice">
+                    <el-input v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
+                </el-form-item>
+                <el-form-item label="库存" prop="stock">
+                    <el-input v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
+                </el-form-item>
+                <el-form-item label="库存预警" prop="warningStock">
+                    <el-input v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
+                </el-form-item>
+                <el-form-item label="重量（Kg）" prop="weight">
+                    <el-input v-model="singleSpec.weight" placeholder="请输入重量（kg）"></el-input>
+                </el-form-item>
+                <el-form-item label="体积（m³）" prop="volume">
+                    <el-input v-model="singleSpec.volume" placeholder="请输入体积（m³）"></el-input>
+                </el-form-item>
+             </div>
+            </template>
+            <template v-if="specRadio===1" >
             <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
                 <div v-if="!editor" v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
@@ -436,7 +494,7 @@
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
                         :activity="ruleForm.activity"
-			:weightRequired="ruleForm.deliveryWay.includes(2)"
+			            :weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -545,7 +603,7 @@
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
                         :activity="ruleForm.activity"
-			:weightRequired="ruleForm.deliveryWay.includes(2)"
+			            :weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -558,6 +616,7 @@
                 </div>
                 <!-- <el-button v-if="!editor" class="border-button" @click="currentDialog = 'AddSpecifications'; selectSpecificationsCurrentDialog = ''; dialogVisible = true">新增规格</el-button> -->
             </div>
+            </template>
             <!-- <el-form-item label="起售数量" prop="number">
                 <div class="input-number">
                     <span style="user-select: none;" class="pointer" @click="reduce">-</span>
@@ -730,7 +789,7 @@
             </div>
         </section>
     </el-form>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList" @getGoodCategory="getGoodCategory"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" :imageMax="6" :isImageHave="ruleForm.images ? ruleForm.images.split(',').length : 0"  @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList" @getProductCategoryInfoId="getProductCategoryInfoId"></component>
     <component :is="selectSpecificationsCurrentDialog" :dialogVisible.sync="selectSpecificationsDialogVisible" @submit="submit" :data="currentData" :specsLength.sync="specsLength" :flatSpecsList="flatSpecsList"></component>
     <el-dialog
         title=""
@@ -767,6 +826,51 @@ export default {
     name: 'addGoods',
     mixins: [anotherAuth],
     data() {
+        var singleSpecValidator = (rule,value,callback) =>{
+            switch(rule.field){
+                case "costPrice":
+                     if(this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字')); 
+                     }else{
+                        callback();
+                     }
+                     break;
+                case "salePrice":
+                    if(this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字'));  
+                    }else if(this.singleSpec.costPrice > this.singleSpec.salePrice){
+                        callback(new Error('售卖价不得低于成本价'));
+                    }else{
+                        callback();
+                    }
+                    break;
+                case "stock":
+                case  "warningStock":
+                    if(this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字'));
+                    }else{
+                        callback();
+                    }
+                    break;
+                case "weight":
+                case "volume":
+                    if(this.singleSpec[rule.field] < 0 || !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字'));
+                    }else{
+                        callback();
+                    }
+                    break;
+                case "code":
+                    if(!/^[a-zA-Z\d_\$]+$/.test(this.singleSpec.code)) {
+                        callback(new Erroe("编码格式不正确"));
+                    }else{
+                        callback();
+                    }
+                    break;
+                
+            }
+            
+        }; 
         var productUnitValidator = (rule, value, callback) => {
             // if(value === '') {
             //     callback(new Error('请选择优惠方式'));
@@ -833,6 +937,15 @@ export default {
             }
         };
         return {
+            specRadio:0,//商品规格信息，1:单一规格，2:多规格
+            singleSpec:{
+                    costPrice:"",
+                    salePrice:"",
+                    stock:"",
+                    warningStock:"",
+                    weight:"",
+                    volume:""
+                },//单一规格属性
             itemCatText: '',
             categoryValue: [],
             categoryOptions: [],
@@ -866,7 +979,7 @@ export default {
                 other: false,
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
-		deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
+		        deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
                 isFreeFreight: 0, // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
@@ -941,6 +1054,25 @@ export default {
                 selfSaleCount: [
                     { validator: selfSaleCountValidator, trigger: 'blur' },
                 ],
+                costPrice: [
+                    { required: true, validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                salePrice: [
+                    { required: true, validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                stock: [
+                    { required: true, validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                warningStock: [
+                    { required: true,validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                weight:[
+                    {validator:singleSpecValidator, trigger: 'blur' }
+                ],
+                volume:[
+                    {validator:singleSpecValidator, trigger: 'blur' }
+                ]
+
             },
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
             optionsTypeList: [],
@@ -1028,6 +1160,7 @@ export default {
         document.querySelector('body').addEventListener('click', function(e) {
             //e.stopPropagation()
             this.hideFenlei = false
+            if(this.specRadio===2){//多规格
             if(e.target.parentNode.parentNode.className != 'add-specs') {
                 that.showSpecsList = false
             }
@@ -1041,7 +1174,7 @@ export default {
                 })
                 that.addedSpecs = addedSpecs
             }
-
+        }
             if(that.editor) {
                 that._globalEvent.$emit('addGoodsEvent', false);
             }
@@ -1157,12 +1290,126 @@ export default {
         });
     },
     methods: {
+        validateGoodsInfos(obj){
+            if(obj){
+                if(obj.costPrice == '') {
+                    this.$message({
+                        message: '请输入成本价',
+                        type: 'warning'
+                    });
+                return
+                }
+                if(+obj.costPrice <= 0) {
+                    this.$message({
+                    message: '成本价必须大于0',
+                    type: 'warning'
+                    });
+                    return
+                }
+                if(/\./.test(obj.costPrice) && obj.costPrice.split(".")[1].length > 2) {
+                    this.$message({
+                        message: '只支持小数点后两位',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(obj.salePrice == '') {
+                    this.$message({
+                        message: '请输入售卖价',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(+obj.salePrice <= 0) {
+                    this.$message({
+                        message: '售卖价必须大于0',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(/\./.test(obj.salePrice) && obj.salePrice.split(".")[1].length > 2) {
+                    this.$message({
+                        message: '只支持小数点后两位',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(obj.salePrice<obj.costPrice) {
+                    this.$message({
+                        message: '售卖价不得人低于成本价',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(obj.stock === '') {
+                    this.$message({
+                        message: '请输入库存',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(!/^\d+$/.test(obj.stock)) {
+                    this.$message({
+                        message: '库存不能为小数',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(+obj.stock  < 0) {
+                    this.$message({
+                        message: '不能为负值',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(+obj.stock  > 10000000) {
+                    this.$message({
+                        message: '库存不能超过10000000',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(!obj.warningStock) {
+                    this.$message({
+                        message: '请输入库存预警',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(!/^\d+$/.test(obj.warningStock)) {
+                    this.$message({
+                        message: '库存预警不能为小数',
+                        type: 'warning'
+                    });
+                    return
+                }
+                if(+obj.warningStock  < 0) {
+                    this.$message({
+                        message: '不能为负值',
+                        type: 'warning'
+                    });
+                    return
+                }
+            //如果配送方式勾选了商家配送，则重量为必填项
+                if(this.ruleForm.deliveryWay.includes(2)){
+                    if(!obj.weight) {
+                        this.$message({
+                            message: '请输入重量',
+                            type: 'warning'
+                        });
+                        return
+                    }
+                }
+            }
+        },
         addGoodCategory(){
             this.currentDialog = 'chooseGoodCategoryDialog';
             this.dialogVisible = true;
         },
-        getGoodCategory(data){
-            this.goodCategoryNames = data.name + ' > '+data.children.categoryName;
+        getProductCategoryInfoId(data){
+            // debugger;
+            this.ruleForm.productCategoryInfoId=data.child.id;
+            this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
         statusChange() {
             if(this.ruleForm.status == 2) {
@@ -2290,7 +2537,10 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                console.log(res)               
+                console.log(res)  
+                // debugger;
+                this.specRadio = res.specsType;
+                // debugger;             
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
@@ -2319,20 +2569,25 @@ export default {
                     }
                 }
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
-
-                res.goodsInfos.forEach(val => {
-                    let label = Object.values(JSON.parse(val.specs)).join(',')
-
-                    val.label = label
-                    val.editorDisabled = true
-                    val.showCodeSpan = false
-                })
-                res.goodsInfos = this.sortGoodsInfos(res)
-                this.computedAddSpecs(res.productSpecs)
-
-                __goodsInfos = this.computedList(res.goodsInfos)
-                this.setGoodsImage(__goodsInfos)
-                res.goodsInfos = __goodsInfos
+                if(res.specsType===1){//多规格   
+                    res.goodsInfos.forEach(val => {
+                        let label = Object.values(JSON.parse(val.specs)).join(',')
+                        val.label = label
+                        val.editorDisabled = true
+                        val.showCodeSpan = false
+                        res.goodsInfos = this.sortGoodsInfos(res)
+                    })
+                          
+                    this.computedAddSpecs(res.productSpecs)
+                    __goodsInfos = this.computedList(res.goodsInfos)
+                    this.setGoodsImage(__goodsInfos)
+                    res.goodsInfos = __goodsInfos
+                    }else if(res.specsType===0){ //单一规格
+                    this.singleSpec = Object.assign({}, this.singleSpec, res.goodsInfos[0], {
+                            //goodsInfos: [res.goodsInfo]
+                        })
+                    }
+                
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
                     this.getCategoryIds(_arr, id)
@@ -2343,6 +2598,7 @@ export default {
                     return this.operateCategoryList.find(val => val.id == id)
                 })
                 this.itemCatText = _arr.map(val => val.name).join(' > ')
+                this.goodCategoryNames = _arr.map(val => val.name).join(' / ')
                 let specs = JSON.parse(res.productSpecs)
                 let specsLabelArr = []
                 let labelArr = []
@@ -2600,17 +2856,16 @@ export default {
                         productUnit: this.ruleForm.other ? this.ruleForm.otherUnit : this.ruleForm.productUnit,
                     }
                     let calculationWay
+                if(this.specRadio===1){
                     try {
                         this.ruleForm.goodsInfos.forEach((val, index) => {
                             if(val.image_hide) {
-                                // let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
-
-                                // val.image = image
                                 val.image = this.ruleForm.goodsInfos[index - 1].image
                             }
                         })
 
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
+                            this.validateGoodsInfos(this.ruleForm.goodsInfos[i]);
                             //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
                         // if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
                         //     this.$message({
@@ -2633,7 +2888,8 @@ export default {
                         //     });
                         //     return
                         // }
-                        if(this.ruleForm.goodsInfos[i].costPrice == '') {
+                       
+                        /*if(this.ruleForm.goodsInfos[i].costPrice == '') {
                             this.$message({
                                 message: '请输入成本价',
                                 type: 'warning'
@@ -2723,8 +2979,8 @@ export default {
                                 type: 'warning'
                             });
                             return
-                        }
-			//如果配送方式勾选了商家配送，则重量为必填项
+                        }*/
+			        //如果配送方式勾选了商家配送，则重量为必填项
                         if(this.ruleForm.deliveryWay.includes(2)){
                             if(!this.ruleForm.goodsInfos[i].weight) {
                                 this.$message({
@@ -2734,45 +2990,47 @@ export default {
                                 return
                             }
                         }
-                        // if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
-                        //     this.$message({
-                        //         message: '重量必须大于0',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(+this.ruleForm.goodsInfos[i].volume  <= 0) {
-                        //     this.$message({
-                        //         message: '体积必须大于0',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
+                        
                     }
                     } catch(e) {
                         console.error(e)
                     }
-                    if(this.ruleForm.name == '' || /^\s+$/.test(this.ruleForm.name)) {
-                        this.$message({
-                            message: '商品名称不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
+                }else {//单一规格属性值校验
+                    this.validateGoodsInfos(this.singleSpec);
+                }
+                if(this.ruleForm.name == '' || /^\s+$/.test(this.ruleForm.name)) {
+                    this.$message({
+                        message: '商品名称不能为空',
+                        type: 'warning'
+                    });
+                    return
+                }
 
-                    if(this.ruleForm.isFreeFreight == 0) {
-                        let id = this.ruleForm.freightTemplateId
-                        calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
-                        if(calculationWay == 3) {
-                            if(this.ruleForm.goodsInfos.some(val => !val.volume)) {
+                if(this.ruleForm.isFreeFreight == 0) {
+                    let id = this.ruleForm.freightTemplateId
+                     calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
+                    if(calculationWay == 3) {
+                        if(this.specRadio===1 &&this.ruleForm.goodsInfos.some(val => !val.volume)) {
                                 this.$message({
                                     message: '规格信息中体积不能为空',
                                     type: 'warning'
                                 });
                                 return
+                            }else if(this.specRadio===0 && !this.singleSpec.volume){
+                                this.$message({
+                                    message:'规格信息中体积不能为空',
+                                    type:'warning'
+                                });
+                                return 
                             }
                         } else if(calculationWay == 2) {
-                            if(this.ruleForm.goodsInfos.some(val => !val.weight)) {
+                            if(this.specRadio===1 && this.ruleForm.goodsInfos.some(val => !val.weight)) {
+                                this.$message({
+                                    message: '规格信息中重量不能为空',
+                                    type: 'warning'
+                                });
+                                return
+                            }else if(this.specRadio===0 && !this.singleSpec.weight){
                                 this.$message({
                                     message: '规格信息中重量不能为空',
                                     type: 'warning'
@@ -2840,6 +3098,7 @@ export default {
                         this.ruleForm.productCatalogInfoIds = arr
                     }
                     //if(!this.editor) {
+                    if(this.specRadio===1){
                         let __goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
 
                         __goodsInfos.forEach(val => {
@@ -2903,13 +3162,12 @@ export default {
                             val.fileList = []
                             return val
                         })
-                        obj.goodsInfos = _goodsInfos
-                    // } else {
-                    //     obj.goodsInfos = this.ruleForm.goodsInfos
-                    // }
-                    // console.log(this.ruleForm.productDetail)
-                    // console.log(window.encodeURIComponent(this.ruleForm.productDetail))
-                    // console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
+                        
+                            obj.goodsInfos = _goodsInfos
+                        }else{
+                            obj.goodsInfos = this.singleSpec
+                        }
+                        
                     params = Object.assign({}, this.ruleForm, obj, {
                         productDetail: window.escape(this.ruleForm.productDetail),
                         productCatalogInfoId: ''
@@ -2929,6 +3187,7 @@ export default {
 		    //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
                     params.generalExpressType = 1; //普通快递
                     params.businessDispatchType = 0; //商家配送
+                    params.specsType = this.specRadio;//0：单一规格，1：多规格
                     if(this.ruleForm.deliveryWay.includes(2)){
                         params.businessDispatchType = 1;
                     }
@@ -2983,7 +3242,7 @@ export default {
             })
             this.itemCatText = arr.map(val => val.name).join(' > ')
             this.ruleForm.productCategoryInfoId = _value.pop()
-            this.getSpecsList()
+            this.getSpecsList(this.ruleForm.productCategoryInfoId)
 
             // this.$nextTick(() => {
             //     setTimeout(() => {
@@ -3285,7 +3544,7 @@ export default {
                 this.index = 3
             }
         },
-        imageSelected(image) {
+        imageSelected(images) {
             // if(this.uploadVideo) {
             //     if(!/\.mp4|\.ogg|\.mov$/.test(image.filePath)) {
             //         this.$message({
@@ -3298,6 +3557,21 @@ export default {
             //     this.uploadVideo = false
             //     return
             // }
+            images.forEach((image,index)=>{
+                if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
+                this.$message({
+                message: '上传的文件格式不正确，请重新上传',
+                type: 'warning'
+                });
+                return
+                }
+            if(image.fileSize > 1024*1024*3) {
+                this.$message({
+                message: '上传图片不能超过3M',
+                type: 'warning'
+                });
+                return
+            }
             if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
@@ -3335,6 +3609,7 @@ export default {
                 }
                 this.hideUpload = this.imagesLength >= 6
             }
+        })
         }
     },
     mounted() {
@@ -3392,6 +3667,24 @@ $blue: #655EFF;
 .app-main .content-box .content-main {
     margin-top: 2px;
 }
+.sku-template{
+   /deep/ .el-input__inner{
+        width:490px;
+        margin-top:5px;
+        margin-bottom:10px;
+        height:30px;
+
+    }
+
+}
+/deep/ .el-form-item .el-form-item--small {
+    margin-bottom: 20px;
+}
+
+/deep/.el-form-item--small .el-form-item__error{
+    left:76px;   
+}
+
 .add-goods {
     padding: 18px 21px;
     padding-top: 2px;
@@ -3582,6 +3875,24 @@ $blue: #655EFF;
     color: #f56c6c;
     margin-right: 4px;
 }
+/deep/ label[for="costPrice"]::before {
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+}
+/deep/ label[for="code"] {
+    position: relative;   
+}
+/deep/ .el-icon-warning-outline{
+        position:absolute;
+        left:-90px;
+        top:10px;
+    }
+   i.sku-code{
+       left:-20px;
+   } 
+    
+
 .autoSaleTime {
     font-size: 12px;
     margin-left: 10px;
@@ -4142,7 +4453,7 @@ $blue: #655EFF;
     display: inline-flex;
     align-items: center;
     padding: 12px;
-    width: 80px;
+    width: 85px;
     height: 34px;
     background-color: #e6fbf3;
     i {

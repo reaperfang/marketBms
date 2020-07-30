@@ -24,7 +24,7 @@ export default [
         component: () => import('@/views/profile/guidePrompt'),
         name: 'guidePrompt',
         hidden: false,
-        meta: { title: '开店引导', noCache: true, tabTitle: '开店引导',navType:2 }
+        meta: { title: '开店引导入口', noCache: true, tabTitle: '开店引导',navType:2 }
       },
       {
         path: 'upgrade',

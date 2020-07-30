@@ -31,7 +31,7 @@
                     </div>
                     <div class="item righter">
                         <span>订单类型：{{order.orderType | orderTypeFilter}}</span>
-                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：{{order.memberName}}</span>
+                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：<span class="pointer" :title="order.memberName">{{order.memberName | memberNameFilter}}</span></span>
                         <span>订单来源：{{order.channelName}}</span>
                         <!-- <i v-permission="['订单', '订单查询', '商城订单', '删除订单']" @click="closeOrder(order.id)" v-if="order.orderStatus == 2" class="el-icon-delete"></i> -->
                     </div>
@@ -244,6 +244,44 @@ export default {
             }
 
             return yingshow
+        },
+        memberNameFilter(value) {
+            let getStr = function(val) {
+                var len = 0;
+                var str = '';
+
+                for (var i = 0; i < val.length; i++) {
+                    var length = val.charCodeAt(i);
+
+                    if(length>=0&&length<=128) {
+                        if(len < 12) {
+                            len += 1;
+                            str += val[i]
+                        } else {
+                            if(i == val.length - 1) {
+                                str += '...'
+                            }
+                            break
+                        }
+                    }
+                    else {
+                        if(len < 11) {
+                            len += 2;
+                            str += val[i]
+                        } else {
+                            if(i == val.length - 1) {
+                                str += '...'
+                            }
+                            break
+                        }
+                    }
+                }
+                return str;
+            } 
+
+            if(value) {
+                return getStr(value)
+            }
         }
     },
     methods: {

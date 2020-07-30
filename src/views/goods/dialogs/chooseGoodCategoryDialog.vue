@@ -8,14 +8,15 @@
     <div>
       <el-cascader
         popper-class="leimu-popper"
-        v-model="itemCatText"
+        v-model="commonCat"
         :options="commonCategories"
         :props="{ multiple: false, checkStrictly: true }"
         placeholder="请选择类目"
         clearable
         filterable
+        @change="itemCatHandleChange"
       ></el-cascader>
-      <span class="deleteBtn">删除</span>
+      <span class="deleteBtn" @click="delCommonCate()">删除</span>
       <div class="category-display">
         <span>您当前选择的是：{{itemCatText}}</span>
         <span class="commonBtn" @click="setCommonCate">设为常用类目</span>
@@ -73,28 +74,28 @@ export default {
   data() {
     return {
       radio: 0,
-      categoryValue: [],
-      values: [],
-      categoryOptions: [],
-      itemCatText: "",
-      commonCategories: [],
+      itemCatText: "",//当前所选类目
+      commonCategories: [],//常用类目
       showFooter: false,
       itemCatList: [],
       firstTpmList: [],
       secondCascader: false,
-      secondItemCatList: [],
+      secondItemCatList: [],//二级级联框
       secondTmpList: [],
-      firstContent: "",
-      secondContent: "",
-      commonCat: {},
-      isWarning:false
+      firstContent: "",//一级级联框输入的内容
+      secondContent: "",//二级级联框输入内容
+      commonCat: {},//
+      isWarning:false,
+      currentCategory:{},//当前选中的类目
+      operateCategoryList:[],//后台获取的所有类目
+      selectedCateId:''//选中的常用类目id
     };
   },
   created() {
     this.getOperateCategoryList();
+   
   },
   watch: {},
-  methods: {},
   computed: {
     visible: {
       get() {
@@ -103,9 +104,39 @@ export default {
       set(val) {
         this.$emit("update:dialogVisible", val);
       }
-    }
+    },
+    cid(){
+            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            return shopInfo.id
+        }
   },
   methods: {
+    //查询常用类目
+    getCommonCategoryList(){
+      this.commonCategories =[];
+      this.commonCat={};
+        this._apis.goods.getProCommonCategory({cid:this.cid})
+        .then(res=>{
+          if(res&&res.length>0){
+            res.forEach((item,index)=>{
+               let temp = this.operateCategoryList.find(data=>data.id===item.categoryId);
+               let _temp = JSON.parse(JSON.stringify(temp));
+               if(_temp.parentId && _temp.parentId>0){
+                  let parentTemp = this.operateCategoryList.find(data=>data.id===_temp.parentId);
+                  let _parentTemp =JSON.parse(JSON.stringify(parentTemp));
+                     _parentTemp.child = _temp;
+                  let elem = {
+                    value:_temp.id,
+                    label:`${_parentTemp.name}->${_temp.name}`
+                  } 
+                  this.commonCategories.push(elem)
+               }   
+            });
+          }
+        }).catch(err=>{
+
+        });
+    },
     searchCategory(key) {
       let reg,
         arr,
@@ -143,6 +174,7 @@ export default {
       this.showSecondLevel(data);
     },
     showSecondName(data) {
+      this.currentCategory = data;
       this.secondContent = data.categoryName;
       let parentCat = this.operateCategoryList.find(
         val => val.id == data.parentId
@@ -164,7 +196,20 @@ export default {
     setCommonCate() {
       if (this.commonCat && this.commonCat.child) {
         this.isWarning=false;
-        
+        let data = {
+          cid:this.cid,
+          categoryId:this.currentCategory.id
+        }
+        this._apis.goods.addProCommonCategory(data)
+        .then(res=>{
+          this.getCommonCategoryList();
+        })
+        .catch(err=>{
+            this.$message({
+                message: err,
+                type: 'warning'
+                });
+        })
         //调用设置常用类目的接口
       } else {
         this.isWarning=true;
@@ -173,10 +218,27 @@ export default {
         },3*1000);
       }
     },
+    delCommonCate(){
+        this._apis.goods.delProCommonCategory({cid:this.cid,categoryId:this.selectedCateId})
+        .then(res=>{
+          this.$message({
+                message: "删除成功",
+                type: 'success'
+                });
+        this.getCommonCategoryList();
+        })
+        .catch(err=>{
+            this.$message({
+                message: err,
+                type: 'warning'
+                });
+        })
+    },
     submit() {
+      console.log(this.commonCat);
       if (this.commonCat && this.commonCat.child) {
         //关闭窗口，将值传到添加商品页面
-        this.$emit("getGoodCategory", this.commonCat);
+        this.$emit("getProductCategoryInfoId", this.commonCat);
         this.visible = false;
         this.isWarning=false;
       } else {
@@ -206,6 +268,7 @@ export default {
             this.itemCatList = arr;
             this.firstCatList = arr;
             this.searchCategory("first");
+            this.getCommonCategoryList();//获取常用类目
             resolve(res.list);
           })
           .catch(error => {
@@ -242,7 +305,6 @@ export default {
     getCategoryInfoIds(arr, id) {
       try {
         let parentId = this.operateCategoryList.find(val => val.id == id)
-          .parentId;
         arr.unshift(id);
         if (parentId && parentId != 0) {
           this.getCategoryInfoIds(arr, parentId);
@@ -254,29 +316,19 @@ export default {
 
     itemCatHandleChange(value) {
       let _value = [...value];
-      let arr = _value.map(id => {
-        return this.operateCategoryList.find(val => val.id == id);
-      });
-      let secondArr = this.itemCatList.find(val => val.id == arr[0].id);
-      if (secondArr && secondArr.children) {
-        this.secondCascader = true;
-        this.secondItemCatList = secondArr.children;
+      this.selectedCateId=_value[0];
+      let temp = this.operateCategoryList.find(data=>data.id===_value[0]);
+      temp.categoryName=temp.name;
+      if(temp.parentId && temp.parentId>0){
+          let parentTemp = this.operateCategoryList.find(data=>data.id===temp.parentId);
+           parentTemp.child = temp;
+           this.commonCat=parentTemp;
       }
-      // let arr = this.ruleForm.itemCat.map(id => {
-      //     return this.operateCategoryList.find(val => val.id == id)
-      // })
-      this.itemCatText = arr.map(val => val.name).join(" > ");
-      // this.ruleForm.productCategoryInfoId = _value.pop()
-      // this.getSpecsList()
-
-      // this.$nextTick(() => {
-      //     setTimeout(() => {
-      //         this.$refs.fenleiCascader.toggleDropDownVisible(false)
-      //         this._globalEvent.$emit('addGoodsEvent', false);
-      //     }, 10000)
-      // })
+      
+    
     }
-  },
+    },
+  
   props: {
     data: {},
     dialogVisible: {
