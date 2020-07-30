@@ -622,8 +622,31 @@ ul.cube {
       }
 }
 
+.icon-info-popover {
+      padding: 6px !important;
+      color: #44434B !important;
+      font-size: 12px !important;
+      border-color: #DADAE3 !important;
+      box-shadow: none !important;
+      border-radius: 2px !important;
+}
+.icon-info-popover[x-placement^=top]{
+      .popper__arrow {
+            border-top-color: #DADAE3 !important;
+      }
+}
+
 .multiple_selection {
       margin: 20px 0 0 14px;
+
+      .icon-info {
+            position: relative;
+            display: inline-block;
+            top: -8px;
+            width: 14px;
+            height: 14px;
+            background: url('~@/assets/images/common/icon-info.png') no-repeat;
+      }
 }
 
 .el-table__header-wrapper .el-checkbox {

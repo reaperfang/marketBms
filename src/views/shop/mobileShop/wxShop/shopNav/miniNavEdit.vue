@@ -181,7 +181,7 @@ export default {
     this._globalEvent.$on('apiNavDataChange', (data, navType)=> {
       if(navType === '1') {
         this.ruleForm = data;
-        this.selectNav(data.navIds[0]);
+        this.selectNav(data.navIds[0], true);
       }
     })
     this.initnavMap();
@@ -252,7 +252,7 @@ export default {
     },
 
     /* 选中一个导航来编辑 */
-    selectNav(id) {
+    selectNav(id, first) {
       this.currentNav = this.ruleForm.navMap[id];
       let curentActiveNav = null;
       for(let k in this.ruleForm.navMap) {
@@ -264,12 +264,38 @@ export default {
         this.$set(curentActiveNav, 'active', false);
       }
       this.$set(this.ruleForm.navMap[id], 'active', true);
+
+      if(!first){ //如果是手动点击触发则执行验证
+        this.$nextTick(() => {
+          this.$refs['ruleForm'].validate();
+        })
+      }
+    },
+
+    //循环验证是否有未填写的导航名称
+    validateNavName() {
+      let mark = false;
+      const data = this.checkIcon();
+      for(let i = 0; i < data.navIds.length; i++){
+        if(data.navMap[data.navIds[i]].navName == ''){
+          mark = true;
+          this.selectNav(data.navIds[i]);
+          break;
+        }
+      }
+      return mark;
     },
 
     /* 保存并启用 */
     saveAndApply() {
       this.$refs.ruleForm.validate( valid => {
         if(valid) {
+
+          const mark = this.validateNavName();
+          if(mark){
+            return;
+          }
+
           this.saveAndApplyLoading = true;
           this.$emit('submitNavData',{
             navigationKey: '',
@@ -287,6 +313,12 @@ export default {
     save() {
        this.$refs.ruleForm.validate( valid => {
         if(valid) {
+
+          const mark = this.validateNavName();
+          if(mark){
+            return;
+          }
+
           this.saveLoading = true;
           this.$emit('submitNavData', {
             navigationKey: '',

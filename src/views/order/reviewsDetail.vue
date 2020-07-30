@@ -589,6 +589,20 @@ export default {
     /deep/ .el-table tr th {
         border-bottom: none;
     }
+    /deep/ .record .el-table td, /deep/ .record .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+    }
+    /deep/ .record .el-table th {
+        &:nth-child(3) {
+            padding-right: 50px;
+        }
+    }
 </style>
 <style lang="scss">
   .reviews-detail {

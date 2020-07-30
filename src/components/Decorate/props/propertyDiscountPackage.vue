@@ -160,7 +160,7 @@ export default {
           {
             min: 1,
             max: 5,
-            message: "请输入标题，最多5个字",
+            message: "最多支持5个字符",
             trigger: "change"
           }
         ]
