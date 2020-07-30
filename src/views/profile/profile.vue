@@ -162,13 +162,13 @@
                   <el-button>立即授权</el-button>
                 </p>
               </div>
-              <!-- <div>
+              <div v-if="isReleaseWX">
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="erweima" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
                   <el-button>立即发布</el-button>
                 </p>
-              </div> -->
+              </div>
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
@@ -186,13 +186,13 @@
                   <el-button>立即授权</el-button>
                 </p>
               </div>
-              <!-- <div>
+              <div v-if="isReleaseGZ">
                 <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="erweima" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
                   <el-button>立即发布</el-button>
                 </p>
-              </div> -->
+              </div>
             </div>
           </div>  
         </div>
@@ -304,6 +304,8 @@ export default {
       gzQrcode:"",//公众号二维码
       isEmpowerWX:false,//微信小程序是否授权
       isEmpowerGZ:false,//微信公众号是否授权
+      isReleaseWX:false,//微信小程序是否发布
+      isReleaseGZ:false,//微信公众号是否发布
       protocol: location.protocol,
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
@@ -334,6 +336,9 @@ export default {
     this.getHelpNews();
     this.getWXQrcode();
     this.getGZQrcode();
+    this.isEmpower();
+    this.isReleaseWX();
+
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
@@ -498,6 +503,28 @@ export default {
         .getwxBindStatus({id:this.cid}).then(response => {
           this.isEmpowerWX = response.bindWechatApplet ? false : true
           this.isEmpowerGZ = response.bindWechatAccount ? false : true
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+    //判断小程序是否发布
+    isReleaseWX(){
+      this._apis.profile
+        .getSmallRelease({id:this.cid}).then(response => {
+          this.isReleaseWX = response.status ? false :  true
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+    //判断公众号是否设置商城首页
+    isReleaseGZ(){
+      this._apis.shop
+        .getHomePage({pageTag:0}).then(response => {
+          this.isReleaseGZ = response ? false : true
         })
         .catch(error => {
           console.error(error);
