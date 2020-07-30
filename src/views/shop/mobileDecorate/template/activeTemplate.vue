@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="isLoading">
     <div class="template_wrapper-head">
       <div class="template_wrapper-head-tags">
         <el-tag
@@ -156,6 +156,7 @@
     },
     data() {
       return {
+        isLoading: false,
         showAllBtn: false,
         tempInfo: {},
         dialogVisible: false,
@@ -381,6 +382,7 @@
         }).then(res1 => {
           if (item.chargeType !== 1) {
             if (res1 === null || res1.status === 2) {
+              return
               this._apis.templatePay.getOrcode({
                 orderSource: 1,
                 orderType: 2,
@@ -390,10 +392,10 @@
                 templateName: item.name,
                 templatePrice: item.price
               }).then(res => {
-                this.qrCodeInfo = res
-                this.dialogVisible = true
+                this.qrCodeInfo = res;
+                this.dialogVisible = true;
                 this.tempInfo = item
-              })
+              }).finally(() => {this.isLoading = false})
             } else {
               this.confirm({
                 title: '提示',
@@ -429,7 +431,7 @@
               })
             }
           }
-        })
+        }).finally(() => {this.isLoading = false})
       },
       closePay() {
         this.dialogVisible = false
