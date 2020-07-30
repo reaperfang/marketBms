@@ -449,11 +449,33 @@ export default {
       }
     },
 
+    //循环验证是否有未填写的导航名称
+    validateNavName() {
+      let mark = false;
+      const data = this.checkIcon();
+      //如果APP导航样式必须有导航名称，则循环验证
+      if(data.navStyle.id != 2){
+        for(let i = 0; i < data.navIds.length; i++){
+          if(data.navMap[data.navIds[i]].navName == ''){
+            mark = true;
+            this.selectNav(data.navIds[i]);
+            break;
+          }
+        }
+      }
+      return mark;
+    },
 
     /* 保存并启用 */
     saveAndApply() {
       this.$refs.ruleForm.validate( valid => {
         if(valid) {
+
+          const mark = this.validateNavName();
+          if(mark){
+            return;
+          }
+
           this.saveAndApplyLoading = true;
           this.$emit('submitNavData',{
             navigationKey: '',
@@ -471,6 +493,12 @@ export default {
     save() {
       this.$refs.ruleForm.validate( valid => {
         if(valid) {
+
+          const mark = this.validateNavName();
+          if(mark){
+            return;
+          }
+        
           this.saveLoading = true;
           this.$emit('submitNavData', {
             navigationKey: '',
