@@ -3165,6 +3165,8 @@ export default {
                         
                             obj.goodsInfos = _goodsInfos
                         }else{
+                            this.singleSpec.specs="";
+                            this.singleSpec.fileList=[];
                             obj.goodsInfos = this.singleSpec
                         }
                         
