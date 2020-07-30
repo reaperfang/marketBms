@@ -4,7 +4,7 @@
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
                 <div v-for="(item, index) in data.goodsInfos" class="item">
-                    <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
+                    <div class="item-title">{{data.goodsInfos.length>1?`${index +1}：`:''}}规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
                         <el-input max-length="11" type="number" :min="item.costPrice" :max="max" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
@@ -35,10 +35,13 @@ export default {
     },
     filters: {
         productSpecsFilter(val) {
-            let arr = Object.values(JSON.parse(val))
-            let str = arr.join('/')
-            
-            return str
+            if(val){
+                let arr = Object.values(JSON.parse(val))
+                let str = arr.join('/')
+                return str
+            }else{
+                return '默认规格'
+            }
         }
     },
     created() {

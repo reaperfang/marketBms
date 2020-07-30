@@ -84,11 +84,13 @@
                     label="SPU编码"
                     width="124">
                     </el-table-column> -->
-                    <el-table-column label="排序" width="100">
+            <el-table-column label="排序" width="100">
             <template slot-scope="scope">
               <template v-if="!scope.row.isEdit">
-                <span>{{scope.row.sortId}}</span>
-                <i slot="suffix" class="el-icon-edit" @click="editGoodIndex(scope.row)"></i>
+                <div @mouseover="showEidtIcon(scope.row)" @mouseleave="hideEditIcon(scope.row)">
+                    <span >{{scope.row.sortId}}</span>
+                    <span class="sort"><i v-if="scope.row.showIcon" slot="suffix" class="i-bg pointer" @click="editGoodIndex(scope.row)"></i></span>
+                </div>
               </template>
               <template v-if="scope.row.isEdit">
                 <el-tooltip class="item" effect="light" placement="top">
@@ -338,7 +340,7 @@
             }
         }
     }
-    .store, .price {
+    .store, .price,.sort {
         .i-bg {
             background:url('../../assets/images/goods/editor.png') no-repeat;
             margin-left: 6px;
@@ -718,8 +720,13 @@ export default {
         changeEdit(item){
             item.isEdit = false;
         },
+        showEidtIcon(item){
+            item.showIcon=true;
+        },
+        hideEditIcon(item){
+            item.showIcon=false;
+        },
         saveGoodIndex(data) {
-            // debugger
             data.isEdit = false;
             let param = {
                         id:data.id,
@@ -748,6 +755,7 @@ export default {
             },
             editGoodIndex(item) {
                 item.isEdit = true;
+                item.showIcon=false;
             },
             changeProductCatalogs(datas){
                 let productInfoIds =this.currentData.map(val=>val.id);
@@ -1384,14 +1392,12 @@ export default {
         getList(param) {
             this.loading = true
             let _param
-            // debugger
             _param = Object.assign({}, this.listQuery, param)
             _param = Object.assign({}, _param, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
             })
 
             this._apis.goods.fetchSpuGoodsList(_param).then((res) => {
-                // debugger;
                 this.allTotal = +res.total
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
@@ -1419,6 +1425,7 @@ export default {
                     //this.getCategoryName(res.list)
                     res.list.forEach(item => {
                         item.isEdit = false;
+                        item.showIcon = false;
                         if(item.status === 1) {
                             item.switchStatus = true
                         } else if(item.status === 0 || item.status === 2) {
@@ -1426,7 +1433,6 @@ export default {
                         }
                     })
                     this.list = res.list
-                    // debugger;
                     this.loading = false
                     // if(this.allTotal && !this.total) {
                     //     this.$router.push('/goods/goodsListEmpty')
