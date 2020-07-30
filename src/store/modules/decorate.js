@@ -50,6 +50,16 @@ const decorate = {
 		/* 添加组件 */
 		addComponent: (state, params) => {
 
+			let compTypeCount = 0;
+			for(let k in state.componentDataMap) {
+				if(state.componentDataMap[k].type === params.component.type) {
+					compTypeCount++;
+				}
+			}
+			if(params.component.limit && compTypeCount >= params.component.limit) {
+				console.log(`最多只能添加${params.component.limit}个${params.component.title}组件！`);
+				return;
+			}
 			if(params.targetId) {
 				let index = state.componentDataIds.indexOf(params.targetId);
 				if(index < 0) {
