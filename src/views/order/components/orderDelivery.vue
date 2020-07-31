@@ -167,7 +167,7 @@
                 <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
-                            <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>
+                            <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push(`/order/orderDetail?id=${scope.row.orderId}&_ids=${scope.row.id}`)">查看</span>
                             <template v-if="scope.row.status == 4">
                                 <span v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">继续发货</span>
                             </template>
@@ -288,9 +288,9 @@ export default {
         },
         computeWidth() {
             if(this.tableData.some(item => item.status == 4 || (item.status == 3 && item.isFillUp))) {
-                return '120'
+                return '130'
             } else {
-                return '90'
+                return '100'
             }
         }
     },
@@ -536,7 +536,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 22px;
+            padding-left: 10px;
         }
     }
 }
@@ -653,6 +653,13 @@ export default {
             color: #655EFF!important;
             background-color: #fff;
         }
+    }
+    /deep/ .el-table .cell {
+        padding-left: 0;
+        padding-right: 20px;
+    }
+    /deep/ .input-with-select .el-input-group__prepend {
+        background-color: #fff;
     }
 </style>
 

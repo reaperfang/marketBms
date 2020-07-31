@@ -80,22 +80,27 @@
         <el-table-column
           prop="cashoutSn"
           label="提现编号"
+          align="left"
           width="200px">
         </el-table-column>
          <el-table-column
           prop="nickName"
+          align="center"
           label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="memberSn"
+          align="right"
           label="用户ID">
         </el-table-column>
         <el-table-column
           prop="amount"
+          align="right"
           label="提现金额（元）">
         </el-table-column>
         <el-table-column
           prop="status"
+          align="center"
           label="状态">
           <template slot-scope="scope">
             {{statusToLabel(scope.row.status)}}
@@ -103,17 +108,21 @@
         </el-table-column>
         <el-table-column
           prop="tradeDetailSn"
+          align="right"
           label="交易流水号">
         </el-table-column>
         <el-table-column
           prop="applyTime"
           label="申请时间"
+          align="right"
           sortable = "custom">
         </el-table-column>
         <el-table-column
-        label="操作">
+        label="操作"
+        align="center">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button>
+            <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button> 
+            <span class="c_line">|</span>
             <el-button type="text" size="small" v-if="scope.row.status == 0" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
           </template>
         </el-table-column>
@@ -458,6 +467,11 @@ export default {
       margin-right:8px;
     }
   }
+}
+
+.c_line{
+  margin: 0 5px;
+  color: #DADAE3;
 }
   
 </style>

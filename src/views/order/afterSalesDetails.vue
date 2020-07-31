@@ -21,7 +21,7 @@
                 <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos || (orderAfterSale.deliveryWay == 2 && orderAfterSale.orderAfterSaleStatus > 1) || orderAfterSaleSendInfo.distributorPhone)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
+        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :sendInfoMap="sendInfoMap" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
         <component :is="currentDialog" :data="currentData" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
@@ -49,7 +49,8 @@ export default {
             catchRealReturnWalletMoney: '',
             catchRealReturnBalance: '',
             orderSendInfo: '',
-            currentData: {}
+            currentData: {},
+            sendInfoMap: {}
         }
     },
     created() {
@@ -154,6 +155,7 @@ export default {
                 }
                 this.orderAfterSale = res.orderAfterSale || {}
                 this.orderAfterSaleSendInfo = res.orderAfterSaleSendInfo || {}
+                this.sendInfoMap = res.sendInfoMap || {}
                 this.recordList = res.recordList.filter(val => val.operationType != 1 && val.operationType != 2 && val.operationType != 5 && val.operationType != 8)
                 this.sendItemList = res.sendItemList
                 this.orderType = res.orderType
