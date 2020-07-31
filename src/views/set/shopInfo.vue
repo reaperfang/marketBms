@@ -446,7 +446,7 @@ export default {
         // })
       }).catch(error =>{
         console.log('updateShopInfo:error', error)
-        this.$message.error('保存失败');
+        this.$message.error(error || '保存失败');
       }).finally(() => {
         this.loading = false
       })
