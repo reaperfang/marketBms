@@ -6,7 +6,7 @@
           placeholder="地图搜索"
           clearable
           v-model="keyword">
-        <el-button slot="append" class="btn" @click="search" icon="el-icon-search"></el-button>
+        <el-button slot="append" class="btn" @click="handleKeyWordSearch" icon="el-icon-search"></el-button>
       </el-input>
         <div class="info-div" v-if="pois.length > 0">
           <ol :style="{height: height + 'px'}">
@@ -216,6 +216,10 @@ export default {
       }
       return city
     },
+    handleKeyWordSearch() {
+      this.page = 1
+      this.search()
+    },
     //执行搜索
     search() {
       this.clearAllMaker()
@@ -234,6 +238,7 @@ export default {
       }
 
       this.getSearch(data).then((response) => {
+        console.log(1111)
         this.totalNum = response.count
         this.pois = response.data || []
         if (this.pois.length > 0) {
@@ -245,12 +250,14 @@ export default {
           this.setPanTo(lng, lat, 4)
         }
       }).catch((err) => {
+        console.log(err)
         this.$message.error('查询失败')
       })
     },
     handlePropSearch(keyword) {
       console.log('----keyword---', keyword)
       this.keyword = keyword
+      this.page = 1
       this.search()
     },
     openInfoWindow(info, marker, map, poi) {
