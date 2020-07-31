@@ -481,9 +481,11 @@ export default {
   methods: {
     // 获取发货地址
     getDeliveryAddress() {
-      // addressId address
-      // this.address = 'test'
-      // this.addressId = 1
+      this._apis.set.getAddressDefaultSender().then((response) => {
+        this.address = `${response.address} ${response.addressDetail}`
+      }).catch((err) => {
+        this.$message.error(err || '数据获取失败')
+      })
     },
     handleRepeatCycleChange(val) {
       console.log('---val--', val)
