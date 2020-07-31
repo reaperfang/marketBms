@@ -98,9 +98,11 @@
 <script>
 import tableBase from '@/components/TableBase';
 import dialogPopularize from '@/views/shop/dialogs/decorateDialogs/dialogPopularize';
+import dialogTableSelect from "@/mixins/dialogTableSelect";
 export default {
   name: 'pageList',
   extends: tableBase,
+  mixins: [dialogTableSelect],
   components: {dialogPopularize},
   data () {
     return {
@@ -261,6 +263,9 @@ export default {
 
     // 修改禁用
     selectInit(row, index){
+      if(row.isHomePage == 1){
+        row.disabled = true;
+      }
       return (row.isHomePage != 1)
     },
 
@@ -299,6 +304,7 @@ export default {
   color:#837DFF!important;
 }
 .index_page_flag{
+  display: inline-block;
   color:rgba(182,130,255,1);
   padding:0px 5px;
   border:1px solid rgba(182,130,255,1);
