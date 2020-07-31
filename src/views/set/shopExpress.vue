@@ -986,6 +986,7 @@ export default {
       })
     },
     handleSubmit(formName) {
+      this.isLoading = true
       let isValidWeeks = true
       this.errWeekMsg = ''
       console.log('handleSubmit:before')
