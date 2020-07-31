@@ -47,7 +47,8 @@ export default [
                 path: 'addressUpdate',
                 component: () => import('@/views/set/addressUpdate'),
                 name: 'addressUpdate',
-                meta: { title: '更新地址', noCache: true, tabTitle: '通用设置' , navType:4 }
+                meta: { title: '更新地址', noCache: true, tabTitle: '通用设置' , navType:4 },
+                hidden: true
             },
             {
                 path: 'ordinaryExpress',
