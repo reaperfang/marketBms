@@ -131,7 +131,7 @@ export default {
       row.disabled = true;
     },
     getRowKey(row) {
-      return row.spuId;
+      return row.activityId;
     },
 
      /* 删除已选失效数据 */

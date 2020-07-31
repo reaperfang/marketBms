@@ -383,12 +383,13 @@
 
       /* 应用模板 */
       apply(item) {
-        this.isLoading = true;
+        // this.isLoading = true;
         this._apis.shop.getTemplateInfo({
           pageTemplateId: item.id
         }).then(res1 => {
           if (item.chargeType !== 1) {
             if (res1 === null || res1.status === 2) {
+              return
               this._apis.templatePay.getOrcode({
                 orderSource: 1,
                 orderType: 1,
