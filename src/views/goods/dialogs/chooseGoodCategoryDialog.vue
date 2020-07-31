@@ -11,7 +11,7 @@
         v-model="commonCat"
         :options="commonCategories"
         :props="{ multiple: false, checkStrictly: true }"
-        placeholder="请选择类目"
+        placeholder="请选择"
         clearable
         filterable
         @change="itemCatHandleChange"
@@ -31,11 +31,11 @@
               <template v-for="item of firstTpmList">
                 <div class="categoryName" @click="showCategoryName(item)">
                   {{item.categoryName}}
-                  <i
+                  <!-- <i
                     v-if="item.isHasChild"
                     class="el-icon-arrow-right"
                     @click="showSecondLevel(item)"
-                  ></i>
+                  ></i> -->
                 </div>
               </template>
             </div>
@@ -411,6 +411,7 @@ export default {
   .first-input,
   .second-input {
     width: 210px;
+    border-bottom:none;
   }
   .cascader-content {
     overflow-y: auto;
@@ -440,6 +441,9 @@ export default {
       }
     }
   }
+}
+.second-cascader .cascader-content{
+   border-left:none;
 }
 .category-display {
   &:first-child {
