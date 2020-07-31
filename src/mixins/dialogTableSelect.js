@@ -1,5 +1,5 @@
 /*
- ** 基于表格基础组件，相关dialog弹出框中选择、全选重写
+ ** 基于表格基础组件，包含存在禁用选择状态的选择列表全选重写
  ** watch数据变化更新全选按钮状态
  */
 let mixin = {
@@ -8,8 +8,9 @@ let mixin = {
 			selectDisabled: false, //控制全选可不可用
 			selectKeyArr: [
 				'id',
-				'spuId',
-				'activityId'
+				'activeId',
+				'activityId',
+				'spuId'
 			] //不同接口返回的唯一标识白名单数组
         }
     },
@@ -71,7 +72,7 @@ let mixin = {
             }
 			let nowPageSelectedLength = 0;
 			let key;
-			console.log(this.multipleSelection)
+			//console.log(this.multipleSelection)
 			if(this.multipleSelection.length != 0){
 				for(let i = 0; i < this.selectKeyArr.length; i++){
 					const nowKey = this.selectKeyArr[i];
@@ -81,7 +82,7 @@ let mixin = {
 					}
 				}
 			}
-			console.log(key)
+			//console.log(key)
 			this.multipleSelection.forEach((item) => {
 				const id = item[key];
 				nowPageSelectedLength = nowPageSelectedLength + selectedTable.filter(items => items[key] === id).length;

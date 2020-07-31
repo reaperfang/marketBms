@@ -227,6 +227,7 @@
       :title="title"
       :ajax="ajax"
       @getDetail="getDetail"
+      :_ids="_ids"
     ></component>
   </div>
 </template>
@@ -315,7 +316,8 @@ export default {
       distributorId: '', //配送员id
       isDistributorShow: false, //尚未创建配送员信息提示控制
       distributorSet: false,
-      ajax: true
+      ajax: true,
+      _ids: []
     };
   },
   created() {
@@ -805,6 +807,7 @@ export default {
           })
           this.tableData = res[0].orderItemList;
           this.orderInfo = res[0];
+          this._ids = [this.orderInfo.id]
           if(!this.orderInfo.sendAddress) {
             this.fetchOrderAddress();
           }

@@ -29,13 +29,13 @@
                     <div class="message">
                         <p>
                             <span>收货信息</span>
-                            <span>小张 / 13800000000</span>
-                            <span>北京市 大兴区 亦庄开发区地盛西路一号 </span>
+                            <span>{{orderSendReceivedAddress.receivedName}} {{orderSendReceivedAddress.receivedPhone && '/'}} {{orderSendReceivedAddress.receivedPhone}}</span>
+                            <span>{{orderSendReceivedAddress.receivedProvinceName}} {{orderSendReceivedAddress.receivedCityName}} {{orderSendReceivedAddress.receivedAreaName}} {{orderSendReceivedAddress.receivedDetail}} </span>
                         </p>
                         <p>
                             <span>发货信息</span>
-                            <span>小张 / 13800000000</span>
-                            <span>北京市 大兴区 亦庄开发区地盛西路一号 </span>
+                            <span>{{orderSendReceivedAddress.sendName}} {{orderSendReceivedAddress.sendPhone && '/'}} {{orderSendReceivedAddress.sendPhone}}</span>
+                            <span>{{orderSendReceivedAddress.sendProvinceName}} {{orderSendReceivedAddress.sendCityName}} {{orderSendReceivedAddress.sendAreaName}} {{orderSendReceivedAddress.sendDetail}} </span>
                         </p>
                     </div>
                     <el-table
@@ -111,12 +111,12 @@
                         <p>
                             <span>收货信息</span>
                             <span>{{orderAfterSaleSendInfo.receivedName}} / {{orderAfterSaleSendInfo.receivedPhone}}</span>
-                            <span>北京市 大兴区 亦庄开发区地盛西路一号 </span>
+                            <span>{{orderAfterSaleSendInfo.receivedProvinceName}} {{orderAfterSaleSendInfo.receivedCityName}} {{orderAfterSaleSendInfo.receivedAreaName}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
                         </p>
                         <p>
                             <span>发货信息</span>
-                            <span>小张 / 13800000000</span>
-                            <span>{{orderAfterSaleSendInfo.receivedProvinceName}} {{orderAfterSaleSendInfo.receivedCityName}} {{orderAfterSaleSendInfo.receivedAreaName}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
+                            <span>{{orderAfterSaleSendInfo.sendName}} / {{orderAfterSaleSendInfo.sendPhone}}</span>
+                            <span>{{orderAfterSaleSendInfo.sendProvinceName}} {{orderAfterSaleSendInfo.sendCityName}} {{orderAfterSaleSendInfo.sendAreaName}} {{orderAfterSaleSendInfo.sendDetail}} </span>
                         </p>
                     </div>
                     <el-table
@@ -388,6 +388,9 @@ export default {
         cid() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
             return shopInfo.id;
+        },
+        orderSendReceivedAddress() {
+            return this.sendInfoMap && this.sendInfoMap.returnSendInfo && this.sendInfoMap.returnSendInfo[0] && this.sendInfoMap.returnSendInfo[0].orderSendReceivedAddress || {}
         }
     },
     created() {
@@ -469,6 +472,9 @@ export default {
         orderAfterSaleSendInfo: {
             type: Object,
             default: {}
+        },
+        sendInfoMap: {
+
         }
     },
     components: {

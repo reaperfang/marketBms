@@ -937,7 +937,7 @@ export default {
             }
         };
         return {
-            specRadio:0,//商品规格信息，1:单一规格，2:多规格
+            specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
                     costPrice:"",
                     salePrice:"",
@@ -1160,7 +1160,7 @@ export default {
         document.querySelector('body').addEventListener('click', function(e) {
             //e.stopPropagation()
             this.hideFenlei = false
-            if(this.specRadio===2){//多规格
+            if(this.specRadio===1){//多规格
             if(e.target.parentNode.parentNode.className != 'add-specs') {
                 that.showSpecsList = false
             }
@@ -2856,7 +2856,7 @@ export default {
                         productUnit: this.ruleForm.other ? this.ruleForm.otherUnit : this.ruleForm.productUnit,
                     }
                     let calculationWay
-                if(this.specRadio===1){
+                if(this.specRadio===1){//多规格校验
                     try {
                         this.ruleForm.goodsInfos.forEach((val, index) => {
                             if(val.image_hide) {
@@ -3165,8 +3165,7 @@ export default {
                         
                             obj.goodsInfos = _goodsInfos
                         }else{
-                            this.singleSpec.specs="";
-                            this.singleSpec.fileList=[];
+                            this.singleSpec.specs={"规格":"默认规格"};
                             obj.goodsInfos = this.singleSpec
                         }
                         
@@ -3195,7 +3194,7 @@ export default {
                     }
                     delete params.deliveryWay;
 
-                    console.log(params)
+                    // console.log(params)
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
