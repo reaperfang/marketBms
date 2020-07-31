@@ -740,6 +740,7 @@ export default {
       }
     },
     open() {
+      console.log('isCompleted',isCompleted)
       // const isCompleted = Math.random() * 10  > 5 ? true : false // mock data
       // 是否完成配置
       if (!isCompleted) {
@@ -766,7 +767,7 @@ export default {
           }
         }).catch(error =>{
           this.isOpen = false
-          this.$message.error('保存失败');
+          this.$message.error(error || '保存失败');
           // this.loading = false
         })
       }
