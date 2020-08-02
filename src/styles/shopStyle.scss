@@ -218,6 +218,7 @@ ul.cube {
                         height:100%;
                         vertical-align: baseline;
                         object-fit: contain;
+                        display: block;
                   }
             }
 
@@ -268,6 +269,12 @@ ul.cube {
 
                         &:nth-child(2n) {
                               margin-right: 0;
+                        }
+                        &:nth-child(3) {
+                              margin-bottom:0;
+                        }
+                        &:nth-child(4) {
+                              margin-bottom:0;
                         }
                   }
             }
@@ -330,6 +337,7 @@ ul.cube {
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
+                        margin-bottom: 0;
                   }
 
                   .fill_block3 {
