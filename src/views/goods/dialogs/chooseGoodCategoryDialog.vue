@@ -364,7 +364,7 @@ export default {
     right: 1px;
   }
   .el-input__prefix{
-    top:-11px;
+    top:-12px;
     left:30px;
   }
   .el-icon-arrow-right {
@@ -430,6 +430,16 @@ transform:rotate(45deg);
 border-right:0px;
 border-bottom:0px;
 }
+/deep/ .el-input__inner:focus +.el-input__prefix .inner {
+  border:1px solid #655EFF;
+  border-right:0px;
+  border-bottom:0px;
+}
+/deep/ .el-input__inner:hover +.el-input__prefix .inner {
+  border:1px solid #B6B5C8;
+  border-right:0px;
+  border-bottom:0px;
+}
 .first-cascader,
 .second-cascader {
   float: left;
@@ -476,7 +486,8 @@ border-bottom:0px;
     font-size: 14px;
     color: rgba(68, 67, 75, 1);
   }
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  margin-top:15px;
 }
 .deleteBtn,
 .commonBtn {
