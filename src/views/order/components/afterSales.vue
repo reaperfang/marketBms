@@ -197,9 +197,9 @@ export default {
         },
         computeWidth() {
             if(this.tableData.some(item => item.status == 2)) {
-                return '90'
+                return '100'
             } else {
-                return '50'
+                return '60'
             }
         }
     },
@@ -406,7 +406,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 15px;
+            padding-left: 10px;
         }
     }
 }
@@ -488,6 +488,13 @@ export default {
             color: #655EFF!important;
             background-color: #fff;
         }
+    }
+    /deep/ .el-table .cell {
+        padding-left: 0;
+        padding-right: 20px;
+    }
+    /deep/ .input-with-select .el-input-group__prepend {
+        background-color: #fff;
     }
 </style>
 

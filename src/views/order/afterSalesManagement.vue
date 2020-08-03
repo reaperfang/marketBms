@@ -105,7 +105,7 @@
                 <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
-                            <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push(`/order/afterSalesDetails?id=${scope.row.id}&afterSale=true`)">查看</span>
                             <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
                             <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
                             <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 && scope.row.deliveryWay == 1">查看物流</span>
@@ -210,13 +210,13 @@ export default {
     computed: {
         computeWidth() {
             if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && (item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0)) && item.orderAfterSaleStatus == 2)) {
-                return '222'
+                return '232'
             } else if(this.tableData.some(item => item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0))){
-                return '120'
+                return '130'
             } else if(this.tableData.some(item => item.orderAfterSaleStatus == 0 || item.orderAfterSaleStatus == 2)){
-                return '90'
+                return '100'
             } else {
-                return '50'
+                return '60'
             }
         }
     },
@@ -519,7 +519,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 15px;
+            padding-left: 10px;
         }
     }
 }
@@ -576,6 +576,13 @@ export default {
         color: #655EFF!important;
         background-color: #fff;
     }
+}
+/deep/ .el-table .cell {
+    padding-left: 0;
+    padding-right: 20px;
+}
+/deep/ .input-with-select .el-input-group__prepend {
+    background-color: #fff;
 }
 </style>
 

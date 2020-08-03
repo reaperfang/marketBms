@@ -481,9 +481,11 @@ export default {
   methods: {
     // 获取发货地址
     getDeliveryAddress() {
-      // addressId address
-      // this.address = 'test'
-      // this.addressId = 1
+      this._apis.set.getAddressDefaultSender().then((response) => {
+        this.address = `${response.address} ${response.addressDetail}`
+      }).catch((err) => {
+        this.$message.error(err || '数据获取失败')
+      })
     },
     handleRepeatCycleChange(val) {
       console.log('---val--', val)
@@ -740,6 +742,7 @@ export default {
       }
     },
     open() {
+      console.log('isCompleted',isCompleted)
       // const isCompleted = Math.random() * 10  > 5 ? true : false // mock data
       // 是否完成配置
       if (!isCompleted) {
@@ -766,7 +769,7 @@ export default {
           }
         }).catch(error =>{
           this.isOpen = false
-          this.$message.error('保存失败');
+          this.$message.error(error || '保存失败');
           // this.loading = false
         })
       }

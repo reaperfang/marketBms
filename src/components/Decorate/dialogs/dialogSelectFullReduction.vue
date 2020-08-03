@@ -16,8 +16,8 @@
             <el-input v-model="ruleForm.name" placeholder="请输入活动名称" clearable></el-input>
           </el-form-item>
           <el-form-item label prop="name">
-            <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">搜 索</el-button>
-            <el-button @click="startIndex = 1;ruleForm.startIndex = 1;fetch($event, true)">刷 新</el-button>
+            <el-button type="primary" @click="search">搜 索</el-button>
+            <el-button @click="refresh">刷 新</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -81,7 +81,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="Number(startIndex) || 1"
+          :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
@@ -111,15 +111,9 @@ export default {
     };
   },
   methods: {
-    fetch(ev, loadAll) {
+    fetch() {
       this.loading = true;
-      let tempForm = {};
-      if(loadAll) {
-        tempForm = {...this.ruleForm};
-        tempForm.name = '';
-        this.ruleForm.name = '';
-      }
-      this._apis.shop.getFullReductionList(loadAll? tempForm: this.ruleForm).then((response)=>{
+      this._apis.shop.getFullReductionList(this.ruleForm).then((response)=>{
         this.tableData = response.list;
         this.total = response.total;
         this.loading = false;

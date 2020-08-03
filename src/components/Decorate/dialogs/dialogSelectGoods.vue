@@ -27,8 +27,8 @@
                 <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable style="width:300px"></el-input>
               </el-form-item> 
               <el-form-item label prop="name">
-                <el-button type="primary" @click="startIndex = 1;ruleForm.startIndex = 1;fetch()">查 询</el-button>
-                <el-button @click="startIndex = 1;ruleForm.startIndex = 1;fetch($event, true)">刷 新</el-button>
+                <el-button type="primary" @click="search">查 询</el-button>
+                <el-button @click="seletedClassify=null;refresh()">刷 新</el-button>
               </el-form-item>
           </div>
         </el-form>
@@ -90,7 +90,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="Number(startIndex) || 1"
+          :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
@@ -137,23 +137,15 @@ export default {
   },
   methods: {
 
-    fetch(ev, loadAll) {
+    fetch() {
       this.loading = true;
-
-      let tempForm = {};
-      if(loadAll) {
-        tempForm = {...this.ruleForm};
-        tempForm.name = '';
-        this.ruleForm.name = '';
-      }
-
       let params = {};
       if(this.seletedClassify && typeof this.seletedClassify === 'string') {
-        params = Object.assign(loadAll? tempForm: this.ruleForm, {
+        params = Object.assign(this.ruleForm, {
           productCatalogInfoId: this.seletedClassify || ''
         })
       }else{
-        params = loadAll? tempForm: this.ruleForm;
+        params = this.ruleForm;
         if(!!params.productCatalogInfoId) {
           delete params.productCatalogInfoId;
         }

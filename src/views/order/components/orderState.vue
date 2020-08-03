@@ -51,7 +51,7 @@
                     <p>用户选择货到付款，您需要自行安排配送和收款。</p>
                     <div class="button-box">
                         <el-button @click="closeOrder">关闭订单</el-button>
-                        <el-button v-if="!authHide" type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -70,7 +70,7 @@
                     <p>部分发货</p>
                     <div class="button-box">
                         <!--<el-button @click="closeOrder">关闭订单</el-button>-->
-                        <el-button v-if="!authHide" type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -169,7 +169,7 @@
                     <p>待发货</p>
                     <div class="button-box">
                         <el-button @click="closeOrder">关闭订单</el-button>
-                        <el-button v-if="!authHide" type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -188,7 +188,7 @@
                     <p>部分发货</p>
                     <div class="button-box">
                         <!--<el-button @click="closeOrder">关闭订单</el-button>-->
-                        <el-button v-if="!authHide" type="primary" @click="$router.push('/order/deliverGoods?id=' + $route.query.id)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
                     </div>
                 </div>
             </template>

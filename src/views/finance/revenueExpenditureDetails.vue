@@ -89,13 +89,14 @@
           label="交易流水号"
           :render-header="renderTradeDetailSn"
           :show-overflow-tooltip="true"
-          style="text-align:left;"
+          align="left"
           >
         </el-table-column>
         <el-table-column
           prop="tradeType"
           label="收支类型"
-          :render-header="renderTradeTypen">
+          :render-header="renderTradeTypen"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.tradeType ? '支出' : '收入' }}
           </template>
@@ -103,7 +104,8 @@
         <el-table-column
           prop="businessType"
           label="业务类型"
-          :render-header="renderBusinessType">
+          :render-header="renderBusinessType"
+          align="center">
           <template slot-scope="scope">
             {{rebusinessTypes[scope.row.businessType] ? rebusinessTypes[scope.row.businessType].label : ''}}
           </template>
@@ -112,26 +114,31 @@
           prop="relationSn"
           label="关联单据编号"
           :render-header="renderRelationSn"
-          :show-overflow-tooltip="true">
+          :show-overflow-tooltip="true"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="payWay"
-          label="支付方式">
+          label="支付方式"
+          align="center">
           <template slot-scope="scope">
             {{payTypes[scope.row.payWay+1].label}}
           </template>
         </el-table-column>
         <el-table-column
           prop="wechatTradeSn"
-          label="第三方流水号">
+          label="第三方流水号"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="amount"
-          label="交易金额（元）">
+          label="交易金额（元）"
+          align="right">
         </el-table-column>
         <el-table-column
           prop="isInvoice"
-          label="开票">
+          label="开票"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.isInvoice ? '是' : '否' }}
           </template>
@@ -141,6 +148,7 @@
           label="交易时间"
           sortable="custom"
           fixed="right"
+          align="right"
           style="white-space:nowrap;"
           >
         </el-table-column>
@@ -428,9 +436,6 @@ export default {
   margin-top:20px;
 }
 
-/deep/.el-table .cell{
-  text-align: center;
-}
 
 // /deep/.el-table .el-table_1_column_1{
 //   text-align: left;
