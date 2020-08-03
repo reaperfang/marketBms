@@ -21,7 +21,7 @@
     </div>
     <div class="table" v-calcHeight="300">
       <p>微页面（共{{total || 0}}个）</p>
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           :selectable='selectInit'
@@ -300,8 +300,33 @@ export default {
   }
 }
 /deep/ thead th{
-  background: rgba(230,228,255,1)!important;
-  color:#837DFF!important;
+  background: #f6f7fa;
+  color:#44434B!important;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+  text-align: center;
+  &:nth-child(2) {
+      text-align: left;
+      padding-left: 20px;
+  }
+}
+/deep/ .el-table td{
+  &:nth-child(5) {
+    text-align: right;
+    padding-right: 50px;
+  }
+  &:nth-child(6) {
+    text-align: right;
+    padding-right: 50px;
+  }
+}
+.table-btn{
+  padding-right: 5px;
+  border-right: 1px solid #dadae3;
+  margin-right: 5px;
+  &:last-child{
+    border-right: none;
+  }
 }
 .index_page_flag{
   display: inline-block;
