@@ -56,7 +56,7 @@
       v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'createTime', order: 'descending'}"
         @sort-change="changeSort"
         >
@@ -87,7 +87,8 @@
         <el-table-column
           prop="createTime"
           label="操作时间"
-          sortable = "custom">
+          sortable = "custom"
+          align="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -99,7 +100,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
     </div>
@@ -137,6 +139,12 @@ export default {
       currentData:{},
       dialogVisible:false
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: {},
   computed:{

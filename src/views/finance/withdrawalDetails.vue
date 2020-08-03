@@ -67,7 +67,7 @@
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'applyTime', order: 'descending'}"
         @sort-change="changeSort"
         @selection-change="handleSelectionChange"
@@ -90,7 +90,7 @@
         </el-table-column>
         <el-table-column
           prop="memberSn"
-          align="right"
+          align="center"
           label="用户ID">
         </el-table-column>
         <el-table-column
@@ -141,7 +141,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
     </div>
@@ -201,6 +202,12 @@ export default {
       multipleSelection:[],
       loading:true
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: { },
   computed:{
