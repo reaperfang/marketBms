@@ -148,6 +148,13 @@ export default [
         hidden: true,
         meta: { title: '发货成功', noCache: true, tabTitle: '订单处理' , navType:5},
       },
+      {
+        path: 'printPreview',
+        component: () => import('@/views/order/printPreview'),
+        name: 'printPreview',
+        hidden: true,
+        meta: { title: '打印配送单小票', noCache: true, tabTitle: '订单处理' , navType:5},
+      },
       // {
       //   path: 'quickDelivery',
       //   component: () => import('@/views/order/quickDelivery'),

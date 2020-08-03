@@ -10,7 +10,7 @@
           <span class="svg-container svg-container_login">
             <img src="@/assets/images/icon_username.png">
           </span>
-          <el-input v-model="loginForm.userName" name="userName" type="text" placeholder="用户名" style="border:none;"  class="login_input"/>
+          <el-input v-model="loginForm.userName" name="userName" type="text" placeholder="账号" style="border:none;"  class="login_input"/>
         </el-form-item>
 
         <el-form-item prop="password">
@@ -26,7 +26,7 @@
         <p style="color:red">{{errorMsg}}</p>
         <el-form-item class="remember">
           <span>
-            <!-- <el-checkbox v-model="checked">记住用户名</el-checkbox>             -->
+            <!-- <el-checkbox v-model="checked">记住账号</el-checkbox>             -->
           </span>
           <!-- <span @click="_routeTo('profile/passwordChange')">修改密码</span> -->
         </el-form-item>
