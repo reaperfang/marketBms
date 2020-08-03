@@ -76,11 +76,12 @@
           <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '收支明细', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
       </div>
+      <!-- background:'#D0D6E4', -->
       <el-table
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="sortTable"
         >
@@ -162,7 +163,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
       <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component> 
@@ -202,8 +204,14 @@ export default {
       dataList:[ ],
       total:0,
       loading:true,
-      types:[]
+      types:[],
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: {
 
@@ -435,15 +443,4 @@ export default {
   width: 100%; 
   margin-top:20px;
 }
-
-
-// /deep/.el-table .el-table_1_column_1{
-//   text-align: left;
-//   width:200px;
-// }
-
-// /deep/.el-table .el-table_1_column_9{
-//   width:200px;
-//   white-space: pre-line;
-// }
 </style>

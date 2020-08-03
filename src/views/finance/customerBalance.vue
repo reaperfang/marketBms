@@ -46,17 +46,19 @@
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="changeSort"
         >
         <el-table-column
           prop="tradeDetailSn"
-          label="交易流水号">
+          label="交易流水号"
+          :show-overflow-tooltip="true">
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
+          :show-overflow-tooltip="true"
           :render-header="renderRelationSn">
         </el-table-column>
         <el-table-column
@@ -76,19 +78,22 @@
         </el-table-column>
         <el-table-column
           prop="changeAmount"
-          label="变动金额（元）">
+          label="变动金额（元）"
+          align="right">
           <template slot-scope="scope">
             {{scope.row.changeAmount > 0 ? '+'+scope.row.changeAmount : scope.row.changeAmount}}
           </template>
         </el-table-column>
         <el-table-column
           prop="surplusAmount"
-          label="剩余金额（元）">
+          label="剩余金额（元）"
+          align="right">
         </el-table-column>
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable = "custom">
+          sortable = "custom"
+          align="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -100,7 +105,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
       <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" ></exportTipDialog>
@@ -136,6 +142,12 @@ export default {
       dialogVisible:false,
       currentData:{}
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: { },
   computed:{
