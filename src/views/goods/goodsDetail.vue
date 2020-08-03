@@ -214,23 +214,23 @@
                     </el-tooltip>
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
                 </el-form-item>
-                <el-form-item label="成本价" prop="costPrice">
-                    <el-input v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
+                <el-form-item  label="成本价" prop="costPrice">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
                 </el-form-item>
                 <el-form-item label="售卖价" prop="salePrice">
-                    <el-input v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" prop="stock">
-                    <el-input v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
                 </el-form-item>
                 <el-form-item label="库存预警" prop="warningStock">
-                    <el-input v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
                 </el-form-item>
                 <el-form-item label="重量（Kg）" prop="weight">
-                    <el-input v-model="singleSpec.weight" placeholder="请输入重量（kg）"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.weight" placeholder="请输入重量（kg）"></el-input>
                 </el-form-item>
                 <el-form-item label="体积（m³）" prop="volume">
-                    <el-input v-model="singleSpec.volume" placeholder="请输入体积（m³）"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.volume" placeholder="请输入体积（m³）"></el-input>
                 </el-form-item>
              </div>
             </template>
@@ -829,14 +829,14 @@ export default {
         var singleSpecValidator = (rule,value,callback) =>{
             switch(rule.field){
                 case "costPrice":
-                     if(this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                     if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字')); 
                      }else{
                         callback();
                      }
                      break;
                 case "salePrice":
-                    if(this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
                     }else if(this.singleSpec.costPrice > this.singleSpec.salePrice){
                         callback(new Error('售卖价不得低于成本价'));
@@ -846,7 +846,7 @@ export default {
                     break;
                 case "stock":
                 case  "warningStock":
-                    if(this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -854,7 +854,7 @@ export default {
                     break;
                 case "weight":
                 case "volume":
-                    if(this.singleSpec[rule.field] < 0 || !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -1408,7 +1408,6 @@ export default {
             this.currentData=this.goodCategoryNames;
         },
         getProductCategoryInfoId(data){
-            // debugger;
             this.ruleForm.productCategoryInfoId=data.child.id;
             this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
@@ -2538,10 +2537,7 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                console.log(res)  
-                // debugger;
-                this.specRadio = res.specsType;
-                // debugger;             
+                this.specRadio = res.specsType;        
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
