@@ -6,16 +6,14 @@
     </div>
     <span class="msgInfo">选择常用类目</span>
     <div>
-      <el-cascader
-        popper-class="leimu-popper"
-        v-model="commonCat"
-        :options="commonCategories"
-        :props="{ multiple: false, checkStrictly: true }"
-        placeholder="请选择"
-        clearable
-        filterable
-        @change="itemCatHandleChange"
-      ></el-cascader>
+      <el-select v-model="commonValue" @change="itemCatHandleChange" clearable placeholder="请选择">
+        <el-option
+          v-for="item in commonCategories"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
       <span class="deleteBtn" @click="delCommonCate()">删除</span>
       <div class="category-display">
         <span>您当前选择的是：{{itemCatText}}</span>
@@ -35,7 +33,7 @@
                     v-if="item.isHasChild"
                     class="el-icon-arrow-right"
                     @click="showSecondLevel(item)"
-                  ></i> -->
+                  ></i>-->
                 </div>
               </template>
             </div>
@@ -74,26 +72,26 @@ export default {
   data() {
     return {
       radio: 0,
-      itemCatText: "",//当前所选类目
-      commonCategories: [],//常用类目
+      itemCatText: "", //当前所选类目
+      commonCategories: [], //常用类目
       showFooter: false,
       itemCatList: [],
       firstTpmList: [],
       secondCascader: false,
-      secondItemCatList: [],//二级级联框
+      secondItemCatList: [], //二级级联框
       secondTmpList: [],
-      firstContent: "",//一级级联框输入的内容
-      secondContent: "",//二级级联框输入内容
-      commonCat: {},//
-      isWarning:false,
-      currentCategory:{},//当前选中的类目
-      operateCategoryList:[],//后台获取的所有类目
-      selectedCateId:''//选中的常用类目id
+      firstContent: "", //一级级联框输入的内容
+      secondContent: "", //二级级联框输入内容
+      commonCat: {}, //记录级联列表中选中的对象
+      commonValue: "", //常用类目下拉框中当前内容
+      isWarning: false,
+      currentCategory: {}, //当前选中的类目
+      operateCategoryList: [], //后台获取的所有类目
     };
   },
   created() {
+    this.itemCatText = this.data;
     this.getOperateCategoryList();
-   
   },
   watch: {},
   computed: {
@@ -103,39 +101,43 @@ export default {
       },
       set(val) {
         this.$emit("update:dialogVisible", val);
-      }
+      },
     },
-    cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-            return shopInfo.id
-        }
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    },
   },
   methods: {
     //查询常用类目
-    getCommonCategoryList(){
-      this.commonCategories =[];
-      this.commonCat={};
-        this._apis.goods.getProCommonCategory({cid:this.cid})
-        .then(res=>{
-          if(res&&res.length>0){
-            res.forEach((item,index)=>{
-               let temp = this.operateCategoryList.find(data=>data.id===item.categoryId);
-               let _temp = JSON.parse(JSON.stringify(temp));
-               if(_temp.parentId && _temp.parentId>0){
-                  let parentTemp = this.operateCategoryList.find(data=>data.id===_temp.parentId);
-                  let _parentTemp =JSON.parse(JSON.stringify(parentTemp));
-                     _parentTemp.child = _temp;
-                  let elem = {
-                    value:_temp.id,
-                    label:`${_parentTemp.name}->${_temp.name}`
-                  } 
-                  this.commonCategories.push(elem)
-               }   
+    getCommonCategoryList() {
+      this.commonCategories = [];
+      // this.commonCat = {};
+      this._apis.goods
+        .getProCommonCategory({ cid: this.cid })
+        .then((res) => {
+          if (res && res.length > 0) {
+            res.forEach((item, index) => {
+              let temp = this.operateCategoryList.find(
+                (data) => data.id === item.categoryId
+              );
+              let _temp = JSON.parse(JSON.stringify(temp));
+              if (_temp.parentId && _temp.parentId > 0) {
+                let parentTemp = this.operateCategoryList.find(
+                  (data) => data.id === _temp.parentId
+                );
+                let _parentTemp = JSON.parse(JSON.stringify(parentTemp));
+                _parentTemp.child = _temp;
+                let elem = {
+                  value: _temp.id,
+                  label: `${_parentTemp.name}->${_temp.name}`,
+                };
+                this.commonCategories.push(elem);
+              }
             });
           }
-        }).catch(err=>{
-
-        });
+        })
+        .catch((err) => {});
     },
     searchCategory(key) {
       let reg,
@@ -177,7 +179,7 @@ export default {
       this.currentCategory = data;
       this.secondContent = data.categoryName;
       let parentCat = this.operateCategoryList.find(
-        val => val.id == data.parentId
+        (val) => val.id == data.parentId
       );
       parentCat.child = data;
       this.commonCat = parentCat;
@@ -195,44 +197,50 @@ export default {
     },
     setCommonCate() {
       if (this.commonCat && this.commonCat.child) {
-        this.isWarning=false;
+        this.isWarning = false;
         let data = {
-          cid:this.cid,
-          categoryId:this.currentCategory.id
-        }
-        this._apis.goods.addProCommonCategory(data)
-        .then(res=>{
-          this.getCommonCategoryList();
-        })
-        .catch(err=>{
+          cid: this.cid,
+          categoryId: this.currentCategory.id,
+        };
+        this._apis.goods
+          .addProCommonCategory(data)
+          .then((res) => {
+            this.getCommonCategoryList();
+          })
+          .catch((err) => {
             this.$message({
-                message: err,
-                type: 'warning'
-                });
-        })
+              message: err,
+              type: "warning",
+            });
+          });
         //调用设置常用类目的接口
       } else {
-        this.isWarning=true;
-        setTimeout(()=>{
-          this.isWarning=false;
-        },3*1000);
+        this.isWarning = true;
+        setTimeout(() => {
+          this.isWarning = false;
+        }, 3 * 1000);
       }
     },
-    delCommonCate(){
-        this._apis.goods.delProCommonCategory({cid:this.cid,categoryId:this.selectedCateId})
-        .then(res=>{
+    delCommonCate() {
+      this._apis.goods
+        .delProCommonCategory({
+          cid: this.cid,
+          categoryId: this.commonValue,
+        })
+        .then((res) => {
           this.$message({
-                message: "删除成功",
-                type: 'success'
-                });
-        this.getCommonCategoryList();
+            message: "删除成功",
+            type: "success",
+          });
+          this.commonValue = ''
+          this.getCommonCategoryList();
         })
-        .catch(err=>{
-            this.$message({
-                message: err,
-                type: 'warning'
-                });
-        })
+        .catch((err) => {
+          this.$message({
+            message: err,
+            type: "warning",
+          });
+        });
     },
     submit() {
       console.log(this.commonCat);
@@ -240,12 +248,12 @@ export default {
         //关闭窗口，将值传到添加商品页面
         this.$emit("getProductCategoryInfoId", this.commonCat);
         this.visible = false;
-        this.isWarning=false;
+        this.isWarning = false;
       } else {
-        this.isWarning=true;
-        setTimeout(()=>{
-          this.isWarning=false;
-        },3*1000);
+        this.isWarning = true;
+        setTimeout(() => {
+          this.isWarning = false;
+        }, 3 * 1000);
       }
     },
     // 获取商品类目列表
@@ -253,13 +261,13 @@ export default {
       return new Promise((resolve, reject) => {
         this._apis.goodsOperate
           .fetchCategoryList({ enable: 1 })
-          .then(res => {
+          .then((res) => {
             let arr = this.transTreeData(res, 0);
             console.log(arr);
-            arr.forEach(val => {
+            arr.forEach((val) => {
               if (val.children && val.children.length > 0) {
                 val.isHasChild = true;
-                val.children.forEach(item => (item.children = null));
+                val.children.forEach((item) => (item.children = null));
               } else {
                 val.isHasChild = false;
               }
@@ -268,10 +276,10 @@ export default {
             this.itemCatList = arr;
             this.firstCatList = arr;
             this.searchCategory("first");
-            this.getCommonCategoryList();//获取常用类目
+            this.getCommonCategoryList(); //获取常用类目
             resolve(res.list);
           })
-          .catch(error => {
+          .catch((error) => {
             reject(error);
           });
       });
@@ -290,7 +298,7 @@ export default {
             image: data[i].image,
             enable: data[i].enable,
             label: data[i].name,
-            value: data[i].id
+            value: data[i].id,
           };
           temp = this.transTreeData(data, data[i].id);
           if (temp.length > 0) {
@@ -304,7 +312,7 @@ export default {
     // 获取类目
     getCategoryInfoIds(arr, id) {
       try {
-        let parentId = this.operateCategoryList.find(val => val.id == id)
+        let parentId = this.operateCategoryList.find((val) => val.id == id);
         arr.unshift(id);
         if (parentId && parentId != 0) {
           this.getCategoryInfoIds(arr, parentId);
@@ -315,31 +323,29 @@ export default {
     },
 
     itemCatHandleChange(value) {
-      let _value = [...value];
-      this.selectedCateId=_value[0];
-      let temp = this.operateCategoryList.find(data=>data.id===_value[0]);
-      temp.categoryName=temp.name;
-      if(temp.parentId && temp.parentId>0){
-          let parentTemp = this.operateCategoryList.find(data=>data.id===temp.parentId);
-           parentTemp.child = temp;
-           this.commonCat=parentTemp;
+      let temp = this.operateCategoryList.find((data) => data.id === value);
+      temp.categoryName = temp.name;
+      if (temp.parentId && temp.parentId > 0) {
+        let parentTemp = this.operateCategoryList.find(
+          (data) => data.id === temp.parentId
+        );
+        parentTemp.child = temp;
+        this.commonCat = parentTemp;
       }
-      
-    
-    }
     },
-  
+  },
+
   props: {
     data: {},
     dialogVisible: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
     DialogBase,
-    Zform
-  }
+    Zform,
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -371,27 +377,27 @@ export default {
   }
 }
 .warning-msg {
-  display:flex;
+  display: flex;
   align-items: center;
-  position:absolute;
-  top:0px;
-  left:203px;
+  position: absolute;
+  top: 0px;
+  left: 203px;
   width: 400px;
   height: 54px;
   background: rgba(253, 147, 43, 0.1);
   border-radius: 4px;
   border: 1px solid rgba(253, 147, 43, 1);
-  i{
+  i {
     display: inline-block;
-    width:32px;
-    height:32px;
-    background:url('../../../assets/images/goods/warning-icon.png');
-    margin-left:80px;
-    margin-right:16px;
+    width: 32px;
+    height: 32px;
+    background: url("../../../assets/images/goods/warning-icon.png");
+    margin-left: 80px;
+    margin-right: 16px;
   }
-  span{
-    font-size:18px;
-    color:rgba(68,67,75,1);
+  span {
+    font-size: 18px;
+    color: rgba(68, 67, 75, 1);
   }
 }
 .msgInfo {
@@ -411,7 +417,7 @@ export default {
   .first-input,
   .second-input {
     width: 210px;
-    border-bottom:none;
+    border-bottom: none;
   }
   .cascader-content {
     overflow-y: auto;
@@ -442,8 +448,8 @@ export default {
     }
   }
 }
-.second-cascader .cascader-content{
-   border-left:none;
+.second-cascader .cascader-content {
+  border-left: none;
 }
 .category-display {
   &:first-child {
