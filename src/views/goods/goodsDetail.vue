@@ -1405,6 +1405,7 @@ export default {
         addGoodCategory(){
             this.currentDialog = 'chooseGoodCategoryDialog';
             this.dialogVisible = true;
+            this.currentData=this.goodCategoryNames;
         },
         getProductCategoryInfoId(data){
             // debugger;
