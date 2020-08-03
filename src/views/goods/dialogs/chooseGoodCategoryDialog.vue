@@ -20,8 +20,9 @@
         <span class="commonBtn" @click="setCommonCate">设为常用类目</span>
       </div>
       <div class="two-cascader">
-        <div class="first-cascader">
-          <el-input class="first-input" v-model="firstContent">
+        <div class="first-cascader ">
+          <el-input class="first-input tip" v-model="firstContent">
+            <i slot="prefix" class="inner"></i>
             <i slot="suffix" class="el-input__icon el-icon-search" @click="searchCategory('first')"></i>
           </el-input>
           <div class="cascader-content">
@@ -362,6 +363,10 @@ export default {
   .el-input__suffix {
     right: 1px;
   }
+  .el-input__prefix{
+    top:-11px;
+    left:30px;
+  }
   .el-icon-arrow-right {
     position: absolute;
     top: 10px;
@@ -410,7 +415,21 @@ export default {
     float: left;
   }
 }
-
+/* 提示框小角的小方块 */
+.inner{
+display:inline-block;
+background-color:#FFF;
+width:10px;
+height:10px;
+border:1px solid rgba(208,214,228,1);
+/* 旋转小方块并调整位置形成尖角 */
+position: relative;
+left:30%;
+top:6px;
+transform:rotate(45deg);
+border-right:0px;
+border-bottom:0px;
+}
 .first-cascader,
 .second-cascader {
   float: left;
