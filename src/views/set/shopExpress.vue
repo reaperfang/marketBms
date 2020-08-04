@@ -485,6 +485,7 @@ export default {
         this.address = `${response.address} ${response.addressDetail}`
         this.ruleForm.lng = response.longitude
         this.ruleForm.lat = response.latitude
+        this.addressId = response.id
       }).catch((err) => {
         this.$message.error(err || '数据获取失败')
       })

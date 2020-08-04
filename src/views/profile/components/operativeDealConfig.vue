@@ -162,7 +162,7 @@ export default {
         orderBy: "create_time desc",
         appid: 52
       }).then(data => {
-        if (data && data.length > 0) {
+        if (data && data.list.length > 0) {
           this.isHasSms = true
         } else {
           this.isHasSms = false
