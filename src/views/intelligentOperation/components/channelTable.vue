@@ -4,14 +4,15 @@
         <el-table
             :data="listObj.list"
             style="width: 100%"
-            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+            :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
             :default-sort = "{prop: 'changeRatio', order: 'descending'}"
             @sort-change="changeSort"
         >
             <el-table-column
                 width="180"
                 type="index"
-                label="排序">
+                label="排序"
+                align="left">
             </el-table-column>
             <el-table-column
                 prop="chanelName"
@@ -34,7 +35,7 @@
             <el-table-column
                 prop="changeRatio"
                 label="支付转化率"
-                align="center"
+                align="right"
                 sortable
             >
             <template slot-scope="scope">
@@ -50,7 +51,8 @@
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size="pageSize"
                 layout="sizes, prev, pager, next"
-                :total="listObj.totalSize">
+                :total="listObj.totalSize"
+                :background="background">
             </el-pagination>
         </div>
     </div>
@@ -61,7 +63,7 @@ import TableBase from "@/components/TableBase";
 export default {
     name: "channelTable",
     extends: TableBase,
-    props:['listObj'],
+    props:['listObj','background'],
     data() {
         return {
             pageSize:10,

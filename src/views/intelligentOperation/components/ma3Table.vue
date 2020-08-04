@@ -4,12 +4,13 @@
     <el-table
       :data="listObj.members"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       >
       <el-table-column
         type="index"
-        label="排序">
+        label="排序"
+        align="left">
       </el-table-column>
       <el-table-column
         prop="id"
@@ -53,6 +54,7 @@
       <el-table-column
         prop="scoreTradeCount"
         label="积分消耗次数（总）"
+        align="right"
       >
       </el-table-column>
     </el-table>
@@ -64,7 +66,8 @@
         :page-sizes="[10, 20, 30, 40]"
         :page-size="pageSize"
         layout="sizes, prev, pager, next"
-        :total="listObj.totalSize">
+        :total="listObj.totalSize"
+        :background="background">
       </el-pagination>
     </div>
   </div>
@@ -75,7 +78,7 @@ import TableBase from "@/components/TableBase";
 export default {
   name: "mcTable",
   extends: TableBase,
-  props:['listObj','totalCount'],
+  props:['listObj','totalCount','background'],
   data() {
     return {
       pageSize:10,
