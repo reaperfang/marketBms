@@ -59,7 +59,7 @@ export default {
     components:{DialogPrintList},
     data() {
         return {
-            currentDialog:'',
+            //打印配送单
             printDialogVisible:false,
             printRadio:null,
             printPathV:'',
@@ -88,6 +88,7 @@ export default {
         }
     },
     methods:{
+        //打印配送单
         handlePrintListOpen(pagePath,query){
             // console.log(pagePath, query)
             this.printPathV = pagePath

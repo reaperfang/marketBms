@@ -144,11 +144,15 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
+        <!-- 打印配送单dialog -->
+        <DialogPrintList :printDialogVisible.sync="printDialogVisible" :printPath="printPathV" :printQuery="printQuery" @closeDialogVisible="closeDialogVisible()"></DialogPrintList>
+    
     </div>
 </template>
 <script>
 import Pagination from '@/components/Pagination'
 import DeliveryMethod from "./deliveryMethod"; //配送方式组件
+import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 
 export default {
@@ -184,7 +188,12 @@ export default {
             tableData: [],
             loading: false,
             checkedAll: false,
-            isIndeterminate: false
+            isIndeterminate: false,
+            //打印配送单
+            printDialogVisible:false,
+            printRadio:null,
+            printPathV:'',
+            printQuery:{}
         }
     },
     created() {
@@ -255,6 +264,7 @@ export default {
             }
             this.$router.push('/order/afterSaleBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderAfterSaleId).join(','))
         },
+        //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择需要打印配送单的售后单'})
@@ -262,7 +272,17 @@ export default {
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
 
-            this.$router.push('/order/printDistributionSheet?ids=' + ids + '&afterSale=' + true)
+            // this.$router.push('/order/printDistributionSheet?ids=' + ids + '&afterSale=' + true)
+            this.handlePrintListOpen('/order/printDistributionSheet',{ids: ids, afterSale: true})
+        },
+        handlePrintListOpen(pagePath,query){
+            // console.log(pagePath, query)
+            this.printPathV = pagePath
+            this.printQuery = query
+            this.printDialogVisible=true
+        },
+        closeDialogVisible(){
+            this.printDialogVisible=false
         },
         batchPrintElectronicForm() {
             if(!this.multipleSelection.length) {
@@ -335,7 +355,8 @@ export default {
     },
     components: {
         Pagination,
-        DeliveryMethod
+        DeliveryMethod,
+        DialogPrintList
     }
 }
 </script>

@@ -178,11 +178,14 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
+        <!-- 打印配送单dialog -->
+        <DialogPrintList :printDialogVisible.sync="printDialogVisible" :printPath="printPathV" :printQuery="printQuery" @closeDialogVisible="closeDialogVisible()"></DialogPrintList>
     </div>
 </template>
 <script>
 import Pagination from '@/components/Pagination'
 import DeliveryMethod from "./deliveryMethod"; //配送方式组件
+import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 
 export default {
@@ -221,7 +224,12 @@ export default {
             express: false,
             checkedAll: false,
             isIndeterminate: false,
-            isOrderAutoSend: false
+            isOrderAutoSend: false,
+            //打印配送单
+            printDialogVisible:false,
+            printRadio:null,
+            printPathV:'',
+            printQuery:{}
         }
     },
     filters: {
@@ -378,6 +386,7 @@ export default {
 
             this.$router.push('/order/printingElectronicForm?ids=' + ids)
         },
+        //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印配送单的单据。'})
@@ -389,7 +398,17 @@ export default {
             }
             let ids = this.multipleSelection.map(val => val.id).join(',')
 
-            this.$router.push('/order/printDistributionSheet?ids=' + ids)
+            // this.$router.push('/order/printDistributionSheet?ids=' + ids)
+            this.handlePrintListOpen('/order/printDistributionSheet',{ids: ids})
+        },
+        handlePrintListOpen(pagePath,query){
+            // console.log(pagePath, query)
+            this.printPathV = pagePath
+            this.printQuery = query
+            this.printDialogVisible=true
+        },
+        closeDialogVisible(){
+            this.printDialogVisible=false
         },
         onSubmit() {
 
@@ -451,7 +470,8 @@ export default {
     },
     components: {
         Pagination,
-        DeliveryMethod
+        DeliveryMethod,
+        DialogPrintList
     }
 }
 </script>
