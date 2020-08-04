@@ -198,10 +198,6 @@
       this.effIndustryList()
       this.fetchList();
       this.preLoadObj = new Image();
-      const shopObj = JSON.parse(localStorage.getItem('shopInfos'));
-      shopObj.id = 51;
-
-      localStorage.setItem('shopInfos', JSON.stringify(shopObj));
     },
     watch: {
       zoomRatio(newValue) {
