@@ -377,12 +377,12 @@
 
       /* 应用模板 */
       apply(item) {
+        this.isLoading = true;
         this._apis.shop.getTemplateInfo({
           pageTemplateId: item.id
         }).then(res1 => {
           if (item.chargeType !== 1) {
             if (res1 === null || res1.status === 2) {
-              return
               this._apis.templatePay.getOrcode({
                 orderSource: 1,
                 orderType: 2,
@@ -397,6 +397,7 @@
                 this.tempInfo = item
               }).finally(() => {this.isLoading = false})
             } else {
+              this.isLoading = false;
               this.confirm({
                 title: '提示',
                 customClass: 'goods-custom',
@@ -419,8 +420,9 @@
                 }).then(() => {
                   this._routeTo('m_templateEdit', {id: item.id});
                 })
-              })
+              }).finally(() => {this.isLoading = false})
             } else {
+              this.isLoading = false;
               this.confirm({
                 title: '提示',
                 customClass: 'goods-custom',
@@ -431,7 +433,7 @@
               })
             }
           }
-        }).finally(() => {this.isLoading = false})
+        }).catch(() => {this.isLoading = false})
       },
       closePay() {
         this.dialogVisible = false
