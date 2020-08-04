@@ -104,7 +104,7 @@
             orderCode: that.qrCodeInfo.orderCode
           }).then(res => {
             if (res.orderStatus === 1) {
-              if(that.intervalFlag && that.time < 60) {
+              if(that.intervalFlag && that.time < 120) {
                 that.time = that.time + 3;
                 that.getPayInfo()
               }else {
@@ -155,7 +155,7 @@
       getIndustries() {
         if(!this.tempInfo.id) return;
          this._apis.goodsOperate.getTemplateIndustries({id: this.tempInfo.id}).then(res => {
-          this.industriesNames = res.industrys;
+          this.industriesNames = res.industrys || [];
         }).catch(error => {
           console.error(error)
          })
