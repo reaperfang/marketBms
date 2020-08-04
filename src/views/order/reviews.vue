@@ -224,11 +224,11 @@ export default {
     computed: {
         computeWidth() {
             if(this.tableData.some(item => item.auditStatus == 1)) {
-                return '120'
+                return '130'
             } else if(this.tableData.some(item => item.auditStatus == 0)){
-                return '90'
+                return '100'
             } else {
-                return '50'
+                return '60'
             }
         }
     },
@@ -454,7 +454,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 15px;
+            padding-left: 10px;
         }
     }
 }
@@ -520,6 +520,10 @@ export default {
         color: #655EFF!important;
         background-color: #fff;
     }
+}
+/deep/ .el-table .cell {
+    padding-left: 0;
+    padding-right: 20px;
 }
 </style>
 

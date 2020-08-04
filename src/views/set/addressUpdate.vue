@@ -141,49 +141,38 @@ export default {
 
   methods: {
     getAddressById(id) {
-      return {
-        id: 1,
-        contactPerson: 'bill', // 联系人
-        mobile: '15712899623', // 手机号
-        sendAddress: '数码庄园', // 联系地址
-        address: '', // 详细地址
-        type: 3, // 地址类型
-        lat: null,
-        lng: null,
-        addressCode: null, // code码
-        province: null, // 省
-        city: null, // 市
-        area: null, // 区
-        defaultDeliveryAddress: 1,
-        defaultReturnAddress: 1
-      }
+      id = +id
+      this._apis.set.getAddressDetail({ id }).then((res)=> {
+        this.handleEchoData(res)
+      }).catch((err) => {
+        this.$message.error(err || '获取数据失败')
+      })
     },
     // 处理编辑时，回显数据
     handleEchoData(data) {
       if (!data) return
       this.isMapChoose = true
-      this.ruleForm.contactPerson = data.contactPerson || null
+      this.ruleForm.contactPerson = data.name || null
       this.ruleForm.mobile = data.mobile || null
-      this.ruleForm.sendAddress = data.sendAddress || ''
-      this.ruleForm.address = data.address || null
+      this.ruleForm.sendAddress = data.address || ''
+      this.ruleForm.address = data.addressDetail || null
       this.ruleForm.type = this.formateEchoAddressType({
-        type: data.type,
-        defaultDeliveryAddress: data.defaultDeliveryAddress,
-        defaultReturnAddress: data.defaultReturnAddress
+        type: data.addressType, // 后端返回数据  0 发货地址 1 退货地址 2 发货地址、退货地址都选中
+        defaultDeliveryAddress: data.isDefaltSenderAddress,
+        defaultReturnAddress: data.isDefaltReturnAddress
       })
-      this.ruleForm.lat = data.lat || null
-      this.ruleForm.lng = data.lng || null
-      this.ruleForm.addressCode = data.addressCode || []
-      this.ruleForm.province = data.province || null
-      this.ruleForm.city = data.city || null
-      this.ruleForm.area = data.area || null
+      this.ruleForm.lat = data.latitude || null
+      this.ruleForm.lng = data.longitude || null
+      this.ruleForm.addressCode =  [data.provinceCode, data.cityCode, data.areaCode] || []
+      this.ruleForm.province = data.provinceName || null
+      this.ruleForm.city = data.cityName || null
+      this.ruleForm.area = data.areaName || null
     },
     init() {
       this.ruleForm.id = this.$route.query && this.$route.query.id
       this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
-        const data = this.getAddressById()
-        this.handleEchoData(data)
+        this.getAddressById(this.ruleForm.id)
       } else {
         this.ruleForm.type.push(1) // 1为勾选发货地址
       }
@@ -191,18 +180,18 @@ export default {
     // 格式化回显地址类型数据
     formateEchoAddressType({ type, defaultDeliveryAddress, defaultReturnAddress }) {
       const arr = []
-      if (type === 3) {
+      if (type === 2) {
         arr.push(1, 2)
         defaultDeliveryAddress && arr.push(3)
         defaultReturnAddress && arr.push(4)
         return arr
       }
-      if (type === 1) {
+      if (type === 0) {
         arr.push(1)
         defaultDeliveryAddress && arr.push(3)
         return arr
       }
-      if (type === 2) {
+      if (type === 1) {
         arr.push(2)
         defaultReturnAddress && arr.push(4)
         return arr
@@ -215,29 +204,52 @@ export default {
       // obj.type 1 发货地址 2 退货地址 3 发货地址、退货地址都选中
       let obj = Object.create(null)
       if (this.hasChecked(1) && this.hasChecked(2)) {
-        obj.type = 3
+        obj.type = 2
         obj.defaultDeliveryAddress = this.hasChecked(3) ? 1 : 0 // 如果存在 3 则为默认发货地址
         obj.defaultReturnAddress = this.hasChecked(4) ? 1 : 0 // 如果存在 4 则为默认收货地址
         return obj
       }
       if (this.hasChecked(1)) {
-        obj.type = 1
+        obj.type = 0
         obj.defaultDeliveryAddress = this.hasChecked(3) ? 1 : 0
         return obj
       }
       if (this.hasChecked(2)) {
-        obj.type = 2
+        obj.type = 1
         obj.defaultReturnAddress = this.hasChecked(4) ? 1 : 0
         return obj
       }
+    },
+    // 格式化请求数据
+    formateReqData(data) {
+      const obj = Object.create(null)
+      if (data) {
+        obj.cid = this.cid
+        obj.id = data.id || null
+        obj.name = data.contactPerson // 联系人姓名
+        obj.mobile = data.mobile // 联系人电话
+        obj.province_name = data.province  // 省名称
+        obj.province_code = data.addressCode[0]// 省编码
+        obj.city_name = data.city // 市名称
+        obj.city_code = data.addressCode[1] // 市编码
+        obj.area_name = data.area // 地区名称
+        obj.area_code = data.addressCode[1] // 地区码
+        obj.longitude = data.lng // 经度
+        obj.latitude = data.lat // 纬度
+        obj.address_type = data.type // 地址类型0:发货地址 1:退货地址 2:发货退货地址
+        obj.is_defalt_sender_address = data.defaultDeliveryAddress
+        obj.is_defalt_return_address = data.defaultReturnAddress
+        obj.address = data.sendAddress
+        obj.address_detail = data.address
+      }
+      return obj
     },
     getReqData() {
       const data = JSON.parse(JSON.stringify(this.ruleForm))
       // 处理地址类型
       const type = this.formateAddressType()
-      console.log(type)
       delete data.type
-      return { data, ...type }
+      return { ...data, ...type }
     },
     hasChecked(val) {
       return this.ruleForm.type.includes(val)
@@ -257,30 +269,46 @@ export default {
       });
     },
     // 处理数据重复问题
-    handleDataRepeatErr(res) {
+    handleDataRepeatErr(id) {
       this.confirm({
         title: "提示",
         iconWarning: true,
         text: '地址信息重复，点击可直接查看或编辑已创建的地址信息。',
         confirmText: '查看'
       }).then(() => {
-        this.$router.push({ path: '/set/addressUpdate', query: { id: 1 } })
+        this.$router.push({ path: '/set/addressUpdate', query: { id } })
       });
     },
+    // 是否弹出更新商家配送
+    isNotUpdateMerchantAddress(res) {
+      // 当前地址是否保存默认发货地址
+      // 原地址是否为默认发货地址
+      const oldIsTrue = res && res.isDefaltSenderAddress
+      const newIsTrue = this.ruleForm.type.includes(3)
+      
+      return oldIsTrue && !newIsTrue
+    },
     // 处理开启商家配送提醒
-    hanldeIsOpenDelivery() {
-      this.confirm({
-        title: "提示",
-        iconWarning: true,
-        text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
-        confirmText: '确定',
-        showCancelButton: true,
-        customClass: 'address-update'
-      }).then(() => {
+    hanldeIsOpenDelivery(res) {
+      // 是否是默认发货地址，如果是，并且 当前地址不是设置为默认发货地址，则 不提示，其他都提示
+        // merchantDeliver 商家配送地址
+        // res && res.isDefaltSenderAddress && (res.addressType === 0 || res.addressType === 2)  && (this.ruleForm.type === 1 || this.ruleForm.type === 2)
+      if (!this.isNotUpdateMerchantAddress(res)) {
+        this.confirm({
+          title: "提示",
+          iconWarning: true,
+          text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
+          confirmText: '确定',
+          showCancelButton: true,
+          customClass: 'address-update'
+        }).then(() => {
+          this.saveAddress()
+        }).catch(() => {
+          this.isLoading = false
+        });
+      } else {
         this.saveAddress()
-      }).catch(() => {
-        this.isLoading = false
-      });
+      }
     },
     // 是否开启商家配送
     isOpenMerchantDeliver() {
@@ -297,9 +325,10 @@ export default {
     },
     // 数据保存之后的处理逻辑
     handleAfterSave(res) {
+      console.log(res)
       // 数据重复
       if (res.code === 1) {
-        this.handleDataRepeatErr(res)
+        this.handleDataRepeatErr(res.id)
         return false
       }
       // 保存成功
@@ -309,14 +338,47 @@ export default {
       }
     },
     saveAddress() {
-      const req = this.getReqData()
+      let req = this.getReqData()
       console.log('req',req)
-      const res = {
-        code: 0
+      req = this.formateReqData(req)
+      console.log('req',req.id)
+      let p1
+      if (req.id) {
+        p1 = this._apis.set.editAddressById(req)
+      } else {
+        p1 = this._apis.set.addAddress(req)
       }
+      p1.then((res) => {
+          const status = Object.create(null)
+          console.log('res', res)
+          if (res) {
+            status.code = 1
+            status.id = res.id
+          } else {
+            status.code = 0
+          }
+          this.handleAfterSave(status)
+        }).catch((err) => {
+          console.log(1111111)
+          console.log(err)
+
+          this.$message.error(err || '保存失败')
+        }).finally(() => {
+          this.isLoading = false
+        })
       // 保存后
-      this.isLoading = false
-      this.handleAfterSave(res)
+      
+      // this.handleAfterSave(res)
+    },
+    // 判断地址是否为商家配送地址
+    getMerchantDeliverAddressById(id) {
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressDefaultSender().then((response) => {
+          resolve(response)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
     },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
@@ -328,16 +390,20 @@ export default {
             return false
           }
           this.isLoading = true
-          const isOpenMerchantDeliver = this.isOpenMerchantDeliver()
-          isOpenMerchantDeliver.then((isOpen) => {
-            console.log('dev',isOpen)
+          const p2 = this.isOpenMerchantDeliver()
+          const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+          Promise.all([p1, p2]).then((result) => {
+            console.log(result)
+            const [response, isOpen] = result
             // 是否打开
             if (isOpen) {
-              this.hanldeIsOpenDelivery()
+              this.hanldeIsOpenDelivery(response)
             } else {
               this.saveAddress()
             }
-          }).catch(() => {
+          }).catch((err) => {
+            console.log('err',err)
+            this.$message.error(err || '保存失败')
             this.isLoading = false
           })
         } else {
