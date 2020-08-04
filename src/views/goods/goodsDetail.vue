@@ -218,10 +218,10 @@
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
                 </el-form-item>
                 <el-form-item label="售卖价" prop="salePrice">
-                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" prop="stock">
-                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
                 </el-form-item>
                 <el-form-item label="库存预警" prop="warningStock">
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
@@ -2548,7 +2548,6 @@ export default {
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
-
 
                 if(this.isIE) {
                     if(this.editor) {

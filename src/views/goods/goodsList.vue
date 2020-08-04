@@ -284,6 +284,9 @@
         }
     }
 }
+.el-tooltip__popper.is-light{
+         border:1px solid red;
+        }  
 .goods-list {
     background-color: #fff;
     padding: 20px;
