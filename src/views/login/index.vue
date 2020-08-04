@@ -85,9 +85,10 @@ export default {
         platform: '134160222D87'
       },
       loginRules: {
-        userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword },
-        { min: 6, max: 20, message: '密码长度应为6到20位', trigger: 'blur' }]
+        // 改为手动校验
+        // userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        // password: [{ required: true, trigger: 'blur', validator: validatePassword },
+        // { min: 6, max: 20, message: '密码长度应为6到20位', trigger: 'blur' }]
       },
       passwordType: 'password',
       loading: false,
@@ -128,13 +129,21 @@ export default {
       }
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid && !this.loading) {
-          this.login();
-        } else {
-          return false
-        }
-      })
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid && !this.loading) {
+      //     this.login();
+      //   } else {
+      //     return false
+      //   }
+      // })
+      if(this.loginForm.userName == '' || this.loginForm.password == '' ) {
+        console.log(111111111)
+        this.errorMsg = '账号或密码不得为空'
+        return
+      }else {
+        console.log(222222222)
+        this.login();
+      }
     },
 
     /* 自动登录 */
@@ -157,6 +166,7 @@ export default {
     login() {
       this.loading = true
       this.$store.dispatch('login', this.loginForm).then((response) => {
+        this.errorMsg = ''
         this.loading = false
         this.autoLoginLoading = false
         this.shopList = []
