@@ -50,6 +50,11 @@
       handleSubmit() {
         // console.log(this.printPath)
         // console.log(this.printQuery)
+        //小票配送单
+        if(this.printRadio==1){
+          this.$router.push({path:'/order/printerSeting'})
+        }
+        //A4纸配送单
         if(this.printRadio==2){
           this.$router.push({
             path: this.printPath,
