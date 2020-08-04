@@ -149,8 +149,17 @@ export default {
       const req = this.getReqData(this.ruleForm)
       this.getAddressList(req)
     },
+    ApiGetAddressList(req) {
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressList(req).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+        reject(err)
+        })
+      })
+    },
     getAddressList(req) {
-      this._apis.set.getAddressList(req).then((res) => {
+      this.ApiGetAddressList(req).then((res) => {
         console.log(res)
         if (res) {
           this.dataList = res.list
@@ -176,7 +185,7 @@ export default {
       this.confirm({
         title: "提示",
         iconWarning: true,
-        text: '此地址已设置为商家配送的发货地址，修改后商家配送设置也将修改，您确定要修改吗？',
+        text: '此地址已设置为商家配送的发货地址，修改或删除后商家配送设置也将修改，您确定要修改吗？',
         confirmText: '确定',
         showCancelButton: true,
         customClass: 'address-update'
@@ -196,35 +205,62 @@ export default {
         })
       })
     },
-    hanldeOpenDeliveryDelAddress(id, addressType) {
+    hanldeOpenDeliveryDelAddress(row) {
       // 需要查看发货地址数量是否剩下1条？？？
-      this.confirm({
-        title: "提示",
-        iconWarning: true,
-        text: '商家配送已开启并使用此地址为发货地址，删除后商家配送功能将自动关闭，您确定要删除吗？',
-        confirmText: '确定',
-        showCancelButton: true,
-        customClass: 'address-update'
-      }).then(() => {
-        const p1 = this.closeMerchantDeliver()
-        const p2 = this.ApiDelAddressById(id, addressType)
-        Promise.all([p1, p2]).then((arr) => {
-          if(arr && arr.length > 0) {
-            this.confirm({
-              title: "提示",
-              iconSuccess: true,
-              text: '保存成功',
-              confirmText: '确定',
-              cancelButtonText: '取消'
-            }).then(() => {
-              this.ruleForm.pageNo = 1
-              this.getAddressList()
-            });
-          }
-        }).catch((err) => {
-          this.$message.error(err || '保存失败')
-        })
-      });
+      const id = row.id
+      const addressType = row.addressType
+      const req = Object.create(null)
+      req.cid  = this.cid
+      req.startIndex = 1
+      req.pageSize = 20
+      req.addressType = addressType
+      this.ApiGetAddressList(req).then((res) => {
+        // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
+        if (res && res.total == 1) {
+          this.confirm({
+            title: "提示",
+            iconWarning: true,
+            text: '商家配送已开启并使用此地址为发货地址，删除后商家配送功能将自动关闭，您确定要删除吗？',
+            confirmText: '确定',
+            showCancelButton: true,
+            customClass: 'address-update'
+          }).then(() => {
+            const p1 = this.closeMerchantDeliver()
+            const p2 = this.ApiDelAddressById(id, addressType)
+            Promise.all([p1, p2]).then((arr) => {
+              if(arr && arr.length > 0) {
+                this.confirm({
+                  title: "提示",
+                  iconSuccess: true,
+                  text: '保存成功',
+                  confirmText: '确定',
+                  cancelButtonText: '取消'
+                }).then(() => {
+                  this.ruleForm.pageNo = 1
+                  this.getAddressList()
+                });
+              }
+            }).catch((err) => {
+              this.$message.error(err || '保存失败')
+            })
+          });
+        } else {
+          this.confirm({
+            title: "提示",
+            iconWarning: true,
+            text: '此地址已设置为商家配送的发货地址，修改或删除后商家配送设置也将修改，您确定要修改吗？',
+            confirmText: '确定',
+            showCancelButton: true,
+            customClass: 'address-update'
+          }).then(() => {
+            this.ApiDelAddressById(id, addressType)
+          }).catch((err) => {
+          });
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+      
     },
     // 判断地址是否为商家配送地址
     getMerchantDeliverAddressById(id) {
@@ -337,11 +373,11 @@ export default {
         const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
         Promise.all([p1, p2]).then((result) => {
           const [ response, isOpen ] = result
-          console.log(id, response.id)
+          console.log(response && +response.id === +id)
           if (response && +response.id === +id) {
               // 是否打开
               if (isOpen) {
-                this.hanldeOpenDeliveryDelAddress(id, addressType)
+                this.hanldeOpenDeliveryDelAddress(row)
               } else {
                 this.handleDelAddress(row)
               }

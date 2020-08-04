@@ -1,11 +1,5 @@
 <template>
 <div class="app-container add-goods">
-    <!-- <header class="header">
-        <div :class="{active: index == 0}" @click="scrollTo(0)" class="item">基本信息</div>
-        <div :class="{active: index == 1}" @click="scrollTo(1)" class="item">销售信息</div>
-        <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
-        <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
-    </header> -->
     <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="152px" class="demo-ruleForm"><!--:disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"-->
         <section class="form-section">
             <h2>基本信息</h2>
@@ -42,26 +36,6 @@
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
             </el-form-item>
             <el-form-item label="商品主图" prop="images">
-                <!-- <img v-for="(item, key) of imageList" :key="key" :src="item.src" alt="" style="width:100px;height:100px"> -->
-                <!-- <el-upload
-                    :disabled="!ruleForm.productCategoryInfoId"
-                    :action="uploadUrl"
-                    accept=".jpg,.jpeg,.png,.gif,.JPG,.JPEG,.GIF"
-                    multiple
-                    :class="{hide:hideUpload}"
-                    :file-list="fileList"
-                    list-type="picture-card"
-                    :limit="6"
-                    :data="{json: JSON.stringify({cid: cid})}"
-                    :on-preview="handlePictureCardPreview"
-                    :on-remove="handleRemove"
-                    :on-success="centerFileUrl"
-                    :on-change="changeUpload"
-                    :before-upload="beforeUpload"
-                    class="p_imgsCon">
-                    <i class="el-icon-plus"></i>
-                    <p style="line-height: 21px; margin-top: -39px; color: #92929B;">上传图片</p>
-                </el-upload> -->
                 <div class="upload-box">
                     <div class="image-list">
                         <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in (ruleForm.images && ruleForm.images.split(',') || [])">
@@ -214,23 +188,23 @@
                     </el-tooltip>
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
                 </el-form-item>
-                <el-form-item label="成本价" prop="costPrice">
-                    <el-input v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
+                <el-form-item  label="成本价" prop="costPrice">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
                 </el-form-item>
                 <el-form-item label="售卖价" prop="salePrice">
-                    <el-input v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" prop="stock">
-                    <el-input v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
                 </el-form-item>
                 <el-form-item label="库存预警" prop="warningStock">
-                    <el-input v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
                 </el-form-item>
                 <el-form-item label="重量（Kg）" prop="weight">
-                    <el-input v-model="singleSpec.weight" placeholder="请输入重量（kg）"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.weight" placeholder="请输入重量（kg）"></el-input>
                 </el-form-item>
                 <el-form-item label="体积（m³）" prop="volume">
-                    <el-input v-model="singleSpec.volume" placeholder="请输入体积（m³）"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.volume" placeholder="请输入体积（m³）"></el-input>
                 </el-form-item>
              </div>
             </template>
@@ -364,130 +338,6 @@
                 </div>
                 <template v-if="!editor">
                     <el-button v-if="ruleForm.goodsInfos && ruleForm.goodsInfos.length" @click="batchFilling" class="batch-filling" type="primary">批量填充</el-button>
-                    <!-- <el-table
-                    class="spec-information"
-                    :data="ruleForm.goodsInfos"
-                    :header-cell-style="{background:'#f2ecff', color:'#655EFF'}"
-                    style="width: 100%"
-                    :span-method="objectSpanMethod"
-                    border>
-                    <el-table-column
-                        class-name="columnSpec"
-                        v-for="(item, index) in specsLabel.split(',')"
-                        :key="index"
-                        prop="label"
-                        :label="item"
-                        width="80">
-                        <template slot-scope="scope">
-                            {{scope.row.label.split(',') && scope.row.label.split(',')[index]}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="costPrice"
-                        label="成本价"
-                        class-name="costPrice operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.costPrice" placeholder="请输入价格(元)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="salePrice"
-                        label="售卖价"
-                        class-name="salePrice operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.salePrice" placeholder="请输入价格(元)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="stock"
-                        label="库存"
-                        class-name="stock operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.stock" placeholder="请输入库存"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="warningStock"
-                        label="库存预警"
-                        class-name="warningStock operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="weight"
-                        label="重量"
-                        class-name="weight operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.weight" placeholder="请输入重量(kg)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="volume"
-                        label="体积"
-                        class-name="volume operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.volume" placeholder="请输入体积(m³)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="code"
-                        label="SKU编码"
-                        class-name="code operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="image"
-                        label="图片"
-                        class-name="image"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-upload
-                                :disabled="!ruleForm.productCategoryInfoId"
-                                class="upload-spec"
-                                :action="uploadUrl"
-                                :ref="`uploadImage_${scope.$index}`"
-                                list-type="picture-card"
-                                :file-list="scope.row.fileList"
-                                :class="{hide:scope.row.image}"
-                                :limit="1"
-                                :data="{json: JSON.stringify({cid: cid})}"
-                                :on-preview="handlePictureCardPreview"
-                                :on-remove="function() {
-                                    specHandleRemove(scope.$index)
-                                }"
-                                :on-success="function(response, file, fileList) {
-                                    specUploadSuccess(response, file, fileList, scope.$index, scope.row)
-                                }">
-                                <p v-if="!scope.row.image">
-                                    <i class="el-icon-plus"></i>
-                                    点击上传
-                                </p>
-                            </el-upload>
-                            <div v-if="!scope.row.image && ruleForm.productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = scope.$index; dialogVisible = true">素材库</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="操作"
-                        width="152"
-                        class-name="operateDelete">
-                        <template slot-scope="scope">
-                            <div class="spec-operate">
-                                <span @click="emptySpec(scope.$index)">清空</span>
-                                <span class="deleteSpan" @click="deleteSpec(scope.$index)">删除</span>
-                            </div>
-                        </template>
-                    </el-table-column>
-                    </el-table> -->
                     <Specs :list.sync="ruleForm.goodsInfos"
                         :specsLabel="specsLabel"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
@@ -502,100 +352,6 @@
                         @deleteSpec="deleteSpec"></Specs>
                 </template>
                 <template v-else>
-                    <!-- <el-table
-                        class="spec-information-editor"
-                        :data="ruleForm.goodsInfos"
-                        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-                        style="width: 100%">
-                        <el-table-column
-                            prop="label"
-                            :label="specsLabel"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="costPrice"
-                            label="成本价"
-                            width="180"
-                            class-name="costPrice">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="salePrice"
-                            label="售卖价"
-                            class-name="salePrice">
-                            <template slot-scope="scope">
-                                <span>¥{{scope.row.salePrice}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="stock"
-                            label="库存"
-                            class-name="stock">
-                        </el-table-column>
-                        <el-table-column
-                            prop="warningStock"
-                            label="库存预警"
-                            class-name="warningStock">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="weight"
-                            label="重量(kg)"
-                            class-name="weight">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.weight" placeholder="请输入重量"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="volume"
-                            label="体积(m³)"
-                            class-name="volume">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="image"
-                            label="图片"
-                            class-name="image">
-                            <template slot-scope="scope">
-                                <el-upload
-                                    :disabled="!ruleForm.productCategoryInfoId"
-                                    class="upload-spec"
-                                    :action="uploadUrl"
-                                    :class="{hide:scope.row.image}"
-                                    list-type="picture-card"
-                                    :file-list="scope.row.fileList"
-                                    :limit="1"
-                                    :data="{json: JSON.stringify({cid: cid})}"
-                                    :on-preview="handlePictureCardPreview"
-                                    :on-remove="function() {
-                                        specHandleRemove(scope.$index)
-                                    }"
-                                    :on-success="function(response, file, fileList) {
-                                        specUploadSuccess(response, file, fileList, scope.$index, scope.row)
-                                    }">
-                                    <p v-if="!scope.row.image">
-                                        <i class="el-icon-plus"></i>
-                                        点击上传
-                                    </p>
-                                </el-upload>
-                                <div v-if="!scope.row.image && ruleForm.productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = scope.$index; dialogVisible = true">素材库</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="code"
-                            label="SKU编码"
-                            class-name="code">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
-                            </template>
-                        </el-table-column>
-                    </el-table> -->
                     <Specs v-if="ruleForm.productSpecs" :list.sync="ruleForm.goodsInfos"
                         :specsLabel="specsLabel"
                         :editor="editor"
@@ -725,7 +481,6 @@
                     </el-select>
                     <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
                         <span @click="addTemplate">新增模板</span>
-                        <!--<el-button type="primary" @click="getTemplateList">刷新</el-button>-->
                         <span class="shuaxin-fenlei" @click="getTemplateList">刷新<i></i></span>
                     </div>
                 </div>
@@ -829,14 +584,14 @@ export default {
         var singleSpecValidator = (rule,value,callback) =>{
             switch(rule.field){
                 case "costPrice":
-                     if(this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                     if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字')); 
                      }else{
                         callback();
                      }
                      break;
                 case "salePrice":
-                    if(this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
                     }else if(this.singleSpec.costPrice > this.singleSpec.salePrice){
                         callback(new Error('售卖价不得低于成本价'));
@@ -846,7 +601,7 @@ export default {
                     break;
                 case "stock":
                 case  "warningStock":
-                    if(this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -854,7 +609,7 @@ export default {
                     break;
                 case "weight":
                 case "volume":
-                    if(this.singleSpec[rule.field] < 0 || !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -1408,7 +1163,6 @@ export default {
             this.currentData=this.goodCategoryNames;
         },
         getProductCategoryInfoId(data){
-            // debugger;
             this.ruleForm.productCategoryInfoId=data.child.id;
             this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
@@ -2538,10 +2292,7 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                console.log(res)  
-                // debugger;
-                this.specRadio = res.specsType;
-                // debugger;             
+                this.specRadio = res.specsType;        
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
@@ -2867,120 +2618,6 @@ export default {
 
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
                             this.validateGoodsInfos(this.ruleForm.goodsInfos[i]);
-                            //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
-                        // if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
-                        //     this.$message({
-                        //         message: '当前SKU编码输入有误，请您重新输入',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.ruleForm.goodsInfos[i].code) {
-                        //     this.$message({
-                        //          message: '当前SKU编码输入有误，请您重新输入',
-                        //          type: 'warning'
-                        //      });
-                        //      return
-                        // }
-                        // if(this.ruleForm.goodsInfos[i].image == '') {
-                        //     this.$message({
-                        //         message: '请上传图片',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                       
-                        /*if(this.ruleForm.goodsInfos[i].costPrice == '') {
-                            this.$message({
-                                message: '请输入成本价',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].costPrice <= 0) {
-                            this.$message({
-                                message: '成本价必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(/\./.test(this.ruleForm.goodsInfos[i].costPrice) && this.ruleForm.goodsInfos[i].costPrice.split(".")[1].length > 2) {
-                            this.$message({
-                                message: '只支持小数点后两位',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(this.ruleForm.goodsInfos[i].salePrice == '') {
-                            this.$message({
-                                message: '请输入售卖价',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].salePrice <= 0) {
-                            this.$message({
-                                message: '售卖价必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(/\./.test(this.ruleForm.goodsInfos[i].salePrice) && this.ruleForm.goodsInfos[i].salePrice.split(".")[1].length > 2) {
-                            this.$message({
-                                message: '只支持小数点后两位',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(this.ruleForm.goodsInfos[i].stock === '') {
-                            this.$message({
-                                message: '请输入库存',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].stock)) {
-                            this.$message({
-                                message: '库存不能为小数',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].stock  < 0) {
-                            this.$message({
-                                message: '不能为负值',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].stock  > 10000000) {
-                            this.$message({
-                                message: '库存不能超过10000000',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.ruleForm.goodsInfos[i].warningStock) {
-                            this.$message({
-                                message: '请输入库存预警',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].warningStock)) {
-                            this.$message({
-                                message: '库存预警不能为小数',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].warningStock  < 0) {
-                            this.$message({
-                                message: '不能为负值',
-                                type: 'warning'
-                            });
-                            return
-                        }*/
 			        //如果配送方式勾选了商家配送，则重量为必填项
                         if(this.ruleForm.deliveryWay.includes(2)){
                             if(!this.ruleForm.goodsInfos[i].weight) {
@@ -3040,56 +2677,6 @@ export default {
                             }
                         }
                     }
-                    // if(this.editor) {
-                    //     if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中成本价不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中售卖价不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中库存不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
-                    //         this.$message({
-                    //             message: '规格信息中库存不能小于0',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
-                    //         this.$message({
-                    //             message: '规格信息中库存预警不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中图片不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    // }
-
-                    // if(this.ruleForm.productDetail) {
-                    //     let _productDetail = ''
-                    //     _productDetail = btoa(unescape(encodeURIComponent(this.ruleForm.productDetail)));
-                    //     obj.productDetail = _productDetail
-                    // }
                     if(this.categoryValue) {
                         let categoryValue = JSON.parse(JSON.stringify(this.categoryValue))
                         let arr = []
@@ -3105,55 +2692,6 @@ export default {
                         __goodsInfos.forEach(val => {
                             val.fileList = null
                         })
-                        // let _deleteSpecArr = Array.from(new Set(this.deleteSpecArr))
-                        // if(_deleteSpecArr.length) {
-                        //     for(let i=0; i<_deleteSpecArr.length; i++) {
-                        //         __goodsInfos.splice(_deleteSpecArr[i], 1)
-                        //     }
-                        // }
-
-                        // if(__goodsInfos.some(val => val.costPrice == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中成本价不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.editor && __goodsInfos.some(val => val.salePrice == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中售卖价不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.editor && __goodsInfos.some(val => val.stock == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中库存不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.editor && __goodsInfos.some(val => +val.stock < 0)) {
-                        //     this.$message({
-                        //         message: '规格信息中库存不能小于0',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(__goodsInfos.some(val => !val.warningStock)) {
-                        //     this.$message({
-                        //         message: '规格信息中库存预警不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(__goodsInfos.some(val => val.image == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中图片不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
                         _goodsInfos = __goodsInfos.map(val => {
                             let _specs = {}
                             val.label.split(',').forEach((spec, index) => {

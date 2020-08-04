@@ -315,7 +315,6 @@ export default {
 .table-btn{
   padding-right: 5px;
   border-right: 1px solid #dadae3;
-  margin-right: 5px;
   &:last-child{
     border-right: none;
   }
