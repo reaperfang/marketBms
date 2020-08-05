@@ -591,9 +591,9 @@ export default {
                      }
                      break;
                 case "salePrice":
-                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
-                    }else if(this.singleSpec.costPrice > this.singleSpec.salePrice){
+                    }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
                         callback(new Error('售卖价不得低于成本价'));
                     }else{
                         callback();
@@ -601,7 +601,7 @@ export default {
                     break;
                 case "stock":
                 case  "warningStock":
-                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -609,7 +609,7 @@ export default {
                     break;
                 case "weight":
                 case "volume":
-                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -1089,9 +1089,9 @@ export default {
                     });
                     return
                 }
-                if(obj.salePrice<obj.costPrice) {
+                if(+obj.salePrice<+obj.costPrice) {
                     this.$message({
-                        message: '售卖价不得人低于成本价',
+                        message: '售卖价不得低于成本价',
                         type: 'warning'
                     });
                     return
@@ -2704,7 +2704,7 @@ export default {
                             obj.goodsInfos = _goodsInfos
                         }else{
                             this.singleSpec.specs={"规格":"默认规格"};
-                            obj.goodsInfos = this.singleSpec
+                            obj.goodsInfos = [this.singleSpec];
                         }
                         
                     params = Object.assign({}, this.ruleForm, obj, {

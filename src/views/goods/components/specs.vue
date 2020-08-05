@@ -771,7 +771,7 @@ export default {
         }
     }
     .message-span {
-        margin-left: 18px;
+        margin-left: 12px;
         margin-top: 2px;
         color:rgba(253,76,43,1);
         font-size: 12px;
