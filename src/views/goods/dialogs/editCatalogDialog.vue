@@ -35,7 +35,6 @@
         v-model="categoryValue"
         :options="categoryOptions"
         @change="handleChange"
-        :disabled="isHasCategory"
         :props="{ multiple: true, checkStrictly: true }"
         placeholder="请选择商品分类"
         clearable

@@ -89,11 +89,11 @@
                     <span class="message-span" v-if="item.showCostPriceError">{{item.costPriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled || (editor && activity)" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input @blur="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled && (editor && activity)" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
                     <span class="message-span" v-if="item.showSalePriceError">{{item.salePriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled || (editor && activity)" v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <el-input @blur="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled && (editor && activity)" v-model="item.stock" placeholder="请输入库存"></el-input>
                     <span class="message-span" v-if="item.showStockError">{{item.stockErrorMessage}}</span>
                 </td>
                 <td>
@@ -771,7 +771,7 @@ export default {
         }
     }
     .message-span {
-        margin-left: 18px;
+        margin-left: 12px;
         margin-top: 2px;
         color:rgba(253,76,43,1);
         font-size: 12px;

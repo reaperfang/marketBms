@@ -190,7 +190,7 @@ export default {
         showCancelButton: true,
         customClass: 'address-update'
       }).then(() => {
-        this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+        this.$router.push({ path: '/set/addressUpdate', query: { id, source: 1  } }) 
       }).catch(() => {
       });
     },
@@ -480,7 +480,6 @@ export default {
     img {
       display: block;
       width: 199px;
-      height: 140x;
       padding-top: 107px;
       margin: 0 auto;
     }

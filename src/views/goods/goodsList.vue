@@ -93,12 +93,13 @@
                 </div>
               </template>
               <template v-if="scope.row.isEdit">
-                <el-tooltip class="item" effect="light" placement="top">
+                <el-tooltip popper-class="goodSortTip" class="item" effect="light" placement="top">
                 <div slot="content">输入框内只能输入≥1的有效数字，不能输入特殊字符、<br/>
                     空格、中英文字符、负数、0等，统一校验文案为<br/>
                     “请您输入正确的数字”；最大可输入数字“999999”<br/>  
                 </div>
                 <el-input
+                  ref='goodSort'
                   v-model="scope.row.sortId"
                   autosize
                   class="goodIndex"
@@ -178,7 +179,7 @@
                         prop="stock"
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{'salePrice-red': scope.row.status === 1 && scope.row.goodsInfos.some(val => val.stock <= val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
+                            <span :class="{'salePrice-red': scope.row.status === 1 && scope.row.goodsInfos.some(val => val.stock <= val.warningStock)}" class="store">{{scope.row.goodsInfos && scope.row.goodsInfos.length ? Math.min.apply(null, scope.row.goodsInfos.map(val => +val.stock)) : scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -283,7 +284,7 @@
             }
         }
     }
-}
+} 
 .goods-list {
     background-color: #fff;
     padding: 20px;
@@ -721,7 +722,7 @@ export default {
             item.isEdit = false;
         },
         showEidtIcon(item){
-            item.showIcon=true;
+            item.showIcon=true;          
         },
         hideEditIcon(item){
             item.showIcon=false;
@@ -756,6 +757,10 @@ export default {
             editGoodIndex(item) {
                 item.isEdit = true;
                 item.showIcon=false;
+                this.$nextTick(() => {
+                this.$refs.goodSort.focus();
+                // console.log(this.$refs);
+            })
             },
             changeProductCatalogs(datas){
                 let productInfoIds =this.currentData.map(val=>val.id);
