@@ -190,7 +190,7 @@ export default {
         showCancelButton: true,
         customClass: 'address-update'
       }).then(() => {
-        this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+        this.$router.push({ path: '/set/addressUpdate', query: { id, source: 1  } }) 
       }).catch(() => {
       });
     },
