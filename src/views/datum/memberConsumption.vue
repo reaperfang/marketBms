@@ -26,7 +26,7 @@
             </div>
             <el-table
             :data="list"
-            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+            :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
             style="margin-top:30px;width: 100%" 
             >
             <el-table-column
@@ -70,7 +70,8 @@
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="pageSize"
                     layout="sizes, prev, pager, next"
-                    :total="total">
+                    :total="total"
+                    :background="background">
                 </el-pagination>
             </div>
         </div>
@@ -93,6 +94,7 @@ export default {
     created(){
         this.getMemberConsumption()
     },
+    props:['background'],
     methods:{
         getMemberConsumption(){
             let data = {

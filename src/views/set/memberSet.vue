@@ -32,6 +32,7 @@
               :min="1" 
               :maxlength="9"
               :precision="0"
+              placeholder="请输入正数"
               style="width:151px;" 
               label="请输入正整数">
             </el-input>

@@ -483,6 +483,9 @@ export default {
     getDeliveryAddress() {
       this._apis.set.getAddressDefaultSender().then((response) => {
         this.address = `${response.address} ${response.addressDetail}`
+        this.ruleForm.lng = response.longitude
+        this.ruleForm.lat = response.latitude
+        this.addressId = response.id
       }).catch((err) => {
         this.$message.error(err || '数据获取失败')
       })
@@ -902,8 +905,9 @@ export default {
           this.isOpenOrdinaryExpress = res.isOpenOrdinaryExpress // 是否开启普通快递 0-否 1-是
           this.isOpenTh3Deliver = res.isOpenTh3Deliver // 是否开启第三方配送 0-否 1-是
           this.isOpenSelfLift = res.isOpenSelfLift // 是否开启上门自提 0-否 1-是
-          this.ruleForm.lng = res.longitude
-          this.ruleForm.lat = res.latitude
+          // 经纬度需要获取地址库的默认地址
+          // this.ruleForm.lng = res.longitude
+          // this.ruleForm.lat = res.latitude
           const areaCode = res.areaCode
           const cityCode = res.cityCode
           const provinceCode = res.provinceCode

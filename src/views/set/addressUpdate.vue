@@ -349,21 +349,23 @@ export default {
         p1 = this._apis.set.addAddress(req)
       }
       p1.then((res) => {
-        const status = Object.create(null)
-        console.log('res', res)
-        if (res) {
-          status.code = 1
-          status.id = res.id
-        } else {
-          status.code = 0
-        }
-        this.handleAfterSave(status)
-      }).catch((error) => {
-         console.log(error)
-         this.$message.error(error | '保存失败')
-      }).finally(() => {
-        this.isLoading = false
-      })
+          const status = Object.create(null)
+          console.log('res', res)
+          if (res) {
+            status.code = 1
+            status.id = res.id
+          } else {
+            status.code = 0
+          }
+          this.handleAfterSave(status)
+        }).catch((err) => {
+          console.log(1111111)
+          console.log(err)
+
+          this.$message.error(err || '保存失败')
+        }).finally(() => {
+          this.isLoading = false
+        })
       // 保存后
       
       // this.handleAfterSave(res)
@@ -399,7 +401,9 @@ export default {
             } else {
               this.saveAddress()
             }
-          }).catch(() => {
+          }).catch((err) => {
+            console.log('err',err)
+            this.$message.error(err || '保存失败')
             this.isLoading = false
           })
         } else {
