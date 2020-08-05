@@ -5,7 +5,7 @@
       <template v-if="hasRealData || hasFakeData">
         <!-- 样式一 -->
         <div class="coupon_first componentCoupon" v-if="hasRealData">
-          <ul ref="scrollContent" class="clearfix">
+          <ul ref="scrollContent" class="clearfix" :class="'list'+currentComponentData.data.listStyle">
             <!-- status:true时候是已领取,hideScrambled:false, -->
             <template v-for="(item, key) in displayList">
               <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
@@ -45,24 +45,24 @@ export default {
   },
   computed: {
     style1() {
-      // 样式为3的时候，颜色边框是什么就是是什么颜色否则走最外层默认定义的白色字体。同时当颜色为第三种的时候（白底），颜色为红色
+      // 样式为4的时候，颜色边框是什么就是是什么颜色否则走最外层默认定义的白色字体。同时当颜色为第三种的时候（白底），颜色为红色
       return [
         this.currentComponentData.data.couponStyle === 3 ? "col_" + this.currentComponentData.data.couponColor : "",
-        this.currentComponentData.data.couponColor === 3 ? "col_1" : ""
+        this.currentComponentData.data.couponColor === 4 ? "col_1" : ""
       ];
     },
     style2() {
-      // 样式为3的时候，颜色边框是什么就是是什么颜色否则走最外层默认定义的白色字体。同时当颜色为第三种的时候字体为灰色。
+      // 样式为4的时候，颜色边框是什么就是是什么颜色否则走最外层默认定义的白色字体。同时当颜色为第三种的时候字体为灰色。
       return [
         this.currentComponentData.data.couponStyle === 3 ? "col_" + this.currentComponentData.data.couponColor : "",
-        this.currentComponentData.data.couponColor === 3 ? "col_6" : ""
+        this.currentComponentData.data.couponColor === 4 ? "col_6" : ""
       ];
     },
     imgs() {
       return {
         backgroundImage:
           "url(" +
-          require(`@/assets/images/shop/coupon/cou${this.currentComponentData.data.couponStyle}_color${this.currentComponentData.data.couponColor}.png`) +
+          require(`@/assets/images/shop/coupon/listStyle${this.currentComponentData.data.listStyle}/style${this.currentComponentData.data.couponStyle}-color${this.currentComponentData.data.couponColor}.png`) +
           ")",
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100%"
@@ -72,7 +72,7 @@ export default {
       return {
         backgroundImage:
           "url(" +
-          require(`@/assets/images/shop/coupon/cou${this.currentComponentData.data.couponStyle}_color0.png`) +
+          require(`@/assets/images/shop/coupon/listStyle${this.currentComponentData.data.listStyle}/over-style${this.currentComponentData.data.couponStyle}.png`) +
           ")",
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100%"
@@ -176,13 +176,9 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-       this.displayList = datas;
-       this.$nextTick(()=>{
-          let width = (this.displayList.length + 1) * (128 + 10);
-          if(this.$refs.scrollContent) {
-            this.$refs.scrollContent.style.width = width + "px";  
-          }
-       })
+      console.log(this.currentComponentData)
+      console.log(this.currentComponentData.data)
+      this.displayList = datas;
     },
 
     /* 获取标题 */
@@ -217,19 +213,16 @@ export default {
 .componentCoupon {
   .coupon_first {
     & > ul {
-      display: -webkit-box;
-      overflow-x: scroll;
-      padding: 0 15px;
+      display: flex;
+      padding: 0 10px 10px 10px;
       & > li {
-        width: 128px;
         height: 92px;
-        margin:10px 0;
-        margin-right: 10px;
+        margin-top:10px;
         text-align: center;
         & > .first_money {
           padding-top: 17px;
           & > span:first-child {
-            font-size: 26px;
+            font-size: 30px;
             font-weight: 500;
             color: rgba(255, 255, 255, 1);
           }
@@ -240,27 +233,47 @@ export default {
         }
         & > .first_present {
           padding-top: 7.5px;
-          font-size: 10px;
-		   transform: scale(0.83);
+          font-size: 12px;
           color: rgba(255, 255, 255, 1);
         }
       }
+    }
+  }
+  .list1 {
+    overflow-x: scroll;
+     & > li {
+       flex: 0 0 138px;
+       background-size: 128px 100% !important;
+     }
+  }
+  .list2 {
+    padding-right: 0 !important;
+    flex-wrap: wrap;
+    & > li {
+      width: calc(33.33333% - 10px);
+      margin-right: 10px !important;
+    }
+  }
+  .list3 {
+    flex-wrap: wrap;
+    & > li {
+      width: 100%;
     }
   }
   .col_1 {
     color: #ff6666 !important;
   }
   .col_2 {
-    color: #fd8246 !important;
+    color: #2A9F3F !important;
   }
   .col_3 {
-    color: #ff6666 !important;
+    color: #F18754 !important;
   }
   .col_4 {
-    color: #2c2e30 !important;
+    color: #FF6666 !important;
   }
   .col_5 {
-    color: #8ed99c !important;
+    color: #000 !important;
   }
   .col_6 {
     color: #d3d3d3 !important;
