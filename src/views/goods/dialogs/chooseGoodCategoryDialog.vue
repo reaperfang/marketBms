@@ -91,7 +91,14 @@ export default {
     };
   },
   created() {
-    this.itemCatText = this.data;
+    if(this.data&&this.data.child){
+      this.itemCatText = this.data.name + ' / '+this.data.child.categoryName;
+      this.commonCat = this.data;
+   
+      }else{
+        this.itemCatText ='';
+        this.commonCat={};
+    }
     this.getOperateCategoryList();
   },
   watch: {},
