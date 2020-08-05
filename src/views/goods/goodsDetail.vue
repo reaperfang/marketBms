@@ -192,10 +192,10 @@
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
                 </el-form-item>
                 <el-form-item label="售卖价" prop="salePrice">
-                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" prop="stock">
-                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
                 </el-form-item>
                 <el-form-item label="库存预警" prop="warningStock">
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
@@ -591,9 +591,9 @@ export default {
                      }
                      break;
                 case "salePrice":
-                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
-                    }else if(this.singleSpec.costPrice > this.singleSpec.salePrice){
+                    }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
                         callback(new Error('售卖价不得低于成本价'));
                     }else{
                         callback();
@@ -601,7 +601,7 @@ export default {
                     break;
                 case "stock":
                 case  "warningStock":
-                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -609,7 +609,7 @@ export default {
                     break;
                 case "weight":
                 case "volume":
-                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -707,6 +707,7 @@ export default {
             productLabelList: [], // 商品标签列表
             specIds: [],
             goodCategoryNames: '',
+            historyGoodCategory:{},
             add: true,
 	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
             isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
@@ -1089,9 +1090,9 @@ export default {
                     });
                     return
                 }
-                if(obj.salePrice<obj.costPrice) {
+                if(+obj.salePrice<+obj.costPrice) {
                     this.$message({
-                        message: '售卖价不得人低于成本价',
+                        message: '售卖价不得低于成本价',
                         type: 'warning'
                     });
                     return
@@ -1160,9 +1161,10 @@ export default {
         addGoodCategory(){
             this.currentDialog = 'chooseGoodCategoryDialog';
             this.dialogVisible = true;
-            this.currentData=this.goodCategoryNames;
+            this.currentData=this.historyGoodCategory;
         },
         getProductCategoryInfoId(data){
+            this.historyGoodCategory = data;
             this.ruleForm.productCategoryInfoId=data.child.id;
             this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
@@ -2304,7 +2306,6 @@ export default {
                 let itemCatAr = []
                 let __goodsInfos
 
-
                 if(this.isIE) {
                     if(this.editor) {
                         let flag = []
@@ -2705,7 +2706,7 @@ export default {
                             obj.goodsInfos = _goodsInfos
                         }else{
                             this.singleSpec.specs={"规格":"默认规格"};
-                            obj.goodsInfos = this.singleSpec
+                            obj.goodsInfos = [this.singleSpec];
                         }
                         
                     params = Object.assign({}, this.ruleForm, obj, {
