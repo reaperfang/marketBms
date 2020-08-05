@@ -707,6 +707,7 @@ export default {
             productLabelList: [], // 商品标签列表
             specIds: [],
             goodCategoryNames: '',
+            historyGoodCategory:{},
             add: true,
 	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
             isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
@@ -1160,9 +1161,10 @@ export default {
         addGoodCategory(){
             this.currentDialog = 'chooseGoodCategoryDialog';
             this.dialogVisible = true;
-            this.currentData=this.goodCategoryNames;
+            this.currentData=this.historyGoodCategory;
         },
         getProductCategoryInfoId(data){
+            this.historyGoodCategory = data;
             this.ruleForm.productCategoryInfoId=data.child.id;
             this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
