@@ -751,8 +751,9 @@ export default {
                 }) 
 
             } else {
+                this.getList();
                 this.$message({
-                message: "请输入合法数字",
+                message: "请您输入正确的数字",
                 type: "warning"
                 });
             }
