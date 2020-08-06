@@ -61,25 +61,28 @@
     <el-table
       :data="tableData"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       >
       <el-table-column
         prop="date"
-        label="时间">
+        label="时间"
+        align="left">
       </el-table-column>
       <el-table-column
         prop="averageOrderPayment"
-        label="客单价（元）">
+        label="客单价（元）"
+        align="right">
       </el-table-column>
       <el-table-column
         prop="orderCount"
-        label="订单量（笔）">
+        label="订单量（笔）"
+        align="right">
       </el-table-column>
       <el-table-column
         prop="averagePayment"
         label="人均消费金额（元）"
-      >
+        align="right">
       </el-table-column>
     </el-table>
     <div class="page_styles">
@@ -89,7 +92,8 @@
           :page-sizes="[5, 10, 15]" 
           :page-size="size" 
           layout="total, sizes, prev, pager, next, jumper" 
-          :total="tableCopyTableList.length">
+          :total="tableCopyTableList.length"
+          :background="background">
           </el-pagination>
     </div>
         </div>
@@ -127,6 +131,12 @@ export default {
             totalNum:0,
 			classId:1
         }
+    },
+    props: {
+        background: {
+            type: Boolean,
+            default: true
+        },
     },
     methods: {
         // 实时概况

@@ -12,14 +12,21 @@
         </span>
       </el-form-item>
       <el-form-item label="店铺LOGO:">
-        <span v-if="form.logo" class="avatar">
+        <div v-if="form.logo" class="avatar">
           <img :src="form.logo" class="logo_img" />
           <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
-        </span>
-        <span
+          <div class="btn">
+            <el-button @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" class="uploadImg" size="mini" type="primary">更新图片</el-button>
+          </div>
+        </div>
+        <div
           class="uploadFont"
+           v-if="!form.logo"
           @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'"
-        >上传</span>
+        >
+          <i class="el-icon-plus"></i>
+          <p>上传图片</p>
+        </div>
         <p class="note">logo支持jpg、jpeg、png格式内容；建议大小300px*300px图片大小不得大于3M</p>
       </el-form-item>
       <el-form-item label="公司名称:" prop="companyName">
@@ -240,73 +247,126 @@ export default {
   padding: 0 0 0 10px;
 }
 .note {
-  color: #92929b;
+  color:rgba(146, 146, 155, .5);
   font-size: 12px;
 }
-/deep/ .avatar-uploader {
-  width: 80px;
-  height: 80px;
+.avatar {
   display: inline-block;
-  vertical-align: middle;
-}
-/deep/ .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
+  width:80px;
+  height:80px;
   position: relative;
-  overflow: hidden;
-  display: inline-block;
-}
-/deep/ .avatar-uploader .el-upload:hover {
-  border-color: #655EFF;
-}
-/deep/ .avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-  text-align: center;
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-}
-/deep/ .avatar {
-  width: 80px;
-  height: 80px;
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  .uploadFont {
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  .btn {
+    display: none;
     position: absolute;
-    color: #655eff;
-    font-size: 14px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background:rgba(0,0,0,.2);
+    .uploadImg {
+      position:absolute;
+      left: 8px;
+      bottom: 6px;
+      width: 64px;
+      padding: 5px 0;
+    }
+  }
+  &:hover .btn {
     display: block;
-    right: -58px;
-    bottom: -8px;
-    cursor: pointer;
   }
 }
-.avatar img,
--moz-img {
-  width: 80px;
-  height: 80px;
-  max-width: 80px;
-  max-height: 80px;
-  object-fit: fill;
+.uploadFont {
   display: inline-block;
+  width:80px;
+  height:80px;
+  border:1px dashed rgba(182,181,200,1);
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  p {
+    text-align: center;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(146,146,155,1);
+    line-height:20px;
+  }
+  i {
+    color:#92929B;
+    font-size: 30px;
+  }
 }
-.-moz-logo_img,
-.logo_img {
-  width: 80px;
-  height: 80px;
-  max-width: 80px;
-  max-height: 80px;
-  object-fit: fill;
-  display: inline-block;
-  border:1px dashed #e6e6e6;
-}
+// /deep/ .avatar-uploader {
+//   width: 80px;
+//   height: 80px;
+//   display: inline-block;
+//   vertical-align: middle;
+// }
+// /deep/ .avatar-uploader .el-upload {
+//   border: 1px dashed #d9d9d9;
+//   border-radius: 6px;
+//   cursor: pointer;
+//   position: relative;
+//   overflow: hidden;
+//   display: inline-block;
+// }
+// /deep/ .avatar-uploader .el-upload:hover {
+//   border-color: #655EFF;
+// }
+// /deep/ .avatar-uploader-icon {
+//   font-size: 28px;
+//   color: #8c939d;
+//   width: 60px;
+//   height: 60px;
+//   line-height: 60px;
+//   text-align: center;
+//   position: absolute;
+//   top: 10px;
+//   left: 10px;
+//   z-index: 10;
+// }
+
+// /deep/ .avatar {
+//   width: 80px;
+//   height: 80px;
+//   display: inline-block;
+//   vertical-align: middle;
+//   position: relative;
+//   .uploadFont {
+//     position: absolute;
+//     color: #655eff;
+//     font-size: 14px;
+//     display: block;
+//     right: -58px;
+//     bottom: -8px;
+//     cursor: pointer;
+//   }
+// }
+// .avatar img,
+// -moz-img {
+//   width: 80px;
+//   height: 80px;
+//   max-width: 80px;
+//   max-height: 80px;
+//   object-fit: fill;
+//   display: inline-block;
+// }
+// .-moz-logo_img,
+// .logo_img {
+//   width: 80px;
+//   height: 80px;
+//   max-width: 80px;
+//   max-height: 80px;
+//   object-fit: fill;
+//   display: inline-block;
+//   border:1px dashed #e6e6e6;
+// }
 .shopInfo-show {
   font-size: 12px;
   color: rgba(146, 146, 155, 1);

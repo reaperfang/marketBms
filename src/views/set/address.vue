@@ -16,9 +16,12 @@
           prop="address"
           label="地址"
           align="left">
+          <template slot-scope="scope">
+            {{scope.row.address}} {{scope.row.addressDetail}}
+          </template>
         </el-table-column>
         <el-table-column
-          prop="contactPerson"
+          prop="name"
           label="联系人"
           align="center"
           width="200">
@@ -34,6 +37,9 @@
           label="地址类型"
           align="center"
           width="200">
+          <template slot-scope="scope">
+            {{ getAddressTypeTxt(scope.row) }}
+          </template>
         </el-table-column>
         <el-table-column
           prop="updateTime"
@@ -49,7 +55,7 @@
             <div class="opeater">
               <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text">编辑</el-button>
               <span>|</span>
-              <el-button class="btn" :class="[scope.row.isDefault ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
+              <el-button class="btn" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
             </div>
           </template>
         </el-table-column>
@@ -87,27 +93,10 @@ export default {
     return {
       total: 0,
       loading: false,
-      dataList: [
-        {
-        id: 1,
-        contactPerson: 'bill', // 联系人
-        mobile: '15712899623', // 手机号
-        sendAddress: '数码庄园', // 联系地址
-        address: '1111', // 详细地址
-        type: 3, // 地址类型
-        lat: null,
-        lng: null,
-        addressCode: null, // code码
-        province: null, // 省
-        city: null, // 市
-        area: null, // 区
-        defaultDeliveryAddress: 1,
-        defaultReturnAddress: 1
-      }
-      ],
+      dataList: [],
       ruleForm: {
         pageNo: 1,
-        pageSize: 0
+        pageSize: 20
       }
     }
   },
@@ -128,12 +117,57 @@ export default {
   mounted() {},
 
   methods: {
-    init() {
-      this.getAddressList()
+    getDefaultAddress(item) {
+      return item.isDefaltSenderAddress === 1 || item.isDefaltReturnAddress === 1
     },
-    getAddressList() {
-      const req = this.ruleForm
-      // api
+    getAddressTypeTxt(item) {
+      if (!item) return ''
+      let txt = ''
+      switch(item.addressType) {
+        case 0:
+          txt = item.isDefaltSenderAddress === 1 ? '默认发货地址': '发货地址'
+          break;
+        case 1:
+          txt = item.isDefaltReturnAddress === 1 ? '默认收货地址' : '收货地址'
+          break;
+        case 2:
+          txt = item.isDefaltSenderAddress === 1 ? '默认发货地址': '发货地址'
+          txt += '/'
+          txt += item.isDefaltReturnAddress === 1 ? '默认收货地址' : '收货地址'
+          break;
+      }
+      return txt
+    },
+    getReqData(req) {
+      const data = Object.create(null)
+      data.cid  = this.cid
+      data.startIndex = req.pageNo
+      data.pageSize = req.pageSize
+      return data
+    },
+    init() {
+      const req = this.getReqData(this.ruleForm)
+      this.getAddressList(req)
+    },
+    ApiGetAddressList(req) {
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressList(req).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+        reject(err)
+        })
+      })
+    },
+    getAddressList(req) {
+      this.ApiGetAddressList(req).then((res) => {
+        console.log(res)
+        if (res) {
+          this.dataList = res.list
+          this.total = res.total
+        }
+      }).catch((err) => {
+        this.$message.error(err || '获取数据失败')
+      })
     },
     handleSizeChange(val) {
       this.ruleForm.pageNo = 1
@@ -151,49 +185,113 @@ export default {
       this.confirm({
         title: "提示",
         iconWarning: true,
-        text: '此地址已设置为商家配送的发货地址，修改后商家配送设置也将修改，您确定要修改吗？',
+        text: '此地址已设置为商家配送的发货地址，修改或删除后商家配送设置也将修改，您确定要修改吗？',
         confirmText: '确定',
         showCancelButton: true,
         customClass: 'address-update'
       }).then(() => {
-          this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+        this.$router.push({ path: '/set/addressUpdate', query: { id, source: 1  } }) 
       }).catch(() => {
       });
     },
-    hanldeOpenDeliveryDelAddress(id) {
-      this.confirm({
-        title: "提示",
-        iconWarning: true,
-        text: '商家配送已开启并使用此地址为发货地址，删除后商家配送功能将自动关闭，您确定要删除吗？',
-        confirmText: '确定',
-        showCancelButton: true,
-        customClass: 'address-update'
-      }).then(() => {
-        this.delAddressById(id)
-      }).catch(() => {
-      });
+    // 关闭商家配送
+    closeMerchantDeliver() {
+      return new Promise((resolve, reject) => {
+        this.updateShopInfo({ isOpenMerchantDeliver: 0 }).then(response =>{
+            resolve(response)
+        }).catch(error =>{
+          reject(error)
+          // this.loading = false
+        })
+      })
+    },
+    hanldeOpenDeliveryDelAddress(row) {
+      // 需要查看发货地址数量是否剩下1条？？？
+      const id = row.id
+      const addressType = row.addressType
+      const req = Object.create(null)
+      req.cid  = this.cid
+      req.startIndex = 1
+      req.pageSize = 20
+      req.addressType = addressType
+      this.ApiGetAddressList(req).then((res) => {
+        // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
+        if (res && res.total == 1) {
+          this.confirm({
+            title: "提示",
+            iconWarning: true,
+            text: '商家配送已开启并使用此地址为发货地址，删除后商家配送功能将自动关闭，您确定要删除吗？',
+            confirmText: '确定',
+            showCancelButton: true,
+            customClass: 'address-update'
+          }).then(() => {
+            const p1 = this.closeMerchantDeliver()
+            const p2 = this.ApiDelAddressById(id, addressType)
+            Promise.all([p1, p2]).then((arr) => {
+              if(arr && arr.length > 0) {
+                this.confirm({
+                  title: "提示",
+                  iconSuccess: true,
+                  text: '保存成功',
+                  confirmText: '确定',
+                  cancelButtonText: '取消'
+                }).then(() => {
+                  this.ruleForm.pageNo = 1
+                  this.getAddressList()
+                });
+              }
+            }).catch((err) => {
+              this.$message.error(err || '保存失败')
+            })
+          });
+        } else {
+          this.confirm({
+            title: "提示",
+            iconWarning: true,
+            text: '此地址已设置为商家配送的发货地址，修改或删除后商家配送设置也将修改，您确定要修改吗？',
+            confirmText: '确定',
+            showCancelButton: true,
+            customClass: 'address-update'
+          }).then(() => {
+            this.ApiDelAddressById(id, addressType)
+          }).catch((err) => {
+          });
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+      
     },
     // 判断地址是否为商家配送地址
-    isMerchantDeliverAddressById(id) {
-      return true
-    },
-    goAddressEdit(id) {  
-      id = 1
-      // 判断是否是商家配送地址// 
-      if (!this.isMerchantDeliverAddressById(id)) {
-         this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
-      } else {
-        const isOpenMerchantDeliver = this.isOpenMerchantDeliver()
-        isOpenMerchantDeliver.then((isOpen) => {
-          console.log('dev',isOpen)
-          // 是否打开
-          if (isOpen) {
-            this.hanldeOpenDelivery(id)
-          } else {
-            this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
-          }
+    getMerchantDeliverAddressById(id) {
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressDefaultSender().then((response) => {
+          resolve(response)
+        }).catch((err) => {
+          reject(err)
         })
-      }
+      })
+    },
+    goAddressEdit(id) {
+      // 判断是否是商家配送地址// 
+      const p2 = this.isOpenMerchantDeliver() // 是否开启商家配送
+      const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+      Promise.all([p1, p2]).then((result) => {
+        const [ response, isOpen ] = result
+        console.log(id, response.id)
+        if (response && +response.id === +id) {
+            // 是否打开
+            if (isOpen) {
+              this.hanldeOpenDelivery(id)
+            } else {
+              this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+            }
+        } else {
+          this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+        }
+      }).catch((errors) => {
+        console.log(errors)
+      })
     },
     // 是否开启商家配送
     isOpenMerchantDeliver() {
@@ -218,7 +316,7 @@ export default {
         cancelButtonText: '取消'
       }).then(() => {
         // 调用删除接口方法
-        this.delAddressById(row.id)
+        this.delAddressById(row.id, row.addressType)
       });
     },
     // 处理删除默认地址
@@ -232,47 +330,77 @@ export default {
       }).then(() => {
       });
     },
-    delAddressById(id) {
+    ApiDelAddressById(id, addressType) {
+      return new Promise((resolve, reject) => {
+        this._apis.set.delAddressById({ id, addressType }).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
+    delAddressById(id, addressType) {
       // 删除api
-      this.confirm({
-        title: "提示",
-        iconSuccess: true,
-        text: '保存成功',
-        confirmText: '确定',
-        cancelButtonText: '取消'
-      }).then(() => {
-        this.ruleForm.pageNo = 1
-        this.getAddressList()
-      }).catch(()=> {
-        
-      });
+      this.ApiDelAddressById(id, addressType).then(() => {
+        this.confirm({
+          title: "提示",
+          iconSuccess: true,
+          text: '保存成功',
+          confirmText: '确定',
+          cancelButtonText: '取消'
+        }).then(() => {
+          this.ruleForm.pageNo = 1
+          this.getAddressList()
+        })
+      }).catch((error) => {
+        this.$message.error(error || '保存失败')
+      })
+      
     },
     delAddress(row) {
-      let id = 1
-      row.id = 1
       // 是否默认地址
       // 删除逻辑
       // 1 默认地址处理，不删除，给提示框
       // 2 开启商家配送，同时商家配送使用此地址（最新地址），删除时要同时关闭商家配送
       // 3 删除地址
       // 3 
-      const isDefaultAddress = false // mock
+      const id = row.id
+      const addressType = row.addressType
+      const isDefaultAddress = row.isDefaltReturnAddress === 1 || row.isDefaltSenderAddress === 1 // mock
       if (!isDefaultAddress) {
           // 判断是否是商家配送地址// 
-        if (!this.isMerchantDeliverAddressById(id)) {
-           this.handleDelAddress(row)
-        } else {
-          const isOpenMerchantDeliver = this.isOpenMerchantDeliver()
-          isOpenMerchantDeliver.then((isOpen) => {
-            console.log('dev',isOpen)
-            // 是否打开
-            if (isOpen) {
-              this.hanldeOpenDeliveryDelAddress(id) // 
-            } else {
-               this.handleDelAddress(row)
-            }
-          })
-        }
+        const p2 = this.isOpenMerchantDeliver() // 是否开启商家配送
+        const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+        Promise.all([p1, p2]).then((result) => {
+          const [ response, isOpen ] = result
+          console.log(response && +response.id === +id)
+          if (response && +response.id === +id) {
+              // 是否打开
+              if (isOpen) {
+                this.hanldeOpenDeliveryDelAddress(row)
+              } else {
+                this.handleDelAddress(row)
+              }
+          } else {
+            this.handleDelAddress(row)
+          }
+        }).catch((errors) => {
+          console.log(errors)
+        })
+        // if (!this.isMerchantDeliverAddressById(id)) {
+        //    this.handleDelAddress(row)
+        // } else {
+        //   const isOpenMerchantDeliver = this.isOpenMerchantDeliver()
+        //   isOpenMerchantDeliver.then((isOpen) => {
+        //     console.log('dev',isOpen)
+        //     // 是否打开
+        //     if (isOpen) {
+        //       this.hanldeOpenDeliveryDelAddress(id) // 
+        //     } else {
+        //        this.handleDelAddress(row)
+        //     }
+        //   })
+        // }
         // this.handleDelAddress(row)
       } else {
         this.handleDelDefaultAddress(row)
@@ -352,7 +480,6 @@ export default {
     img {
       display: block;
       width: 199px;
-      height: 140x;
       padding-top: 107px;
       margin: 0 auto;
     }

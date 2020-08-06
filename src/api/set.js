@@ -243,3 +243,67 @@ export function updateOrderDeliverInfo(data) {
     data
   })
 }
+
+// 获取地址列表
+export function getAddressList(data) {
+  return request({
+    target: 'SHOP-ADDRESS-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 新增地址
+export function addAddress(data) {
+  return request({
+    target: 'SHOP-ADDRESS-ADD-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 编辑地址
+export function editAddressById(data) {
+  return request({
+    target: 'SHOP-ADDRESS-EDIT-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+//  地址库默认退货地址查询
+export function getAddressDefaultReturn(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-RETURN-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+//  地址库默认发货地址查询
+export function getAddressDefaultSender(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-SENDER-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 地址库详情查询
+export function getAddressDetail(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DETAIL-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 
+export function delAddressById(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DELETE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}

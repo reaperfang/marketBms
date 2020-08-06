@@ -481,9 +481,14 @@ export default {
   methods: {
     // 获取发货地址
     getDeliveryAddress() {
-      // addressId address
-      // this.address = 'test'
-      // this.addressId = 1
+      this._apis.set.getAddressDefaultSender().then((response) => {
+        this.address = `${response.address} ${response.addressDetail}`
+        this.ruleForm.lng = response.longitude
+        this.ruleForm.lat = response.latitude
+        this.addressId = response.id
+      }).catch((err) => {
+        this.$message.error(err || '数据获取失败')
+      })
     },
     handleRepeatCycleChange(val) {
       console.log('---val--', val)
@@ -740,6 +745,7 @@ export default {
       }
     },
     open() {
+      console.log('isCompleted',isCompleted)
       // const isCompleted = Math.random() * 10  > 5 ? true : false // mock data
       // 是否完成配置
       if (!isCompleted) {
@@ -766,7 +772,7 @@ export default {
           }
         }).catch(error =>{
           this.isOpen = false
-          this.$message.error('保存失败');
+          this.$message.error(error || '保存失败');
           // this.loading = false
         })
       }
@@ -899,8 +905,9 @@ export default {
           this.isOpenOrdinaryExpress = res.isOpenOrdinaryExpress // 是否开启普通快递 0-否 1-是
           this.isOpenTh3Deliver = res.isOpenTh3Deliver // 是否开启第三方配送 0-否 1-是
           this.isOpenSelfLift = res.isOpenSelfLift // 是否开启上门自提 0-否 1-是
-          this.ruleForm.lng = res.longitude
-          this.ruleForm.lat = res.latitude
+          // 经纬度需要获取地址库的默认地址
+          // this.ruleForm.lng = res.longitude
+          // this.ruleForm.lat = res.latitude
           const areaCode = res.areaCode
           const cityCode = res.cityCode
           const provinceCode = res.provinceCode
@@ -1009,6 +1016,17 @@ export default {
           this.errWeekMsg = '请点击编辑，选择重复日'
           isValidWeeks = false
         }
+      }
+      if (!this.ruleForm.lng || !this.ruleForm.lat) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: '当前地址无法获取经纬度，请重新修改取货地址',
+          confirmText: '我知道了',
+          showCancelButton: false
+        })
+        this.isLoading = false
+        return false
       }
       console.log('handleSubmit:repeatCycle')
       this.$refs[formName].validate((valid) => {

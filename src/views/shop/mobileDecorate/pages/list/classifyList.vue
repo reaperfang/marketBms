@@ -162,8 +162,28 @@ export default {
   }
 }
 /deep/ thead th{
-  background: rgba(230,228,255,1)!important;
-  color:#837DFF!important;
+  background: #f6f7fa!important;
+  color:#44434B!important;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+  text-align: center;
+  &:nth-child(1) {
+      text-align: left;
+      padding-left: 20px;
+  }
+}
+/deep/ .el-table td{
+  &:nth-child(2) {
+    text-align: right;
+    padding-right: 94px;
+  }
+}
+.table-btn{
+  padding-right: 5px;
+  border-right: 1px solid #dadae3;
+  &:last-child{
+    border-right: none;
+  }
 }
 .page_name{
   cursor: pointer;

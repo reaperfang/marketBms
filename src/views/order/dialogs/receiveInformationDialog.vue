@@ -401,12 +401,12 @@ export default {
           }
           if(!this.$route.query.afterSale) {
             params = Object.assign({}, params, {
-              orderIds: this.$route.query.ids.split(',').map(id => id),
-              orderSendInfoIds: this.$route.query._ids.split(',').map(id => id),
+              orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+              orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
             })
           } else {
             params = Object.assign({}, params, {
-              orderAfterIds: this.$route.query.ids.split(',').map(id => id)
+              orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
             })
           }
           this._apis.order
@@ -472,6 +472,10 @@ export default {
     ajax: {
       type: Boolean,
       default: false
+    },
+    _ids: {
+      type: Array,
+      default: () => []
     }
   },
   components: {

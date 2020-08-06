@@ -3,29 +3,43 @@
         <el-dialog
         title=""
         :visible.sync="showShopsDialog"
-        width="40%"
+        width="50%"
         :before-close="handleClose"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="showClose"
         style="margin-top:20vh;">
         <span slot="title" class="dialog_title">
-            <a href="https://www.300.cn/ " target="_blank">返回官网</a> 
-            <!-- | <a>创建店铺</a> -->
+            <!-- <a href="https://www.300.cn/ " target="_blank">返回官网</a>  -->
+            我的店铺
         </span>
         <div class="content">
-            <div class="content_top">
-            <!-- <el-input placeholder="请输入店铺名称" v-model="shopName" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search" class="search"></el-button>
-            </el-input> -->
-            <!-- <el-button>创建店铺</el-button> -->
-            </div>
-            <div class="content_main">
-              <div v-for="item in shopList" :key="item.id" @click="toShop(item)" class="shopItem">
-                  <span>{{item.shopName}}</span>
-                  <span>移动商城</span>
-              </div>
-            </div>
+          <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
+              <!-- <span>{{item.shopName}}</span>
+              <span>移动商城</span> -->
+              <p>
+                <span class="shopName">{{item.shopName}}</span>
+                <span class="status">营业中</span>
+              </p>
+              <p>
+                <span class="base" v-if="item.bossProductId == 3">基础版</span>
+                <span class="major" v-if="item.bossProductId == 100">专业版</span>
+              </p>
+              <p>创建时间：2018.09.12 12:00:00</p>
+              <p>有效期至：2019.09.12 12:00:00</p>
+          </div>
+          <p class="p_center">
+            <el-pagination
+              v-if="shopLists.length != 0"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="Number(startIndex) || 1"
+              :page-size="pageSize*1"
+              layout="prev, pager, next"
+              :total="total"
+              :background="background">
+            </el-pagination>
+          </p>
         </div>
         </el-dialog>
     </div>
@@ -44,23 +58,48 @@ export default {
         return true
       }
       return false
+    },
+    tid(){
+      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      return userInfo.tenantInfoId
     }
   },
   data() {
       return {
           shopName:'',
           showDialog:false,
-          shopLists:[]
+          shopLists:[],
+          startIndex:1,
+          pageSize:9,
+          total:0
       }
   },
-  props:['showShopsDialog','shopList','route','showClose'],
+  props:['showShopsDialog','shopList','route','showClose','background'],
   watch: {
       showShopsDialog(newValue,oldValue){
           this.showDialog = newValue
       },
   },
-  created(){},
+  created(){
+    this.getShopList()
+  },
   methods: {
+    //获取店铺列表
+    getShopList(){
+      let obj =  {
+        startIndex:this.startIndex,
+        pageSize:this.pageSize,
+        tenantInfoId:this.tid
+      }
+      this._apis.profile.getShopList(obj).then(response => {
+        console.log('res',response)
+        this.total = response.total
+        this.shopLists = response.list
+      }).catch(error =>{
+        this.$message.error(error);
+      })
+    },
+
     //进入店铺
     toShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
@@ -95,49 +134,67 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style scoped rel="stylesheet/scss" lang="scss">
+.dialog_title{
+  font-size: 22px;
+  color: #44434B;
+}
 .content{
-  .content_top{
-    display: flex;
-    justify-content: space-between;
-  }
-  .content_main{
-    width: 100%;
-    display:flex;
-    flex-wrap: wrap;
-    flex: 1;
-    margin:20px 0px 30px 0px;
-    .shopItem{
-      width: 143px;
-      height: 76px;
-      border-radius:4px;
-      background:rgba(101,94,255,1);
-      opacity:0.5;
-      margin:0px 10px 10px 0px;
-      cursor: pointer;
-      display:inline-block;
-      span{
-        width: 123px;
-        height:35px;
-        line-height: 25px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        padding:10px;
-        display: block;
+  width: 100%;
+  margin:20px 0px 30px 0px;
+  .shopItem{
+    width:30%;
+    height:121px;
+    background:rgba(255,255,255,1);
+    border-radius:3px;
+    border:1px solid rgba(218,218,227,1);
+    margin:0px 10px 10px 0px;
+    padding: 10px;
+    cursor: pointer;
+    display:inline-block;
+    p:nth-of-type(1){
+      display: flex;
+      justify-content: space-between;
+      .shopName{
         font-size: 14px;
+        color: #44434B;
+        font-weight:500;
+      }
+      .status{
+        font-size: 12px;
+        color: #FD932B;
+      }
+    }
+    p:nth-of-type(2){
+      line-height: 40px;
+      span{
+        width:62px;
+        height:22px;
+        line-height: 22px;
+        border-radius:3px;
+        display: inline-block;
+        text-align: center;
+        font-size: 12px;
         color: #FFFFFF;
       }
+      .base{
+        background: #578EFA;
+      }
+      .major{
+        background: #FD932B;
+      }
+    }
+    p:nth-of-type(3),p:nth-of-type(4){
+      font-size: 12px;
+      color: #92929B;
+      line-height: 25px;
     }
   }
 }
-/deep/ .el-dialog__body{
-  padding:10px 20px;
+.el-dialog__header{
+  background:rgba(101,94,255,0.09);
 }
-.dialog_title a{
-  cursor: pointer;
-}
-.dialog_title a:hover{
-  text-decoration: underline;
+.p_center{
+  text-align: center;
 }
 </style>

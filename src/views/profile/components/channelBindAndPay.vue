@@ -20,7 +20,7 @@
        <li class="pay">
          <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
          <div class="btn-area">
-            <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
+            <el-button class="btn-opeate" :disabled="isOpenPay" @click="setPayInfo">开启支付</el-button>
             <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
          </div>
        </li>
@@ -134,13 +134,13 @@ export default {
         mchId:this.cid,
         channelId:'WX_ALL',
       }
-      // this._apis.set.getShopPayInfo(query).then(response =>{
-      //   const id = response && response.id
-      //   this.isOpenPay = id ? true : false
-      // }).catch(error =>{
-      //   this.$message.info('商户未设置支付信息');
-      //   this.isOpenPay = false
-      // })
+      this._apis.set.getShopPayInfo(query).then(response =>{
+        const id = response && response.id
+        this.isOpenPay = id ? true : false
+      }).catch(error =>{
+        this.$message.info('商户未设置支付信息');
+        this.isOpenPay = false
+      })
       
     },
     setPayInfo() {

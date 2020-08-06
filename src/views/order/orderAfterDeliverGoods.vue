@@ -536,7 +536,7 @@ export default {
 
                     this.sending = true
                     let obj = {
-                                orderAfterSaleId: this.$route.query.ids,
+                                orderAfterSaleId: this.$route.query.ids || this.$route.query.id,
                                 memberInfoId: this.orderAfterSaleSendInfo.memberInfoId,
                                 orderAfterSaleCode: this.orderAfterSaleSendInfo.orderAfterSaleCode,
                                 receivedName: this.orderAfterSaleSendInfo.receivedName,
@@ -585,7 +585,7 @@ export default {
                         this.$router.push({
                             path: '/order/deliverGoodsSuccess',
                             query: {
-                                id: this.$route.query.ids,
+                                id: this.$route.query.ids || this.$route.query.id,
                                 type: 'orderAfterDeliverGoods',
                                 print: this.express + ''
                             }
@@ -620,7 +620,7 @@ export default {
             this.orderAfterSaleSendInfo = Object.assign({}, this.orderAfterSaleSendInfo, value)
         },
         getOrderDetail() {
-            this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids]}).then((res) => {
+            this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 if(!this.orderAfterSaleSendInfo.sendAddress) {

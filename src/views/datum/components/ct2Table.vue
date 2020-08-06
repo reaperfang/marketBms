@@ -4,7 +4,7 @@
     <el-table
       :data="listObj"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'pv', order: 'descending'}"
       >
       <el-table-column

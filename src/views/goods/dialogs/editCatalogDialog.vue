@@ -5,12 +5,14 @@
     :showFooter="showFooter"
     title="编辑分类">
     <span class="msgInfo">您要进行</span>
-    <el-radio-group v-model="radio">
-      <el-tooltip class="item" effect="dark" content="转移分类后，原有商品分类将被清空" placement="top">
+    <el-radio-group v-model="radio" @change="clearValues">
+      <el-tooltip class="item" effect="dark" placement="top">
         <el-radio :label="1">转移分类</el-radio>
+        <div slot="content">转移分类后，原有商品分类将<br/>被清空</div>
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="原商品分类不变，商品将增加新的分类" placement="top">
+      <el-tooltip class="item" effect="dark" placement="top">
         <el-radio :label="2">新增分类</el-radio>
+        <div slot="content">原商品分类不变，商品将增加<br/>新的分类</div>
       </el-tooltip>
     </el-radio-group>
     <div>
@@ -33,7 +35,6 @@
         v-model="categoryValue"
         :options="categoryOptions"
         @change="handleChange"
-        :disabled="isHasCategory"
         :props="{ multiple: true, checkStrictly: true }"
         placeholder="请选择商品分类"
         clearable
@@ -58,13 +59,6 @@ export default {
       categoryValue: [],
       values: [],
       categoryOptions: [],
-      ruleForm: {
-        name: "",
-        stock: ""
-      },
-      rules: {
-        stock: [{ required: true, message: "请输入库存", trigger: "blur" }]
-      },
       showFooter: false
     };
   },
@@ -73,6 +67,9 @@ export default {
   },
   watch: {},
   methods: {
+    clearValues(){
+      this.categoryValue=[];
+    },
     getCategoryList() {
       this._apis.goods
         .fetchCategoryList()
@@ -162,11 +159,15 @@ export default {
     font-size: 22px;
     color: rgba(68, 67, 75, 1);
   }
+  .el-radio__label{
+    font-size:16px;
+  }
 }
 .msgInfo {
   display: inline-block;
   margin:20px 37px 0 24px;
   color:rgba(68,67,75,1);
+  font-size:18px;
 }
 
 .item{

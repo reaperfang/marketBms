@@ -140,7 +140,7 @@ export default {
             })
         },
         sendGoods() {
-            this.$router.push('/order/orderAfterDeliverGoods?id=' + this.orderAfterSale.id)
+            this.$router.push('/order/orderAfterDeliverGoods?afterSale=true&id=' + this.orderAfterSale.id)
         },
         confirmTakeOver() {
             this.$emit('confirmTakeOver')
