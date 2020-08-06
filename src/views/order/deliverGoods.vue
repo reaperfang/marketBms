@@ -19,7 +19,7 @@
           <div class="content">
             <el-table
               :row-key="getRowKeys"
-              :class="{isIE: isIE}"
+              :class="{isIE: isIE, disabledCheckAll: orderInfo.deliveryWay != 4}"
               ref="table"
               :data="tableData"
               style="width: 100%"
@@ -77,53 +77,79 @@
         </div>
       </div>
       <div class="container-item">
-        <p>2.确认收发货信息</p>
-        <div class="container-item-content deliver-goods-address">
-          <div class="title">
-            <div class="title-list">
-              <i class="take-in-icon"></i>
-              <span>收货信息</span>
+        <template v-if="false">
+          <p>2.确认收发货信息</p>
+          <div class="container-item-content deliver-goods-address">
+            <div class="title">
+              <div class="title-list">
+                <i class="take-in-icon"></i>
+                <span>收货信息</span>
+              </div>
+              <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
             </div>
-            <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
-          </div>
-          <div class="content">
-            <div class="item">
-              <div class="label">收货人</div>
-              <div class="value">{{orderInfo.receivedName}}</div>
-            </div>
-            <div class="item">
-              <div class="label">联系电话</div>
-              <div class="value">{{orderInfo.receivedPhone}}</div>
-            </div>
-            <div class="item">
-              <div class="label">收货信息</div>
-              <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="container-item-content deliver-goods-address">
-          <div class="title">
-            <div class="title-list">
-              <i class="deliver-icon"></i>
-              <span>发货信息</span>
-            </div>
-            <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
-          </div>
-          <div class="content">
-            <div class="item">
-              <div class="label">发货人</div>
-              <div class="value">{{orderInfo.sendName}}</div>
-            </div>
-            <div class="item">
-              <div class="label">联系电话</div>
-              <div class="value">{{orderInfo.sendPhone}}</div>
-            </div>
-            <div class="item">
-              <div class="label">发货信息</div>
-              <div class="value">{{orderInfo.sendAddress}} {{orderInfo.sendDetail}}</div>
+            <div class="content">
+              <div class="item">
+                <div class="label">收货人</div>
+                <div class="value">{{orderInfo.receivedName}}</div>
+              </div>
+              <div class="item">
+                <div class="label">联系电话</div>
+                <div class="value">{{orderInfo.receivedPhone}}</div>
+              </div>
+              <div class="item">
+                <div class="label">收货信息</div>
+                <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</div>
+              </div>
             </div>
           </div>
-        </div>
+          <div class="container-item-content deliver-goods-address">
+            <div class="title">
+              <div class="title-list">
+                <i class="deliver-icon"></i>
+                <span>发货信息</span>
+              </div>
+              <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
+            </div>
+            <div class="content">
+              <div class="item">
+                <div class="label">发货人</div>
+                <div class="value">{{orderInfo.sendName}}</div>
+              </div>
+              <div class="item">
+                <div class="label">联系电话</div>
+                <div class="value">{{orderInfo.sendPhone}}</div>
+              </div>
+              <div class="item">
+                <div class="label">发货信息</div>
+                <div class="value">{{orderInfo.sendAddress}} {{orderInfo.sendDetail}}</div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <p>2.确认自提信息</p>
+          <div class="container-item-content deliver-goods-address">
+            <div class="title">
+              <div class="title-list">
+                <span>提货信息</span>
+              </div>
+            </div>
+            <div class="content">
+              <div class="item">
+                <div class="label">提货人</div>
+                <div class="value">{{orderInfo.receivedName}}</div>
+              </div>
+              <div class="item">
+                <div class="label">自提点信息</div>
+                <div class="value">{{orderInfo.receivedPhone}}</div>
+              </div>
+              <div class="item">
+                <div class="label">预约提货时间</div>
+                <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</div>
+              </div>
+            </div>
+          </div>
+        </template>
       </div>
       <div class="container-item">
         <p>3.填写物流信息</p>
@@ -173,7 +199,7 @@
             ref="ruleFormStore"
             label-width="100px"
             class="demo-ruleForm"
-          >
+           >
             <el-form-item label="配送方式">
               <span>商家配送</span>
             </el-form-item>
@@ -208,6 +234,23 @@
                 placeholder="非必填，请输入，不超过100个字符"
                 v-model="ruleFormStore.sendRemark"
               ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <!-- 配送方式 上门自提 -->
+        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 3">
+          <el-form
+            :model="ruleFormStore"
+            :rules="rulesStore"
+            ref="ruleFormStore"
+            label-width="100px"
+            class="demo-ruleForm"
+           >
+            <el-form-item label="配送方式">
+              <span>上门自提</span>
+            </el-form-item>
+            <el-form-item label="备注" prop="desc">
+              <el-input type="textarea" v-model="ruleFormStore.desc" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -544,7 +587,7 @@ export default {
       }, 500)
     },
     selectable(row, index) {
-      if(row.goodsCount - row.cacheSendCount == 0) {
+      if(this.orderInfo.deliveryWay == 4 || (row.goodsCount - row.cacheSendCount == 0)) {
         return false
       }
       return true
@@ -816,6 +859,17 @@ export default {
           if(this.orderInfo.deliveryWay == 2){
             this.getDistributorList();
           }
+
+          if(this.orderInfo.deliveryWay == 4) {
+            this.$nextTick(() => {
+              document.querySelector('.disabledCheckAll thead .el-checkbox').setAttribute('class', 'el-checkbox is-disabled')
+              document.querySelector('.disabledCheckAll thead .el-checkbox__input').setAttribute('class', 'el-checkbox__input is-disabled')
+              document.querySelector('.disabledCheckAll thead .el-checkbox__original').setAttribute('disabled', 'disabled')
+              document.querySelector('.disabledCheckAll thead').addEventListener('click', function () {
+                event.stopImmediatePropagation()
+              }, true)
+            })
+          }
         })
         .catch(error => {});
     },
@@ -1056,6 +1110,10 @@ export default {
 }
 /deep/ .el-table thead tr th {
   border-bottom: none;
+}
+/deep/ .deliver-goods-logistics .el-textarea {
+  width: 623px;
+  height: 99px;
 }
 </style>
 

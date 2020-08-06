@@ -125,7 +125,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
-                    label="配送时间"
+                    label="预约时间"
                     width="110">
                     <template slot-scope="scope">
                         <div>
@@ -175,6 +175,9 @@
                                 <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
                                 <span v-else @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
+                            <!-- <template>
+                                <span>核销验证</span>
+                            </template> -->
                         </div>
                     </template>
                 </el-table-column>
@@ -225,7 +228,8 @@ export default {
                 receivedName: '',
                 deliveryWay: "", // 配送方式:1普通快递,2商家配送
                 deliveryDate: "", //商家配送-日期
-                deliveryTime: "" //商家配送-时间段
+                deliveryTime: "", //商家配送-时间段
+                isSupportElectronicSheet: 0
             },
             tableData: [],
             loading: false,
@@ -316,6 +320,10 @@ export default {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要补填物流信息的订单。'})
                 return
             }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量补填物流。'})
+                return;
+            }
             if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
                 this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
                 return;
@@ -354,8 +362,12 @@ export default {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量发货的单据。'})
                 return
             }
-            if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
-                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+            // if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
+            //     this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+            //     return;
+            // }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量发货。'})
                 return;
             }
             if(this.multipleSelection.some(val => val.status != 3 && val.status != 4)) {
@@ -376,6 +388,10 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印电子面单的单据。'})
                 return
+            }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出配送方式为普通快递-电子面单的单据，再进行批量打印电子面单。'})
+                return;
             }
             if(!this.multipleSelection.map(val => val.isKDBird).every(val => val == true)) {
                 this.confirm({title: '提示', icon: true, text: '勾选单据中包含不支持电子面单的单据，无法批量打印，请先依据支持电子面单的快递公司筛选单据后，再打印。'})
@@ -403,6 +419,10 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印配送单的单据。'})
                 return
+            }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送、第三方配送或上门自提的单据，再进行批量打印配送单。'})
+                return;
             }
             if(this.multipleSelection.some(val => val.status == 3)) {
                 this.confirm({title: '提示', icon: true, text: '勾选订单包含未发货或未付款订单，无法批量打印；请重新勾选已发货订单批量打印配送单。'})
