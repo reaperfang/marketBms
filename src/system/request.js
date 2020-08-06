@@ -216,6 +216,9 @@ class Ajax {
           case 'uploadImage':  //图片上传
             config.baseURL = `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`;
             break;
+          case 'commission': //分销模块
+            config.baseURL = `${process.env.DATA_API}/api-commission-web/commission/api.do`;
+            break;
           case 'matrix':  //智能运营数据查询条件来源
             config.baseURL = `${process.env.DATA_API}/matrix-admin/matrix/api.do`;
             break;

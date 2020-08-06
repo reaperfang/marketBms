@@ -636,7 +636,7 @@ export default {
       this.selectedInfos = Object.assign({}, obj);
     },
     save() {
-      if (this.ruleForm.name == "") {
+      if (!this.ruleForm.name) {
         this.$message({
           message: '等级称谓不能为空',
           type: 'warning'

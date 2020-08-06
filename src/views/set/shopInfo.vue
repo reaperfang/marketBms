@@ -378,6 +378,10 @@ export default {
             arr.push(response.areaCode);
             this.form.addressCode = arr;
           }
+          // 解决省市区名称第二次保存时，没有点选地图的重新获取地址时，省市区名称丢失问题
+          this.province = response.province || this.province
+          this.city = response.city || this.city
+          this.area = response.area || this.area
           // 经纬度
           this.form.lat = response.latitude
           this.form.lng = response.longitude
@@ -446,7 +450,7 @@ export default {
         // })
       }).catch(error =>{
         console.log('updateShopInfo:error', error)
-        this.$message.error('保存失败');
+        this.$message.error(error || '保存失败');
       }).finally(() => {
         this.loading = false
       })
