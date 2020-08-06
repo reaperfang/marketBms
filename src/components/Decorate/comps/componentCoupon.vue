@@ -8,7 +8,7 @@
           <ul ref="scrollContent" class="clearfix" :class="'list'+currentComponentData.data.listStyle+' couponStyle'+currentComponentData.data.couponStyle">
             <!-- status:true时候是已领取,hideScrambled:false, -->
             <template v-for="(item, key) in displayList">
-              <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
+              <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :class="{'list-received': item.status=='true'}" :key="key" @click="openCouponLayer(item)">
                 <template v-if="currentComponentData.data.listStyle !== 3">
                   <div class="first_money">
                     <span :class="style1">{{getTitle(item)}}</span>
@@ -194,6 +194,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
+      datas[0].status = 'true';
       this.displayList = datas;
     },
 
@@ -356,7 +357,19 @@ export default {
     color: #000 !important;
   }
   .col_6 {
-    color: #d3d3d3 !important;
+    color: #D3D2D3 !important;
+  }
+  .list-received {
+    .first_money span, .first_moneys span, .info-title, .first_present {
+      color: #fff !important;
+    }
+  }
+  .list1.couponStyle3,.list2.couponStyle3 {
+    .list-received {
+      .first_money span, .first_moneys span, .info-title, .first_present {
+        color: #D3D2D3 !important;
+      }
+    }
   }
 }
 </style>
