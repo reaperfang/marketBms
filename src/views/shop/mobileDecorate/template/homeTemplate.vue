@@ -35,12 +35,11 @@
           <el-form-item label="" prop="name">
             <el-radio-group v-model="ruleForm.sortBy" size="small" @change="sortByChange">
               <el-radio-button :value="0" :label="0">综合排序</el-radio-button>
-<!--              <el-radio-button :value="1" :label="1">价格<i class="el-icon-top"></i></el-radio-button>-->
-<!--              <el-radio-button :value="2" :label="2">价格<i class="el-icon-bottom"></i></el-radio-button>-->
+              <el-radio-button :value="1" :label="1">价格<i class="el-icon-top"></i></el-radio-button>
+              <el-radio-button :value="2" :label="2">价格<i class="el-icon-bottom"></i></el-radio-button>
               <el-radio-button :value="3" :label="3">人气从高到低</el-radio-button>
             </el-radio-group>
           </el-form-item>
-<!--      付费相关 先注释
           <el-form-item label="" prop="name">
             <el-checkbox v-model="checked" :disabled="freeDisabled">只看免费模板</el-checkbox>
           </el-form-item>
@@ -51,7 +50,6 @@
             <el-input-number v-model="ruleForm.highPrice" controls-position="right" :precision="2" :disabled="checked"
                              :min="0" :max="9999" width="150" placeholder="最高金额（元）"></el-input-number>
           </el-form-item>
--->
         </el-form>
       </div>
     </div>
@@ -200,10 +198,6 @@
       this.effIndustryList()
       this.fetchList();
       this.preLoadObj = new Image();
-      const shopObj = JSON.parse(localStorage.getItem('shopInfos'));
-      shopObj.id = 51;
-
-      localStorage.setItem('shopInfos', JSON.stringify(shopObj));
     },
     watch: {
       zoomRatio(newValue) {
@@ -383,13 +377,12 @@
 
       /* 应用模板 */
       apply(item) {
-        // this.isLoading = true;
+        this.isLoading = true;
         this._apis.shop.getTemplateInfo({
           pageTemplateId: item.id
         }).then(res1 => {
           if (item.chargeType !== 1) {
             if (res1 === null || res1.status === 2) {
-              return
               this._apis.templatePay.getOrcode({
                 orderSource: 1,
                 orderType: 1,
@@ -402,8 +395,12 @@
                 this.qrCodeInfo = res;
                 this.dialogVisible = true;
                 this.tempInfo = item
+              }).catch((err)=> {
+                console.log('aaa', err);
+                this.$message.error(err)
               }).finally(() => {this.isLoading = false})
             } else {
+              this.isLoading = false;
               this.confirm({
                 title: '提示',
                 customClass: 'goods-custom',
@@ -426,8 +423,11 @@
                 }).then(() => {
                   this._routeTo('m_templateEdit', {id: item.id});
                 })
-              })
+              }).catch((err)=> {
+                this.$message.error(err)
+              }).finally(() => {this.isLoading = false})
             } else {
+              this.isLoading = false;
               this.confirm({
                 title: '提示',
                 customClass: 'goods-custom',
@@ -438,7 +438,7 @@
               })
             }
           }
-        }).finally(() => {this.isLoading = false})
+        }).catch(() => {this.isLoading = false})
       },
 
       /* 关闭支付模板 */
