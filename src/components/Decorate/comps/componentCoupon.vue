@@ -5,16 +5,34 @@
       <template v-if="hasRealData || hasFakeData">
         <!-- 样式一 -->
         <div class="coupon_first componentCoupon" v-if="hasRealData">
-          <ul ref="scrollContent" class="clearfix" :class="'list'+currentComponentData.data.listStyle">
+          <ul ref="scrollContent" class="clearfix" :class="'list'+currentComponentData.data.listStyle+' couponStyle'+currentComponentData.data.couponStyle">
             <!-- status:true时候是已领取,hideScrambled:false, -->
             <template v-for="(item, key) in displayList">
               <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
-                <div class="first_money">
-                  <span :class="style1">{{getTitle(item)}}</span>
-                  <span :class="style1">{{getContent(item)}}</span>
-                </div>
-                <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
-                <div :class="style2" class="first_present" v-else>无门槛限制</div>
+                <template v-if="currentComponentData.data.listStyle !== 3">
+                  <div class="first_money">
+                    <span :class="style1">{{getTitle(item)}}</span>
+                    <span :class="style1">{{getContent(item)}}</span>
+                  </div>
+                  <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
+                  <div :class="style2" class="first_present" v-else>无门槛限制</div>
+                </template>
+                <template v-else>
+                  <div class="first_money" v-if="getContent(item) == '折'">
+                    <span :class="style1">{{getTitle(item)}}</span>
+                    <span :class="style1">{{getContent(item)}}</span>
+                  </div>
+                  <div class="first_moneys" v-else>
+                    <span :class="style1">¥</span>
+                    <span :class="style1">{{getTitle(item)}}</span>
+
+                  </div>
+                  <div class="info">
+                    <div class="info-title" :class="style1">优惠券</div>
+                    <div :class="style1" class="first_present" v-if="item.useCondition!=-1">购物满{{item.useCondition}}使用</div>
+                    <div :class="style1" class="first_present" v-else>无门槛限制</div>
+                  </div>
+                </template> 
               </li>
             </template>
           </ul>
@@ -47,7 +65,7 @@ export default {
     style1() {
       // 样式为4的时候，颜色边框是什么就是是什么颜色否则走最外层默认定义的白色字体。同时当颜色为第三种的时候（白底），颜色为红色
       return [
-        this.currentComponentData.data.couponStyle === 3 ? "col_" + this.currentComponentData.data.couponColor : "",
+        this.currentComponentData.data.couponStyle === 3 && this.currentComponentData.data.listStyle !== 3 ? "col_" + this.currentComponentData.data.couponColor : "",
         this.currentComponentData.data.couponColor === 4 ? "col_1" : ""
       ];
     },
@@ -176,8 +194,6 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      console.log(this.currentComponentData)
-      console.log(this.currentComponentData.data)
       this.displayList = datas;
     },
 
@@ -227,7 +243,7 @@ export default {
             color: rgba(255, 255, 255, 1);
           }
           & > span:last-child {
-            font-size: 9px;
+            font-size: 12px;
             color: rgba(255, 255, 255, 1);
           }
         }
@@ -244,6 +260,12 @@ export default {
      & > li {
        flex: 0 0 138px;
        background-size: 128px 100% !important;
+       & > .first_money {
+         padding-right: 10px;
+       }
+       & > .first_present {
+         padding-right: 10px;
+       }
      }
   }
   .list2 {
@@ -252,12 +274,70 @@ export default {
     & > li {
       width: calc(33.33333% - 10px);
       margin-right: 10px !important;
+      & > .first_money {
+        & > span:first-child {
+          font-size: 28px !important;
+        }
+      }
     }
   }
   .list3 {
     flex-wrap: wrap;
     & > li {
       width: 100%;
+      & > .first_money {
+        float: left;
+        margin-left: 34px;
+        padding-top: 16px;
+        & > span:first-child {
+            font-size: 54px !important;
+        }
+      }
+      & > .first_moneys {
+        float: left;
+        margin-left: 34px;
+        padding-top: 16px;
+        & > span:first-child {
+            font-size: 20px !important;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+        }
+        & > span:last-child {
+            font-size: 54px !important;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+        }
+      }
+      & > .info {
+        float: left;
+        text-align: left;
+        margin-left: 20px;
+        .info-title {
+          padding-top: 30px;
+          padding-bottom: 3px;
+          font-size: 16px;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+        }
+        .first_present {
+          color:rgba(255,255,255,1);
+        }
+      }
+    }
+  }
+  .list3.couponStyle4 {
+    .first_moneys {
+      width: 130px;
+      margin: 0;
+      text-align: center;
+    }
+    .info {
+      width: 185px;
+      margin: 0;
+      text-align: center;
+      .info-title {
+        padding-top: 16px;
+      }
     }
   }
   .col_1 {
