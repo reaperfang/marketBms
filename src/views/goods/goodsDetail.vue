@@ -2619,9 +2619,9 @@ export default {
                         })
 
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
-                            if(!this.validateGoodsInfos(this.ruleForm.goodsInfos[i])){
-                                return 
-                            }
+                           if(!this.validateGoodsInfos(this.ruleForm.goodsInfos[i])){//属性值验证不通过
+                               return
+                           }
 			        //如果配送方式勾选了商家配送，则重量为必填项
                         if(this.ruleForm.deliveryWay.includes(2)){
                             if(!this.ruleForm.goodsInfos[i].weight) {
