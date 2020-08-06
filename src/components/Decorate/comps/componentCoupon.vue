@@ -194,7 +194,6 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      datas[0].status = 'true';
       this.displayList = datas;
     },
 
