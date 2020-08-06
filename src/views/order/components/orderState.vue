@@ -115,7 +115,7 @@
                 </div>
                 <div class="item righter">
                     <p>已关闭</p>
-                    <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                    <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                 </div>
             </template>
         </template>
@@ -234,7 +234,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                     </div>
                 </template>
                 <template v-else-if="orderInfo.closeReason == 1">
@@ -251,7 +251,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -265,7 +265,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                         </div>
                     </template>
                 </template>
@@ -283,7 +283,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -297,7 +297,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                         </div>
                     </template>
                 </template>
@@ -312,7 +312,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                     </div>
                 </template>
                 <template v-else-if="orderInfo.closeReason == 4">
@@ -326,7 +326,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                     </div>
                 </template>
                 <template v-else-if="orderInfo.closeReason == 5">
@@ -342,7 +342,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReaosn | closeReaosnFilter}}</p>
+                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
                     </div>
                 </template>
             </template>
