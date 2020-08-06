@@ -213,6 +213,10 @@ export default {
         this._apis.goods
           .addProCommonCategory(data)
           .then((res) => {
+            this.$message({
+              message: "常用类目添加成功",
+              type: "success",
+            });
             this.getCommonCategoryList();
           })
           .catch((err) => {
