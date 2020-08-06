@@ -248,12 +248,20 @@ export default {
             this.isIndeterminate = false;
         },
         batchSendGoods() {
+            function unique(arr) {
+                return Array.form(new Set(arr))
+            }
+
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
                 return
             }
-            if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
-                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+            // if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
+            //     this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+            //     return;
+            // }
+            if(unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量发货。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量发货。'})
                 return;
             }
             if(this.multipleSelection.some(val => val.status != 2)) {
