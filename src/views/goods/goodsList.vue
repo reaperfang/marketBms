@@ -71,7 +71,7 @@
                     ref="table"
                     style="width: 100%"
                     :default-sort = "{prop: 'stock', order: 'descending'}"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                    :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
                     @selection-change="handleSelectionChange"
                     @sort-change="sortChange"
                     :empty-text="emptyText">
@@ -191,7 +191,7 @@
                             <span class="store">{{scope.row.saleCount}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" width="140">
+                    <el-table-column label="操作" width="140" fixed="right">
                         <template slot-scope="scope">
                             <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="编辑" placement="bottom">
                                 <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="operate-editor pointer"><i class="i-bg"></i></span>
@@ -249,6 +249,10 @@
     </div>
 </template>
 <style lang="scss" scoped>
+/deep/.el-table thead {
+    color:rgba(68,67,75,1);
+    font-size:14px;
+}
 .table-footer {
     display: flex;
     align-items: center;
@@ -747,8 +751,9 @@ export default {
                 }) 
 
             } else {
+                this.getList();
                 this.$message({
-                message: "请输入合法数字",
+                message: "请您输入正确的数字",
                 type: "warning"
                 });
             }

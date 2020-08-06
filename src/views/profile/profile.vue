@@ -149,7 +149,7 @@
           <div class="main">
             <div>
               <p class="title3">微信小程序商城</p>
-              <div v-if="wxQrcode">
+              <div v-if="!isEmpowerWX && wxQrcode">
                 <img  class="erweima" :src="wxQrcode" alt/>
                 <p class="opt">
                   <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
@@ -172,7 +172,7 @@
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
-              <div v-if="gzQrcode">
+              <div v-if="!isEmpowerGZ && gzQrcode">
                 <img  class="erweima" :src="gzQrcode" alt>
                 <p class="opt">
                   <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
@@ -337,7 +337,8 @@ export default {
     this.getWXQrcode();
     this.getGZQrcode();
     this.isEmpower();
-    this.isReleaseWX();
+    this.getIsReleaseWX();
+    this.getIsReleaseGZ();
 
   },
   methods: {
@@ -510,7 +511,7 @@ export default {
     },
 
     //判断小程序是否发布
-    isReleaseWX(){
+    getIsReleaseWX(){
       this._apis.profile
         .getSmallRelease({id:this.cid}).then(response => {
           this.isReleaseWX = response.status ? false :  true
@@ -521,7 +522,7 @@ export default {
     },
 
     //判断公众号是否设置商城首页
-    isReleaseGZ(){
+    getIsReleaseGZ(){
       this._apis.shop
         .getHomePage({pageTag:0}).then(response => {
           this.isReleaseGZ = response ? false : true
