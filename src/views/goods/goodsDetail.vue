@@ -1154,7 +1154,6 @@ export default {
                             type: 'warning'
                         });
                         return false
-
                     }
                 }
                 return true
