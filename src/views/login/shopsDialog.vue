@@ -14,7 +14,7 @@
             我的店铺
         </span>
         <div class="content">
-          <div v-for="item in shopList" :key="item.id" @click="toShop(item)" class="shopItem">
+          <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
               <!-- <span>{{item.shopName}}</span>
               <span>移动商城</span> -->
               <p>
@@ -22,12 +22,24 @@
                 <span class="status">营业中</span>
               </p>
               <p>
-                <span class="base">基础版</span>
-                <span class="major">专业版</span>
+                <span class="base" v-if="item.bossProductId == 3">基础版</span>
+                <span class="major" v-if="item.bossProductId == 100">专业版</span>
               </p>
               <p>创建时间：2018.09.12 12:00:00</p>
               <p>有效期至：2019.09.12 12:00:00</p>
           </div>
+          <p class="p_center">
+            <el-pagination
+              v-if="shopLists.length != 0"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="Number(startIndex) || 1"
+              :page-size="pageSize*1"
+              layout="prev, pager, next"
+              :total="total"
+              :background="background">
+            </el-pagination>
+          </p>
         </div>
         </el-dialog>
     </div>
@@ -46,23 +58,48 @@ export default {
         return true
       }
       return false
+    },
+    tid(){
+      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      return userInfo.tenantInfoId
     }
   },
   data() {
       return {
           shopName:'',
           showDialog:false,
-          shopLists:[]
+          shopLists:[],
+          startIndex:1,
+          pageSize:9,
+          total:0
       }
   },
-  props:['showShopsDialog','shopList','route','showClose'],
+  props:['showShopsDialog','shopList','route','showClose','background'],
   watch: {
       showShopsDialog(newValue,oldValue){
           this.showDialog = newValue
       },
   },
-  created(){},
+  created(){
+    this.getShopList()
+  },
   methods: {
+    //获取店铺列表
+    getShopList(){
+      let obj =  {
+        startIndex:this.startIndex,
+        pageSize:this.pageSize,
+        tenantInfoId:this.tid
+      }
+      this._apis.profile.getShopList(obj).then(response => {
+        console.log('res',response)
+        this.total = response.total
+        this.shopLists = response.list
+      }).catch(error =>{
+        this.$message.error(error);
+      })
+    },
+
     //进入店铺
     toShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
@@ -156,5 +193,8 @@ export default {
 }
 .el-dialog__header{
   background:rgba(101,94,255,0.09);
+}
+.p_center{
+  text-align: center;
 }
 </style>

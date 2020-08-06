@@ -20,7 +20,7 @@
             </el-form>
         </div>
         <div class="categoryTh" style="background:'#ebeafa'; color:'#655EFF';">
-			<div class="treeRow th" :style="{background:'#ebeafa', color:'#655EFF'}">
+			<div class="treeRow th" :style="{background:'#F6F7FA', color:'#44434B'}">
 			<span class="td">分类名称</span>
 			<span class="td">状态</span>
 			<span class="td">操作</span>

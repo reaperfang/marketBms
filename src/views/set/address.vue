@@ -480,7 +480,6 @@ export default {
     img {
       display: block;
       width: 199px;
-      height: 140x;
       padding-top: 107px;
       margin: 0 auto;
     }

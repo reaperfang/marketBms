@@ -192,10 +192,10 @@
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
                 </el-form-item>
                 <el-form-item label="售卖价" prop="salePrice">
-                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
                 </el-form-item>
                 <el-form-item label="库存" prop="stock">
-                    <el-input type="number" min="0" :disabled="(editor || ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
                 </el-form-item>
                 <el-form-item label="库存预警" prop="warningStock">
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
@@ -591,17 +591,17 @@ export default {
                      }
                      break;
                 case "salePrice":
-                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
-                    }else if(this.singleSpec.costPrice > this.singleSpec.salePrice){
-                        callback(new Error('售卖价不得低于成本价'));
+                    }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
+                        callback(new Error('售卖价不得低于成本价2'));
                     }else{
                         callback();
                     }
                     break;
                 case "stock":
                 case  "warningStock":
-                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -609,7 +609,7 @@ export default {
                     break;
                 case "weight":
                 case "volume":
-                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));
                     }else{
                         callback();
@@ -707,6 +707,7 @@ export default {
             productLabelList: [], // 商品标签列表
             specIds: [],
             goodCategoryNames: '',
+            historyGoodCategory:{},
             add: true,
 	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
             isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
@@ -1052,98 +1053,98 @@ export default {
                         message: '请输入成本价',
                         type: 'warning'
                     });
-                return
+                return false
                 }
                 if(+obj.costPrice <= 0) {
                     this.$message({
                     message: '成本价必须大于0',
                     type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(/\./.test(obj.costPrice) && obj.costPrice.split(".")[1].length > 2) {
                     this.$message({
                         message: '只支持小数点后两位',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(obj.salePrice == '') {
                     this.$message({
                         message: '请输入售卖价',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(+obj.salePrice <= 0) {
                     this.$message({
                         message: '售卖价必须大于0',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(/\./.test(obj.salePrice) && obj.salePrice.split(".")[1].length > 2) {
                     this.$message({
                         message: '只支持小数点后两位',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
-                if(obj.salePrice<obj.costPrice) {
+                if(+obj.salePrice<+obj.costPrice) {
                     this.$message({
-                        message: '售卖价不得人低于成本价',
+                        message: '售卖价不得低于成本价1',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(obj.stock === '') {
                     this.$message({
                         message: '请输入库存',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(!/^\d+$/.test(obj.stock)) {
                     this.$message({
                         message: '库存不能为小数',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(+obj.stock  < 0) {
                     this.$message({
                         message: '不能为负值',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(+obj.stock  > 10000000) {
                     this.$message({
                         message: '库存不能超过10000000',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(!obj.warningStock) {
                     this.$message({
                         message: '请输入库存预警',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(!/^\d+$/.test(obj.warningStock)) {
                     this.$message({
                         message: '库存预警不能为小数',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
                 if(+obj.warningStock  < 0) {
                     this.$message({
                         message: '不能为负值',
                         type: 'warning'
                     });
-                    return
+                    return false
                 }
             //如果配送方式勾选了商家配送，则重量为必填项
                 if(this.ruleForm.deliveryWay.includes(2)){
@@ -1152,17 +1153,20 @@ export default {
                             message: '请输入重量',
                             type: 'warning'
                         });
-                        return
+                        return false
+
                     }
                 }
+                return true
             }
         },
         addGoodCategory(){
             this.currentDialog = 'chooseGoodCategoryDialog';
             this.dialogVisible = true;
-            this.currentData=this.goodCategoryNames;
+            this.currentData=this.historyGoodCategory;
         },
         getProductCategoryInfoId(data){
+            this.historyGoodCategory = data;
             this.ruleForm.productCategoryInfoId=data.child.id;
             this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
         },
@@ -2304,7 +2308,6 @@ export default {
                 let itemCatAr = []
                 let __goodsInfos
 
-
                 if(this.isIE) {
                     if(this.editor) {
                         let flag = []
@@ -2617,7 +2620,9 @@ export default {
                         })
 
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
-                            this.validateGoodsInfos(this.ruleForm.goodsInfos[i]);
+                           if(!this.validateGoodsInfos(this.ruleForm.goodsInfos[i])){//属性值验证不通过
+                               return
+                           }
 			        //如果配送方式勾选了商家配送，则重量为必填项
                         if(this.ruleForm.deliveryWay.includes(2)){
                             if(!this.ruleForm.goodsInfos[i].weight) {
@@ -2634,7 +2639,9 @@ export default {
                         console.error(e)
                     }
                 }else {//单一规格属性值校验
-                    this.validateGoodsInfos(this.singleSpec);
+                    if(!this.validateGoodsInfos(this.singleSpec)){
+                        return
+                    }
                 }
                 if(this.ruleForm.name == '' || /^\s+$/.test(this.ruleForm.name)) {
                     this.$message({
@@ -2705,7 +2712,7 @@ export default {
                             obj.goodsInfos = _goodsInfos
                         }else{
                             this.singleSpec.specs={"规格":"默认规格"};
-                            obj.goodsInfos = this.singleSpec
+                            obj.goodsInfos = [this.singleSpec];
                         }
                         
                     params = Object.assign({}, this.ruleForm, obj, {

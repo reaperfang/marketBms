@@ -91,7 +91,14 @@ export default {
     };
   },
   created() {
-    this.itemCatText = this.data;
+    if(this.data&&this.data.child){
+      this.itemCatText = this.data.name + ' / '+this.data.child.categoryName;
+      this.commonCat = this.data;
+   
+      }else{
+        this.itemCatText ='';
+        this.commonCat={};
+    }
     this.getOperateCategoryList();
   },
   watch: {},
@@ -206,6 +213,10 @@ export default {
         this._apis.goods
           .addProCommonCategory(data)
           .then((res) => {
+            this.$message({
+              message: "添加成功",
+              type: "warning",
+            });
             this.getCommonCategoryList();
           })
           .catch((err) => {
