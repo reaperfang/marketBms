@@ -1,4 +1,4 @@
-
+import Vue from 'vue'
 import utils from '@/utils'
 const decorate = {
 	state: {
@@ -58,6 +58,9 @@ const decorate = {
 			}
 			if(params.component.limit && compTypeCount >= params.component.limit) {
 				console.log(`最多只能添加${params.component.limit}个${params.component.title}组件！`);
+				Vue.prototype.confirm({title: '提示', icon: false, iconWarning: true, text: `当前页已添加过${params.component.title}组件，不能再次添加`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+
+                })
 				return;
 			}
 
