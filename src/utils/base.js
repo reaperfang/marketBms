@@ -269,3 +269,7 @@ export function isSafariBrowser() {
   const isSafariBrowser = /Safari\/([\d.]+)/.test(ua) && !/Chrome\/([\d.]+)/.test(ua);
   return isSafariBrowser
 }
+
+export function unique(arr) {
+  return Array.form(new Set(arr))
+}
