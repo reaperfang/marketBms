@@ -45,7 +45,7 @@
       添加导航：
       <p style="color:rgb(211, 211, 211);margin-top:5px;">最多添加10个导航，鼠标拖拽可调整导航顺序</p>
       <!-- 可拖拽调整顺序 -->
-      <vuedraggable 
+      <vuedraggable
       class="drag-wrap item_list"
       :list='ruleForm.itemList'
       v-bind="dragOptions"
@@ -92,7 +92,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @seletedPage="seletedPage"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :customLinkDisabled = "false" @imageSelected="imageSelected" @seletedPage="seletedPage"></component>
   </el-form>
 </template>
 
@@ -160,10 +160,10 @@ export default {
       switch(Number(templateType)) {
         case 1:
           this.suggestSize = '建议上传尺寸160*160像素(或其他1: 1尺寸)且小于3M的图片（当尺寸不匹配时图片会被压缩或拉伸至变形）';
-          break; 
+          break;
         case 2:
           this.suggestSize = '建议：不超过5个汉字';
-          break; 
+          break;
       }
     },
 
@@ -181,7 +181,7 @@ export default {
           id: uuidv4()
         });
         this.currentNav = this.ruleForm.itemList[this.ruleForm.itemList.length - 1];
-        // this.dialogVisible=true; 
+        // this.dialogVisible=true;
         // this.currentDialog='dialogSelectImageMaterial';
       }
     },
@@ -200,12 +200,12 @@ export default {
     deleteItem(item) {
       if(this.ruleForm.itemList.length < 2) {
         this.$message.warning('最后一个不允许删除')
-        return;           
+        return;
       }
       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: '确定删除此图文导航吗？'
       }).then(() => {
         const tempItems = [...this.ruleForm.itemList];
