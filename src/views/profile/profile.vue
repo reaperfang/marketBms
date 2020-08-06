@@ -173,7 +173,7 @@
         </p>
         <p class="title_h5">商户工作台H5</p>
         <p class="link_h5">
-          <span ref="linkH5">{{protocol}}//omo.aiyouyi.cn/bh</span>
+          <span ref="linkH5">{{pageLink}}</span>
           <img
             :src="require('@/assets/images/profile/icon_05.png')"
             alt
@@ -203,9 +203,8 @@ export default {
       stayProcessedCount: "",
       staySendCount: "",
       stayAuthCount: "",
-      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",
+      pageLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh",
       qrCode: "",
-      protocol: location.protocol,
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: []
     };
