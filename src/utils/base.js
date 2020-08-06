@@ -271,5 +271,5 @@ export function isSafariBrowser() {
 }
 
 export function unique(arr) {
-  return Array.form(new Set(arr))
+  return Array.from(new Set(arr))
 }

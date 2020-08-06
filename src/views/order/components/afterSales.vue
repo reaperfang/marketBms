@@ -85,7 +85,7 @@
                     label="用户昵称"
                     width="120">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     prop="deliveryWay"
                     label="退货方式"
                     width="120">
@@ -95,8 +95,8 @@
                             <span class="icon-store-text">{{scope.row.deliveryWay | deliveryWayFilter}}</span>
                         </div>
                     </template>
-                </el-table-column>
-                <el-table-column
+                </el-table-column> -->
+                <!-- <el-table-column
                     prop="updateTime"
                     label="取货时间"
                     width="110">
@@ -106,7 +106,7 @@
                             <div>{{scope.row.deliveryTime}}</div>
                         </div>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     prop="receivedName"
                     label="收货人">
