@@ -508,7 +508,7 @@ export function editProductsCatalogs(data) {
 //添加商品常用类目
 export function addProCommonCategory(data) {
   return request({
-    target: 'PRODUCT-ADD-CATEGORY-RECORD-PROCESSOR',
+    target: 'PRODUCT_OFTEN_CATEGORY_ADD_PROCESSOR',
     method: 'post',
     apiType: 'goods',
     data,
@@ -517,7 +517,7 @@ export function addProCommonCategory(data) {
 //查询商品常用类目
 export function getProCommonCategory(data) {
   return request({
-    target: 'PRODUCT-FIND-CATEGORY-RECORD-LIST-PROCESSOR',
+    target: 'PRODUCT_OFTEN_CATEGORY_FIND_LIST_PROCESSOR',
     method: 'post',
     apiType: 'goods',
     data,
@@ -526,7 +526,7 @@ export function getProCommonCategory(data) {
 //删除商品常用类目
 export function delProCommonCategory(data) {
   return request({
-    target: 'PRODUCT-DEL-CATEGORY-RECORD-PROCESSOR',
+    target: 'PRODUCT_OFTEN_CATEGORY_DEL_PROCESSOR',
     method: 'post',
     apiType: 'goods',
     data,

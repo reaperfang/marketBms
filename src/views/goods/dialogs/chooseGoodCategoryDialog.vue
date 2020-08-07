@@ -127,7 +127,7 @@ export default {
           if (res && res.length > 0) {
             res.forEach((item, index) => {
               let temp = this.operateCategoryList.find(
-                (data) => data.id === item.categoryId
+                (data) => data.id === item.productCategoryInfoId
               );
               let _temp = JSON.parse(JSON.stringify(temp));
               if (_temp.parentId && _temp.parentId > 0) {
@@ -208,14 +208,14 @@ export default {
         this.isWarning = false;
         let data = {
           cid: this.cid,
-          categoryId: this.currentCategory.id,
+          productCategoryInfoId: this.currentCategory.id,
         };
         this._apis.goods
           .addProCommonCategory(data)
           .then((res) => {
             this.$message({
               message: "添加成功",
-              type: "warning",
+              type: "success",
             });
             this.getCommonCategoryList();
           })
@@ -237,7 +237,7 @@ export default {
       this._apis.goods
         .delProCommonCategory({
           cid: this.cid,
-          categoryId: this.commonValue,
+          productCategoryInfoId: this.commonValue,
         })
         .then((res) => {
           this.$message({
