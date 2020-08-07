@@ -10,33 +10,29 @@
         :show-close="showClose"
         style="margin-top:20vh;">
         <span slot="title" class="dialog_title">
-            <!-- <a href="https://www.300.cn/ " target="_blank">返回官网</a>  -->
             我的店铺
         </span>
         <div class="content">
           <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
-              <!-- <span>{{item.shopName}}</span>
-              <span>移动商城</span> -->
               <p>
                 <span class="shopName">{{item.shopName}}</span>
-                <span class="status">营业中</span>
+                <span class="status">{{item.shopExpire == 1 ? '已过期' : '营业中'}}</span>
               </p>
               <p>
                 <span class="base" v-if="item.bossProductId == 3">基础版</span>
                 <span class="major" v-if="item.bossProductId == 100">专业版</span>
               </p>
-              <p>创建时间：2018.09.12 12:00:00</p>
-              <p>有效期至：2019.09.12 12:00:00</p>
+              <p>创建时间：{{item.openTime}}</p>
+              <p>有效期至：{{item.shopExpireTime}}</p>
           </div>
           <p class="p_center">
             <el-pagination
               v-if="shopLists.length != 0"
-              @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
               layout="prev, pager, next"
-              :total="total"
+              :total="total*1"
               :background="background">
             </el-pagination>
           </p>
@@ -53,16 +49,11 @@ export default {
   computed: {
     isAdminUser(){
       let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      console.log('userInfo', userInfo)
       if(userInfo && userInfo.type == "admin") {
         return true
       }
       return false
     },
-    tid(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      return userInfo.tenantInfoId
-    }
   },
   data() {
       return {
@@ -71,7 +62,7 @@ export default {
           shopLists:[],
           startIndex:1,
           pageSize:9,
-          total:0
+          total:0,
       }
   },
   props:['showShopsDialog','shopList','route','showClose','background'],
@@ -79,20 +70,24 @@ export default {
       showShopsDialog(newValue,oldValue){
           this.showDialog = newValue
       },
+      shopList(newValue,oldValue){
+        newValue.length !=0 && this.getShopList()
+      }
   },
+
   created(){
-    this.getShopList()
   },
+
   methods: {
     //获取店铺列表
     getShopList(){
+      let tid = JSON.parse(localStorage.getItem('userInfo')) && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId
       let obj =  {
         startIndex:this.startIndex,
         pageSize:this.pageSize,
-        tenantInfoId:this.tid
+        tenantInfoId:tid
       }
       this._apis.profile.getShopList(obj).then(response => {
-        console.log('res',response)
         this.total = response.total
         this.shopLists = response.list
       }).catch(error =>{
@@ -108,7 +103,6 @@ export default {
             this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
-            console.log('shop.storeGuide',this.isAdminUser,shop.storeGuide)
             if (this.isAdminUser && shop.storeGuide === -1) {
                 this.$router.push({ path: '/profile/guidePrompt' })
               } else {
@@ -121,14 +115,20 @@ export default {
         console.log(error)
       })
     },
+
     getShopAuthList() {
       this.$store.dispatch('getShopAuthList').then(() => {
         window.eventHub.$emit('onGetShopAuthList')
       })
     },
+
     handleClose(){
       this.showDialog = false
       this.$emit('handleClose')
+    },
+    
+    handleCurrentChange(val){
+      this.startIndex = val
     }
   }
 }
@@ -189,6 +189,9 @@ export default {
       color: #92929B;
       line-height: 25px;
     }
+  }
+  .shopItem:hover{
+    border:1px solid #5B54E6;
   }
 }
 .el-dialog__header{
