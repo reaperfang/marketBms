@@ -14,7 +14,7 @@
             我的店铺
         </span>
         <div class="content">
-          <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
+          <div v-for="item in shopList" :key="item.id" @click="toShop(item)" class="shopItem">
               <!-- <span>{{item.shopName}}</span>
               <span>移动商城</span> -->
               <p>
@@ -28,7 +28,7 @@
               <p>创建时间：{{item.openTime}}</p>
               <p>有效期至：{{item.shopExpireTime}}</p>
           </div>
-          <p class="p_center">
+          <!-- <p class="p_center">
             <el-pagination
               v-if="shopLists.length != 0"
               @size-change="handleSizeChange"
@@ -39,7 +39,7 @@
               :total="total"
               :background="background">
             </el-pagination>
-          </p>
+          </p> -->
         </div>
         </el-dialog>
     </div>
@@ -53,15 +53,20 @@ export default {
   computed: {
     isAdminUser(){
       let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      console.log('userInfo', userInfo)
       if(userInfo && userInfo.type == "admin") {
         return true
       }
       return false
     },
-    tid(){
+    haveTid(){
       let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      return userInfo.tenantInfoId
+      console.log('userInfo', userInfo)
+      if(userInfo){
+        this.tid = userInfo.tenantInfoId
+        return true
+      }else{
+        return false
+      }
     }
   },
   data() {
@@ -71,7 +76,8 @@ export default {
           shopLists:[],
           startIndex:1,
           pageSize:9,
-          total:0
+          total:0,
+          tid:''
       }
   },
   props:['showShopsDialog','shopList','route','showClose','background'],
@@ -81,7 +87,7 @@ export default {
       },
   },
   created(){
-    this.getShopList()
+    haveTid && this.getShopList()
   },
   methods: {
     //获取店铺列表
@@ -89,7 +95,8 @@ export default {
       let obj =  {
         startIndex:this.startIndex,
         pageSize:this.pageSize,
-        tenantInfoId:this.tid
+        tenantInfoId:''
+        // tenantInfoId:this.tid
       }
       this._apis.profile.getShopList(obj).then(response => {
         console.log('res',response)
