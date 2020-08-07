@@ -112,6 +112,9 @@ export default {
 .add_button.disable{
   cursor: not-allowed;
 }
+.add_button.disable:hover {
+  border-color: #b6b5c8;
+}
 /deep/ .color_block .colorBtn {
   margin-left: 6px;
   margin-right: 0;
