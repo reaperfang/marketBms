@@ -868,6 +868,9 @@ export default {
     li{
         overflow:hidden;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
         &:first-child{
             margin-top:0;
         }
@@ -1021,14 +1024,23 @@ export default {
     li.goodsStyle1{
         border:0;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
     }
     li.goodsStyle2{
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
         box-shadow:0px 1px 3px 0px rgba(154,154,154,0.19);
     }
     li.goodsStyle3{
         border:1px solid #eee;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
     }
     li.goodsStyle4{
         border:0;

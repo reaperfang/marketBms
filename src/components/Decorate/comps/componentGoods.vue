@@ -249,7 +249,7 @@ export default {
                         return;
                     }
                     params = {
-                        // status: '1',
+                        status: '1',
                         productCatalogInfoId: componentData.currentCatagoryId
                     };
                 }
@@ -439,6 +439,12 @@ export default {
                     //position:absolute;
                     right:10px;
                     bottom:10px;
+                }
+            }
+            &.fakeData{
+                background:transparent!important;  
+                .img{
+                    background:transparent!important;  
                 }
             }
         }
