@@ -59,6 +59,9 @@
 				}
 			}
 		},
+		created(){
+			console.log(this.$route.query.printType)
+		},
 		methods: {
 			goPrinter(formName) {
 				this.$refs[formName].validate((valid) => {

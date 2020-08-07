@@ -50,11 +50,23 @@
     },
     methods: {
       handleSubmit() {
+        // console.log(this.printType);
         // console.log(this.printPath)
         // console.log(this.printQuery)
+
         //小票配送单
         if(this.printRadio==1){
-          this.$router.push({path:'/order/printerSeting'})
+          this._apis.order.getPrinterSetDetail().then(res => {
+            console.log(res)
+            if(!!res){
+              //printType 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
+              this.$router.push({path:'/order/printPreview',query:this.printQuery})
+            }else{
+              this.$router.push({path:'/order/printerSeting',query:this.printQuery})
+            }
+          })
+          .catch(error => {});
+          // 
         }
         //A4纸配送单
         if(this.printRadio==2){

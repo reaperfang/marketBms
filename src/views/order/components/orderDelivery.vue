@@ -396,10 +396,12 @@ export default {
                 this.confirm({title: '提示', icon: true, text: '勾选订单包含未发货或未付款订单，无法批量打印；请重新勾选已发货订单批量打印配送单。'})
                 return
             }
+            console.log(this.multipleSelection)
             let ids = this.multipleSelection.map(val => val.id).join(',')
-
+            let orderIds = this.multipleSelection.map(val => val.orderId).join(',')
             // this.$router.push('/order/printDistributionSheet?ids=' + ids)
-            this.handlePrintListOpen('/order/printDistributionSheet',{ids: ids})
+            // 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
+            this.handlePrintListOpen('/order/printDistributionSheet',{ids:ids,orderIds:orderIds,printType:1})
         },
         handlePrintListOpen(pagePath,query){
             // console.log(pagePath, query)

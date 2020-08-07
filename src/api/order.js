@@ -633,6 +633,25 @@ export function getDistributorList(data) {
   })
 }
 
+// 小票打印机设置-详情  易其孜
+export function getPrinterSetDetail(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-DETAIL-PROCESSOR',
+    data
+  })
+}
+
+// 小票配送单预览 易其孜
+export function shopPrinterPreview(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-PREVIEW-PROCESSOR',
+    data
+  })
+}
 
 
 

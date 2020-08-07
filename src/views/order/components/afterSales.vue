@@ -273,7 +273,8 @@ export default {
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
 
             // this.$router.push('/order/printDistributionSheet?ids=' + ids + '&afterSale=' + true)
-            this.handlePrintListOpen('/order/printDistributionSheet',{ids: ids, afterSale: true})
+            // 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
+            this.handlePrintListOpen('/order/printDistributionSheet',{ids: ids, afterSale: true,printType:1})
         },
         handlePrintListOpen(pagePath,query){
             // console.log(pagePath, query)
