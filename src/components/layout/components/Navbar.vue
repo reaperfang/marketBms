@@ -5,7 +5,7 @@
         <i class="el-icon-arrow-left" @click="backToPre" v-if="$route.path === '/shop/m_templateEdit'"></i>
         <span class="shop_name">{{shopName}}</span>
         <span class="edition">{{guideType}}</span>
-        <el-button class="border_btn guide" v-if="isCompleteGuide" @click="goShopGulde">开店引导</el-button>
+        <el-button class="border_btn guide" v-if="!userType && isCompleteGuide" @click="goShopGulde">开店引导</el-button>
       </div>
       <!-- <div class="navbar-item"></div> -->
       <div class="right-menu">
