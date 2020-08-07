@@ -20,7 +20,6 @@ export default {
       this.decoration && this.decoration();
   },
   mounted() {
-      console.log(this.displayList)
         this.checkRealData(this.displayList);
         if(this.currentComponentData.data.fakeList && this.currentComponentData.data.fakeList.length) {
           this.checkFakeData(this.currentComponentData.data.fakeList);

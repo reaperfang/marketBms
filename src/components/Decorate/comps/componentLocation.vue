@@ -53,7 +53,7 @@ export default {
 .location_box{
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  min-height: 34px;
+  height: 34px;
   line-height: 34px;
   display: flex;
   overflow: hidden;
