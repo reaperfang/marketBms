@@ -1,5 +1,5 @@
 <template>
-	<section style="padding: 20px; background-color: #FFFFFF; min-height: 100%">
+	<section style="padding: 20px; background-color: #FFFFFF; height: 100%">
 		<div class="printer-title">小票打印机设置</div>
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm" style="margin-top: 40px">
 			<el-form-item label="设备品牌：" prop="resource">
