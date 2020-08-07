@@ -301,6 +301,102 @@
                         </div>
                     </template>
                 </template>
+                <template v-else-if="orderInfo.closeReason == 6">
+                    <!-- 商户关闭 库存不足 -->
+                    <template v-if="orderInfo.payComplateTime">
+                        <!-- 客户付款 -->
+                        <div class="item lefter">
+                            <el-steps active="4">
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
+                                <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
+                            </el-steps>
+                        </div>
+                        <div class="item righter">
+                            <p>已关闭</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <!-- 客户未付款 -->
+                        <div class="item lefter">
+                            <el-steps active="3">
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
+                            </el-steps>
+                        </div>
+                        <div class="item righter">
+                            <p>已关闭</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        </div>
+                    </template>
+                </template>
+                <template v-else-if="orderInfo.closeReason == 7">
+                    <!-- 商户关闭 用户申请关闭 -->
+                    <template v-if="orderInfo.payComplateTime">
+                        <!-- 客户付款 -->
+                        <div class="item lefter">
+                            <el-steps active="4">
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
+                                <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
+                            </el-steps>
+                        </div>
+                        <div class="item righter">
+                            <p>已关闭</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <!-- 客户未付款 -->
+                        <div class="item lefter">
+                            <el-steps active="3">
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
+                            </el-steps>
+                        </div>
+                        <div class="item righter">
+                            <p>已关闭</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        </div>
+                    </template>
+                </template>
+                <template v-else-if="orderInfo.closeReason == 8">
+                    <!-- 商户关闭 其他 -->
+                    <template v-if="orderInfo.payComplateTime">
+                        <!-- 客户付款 -->
+                        <div class="item lefter">
+                            <el-steps active="4">
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
+                                <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
+                            </el-steps>
+                        </div>
+                        <div class="item righter">
+                            <p>已关闭</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <!-- 客户未付款 -->
+                        <div class="item lefter">
+                            <el-steps active="3">
+                                <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
+                                <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
+                                <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
+                            </el-steps>
+                        </div>
+                        <div class="item righter">
+                            <p>已关闭</p>
+                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        </div>
+                    </template>
+                </template>
                 <template v-else-if="orderInfo.closeReason == 3">
                     <!-- 拼团失败 -->
                     <div class="item lefter">
@@ -409,17 +505,23 @@ export default {
         closeReaosnFilter(code) {
             switch(+code) {
                 case 0:
-                    return '超时取消'
+                    return '原因: 超时取消'
                 case 1:
-                    return '用户取消'
+                    return '原因: 用户取消'
                 case 2:
-                    return '商户关闭'
+                    return '原因: 商户关闭'
                 case 3:
-                    return '拼团失败'
+                    return '原因: 拼团失败'
                 case 4:
-                    return '商户关闭拼团'
+                    return '原因: 商户关闭拼团'
                 case 5:
-                    return '用户拒收'
+                    return '原因: 用户拒收'
+                case 6:
+                    return '原因: 库存不足'
+                case 7:
+                    return '原因: 用户申请关闭'
+                case 8:
+                    return `原因: 其他: ${this.orderInfo.closeRemark}`
             }
         }
     },
