@@ -289,7 +289,7 @@ export default {
                 return;
               }
               params = {
-                  // status: '1',
+                  status: '1',
                   productCatalogInfoId: this.ruleForm.currentCatagoryId
               };
             }
