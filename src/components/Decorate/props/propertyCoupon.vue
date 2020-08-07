@@ -18,7 +18,7 @@
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
             v-for="tag in displayList"
-            :key="tag.title"
+            :key="tag.id"
             :closable="ruleForm.addType === 1"
             style="margin-right:5px;"
             type="success" @close="deleteItem(tag)" :title="getTitleTips(tag)">
