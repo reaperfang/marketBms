@@ -32,10 +32,10 @@
 					手机扫描二维码支付
 				</div>
 				<div class="templage-pay-content-right-code" id="qrcode" ref="qrcode">
-					<div class="templage-pay-content-right-code-cover" v-show="!intervalFlag" @click="refreshQrCode">
-						<i class="el-icon-refresh"></i>
-						<span class="templage-pay-content-right-code-cover-tip">二维码过期，刷新重试！</span>
-					</div>
+<!--					<div class="templage-pay-content-right-code-cover" v-show="!intervalFlag" @click="refreshQrCode">-->
+<!--						<i class="el-icon-refresh"></i>-->
+<!--						<span class="templage-pay-content-right-code-cover-tip">二维码过期，刷新重试！</span>-->
+<!--					</div>-->
           <img class="templage-pay-content-right-code-pic" :src="qrCodeInfo.billQRCode" alt="支付码">
 				</div>
 				<div class="templage-pay-content-right-btn">
@@ -104,15 +104,14 @@
             orderCode: that.qrCodeInfo.orderCode
           }).then(res => {
             if (res.orderStatus === 1) {
-              if(that.intervalFlag && that.time < 120) {
-                that.time = that.time + 3;
+              // if(that.intervalFlag && that.time < 120) {
+              //   that.time = that.time + 3;
                 that.getPayInfo()
-              }else {
-                that.disabled = false;
-                that.time = 0;
-                that.intervalFlag = false;
-                window.clearTimeout(that.timeInterval)
-              }
+              // }else {
+              //   that.time = 0;
+              //   that.intervalFlag = false;
+              //   window.clearTimeout(that.timeInterval)
+              // }
             } else if (res.orderStatus === 2) {
               that.disabled = false;
               that.time = 0;
@@ -172,6 +171,7 @@
           this.time = 0;
           this.intervalFlag = false;
           this.disabled = true;
+          window.clearTimeout(this.timeInterval)
         }
       }
     }
