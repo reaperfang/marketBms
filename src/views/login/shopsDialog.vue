@@ -19,14 +19,14 @@
               <span>移动商城</span> -->
               <p>
                 <span class="shopName">{{item.shopName}}</span>
-                <span class="status">营业中</span>
+                <span class="status">{{item.shopExpire == 1 ? '已过期' : '营业中'}}</span>
               </p>
               <p>
                 <span class="base" v-if="item.bossProductId == 3">基础版</span>
                 <span class="major" v-if="item.bossProductId == 100">专业版</span>
               </p>
-              <p>创建时间：2018.09.12 12:00:00</p>
-              <p>有效期至：2019.09.12 12:00:00</p>
+              <p>创建时间：{{item.openTime}}</p>
+              <p>有效期至：{{item.shopExpireTime}}</p>
           </div>
           <p class="p_center">
             <el-pagination
