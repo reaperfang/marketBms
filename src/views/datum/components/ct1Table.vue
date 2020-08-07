@@ -19,19 +19,23 @@
       </el-table-column>
       <el-table-column
         prop="uv"
-        label="访问人数">
+        label="访问人数"
+        align="right">
       </el-table-column>
       <el-table-column
         prop="pays"
-        label="支付人数">
+        label="支付人数"
+        align="right">
       </el-table-column>
       <el-table-column
         prop="sellingQuantity"
-        label="售卖数量">
+        label="售卖数量"
+        align="right">
       </el-table-column>
       <el-table-column
         prop="rateUvPays"
         label="访问支付转化率"
+        align="right"
       >
       <template slot-scope="scope">
         {{scope.row.rateUvPays == 0 ? 0 : (scope.row.rateUvPays*100).toFixed(2)}}%

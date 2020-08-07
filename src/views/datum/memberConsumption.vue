@@ -31,7 +31,8 @@
             >
             <el-table-column
                 type="index"
-                label="排行">
+                label="排行"
+                align="left">
             </el-table-column>
             <el-table-column
                 prop="name"
@@ -49,16 +50,19 @@
             <el-table-column
                 prop="score"
                 label="积分（余额）"
+                align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="totalTradeMoney"
                 label="消费金额（累计）"
+                align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="orderCount"
                 label="订单数（累计）"
+                align="right"
             >
             </el-table-column>
             </el-table>
