@@ -15,12 +15,12 @@
         <div class="content">
           <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
               <p>
-                <span class="shopName">{{item.shopName}}</span>
-                <span class="status">{{item.shopExpire == 1 ? '已过期' : '营业中'}}</span>
+                <span :class="item.shopExpire == 1 ? 'e-shopName' : 'shopName'">{{item.shopName}}</span>
+                <span :class="item.shopExpire == 1 ? 'e-status' : 'status'">{{item.shopExpire == 1 ? '已过期' : '营业中'}}</span>
               </p>
               <p>
-                <span class="base" v-if="item.bossProductId == 3">基础版</span>
-                <span class="major" v-if="item.bossProductId == 100">专业版</span>
+                <span :class="item.shopExpire == 1 ? 'expire' : 'base'" v-if="item.bossProductId == 3">基础版</span>
+                <span :class="item.shopExpire == 1 ? 'expire' : 'major'" v-if="item.bossProductId == 100">专业版</span>
               </p>
               <p>创建时间：{{item.openTime}}</p>
               <p>有效期至：{{item.shopExpireTime}}</p>
@@ -160,9 +160,18 @@ export default {
         color: #44434B;
         font-weight:500;
       }
+      .e-shopName{
+        font-size: 14px;
+        color:rgba(146,146,155,1);
+        font-weight:500;
+      }
       .status{
         font-size: 12px;
         color: #FD932B;
+      }
+      .e-status{
+        font-size: 12px;
+        color:rgba(146,146,155,1);
       }
     }
     p:nth-of-type(2){
@@ -182,6 +191,9 @@ export default {
       }
       .major{
         background: #FD932B;
+      }
+      .expire{
+        background: rgba(146,146,155,0.5);;
       }
     }
     p:nth-of-type(3),p:nth-of-type(4){
