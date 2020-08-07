@@ -265,6 +265,9 @@ export default {
             &.buy-notice{
               background:url('../../assets/images/shop/editor/widget/goumaigonggao.png') no-repeat 0 0;
             }
+            &.location{
+              background:url('../../assets/images/shop/editor/widget/weizhixinxi.png') no-repeat 0 0;
+            }
           }
           p{
             color:rgba(58,64,72,1);
