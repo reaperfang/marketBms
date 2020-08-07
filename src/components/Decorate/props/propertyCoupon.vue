@@ -238,6 +238,7 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ .el-tag.el-tag--success{
+  position: relative;
   color: #fff;
   width: 56px;
   height: 26px;
@@ -247,6 +248,13 @@ export default {
   line-height: 26px;
   border: none;
   padding: 0px 5px;
+  .el-icon-close {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    background: #67c23a;
+    color: #fff;
+  }
 }
 .property-coupon {
   .add-coupon {
