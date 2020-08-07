@@ -10,13 +10,10 @@
         :show-close="showClose"
         style="margin-top:20vh;">
         <span slot="title" class="dialog_title">
-            <!-- <a href="https://www.300.cn/ " target="_blank">返回官网</a>  -->
             我的店铺
         </span>
         <div class="content">
-          <div v-for="item in shopList" :key="item.id" @click="toShop(item)" class="shopItem">
-              <!-- <span>{{item.shopName}}</span>
-              <span>移动商城</span> -->
+          <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
               <p>
                 <span class="shopName">{{item.shopName}}</span>
                 <span class="status">{{item.shopExpire == 1 ? '已过期' : '营业中'}}</span>
@@ -28,18 +25,17 @@
               <p>创建时间：{{item.openTime}}</p>
               <p>有效期至：{{item.shopExpireTime}}</p>
           </div>
-          <!-- <p class="p_center">
+          <p class="p_center">
             <el-pagination
               v-if="shopLists.length != 0"
-              @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
               layout="prev, pager, next"
-              :total="total"
+              :total="total*1"
               :background="background">
             </el-pagination>
-          </p> -->
+          </p>
         </div>
         </el-dialog>
     </div>
@@ -58,16 +54,6 @@ export default {
       }
       return false
     },
-    haveTid(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
-      console.log('userInfo', userInfo)
-      if(userInfo){
-        this.tid = userInfo.tenantInfoId
-        return true
-      }else{
-        return false
-      }
-    }
   },
   data() {
       return {
@@ -77,7 +63,6 @@ export default {
           startIndex:1,
           pageSize:9,
           total:0,
-          tid:''
       }
   },
   props:['showShopsDialog','shopList','route','showClose','background'],
@@ -85,21 +70,24 @@ export default {
       showShopsDialog(newValue,oldValue){
           this.showDialog = newValue
       },
+      shopList(newValue,oldValue){
+        newValue.length !=0 && this.getShopList()
+      }
   },
+
   created(){
-    haveTid && this.getShopList()
   },
+
   methods: {
     //获取店铺列表
     getShopList(){
+      let tid = JSON.parse(localStorage.getItem('userInfo')) && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId
       let obj =  {
         startIndex:this.startIndex,
         pageSize:this.pageSize,
-        tenantInfoId:''
-        // tenantInfoId:this.tid
+        tenantInfoId:tid
       }
       this._apis.profile.getShopList(obj).then(response => {
-        console.log('res',response)
         this.total = response.total
         this.shopLists = response.list
       }).catch(error =>{
@@ -115,7 +103,6 @@ export default {
             this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
-            console.log('shop.storeGuide',this.isAdminUser,shop.storeGuide)
             if (this.isAdminUser && shop.storeGuide === -1) {
                 this.$router.push({ path: '/profile/guidePrompt' })
               } else {
@@ -128,14 +115,20 @@ export default {
         console.log(error)
       })
     },
+
     getShopAuthList() {
       this.$store.dispatch('getShopAuthList').then(() => {
         window.eventHub.$emit('onGetShopAuthList')
       })
     },
+
     handleClose(){
       this.showDialog = false
       this.$emit('handleClose')
+    },
+    
+    handleCurrentChange(val){
+      this.startIndex = val
     }
   }
 }
@@ -196,6 +189,9 @@ export default {
       color: #92929B;
       line-height: 25px;
     }
+  }
+  .shopItem:hover{
+    border:1px solid #5B54E6;
   }
 }
 .el-dialog__header{

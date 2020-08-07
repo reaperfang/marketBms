@@ -85,6 +85,7 @@ export function getShopList (data) {
     target: 'SHOP-API-110-PROCESSOR',
     method: 'post',
     apiType: 'manager',
+    noCid:'true',
     data
   })
 }
