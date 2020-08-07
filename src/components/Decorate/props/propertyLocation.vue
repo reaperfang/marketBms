@@ -4,7 +4,7 @@
       <el-form-item label="文字颜色" prop="fontColor">
         <div class="color_block">
           <el-input v-model="ruleForm.fontColor" :disabled="true"></el-input>
-          <colorPicker  v-model="ruleForm.fontColor" defaultColor="rgba(255,255,255,1)"></colorPicker >
+          <colorPicker  v-model="ruleForm.fontColor" defaultColor="rgba(0,0,0,1)"></colorPicker >
         </div>
       </el-form-item>
       <el-form-item label="背景" prop="fontColor">
@@ -111,6 +111,9 @@ export default {
 }
 .add_button.disable{
   cursor: not-allowed;
+}
+.add_button.disable:hover {
+  border-color: #b6b5c8;
 }
 /deep/ .color_block .colorBtn {
   margin-left: 6px;

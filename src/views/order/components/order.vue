@@ -25,6 +25,7 @@
                             <el-tooltip v-if="order.isUrge == 0" content="用户催发货，请尽快发货" placement="bottom" effect="dark">
                                 <i class="urge"></i>
                             </el-tooltip>
+                            <span class="deliveryWay-icon">{{order.deliveryWayIcon}}</span>
                             <span class="order-code-inner">订单编号：{{order.code}}</span>
                             <span class="createTime">下单时间：{{order.createTime}}</span>
                         </span>
@@ -112,6 +113,7 @@
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
+                            <p v-if="order.deliveryWay== 4">核销验证</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
                             <!-- 完成 -->
@@ -152,6 +154,25 @@ export default {
         list: {
             deep: true,
             handler(newVal, objVal) {
+                newVal.forEach(item=>{
+                    switch(item.deliveryWay) {
+                        case 1:
+                            item.deliveryWayIcon = "普快"
+                            break;
+                        case 2:
+                             item.deliveryWayIcon = "商配"
+                            break;
+                        case 3:
+                            item.deliveryWayIcon = "三方"
+                            break;
+                        case 4:
+                            item.deliveryWayIcon = "自提"
+                            break;
+                    }
+                    if(item.deliveryWay==1){
+
+                    }
+                })
                 //如果当前列表中包含商家配送方式，则配送方式标题需要加宽
                 if(newVal.some(item => item.deliveryWay == 2)){
                     this.storeMark = true;
@@ -182,6 +203,8 @@ export default {
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 4:
+                    return '上门自提'
             }
         },
         goodsSpecsFilter(value) {
@@ -391,6 +414,20 @@ export default {
                     color:#44434B;
                     font-weight:400;
                     border-radius: 10px 10px 0 0;
+                    .deliveryWay-icon{
+                        display:inline-block;
+                        width:32px;
+                        height:18px;
+                        background:rgba(230,230,250,1);
+                        border-radius:3px;  
+                        line-height:18px;
+                        text-align: center;
+                        font-size:12px;
+                        font-weight:500;
+                        color:rgba(101,94,255,1);
+                        margin-left:10px;
+                        margin-right:5px;
+                    }
                     .order-code {
                        .order-code-inner {
                            padding-right: 12px;
