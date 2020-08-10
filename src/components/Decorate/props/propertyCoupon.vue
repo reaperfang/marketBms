@@ -22,7 +22,7 @@
             :closable="ruleForm.addType === 1"
             style="margin-right:5px;"
             type="success" @close="deleteItem(tag)" :title="getTitleTips(tag)">
-            {{tag.title}}
+            {{tag.title.length >= 5 ? tag.title.substring(0, 3) + '...' : tag.title}}
           </el-tag>
         </div>
       </el-form-item>
