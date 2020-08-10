@@ -13,7 +13,7 @@
     </div>
     <!-- 按钮区域 -->
     <div class="btn-area">
-      <el-button class="primary" type="primary">新增自提点</el-button>
+      <el-button class="primary" type="primary" @click="handleAddSelfLift()">新建自提点</el-button>
       <el-button v-if="addressTotal > 0" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
     </div>
     <!-- 列表 -->
@@ -25,19 +25,19 @@
       :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '400'}"
       >
       <el-table-column
-        prop="id"
+        prop="pickUpId"
         label="自提点编号"
         width="150"
         align="left">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="pickUpName"
         label="自提点名称"
         align="left"
         width="130">
       </el-table-column>
       <el-table-column
-        prop='userName'
+        prop='name'
         label="联系人"
         align="left"
         width="118">
@@ -54,10 +54,14 @@
         align="left">
       </el-table-column>
       <el-table-column
-        prop="status"
+        prop="pickUpStatus"
         label="状态"
         align="center"
         width="60">
+        <template slot-scope="scope">
+          <span v-if="scope.row.pickUpStatus === 1">启用</span>
+          <span v-if="scope.row.pickUpStatus === 0">禁用</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="updateTime"
@@ -73,7 +77,7 @@
           <div class="opeater">
             <el-button class="btn" @click="goEdit(scope.row.id)" type="text">编辑</el-button>
             <span>|</span>
-            <el-button class="btn" type="text">禁用</el-button>
+            <el-button class="btn" type="text" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -83,7 +87,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="ruleForm.pageNo"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[3, 10, 20, 30, 40]"
         :page-size="ruleForm.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total*1">
@@ -94,6 +98,7 @@
 </template>
 
 <script>
+import utils from "@/utils";
 import DialogChooseAddress from './dialogs/dialogChooseAddress'
 export default {
   components: {
@@ -110,15 +115,6 @@ export default {
       loading: false,
       isExistEnabled: false, // 是否存在启用的自提点信息
       dataList: [
-        {
-          id: 11111,
-          name: '一点自提点',
-          userName: '张三',
-          mobile: '17686557723',
-          address: '北京市大兴区地盛西路1号',
-          status: 1,
-          updateTime: '2019-11-06 10:12:28'
-        }
       ],
       ruleForm: {
         pageNo: 1,
@@ -129,7 +125,12 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        return shopInfo.id
+    }
+  },
 
   watch: {},
 
@@ -145,6 +146,128 @@ export default {
       this.getSelfLift()
       // 获取地址库列表是否有数据
       this.getAddressTotal()
+      this.getShopInfo()
+    },
+    getShopInfo() {
+      const id = this.cid
+      this._apis.set.getShopInfo({ id }).then(response =>{
+        this.isOpen = response.isOpenSelfLift === 1 ? true : false
+      }).catch(error =>{
+        this.$message.error(error);
+      })
+    },
+    goEdit(id) {
+      this.$router.push({ path: '/set/addSelfLift',query: { id } })
+    },
+    ApiEditSelfLiftById(req) {
+      return new Promise((resolve, reject) => {
+        this._apis.set.editSelfLiftById(req).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
+    updateSelfLiftStatusById(item, pickUpStatus) {
+      const id = item.id
+      this.ApiEditSelfLiftById({ id, pickUpStatus }).then(() => {
+        if (pickUpStatus === 0) {
+          this.$message({
+            duratio: 5000,
+            showClose: true,
+            message: '自提点已禁用！',
+            type: 'success'
+          });
+        }
+        if (pickUpStatus === 1) {
+          this.$message({
+            duratio: 5000,
+            showClose: true,
+            message: '自提点开启成功！',
+            type: 'success'
+          });
+        }
+      })
+    },
+    // 处理当前仅启用自提点关闭逻辑
+    handleCurrentOnlyEnabled(item, pickUpStatus) {
+      const id = item.id
+
+      const p1 = this.ApiEditSelfLiftById({ id, pickUpStatus })
+      const data = {
+          isOpenSelfLift: 0
+      }
+      const p2 = this.updateShopInfo(data)
+      Promise.all([p1, p2]).then(() => {
+        this.isOpen = false
+        this.$message({
+          duratio: 5000,
+          showClose: true,
+          message: '上门自提已关闭，自提点已禁用!',
+          type: 'success'
+        });
+      }).catch(() => {
+
+      })
+    },
+    // 启用禁用自提点
+    handleEnableSelfLift(item) {
+      // pickUpStatus === 1 当前状态 1 启用 0 禁用
+      if (item.pickUpStatus === 1) {
+        const req = {
+          pickUpStatus: 1, // 1 为启用
+          startIndex: 1,
+          pageSize: 10
+        }
+        if (!this.isOpen) {
+          this.confirm({
+            title: "提示",
+            iconWarning: true,
+            text: '禁用后用户将不能使用该自提点进行下单，您确定要禁用吗？',
+            confirmText: '确定',
+            showCancelButton: true
+          }).then(() => {
+            this.updateSelfLiftStatusById(item, 0)
+          })
+          return false
+        }
+        this.ApiGetSelfLiftList(req).then((res) => {
+          if (res && res.list.length === 1) {
+            this.confirm({
+              title: "提示",
+              iconWarning: true,
+              text: '您正在禁用当前仅有的启用自提点，禁用后，上门自提的配送方式将关闭，用户将不能使用上门自提，您确定要禁用吗？',
+              confirmText: '确定',
+              showCancelButton: true
+            }).then(() => {
+              // 
+              this.handleCurrentOnlyEnabled(item, 0)
+
+              // this.updateSelfLiftStatusById(item, 0)
+            })
+          } else {
+            this.confirm({
+              title: "提示",
+              iconWarning: true,
+              text: '禁用后用户将不能使用该自提点进行下单，您确定要禁用吗？',
+              confirmText: '确定',
+              showCancelButton: true
+            }).then(() => {
+              this.updateSelfLiftStatusById(item, 0)
+            })
+          }
+        })
+      }
+      if (item.pickUpStatus === 0) {
+        this.updateSelfLiftStatusById(item, 1)
+      }
+    },
+    //  获取启用禁用文案
+    getStatusTxt(item) {
+      return item.pickUpStatus === 0 ? '启用' : '禁用'
+    },
+    handleAddSelfLift() {
+      this.$router.push({ path: '/set/addSelfLift'})
     },
     getAddressId(val) {
       const addressId = val
@@ -168,22 +291,35 @@ export default {
     },
     getReqData() {
       const data = Object.create(null)
-      data.pageNo = this.ruleForm.pageNo
+      data.startIndex = this.ruleForm.pageNo
       data.pageSize = this.ruleForm.pageSize
       return data
     },
+    ApiGetSelfLiftList(req) {
+      return new Promise((resolve, reject) => {
+        this._apis.set.getSelfLiftList(req).then((res) => {     
+          resolve(res)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
     getSelfLift() {
       const req = this.getReqData()
-      this._apis.set.getSelfLiftList(req).then((res) => {
+      this.ApiGetSelfLiftList(req).then((res) => {
         this.dataList = res.list
-        this.total = res.total || 0
+        this.total = +res.total || 0
       }).catch((err) => {
         this.$message.error(err || '获取数据失败')
       })
     },
     updateShopInfo(data) {
+      const id = this.cid;
+      console.log('--data---',data)
+      const req = { id, ...data }
+      console.log('--req---',req)
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo((data) => {
+        this._apis.set.updateShopInfo(req).then((data) => {
           this.$store.dispatch('getShopInfo');
           resolve(data)
           
@@ -195,26 +331,79 @@ export default {
       })
       
     },
-    openSelfLift() {
-      if (this.total > 0) {
-        // 调用开启接口
-        const data = {
-          isOpenSelfLift: 1
+    ApiGetHomePage() {
+      return new Promise((resolve, reject) => {
+        this._apis.shop.getHomePage({pageTag:0}).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        });
+      })
+      
+    },
+    openSelfLiftSuccess(isHasLocation = false, pageId) {
+      const data = {
+        isOpenSelfLift: 1
+      }
+      this.updateShopInfo(data).then(() => {
+        let showConfirmButton = true
+        let text = '上门自提开启成功！'
+        if (!isHasLocation) {
+          showConfirmButton = false
+          const url = `${location.protocol}//${location.host}/bp/shop/m_shopEditor?pageId=${pageId}`
+          text = `<p style="font-size:16px;color:rgba(68,67,75,1);">上门自提开启成功！</p><p style="font-size:12px;color:rgba(68,67,75,1);">您还没有装修位置组件<a href="${url}" style="color:#655EFF;text-decoration: underline;">去装修 &gt;</a></p>`
         }
-        this.updateShopInfo(data).then(() => {
-          this.confirm({
-            title: "提示",
-            iconSuccess: true,
-            text: '已成功开启上门自提！',
-            confirmText: '我知道了',
-            showCancelButton: false
-          });
-          if (!this.isOpen) {
-            this.isOpen = true
+        this.confirm({
+          title: "提示",
+          iconSuccess: true,
+          text,
+          showConfirmButton,
+          confirmText: '我知道了',
+          showCancelButton: false
+        });
+        if (!this.isOpen) {
+          this.isOpen = true
+        }
+      }).catch(() => {
+        this.isOpen = false
+      })
+    },
+    openSelfLift() {
+      console.log('--openSelfLift--')
+      if (+this.total > 0) {
+        this._apis.shop.getHomePage({pageTag:0}).then((res) => {
+          const str = utils.uncompileStr(res.pageData);
+          const pageData = JSON.parse(str);
+          if (pageData && pageData.length > 0) {
+            const curr = Array.from(pageData).find(item => {
+              return item.type === 'location'
+            })
+            // 有店铺首页装修位置
+            if (curr) {
+              this.openSelfLiftSuccess(true)
+            } else {
+              // 没有店铺装修位置
+              this.openSelfLiftSuccess(false, res.id)
+            }
           }
-        }).catch(() => {
-          this.isOpen = false
+          console.log('--pageData--',pageData)
+        }).catch((err) => {
+          this.$message.error(err)
         })
+        // this.updateShopInfo(data).then(() => {
+        //   this.confirm({
+        //     title: "提示",
+        //     iconSuccess: true,
+        //     text: '已成功开启上门自提！',
+        //     confirmText: '我知道了',
+        //     showCancelButton: false
+        //   });
+        //   if (!this.isOpen) {
+        //     this.isOpen = true
+        //   }
+        // }).catch(() => {
+        //   this.isOpen = false
+        // })
       } else {
         this.confirm({
           title: "提示",
@@ -231,21 +420,32 @@ export default {
       }
     },
     closeSelfLift() {
-      const data = {
-        isOpenSelfLift: 0
-      }
-      this.updateShopInfo(data).then(() => {
-        this.confirm({
-          title: "提示",
-          iconSuccess: true,
-          text: '已成功关闭上门自提！',
-          confirmText: '我知道了',
-          showCancelButton: false
-        });
-        this.isOpen = false
+       this.confirm({
+        title: "提示",
+        iconSuccess: true,
+        text: '关闭后用户下单时将不能再使用上门自提，您确定要关闭吗？',
+        confirmText: '确定',
+        showCancelButton: true
+      }).then(() => {
+        const data = {
+          isOpenSelfLift: 0
+        }
+        this.updateShopInfo(data).then(() => {
+          this.confirm({
+            title: "提示",
+            iconSuccess: true,
+            text: '已成功关闭上门自提！',
+            confirmText: '我知道了',
+            showCancelButton: false
+          });
+          this.isOpen = false
+        }).catch(() => {
+          this.isOpen = true
+        })
       }).catch(() => {
         this.isOpen = true
       })
+      
     },
     handleSwitch(val) {
       if (val) {
@@ -254,8 +454,15 @@ export default {
         this.closeSelfLift()
       }
     },
-    handleSizeChange() {},
-    handleCurrentChange() {}
+    handleSizeChange(val) {
+      this.ruleForm.pageNo = 1
+      this.ruleForm.pageSize = val
+      this.getSelfLift()
+    },
+    handleCurrentChange(val) {
+      this.ruleForm.pageNo = val
+      this.getSelfLift()
+    }
   }
 }
 </script>
