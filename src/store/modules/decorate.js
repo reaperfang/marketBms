@@ -7,7 +7,8 @@ const decorate = {
 		baseInfo: {},  //店铺装修页面基础信息
 		componentDataIds: [],  //组件列表id序列
 		componentDataMap: {},   //组件数据集合映射
-		decorateEvents: []   //事件列表
+		decorateEvents: [],   //事件列表
+		checkErrorId: null //最终保存时检测到组件错误时设置id，方便右侧编辑区触发显示错误提示
 	},
 	mutations: {
 
@@ -142,7 +143,12 @@ const decorate = {
 			let events = [...state.decorateEvents];
 			decorateEvents.splice(index, 1);
 			state.decorateEvents = events;
-		}
+		},
+
+		/* 最终保存时检测到组件错误时设置id，方便右侧编辑区触发显示错误提示 */
+		setCheckErrorId: (state, id) => {
+			state.checkErrorId = id;
+		},
 	},
 	actions: {}
 };

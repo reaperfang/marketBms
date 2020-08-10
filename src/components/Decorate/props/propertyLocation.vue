@@ -16,6 +16,9 @@
           </div>
           <div class="color_block mg_top12">
             <el-radio :label="2">背景图</el-radio>
+            <div class="el-form-item__error" v-show="errorMark && ruleForm.bgType === 2 && ruleForm.backgroundImage === ''">
+              请上传背景图片
+            </div>
             <div class="img_preview" v-if="ruleForm.backgroundImage">
               <img :src="ruleForm.backgroundImage" alt="">
               <i v-show="ruleForm.bgType == 2" class="delete_btn" @click.stop="deleteImage()"></i>
@@ -61,6 +64,7 @@ export default {
     }
   },
   created() {
+    
   },
   methods: {
     /* 弹框选中图片 */
@@ -105,6 +109,10 @@ export default {
   display: block;
   margin-top: 12px;
   margin-bottom: 8px;
+  .el-form-item__error {
+    position: static;
+    display: inline-block;
+  }
 }
 .img_preview span{
   font-size: 14px;

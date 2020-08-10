@@ -198,7 +198,15 @@ export default {
 
     /* 检查输入正确性 */
     checkInput(resultData) {
-      return this.checkBaseInfo(resultData);
+      //检测基础信息
+      if(!this.checkBaseInfo(resultData)){
+        return false;
+      }
+      //检测组件有必填条件的则进行验证
+      if(!this.checkComponents(resultData)){
+        return false;
+      }
+      return true;
     },
 
     /* 发起请求 */
@@ -289,6 +297,32 @@ export default {
         });
         return false;
       }
+      return true;
+    },
+
+    /* 检测组件有必填条件的则进行验证 */
+    checkComponents(data) {
+      for(let item of this.componentDataIds) {
+        const componentData = this.componentDataMap[item];
+        //检测位置信息组件
+        if(componentData.type === 'location' && !this.checkLocation(componentData)){
+          return false;
+        }
+      }
+      return true;
+    },
+
+    /* 检测位置信息组件 */
+    checkLocation(componentData) {
+      //如果选择背景图模式，则背景图必填
+      const data = componentData.data;
+      if(data.bgType === 2 && data.backgroundImage === ''){
+        this.$store.commit('setCheckErrorId', uuidv4());
+        this.$store.commit('setCurrentComponentId', componentData.id);
+        this.setLoading(false);
+        return false;
+      }
+      console.log(data)
       return true;
     },
 
