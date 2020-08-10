@@ -16,13 +16,16 @@ export default {
   },
   methods: {
       sendAuthorization(){
-        var params = {};
-        console.log(window.location.href);
-        /* this._apis.order.sendYlyunResult().then(res => {
+        var params = {
+            code: this.$route.query.code,
+            response_type: this.$route.query.response_type,
+            state: this.$route.query.state
+        };
+        this._apis.order.sendYlyunResult(params).then(res => {
             this.status = true;
         }).catch(error => {
             this.$message.error(error);
-        }) */
+        })
       }
   }
 };

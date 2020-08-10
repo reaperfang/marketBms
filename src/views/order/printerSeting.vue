@@ -9,7 +9,7 @@
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="打印纸宽：" prop="paperWidth">
-				<el-radio v-model="ruleForm.paperWidth" label="58mm"></el-radio>
+				<el-radio v-model="ruleForm.paperWidth" label="58">58mm</el-radio>
 				<div style="color: #92929B; font-size: 12px">打印机背后有标注</div>
 			</el-form-item>
 			<el-form-item label="设备号码：" prop="code">
@@ -60,7 +60,7 @@
 			return {
 				ruleForm: {
 					brand: '',
-					paperWidth: '58mm',
+					paperWidth: '58',
 					code: '',
 					keys: '',
 					status: ''
@@ -81,7 +81,7 @@
 				},
 				tip: false,
 				printerDetail: {},
-				dialogVisible1: true,
+				dialogVisible1: false,
 				dialogVisible2: false,
 				ylyURL: ''
 			}
@@ -105,6 +105,7 @@
 					return false;
 				} else {
 					this.tip = false;
+					this.$router.push(`/order/printPreview?orderIds=${this.$route.query.orderIds}&printType=${this.$route.query.printType}`)
 				}
 			},
 			checkDevice(formName) {
@@ -127,7 +128,9 @@
 					} else {
 						this.getPrinterDetail();
 					}
-				})
+				}).catch(error => {
+                	this.$message.error(error);
+            	})
 			},
 			getPrinterDetail(){
 				this._apis.order.getPrinterSetDetail().then(res => {
