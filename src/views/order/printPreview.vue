@@ -58,7 +58,7 @@
                         <p class="border"></p>
                         <div class="info">
                             <div class="info_li">
-                                <p class="info_p" v-if="printOrderInfoCurret.orderCode"><span class="info_p_l">订单号：</span><span class="info_p_r">{{printOrderInfoCurret.orderCode}}</span></p>
+                                <p class="info_p" v-if="printOrderInfoCurret.id"><span class="info_p_l">订单号：</span><span class="info_p_r">{{printOrderInfoCurret.id}}</span></p>
                                 <p class="info_p" v-if="printOrderInfoCurret.payWay">
                                     <span class="info_p_l">交易方式：</span>
                                     <!-- <span class="info_p_r" v-text="printOrderInfoCurret.payWay==1?'微信支付':(printOrderInfoCurret.payWay==2?'货到付款'):(printOrderInfoCurret.payWay==3?'找人代付')?
@@ -93,7 +93,7 @@
                                 <p class="info_p"><span class="info_p_l">运费：</span><span class="info_p_r">￥{{printOrderInfoCurret.freight}}</span></p>
                                 <p class="info_p"><span class="info_p_l">订单总金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.receivableMoney}}</span></p>
                                 <p class="info_p"><span class="info_p_l">优惠金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.reducedPrice}}</span></p>
-                                <p class="info_p" v-if="printOrderInfoCurret.isConsumeBalance==1"><span class="info_p_l">余额抵扣：</span><span class="info_p_r">￥{{printOrderInfoCurret.consumeBalanceMoney}}</span></p>
+                                <p class="info_p"><span class="info_p_l">余额抵扣：</span><span class="info_p_r">￥{{printOrderInfoCurret.consumeBalanceMoney}}</span></p>
                                 <p class="info_p"><span class="info_p_l">实付金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.actualMoney}}</span></p>
                             </div>
                             <p class="border"></p>
@@ -105,7 +105,7 @@
                                 </p>
                                 <p class="info_p" v-if="printOrderInfoCurret.receivedName"><span class="info_p_l">收货人：</span><span class="info_p_r">{{printOrderInfoCurret.receivedName}}</span></p>
                                 <p class="info_p" v-if="printOrderInfoCurret.receivedPhone"><span class="info_p_l">联系电话：</span><span class="info_p_r">{{printOrderInfoCurret.receivedPhone}}</span></p>
-                                <p class="info_p" v-if="printOrderInfoCurret.buyerRemark"><span class="info_p_l">备注：</span><span class="info_p_r">{{printOrderInfoCurret.buyerRemark}}</span></p>
+                                <p class="info_p"><span class="info_p_l">备注：</span><span class="info_p_r">{{printOrderInfoCurret.buyerRemark}}</span></p>
                             </div>
                         </div>
                     </div>
@@ -177,7 +177,7 @@ export default {
         },
         //修改打印机设置
         handlePrinterSet(){
-            this.$router.push({path:'/order/printerSeting'})
+            this.$router.push({path:'/order/printerSeting',query:this.$route.query})
         },
         //去打印
         handleGoPrinter(){
@@ -231,7 +231,7 @@ export default {
         display: flex;
         display:flex;
         display:-webkit-flex;
-        justify-content:space-between;
+        // justify-content:space-between;
         // flex-wrap:wrap;
         .print_preview_left{
             font-size: 14px;
@@ -244,16 +244,17 @@ export default {
             }
         }
         .print_preview_center{
-            width: 272px;
+            // width: 272px;
             height: 100%;
             .print_preview_center_box{
                 // width: 272px;
-                height: calc(100% - 72px);
-                overflow: hidden;
+                height: calc(100% - 52px);
+                // overflow: hidden;
             }
             .print_preview_center_mx{
                 width: 272px;
                 height: 100%;
+                margin: auto;
                 background: #fff;
                 box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
                 border:2px solid rgba(242,242,249,1);
@@ -336,7 +337,7 @@ export default {
                     }
                 }
             }
-            .pagination{margin-top: 40px;}
+            .pagination{width:272px;margin:auto;margin-top: 40px;}
         } 
     }
     
