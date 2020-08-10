@@ -2771,12 +2771,13 @@ export default {
                     params.businessDispatchType = 0; //商家配送
                     params.shopExtractType = 0; // 上门自提
                     params.specsType = this.specRadio;//0：单一规格，1：多规格
-                    if(this.ruleForm.deliveryWay.includes(4)){
+                    if(this.ruleForm.deliveryWay.includes(2)){ //勾选了商家配送
+                        params.businessDispatchType = 1;
+                    }
+                    if(this.ruleForm.deliveryWay.includes(4)){//勾选了上门自提
                         params.shopExtractType = 1;
                     }
                     delete params.deliveryWay;
-
-                    // console.log(params)
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
