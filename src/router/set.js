@@ -148,6 +148,19 @@ export default [
                 meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:5},
             },
             {
+                path: 'addSelfLift',
+                component: () => import('@/views/set/addSelfLift'),
+                name: 'addSelfLift',
+                hidden: true,
+                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:4},
+            },
+            {
+                path: 'selfLift',
+                component: () => import('@/views/set/selfLift'),
+                name: 'selfLift',
+                meta: { title: '上门自提', noCache: true, tabTitle: '配送设置' ,navType:2},
+            },
+            {
                  path: 'authorize',
                  component: () => import('@/views/set/authorize'),
                  name: 'authorize',

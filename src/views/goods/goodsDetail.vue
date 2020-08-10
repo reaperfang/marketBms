@@ -2327,7 +2327,7 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                this.specRadio = res.specsType;        
+                this.specRadio = res.specsType;       
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
@@ -2365,13 +2365,13 @@ export default {
                         val.label = label
                         val.editorDisabled = true
                         val.showCodeSpan = false
-                        res.goodsInfos = this.sortGoodsInfos(res)
                     })
-                          
+                     res.goodsInfos = this.sortGoodsInfos(res)    
                     this.computedAddSpecs(res.productSpecs)
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)
                     res.goodsInfos = __goodsInfos
+                    debugger
                     }else if(res.specsType===0){ //单一规格
                     this.singleSpec = Object.assign({}, this.singleSpec, res.goodsInfos[0], {
                             //goodsInfos: [res.goodsInfo]
@@ -2766,17 +2766,18 @@ export default {
                             productUnit: item && item.name || ''
                         })
                     }
-		    //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
+		            //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
                     params.generalExpressType = 1; //普通快递
                     params.businessDispatchType = 0; //商家配送
                     params.shopExtractType = 0; // 上门自提
                     params.specsType = this.specRadio;//0：单一规格，1：多规格
-                    if(this.ruleForm.deliveryWay.includes(4)){
+                    if(this.ruleForm.deliveryWay.includes(2)){ //勾选了商家配送
+                        params.businessDispatchType = 1;
+                    }
+                    if(this.ruleForm.deliveryWay.includes(4)){//勾选了上门自提
                         params.shopExtractType = 1;
                     }
                     delete params.deliveryWay;
-
-                    // console.log(params)
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
