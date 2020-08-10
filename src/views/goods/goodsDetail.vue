@@ -2366,7 +2366,7 @@ export default {
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
-                     res.goodsInfos = this.sortGoodsInfos(res)    
+                    res.goodsInfos = this.sortGoodsInfos(res)  
                     this.computedAddSpecs(res.productSpecs)
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)
