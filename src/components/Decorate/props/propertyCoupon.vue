@@ -250,9 +250,9 @@ export default {
   padding: 0px 5px;
   .el-icon-close {
     position: absolute;
-    top: 5px;
-    right: 0;
-    background: #67c23a;
+    top: -5px;
+    right: -5px;
+    background: #92929B;
     color: #fff;
   }
 }
