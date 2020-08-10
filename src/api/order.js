@@ -653,6 +653,16 @@ export function shopPrinterPreview(data) {
   })
 }
 
+// 小票配送单打印 易其孜
+export function goPrinter(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-PRINT-PROCESSOR',
+    data
+  })
+}
+
 
 
 

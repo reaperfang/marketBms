@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="print_preview_center_box">
+                <div class="print_preview_center_box" v-loading="info_loading">
                     <div class="print_preview_center_mx">
                         <div class="print_preview_center_title" v-if="printOrderInfoCurret.shopName">{{printOrderInfoCurret.shopName}}</div>
                         <p class="border"></p>
@@ -98,7 +98,11 @@
                             </div>
                             <p class="border"></p>
                             <div class="info_li">
-                                <p class="info_p" v-if="printOrderInfoCurret.receiveAddress"><span class="info_p_l">地址：</span><span class="info_p_r">{{printOrderInfoCurret.receiveAddress}}</span></p>
+                                <p class="info_p">
+                                    <span class="info_p_l">地址：</span>
+                                    <span class="info_p_r">{{printOrderInfoCurret.receivedProvinceName}} {{printOrderInfoCurret.receivedCityName}}
+                                        {{printOrderInfoCurret.receivedAreaName}} {{printOrderInfoCurret.receivedDetail}}</span>
+                                </p>
                                 <p class="info_p" v-if="printOrderInfoCurret.receivedName"><span class="info_p_l">收货人：</span><span class="info_p_r">{{printOrderInfoCurret.receivedName}}</span></p>
                                 <p class="info_p" v-if="printOrderInfoCurret.receivedPhone"><span class="info_p_l">联系电话：</span><span class="info_p_r">{{printOrderInfoCurret.receivedPhone}}</span></p>
                                 <p class="info_p" v-if="printOrderInfoCurret.buyerRemark"><span class="info_p_l">备注：</span><span class="info_p_r">{{printOrderInfoCurret.buyerRemark}}</span></p>
@@ -124,7 +128,7 @@
             </el-col>
             <!-- 去打印 -->
             <el-col :span="8" class="print_preview_right">
-                <el-button class="fr" type="primary" size="small" :loading="isloading" @click="handleGoPrinter">去打印</el-button>
+                <el-button class="fr" type="primary" size="small" :loading="btn_loading" @click="handleGoPrinter">去打印</el-button>
             </el-col>
         </el-row>
         
@@ -134,7 +138,9 @@
 export default {
     data() {
         return {
-            isloading:false,
+            info_loading:false,
+            btn_loading:false,
+            codes:[],
             printOrderInfo:[],
             printOrderInfoCurret:[]
         }
@@ -149,17 +155,20 @@ export default {
         }
     },
     methods:{
+        //x小票配送单预览
         getPrinterInfo(){
             //printType 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
+            this.info_loading=true
             this._apis.order.shopPrinterPreview({
                 ids:this.$route.query.orderIds.split(","),
                 printType:this.$route.query.printType
             }).then(res => {
-                console.log(res)
+                this.info_loading=false
+                // this.codes=res.codes
                 this.printOrderInfo=!!res.printOrderInfo?res.printOrderInfo:[]
                 this.printOrderInfoCurret = this.printOrderInfo.length>0?this.printOrderInfo[0]:[]
             })
-            .catch(error => {});
+            .catch(error => {this.info_loading=false});
         },
         //分页页码改变
         handleCurrentChange(val){
@@ -172,12 +181,16 @@ export default {
         },
         //去打印
         handleGoPrinter(){
+            this.btn_loading=true
+            //打印机设置详情，获取打印机连接状态
             this._apis.order.getPrinterSetDetail().then(res => {
                 console.log(res.status)
+                this.btn_loading=false
                 if(!!res&&res.status==1){
                     //printType 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
                     // status 连接状态 0离线，1在线，2异常（缺纸）
                     console.log('在线')
+                    this.goPrinter()
                 }else{
                     this.$confirm('找不到打印机，无法打印。请重新设置或确认打印机是否已连接。', {
                         confirmButtonText: '去设置',
@@ -190,7 +203,19 @@ export default {
                     }).catch(() => {});
                 }
             })
-            .catch(error => {});
+            .catch(error => {this.$message.error(error);this.btn_loading=false});
+        },
+        //小票配送单打印
+        goPrinter(){
+            // console.log(code)
+            this._apis.order.goPrinter({
+                ids:this.$route.query.orderIds.split(","),
+                printType:this.$route.query.printType,
+                printOrderInfo:this.printOrderInfo
+            }).then(res => {
+                this.$message.success('调用打印小票成功')
+            })
+            .catch(error => {this.$message.error(error)});
         }
     }
 }
