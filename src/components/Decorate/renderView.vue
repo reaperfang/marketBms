@@ -53,6 +53,10 @@
                     <div class="popper">{{getComponentData(item).title}}</div>
                   </div>
                 </transition>-->
+                <div class="border-line border-line-l"></div>
+                <div class="border-line border-line-t"></div>
+                <div class="border-line border-line-r"></div>
+                <div class="border-line border-line-b"></div>
             </div>
           </el-popover>
           </div>
@@ -420,9 +424,44 @@ export default {
       scrollbar-width: none;
 
       .component_wrapper{
+        .border-line {
+          position: absolute;
+          display: none;
+        }
+        .border-line-l {
+          left: 0;
+          top: 0;
+          width: 2px;
+          height: 100%;
+          border-left: 2px dashed $globalMainColor;
+        }
+        .border-line-t {
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 2px;
+          border-top: 2px dashed $globalMainColor;
+        }
+        .border-line-r {
+          right: 0;
+          top: 0;
+          width: 2px;
+          height: 100%;
+          border-left: 2px dashed $globalMainColor;
+        }
+        .border-line-b {
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 2px;
+          border-top: 2px dashed $globalMainColor;
+        }
         // min-height: 50px;
         &.actived{
-          border:2px dashed $globalMainColor;
+          .border-line {
+            display: block;
+          }
+          //  border: 2px dashed $globalMainColor;
         }
         i{
           width:20px;
