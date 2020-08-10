@@ -422,15 +422,6 @@ export default {
       .component_wrapper{
         // min-height: 50px;
         &.actived{
-          // border:2px dashed $globalMainColor;
-        }
-        &.actived:after {
-          position: absolute;
-          content: "";
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
           border:2px dashed $globalMainColor;
         }
         i{
