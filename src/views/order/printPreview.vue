@@ -11,7 +11,7 @@
         <el-row class="print_preview_info">
             <el-col :span="8" class="print_preview_left">
                 <p>打印配送单小票</p>
-                <a href="javascript:void(0)">修改打印机设置</a>
+                <a href="javascript:void(0)" @click="handlePrinterSet">修改打印机设置</a>
             </el-col>
             <el-col :span="8" class="print_preview_center">
                 <!-- <div class="print_preview_center_mx">
@@ -52,57 +52,68 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="print_preview_center_mx" v-for="(item,index) in printOrderInfo" :key="index">
-                    <div class="print_preview_center_title">{{item.shopName}}</div>
-                    <p class="border"></p>
-                    <div class="info">
-                        <div class="info_li">
-                            <p class="info_p"><span class="info_p_l">订单号：</span><span class="info_p_r">{{item.orderCode}}</span></p>
-                            <p class="info_p" v-if="!!item.payWay">
-                                <span class="info_p_l">交易方式：</span>
-                                <!-- <span class="info_p_r" v-text="item.payWay==1?'微信支付':(item.payWay==2?'货到付款'):(item.payWay==3?'找人代付')?
-                                    (item.payWay==4?'线下支付')?(item.payWay==5?'线上支付')?(item.payWay==6?'支付宝支付'):''"></span> -->
-                                    <span class="info_p_r" v-text="item.payWay==1?'微信支付':item.payWay==2?'货到付款':item.payWay==3?'找人代付':
-                                    item.payWay==4?'线下支付':item.payWay==5?'线上支付1':item.payWay==6?'支付宝支付':''"></span>
-                            </p>
-                            <p class="info_p"><span class="info_p_l">交易时间：</span><span class="info_p_r">{{item.createTime}}</span></p>
-                        </div>
+                <div class="print_preview_center_box">
+                    <div class="print_preview_center_mx">
+                        <div class="print_preview_center_title" v-if="printOrderInfoCurret.shopName">{{printOrderInfoCurret.shopName}}</div>
                         <p class="border"></p>
-                        <div class="info_li info_li2">
-                            <div class="info_li2_tab">
-                                <span class="good_name">商品名称</span>
-                                <span class="number">数量</span>
-                                <span class="money">金额</span>
-                                <span class="fh_number">发货数量</span>
+                        <div class="info">
+                            <div class="info_li">
+                                <p class="info_p" v-if="printOrderInfoCurret.orderCode"><span class="info_p_l">订单号：</span><span class="info_p_r">{{printOrderInfoCurret.orderCode}}</span></p>
+                                <p class="info_p" v-if="printOrderInfoCurret.payWay">
+                                    <span class="info_p_l">交易方式：</span>
+                                    <!-- <span class="info_p_r" v-text="printOrderInfoCurret.payWay==1?'微信支付':(printOrderInfoCurret.payWay==2?'货到付款'):(printOrderInfoCurret.payWay==3?'找人代付')?
+                                        (printOrderInfoCurret.payWay==4?'线下支付')?(printOrderInfoCurret.payWay==5?'线上支付')?(printOrderInfoCurret.payWay==6?'支付宝支付'):''"></span> -->
+                                        <span class="info_p_r" v-text="printOrderInfoCurret.payWay==1?'微信支付':printOrderInfoCurret.payWay==2?'货到付款':printOrderInfoCurret.payWay==3?'找人代付':
+                                        printOrderInfoCurret.payWay==4?'线下支付':printOrderInfoCurret.payWay==5?'线上支付':printOrderInfoCurret.payWay==6?'支付宝支付':''"></span>
+                                </p>
+                                <p class="info_p" v-if="printOrderInfoCurret.createTime"><span class="info_p_l">交易时间：</span><span class="info_p_r">{{printOrderInfoCurret.createTime}}</span></p>
                             </div>
-                            <ul class="info_li2_mx">
-                                <li class="clearfix">
-                                    <p class="info_li2_mx_p0"><span>麻辣鱼头麻辣鱼头辣鱼头麻辣</span></p>
-                                    <p class="info_li2_mx_p1 fr"><span class="number_i">×2</span><span class="money_i">￥129.00</span><span class="fh_number_i">2</span></p>
-                                </li>
-                                <li class="clearfix">
-                                    <p class="info_li2_mx_p0"><span>麻辣鱼头麻辣鱼头麻辣鱼头辣鱼头麻辣</span></p>
-                                    <p class="info_li2_mx_p1 fr"><span class="number_i">×2</span><span class="money_i">￥129.00</span><span class="fh_number_i">2</span></p>
-                                </li>
-                            </ul>
-                        </div>
-                        <p class="border"></p>
-                        <div class="info_li">
-                            <p class="info_p"><span class="info_p_l">商品总金额：</span><span class="info_p_r">￥{{item.goodsAmount}}</span></p>
-                            <p class="info_p"><span class="info_p_l">运费：</span><span class="info_p_r">￥{{item.freight}}</span></p>
-                            <p class="info_p"><span class="info_p_l">订单总金额：</span><span class="info_p_r">￥{{item.receivableMoney}}</span></p>
-                            <p class="info_p"><span class="info_p_l">优惠金额：</span><span class="info_p_r">￥{{item.reducedPrice}}</span></p>
-                            <p class="info_p"><span class="info_p_l">余额抵扣：</span><span class="info_p_r">￥{{item.discountMoney}}</span></p>
+                            <p class="border"></p>
+                            <div class="info_li info_li2">
+                                <div class="info_li2_tab">
+                                    <span class="good_name">商品名称</span>
+                                    <span class="number">数量</span>
+                                    <span class="money">金额</span>
+                                    <span class="fh_number">发货数量</span>
+                                </div>
+                                <ul class="info_li2_mx">
+                                    <li class="clearfix" v-for="(item,index) in printOrderInfoCurret.itemList" :key="index">
+                                        <p class="info_li2_mx_p0" v-if="item.goodsName"><span>{{item.goodsName}}</span></p>
+                                        <p class="info_li2_mx_p1 fr">
+                                            <span class="number_i" v-if="item.goodsCount">×{{item.goodsCount}}</span>
+                                            <span class="money_i" v-if="item.goodsPrice">￥{{item.goodsPrice}}</span>
+                                            <span class="fh_number_i" v-if="item.sendCount">{{item.sendCount}}</span>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="border"></p>
+                            <div class="info_li">
+                                <p class="info_p"><span class="info_p_l">商品总金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.goodsAmount}}</span></p>
+                                <p class="info_p"><span class="info_p_l">运费：</span><span class="info_p_r">￥{{printOrderInfoCurret.freight}}</span></p>
+                                <p class="info_p"><span class="info_p_l">订单总金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.receivableMoney}}</span></p>
+                                <p class="info_p"><span class="info_p_l">优惠金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.reducedPrice}}</span></p>
+                                <p class="info_p" v-if="printOrderInfoCurret.isConsumeBalance==1"><span class="info_p_l">余额抵扣：</span><span class="info_p_r">￥{{printOrderInfoCurret.consumeBalanceMoney}}</span></p>
+                                <p class="info_p"><span class="info_p_l">实付金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.actualMoney}}</span></p>
+                            </div>
+                            <p class="border"></p>
+                            <div class="info_li">
+                                <p class="info_p" v-if="printOrderInfoCurret.receiveAddress"><span class="info_p_l">地址：</span><span class="info_p_r">{{printOrderInfoCurret.receiveAddress}}</span></p>
+                                <p class="info_p" v-if="printOrderInfoCurret.receivedName"><span class="info_p_l">收货人：</span><span class="info_p_r">{{printOrderInfoCurret.receivedName}}</span></p>
+                                <p class="info_p" v-if="printOrderInfoCurret.receivedPhone"><span class="info_p_l">联系电话：</span><span class="info_p_r">{{printOrderInfoCurret.receivedPhone}}</span></p>
+                                <p class="info_p" v-if="printOrderInfoCurret.buyerRemark"><span class="info_p_l">备注：</span><span class="info_p_r">{{printOrderInfoCurret.buyerRemark}}</span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
                 
                 <!-- 分页 -->
                 <el-pagination
                     v-if="printOrderInfo.length>1" 
                     class="pagination"
                     background
-                    :total="5" 
+                    :total="printOrderInfo.length" 
                     :page-size="1"
                     :pager-count="5"
                     :current-page="1"
@@ -113,7 +124,7 @@
             </el-col>
             <!-- 去打印 -->
             <el-col :span="8" class="print_preview_right">
-                <el-button class="fr" type="primary" size="small" :loading="false">去打印</el-button>
+                <el-button class="fr" type="primary" size="small" :loading="isloading" @click="handleGoPrinter">去打印</el-button>
             </el-col>
         </el-row>
         
@@ -123,7 +134,9 @@
 export default {
     data() {
         return {
-            printOrderInfo:[]
+            isloading:false,
+            printOrderInfo:[],
+            printOrderInfoCurret:[]
         }
     },
     computed: {
@@ -144,12 +157,40 @@ export default {
             }).then(res => {
                 console.log(res)
                 this.printOrderInfo=!!res.printOrderInfo?res.printOrderInfo:[]
+                this.printOrderInfoCurret = this.printOrderInfo.length>0?this.printOrderInfo[0]:[]
             })
             .catch(error => {});
         },
         //分页页码改变
         handleCurrentChange(val){
             console.log(val)
+            this.printOrderInfoCurret = this.printOrderInfo[val-1]
+        },
+        //修改打印机设置
+        handlePrinterSet(){
+            this.$router.push({path:'/order/printerSeting'})
+        },
+        //去打印
+        handleGoPrinter(){
+            this._apis.order.getPrinterSetDetail().then(res => {
+                console.log(res.status)
+                if(!!res&&res.status==1){
+                    //printType 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
+                    // status 连接状态 0离线，1在线，2异常（缺纸）
+                    console.log('在线')
+                }else{
+                    this.$confirm('找不到打印机，无法打印。请重新设置或确认打印机是否已连接。', {
+                        confirmButtonText: '去设置',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                        showClose:false,
+                        closeOnClickModal:false
+                    }).then(() => {
+                        this.$router.push({path:'/order/printerSeting'})
+                    }).catch(() => {});
+                }
+            })
+            .catch(error => {});
         }
     }
 }
@@ -180,9 +221,14 @@ export default {
         .print_preview_center{
             width: 272px;
             height: 100%;
-            .print_preview_center_mx{
-                width: 100%;
+            .print_preview_center_box{
+                // width: 272px;
                 height: calc(100% - 72px);
+                overflow: hidden;
+            }
+            .print_preview_center_mx{
+                width: 272px;
+                height: 100%;
                 background: #fff;
                 box-shadow:0px 0px 8px 0px rgba(0,0,0,0.1);
                 border:2px solid rgba(242,242,249,1);
@@ -238,13 +284,14 @@ export default {
                         }
                         .info_li2_mx{
                             margin-top: 10px;
-                            padding-right: 20px;
+                            padding-right: 40px;
                             li{
                                 margin-top: 4px;
                             }
                             .info_li2_mx_p0{
                                 // text-align: right;
                                 display: flex;
+                                line-height: 16px;
                             }
                             .info_li2_mx_p1{
                                 margin-top: 2px;

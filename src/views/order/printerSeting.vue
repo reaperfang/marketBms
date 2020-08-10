@@ -60,7 +60,7 @@
 			}
 		},
 		created(){
-			console.log(this.$route.query.printType)
+			// console.log(this.$route.query.printType)
 		},
 		methods: {
 			goPrinter(formName) {
