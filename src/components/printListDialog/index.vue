@@ -58,7 +58,7 @@
         if(this.printRadio==1){
           this._apis.order.getPrinterSetDetail().then(res => {
             // 选择小票配送单，点击确定，未设置过小票打印机的，原页面打开连接打印机页面，已经设置过小票打印机的，页面直接打开下票预览页；
-            if(!!res){
+            if(!res){
               //printType 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
               // status 连接状态 0离线，1在线，2异常（缺纸）
               // this.printQuery.status=res.status

@@ -663,8 +663,25 @@ export function goPrinter(data) {
   })
 }
 
+// 易联云商户授权结果  lyc
+export function sendYlyunResult(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-ES-CALL-BACK-PROCESSOR',
+    data
+  })
+}
 
-
+// 连接打印机  lyc
+export function connectPrinter(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-CONNECT-PROCESSOR',
+    data
+  })
+}
 
 
 
