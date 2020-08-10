@@ -178,7 +178,7 @@ export default {
                     });
                     this.checkCreditRule();
                 }).catch((error) => {
-                    console.log(error);
+                   this.$message.error(error);
                 })
             }
         },
