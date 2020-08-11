@@ -21,8 +21,12 @@
 					<div slot="reference" class="hint">找不到设备号？</div>
 				</el-popover>
 			</el-form-item>
-			<el-form-item label="设备密钥：" prop="secretKey">
+			<el-form-item v-if="ruleForm.brand == 1" label="设备密钥：" prop="secretKey">
 				<el-input v-model="ruleForm.secretKey" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
+				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
+			</el-form-item>
+			<el-form-item v-if="ruleForm.brand == 2" label="">
+<!--				<el-input v-model="ruleForm.secretKey" v-if="ruleForm.brand == 1" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>-->
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
 			<el-form-item label="设备状态：" style="margin-bottom:0;">
@@ -122,6 +126,7 @@
 				}
 				delete params.status;
 				this._apis.order.connectPrinter(params).then(res => {
+					console.log(res)
 					if(res != null) {
 						this.dialogVisible1 = true;
 						this.ylyURL = res;
@@ -147,7 +152,7 @@
             	})
 			},
 			toYLyun(){
-				window.open('https://www.baidu.com');
+				window.open(this.ylyURL);
 				this.dialogVisible1 = false;
 				this.dialogVisible2 = true;
 			},
