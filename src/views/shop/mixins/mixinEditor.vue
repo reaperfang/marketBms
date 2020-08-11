@@ -39,7 +39,6 @@ export default {
 
     /* 检测基础信息 */
     checkBaseInfo(data) {
-      console.log('11')
       if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
         this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
           confirmButtonText: '确定',
