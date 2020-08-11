@@ -141,7 +141,7 @@ export default {
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
             var scrollWidth = window && this.utils.isIE() ? 18 : 0;
-            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
+            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth : (375);
             bodyWidth = this.$refs.componentContent && (this.currentComponentData.type === 'goodsGroup') && this.showTemplate==2 ? bodyWidth + 100 : bodyWidth;
             if(this.listStyle=='1'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
@@ -184,10 +184,10 @@ export default {
             else if(this.listStyle=='5'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
                 var scrollWidth = window && this.utils.isIE() ? 18 : 0;
-                var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
+                var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth : (375);
                 if('showTemplate' in this.currentComponentData.data){
                     this.showTemplate= this.currentComponentData.data.showTemplate;
-                    if(this.showTemplate!=1){
+                    if(this.showTemplate!=1 && !this.$refs.componentContent){
                         this.goodWidth = {width:(bodyWidth - this.pageMargin * 2 - this.goodsMargin - 100) / 2 + 'px'}
                     }
                     else{
