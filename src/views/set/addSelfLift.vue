@@ -322,6 +322,7 @@ export default {
       this.ruleForm.province = data.provinceName || null
       this.ruleForm.city = data.cityName || null
       this.ruleForm.area = data.areaName || null
+      this.isMapChoose = true
     },
     getAddressInfo() {
       const id = this.$route.query && +this.$route.query.addressId
@@ -383,10 +384,24 @@ export default {
       delete res.subscribeTimeWeekDays
       delete res.subscribeTimeType
       delete res.subscribeTimeCustomizeType
-      Object.assign(this.ruleForm, res)
+      this.ruleForm.status = res.pickUpStatus || 1
+      this.ruleForm.name = res.pickUpName || null
+      this.ruleForm.contactPerson = res.name || null
+      this.ruleForm.mobile = res.mobile || null
+      this.ruleForm.address = res.address || ''
+      this.ruleForm.addressDetail = res.addressDetail || null
+      this.ruleForm.provinceCode = res.provinceCode || null
+      this.ruleForm.province = res.provinceName || null
+      this.ruleForm.cityCode = res.cityCode || null
+      this.ruleForm.city = res.cityName || null
+      this.ruleForm.areaCode = res.areaCode || null
+      this.ruleForm.area = res.areaName || null
+      this.ruleForm.lng = res.longitude || null
+      this.ruleForm.lat = res.latitude || null
+      this.isMapChoose = true
     },
     getSelfLiftById() {
-      const id = this.$route.query && this.$route.query.id
+      const id = this.$route.query && +this.$route.query.id
       this._apis.set.getSelfLiftById({ id }).then((response) => {
         this.handleEchoData(response)
       }).catch((err) => {
@@ -666,20 +681,6 @@ export default {
       return ''
     },
     getReqData() {
-      // const cid = this.cid
-      // status: 1, // 0 停用 1 启用
-      //   name: null, // 自提点名称
-      //   contactPerson: null, // 联系人
-      //   mobile: null, // 联系电话
-      //   address: '', //联系地址
-      //   lat: null, // 纬度
-      //   lng: null, // 经度
-      //   provinceCode: null, //
-      //   cityCode: null,
-      //   areaCode: null,
-      //   province: null,
-      //   city: null,
-      //   area: null,
       let id = this.$route.query && +this.$route.query.id
       id = id ? { id } : null
       const ruleForm = JSON.parse(JSON.stringify(this.ruleForm))
@@ -689,19 +690,64 @@ export default {
       if (subscribeTimeType === 2) {
         subscribeTimeHourRanges = { subscribeTimeHourRanges: this.getSubscribeTimeHourRanges()} // this.ruleForm.
       }
-      const subscribeTimeWeekDays = ruleForm.weeks.sort().join(',')
-      delete ruleForm.weeks
-      delete ruleForm.timePeriods
-      delete ruleForm.repeatCycle
-      delete ruleForm.deliveryTimeType
-      return {
+      let subscribeTimeWeekDays = ruleForm.weeks.length > 0 ? { subscribeTimeWeekDays:ruleForm.weeks.sort().join(',')  } : null
+      // delete ruleForm.weeks
+      // delete ruleForm.timePeriods
+      // delete ruleForm.repeatCycle
+      // delete ruleForm.deliveryTimeType
+      const pickUpName = ruleForm.name
+      const address = ruleForm.address
+      const addressDetail = ruleForm.addressDetail
+      const name = ruleForm.contactPerson
+      const pickUpStatus = ruleForm.status
+      const provinceCode = ruleForm.provinceCode
+      const provinceName = ruleForm.province
+      const cityCode = ruleForm.cityCode
+      const cityName = ruleForm.city
+      const areaCode = ruleForm.areaCode
+      const areaName = ruleForm.area
+      const longitude = ruleForm.lng
+      const subscribe_time_type = subscribeTimeType
+      const mobile = ruleForm.mobile
+      const latitude = ruleForm.lat
+      return{
         ...id,
-        ...ruleForm,
+        pickUpName,
+        name,
+        mobile,
+        address,
+        addressDetail,
+        pickUpStatus,
+        provinceCode,
+        provinceName,
+        cityCode,
+        cityName,
+        areaCode,
+        areaName,
+        longitude,
+        latitude,
+        subscribeTimeType,
         subscribeTimeCustomizeType,
         ...subscribeTimeHourRanges,
-        subscribeTimeType,
-        subscribeTimeWeekDays
+        ...subscribeTimeWeekDays
       }
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.ruleForm.weeks = [], // 重复日
+      this.ruleForm.timePeriods = [ 
+        {
+          start: '',
+          end: ''
+        }
+      ]
+      this.ruleForm.province = null
+      this.ruleForm.provinceCode = null
+      this.ruleForm.city = null
+      this.ruleForm.cityCode = null
+      this.ruleForm.area = null
+      this.ruleForm.areaCode = null
+      this.tempWeeks = []
     },
     handleSubmit(formName) {
       this.$refs[formName].validate((valid) => {
@@ -725,7 +771,9 @@ export default {
               confirmText: '继续新建自提点',
               showCancelButton: false
             }).then(() => {
-              this.$router.push({ path: '/set/addSelfLift' })
+              this.resetForm(formName)
+              
+              // this.$router.replace({ path: '/set/addSelfLift' })
             }).catch(()=> {
             });
           }).catch((err) => {

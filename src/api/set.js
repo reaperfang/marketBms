@@ -307,19 +307,19 @@ export function delAddressById(data) {
     data
   })
 }
-// 新建自提点 mock
+// 新建自提点
 export function addSelfLift(data) {
   return request({
-    target: 'SHOP-ADDRESS-DELETE-PROCESSOR',
+    target: 'PICKUPINFO-ADD-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
   })
 }
-// 编辑自提点 mock
+// 编辑自提点
 export function editSelfLiftById(data) {
   return request({
-    target: 'SHOP-ADDRESS-DELETE-PROCESSOR',
+    target: 'PICKUPINFO-UPDATE-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
@@ -328,16 +328,16 @@ export function editSelfLiftById(data) {
 // 通过id 获取自提点详情 
 export function getSelfLiftById(data) {
   return request({
-    target: 'SHOP-ADDRESS-DELETE-PROCESSOR',
+    target: 'PICKUPINFO-FIND-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
   })
 }
-// 获取自提点列表 mock
+// 获取自提点列表
 export function getSelfLiftList(data) {
   return request({
-    target: 'SHOP-ADDRESS-DELETE-PROCESSOR',
+    target: 'PICKUPINFO-PAGE-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
