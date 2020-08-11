@@ -204,7 +204,7 @@ export default {
           {
             min: 1,
             max: 300,
-            message: "长度在 1 到 100 个字符",
+            message: "长度在 1 到 300 个字符",
             trigger: "blur"
           }
         ],
