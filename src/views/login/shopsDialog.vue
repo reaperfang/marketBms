@@ -12,7 +12,7 @@
         <span slot="title" class="dialog_title">
             我的店铺
         </span>
-        <div class="content">
+        <div class="content"  v-loading="loading">
           <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
               <p>
                 <span :class="item.shopExpire == 1 ? 'e-shopName' : 'shopName'">{{item.shopName}}</span>
@@ -63,6 +63,7 @@ export default {
           startIndex:1,
           pageSize:9,
           total:0,
+          loading:true
       }
   },
   props:['showShopsDialog','shopList','route','showClose','background'],
@@ -90,7 +91,9 @@ export default {
       this._apis.profile.getShopList(obj).then(response => {
         this.total = response.total
         this.shopLists = response.list
+        this.loading = false
       }).catch(error =>{
+        this.loading = false
         this.$message.error(error);
       })
     },
