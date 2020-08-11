@@ -149,7 +149,7 @@
           <div class="main">
             <div>
               <p class="title3">微信小程序商城</p>
-              <div v-if="!isEmpowerWX && wxQrcode">
+              <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode">
                 <img  class="erweima" :src="wxQrcode" alt/>
                 <p class="opt">
                   <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
@@ -172,7 +172,7 @@
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
-              <div v-if="!isEmpowerGZ && gzQrcode">
+              <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode">
                 <img  class="erweima" :src="gzQrcode" alt>
                 <p class="opt">
                   <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
