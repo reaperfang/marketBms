@@ -341,7 +341,7 @@ export default {
                 [`${this.listQuery.searchTimeType}TimeEnd`]: this.listQuery.orderTimeValue ? utils.formatDate(this.listQuery.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss") : ''
             })
             this._apis.order.SendPageList(params).then((res) => {
-                console.log(res)
+                // console.log(res)
                 this.total = +res.total
                 this.tableData = res.list
                 this.loading = false

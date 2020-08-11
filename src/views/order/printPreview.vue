@@ -148,11 +148,11 @@ export default {
     computed: {
     },
     created(){
-        console.log(this.$route.query.orderIds.split(","))
-        console.log(this.$route.query.printType)
-        if(this.$route.query.orderIds&&this.$route.query.printType){
+        // console.log(this.$route.query.orderIds.split(","))
+        // console.log(this.$route.query.printType)
+        // if(this.$route.query.orderIds&&this.$route.query.printType){
             this.getPrinterInfo()
-        }
+        // }
     },
     methods:{
         //x小票配送单预览
@@ -168,11 +168,10 @@ export default {
                 this.printOrderInfo=!!res.printOrderInfo?res.printOrderInfo:[]
                 this.printOrderInfoCurret = this.printOrderInfo.length>0?this.printOrderInfo[0]:[]
             })
-            .catch(error => {this.info_loading=false});
+            .catch(error => {this.info_loading=false;this.$message.error(error);});
         },
         //分页页码改变
         handleCurrentChange(val){
-            console.log(val)
             this.printOrderInfoCurret = this.printOrderInfo[val-1]
         },
         //修改打印机设置
@@ -184,12 +183,10 @@ export default {
             this.btn_loading=true
             //打印机设置详情，获取打印机连接状态
             this._apis.order.getPrinterSetDetail().then(res => {
-                console.log(res.status)
                 this.btn_loading=false
                 if(!!res&&res.status==1){
                     //printType 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
                     // status 连接状态 0离线，1在线，2异常（缺纸）
-                    console.log('在线')
                     this.goPrinter()
                 }else{
                     this.$confirm('找不到打印机，无法打印。请重新设置或确认打印机是否已连接。', {
@@ -207,7 +204,6 @@ export default {
         },
         //小票配送单打印
         goPrinter(){
-            // console.log(code)
             this._apis.order.goPrinter({
                 ids:this.$route.query.orderIds.split(","),
                 printType:this.$route.query.printType,
