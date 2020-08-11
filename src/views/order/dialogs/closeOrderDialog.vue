@@ -36,7 +36,7 @@ export default {
     data() {
         return {
             showFooter: false,
-            operationType: '6',
+            operationType: '',
             operationRemark: '',
             showTextarea: false
         }
