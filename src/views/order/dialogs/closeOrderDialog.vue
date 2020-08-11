@@ -45,6 +45,13 @@ export default {
         submit() {
             let operationRemark = ''
 
+            if(this.operationType == '') {
+                this.$message({
+                    message: '请选择关闭原因',
+                    type: 'warning'
+                });
+                return
+            }
             if(this.operationType == 7) {
                 operationRemark = '用户申请关闭'
             } else if(this.operationType == 6) {
