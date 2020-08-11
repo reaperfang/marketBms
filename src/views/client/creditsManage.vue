@@ -13,7 +13,7 @@
                                 <div v-if="ruleForm.scoreToCash == '1'">
                                     <span>抵现比例：</span>
                                     <div style="width: 140px; display: inline-block">
-                                        <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
+                                        <el-input maxlength="9" placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
                                     </div>
                                     <span class="marL20">积分</span>
                                     <div style="width: 54px; display: inline-block" class="marL20">
