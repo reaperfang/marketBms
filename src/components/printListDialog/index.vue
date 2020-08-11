@@ -67,7 +67,7 @@
               this.$router.push({path:'/order/printerSeting',query:this.printQuery})
             }
           })
-          .catch(error => {});
+          .catch(error => {this.$message.error(error)});
           // 
         }
         //A4纸配送单

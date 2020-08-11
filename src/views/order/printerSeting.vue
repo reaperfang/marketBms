@@ -21,8 +21,8 @@
 					<div slot="reference" class="hint">找不到设备号？</div>
 				</el-popover>
 			</el-form-item>
-			<el-form-item label="设备密钥：" prop="keys">
-				<el-input v-model="ruleForm.keys" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
+			<el-form-item label="设备密钥：" prop="secretKey">
+				<el-input v-model="ruleForm.secretKey" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
 			<el-form-item label="设备状态：" style="margin-bottom:0;">
@@ -62,7 +62,7 @@
 					brand: '',
 					paperWidth: '58',
 					code: '',
-					keys: '',
+					secretKey: '',
 					status: ''
 				},
 				rules: {
@@ -75,7 +75,7 @@
 					code: [
 						{ required: true, message: '必填项，请输入设备号码', trigger: 'change' }
 					],
-					keys: [
+					secretKey: [
 						{ required: true, message: '必填项，请输入设备密钥', trigger: 'change' }
 					],
 				},
@@ -118,7 +118,7 @@
 				});
 				var params = JSON.parse(JSON.stringify(this.ruleForm));
 				if (params.brand == 2) {
-					delete params.keys;
+					delete params.secretKey;
 				}
 				delete params.status;
 				this._apis.order.connectPrinter(params).then(res => {
@@ -128,17 +128,20 @@
 					} else {
 						this.getPrinterDetail();
 					}
+					this.$message.success('打印机连接成功');
 				}).catch(error => {
                 	this.$message.error(error);
             	})
 			},
 			getPrinterDetail(){
 				this._apis.order.getPrinterSetDetail().then(res => {
-					this.printerDetail = res;
-					this.ruleForm.brand = res.brand;
-					this.ruleForm.code = res.code;
-					this.ruleForm.keys = res.secretKey;
-					this.ruleForm.status = res.status;
+					if(!!res){
+						this.printerDetail = res;
+						this.ruleForm.brand = res.brand;
+						this.ruleForm.code = res.code;
+						this.ruleForm.secretKey = res.secretKey;
+						this.ruleForm.status = res.status;
+					}
 				}).catch(error => {
                 	this.$message.error(error);
             	})
