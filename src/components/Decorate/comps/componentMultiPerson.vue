@@ -120,6 +120,7 @@ export default {
                 return;
             }
             if(newValue == 2) {
+                this.displayList = [];
                 this.fetch();
             }else{
                 this.displayList = [];
@@ -274,6 +275,7 @@ export default {
 
         /* 检查真数据 */
         checkRealData(newValue) {
+            console.log(newValue)
             this.hasRealData = !!newValue.length;
             this.upadteComponentData();
         },
