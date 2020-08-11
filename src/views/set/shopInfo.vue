@@ -104,7 +104,7 @@
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
-      <!-- <map-search 
+      <!-- <map-search
         class="map"
         ref="shopInfoMap"
         :address="provinceCityArea"
@@ -203,7 +203,7 @@ export default {
         shopIntroduce: [
           {
             min: 1,
-            max: 100,
+            max: 300,
             message: "长度在 1 到 100 个字符",
             trigger: "blur"
           }
@@ -411,7 +411,7 @@ export default {
       console.log('--formatAddress---',address)
 
       address = province === city ? `${province}${area}${address}`: `${province}${city}${area}${address}`
-      
+
       return address
     },
     updateShopInfo() {
@@ -442,8 +442,8 @@ export default {
         latitude: this.form.lat
       }
       this._apis.set.updateShopInfo(data).then(response =>{
-        this.setShopName()    
-        this.$store.dispatch('getShopInfo');    
+        this.setShopName()
+        this.$store.dispatch('getShopInfo');
         // this.$nextTick(()=> {
         //   this.$refs.shopInfoMap.clearSearchResultList()
         //   this.$refs.shopInfoMap.clearKeyword()
@@ -480,10 +480,10 @@ export default {
             // } else {
               this.updateShopInfo()
             // }
-            
+
             // this._apis.set.updateShopInfo(data).then(response =>{
-            //   this.setShopName()    
-            //   this.$store.dispatch('getShopInfo');          
+            //   this.setShopName()
+            //   this.$store.dispatch('getShopInfo');
             // }).catch(error =>{
             //   this.$message.error(error);
             //   this.loading = false
@@ -524,8 +524,8 @@ export default {
           ctx.drawImage(img, 0, 0, 80, 80);
           ctx.restore();
           ctx.closePath();
-          let base64 = _self.canvas.toDataURL("image/png"); 
-          let urlData = base64.substring(22, base64.length);          
+          let base64 = _self.canvas.toDataURL("image/png");
+          let urlData = base64.substring(22, base64.length);
           _self.uploadCircle(urlData)
       }
       img.src = res;
@@ -646,7 +646,7 @@ export default {
     },
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
-      if (!poi) return false 
+      if (!poi) return false
       this.form.sendAddress = poi.address
       this.tempSendAddress = poi.address
       this.form.lat = poi.location.lat
