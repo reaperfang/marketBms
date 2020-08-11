@@ -187,6 +187,7 @@ export default {
             type: 'success'
           });
         }
+        item.pickUpStatus = pickUpStatus
       })
     },
     // 处理当前仅启用自提点关闭逻辑

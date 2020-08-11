@@ -384,10 +384,24 @@ export default {
       delete res.subscribeTimeWeekDays
       delete res.subscribeTimeType
       delete res.subscribeTimeCustomizeType
-      Object.assign(this.ruleForm, res)
+      this.ruleForm.status = res.pickUpStatus || 1
+      this.ruleForm.name = res.pickUpName || null
+      this.ruleForm.contactPerson = res.name || null
+      this.ruleForm.mobile = res.mobile || null
+      this.ruleForm.address = res.address || ''
+      this.ruleForm.addressDetail = res.addressDetail || null
+      this.ruleForm.provinceCode = res.provinceCode || null
+      this.ruleForm.province = res.provinceName || null
+      this.ruleForm.cityCode = res.cityCode || null
+      this.ruleForm.city = res.cityName || null
+      this.ruleForm.areaCode = res.areaCode || null
+      this.ruleForm.area = res.areaName || null
+      this.ruleForm.lng = res.longitude || null
+      this.ruleForm.lat = res.latitude || null
+      this.isMapChoose = true
     },
     getSelfLiftById() {
-      const id = this.$route.query && this.$route.query.id
+      const id = this.$route.query && +this.$route.query.id
       this._apis.set.getSelfLiftById({ id }).then((response) => {
         this.handleEchoData(response)
       }).catch((err) => {
