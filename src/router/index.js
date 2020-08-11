@@ -8,7 +8,7 @@ import goods from './goods';
 import order from './order';
 import finance from './finance';
 import set from './set';
-import intelligentOperation from './intelligentOperation';
+// import intelligentOperation from './intelligentOperation';
 import client from './client';
 import datum from './datum';
 import profile from './profile';
@@ -22,7 +22,7 @@ export const asyncRouterMap = [  //异步路由表
   ...order,
   ...client,
   ...datum,
-  ...intelligentOperation,
+  // ...intelligentOperation,
   ...finance,
   ...apply,
   ...set,
