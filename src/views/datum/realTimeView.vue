@@ -1,73 +1,104 @@
 <template>
 <div>
-  <div class="p_container p_channel">
-       <div class="clearfix">
+    <div class="viewBut"><img src="@/assets/images/realtime/curtime.png" alt=""></div>
+  <div class="p_container">
+       <div class="p_title clearfix">
+           <h2>数据总览</h2>
+           <span class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
           <div class="fr fr_channel">
-            <el-button type="primary">实时战况</el-button>
+            <!-- <el-button type="primary">实时战况</el-button> -->
           </div>
       </div>
-      <div class="p_line">
-            <div class="input_wrap" v-if="nearDay == 4">
-               <el-date-picker
-                  v-model="range"
-                  type="datetimerange"
-                  align="right"
-                  range-separator="至"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
-                  @change="changeTime">
-                </el-date-picker>
+      <div class="pane_container clearfix">
+        <div class="p_screening">
+            <div class="clearfix pt">
+                <p class="fl">支付金额（元）</p>
+                <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+                <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
+                </el-tooltip>
             </div>
+            <div class="clearfix pt">
+                <strong class="fl">8,233,000</strong>
+                <span class="fl">昨日全天：<span>860</span></span>
+            </div>
+            <screening 
+    :title="'测试图表'" 
+    ref="dtChart"
+    :dataChart="dataChart" height="300px" >
+    </screening>
+        </div>
+        <div class="card-content">
+            <div class="card-item">
+                <div class="item-top">
+                    <p>支付金额（元）</p>
+                    <span> <strong>8,233,000</strong> </span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+            <div class="card-item">
+                <div class="item-top">
+                    <p>支付订单数（单）</p>
+                    <span> <strong>50</strong> <el-button type="text">查看</el-button> </span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+            <div class="card-item">
+                <div class="item-top">
+                    <p>支付人数（人）</p>
+                    <span> <strong>8,233,000</strong> </span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+            <div class="card-item">
+                <div class="item-top">
+                    <p>退款金额（元）</p>
+                    <span> <strong>8,233,000</strong></span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+            <div class="card-item">
+                <div class="item-top">
+                    <p>退款订单数（单）</p>
+                    <span> <strong>50</strong> <el-button type="text">查看</el-button> </span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+            <div class="card-item">
+                <div class="item-top">
+                    <p>客单价（元）</p>
+                    <span> <strong>5033</strong>  </span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+            <div class="card-item">
+                <div class="item-top">
+                    <p>访客数量（次）</p>
+                    <span> <strong>50</strong> </span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+            <div class="card-item">
+                <div class="item-top">
+                    <p>浏览数量（次）</p>
+                    <span> <strong>50</strong> </span>
+                </div>
+                <p>昨日全天：<span>860</span></p>
+            </div>
+        </div>
       </div>
-
   </div>
   <div class="p_container">
       
-        <div class="pane_container">
-			<div class="btn_tabs clearfix">
-				<el-radio-group class="fr" v-model="analysisType" @change="changeType">
-					<el-radio-button class="btn_bor" label="1">浏览量/访客量</el-radio-button>
-					<el-radio-button class="btn_bor" label="2">到店时段</el-radio-button>
-					<el-radio-button class="btn_bor" label="3">访问次数</el-radio-button>
-					<el-radio-button class="btn_bor" label="4"  v-if="visitSourceType ==0 ">访问来源</el-radio-button>
-				</el-radio-group>
-			</div>
-          <div class="chart_container">
-            <pfChart 
-            :title="'测试图表'" 
-            ref="prChart"
-            :dataChart="dataChart"
-            :type="analysisType"
-            >
-            </pfChart>
-          </div>
-        </div>
-        <div class="btn_tabs clearfix" style="margin-top:40px;">
-            <el-radio-group class="fr" v-model="duration" @change="changeDp">
-              <el-radio-button class="btn_bor" label="1">停留时长</el-radio-button>
-              <el-radio-button class="btn_bor" label="2">跳出率</el-radio-button>
-            </el-radio-group>
-        </div>
-        <div>
-            <durationChart 
-            :title="'测试图表'" 
-            ref="dtChart"
-            :dataChart="dataChart1"
-            :type="duration">
-            </durationChart>
-        </div>
   </div>
 </div>
 </template>
 <script>
 import {GetDateStr} from "@/utils/validate.js"
 import pfChart from "./components/pfChart";
-import durationChart from "./components/durationChart";
+import screening from "./components/realtime/screening";
 export default {
-  name: "passengerFlow",
-  components: { pfChart,durationChart },
+  name: "realTimeView",
+  components: { pfChart,screening },
   data() {
     const _self = this;
     return {
@@ -97,26 +128,36 @@ export default {
   },
   created() {
     this.init()
+    this.dataChart={
+        xAxis:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        series:[{
+                    name: '招商银行',
+                    data: [820, 932, 901, 934, 1290, 1330, 1320],
+                    type: 'line',
+                    symbol:'circle',
+                    symbolSize: 8,   //设定实心点的大小
+                    color:['red'],
+                    itemStyle:{  
+                        normal:{  
+                        color:'red',  
+                        borderColor:'#fff',  //拐点边框颜色  
+                        }  
+                    },
+                },
+                {
+                    name: '浦发银行',
+                    data: [620, 711, 823, 934, 1445, 1456, 1178],
+                    type: 'line',
+                    itemStyle: {
+                        //则线图每个点的样式
+                        borderWidth: 2,
+                    },
+                }]
+    }
   }, 
   methods: {
     init(){
       this.getFlowAnalysis()
-      this.getResidetime()
-      this.getOpen()
-    },
-    //pc wap是否开通
-    getOpen(){
-      this._apis.data.openPcWap().then(response => {
-        if(response == null){
-          this.isPc = false
-        }else if(response.onoff == 0){
-          this.isPc = false
-        }else{
-          this.isPc = true
-        }
-      }).catch(error => {
-        this.$message.error(error);
-      });
     },
 
     //浏览量/访问量
@@ -134,135 +175,7 @@ export default {
       });
     },
 
-    //到店时段
-    getUvhour(){
-      let data = {
-          channel:this.visitSourceType,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          nearDay: this.nearDay  == '4' ? null : this.nearDay,
-        };
-      this._apis.data.uvhour(data).then(response => {
-        this.dataChart = response
-      }).catch(error => {
-        this.$message.error(error);
-      });
-    },
 
-    //访问次数
-    getPvady(){
-      let data = {
-          channel:this.visitSourceType,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          nearDay: this.nearDay  == '4' ? null : this.nearDay,
-        };
-      this._apis.data.pvady(data).then(response => {
-        this.dataChart = response
-      }).catch(error => {
-        this.$message.error(error);
-      });
-    },
-
-    //访问来源
-    getChannel(){
-      let data = {
-          startTime: this.startTime,
-          endTime: this.endTime,
-          nearDay: this.nearDay  == '4' ? null : this.nearDay,
-        };
-      this._apis.data.channel(data).then(response => {
-          this.dataChart = response
-        }).catch(error => {
-          this.$message.error(error);
-        });
-    },
-
-    //停留时长
-    getResidetime(){
-       let data = {
-         channel:this.visitSourceType,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          nearDay: this.nearDay  == '4' ? null : this.nearDay,
-        };
-      this._apis.data.residetime(data).then(response => {
-          this.dataChart1 = response
-        }).catch(error => {
-          this.$message.error(error);
-        });
-    },
-
-    //跳出率
-    getPathOut(){
-        let data = {
-          channel:this.visitSourceType,
-          startTime: this.startTime,
-          endTime: this.endTime,
-          nearDay: this.nearDay  == '4' ? null : this.nearDay,
-        };
-      this._apis.data.bouncerate(data).then(response => {
-            this.dataChart1 = response
-        }).catch(error => {
-          this.$message.error(error);
-        });
-    },
-
-    //浏览量/访客量 or 到店时段 or 访问次数 or 访问来源
-    changeType(e) {
-    	console.log("skdjfks");
-      if(this.nearDay != 4 || this.range != ''){
-        switch (e) {
-          case '1':
-            this.getFlowAnalysis()
-            break;
-          case '2':
-            this.getUvhour()
-            break;
-          case '3': 
-              this.getPvady()
-              break;
-          case '4': 
-              this.getChannel()
-              break;
-        }
-      }
-    },
-
-    //停留时长 or 跳出率
-    changeDp(e){
-      if(this.nearDay != 4 || this.range != ''){
-        switch(e){
-          case '1':
-            this.getResidetime()
-            break;
-          case '2':
-            this.getPathOut()
-            break;
-        }
-      }
-    },
-
-    //全部 or  小程序  or  公众号
-    all() {
-      if(this.nearDay != 4 || this.range != ''){
-        this.changeType(this.analysisType)
-        this.changeDp(this.duration)
-      }
-    },
-
-
-    //最近7天 or  最近15天  or 最近30天 or 自定义时间
-    changeDay(val) {
-    	this.nearDay = val;
-      if(this.nearDay != 4){
-        this.startTime = ''
-        this.endTime = ''
-        this.range = ''
-        this.changeType(this.analysisType)
-        this.changeDp(this.duration)
-      }
-    },
 
     //自定义时间选择
     changeTime(val){
@@ -291,50 +204,110 @@ export default {
 	color:#655EFF;
 	background-color: #E6E4FF;
 }
-.p_channel{
-    padding:0px;
-    margin-bottom:20px;
-    .fr_channel{
-        float:left;
-        margin-bottom:30px;
-    }
-}
-.input_wrap {
-	display: inline-block;
+.viewBut{
+    position: fixed;
+    top: 50%;
+    margin-top: -50px;
+    right: 0;
 }
 .p_container {
-  padding: 20px;
+  padding:0 28px;
+  margin-bottom: 12px;
   background-color: #fff;
+  .p_title{
+      width: 100%;
+      height: 58px;
+      border-bottom: 1px solid #EDEDED;
+      padding: 15px 0;
+    h2{
+        font-size: 16px;
+        font-weight: 500;
+        color: #252A2E;
+        line-height: 28px;
+        float: left;
+    }  
+    .refresh{
+        float: left;
+        width: 28px;
+        height: 28px;
+        border-radius: 5px;
+        background: #F7F9FC;
+        margin-left: 10px;
+        img{
+            display: block;
+            margin-left: 6px;
+            margin-top: 6px;
+        }
+    }
+  }
   .pane_container {
 	  position: relative;
-    .p_line {
-      .input_wrap {
-        width: 350px;
-        display: inline-block;
+      padding: 14px 0;
+      .p_screening{
+          width: calc(100% - 580px);
+          color: #92929B;
+          font-size: 14px;
+          line-height: 16px;
+          float: left;
+          strong{
+              font-size: 24px;
+              color: #161617;
+              margin-right: 22px;
+              font-family:DINAlternate-Bold,DINAlternate;
+          }
+          .pt{
+              padding-bottom: 10px;
+              span{
+                  font-size: 12px;
+                  span{
+                      color: #161617;
+                      font-weight: 500;
+                  }
+              }
+          }
       }
-      span {
-        color: #655eff;
-        margin-left: 20px;
+    
+  }
+  .card-content{
+      width: 558px;
+      float: right;
+      .card-item{
+          width:176px;
+        height:106px;
+        background:rgba(253,253,253,1);
+        border-radius:4px;
+        border:1px solid rgba(237,237,237,1);
+        overflow: hidden;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        float: left;
+        .item-top{
+            height:75px;
+            padding-top: 14px;
+            padding-left: 16px;
+            >p{
+                color: #92929B;
+                padding-bottom: 8px;
+            }
+            strong{
+                color: #161617;
+                font-size: 24px;
+                font-family:DINAlternate-Bold,DINAlternate;
+            }
+        }
+        >p{
+            font-size: 12px;
+            height: 30px;
+            line-height: 30px;
+            padding-left: 16px;
+            color: #92929B;
+            background:rgba(248,248,248,1);
+            border-top:1px solid rgba(237,237,237,1);
+            span{
+                color: #161617;
+            }
+        }
       }
-    }
-    .btn_tabs {
-		width: 350px;
-		display: inline-block;
-		position: absolute;
-		right: 60px;
-		top: 0;
-		z-index: 10;
-      .active_btn {
-        background: rgba(101, 94, 255, 0.1);
-        color: #655eff;
-      }
-      .btn_bor {
-        // margin: 0 10px;
-        border-radius: 20px;
-      }
-    }
-    .chart_container {
-    }
   }
 }
 .el-radio-group label:last-child{
