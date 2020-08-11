@@ -150,9 +150,9 @@ export default {
     created(){
         // console.log(this.$route.query.orderIds.split(","))
         // console.log(this.$route.query.printType)
-        if(this.$route.query.orderIds&&this.$route.query.printType){
+        // if(this.$route.query.orderIds&&this.$route.query.printType){
             this.getPrinterInfo()
-        }
+        // }
     },
     methods:{
         //x小票配送单预览
@@ -168,7 +168,7 @@ export default {
                 this.printOrderInfo=!!res.printOrderInfo?res.printOrderInfo:[]
                 this.printOrderInfoCurret = this.printOrderInfo.length>0?this.printOrderInfo[0]:[]
             })
-            .catch(error => {this.info_loading=false});
+            .catch(error => {this.info_loading=false;this.$message.error(error);});
         },
         //分页页码改变
         handleCurrentChange(val){

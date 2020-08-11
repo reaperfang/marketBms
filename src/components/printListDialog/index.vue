@@ -115,7 +115,7 @@
   height: 18px;
   display: block;
 }
-/deep/ .el-dialog__body{
+/deep/ .el-dialog--center .el-dialog__body{
    padding: 70px 0px 86px;
 }
 .printBody{
