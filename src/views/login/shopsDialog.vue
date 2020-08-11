@@ -101,7 +101,11 @@ export default {
     //进入店铺
     toShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
-          this.$store.dispatch('setShopInfos',shop).then(() => {
+          let shopInfo = {}
+          this.shopList.map(item =>{
+            item.id == shop.id && (shopInfo = item)
+          })
+          this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
             this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
