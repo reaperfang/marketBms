@@ -115,7 +115,7 @@
                 </div>
                 <div class="item righter">
                     <p>已关闭</p>
-                    <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                    <p>{{orderInfo | closeReaosnFilter}}</p>
                 </div>
             </template>
         </template>
@@ -234,7 +234,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        <p>{{orderInfo | closeReaosnFilter}}</p>
                     </div>
                 </template>
                 <template v-else-if="orderInfo.closeReason == 1">
@@ -251,7 +251,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -265,7 +265,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                 </template>
@@ -283,7 +283,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -297,7 +297,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                 </template>
@@ -315,7 +315,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -329,7 +329,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                 </template>
@@ -347,7 +347,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -361,7 +361,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                 </template>
@@ -379,7 +379,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                     <template v-else>
@@ -393,7 +393,7 @@
                         </div>
                         <div class="item righter">
                             <p>已关闭</p>
-                            <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                            <p>{{orderInfo | closeReaosnFilter}}</p>
                         </div>
                     </template>
                 </template>
@@ -408,7 +408,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        <p>{{orderInfo | closeReaosnFilter}}</p>
                     </div>
                 </template>
                 <template v-else-if="orderInfo.closeReason == 4">
@@ -422,7 +422,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        <p>{{orderInfo | closeReaosnFilter}}</p>
                     </div>
                 </template>
                 <template v-else-if="orderInfo.closeReason == 5">
@@ -438,7 +438,7 @@
                     </div>
                     <div class="item righter">
                         <p>已关闭</p>
-                        <p>{{orderInfo.closeReason | closeReaosnFilter}}</p>
+                        <p>{{orderInfo | closeReaosnFilter}}</p>
                     </div>
                 </template>
             </template>
@@ -502,7 +502,10 @@ export default {
         }
     },
     filters: {
-        closeReaosnFilter(code) {
+        closeReaosnFilter(orderInfo) {
+            let code = orderInfo.closeReason
+            let closeRemark = orderInfo.closeRemark
+
             switch(+code) {
                 case 0:
                     return '原因: 超时取消'
@@ -521,7 +524,7 @@ export default {
                 case 7:
                     return '原因: 用户申请关闭'
                 case 8:
-                    return `原因: 其他: ${this.orderInfo.closeRemark}`
+                    return `原因: 其他: ${closeRemark}`
             }
         }
     },
