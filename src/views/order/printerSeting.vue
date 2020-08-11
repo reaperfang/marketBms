@@ -4,7 +4,7 @@
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm" style="margin-top: 40px">
 			<el-form-item label="设备品牌：" prop="brand">
 				<el-radio-group v-model="ruleForm.brand">
-					<el-radio :label="1">飞鸽</el-radio>
+					<el-radio :label="1">飞鹅</el-radio>
 					<el-radio :label="2">易联云</el-radio>
 				</el-radio-group>
 			</el-form-item>
