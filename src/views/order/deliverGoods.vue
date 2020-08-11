@@ -61,7 +61,7 @@
                 <template slot-scope="scope">
                   <el-input
                     :class="{'send-input': scope.row.errorMessage}"
-                    :disabled="scope.row.goodsCount - scope.row.cacheSendCount == 0"
+                    :disabled="orderInfo.deliveryWay == 4 || scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
                     step="1"
                     :max="scope.row.goodsCount - scope.row.cacheSendCount"
@@ -77,7 +77,7 @@
         </div>
       </div>
       <div class="container-item">
-        <template v-if="false">
+        <template v-if="orderInfo.deliveryWay != 4">
           <p>2.确认收发货信息</p>
           <div class="container-item-content deliver-goods-address">
             <div class="title">
@@ -128,7 +128,7 @@
         </template>
         <template v-else>
           <p>2.确认自提信息</p>
-          <div class="container-item-content deliver-goods-address">
+          <div class="container-item-content deliver-goods-address self-reference">
             <div class="title">
               <div class="title-list">
                 <span>提货信息</span>
@@ -276,6 +276,7 @@
 </template>
 <script>
 import ReceiveInformationDialog from "@/views/order/dialogs/receiveInformationDialog";
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 import { validatePhone } from "@/utils/validate.js"
 
@@ -415,6 +416,17 @@ export default {
     },
   },
   methods: {
+    getExpressSpec() {
+      this._apis.order
+        .getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => {
+          this.visible = false;
+          this.$message.error(error);
+        });
+    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -716,6 +728,10 @@ export default {
         if (valid) {
           let params;
 
+          //this.getExpressSpec()
+          // this.currentDialog = 'SelectSizeDialog'
+          // this.dialogVisible = true
+          // return
           // if(!this.ruleForm.expressCompanyCode) {
           //     this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
           //     return
@@ -849,6 +865,9 @@ export default {
             val.errorMessage = ''
           })
           this.tableData = res[0].orderItemList;
+          this.tableData.forEach(row => {
+            this.$refs.table.toggleRowSelection(row);
+          })
           this.orderInfo = res[0];
           this._ids = [this.orderInfo.id]
           if(!this.orderInfo.sendAddress) {
@@ -941,7 +960,8 @@ export default {
   	}
   },
   components: {
-    ReceiveInformationDialog
+    ReceiveInformationDialog,
+    SelectSizeDialog
   }
 };
 </script>
@@ -1114,6 +1134,9 @@ export default {
 /deep/ .deliver-goods-logistics .el-textarea {
   width: 623px;
   height: 99px;
+}
+.deliver-goods .deliver-goods-address.self-reference .content .item .label {
+    width: 84px;
 }
 </style>
 
