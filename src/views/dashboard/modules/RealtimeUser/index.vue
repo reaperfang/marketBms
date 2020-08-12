@@ -80,9 +80,9 @@ export default {
 	}
 
 	// 斑马线背景
-	.el-table--striped .el-table__body tr.el-table__row--striped td {
-		background: RGBA(26, 39, 61, 1);
-	}
+	// .el-table--striped .el-table__body tr.el-table__row--striped td {
+	// 	background: RGBA(26, 39, 61, 1);
+	// }
 
 	//修改表格鼠标悬浮hover背景色
 	.el-table--enable-row-hover .el-table__body tr:hover > td {
@@ -107,7 +107,7 @@ export default {
 	}
 	//修改表格最底部颜色和高度
 	.el-table::before {
-		border-bottom: 0px solid rgba(6, 201, 221, 0.1);
+		height: 0;
 	}
 }
 </style>
