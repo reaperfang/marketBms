@@ -297,8 +297,8 @@ export default {
 
   methods: {
     init() {
-      // 数据回显
-      this.getSelfLiftById()
+      const id = this.$route.query && +this.$route.query.id
+      if (id) this.getSelfLiftById()
       // 如果通过地址库选择进入
       this.getAddressInfo()
     },
@@ -384,7 +384,7 @@ export default {
       delete res.subscribeTimeWeekDays
       delete res.subscribeTimeType
       delete res.subscribeTimeCustomizeType
-      this.ruleForm.status = res.pickUpStatus || 1
+      this.ruleForm.status = res.pickUpStatus
       this.ruleForm.name = res.pickUpName || null
       this.ruleForm.contactPerson = res.name || null
       this.ruleForm.mobile = res.mobile || null
@@ -775,6 +775,7 @@ export default {
               
               // this.$router.replace({ path: '/set/addSelfLift' })
             }).catch(()=> {
+              this.$router.push({ path: '/set/selfLift'})
             });
           }).catch((err) => {
             this.$message.error(err || '保存失败')
