@@ -341,7 +341,6 @@ export default {
             }) 
         },
         getDetail() {
-            alert('1111状态页面刷新列表');
             return new Promise((resolve, reject) => {
                 let id = this.$route.query.id
 
