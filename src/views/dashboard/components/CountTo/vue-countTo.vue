@@ -235,6 +235,7 @@ export default {
         rgba(20, 225, 252, 1) 100%
       );
       background-clip: text;
+      -webkit-background-clip:text;
       -webkit-text-fill-color: transparent;
     }
   }
