@@ -113,7 +113,8 @@
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
-                            <p v-if="order.deliveryWay== 4">核销验证</p>
+                            <!-- order.deliveryWay== 4 -->
+                            <p v-if="order.deliveryWay== 4" @click="currentDialog = 'VerificationDialog'; currentData = order.id; dialogVisible = true">核销验证</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
                             <!-- 完成 -->
@@ -125,11 +126,12 @@
             </div>
         </div>
         <Empty v-else></Empty>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
     </div>
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
+import VerificationDialog from '@/views/order/dialogs/verificationDialog'
 import anotherAuth from '@/mixins/anotherAuth'
 import Empty from '@/components/Empty'
 
@@ -340,7 +342,6 @@ export default {
         checkedChange() {
             let len = this.list.filter(val => val.checked).length
             let list = this.list.filter(val => val.checked)
-
             this._globalEvent.$emit('checkedLength', len)
             this._globalEvent.$emit('checkedList', list)
         }
@@ -352,6 +353,7 @@ export default {
     },
     components: {
         CloseOrderDialog,
+        VerificationDialog,
         Empty
     }
 }
