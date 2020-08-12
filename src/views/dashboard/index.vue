@@ -114,9 +114,7 @@
 				<div class="row-3-grid-content">
 					<el-row type="flex" justify="space-between" class="item">
 						<el-col :span="12">
-							<gridtitle
-								:title="'总交易金额分布'"
-							></gridtitle>
+							<gridtitle :title="'总交易金额分布'"></gridtitle>
 						</el-col>
 						<el-col :span="12">
 							<gridtitle :title="'客单价(最近七天)'"></gridtitle>
@@ -129,7 +127,7 @@
 		<el-row class="row-4">
 			<el-col :span="7">
 				<div class="row-4-grid-content">
-          	<el-row type="flex" justify="space-between" class="item">
+					<el-row type="flex" justify="space-between" class="item">
 						<el-col :span="12">
 							<gridtitle
 								:title="'下单转换漏斗(最近七天)'"
@@ -139,35 +137,40 @@
 							<!-- <gridtitle :title="'客单价(最近七天)'"></gridtitle> -->
 						</el-col>
 					</el-row>
-        </div>
+				</div>
 			</el-col>
 			<el-col :span="10">
 				<div class="row-4-grid-content middle-grid-margin">
-          	<el-row type="flex" justify="space-between" class="item">
+					<el-row type="flex" justify="space-between" class="item">
 						<el-col :span="12">
 							<gridtitle
 								:title="'支付金额(最近七天)'"
 							></gridtitle>
 						</el-col>
 						<el-col :span="12">
-							<gridtitle :title="'商城浏览(最近七天)'"></gridtitle>
-						</el-col>
-					</el-row>
-        </div>
-			</el-col>
-			<el-col :span="7">
-				<div class="row-4-grid-content">
-          	<el-row type="flex" justify="space-between" class="item">
-						<el-col :span="12">
 							<gridtitle
-								:title="'实时交易用户'"
+								:title="'商城浏览(最近七天)'"
 							></gridtitle>
 						</el-col>
-						<el-col :span="12">
-							<!-- <gridtitle :title="'客单价(最近七天)'"></gridtitle> -->
-						</el-col>
 					</el-row>
-        </div>
+				</div>
+			</el-col>
+			<el-col :span="7">
+				<div class="row-4-grid-content flex-column">
+					<el-row
+						type="flex"
+						justify="space-between"
+						class="item-title"
+					>
+						<el-col :span="12">
+							<gridtitle :title="'实时交易用户'"></gridtitle>
+						</el-col>
+						<el-col :span="12"> </el-col>
+					</el-row>
+					<el-row class="item-content">
+						<realtimeuser></realtimeuser>
+					</el-row>
+				</div>
 			</el-col>
 		</el-row>
 	</div>
@@ -179,9 +182,12 @@ import vhead from "./components/head/index";
 import chinamap from "./components/map/china/index";
 import gridtitle from "./components/title/index";
 import vpay from "./components/pay/index";
+
+//module
+import realtimeuser from "./modules/RealtimeUser/index";
 export default {
 	name: "mall",
-	components: { countTo, vhead, chinamap, gridtitle, vpay },
+	components: { countTo, vhead, chinamap, gridtitle, vpay, realtimeuser },
 	data() {
 		return {
 			startVal: 0,
@@ -194,8 +200,8 @@ export default {
 <style lang="scss">
 .mall {
 	$grid-content-h: 500px;
-  $row-3-grid-content:250px;
-  $row-4-grid-content:250px;
+	$row-3-grid-content: 300px;
+	// $row-4-grid-content:250px;
 	$grid-map-h: calc(500px - 150px);
 	min-height: 100%;
 	width: 100%;
@@ -258,6 +264,15 @@ export default {
 
 		.item-end {
 			flex: 310;
+		}
+
+		.item-title {
+			height: 50px;
+		}
+
+		.item-content {
+			height: 100%;
+      margin:0 8px;
 		}
 	}
 }

@@ -1,9 +1,16 @@
 <template>
 	<div class="pay">
-		<el-row class="row" v-for="(item,index) in payData" :key="index">
-			<el-col :span="8" v-for="(subItem,subindex) in item.children" :key="subindex">
+		<el-row class="row" v-for="(item, index) in payData" :key="index">
+			<el-col
+				:span="8"
+				v-for="(subItem, subindex) in item.children"
+				:key="subindex"
+			>
 				<div class="grid-box">
-					<vitem  :title="subItem.title" :content="subItem.content"></vitem>
+					<vitem
+						:title="subItem.title"
+						:content="subItem.content"
+					></vitem>
 				</div>
 			</el-col>
 		</el-row>
