@@ -65,7 +65,12 @@ export const syncRouterMap = [ //同步路由表
     path: '/401',
     component: () => import('@/components/errorPage/401'),
     hidden: true
-  }
+  },
+  {
+    path: '/dashboard',
+    component: () => import('@/views/dashboard/index'),
+    hidden: true
+  },
 ]
 
 const routerConfig = {
