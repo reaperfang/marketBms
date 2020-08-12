@@ -1,40 +1,55 @@
 <template>
 <!-- 组件-商品列表 -->
-    <div class="component_wrapper" v-loading="loading">
-        <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data && hasContent" ref="componentContent">
-            <ul>
-                <li v-for="(item,key) in list" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
-                    <div class="img" >
-                        <div class="imgAbsolute">
-                            <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
+    <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
+        <div class="componentGoods" :class="'listStyle'+listStyle" :style="{padding:pageMargin+'px'}" v-if="currentComponentData && currentComponentData.data" ref="componentContent">
+            <template v-if="hasRealData || hasFakeData">
+                <ul  v-if="hasRealData">
+                    <li v-for="(item,key) in displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                        <div class="img" >
+                            <div class="imgAbsolute">
+                                <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
+                            </div>
+                            <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
+                            <p class="nothing" v-if="calcSotck(item)<1">售罄</p>
+                            <div class="nothingLayer" v-if="calcSotck(item)<1"></div>
                         </div>
-                        <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
-                        <p class="nothing" v-if="calcSotck(item)<1">售罄</p>
-                        <div class="nothingLayer" v-if="calcSotck(item)<1"></div>
-                    </div>
-                    <div class="text" v-if="showContents.length>0">
-                        <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
-                        <p class="fTitle" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('3')!=-1">{{item.description}}</p>
-                        <div class="priceLine">
-                            <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{getPrice(item)}}</font></p>
-                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&calcSotck(item)>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
+                        <div class="text" v-if="showContents.length>0">
+                            <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
+                            <p class="fTitle" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('3')!=-1">{{item.description}}</p>
+                            <div class="priceLine">
+                                <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{getPrice(item)}}</font></p>
+                                <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" v-if="showContents.indexOf('4')!=-1&&calcSotck(item)>0 && listStyle != 3 && listStyle != 6" class="button"></componentButton>
+                            </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+                
+                <ul v-else>
+                    <li v-for="(item,key) in currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]" class="fakeData">
+                        <div class="img"  v-if="listStyle != 4">
+                            <div class="imgAbsolute">
+                                <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                            </div>
+                        </div>
+                        <div v-else class="img">
+                            <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                        </div>
+                    </li>
+                </ul>
+            </template>
+            <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
         </div>
         <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
 </template>
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
     name:"componentGoods",
-    mixins:[componentMixin],
+    mixins:[mixinCompsData],
     props: ['currentCatagoryId', 'origin'],
     data(){
         return{
-            allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
             // 样式属性
             listStyle:'',
             pageMargin:'',
@@ -55,34 +70,24 @@ export default {
             // 上拉加载
             goodListLoading: false,
             goodListFinished: false,
-            list: [],
+            displayList: [],
             loading: false
         }
     },
     created() {
         const _self = this;
         this.$store.dispatch('getShopStyle');
-        this._globalEvent.$on('goodsListOfGroupChange', (list, componentId)=>{
-            if(this.currentComponentId === componentId) {
-                this.list = list;
-            }
-        })
-        this.fetch();
-        this._globalEvent.$on('fetchGoods', (componentData, componentId) => {
-            if(_self.currentComponentId === componentId) {
-                _self.fetch(componentData);
-            }
+        this.receivePropDataChange('goodsListOfGroupChange', (list) => {
+            this.displayList = list;
         });
     },
-    mounted() {
-        this.decoration();
-    },
     watch: {
-        currentComponentData(newValue, oldValue){
-            this.decoration();
-        },
         'currentComponentData.data.ids': {
             handler(newValue, oldValue) {
+                if(!Array.isArray(newValue)) {
+                    this.fetch();
+                    return;
+                }
                 if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                     this.fetch();
                 }
@@ -102,21 +107,13 @@ export default {
                 this.fetch();
             }
         },
-        'ruleForm.currentCatagoryId'(newValue, oldValue) {
+        'currentComponentData.data.currentCatagoryId'(newValue, oldValue) {
             if(newValue !== oldValue) {
                 this.fetch();
             }
-        },
+        }
     },
     computed: {
-         /* 检测是否有数据 */
-        hasContent() {
-            let value = false;
-            if(this.list && this.list.length) {
-               value = true;
-            }
-            return value;
-        },
         colorStyle() {
           return this.$store.getters.colorStyle || {colors:[]};
         },
@@ -136,11 +133,15 @@ export default {
             if(!this.currentComponentData || !this.currentComponentData.data) {
               return;
             }
+            //因计算bodyWidth用到了this.showTemplate，所以这里提前获取
+            if('showTemplate' in this.currentComponentData.data){
+                this.showTemplate= this.currentComponentData.data.showTemplate;
+            }
             this.listStyle = this.currentComponentData.data.listStyle;
             this.pageMargin = this.currentComponentData.data.pageMargin;
             this.goodsMargin = this.currentComponentData.data.goodsMargin;
             var scrollWidth = window && this.utils.isIE() ? 18 : 0;
-            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
+            var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth : (375);
             bodyWidth = this.$refs.componentContent && (this.currentComponentData.type === 'goodsGroup') && this.showTemplate==2 ? bodyWidth + 100 : bodyWidth;
             if(this.listStyle=='1'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
@@ -148,9 +149,8 @@ export default {
             }
             else if(this.listStyle=='2'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
-                
                 if('showTemplate' in this.currentComponentData.data){
-                    this.showTemplate= this.currentComponentData.data.showTemplate;
+                    //this.showTemplate= this.currentComponentData.data.showTemplate;
                     if(this.showTemplate!=1){
                         this.goodWidth = {width:(bodyWidth - this.pageMargin * 2 - this.goodsMargin - 100) / 2 + 'px'}
                     }
@@ -184,10 +184,10 @@ export default {
             else if(this.listStyle=='5'){
                 this.goodMargin = {marginTop:this.goodsMargin + 'px'};
                 var scrollWidth = window && this.utils.isIE() ? 18 : 0;
-                var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth - 4 : (375 - 4);
+                var bodyWidth = this.$refs.componentContent ? this.$refs.componentContent.clientWidth - scrollWidth : (375);
                 if('showTemplate' in this.currentComponentData.data){
                     this.showTemplate= this.currentComponentData.data.showTemplate;
-                    if(this.showTemplate!=1){
+                    if(this.showTemplate!=1 && !this.$refs.componentContent){
                         this.goodWidth = {width:(bodyWidth - this.pageMargin * 2 - this.goodsMargin - 100) / 2 + 'px'}
                     }
                     else{
@@ -221,30 +221,35 @@ export default {
                         if(Object.prototype.toString.call(ids) === '[object Object]') {
                             params = this.setGroupGoodsParams(ids);
                             if(!params.ids || !params.ids.length) {
-                                this.list = [];
+                                this.displayList = [];
+                                this.dataLoaded = true;
                                 return;
                             }
                         }else if(Array.isArray(ids) && ids.length){
                             params = this.setNormalGoodsParams(ids);
                             if(!params.ids || !params.ids.length) {
-                                this.list = [];
+                                this.displayList = [];
+                                this.dataLoaded = true;
                                 return;
                             }
                         }else{
-                            this.list = [];
+                            this.displayList = [];
+                            this.dataLoaded = true;
                             return;
                         }
                     }else{
-                        this.list = [];
+                        this.displayList = [];
+                        this.dataLoaded = true;
                         return;
                     }
                 }else if(componentData.source === 2){
                     if(!componentData.currentCatagoryId) {
-                        this.list = [];
+                        this.displayList = [];
+                        this.dataLoaded = true;
                         return;
                     }
                     params = {
-                        // status: '1',
+                        status: '1',
                         productCatalogInfoId: componentData.currentCatagoryId
                     };
                 }
@@ -253,18 +258,19 @@ export default {
                 this._apis.goods.fetchAllSpuGoodsList(params).then((response)=>{
                     this.createList(response, componentData);
                     this.loading = false;
+                    this.dataLoaded = true;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
+                    this.displayList = [];
                     this.loading = false;
+                    this.dataLoaded = true;
                 });
             }
         },
 
         /* 创建数据 */
         createList(datas, componentData) {
-            this.list = datas;
-            this.allLoaded = true;
+            this.displayList = datas;
         },
 
          /* 设置分类商品参数 */
@@ -315,14 +321,27 @@ export default {
                 }
             }
             return totalStock;
+        },
+
+        /* 检查真数据 */
+        checkRealData(newValue) {
+            this.hasRealData = !!newValue.length;
+            this.upadteComponentData();
+        },
+
+        /* 检查假数据 */
+        checkFakeData(newValue) {
+            this.hasFakeData = false;
+            for(let item of newValue) {
+                if(item && item.length) {
+                    this.hasFakeData = true;
+                    break;
+                }
+            }
+            this.upadteComponentData();
         }
 
-    },
-    beforeDestroy() {
-        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-        this._globalEvent.$off('fetchGoods');
-        this._globalEvent.$off('goodsListOfGroupChange');
-    },
+    }
 }
 </script>
 
@@ -420,6 +439,12 @@ export default {
                     //position:absolute;
                     right:10px;
                     bottom:10px;
+                }
+            }
+            &.fakeData{
+                background:transparent!important;  
+                .img{
+                    background:transparent!important;  
                 }
             }
         }
@@ -706,6 +731,21 @@ export default {
                 //@include borderRadius(8px);
                 overflow:hidden;
             }
+            &.fakeData{
+                padding:0;
+                .img{
+                    width:100%;
+                    height:126px;
+                    position:relative;
+                    overflow:hidden;
+                    padding:0!important;
+                    img{
+                        width:100%;
+                        height:100%;
+                        object-fit: initial!important;
+                    }
+                }
+            }
             .text{
                 overflow:hidden;
                 position:relative;
@@ -869,7 +909,7 @@ export default {
                     }
                 }
             }
-            &:nth-of-type(3n+2){
+            &:nth-of-type(3n+2),&:nth-of-type(3n+3){
                 margin-top:15px;
                 width:170px;
                 overflow:hidden;
@@ -881,7 +921,7 @@ export default {
                 }
                 .text{
                     overflow:hidden;
-                    padding:10px;
+                    padding:10px 10px 15px 10px;
                     position:relative;
                     .title{
                         font-size:13px;
@@ -897,7 +937,7 @@ export default {
                         @extend .ellipsis;
                     }
                     .priceLine{
-                        margin-top:12.5px;
+                        margin-top:13.5px;
                         overflow:hidden;
                         .price{
                             float:left;
@@ -910,52 +950,7 @@ export default {
                     }
                     .button{
                         right:10px;
-                        bottom:10px;
-                    }
-                }
-            }
-            &:nth-of-type(3n+3){
-                margin-top:15px;
-                width:170px;
-                overflow:hidden;
-                .img{
-                    position:relative;
-                    overflow:hidden;
-                    padding-bottom:100%;
-                    height:0;
-                }
-                .text{
-                    overflow:hidden;
-                    padding:10px;
-                    position:relative;
-                    .title{
-                        font-size:13px;
-                        line-height:16px;
-                        height:15px;
-                        @include lineClamp(1);
-                    }
-                    .fTitle{
-                        font-size:12px;
-                        line-height:15px;
-                        height:15px;
-                        margin-top:5px;
-                        @extend .ellipsis;
-                    }
-                    .priceLine{
-                        margin-top:12.5px;
-                        overflow:hidden;
-                        .price{
-                            float:left;
-                            font-size:11px;
-                            margin-right:12.5px;
-                            font{
-                                font-size:16px;
-                            }
-                        }
-                    }
-                    .button{
-                        right:10px;
-                        bottom:10px;
+                        bottom:15px;
                     }
                 }
             }

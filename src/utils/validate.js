@@ -11,6 +11,13 @@ export function validateURL(textval) {
   return urlregex.test(textval)
 }
 
+/* mp4*/
+export function validateMP4(str) {
+  const reg = /^.*\.(mp|MP)4$/
+  const regUrl = /(http|https):\/\/([\w.]+\/?)\S*/
+  return reg.test(str) && regUrl.test(str)
+}
+
 /* 小写字母*/
 export function validateLowerCase(str) {
   const reg = /^[a-z]+$/
@@ -53,4 +60,34 @@ export  function GetDateStr(AddDayCount) {
 export function validatePhone(str) {
   const reg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|16[6]|17[0|6|7|8]|18[0-9]|19[8|9])\d{8}$/ 
   return reg.test(str)
+}
+
+//验证URL
+export  function isURL (url) { 
+  var strRegex = '^((https|http|ftp|rtsp|mms)?://)' 
+      + '?(([0-9a-z_!~*\'().&=+$%-]+: )?[0-9a-z_!~*\'().&=+$%-]+@)?' //ftp的user@ 
+      + '(([0-9]{1,3}.){3}[0-9]{1,3}' // IP形式的URL- 199.194.52.184 
+      + '|' // 允许IP和DOMAIN（域名） 
+      + '([0-9a-z_!~*\'()-]+.)*' // 域名- www. 
+      + '([0-9a-z][0-9a-z-]{0,61})?[0-9a-z].' // 二级域名 
+      + '[a-z]{2,6})' // first level domain- .com or .museum 
+      + '(:[0-9]{1,4})?' // 端口- :80 
+      + '((/?)|' // a slash isn't required if there is no file name 
+      + '(/[0-9a-z_!~*\'().;?:@&=+$,%#-]+)+/?)$'; 
+  var re=new RegExp(strRegex); 
+  //re.test() 
+  if (re.test(url)) { 
+      return true; 
+  } else { 
+      return false; 
+  } 
+}
+
+export function isPic(url) {
+  return /\.(gif|jpg|jpeg|png|GIF|JPEG|JPG|PNG)$/.test(url)
+}
+
+export function isBase64(string) {
+  var reg = /^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\/?%\s]*?)\s*$/i;
+    return reg.test(string)
 }

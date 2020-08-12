@@ -1,5 +1,5 @@
 <template>
-<el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :inline="true" v-calcHeight="height">
+<el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :inline="true">
   <div class="block form">
     <el-form-item label="背景颜色">
       <div class="color_block">
@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';;
+import mixinPropsBase from '../mixins/mixinPropsBase';;
 import RichEditor from '@/components/RichEditor';
 export default {
   name: 'propertyRichEditor',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {RichEditor},
   data () {
     return {
@@ -33,7 +33,7 @@ export default {
           // 初始容器高度
           initialFrameHeight: 320,
           // 初始容器宽度
-          initialFrameWidth: 306
+          initialFrameWidth: 304
       },
       ruleForm: {
         backgroundColor: '#ffffff',//背景颜色

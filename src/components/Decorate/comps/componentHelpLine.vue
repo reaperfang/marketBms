@@ -1,6 +1,6 @@
 <template>
   <!-- 辅助线 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentHelpLine" v-if="currentComponentData && currentComponentData.data">
       <div :class="currentComponentData.data.lineMargin===1?'help_blank':'help_blank1'">
         <p :style="styleObj"></p>
@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentHelpLine',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {
@@ -28,6 +28,9 @@ export default {
   created() {
 
   },
+  mounted() {
+    this.dataLoaded = true;
+  },  
   computed: {
     styleObj() {
       return {

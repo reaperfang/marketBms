@@ -459,15 +459,15 @@ export function enableLevel(data) {
         data
     })
 }
-//等级批量禁用
-export function batchEnableLevel(data) {
-    return request({
-        target:'LEVEL-ENABEL-PROCESSOR',
-        method: 'post',
-        apiType: 'member',
-        data
-    })
-}
+//等级批量禁用  优化相同的接口统一，测试通过可删除
+// export function batchEnableLevel(data) {
+//     return request({
+//         target:'LEVEL-ENABEL-PROCESSOR',
+//         method: 'post',
+//         apiType: 'member',
+//         data
+//     })
+// }
 //解除黑名单冻结列表
 export function getFreezeList(data) {
     return request({
@@ -666,15 +666,15 @@ export function batchFrozenCoupons(data) {
         data
     })
 }
-//等级启用
-export function levelEnable(data) {
-    return request({
-        target:'LEVEL-ENABEL-PROCESSOR',
-        method: 'post',
-        apiType: 'member',
-        data
-    })
-}
+//等级启用  优化相同的接口统一，测试通过可删除
+// export function levelEnable(data) {
+//     return request({
+//         target:'LEVEL-ENABEL-PROCESSOR',
+//         method: 'post',
+//         apiType: 'member',
+//         data
+//     })
+// }
 //等级禁用
 export function levelDisable(data) {
     return request({

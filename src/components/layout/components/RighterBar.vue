@@ -196,8 +196,9 @@ export default {
       height: calc(100% - 60px);
       overflow-y: scroll;
     }
+    border-right: 1px solid rgba(242,242,249,1);
     font-size: 14px;
-    border-top: 1px solid #f2f2f9;
+    //border-top: 1px solid #f2f2f9;
     position: fixed;
     left: 120px;
     top: 66px;

@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px">
     <div class="block form">
       <el-form-item label="分类名称" prop="name">
         <el-input placeholder="请勿超过10个字" v-model="ruleForm.name" @blur="changeValidate"></el-input>
@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import RichEditor from '@/components/RichEditor';
 import DialogBase from "@/components/DialogBase";
 export default {
   name: 'propertyTitle',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {DialogBase, RichEditor},
   data () {
     return {

@@ -1,82 +1,86 @@
 <template>
 <!-- 组件-商品分类 -->
-    <div class="component_wrapper" v-loading="loading">
-      <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data && hasContent">
-          <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
+    <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
+      <div class="componentGoodsGroup" :class="{showTemplate:showTemplate!=1}" id="componentGoodsGroup" v-if="currentComponentData && currentComponentData.data">
+          <template v-if="hasRealData || hasFakeData">
+            <div v-if="hasRealData" class="componentGoodsGroup_tab_wrap">
+              <div class="componentGoodsGroup_tab" id="componentGoodsGroup_tab" :class="'menuStyle'+menuStyle" :style="{width:componentGoodsGroup_tabWidth}">
 
 
-            <!-- 原来的 -->
-            <!-- <div class="scroll_wrapper">
-              <div class="scroll_inner clearfix" ref="scrollContent">
-                <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
-                <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" 
-                @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
-              </div>
-            </div> -->
-             <!-- 原来的 -->
+                <!-- 原来的 -->
+                <!-- <div class="scroll_wrapper">
+                  <div class="scroll_inner clearfix" ref="scrollContent">
+                    <p :class="{active:activeGoodId==''&&showAllGroup==1}" v-if="showAllGroup==1" @click="currentCatagory=null;getIdData('')">全部</p>
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" 
+                    @click="currentCatagory=item;getIdData(item.id)">{{item.name}}</p>
+                  </div>
+                </div> -->
+                <!-- 原来的 -->
 
 
-            <template v-if="menuStyle==1">
-              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{color:activeGoodId=='all'?color1:''}">
-                  全部
-                  <font class="activeLine" :style="{background:color1}"></font>
-              </p>
-            </template>
-            <template v-else-if="menuStyle==2">
-              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
-                  全部
-              </p>
-            </template>
-            <template v-else-if="menuStyle==3">
-              <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
-                  全部
-                  <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
-                  <font class="activeLine" v-else :style="{borderTop:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
-              </p>
-            </template>
+                  <template v-if="menuStyle==1">
+                    <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{color:activeGoodId=='all'?color1:''}">
+                        全部
+                        <font class="activeLine" :style="{background:color1}"></font>
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==2">
+                    <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
+                        全部
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==3">
+                    <p :class="{active:activeGoodId=='all'}" v-if="showAllGroup==1" @click="currentCatagory=null;selectCatagory('all')" :style="{background:activeGoodId=='all'?color1:''}">
+                        全部
+                        <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
+                        <font class="activeLine" v-else :style="{borderTop:activeGoodId=='all'?'6px solid '+ color1:''}"></font>
+                    </p>
+                  </template>
 
-            <template v-if="menuStyle==1">
-              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{color:activeGoodId==item.id?color1:''}">
-                  {{item.name}}
-                  <font class="activeLine" :style="{background:color1}"></font>
-              </p>
-            </template>
-            <template v-else-if="menuStyle==2">
-              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
-                  {{item.name}}
-              </p>
-            </template>
-            <template v-else-if="menuStyle==3">
-              <p v-for="(item,key) of list" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
-                  {{item.name}}
-                  <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
-                  <font class="activeLine" v-else :style="{borderTop:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
-              </p>
-            </template>
-
-
-
-          </div>
-          <div class="componentGoodsGroup_content">
-              <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? list[0] && list[0].id : 'all'"></componentGoods>
-          </div> 
+                  <template v-if="menuStyle==1">
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{color:activeGoodId==item.id?color1:''}">
+                        {{item.name}}
+                        <font class="activeLine" :style="{background:color1}"></font>
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==2">
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+                        {{item.name}}
+                    </p>
+                  </template>
+                  <template v-else-if="menuStyle==3">
+                    <p v-for="(item,key) of displayList" :class="{active:activeGoodId==item.id}" :key="key" @click="currentCatagory=item;selectCatagory(item.id)" :style="{background:activeGoodId==item.id?color1:''}">
+                        {{item.name}}
+                        <font class="activeLine" v-if="showTemplate!=1" :style="{borderLeft:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
+                        <font class="activeLine" v-else :style="{borderTop:activeGoodId==item.id?'6px solid '+ color1:''}"></font>
+                    </p>
+                  </template>
+                </div>
+              <div class="componentGoodsGroup_content">
+                  <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
+              </div> 
+            </div>
+            <div v-else style="padding: 10px;">
+              <img :src="currentComponentData.data.fakeList[showTemplate - 1].fileUrl" alt="" style="width:100%;">
+            </div>
+          </template>
+          <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
       </div>
       <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
 </template>
 <script>
 import componentGoods from './componentGoods';
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
     name:"componentGoodsGroup",
-    mixins:[componentMixin],
+    mixins:[mixinCompsData],
     data() {
       return {
-        allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
         // 商品列表
         componentGoodsItemData: {},
         // 商品分类列表
-        list: [],
+        displayList: [],
         // 样式属性
         listStyle: "",
         showAllGroup: "",
@@ -97,16 +101,7 @@ export default {
       componentGoods
     },
     created() {
-      this.fetch();
       this.$store.dispatch('getShopStyle');
-      this._globalEvent.$on('fetchGoodsGroup', (componentData, componentId) => {
-        if(this.currentComponentId === componentId) {
-          this.fetch(componentData);
-        }
-      });
-    },
-    mounted() {
-        this.decoration();
     },
     watch: {
       data: {
@@ -122,22 +117,14 @@ export default {
       },
       'currentComponentData.data.ids': {
           handler(newValue, oldValue) {
-              // if(!this.utils.isIdsUpdate(newValue, oldValue)) {
+              if(!this.utils.isIdsUpdate(newValue, oldValue)) {
                   this.fetch();
-              // }
+              }
           },
           deep: true
       }
     },
     computed: {
-        /* 检测是否有数据 */
-        hasContent() {
-            let value = false;
-            if(this.list && this.list.length) {
-               value = true;
-            }
-            return value;
-        },
         colorStyle() {
           return this.$store.getters.colorStyle || {colors:[]};
         },
@@ -183,27 +170,29 @@ export default {
                   ids.push(item);
                 }
                 if(!ids.length) {
-                  this.list = [];
-                  this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                  this.displayList = [];
+                  this.syncToOther('goods', componentData);
+                  this.dataLoaded = true;
                   return;
                 }
                 this.loading = true;
                 this._apis.goods.fetchCategoryList({ids}).then((response)=>{
-                    this.list = response;
+                    this.displayList = response;
                     if(response && response[0] && _self.currentComponentData.data.showAllGroup == 2) {
                       _self.activeGoodId = response[0].id;
                     }else {
                       _self.activeGoodId = 'all';
                     }
                     this.calcScroll();
-                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                    this.syncToOther('goods', componentData);
                     this.loading = false;
-                    this.allLoaded = true;
+                    this.dataLoaded = true;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
-                    this._globalEvent.$emit('fetchGoods', componentData, this.currentComponentId);
+                    this.displayList = [];
+                    this.syncToOther('goods', componentData);
                     this.loading = false;
+                    this.dataLoaded = true;
                 });
           }
           }
@@ -252,13 +241,41 @@ export default {
               }
             }
           })
+        },
+
+        /* 检查真数据 */
+        checkRealData(newValue) {
+            if(newValue) {
+              if(Object.prototype.toString.call(newValue) === '[object Object]') {
+                this.hasRealData = !!Object.keys(newValue).length;
+              }else if(Array.isArray(newValue)) {
+                this.hasRealData = !!newValue.length;
+              }
+            }else {
+              this.hasRealData = false;
+            }
+            this.upadteComponentData();
+        },
+
+        /* 检查假数据 */
+        checkFakeData(newValue) {
+            this.hasFakeData = false;
+            for(let item of newValue) {
+                if(item && Object.prototype.toString.call(item) === '[object Object]' && !!Object.keys(item).length) {
+                  this.hasFakeData = true;
+                  break;
+                }else if(item && Array.isArray(item) && !!item.length) {
+                  this.hasFakeData = true;
+                  break;
+                }else if(item && item.length) {
+                    this.hasFakeData = true;
+                    break;
+                }
+            }
+            this.upadteComponentData();
         }
 
-    },
-    beforeDestroy() {
-        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-        this._globalEvent.$off('fetchGoodsGroup');
-    },
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -285,7 +302,6 @@ export default {
         height:44px;
       }
       p.active {
-        color:#fff;
         .activeLine{
           right: 0;
           height: 44px;
@@ -408,9 +424,11 @@ export default {
     }
       
 }
+.componentGoodsGroup_tab_wrap {
+  background:#fff;
+}
 .componentGoodsGroup {
   overflow: hidden;
-  background:#fff;
     .componentGoodsGroup_tab {
         padding: 0 5px;
         display: flex;
@@ -465,7 +483,7 @@ export default {
           @include borderRadius(50px);
         }
         p.active {
-          background: #efefef;
+          background:#fc3d42;
           color: #fff !important;
         }
     }

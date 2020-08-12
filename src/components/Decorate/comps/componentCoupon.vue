@@ -1,23 +1,29 @@
 <template>
   <!-- 优惠券 -->
-  <div class="component_wrapper" v-loading="loading">
-    <div v-if="currentComponentData && currentComponentData.data && hasContent" class="componentCoupon">
-      <!-- 样式一 -->
-      <div class="coupon_first componentCoupon">
-        <ul ref="scrollContent" class="clearfix">
-          <!-- status:true时候是已领取,hideScrambled:false, -->
-          <template v-for="(item, key) in list">
-            <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
-              <div class="first_money">
-                <span :class="style1">{{getTitle(item)}}</span>
-                <span :class="style1">{{getContent(item)}}</span>
-              </div>
-              <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
-              <div :class="style2" class="first_present" v-else>无门槛限制</div>
-            </li>
-          </template>
-        </ul>
-      </div>
+  <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
+    <div v-if="currentComponentData && currentComponentData.data" class="componentCoupon">
+      <template v-if="hasRealData || hasFakeData">
+        <!-- 样式一 -->
+        <div class="coupon_first componentCoupon" v-if="hasRealData">
+          <ul ref="scrollContent" class="clearfix">
+            <!-- status:true时候是已领取,hideScrambled:false, -->
+            <template v-for="(item, key) in displayList">
+              <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :key="key" @click="openCouponLayer(item)">
+                <div class="first_money">
+                  <span :class="style1">{{getTitle(item)}}</span>
+                  <span :class="style1">{{getContent(item)}}</span>
+                </div>
+                <div :class="style2" class="first_present" v-if="item.useCondition!=-1">满{{item.useCondition}}元可使用</div>
+                <div :class="style2" class="first_present" v-else>无门槛限制</div>
+              </li>
+            </template>
+          </ul>
+        </div>
+        <div class="coupon_first componentCoupon" v-else>
+          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;">
+        </div>
+      </template>
+      <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
     <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
   </div>
@@ -26,25 +32,16 @@
 
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
   name: 'componentCoupon',
-  mixins:[componentMixin],
+  mixins:[mixinCompsData],
   components: {},
   data () {
     return {
-      allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
-      list: [],
+      displayList: [],
       loading: false
     }
-  },
-  created() {
-    this.fetch();
-    this._globalEvent.$on('fetchCoupon', (componentData, componentId) => {
-      if(this.currentComponentId === componentId) {
-        this.fetch(componentData);
-      }
-    });
   },
   computed: {
     style1() {
@@ -80,15 +77,6 @@ export default {
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100%"
       }
-    },
-
-     /* 检测是否有数据 */
-    hasContent() {
-        let value = false;
-        if(this.list && this.list.length) {
-            value = true;
-        }
-        return value;
     }
   },
   watch: {
@@ -98,9 +86,10 @@ export default {
         return;
       }
       if(newValue == 2) {
+        this.displayList = [];
         this.fetch();
       }else{
-        this.list = [];
+        this.displayList = [];
         this.fetch();
       }
     },
@@ -121,7 +110,7 @@ export default {
       this.fetch();
     },
     /* 监听隐藏已抢完券 */
-    'ruleForm.hideScrambled'(newValue, oldValue) {
+    'currentComponentData.data.hideScrambled'(newValue, oldValue) {
       if(newValue === oldValue) {
           return;
       }
@@ -159,7 +148,8 @@ export default {
                   ids: componentData.ids
                 };
               }else{
-                this.list = [];
+                this.displayList = [];
+                this.dataLoaded = true;
                 return;
               }
             }
@@ -171,24 +161,25 @@ export default {
             }
 
             this.loading = true;
-            this.list = [];
+            this.displayList = [];
             this._apis.shop.getCouponListByIds(params).then((response)=>{
                 this.createList(response);
                 this.loading = false;
+                this.dataLoaded = true;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.displayList = [];
                 this.loading = false;
+                this.dataLoaded = true;
             });
         }
     },
 
       /* 创建数据 */
     createList(datas) {
-       this.list = datas;
-       this.allLoaded = true;
+       this.displayList = datas;
        this.$nextTick(()=>{
-          let width = (this.list.length + 1) * (128 + 10);
+          let width = (this.displayList.length + 1) * (128 + 10);
           if(this.$refs.scrollContent) {
             this.$refs.scrollContent.style.width = width + "px";  
           }
@@ -203,38 +194,39 @@ export default {
     /* 获取内容 */
     getContent(item) {
       return item.useType==0?'元':'折';
+    },
+
+    /* 检查真数据 */
+    checkRealData(newValue) {
+      this.hasRealData = !!newValue.length;
+      this.upadteComponentData();
+    },
+
+    /* 检查假数据 */
+    checkFakeData(newValue) {
+      this.hasFakeData = false;
+        if(newValue && newValue.length) {
+          this.hasFakeData = true;
+        }
+      this.upadteComponentData();
     }
-  },
-  beforeDestroy() {
-      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-      this._globalEvent.$off('fetchCoupon');
-  },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .componentCoupon {
-  // background: #f1f1f1;
   .coupon_first {
-    overflow-x: auto;
     & > ul {
-      // display: -webkit-box;
-      // display: -moz-box;
-      // display: -ms-flexbox;
-      // display: -o-box;
-      // display: box;
-      // overflow-x: scroll;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      margin: 10px;
-      box-shadow: 0px 0px 9px rgba(0,0,0,0.1);
+      display: -webkit-box;
+      overflow-x: scroll;
+      padding: 0 15px;
       & > li {
         width: 128px;
         height: 92px;
+        margin:10px 0;
         margin-right: 10px;
         text-align: center;
-        float:left;
         & > .first_money {
           padding-top: 17px;
           & > span:first-child {
@@ -244,12 +236,11 @@ export default {
           }
           & > span:last-child {
             font-size: 9px;
-			transform: scale(0.75);
             color: rgba(255, 255, 255, 1);
           }
         }
         & > .first_present {
-          padding-top: 8px;
+          padding-top: 7.5px;
           font-size: 10px;
 		   transform: scale(0.83);
           color: rgba(255, 255, 255, 1);

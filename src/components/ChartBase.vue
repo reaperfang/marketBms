@@ -5,6 +5,8 @@
 
 <script type='es6'>
 import echarts from 'echarts';  // 引入 ECharts 模块
+// const echarts = () =>
+//   import(/* webpackChunkName: "echarts" */ 'echarts')
 export default {
   name: "chartBase",
   props:{

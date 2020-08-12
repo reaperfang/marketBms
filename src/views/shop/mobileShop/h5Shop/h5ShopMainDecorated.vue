@@ -21,8 +21,19 @@
       </div>
       <div class="preview_wrapper">
         <!-- 装修编辑器 -->
-        <Decorate ref="Decorate" :decorateData="decoratePageData" :config="config" :height="175+7+64"></Decorate>
-        <div class="shop_info" v-calcHeight="175+10">
+        <Decorate 
+          ref="Decorate" 
+          :decorateData="decorateData" 
+          :config="config" 
+          @widgetPanelInited="widgetPanelInited"
+          @renderPanelInited="renderPanelInited"
+          @propsPanelInited="propsPanelInited"
+          @responseDataInited="responseDataInited"
+          @propDataChanged="propDataChanged"
+          @dataLoadProgress="dataLoadProgress"
+          @finished="finished"
+        ></Decorate>
+        <div class="shop_info" v-calcHeight="260+10">
           <div class="shop_code">
             <h3>H5店铺手机预览</h3>
             <h4>请您使用手机内自带浏览器扫描二维码，预览店铺效果</h4>
@@ -77,7 +88,27 @@ export default {
     return {
       loading: true,
       webStatus: null,  //未绑定过域名
-      h5ShareUrl: ''  //h5店铺分享地址
+      h5ShareUrl: '',  //h5店铺分享地址
+
+       /* 装修编辑器配置 */
+      config: {
+        pageBase: {
+          type: 'pageInfo',
+          isBase: true,
+          hidden: true,
+          title: '页面信息'
+        },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
+        callbacks: {
+          setBaseInfo: this.setBaseInfo
+        },
+        showWidget: false,
+        showProp: false,
+        dragable: false,
+        renderCalcHeight: 260+10  //渲染区扣减高度
+      },
     }
   },
   props: {
@@ -156,6 +187,41 @@ export default {
         console.error(error);
       });
     },
+
+    /* 控件面板初始化 */
+    widgetPanelInited(scope) {
+      // console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderPanelInited(scope) {
+      // console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsPanelInited(scope) {
+      // console.log('属性面板初始化结束');
+    },
+
+    /* 请求数据转换初始化事件 */
+    responseDataInited(scope) {
+      // console.log('请求数据转换初始化结束');
+    },
+
+    /* 组件数据发生改变事件 */
+    propDataChanged(scope, id, data) {
+      // console.log('组件数据发生改变');
+    },
+
+    /* 组件数据加载进度事件 */
+    dataLoadProgress(scope, value, component) {
+      // console.log('组件数据加载进度');
+    },
+
+    /* 编辑器整体加载完毕事件 */
+    finished(scope) {
+      // console.log('编辑器整体加载完毕');
+    }
   }
 }
 </script>

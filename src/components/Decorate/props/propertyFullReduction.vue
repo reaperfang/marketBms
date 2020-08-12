@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <!-- <el-form-item label="显示标题" prop="title">
         <el-input
@@ -8,10 +8,16 @@
         </el-input>
       </el-form-item> -->
       <el-form-item label="选择活动" prop="promotions">
-        <el-button type="primary" plain @click="dialogVisible=true; currentDialog='dialogSelectFullReduction'">选择活动</el-button>
-        <div v-loading="loading">
+        <div class="row align-center">
+          <div class="add-button-x" @click="dialogVisible=true; currentDialog='dialogSelectFullReduction'">
+            <i class="el-icon-plus"></i>
+            <span>选择活动</span>
+          </div>
+          <p class="message">建议最多添加5个活动</p>
+        </div>
+        <div v-loading="loading" class="goods_groups">
           <el-tag
-            v-for="tag in list"
+            v-for="tag in displayList"
             :key="tag.name"
             closable
             style="margin-right:5px;"
@@ -19,7 +25,6 @@
             {{tag.name}}
           </el-tag>
         </div>
-        <p style="color: rgb(211, 211, 211);;margin-top:10px;">建议最多添加5个活动</p>
       </el-form-item>
       <el-form-item label="展示样式" prop="displayStyle">
         <el-radio-group v-model="ruleForm.displayStyle">
@@ -36,31 +41,28 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
-import dialogSelectFullReduction from '@/views/shop/dialogs/decorateDialogs/dialogSelectFullReduction';
+import mixinPropsData from '../mixins/mixinPropsData';
+import dialogSelectFullReduction from '@/components/Decorate/dialogs/dialogSelectFullReduction';
 export default {
   name: 'propertyFullReduction',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectFullReduction},
   data () {
     return {
       ruleForm: {
         title: '满减/满折',//显示标题
         displayStyle: 1,//展示样式
-        ids: [],//满减满折活动id列表
+        ids: []//满减满折活动id列表
       },
+      displayList: [],
       loading: false,
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: ''
     }
-  },
-  created() {
-    this.fetch(false);
   },
    watch: {
     'items': {
@@ -92,7 +94,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
       if(componentData) {
-         bNeedUpdateMiddle && this._globalEvent.$emit('fetchFullReduction', this.ruleForm, this.$parent.currentComponentId);
+         bNeedUpdateMiddle && this.syncToMiddle();
           if(Array.isArray(componentData.ids) && componentData.ids.length){
               this.loading = true;
               this._apis.shop.getFullReductionListByIds({
@@ -102,22 +104,51 @@ export default {
                   this.loading = false;
               }).catch((error)=>{
                   console.error(error);
-                  this.list = [];
+                  this.displayList = [];
                   this.loading = false;
               });
           }else{
-              this.list = [];
+              this.displayList = [];
           }
       }
     },
 
       /* 创建数据 */
     createList(datas) {
-        this.list = datas;
+        this.displayList = datas;
     },
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  .message {
+    margin-left: 6px!important;
+    font-size: 12px;
+    color:rgba(146,146,155,1);
+  }
+  .goods_groups{
+    margin-top: 10px;
+    .el-tag{
+      margin-right:12px!important;
+    }
+    /deep/ .el-tag {
+      border-radius:4px;
+      border:1px dashed rgba(101,94,255,1);
+      padding: 4px 8px;
+      height: 100%;
+      margin-bottom: 10px;
+      background-color: #fff;
+      color: rgba(101,94,255,1);
+      font-size: 14px;
+      .el-tag__close {
+        color: rgba(101,94,255,1);
+        font-size: 16px;
+        &:hover {
+          color: rgba(101,94,255,1);
+          background: #fff;
+        }
+      }
+    }
+  }
 </style>

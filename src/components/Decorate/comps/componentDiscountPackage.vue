@@ -1,62 +1,74 @@
 <template>
 <!-- 组件-优惠套装 -->
-    <div class="component_wrapper" v-loading="loading">
-        <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data && hasContent">
-            <ul>
-                <li v-for="(item,key) of list" :key="key" v-if="!(item.status==2&&currentComponentData.data.hideSaledGoods==true|| utils.dateDifference(item.endTime)<1&&currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&currentComponentData.data.hideSaledGoods==true)" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
-                    <div class="img_box">
-                        <div class="label">已售{{item.participateActivityNum}}套</div>
-                        <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
-                    </div>
-                    <div class="countdown_Bar" v-if="showContents.indexOf('4')!=-1">
-                        <h1 class="title">优惠套装</h1>
-                        <div class="countdown">
-                            <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
-                            <div class="content">
-                                <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                                <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
-                                <!-- <p class="time">{{item.endTime}}</p> -->
-                                <!-- <van-count-down :time="
-                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
-                                " class="time">
-                                    <template v-slot="timeData">
-                                        <span class="item">{{ utils.addZero(timeData.days) }}</span>
-                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
-                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
-                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
-                                    </template>
-                                </van-count-down> -->
+    <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
+        <div class="componentDiscountPackage" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle"  v-if="currentComponentData && currentComponentData.data">
+            <template v-if="hasRealData || hasFakeData">
+                 <ul v-if="hasRealData">
+                    <li v-for="(item,key) of displayList" :key="key" v-if="item.show" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                        <div class="img_box">
+                            <div class="label">已售{{item.participateActivityNum}}套</div>
+                            <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
+                        </div>
+                        <div class="countdown_Bar" v-if="showContents.indexOf('4')!=-1">
+                            <h1 class="title">优惠套装</h1>
+                            <div class="countdown">
+                                <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
+                                <div class="content">
+                                    <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
+                                    <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                    <!-- <p class="time">{{item.endTime}}</p> -->
+                                    <!-- <van-count-down :time="
+                                    item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                    " class="time">
+                                        <template v-slot="timeData">
+                                            <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                            <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                            <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                            <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                        </template>
+                                    </van-count-down> -->
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="info_box" v-if="showContents.length > 0">
-                        <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
-                        <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">套餐包含商品{{item.totalGoodsNum}}件</p>
-                        <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&item.joinLimit!=-1">
-                            <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
+                        <div class="info_box" v-if="showContents.length > 0">
+                            <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
+                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">套餐包含商品{{item.totalGoodsNum}}件</p>
+                            <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&item.joinLimit!=-1">
+                                <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
+                            </div>
+                            <div class="price_line">
+                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice || 0}}</font></p>
+                                <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.status==1&&utils.dateDifference(item.endTime) && listStyle != 3 && listStyle != 6"></componentButton>
+                                <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">已结束</p>
+                                <p class="activity_end" v-if="item.status==0">未开始</p>
+                            </div>
                         </div>
-                        <div class="price_line">
-                            <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice || 0}}</font></p>
-                            <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.status==1&&utils.dateDifference(item.endTime) && listStyle != 3 && listStyle != 6"></componentButton>
-                            <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">活动已结束</p>
-                            <p class="activity_end" v-if="item.status==0">活动未开始</p>
+                    </li>
+                </ul>
+                <ul v-else>
+                    <li v-for="(item,key) of currentComponentData.data.fakeList[listStyle - 1]" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio, 'fakeData']">
+                        <div class="img_box"  v-if="listStyle != 4">
+                            <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
                         </div>
-                    </div>
-                </li>
-            </ul>
+                        <div v-else class="img_box">
+                            <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                        </div>
+                    </li>
+                </ul>
+            </template>
+            <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
         </div>
         <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
 
 </template>
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
     name:"componentDiscountPackage",
-    mixins:[componentMixin],
+    mixins:[mixinCompsData],
     data(){
         return{
-            allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
             // 样式属性
             listStyle: '',
             pageMargin: '',
@@ -75,25 +87,11 @@ export default {
             // 自己定义的
             goodWidth:'',
             goodMargin:'',
-            list: [],
+            displayList: [],
             loading: false
         }
     },
-    created() {
-        this.fetch();
-        this._globalEvent.$on('fetchDiscountPackage', (componentData, componentId) => {
-            if(this.currentComponentId === componentId) {
-                this.fetch(componentData);
-            }
-        });
-    },
-    mounted() {
-        this.decoration();
-    },
     watch: {
-      currentComponentData(){
-        this.decoration();
-      },
       'currentComponentData.data.ids': {
             handler(newValue, oldValue) {
                 if(!this.utils.isIdsUpdate(newValue, oldValue)) {
@@ -101,16 +99,13 @@ export default {
                 }
             },
             deep: true
-        }
-    },
-    computed: {
-         /* 检测是否有数据 */
-        hasContent() {
-            let value = false;
-            if(this.list && this.list.length) {
-                value = true;
-            }
-            return value;
+        },
+        'currentComponentData.data.hideSaledGoods': {
+            handler(newValue) {
+                const result = this.checkHideStatus(this.displayList);
+                this.displayList = result;
+            },
+            deep: true
         }
     },
     methods:{
@@ -169,28 +164,59 @@ export default {
                     }).then((response)=>{
                         this.createList(response);
                         this.loading = false;
+                        this.dataLoaded = true;
                     }).catch((error)=>{
                         console.error(error);
-                        this.list = [];
+                        this.displayList = [];
                         this.loading = false;
+                        this.dataLoaded = true;
                     });
                 }else{
-                    this.list = [];
+                    this.displayList = [];
+                    this.dataLoaded = true;
                 }
             }
         },
 
         /* 创建数据 */
         createList(datas) {
-            this.list = datas;
-            this.allLoaded = true;
+            const result = this.checkHideStatus(datas);
+            this.displayList = result;
         },
 
-    },
-    beforeDestroy() {
-      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-      this._globalEvent.$off('fetchDiscountPackage');
-    },
+        /* 检查真数据 */
+        checkRealData(newValue) {
+            const showList = newValue.filter((item)=>{return !!item.show})
+            this.hasRealData = !!newValue.length && !!showList.length;
+            this.upadteComponentData();
+        },
+
+        /* 检查假数据 */
+        checkFakeData(newValue) {
+            this.hasFakeData = false;
+            for(let item of newValue) {
+                if(item && item.length) {
+                    this.hasFakeData = true;
+                    break;
+                }
+            }
+            this.upadteComponentData();
+        },
+
+        /* 检查隐藏状态 */
+        checkHideStatus(datas) {
+            let templateDatas = JSON.parse(JSON.stringify([...datas]));
+            for(let item of templateDatas) {
+                if(!(item.status==2&&this.currentComponentData.data.hideSaledGoods==true|| this.utils.dateDifference(item.endTime)<1&&this.currentComponentData.data.hideSaledGoods==true|| item.status==1&&item.isFutilityActivity==false&&this.currentComponentData.data.hideSaledGoods==true)) {
+                    item['show'] = true;
+                }else {
+                    item['show'] = false;
+                }
+            }
+            return templateDatas;
+        }
+
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -303,7 +329,6 @@ export default {
                         display:none;
                     }
                     .content{
-                        // @extend .flexCenterMiddle;
                         display:flex;
                         align-items:center;
                         padding:0 10px;
@@ -471,6 +496,15 @@ export default {
             float:left;
             margin-right:10px;
             width:36%;
+        }
+        &.fakeData{
+            padding: 0;
+            .img_box{
+                width:100%;
+                img{
+                    object-fit: initial!important;
+                }
+            }
         }
         .countdown_Bar{
             width:33%;
@@ -703,7 +737,7 @@ export default {
                 .info_box{
                     padding:15px 10px;
                     .name{
-                        height:22px;
+                        height:23px;
                         font-size:16px;
                         line-height:22px;
                         @extend .ellipsis;
@@ -750,7 +784,6 @@ export default {
                             display:none;
                         }
                         .content{
-                            // @extend .flexCenterMiddle;
                             display:flex;
                             align-items:center;
                             padding:0 10px;
@@ -835,7 +868,7 @@ export default {
                     .activity_end{
                         right:10px;
                         bottom:17.5px;
-                        line-height:1;
+                        line-height:24px;
                         font-size:15px;
                     }
                 }
@@ -849,6 +882,7 @@ export default {
         display:flex;
         display:-webkit-flex;
         overflow-x:scroll;
+        -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 100px;
             &:first-child{
@@ -907,6 +941,9 @@ export default {
     li{
         overflow:hidden;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
         box-sizing:border-box;
         &:first-child{
             margin-top:0;
@@ -1072,14 +1109,23 @@ export default {
     li.goodsStyle1{
         border:0;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
     }
     li.goodsStyle2{
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
         box-shadow:0px 1px 3px 0px rgba(154,154,154,0.19);
     }
     li.goodsStyle3{
         border:1px solid #eee;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
     }
     li.goodsStyle4{
         border:0;

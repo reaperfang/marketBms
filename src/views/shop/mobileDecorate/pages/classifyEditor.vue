@@ -1,7 +1,18 @@
 <template>
     <div>
       <!-- 装修编辑器 -->
-      <Decorate ref="Decorate" :decorateData="decorateData" :config="config" :height="146+10"></Decorate>
+      <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetPanelInited="widgetPanelInited"
+      @renderPanelInited="renderPanelInited"
+      @propsPanelInited="propsPanelInited"
+      @responseDataInited="responseDataInited"
+      @propDataChanged="propDataChanged"
+      @dataLoadProgress="dataLoadProgress"
+      @finished="finished"
+    ></Decorate>
 
       <!-- 动态弹窗 预览 -->
       <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :decorateData="decorateData"></component>
@@ -11,7 +22,9 @@
 <script>
 import utils from "@/utils";
 import Decorate from '@/components/Decorate';
-import dialogDecoratePreview from '@/views/shop/dialogs/decorateDialogs/dialogDecoratePreview';
+import dialogDecoratePreview from '@/components/Decorate/dialogs/dialogDecoratePreview';
+import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
+import widget from '@/components/Decorate/config/widgetConfig';
 export default {
   name: "classifyEditor",
   components: {Decorate, dialogDecoratePreview},
@@ -25,6 +38,9 @@ export default {
       config: {
         pageBase: {
           type: 'classify'
+        },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
         },
         buttons: {
           saveData: {
@@ -54,13 +70,16 @@ export default {
         },
         showWidget: true,
         showProp: true,
-        dragable: true
+        dragable: true,
+        widgetCalcHeight: 66, //控件区扣减高度
+        renderCalcHeight: 66+10+24,  //渲染区扣减高度
+        propCalcHeight: 66 //属性区扣减高度
       },
       decorateData: null
     };
   },
   created() {
-    this.$store.commit("clearAllData");
+    this.$store.commit("clearEditor");
     this.fetch();
   },
   computed: {
@@ -107,12 +126,14 @@ export default {
 
     /* 保存数据 */
     saveData() {
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         this.id && (resultData['id'] = this.id);
         const copyResultData = {...resultData};
         copyResultData['explain'] = utils.compileStr(copyResultData.explain);
         if(this.checkInput(copyResultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           if(this.id) {
             this.sendRequest({methodName: 'editClassifyInfo', resultData: copyResultData, tipWord: '编辑成功!'});
@@ -125,37 +146,13 @@ export default {
 
      /* 检查输入正确性 */
     checkInput(resultData) {
-      if (this.baseInfo.vError) {
-        this.$alert('请填写基础信息后重试，点击确认返回编辑分类信息!', '警告', {
-          confirmButtonText: '确定',
-          callback: action => {
-            //打开基础信息面板
-            this.$store.commit('setCurrentComponentId', this.basePropertyId);
-            this.setLoading(false);
-          }
-        });
-        // this.$message({ message: '请填写正确信息', type: 'warning' });
-        return false;
-      }else{
-        if(!resultData.name || !resultData.explain) {
-          this.$alert('请填写基础信息后重试，点击确认返回编辑分类信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-          return false;
-        }else{
-          return true;
-        }
-      }
-      return true;
+      return this.checkBaseInfo(resultData);
     },
 
     /* 发起请求 */
     sendRequest(params) {
+      let pageData = params.resultData.pageData;
+      params.resultData.pageData = this.utils.compileStr(JSON.stringify(pageData));
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord);
           this.setLoading(false);
@@ -186,6 +183,89 @@ export default {
       }).then(() => {
         this._routeTo('m_pageManageIndex');
       })
+    },
+
+    /* 清洗数据 */
+    washData(data) {
+      let copyData = [...data.pageData];
+      for(let item of copyData) {
+
+        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/7）start  */
+        if(item.type === 'articleAD') {
+          this.deleteEmptyArticleAD(item);
+        }
+        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/  end  */
+        const keys = Object.keys(item.data);
+        for(let item2 of keys) {
+          if(SAVE_BLACK_LIST.includes(item2)) {
+            delete item.data[item2];
+          }
+        }
+      }
+      data.pageData = copyData;
+    },
+
+    /* 删除空的图文广告（临时需求） */
+    deleteEmptyArticleAD(data) {
+      const templateItemList = [...data.data.itemList];
+      for(let i=0;i<templateItemList.length;i++) {
+        if(!templateItemList[i].url || !this.utils.validate.isURL(templateItemList[i].url) || !this.utils.validate.isPic(templateItemList[i].url)) {
+          templateItemList.splice(i, 1);
+          i--;
+        }
+      }
+      data.data.itemList = templateItemList;
+    },
+
+    /* 检测基础信息 */
+    checkBaseInfo(data) {
+      if (this.baseInfo.vError || !data.name || !data.explain) {
+        this.$alert('请填写基础信息后重试，点击确认返回编辑分类信息!', '警告', {
+          confirmButtonText: '确定',
+          callback: action => {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+            this.setLoading(false);
+          }
+        });
+        return false;
+      }
+      return true;
+    },
+
+    /* 控件面板初始化 */
+    widgetPanelInited(scope) {
+      // console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderPanelInited(scope) {
+      // console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsPanelInited(scope) {
+      // console.log('属性面板初始化结束');
+    },
+
+    /* 请求数据转换初始化事件 */
+    responseDataInited(scope) {
+      // console.log('请求数据转换初始化结束');
+    },
+
+    /* 组件数据发生改变事件 */
+    propDataChanged(scope, id, data) {
+      // console.log('组件数据发生改变');
+    },
+
+    /* 组件数据加载进度事件 */
+    dataLoadProgress(scope, value, component) {
+      // console.log('组件数据加载进度');
+    },
+
+    /* 编辑器整体加载完毕事件 */
+    finished(scope) {
+      // console.log('编辑器整体加载完毕');
     }
 
   }

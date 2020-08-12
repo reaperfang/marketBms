@@ -1,6 +1,6 @@
 <template>
   <!-- 辅助线 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentHelpBlank" v-if="currentComponentData && currentComponentData.data">
       <div class="help_blank" :style="{'height':currentComponentData.data.blankHeight+'px'}"></div>
     </div>
@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentHelpBlank',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {
@@ -20,6 +20,9 @@ export default {
   },
   created() {
 
+  },
+  mounted() {
+    this.dataLoaded = true;
   },
   computed: {
    
