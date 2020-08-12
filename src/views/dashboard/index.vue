@@ -60,12 +60,12 @@
       </el-col>
       <el-col :span="7">
         <div class="grid-content flex-column">
-          <el-row type="flex" justify="space-between" class="item">
+          <el-row type="flex" justify="space-between" class="item-start">
             <el-col :span="24">
               <vpay></vpay>
             </el-col>
           </el-row>
-          <el-row type="flex" justify="space-between" class="item">
+          <el-row type="flex" justify="space-between" class="item-end">
             <el-col :span="12">
               <gridtitle :title="'商城成交来源TOP3'"></gridtitle>
             </el-col>
@@ -176,7 +176,15 @@ export default {
     flex-direction: column;
 
     .item{
-      flex: 1;
+        flex: 1;
+    }
+
+    .item-start{
+      flex: 190;
+    }
+
+    .item-end{
+      flex: 310;
     }
 
   }

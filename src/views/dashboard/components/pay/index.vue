@@ -1,7 +1,10 @@
 <template>
 	<div class="pay">
 		<el-row class="row">
-			<el-col :span="8"><div class="grid-box"></div></el-col>
+			<el-col :span="8"
+				><div class="grid-box">
+					<vitem></vitem></div
+			></el-col>
 			<el-col :span="8"><div class="grid-box"></div></el-col>
 			<el-col :span="8"><div class="grid-box"></div></el-col>
 		</el-row>
@@ -15,7 +18,7 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
-
+import vitem from "./item";
 export default {
 	watch: {
 		// flowData(val) {
@@ -27,7 +30,7 @@ export default {
 		//   default: false
 		// }
 	},
-	components: {},
+	components: { vitem },
 	data: function() {
 		return {};
 	},
