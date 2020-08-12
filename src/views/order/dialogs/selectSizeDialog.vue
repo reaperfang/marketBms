@@ -6,7 +6,7 @@
                     <i class="el-icon-warning"></i>
                     <p>您未设置电子面单打印纸尺寸，请选择电子面单打印纸规格尺寸，选定后可点击继续，完成发货。</p>
                 </div>
-                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="demo-ruleForm">
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
                     <el-form-item label="已选快递公司：" prop="region">
                         <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
                         <el-option label="区域一" value="shanghai"></el-option>
@@ -73,23 +73,7 @@ export default {
     },
     methods: {
         submit() {
-            if(this.refuseReasonLabel == 2) {
-                if(!this.refuseReason) {
-                    this.$message({
-                    message: '请输入拒绝原因',
-                    type: 'warning'
-                    });
-                    return
-                }
-                if(/^\s+$/.test(this.refuseReason)) {
-                    this.$message({
-                    message: '拒绝原因不能为空',
-                    type: 'warning'
-                    });
-                    return
-                }
-            }
-            this.$emit('reject', this.refuseReasonLabel == 1 ? '人为破坏拒绝售后' : this.refuseReason)
+            this.orderSendGoodsHander(this.params)
             this.visible = false
         }
     },
@@ -118,6 +102,12 @@ export default {
             type: String,
             required: true
         },
+        orderSendGoodsHander: {
+
+        },
+        params: {
+
+        }
     },
     components: {
         DialogBase
@@ -127,6 +117,7 @@ export default {
 <style lang="scss" scoped>
     .header {
         display: flex;
+        margin-bottom: 40px;
         p {
             font-size:16px;
             font-weight:500;
