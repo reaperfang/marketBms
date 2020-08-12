@@ -58,9 +58,9 @@
                         <p class="border"></p>
                         <div class="info">
                             <div class="info_li">
-                                <p class="info_p" v-if="printOrderInfoCurret.id"><span class="info_p_l">订单号：</span><span class="info_p_r">{{printOrderInfoCurret.id}}</span></p>
+                                <p class="info_p" v-if="printOrderInfoCurret.code"><span class="info_p_l">订单号：</span><span class="info_p_r">{{printOrderInfoCurret.code}}</span></p>
                                 <p class="info_p" v-if="printOrderInfoCurret.payWay">
-                                    <span class="info_p_l">交易方式：</span>
+                                    <span class="info_p_l">支付方式：</span>
                                     <!-- <span class="info_p_r" v-text="printOrderInfoCurret.payWay==1?'微信支付':(printOrderInfoCurret.payWay==2?'货到付款'):(printOrderInfoCurret.payWay==3?'找人代付')?
                                         (printOrderInfoCurret.payWay==4?'线下支付')?(printOrderInfoCurret.payWay==5?'线上支付')?(printOrderInfoCurret.payWay==6?'支付宝支付'):''"></span> -->
                                         <span class="info_p_r" v-text="printOrderInfoCurret.payWay==1?'微信支付':printOrderInfoCurret.payWay==2?'货到付款':printOrderInfoCurret.payWay==3?'找人代付':
@@ -78,26 +78,26 @@
                                 </div>
                                 <ul class="info_li2_mx">
                                     <li class="clearfix" v-for="(item,index) in printOrderInfoCurret.itemList" :key="index">
-                                        <p class="info_li2_mx_p0" v-if="item.goodsName"><span>{{item.goodsName}}</span></p>
+                                        <p class="info_li2_mx_p0"><span>{{item.goodsName}}</span></p>
                                         <p class="info_li2_mx_p1 fr">
-                                            <span class="number_i" v-if="item.goodsCount">×{{item.goodsCount}}</span>
-                                            <span class="money_i" v-if="item.goodsPrice">￥{{item.goodsPrice}}</span>
-                                            <span class="fh_number_i" v-if="item.sendCount">{{item.sendCount}}</span>
+                                            <span class="number_i">×{{item.goodsCount}}</span>
+                                            <span class="money_i">￥{{item.goodsPrice}}</span>
+                                            <span class="fh_number_i">{{item.sendCount}}</span>
                                         </p>
                                     </li>
                                 </ul>
                             </div>
                             <p class="border"></p>
-                            <div class="info_li">
+                            <div class="info_li info_li_3">
                                 <p class="info_p"><span class="info_p_l">商品总金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.goodsAmount}}</span></p>
                                 <p class="info_p"><span class="info_p_l">运费：</span><span class="info_p_r">￥{{printOrderInfoCurret.freight}}</span></p>
                                 <p class="info_p"><span class="info_p_l">订单总金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.receivableMoney}}</span></p>
                                 <p class="info_p"><span class="info_p_l">优惠金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.reducedPrice}}</span></p>
                                 <p class="info_p"><span class="info_p_l">余额抵扣：</span><span class="info_p_r">￥{{printOrderInfoCurret.consumeBalanceMoney}}</span></p>
-                                <p class="info_p"><span class="info_p_l">实付金额：</span><span class="info_p_r">￥{{printOrderInfoCurret.actualMoney}}</span></p>
+                                <p class="info_p"><span class="info_p_l sf_money">实付金额：</span><span class="info_p_r sf_money">￥{{printOrderInfoCurret.actualMoney}}</span></p>
                             </div>
                             <p class="border"></p>
-                            <div class="info_li">
+                            <div class="info_li info_li4">
                                 <p class="info_p">
                                     <span class="info_p_l">地址：</span>
                                     <span class="info_p_r">{{printOrderInfoCurret.receivedProvinceName}} {{printOrderInfoCurret.receivedCityName}}
@@ -105,7 +105,10 @@
                                 </p>
                                 <p class="info_p" v-if="printOrderInfoCurret.receivedName"><span class="info_p_l">收货人：</span><span class="info_p_r">{{printOrderInfoCurret.receivedName}}</span></p>
                                 <p class="info_p" v-if="printOrderInfoCurret.receivedPhone"><span class="info_p_l">联系电话：</span><span class="info_p_r">{{printOrderInfoCurret.receivedPhone}}</span></p>
-                                <p class="info_p"><span class="info_p_l">备注：</span><span class="info_p_r">{{printOrderInfoCurret.buyerRemark}}</span></p>
+                            </div>
+                            <p class="border"></p>
+                            <div class="info_li info_li5">
+                                <p class="info_p">备注：{{printOrderInfoCurret.buyerRemark}}</p>
                             </div>
                         </div>
                     </div>
@@ -209,9 +212,32 @@ export default {
                 printType:this.$route.query.printType,
                 printOrderInfo:this.printOrderInfo
             }).then(res => {
-                this.$message.success('调用打印小票成功')
+                if(res==2){
+                    this.$confirm('找不到打印机，无法打印。请重新设置或确认打印机是否已连接。', {
+                        confirmButtonText: '去设置',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                        showClose:false,
+                        closeOnClickModal:false
+                    }).then(() => {
+                        this.$router.push({path:'/order/printerSeting'})
+                    }).catch(() => {});
+                }else{
+                    this.$message.success('调用打印小票成功');
+                }
             })
-            .catch(error => {this.$message.error(error)});
+            .catch(error => {
+                // this.$message.error(error)}
+                this.$confirm('找不到打印机，无法打印。请重新设置或确认打印机是否已连接。', {
+                    confirmButtonText: '去设置',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    showClose:false,
+                    closeOnClickModal:false
+                }).then(() => {
+                    this.$router.push({path:'/order/printerSeting'})
+                }).catch(() => {});
+            });
         }
     }
 }
@@ -244,7 +270,7 @@ export default {
             height: 100%;
             .print_preview_center_box{
                 // width: 272px;
-                height: calc(100% - 52px);
+                height: calc(100% - 40px);
                 // overflow: hidden;
             }
             .print_preview_center_mx{
@@ -288,8 +314,7 @@ export default {
                             flex-wrap: wrap;
                             margin-bottom: 10px;
                             .info_p_l{
-                                flex: 1;
-                                max-width: 100px;
+                                width: auto;
                             }
                             .info_p_r{
                                 flex: 1;
@@ -300,13 +325,15 @@ export default {
                     }
                     .info_li2{
                         .info_li2_tab{
-                            .good_name{padding-right: 6px;}
+                            display: flex;
+                            display: -webkit-flex;
+                            justify-content: space-between;
+                            .good_name{padding-right: 8px;}
                             .number{padding-right: 22px;}
-                            .money{padding-right: 20px;}
+                            .money{padding-right: 34px;}
                         }
                         .info_li2_mx{
                             margin-top: 10px;
-                            padding-right: 40px;
                             li{
                                 margin-top: 4px;
                             }
@@ -321,19 +348,50 @@ export default {
                                 display: flex;
                                 flex-wrap: wrap;
                                 .number_i{
-                                    padding-right: 34px;
+                                    // padding-right: 34px;
+                                    width: 92px;
+                                    text-align: right;
                                 }
                                 .money_i{
-                                    padding-right: 32px;
+                                    // padding-right: 32px;
+                                    width: 92px;
+                                    text-align: center;
                                     flex: 1;
                                     word-break: break-all;
+                                }
+                                .fh_number_i{
+                                    width: 58px;
+                                    text-align: center;
                                 }
                             }
                         }
                     }
+                    .info_li_3{
+                        .info_p{
+                           margin-bottom: 6px; 
+                        }
+                        .info_p .info_p_r.sf_money,
+                        .info_p .info_p_l.sf_money{
+                            font-size:16px;
+                            font-weight:600;
+                        }
+                    }
+                    .info_li4{
+                        .info_p .info_p_r{
+                            text-align: left;
+                            font-size: 16px;
+                            font-weight: 600;
+                        }
+                    }
+                    .info_li5{
+                        .info_p{
+                            font-size: 16px;
+                            font-weight: 600;
+                        }
+                    }
                 }
             }
-            .pagination{width:272px;margin:auto;margin-top: 40px;}
+            .pagination{width:272px;margin:auto;margin-top: 24px;}
         } 
     }
     
