@@ -17,7 +17,7 @@
 				<el-popover
 					placement="bottom"
 					trigger="click">
-					<img v-if="ruleForm.brand == 1" src="@/assets/images/order/printerInfo.png" alt="" style="">
+					<img v-if="ruleForm.brand == 1" src="@/assets/images/order/printerInfo.jpg" alt="" style="">
 					<img v-if="ruleForm.brand == 2" src="@/assets/images/order/yilianyun.png" alt="" style="height: 300px">
 					<div slot="reference" class="hint">找不到设备号？</div>
 				</el-popover>
@@ -90,7 +90,8 @@
 				dialogVisible2: false,
 				ylyURL: '',
 				equipmentCode: '',
-				tipMsg: '请先点击连接，获取设备连接状态，连接成功后才能去打印'
+				tipMsg: '请先点击连接，获取设备连接状态，连接成功后才能去打印',
+				brandCode: ''
 			}
 		},
 		created(){
@@ -101,13 +102,17 @@
 			// 切换打印机品牌
 			changeEquipment() {
 				// this.ruleForm.brand = '';
-				this.ruleForm.code = '';
-				this.ruleForm.secretKey = '';
-				this.ruleForm.status = '';
+				if (this.brandCode && (this.brandCode == this.ruleForm.brand)) {
+					this.getPrinterDetail();
+				} else {
+					this.ruleForm.code = '';
+					this.ruleForm.secretKey = '';
+					this.ruleForm.status = '';
+				}
 			},
 			// 更改打印机编号时
 			codeChange() {
-				if (this.printerDetail.length > 0 && (this.ruleForm.code != this.equipmentCode)) {
+				if (this.equipmentCode && (this.ruleForm.code != this.equipmentCode)) {
 					this.ruleForm.status = '';
 					this.tipMsg = '请重新连接设备，获取最新设备状态，连接成功后再点击去打印'
 				}
@@ -149,8 +154,9 @@
 						this.ylyURL = res;
 					} else {
 						this.getPrinterDetail();
+						this.$message.success('打印机连接成功');
 					}
-					this.$message.success('打印机连接成功');
+					// this.$message.success('打印机连接成功');
 				}).catch(error => {
                 	this.$message.error(error);
             	})
@@ -160,6 +166,7 @@
 					if(!!res){
 						this.printerDetail = res;
 						this.ruleForm.brand = res.brand;
+						this.brandCode = res.brand;
 						this.ruleForm.code = res.code;
 						this.ruleForm.secretKey = res.secretKey;
 						this.ruleForm.status = res.status;
