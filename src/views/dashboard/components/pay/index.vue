@@ -1,17 +1,11 @@
 <template>
 	<div class="pay">
-		<el-row class="row">
-			<el-col :span="8"
-				><div class="grid-box">
-					<vitem></vitem></div
-			></el-col>
-			<el-col :span="8"><div class="grid-box"></div></el-col>
-			<el-col :span="8"><div class="grid-box"></div></el-col>
-		</el-row>
-		<el-row class="row">
-			<el-col :span="8"><div class="grid-box"></div></el-col>
-			<el-col :span="8"><div class="grid-box"></div></el-col>
-			<el-col :span="8"><div class="grid-box"></div></el-col>
+		<el-row class="row" v-for="(item,index) in payData" :key="index">
+			<el-col :span="8" v-for="(subItem,subindex) in item.children" :key="subindex">
+				<div class="grid-box">
+					<vitem  :title="subItem.title" :content="subItem.content"></vitem>
+				</div>
+			</el-col>
 		</el-row>
 	</div>
 </template>
@@ -32,7 +26,24 @@ export default {
 	},
 	components: { vitem },
 	data: function() {
-		return {};
+		return {
+			payData: [
+				{
+					children: [
+						{ title: "支付人数", content: "8789" },
+						{ title: "支付金额", content: "5545" },
+						{ title: "客单价", content: "54556" }
+					]
+				},
+				{
+					children: [
+						{ title: "支付订单数", content: "455" },
+						{ title: "退款金额", content: "45411" },
+						{ title: "退款订单数", content: "844" }
+					]
+				}
+			]
+		};
 	},
 	computed: {
 		//...mapState([""])

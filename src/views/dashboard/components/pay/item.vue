@@ -1,10 +1,10 @@
 <template>
 	<div class="pay-item">
 		<el-row class="row-start">
-			<span>支付人数</span>
+			<span>{{title}}</span>
 		</el-row>
 		<el-row class="row-end">
-		<span>275</span>
+		<span>{{content}}</span>
 		</el-row>
 	</div>
 </template>
@@ -17,12 +17,7 @@ export default {
 		// flowData(val) {
 		// }
 	},
-	props: {
-		// data: {
-		//   type: Object,
-		//   default: false
-		// }
-	},
+	props: ["title","content"],
 	components: {},
 	data: function() {
 		return {};
@@ -59,6 +54,7 @@ export default {
 			font-weight: 400;
 			color: rgba(255, 255, 255, 1);
 			margin-left: 10px;
+            padding: 10px 0;
 		}
 	}
 
