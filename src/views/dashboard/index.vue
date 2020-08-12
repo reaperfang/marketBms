@@ -97,8 +97,8 @@
 				</div>
 			</el-col>
 			<el-col :span="10">
-				<div class="row-3-grid-content middle-grid-margin">
-					<el-row type="flex" justify="space-between" class="item">
+				<div class="row-3-grid-content middle-grid-margin flex-column">
+					<el-row type="flex" justify="space-between" class="item-title">
 						<el-col :span="12">
 							<gridtitle
 								:title="'商城访客(最近七天)'"
@@ -108,11 +108,18 @@
 							<!-- <gridtitle :title="'渠道会员转换'"></gridtitle> -->
 						</el-col>
 					</el-row>
+					<el-row class="item-content">
+						<mallvistors></mallvistors>
+					</el-row>
 				</div>
 			</el-col>
 			<el-col :span="7">
 				<div class="row-3-grid-content">
-					<el-row type="flex" justify="space-between" class="item">
+					<el-row
+						type="flex"
+						justify="space-between"
+						class="item-title"
+					>
 						<el-col :span="12">
 							<gridtitle :title="'总交易金额分布'"></gridtitle>
 						</el-col>
@@ -120,6 +127,9 @@
 							<gridtitle :title="'客单价(最近七天)'"></gridtitle>
 						</el-col>
 					</el-row>
+					<!-- <el-row class="item-content">
+						<realtimeuser></realtimeuser>
+					</el-row> -->
 				</div>
 			</el-col>
 		</el-row>
@@ -185,9 +195,18 @@ import vpay from "./components/pay/index";
 
 //module
 import realtimeuser from "./modules/RealtimeUser/index";
+import mallvistors from "./modules/MallVistors/index";
 export default {
 	name: "mall",
-	components: { countTo, vhead, chinamap, gridtitle, vpay, realtimeuser },
+	components: {
+		countTo,
+		vhead,
+		chinamap,
+		gridtitle,
+		vpay,
+		realtimeuser,
+		mallvistors
+	},
 	data() {
 		return {
 			startVal: 0,
@@ -272,7 +291,7 @@ export default {
 
 		.item-content {
 			height: 100%;
-      margin:0 8px;
+			margin: 0 8px;
 		}
 	}
 }

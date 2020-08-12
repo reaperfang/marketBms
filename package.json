@@ -40,6 +40,7 @@
     "screenfull": "^5.0.2",
     "scss-loader": "^0.0.1",
     "tinycolor2": "^1.4.1",
+    "v-charts": "^1.19.0",
     "vant": "^2.5.9",
     "vue": "^2.5.2",
     "vue-clipboard2": "^0.3.1",
