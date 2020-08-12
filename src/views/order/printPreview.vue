@@ -212,9 +212,32 @@ export default {
                 printType:this.$route.query.printType,
                 printOrderInfo:this.printOrderInfo
             }).then(res => {
-                this.$message.success('调用打印小票成功')
+                if(res==2){
+                    this.$confirm('找不到打印机，无法打印。请重新设置或确认打印机是否已连接。', {
+                        confirmButtonText: '去设置',
+                        cancelButtonText: '取消',
+                        type: 'warning',
+                        showClose:false,
+                        closeOnClickModal:false
+                    }).then(() => {
+                        this.$router.push({path:'/order/printerSeting'})
+                    }).catch(() => {});
+                }else{
+                    this.$message.success('调用打印小票成功');
+                }
             })
-            .catch(error => {this.$message.error(error)});
+            .catch(error => {
+                // this.$message.error(error)}
+                this.$confirm('找不到打印机，无法打印。请重新设置或确认打印机是否已连接。', {
+                    confirmButtonText: '去设置',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    showClose:false,
+                    closeOnClickModal:false
+                }).then(() => {
+                    this.$router.push({path:'/order/printerSeting'})
+                }).catch(() => {});
+            });
         }
     }
 }
