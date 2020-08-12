@@ -364,7 +364,6 @@ export default {
       distributorSet: false,
       ajax: true,
       _ids: [],
-      sizeSpecs: null,
       params: {}
     };
   },
@@ -420,17 +419,6 @@ export default {
     },
   },
   methods: {
-    getExpressSpec() {
-      this._apis.order
-        .getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
-        .then(res => {
-          this.sizeSpecs = res
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
-    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -636,9 +624,6 @@ export default {
             this.$set(this.rules, "expressNos", [
                 { required: false, message: "请输入快递单号", trigger: "blur" }
               ]);
-            if(!this.express.specificationSize) {
-              this.getExpressSpec()
-            }
           }
         })
         .catch(error => {
@@ -734,7 +719,7 @@ export default {
         return;
       }
      
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let params;
 
@@ -814,9 +799,23 @@ export default {
             ]
           };
           this.params = params
-          if(this.express != null && !this.express.specificationSize && this.sizeSpecs && this.sizeSpecs.length) {
-            this.currentDialog = 'SelectSizeDialog'
-            this.dialogVisible = true
+          if(this.express != null && !this.express.specificationSize) {
+            try {
+              let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
+
+              console.log(res)
+              if(res && res.length) {
+                this.currentData = {
+                  list: res,
+                  expressCompanyCode: this.ruleForm.expressCompanyCode,
+                  expressCompanyList: this.expressCompanyList
+                }
+                this.currentDialog = 'SelectSizeDialog'
+                this.dialogVisible = true
+              }
+            } catch(e) {
+              this.$message.error(error);
+            }
           } else {
             this.orderSendGoodsHander(params)
           }
