@@ -3,7 +3,7 @@
 		<div class="printer-title">小票打印机设置</div>
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm" style="margin-top: 40px">
 			<el-form-item label="设备品牌：" prop="brand">
-				<el-radio-group v-model="ruleForm.brand">
+				<el-radio-group @change="changeEquipment" v-model="ruleForm.brand">
 					<el-radio :label="1">飞鹅</el-radio>
 					<el-radio :label="2">易联云</el-radio>
 				</el-radio-group>
@@ -13,11 +13,12 @@
 				<div style="color: #92929B; font-size: 12px">打印机背后有标注</div>
 			</el-form-item>
 			<el-form-item label="设备号码：" prop="code">
-				<el-input v-model="ruleForm.code" placeholder="输入打印机底部的机器号" style="width: 400px"></el-input>
+				<el-input v-model="ruleForm.code" maxlength="30" @blur="codeChange" placeholder="输入打印机底部的机器号" style="width: 400px"></el-input>
 				<el-popover
 					placement="bottom"
 					trigger="click">
-					<img src="@/assets/images/order/printerInfo.png" alt="" style="">
+					<img v-if="ruleForm.brand == 1" src="@/assets/images/order/printerInfo.png" alt="" style="">
+					<img v-if="ruleForm.brand == 2" src="@/assets/images/order/yilianyun.png" alt="" style="height: 300px">
 					<div slot="reference" class="hint">找不到设备号？</div>
 				</el-popover>
 			</el-form-item>
@@ -33,9 +34,9 @@
 				<span v-if="ruleForm.status == 1" class="state">已连接</span>
 				<span v-else class="state">未连接</span>
 			</el-form-item>
-			<span v-if="tip" class="no-connect-tip">请先点击连接，获取设备连接状态，连接成功后才能去打印</span>
+			<span v-if="tip" class="no-connect-tip">{{tipMsg}}</span>
 			<br>
-			<el-button class="buttonSty" :class="{notAllowed:ruleForm.status != 1}" @click="goPrinter()">去打印</el-button>
+			<el-button class="buttonSty" type="primary" :class="{notAllowed:ruleForm.status != 1}" @click="goPrinter()">去打印</el-button>
 		</el-form>
 		<el-dialog
 			title="提示"
@@ -77,17 +78,19 @@
 						{ required: true, message: '', trigger: 'change' }
 					],
 					code: [
-						{ required: true, message: '必填项，请输入设备号码', trigger: 'change' }
+						{ required: true, message: '请输入设备号码', trigger: 'change' }
 					],
 					secretKey: [
-						{ required: true, message: '必填项，请输入设备密钥', trigger: 'change' }
+						{ required: true, message: '请输入设备密钥', trigger: 'change' }
 					],
 				},
 				tip: false,
 				printerDetail: {},
 				dialogVisible1: false,
 				dialogVisible2: false,
-				ylyURL: ''
+				ylyURL: '',
+				equipmentCode: '',
+				tipMsg: '请先点击连接，获取设备连接状态，连接成功后才能去打印'
 			}
 		},
 		created(){
@@ -95,6 +98,20 @@
 			this.getPrinterDetail();
 		},
 		methods: {
+			// 切换打印机品牌
+			changeEquipment() {
+				// this.ruleForm.brand = '';
+				this.ruleForm.code = '';
+				this.ruleForm.secretKey = '';
+				this.ruleForm.status = '';
+			},
+			// 更改打印机编号时
+			codeChange() {
+				if (this.printerDetail.length > 0 && (this.ruleForm.code != this.equipmentCode)) {
+					this.ruleForm.status = '';
+					this.tipMsg = '请重新连接设备，获取最新设备状态，连接成功后再点击去打印'
+				}
+			},
 			goPrinter(/* formName */) {
 				/* this.$refs[formName].validate((valid) => {
 					if (valid) {
@@ -146,6 +163,7 @@
 						this.ruleForm.code = res.code;
 						this.ruleForm.secretKey = res.secretKey;
 						this.ruleForm.status = res.status;
+						this.equipmentCode = res.code
 					}
 				}).catch(error => {
                 	this.$message.error(error);
@@ -187,6 +205,7 @@
 		border-radius: 5px;
 		margin-left: 40%;
 		margin-top: 20px;
+		border: none;
 	}
 	.notAllowed{
 		background-color: #aaa;
