@@ -23,7 +23,7 @@
 				</el-popover>
 			</el-form-item>
 			<el-form-item v-if="ruleForm.brand == 1" label="设备密钥：" prop="secretKey">
-				<el-input v-model="ruleForm.secretKey" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
+				<el-input v-model="ruleForm.secretKey" maxlength="30" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
 			<el-form-item v-if="ruleForm.brand == 2" label="">
