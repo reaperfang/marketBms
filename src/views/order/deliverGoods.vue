@@ -624,8 +624,13 @@ export default {
     // 配送单 id
     sendGoodsHandler(formName) {
       let reg = /^[1-9]\d*$/
-
-      if (!this.multipleSelection.length) {
+      // 已选的商品数据
+      var curItem=[]
+      this.tableData.forEach(item => {
+       if( this.multipleSelection.some(val => val.id== item.id))
+        curItem.push(item)
+      })
+      if (!curItem.length) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -634,7 +639,7 @@ export default {
         return;
       }
 
-      if (this.multipleSelection.some(val => !val.sendCount)) {        
+      if (curItem.some(val => !val.sendCount)) {        
         // this.confirm({
         //   title: "提示",
         //   icon: true,
@@ -647,7 +652,7 @@ export default {
         return;
       }
 
-      if (this.multipleSelection.some(val => +val.sendCount > val.goodsCount)) {
+      if (curItem.some(val => +val.sendCount > val.goodsCount)) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -655,7 +660,7 @@ export default {
         });
         return;
       }
-      if (this.multipleSelection.some(val => +val.sendCount <= 0 || !reg.test(val.sendCount))) {
+      if (curItem.some(val => +val.sendCount <= 0 || !reg.test(val.sendCount))) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -690,7 +695,7 @@ export default {
                 orderId: this.$route.query.orderId || this.$route.query.id || this.$route.query.ids, // 订单id
                 memberInfoId: this.orderInfo.memberInfoId,
                 orderCode: this.orderInfo.orderCode,
-                orderItems: this.multipleSelection.map(val => ({
+                orderItems: curItem.map(val => ({
                   id: val.id,
                   sendCount: val.sendCount
                 })), // 发货的商品列表
