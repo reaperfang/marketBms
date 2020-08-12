@@ -4,11 +4,18 @@ export default {
   props: ["data"],
   data() {
     return {
-      currentComponentData: {}
+      currentComponentData: {},
+      errorMark: false, //是否开启错误验证
     }
   },
   created() {
     this.initRuleForm();
+
+    //点击保存按钮验证到组件有未填写项错误时，跳转至组件后显示错误提示
+    if(this.$store.state.decorate.checkErrorId){
+      this.errorMark = true;
+      this.$store.commit('setCheckErrorId', null);
+    }
   },
   watch: {
     ruleForm: {
@@ -16,6 +23,10 @@ export default {
         this.emitChangeRuleForm(newValue);
       },
       deep: true
+    },
+    //点击保存按钮验证到当前显示组件中有未填写项错误时，显示错误提示
+    '$store.state.decorate.checkErrorId'(newValue) { 
+      this.errorMark = true;
     }
   },
   methods: {

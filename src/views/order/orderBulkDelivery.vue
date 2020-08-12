@@ -56,6 +56,7 @@
                   <div class="col send-count" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
                     <el-input
+                      :disabled="item.deliveryWay == 4"
                       type="number"
                       min="1"
                       @input="inputHandler(index, i)"

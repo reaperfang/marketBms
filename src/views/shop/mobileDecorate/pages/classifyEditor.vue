@@ -23,11 +23,12 @@
 import utils from "@/utils";
 import Decorate from '@/components/Decorate';
 import dialogDecoratePreview from '@/components/Decorate/dialogs/dialogDecoratePreview';
-import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
 import widget from '@/components/Decorate/config/widgetConfig';
+import mixinEditor from '@/views/shop/mixins/mixinEditor';
 export default {
   name: "classifyEditor",
   components: {Decorate, dialogDecoratePreview},
+  mixins: [mixinEditor],
   data() {
     return {
       loading: false,
@@ -146,7 +147,15 @@ export default {
 
      /* 检查输入正确性 */
     checkInput(resultData) {
-      return this.checkBaseInfo(resultData);
+      //检测基础信息
+      if(!this.checkBaseInfo(resultData)){
+        return false;
+      }
+      //检测组件有必填条件的则进行验证
+      if(!this.checkComponents(resultData)){
+        return false;
+      }
+      return true;
     },
 
     /* 发起请求 */
@@ -183,38 +192,6 @@ export default {
       }).then(() => {
         this._routeTo('m_pageManageIndex');
       })
-    },
-
-    /* 清洗数据 */
-    washData(data) {
-      let copyData = [...data.pageData];
-      for(let item of copyData) {
-
-        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/7）start  */
-        if(item.type === 'articleAD') {
-          this.deleteEmptyArticleAD(item);
-        }
-        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/  end  */
-        const keys = Object.keys(item.data);
-        for(let item2 of keys) {
-          if(SAVE_BLACK_LIST.includes(item2)) {
-            delete item.data[item2];
-          }
-        }
-      }
-      data.pageData = copyData;
-    },
-
-    /* 删除空的图文广告（临时需求） */
-    deleteEmptyArticleAD(data) {
-      const templateItemList = [...data.data.itemList];
-      for(let i=0;i<templateItemList.length;i++) {
-        if(!templateItemList[i].url || !this.utils.validate.isURL(templateItemList[i].url) || !this.utils.validate.isPic(templateItemList[i].url)) {
-          templateItemList.splice(i, 1);
-          i--;
-        }
-      }
-      data.data.itemList = templateItemList;
     },
 
     /* 检测基础信息 */
