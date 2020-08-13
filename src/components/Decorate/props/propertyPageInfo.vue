@@ -44,7 +44,8 @@ export default {
         pageKey: '',
         status: 0,
         vError: false,
-        pageTemplateId: '-1'
+        pageTemplateId: '-1',
+        saveCallBack: this.saveCallBack //保存时需要触发的回调函数
       },
       rules: {
         name: [
@@ -103,6 +104,16 @@ export default {
     }
   },
   methods: {
+    //保存时需要触发的回调函数
+    saveCallBack(data, _this) {
+      if (_this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+        // _this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+        //   confirmButtonText: '确定'
+        // });
+        return false;
+      }
+      return true;
+    },
 
     //获取分类列表
     getClassifyList() {
