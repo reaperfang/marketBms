@@ -149,7 +149,7 @@
           <div class="main">
             <div>
               <p class="title3">微信小程序商城</p>
-              <div v-if="!isEmpowerWX && wxQrcode">
+              <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode">
                 <img  class="erweima" :src="wxQrcode" alt/>
                 <p class="opt">
                   <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
@@ -172,7 +172,7 @@
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
-              <div v-if="!isEmpowerGZ && gzQrcode">
+              <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode">
                 <img  class="erweima" :src="gzQrcode" alt>
                 <p class="opt">
                   <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
@@ -297,8 +297,8 @@ export default {
       stayProcessedCount: "",
       staySendCount: "",
       stayAuthCount: "",
-      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",//客户工作台地址
-      gzLink:location.protocol + "//omo.aiyouyi.cn/cp/?cid=" + this.cid,//公众号商城地址
+      pageLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh",//客户工作台地址
+      gzLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid,//公众号商城地址
       qrCode: "",//客户工作台二维码
       wxQrcode:"",//小程序二维码
       gzQrcode:"",//公众号二维码

@@ -458,14 +458,29 @@
             </el-form-item>
             <el-form-item label="配送方式" prop="deliveryWay">
                 <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
-                    <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
-                    <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:195px;">商家配送</el-checkbox>
+                    <div class='checkbox-item'>
+                        <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
+                    </div>
+                    <div class='checkbox-item'>
+                        <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-left:50px;">上门自提</el-checkbox>
+                        <div> 
+                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
+                        </div>
+                    </div>
+                    <div class='checkbox-item'>
+                        <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:50px;">同城配送</el-checkbox>
+                        <div>
+                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                        </div>
+                    </div>
                 </el-checkbox-group>
                 <div>
-                    <div style="display:inline-block;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
+                    <div style="display:none;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
                         <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
                     </div>
-                    <span class="prompt" v-show="!isDeliverySet">“商家配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                    <!-- <span class="prompt" v-show="!isSelfLiftSet" style="margin-left:60px;">“上门自提”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span> -->
+                    <!-- <span class="prompt" v-show="!isDeliverySet">“同城配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span> -->
+
                 </div>
             </el-form-item>
             <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryWay.includes(1)">
@@ -594,7 +609,7 @@ export default {
                     if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
                     }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
-                        callback(new Error('售卖价不得低于成本价2'));
+                        callback(new Error('售卖价不得低于成本价'));
                     }else{
                         callback();
                     }
@@ -711,6 +726,7 @@ export default {
             add: true,
 	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
             isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
+            isSelfLiftSet:true,//上门自提是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
 	    ruleForm: {
                 productCategoryInfoId: '', // 商品类目id
                 //productCatalogInfoId: '', // 商品商家分类ID
@@ -1154,7 +1170,6 @@ export default {
                             type: 'warning'
                         });
                         return false
-
                     }
                 }
                 return true
@@ -1845,6 +1860,10 @@ export default {
             let routeData = this.$router.resolve({ path: '/set/shopExpress' });
             window.open(routeData.href, '_blank');
         },
+        gotoSelfLiftSet(){
+            let routeData = this.$router.resolve({ path: '/set/shopExpress' });
+            window.open(routeData.href, '_blank');
+        },
         //获取普通快递在店铺是否设置开启状态
         getExpressAndDeliverySet(name){
             const params = {
@@ -1860,6 +1879,10 @@ export default {
                 //如果商家配送未开启则提示去设置
                 if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
                     this.isDeliverySet = false; 
+                }
+                //如果上门自提未开启则提示去设置
+                if(name == 'selfLift' && res.isOpenSelfLift == 0){
+                    this.isSelfLiftSet = false;
                 }
             })
             .catch(error => {});
@@ -1880,6 +1903,14 @@ export default {
                     this.getExpressAndDeliverySet('delivery');
                 }else{ //不选中，则直接隐藏提示即可
                     this.isDeliverySet = true;
+                }
+            }
+             //上门自提
+            if(index === '4'){
+                if(val){ //如果选中，则验证店铺中是否开启，未开启则提示去设置
+                    this.getExpressAndDeliverySet('selfLift');
+                }else{ //不选中，则直接隐藏提示即可
+                    this.isSelfLiftSet = true;
                 }
             }
         },
@@ -2296,12 +2327,16 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                this.specRadio = res.specsType;        
+                this.specRadio = res.specsType;       
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
                     deliveryWayArr.push(2);
                     this.getExpressAndDeliverySet('delivery');
+                }
+                if(res.shopExtractType == 1){ //如果开启了上门自提
+                    deliveryWayArr.push(4);
+                    this.getExpressAndDeliverySet('selfLift');
                 }
                 res.deliveryWay = deliveryWayArr;
                 let arr = []
@@ -2331,11 +2366,12 @@ export default {
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
-                    res.goodsInfos = this.sortGoodsInfos(res)  
+                     res.goodsInfos = this.sortGoodsInfos(res)    
                     this.computedAddSpecs(res.productSpecs)
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)
                     res.goodsInfos = __goodsInfos
+                    debugger
                     }else if(res.specsType===0){ //单一规格
                     this.singleSpec = Object.assign({}, this.singleSpec, res.goodsInfos[0], {
                             //goodsInfos: [res.goodsInfo]
@@ -2730,16 +2766,18 @@ export default {
                             productUnit: item && item.name || ''
                         })
                     }
-		    //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
+		            //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
                     params.generalExpressType = 1; //普通快递
                     params.businessDispatchType = 0; //商家配送
+                    params.shopExtractType = 0; // 上门自提
                     params.specsType = this.specRadio;//0：单一规格，1：多规格
-                    if(this.ruleForm.deliveryWay.includes(2)){
+                    if(this.ruleForm.deliveryWay.includes(2)){ //勾选了商家配送
                         params.businessDispatchType = 1;
                     }
+                    if(this.ruleForm.deliveryWay.includes(4)){//勾选了上门自提
+                        params.shopExtractType = 1;
+                    }
                     delete params.deliveryWay;
-
-                    // console.log(params)
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
@@ -3199,6 +3237,9 @@ $blue: #655EFF;
     color: $grayColor;
     font-size: 12px;
     margin-top: -27px;
+}
+.checkbox-item{
+    float:left;
 }
 .blue {
     color: $blue;
