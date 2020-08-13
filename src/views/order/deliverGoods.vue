@@ -176,8 +176,8 @@
               </el-select>
               <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
             </el-form-item>
-            <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
-              <el-input :disabled="!express" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos" maxlength="20"></el-input>
+            <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': express != null}">
+              <el-input :disabled="express != null" :placeholder="express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos" maxlength="20"></el-input>
             </el-form-item>
             <el-form-item label="物流备注" prop="sendRemark">
               <el-input
@@ -271,6 +271,8 @@
       :ajax="ajax"
       @getDetail="getDetail"
       :_ids="_ids"
+      :orderSendGoodsHander="orderSendGoodsHander"
+      :params="params"
     ></component>
   </div>
 </template>
@@ -361,7 +363,8 @@ export default {
       isDistributorShow: false, //尚未创建配送员信息提示控制
       distributorSet: false,
       ajax: true,
-      _ids: []
+      _ids: [],
+      params: {}
     };
   },
   created() {
@@ -416,17 +419,6 @@ export default {
     },
   },
   methods: {
-    getExpressSpec() {
-      this._apis.order
-        .getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
-        .then(res => {
-          console.log(res)
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
-    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -624,7 +616,7 @@ export default {
         .checkExpress({expressName})
         .then(res => {
           this.express = res;
-          if(this.express) {
+          if(this.express == null) {
               this.$set(this.rules, "expressNos", [
                 { required: true, message: "请输入快递单号", trigger: "blur" }
               ]);
@@ -632,7 +624,6 @@ export default {
             this.$set(this.rules, "expressNos", [
                 { required: false, message: "请输入快递单号", trigger: "blur" }
               ]);
-
           }
         })
         .catch(error => {
@@ -683,6 +674,10 @@ export default {
     // 电子面单 orderId
     // 配送单 id
     sendGoodsHandler(formName) {
+      // this.getExpressSpec()
+      // this.currentDialog = 'SelectSizeDialog'
+      // this.dialogVisible = true
+      // return
       let reg = /^[1-9]\d*$/
 
       if (!this.multipleSelection.length) {
@@ -724,7 +719,7 @@ export default {
         return;
       }
      
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let params;
 
@@ -732,6 +727,7 @@ export default {
           // this.currentDialog = 'SelectSizeDialog'
           // this.dialogVisible = true
           // return
+          
           // if(!this.ruleForm.expressCompanyCode) {
           //     this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
           //     return
@@ -802,36 +798,58 @@ export default {
               obj
             ]
           };
+          this.params = params
+          if(this.express != null && !this.express.specificationSize) {
+            try {
+              let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
-           this._apis.order
-            .orderSendGoods(params)
-            .then(res => {
-              this.$message.success('发货成功');
-              this.sending = false
-              // this.$router.push(
-              //   "/order/deliverGoodsSuccess?id=" +
-              //     res.success[0].expressParameter.orderSendInfo.id +
-              //     "&type=deliverGoods"
-              // );
-              this.$router.push({
-                path: '/order/deliverGoodsSuccess',
-                query: {
-                  id: res.success[0].expressParameter.orderSendInfo.id,
-                  orderId: res.success[0].expressParameter.orderSendInfo.orderId,
-                  type: 'deliverGoods',
-                  print: this.express + ''
+              console.log(res)
+              if(res && res.length) {
+                this.currentData = {
+                  list: res,
+                  expressCompanyCode: this.ruleForm.expressCompanyCode,
+                  expressCompanyList: this.expressCompanyList
                 }
-              })
-            })
-            .catch(error => {
+                this.currentDialog = 'SelectSizeDialog'
+                this.dialogVisible = true
+              }
+            } catch(e) {
               this.$message.error(error);
-              this.sending = false
-            });
+            }
+          } else {
+            this.orderSendGoodsHander(params)
+          }
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    orderSendGoodsHander(params) {
+      this._apis.order
+        .orderSendGoods(params)
+        .then(res => {
+          this.$message.success('发货成功');
+          this.sending = false
+          // this.$router.push(
+          //   "/order/deliverGoodsSuccess?id=" +
+          //     res.success[0].expressParameter.orderSendInfo.id +
+          //     "&type=deliverGoods"
+          // );
+          this.$router.push({
+            path: '/order/deliverGoodsSuccess',
+            query: {
+              id: res.success[0].expressParameter.orderSendInfo.id,
+              orderId: res.success[0].expressParameter.orderSendInfo.orderId,
+              type: 'deliverGoods',
+              print: this.express + ''
+            }
+          })
+        })
+        .catch(error => {
+          this.$message.error(error);
+          this.sending = false
+        });
     },
     changeReceivedInfo() {
       this.currentDialog = "ReceiveInformationDialog";

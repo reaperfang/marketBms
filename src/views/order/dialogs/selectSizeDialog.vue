@@ -6,17 +6,15 @@
                     <i class="el-icon-warning"></i>
                     <p>您未设置电子面单打印纸尺寸，请选择电子面单打印纸规格尺寸，选定后可点击继续，完成发货。</p>
                 </div>
-                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="demo-ruleForm">
-                    <el-form-item label="已选快递公司：" prop="region">
-                        <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+                    <el-form-item label="已选快递公司：">
+                        <el-select disabled v-model="data.expressCompanyCode" placeholder="请选择">
+                            <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="电子面单规格尺寸：" prop="region">
-                        <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                    <el-form-item label="电子面单规格尺寸：" prop="specificationSize">
+                        <el-select v-model="ruleForm.specificationSize" placeholder="请选择">
+                            <el-option v-for="(item, index) in data.list" :key="index" :label="item.sizeSpecs" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -36,60 +34,18 @@ export default {
         return {
             showFooter: false,
             ruleForm: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
-                rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                region: [
-                    { required: true, message: '请选择活动区域', trigger: 'change' }
-                ],
-                date1: [
-                    { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-                ],
-                date2: [
-                    { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-                ],
-                type: [
-                    { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-                ],
-                resource: [
-                    { required: true, message: '请选择活动资源', trigger: 'change' }
-                ],
-                desc: [
-                    { required: true, message: '请填写活动形式', trigger: 'blur' }
+                specificationSize: ''
+            },
+            rules: {
+                specificationSize: [
+                    { required: true, message: '请选择', trigger: 'blur' },
                 ]
             }
         }
     },
     methods: {
         submit() {
-            if(this.refuseReasonLabel == 2) {
-                if(!this.refuseReason) {
-                    this.$message({
-                    message: '请输入拒绝原因',
-                    type: 'warning'
-                    });
-                    return
-                }
-                if(/^\s+$/.test(this.refuseReason)) {
-                    this.$message({
-                    message: '拒绝原因不能为空',
-                    type: 'warning'
-                    });
-                    return
-                }
-            }
-            this.$emit('reject', this.refuseReasonLabel == 1 ? '人为破坏拒绝售后' : this.refuseReason)
+            this.orderSendGoodsHander(this.params)
             this.visible = false
         }
     },
@@ -118,6 +74,12 @@ export default {
             type: String,
             required: true
         },
+        orderSendGoodsHander: {
+
+        },
+        params: {
+
+        }
     },
     components: {
         DialogBase
@@ -127,6 +89,7 @@ export default {
 <style lang="scss" scoped>
     .header {
         display: flex;
+        margin-bottom: 40px;
         p {
             font-size:16px;
             font-weight:500;

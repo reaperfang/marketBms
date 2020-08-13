@@ -38,6 +38,41 @@
           </div>
         </div>
         <div v-show="item.showContent" class="content">
+          <template v-if="item.deliveryWay == 4">
+                  <div class="message">
+                    <div class="message-item-list">
+                    <div class="message-item">提货信息：</div>
+                  </div>
+                  <div class="message-item-list">
+                    <div class="message-item">{{item.receivedName}}</div>
+                  </div>
+                  <div class="message-item-list">
+                      <div class="message-item">{{item.receivedPhone}}</div>
+                  </div>
+                  </div>
+                  <div class="message">
+                    <div class="message-item-list">
+                    <div class="message-item">自提点信息</div>
+                    </div>
+                    <div class="message-item-list">
+                      <div class="message-item">{{item.receivedName}}</div>
+                    </div>
+                    <div class="message-item-list">
+                      <div class="message-item">{{item.receivedPhone}}</div>
+                    </div>
+                  </div>
+                  <div class="message">
+                      <div class="message-item-list">
+                        <div v-if="item.orderStatus==5" class="message-item">预约提货时间</div>
+                        <div v-if="item.orderStatus==6" class="message-item">提货时间</div>
+                      </div>
+                      <div class="message-item-list">
+                         <div v-if="item.orderStatus==6" class="message-item">{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</div>
+                         <div v-if="item.orderStatus==6" class="message-item">提货时间</div>
+                      </div>
+                  </div>
+          </template>
+          <template v-else>
           <template v-if="item.address"> 
           <div class="message">
             <div class="message-item-list">
@@ -100,6 +135,7 @@
             </div>
           </div>
           </template> 
+          </template>
           <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
             <el-table-column label="商品" width="400">
               <template slot-scope="scope">
@@ -197,6 +233,8 @@ export default {
                 return '普通快递'
             case 2:
                 return '商家配送'
+            case 4:
+                return '上门自提'
         }
     },
   },
@@ -264,31 +302,9 @@ export default {
                 sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
                 receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
                 receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
-                sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || ''
-              }
-            );
-            arr.push(obj);
-          }
-        }
-      }else{
-        for (let i in this.orderDetail.sendItemAndAddress) {
-          if (this.orderDetail.sendItemAndAddress.hasOwnProperty(i)) {
-            let obj = Object.assign(
-              {},
-              {
-                address: this.orderDetail.sendItemAndAddress[i].address ? JSON.parse(this.orderDetail.sendItemAndAddress[i].address) : '',
-                goodsList: this.orderDetail.sendItemAndAddress[i].list,
-                expressNo: i,
-                shipperName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].expressCompany || '',
-                showContent: true,
-                sendRemark: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendRemark || '',
-                sendName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].sendName || '',
-                id: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].orderId || '',
-                createTime: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].createTime || '',
-                deliveryWay: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].deliveryWay || '',
-                deliveryName: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].distributorName || '',
-                phone: this.orderDetail.sendItemAndAddress[i] && this.orderDetail.sendItemAndAddress[i].list[0] && this.orderDetail.sendItemAndAddress[i].list[0].distributorPhone || ''
-              
+                sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || '',
+                orderStatus: this.orderDetail.orderInfo.orderStatus,
+
               }
             );
             arr.push(obj);
