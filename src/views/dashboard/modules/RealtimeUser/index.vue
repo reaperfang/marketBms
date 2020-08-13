@@ -1,10 +1,9 @@
 <template>
 	<div class="row-4-grid-content flex-column">
 		<el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="12">
+			<el-col :span="24">
 				<gridtitle :title="'实时交易用户'"></gridtitle>
 			</el-col>
-			<el-col :span="12"> </el-col>
 		</el-row>
 		<el-row class="item-content">
 			<vtable></vtable>

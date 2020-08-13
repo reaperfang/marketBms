@@ -6,10 +6,9 @@
 			</el-col>
 		</el-row>
 		<el-row type="flex" justify="space-between" class="item-end">
-			<el-col :span="12">
+			<el-col :span="24">
 				<gridtitle :title="'商城成交来源TOP3'"></gridtitle>
 			</el-col>
-			<el-col :span="12"> </el-col>
 		</el-row>
 	</div>
 </template>

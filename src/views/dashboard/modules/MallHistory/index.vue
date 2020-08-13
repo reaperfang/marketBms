@@ -1,16 +1,4 @@
 <template>
-	<!-- <div class="row-3-grid-content middle-grid-margin flex-column">
-		<el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="12">
-				<gridtitle :title="'商城访客(最近七天)'"></gridtitle>
-			</el-col>
-			<el-col :span="12"> </el-col>
-		</el-row>
-		<el-row class="item-content">
-			<vline :chartData="chartData" :chartSettings="chartSettings" :chartExtend="chartExtend"></vline>
-		</el-row>
-	</div> -->
-
 	<div class="row-3-grid-content  flex-column">
 		<el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="12">
