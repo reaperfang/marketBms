@@ -278,7 +278,6 @@ export default {
       const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
       Promise.all([p1, p2]).then((result) => {
         const [ response, isOpen ] = result
-        console.log(id, response.id)
         if (response && +response.id === +id) {
             // 是否打开
             if (isOpen) {
