@@ -5,6 +5,8 @@
 
 <script type='es6'>
 import echarts from 'echarts';  // 引入 ECharts 模块
+import china from 'echarts/map/json/china.json'
+echarts.registerMap('chinaAll', china)//去掉南海诸岛
 export default {
   name: "chartBase",
   props:{
@@ -68,6 +70,13 @@ export default {
       if (this.$refs.chart) {
         this.eChart = this.$refs.chart;
         this.oChart = this.engine.init(this.eChart, null, {renderer: 'svg'});
+        _self.oChart.on("mouseover", function (params){//设置鼠标移入指定省份颜色不变的效果
+            if(params.data.value != undefined){
+                _self.oChart.dispatchAction({
+                    type: 'downplay'
+                });
+            }
+        });
         document.body.onresize = ()=>{
           _self.oChart.resize();
         }
