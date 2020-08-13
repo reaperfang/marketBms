@@ -641,5 +641,3 @@ export default {
         }
     }
 </style>
-
-

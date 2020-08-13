@@ -5,6 +5,7 @@
           <el-input v-model="ruleForm.customLink" placeholder="请输入自定义链接" clearable></el-input>
         </el-form-item>
       </el-form>
+	  <div style="text-align: center; color: red">支持omo域名下的链接且只有公众号可用，小程序不支持，小程序支持京东直播的链接</div>
   </div>
 </template>
 

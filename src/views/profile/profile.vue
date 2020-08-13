@@ -308,7 +308,6 @@ export default {
       isEmpowerGZ:false,//微信公众号是否授权
       isReleaseWX:false,//微信小程序是否发布
       isReleaseGZ:false,//微信公众号是否发布
-      protocol: location.protocol,
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
       helpNews: []

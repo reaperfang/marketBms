@@ -269,6 +269,10 @@ export default {
           this.$message.success(params.tipWord);
           this.setLoading(false);
         }).catch((error)=>{
+          if(error === '微页面名称已存在') {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+          }
           this.$message.error(error);
           this.setLoading(false);
         });

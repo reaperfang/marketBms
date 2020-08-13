@@ -5,13 +5,14 @@
             <div class="clearfix">
                 <p class="c_label fl">选择标签：</p>
                 <div class="fl tags_container">
+                    <p class="fl" v-if="tags.length==0" style="margin-left: 10px">暂无标签，请先创建标签。</p>
                     <el-checkbox-group v-model="checkList" @change="handleChange">
                         <el-checkbox v-for="item in tags" :key="item.id" :label="item.tagName"></el-checkbox>
                     </el-checkbox-group>
                 </div>
             </div> 
-            <el-checkbox v-model="checkAll" @change="handleCheckAll" style="margin-left: 71px">全部</el-checkbox>
-            <p class="red">确定给{{this.labels || '  '}}发放会员卡：{{data.name}}吗？</p>
+            <el-checkbox v-model="checkAll" v-if="tags.length>0" @change="handleCheckAll" style="margin-left: 70px">全部标签</el-checkbox>
+            <p class="red">确定给{{this.labels || ' '}}发放会员卡：{{data.name}}吗？</p>
         </div>
         <div>
             <span slot="footer" class="dialog-footer fcc">
@@ -47,6 +48,7 @@ export default {
             }else{
                 this.checkList = [];
             }
+            this.labels = this.checkList.join(',');
         },
         submit() {
             this.btnLoading = true;
@@ -92,6 +94,11 @@ export default {
             })
         },
         handleChange() {
+            if(this.checkList.length!=0&&this.checkList.length==this.tags.length){
+                this.checkAll=true
+            }else{
+                this.checkAll=false
+            }
             this.labels = this.checkList.join(',');
         }
     },
