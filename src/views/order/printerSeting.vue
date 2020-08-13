@@ -26,7 +26,7 @@
 				<el-input v-model="ruleForm.secretKey" maxlength="30" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
-			<el-form-item v-if="ruleForm.brand == 2" label="" style="margin-top: 20px">
+			<el-form-item v-if="ruleForm.brand == 2" label="" prop="secretKey" style="margin-top: 20px">
 <!--				<el-input v-model="ruleForm.secretKey" v-if="ruleForm.brand == 1" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>-->
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
@@ -106,11 +106,18 @@
 				// this.ruleForm.brand = '';
 				if (this.brandCode && (this.brandCode == this.ruleForm.brand)) {
 					this.getPrinterDetail();
+					this.$nextTick(()=>{
+						this.$refs[formName].clearValidate();
+						console.log(this.$refs[formName])
+					})
 				} else {
 					this.ruleForm.code = '';
 					this.ruleForm.secretKey = '';
 					this.ruleForm.status = '';
-					// this.$refs[formName].clearValidate();
+					this.$nextTick(()=>{
+						this.$refs[formName].clearValidate();
+						console.log(this.$refs[formName])
+					})
 				}
 			},
 			// 更改打印机编号时
@@ -138,13 +145,16 @@
 				}
 			},
 			checkDevice(formName) {
-				this.$refs[formName].validate((valid) => {
-					if (valid) {
-					} else {
-						console.log('error submit!!');
-						return false;
-					}
-				});
+				this.$nextTick(()=>{
+					this.$refs[formName].validate((valid) => {
+						console.log(valid)
+						if (valid) {
+						} else {
+							console.log('error submit!!');
+							return false;
+						}
+					});
+				})
 				var params = JSON.parse(JSON.stringify(this.ruleForm));
 				if (params.brand == 2) {
 					delete params.secretKey;
