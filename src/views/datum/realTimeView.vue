@@ -1,7 +1,9 @@
 <template>
 <div>
+    <!-- 悬浮按钮 数据大屏 -->
     <div class="viewBut"><img src="@/assets/images/realtime/curtime.png" alt=""></div>
-  <div class="p_container pb12">
+    <!-- 数据总览 -->
+    <div class="p_container pb12">
        <div class="p_title clearfix">
            <h2>数据总览</h2>
            <span class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
@@ -87,91 +89,146 @@
         </div>
       </div>
     </div>
-    <div class="clearfix pb12" style="background:#fff;">
-        <div class="fl p_container p_ltsiade">
-            <div class="p_title clearfix">
-                <h2>交易看板</h2>
-                <div class="fr clearfix">
-                    <serchRt class="fr" />
-                </div>
-            </div>
-            <div class="choose-type clearfix">
-                <div class="choose-item" :class="{'active':activetype==1}">
-                    <div class="choosetop">
-                        <p>支付金额（元）<span class="chooseBut" @click="chooseType(1)"></span></p>
-                        <span> <strong>50</strong> </span>
-                    </div>
-                    <div class="choosebot">
-                        <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
-                        <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+    <!-- 交易看板 -->
+    <el-container class="pb12 clearfix">
+        <el-aside class="asideBox" width="65%">
+            <div class="p_container p_ltsiade">
+                <div class="p_title clearfix">
+                    <h2>交易看板</h2>
+                    <div class="fr clearfix">
+                        <serchRt class="fr" />
                     </div>
                 </div>
-                <div class="choose-item" :class="{'active':activetype==2}">
-                    <div class="choosetop">
-                        <p>支付订单数（单）<span class="chooseBut" @click="chooseType(2)"></span></p>
-                        <span> <strong>50</strong> </span>
+                <div class="choose-type clearfix">
+                    <div class="choose_item" :class="{'active':activetype==1}">
+                        <div class="choosetop">
+                            <p>支付金额（元）<span class="chooseBut" @click="chooseType(1)"></span></p>
+                            <span> <strong>50</strong> </span>
+                        </div>
+                        <div class="choosebot">
+                            <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                            <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                        </div>
                     </div>
-                    <div class="choosebot">
-                        <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
-                        <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                    <div class="choose_item" :class="{'active':activetype==2}">
+                        <div class="choosetop">
+                            <p>支付订单数（单）<span class="chooseBut" @click="chooseType(2)"></span></p>
+                            <span> <strong>50</strong> </span>
+                        </div>
+                        <div class="choosebot">
+                            <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                            <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                        </div>
+                    </div>
+                    <div class="choose_item" :class="{'active':activetype==3}">
+                        <div class="choosetop">
+                            <p>支付人数（人）<span class="chooseBut" @click="chooseType(3)"></span></p>
+                            <span> <strong>50</strong> </span>
+                        </div>
+                        <div class="choosebot">
+                            <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                            <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                        </div>
+                    </div>
+                    <div class="choose_item" :class="{'active':activetype==4}">
+                        <div class="choosetop">
+                            <p class="clearfix"> <span class="fl">客单价（元）</span> 
+                                <el-tooltip class="item" effect="dark" content="统计时间内，用户平均消费金额" placement="top-start">
+                                <img class="fl" style="margin-top:5px" src="@/assets/images/realtime/hoverTips.png" alt="">
+                                </el-tooltip>
+                                <span class="chooseBut" @click="chooseType(4)"></span>
+                            </p>
+                            <span> <strong>50</strong> </span>
+                        </div>
+                        <div class="choosebot">
+                            <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                            <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgdown.png" alt="">60%</span></p>
+                        </div>
                     </div>
                 </div>
-                <div class="choose-item" :class="{'active':activetype==3}">
-                    <div class="choosetop">
-                        <p>支付人数（人）<span class="chooseBut" @click="chooseType(3)"></span></p>
-                        <span> <strong>50</strong> </span>
-                    </div>
-                    <div class="choosebot">
-                        <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
-                        <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
+                <screeningChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart" height="420px" ></screeningChart>
+            </div>
+        </el-aside>
+        <el-main class="p_rtsiade" style="padding:0">
+            <div class="clearfix ">
+                <div class="p_container">
+                <div class="p_title clearfix">
+                    <h2>交易分布</h2>
+                    <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
+                    <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
+                    </el-tooltip>
+                </div>
+                </div>
+                <div class="chartbox">
+                    <mapChart 
+                    :title="'测试图表'" 
+                    ref="mapChart"
+                    :dataChart="dataChart" height="300px" >
+                    </mapChart>
+                    <div class="lengebox">
+                        <p><span class="line1"></span>3001单以上</p>
+                        <p><span class="line2"></span>2001-3000单</p>
+                        <p><span class="line3"></span>1001-2000单</p>
+                        <p><span class="line4"></span>1-1000单</p>
+                        <p><span class="line5"></span>待破零</p>
                     </div>
                 </div>
-                <div class="choose-item" :class="{'active':activetype==4}">
-                    <div class="choosetop">
-                        <p class="clearfix"> <span class="fl">客单价（元）</span> 
-                            <el-tooltip class="item" effect="dark" content="统计时间内，用户平均消费金额" placement="top-start">
-                            <img class="fl" style="margin-top:5px" src="@/assets/images/realtime/hoverTips.png" alt="">
-                            </el-tooltip>
-                            <span class="chooseBut" @click="chooseType(4)"></span>
-                        </p>
-                        <span> <strong>50</strong> </span>
-                    </div>
-                    <div class="choosebot">
-                        <p>较前一日：<span class="up"><img src="@/assets/images/realtime/imgup.png" alt="">60%</span></p>
-                        <p>较上周同期：<span class="down"><img src="@/assets/images/realtime/imgdown.png" alt="">60%</span></p>
+            </div>
+        </el-main>
+    </el-container>
+    <!-- 用户概览 -->
+    <el-container class="pb12 clearfix">
+        <el-aside class="asideBox" width="65%">
+            <div class="p_container p_ltsiade">
+                <div class="p_title clearfix">
+                    <h2>用户概览</h2>
+                    <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
+                    <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
+                    </el-tooltip>
+                    <div class="fr clearfix">
+                        <serchRt class="fr ml12" />
+                        <el-radio-group class="fr radioBox" v-model="visitSourceType" @change="all">
+                            <el-radio-button class="btn_bor" label="0" v-permission="['数据', '客流分析', '全部']">全部</el-radio-button>
+                            <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
+                            <el-radio-button class="btn_bor" label="2" v-permission="['数据', '客流分析', '公众号']">公众号</el-radio-button>
+                        </el-radio-group>
                     </div>
                 </div>
+                <div class="chartbox">
+                    <screeningChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart" height="300px" ></screeningChart>
+                </div>
             </div>
-            <screeningChart 
-    :title="'测试图表'" 
-    ref="dtChart"
-    :dataChart="dataChart" height="300px" >
-    </screeningChart>
-        </div>
-        <div class="fr  p_rtsiade">
-            <div class="p_container">
-            <div class="p_title clearfix">
-                <h2>交易分布</h2>
-                <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
-                <img class="fl" style="margin: 6px 0 0 5px" src="@/assets/images/realtime/hoverTips.png" alt="">
-                </el-tooltip>
+        </el-aside>
+        <el-main class="p_rtsiade" style="padding:0">
+            <div class="clearfix ">
+                <div class="p_container">
+                <div class="p_title clearfix">
+                    <h2>交易分布</h2>
+                    <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
+                    <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
+                    </el-tooltip>
+                    <div class="fr clearfix">
+                        <el-radio-group class="fr radioBox" v-model="visitSourceType" @change="all">
+                            <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
+                            <el-radio-button class="btn_bor" label="2" v-permission="['数据', '客流分析', '公众号']">公众号</el-radio-button>
+                        </el-radio-group>
+                    </div>
+                </div>
+                </div>
+                <div class="chartbox">
+                    <pieChart :title="'测试图表'" ref="pieChart" height="280px"></pieChart>
+                </div>
             </div>
-            </div>
-            <div class="chartbox">
-                <mapChart 
-    :title="'测试图表'" 
-    ref="mapChart"
-    :dataChart="dataChart" height="300px" >
-    </mapChart>
-    <div class="lengebox">
-        <p><span class="line1"></span>3001单以上</p>
-        <p><span class="line2"></span>2001-3000单</p>
-        <p><span class="line3"></span>1001-2000单</p>
-        <p><span class="line4"></span>1-1000单</p>
-        <p><span class="line5"></span>待破零</p>
-    </div>
-            </div>
-        </div>
+        </el-main>
+    </el-container>
+    <!--  -->
+    <div class="p_container pb12">
+       <div class="p_title clearfix">
+           <h2>商品看板</h2>
+      </div>
+      <div class="p_product">
+          <div class="pro_item"></div>
+      </div>
     </div>
 </div>
 </template>
@@ -181,9 +238,10 @@ import serchRt from "./components/realtime/serchRt";//季度
 import pfChart from "./components/pfChart";
 import screeningChart from "./components/realtime/screeningChart";
 import mapChart from "./components/realtime/mapChart";
+import pieChart from "./components/realtime/pieChart";
 export default {
   name: "realTimeView",
-  components: { pfChart,screeningChart,mapChart,serchRt },
+  components: { pfChart,screeningChart,mapChart,pieChart,serchRt },
   data() {
     const _self = this;
     return {
@@ -247,8 +305,11 @@ export default {
 
     chooseType(type){
         this.activetype=type
-    }
-
+    },
+    //全部 or  小程序  or  公众号
+    all() {
+      
+    },
 
   },
 };
@@ -263,22 +324,28 @@ export default {
 .pb12{
 margin-bottom: 12px;
 }
+.ml12{
+margin-left: 12px;
+}
 .p_container {
   padding:0 28px;
 //   margin-bottom: 12px;
   background-color: #fff;
   .p_title{
       width: 100%;
-      height: 58px;
+    //   height: 63px;
       border-bottom: 1px solid #EDEDED;
       padding: 15px 0;
     h2{
         font-size: 16px;
         font-weight: 500;
         color: #252A2E;
-        line-height: 28px;
+        line-height: 34px;
         float: left;
     }  
+    >img{
+        margin: 9px 0 0 5px;
+    }
     .refresh{
         float: left;
         width: 28px;
@@ -286,6 +353,8 @@ margin-bottom: 12px;
         border-radius: 5px;
         background: #F7F9FC;
         margin-left: 10px;
+        margin-top: 3px;
+        cursor: pointer;
         img{
             display: block;
             margin-left: 6px;
@@ -319,7 +388,7 @@ margin-bottom: 12px;
               }
           }
       }
-    
+      
   }
   .card-content{
       width: 558px;
@@ -363,15 +432,26 @@ margin-bottom: 12px;
       }
   }
 }
+::-webkit-scrollbar {//滚动条的宽度
+width:0px;
+height:0px;
+}
+.asideBox{
+    background: #fff; margin-right:12px;
+}
+.chartbox{
+        width: 100%;
+        padding: 20px 0;
+      }
 .p_ltsiade{
-    width: 65%;
+    // width: 65%;
     // min-width: 735px;
-    border-right: 12px solid #f2f2f9;
+    // border-right: 12px solid #f2f2f9;
     padding-bottom: 10px;
     .choose-type{
         padding: 20px 0 10px;
     }
-    .choose-item{
+    .choose_item{
         float: left;
         width:176px;
         height:125px;
@@ -424,10 +504,10 @@ margin-bottom: 12px;
             }
         }
     }
-    .choose-item:last-child{
+    .choose_item:last-child{
         margin-right: 0;
     }
-    .choose-item.active{
+    .choose_item.active{
         background: #F7F7FF;
         border:1px solid #655EFF;
         .choosebot{
@@ -439,11 +519,10 @@ margin-bottom: 12px;
     }
 }
 .p_rtsiade{
-    width: calc(35% - 0px);
+    background: #fff;
+    // width: calc(35% - 0px);
     // min-width:calc(100% - 795px - 12px);
     .chartbox{
-        width: 100%;
-        padding: 20px 0;
         .lengebox{
             width: 160px;
             margin: 0 auto;
@@ -481,24 +560,25 @@ margin-bottom: 12px;
 }
 
 
-.radio-group{
-	display: inline-block;
+
+</style>
+<style lang="scss">
+.radioBox{
+    // margin-right: 12px;
+    .btn_bor{
+        .el-radio-button__inner{
+            border-color: #DADAE3;
+            color: #92929B;
+        }
+    }
+    .el-radio-button__orig-radio:checked+.el-radio-button__inner{
+        background-color: #F6F7FA;
+            color: #161617;
+            box-shadow: -1px 0 0 0 #DADAE3;
+    }
+    
 }
-.radio-group span{
-	display: inline-block;
-	font-size: 14px;
-	background-color: #fff;
-	line-height: 14px;
-	padding: 6px 29px;
-	cursor: pointer;
-	color: #B6B5C8;
-}
-.radio-group span.active{
-	color:#655EFF;
-	background-color: #E6E4FF;
-}
-.el-radio-group label:last-child{
+.radioBox label:last-child{
   margin-left: 0px;
 }
 </style>
-
