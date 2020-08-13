@@ -15,7 +15,7 @@
 			<el-form-item label="设备号码：" prop="code">
 				<el-input v-model="ruleForm.code" maxlength="30" @blur="codeChange" placeholder="输入打印机底部的机器号" style="width: 400px"></el-input>
 				<el-popover
-					placement="bottom"
+					placement="bottom-start"
 					trigger="click">
 					<img v-if="ruleForm.brand == 1" src="@/assets/images/order/printerInfo.jpg" alt="" style="">
 					<img v-if="ruleForm.brand == 2" src="@/assets/images/order/yilianyun.png" alt="" style="height: 300px">
@@ -40,6 +40,7 @@
 		</el-form>
 		<el-dialog
 			title="提示"
+			class="dia_Box"
 			:visible.sync="dialogVisible1"
 			width="30%">
 			<p style="text-align:center;">您尚未完成设备授权。</p>
@@ -48,6 +49,7 @@
 			</span>
 		</el-dialog>
 		<el-dialog
+			class="dia_Box"
 			title="请确认授权状态"
 			:visible.sync="dialogVisible2"
 			width="30%">
@@ -224,5 +226,10 @@
 		margin-left: 120px;
 		color: #FD4C2B;
 		font-size: 12px;
+	}
+</style>
+<style>
+	.dia_Box .el-dialog__footer{
+		text-align: center!important;
 	}
 </style>
