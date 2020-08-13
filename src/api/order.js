@@ -633,9 +633,55 @@ export function getDistributorList(data) {
   })
 }
 
+// 小票打印机设置-详情  易其孜
+export function getPrinterSetDetail(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-DETAIL-PROCESSOR',
+    data
+  })
+}
 
+// 小票配送单预览 易其孜
+export function shopPrinterPreview(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-PREVIEW-PROCESSOR',
+    data
+  })
+}
 
+// 小票配送单打印 易其孜
+export function goPrinter(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-PRINT-PROCESSOR',
+    data
+  })
+}
 
+// 易联云商户授权结果  lyc
+export function sendYlyunResult(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-ES-CALL-BACK-PROCESSOR',
+    data
+  })
+}
+
+// 连接打印机  lyc
+export function connectPrinter(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-CONNECT-PROCESSOR',
+    data
+  })
+}
 
 
 
