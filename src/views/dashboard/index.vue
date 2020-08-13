@@ -23,7 +23,7 @@
 				</div>
 			</el-col>
 			<el-col :span="10">
-				<div class="grid-content middle-grid-margin">
+				<!-- <div class="grid-content middle-grid-margin">
 					<el-row type="flex" justify="space-between">
 						<el-col :span="12">
 							<gridtitle :title="'今日交易金额'"></gridtitle>
@@ -56,7 +56,8 @@
 					<el-row class="grid-map">
 						<chinamap></chinamap>
 					</el-row>
-				</div>
+				</div> -->
+				<todayuserdeal></todayuserdeal>
 			</el-col>
 			<el-col :span="7">
 				<div class="grid-content flex-column">
@@ -90,9 +91,7 @@
 						<el-col :span="12">
 							<gridtitle :title="'用户交易偏好'"></gridtitle>
 						</el-col>
-						<el-col :span="12">
-							<!-- <gridtitle :title="'渠道会员转换'"></gridtitle> -->
-						</el-col>
+						<el-col :span="12"> </el-col>
 					</el-row>
 				</div>
 			</el-col>
@@ -113,9 +112,7 @@
 								:title="'下单转换漏斗(最近七天)'"
 							></gridtitle>
 						</el-col>
-						<el-col :span="12">
-							<!-- <gridtitle :title="'客单价(最近七天)'"></gridtitle> -->
-						</el-col>
+						<el-col :span="12"> </el-col>
 					</el-row>
 				</div>
 			</el-col>
@@ -136,34 +133,21 @@
 				</div>
 			</el-col>
 			<el-col :span="7">
-				<div class="row-4-grid-content flex-column">
-					<el-row
-						type="flex"
-						justify="space-between"
-						class="item-title"
-					>
-						<el-col :span="12">
-							<gridtitle :title="'实时交易用户'"></gridtitle>
-						</el-col>
-						<el-col :span="12"> </el-col>
-					</el-row>
-					<el-row class="item-content">
-						<realtimeuser></realtimeuser>
-					</el-row>
-				</div>
+				<realtimeuser></realtimeuser>
 			</el-col>
 		</el-row>
 	</div>
 </template>
 
 <script>
-import countTo from "./components/CountTo/index";
 import vhead from "./components/head/index";
-import chinamap from "./components/map/china/index";
 import gridtitle from "./components/title/index";
 import vpay from "./components/pay/index";
 
 //module
+
+//今日交易金额 用户交易分别
+import todayuserdeal from "./modules/TodayUserDeal/index";
 //实时交易用户
 import realtimeuser from "./modules/RealtimeUser/index";
 
@@ -175,20 +159,16 @@ import transaction from "./modules/transaction/index";
 export default {
 	name: "mall",
 	components: {
-		countTo,
 		vhead,
-		chinamap,
 		gridtitle,
 		vpay,
 		realtimeuser,
 		mallvistors,
-		transaction
+		transaction,
+		todayuserdeal
 	},
 	data() {
-		return {
-			startVal: 0,
-			endVal: 1000000
-		};
+		return {};
 	}
 };
 </script>

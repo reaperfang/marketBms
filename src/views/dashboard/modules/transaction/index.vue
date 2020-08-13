@@ -55,27 +55,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss">
-// $row-3-grid-content: 300px;
-
-// .row-3-grid-content {
-// 	height: $row-3-grid-content;
-// 	background: rgba(71, 225, 255, 0.02);
-// 	box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
-// 	border: 1px solid rgba(71, 225, 255, 0.15);
-
-// 	.item-title {
-// 		height: 50px;
-// 	}
-
-// 	.item-content {
-// 		height: 100%;
-// 		margin: 0 8px;
-
-// 		.v-el-col {
-// 			height: 100%;
-// 		}
-// 	}
-// }
-</style>

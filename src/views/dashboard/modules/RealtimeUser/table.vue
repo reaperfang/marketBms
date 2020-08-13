@@ -1,20 +1,16 @@
 <template>
-	<div class="row-4-grid-content flex-column">
-		<el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="12">
-				<gridtitle :title="'实时交易用户'"></gridtitle>
-			</el-col>
-			<el-col :span="12"> </el-col>
-		</el-row>
-		<el-row class="item-content">
-			<vtable></vtable>
-		</el-row>
+	<div class="realtime-user">
+		<el-table :data="tableData">
+			<el-table-column prop="date" label="日期" width="180">
+			</el-table-column>
+			<el-table-column prop="name" label="姓名" width="180">
+			</el-table-column>
+			<el-table-column prop="address" label="地址"> </el-table-column>
+		</el-table>
 	</div>
 </template>
 
 <script>
-import gridtitle from "../..//components/title/index";
-import vtable from "./table"
 import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
@@ -28,7 +24,7 @@ export default {
 		//   default: false
 		// }
 	},
-	components: { gridtitle,vtable },
+	components: {},
 	data: function() {
 		return {
 			tableData: [
