@@ -1,6 +1,6 @@
 <template>
   <div class="authorization">
-      <p v-if="!status"><el-button type="danger" icon="el-icon-warning" circle style="position:relative;top:-4px;margin-right:10px;"></el-button>{{filedMsg}}</p>
+      <p v-if="!status"><i class="el-icon-warning" style="position:relative;top:-4px;margin-right:10px; font-size: 30px; color: red"></i>{{filedMsg}}</p>
       <p v-else><el-button type="success" icon="el-icon-check" circle style="position:relative;top:-4px;margin-right:10px;"></el-button>设备授权成功，请您关闭当前窗口回到原页面继续打印。</p>
   </div>
 </template>
