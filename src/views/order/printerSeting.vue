@@ -26,7 +26,7 @@
 				<el-input v-model="ruleForm.secretKey" maxlength="30" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
-			<el-form-item v-if="ruleForm.brand == 2" label="" prop="secretKey" style="margin-top: 20px">
+			<el-form-item v-if="ruleForm.brand == 2" label="" style="margin-top: 20px">
 <!--				<el-input v-model="ruleForm.secretKey" v-if="ruleForm.brand == 1" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>-->
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
@@ -142,33 +142,32 @@
 			checkDevice(formName) {
 				this.$nextTick(()=>{
 					this.$refs[formName].validate((valid) => {
-						console.log(valid)
 						if (valid) {
+							var params = JSON.parse(JSON.stringify(this.ruleForm));
+							if (params.brand == 2) {
+								delete params.secretKey;
+							}
+							delete params.status;
+							this._apis.order.connectPrinter(params).then(res => {
+								console.log(res)
+								if(res != null) {
+									this.dialogVisible1 = true;
+									this.ylyURL = res;
+								} else {
+									this.getPrinterDetail();
+									this.$message.success('打印机连接成功');
+									this.tip = false
+								}
+								// this.$message.success('打印机连接成功');
+							}).catch(error => {
+								this.$message.error(error);
+							})
 						} else {
 							console.log('error submit!!');
 							return false;
 						}
 					});
 				})
-				var params = JSON.parse(JSON.stringify(this.ruleForm));
-				if (params.brand == 2) {
-					delete params.secretKey;
-				}
-				delete params.status;
-				this._apis.order.connectPrinter(params).then(res => {
-					console.log(res)
-					if(res != null) {
-						this.dialogVisible1 = true;
-						this.ylyURL = res;
-					} else {
-						this.getPrinterDetail();
-						this.$message.success('打印机连接成功');
-						this.tip = false
-					}
-					// this.$message.success('打印机连接成功');
-				}).catch(error => {
-                	this.$message.error(error);
-            	})
 			},
 			getPrinterDetail(){
 				this._apis.order.getPrinterSetDetail().then(res => {

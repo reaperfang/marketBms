@@ -1,6 +1,6 @@
 <template>
   <div class="authorization">
-      <p v-if="!status">确认授权中，请稍候</p>
+      <p v-if="!status"><el-button type="danger" icon="el-icon-warning" circle style="position:relative;top:-4px;margin-right:10px;"></el-button>{{filedMsg}}</p>
       <p v-else><el-button type="success" icon="el-icon-check" circle style="position:relative;top:-4px;margin-right:10px;"></el-button>设备授权成功，请您关闭当前窗口回到原页面继续打印。</p>
   </div>
 </template>
@@ -8,7 +8,8 @@
 export default {
   data() {
     return{
-      status:false
+      status:false,
+		filedMsg: ''
     };
   },
   created(){
@@ -22,7 +23,11 @@ export default {
             state: this.$route.query.state
         };
         this._apis.order.sendYlyunResult(params).then(res => {
-            this.status = true;
+            if (res.data == 1) {
+				this.status = true;
+			} else {
+            	this.filedMsg = res.msg
+			}
         }).catch(error => {
             this.$message.error(error);
         })
