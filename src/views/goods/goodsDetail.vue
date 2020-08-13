@@ -609,7 +609,7 @@ export default {
                     if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
                     }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
-                        callback(new Error('售卖价不得低于成本价2'));
+                        callback(new Error('售卖价不得低于成本价'));
                     }else{
                         callback();
                     }
@@ -1108,7 +1108,7 @@ export default {
                 }
                 if(+obj.salePrice<+obj.costPrice) {
                     this.$message({
-                        message: '售卖价不得低于成本价1',
+                        message: '售卖价不得低于成本价',
                         type: 'warning'
                     });
                     return false
@@ -2366,7 +2366,7 @@ export default {
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
-                    res.goodsInfos = this.sortGoodsInfos(res)  
+                     res.goodsInfos = this.sortGoodsInfos(res)    
                     this.computedAddSpecs(res.productSpecs)
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)

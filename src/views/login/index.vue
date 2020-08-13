@@ -185,6 +185,7 @@ export default {
           if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
             this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
               this.getShopAuthList()
+              this.$store.commit('setStoreGuide', this.shopList[0].storeGuide)
               if (this.isAdminUser && this.shopList.length > 0 && this.shopList[0].storeGuide === -1) {
                 this.$router.push({ path: '/profile/guidePrompt' })
               } else {
@@ -208,27 +209,11 @@ export default {
         window.eventHub.$emit('onGetShopAuthList')
       })
     },
-    // login(userName, password) {
-    //   this.loading = true
-    //   this.loginForm = Object.assign({}, this.loginForm, {userName, password})
-    //   this.$store.dispatch('login', this.loginForm).then(() => {
-    //     this.loading = false
-    //     this.$router.push({ path: '/profile/guidePrompt' })
-    //   }).catch(error => {
-        // this.$message.error(error);
-    //     this.loading = false
-    //   })
-    // },
-    // autoLogin() {
-    //   let userName = this.$route.query.name
-    //   let password = this.$route.query.password
-    //   if(userName!=undefined && password!=undefined) {
-    //     this.login('admin-lqx', '111111')
-    //   }
-    // },
+
     handleCloses(){
       this.dialogVisible = false
     },
+    
     handleClose(){
       this.showShopsDialog = false
       this.loginForm.userName = ''
