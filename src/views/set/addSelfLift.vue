@@ -9,6 +9,9 @@
             <el-radio class="radio" :label="0">停用</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item v-if="ruleForm.pickUpId" label="自提点编号" prop="pickUpId">
+          <span>{{ ruleForm.pickUpId }}</span>
+        </el-form-item>
         <el-form-item label="自提点名称" prop="name">
           <el-input v-model="ruleForm.name" style="width:360px;" placeholder="请输入自提点名称"></el-input>
         </el-form-item>
@@ -181,6 +184,7 @@ export default {
       tempWeeks: [],
       ruleForm: {
         status: 1, // 0 停用 1 启用
+        pickUpId: null,
         name: null,
         contactPerson: null,
         mobile: null,
@@ -398,6 +402,7 @@ export default {
       this.ruleForm.area = res.areaName || null
       this.ruleForm.lng = res.longitude || null
       this.ruleForm.lat = res.latitude || null
+      this.ruleForm.pickUpId = res.pickUpId || null
       this.isMapChoose = true
     },
     getSelfLiftById() {
@@ -772,8 +777,7 @@ export default {
               showCancelButton: false
             }).then(() => {
               this.resetForm(formName)
-              
-              // this.$router.replace({ path: '/set/addSelfLift' })
+              this.$router.replace({ path: '/set/addSelfLift' })
             }).catch(()=> {
               this.$router.push({ path: '/set/selfLift'})
             });
