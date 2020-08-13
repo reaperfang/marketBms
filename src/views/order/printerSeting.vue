@@ -106,19 +106,14 @@
 				// this.ruleForm.brand = '';
 				if (this.brandCode && (this.brandCode == this.ruleForm.brand)) {
 					this.getPrinterDetail();
-					this.$nextTick(()=>{
-						this.$refs[formName].clearValidate();
-						console.log(this.$refs[formName])
-					})
 				} else {
 					this.ruleForm.code = '';
 					this.ruleForm.secretKey = '';
 					this.ruleForm.status = '';
-					this.$nextTick(()=>{
-						this.$refs[formName].clearValidate();
-						console.log(this.$refs[formName])
-					})
 				}
+				this.$nextTick(()=>{
+					this.$refs[formName].clearValidate();
+				})
 			},
 			// 更改打印机编号时
 			codeChange() {
