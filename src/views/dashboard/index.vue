@@ -23,64 +23,10 @@
 				</div>
 			</el-col>
 			<el-col :span="10">
-				<!-- <div class="grid-content middle-grid-margin">
-					<el-row type="flex" justify="space-between">
-						<el-col :span="12">
-							<gridtitle :title="'今日交易金额'"></gridtitle>
-						</el-col>
-						<el-col :span="12">
-							<div class="grid-title-end">
-								<span>
-									同比昨日
-									<span>增长20%</span>
-								</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="24">
-							<countTo
-								:startVal="startVal"
-								:endVal="endVal"
-								:duration="7000"
-							></countTo>
-						</el-col>
-					</el-row>
-
-					<el-row>
-						<el-col :span="12">
-							<gridtitle :title="'用户交易分布'"></gridtitle>
-						</el-col>
-					</el-row>
-
-					<el-row class="grid-map">
-						<chinamap></chinamap>
-					</el-row>
-				</div> -->
 				<todayuserdeal></todayuserdeal>
 			</el-col>
 			<el-col :span="7">
-				<div class="grid-content flex-column">
-					<el-row
-						type="flex"
-						justify="space-between"
-						class="item-start"
-					>
-						<el-col :span="24">
-							<vpay></vpay>
-						</el-col>
-					</el-row>
-					<el-row
-						type="flex"
-						justify="space-between"
-						class="item-end"
-					>
-						<el-col :span="12">
-							<gridtitle :title="'商城成交来源TOP3'"></gridtitle>
-						</el-col>
-						<el-col :span="12"> </el-col>
-					</el-row>
-				</div>
+				<paymalldeal></paymalldeal>
 			</el-col>
 		</el-row>
 
@@ -142,12 +88,14 @@
 <script>
 import vhead from "./components/head/index";
 import gridtitle from "./components/title/index";
-import vpay from "./components/pay/index";
 
 //module
 
 //今日交易金额 用户交易分别
 import todayuserdeal from "./modules/TodayUserDeal/index";
+
+// 支付 商城交易分布
+import paymalldeal from "./modules/PayMallDeal/index"
 //实时交易用户
 import realtimeuser from "./modules/RealtimeUser/index";
 
@@ -161,11 +109,11 @@ export default {
 	components: {
 		vhead,
 		gridtitle,
-		vpay,
 		realtimeuser,
 		mallvistors,
 		transaction,
-		todayuserdeal
+		todayuserdeal,
+		paymalldeal
 	},
 	data() {
 		return {};
