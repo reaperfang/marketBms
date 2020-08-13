@@ -297,8 +297,10 @@ export default {
       stayProcessedCount: "",
       staySendCount: "",
       stayAuthCount: "",
-      pageLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh",//客户工作台地址
-      gzLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid,//公众号商城地址
+      pageLink:'',
+      gzLink:'',
+      // pageLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh",//客户工作台地址
+      // gzLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid,//公众号商城地址
       qrCode: "",//客户工作台二维码
       wxQrcode:"",//小程序二维码
       gzQrcode:"",//公众号二维码
@@ -321,13 +323,22 @@ export default {
   created() {
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
+      this.getLink();
       this.getQrcode();
       this.getOverviewDetails();
       this.getOerviewRemind();
       this.getOverviewSelling();
+      this.getProductNews();
+      this.getHelpNews();
+      this.getWXQrcode();
+      this.getGZQrcode();
+      this.isEmpower();
+      this.getIsReleaseWX();
+      this.getIsReleaseGZ();
     });
     this.$message.closeAll();
     this.init();
+    this.getLink();
     this.getQrcode();
     this.getOverviewDetails();
     this.getOerviewRemind();
@@ -339,7 +350,6 @@ export default {
     this.isEmpower();
     this.getIsReleaseWX();
     this.getIsReleaseGZ();
-
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
@@ -360,6 +370,11 @@ export default {
         .catch(error => {
           console.log("error", error);
         });
+    },
+
+    getLink(){
+      this.pageLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh" //客户工作台地址
+      this.gzLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid //公众号商城地址
     },
 
     //获取客户工作台二维码
