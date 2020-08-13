@@ -1,6 +1,6 @@
 <template>
    <div class="address">
-     <div class="btn-area"><el-button type="primary" @click="goAddressNew()">新建地址</el-button></div>
+     <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</el-button></div>
      <div class="list-area">
        <div class="total">
         <span>全部 <em>{{ total }}</em> 项</span>
@@ -53,9 +53,9 @@
           width="150">
           <template slot-scope="scope">
             <div class="opeater">
-              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text">编辑</el-button>
+              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text"  v-permission="['设置','地址库', '默认页面', '编辑']">编辑</el-button>
               <span>|</span>
-              <el-button class="btn" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
+              <el-button class="btn" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
             </div>
           </template>
         </el-table-column>
@@ -65,7 +65,7 @@
           </div>
           <p>
             暂无数据，去
-            <router-link :to="{ path: '/set/addressUpdate'} ">新建地址</router-link>
+            <router-link :to="{ path: '/set/addressUpdate'}" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</router-link>
           </p>
         </div>
       </el-table>
