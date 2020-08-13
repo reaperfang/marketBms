@@ -1,5 +1,5 @@
 <template>
-	<div class="row-3-grid-content middle-grid-margin flex-column">
+	<!-- <div class="row-3-grid-content middle-grid-margin flex-column">
 		<el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="12">
 				<gridtitle :title="'商城访客(最近七天)'"></gridtitle>
@@ -8,6 +8,25 @@
 		</el-row>
 		<el-row class="item-content">
 			<vline :chartData="chartData" :chartSettings="chartSettings" :chartExtend="chartExtend"></vline>
+		</el-row>
+	</div> -->
+
+	<div class="row-3-grid-content  flex-column">
+		<el-row type="flex" justify="space-between" class="item-title">
+			<el-col :span="12">
+				<gridtitle :title="'支付金额(最近七天'"></gridtitle>
+			</el-col>
+			<el-col :span="12">
+				<gridtitle :title="'商城浏览(最近七天)'"></gridtitle>
+			</el-col>
+		</el-row>
+		<el-row class="item-content">
+			<el-col :span="12" class="v-el-col">
+			<vline :chartData="chartData" :chartSettings="chartSettings" :chartExtend="chartExtend"></vline>
+			</el-col>
+			<el-col :span="12" class="v-el-col">
+				<vline :chartData="chartData" :chartSettings="chartSettings" :chartExtend="chartExtend"></vline>
+			</el-col>
 		</el-row>
 	</div>
 </template>
@@ -43,7 +62,7 @@ export default {
 				]
 			},
 			chartSettings: {
-				area: true
+				// area: false
 			},
 			chartExtend: {
 				color: "rgba(71, 225, 255, 0.15)",

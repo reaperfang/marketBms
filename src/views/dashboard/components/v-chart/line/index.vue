@@ -15,51 +15,10 @@
 import list from "../../_mixin/index.js";
 import echarts from "echarts";
 export default {
+	props: ["chartData", "chartSettings", "chartExtend"],
 	mixins: [list],
 	data() {
-		return {
-			chartData: {
-				columns: ["日期", "访问人数"],
-				rows: [
-					{ 日期: "1/1", 访问人数: 1393 },
-					{ 日期: "1/2", 访问人数: 3530 },
-					{ 日期: "1/3", 访问人数: 2923 },
-					{ 日期: "1/4", 访问人数: 1723 },
-					{ 日期: "1/5", 访问人数: 3792 },
-					{ 日期: "1/6", 访问人数: 4593 }
-				]
-			},
-			chartSettings: {
-				area: true
-			},
-			chartExtend: {
-				color: "rgba(71, 225, 255, 0.15)",
-				grid: {
-					top: "10px",
-					bottom: "7px"
-				},
-				xAxis: {
-					axisLine: {
-						lineStyle: {
-							color: "rgba(255,255,255,0.8)"
-						}
-					}
-				},
-				yAxis: {
-					splitLine: {
-						lineStyle: {
-							color: "#26353a"
-						}
-					},
-					axisLine: {
-						lineStyle: {
-							color: "rgba(255,255,255,0.8)"
-						},
-						show: false
-					}
-				}
-			}
-		};
+		return {};
 	}
 };
 </script>

@@ -63,7 +63,7 @@
 				</div>
 			</el-col>
 			<el-col :span="10">
-				<div class="row-4-grid-content middle-grid-margin">
+				<!-- <div class="row-4-grid-content middle-grid-margin">
 					<el-row type="flex" justify="space-between" class="item">
 						<el-col :span="12">
 							<gridtitle
@@ -76,7 +76,8 @@
 							></gridtitle>
 						</el-col>
 					</el-row>
-				</div>
+				</div> -->
+				<mallhistory></mallhistory>
 			</el-col>
 			<el-col :span="7">
 				<realtimeuser></realtimeuser>
@@ -104,6 +105,8 @@ import mallvistors from "./modules/MallVistors/index";
 
 //总交易金额分布 客单价近七天
 import transaction from "./modules/transaction/index";
+
+import mallhistory from "./modules/MallHistory/index"
 export default {
 	name: "mall",
 	components: {
@@ -113,7 +116,8 @@ export default {
 		mallvistors,
 		transaction,
 		todayuserdeal,
-		paymalldeal
+		paymalldeal,
+		mallhistory
 	},
 	data() {
 		return {};
