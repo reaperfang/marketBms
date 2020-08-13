@@ -173,7 +173,10 @@ export default {
 
     //获取配置文件对应组件数据
     getComponentConfigData(id, index) {
-      const data = widget.getComponentConfigData(this.componentDataMap[id].type);
+      let data = widget.getComponentConfigData(this.componentDataMap[id].type);
+      if(!data){
+        data = this.getComponentData(id);
+      }
       this.componentConfigData[index] = data;
       return data;
     },
