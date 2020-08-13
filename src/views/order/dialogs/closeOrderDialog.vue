@@ -5,14 +5,14 @@
             <p>建议与用户沟通后再关闭订单，并选择关闭原因：</p>
             <div>
                 <span @click="showTextarea = false">
-                    <el-radio v-model="operationType" label="6">用户申请关闭</el-radio>
+                    <el-radio v-model="operationType" label="7">用户申请关闭</el-radio>
                 </span>
                 <span @click="showTextarea = false">
-                    <el-radio v-model="operationType" label="7">库存不足</el-radio>
+                    <el-radio v-model="operationType" label="6">库存不足</el-radio>
                 </span>
                 
                 <p @click="showTextarea = true" class="other">
-                    <el-radio v-model="operationType" label="9">其它</el-radio>
+                    <el-radio v-model="operationType" label="8">其它</el-radio>
                 </p>
                 <el-input
                     v-if="showTextarea"
@@ -36,7 +36,7 @@ export default {
     data() {
         return {
             showFooter: false,
-            operationType: '6',
+            operationType: '',
             operationRemark: '',
             showTextarea: false
         }
@@ -45,11 +45,18 @@ export default {
         submit() {
             let operationRemark = ''
 
-            if(this.operationType == 6) {
+            if(this.operationType == '') {
+                this.$message({
+                    message: '请选择关闭原因',
+                    type: 'warning'
+                });
+                return
+            }
+            if(this.operationType == 7) {
                 operationRemark = '用户申请关闭'
-            } else if(this.operationType == 7) {
+            } else if(this.operationType == 6) {
                 operationRemark = '库存不足'
-            } else if(this.operationType == 9) {
+            } else if(this.operationType == 8) {
                 operationRemark = this.operationRemark
                 if(!this.operationRemark) {
                     this.$message({
@@ -67,7 +74,7 @@ export default {
                 }
             }
             this.$emit('submit', {
-                operationType: 6,
+                operationType: +this.operationType,
                 operationRemark
             })
 
@@ -117,5 +124,3 @@ export default {
        font-size: 16px;
    }
 </style>
-
-

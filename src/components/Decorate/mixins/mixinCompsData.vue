@@ -85,10 +85,12 @@ export default {
 
     /* 更新是否需要替换真实数据标识给组件信息 */
     upadteComponentData() {
-      this.$store.commit('updateComponent',{
-        id: this.currentComponentData.id,
-        data: Object.assign({...this.currentComponentData.data}, {
-          needReplace: this.hasFakeData && !this.hasRealData
+      setTimeout(() => {
+        this.$store.commit('updateComponent',{
+          id: this.currentComponentData.id,
+          data: Object.assign({...this.currentComponentData.data}, {
+            needReplace: this.hasFakeData && !this.hasRealData
+          })
         })
       })
     }

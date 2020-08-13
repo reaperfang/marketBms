@@ -65,6 +65,13 @@ export default [
         hidden: true,
         meta: { title: '查看物流', noCache: true, tabTitle: '订单处理' ,navType:5},
       },
+		{
+			path: 'printerSeting',
+			component: () => import('@/views/order/printerSeting'),
+			name: 'printerSeting',
+			hidden: true,
+			meta: { title: '打印机设置', noCache: true, tabTitle: '订单处理' ,navType:5},
+		},
       {
         path: 'reviews',
         component: () => import('@/views/order/reviews'),
@@ -147,6 +154,13 @@ export default [
         name: 'deliverGoodsSuccess',
         hidden: true,
         meta: { title: '发货成功', noCache: true, tabTitle: '订单处理' , navType:5},
+      },
+      {
+        path: 'printPreview',
+        component: () => import('@/views/order/printPreview'),
+        name: 'printPreview',
+        hidden: true,
+        meta: { title: '打印配送单小票', noCache: true, tabTitle: '订单处理' , navType:5},
       },
       // {
       //   path: 'quickDelivery',
