@@ -1,6 +1,6 @@
 <template>
 	<div class="icon-user">
-		<div class="row start">用户</div>
+		<div class="row start">{{title}}</div>
 		<div class="row end">5156556</div>
 	</div>
 </template>
@@ -13,12 +13,13 @@ export default {
 		// flowData(val) {
 		// }
 	},
-	props: {
-		data: {
-			type: Object,
-			default: false
-		}
-	},
+	// props: {
+	// 	data: {
+	// 		type: Object,
+	// 		default: false
+	// 	}
+	// },
+	props:["title"],
 	components: {},
 	data: function() {
 		return {};
@@ -62,6 +63,6 @@ export default {
 		color: rgba(255, 255, 255, 1);
 	}
 
-	background: yellow;
+	// background: yellow;
 }
 </style>
