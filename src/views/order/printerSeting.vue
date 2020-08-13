@@ -40,6 +40,7 @@
 		</el-form>
 		<el-dialog
 			title="提示"
+			@close="handDialog"
 			class="dia_Box"
 			:visible.sync="dialogVisible1"
 			width="30%">
@@ -50,6 +51,7 @@
 		</el-dialog>
 		<el-dialog
 			class="dia_Box"
+			@close="handDialog"
 			title="请确认授权状态"
 			:visible.sync="dialogVisible2"
 			width="30%">
@@ -101,9 +103,13 @@
 			this.getPrinterDetail();
 		},
 		methods: {
+			handDialog() {
+				this.dialogVisible1 = false
+				this.getPrinterDetail();
+			},
 			// 切换打印机品牌
 			changeEquipment(formName) {
-				// this.ruleForm.brand = '';
+				// debugger
 				if (this.brandCode && (this.brandCode == this.ruleForm.brand)) {
 					this.getPrinterDetail();
 				} else {
@@ -170,6 +176,7 @@
 				})
 			},
 			getPrinterDetail(){
+				console.log('进来了')
 				this._apis.order.getPrinterSetDetail().then(res => {
 					if(!!res){
 						this.printerDetail = res;
