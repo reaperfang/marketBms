@@ -110,6 +110,7 @@ export default {
             this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
+            this.$store.commit('setStoreGuide', shop.storeGuide)
             if (this.isAdminUser && shop.storeGuide === -1) {
                 this.$router.push({ path: '/profile/guidePrompt' })
               } else {
