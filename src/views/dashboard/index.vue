@@ -268,7 +268,11 @@ export default {
 
 		.item-content {
 			height: 100%;
-			margin: 0 8px;
+			margin: 0 5px;
+
+			.v-el-col {
+				height: 100%;
+			}
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <template>
-	<div class="row-3-grid-content">
+	<div class="row-3-grid-content  middle-grid-margin flex-column">
 		<el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="12">
 				<gridtitle :title="'总交易金额分布'"></gridtitle>
@@ -57,25 +57,25 @@ export default {
 </script>
 
 <style lang="scss">
-$row-3-grid-content: 300px;
+// $row-3-grid-content: 300px;
 
-.row-3-grid-content {
-	height: $row-3-grid-content;
-	background: rgba(71, 225, 255, 0.02);
-	box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
-	border: 1px solid rgba(71, 225, 255, 0.15);
+// .row-3-grid-content {
+// 	height: $row-3-grid-content;
+// 	background: rgba(71, 225, 255, 0.02);
+// 	box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
+// 	border: 1px solid rgba(71, 225, 255, 0.15);
 
-	.item-title {
-		height: 50px;
-	}
+// 	.item-title {
+// 		height: 50px;
+// 	}
 
-	.item-content {
-		height: 100%;
-		margin: 0 8px;
+// 	.item-content {
+// 		height: 100%;
+// 		margin: 0 8px;
 
-		.v-el-col {
-			height: 100%;
-		}
-	}
-}
+// 		.v-el-col {
+// 			height: 100%;
+// 		}
+// 	}
+// }
 </style>

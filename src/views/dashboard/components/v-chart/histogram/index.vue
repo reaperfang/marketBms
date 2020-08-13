@@ -47,7 +47,8 @@ export default {
 			},
 			chartExtend: {
 				grid: {
-					top: "10px"
+					top: "10px",
+					bottom: "7px"
 				},
 				xAxis: {
 					axisLine: {
