@@ -97,21 +97,7 @@
 				</div>
 			</el-col>
 			<el-col :span="10">
-				<div class="row-3-grid-content middle-grid-margin flex-column">
-					<el-row type="flex" justify="space-between" class="item-title">
-						<el-col :span="12">
-							<gridtitle
-								:title="'商城访客(最近七天)'"
-							></gridtitle>
-						</el-col>
-						<el-col :span="12">
-							<!-- <gridtitle :title="'渠道会员转换'"></gridtitle> -->
-						</el-col>
-					</el-row>
-					<el-row class="item-content">
-						<mallvistors></mallvistors>
-					</el-row>
-				</div>
+				<mallvistors></mallvistors>
 			</el-col>
 			<el-col :span="7">
 				<transaction></transaction>
@@ -185,7 +171,7 @@ import realtimeuser from "./modules/RealtimeUser/index";
 import mallvistors from "./modules/MallVistors/index";
 
 //总交易金额分布 客单价近七天
-import transaction from "./modules/transaction/index"
+import transaction from "./modules/transaction/index";
 export default {
 	name: "mall",
 	components: {
