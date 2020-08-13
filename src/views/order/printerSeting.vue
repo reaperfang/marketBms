@@ -3,7 +3,7 @@
 		<div class="printer-title">小票打印机设置</div>
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm" style="margin-top: 40px">
 			<el-form-item label="设备品牌：" prop="brand">
-				<el-radio-group @change="changeEquipment" v-model="ruleForm.brand">
+				<el-radio-group @change="changeEquipment('ruleForm')" v-model="ruleForm.brand">
 					<el-radio :label="1">飞鹅</el-radio>
 					<el-radio :label="2">易联云</el-radio>
 				</el-radio-group>
@@ -17,20 +17,20 @@
 				<el-popover
 					placement="bottom-start"
 					trigger="click">
-					<img v-if="ruleForm.brand == 1" src="@/assets/images/order/printerInfo.jpg" alt="" style="">
-					<img v-if="ruleForm.brand == 2" src="@/assets/images/order/yilianyun.png" alt="" style="height: 300px">
+					<img v-if="ruleForm.brand == 1" src="@/assets/images/order/printerInfo.jpg" alt="" style="width: 327px; height: 134px">
+					<img v-if="ruleForm.brand == 2" src="@/assets/images/order/yilianyun.png" alt="" style="width: 154px; height: 178px">
 					<div slot="reference" class="hint">找不到设备号？</div>
 				</el-popover>
 			</el-form-item>
-			<el-form-item v-if="ruleForm.brand == 1" label="设备密钥：" prop="secretKey">
+			<el-form-item v-if="ruleForm.brand == 1" label="设备密钥：" prop="secretKey" style="margin-top: 20px">
 				<el-input v-model="ruleForm.secretKey" maxlength="30" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
-			<el-form-item v-if="ruleForm.brand == 2" label="">
+			<el-form-item v-if="ruleForm.brand == 2" label="" style="margin-top: 20px">
 <!--				<el-input v-model="ruleForm.secretKey" v-if="ruleForm.brand == 1" placeholder="输入打印机底部的密匙" style="width: 400px"></el-input>-->
 				<span style="color: #655EFF; font-size: 14px; cursor: pointer" @click="checkDevice('ruleForm')">连接设备</span>
 			</el-form-item>
-			<el-form-item label="设备状态：" style="margin-bottom:0;">
+			<el-form-item label="设备状态：" style="margin-bottom:0; margin-top: 40px">
 				<span v-if="ruleForm.status == 1" class="state">已连接</span>
 				<span v-else class="state">未连接</span>
 			</el-form-item>
@@ -102,7 +102,7 @@
 		},
 		methods: {
 			// 切换打印机品牌
-			changeEquipment() {
+			changeEquipment(formName) {
 				// this.ruleForm.brand = '';
 				if (this.brandCode && (this.brandCode == this.ruleForm.brand)) {
 					this.getPrinterDetail();
@@ -110,6 +110,7 @@
 					this.ruleForm.code = '';
 					this.ruleForm.secretKey = '';
 					this.ruleForm.status = '';
+					// this.$refs[formName].clearValidate();
 				}
 			},
 			// 更改打印机编号时
@@ -157,6 +158,7 @@
 					} else {
 						this.getPrinterDetail();
 						this.$message.success('打印机连接成功');
+						this.tip = false
 					}
 					// this.$message.success('打印机连接成功');
 				}).catch(error => {
