@@ -181,12 +181,12 @@ export default {
     init() {
       let info = JSON.parse(localStorage.getItem("userInfo"));
       let arr = Object.keys(info.shopInfoMap);
-      if (arr.length == 0) {
-        this.shopList = [];
-      } else {
-        this.shopList = info.shopInfoMap;
-        this.showShopsDialog = true;
-      }
+      let data = info.shopInfoMap
+        for(let key in data){
+          let shopObj = data[key]
+          this.shopList.push(shopObj)
+        }
+      this.showShopsDialog = true
     },
     //帮助中心搜索
     onSearch() {
