@@ -199,7 +199,7 @@ export default {
                         showClose:false,
                         closeOnClickModal:false
                     }).then(() => {
-                        this.$router.push({path:'/order/printerSeting'})
+                        this.$router.push({path:'/order/printerSeting',query:this.$route.query})
                     }).catch(() => {});
                 }
             })
@@ -220,7 +220,7 @@ export default {
                         showClose:false,
                         closeOnClickModal:false
                     }).then(() => {
-                        this.$router.push({path:'/order/printerSeting'})
+                        this.$router.push({path:'/order/printerSeting',query:this.$route.query})
                     }).catch(() => {});
                 }else{
                     this.$message.success('调用打印小票成功');
@@ -235,7 +235,7 @@ export default {
                     showClose:false,
                     closeOnClickModal:false
                 }).then(() => {
-                    this.$router.push({path:'/order/printerSeting'})
+                    this.$router.push({path:'/order/printerSeting',query:this.$route.query})
                 }).catch(() => {});
             });
         }
