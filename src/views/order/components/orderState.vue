@@ -166,7 +166,7 @@
                     <el-steps :active="active">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <template v-if="orderInfo.deliveryWay == 1">
+                        <template v-if="orderInfo.deliveryWay == 4">
                              <el-step title="商户备货" description="用户已完成付款，请尽快完成备货"></el-step>
                         </template>    
                        <template v-else>
@@ -191,7 +191,7 @@
                     <el-steps active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <template v-if="orderInfo.deliveryWay == 1">
+                        <template v-if="orderInfo.deliveryWay == 4">
                              <el-step title="商户备货" description="用户已完成付款，请尽快完成剩余备货"></el-step>
                         </template>    
                        <template v-else>
@@ -469,7 +469,7 @@
                 </template>
             </template>
         </template>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData"></component>
     </div>
 </template>
 <script>
@@ -535,7 +535,7 @@ export default {
             }
         },
         merchantType(){
-            if(this.orderInfo.deliveryWay==1){
+            if(this.orderInfo.deliveryWay==4){
                 return '商户备货'
             }else{
                 return '商户发货'

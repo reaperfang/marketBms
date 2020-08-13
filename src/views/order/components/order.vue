@@ -126,7 +126,7 @@
             </div>
         </div>
         <Empty v-else></Empty>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data='currentData'></component>
     </div>
 </template>
 <script>
@@ -427,7 +427,7 @@ export default {
                         font-size:12px;
                         font-weight:500;
                         color:rgba(101,94,255,1);
-                        margin-left:10px;
+                        margin-left:-10px;
                         margin-right:5px;
                     }
                     .order-code {
@@ -584,7 +584,7 @@ export default {
             height: 20px;
             background: url(../../../assets/images/order/auto.png) no-repeat;
             position: relative;
-            margin-right: 5px;
+            margin-right: 15px;
         }
         .urge {
             display: inline-block;
@@ -592,7 +592,7 @@ export default {
             height: 20px;
             background: url(../../../assets/images/order/urge.png) no-repeat;
             background-size: 100% 100%;
-            margin-right: 10px;
+            margin-right: 20px;
         }
     }
 </style>

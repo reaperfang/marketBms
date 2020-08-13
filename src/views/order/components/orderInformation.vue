@@ -6,8 +6,9 @@
                     <div class="item">
                         <div class="label">配送方式</div>
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
+                        <!-- && orderInfo.deliveryDate -->
                     </div>
-                    <template v-if="orderInfo.deliveryWay == 4 && orderInfo.deliveryDate">
+                    <template v-if="orderInfo.deliveryWay == 4">
                         <div class="item">
                             <div class="label">提货信息</div> 
                             <div class="value">
