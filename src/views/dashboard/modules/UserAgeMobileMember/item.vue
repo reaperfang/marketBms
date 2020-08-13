@@ -6,7 +6,8 @@
 			</el-col>
 		</el-row>
 		<el-row class="item-content"> 
-            <vring :chartData="chartData"></vring>
+            <vring :chartData="chartData" :title="title"></vring>
+			<!-- <component :is="isIcon" :data="{key:title,value:'8445566'}"></component> -->
         </el-row>
 	</div>
 </template>
@@ -16,6 +17,7 @@ import gridtitle from "../../components/title/index";
 import vring from "../../components/v-chart/ring/index";
 import { mapGetters, mapActions, mapState } from "vuex";
 
+
 export default {
 	watch: {
 		// flowData(val) {
@@ -24,7 +26,8 @@ export default {
 	props: ["title","chartData"],
 	components: { gridtitle ,vring},
 	data: function() {
-		return {};
+		return {
+		};
 	},
 	computed: {
 		//...mapState([""])
