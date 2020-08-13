@@ -3,24 +3,7 @@
 		<vhead></vhead>
 		<el-row class="row-2">
 			<el-col :span="7">
-				<div class="grid-content flex-column">
-					<el-row type="flex" justify="space-between" class="item">
-						<el-col :span="12">
-							<gridtitle :title="'用户渠道分别'"></gridtitle>
-						</el-col>
-						<el-col :span="12">
-							<gridtitle :title="'渠道会员转换'"></gridtitle>
-						</el-col>
-					</el-row>
-					<el-row type="flex" justify="space-between" class="item">
-						<el-col :span="12">
-							<gridtitle :title="'性别年龄分布'"></gridtitle>
-						</el-col>
-						<el-col :span="12">
-							<gridtitle :title="'绑定手机号'"></gridtitle>
-						</el-col>
-					</el-row>
-				</div>
+				<useragemobilemember></useragemobilemember>
 			</el-col>
 			<el-col :span="10">
 				<todayuserdeal></todayuserdeal>
@@ -63,20 +46,6 @@
 				</div>
 			</el-col>
 			<el-col :span="10">
-				<!-- <div class="row-4-grid-content middle-grid-margin">
-					<el-row type="flex" justify="space-between" class="item">
-						<el-col :span="12">
-							<gridtitle
-								:title="'支付金额(最近七天)'"
-							></gridtitle>
-						</el-col>
-						<el-col :span="12">
-							<gridtitle
-								:title="'商城浏览(最近七天)'"
-							></gridtitle>
-						</el-col>
-					</el-row>
-				</div> -->
 				<mallhistory></mallhistory>
 			</el-col>
 			<el-col :span="7">
@@ -91,6 +60,8 @@ import vhead from "./components/head/index";
 import gridtitle from "./components/title/index";
 
 //module
+
+import useragemobilemember from "./modules/UserAgeMobileMember/index"
 
 //今日交易金额 用户交易分别
 import todayuserdeal from "./modules/TodayUserDeal/index";
@@ -111,6 +82,7 @@ export default {
 	name: "mall",
 	components: {
 		vhead,
+		useragemobilemember,
 		gridtitle,
 		realtimeuser,
 		mallvistors,
