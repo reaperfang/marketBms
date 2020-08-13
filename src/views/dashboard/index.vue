@@ -114,23 +114,7 @@
 				</div>
 			</el-col>
 			<el-col :span="7">
-				<div class="row-3-grid-content">
-					<el-row
-						type="flex"
-						justify="space-between"
-						class="item-title"
-					>
-						<el-col :span="12">
-							<gridtitle :title="'总交易金额分布'"></gridtitle>
-						</el-col>
-						<el-col :span="12">
-							<gridtitle :title="'客单价(最近七天)'"></gridtitle>
-						</el-col>
-					</el-row>
-					<!-- <el-row class="item-content">
-						<realtimeuser></realtimeuser>
-					</el-row> -->
-				</div>
+				<transaction></transaction>
 			</el-col>
 		</el-row>
 
@@ -194,8 +178,14 @@ import gridtitle from "./components/title/index";
 import vpay from "./components/pay/index";
 
 //module
+//实时交易用户
 import realtimeuser from "./modules/RealtimeUser/index";
+
+//商城访客(最近七天)
 import mallvistors from "./modules/MallVistors/index";
+
+//总交易金额分布 客单价近七天
+import transaction from "./modules/transaction/index"
 export default {
 	name: "mall",
 	components: {
@@ -205,7 +195,8 @@ export default {
 		gridtitle,
 		vpay,
 		realtimeuser,
-		mallvistors
+		mallvistors,
+		transaction
 	},
 	data() {
 		return {

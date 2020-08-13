@@ -1,13 +1,11 @@
 <template>
-	<div class="v-chart-line">
-		<ve-line
-			:data="chartData"
-			:settings="chartSettings"
+	<div class="v-chart-histogram">
+		<ve-histogram
 			:extend="chartExtend"
+			:data="chartData"
 			v-bind="pubSetting"
-			:tooltip-visible="true"
 			:legend-visible="false"
-		></ve-line>
+		></ve-histogram>
 	</div>
 </template>
 
@@ -19,24 +17,37 @@ export default {
 	data() {
 		return {
 			chartData: {
-				columns: ["日期", "访问人数"],
+				columns: ["日期", "访问用户"],
 				rows: [
-					{ 日期: "1/1", 访问人数: 1393 },
-					{ 日期: "1/2", 访问人数: 3530 },
-					{ 日期: "1/3", 访问人数: 2923 },
-					{ 日期: "1/4", 访问人数: 1723 },
-					{ 日期: "1/5", 访问人数: 3792 },
-					{ 日期: "1/6", 访问人数: 4593 }
+					{
+						日期: "1/1",
+						访问用户: 1393
+					},
+					{
+						日期: "1/2",
+						访问用户: 3530
+					},
+					{
+						日期: "1/3",
+						访问用户: 2923
+					},
+					{
+						日期: "1/4",
+						访问用户: 1723
+					},
+					{
+						日期: "1/5",
+						访问用户: 3792
+					},
+					{
+						日期: "1/6",
+						访问用户: 4593
+					}
 				]
 			},
-			chartSettings: {
-				area: true
-			},
 			chartExtend: {
-				color: "rgba(71, 225, 255, 0.15)",
 				grid: {
-					top: "10px",
-					bottom: "7px"
+					top: "10px"
 				},
 				xAxis: {
 					axisLine: {
@@ -65,7 +76,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-chart-line {
+.v-chart-histogram {
 	height: 100%;
 	// background: yellow;
 }
