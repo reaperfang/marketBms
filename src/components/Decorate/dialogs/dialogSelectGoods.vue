@@ -218,7 +218,7 @@ export default {
 
     /* 添加新商品跳转 */
     addNewGoods() {
-      let newUrl = `${window.location.origin}/bp/goods/addGoodsOnly`
+      let newUrl = `${window.location.origin}/bp/goods/addGoods`
       let newWindow = window.open("about:blank");
       newWindow.location.href = newUrl;
     }
