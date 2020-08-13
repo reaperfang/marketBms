@@ -148,9 +148,9 @@ export default {
      /* 检查输入正确性 */
     checkInput(resultData) {
       //检测基础信息
-      if(!this.checkBaseInfo(resultData)){
-        return false;
-      }
+      // if(!this.checkBaseInfo(resultData)){
+      //   return false;
+      // }
       //检测组件有必填条件的则进行验证
       if(!this.checkComponents(resultData)){
         return false;
@@ -195,20 +195,20 @@ export default {
     },
 
     /* 检测基础信息 */
-    checkBaseInfo(data) {
-      if (this.baseInfo.vError || !data.name || !data.explain) {
-        this.$alert('请填写基础信息后重试，点击确认返回编辑分类信息!', '警告', {
-          confirmButtonText: '确定',
-          callback: action => {
-            //打开基础信息面板
-            this.$store.commit('setCurrentComponentId', this.basePropertyId);
-            this.setLoading(false);
-          }
-        });
-        return false;
-      }
-      return true;
-    },
+    // checkBaseInfo(data) {
+    //   if (this.baseInfo.vError || !data.name || !data.explain) {
+    //     this.$alert('请填写基础信息后重试，点击确认返回编辑分类信息!', '警告', {
+    //       confirmButtonText: '确定',
+    //       callback: action => {
+    //         //打开基础信息面板
+    //         this.$store.commit('setCurrentComponentId', this.basePropertyId);
+    //         this.setLoading(false);
+    //       }
+    //     });
+    //     return false;
+    //   }
+    //   return true;
+    // },
 
     /* 控件面板初始化 */
     widgetPanelInited(scope) {

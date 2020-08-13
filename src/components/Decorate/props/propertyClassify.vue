@@ -55,7 +55,8 @@ export default {
         colorStyle: '#fff',
         explain: '',
         vError: false,
-        pageInfos: []
+        pageInfos: [],
+        saveCallBack: this.saveCallBack //保存时需要触发的回调函数
       },
       rules: {
         name: [
@@ -77,6 +78,16 @@ export default {
     // this.changeValidate('');
   },
   methods: {
+    //保存时需要触发的回调函数
+    saveCallBack(data, _this) {
+      if (_this.baseInfo.vError || !data.name || !data.explain) {
+        // _this.$alert('请填写基础信息后重试，点击确认返回编辑分类信息!', '警告', {
+        //   confirmButtonText: '确定'
+        // });
+        return false;
+      }
+      return true;
+    },
 
      /* 富文本内容更新 */
     editorValueUpdate(html) {
