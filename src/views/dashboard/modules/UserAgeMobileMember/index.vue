@@ -13,7 +13,7 @@
 				<vitem :title="'性别年龄分布'" :chartData="chartData"></vitem>
 			</el-col>
 			<el-col :span="12">
-					<vitem :title="'绑定手机号'" :chartData="chartData"></vitem>
+				<vitem :title="'绑定手机号'" :chartData="chartData"></vitem>
 			</el-col>
 		</el-row>
 	</div>
@@ -21,7 +21,6 @@
 
 <script>
 import gridtitle from "../../components/title/index";
-// import vring from "../../components/v-chart/ring/index";
 import vitem from "./item";
 import { mapGetters, mapActions, mapState } from "vuex";
 
