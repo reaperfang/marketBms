@@ -1092,7 +1092,7 @@ export default {
                 }
                 if(+obj.salePrice<+obj.costPrice) {
                     this.$message({
-                        message: '售卖价不得低于成本价1',
+                        message: '售卖价不得低于成本价',
                         type: 'warning'
                     });
                     return false
