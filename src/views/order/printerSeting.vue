@@ -17,8 +17,8 @@
 				<el-popover
 					placement="bottom-start"
 					trigger="click">
-					<img v-if="ruleForm.brand == 1" src="@/assets/images/order/printerInfo.jpg" alt="" style="width: 327px; height: 134px">
 					<img v-if="ruleForm.brand == 2" src="@/assets/images/order/yilianyun.png" alt="" style="width: 154px; height: 178px">
+					<img v-else src="@/assets/images/order/printerInfo.jpg" alt="" style="width: 327px; height: 134px">
 					<div slot="reference" class="hint">找不到设备号？</div>
 				</el-popover>
 			</el-form-item>

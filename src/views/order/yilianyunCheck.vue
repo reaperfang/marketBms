@@ -9,7 +9,7 @@ export default {
   data() {
     return{
       status:false,
-		filedMsg: ''
+		filedMsg: '',
     };
   },
   created(){
@@ -23,7 +23,7 @@ export default {
             state: this.$route.query.state
         };
         this._apis.order.sendYlyunResult(params).then(res => {
-            if (res.data == 1) {
+            if (res.type == 1) {
 				this.status = true;
 			} else {
             	this.filedMsg = res.msg
