@@ -185,6 +185,7 @@ export default {
           if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
             this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
               this.getShopAuthList()
+              this.$store.commit('setStoreGuide', this.shopList[0].storeGuide)
               if (this.isAdminUser && this.shopList.length > 0 && this.shopList[0].storeGuide === -1) {
                 this.$router.push({ path: '/profile/guidePrompt' })
               } else {
