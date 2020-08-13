@@ -297,8 +297,8 @@ export default {
       stayProcessedCount: "",
       staySendCount: "",
       stayAuthCount: "",
-      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",//客户工作台地址
-      gzLink:location.protocol + "//omo.aiyouyi.cn/cp/?cid=" + this.cid,//公众号商城地址
+      pageLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh",//客户工作台地址
+      gzLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid,//公众号商城地址
       qrCode: "",//客户工作台二维码
       wxQrcode:"",//小程序二维码
       gzQrcode:"",//公众号二维码
