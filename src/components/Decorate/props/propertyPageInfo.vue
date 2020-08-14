@@ -119,6 +119,9 @@ export default {
       //   return false;
       // }
       if (_this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+        _this.$alert('请填写基础信息后重试!', '警告', {
+          confirmButtonText: '确定'
+        });
         return false;
       }
       return true;
