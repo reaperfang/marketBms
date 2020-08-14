@@ -273,6 +273,7 @@
       :_ids="_ids"
       :orderSendGoodsHander="orderSendGoodsHander"
       :params="params"
+      :list="_list"
     ></component>
   </div>
 </template>
@@ -352,7 +353,7 @@ export default {
       expressCompanyList: [],
       sendGoods: "",
       title: "",
-      express: true,
+      express: null,
       sending: false,
       errorMessage: '',
       showError: false,
@@ -364,7 +365,8 @@ export default {
       distributorSet: false,
       ajax: true,
       _ids: [],
-      params: {}
+      params: {},
+      _list: []
     };
   },
   created() {
@@ -625,6 +627,11 @@ export default {
                 { required: false, message: "请输入快递单号", trigger: "blur" }
               ]);
           }
+
+          this._list.splice(0, 1, Object.assign({}, this._list[0], {
+            expressCompanyCodes: this.ruleForm.expressCompanyCode
+          }))
+          console.log(this._list)
         })
         .catch(error => {
           this.visible = false;
@@ -805,12 +812,13 @@ export default {
 
               console.log(res)
               if(res && res.length) {
+                this._list[0].sizeList = res
                 this.currentData = {
-                  list: res,
-                  expressCompanyCode: this.ruleForm.expressCompanyCode,
+                  list: this._list,
                   expressCompanyList: this.expressCompanyList
                 }
                 this.currentDialog = 'SelectSizeDialog'
+                this.title = '提示'
                 this.dialogVisible = true
               }
             } catch(e) {
@@ -882,6 +890,8 @@ export default {
             val.showError = false
             val.errorMessage = ''
           })
+          this._list = res
+          console.log(this._list)
           this.tableData = res[0].orderItemList;
           this.tableData.forEach(row => {
             this.$refs.table.toggleRowSelection(row);

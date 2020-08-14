@@ -176,7 +176,7 @@
                                 <span v-else @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
                             <!-- <template>
-                                <span>核销验证</span>
+                                <span @click="verificationHandler">核销验证</span>
                             </template> -->
                         </div>
                     </template>
@@ -192,12 +192,21 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
+        <component
+            v-if="dialogVisible"
+            :is="currentDialog"
+            :dialogVisible.sync="dialogVisible"
+            :data="currentData"
+            @submit="onSubmit"
+            :title="title">
+        </component>
     </div>
 </template>
 <script>
 import Pagination from '@/components/Pagination'
 import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import utils from "@/utils";
+import VerificationDialog from "@/views/order/dialogs/verificationDialog";
 
 export default {
     data() {
@@ -236,7 +245,11 @@ export default {
             express: false,
             checkedAll: false,
             isIndeterminate: false,
-            isOrderAutoSend: false
+            isOrderAutoSend: false,
+            currentDialog: '',
+            dialogVisible: false,
+            currentData: {},
+            title: ''
         }
     },
     filters: {
@@ -299,6 +312,10 @@ export default {
         }
     },
     methods: {
+        verificationHandler() {
+            this.currentDialog = 'VerificationDialog'
+            this.dialogVisible = true
+        },
         getShopInfo() {
             let id = this.cid
             this._apis.set.getShopInfo({id:id}).then(response =>{
@@ -492,7 +509,8 @@ export default {
     },
     components: {
         Pagination,
-        DeliveryMethod
+        DeliveryMethod,
+        VerificationDialog
     }
 }
 </script>

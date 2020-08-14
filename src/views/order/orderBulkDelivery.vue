@@ -106,7 +106,7 @@
                           <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                          <el-input maxlength="20" :disabled="!item.express" v-model="item.expressNos" :placeholder="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
+                          <el-input maxlength="20" :disabled="item.express != null" v-model="item.expressNos" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
                           <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                       </el-form>
@@ -184,6 +184,9 @@
       :title="title"
       :ajax="ajax"
       @getDetail="getDetail"
+      :orderSendGoodsHander="orderSendGoodsHander"
+      :params="params"
+      :list="list"
     ></component>
   </div>
 </template>
@@ -194,6 +197,7 @@ import $ from 'jquery';
 import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 export default {
   data() {
@@ -212,7 +216,9 @@ export default {
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
       distributorSet: false,
       allchecked: true,
-      ajax: true
+      ajax: true,
+      _list: [],
+      params: {}
     };
   },
   created() {
@@ -747,7 +753,7 @@ export default {
                 item.showErrorExpressCompany = true
                 item.errorMessageExpressCompany = '请选择快递公司'
               } else {
-                if(item.express && !item.expressNos) {
+                if((item.express == null) && !item.expressNos) {
                   isWrong = true
                   item.showErrorExpressNos = true
                   item.errorMessageExpressNos = '请输入快递单号'
@@ -855,46 +861,79 @@ export default {
             return obj;
           })
         };
+        this.params = params
+        let _arr = []
 
-        this._apis.order
-          .orderSendGoods(params)
-          .then(res => {
-            this.$message.success('发货成功');
-            this.sending = false
-            // this.$router.push(
-            //   "/order/deliverGoodsSuccess?ids=" +
-            //     this.list.map(val => val.id).join(",") +
-            //     "&type=orderBulkDelivery"
-            // );
+        this.list.forEach(item => {
+          let pro = this._apis.order.getExpressSpec({ companyCode: item.expressCompanyCodes, cid: this.cid })
 
-            // this.$router.push(
-            //   "/order/deliverGoodsSuccess?ids=" +
-            //     res.success.map(val => val.orderInfoId).join(",") +
-            //     "&type=orderBulkDelivery"
-            // );
-            let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
+          _arr.push(pro)
+        })
+        this._list = JSON.parse(JSON.stringify(this.list)) 
 
-            this.$router.push({
-              path: "/order/deliverGoodsSuccess",
-              query: {
-                ids: res.success
-                  .map(val => val.expressParameter.orderSendInfo.id)
-                  .join(","),
-                orderId: res.success
-                  .map(val => val.expressParameter.orderSendInfo.orderId)
-                  .join(","),
-                type: "orderBulkDelivery",
-                printIds
-              }
-            });
+        Promise.all(_arr).then((values) => {
+          values.forEach((item, index) => {
+            this._list[index].sizeList = item
+            if(!item || !item.length) {
+              this._list.splice(index, 1)
+            }
           })
-          .catch(error => {
-            this.$message.error(error);
-            this.sending = false
-          });
+
+          if(this._list.length) {
+            this.currentData = {
+              list: this._list,
+              expressCompanyList: this.expressCompanyList,
+            }
+            this.currentDialog = 'SelectSizeDialog'
+            this.title = '提示'
+            this.dialogVisible = true
+          } else {
+            this.orderSendGoodsHander(params)
+          }
+        });
+
+        
       } catch (e) {
         console.error(e);
       }
+    },
+    orderSendGoodsHander(params) {
+      this._apis.order
+        .orderSendGoods(params)
+        .then(res => {
+          this.$message.success('发货成功');
+          this.sending = false
+          // this.$router.push(
+          //   "/order/deliverGoodsSuccess?ids=" +
+          //     this.list.map(val => val.id).join(",") +
+          //     "&type=orderBulkDelivery"
+          // );
+
+          // this.$router.push(
+          //   "/order/deliverGoodsSuccess?ids=" +
+          //     res.success.map(val => val.orderInfoId).join(",") +
+          //     "&type=orderBulkDelivery"
+          // );
+          let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
+
+          this.$router.push({
+            path: "/order/deliverGoodsSuccess",
+            query: {
+              ids: res.success
+                .map(val => val.expressParameter.orderSendInfo.id)
+                .join(","),
+              orderId: res.success
+                .map(val => val.expressParameter.orderSendInfo.orderId)
+                .join(","),
+              type: "orderBulkDelivery",
+              printIds
+            }
+          });
+        })
+        .catch(error => {
+          this.$message.error(error);
+          this.sending = false
+        });
     },
     select(index, i) {
       if(this.list[0].deliveryWay == 4) {
@@ -970,7 +1009,7 @@ export default {
         .then(res => {
           console.log(res);
           res.forEach(val => {
-            val.express = true
+            val.express = null
             val.other = "";
             val.checked = true;
             val.expressNos = "";
@@ -1012,6 +1051,7 @@ export default {
             this.getDistributorList(res.length);
           }
           this.list = res;
+          this._list = JSON.parse(JSON.stringify(res))
           this._apis.order
             .fetchOrderAddress({ id: this.cid, cid: this.cid })
             .then(response => {
@@ -1042,7 +1082,8 @@ export default {
     }
   },
   components: {
-    ReceiveInformationDialog
+    ReceiveInformationDialog,
+    SelectSizeDialog
   }
 };
 </script>
