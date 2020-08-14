@@ -118,7 +118,7 @@ export default {
       //   // });
       //   return false;
       // }
-      if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+      if (_this.baseInfo.vError || !data.name || !data.title || !data.explain) {
         return false;
       }
       return true;
