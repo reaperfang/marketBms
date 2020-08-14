@@ -19,7 +19,7 @@ export default {
   data () {
     return {
       isFirstLogin: false,
-      storeGuide: null,
+      // storeGuide: null,
       isClick: false, // 为了解决在初始化设置引导状态时，后端未返回结果的情况，用户直接操作后，导致bug
     }
   },
@@ -29,10 +29,11 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
     },
-    // storeGuide() {
-    //   let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-    //   return shopInfo.storeGuide || null;
-    // }
+    storeGuide() {
+      return this.$store.state.shop.storeGuide
+      // let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      // return shopInfo.storeGuide || null;
+    }
   },
 
   watch: {},
@@ -53,6 +54,7 @@ export default {
       this._apis.set.updateShopInfo(data).then(response =>{
         this.$store.dispatch('getShopInfo');
         this.storeGuide = response && response.storeGuide || storeGuide
+        this.$store.commit('setStoreGuide', this.storeGuide)
         this.isClick = true
         // this.$nextTick(()=> {
         //   this.$refs.shopInfoMap.clearSearchResultList()

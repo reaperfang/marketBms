@@ -76,9 +76,7 @@
 <script>
 import utils from "@/utils";
 import Blob from '@/assets/js/excel/Blob'
-// import Export2Excel from '@/assets/js/excel/Export2Excel.js'
-const Export2Excel = () =>
-  import(/* webpackChunkName: "Export2Excel" */ '@/assets/js/excel/Export2Excel.js')
+import Export2Excel from '@/assets/js/excel/Export2Excel.js'
 import sgsTable from './components/sgsTable'
 import financeCons from '@/system/constant/finance'
 import { mapMutations } from 'vuex'

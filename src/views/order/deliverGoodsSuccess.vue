@@ -41,11 +41,13 @@
                     <router-link :to="{ path: '/order/printDistributionSheet', query: {ids: this.$route.query.ids} }">打印配送单</router-link>
                 </template>
             </div>
-        </div>
-    </div>
+        </div> </div>
+    
 </template>
 <script>
+
 export default {
+
     data() {
         return {
 
@@ -71,6 +73,9 @@ export default {
 
             return returnIdsArr.join(',')
         }
+    },
+    methods:{
+
     }
 }
 </script>

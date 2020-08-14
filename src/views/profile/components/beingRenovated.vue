@@ -163,6 +163,7 @@ export default {
       return new Promise((resolve, reject) => {
         this._apis.set.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');
+          this.$store.commit('setStoreGuide', storeGuide)
           resolve(response)
         }).catch(error =>{
           reject(error)
@@ -293,6 +294,7 @@ export default {
         chargeType: 1,
         startIndex: this.form.pageNo,
         pageSize: this.form.pageSize,
+        sortBy: 3 // 新增根据人气排序
       }
       return new Promise((resolve, reject) => {
         this._apis.goodsOperate.getEffTemplateList(reqParams).then((response) => {

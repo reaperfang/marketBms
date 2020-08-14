@@ -75,9 +75,9 @@
         width="150">
         <template slot-scope="scope">
           <div class="opeater">
-            <el-button class="btn" @click="goEdit(scope.row.id)" type="text" v-permission="['设置', '上门自提','默认页面', '编辑自提点']">编辑</el-button>
-            <span v-permission="['设置', '上门自提','默认页面', '编辑自提点']">|</span>
-            <el-button class="btn" type="text" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
+            <el-button class="btn" @click="goEdit(scope.row.id)" type="text" v-permission="['设置', '上门自提','默认页面', '编辑']">编辑</el-button>
+            <span>|</span>
+            <el-button class="btn" type="text" v-permission="['设置', '上门自提','默认页面', '启用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
           </div>
         </template>
       </el-table-column>

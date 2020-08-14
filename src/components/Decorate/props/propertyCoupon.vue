@@ -18,11 +18,11 @@
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
             v-for="tag in displayList"
-            :key="tag.title"
+            :key="tag.id"
             :closable="ruleForm.addType === 1"
             style="margin-right:5px;"
             type="success" @close="deleteItem(tag)" :title="getTitleTips(tag)">
-            {{tag.title}}
+            {{tag.title.length >= 5 ? tag.title.substring(0, 3) + '...' : tag.title}}
           </el-tag>
         </div>
       </el-form-item>
@@ -238,6 +238,7 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ .el-tag.el-tag--success{
+  position: relative;
   color: #fff;
   width: 56px;
   height: 26px;
@@ -247,6 +248,13 @@ export default {
   line-height: 26px;
   border: none;
   padding: 0px 5px;
+  .el-icon-close {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #92929B;
+    color: #fff;
+  }
 }
 .property-coupon {
   .add-coupon {

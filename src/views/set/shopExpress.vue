@@ -865,7 +865,7 @@ export default {
         }).catch(()=> {
         });
       } else {
-          this.$router.push({ path:'/set/addressUpdate', query: { source: 1 } })
+          this.$router.push({ path:'/set/addressAdd', query: { source: 1 } })
       }
     },
     // 开启商家配送 api
@@ -1016,6 +1016,17 @@ export default {
           this.errWeekMsg = '请点击编辑，选择重复日'
           isValidWeeks = false
         }
+      }
+      if (!this.ruleForm.lng || !this.ruleForm.lat) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: '当前地址无法获取经纬度，请重新修改取货地址',
+          confirmText: '我知道了',
+          showCancelButton: false
+        })
+        this.isLoading = false
+        return false
       }
       console.log('handleSubmit:repeatCycle')
       this.$refs[formName].validate((valid) => {

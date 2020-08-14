@@ -1,27 +1,32 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="500px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="640px" :showFooter="showFooter">
         <div>
             <div>
                 <div class="header">
                     <i class="el-icon-warning"></i>
                     <p>您未设置电子面单打印纸尺寸，请选择电子面单打印纸规格尺寸，选定后可点击继续，完成发货。</p>
                 </div>
-                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
-                    <el-form-item label="已选快递公司：">
-                        <el-select disabled v-model="data.expressCompanyCode" placeholder="请选择">
-                            <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="电子面单规格尺寸：" prop="specificationSize">
-                        <el-select v-model="ruleForm.specificationSize" placeholder="请选择">
-                            <el-option v-for="(item, index) in data.list" :key="index" :label="item.sizeSpecs" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
+                <div class="content-box">
+                    <el-form ref="ruleForm" label-width="150px" class="demo-ruleForm">
+                        <div v-for="(item, index) in data.list" :key="index">
+                            <el-form-item label="已选快递公司：">
+                                <el-select disabled v-model="item.expressCompanyCodes" placeholder="请选择">
+                                    <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="电子面单规格尺寸：" prop="specificationSize">
+                                <el-select v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
+                                    <el-option v-for="(item, index) in item.sizeList" :key="index" :label="item.sizeSpecs" :value="item.templateSize"></el-option>
+                                </el-select>
+                                <p v-if="item.showError">请选择</p>
+                            </el-form-item>
+                        </div>
+                    </el-form>
+                </div>
             </div>
             <div class="footer">
+                <el-button @click="submit" type="primary">继续</el-button>
                 <el-button @click="visible = false">取消</el-button>
-                <el-button @click="submit" type="primary">确定</el-button>
             </div>
         </div>
     </DialogBase>
@@ -44,8 +49,38 @@ export default {
         }
     },
     methods: {
+        specificationSizeChange(value, index) {
+            if(!value) {
+                this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
+                    showError: true
+                }))
+            } else {
+                this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
+                    showError: false
+                }))
+            }
+        },
         submit() {
-            this.orderSendGoodsHander(this.params)
+            let _params = JSON.parse(JSON.stringify(this.params))
+
+            _params.sendInfoDtoList.forEach((val, index) => {
+                val.specificationSize = this.data.list[index].specificationSize
+            })
+            this.data.list.forEach((item, index) => {
+                if(!item.specificationSize) {
+                    this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
+                        showError: true
+                    }))
+                } else {
+                    this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
+                        showError: false
+                    }))
+                }
+            })
+            if(this.data.list.find(item => !item.specificationSize)) {
+                return
+            }
+            this.orderSendGoodsHander(_params)
             this.visible = false
         }
     },
@@ -79,6 +114,9 @@ export default {
         },
         params: {
 
+        },
+        list: {
+
         }
     },
     components: {
@@ -99,7 +137,7 @@ export default {
     }
    .footer {
        text-align: center;
-       margin-top: 140px;
+       margin-top: 52px;
    }
    /deep/ .el-icon-warning {
        margin-right: 16px;
@@ -108,6 +146,23 @@ export default {
            font-size: 30px;
        }
    }
+   /deep/ .el-input {
+       width: 360px;
+   }
+   /deep/ .el-dialog__body {
+       padding: 40px 40px 35px 40px;
+   }
+   .content-box {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+   .content-box::-webkit-scrollbar-thumb {
+        background: rgba(101,94,255,0.4) !important;
+    }
+    .content-box::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
 </style>
 
 

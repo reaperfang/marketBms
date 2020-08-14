@@ -6,19 +6,19 @@ export default {
                   wxhex: 1
             },
             {
-                  hex: '#FFA77D',
+                  hex: '#BCEEC5', 
                   wxhex: 2
             },
             {
-                  hex: '#FFFFFF',
+                  hex: '#FFA77D', 
                   wxhex: 3
             },
             {
-                  hex: '#000000',
+                  hex: '#FFFFFF', 
                   wxhex: 4
             },
             {
-                  hex: '#BCEEC5',                  
+                  hex: '#000000',                   
                   wxhex: 5
             }
       ]

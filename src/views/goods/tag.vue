@@ -29,7 +29,7 @@
       v-loading="loading"
       :data="list"
       ref="table"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
@@ -41,7 +41,7 @@
           <span>{{scope.row.enable | enableFilter}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="operate-span blue pointer" @click="change(scope.row)">修改</span>
           <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="operate-span blue pointer" @click="hide(scope.row)">

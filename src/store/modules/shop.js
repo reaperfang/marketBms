@@ -4,7 +4,8 @@ import utils from '@/utils';
 const app = {
   state: {
     shopInfo: {},  //店铺信息
-    colorStyle: {}  //店铺颜色风格
+    colorStyle: {},  //店铺颜色风格
+    storeGuide: null
   },
   mutations: {
     setShopInfo: (state, data) => {
@@ -12,6 +13,9 @@ const app = {
     },
     setColorStyle: (state, data) => {
       state.colorStyle = data;
+    },
+    setStoreGuide(state, val) {
+      state.storeGuide = +val
     }
   },
   actions: {
@@ -23,6 +27,7 @@ const app = {
         let cid = shopInfo.id || '';
         this._apis.shop.getShopInfo({id: cid}).then((response)=>{
           commit('setShopInfo', response);
+          commit('setStoreGuide', response.storeGuide);
           resolve()
         }).catch((error)=>{
           commit('setShopInfo', {});

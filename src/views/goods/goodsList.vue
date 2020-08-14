@@ -9,7 +9,7 @@
 		</div>-->
         <div class="goods-list">
             <header class="header">
-                <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
+                <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$route.name === 'goodsListOnly' ? $router.push('/goods/addGoodsOnly') : $router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
                 </div>
                 <!-- <div v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="item pointer" @click="$router.push('/goods/batchPriceChange')">批量改价</div>
@@ -71,7 +71,7 @@
                     ref="table"
                     style="width: 100%"
                     :default-sort = "{prop: 'stock', order: 'descending'}"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                    :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
                     @selection-change="handleSelectionChange"
                     @sort-change="sortChange"
                     :empty-text="emptyText">
@@ -191,7 +191,7 @@
                             <span class="store">{{scope.row.saleCount}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" width="140">
+                    <el-table-column label="操作" width="140" fixed="right" v-if="$route.name !== 'goodsListOnly'">
                         <template slot-scope="scope">
                             <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="编辑" placement="bottom">
                                 <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="operate-editor pointer"><i class="i-bg"></i></span>
@@ -224,14 +224,16 @@
                         </div>
                     </div>
                     <el-button v-if="showTableCheck" @click="cancelHandler">取消</el-button> -->
-                    <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allUpper" class="border-button">批量上架</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
-                    <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
-                    <el-button @click="shareMore" class="border-button">批量推广</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
-                    <el-button @click="copyUrl" class="border-button">复制链接</el-button>
-                    <el-button @click="editCategory" class="border-button">编辑分类</el-button>
+                    <template v-if="$route.name !== 'goodsListOnly'">
+                        <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allUpper" class="border-button">批量上架</el-button>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
+                        <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
+                        <el-button @click="shareMore" class="border-button">批量推广</el-button>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
+                        <el-button @click="copyUrl" class="border-button">复制链接</el-button>
+                        <el-button @click="editCategory" class="border-button">编辑分类</el-button>
+                    </template>
                 </div>
             </div>
             <div class="footer">
@@ -249,6 +251,10 @@
     </div>
 </template>
 <style lang="scss" scoped>
+/deep/.el-table thead {
+    color:rgba(68,67,75,1);
+    font-size:14px;
+}
 .table-footer {
     display: flex;
     align-items: center;
@@ -568,7 +574,11 @@ export default {
                 let total = +res.total
                 
                 if(!total) {
-                    vm.$router.replace('/goods/goodsListEmpty')
+                    if(this.$route.name === 'goodsListOnly') {
+                        vm.$router.replace('/goods/goodsListEmptyOnly')
+                    }else {
+                        vm.$router.replace('/goods/goodsListEmpty')
+                    }
                 }
             }).catch(error => {
                 //this.loading = false
@@ -747,8 +757,9 @@ export default {
                 }) 
 
             } else {
+                this.getList();
                 this.$message({
-                message: "请输入合法数字",
+                message: "请您输入正确的数字",
                 type: "warning"
                 });
             }
@@ -1440,7 +1451,11 @@ export default {
                     this.list = res.list
                     this.loading = false
                     // if(this.allTotal && !this.total) {
-                    //     this.$router.push('/goods/goodsListEmpty')
+                    //     if(this.$route.name === 'goodsListOnly') {
+                    //         this.$router.push('/goods/goodsListEmptyOnly')
+                    //     }else {
+                    //         this.$router.push('/goods/goodsListEmpty')
+                    //     }
                     // }
                 })
             }).catch(error => {
@@ -1482,7 +1497,11 @@ export default {
                             let total = +res.total
                             
                             if(!total) {
-                                this.$router.replace('/goods/goodsListEmpty')
+                                if(this.$route.name === 'goodsListOnly') {
+                                    vm.$router.replace('/goods/goodsListEmptyOnly')
+                                }else {
+                                    vm.$router.replace('/goods/goodsListEmpty')
+                                }
                             }
                         }).catch(error => {
                             //this.loading = false
