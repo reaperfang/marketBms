@@ -9,7 +9,7 @@
 								src="../../../../assets/images/dashboard/head/left/default.png"
 								alt
 							/>
-							<span>店铺名称</span>
+							<span>店 铺 名 称</span>
 						</div>
 					</el-col>
 					<el-col
@@ -20,7 +20,7 @@
 						:xl="16"
 						class="content"
 					>
-						<div>交易数据大屏</div>
+						<div>交  易  数  据  大  屏</div>
 					</el-col>
 					<el-col
 						:xs="8"
@@ -35,14 +35,14 @@
 								src="../../../../assets/images/dashboard/head/right/refresh/default.png"
 								alt
 							/>
-							<span>刷新</span>
+							<span>刷 新</span>
 						</div>
 						<div class="fullscreen" @click="fullscreen">
 							<img
 								src="../../../../assets/images/dashboard/head/right/fullscreen/default.png"
 								alt
 							/>
-							<span>全屏</span>
+							<span>全 屏</span>
 						</div>
 					</el-col>
 				</el-row>

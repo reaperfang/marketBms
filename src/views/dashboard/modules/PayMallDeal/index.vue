@@ -7,14 +7,24 @@
 		</el-row>
 		<el-row class="item-end">
 			<div class="maill-deal-s">
-				<el-row
-					class="box-item-start"
-				>
+				<el-row class="box-item-start">
 					<el-col :span="24">
 						<gridtitle :title="'商城成交来源TOP3'"></gridtitle>
 					</el-col>
 				</el-row>
-				<div class="box-item-end"></div>
+				<div class="box-item-end">
+					<el-row class="fill-height">
+						<el-col :span="8" class="v-el-col"
+							><div class="grid-content-box bg-purple"></div
+						></el-col>
+						<el-col :span="8" class="v-el-col"
+							><div class="grid-content-box bg-purple-light"></div
+						></el-col>
+						<el-col :span="8" class="v-el-col"
+							><div class="grid-content-box bg-purple"></div
+						></el-col>
+					</el-row>
+				</div>
 			</div>
 		</el-row>
 	</div>
@@ -68,13 +78,32 @@ export default {
 	}
 
 	.box-item-end {
-		background: red;
-		margin:0  8px;
+		// background: red;
+		margin: 0 8px;
 		position: absolute;
 		top: 43px;
 		left: 0;
 		bottom: 0;
 		right: 0;
+
+		// .bg-purple {
+		// 	background: #d3dce6;
+		// }
+		// .bg-purple-light {
+		// 	background: #e5e9f2;
+		// }
+
+		.grid-content-box {
+			height: 100%;
+		}
+
+		.v-el-col {
+			height: 100%;
+		}
+
+		.fill-height{
+			height: 100%;
+		}
 	}
 }
 </style>
