@@ -8,7 +8,7 @@
           <ul ref="scrollContent" class="clearfix" :class="'list'+currentComponentData.data.listStyle+' couponStyle'+currentComponentData.data.couponStyle">
             <!-- status:true时候是已领取,hideScrambled:false, -->
             <template v-for="(item, key) in displayList">
-              <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :class="{'list-received': item.status=='true'}" :key="key" @click="openCouponLayer(item)">
+              <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :class="{'list-received': item.status=='true'}" :key="key">
                 <template v-if="currentComponentData.data.listStyle !== 3">
                   <div class="first_money">
                     <span :class="style1">{{getTitle(item)}}</span>
