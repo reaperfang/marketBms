@@ -10,12 +10,6 @@ export default {
   },
   created() {
     this.initRuleForm();
-
-    //点击保存按钮验证到组件有未填写项错误时，跳转至组件后显示错误提示
-    if(this.$store.state.decorate.checkErrorId){
-      this.errorMark = true;
-      this.$store.commit('setCheckErrorId', null);
-    }
   },
   watch: {
     ruleForm: {
@@ -25,15 +19,26 @@ export default {
       deep: true
     },
     //点击保存按钮验证到当前显示组件中有未填写项错误时，显示错误提示
-    '$store.state.decorate.checkErrorId'(newValue) { 
-      this.errorMark = true;
+    '$store.state.decorate.checkErrorId': {
+      handler(newValue, oldValue) { 
+        if(newValue && newValue !== oldValue){
+          setTimeout(() => {
+            this.errorMark = true;
+            this.$store.commit('setCheckErrorId', null);
+            if(this.$refs.ruleForm){
+              this.$refs.ruleForm.validate();
+            }
+          })
+        }
+      },
+      immediate: true
     }
   },
   methods: {
     /* 初始化表单数据 */
     initRuleForm() {
       if (this.data) {
-        this.ruleForm = this.data;
+        this.ruleForm = Object.assign({}, this.ruleForm, this.data);
       }
       this.emitChangeRuleForm(this.ruleForm);
     },

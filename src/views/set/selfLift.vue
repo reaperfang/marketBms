@@ -13,7 +13,7 @@
     </div>
     <!-- 按钮区域 -->
     <div class="btn-area">
-      <el-button class="primary" type="primary" @click="handleAddSelfLift()">新建自提点</el-button>
+      <el-button class="primary" type="primary" @click="handleAddSelfLift()" v-permission="['设置', '上门自提', '默认页面', '新建自提点']">新建自提点</el-button>
       <el-button v-if="addressTotal > 0" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
     </div>
     <!-- 列表 -->
@@ -75,9 +75,9 @@
         width="150">
         <template slot-scope="scope">
           <div class="opeater">
-            <el-button class="btn" @click="goEdit(scope.row.id)" type="text">编辑</el-button>
+            <el-button class="btn" @click="goEdit(scope.row.id)" type="text" v-permission="['设置', '上门自提','默认页面', '编辑']">编辑</el-button>
             <span>|</span>
-            <el-button class="btn" type="text" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
+            <el-button class="btn" type="text" v-permission="['设置', '上门自提','默认页面', '启用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -87,7 +87,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="ruleForm.pageNo"
-        :page-sizes="[3, 10, 20, 30, 40]"
+        :page-sizes="[10, 20, 30, 40]"
         :page-size="ruleForm.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total*1">
@@ -148,6 +148,26 @@ export default {
       this.getAddressTotal()
       this.getShopInfo()
     },
+    getExistEnabled() {
+       const req = {
+        pickUpStatus: 1, // 1 为启用
+        startIndex: 1,
+        pageSize: 10
+      }
+      return new Promise((resolve, reject) => {
+        let isExistEnabled = false
+        this.ApiGetSelfLiftList(req).then((res) => {
+          if (res && res.list.length > 0) {
+            isExistEnabled = true
+          }
+          resolve(isExistEnabled)
+        }).catch((err) => {
+          reject(err)
+        })
+
+      })
+      
+    },
     getShopInfo() {
       const id = this.cid
       this._apis.set.getShopInfo({ id }).then(response =>{
@@ -201,6 +221,7 @@ export default {
       const p2 = this.updateShopInfo(data)
       Promise.all([p1, p2]).then(() => {
         this.isOpen = false
+        item.pickUpStatus = pickUpStatus
         this.$message({
           duratio: 5000,
           showClose: true,
@@ -215,11 +236,6 @@ export default {
     handleEnableSelfLift(item) {
       // pickUpStatus === 1 当前状态 1 启用 0 禁用
       if (item.pickUpStatus === 1) {
-        const req = {
-          pickUpStatus: 1, // 1 为启用
-          startIndex: 1,
-          pageSize: 10
-        }
         if (!this.isOpen) {
           this.confirm({
             title: "提示",
@@ -231,6 +247,11 @@ export default {
             this.updateSelfLiftStatusById(item, 0)
           })
           return false
+        }
+        const req = {
+          pickUpStatus: 1, // 1 为启用
+          startIndex: 1,
+          pageSize: 10
         }
         this.ApiGetSelfLiftList(req).then((res) => {
           if (res && res.list.length === 1) {
@@ -352,73 +373,70 @@ export default {
         if (!isHasLocation) {
           showConfirmButton = false
           const url = `${location.protocol}//${location.host}/bp/shop/m_shopEditor?pageId=${pageId}`
-          text = `<p style="font-size:16px;color:rgba(68,67,75,1);">上门自提开启成功！</p><p style="font-size:12px;color:rgba(68,67,75,1);">您还没有装修位置组件<a href="${url}" style="color:#655EFF;text-decoration: underline;">去装修 &gt;</a></p>`
+          text = `<p style="font-size:16px;color:rgba(68,67,75,1);">上门自提开启成功！</p><p style="font-size:12px;color:rgba(68,67,75,1);">您还没有装修位置组件<a href="${url}" style="color:#655EFF;text-decoration: underline;" target="_blank">去装修 &gt;</a></p>`
+          this.confirm({
+            title: "提示",
+            iconSuccess: true,
+            text,
+            showConfirmButton,
+            confirmText: '我知道了',
+            showCancelButton: false
+          });
+        } else {
+          this.$message({
+            duratio: 5000,
+            showClose: true,
+            message: text,
+            type: 'success'
+          });
         }
-        this.confirm({
-          title: "提示",
-          iconSuccess: true,
-          text,
-          showConfirmButton,
-          confirmText: '我知道了',
-          showCancelButton: false
-        });
+        
         if (!this.isOpen) {
           this.isOpen = true
         }
-      }).catch(() => {
+      }).catch((err) => {
         this.isOpen = false
+        this.$message.error(err || '保存失败')
       })
     },
     openSelfLift() {
-      console.log('--openSelfLift--')
-      if (+this.total > 0) {
-        this._apis.shop.getHomePage({pageTag:0}).then((res) => {
-          const str = utils.uncompileStr(res.pageData);
-          const pageData = JSON.parse(str);
-          if (pageData && pageData.length > 0) {
-            const curr = Array.from(pageData).find(item => {
-              return item.type === 'location'
-            })
-            // 有店铺首页装修位置
-            if (curr) {
-              this.openSelfLiftSuccess(true)
-            } else {
-              // 没有店铺装修位置
-              this.openSelfLiftSuccess(false, res.id)
+      this.getExistEnabled().then((isExistEnabled) => {
+        console.log('isExistEnabled',isExistEnabled)
+        if (isExistEnabled) {
+          this._apis.shop.getHomePage({pageTag:0}).then((res) => {
+            const str = utils.uncompileStr(res.pageData);
+            const pageData = JSON.parse(str);
+            if (pageData && pageData.length > 0) {
+              const curr = Array.from(pageData).find(item => {
+                return item.type === 'location'
+              })
+              // 有店铺首页装修位置
+              if (curr) {
+                this.openSelfLiftSuccess(true)
+              } else {
+                // 没有店铺装修位置
+                this.openSelfLiftSuccess(false, res.id)
+              }
             }
-          }
-          console.log('--pageData--',pageData)
-        }).catch((err) => {
-          this.$message.error(err)
-        })
-        // this.updateShopInfo(data).then(() => {
-        //   this.confirm({
-        //     title: "提示",
-        //     iconSuccess: true,
-        //     text: '已成功开启上门自提！',
-        //     confirmText: '我知道了',
-        //     showCancelButton: false
-        //   });
-        //   if (!this.isOpen) {
-        //     this.isOpen = true
-        //   }
-        // }).catch(() => {
-        //   this.isOpen = false
-        // })
-      } else {
-        this.confirm({
-          title: "提示",
-          text: '当前没有启用的自提点信息，请先新建或启用自提点后再开启。',
-          confirmText: '我知道了',
-          cancelButtonText: '去新建'
-        }).then(() => {
-          // 关闭弹窗
-        }).catch(()=> {
-          this.$router.push({ path: '/set/addSelfLift' })
-        }).finally(() => {
-          this.isOpen = false
-        });
-      }
+            console.log('--pageData--',pageData)
+          }).catch((err) => {
+            this.$message.error(err)
+          })
+        } else {
+          this.confirm({
+            title: "提示",
+            text: '当前没有启用的自提点信息，请先新建或启用自提点后再开启。',
+            confirmText: '我知道了',
+            cancelButtonText: '去新建'
+          }).then(() => {
+            // 关闭弹窗
+          }).catch(()=> {
+            this.$router.push({ path: '/set/addSelfLift' })
+          }).finally(() => {
+            this.isOpen = false
+          });
+        }
+      })
     },
     closeSelfLift() {
        this.confirm({
@@ -432,16 +450,23 @@ export default {
           isOpenSelfLift: 0
         }
         this.updateShopInfo(data).then(() => {
-          this.confirm({
-            title: "提示",
-            iconSuccess: true,
-            text: '已成功关闭上门自提！',
-            confirmText: '我知道了',
-            showCancelButton: false
+           this.$message({
+            duratio: 5000,
+            showClose: true,
+            message: '已成功关闭上门自提！',
+            type: 'warning'
           });
+          // this.confirm({
+          //   title: "提示",
+          //   iconSuccess: true,
+          //   text: '已成功关闭上门自提！',
+          //   confirmText: '我知道了',
+          //   showCancelButton: false
+          // });
           this.isOpen = false
-        }).catch(() => {
+        }).catch((err) => {
           this.isOpen = true
+          this.$message.error(err || '保存失败')
         })
       }).catch(() => {
         this.isOpen = true

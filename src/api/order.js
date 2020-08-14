@@ -643,16 +643,12 @@ export function getDistributorList(data) {
   })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+//查看电子面单快递规格
+export function getExpressSpec(data) {
+  return request({
+    target: 'EXPRESS-ELECTRONIC-SIZE-PROCESSOR',
+    method: 'post',
+    apiType: 'goodsOperate',
+    data
+  })
+}

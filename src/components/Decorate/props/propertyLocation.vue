@@ -55,6 +55,7 @@ export default {
         bgType: 1,// 背景类型
         backgroundColor: 'rgba(255,255,255,1)',//背景颜色
         backgroundImage: '',
+        saveCallBack: this.saveCallBack //保存时需要触发的回调函数
       },
       rules: {
 
@@ -67,6 +68,15 @@ export default {
     
   },
   methods: {
+    //保存时需要触发的回调函数
+    saveCallBack(data) {
+      console.log(this.rules)
+      if(data.bgType === 2 && data.backgroundImage === ''){
+        return false;
+      }
+      return true;
+    },
+
     /* 弹框选中图片 */
     imageSelected(dialogData) {
       if(this.ruleForm.bgType == 2){

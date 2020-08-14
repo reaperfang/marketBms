@@ -6,7 +6,28 @@
                     <div class="item">
                         <div class="label">配送方式</div>
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
+                        <!-- && orderInfo.deliveryDate -->
                     </div>
+                    <template v-if="orderInfo.deliveryWay == 4">
+                        <div class="item">
+                            <div class="label">提货信息</div> 
+                            <div class="value">
+                                <p>姓名：{{orderInfo.receivedName}}</p>
+                                <p>联系电话：{{orderInfo.receivedPhone}}</p>
+                                <p>预约自提时间：{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</p>
+            
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="label">自提点信息</div> 
+                            <div class="value">
+                                <p>地址</p>
+                                <p>联系人：</p>
+                                <p>联系电话：</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>   
                     <!-- 开启了预约配送则显示C端用户下单时选定的配送时间 -->
                     <div class="item" v-if="orderInfo.deliveryWay == 2 && orderInfo.deliveryDate">
                         <div class="label">配送时间</div>
@@ -19,6 +40,7 @@
                             <p>{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
+                    </template>
                     <!-- <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p> -->
                 </div>
             </el-col>
@@ -696,6 +718,8 @@ export default {
                 return '普通快递'
             } else if(code === 2) {
                 return '商家配送'
+            }else if(code ===4) {
+                return '上门自提'
             }
         },
         payWayFilter(code) {

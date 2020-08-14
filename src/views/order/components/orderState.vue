@@ -8,8 +8,8 @@
                     <el-steps active="1">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="客戶收货" description=""></el-step>
+                        <el-step :title="merchantType" description=""></el-step>
+                        <el-step :title="userType" description=""></el-step> 
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -26,8 +26,8 @@
                     <el-steps active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" description=""></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <el-step :title="merchantType" description=""></el-step>
+                        <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -41,8 +41,8 @@
                     <el-steps active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <el-step :title="merchantType" description=""></el-step>
+                        <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -61,8 +61,8 @@
                     <el-steps active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <el-step :title="merchantType" description=""></el-step>
+                        <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -80,8 +80,8 @@
                     <el-steps active="4">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
-                        <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <el-step :title="merchantType" :description="orderInfo.sendTime"></el-step>
+                        <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -95,8 +95,14 @@
                     <el-steps active="5">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" :description="orderInfo.createTime"></el-step>
-                        <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="用户收货" :description="orderInfo.complateTime"></el-step>
+                        <el-step :title="merchantType" :description="orderInfo.sendTime"></el-step>
+                         <template v-if="orderInfo.deliveryWay == 4">
+                             <el-step title="用户取货" :description="orderInfo.complateTime"></el-step>
+                        </template>    
+                       <template v-else>
+                           <el-step title="用户收货" :description="orderInfo.complateTime"></el-step>
+                       </template>
+                        <!-- <el-step title="用户收货" :description="orderInfo.complateTime"></el-step> -->
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
@@ -127,8 +133,8 @@
                     <el-steps :active="active">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" description=""></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <el-step :title="merchantType" description=""></el-step>
+                         <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -145,8 +151,8 @@
                     <el-steps :active="active">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <el-step title="商户发货" description=""></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <el-step :title="merchantType" description=""></el-step>
+                        <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -160,8 +166,14 @@
                     <el-steps :active="active">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <el-step title="商户发货" description="用户已完成付款，请尽快完成发货"></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <template v-if="orderInfo.deliveryWay == 4">
+                             <el-step title="商户备货" description="用户已完成付款，请尽快完成备货"></el-step>
+                        </template>    
+                       <template v-else>
+                           <el-step title="商户发货" description="用户已完成付款，请尽快完成发货"></el-step>
+                       </template>
+                        <!-- <el-step :title="merchantType" description="用户已完成付款，请尽快完成发货"></el-step> -->
+                        <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -179,8 +191,13 @@
                     <el-steps active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <el-step title="商户发货" description="用户已完成付款，请尽快完成剩余发货"></el-step>
-                        <el-step title="用户收货" description=""></el-step>
+                        <template v-if="orderInfo.deliveryWay == 4">
+                             <el-step title="商户备货" description="用户已完成付款，请尽快完成剩余备货"></el-step>
+                        </template>    
+                       <template v-else>
+                           <el-step title="商户发货" description="用户已完成付款，请尽快完成剩余发货"></el-step>
+                       </template>
+                        <el-step :title="userType" description=""></el-step>
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
@@ -198,13 +215,22 @@
                     <el-steps :active="active">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="用户收货" description="等待签收"></el-step>
+                        <el-step :title="merchantType" :description="orderInfo.sendTime"></el-step>
+                        <template v-if="orderInfo.deliveryWay == 4">
+                             <el-step title="用户取货" description=""></el-step>
+                        </template>    
+                       <template v-else>
+                           <el-step title="用户收货" description="等待签收"></el-step>
+                       </template>
+                        <!-- <el-step title="用户收货" description="等待签收"></el-step> -->
                         <el-step class="close" title="完成" description=""></el-step>
                     </el-steps>
                 </div>
                 <div class="item righter">
                     <p>待收货</p>
+                    <div v-if="orderInfo.deliveryWay == 4">
+                       <el-button class="verifyBtn" @click="currentDialog = 'VerificationDialog'; currentData = orderInfo.id; dialogVisible = true">核销验证</el-button>
+                    </div>
                 </div>
             </template>
             <template v-else-if="orderState == 6">
@@ -213,8 +239,8 @@
                     <el-steps :active="active">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
-                        <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
-                        <el-step title="用户收货" :description="orderInfo.complateTime"></el-step>
+                        <el-step :title="merchantType" :description="orderInfo.sendTime"></el-step>
+                        <el-step :title="userType" :description="orderInfo.complateTime"></el-step>
                         <el-step class="close" title="完成" :description="orderInfo.complateTime"></el-step>
                     </el-steps>
                 </div>
@@ -443,7 +469,7 @@
                 </template>
             </template>
         </template>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData"></component>
     </div>
 </template>
 <script>
@@ -453,6 +479,7 @@
 // 订单关闭原因: 0超时取消 1客户取消 2商户关闭 3拼团失败 4商户关闭拼团 5客户拒收
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
 import anotherAuth from '@/mixins/anotherAuth'
+import VerificationDialog from '@/views/order/dialogs/verificationDialog'
 
 export default {
     mixins: [anotherAuth],
@@ -498,6 +525,20 @@ export default {
                     case 6:
                         return 5
                 }
+            }
+        },
+        userType(){
+            if(this.orderInfo.deliveryWay==1){
+                return '用户取货'
+            }else{
+                return '用户收货'
+            }
+        },
+        merchantType(){
+            if(this.orderInfo.deliveryWay==4){
+                return '商户备货'
+            }else{
+                return '商户发货'
             }
         }
     },
@@ -558,11 +599,20 @@ export default {
         }
     },
     components: {
-        CloseOrderDialog
+        CloseOrderDialog,
+        VerificationDialog
     }
 }
 </script>
 <style lang="scss" scoped>
+    .verifyBtn{
+        height:34px;
+        background:rgba(101,94,255,1);
+        border-radius:4px;
+        color:#fff;
+        font-size:14px;
+        margin-top:20px;
+    }
     .order-state {
         background-color: #fff;
         padding: 30px 50px;
@@ -641,3 +691,5 @@ export default {
         }
     }
 </style>
+
+

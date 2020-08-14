@@ -247,17 +247,20 @@ export default {
     /* 检查输入正确性 */
     checkInput(resultData) {
       //检测基础信息
-      if(!this.checkBaseInfo(resultData)){
-        return false;
-      }
-      //检测假数据
-      if(!this.checkFakeData(resultData)){
-        return false;
-      }
+      // if(!this.checkBaseInfo(resultData)){
+      //   return false;
+      // }
+
       //检测组件有必填条件的则进行验证
       if(!this.checkComponents(resultData)){
         return false;
       }
+
+      //检测假数据
+      if(!this.checkFakeData(resultData)){
+        return false;
+      }
+      
       return true;
     },
 

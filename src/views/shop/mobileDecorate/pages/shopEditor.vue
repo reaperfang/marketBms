@@ -168,6 +168,7 @@ export default {
         if(this.checkInput(resultData)) {
           this.washData(resultData);
           this.setLoading(true);
+          
           if(this.id) {
             this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
           }else{
@@ -200,9 +201,9 @@ export default {
     /* 检查输入正确性 */
     checkInput(resultData) {
       //检测基础信息
-      if(!this.checkBaseInfo(resultData)){
-        return false;
-      }
+      // if(!this.checkBaseInfo(resultData)){
+      //   return false;
+      // }
       //检测组件有必填条件的则进行验证
       if(!this.checkComponents(resultData)){
         return false;
@@ -214,6 +215,7 @@ export default {
     sendRequest(params) {
       let pageData = params.resultData.pageData;
       params.resultData.pageData = this.utils.compileStr(JSON.stringify(pageData));
+      const string = utils.uncompileStr(params.resultData.pageData);
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord);
           this.setLoading(false);

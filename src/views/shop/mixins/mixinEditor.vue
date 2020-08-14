@@ -38,44 +38,33 @@ export default {
     },
 
     /* 检测基础信息 */
-    checkBaseInfo(data) {
-      if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
-        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-          confirmButtonText: '确定',
-          callback: action => {
-            //打开基础信息面板
-            this.$store.commit('setCurrentComponentId', this.basePropertyId);
-            this.setLoading(false);
-          }
-        });
-        return false;
-      }
-      return true;
-    },
+    // checkBaseInfo(data) {
+    //   if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+    //     this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+    //       confirmButtonText: '确定',
+    //       callback: action => {
+    //         //打开基础信息面板
+    //         this.$store.commit('setCurrentComponentId', this.basePropertyId);
+    //         this.setLoading(false);
+    //       }
+    //     });
+    //     return false;
+    //   }
+    //   return true;
+    // },
 
-    /* 检测组件有必填条件的则进行验证 */
+    /* 检测组件有回调函数则执行 */
     checkComponents(data) {
       for(let item of this.componentDataIds) {
         const componentData = this.componentDataMap[item];
-        //检测位置信息组件
-        if(componentData.type === 'location' && !this.checkLocation(componentData)){
+        const saveCallBack = componentData.data.saveCallBack;
+        if(!!saveCallBack && !saveCallBack(componentData.data, this)){
+          this.$store.commit('setCheckErrorId', uuidv4());
+          this.$store.commit('setCurrentComponentId', componentData.id);
+          this.setLoading(false);
           return false;
         }
       }
-      return true;
-    },
-
-    /* 检测位置信息组件 */
-    checkLocation(componentData) {
-      //如果选择背景图模式，则背景图必填
-      const data = componentData.data;
-      if(data.bgType === 2 && data.backgroundImage === ''){
-        this.$store.commit('setCheckErrorId', uuidv4());
-        this.$store.commit('setCurrentComponentId', componentData.id);
-        this.setLoading(false);
-        return false;
-      }
-      console.log(data)
       return true;
     },
 
