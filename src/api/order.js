@@ -655,12 +655,10 @@ export function getExpressSpec(data) {
 // 测试验证自提码功能
 export function verifySelfLiftCode(data) {
   return request({
-    target:`checkVerifyCode`,
     url:`/mkt-api/v1/b/app-verify-tool-info/checkVerifyCode`,
     method: 'get',
-    data,
+    params:data,
     baseURL: process.env.DATA_API,
-    // baseURL: process.env.SALE_API,
-    own: true
+   
   })
 }
