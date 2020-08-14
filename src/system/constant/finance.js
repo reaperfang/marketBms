@@ -20,10 +20,11 @@ export default {
     payTypes:[
         { value: -1, label: '全部' },
         { value: 0, label: '微信支付' },
-        { value: 1, label: '货到付款' },
+        { value: 1, label: '线下-货到付款' },
         { value: 2, label: '余额支付' },
         { value: 3, label: '红包支付' },
-        { value: 4, label: '支付宝支付' }
+        { value: 4, label: '支付宝支付' },
+        { value: 5, label: '线下-手动确认' }
     ],
     //收支明细---收支类型
     tradeTypes:[

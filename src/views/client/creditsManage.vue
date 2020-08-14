@@ -13,7 +13,7 @@
                                 <div v-if="ruleForm.scoreToCash == '1'">
                                     <span>抵现比例：</span>
                                     <div style="width: 140px; display: inline-block">
-                                        <el-input placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
+                                        <el-input maxlength="9" placeholder="请输入整数" v-model="ruleForm.scorePercentage" @keyup.native="checkZero2($event,ruleForm.scorePercentage,'scorePercentage')"></el-input>
                                     </div>
                                     <span class="marL20">积分</span>
                                     <div style="width: 54px; display: inline-block" class="marL20">
@@ -166,8 +166,10 @@ export default {
             }else{
                 formObj.scoreEnableOrderAchieveCash = formObj.scoreEnableOrderAchieveCash == true?'1':'0';
                 formObj.scoreEnableOrderHighCash = formObj.scoreEnableOrderHighCash == true?'1':'0';
-                formObj.scoreToCashOrderMoney = formObj.scoreToCashOrderMoney == "" ? -1:formObj.scoreToCashOrderMoney;
-                formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
+                // formObj.scoreToCashOrderMoney = formObj.scoreToCashOrderMoney == "" ? -1:formObj.scoreToCashOrderMoney;
+                formObj.scoreToCashOrderMoney = formObj.scoreEnableOrderAchieveCash=="1" ? formObj.scoreToCashOrderMoney:-1;
+                // formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
+                formObj.scoreToCashOrderRate = formObj.scoreEnableOrderHighCash == "1" ? formObj.scoreToCashOrderRate:-1;
                 formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
                 this._apis.client.saveCreditRule(formObj).then((response) => {
                     this.$message({
@@ -176,7 +178,7 @@ export default {
                     });
                     this.checkCreditRule();
                 }).catch((error) => {
-                    console.log(error);
+                   this.$message.error(error);
                 })
             }
         },

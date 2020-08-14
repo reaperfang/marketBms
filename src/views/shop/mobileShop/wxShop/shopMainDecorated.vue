@@ -54,9 +54,9 @@
               width="170"
               trigger="click"
               content="">
-              <img v-if="showCode" :src="miniAppcode" alt="" style="width:150px;height:170px;">
+              <img v-if="showCode" :src="miniAppcode" alt="" style="width:150px;height:150px;">
               <span v-else>无分享地址</span>
-              <el-button slot="reference" @click="getMiniAppQrcode();showCode=true" type="primary" plain>
+              <el-button slot="reference" @click="getMiniAppQrcode();showCode=true" type="primary" plain :disabled="!miniProgramStatus.data || miniProgramStatus.data.current_status !== 'published'">
                 <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
                   <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
                 </el-tooltip>
@@ -67,7 +67,7 @@
                 <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
               </el-tooltip>
             </el-button> -->
-            <p :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.data.current_name || ''}}</p>  
+            <p v-if="miniProgramStatus.data" :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.data.current_name || ''}}</p>  
           </li>
         </ul>
       </div>
@@ -130,6 +130,10 @@ export default {
     },
     shopInfo() {
       return this.$store.getters.shopInfo || {};
+    },
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
     }
   },
   created() {
@@ -219,16 +223,31 @@ export default {
       }
     },
 
-      /* 获取小程序码 */
-    getMiniAppQrcode() {
+    //   /* 获取小程序码 */
+    // getMiniAppQrcode() {
+    //   this.openMiniAppcodeLoading = true;
+    //   this._apis.shop.getMiniAppQrcode({id: '1'}).then((response)=>{
+    //     this.miniAppcode = response;
+    //     this.openMiniAppcodeLoading = false;
+    //   }).catch((error)=>{
+    //     this.openMiniAppcodeLoading = false;
+    //     this.$message({ message: error, type: 'error' });
+    //   });
+    // },
+
+    //获取小程序太阳码
+    getMiniAppQrcode(){
       this.openMiniAppcodeLoading = true;
-      this._apis.shop.getMiniAppQrcode({id: '1'}).then((response)=>{
-        this.miniAppcode = response;
-        this.openMiniAppcodeLoading = false;
-      }).catch((error)=>{
-        this.openMiniAppcodeLoading = false;
-        this.$message({ message: error, type: 'error' });
-      });
+      this._apis.profile
+        .getSmallQRcode({id:this.cid}).then(response => {
+          this.miniAppcode = `data:image/png;base64,${response}`;
+          this.openMiniAppcodeLoading = false;
+        })
+        .catch(error => {
+          console.error(error);
+          this.$message({ message: error, type: 'error' });
+          this.openMiniAppcodeLoading = false;
+        });
     },
 
     /* 控件面板初始化 */

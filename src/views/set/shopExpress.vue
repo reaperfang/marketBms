@@ -1017,6 +1017,17 @@ export default {
           isValidWeeks = false
         }
       }
+      if (!this.ruleForm.lng || !this.ruleForm.lat) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: '当前地址无法获取经纬度，请重新修改取货地址',
+          confirmText: '我知道了',
+          showCancelButton: false
+        })
+        this.isLoading = false
+        return false
+      }
       console.log('handleSubmit:repeatCycle')
       this.$refs[formName].validate((valid) => {
       console.log('handleSubmit:valid && isValidWeeks', valid, isValidWeeks)

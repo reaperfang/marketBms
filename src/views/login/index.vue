@@ -10,7 +10,7 @@
           <span class="svg-container svg-container_login">
             <img src="@/assets/images/icon_username.png">
           </span>
-          <el-input v-model="loginForm.userName" name="userName" type="text" placeholder="用户名" style="border:none;"  class="login_input"/>
+          <el-input v-model="loginForm.userName" name="userName" type="text" placeholder="账号" style="border:none;"  class="login_input"/>
         </el-form-item>
 
         <el-form-item prop="password">
@@ -26,7 +26,7 @@
         <p style="color:red">{{errorMsg}}</p>
         <el-form-item class="remember">
           <span>
-            <!-- <el-checkbox v-model="checked">记住用户名</el-checkbox>             -->
+            <!-- <el-checkbox v-model="checked">记住账号</el-checkbox>             -->
           </span>
           <!-- <span @click="_routeTo('profile/passwordChange')">修改密码</span> -->
         </el-form-item>
@@ -95,9 +95,10 @@ export default {
         platform: '134160222D87'
       },
       loginRules: {
-        userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword },
-        { min: 6, max: 20, message: '密码长度应为6到20位', trigger: 'blur' }]
+        // 改为手动校验
+        // userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        // password: [{ required: true, trigger: 'blur', validator: validatePassword },
+        // { min: 6, max: 20, message: '密码长度应为6到20位', trigger: 'blur' }]
       },
       passwordType: 'password',
       loading: false,
@@ -138,13 +139,21 @@ export default {
       }
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid && !this.loading) {
-          this.login();
-        } else {
-          return false
-        }
-      })
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid && !this.loading) {
+      //     this.login();
+      //   } else {
+      //     return false
+      //   }
+      // })
+      if(this.loginForm.userName == '' || this.loginForm.password == '' ) {
+        console.log(111111111)
+        this.errorMsg = '账号或密码不得为空'
+        return
+      }else {
+        console.log(222222222)
+        this.login();
+      }
     },
 
     /* 自动登录 */
@@ -169,6 +178,7 @@ export default {
       let tempParams = {...this.loginForm};
       tempParams['password'] = this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.loginForm.password, 'EhYKNoYmZ7rXa1aE');
       this.$store.dispatch('login', tempParams).then((response) => {
+	this.errorMsg = ''
         this.loading = false
         this.autoLoginLoading = false
         this.shopList = []
@@ -185,6 +195,7 @@ export default {
           if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
             this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
               this.getShopAuthList()
+              this.$store.commit('setStoreGuide', this.shopList[0].storeGuide)
               if (this.isAdminUser && this.shopList.length > 0 && this.shopList[0].storeGuide === -1) {
                 this.$router.push({ path: '/profile/guidePrompt' })
               } else {
@@ -208,27 +219,11 @@ export default {
         window.eventHub.$emit('onGetShopAuthList')
       })
     },
-    // login(userName, password) {
-    //   this.loading = true
-    //   this.loginForm = Object.assign({}, this.loginForm, {userName, password})
-    //   this.$store.dispatch('login', this.loginForm).then(() => {
-    //     this.loading = false
-    //     this.$router.push({ path: '/profile/guidePrompt' })
-    //   }).catch(error => {
-        // this.$message.error(error);
-    //     this.loading = false
-    //   })
-    // },
-    // autoLogin() {
-    //   let userName = this.$route.query.name
-    //   let password = this.$route.query.password
-    //   if(userName!=undefined && password!=undefined) {
-    //     this.login('admin-lqx', '111111')
-    //   }
-    // },
+
     handleCloses(){
       this.dialogVisible = false
     },
+    
     handleClose(){
       this.showShopsDialog = false
       this.loginForm.userName = ''

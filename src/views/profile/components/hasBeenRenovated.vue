@@ -146,6 +146,7 @@ export default {
       return new Promise((resolve, reject) => {
         this._apis.set.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');
+          this.$store.commit('setStoreGuide', storeGuide)
           resolve(response)
         }).catch(error =>{
           reject(error)
