@@ -634,7 +634,7 @@ export default {
       }
     }
     .p_l_main {
-      margin-top: 15px;
+      margin-top: 10px;
       display: flex;
       .dealt{
         width: 246px;
@@ -697,7 +697,7 @@ export default {
       }
     }
     .p_l_bottom {
-      margin-top: 15px;
+      margin-top: 10px;
       display: flex;
       .p_l_bottom_l{
         flex: 1;
@@ -747,8 +747,8 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 60px;
-              height: 60px;
+              width: 76px;
+              height: 76px;
             }
             .opt{
               margin-top: 20px;

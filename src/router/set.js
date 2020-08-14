@@ -44,10 +44,17 @@ export default [
                 meta: { title: '地址库', noCache: true, tabTitle: '通用设置' , navType:2 }
             },
             {
+                path: 'addressAdd',
+                component: () => import('@/views/set/addressUpdate'),
+                name: 'addressAdd',
+                meta: { title: '新建地址', noCache: true, tabTitle: '通用设置' , navType:5 },
+                hidden: true
+            },
+            {
                 path: 'addressUpdate',
                 component: () => import('@/views/set/addressUpdate'),
                 name: 'addressUpdate',
-                meta: { title: '更新地址', noCache: true, tabTitle: '通用设置' , navType:4 },
+                meta: { title: '编辑', noCache: true, tabTitle: '通用设置' , navType:5 },
                 hidden: true
             },
             {
@@ -138,14 +145,14 @@ export default [
                 component: () => import('@/views/set/newTemplate'),
                 name: 'newTemplate',
                 hidden: true,
-                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:5},
+                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:4},
             },
             {
                 path: 'newElectronicFaceSheet',
                 component: () => import('@/views/set/newElectronicFaceSheet'),
                 name: 'newElectronicFaceSheet',
                 hidden: true,
-                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:5},
+                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:4},
             },
             {
                 path: 'addSelfLift',
