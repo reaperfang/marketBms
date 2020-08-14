@@ -8,8 +8,7 @@
   >
     <template v-if="!isSucess">
       <div class="container">
-        <el-select v-model="codes">
-          <!-- <el-option label="自提码核销" ></el-option> -->
+        <el-select v-model="code">
           <el-option label="自提码核销" :value="1"></el-option>
         </el-select>
         <div>
@@ -37,8 +36,8 @@ import DialogBase from "@/components/DialogBase";
 export default {
   data() {
     return {
-      codes: ["1", "2", "3"],
-      selfCode: "123456",
+      code: 1,
+      selfCode: "",
       showFooter: false,
       isSucess: false,
       countdown: 5,
@@ -60,26 +59,55 @@ export default {
          return
       }
       //调取核销验证码接口
-      if (true) {
-        //验证码匹配
-        this.isSucess = true;
-        let timer = setInterval(() => {
-          self.countdown = self.countdown - 1;
-          if (self.countdown == 0) {
-            clearInterval(timer);
-            this.visible = false;
-          }
-        }, 1000);
+      this._apis.order.verifySelfLiftCode({
+        verifyCode:this.selfCode,
+        relationId:this.data,
+        businessId:1
+       
+        })
+      .then(res=>{
+          console.log("res====")
+          console.log(res)
+          self.isShowError = false;
+          self.isSucess = true;
+          let timer = setInterval(() => {
+              self.countdown = self.countdown - 1;
+              if (self.countdown == 0) {
+              clearInterval(timer);
+                this.visible = false;
+              }
+            }, 1000);
         //刷新订单页面
         if(this.$route.name == 'query') {
-          this.$parent.$parent.getList()
+          // this.$parent.$parent.getList()
         } else if(this.$route.name == 'orderDetail') {
-          this.$parent.$parent.getDetail()
+          // this.$parent.$parent.getDetail()
         }
-      } else {
-        //验证码不匹配
-        self.showError = true;
-      }
+      }).catch(err=>{
+        console.log('error')
+        console.log(err)
+
+      })
+      // if (true) {
+      //   //验证码匹配
+      //   this.isSucess = true;
+      //   let timer = setInterval(() => {
+      //     self.countdown = self.countdown - 1;
+      //     if (self.countdown == 0) {
+      //       clearInterval(timer);
+      //       this.visible = false;
+      //     }
+      //   }, 1000);
+      //   //刷新订单页面
+      //   if(this.$route.name == 'query') {
+      //     this.$parent.$parent.getList()
+      //   } else if(this.$route.name == 'orderDetail') {
+      //     this.$parent.$parent.getDetail()
+      //   }
+      // } else {
+      //   //验证码不匹配
+      //   self.showError = true;
+      // }
       // this.visible = false;
     },
     verifyCode() {},
