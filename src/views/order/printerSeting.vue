@@ -199,6 +199,7 @@
 			authorizationOver(){
 				this.getPrinterDetail();
 				this.dialogVisible2 = false;
+				this.tip = false;
 			}
 		}
 	}
