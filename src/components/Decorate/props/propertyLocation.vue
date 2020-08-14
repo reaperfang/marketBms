@@ -70,6 +70,7 @@ export default {
   methods: {
     //保存时需要触发的回调函数
     saveCallBack(data) {
+      console.log(this.rules)
       if(data.bgType === 2 && data.backgroundImage === ''){
         return false;
       }
