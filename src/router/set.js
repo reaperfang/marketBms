@@ -148,6 +148,13 @@ export default [
                 meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:4},
             },
             {
+                path: 'newTemplateOnly',
+                component: () => import('@/views/set/newTemplate'),
+                name: 'newTemplateOnly',
+                hidden: true,
+                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:5, hideLeft: true},
+            },
+            {
                 path: 'newElectronicFaceSheet',
                 component: () => import('@/views/set/newElectronicFaceSheet'),
                 name: 'newElectronicFaceSheet',

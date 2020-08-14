@@ -854,6 +854,9 @@ export default {
             val.errorMessage = ''
           })
           this.tableData = res[0].orderItemList;
+          this.tableData.forEach(row => {
+            this.$refs.table.toggleRowSelection(row);
+          })
           this.orderInfo = res[0];
           this._ids = [this.orderInfo.id]
           if(!this.orderInfo.sendAddress) {
