@@ -6,7 +6,7 @@
     width="420px"
     :showFooter="showFooter"
   >
-    <template v-if="!isSucess">
+    <template v-if="!isSuccess">
       <div class="container">
         <el-select v-model="code">
           <el-option label="自提码核销" :value="1"></el-option>
@@ -39,7 +39,7 @@ export default {
       code: 1,
       selfCode: "",
       showFooter: false,
-      isSucess: false,
+      isSuccess: false,
       countdown: 5,
       isShowError:false,
       errorMsg:''
@@ -59,17 +59,15 @@ export default {
          return
       }
       //调取核销验证码接口
-      this._apis.order.verifySelfLiftCode({
+      this._apis.order.confirmVerifySelfLiftCode({
         verifyCode:this.selfCode,
         relationId:this.data,
         businessId:1
-       
         })
       .then(res=>{
-        debugger
-          if(res&&res.isSucess){//自提码验证成功
-          self.isShowError = false;
-          self.isSucess = true;
+          if(res&&res.isSuccess){//自提码验证成功
+            self.isShowError = false;
+            self.isSuccess = true;
           let timer = setInterval(() => {
               self.countdown = self.countdown - 1;
               if (self.countdown == 0) {
@@ -90,31 +88,8 @@ export default {
       }).catch(err=>{
         console.log('报错啦error')
         console.log(err)
-        
-        
-
       })
-      // if (true) {
-      //   //验证码匹配
-      //   this.isSucess = true;
-      //   let timer = setInterval(() => {
-      //     self.countdown = self.countdown - 1;
-      //     if (self.countdown == 0) {
-      //       clearInterval(timer);
-      //       this.visible = false;
-      //     }
-      //   }, 1000);
-      //   //刷新订单页面
-      //   if(this.$route.name == 'query') {
-      //     this.$parent.$parent.getList()
-      //   } else if(this.$route.name == 'orderDetail') {
-      //     this.$parent.$parent.getDetail()
-      //   }
-      // } else {
-      //   //验证码不匹配
-      //   self.showError = true;
-      // }
-      // this.visible = false;
+      
     },
     verifyCode() {},
   },
