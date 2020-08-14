@@ -14,14 +14,21 @@
 				</el-row>
 				<div class="box-item-end">
 					<el-row class="fill-height">
-						<el-col :span="8" class="v-el-col"
-							><div class="grid-content-box bg-purple"></div
-						></el-col>
-						<el-col :span="8" class="v-el-col"
-							><div class="grid-content-box bg-purple-light"></div
-						></el-col>
-						<el-col :span="8" class="v-el-col"
-							><div class="grid-content-box bg-purple"></div
+						<el-col
+							v-for="(item, index) in chartData"
+							:key="index"
+							:span="8"
+							class="v-el-col"
+							><div
+								class="grid-content-box bg-purple"
+								:style="index == 2 ? '' : 'margin-right:3px'"
+							>
+								<pchart
+									:radius="10"
+									:progress="70"
+									:stroke-width="8"
+									:isAnimation="true"
+								></pchart></div
 						></el-col>
 					</el-row>
 				</div>
@@ -33,6 +40,7 @@
 <script>
 import gridtitle from "../../components/title/index";
 import vpay from "../../components/pay/index";
+import pchart from "../../components/v-chart/persentchart/index";
 import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
@@ -46,11 +54,12 @@ export default {
 		//   default: false
 		// }
 	},
-	components: { gridtitle, vpay },
+	components: { gridtitle, vpay, pchart },
 	data: function() {
 		return {
 			startVal: 0,
-			endVal: 1000000
+			endVal: 1000000,
+			chartData: [1, 2, 3]
 		};
 	},
 	computed: {
@@ -95,13 +104,16 @@ export default {
 
 		.grid-content-box {
 			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 
 		.v-el-col {
 			height: 100%;
 		}
 
-		.fill-height{
+		.fill-height {
 			height: 100%;
 		}
 	}
