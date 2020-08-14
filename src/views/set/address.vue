@@ -65,7 +65,7 @@
           </div>
           <p>
             暂无数据，去
-            <router-link :to="{ path: '/set/addressUpdate'}" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</router-link>
+            <router-link :to="{ path: '/set/addressAdd'}" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</router-link>
           </p>
         </div>
       </el-table>
@@ -341,16 +341,17 @@ export default {
     delAddressById(id, addressType) {
       // 删除api
       this.ApiDelAddressById(id, addressType).then(() => {
-        this.confirm({
-          title: "提示",
-          iconSuccess: true,
-          text: '保存成功',
-          confirmText: '确定',
-          cancelButtonText: '取消'
-        }).then(() => {
-          this.ruleForm.pageNo = 1
-          this.getAddressList()
-        })
+        this.ruleForm.pageNo = 1
+        this.getAddressList()
+        this.$message.success('保存成功')
+        // this.confirm({
+        //   title: "提示",
+        //   iconSuccess: true,
+        //   text: '保存成功',
+        //   confirmText: '确定',
+        //   cancelButtonText: '取消'
+        // }).then(() => {
+        // })
       }).catch((error) => {
         this.$message.error(error || '保存失败')
       })
