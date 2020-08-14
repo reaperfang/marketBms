@@ -865,7 +865,7 @@ export default {
         }).catch(()=> {
         });
       } else {
-          this.$router.push({ path:'/set/addressUpdate', query: { source: 1 } })
+          this.$router.push({ path:'/set/addressAdd', query: { source: 1 } })
       }
     },
     // 开启商家配送 api
