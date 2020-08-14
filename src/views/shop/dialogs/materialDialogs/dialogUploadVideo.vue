@@ -19,8 +19,7 @@
             class="el-icon-plus avatar-uploader-icon"></i>   -->
           <el-progress v-if="videoFlag == true"
               type="circle"
-              :percentage="videoUploadPercent"
-              style="width:80px;height:80px;">
+              :percentage="videoUploadPercent">
           </el-progress>
           <!-- <el-button class="video-btn"
                 slot="trigger"
@@ -274,6 +273,10 @@ export default {
       display: inline-block;
     }
   }
+/deep/ .el-progress-circle{
+  width: 80px !important;
+  height: 80px !important;
+}
 .txt_center{
   width: 100%;
   text-align: center;
