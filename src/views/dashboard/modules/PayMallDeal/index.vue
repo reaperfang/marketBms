@@ -5,10 +5,17 @@
 				<vpay></vpay>
 			</el-col>
 		</el-row>
-		<el-row type="flex" justify="space-between" class="item-end">
-			<el-col :span="24">
-				<gridtitle :title="'商城成交来源TOP3'"></gridtitle>
-			</el-col>
+		<el-row class="item-end">
+			<div class="maill-deal-s">
+				<el-row
+					class="box-item-start"
+				>
+					<el-col :span="24">
+						<gridtitle :title="'商城成交来源TOP3'"></gridtitle>
+					</el-col>
+				</el-row>
+				<div class="box-item-end"></div>
+			</div>
 		</el-row>
 	</div>
 </template>
@@ -52,3 +59,22 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+.maill-deal-s {
+	// background: yellow;
+	height: 100%;
+	.box-item-start {
+		height: 43px;
+	}
+
+	.box-item-end {
+		background: red;
+		margin:0  8px;
+		position: absolute;
+		top: 43px;
+		left: 0;
+		bottom: 0;
+		right: 0;
+	}
+}
+</style>
