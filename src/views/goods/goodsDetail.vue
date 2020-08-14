@@ -2587,7 +2587,11 @@ export default {
                     message: '新增成功！',
                     type: 'success'
                 });
-                this.$router.push('/goods/goodsList')
+                if(this.$route.name === 'addGoodsOnly') {
+                    this.$router.push('/goods/goodsListOnly')
+                }else {
+                    this.$router.push('/goods/goodsList')
+                }
             }).catch(error => {
                 this.$message.error({
                     message: error,

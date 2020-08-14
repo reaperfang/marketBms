@@ -19,6 +19,13 @@ export default [
         meta: { title: '商品列表', noCache: true, tabTitle: '商品管理',navType:2 },
       },
       {
+        path: 'goodsListOnly',
+        component: () => import('@/views/goods/goodsList'),
+        name: 'goodsListOnly',
+        hidden: true,
+        meta: { title: '商品列表', noCache: true, tabTitle: '商品管理',navType:2, hideLeft: true },
+      },
+      {
         path: 'goodsListEmpty',
         component: () => import('@/views/goods/goodsListEmpty'),
         name: 'goodsListEmpty',
@@ -26,10 +33,24 @@ export default [
         meta: { title: '商品列表空白', noCache: true, tabTitle: '商品管理',navType:2 },
       },
       {
+        path: 'goodsListEmptyOnly',
+        component: () => import('@/views/goods/goodsListEmpty'),
+        name: 'goodsListEmptyOnly',
+        hidden: true,
+        meta: { title: '商品列表空白', noCache: true, tabTitle: '商品管理',navType:2, hideLeft: true },
+      },
+      {
         path: 'classify',
         component: () => import('@/views/goods/classify'),
         name: 'classify',
         meta: { title: '商品分类', noCache: true, tabTitle: '商品管理', classify: true ,navType:2},
+      },
+      {
+        path: 'classifyOnly',
+        component: () => import('@/views/goods/classify'),
+        name: 'classifyOnly',
+        hidden: true,
+        meta: { title: '商品分类', noCache: true, tabTitle: '商品管理', classify: true ,navType:2, hideLeft: true},
       },
       {
         path: 'tag',

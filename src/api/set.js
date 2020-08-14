@@ -298,10 +298,46 @@ export function getAddressDetail(data) {
     data
   })
 }
-// 
+// 删除地址库通过id
 export function delAddressById(data) {
   return request({
     target: 'SHOP-ADDRESS-DELETE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 新建自提点
+export function addSelfLift(data) {
+  return request({
+    target: 'PICKUPINFO-ADD-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 编辑自提点
+export function editSelfLiftById(data) {
+  return request({
+    target: 'PICKUPINFO-UPDATE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 通过id 获取自提点详情 
+export function getSelfLiftById(data) {
+  return request({
+    target: 'PICKUPINFO-FIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 获取自提点列表
+export function getSelfLiftList(data) {
+  return request({
+    target: 'PICKUPINFO-PAGE-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data

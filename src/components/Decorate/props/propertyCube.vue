@@ -245,7 +245,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @seletedPage="seletedPage"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :customLinkDisabled = "false" @imageSelected="imageSelected" @seletedPage="seletedPage"></component>
   </el-form>
 </template>
 
@@ -294,7 +294,7 @@ export default {
       this.ruleForm.templateType = templateType;
       this.blockType = 1;
     },
-  
+
     /* 选中具体布局中的一块 */
     selectLayout(templateType, blockType) {
       this.ruleForm.templateType = templateType;

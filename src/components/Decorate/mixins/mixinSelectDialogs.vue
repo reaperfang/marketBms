@@ -65,6 +65,7 @@ export default {
     handleCurrentChange(pIndex=1) {
       this.loading = true
       this.pageNum = pIndex
+      this.ruleForm.startIndex = pIndex
       this.ruleForm.pageNum = pIndex
       this.fetch()
     },
@@ -77,11 +78,13 @@ export default {
     //选择商品或者活动弹出框中的 搜索按钮事件 分页回到第一页
     search() {
       this.ruleForm.pageNum = 1;
+      this.ruleForm.startIndex = 1;
       this.fetch();
     },
     //选择商品或者活动弹出框中的 刷新按钮事件 清除所有筛选项和分页回到第一页
     refresh() {
       this.ruleForm.pageNum = 1;
+      this.ruleForm.startIndex = 1;
       this.$refs.ruleForm.resetFields();
       this.fetch();
     }
