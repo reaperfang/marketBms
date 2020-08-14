@@ -297,8 +297,10 @@ export default {
       stayProcessedCount: "",
       staySendCount: "",
       stayAuthCount: "",
-      pageLink: location.protocol + "//omo.aiyouyi.cn/bh",//客户工作台地址
-      gzLink:location.protocol + "//omo.aiyouyi.cn/cp/?cid=" + this.cid,//公众号商城地址
+      pageLink:'',
+      gzLink:'',
+      // pageLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh",//客户工作台地址
+      // gzLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid,//公众号商城地址
       qrCode: "",//客户工作台二维码
       wxQrcode:"",//小程序二维码
       gzQrcode:"",//公众号二维码
@@ -306,7 +308,6 @@ export default {
       isEmpowerGZ:false,//微信公众号是否授权
       isReleaseWX:false,//微信小程序是否发布
       isReleaseGZ:false,//微信公众号是否发布
-      protocol: location.protocol,
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
       helpNews: []
@@ -321,13 +322,22 @@ export default {
   created() {
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
+      this.getLink();
       this.getQrcode();
       this.getOverviewDetails();
       this.getOerviewRemind();
       this.getOverviewSelling();
+      this.getProductNews();
+      this.getHelpNews();
+      this.getWXQrcode();
+      this.getGZQrcode();
+      this.isEmpower();
+      this.getIsReleaseWX();
+      this.getIsReleaseGZ();
     });
     this.$message.closeAll();
     this.init();
+    this.getLink();
     this.getQrcode();
     this.getOverviewDetails();
     this.getOerviewRemind();
@@ -339,7 +349,6 @@ export default {
     this.isEmpower();
     this.getIsReleaseWX();
     this.getIsReleaseGZ();
-
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
@@ -360,6 +369,11 @@ export default {
         .catch(error => {
           console.log("error", error);
         });
+    },
+
+    getLink(){
+      this.pageLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh" //客户工作台地址
+      this.gzLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid //公众号商城地址
     },
 
     //获取客户工作台二维码
@@ -620,7 +634,7 @@ export default {
       }
     }
     .p_l_main {
-      margin-top: 15px;
+      margin-top: 10px;
       display: flex;
       .dealt{
         width: 246px;
@@ -683,7 +697,7 @@ export default {
       }
     }
     .p_l_bottom {
-      margin-top: 15px;
+      margin-top: 10px;
       display: flex;
       .p_l_bottom_l{
         flex: 1;
@@ -733,8 +747,8 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 60px;
-              height: 60px;
+              width: 76px;
+              height: 76px;
             }
             .opt{
               margin-top: 20px;

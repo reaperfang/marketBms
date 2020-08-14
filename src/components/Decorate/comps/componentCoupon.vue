@@ -104,6 +104,7 @@ export default {
         return;
       }
       if(newValue == 2) {
+        this.displayList = [];
         this.fetch();
       }else{
         this.displayList = [];

@@ -353,5 +353,14 @@ export default {
         needFakeDataWidget.push(item.type);
       });
       return needFakeDataWidget;
+    },
+
+    /* 根据type获取到对应的组件配置数据 */
+    getComponentConfigData(type) {
+      let widgetList = [];
+      for(let k in this.widgetList){
+        widgetList = [...widgetList, ...this.widgetList[k].list];
+      }
+      return widgetList.filter(item => item.type === type)[0];
     }
 };
