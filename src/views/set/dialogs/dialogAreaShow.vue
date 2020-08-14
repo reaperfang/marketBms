@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    :width="500"
+    width="500"
     title="配送到"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
@@ -14,7 +14,7 @@
       </div>
     </div>
     <span slot="footer" class="dialog-footer fcc">
-        <el-button @click="dialogVisible = false">关闭</el-button>
+        <el-button @click="close">关闭</el-button>
     </span>
   </el-dialog>
 </template>
@@ -54,6 +54,9 @@ export default {
   },
   methods: {
     submit() {
+    },
+    close() {
+      this.$emit('close')
     }
   },
 

@@ -119,7 +119,7 @@
         <el-button @click="submit('ruleForm')" type="primary">确 定</el-button>
       </div>
     </section>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :data="currTemplate"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :data="currTemplate" @close="dialogClose"></component>
   </div>
 </template>
 <script>
@@ -230,6 +230,7 @@ export default {
   },
   methods: {
     showMoreAreaInfoList(item) {
+      console.log(11111)
       this.currTemplate = item.areaInfoList
       this.currentDialog = 'DialogAreaShow'; 
       this.dialogVisible = true
@@ -434,7 +435,9 @@ export default {
         }
       ];
     },
-    dialogClose() {},
+    dialogClose() {
+      this.dialogVisible = false
+    },
     selectedRegions() {},
     fetch() {},
     getArea() {

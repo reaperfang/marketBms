@@ -26,19 +26,19 @@
             ref="popover"
             :popper-class="'editor-view-popover active'"
             placement="right-start"
-            :width="getComponentData(item).noDelete ? 0 : 76"
+            :width="getComponentConfigData(item, key).noDelete ? 0 : 76"
             :popper-options="{boundariesElement: 'viewport', boundariesPadding: 64}"
-            :disabled="getComponentData(item).noDelete || popoverDisabled"
+            :disabled="componentConfigData[key] ? componentConfigData[key].noDelete : getComponentConfigData(item, key).noDelete"
             trigger="hover">
             <div class="arrow-box" @mouseover="componentMouseover(item)" @mouseout="componentMouseleave(item)" @click="deleteComponent(item)">
-              <span>{{getComponentData(item).title}}</span>
+              <span>{{componentConfigData[key].title}}</span>
               <i v-show="item !== basePropertyId" class="el-icon-delete"></i>
             </div>
             <div 
               slot="reference"
               class="component_wrapper" 
               :data-id="getComponentData(item).id"
-              v-if="!getComponentData(item).hidden"
+              v-if="!componentConfigData[key].hidden"
               :key="key" 
               :class="{'actived': item === currentComponentId}"
               @click="selectComponent(item)" 
@@ -50,9 +50,13 @@
                 <!--<i v-if="item !== basePropertyId" class="delete_btn" @click.stop="deleteComponent(item)" title="移除此组件"></i>
                 <transition name="fade">
                   <div v-show="item === currentMouseOverComponentId" class="title-box">
-                    <div class="popper">{{getComponentData(item).title}}</div>
+                    <div class="popper">{{componentConfigData[key].title}}</div>
                   </div>
                 </transition>-->
+                <div class="border-line border-line-l"></div>
+                <div class="border-line border-line-t"></div>
+                <div class="border-line border-line-r"></div>
+                <div class="border-line border-line-b"></div>
             </div>
           </el-popover>
           </div>
@@ -62,7 +66,7 @@
       <!-- 不可拖拽调整顺序,可用来预览 -->
       <template v-else>
         <template v-for="(item, key) of componentDataIds">
-          <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentData(item).hidden">
+          <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentConfigData(item, key).hidden">
             <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :dragable="dragable"  @componentDataLoaded="componentDataLoaded"></component>
           </div>
         </template>
@@ -126,6 +130,7 @@ export default {
       loadPercent: 0,
       scrollBottomMark: false, //只有当点击或者拖拽新添加组件时为true，等新的组件加载完成，需要触发滚动至底部事件的标记，然后初始为false
       scrollAutoMark: false, //只有当点击或者拖拽新添加组件时为true，等新的组件加载完成，需要触发滚动至组件位置事件的标记，然后初始为false
+      componentConfigData: {}, //配置数据
     }
   },
   computed:{
@@ -165,6 +170,16 @@ export default {
     getComponentData(id) {
       console.log(this.componentDataMap[id])
       return this.componentDataMap[id];
+    },
+
+    //获取配置文件对应组件数据
+    getComponentConfigData(id, index) {
+      let data = widget.getComponentConfigData(this.componentDataMap[id].type);
+      if(!data){
+        data = this.getComponentData(id);
+      }
+      this.componentConfigData[index] = data;
+      return data;
     },
 
     //加载模板列表
@@ -421,9 +436,44 @@ export default {
       scrollbar-width: none;
 
       .component_wrapper{
+        .border-line {
+          position: absolute;
+          display: none;
+        }
+        .border-line-l {
+          left: 0;
+          top: 0;
+          width: 2px;
+          height: 100%;
+          border-left: 2px dashed $globalMainColor;
+        }
+        .border-line-t {
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 2px;
+          border-top: 2px dashed $globalMainColor;
+        }
+        .border-line-r {
+          right: 0;
+          top: 0;
+          width: 2px;
+          height: 100%;
+          border-left: 2px dashed $globalMainColor;
+        }
+        .border-line-b {
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 2px;
+          border-top: 2px dashed $globalMainColor;
+        }
         // min-height: 50px;
         &.actived{
-          border:2px dashed $globalMainColor;
+          .border-line {
+            display: block;
+          }
+          //  border: 2px dashed $globalMainColor;
         }
         i{
           width:20px;

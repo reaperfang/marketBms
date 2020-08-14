@@ -62,7 +62,7 @@
             <el-table
                 v-loading="loading"
                 :data="tableData"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
                 style="width: 100%">
                 <el-table-column
                     prop="number"

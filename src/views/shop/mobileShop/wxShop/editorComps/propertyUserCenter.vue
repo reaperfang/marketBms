@@ -114,8 +114,8 @@
           <div class="help_blank"></div>
           <div class="buttons">
             <el-button @click="resetLoading = true; resetData()" :loading="resetLoading">重    置</el-button>
-            <el-button @click="userCenterSave()" :loading="saveDataLoading" :disabled="true">保    存</el-button>
-            <el-button type="primary" @click="userCenterSaveAndApply()" :loading="saveAndApplyDataLoading" :disabled="true">保存并生效</el-button>
+            <el-button @click="userCenterSave()" :loading="saveDataLoading">保    存</el-button>
+            <el-button type="primary" @click="userCenterSaveAndApply()" :loading="saveAndApplyDataLoading">保存并生效</el-button>
             <el-popover
               v-if="showPreviewCode"
               ref="popover2"
