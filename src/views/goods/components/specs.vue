@@ -326,6 +326,13 @@ export default {
     methods: {
         specsChange(index, str) {
             if(str == 'costPrice') {
+				if (this.list[index].costPrice > 10000000) {
+					this.$message({
+						message: '当前成本价最大限制为10000000，请您重新输入',
+						type: 'warning'
+					});
+					return
+				}
                 if(+this.list[index].costPrice < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].costPrice)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showCostPriceError: true,
@@ -338,6 +345,13 @@ export default {
                     }))
                 }
             } else if(str == 'salePrice') {
+				if (this.list[index].salePrice > 10000000) {
+					this.$message({
+						message: '当前售卖价最大限制为10000000，请您重新输入',
+						type: 'warning'
+					});
+					return
+				}
                 if(+this.list[index].salePrice < 0 || !/[\d+\.\d+|\d+]/.test(this.list[index].salePrice)) {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showSalePriceError: true,
@@ -570,7 +584,7 @@ export default {
         margin-left: 22px;
     }
     .upload-spec-ku {
-       margin-left: 22px; 
+       margin-left: 22px;
     }
     .spec-operate {
         margin-left: 34px;
