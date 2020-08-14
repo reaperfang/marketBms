@@ -163,7 +163,7 @@
                 </p>
               </div>
               <div v-if="isReleaseWX">
-                <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="erweima" alt/>
+                <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
                   <el-button>立即发布</el-button>
@@ -187,7 +187,7 @@
                 </p>
               </div>
               <div v-if="isReleaseGZ">
-                <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="erweima" alt/>
+                <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
                   <el-button>立即发布</el-button>
@@ -299,8 +299,6 @@ export default {
       stayAuthCount: "",
       pageLink:'',
       gzLink:'',
-      // pageLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh",//客户工作台地址
-      // gzLink: process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid,//公众号商城地址
       qrCode: "",//客户工作台二维码
       wxQrcode:"",//小程序二维码
       gzQrcode:"",//公众号二维码
@@ -749,6 +747,10 @@ export default {
             .erweima{
               width: 76px;
               height: 76px;
+            }
+            .no_release{
+              width: 61px;
+              height:61px;
             }
             .opt{
               margin-top: 20px;
