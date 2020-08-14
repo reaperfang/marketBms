@@ -25,9 +25,10 @@
 							>
 								<pchart
 									:radius="10"
-									:progress="70"
+									:progress="item.progress"
 									:stroke-width="8"
 									:isAnimation="true"
+									:barColor="item.barColor"
 								></pchart></div
 						></el-col>
 					</el-row>
@@ -59,7 +60,11 @@ export default {
 		return {
 			startVal: 0,
 			endVal: 1000000,
-			chartData: [1, 2, 3]
+			chartData: [
+				{ progress: 75, barColor: "RGBA(255, 0, 139, 1)" },
+				{ progress: 70, barColor: "RGBA(255, 92, 49, 1)" },
+				{ progress: 10, barColor: "RGBA(245, 159, 0, 1)" }
+			]
 		};
 	},
 	computed: {
