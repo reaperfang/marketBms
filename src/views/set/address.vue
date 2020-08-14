@@ -179,7 +179,7 @@ export default {
       this.getAddressList()
     },
     goAddressNew() {
-      this.$router.push({ path: '/set/addressUpdate' }) 
+      this.$router.push({ path: '/set/addressAdd' }) 
     },
     hanldeOpenDelivery(id) {
       this.confirm({
