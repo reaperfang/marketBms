@@ -262,7 +262,7 @@
             <span class="title1">帮助中心</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=shushangdongtai'"
+            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=yidongshangcheng'"
             target="_blank"
             :underline="false"
           >
