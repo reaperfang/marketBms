@@ -1,4 +1,4 @@
-/* 数据总览 */
+/* 用户概览 */
 <script type='es6'>
 import chartBase from "@/components/ChartBase";
 export default {
@@ -28,12 +28,12 @@ export default {
         },
         legend: {  
             x:'right',      //可设定图例在左、右、居中
-          y:'top',
-          data: ['今日', '昨日'],
-          icon: "circle",
-          itemWidth:8,
-          },  
-          color:['#0077FF','#2FC25B'],
+            y:'top',
+            data: ['用户总数','新增用户', '新增会员'],
+            icon: "circle",
+            itemWidth:8,
+          }, 
+        color:['#0077FF','#2FC25B','#FF8615'], 
         grid: {
           top:'11%',
           left: "0%",
@@ -63,7 +63,7 @@ export default {
           },
         },
          series: [{
-                    name: '今日',
+                    name: '用户总数',
                     data: [820, 932, 901, 934, 1290, 1330, 1320],
                     type: 'line',
                     hoverAnimation:false,
@@ -76,13 +76,25 @@ export default {
                     },
                 },
                 {
-                    name: '昨日',
+                    name: '新增用户',
+                    data: [20, 71, 123, 934, 1545, 456, 178],
+                    type: 'line',
+                    hoverAnimation:false,
+                    symbol:'circle',
+                    symbolSize: 8,   //设定实心点的大小
+                    itemStyle:{  
+                        normal:{  
+                        borderColor:'#fff',  //拐点边框颜色  
+                        }  
+                    },
+                },
+                {
+                    name: '新增会员',
                     data: [620, 711, 823, 934, 1445, 1456, 1178],
                     type: 'line',
                     hoverAnimation:false,
                     symbol:'circle',
                     symbolSize: 8,   //设定实心点的大小
-                    // color:['#2FC25B'],
                     itemStyle:{  
                         normal:{  
                         borderColor:'#fff',  //拐点边框颜色  

@@ -146,7 +146,7 @@
                         </div>
                     </div>
                 </div>
-                <screeningChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart" height="420px" ></screeningChart>
+                <tradeChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart" height="420px" ></tradeChart>
             </div>
         </el-aside>
         <el-main class="p_rtsiade" style="padding:0">
@@ -195,7 +195,7 @@
                     </div>
                 </div>
                 <div class="chartbox">
-                    <screeningChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart" height="300px" ></screeningChart>
+                    <userChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart" height="300px" ></userChart>
                 </div>
             </div>
         </el-aside>
@@ -221,14 +221,114 @@
             </div>
         </el-main>
     </el-container>
-    <!--  -->
-    <div class="p_container pb12">
-       <div class="p_title clearfix">
-           <h2>商品看板</h2>
-      </div>
-      <div class="p_product">
-          <div class="pro_item"></div>
-      </div>
+    <!-- 商品看板 -->
+    <div class="clearfix">
+        <div class="p_container">
+            <div class="p_title clearfix">
+            <h2>商品看板</h2>
+            </div>
+        </div>
+        <el-row class="p_product">
+            <el-col :span="8">
+                <div class="pro_item">
+                    <div class="pro_tle tle1">支付商品TOP</div>
+                    <ul>
+                        <li><span>排名</span><span>商品</span><span>支付金额</span></li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><span>04</span></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><span>05</span></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                    </ul>
+                </div>
+            </el-col>
+            <el-col :span="8">
+                <div class="pro_item">
+                    <div class="pro_tle tle2">销量商品TOP</div>
+                    <ul>
+                        <li><span>排名</span><span>商品</span><span>支付金额</span></li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><span>04</span></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><span>05</span></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                    </ul>
+                </div>
+            </el-col>
+            <el-col :span="8">
+                <div class="pro_item nonerb">
+                    <div class="pro_tle tle3">浏览商品TOP</div>
+                    <ul>
+                        <li><span>排名</span><span>商品</span><span>支付金额</span></li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><span>04</span></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                        <li>
+                            <span><span>05</span></span>
+                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
+                            <span><p>866.23</p></span>
+                        </li>
+                    </ul>
+                </div>
+            </el-col>
+        </el-row>
     </div>
 </div>
 </template>
@@ -239,9 +339,11 @@ import pfChart from "./components/pfChart";
 import screeningChart from "./components/realtime/screeningChart";
 import mapChart from "./components/realtime/mapChart";
 import pieChart from "./components/realtime/pieChart";
+import tradeChart from "./components/realtime/tradeChart";
+import userChart from "./components/realtime/userChart";
 export default {
   name: "realTimeView",
-  components: { pfChart,screeningChart,mapChart,pieChart,serchRt },
+  components: { pfChart,screeningChart,mapChart,pieChart,tradeChart,userChart,serchRt },
   data() {
     const _self = this;
     return {
@@ -320,6 +422,7 @@ export default {
     top: 50%;
     margin-top: -50px;
     right: 0;
+    z-index: 999999;
 }
 .pb12{
 margin-bottom: 12px;
@@ -558,7 +661,91 @@ height:0px;
         }
     }
 }
-
+.p_product{
+    padding: 30px 0;
+    background: #fff;
+    .pro_item{
+        width: 100%;
+        padding: 0 20px;
+        height: 388px;
+        border-right: 1px solid #EDEDED;
+        .pro_tle{
+            width: 248px;
+            height: 42px;
+            line-height: 36px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            margin: 0 auto;
+            font-family:PingFang SC Heavy,PingFang SC;
+        }
+        .tle1{
+            background-image: url(../../assets/images/realtime/title1.png);
+        }
+        .tle2{
+            background-image: url(../../assets/images/realtime/title2.png);
+        }
+        .tle3{
+            background-image: url(../../assets/images/realtime/title3.png);
+        }
+        ul{
+            li{
+                width: 100%;
+                padding: 10px 0;
+                height: 62px;
+                color: #3D434A;
+                span{
+                    float: left;
+                }
+                span:nth-child(1){
+                    width: 36px;
+                    text-align: center;
+                    img{
+                        padding-top: 6px;
+                    }
+                    span{
+                        font-weight: bold;
+                        line-height: 42px;
+                    }
+                }
+                span:nth-child(2){
+                    width: 60%;
+                    text-align: left;
+                    padding-left: 40px;
+                    img{
+                        width: 42px;
+                        height: 42px;
+                    }
+                    p{
+                        padding-left: 10px;
+                        line-height: 42px;
+                        // width: 100%;
+                        height: 42px;
+                        overflow: hidden;
+                        text-overflow:ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+                span:nth-child(3){
+                    width: calc(40% - 36px);
+                    text-align: right;
+                    p{
+                        line-height: 42px;
+                    }
+                }
+            }
+            li:first-child{
+                padding: 10px 0 0;
+                color: #92929B;
+                line-height: 28px;
+                height: 38px;
+            }
+        }
+    }
+    .pro_item.nonerb{
+        border-right:none;
+    }
+}
 
 
 </style>

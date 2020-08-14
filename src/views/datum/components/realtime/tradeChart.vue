@@ -1,4 +1,4 @@
-/* 数据总览 */
+/* 交易看板 */
 <script type='es6'>
 import chartBase from "@/components/ChartBase";
 export default {
@@ -28,12 +28,12 @@ export default {
         },
         legend: {  
             x:'right',      //可设定图例在左、右、居中
-          y:'top',
-          data: ['今日', '昨日'],
-          icon: "circle",
-          itemWidth:8,
-          },  
-          color:['#0077FF','#2FC25B'],
+            y:'top',
+            data: ['支付金额','支付订单数', '支付人数','客单价'],
+            icon: "circle",
+            itemWidth:8,
+          }, 
+        color:['#FF8615','#0077FF','#2FC25B','#655EFF'], 
         grid: {
           top:'11%',
           left: "0%",
@@ -63,7 +63,7 @@ export default {
           },
         },
          series: [{
-                    name: '今日',
+                    name: '支付金额',
                     data: [820, 932, 901, 934, 1290, 1330, 1320],
                     type: 'line',
                     hoverAnimation:false,
@@ -76,8 +76,35 @@ export default {
                     },
                 },
                 {
-                    name: '昨日',
+                    name: '支付订单数',
                     data: [620, 711, 823, 934, 1445, 1456, 1178],
+                    type: 'line',
+                    hoverAnimation:false,
+                    symbol:'circle',
+                    symbolSize: 8,   //设定实心点的大小
+                    // color:['#2FC25B'],
+                    itemStyle:{  
+                        normal:{  
+                        borderColor:'#fff',  //拐点边框颜色  
+                        }  
+                    },
+                },
+                {
+                    name: '支付人数',
+                    data: [80, 93, 91, 94, 129, 133, 120],
+                    type: 'line',
+                    hoverAnimation:false,
+                    symbol:'circle',
+                    symbolSize: 8,   //设定实心点的大小
+                    itemStyle:{  
+                        normal:{  
+                        borderColor:'#fff',  //拐点边框颜色  
+                        }  
+                    },
+                },
+                {
+                    name: '客单价',
+                    data: [20, 11,83, 94, 145, 156, 178],
                     type: 'line',
                     hoverAnimation:false,
                     symbol:'circle',
