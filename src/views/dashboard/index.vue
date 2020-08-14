@@ -34,7 +34,7 @@
 
 		<el-row class="row-4">
 			<el-col :span="7">
-				<div class="row-4-grid-content">
+				<!-- <div class="row-4-grid-content">
 					<el-row type="flex" justify="space-between" class="item">
 						<el-col :span="12">
 							<gridtitle
@@ -43,7 +43,8 @@
 						</el-col>
 						<el-col :span="12"> </el-col>
 					</el-row>
-				</div>
+				</div> -->
+				<order></order>
 			</el-col>
 			<el-col :span="10">
 				<mallhistory></mallhistory>
@@ -78,6 +79,10 @@ import mallvistors from "./modules/MallVistors/index";
 import transaction from "./modules/transaction/index";
 
 import mallhistory from "./modules/MallHistory/index"
+
+
+//下单转换漏斗最近七天
+import order from "./modules/order/index"
 export default {
 	name: "mall",
 	components: {
@@ -89,7 +94,8 @@ export default {
 		transaction,
 		todayuserdeal,
 		paymalldeal,
-		mallhistory
+		mallhistory,
+		order
 	},
 	data() {
 		return {};
