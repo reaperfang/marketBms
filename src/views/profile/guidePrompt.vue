@@ -30,7 +30,7 @@ export default {
       return shopInfo.id;
     },
     storeGuide() {
-      return this.$store.state.shop.storeGuide
+      return this.$store.state.shop.storeGuide || null
       // let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       // return shopInfo.storeGuide || null;
     }
@@ -39,7 +39,7 @@ export default {
   watch: {},
 
   created() {
-    this.getShopInfo()
+    this.init()
   },
 
   mounted() {},
@@ -53,8 +53,8 @@ export default {
       }
       this._apis.set.updateShopInfo(data).then(response =>{
         this.$store.dispatch('getShopInfo');
-        this.storeGuide = response && response.storeGuide || storeGuide
-        this.$store.commit('setStoreGuide', this.storeGuide)
+        const storeGuide = response && response.storeGuide || storeGuide
+        this.$store.commit('setStoreGuide', storeGuide)
         this.isClick = true
         // this.$nextTick(()=> {
         //   this.$refs.shopInfoMap.clearSearchResultList()
@@ -90,7 +90,7 @@ export default {
       this._apis.set
         .getShopInfo({ id: id })
         .then(response => {
-          this.storeGuide = response && response.storeGuide
+          // this.storeGuide = response && response.storeGuide
           this.init()
         })
     },
