@@ -1,7 +1,11 @@
 <template>
 	<div class="icon-user">
-		<div class="row start">{{title}}</div>
-		<div class="row end">5156556</div>
+		<div class="row start">
+			<span>总用户</span>
+		</div>
+		<div class="row end">
+			<span>5156556</span>
+		</div>
 	</div>
 </template>
 
@@ -19,7 +23,7 @@ export default {
 	// 		default: false
 	// 	}
 	// },
-	props:["title"],
+	props: ["title"],
 	components: {},
 	data: function() {
 		return {};
@@ -50,17 +54,22 @@ export default {
 	bottom: 0;
 	right: 0;
 	height: 70px;
-	width: 70px;
-	.start {
-		font-size: 12px;
+	width: 100px;
+	.start,
+	.end {
 		font-weight: 400;
 		color: rgba(255, 255, 255, 1);
+		display: flex;
+		justify-content: center;
+	}
+
+	.start {
+		font-size: 14px;
 	}
 
 	.end {
-		font-size: 14px;
-		font-weight: 400;
-		color: rgba(255, 255, 255, 1);
+		font-size: 20px;
+		margin-top: 10px;
 	}
 
 	// background: yellow;

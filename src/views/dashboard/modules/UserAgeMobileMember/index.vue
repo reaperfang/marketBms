@@ -2,18 +2,18 @@
 	<div class="grid-content flex-column">
 		<el-row type="flex" justify="space-between" class="item">
 			<el-col :span="12">
-				<vitem :title="'用户渠道分别'" :chartData="chartData"></vitem>
+				<vitem :title="'用户渠道分别'" :chartData="chartData" :icon="'0'"></vitem>
 			</el-col>
 			<el-col :span="12">
-				<vitem :title="'渠道会员转换'" :chartData="chartData"></vitem>
+				<vitem :title="'渠道会员转换'" :chartData="chartData" :icon="'1'"></vitem>
 			</el-col>
 		</el-row>
 		<el-row type="flex" justify="space-between" class="item">
 			<el-col :span="12">
-				<vitem :title="'性别年龄分布'" :chartData="chartData"></vitem>
+				<vitem :title="'性别年龄分布'" :chartData="chartData" :icon="'2'"></vitem>
 			</el-col>
 			<el-col :span="12">
-				<vitem :title="'绑定手机号'" :chartData="chartData"></vitem>
+				<vitem :title="'绑定手机号'" :chartData="chartData" :icon="'3'"></vitem>
 			</el-col>
 		</el-row>
 	</div>

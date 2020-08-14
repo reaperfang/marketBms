@@ -1,5 +1,5 @@
 <template>
-	<div class="grid-content flex-column">
+	<div class="grid-content  flex-column">
 		<el-row type="flex" justify="space-between" class="item-start">
 			<el-col :span="24">
 				<vpay></vpay>
