@@ -461,7 +461,8 @@
                     <div class='checkbox-item'>
                         <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
                     </div>
-                    <div class='checkbox-item'>
+                    <!-- 注释掉上门自提功能 -->
+                    <div class='checkbox-item' style="display:none">
                         <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-left:50px;">上门自提</el-checkbox>
                         <div> 
                             <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
