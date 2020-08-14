@@ -214,7 +214,7 @@ export default {
       rules: {},
       showCode: false,   //是否显示二维码
       qrCode: '',
-      showPreviewCode: true  //预览二维码按钮是否可见
+      showPreviewCode: false  //预览二维码按钮是否可见
     }
   },
   watch:{
