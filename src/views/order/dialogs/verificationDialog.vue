@@ -66,8 +66,8 @@ export default {
        
         })
       .then(res=>{
-          console.log("res====")
-          console.log(res)
+        debugger
+          if(res&&res.isSucess){//自提码验证成功
           self.isShowError = false;
           self.isSucess = true;
           let timer = setInterval(() => {
@@ -83,9 +83,15 @@ export default {
         } else if(this.$route.name == 'orderDetail') {
           // this.$parent.$parent.getDetail()
         }
+        }else{//自提码验证失败
+           self.isShowError = true;
+           self.errorMsg = res.msg
+        }
       }).catch(err=>{
-        console.log('error')
+        console.log('报错啦error')
         console.log(err)
+        
+        
 
       })
       // if (true) {

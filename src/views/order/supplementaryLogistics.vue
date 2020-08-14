@@ -70,7 +70,7 @@
                             <i class="take-in-icon"></i>
                             <span>收货信息</span>
                         </div>
-                        <!-- <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div> -->
+                        <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
                     </div>
                     <div class="content">
                         <div class="item">
@@ -120,14 +120,14 @@
                         <el-form-item label="配送方式">
                             <span>普通快递</span>
                         </el-form-item>
-                        <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
+                        <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': express != null}">
                             <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
                             <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
                         </el-form-item>
-                        <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
-                            <el-input maxlength="20" :disabled="!express" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
+                        <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': express != null}">
+                            <el-input maxlength="20" :disabled="express != null" :placeholder="express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
                         </el-form-item>
                         <el-form-item label="物流备注" prop="remark">
                             <el-input
@@ -194,7 +194,19 @@
                 <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">确定</el-button>
             </div>
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :ajax="ajax" @getDetail="getOrderDetail"></component>
+        <component 
+            v-if="dialogVisible" 
+            :is="currentDialog" 
+            :dialogVisible.sync="dialogVisible" 
+            :data="currentData" 
+            @submit="onSubmit" 
+            :sendGoods="sendGoods" 
+            :ajax="ajax" 
+            @getDetail="getOrderDetail"
+            :orderSendGoodsHander="orderSendGoodsHander"
+            :params="params"
+            :list="_list">
+        </component>
     </div>
 </template>
 <script>
@@ -203,6 +215,7 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 export default {
     data() {
@@ -273,7 +286,7 @@ export default {
             expressCompanyList: [],
             sendGoods: '',
             title: '',
-            express: true,
+            express: null,
             sending: false,
             distributorList: [], //配送员筛选后的数据
             distributorListFilter: [], //所有配送员数据
@@ -281,7 +294,9 @@ export default {
             distributorId: '', //配送员id
             isDistributorShow: false, //尚未创建配送员信息提示控制
             distributorSet: false,
-            ajax: true
+            ajax: true,
+            params: {},
+            _list: []
         }
     },
     created() {
@@ -466,7 +481,7 @@ export default {
         .checkExpress({expressName})
         .then(res => {
           this.express = res;
-          if(this.express) {
+          if(this.express == null) {
               this.$set(this.rules, "expressNos", [
                 { required: true, message: "请输入快递单号", trigger: "blur" }
               ]);
@@ -476,6 +491,10 @@ export default {
               ]);
 
           }
+
+          this._list.splice(0, 1, Object.assign({}, this._list[0], {
+            expressCompanyCodes: this.ruleForm.expressCompanyCode
+          }))
         })
         .catch(error => {
           this.visible = false;
@@ -523,7 +542,7 @@ export default {
         },
         sendGoodsHandler(formName) {
             
-            this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params
 
@@ -588,20 +607,42 @@ export default {
                             obj
                         ],
                     }
+                    this.params = params
+                    if(this.express != null && !this.express.specificationSize) {
+                        try {
+                        let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
-                    this._apis.order.orderSendGoods(params).then((res) => {
-                        this.$message.success('补填物流成功');
-                        this.sending = false
-                        this.$router.push('/order/query')
-                    }).catch(error => {
-                        this.$message.error(error);
-                        this.sending = false
-                    })
+                        if(res && res.length) {
+                            this._list[0].sizeList = res
+                            this.currentData = {
+                                list: this._list,
+                                expressCompanyList: this.expressCompanyList
+                            }
+                            this.currentDialog = 'SelectSizeDialog'
+                            this.title = '提示'
+                            this.dialogVisible = true
+                        }
+                        } catch(e) {
+                            this.$message.error(error);
+                        }
+                    } else {
+                        this.orderSendGoodsHander(params)
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
+        },
+        orderSendGoodsHander(params) {
+            this._apis.order.orderSendGoods(params).then((res) => {
+                this.$message.success('补填物流成功');
+                this.sending = false
+                this.$router.push('/order/query')
+            }).catch(error => {
+                this.$message.error(error);
+                this.sending = false
+            })
         },
         changeReceivedInfo() {
             this.currentDialog = 'ReceiveInformationDialog'
@@ -629,6 +670,7 @@ export default {
                 })
                 this.orderDetail = res[0]
                 this.orderSendInfo = res[0]
+                this._list = res
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
 
@@ -668,7 +710,8 @@ export default {
         }
     },
     components: {
-        ReceiveInformationDialog
+        ReceiveInformationDialog,
+        SelectSizeDialog
     }
 }
 </script>
