@@ -128,12 +128,12 @@ export default {
           txt = item.isDefaltSenderAddress === 1 ? '默认发货地址': '发货地址'
           break;
         case 1:
-          txt = item.isDefaltReturnAddress === 1 ? '默认收货地址' : '收货地址'
+          txt = item.isDefaltReturnAddress === 1 ? '默认退货地址' : '退货地址'
           break;
         case 2:
           txt = item.isDefaltSenderAddress === 1 ? '默认发货地址': '发货地址'
           txt += '/'
-          txt += item.isDefaltReturnAddress === 1 ? '默认收货地址' : '收货地址'
+          txt += item.isDefaltReturnAddress === 1 ? '默认退货地址' : '退货地址'
           break;
       }
       return txt
