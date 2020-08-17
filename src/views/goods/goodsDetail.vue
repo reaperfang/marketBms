@@ -2386,7 +2386,6 @@ export default {
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)
                     res.goodsInfos = __goodsInfos
-                    debugger
                     }else if(res.specsType===0){ //单一规格
                     this.singleSpec = Object.assign({}, this.singleSpec, res.goodsInfos[0], {
                             //goodsInfos: [res.goodsInfo]

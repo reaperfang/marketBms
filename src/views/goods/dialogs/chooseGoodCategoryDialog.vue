@@ -278,6 +278,7 @@ export default {
             this.operateCategoryList = res;
             this.itemCatList = arr;
             this.firstCatList = arr;
+            this.getHistoryProductCategory(this.data)
             this.searchCategory("first");
             this.getCommonCategoryList(); //获取常用类目
             resolve(res.list);
