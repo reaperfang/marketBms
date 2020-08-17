@@ -91,14 +91,6 @@ export default {
     };
   },
   created() {
-    if(this.data&&this.data.child){
-      this.itemCatText = this.data.name + ' / '+this.data.child.categoryName;
-      this.commonCat = this.data;
-   
-      }else{
-        this.itemCatText ='';
-        this.commonCat={};
-    }
     this.getOperateCategoryList();
   },
   watch: {},
@@ -120,7 +112,6 @@ export default {
     //查询常用类目
     getCommonCategoryList() {
       this.commonCategories = [];
-      // this.commonCat = {};
       this._apis.goods
         .getProCommonCategory({ cid: this.cid })
         .then((res) => {
@@ -345,6 +336,25 @@ export default {
         this.commonCat = parentTemp;
       }
     },
+    getHistoryProductCategory(id){//获取历史类目
+      if(id){
+          let category = this.operateCategoryList.find(val =>val.id == id);
+          if(category && category.parentId!=0){
+              let parentCat = this.operateCategoryList.find(val => val.id == category.parentId);
+              parentCat.child = category;
+              this.commonCat = parentCat;
+              this.itemCatText = parentCat.name + " > " + category.name;
+              this.currentCategory = category;
+          }else{
+            this.itemCatText ='';
+            this.commonCat={};
+          }
+       }else{
+         this.itemCatText ='';
+         this.commonCat={};
+      }
+    }
+
   },
 
   props: {
