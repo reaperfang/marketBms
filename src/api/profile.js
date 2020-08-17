@@ -33,7 +33,7 @@ export function getProductNews(data) {
 // 帮助中心
 export function getHelpNews(data) {
   return request({
-    url: '/news?dept=aiyouyi.cn&cat=yidongshangcheng&pagenum=8',
+    url: '/info?dept=aiyouyi.cn&cat=yidongshangcheng&pagenum=8',
     method: 'get',
     baseURL: process.env.ZX_API,
     data
