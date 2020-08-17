@@ -923,7 +923,7 @@ export default {
         },
         editCategory(){
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后在进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后再进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1382,10 +1382,11 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
-
+            let checkedCount = val.length;
             if(this.list.length == this.multipleSelection.length) {
                 this.checkedAll = true
             }
+             this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
         },
         stateHandler(val) {
             if(this.listQuery.status === val) {
