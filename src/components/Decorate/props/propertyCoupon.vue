@@ -127,7 +127,7 @@ export default {
         this.fetch();
       }else{
         this.displayList = [];
-        this.fetch();
+        this.fetch(false);
       }
     },
 

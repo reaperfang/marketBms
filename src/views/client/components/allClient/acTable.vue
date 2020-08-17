@@ -22,8 +22,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="phone" label="手机号"></el-table-column>
-      <el-table-column label="身份" :width="150">
+      <el-table-column prop="phone" label="手机号" :width="150"></el-table-column>
+      <el-table-column label="身份" :width="130">
         <template slot-scope="scope">
           <div class="clearfix iden_cont">
             <span class="fl">{{scope.row?scope.row.memberType:""}}</span>
@@ -396,12 +396,12 @@ export default {
   }
 }
 .iden_cont{
-  width: 150px;
+  width: 140px;
   > span{
     line-height: 46px;
   }
   div{
-    width: 110px;
+    width: 100px;
     span{
       display: block;
       font-size: 12px;
