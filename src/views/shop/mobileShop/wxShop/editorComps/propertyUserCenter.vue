@@ -68,7 +68,7 @@
                     :label="item.title"
                     label-width="72px"
                     :prop="'moduleList['+ index +'].titleValue'"
-                    :rules="item.disabled === 2 ? [{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }] : []">
+                    :rules="item.disabled === 2 ? [{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '请输入1~10个字符',trigger: 'blur' }] : []">
                     <div class="module_block color_block" style="position:relative;">
                         <div class="custom-disabled" v-show="item.disabled === 1"></div>
                         <el-input :disabled="item.disabled === 1" v-model="item.titleValue" placeholder="请输入"></el-input>
