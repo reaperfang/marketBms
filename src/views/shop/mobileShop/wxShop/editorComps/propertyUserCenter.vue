@@ -68,7 +68,7 @@
                     :label="item.title"
                     label-width="72px"
                     :prop="'moduleList['+ index +'].titleValue'"
-                    :rules="item.disabled === 2 ? [{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '要求1~10个字符',trigger: 'blur' }] : []">
+                    :rules="item.disabled === 2 ? [{ required: true, message: '请输入内容', trigger: 'blur' },{ min: 1, max: 10, message: '请输入1~10个字符',trigger: 'blur' }] : []">
                     <div class="module_block color_block" style="position:relative;">
                         <div class="custom-disabled" v-show="item.disabled === 1"></div>
                         <el-input :disabled="item.disabled === 1" v-model="item.titleValue" placeholder="请输入"></el-input>
@@ -373,6 +373,10 @@ export default {
       const prevItem = this.ruleForm.moduleList[index - 1];
       this.$set(this.ruleForm.moduleList, index - 1, item);
       this.$set(this.ruleForm.moduleList, index, prevItem);
+      this.$nextTick(() => {
+        this.$refs['customFormItem'+index][0].clearValidate();
+        this.$refs['ruleForm'].validate();
+      })
     },
 
     //向下移动
@@ -380,6 +384,10 @@ export default {
       const nextItem = this.ruleForm.moduleList[index + 1];
       this.$set(this.ruleForm.moduleList, index + 1, item);
       this.$set(this.ruleForm.moduleList, index, nextItem);
+      this.$nextTick(() => {
+        this.$refs['customFormItem'+index][0].clearValidate();
+        this.$refs['ruleForm'].validate();
+      })
     },
 
      /* 弹框选中图片 */
