@@ -93,10 +93,10 @@
                 </div>
               </template>
               <template v-if="scope.row.isEdit">
-                <el-tooltip popper-class="goodSortTip" class="item" effect="light" placement="top">
+                <!-- <el-tooltip popper-class="goodSortTip" class="item" effect="light" placement="top">
                 <div slot="content">输入框内只能输入≥1的有效数字，不能输入特殊字符、<br/>
                     空格、中英文字符、负数、0等。  
-                </div>
+                </div> -->
                 <el-input
                   ref='goodSort'
                   v-model="scope.row.sortId"
@@ -105,7 +105,7 @@
                   @blur="changeEdit(scope.row)"
                   @change="saveGoodIndex(scope.row)">
                   </el-input>
-                 </el-tooltip>
+                 <!-- </el-tooltip> -->
               </template>
             </template>
             </el-table-column>
