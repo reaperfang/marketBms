@@ -2342,8 +2342,9 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                this.specRadio = res.specsType;       
-		//配送方式(根据选中去请求是否在店铺开启)
+                this.specRadio = res.specsType;  
+                this.historyProductCategoryId = res.productCategoryInfoId;     
+		        //配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
                     deliveryWayArr.push(2);
