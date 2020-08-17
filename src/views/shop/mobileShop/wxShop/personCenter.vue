@@ -14,7 +14,8 @@
       </div>
     </div>
     <div class="module props">
-      <propertyUserCenter 
+      <propertyUserCenter
+      ref="propertyUserCenter" 
       :saveAndApply="saveAndApply" 
       :data="ruleForm" 
       :save="save" 
@@ -210,9 +211,14 @@ export default {
           }
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
-          this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];
+          if(response.shareUrl){
+            this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];
+          }
         }
         this._globalEvent.$emit('userCenterResetLoading', true);
+        this.$nextTick(() => { //重置时重新验证，为了让错误提示消失
+          this.$refs['propertyUserCenter'].$refs['ruleForm'].validate();
+        })
       }).catch((error)=>{
         this.$message.error(error);
         this._globalEvent.$emit('userCenterResetLoading', false);

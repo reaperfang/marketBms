@@ -389,12 +389,28 @@ export default {
         this.handleOpenPayOnDelivery()
       }
     },
-
+    isOpenPrompt(query = {}) {
+      console.log('query',query, query.hasOwnProperty('balanceOfAccountPay'))
+      // wechatPay
+      // aliPay
+      // balanceOfAccountPay
+      // payOnDelivery
+      let isOpenPrompt = false
+      if (query.hasOwnProperty('wechatPay')) isOpenPrompt = query.wechatPay == 1 ? true : false
+      if (query.hasOwnProperty('alipayPay')) isOpenPrompt = query.alipayPay == 1 ? true : false
+      if (query.hasOwnProperty('balanceOfAccountPay')) isOpenPrompt = query.balanceOfAccountPay == 1 ? true : false
+      if (query.hasOwnProperty('payOnDelivery')) isOpenPrompt = query.payOnDelivery == 1 ? true : false
+      return isOpenPrompt
+    },
     onSubmit(data){
       let id = this.cid
       let query = Object.assign({id:id},data)
+      const isOpen = this.isOpenPrompt(query)
       this._apis.set.updateShopInfo(query).then(response =>{
-        this.$message.success('保存成功！');
+        console.log(123213131321, isOpen)
+        if (isOpen) this.$message.success('开启成功')
+        else this.$message.success('关闭成功');
+        // this.$message.success('开启成功');
         this.getShopInfo()
       }).catch(error =>{
         this.$message.error(error);
