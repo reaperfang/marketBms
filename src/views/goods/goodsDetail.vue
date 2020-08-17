@@ -723,7 +723,7 @@ export default {
             productLabelList: [], // 商品标签列表
             specIds: [],
             goodCategoryNames: '',
-            historyGoodCategory:{},
+            historyProductCategoryId: '',
             add: true,
 	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
             isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
@@ -1179,12 +1179,14 @@ export default {
         addGoodCategory(){
             this.currentDialog = 'chooseGoodCategoryDialog';
             this.dialogVisible = true;
-            this.currentData=this.historyGoodCategory;
+            this.currentData=this.historyProductCategoryId;
         },
         getProductCategoryInfoId(data){
-            this.historyGoodCategory = data;
-            this.ruleForm.productCategoryInfoId=data.child.id;
-            this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
+            if(data&&data.child){
+                this.leimuMessage = false;
+                this.ruleForm.productCategoryInfoId=data.child.id;
+                this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
+            }
         },
         statusChange() {
             if(this.ruleForm.status == 2) {
@@ -2158,14 +2160,18 @@ export default {
         },
         // 获取类目
         getCategoryInfoIds(arr, id) {
-            try {
-                let parentId = this.operateCategoryList.find(val => val.id == id).parentId
-                arr.unshift(id)
-                if(parentId && parentId != 0) {
-                    this.getCategoryInfoIds(arr, parentId)
-                }
+            if(id){
+                try {
+                    if(this.operateCategoryList.find(val => val.id == id)){
+                        let parentId = this.operateCategoryList.find(val => val.id == id).parentId
+                        arr.unshift(id)
+                        if(parentId && parentId != 0) {
+                        this.getCategoryInfoIds(arr, parentId)
+                        }
+                    }        
             } catch(e) {
                 console.error(e)
+            }
             }
         },
         computedAddSpecs(specs) {
@@ -2328,6 +2334,7 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
+                this.historyProductCategoryId = res.productCategoryInfoId;
                 this.specRadio = res.specsType;       
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
@@ -2372,7 +2379,6 @@ export default {
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)
                     res.goodsInfos = __goodsInfos
-                    debugger
                     }else if(res.specsType===0){ //单一规格
                     this.singleSpec = Object.assign({}, this.singleSpec, res.goodsInfos[0], {
                             //goodsInfos: [res.goodsInfo]
@@ -2844,9 +2850,6 @@ export default {
         getOperateCategoryList() {
             return new Promise((resolve, reject) => {
                 this._apis.goodsOperate.fetchCategoryList({enable: 1}).then(res => {
-                    // let arr = this.transTreeData(res.list, 0)
-                    // this.operateCategoryList = res.list
-                    // this.itemCatList = arr
                     let arr = this.transTreeData(res, 0)
                     this.operateCategoryList = res
                     this.itemCatList = arr
@@ -4090,12 +4093,15 @@ $blue: #655EFF;
     position:relative;
     display:inline-block;
     width:210px;
+    line-height:32px;
     height:32px;
-    line-heiGHT:32PX;
     border-radius:4px;
     border:1px solid rgba(218,218,227,1);
     padding:0 10px;
     font-size:12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     color:rgba(68,67,75,1);
     /deep/ .el-icon-caret-bottom{
         color: #92929B;
