@@ -175,9 +175,9 @@
                                 <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
                                 <span v-else @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
-                            <!-- <template>
+                            <template v-if="scope.row.status == 5">
                                 <span @click="verificationHandler">核销验证</span>
-                            </template> -->
+                            </template>
                         </div>
                     </template>
                 </el-table-column>
@@ -277,6 +277,8 @@ export default {
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 4:
+                    return '上门自提'
             }
         },
     },
