@@ -15,6 +15,7 @@
         <div slot="content">原商品分类不变，商品将增加<br/>新的分类</div>
       </el-tooltip>
     </el-radio-group>
+    <span v-if="chooseMsg" class="chooseMsg">请选择</span>
     <div>
    
     <template v-if="radio===1">
@@ -59,7 +60,8 @@ export default {
       categoryValue: [],
       values: [],
       categoryOptions: [],
-      showFooter: false
+      showFooter: false,
+      chooseMsg:false
     };
   },
   created() {
@@ -125,8 +127,15 @@ export default {
         type:this.radio,
         list:this.values
       }
+      if(data.list.length>0){
       this.$emit("changeProductCatalogs", data);
       this.visible = false;
+      this.chooseMsg =false;
+      }else{
+        this.visible = true;
+        this.chooseMsg =true;
+        return
+      }
     }
   },
   computed: {
@@ -162,6 +171,10 @@ export default {
   .el-radio__label{
     font-size:16px;
   }
+}
+.chooseMsg{
+  color:red;
+  font-size:16px;
 }
 .msgInfo {
   display: inline-block;
