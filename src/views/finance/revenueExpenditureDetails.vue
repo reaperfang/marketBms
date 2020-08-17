@@ -123,7 +123,7 @@
           label="支付方式"
           align="center">
           <template slot-scope="scope">
-            {{payTypes[scope.row.payWay+1].label}}
+            {{payTypes[scope.row.payWay].label}}
           </template>
         </el-table-column>
         <el-table-column
