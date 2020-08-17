@@ -238,11 +238,11 @@
           </el-form>
         </div>
         <!-- 配送方式 上门自提 -->
-        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 3">
+        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 4">
           <el-form
-            :model="ruleFormStore"
-            :rules="rulesStore"
-            ref="ruleFormStore"
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleFormSelfRaising"
             label-width="100px"
             class="demo-ruleForm"
            >
@@ -250,13 +250,13 @@
               <span>上门自提</span>
             </el-form-item>
             <el-form-item label="备注" prop="desc">
-              <el-input type="textarea" v-model="ruleFormStore.desc" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
+              <el-input type="textarea" v-model="ruleForm.desc" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
             </el-form-item>
           </el-form>
         </div>
       </div>
       <div class="footer">
-        <el-button v-if="orderInfo.deliveryWay == 1" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
         <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
       </div>
     </div>
@@ -790,14 +790,20 @@ export default {
                 sendDetail: this.orderInfo.sendDetail // 发货人详细地址
               };
 
-          //如果是普通快递
+          
           if(formName == 'ruleForm'){
-            obj.deliveryWay = 1;
-            obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
-            obj.expressNos = this.ruleForm.expressNos; // 快递单号
-            obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
-            obj.remark = this.ruleForm.remark; // 发货备注
-            obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+            //如果是普通快递
+            if(this.orderInfo.deliveryWay != 4) {
+              obj.deliveryWay = 1;
+              obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
+              obj.expressNos = this.ruleForm.expressNos; // 快递单号
+              obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
+              obj.remark = this.ruleForm.remark; // 发货备注
+              obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+            } else {
+              //上门自提
+              obj.deliveryWay = 4;
+            }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
             obj.deliveryWay = 2;
             obj.distributorName = this.distributorName; //配送员名字

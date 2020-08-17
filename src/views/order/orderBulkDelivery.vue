@@ -28,7 +28,7 @@
               <div class="col">
                 <div class="row align-center row-margin">
                   <div class="col" style="width: 180px;">{{list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
-                  <div class="col" style="width: 281px; text-align: center;">物流信息</div>
+                  <div class="col" style="width: 281px; text-align: center;">{{list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
                 </div>
               </div>
             </div>
@@ -79,7 +79,7 @@
                     <template v-else>
                       <p>提货人: {{item.receivedName}} {{item.receivedPhone}}</p>
                       <p>自提点名称: {{item.receivedPhone}}</p>
-                      <p>提货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
+                      <p>提货地址: {{item.sendAddress}} {{item.sendDetail}}</p>
                     </template>
                   </div>
                   <div class="col">
@@ -132,7 +132,7 @@
                       </el-form>
                     </template>
                     <template v-else>
-                      <p style="width: 285px; text-align: center; margin-top: 29px;">2020-04-02 10:00-18:00</p>
+                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + item.deliveryTime}}</p>
                     </template>
                   </div>
                 </div>
