@@ -1638,11 +1638,13 @@ export default {
 
             this.flatSpecsList.splice(_index, 1)
             this.specsList.splice(this.specsList.findIndex(val => val.name == name), 1)
-            if(this.addedSpecs[index].valueList) {
-                this.addedSpecs[index].valueList.forEach(val => {
-                    let name = val.name
+            if(this.addedSpecs[index].list) {
+                this.addedSpecs[index].list.forEach(val => {
+                    if(val.type == 'new') {
+                        let name = val.name
 
-                    this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                        this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                    }
                 })
             }
             this.addedSpecs.splice(index, 1)
