@@ -141,6 +141,7 @@ export default {
       that.getValue(that.year + arr[0] + '-' + that.year + arr[1])
       that.showSeason = false
       this.showValue = `${this.year}年${this.season}季度`
+      this.$emit("change",`${this.year}-${this.season}`)
     }
   }
 }

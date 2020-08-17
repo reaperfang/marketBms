@@ -7,21 +7,24 @@
                             <el-option label="季度" value="4"></el-option>
                         </el-select>
                         <el-date-picker class="dayinput" v-if="value==1"
-                        v-model="value2"
+                        v-model="value2" @change="getData"
                         align="right"
                         type="date"
                         placeholder="选择日期"
+                        format="yyyy-MM-dd"
+                        value-format='timestamp'
                         :picker-options="pickerOptions">
                         </el-date-picker>
                         <el-date-picker class="dayinput" v-if="value==2"
-                        v-model="value2"
+                        v-model="value2" @change="getData"
                         type="week"
                         format="yyyy 第 WW 周"
                         placeholder="选择周" :picker-options="pickerOptions">
                         </el-date-picker>
                         <el-date-picker class="dayinput" v-if="value==3"
-                        v-model="value2"
+                        v-model="value2" @change="getData"
                         type="month"
+                        format="yyyy-MM"
                         placeholder="选择月" :picker-options="pickerOptions">
                         </el-date-picker>
                         <quarter class="fl" v-if="value==4" />
@@ -45,7 +48,9 @@ export default {
   created() {
   },
   methods: {
-    
+    getData(){
+        this.$emit("change",this.value2)
+    }
   }
 }
 </script>

@@ -15,7 +15,7 @@
         <div class="p_screening">
             <div class="clearfix pt">
                 <p class="fl">支付金额（元）</p>
-                <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start">
+                <el-tooltip class="item" effect="dark" content="统计时间内，所有支付订单金额之和" placement="top-start">
                 <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
                 </el-tooltip>
             </div>
@@ -96,7 +96,7 @@
                 <div class="p_title clearfix">
                     <h2>交易看板</h2>
                     <div class="fr clearfix">
-                        <serchRt class="fr" />
+                        <serchRt @change="getVal" class="fr" />
                     </div>
                 </div>
                 <div class="choose-type clearfix">
@@ -182,12 +182,12 @@
             <div class="p_container p_ltsiade">
                 <div class="p_title clearfix">
                     <h2>用户概览</h2>
-                    <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
+                    <!-- <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
                     <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
-                    </el-tooltip>
+                    </el-tooltip> -->
                     <div class="fr clearfix">
                         <serchRt class="fr ml12" />
-                        <el-radio-group class="fr radioBox" v-model="visitSourceType" @change="all">
+                        <el-radio-group class="fr radioBox" v-model="userType" @change="alluserType">
                             <el-radio-button class="btn_bor" label="0" v-permission="['数据', '客流分析', '全部']">全部</el-radio-button>
                             <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
                             <el-radio-button class="btn_bor" label="2" v-permission="['数据', '客流分析', '公众号']">公众号</el-radio-button>
@@ -203,8 +203,8 @@
             <div class="clearfix ">
                 <div class="p_container">
                 <div class="p_title clearfix">
-                    <h2>交易分布</h2>
-                    <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
+                    <h2>渠道转化</h2>
+                    <el-tooltip class="item" effect="dark" content="渠道会员数量占比" placement="top-start">
                     <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
                     </el-tooltip>
                     <div class="fr clearfix">
@@ -350,10 +350,12 @@ export default {
         activetype: 1,
         startTime: "",
         endTime:"",
-        visitSourceType: 0, //1 小程序 2 公众号
         nearDay: 7, 
         dataChart: {},
         type:1,
+        seachTime:'',
+        userType:0, //1 小程序 2 公众号  ， 用户
+        visitSourceType: 1, //1 小程序 2 公众号  ， 渠道转化
     };
   },
   created() {
@@ -408,11 +410,17 @@ export default {
     chooseType(type){
         this.activetype=type
     },
-    //全部 or  小程序  or  公众号
-    all() {
+    //用户  全部 or  小程序  or  公众号
+    alluserType() {
       
     },
-
+    all() { //渠道
+      
+    },
+    getVal(val){
+        console.log(val)
+        this.seachTime=val
+    }
   },
 };
 </script>
@@ -666,7 +674,7 @@ height:0px;
     background: #fff;
     .pro_item{
         width: 100%;
-        padding: 0 20px;
+        padding: 0 28px;
         height: 388px;
         border-right: 1px solid #EDEDED;
         .pro_tle{
