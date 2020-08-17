@@ -237,7 +237,7 @@
             <span class="title1">产品动态</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=shushangdongtai'"
+            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=shushangdongtai'"
             target="_blank"
             :underline="false"
           >
@@ -262,7 +262,7 @@
             <span class="title1">帮助中心</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=yidongshangcheng'"
+            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=yidongshangcheng'"
             target="_blank"
             :underline="false"
           >
