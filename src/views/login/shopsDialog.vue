@@ -27,7 +27,7 @@
           </div>
           <p class="p_center">
             <el-pagination
-              v-if="shopLists.length != 0"
+              v-if="shopLists.length >= 9"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
@@ -214,8 +214,8 @@ export default {
     border:1px solid #5B54E6;
   }
 }
-.el-dialog__header{
-  background:rgba(101,94,255,0.09);
+/deep/ .el-dialog__header{
+  background:rgba(101,94,255,0.09) !important;
 }
 .p_center{
   text-align: center;

@@ -159,14 +159,14 @@
                 <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
                 <p class="title4">您当前还未授权小程序</p>
                 <p class="opt">
-                  <el-button>立即授权</el-button>
+                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                 </p>
               </div>
               <div v-if="isReleaseWX">
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
-                  <el-button>立即发布</el-button>
+                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即发布</el-button>
                 </p>
               </div>
             </div>
@@ -183,14 +183,14 @@
                 <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
                 <p class="title4">您当前还未授权公众号</p>
                 <p class="opt">
-                  <el-button>立即授权</el-button>
+                  <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
                 </p>
               </div>
               <div v-if="isReleaseGZ">
                 <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
-                  <el-button>立即发布</el-button>
+                  <el-button @click="linkTo({text:'绑定微信公众号'})">立即发布</el-button>
                 </p>
               </div>
             </div>
@@ -466,7 +466,20 @@ export default {
           query: { paths: "/application/appIndex" }
         });
         this.SETCURRENT(8);
-      } else {
+      } else if(item.text == '绑定微信公众号'){
+        this.$router.push({
+          path:'/apply',
+          query:{paths:'/application/channelapp/publicnum',applyId:'3'
+        }})
+        this.SETCURRENT(8)
+      } else if(item.text == '绑定微信小程序'){
+        this.$router.push({
+          path:'/apply',
+          query:{paths:'/application/channelapp/smallapp',applyId:'3'
+        }})
+        this.SETCURRENT(8)
+        } 
+      else {
         this.$router.push({ path: item.url });
       }
     },
