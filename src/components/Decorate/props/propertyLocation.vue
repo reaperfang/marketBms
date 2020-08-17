@@ -69,9 +69,11 @@ export default {
   },
   methods: {
     //保存时需要触发的回调函数
-    saveCallBack(data) {
-      console.log(this.rules)
+    saveCallBack(data, _this) {
       if(data.bgType === 2 && data.backgroundImage === ''){
+        _this.$alert('请上传背景图片!', '警告', {
+          confirmButtonText: '确定'
+        });
         return false;
       }
       return true;
