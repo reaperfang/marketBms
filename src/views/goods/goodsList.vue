@@ -229,7 +229,7 @@
                         <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
                         <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
                         <el-button @click="shareMore" class="border-button">批量推广</el-button>
-                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete border-button">批量删除</el-button>
                         <el-button @click="copyUrl" class="border-button">复制链接</el-button>
                         <el-button @click="editCategory" class="border-button">编辑分类</el-button>
                     </template>
@@ -254,6 +254,15 @@
     color:rgba(68,67,75,1);
     font-size:14px;
 }
+.border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
+        }
+    }
 .table-footer {
     display: flex;
     align-items: center;
@@ -435,6 +444,7 @@
 /deep/ .el-checkbox__label {
     padding-left: 6px;
     padding-right: 6px;
+    margin-right:20px;
 }
 .el-button+.el-button {
     margin-left: 12px;
