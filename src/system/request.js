@@ -52,9 +52,11 @@ class Ajax {
           if(res.msg == 'existProduct') {
             return res
           }
-          // if(res.code&&res.code.includes('SYS')){
+          // if(res.code&&res.code.length===7&&res.code.includes(' SYS')){
+          //   debugger
           //   return res
           // }
+           
           return res.data;
         }else if (res.code === 1) {
           return res.data;
