@@ -373,6 +373,10 @@ export default {
       const prevItem = this.ruleForm.moduleList[index - 1];
       this.$set(this.ruleForm.moduleList, index - 1, item);
       this.$set(this.ruleForm.moduleList, index, prevItem);
+      this.$nextTick(() => {
+        this.$refs['customFormItem'+index][0].clearValidate();
+        this.$refs['ruleForm'].validate();
+      })
     },
 
     //向下移动
@@ -380,6 +384,10 @@ export default {
       const nextItem = this.ruleForm.moduleList[index + 1];
       this.$set(this.ruleForm.moduleList, index + 1, item);
       this.$set(this.ruleForm.moduleList, index, nextItem);
+      this.$nextTick(() => {
+        this.$refs['customFormItem'+index][0].clearValidate();
+        this.$refs['ruleForm'].validate();
+      })
     },
 
      /* 弹框选中图片 */
