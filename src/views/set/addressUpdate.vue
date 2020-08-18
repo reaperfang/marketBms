@@ -105,7 +105,7 @@ export default {
           { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
         ],
         type: [
-          { type: 'array', required: true, message: '必填项', trigger: 'change' }
+          { type: 'array', required: true, message: '必选项', trigger: 'change' }
         ]
       }
     }
@@ -173,8 +173,6 @@ export default {
       this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
-      } else {
-        this.ruleForm.type.push(1) // 1为勾选发货地址
       }
     },
     // 格式化回显地址类型数据

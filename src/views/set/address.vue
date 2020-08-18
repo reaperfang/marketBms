@@ -15,6 +15,7 @@
         <el-table-column
           prop="address"
           label="地址"
+          min-width="300"
           align="left">
           <template slot-scope="scope">
             {{scope.row.address}} {{scope.row.addressDetail}}
