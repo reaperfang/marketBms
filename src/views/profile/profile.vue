@@ -224,7 +224,7 @@
             商户工作台H5
           </p>
           <p class="operation">
-            <a @click="downs(qrCode,'商户工作台H5二维码')">下载</a>
+            <a @click="downs(qrCode,'店铺移动管理二维码')">下载</a>
             <a v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError" class="ml15">复制链接</a>
           </p>
         </div>
