@@ -52,25 +52,29 @@
         </el-table-column>
         <el-table-column
           prop="smsType"
-          label="消息类型">
+          label="消息类型"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.smsType == 1 ? '营销短信' : '通知短信'}}
           </template>
         </el-table-column>
         <el-table-column
           prop="pageCount"
-          label="是否拆分">
+          label="是否拆分"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.pageCount > 1 ? '是' : '否'}}
           </template>
         </el-table-column>
         <el-table-column
           prop="acceptSmsCountDisplay"
-          label="消息数量">
+          label="消息数量"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="acceptStatus"
-          label="状态">
+          label="状态"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.acceptStatus == true ? '成功' : '失败'}}
           </template>
@@ -79,7 +83,7 @@
           prop="sendTime"
           label="发送时间"
           sortable = "custom"
-          align="right">
+          align="center">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -249,6 +253,12 @@ export default {
       }
     }
   }
+}
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
 }
 </style>
 
