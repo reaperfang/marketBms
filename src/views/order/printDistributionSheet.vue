@@ -1,4 +1,5 @@
 <template>
+<!-- 打印配送单（A4纸） -->
     <div class="print-distribution-sheet">
         <div class="header">
             打印配送单预览

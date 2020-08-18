@@ -144,11 +144,15 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
+        <!-- 打印配送单dialog -->
+        <DialogPrintList :printDialogVisible.sync="printDialogVisible" :printPath="printPathV" :printQuery="printQuery" @closeDialogVisible="closeDialogVisible()"></DialogPrintList>
+    
     </div>
 </template>
 <script>
 import Pagination from '@/components/Pagination'
 import DeliveryMethod from "./deliveryMethod"; //配送方式组件
+import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 
 export default {
@@ -184,7 +188,12 @@ export default {
             tableData: [],
             loading: false,
             checkedAll: false,
-            isIndeterminate: false
+            isIndeterminate: false,
+            //打印配送单
+            printDialogVisible:false,
+            printRadio:null,
+            printPathV:'',
+            printQuery:{}
         }
     },
     created() {
@@ -262,14 +271,27 @@ export default {
             }
             this.$router.push(`/order/afterSaleBulkDelivery?ids=${this.multipleSelection.map(val => val.orderAfterSaleId).join(',')}&afterSale=true`)
         },
+        //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择需要打印配送单的售后单'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
-
-            this.$router.push('/order/printDistributionSheet?ids=' + ids + '&afterSale=' + true)
+            let orderIds = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
+            
+            // this.$router.push('/order/printDistributionSheet?ids=' + ids + '&afterSale=' + true)
+            // 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
+            this.handlePrintListOpen('/order/printDistributionSheet',{ids: ids,orderIds:orderIds,printType:1,afterSale: true})
+        },
+        handlePrintListOpen(pagePath,query){
+            // console.log(pagePath, query)
+            this.printPathV = pagePath
+            this.printQuery = query
+            this.printDialogVisible=true
+        },
+        closeDialogVisible(){
+            this.printDialogVisible=false
         },
         batchPrintElectronicForm() {
             if(!this.multipleSelection.length) {
@@ -326,7 +348,7 @@ export default {
                 [`${this.listQuery.searchTimeType}TimeEnd`]: this.listQuery.orderTimeValue ? utils.formatDate(this.listQuery.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss") : ''
             })
             this._apis.order.SendPageList(params).then((res) => {
-                console.log(res)
+                // console.log(res)
                 this.total = +res.total
                 this.tableData = res.list
                 this.loading = false
@@ -342,7 +364,8 @@ export default {
     },
     components: {
         Pagination,
-        DeliveryMethod
+        DeliveryMethod,
+        DialogPrintList
     }
 }
 </script>
