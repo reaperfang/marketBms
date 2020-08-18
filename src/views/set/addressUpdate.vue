@@ -173,8 +173,6 @@ export default {
       this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
-      } else {
-        this.ruleForm.type.push(1) // 1为勾选发货地址
       }
     },
     // 格式化回显地址类型数据
