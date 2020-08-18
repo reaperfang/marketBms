@@ -355,7 +355,7 @@ export default {
          this.commonCat={};
       }
     }
-
+    
   },
 
   props: {

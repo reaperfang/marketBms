@@ -638,25 +638,35 @@ export default {
           this.$message.error(error);
         });
     },
-    fetchOrderAddress() {
-      this._apis.order
-        .fetchOrderAddress({ id: this.cid, cid: this.cid })
-        .then(res => {
-          this.orderInfo.sendName = res.senderName;
-          this.orderInfo.sendPhone = res.senderPhone;
-          this.orderInfo.sendProvinceCode = res.provinceCode;
-          this.orderInfo.sendProvinceName = res.province;
-          this.orderInfo.sendCityCode = res.cityCode;
-          this.orderInfo.sendCityName = res.city;
-          this.orderInfo.sendAreaCode = res.areaCode;
-          this.orderInfo.sendAreaName = res.area;
-          this.orderInfo.sendAddress = res.sendAddress;
-          this.orderInfo.sendDetail = res.address;
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
+    fetchOrderAddress(address) {
+      // this._apis.order
+      //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
+      //   .then(res => {
+      //     this.orderInfo.sendName = res.senderName;
+      //     this.orderInfo.sendPhone = res.senderPhone;
+      //     this.orderInfo.sendProvinceCode = res.provinceCode;
+      //     this.orderInfo.sendProvinceName = res.province;
+      //     this.orderInfo.sendCityCode = res.cityCode;
+      //     this.orderInfo.sendCityName = res.city;
+      //     this.orderInfo.sendAreaCode = res.areaCode;
+      //     this.orderInfo.sendAreaName = res.area;
+      //     this.orderInfo.sendAddress = res.sendAddress;
+      //     this.orderInfo.sendDetail = res.address;
+      //   })
+      //   .catch(error => {
+      //     this.visible = false;
+      //     this.$message.error(error);
+      //   });
+      this.orderInfo.sendName = address.name;
+      this.orderInfo.sendPhone = address.mobile;
+      this.orderInfo.sendProvinceCode = address.provinceCode;
+      this.orderInfo.sendProvinceName = address.provinceName;
+      this.orderInfo.sendCityCode = address.cityCode;
+      this.orderInfo.sendCityName = address.cityName;
+      this.orderInfo.sendAreaCode = address.areaCode;
+      this.orderInfo.sendAreaName = address.areaName;
+      this.orderInfo.sendAddress = address.address;
+      this.orderInfo.sendDetail = address.addressDetail;
     },
     getExpressCompanyList() {
       this._apis.order
@@ -893,29 +903,55 @@ export default {
       this._apis.order
         .orderSendDetail({ ids: [+this.$route.query.id || +this.$route.query.ids] })
         .then(res => {
-          res[0].orderItemList.forEach(val => {
-            val.cacheSendCount = val.sendCount;
-            val.sendCount = val.goodsCount - val.sendCount;
-          });
-          res[0].orderItemList.forEach(val => {
-            val.showError = false
-            val.errorMessage = ''
-          })
-          this._list = res
-          console.log(this._list)
-          this.tableData = res[0].orderItemList;
-          this.tableData.forEach(row => {
-            this.$refs.table.toggleRowSelection(row);
-          })
-          this.orderInfo = res[0];
-          this._ids = [this.orderInfo.id]
-          if(!this.orderInfo.sendAddress) {
-            this.fetchOrderAddress();
-          }
+          if(res instanceof Array) {
+            res[0].orderItemList.forEach(val => {
+              val.cacheSendCount = val.sendCount;
+              val.sendCount = val.goodsCount - val.sendCount;
+            });
+            res[0].orderItemList.forEach(val => {
+              val.showError = false
+              val.errorMessage = ''
+            })
+            this.tableData = res[0].orderItemList;
+            this.tableData.forEach(row => {
+              this.$refs.table.toggleRowSelection(row);
+            })
+            this.orderInfo = res[0];
+            this._ids = [this.orderInfo.id]
+            if(!this.orderInfo.sendAddress) {
+              this.fetchOrderAddress();
+            }
 
-          //如果是商家配送，则需要请求拿到配送员列表
-          if(this.orderInfo.deliveryWay == 2){
-            this.getDistributorList();
+            //如果是商家配送，则需要请求拿到配送员列表
+            if(this.orderInfo.deliveryWay == 2){
+              this.getDistributorList();
+            }
+          } else {
+            let _address = res.shopAddressInfo
+
+            res = res.sendInfoListData
+            res[0].orderItemList.forEach(val => {
+              val.cacheSendCount = val.sendCount;
+              val.sendCount = val.goodsCount - val.sendCount;
+            });
+            res[0].orderItemList.forEach(val => {
+              val.showError = false
+              val.errorMessage = ''
+            })
+            this.tableData = res[0].orderItemList;
+            this.tableData.forEach(row => {
+              this.$refs.table.toggleRowSelection(row);
+            })
+            this.orderInfo = res[0];
+            this._ids = [this.orderInfo.id]
+            //if(!this.orderInfo.sendAddress) {
+              this.fetchOrderAddress(_address);
+            //}
+
+            //如果是商家配送，则需要请求拿到配送员列表
+            if(this.orderInfo.deliveryWay == 2){
+              this.getDistributorList();
+            }
           }
 
           if(this.orderInfo.deliveryWay == 4) {

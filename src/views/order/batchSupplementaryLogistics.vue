@@ -756,6 +756,9 @@ export default {
         })
         .then(res => {
           console.log(res)
+          let _address = res.shopAddressInfo
+            
+          res = res.sendInfoListData
           res.forEach(val => {
             val.express = null
             val.other = "";
@@ -799,28 +802,40 @@ export default {
           
           this.list = res;
 
-          this._apis.order
-            .fetchOrderAddress({ id: this.cid, cid: this.cid })
-            .then(response => {
-              this.list.forEach(res => {
-                if(!res.sendAddress) {
-                  res.sendName = response.senderName
-                  res.sendPhone = response.senderPhone
-                  res.sendProvinceCode = response.provinceCode
-                  res.sendProvinceName = response.province
-                  res.sendCityCode = response.cityCode
-                  res.sendCityName = response.city
-                  res.sendAreaCode = response.areaCode
-                  res.sendAreaName = response.area
-                  res.sendAddress = response.sendAddress
-                  res.sendDetail = response.address
-                }
-              })
-            })
-            .catch(error => {
-              this.visible = false;
-              this.$message.error(error);
-            });
+          // this._apis.order
+          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
+          //   .then(response => {
+          //     this.list.forEach(res => {
+          //       if(!res.sendAddress) {
+          //         res.sendName = response.senderName
+          //         res.sendPhone = response.senderPhone
+          //         res.sendProvinceCode = response.provinceCode
+          //         res.sendProvinceName = response.province
+          //         res.sendCityCode = response.cityCode
+          //         res.sendCityName = response.city
+          //         res.sendAreaCode = response.areaCode
+          //         res.sendAreaName = response.area
+          //         res.sendAddress = response.sendAddress
+          //         res.sendDetail = response.address
+          //       }
+          //     })
+          //   })
+          //   .catch(error => {
+          //     this.visible = false;
+          //     this.$message.error(error);
+          //   });
+          this.list.forEach(res => {
+            res.sendName = _address.name;
+            res.sendPhone = _address.mobile;
+            res.sendProvinceCode = _address.provinceCode;
+            res.sendProvinceName = _address.provinceName;
+            res.sendCityCode = _address.cityCode;
+            res.sendCityName = _address.cityName;
+            res.sendAreaCode = _address.areaCode;
+            res.sendAreaName = _address.areaName;
+            res.sendAddress = _address.address;
+            res.sendDetail = _address.addressDetail;
+          });
         })
         .catch(error => {
           this.visible = false;

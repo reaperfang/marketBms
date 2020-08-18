@@ -1189,8 +1189,8 @@ export default {
                 }else if(data.child.categoryName){
                     this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
                 }
+                
             }
-
         },
         statusChange() {
             if(this.ruleForm.status == 2) {
@@ -1644,11 +1644,13 @@ export default {
 
             this.flatSpecsList.splice(_index, 1)
             this.specsList.splice(this.specsList.findIndex(val => val.name == name), 1)
-            if(this.addedSpecs[index].valueList) {
-                this.addedSpecs[index].valueList.forEach(val => {
-                    let name = val.name
+            if(this.addedSpecs[index].list) {
+                this.addedSpecs[index].list.forEach(val => {
+                    if(val.type == 'new') {
+                        let name = val.name
 
-                    this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                        this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                    }
                 })
             }
             this.addedSpecs.splice(index, 1)
@@ -2153,7 +2155,7 @@ export default {
         },
         getCategoryIds(arr, id) {
             try {
-                 if(this.flatCategoryList.find(val => val.id == id)){
+                if(this.flatCategoryList.find(val => val.id == id)){
                     let parentId = this.flatCategoryList.find(val => val.id == id).parentId
                     arr.unshift(id)
                     if(parentId && parentId != 0) {
@@ -2176,11 +2178,10 @@ export default {
                         this.getCategoryInfoIds(arr, parentId)
                         }
                     }        
-                } catch(e) {
-                    console.error(e)
-                }
+            } catch(e) {
+                console.error(e)
             }
-
+            }
         },
         computedAddSpecs(specs) {
             let _specs
@@ -2342,9 +2343,9 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                this.specRadio = res.specsType;  
-                this.historyProductCategoryId = res.productCategoryInfoId;     
-		        //配送方式(根据选中去请求是否在店铺开启)
+                this.historyProductCategoryId = res.productCategoryInfoId;
+                this.specRadio = res.specsType;       
+		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
                     deliveryWayArr.push(2);
@@ -4101,12 +4102,15 @@ $blue: #655EFF;
     position:relative;
     display:inline-block;
     width:210px;
-    height:32px;
     line-height:32px;
+    height:32px;
     border-radius:4px;
     border:1px solid rgba(218,218,227,1);
     padding:0 10px;
     font-size:12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     color:rgba(68,67,75,1);
     text-overflow: ellipsis;
     white-space: nowrap;
