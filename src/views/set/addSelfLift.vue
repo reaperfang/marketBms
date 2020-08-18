@@ -13,7 +13,7 @@
           <span>{{ ruleForm.pickUpId }}</span>
         </el-form-item>
         <el-form-item label="自提点名称" prop="name">
-          <el-input v-model="ruleForm.name" style="width:360px;" placeholder="请输入自提点名称"></el-input>
+          <el-input v-model="ruleForm.name" style="width:360px;" placeholder="请输入"></el-input>
         </el-form-item>
         <el-form-item label="联系人" prop="contactPerson">
           <el-input v-model="ruleForm.contactPerson" style="width:360px;" placeholder="请输入联系人姓名"></el-input>
@@ -43,7 +43,7 @@
             <div>
               <el-radio v-model="ruleForm.deliveryTimeType" :label="1">全天</el-radio>
               <span class="prompt">
-                说明：默认可配送时间为当天06:00~20:00。点击
+                默认可配送时间为当天06:00:00~20:00:00。点击
                 <el-popover
                   placement="top"
                   width="240"
@@ -755,8 +755,18 @@ export default {
       this.tempWeeks = []
     },
     handleSubmit(formName) {
+      this.isLoading = true
+      let isValidWeeks = true
+      this.errWeekMsg = ''
+      console.log('handleSubmit:before')
+      if (this.ruleForm.repeatCycle === 2) {
+        if (this.ruleForm.weeks.length <= 0) {
+          this.errWeekMsg = '请点击编辑，选择重复日'
+          isValidWeeks = false
+        }
+      }
       this.$refs[formName].validate((valid) => {
-        if (valid) {
+        if (valid && isValidWeeks) {
           if (!this.isMapChoose) {
             this.$message.error('保存失败')
             this.ruleForm.address = ''
@@ -769,18 +779,23 @@ export default {
           console.log('req',req)
           const p1 = id ? this._apis.set.editSelfLiftById(req) : this._apis.set.addSelfLift(req)
           p1.then((res) => {
+            let txt = ''
+            if (!id) {
+              const url = `${location.protocol}//${location.host}/bp/set/addSelfLift`
+              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p><p style="font-size:12px;color:rgba(68,67,75,1);"><a href="${url}" style="color:#655EFF;text-decoration: underline;" target="_blank">继续新建自提点</a></p>`
+            } else {
+              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p>`
+            }
             this.confirm({
               title: "提示",
               iconSuccess: true,
-              text: '保存成功',
-              confirmText: '继续新建自提点',
+              text: txt,
+              showConfirmButton: false,
+              confirmText: '我知道了',
               showCancelButton: false
-            }).then(() => {
-              this.resetForm(formName)
-              this.$router.replace({ path: '/set/addSelfLift' })
-            }).catch(()=> {
+            }).catch(() => {
               this.$router.push({ path: '/set/selfLift'})
-            });
+            })
           }).catch((err) => {
             this.$message.error(err || '保存失败')
           }).finally(() => {
@@ -789,6 +804,7 @@ export default {
 
         } else {
           console.log('error submit!!');
+          this.isLoading = false
           return false;
         }
       });
@@ -940,6 +956,16 @@ export default {
           position: absolute;
           left: 105px;
           top: 0;
+          border-radius:4px;
+          border:1px solid rgba(101,94,255,1);
+          font-size:14px;
+          font-weight:400;
+          color:rgba(101,94,255,1);
+          background-color: transparent;
+          &:hover {
+            color:rgba(101,94,255,1);
+            background-color: transparent;
+          }
         }
       }
     }

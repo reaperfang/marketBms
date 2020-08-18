@@ -37,6 +37,7 @@ export default {
   methods: {
     /* 初始化表单数据 */
     initRuleForm() {
+      console.log(this.data)
       if (this.data) {
         this.ruleForm = Object.assign({}, this.ruleForm, this.data);
       }

@@ -51,6 +51,7 @@
       <el-table-column
         prop="address"
         label="地址信息"
+        min-width="300"
         align="left">
       </el-table-column>
       <el-table-column

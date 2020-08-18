@@ -168,7 +168,6 @@ export default {
 
     /* 获取组件数据 */
     getComponentData(id) {
-      console.log(this.componentDataMap[id])
       return this.componentDataMap[id];
     },
 
