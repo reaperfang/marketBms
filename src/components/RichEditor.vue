@@ -39,6 +39,7 @@ export default {
     }
   },
   created() {
+    console.log( process.env.NODE_ENV)
     this.config = Object.assign(this.defaultConfig, this.myConfig);
   },
   mounted() {
