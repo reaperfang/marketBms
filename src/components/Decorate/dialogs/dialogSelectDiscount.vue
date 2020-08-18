@@ -32,9 +32,9 @@
             type="selection"
             :selectable="itemSelectable"
             :reserve-selection="true"
-            width="30">
+            width="55">
           </el-table-column>
-          <el-table-column prop="activityName" label="活动标题" :width="300">
+          <el-table-column prop="activityName" label="活动标题">
             <template slot-scope="scope">
               <div class="name_wrapper">
                 <img :src="scope.row.goodsImgUrl" alt="失败" />
@@ -54,7 +54,7 @@
               <span v-else-if="scope.row.status === 2">已失效</span>
             </template>
           </el-table-column>
-          <el-table-column prop="" label="活动时间" :width="400">
+          <el-table-column prop="" label="活动时间">
             <template slot-scope="scope">
               {{scope.row.startTime}} 至 {{scope.row.endTime}}
             </template>

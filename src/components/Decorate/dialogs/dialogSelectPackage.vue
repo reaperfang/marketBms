@@ -32,7 +32,7 @@
             type="selection"  
             :selectable="itemSelectable"
             :reserve-selection="true"
-            width="30">
+            width="55">
           </el-table-column>
           <el-table-column prop="name" label="优惠活动标题" :width="300">
             <template slot-scope="scope">
