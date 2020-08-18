@@ -225,6 +225,12 @@ export default {
             .item {
                 margin-bottom: 15px;
             }
+            &:nth-child(1) {
+                flex-shrink: 0;
+            }
+            &:nth-child(2) {
+                flex-shrink: 0;
+            }
         }
     }
 </style>
