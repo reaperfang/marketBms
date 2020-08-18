@@ -659,6 +659,6 @@ export function confirmVerifySelfLiftCode(data) {
     method: 'get',
     params:data,
     baseURL: process.env.DATA_API,
-   
+    verifyCode:1
   })
 }

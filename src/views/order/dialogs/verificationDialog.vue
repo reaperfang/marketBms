@@ -77,9 +77,9 @@ export default {
             }, 1000);
         //刷新订单页面
         if(this.$route.name == 'query') {
-          // this.$parent.$parent.getList()
+          this.$parent.$parent.getList()
         } else if(this.$route.name == 'orderDetail') {
-          // this.$parent.$parent.getDetail()
+          this.$parent.$parent.getDetail()
         }
         }else{//自提码验证失败
            self.isShowError = true;
