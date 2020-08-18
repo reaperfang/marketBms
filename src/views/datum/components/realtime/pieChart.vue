@@ -37,7 +37,7 @@ export default {
           y:'top',
           data:["非会员", "会员"],
           icon: "circle",
-          itemWidth:10,
+          itemWidth:8,
           },
         calculable: true,
         color: ['#0077FF', '#FF9938'], 
@@ -61,7 +61,7 @@ export default {
                     position: 'outer',
                     fontSize: 12,
                     // formatter: '{b}：{c}人\n占比：{d}%', // {b}:数据名； {c}：数据值； {d}：百分比
-                    // // formatter: "{a_set|{b},{d}%}\n{c_set|{c}辆}\n\n\n",
+                    formatter: '{b}：{c}人\n\n占比：{d}%',
                     // formatter:'{a_set|这段文本采用样式a}',
                     // borderWidth: 20,
                     // borderRadius: 4,

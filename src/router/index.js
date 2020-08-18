@@ -69,6 +69,7 @@ export const syncRouterMap = [ //同步路由表
   {
     path: '/dashboard',
     component: () => import('@/views/dashboard/index'),
+    name:'dashboard',
     hidden: true
   },
 ]

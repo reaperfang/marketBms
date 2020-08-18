@@ -1,7 +1,7 @@
 <template>
 <div>
     <!-- 悬浮按钮 数据大屏 -->
-    <div class="viewBut"><img src="@/assets/images/realtime/curtime.png" alt=""></div>
+    <div class="viewBut" @click="_routeTo('dashboard')"><img src="@/assets/images/realtime/curtime.png" alt=""></div>
     <!-- 数据总览 -->
     <div class="p_container pb12">
        <div class="p_title clearfix">
@@ -40,7 +40,7 @@
             <div class="card-item">
                 <div class="item-top">
                     <p>支付订单数（单）</p>
-                    <span> <strong>50</strong> <el-button type="text">查看</el-button> </span>
+                    <span> <strong>50</strong> <el-button type="text" @click="_routeTo('query')">查看</el-button> </span>
                 </div>
                 <p>昨日全天：<span>860</span></p>
             </div>
@@ -61,7 +61,7 @@
             <div class="card-item">
                 <div class="item-top">
                     <p>退款订单数（单）</p>
-                    <span> <strong>50</strong> <el-button type="text">查看</el-button> </span>
+                    <span> <strong>50</strong> <el-button type="text" @click="_routeTo('afterSalesManagement')">查看</el-button> </span>
                 </div>
                 <p>昨日全天：<span>860</span></p>
             </div>
@@ -453,6 +453,7 @@ margin-left: 12px;
         color: #252A2E;
         line-height: 34px;
         float: left;
+        font-family:PingFangSC-Medium,PingFang SC;
     }  
     >img{
         margin: 9px 0 0 5px;
