@@ -910,3 +910,8 @@ textarea:-ms-input-placeholder {
     }
   }
 }
+// 修复富文本秀米图标错误问题
+.edui-button.edui-for-xiumi-connect .edui-button-wrap .edui-button-body .edui-icon {
+    background-image: url("http://xiumi.us/connect/ue/xiumi-connect-icon.png") !important;
+    background-size: contain!important;
+}

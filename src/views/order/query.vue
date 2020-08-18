@@ -3,6 +3,7 @@
     <section class="search">
       <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
         <el-form-item label>
+          {{code}}
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
               <el-option label="订单编号" value="code"></el-option>
@@ -55,10 +56,10 @@
               <el-option label="用户昵称" value="memberName"></el-option>
               <el-option label="收货人姓名" value="receivedName"></el-option>
               <el-option label="收货人联系电话" value="receivedPhone"></el-option>
-              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员ID" value="resellersn"></el-option>
+              <!--wyyfx删除 <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员ID" value="resellersn"></el-option>
               <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员姓名" value="resellerName"></el-option>
               <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员昵称" value="resellerNick"></el-option>
-              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员手机号" value="resellerPhone"></el-option>
+              <el-option v-if="resellConfigInfo && listQuery.orderType == 5" label="分销员手机号" value="resellerPhone"></el-option> -->
             </el-select>
           </el-input>
         </el-form-item>
@@ -69,7 +70,7 @@
             <el-option label="拼团订单" :value="1"></el-option>
             <el-option label="优惠套装订单" :value="2"></el-option>
             <el-option label="赠品订单" :value="4"></el-option>
-            <el-option v-if="resellConfigInfo" label="分销订单" :value="5"></el-option>
+            <!--wyyfx删除 <el-option v-if="resellConfigInfo" label="分销订单" :value="5"></el-option> -->
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="支付方式">
@@ -217,6 +218,10 @@ export default {
               orderStatus
           })
       }
+    /**从分销跳转过来的 */
+    if(this.$route.query.orderCode){
+      this.listQuery.searchValue= this.$route.query.orderCode;
+    }
     this.checkCreditRule()
   },
   methods: {
@@ -400,6 +405,11 @@ export default {
     Shop,
     IntegralShop,
     DeliveryMethod
+  },
+  watch:{
+    code:function(){
+      // this.code
+    }
   }
 };
 </script>
