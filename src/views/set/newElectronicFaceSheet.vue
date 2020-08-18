@@ -16,7 +16,7 @@
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <el-form-item label="快递公司" prop="expressCompanyCode">
-              <el-select v-model="ruleForm.expressCompanyCode" placeholder="请选择">
+              <el-select v-model="ruleForm.expressCompanyCode" @change="chooseExpressCompany" placeholder="请选择">
                 <el-option
                     v-for="item in expressCompanyList"
                     :key="item.id"
@@ -25,7 +25,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="快递公司账号" prop="expressCompanyAccount">
+            <el-form-item v-if="isShowPwa" label="快递公司账号" prop="expressCompanyAccount">
                 <el-input v-model="ruleForm.expressCompanyAccount" placeholder="请输入，不超过20个字符"></el-input>
                 <span v-popover:popover class="account-explain">查看账号说明</span>
                 <el-popover
@@ -39,7 +39,7 @@
                     <p>快递公司账号即在已选择的快递公司申请的用户ID和密码。</p>
                 </el-popover>
             </el-form-item>
-            <el-form-item label="密码" prop="expressCompanyPassword">
+            <el-form-item v-if="isShowPwa" label="密码" prop="expressCompanyPassword">
                 <el-input show-password v-model="ruleForm.expressCompanyPassword" placeholder="请输入，不超过20个字符"></el-input>
             </el-form-item>
             <el-form-item label="邮费支付" prop="payType">
@@ -142,7 +142,8 @@ export default {
                 label: '第三方支付（仅顺丰支持）',
                 value: 4
               },
-            ]
+            ],
+			isShowPwa: false
         }
     },
     created() {
@@ -152,6 +153,7 @@ export default {
       }
     },
     methods: {
+    	// 查询快递公司列表
       getExpressCompanyList() {
         this._apis.order
         .getElectronicFaceSheetExpressCompanyList({isElectronicSingle: 1})
@@ -162,6 +164,17 @@ export default {
           this.$message.error(error);
         });
       },
+		// 切换选择的快递公司
+		chooseExpressCompany() {
+			let expressCompanyCode = this.ruleForm.expressCompanyCode
+			let expressCompany = this.expressCompanyList.find(val => val.expressCode == expressCompanyCode)
+			console.log(expressCompany);
+			if (expressCompany.isClientNumber * 1 === 1) {
+				this.isShowPwa = true
+			} else {
+				this.isShowPwa = false
+			}
+		},
       editor() {
         let expressCompanyCode = this.ruleForm.expressCompanyCode
         let expressCompany = this.expressCompanyList.find(val => val.expressCode == expressCompanyCode).expressName
