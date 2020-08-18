@@ -2,9 +2,9 @@
   <!-- <span>
       {{displayValue}}
     </span> -->
-    <div class="item">
-      <span> {{ displayValue }}</span>
-    </div>
+  <div class="item">
+    <span> {{ displayValue }}</span>
+  </div>
 </template>
 <script>
 import {
@@ -217,28 +217,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.item {
+  height: 85px;
+  background: rgba(71, 225, 255, 0.02);
+  box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
+  text-align: center;
 
-  .item {
-    height: 85px;
-    background: rgba(71, 225, 255, 0.02);
-    box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
-    text-align: center;
+  span {
+    font-size: 68px;
+    font-weight: normal;
+    color: rgba(255, 255, 255, 1);
+    background: linear-gradient(
+      180deg,
+      rgba(218, 255, 253, 1) 0%,
+      rgba(20, 225, 252, 1) 100%
+    );
 
-    span {
-      font-size: 68px;
-      font-weight: normal;
-      color: rgba(255, 255, 255, 1);
-      line-height: 78px;
-      background: linear-gradient(
-        180deg,
-        rgba(218, 255, 253, 1) 0%,
-        rgba(20, 225, 252, 1) 100%
-      );
-      background-clip: text;
-      -ms-background-clip:text;
-      -webkit-background-clip:text;
-      -ms-text-fill-color: transparent;
-      -webkit-text-fill-color: transparent;
-    }
+    background-clip: text;
+    -ms-background-clip: text;
+    -webkit-background-clip: text;
+    -ms-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+
+   // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=rgba(218, 255, 253, 1), endColorstr=rgba(20, 225, 252, 1),GradientType=0 );
+
+    // .gradient{
+    // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#ffffff',GradientType=0 );
+    // }
   }
+}
 </style>

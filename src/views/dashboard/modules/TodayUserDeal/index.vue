@@ -1,10 +1,10 @@
 <template>
 	<div class="grid-content middle-grid-margin">
 		<el-row type="flex" justify="space-between">
-			<el-col :span="20">
+			<el-col :span="18">
 				<gridtitle :title="'今日交易金额'"></gridtitle>
 			</el-col>
-			<el-col :span="4">
+			<el-col :span="6">
 				<div class="grid-title-end">
 					<span>
 						同比昨日

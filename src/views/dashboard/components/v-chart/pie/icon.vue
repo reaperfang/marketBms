@@ -1,7 +1,7 @@
 <template>
-  <div class="icon-mobile">
-    <div class="row start">绑定手机</div>
-    <div class="row end">77%</div>
+  <div class="icon-pie">
+    <p class="p-start">{{progress}}%</p>
+    <p class="p-end">{{city}}</p>
   </div>
 </template>
 
@@ -13,13 +13,7 @@ export default {
     // flowData(val) {
     // }
   },
-  // props: {
-  // 	data: {
-  // 		type: Object,
-  // 		default: false
-  // 	}
-  // },
-  props: ["title"],
+  props: ["progress","city"],
   components: {},
   data: function() {
     return {};
@@ -42,7 +36,7 @@ export default {
 </script>
 
 <style lang="scss">
-.icon-mobile {
+.icon-pie {
   position: absolute;
   margin: auto;
   top: 0;
@@ -51,26 +45,19 @@ export default {
   right: 0;
   height: 70px;
   width: 100px;
-  .start,
-  .end {
-    display: flex;
-    justify-content: center;
-  }
-
-  .start {
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-  }
-
-  .end {
-    font-size: 24px;
+  text-align: center;
+  .p-start {
+    font-size: 28px;
     font-weight: 600;
     color: rgba(255, 255, 255, 1);
-    line-height: 33px;
-    margin-top: 10px;
+    line-height: 40px;
   }
 
-  // background: yellow;
+  .p-end {
+    font-size: 14px;
+    font-weight: 400;
+    color:#FFFFFF;
+    line-height: 20px;
+  }
 }
 </style>

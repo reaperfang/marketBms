@@ -55,7 +55,7 @@ export default {
 			chartExtend: {
 				color: "rgba(71, 225, 255, 0.15)",
 				grid: {
-					top: "10px",
+					top: "30px",
 					bottom: "7px"
 				},
 				xAxis: {

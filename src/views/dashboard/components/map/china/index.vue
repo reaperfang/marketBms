@@ -8,8 +8,8 @@
 import axios from "axios";
 import echarts from "echarts";
 import { mapGetters, mapActions, mapState } from "vuex";
-import chinaData from "../../../data/china.json"
-import byDate from "../../../data/by_date.json"
+import chinaData from "../../../data/china.json";
+import byDate from "../../../data/by_date.json";
 
 export default {
   watch: {
@@ -31,6 +31,7 @@ export default {
           supportProvince: true,
         },
       },
+      chartMap: "",
     };
   },
   computed: {
@@ -38,7 +39,18 @@ export default {
   },
   mounted() {
     this.handleHashChanged();
-    window.onresize = this.handleHashChanged;
+    window.addEventListener("resize", (ev) => {
+       this.chartMap && this.chartMap.resize();
+      // this.$dt.start({
+      //   type: "debounce",
+      //   immediate: true,
+      //   time: 100,
+      //   success: () => {
+      //     console.log("china map chart size changed!");
+      //     this.chartMap && this.chartMap.resize();
+      //   },
+      // });
+    });
   },
   beforeCreate() {},
   created() {},
@@ -68,10 +80,13 @@ export default {
         '<div id="mapchart" class="mychart" style="display:inline-block;width:100%;height:100%;"></div>';
       container.innerHTML = html;
       const cfg = await this.createMapChartConfig({ mapName, data: records });
-      const chart = echarts.init(document.getElementById("mapchart"));
-      chart.setOption(cfg);
+      // const chart = echarts.init(document.getElementById("mapchart"));
+      // chart.setOption(cfg);
+      // return [chart];
 
-      return [chart];
+      this.chartMap = echarts.init(document.getElementById("mapchart"));
+      this.chartMap.setOption(cfg);
+      return [this.chartMap];
     },
     async showMap(name) {
       const records = await this.getData("date");
@@ -85,7 +100,7 @@ export default {
       let geoJSON = null;
       if (!echarts.getMap(mapName)) {
         // geoJSON = (await axios.get("static/data/china.json")).data;
-        geoJSON=chinaData;
+        geoJSON = chinaData;
         echarts.registerMap(mapName, geoJSON);
       } else {
         geoJSON = echarts.getMap(mapName).geoJson;
@@ -160,7 +175,7 @@ export default {
               bottom: 30,
               show: true,
               textStyle: {
-                fontSize:12,
+                fontSize: 12,
                 color: "#FFFFFF",
               },
             },
@@ -219,6 +234,8 @@ export default {
     handleHashChanged() {
       const func = this.mobulesConfig["map"];
       func.func("", "");
+
+      //this.chartMap&&this.chartMap.resize();
     },
   },
 };

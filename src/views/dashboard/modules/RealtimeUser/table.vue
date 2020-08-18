@@ -5,7 +5,7 @@
 			</el-table-column>
 			<el-table-column prop="name" label="姓名" width="180">
 			</el-table-column>
-			<el-table-column prop="address" label="地址"> </el-table-column>
+			<el-table-column prop="address" label="地址"  width="150"> </el-table-column>
 		</el-table>
 	</div>
 </template>
@@ -95,6 +95,7 @@ export default {
 	//修改表格内容部分字体颜色
 	.el-table {
 		color: rgba(255, 255, 255, 1);
+		width: 100%!important;
 	}
 
 	.el-table td,

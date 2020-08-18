@@ -51,22 +51,25 @@ export default {
 	right: 0;
 	height: 70px;
 	width: 100px;
-	.start,
-	.end {
-		font-weight: 400;
-		color: rgba(255, 255, 255, 1);
-		display: flex;
-		justify-content: center;
-	}
+  .start,
+  .end {
+    display: flex;
+    justify-content: center;
+  }
 
-	.start {
-		font-size: 14px;
-	}
+  .start {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+  }
 
-	.end {
-		font-size: 20px;
-		margin-top: 10px;
-	}
+  .end {
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    line-height: 33px;
+    margin-top: 10px;
+  }
 
 	// background: yellow;
 }
