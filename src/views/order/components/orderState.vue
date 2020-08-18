@@ -528,7 +528,7 @@ export default {
             }
         },
         userType(){
-            if(this.orderInfo.deliveryWay==1){
+            if(this.orderInfo.deliveryWay==4){
                 return '用户取货'
             }else{
                 return '用户收货'
