@@ -71,6 +71,13 @@ export default [
 			name: 'printerSeting',
 			hidden: true,
 			meta: { title: '打印机设置', noCache: true, tabTitle: '订单处理' ,navType:5},
+    },
+    {
+			path: 'yilianyunCheck',
+			component: () => import('@/views/order/yilianyunCheck'),
+			name: 'yilianyunCheck',
+			hidden: true,
+			meta: { title: '易联云授权确认', noCache: true, tabTitle: '订单处理' ,navType:5},
 		},
       {
         path: 'reviews',

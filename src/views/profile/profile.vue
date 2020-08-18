@@ -162,7 +162,7 @@
                   <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="isReleaseWX">
+              <div v-if="!isEmpowerWX &&  isReleaseWX">
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
@@ -186,11 +186,11 @@
                   <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="isReleaseGZ">
+              <div v-if="!isEmpowerGZ && isReleaseGZ">
                 <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信公众号'})">立即发布</el-button>
+                  <el-button @click="linkTo({text:'设置首页',url:'/shop/m_wxShopIndex'})">设置首页</el-button>
                 </p>
               </div>
             </div>
@@ -224,7 +224,7 @@
             商户工作台H5
           </p>
           <p class="operation">
-            <a @click="downs(qrCode,'商户工作台H5二维码')">下载</a>
+            <a @click="downs(qrCode,'店铺移动管理二维码')">下载</a>
             <a v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError" class="ml15">复制链接</a>
           </p>
         </div>
@@ -478,8 +478,7 @@ export default {
           query:{paths:'/application/channelapp/smallapp',applyId:'3'
         }})
         this.SETCURRENT(8)
-        } 
-      else {
+      } else {
         this.$router.push({ path: item.url });
       }
     },
