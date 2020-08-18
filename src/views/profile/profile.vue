@@ -225,7 +225,7 @@
           </p>
           <p class="operation">
             <a @click="downs(qrCode,'商户工作台H5二维码')">下载</a>
-            <a v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</a>
+            <a v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError" class="ml15">复制链接</a>
           </p>
         </div>
       </div>
@@ -247,7 +247,7 @@
         <p class="p_email no_data" v-if="productNews.length == 0">暂无产品动态</p>
         <ul class="info_box" v-else>
           <template v-for="(item, key) in productNews">
-            <li class="info_list" :key="key">
+            <li class="info_list info_first" :key="key">
               <p @click="onDetail(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
@@ -863,9 +863,6 @@ export default {
       padding: 3px 0;
       font-size: 14px;
       color: #44434B;
-      &:first-child {
-        color:#FD4C2B;
-      }
       p {
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -878,6 +875,9 @@ export default {
         // color: #fd932b;
         color: #FD4C2B;
       }
+    }
+    .info_first:first-child{
+        color:#FD4C2B;
     }
     .no_data {
       color: #92929b !important;
@@ -932,6 +932,9 @@ export default {
   i {
     cursor: pointer;
   }
+}
+.ml15{
+  margin-left:15px;
 }
 </style>
 
