@@ -792,6 +792,7 @@ export default {
                 }
                 this._apis.goods.editProductsCatalogs(param)
                 .then(res=>{
+                    this.checkedAll = false
                     this.getList()
                 })
                 .catch(err=>{
