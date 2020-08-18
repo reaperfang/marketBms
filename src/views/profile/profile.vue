@@ -248,7 +248,7 @@
         <ul class="info_box" v-else>
           <template v-for="(item, key) in productNews">
             <li class="info_list info_first" :key="key">
-              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <p @click="onDetailNews(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
           </template>
@@ -273,7 +273,7 @@
         <ul class="info_box" v-else>
           <template v-for="(item, key) in helpNews">
             <li class="info_list" :key="key">
-              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <p @click="onDetailService(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
           </template>
@@ -518,8 +518,13 @@ export default {
     },
 
     //点击资讯/公告详情
-    onDetail(id) {
+    onDetailNews(id) {
       window.open(`${this.zxLink}/cms/news/${id}.html`);
+    },
+
+    //帮助中心详情
+    onDetailService(){
+      window.open(`${this.zxLink}/cms/service/${id}.html`);
     },
 
     //判断是否授权

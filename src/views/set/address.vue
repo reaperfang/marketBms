@@ -70,12 +70,12 @@
           </p>
         </div>
       </el-table>
-      <div class="page_styles" v-if="dataList.length > ruleForm.pageSize">
+      <div class="page_styles" v-if="total*1 > 20">
         <el-pagination
           background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="1"
+          :current-page="ruleForm.pageNo"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize"
           layout="sizes, prev, pager, next"
@@ -122,6 +122,7 @@ export default {
       return item.isDefaltSenderAddress === 1 || item.isDefaltReturnAddress === 1
     },
     getAddressTypeTxt(item) {
+      console.log('item',item)
       if (!item) return ''
       let txt = ''
       switch(item.addressType) {
@@ -173,11 +174,13 @@ export default {
     handleSizeChange(val) {
       this.ruleForm.pageNo = 1
       this.ruleForm.pageSize = val
-      this.getAddressList()
+      const req = this.getReqData(this.ruleForm)
+      this.getAddressList(req)
     },
     handleCurrentChange(val) {
       this.ruleForm.pageNo = val
-      this.getAddressList()
+      const req = this.getReqData(this.ruleForm)
+      this.getAddressList(req)
     },
     goAddressNew() {
       this.$router.push({ path: '/set/addressAdd' }) 
@@ -238,7 +241,8 @@ export default {
                   cancelButtonText: '取消'
                 }).then(() => {
                   this.ruleForm.pageNo = 1
-                  this.getAddressList()
+                  const req = this.getReqData(this.ruleForm)
+                  this.getAddressList(req)
                 });
               }
             }).catch((err) => {
@@ -326,6 +330,7 @@ export default {
         icon: true,
         text: '默认地址不可删除',
         confirmText: '我知道了',
+        customClass: 'address-disable-del',
         showCancelButton: false
       }).then(() => {
       });
@@ -343,7 +348,8 @@ export default {
       // 删除api
       this.ApiDelAddressById(id, addressType).then(() => {
         this.ruleForm.pageNo = 1
-        this.getAddressList()
+        const req = this.getReqData(this.ruleForm)
+        this.getAddressList(req)
         this.$message.success('保存成功')
         // this.confirm({
         //   title: "提示",
@@ -411,6 +417,7 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+
 .address {
   background: #fff;
   padding: 20px;
@@ -493,6 +500,13 @@ export default {
         color:rgba(101, 94, 255, 1)
       }
     }
+  }
+}
+</style>
+<style rel="stylesheet/scss" lang="scss">
+.address-disable-del.confirm.no-cancel {
+   .el-button {
+    letter-spacing: 0;
   }
 }
 </style>

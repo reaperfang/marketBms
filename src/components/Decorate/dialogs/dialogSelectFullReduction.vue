@@ -29,9 +29,9 @@
         v-loading="loading"
         :row-key="getRowKey"
       >
-        <el-table-column type="selection" width="30" :selectable="itemSelectable" :reserve-selection="true"></el-table-column>
+        <el-table-column type="selection" width="55" :selectable="itemSelectable" :reserve-selection="true"></el-table-column>
         <el-table-column prop="name" label="活动标题" :width="250"></el-table-column>
-        <el-table-column prop="status" label="状态">  <!-- 0是未生效  1是生效中 2是已失效-->
+        <el-table-column prop="status" label="状态" :width="70">  <!-- 0是未生效  1是生效中 2是已失效-->
             <template slot-scope="scope">
               <span v-if="scope.row.status === 0">未生效</span>
               <span v-else-if="scope.row.status === 1">生效中</span>
