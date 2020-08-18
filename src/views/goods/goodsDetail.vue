@@ -1185,12 +1185,7 @@ export default {
             if(data&&data.child){
                 this.leimuMessage = false;
                 this.ruleForm.productCategoryInfoId=data.child.id;
-                if(data.child.name){
-                    this.goodCategoryNames = data.name + ' / '+data.child.name;
-                }else if(data.child.categoryName){
-                    this.goodCategoryNames = data.name + ' / '+data.child.categoryName;
-                }
-                
+                this.goodCategoryNames = data.name + ' / '+data.child.name;  
             }
         },
         statusChange() {

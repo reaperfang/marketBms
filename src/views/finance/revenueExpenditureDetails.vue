@@ -148,9 +148,8 @@
           prop="tradeTime"
           label="交易时间"
           sortable="custom"
-          fixed="right"
           align="right"
-          style="white-space:nowrap;"
+          :show-overflow-tooltip="true"
           >
         </el-table-column>
       </el-table>
@@ -449,5 +448,11 @@ export default {
 .table{
   width: 100%; 
   margin-top:20px;
+}
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
 }
 </style>
