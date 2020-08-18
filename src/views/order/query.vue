@@ -3,7 +3,6 @@
     <section class="search">
       <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
         <el-form-item label>
-          {{code}}
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
               <el-option label="订单编号" value="code"></el-option>
