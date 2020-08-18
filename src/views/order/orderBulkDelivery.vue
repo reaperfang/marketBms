@@ -78,7 +78,7 @@
                     </template>
                     <template v-else>
                       <p>提货人: {{item.receivedName}} {{item.receivedPhone}}</p>
-                      <p>自提点名称: {{item.receivedPhone}}</p>
+                      <p>自提点名称: {{item.pickUpName}}</p>
                       <p>提货地址: {{item.sendAddress}} {{item.sendDetail}}</p>
                     </template>
                   </div>
@@ -858,6 +858,10 @@ export default {
               //obj.distributorId = item.distributorId;
               obj.distributorPhone = item.phone;
             }
+            if(item.deliveryWay == 4) {
+              obj.deliveryWay = 4;
+              obj.verifyCode = item.verifyCode
+            }
             return obj;
           })
         };
@@ -1039,7 +1043,18 @@ export default {
             val.errorMessageDistributorName = '请输入或选择配送员';
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
+            val.pickUpName = '';
 
+            this._apis.order
+            .getPickInfo({id: val.pickId || 4})
+            .then(res => {
+              console.log(res)
+              val.pickUpName = res.pickUpName
+            })
+            .catch(error => {
+              this.visible = false;
+              this.$message.error(error);
+            });
           });
           // res.forEach(val => {
           //   val.orderItemList.forEach(item => {
