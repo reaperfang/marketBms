@@ -8,7 +8,7 @@
                 <div class="title" style="color: #161617; font-size: 18px; text-align: center; margin-bottom: 18px;">配送单</div>
                 <div class="table-head" style="border: 1px solid #ccc; border-bottom: none; color: #161617; font-size: 14px; padding: 20px 10px 20px 25px; padding-bottom: 10px;">
                     <template v-if="$route.query.afterSale">
-                        <div style="display: flex; margin-bottom: 15px;">
+                        <!-- <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">订单编号：{{item.orderAfterSaleSendInfo.orderAfterSaleCode}}</div>
                             <div class="item" style="width: 260px;">发货日期：{{item.orderAfterSaleSendInfo.sendTime}}</div>
                             <div class="item" v-if="!!item.orderAfterSaleSendInfo.deliveryDate" style="white-space:nowrap;">配送时间：{{item.orderAfterSaleSendInfo.deliveryDate | formatDateRemoveZero}} {{item.orderAfterSaleSendInfo.deliveryTime}}</div>
@@ -22,10 +22,24 @@
                             <div class="item" style="width: 260px;">联系电话：{{item.orderAfterSaleSendInfo.receivedPhone}}</div>
                             <div class="item">收货地址：{{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receivedDetail}}
                             </div>
+                        </div> -->
+                        <div class="item-box">
+                            <div class="item">订单编号：{{item.orderAfterSaleSendInfo.orderAfterSaleCode}}</div>
+                            <div class="item">用户ID：{{item.orderAfterSaleSendInfo.memberSn}}</div>
+                            <div class="item">收货人：{{item.orderAfterSaleSendInfo.receivedName}}</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item">发货日期：{{item.orderAfterSaleSendInfo.sendTime}}</div>
+                            <div class="item">用户昵称：{{item.orderAfterSaleSendInfo.memberName}}</div>
+                            <div class="item">联系电话：{{item.orderAfterSaleSendInfo.receivedPhone}}</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item">收货地址：{{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receivedDetail}}
+                            </div>
                         </div>
                     </template>
                     <template v-else>
-                        <div style="display: flex; margin-bottom: 15px;">
+                        <!-- <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">订单编号：{{item.orderCode}}</div>
                             <div class="item" style="width: 260px;">发货日期：{{item.updateTime}}</div>
                             <div class="item" v-if="!!item.deliveryDate" style="white-space:nowrap;">配送时间：{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</div>
@@ -37,6 +51,19 @@
                         <div style="display: flex; margin-bottom: 15px;">
                             <div class="item" style="width: 280px;">收货人：{{item.receivedName}}</div>
                             <div class="item" style="width: 260px;">联系电话：{{item.receivedPhone}}</div>
+                            <div class="item">收货地址：{{item.orderInfoView.receiveAddress}} {{item.orderInfoView.receivedDetail}}</div>
+                        </div> -->
+                        <div class="item-box">
+                            <div class="item">订单编号：{{item.orderCode}}</div>
+                            <div class="item">用户ID：{{item.memberSn}}</div>
+                            <div class="item">收货人：{{item.receivedName}}</div>
+                        </div>
+                        <div class="item-box">
+                            <div class="item">发货日期：{{item.updateTime}}</div>
+                            <div class="item">用户昵称：{{item.memberName}}</div>
+                            <div class="item">联系电话：{{item.receivedPhone}}</div>
+                        </div>
+                        <div class="item-box">
                             <div class="item">收货地址：{{item.orderInfoView.receiveAddress}} {{item.orderInfoView.receivedDetail}}</div>
                         </div>
                     </template>
@@ -156,8 +183,18 @@ export default {
                 var body = window.document.body.innerHTML; 
 
                 //2.要打印的部分（#print里面的内容就是要打印的内容）
-
-                window.document.body.innerHTML = document.getElementsByClassName("print-content")[0].innerHTML; 
+                let header =    '<header>' +
+                                    '<style media="print">' +
+                                        '@page {' +
+                                        'size: auto;' +
+                                        'margin: 0mm;' +
+                                        '}' +
+                                        'body {' +
+                                            'padding: 20px;' +
+                                        '}' +
+                                    '</style>' +
+                                '</header>'
+                window.document.body.innerHTML = header + document.getElementsByClassName("print-content")[0].innerHTML; 
 
                 window.print();
 
@@ -178,6 +215,15 @@ export default {
         color: rgb(205, 208, 206);
         .header {
             margin-bottom: 20px;
+        }
+    }
+    .table-head {
+        display: flex;
+        .item-box {
+            margin-right: 20px;
+            .item {
+                margin-bottom: 15px;
+            }
         }
     }
 </style>
