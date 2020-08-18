@@ -38,7 +38,7 @@
               </div>
               <p class="img_bottom">
                 <!-- <span @click="uploadImage(item.id,'videoId')"><i class="el-icon-edit"></i></span> -->
-                <span @click="moveGroup(item.id)"><i class="el-icon-folder"></i></span>
+                <span @click="moveGroup(item.id,item.fileGroupInfoId)"><i class="el-icon-folder"></i></span>
                 <span @click="downVideo(item.filePath,item.fileName)"><i class="el-icon-video-camera"></i></span>
                 <span @click="deleteImage(item.id,'videoId')"><i class="el-icon-delete"></i></span>
               </p>
@@ -81,7 +81,7 @@
       </div>
     </div>
     <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" :typeName="typeName" @submit="handleSubmit"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="data" :arrayData="arrayData" :fromGroupId="fromGroupId" :typeName="typeName" @submit="handleSubmit"></component>
   </div>
 </template>
 
@@ -120,7 +120,8 @@ export default {
       currentPage:1,
       pageSize:10,
       total:0,
-      groupId:''
+      groupId:'',
+      fromGroupId:''
     }
   },
   created() {
@@ -227,12 +228,13 @@ export default {
     },
 
     //分组
-    moveGroup(id){
+    moveGroup(id,fileGroupInfoId){
       this.dialogVisible = true;
       this.currentDialog = 'dialogGroupsMove'
       this.data = 'video'
       this.arrayData = []
       this.arrayData.push(id)
+      this.fromGroupId = fileGroupInfoId
     },
 
     //移动分组
@@ -240,7 +242,8 @@ export default {
       this.data = 'video'
       this.arrayData = []
       this.list.map(item =>{
-        item.checked == true && this.arrayData.push(item.id)        
+        item.checked == true && this.arrayData.push(item.id) 
+        this.fromGroupId = item.fileGroupInfoId        
       })
       if(this.arrayData.length == 0){
         this.$message.warning('请选择视频后再进行批量操作！');
@@ -286,6 +289,7 @@ export default {
       }
       this._apis.file.moveGroup(query).then((response)=>{
         this.$message.success('移动分组成功！');
+        this.getList()
         this.checkedAll = false
       }).catch((error)=>{
         this.$message.error(error);

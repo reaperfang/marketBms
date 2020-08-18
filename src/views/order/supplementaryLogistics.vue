@@ -501,22 +501,32 @@ export default {
           this.$message.error(error);
         });
     },
-        fetchOrderAddress() {
-            this._apis.order.fetchOrderAddress({id: this.cid, cid: this.cid}).then((res) => {
-                this.orderInfo.sendName = res.senderName
-                this.orderInfo.sendPhone = res.senderPhone
-                this.orderInfo.sendProvinceCode = res.provinceCode
-                this.orderInfo.sendProvinceName = res.province
-                this.orderInfo.sendCityCode = res.cityCode
-                this.orderInfo.sendCityName = res.city
-                this.orderInfo.sendAreaCode = res.areaCode
-                this.orderInfo.sendAreaName = res.area
-                this.orderInfo.sendAddress = res.sendAddress
-                this.orderInfo.sendDetail = res.address
-            }).catch(error => {
-                this.visible = false
-                this.$message.error(error);
-            })
+        fetchOrderAddress(address) {
+            // this._apis.order.fetchOrderAddress({id: this.cid, cid: this.cid}).then((res) => {
+            //     this.orderInfo.sendName = res.senderName
+            //     this.orderInfo.sendPhone = res.senderPhone
+            //     this.orderInfo.sendProvinceCode = res.provinceCode
+            //     this.orderInfo.sendProvinceName = res.province
+            //     this.orderInfo.sendCityCode = res.cityCode
+            //     this.orderInfo.sendCityName = res.city
+            //     this.orderInfo.sendAreaCode = res.areaCode
+            //     this.orderInfo.sendAreaName = res.area
+            //     this.orderInfo.sendAddress = res.sendAddress
+            //     this.orderInfo.sendDetail = res.address
+            // }).catch(error => {
+            //     this.visible = false
+            //     this.$message.error(error);
+            // })
+            this.orderInfo.sendName = address.name;
+          this.orderInfo.sendPhone = address.mobile;
+          this.orderInfo.sendProvinceCode = address.provinceCode;
+          this.orderInfo.sendProvinceName = address.provinceName;
+          this.orderInfo.sendCityCode = address.cityCode;
+          this.orderInfo.sendCityName = address.cityName;
+          this.orderInfo.sendAreaCode = address.areaCode;
+          this.orderInfo.sendAreaName = address.areaName;
+          this.orderInfo.sendAddress = address.address;
+          this.orderInfo.sendDetail = address.addressDetail;
         },
         printDistributionSheet() {
             this.$router.push('/order/printDistributionSheet?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
@@ -664,7 +674,10 @@ export default {
         _orderDetail() {
             let id = this.$route.query.ids
 
-            this._apis.order.orderSendDetail({ids: [this.$route.query.ids]}).then((res) => {
+            this._apis.order.orderSendDetail({ids: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
+                let _address = res.shopAddressInfo
+
+                res = res.sendInfoListData
                 res[0].orderItemList.forEach(val => {
                     val.sendCount =  val.goodsCount
                 })
@@ -675,7 +688,7 @@ export default {
                 this.orderInfo = res[0]
 
                 if(!this.orderInfo.sendAddress) {
-                    this.fetchOrderAddress()
+                    this.fetchOrderAddress(_address)
                 }
 
                 //如果是商家配送，则需要请求拿到配送员列表

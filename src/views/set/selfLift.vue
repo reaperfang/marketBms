@@ -51,6 +51,7 @@
       <el-table-column
         prop="address"
         label="地址信息"
+        min-width="300"
         align="left">
       </el-table-column>
       <el-table-column
@@ -441,7 +442,7 @@ export default {
     closeSelfLift() {
        this.confirm({
         title: "提示",
-        iconSuccess: true,
+        iconWarning: true,
         text: '关闭后用户下单时将不能再使用上门自提，您确定要关闭吗？',
         confirmText: '确定',
         showCancelButton: true

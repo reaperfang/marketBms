@@ -94,7 +94,7 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="215"
+                    width="250"
                     :class-name="haveAuto ? 'orderCode haveAuto' : 'orderCode'">
                     <template slot-scope="scope">
                         <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
@@ -175,9 +175,9 @@
                                 <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
                                 <span v-else @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
-                            <!-- <template>
+                            <template v-if="scope.row.status == 5">
                                 <span @click="verificationHandler">核销验证</span>
-                            </template> -->
+                            </template>
                         </div>
                     </template>
                 </el-table-column>
@@ -192,6 +192,8 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
+        <!-- 打印配送单dialog -->
+        <DialogPrintList :printDialogVisible.sync="printDialogVisible" :printPath="printPathV" :printQuery="printQuery" @closeDialogVisible="closeDialogVisible()"></DialogPrintList>
         <component
             v-if="dialogVisible"
             :is="currentDialog"
@@ -205,6 +207,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import DeliveryMethod from "./deliveryMethod"; //配送方式组件
+import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 import VerificationDialog from "@/views/order/dialogs/verificationDialog";
 
@@ -246,6 +249,11 @@ export default {
             checkedAll: false,
             isIndeterminate: false,
             isOrderAutoSend: false,
+            //打印配送单
+            printDialogVisible:false,
+            printRadio:null,
+            printPathV:'',
+            printQuery:{},
             currentDialog: '',
             dialogVisible: false,
             currentData: {},
@@ -277,6 +285,8 @@ export default {
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 4:
+                    return '上门自提'
             }
         },
     },
@@ -432,6 +442,7 @@ export default {
 
             this.$router.push('/order/printingElectronicForm?ids=' + ids)
         },
+        //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印配送单的单据。'})
@@ -446,8 +457,19 @@ export default {
                 return
             }
             let ids = this.multipleSelection.map(val => val.id).join(',')
-
-            this.$router.push('/order/printDistributionSheet?ids=' + ids)
+            let orderIds = this.multipleSelection.map(val => val.orderId).join(',')
+            // this.$router.push('/order/printDistributionSheet?ids=' + ids)
+            // 0：最后一次发货(入口:从发货后打印配送单)；1：所有发货(入口:批量打印配送单)
+            this.handlePrintListOpen('/order/printDistributionSheet',{ids:ids,orderIds:orderIds,printType:1})
+        },
+        handlePrintListOpen(pagePath,query){
+            // console.log(pagePath, query)
+            this.printPathV = pagePath
+            this.printQuery = query
+            this.printDialogVisible=true
+        },
+        closeDialogVisible(){
+            this.printDialogVisible=false
         },
         onSubmit() {
 
@@ -510,6 +532,7 @@ export default {
     components: {
         Pagination,
         DeliveryMethod,
+        DialogPrintList,
         VerificationDialog
     }
 }

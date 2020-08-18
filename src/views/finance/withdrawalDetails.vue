@@ -122,8 +122,11 @@
         align="center">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button> 
-            <span class="c_line">|</span>
-            <el-button type="text" size="small" v-if="scope.row.status == 0" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
+            <span v-if="scope.row.status == 0">
+              <span class="c_line">|</span>
+              <el-button type="text" size="small" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
+            </span>
+            <span v-else class="placeholders"></span>
           </template>
         </el-table-column>
       </el-table>
@@ -479,6 +482,18 @@ export default {
 .c_line{
   margin: 0 5px;
   color: #DADAE3;
+}
+
+.placeholders{
+  width: 45px;
+  display: inline-block;
+}
+
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
 }
   
 </style>

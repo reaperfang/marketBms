@@ -132,7 +132,7 @@ export default {
     },
     getIsHasGoods() {
       const req = {
-        cid: 11,
+        cid: this.cid,
         startIndex: 1,
         pageSize: 20,
         name: "",

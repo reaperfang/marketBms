@@ -159,14 +159,14 @@
                 <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
                 <p class="title4">您当前还未授权小程序</p>
                 <p class="opt">
-                  <el-button>立即授权</el-button>
+                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="isReleaseWX">
+              <div v-if="!isEmpowerWX &&  isReleaseWX">
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
-                  <el-button>立即发布</el-button>
+                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即发布</el-button>
                 </p>
               </div>
             </div>
@@ -183,14 +183,14 @@
                 <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
                 <p class="title4">您当前还未授权公众号</p>
                 <p class="opt">
-                  <el-button>立即授权</el-button>
+                  <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="isReleaseGZ">
+              <div v-if="!isEmpowerGZ && isReleaseGZ">
                 <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
-                  <el-button>立即发布</el-button>
+                  <el-button @click="linkTo({text:'设置首页',url:'/shop/m_wxShopIndex'})">设置首页</el-button>
                 </p>
               </div>
             </div>
@@ -224,8 +224,8 @@
             商户工作台H5
           </p>
           <p class="operation">
-            <a @click="downs(qrCode,'商户工作台H5二维码')">下载</a>
-            <a v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</a>
+            <a @click="downs(qrCode,'店铺移动管理二维码')">下载</a>
+            <a v-clipboard:copy="pageLink" v-clipboard:success="onCopy" v-clipboard:error="onError" class="ml15">复制链接</a>
           </p>
         </div>
       </div>
@@ -237,7 +237,7 @@
             <span class="title1">产品动态</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=shushangdongtai'"
+            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=shushangdongtai'"
             target="_blank"
             :underline="false"
           >
@@ -247,8 +247,8 @@
         <p class="p_email no_data" v-if="productNews.length == 0">暂无产品动态</p>
         <ul class="info_box" v-else>
           <template v-for="(item, key) in productNews">
-            <li class="info_list" :key="key">
-              <p @click="onDetail(item.id)">{{item.title}}</p>
+            <li class="info_list info_first" :key="key">
+              <p @click="onDetailNews(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
           </template>
@@ -262,7 +262,7 @@
             <span class="title1">帮助中心</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=news&dept=aiyouyi.cn&cat=yidongshangcheng'"
+            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=yidongshangcheng'"
             target="_blank"
             :underline="false"
           >
@@ -273,7 +273,7 @@
         <ul class="info_box" v-else>
           <template v-for="(item, key) in helpNews">
             <li class="info_list" :key="key">
-              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <p @click="onDetailService(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
           </template>
@@ -466,6 +466,18 @@ export default {
           query: { paths: "/application/appIndex" }
         });
         this.SETCURRENT(8);
+      } else if(item.text == '绑定微信公众号'){
+        this.$router.push({
+          path:'/apply',
+          query:{paths:'/application/channelapp/publicnum',applyId:'3'
+        }})
+        this.SETCURRENT(8)
+      } else if(item.text == '绑定微信小程序'){
+        this.$router.push({
+          path:'/apply',
+          query:{paths:'/application/channelapp/smallapp',applyId:'3'
+        }})
+        this.SETCURRENT(8)
       } else {
         this.$router.push({ path: item.url });
       }
@@ -506,8 +518,13 @@ export default {
     },
 
     //点击资讯/公告详情
-    onDetail(id) {
+    onDetailNews(id) {
       window.open(`${this.zxLink}/cms/news/${id}.html`);
+    },
+
+    //帮助中心详情
+    onDetailService(){
+      window.open(`${this.zxLink}/cms/service/${id}.html`);
     },
 
     //判断是否授权
@@ -850,9 +867,6 @@ export default {
       padding: 3px 0;
       font-size: 14px;
       color: #44434B;
-      &:first-child {
-        color:#FD4C2B;
-      }
       p {
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -865,6 +879,9 @@ export default {
         // color: #fd932b;
         color: #FD4C2B;
       }
+    }
+    .info_first:first-child{
+        color:#FD4C2B;
     }
     .no_data {
       color: #92929b !important;
@@ -919,6 +936,9 @@ export default {
   i {
     cursor: pointer;
   }
+}
+.ml15{
+  margin-left:15px;
 }
 </style>
 

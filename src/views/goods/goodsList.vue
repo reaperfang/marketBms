@@ -93,11 +93,10 @@
                 </div>
               </template>
               <template v-if="scope.row.isEdit">
-                <el-tooltip popper-class="goodSortTip" class="item" effect="light" placement="top">
+                <!-- <el-tooltip popper-class="goodSortTip" class="item" effect="light" placement="top">
                 <div slot="content">输入框内只能输入≥1的有效数字，不能输入特殊字符、<br/>
-                    空格、中英文字符、负数、0等，统一校验文案为<br/>
-                    “请您输入正确的数字”；最大可输入数字“999999”<br/>  
-                </div>
+                    空格、中英文字符、负数、0等。  
+                </div> -->
                 <el-input
                   ref='goodSort'
                   v-model="scope.row.sortId"
@@ -106,7 +105,7 @@
                   @blur="changeEdit(scope.row)"
                   @change="saveGoodIndex(scope.row)">
                   </el-input>
-                 </el-tooltip>
+                 <!-- </el-tooltip> -->
               </template>
             </template>
             </el-table-column>
@@ -230,7 +229,7 @@
                         <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
                         <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
                         <el-button @click="shareMore" class="border-button">批量推广</el-button>
-                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete border-button">批量删除</el-button>
                         <el-button @click="copyUrl" class="border-button">复制链接</el-button>
                         <el-button @click="editCategory" class="border-button">编辑分类</el-button>
                     </template>
@@ -255,6 +254,15 @@
     color:rgba(68,67,75,1);
     font-size:14px;
 }
+.border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
+        }
+    }
 .table-footer {
     display: flex;
     align-items: center;
@@ -436,6 +444,7 @@
 /deep/ .el-checkbox__label {
     padding-left: 6px;
     padding-right: 6px;
+    margin-right:20px;
 }
 .el-button+.el-button {
     margin-left: 12px;
@@ -783,6 +792,7 @@ export default {
                 }
                 this._apis.goods.editProductsCatalogs(param)
                 .then(res=>{
+                    this.checkedAll = false
                     this.getList()
                 })
                 .catch(err=>{
@@ -923,7 +933,7 @@ export default {
         },
         editCategory(){
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后在进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后再进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1382,10 +1392,11 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
-
+            let checkedCount = val.length;
             if(this.list.length == this.multipleSelection.length) {
                 this.checkedAll = true
             }
+             this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
         },
         stateHandler(val) {
             if(this.listQuery.status === val) {

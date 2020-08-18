@@ -28,7 +28,7 @@
               <div class="col">
                 <div class="row align-center row-margin">
                   <div class="col" style="width: 180px;">{{list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
-                  <div class="col" style="width: 281px; text-align: center;">物流信息</div>
+                  <div class="col" style="width: 281px; text-align: center;">{{list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
                 </div>
               </div>
             </div>
@@ -78,8 +78,8 @@
                     </template>
                     <template v-else>
                       <p>提货人: {{item.receivedName}} {{item.receivedPhone}}</p>
-                      <p>自提点名称: {{item.receivedPhone}}</p>
-                      <p>提货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
+                      <p>自提点名称: {{item.pickUpName}}</p>
+                      <p>提货地址: {{item.sendAddress}} {{item.sendDetail}}</p>
                     </template>
                   </div>
                   <div class="col">
@@ -132,7 +132,7 @@
                       </el-form>
                     </template>
                     <template v-else>
-                      <p style="width: 285px; text-align: center; margin-top: 29px;">2020-04-02 10:00-18:00</p>
+                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + item.deliveryTime}}</p>
                     </template>
                   </div>
                 </div>
@@ -858,6 +858,10 @@ export default {
               //obj.distributorId = item.distributorId;
               obj.distributorPhone = item.phone;
             }
+            if(item.deliveryWay == 4) {
+              obj.deliveryWay = 4;
+              obj.verifyCode = item.verifyCode
+            }
             return obj;
           })
         };
@@ -1008,6 +1012,9 @@ export default {
         })
         .then(res => {
           console.log(res);
+          let _address = res.shopAddressInfo
+            
+          res = res.sendInfoListData
           res.forEach(val => {
             val.express = null
             val.other = "";
@@ -1036,7 +1043,18 @@ export default {
             val.errorMessageDistributorName = '请输入或选择配送员';
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
+            val.pickUpName = '';
 
+            this._apis.order
+            .getPickInfo({id: val.pickId || 4})
+            .then(res => {
+              console.log(res)
+              val.pickUpName = res.pickUpName
+            })
+            .catch(error => {
+              this.visible = false;
+              this.$message.error(error);
+            });
           });
           // res.forEach(val => {
           //   val.orderItemList.forEach(item => {
@@ -1051,29 +1069,42 @@ export default {
             this.getDistributorList(res.length);
           }
           this.list = res;
-          this._list = JSON.parse(JSON.stringify(res))
-          this._apis.order
-            .fetchOrderAddress({ id: this.cid, cid: this.cid })
-            .then(response => {
-              this.list.forEach(res => {
-                if(!res.sendAddress) {
-                  res.sendName = response.senderName;
-                  res.sendPhone = response.senderPhone;
-                  res.sendProvinceCode = response.provinceCode;
-                  res.sendProvinceName = response.province;
-                  res.sendCityCode = response.cityCode;
-                  res.sendCityName = response.city;
-                  res.sendAreaCode = response.areaCode;
-                  res.sendAreaName = response.area;
-                  res.sendAddress = response.sendAddress;
-                  res.sendDetail = response.address;
-                }
-              });
-            })
-            .catch(error => {
-              this.visible = false;
-              this.$message.error(error);
-            });
+          // this._apis.order
+          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
+          //   .then(response => {
+          //     this.list.forEach(res => {
+          //       if(!res.sendAddress) {
+          //         res.sendName = response.senderName;
+          //         res.sendPhone = response.senderPhone;
+          //         res.sendProvinceCode = response.provinceCode;
+          //         res.sendProvinceName = response.province;
+          //         res.sendCityCode = response.cityCode;
+          //         res.sendCityName = response.city;
+          //         res.sendAreaCode = response.areaCode;
+          //         res.sendAreaName = response.area;
+          //         res.sendAddress = response.sendAddress;
+          //         res.sendDetail = response.address;
+          //       }
+          //     });
+          //   })
+          //   .catch(error => {
+          //     this.visible = false;
+          //     this.$message.error(error);
+          //   });
+          this.list.forEach(res => {
+            if(!res.sendAddress) {
+              res.sendName = _address.name;
+              res.sendPhone = _address.mobile;
+              res.sendProvinceCode = _address.provinceCode;
+              res.sendProvinceName = _address.provinceName;
+              res.sendCityCode = _address.cityCode;
+              res.sendCityName = _address.cityName;
+              res.sendAreaCode = _address.areaCode;
+              res.sendAreaName = _address.areaName;
+              res.sendAddress = _address.address;
+              res.sendDetail = _address.addressDetail;
+            }
+          });
         })
         .catch(error => {
           this.visible = false;

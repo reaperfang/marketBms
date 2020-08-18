@@ -29,7 +29,7 @@
         <el-form-item label="支付方式">
           <el-select v-model="ruleForm.payWay" style="width:210px;" placeholder="全部">
             <el-option
-              v-for="item in payTypes"
+              v-for="item in payTypeList"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -148,9 +148,8 @@
           prop="tradeTime"
           label="交易时间"
           sortable="custom"
-          fixed="right"
           align="right"
-          style="white-space:nowrap;"
+          :show-overflow-tooltip="true"
           >
         </el-table-column>
       </el-table>
@@ -225,6 +224,13 @@ export default {
     },
     payTypes(){
       return financeCons.payTypes;
+    },
+    payTypeList(){
+      let arr = []
+      financeCons.payTypes.map(item =>{
+        item.value !== 3 && arr.push(item)
+      })
+      return arr
     },
     tradeTypes(){
       return financeCons.tradeTypes;
@@ -442,5 +448,11 @@ export default {
 .table{
   width: 100%; 
   margin-top:20px;
+}
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
 }
 </style>

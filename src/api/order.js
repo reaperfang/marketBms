@@ -643,6 +643,57 @@ export function getDistributorList(data) {
   })
 }
 
+// 小票打印机设置-详情  易其孜
+export function getPrinterSetDetail(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-DETAIL-PROCESSOR',
+    data
+  })
+}
+
+// 小票配送单预览 易其孜
+export function shopPrinterPreview(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-PREVIEW-PROCESSOR',
+    data
+  })
+}
+
+// 小票配送单打印 易其孜
+export function goPrinter(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-PRINT-PROCESSOR',
+    data
+  })
+}
+
+// 易联云商户授权结果  lyc
+export function sendYlyunResult(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-ES-CALL-BACK-PROCESSOR',
+    data
+  })
+}
+
+// 连接打印机  lyc
+export function connectPrinter(data) {
+  return request({
+    apiType: 'manager',
+    method: 'post',
+    target: 'TC-SHOP-PRINTER-CONNECT-PROCESSOR',
+    data
+  })
+}
+
+
 //查看电子面单快递规格
 export function getExpressSpec(data) {
   return request({
@@ -659,6 +710,16 @@ export function confirmVerifySelfLiftCode(data) {
     method: 'get',
     params:data,
     baseURL: process.env.DATA_API,
-   
+    verifyCode:1
+  })
+}
+
+//自提点-详情
+export function getPickInfo(data) {
+  return request({
+    target: 'PICKUPINFO-FIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
   })
 }

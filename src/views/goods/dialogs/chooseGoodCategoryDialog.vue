@@ -29,7 +29,7 @@
             <div>
               <template v-for="item of firstTpmList">
                 <div class="categoryName" @click="showCategoryName(item)">
-                  {{item.categoryName}}
+                  {{item.name}}
                   <!-- <i
                     v-if="item.isHasChild"
                     class="el-icon-arrow-right"
@@ -51,7 +51,7 @@
           <div class="cascader-content">
             <div>
               <template v-for="item of secondTmpList">
-                <div class="categoryName" @click="showSecondName(item)">{{item.categoryName}}</div>
+                <div class="categoryName" @click="showSecondName(item)">{{item.name}}</div>
               </template>
             </div>
           </div>
@@ -88,17 +88,10 @@ export default {
       isWarning: false,
       currentCategory: {}, //当前选中的类目
       operateCategoryList: [], //后台获取的所有类目
+      submitCat:{}//最终选择的类目
     };
   },
   created() {
-    if(this.data&&this.data.child){
-      this.itemCatText = this.data.name + ' / '+this.data.child.categoryName;
-      this.commonCat = this.data;
-   
-      }else{
-        this.itemCatText ='';
-        this.commonCat={};
-    }
     this.getOperateCategoryList();
   },
   watch: {},
@@ -120,7 +113,6 @@ export default {
     //查询常用类目
     getCommonCategoryList() {
       this.commonCategories = [];
-      // this.commonCat = {};
       this._apis.goods
         .getProCommonCategory({ cid: this.cid })
         .then((res) => {
@@ -156,7 +148,7 @@ export default {
         reg = new RegExp(this.firstContent);
         arr = [];
         for (var i = 0; i < list.length; i++) {
-          if (reg.test(list[i].categoryName)) {
+          if (reg.test(list[i].name)) {
             arr.push(list[i]);
           }
         }
@@ -169,7 +161,7 @@ export default {
         reg = new RegExp(this.secondContent);
         arr = [];
         for (var i = 0; i < list.length; i++) {
-          if (reg.test(list[i].categoryName)) {
+          if (reg.test(list[i].name)) {
             arr.push(list[i]);
           }
         }
@@ -177,21 +169,24 @@ export default {
       }
     },
     showCategoryName(data) {
-      this.firstContent = data.categoryName;
-      this.itemCatText = data.categoryName;
+      this.firstContent = data.name;
+      this.itemCatText = data.name;
       this.secondContent = "";
       this.commonCat = data;
+      this.submitCat = data;
       this.showSecondLevel(data);
     },
     showSecondName(data) {
       this.currentCategory = data;
-      this.secondContent = data.categoryName;
+      this.secondContent = data.name;
       let parentCat = this.operateCategoryList.find(
         (val) => val.id == data.parentId
       );
       parentCat.child = data;
       this.commonCat = parentCat;
-      this.itemCatText = parentCat.name + " > " + data.categoryName;
+      this.submitCat = parentCat;
+      this.itemCatText = parentCat.name + " > " + data.name;
+
     },
     showSecondLevel(item) {
       if (item.isHasChild) {
@@ -201,7 +196,8 @@ export default {
       } else {
         this.secondCascader = false;
       }
-      this.itemCatText = item.categoryName;
+      this.itemCatText = item.name;
+
     },
     setCommonCate() {
       if (this.commonCat && this.commonCat.child) {
@@ -255,10 +251,9 @@ export default {
         });
     },
     submit() {
-      console.log(this.commonCat);
-      if (this.commonCat && this.commonCat.child) {
+        if(this.submitCat && this.submitCat.child){
         //关闭窗口，将值传到添加商品页面
-        this.$emit("getProductCategoryInfoId", this.commonCat);
+        this.$emit("getProductCategoryInfoId", this.submitCat)//this.commonCat);
         this.visible = false;
         this.isWarning = false;
       } else {
@@ -287,6 +282,7 @@ export default {
             this.operateCategoryList = res;
             this.itemCatList = arr;
             this.firstCatList = arr;
+            this.getHistoryProductCategory(this.data)
             this.searchCategory("first");
             this.getCommonCategoryList(); //获取常用类目
             resolve(res.list);
@@ -302,7 +298,8 @@ export default {
       for (var i = 0; i < data.length; i++) {
         if (data[i].parentId == pid) {
           var obj = {
-            categoryName: data[i].name,
+            // categoryName: data[i].name,
+            name: data[i].name,
             id: data[i].id,
             parentId: data[i].parentId,
             level: data[i].level,
@@ -336,15 +333,33 @@ export default {
 
     itemCatHandleChange(value) {
       let temp = this.operateCategoryList.find((data) => data.id === value);
-      temp.categoryName = temp.name;
-      if (temp.parentId && temp.parentId > 0) {
+      if (temp&&temp.parentId && temp.parentId > 0) {
         let parentTemp = this.operateCategoryList.find(
           (data) => data.id === temp.parentId
         );
         parentTemp.child = temp;
-        this.commonCat = parentTemp;
+        this.submitCat = parentTemp;
       }
     },
+    getHistoryProductCategory(id){//获取历史类目
+      if(id){
+          let category = this.operateCategoryList.find(val =>val.id == id);
+          if(category && category.parentId!=0){
+              let parentCat = this.operateCategoryList.find(val => val.id == category.parentId);
+              parentCat.child = category;
+              this.commonCat = parentCat;
+              this.itemCatText = parentCat.name + " > " + category.name;
+              this.currentCategory = category;
+          }else{
+            this.itemCatText ='';
+            this.commonCat={};
+          }
+       }else{
+         this.itemCatText ='';
+         this.commonCat={};
+      }
+    }
+    
   },
 
   props: {

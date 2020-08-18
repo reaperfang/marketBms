@@ -238,11 +238,11 @@
           </el-form>
         </div>
         <!-- 配送方式 上门自提 -->
-        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 3">
+        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 4">
           <el-form
-            :model="ruleFormStore"
-            :rules="rulesStore"
-            ref="ruleFormStore"
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
             label-width="100px"
             class="demo-ruleForm"
            >
@@ -250,13 +250,13 @@
               <span>上门自提</span>
             </el-form-item>
             <el-form-item label="备注" prop="desc">
-              <el-input type="textarea" v-model="ruleFormStore.desc" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
+              <el-input type="textarea" v-model="ruleForm.sendRemark" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
             </el-form-item>
           </el-form>
         </div>
       </div>
       <div class="footer">
-        <el-button v-if="orderInfo.deliveryWay == 1" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
         <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
       </div>
     </div>
@@ -638,25 +638,35 @@ export default {
           this.$message.error(error);
         });
     },
-    fetchOrderAddress() {
-      this._apis.order
-        .fetchOrderAddress({ id: this.cid, cid: this.cid })
-        .then(res => {
-          this.orderInfo.sendName = res.senderName;
-          this.orderInfo.sendPhone = res.senderPhone;
-          this.orderInfo.sendProvinceCode = res.provinceCode;
-          this.orderInfo.sendProvinceName = res.province;
-          this.orderInfo.sendCityCode = res.cityCode;
-          this.orderInfo.sendCityName = res.city;
-          this.orderInfo.sendAreaCode = res.areaCode;
-          this.orderInfo.sendAreaName = res.area;
-          this.orderInfo.sendAddress = res.sendAddress;
-          this.orderInfo.sendDetail = res.address;
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
+    fetchOrderAddress(address) {
+      // this._apis.order
+      //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
+      //   .then(res => {
+      //     this.orderInfo.sendName = res.senderName;
+      //     this.orderInfo.sendPhone = res.senderPhone;
+      //     this.orderInfo.sendProvinceCode = res.provinceCode;
+      //     this.orderInfo.sendProvinceName = res.province;
+      //     this.orderInfo.sendCityCode = res.cityCode;
+      //     this.orderInfo.sendCityName = res.city;
+      //     this.orderInfo.sendAreaCode = res.areaCode;
+      //     this.orderInfo.sendAreaName = res.area;
+      //     this.orderInfo.sendAddress = res.sendAddress;
+      //     this.orderInfo.sendDetail = res.address;
+      //   })
+      //   .catch(error => {
+      //     this.visible = false;
+      //     this.$message.error(error);
+      //   });
+      this.orderInfo.sendName = address.name;
+      this.orderInfo.sendPhone = address.mobile;
+      this.orderInfo.sendProvinceCode = address.provinceCode;
+      this.orderInfo.sendProvinceName = address.provinceName;
+      this.orderInfo.sendCityCode = address.cityCode;
+      this.orderInfo.sendCityName = address.cityName;
+      this.orderInfo.sendAreaCode = address.areaCode;
+      this.orderInfo.sendAreaName = address.areaName;
+      this.orderInfo.sendAddress = address.address;
+      this.orderInfo.sendDetail = address.addressDetail;
     },
     getExpressCompanyList() {
       this._apis.order
@@ -747,12 +757,14 @@ export default {
 
           //如果是普通快递
           if(formName == 'ruleForm'){
-            if(this.ruleForm.expressCompanyCode == 'other') {
-              this.ruleForm.expressCompany = this.ruleForm.other
-            } else {
-              this.ruleForm.expressCompany = this.expressCompanyList.find(
-                val => val.expressCompanyCode == this.ruleForm.expressCompanyCode
-              ).expressCompany;
+            if(this.orderInfo.deliveryWay != 4) {
+              if(this.ruleForm.expressCompanyCode == 'other') {
+                this.ruleForm.expressCompany = this.ruleForm.other
+              } else {
+                this.ruleForm.expressCompany = this.expressCompanyList.find(
+                  val => val.expressCompanyCode == this.ruleForm.expressCompanyCode
+                ).expressCompany;
+              }
             }
           }
           
@@ -790,14 +802,22 @@ export default {
                 sendDetail: this.orderInfo.sendDetail // 发货人详细地址
               };
 
-          //如果是普通快递
+          
           if(formName == 'ruleForm'){
-            obj.deliveryWay = 1;
-            obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
-            obj.expressNos = this.ruleForm.expressNos; // 快递单号
-            obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
-            obj.remark = this.ruleForm.remark; // 发货备注
-            obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+            //如果是普通快递
+            if(this.orderInfo.deliveryWay != 4) {
+              obj.deliveryWay = 1;
+              obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
+              obj.expressNos = this.ruleForm.expressNos; // 快递单号
+              obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
+              obj.remark = this.ruleForm.remark; // 发货备注
+              obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+            } else {
+              //上门自提
+              obj.deliveryWay = 4;
+              obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+              obj.verifyCode = this.orderInfo.verifyCode
+            }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
             obj.deliveryWay = 2;
             obj.distributorName = this.distributorName; //配送员名字
@@ -887,29 +907,55 @@ export default {
       this._apis.order
         .orderSendDetail({ ids: [+this.$route.query.id || +this.$route.query.ids] })
         .then(res => {
-          res[0].orderItemList.forEach(val => {
-            val.cacheSendCount = val.sendCount;
-            val.sendCount = val.goodsCount - val.sendCount;
-          });
-          res[0].orderItemList.forEach(val => {
-            val.showError = false
-            val.errorMessage = ''
-          })
-          this._list = res
-          console.log(this._list)
-          this.tableData = res[0].orderItemList;
-          this.tableData.forEach(row => {
-            this.$refs.table.toggleRowSelection(row);
-          })
-          this.orderInfo = res[0];
-          this._ids = [this.orderInfo.id]
-          if(!this.orderInfo.sendAddress) {
-            this.fetchOrderAddress();
-          }
+          if(res instanceof Array) {
+            res[0].orderItemList.forEach(val => {
+              val.cacheSendCount = val.sendCount;
+              val.sendCount = val.goodsCount - val.sendCount;
+            });
+            res[0].orderItemList.forEach(val => {
+              val.showError = false
+              val.errorMessage = ''
+            })
+            this.tableData = res[0].orderItemList;
+            this.tableData.forEach(row => {
+              this.$refs.table.toggleRowSelection(row);
+            })
+            this.orderInfo = res[0];
+            this._ids = [this.orderInfo.id]
+            if(!this.orderInfo.sendAddress) {
+              this.fetchOrderAddress();
+            }
 
-          //如果是商家配送，则需要请求拿到配送员列表
-          if(this.orderInfo.deliveryWay == 2){
-            this.getDistributorList();
+            //如果是商家配送，则需要请求拿到配送员列表
+            if(this.orderInfo.deliveryWay == 2){
+              this.getDistributorList();
+            }
+          } else {
+            let _address = res.shopAddressInfo
+
+            res = res.sendInfoListData
+            res[0].orderItemList.forEach(val => {
+              val.cacheSendCount = val.sendCount;
+              val.sendCount = val.goodsCount - val.sendCount;
+            });
+            res[0].orderItemList.forEach(val => {
+              val.showError = false
+              val.errorMessage = ''
+            })
+            this.tableData = res[0].orderItemList;
+            this.tableData.forEach(row => {
+              this.$refs.table.toggleRowSelection(row);
+            })
+            this.orderInfo = res[0];
+            this._ids = [this.orderInfo.id]
+            if(!this.orderInfo.sendAddress) {
+              this.fetchOrderAddress(_address);
+            }
+
+            //如果是商家配送，则需要请求拿到配送员列表
+            if(this.orderInfo.deliveryWay == 2){
+              this.getDistributorList();
+            }
           }
 
           if(this.orderInfo.deliveryWay == 4) {
