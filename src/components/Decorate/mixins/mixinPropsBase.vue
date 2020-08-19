@@ -37,7 +37,6 @@ export default {
   methods: {
     /* 初始化表单数据 */
     initRuleForm() {
-      console.log(this.data)
       if (this.data) {
         this.ruleForm = this.data;
       }
