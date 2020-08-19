@@ -31,7 +31,7 @@
                     </div>
                     <div class="item righter">
                         <span>订单类型：{{order.orderType | orderTypeFilter}}</span>
-                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：<span class="pointer" :title="order.memberName">{{order.memberName | memberNameFilter}}</span></span>
+                        <span><i v-if="order.memberLevelImg" class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：<span class="pointer" :title="order.memberName">{{order.memberName | memberNameFilter}}</span></span>
                         <span>订单来源：{{order.channelName}}</span>
                         <!-- <i v-permission="['订单', '订单查询', '商城订单', '删除订单']" @click="closeOrder(order.id)" v-if="order.orderStatus == 2" class="el-icon-delete"></i> -->
                     </div>
@@ -401,8 +401,15 @@ export default {
                        }
                     }
                     .righter {
-                        span {
-                            margin-right: 20px;
+                        >span {
+                            padding-left: 12px;
+                            padding-right: 12px;
+                            &:nth-child(1) {
+                                border-right: 1px solid #dadae3;
+                            }
+                            &:nth-child(2) {
+                                border-right: 1px solid #dadae3;
+                            }
                         }
                     }
                     .item {
