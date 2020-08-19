@@ -25,6 +25,7 @@
                             <el-tooltip v-if="order.isUrge == 0" content="用户催发货，请尽快发货" placement="bottom" effect="dark">
                                 <i class="urge"></i>
                             </el-tooltip>
+                            <span class="deliveryWay-icon">{{order.deliveryWayIcon}}</span>
                             <span class="order-code-inner">订单编号：{{order.code}}</span>
                             <span class="createTime">下单时间：{{order.createTime}}</span>
                         </span>
@@ -111,7 +112,9 @@
                             <!-- 待收货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
-                            <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push(`/order/supplementaryLogistics?id=${order.id}&ids=${order.id}`)">补填物流</p>
+                            <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
+                            <!-- order.deliveryWay== 4 -->
+                            <p v-if="order.deliveryWay== 4" @click="currentDialog = 'VerificationDialog'; currentData = order.id; dialogVisible = true">核销验证</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
                             <!-- 完成 -->
@@ -123,11 +126,12 @@
             </div>
         </div>
         <Empty v-else></Empty>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data='currentData'></component>
     </div>
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
+import VerificationDialog from '@/views/order/dialogs/verificationDialog'
 import anotherAuth from '@/mixins/anotherAuth'
 import Empty from '@/components/Empty'
 
@@ -152,6 +156,25 @@ export default {
         list: {
             deep: true,
             handler(newVal, objVal) {
+                newVal.forEach(item=>{
+                    switch(item.deliveryWay) {
+                        case 1:
+                            item.deliveryWayIcon = "普快"
+                            break;
+                        case 2:
+                             item.deliveryWayIcon = "商配"
+                            break;
+                        case 3:
+                            item.deliveryWayIcon = "三方"
+                            break;
+                        case 4:
+                            item.deliveryWayIcon = "自提"
+                            break;
+                    }
+                    if(item.deliveryWay==1){
+
+                    }
+                })
                 //如果当前列表中包含商家配送方式，则配送方式标题需要加宽
                 if(newVal.some(item => item.deliveryWay == 2)){
                     this.storeMark = true;
@@ -182,6 +205,8 @@ export default {
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 4:
+                    return '上门自提'
             }
         },
         goodsSpecsFilter(value) {
@@ -317,7 +342,6 @@ export default {
         checkedChange() {
             let len = this.list.filter(val => val.checked).length
             let list = this.list.filter(val => val.checked)
-
             this._globalEvent.$emit('checkedLength', len)
             this._globalEvent.$emit('checkedList', list)
         }
@@ -329,6 +353,7 @@ export default {
     },
     components: {
         CloseOrderDialog,
+        VerificationDialog,
         Empty
     }
 }
@@ -391,6 +416,20 @@ export default {
                     color:#44434B;
                     font-weight:400;
                     border-radius: 10px 10px 0 0;
+                    .deliveryWay-icon{
+                        display:inline-block;
+                        width:32px;
+                        height:18px;
+                        background:rgba(230,230,250,1);
+                        border-radius:3px;  
+                        line-height:18px;
+                        text-align: center;
+                        font-size:12px;
+                        font-weight:500;
+                        color:rgba(101,94,255,1);
+                        margin-left:-10px;
+                        margin-right:5px;
+                    }
                     .order-code {
                        .order-code-inner {
                            padding-right: 12px;
@@ -552,7 +591,7 @@ export default {
             height: 20px;
             background: url(../../../assets/images/order/auto.png) no-repeat;
             position: relative;
-            margin-right: 5px;
+            margin-right: 15px;
         }
         .urge {
             display: inline-block;
@@ -560,7 +599,7 @@ export default {
             height: 20px;
             background: url(../../../assets/images/order/urge.png) no-repeat;
             background-size: 100% 100%;
-            margin-right: 10px;
+            margin-right: 20px;
         }
     }
 </style>

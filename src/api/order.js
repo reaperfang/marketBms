@@ -694,11 +694,32 @@ export function connectPrinter(data) {
 }
 
 
+//查看电子面单快递规格
+export function getExpressSpec(data) {
+  return request({
+    target: 'EXPRESS-ELECTRONIC-SIZE-PROCESSOR',
+    method: 'post',
+    apiType: 'goodsOperate',
+    data
+  })
+}
+// 测试验证自提码功能
+export function confirmVerifySelfLiftCode(data) {
+  return request({
+    url:`/mkt-api/v1/b/app-verify-tool-info/confirmVerifyCode`,
+    method: 'get',
+    params:data,
+    baseURL: process.env.DATA_API,
+    verifyCode:1
+  })
+}
 
-
-
-
-
-
-
-
+//自提点-详情
+export function getPickInfo(data) {
+  return request({
+    target: 'PICKUPINFO-FIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}

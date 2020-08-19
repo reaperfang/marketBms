@@ -4,7 +4,8 @@ export default {
   props: ["data"],
   data() {
     return {
-      currentComponentData: {}
+      currentComponentData: {},
+      errorMark: false, //是否开启错误验证
     }
   },
   created() {
@@ -16,6 +17,21 @@ export default {
         this.emitChangeRuleForm(newValue);
       },
       deep: true
+    },
+    //点击保存按钮验证到当前显示组件中有未填写项错误时，显示错误提示
+    '$store.state.decorate.checkErrorId': {
+      handler(newValue, oldValue) { 
+        if(newValue && newValue !== oldValue){
+          setTimeout(() => {
+            this.errorMark = true;
+            this.$store.commit('setCheckErrorId', null);
+            if(this.$refs.ruleForm){
+              this.$refs.ruleForm.validate();
+            }
+          })
+        }
+      },
+      immediate: true
     }
   },
   methods: {
@@ -24,6 +40,7 @@ export default {
       if (this.data) {
         this.ruleForm = this.data;
       }
+      this.ruleForm.saveCallBack = this.saveCallBack; //保存时需要触发的回调函数
       this.emitChangeRuleForm(this.ruleForm);
     },
 
@@ -34,7 +51,34 @@ export default {
         id: this.$parent.currentComponentId,
         data: newValue
       });
-    }
+    },
+
+    //保存时需要触发的回调函数
+    saveCallBack(data) {
+      const rules = this.rules;
+      if(!!rules && Object.prototype.toString.call(rules) === '[object Object]'){
+        const keys = Object.keys(rules);
+        for(let i = 0; i < keys.length; i++){
+          const ruleArr = rules[keys[i]];
+          for(let j = 0; j < ruleArr.length; j++){
+            if(ruleArr[j].validator){
+              let res = null;
+              ruleArr[j].validator.call(this, ruleArr[j], data[keys[i]], (result) => {
+                res = result;
+              })
+              if(!!res){
+                const message = this.errorMessage ? this.errorMessage : res.toString().split(':')[1] + '!';
+                this.$alert(message, '警告', {
+                  confirmButtonText: '确定'
+                });
+                return false;
+              }
+            }
+          }
+        }
+      }
+      return true;
+    },
   }
 };
 </script>

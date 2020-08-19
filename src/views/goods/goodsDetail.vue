@@ -461,17 +461,16 @@
                     <div class='checkbox-item'>
                         <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
                     </div>
-                    <!-- 注释掉上门自提功能 -->
-                    <div class='checkbox-item' style="display:none">
+                    <div class='checkbox-item' >
                         <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-left:50px;">上门自提</el-checkbox>
                         <div> 
-                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
+                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
                         </div>
                     </div>
                     <div class='checkbox-item'>
                         <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:50px;">同城配送</el-checkbox>
                         <div>
-                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
                         </div>
                     </div>
                 </el-checkbox-group>
@@ -1866,7 +1865,7 @@ export default {
             window.open(routeData.href, '_blank');
         },
         gotoSelfLiftSet(){
-            let routeData = this.$router.resolve({ path: '/set/shopExpress' });
+            let routeData = this.$router.resolve({ path: '/set/selfLift' });
             window.open(routeData.href, '_blank');
         },
         //获取普通快递在店铺是否设置开启状态
@@ -2158,6 +2157,7 @@ export default {
                      this.getCategoryIds(arr, parentId)
                     }   
                 }
+
             } catch(e) {
                 console.error(e)
             }
@@ -4107,6 +4107,9 @@ $blue: #655EFF;
     white-space: nowrap;
     overflow: hidden;
     color:rgba(68,67,75,1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     /deep/ .el-icon-caret-bottom{
         color: #92929B;
         position: absolute;

@@ -27,8 +27,8 @@
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
-                  <div class="col" style="width: 180px;">收货信息</div>
-                  <div class="col" style="width: 281px; text-align: center;">物流信息</div>
+                  <div class="col" style="width: 180px;">{{list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
+                  <div class="col" style="width: 281px; text-align: center;">{{list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
                 </div>
               </div>
             </div>
@@ -56,6 +56,7 @@
                   <div class="col send-count" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
                     <el-input
+                      :disabled="item.deliveryWay == 4"
                       type="number"
                       min="1"
                       @input="inputHandler(index, i)"
@@ -70,57 +71,69 @@
               <div class="col">
                 <div class="row row-margin">
                   <div class="col" style="width: 180px;">
-                    <p>收货人: {{item.receivedName}}</p>
-                    <p>联系电话: {{item.receivedPhone}}</p>
-                    <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
+                    <template v-if="list[0].deliveryWay != 4">
+                      <p>收货人: {{item.receivedName}}</p>
+                      <p>联系电话: {{item.receivedPhone}}</p>
+                      <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
+                    </template>
+                    <template v-else>
+                      <p>提货人: {{item.receivedName}} {{item.receivedPhone}}</p>
+                      <p>自提点名称: {{item.pickUpName}}</p>
+                      <p>提货地址: {{item.sendAddress}} {{item.sendDetail}}</p>
+                    </template>
                   </div>
                   <div class="col">
-                    <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
-                      <el-form-item label="快递公司" prop="expressCompanys">
-                        <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
-                          <el-option
-                            :label="item.expressCompany"
-                            :value="item.expressCompanyCode"
-                            v-for="(item, index) in expressCompanyList"
-                            :key="index"
-                          ></el-option>
-                        </el-select>
-                        <p v-if="item.showErrorExpressCompany" class="error-message">{{item.errorMessageExpressCompany}}</p>
-                        <el-input
-                          style="margin-top: 5px;"
-                          v-if="item.expressCompanyCodes == 'other'"
-                          @change="otherInputChange(index)"
-                          @input="otherInput(index)"
-                          v-model="item.other"
-                          placeholder="请输入快递公司名称"
-                        ></el-input>
-                        <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
-                      </el-form-item>
-                      <el-form-item label="快递单号" prop="expressNos">
-                        <el-input maxlength="20" :disabled="!item.express" v-model="item.expressNos" :placeholder="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="!item.express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
-                        <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
-                      </el-form-item>
-                    </el-form>
-                    <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
-                      <el-form-item label="配送时间">
-                        <span>{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</span>
-                      </el-form-item>
-                      <el-form-item class="is-required" label="配送员" prop="distributorValue">
-                        <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">
-                          <el-option
-                            v-for="items in distributorList[index]"
-                            :key="items.id"
-                            :label="items.name"
-                            :value="items.name">
-                          </el-option>
-                        </el-select>
-                        <p v-if="item.showErrorDistributorName" class="error-message">{{item.errorMessageDistributorName}}</p>
-                      </el-form-item>
-                      <el-form-item class="is-required" label="联系方式" prop="phone">
-                        <el-input placeholder="请输入配送员手机号码" v-model="item.phone" @blur="(e)=>{distributorPhoneBlur(e, index)}"></el-input>
-                        <p v-if="item.showErrorPhone" class="error-message">{{item.errorMessagePhone}}</p>
-                      </el-form-item>
-                    </el-form>
+                    <template v-if="list[0].deliveryWay != 4">
+                      <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
+                        <el-form-item label="快递公司" prop="expressCompanys">
+                          <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
+                            <el-option
+                              :label="item.expressCompany"
+                              :value="item.expressCompanyCode"
+                              v-for="(item, index) in expressCompanyList"
+                              :key="index"
+                            ></el-option>
+                          </el-select>
+                          <p v-if="item.showErrorExpressCompany" class="error-message">{{item.errorMessageExpressCompany}}</p>
+                          <el-input
+                            style="margin-top: 5px;"
+                            v-if="item.expressCompanyCodes == 'other'"
+                            @change="otherInputChange(index)"
+                            @input="otherInput(index)"
+                            v-model="item.other"
+                            placeholder="请输入快递公司名称"
+                          ></el-input>
+                          <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
+                        </el-form-item>
+                        <el-form-item label="快递单号" prop="expressNos">
+                          <el-input maxlength="20" :disabled="item.express != null" v-model="item.expressNos" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
+                          <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
+                        </el-form-item>
+                      </el-form>
+                      <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
+                        <el-form-item label="配送时间">
+                          <span>{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</span>
+                        </el-form-item>
+                        <el-form-item class="is-required" label="配送员" prop="distributorValue">
+                          <el-select v-model="item.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" :ref="'searchSelect'+index" :filter-method="(val)=>{dataFilter(val, index)}" @visible-change="(val)=>{visibleChange(val, index)}" @focus="(val)=>{selectFocus(val, index)}" @blur="(val)=>{selectBlur(val, index)}" @change="(val)=>{selectChange(val, index)}">
+                            <el-option
+                              v-for="items in distributorList[index]"
+                              :key="items.id"
+                              :label="items.name"
+                              :value="items.name">
+                            </el-option>
+                          </el-select>
+                          <p v-if="item.showErrorDistributorName" class="error-message">{{item.errorMessageDistributorName}}</p>
+                        </el-form-item>
+                        <el-form-item class="is-required" label="联系方式" prop="phone">
+                          <el-input placeholder="请输入配送员手机号码" v-model="item.phone" @blur="(e)=>{distributorPhoneBlur(e, index)}"></el-input>
+                          <p v-if="item.showErrorPhone" class="error-message">{{item.errorMessagePhone}}</p>
+                        </el-form-item>
+                      </el-form>
+                    </template>
+                    <template v-else>
+                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + item.deliveryTime}}</p>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -171,6 +184,9 @@
       :title="title"
       :ajax="ajax"
       @getDetail="getDetail"
+      :orderSendGoodsHander="orderSendGoodsHander"
+      :params="params"
+      :list="list"
     ></component>
   </div>
 </template>
@@ -181,6 +197,7 @@ import $ from 'jquery';
 import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 export default {
   data() {
@@ -199,7 +216,9 @@ export default {
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
       distributorSet: false,
       allchecked: true,
-      ajax: true
+      ajax: true,
+      _list: [],
+      params: {}
     };
   },
   created() {
@@ -234,6 +253,9 @@ export default {
   },
   methods: {
     allcheckHandler() {
+      if(this.list[0].deliveryWay == 4) {
+        return
+      }
       this.allchecked = !this.allchecked
 
       let _list = JSON.parse(JSON.stringify(this.list))
@@ -573,6 +595,9 @@ export default {
       this.list.splice(index, 1);
     },
     changeAll(item) {
+      if(this.list[0].deliveryWay == 4) {
+        return
+      }
       item.checked = !item.checked;
 
       if (item.checked) {
@@ -728,7 +753,7 @@ export default {
                 item.showErrorExpressCompany = true
                 item.errorMessageExpressCompany = '请选择快递公司'
               } else {
-                if(item.express && !item.expressNos) {
+                if((item.express == null) && !item.expressNos) {
                   isWrong = true
                   item.showErrorExpressNos = true
                   item.errorMessageExpressNos = '请输入快递单号'
@@ -833,51 +858,91 @@ export default {
               //obj.distributorId = item.distributorId;
               obj.distributorPhone = item.phone;
             }
+            if(item.deliveryWay == 4) {
+              obj.deliveryWay = 4;
+              obj.verifyCode = item.verifyCode
+            }
             return obj;
           })
         };
+        this.params = params
+        let _arr = []
 
-        this._apis.order
-          .orderSendGoods(params)
-          .then(res => {
-            this.$message.success('发货成功');
-            this.sending = false
-            // this.$router.push(
-            //   "/order/deliverGoodsSuccess?ids=" +
-            //     this.list.map(val => val.id).join(",") +
-            //     "&type=orderBulkDelivery"
-            // );
+        this.list.forEach(item => {
+          let pro = this._apis.order.getExpressSpec({ companyCode: item.expressCompanyCodes, cid: this.cid })
 
-            // this.$router.push(
-            //   "/order/deliverGoodsSuccess?ids=" +
-            //     res.success.map(val => val.orderInfoId).join(",") +
-            //     "&type=orderBulkDelivery"
-            // );
-            let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
+          _arr.push(pro)
+        })
+        this._list = JSON.parse(JSON.stringify(this.list)) 
 
-            this.$router.push({
-              path: "/order/deliverGoodsSuccess",
-              query: {
-                ids: res.success
-                  .map(val => val.expressParameter.orderSendInfo.id)
-                  .join(","),
-                orderId: res.success
-                  .map(val => val.expressParameter.orderSendInfo.orderId)
-                  .join(","),
-                type: "orderBulkDelivery",
-                printIds
-              }
-            });
+        Promise.all(_arr).then((values) => {
+          values.forEach((item, index) => {
+            this._list[index].sizeList = item
+            if(!item || !item.length) {
+              this._list.splice(index, 1)
+            }
           })
-          .catch(error => {
-            this.$message.error(error);
-            this.sending = false
-          });
+
+          if(this._list.length) {
+            this.currentData = {
+              list: this._list,
+              expressCompanyList: this.expressCompanyList,
+            }
+            this.currentDialog = 'SelectSizeDialog'
+            this.title = '提示'
+            this.dialogVisible = true
+          } else {
+            this.orderSendGoodsHander(params)
+          }
+        });
+
+        
       } catch (e) {
         console.error(e);
       }
     },
+    orderSendGoodsHander(params) {
+      this._apis.order
+        .orderSendGoods(params)
+        .then(res => {
+          this.$message.success('发货成功');
+          this.sending = false
+          // this.$router.push(
+          //   "/order/deliverGoodsSuccess?ids=" +
+          //     this.list.map(val => val.id).join(",") +
+          //     "&type=orderBulkDelivery"
+          // );
+
+          // this.$router.push(
+          //   "/order/deliverGoodsSuccess?ids=" +
+          //     res.success.map(val => val.orderInfoId).join(",") +
+          //     "&type=orderBulkDelivery"
+          // );
+          let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
+
+          this.$router.push({
+            path: "/order/deliverGoodsSuccess",
+            query: {
+              ids: res.success
+                .map(val => val.expressParameter.orderSendInfo.id)
+                .join(","),
+              orderId: res.success
+                .map(val => val.expressParameter.orderSendInfo.orderId)
+                .join(","),
+              type: "orderBulkDelivery",
+              printIds
+            }
+          });
+        })
+        .catch(error => {
+          this.$message.error(error);
+          this.sending = false
+        });
+    },
     select(index, i) {
+      if(this.list[0].deliveryWay == 4) {
+        return
+      }
       try {
         let _list = JSON.parse(JSON.stringify(this.list));
 
@@ -951,7 +1016,7 @@ export default {
             
           res = res.sendInfoListData
           res.forEach(val => {
-            val.express = true
+            val.express = null
             val.other = "";
             val.checked = true;
             val.expressNos = "";
@@ -978,7 +1043,18 @@ export default {
             val.errorMessageDistributorName = '请输入或选择配送员';
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
+            val.pickUpName = '';
 
+            this._apis.order
+            .getPickInfo({id: val.pickId || 4})
+            .then(res => {
+              console.log(res)
+              val.pickUpName = res.pickUpName
+            })
+            .catch(error => {
+              this.visible = false;
+              this.$message.error(error);
+            });
           });
           // res.forEach(val => {
           //   val.orderItemList.forEach(item => {
@@ -1037,7 +1113,8 @@ export default {
     }
   },
   components: {
-    ReceiveInformationDialog
+    ReceiveInformationDialog,
+    SelectSizeDialog
   }
 };
 </script>

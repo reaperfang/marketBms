@@ -6,7 +6,28 @@
                     <div class="item">
                         <div class="label">配送方式</div>
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
+                        <!-- && orderInfo.deliveryDate -->
                     </div>
+                    <template v-if="orderInfo.deliveryWay == 4">
+                        <div class="item">
+                            <div class="label">提货信息</div> 
+                            <div class="value">
+                                <p>姓名：{{orderInfo.receivedName}}</p>
+                                <p>联系电话：{{orderInfo.receivedPhone}}</p>
+                                <p>预约自提时间：{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="label">自提点信息</div> 
+                            <div class="value">
+                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.pickUpName:''}}</p>
+                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.address +' '+ orderDetail.pickUpInfoDto.addressDetail:''}}</p>
+                                <p>联系人：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</p>
+                                <p>联系电话：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.mobile:''}}</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>   
                     <!-- 开启了预约配送则显示C端用户下单时选定的配送时间 -->
                     <div class="item" v-if="orderInfo.deliveryWay == 2 && orderInfo.deliveryDate">
                         <div class="label">配送时间</div>
@@ -19,6 +40,7 @@
                             <p>{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
+                    </template>
                     <!-- <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p> -->
                 </div>
             </el-col>
@@ -288,37 +310,6 @@
                         <div class="col">积分抵现:</div>
                         <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || '0.00'}}</div>
                     </div>
-                    <!-- <div class="row align-center">
-                        <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                            <el-select style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
-                                <el-option
-                                v-for="item in reducePriceTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                        <div v-else-if="orderDetail.orderInfo.consultMoney">
-                            <el-select disabled style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
-                                <el-option
-                                v-for="item in reducePriceTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                        <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                            <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="orderInfo.consultMoney"></el-input>
-                            <span v-if="!changePriceVisible">{{orderInfo.consultMoney}}</span>
-                            <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
-                            <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
-                        </div>
-                        <div v-else-if="orderDetail.orderInfo.consultMoney">
-                            <span>¥{{orderDetail.orderInfo.consultMoney}}</span>
-                        </div>
-                    </div> -->
                 </section>
                 <section>
                     <div class="row strong" style="align-items: center;">
@@ -610,28 +601,7 @@ export default {
             //this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
             this.orderInfo.consultMoney = (this.orderInfo.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
-        // reducePriceHandler() {
-        //     if(this.orderInfo.consultType == 2) {
-        //         if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
-        //             this.$message({
-        //                 message: '不能大于第三方待支付金额',
-        //                 type: 'warning'
-        //             });
-        //             return
-        //         }
-        //     }
-        //     this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-        //     consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
-        //         this.changePriceVisible = false
-        //         // this.$message.success('添加成功！');
-        //         this.currentDialog = 'ChangePriceDialog'
-        //         this.dialogVisible = true
-        //         this.getDetail()
-        //     }).catch(error => {
-        //         this.changePriceVisible = false
-        //         this.$message.error(error);
-        //     }) 
-        // },
+       
         reducePriceHandler() {
             if(this.orderInfo.consultType == 2) {
                 if(parseFloat(this.orderDetail.orderInfo.receivableMoney) < this.orderInfo.consultMoney) {
@@ -701,6 +671,8 @@ export default {
                 return '普通快递'
             } else if(code === 2) {
                 return '商家配送'
+            }else if(code ===4) {
+                return '上门自提'
             }
         },
         payWayFilter(code) {
@@ -938,6 +910,9 @@ export default {
                 }
                 .value {
                     color: #9FA29F;
+                    p{
+                        margin-bottom:5px;
+                    }
                 }
             }
         }
