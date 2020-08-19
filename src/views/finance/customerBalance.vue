@@ -53,25 +53,28 @@
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号"
-          :show-overflow-tooltip="true">
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
-          :show-overflow-tooltip="true"
-          :render-header="renderRelationSn">
+          :render-header="renderRelationSn"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
-          label="用户ID">
+          label="用户ID"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="nickName"
-          label="用户昵称">
+          label="用户昵称"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="businessType"
-          label="交易类型">
+          label="交易类型"
+          align="center">
           <template slot-scope="scope">
             {{transactionTypes[scope.row.businessType].label}}
           </template>
@@ -93,7 +96,8 @@
           prop="tradeTime"
           label="交易时间"
           sortable = "custom"
-          align="right">
+          align="center"
+          width="200px">
         </el-table-column>
       </el-table>
       <div class="page_styles">
