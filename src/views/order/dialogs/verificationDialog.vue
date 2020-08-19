@@ -143,7 +143,7 @@ export default {
   margin-top: 30px;
 }
 .saveBox {
-  width: 130px;
+  width: 140px;
   margin: 0 auto;
 }
 .save-icon {

@@ -41,7 +41,7 @@
           <template v-if="item.deliveryWay == 4">
                   <div class="message">
                     <div class="message-item-list">
-                    <div class="message-item">提货信息：</div>
+                    <div class="message-item">提货信息</div>
                   </div>
                   <div class="message-item-list">
                     <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</div>
@@ -66,7 +66,7 @@
                         <div v-if="item.orderStatus==5" class="message-item">预约提货时间</div>
                         <div v-if="item.orderStatus==6" class="message-item">提货时间</div>
                       </div>
-                      <div class="message-item-list">
+                      <div class="message-item-list pickup-time">
                          <div v-if="item.orderStatus==5" class="message-item">{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</div>
                          <div v-if="item.orderStatus==6" class="message-item">{{item.complateTime}}</div>
                       </div>
@@ -480,6 +480,9 @@ export default {
       margin-bottom: 17px;
     }
 
+  }
+  .pickup-time{
+    width:auto !important;
   }
   &.message2 {
     .message-item-list {

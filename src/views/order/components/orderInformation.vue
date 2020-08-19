@@ -8,14 +8,13 @@
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
                         <!-- && orderInfo.deliveryDate -->
                     </div>
-                    <template v-if="orderInfo.deliveryWay == 4 && orderInfo.deliveryDate">
+                    <template v-if="orderInfo.deliveryWay == 4">
                         <div class="item">
                             <div class="label">提货信息</div> 
                             <div class="value">
                                 <p>姓名：{{orderInfo.receivedName}}</p>
                                 <p>联系电话：{{orderInfo.receivedPhone}}</p>
                                 <p>预约自提时间：{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</p>
-            
                             </div>
                         </div>
                         <div class="item">
@@ -911,6 +910,9 @@ export default {
                 }
                 .value {
                     color: #9FA29F;
+                    p{
+                        margin-bottom:5px;
+                    }
                 }
             }
         }
