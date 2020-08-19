@@ -218,7 +218,7 @@ export default {
           .catch((err) => {
             this.$message({
               message: err,
-              type: "warning",
+              type: "error",
             });
           });
         //调用设置常用类目的接口
@@ -246,7 +246,7 @@ export default {
         .catch((err) => {
           this.$message({
             message: err,
-            type: "warning",
+            type: "error",
           });
         });
     },

@@ -86,8 +86,10 @@ export default {
            self.errorMsg = res.msg
         }
       }).catch(err=>{
-        console.log('报错啦error')
-        console.log(err)
+        this.$message({
+            message: err,
+            type: "error"
+           });
       })
       
     },

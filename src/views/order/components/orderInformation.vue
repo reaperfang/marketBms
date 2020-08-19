@@ -21,7 +21,7 @@
                             <div class="label">自提点信息</div> 
                             <div class="value">
                                 <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.pickUpName:''}}</p>
-                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.address:''}}</p>
+                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.address +' '+ orderDetail.pickUpInfoDto.addressDetail:''}}</p>
                                 <p>联系人：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</p>
                                 <p>联系电话：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.mobile:''}}</p>
                             </div>
