@@ -44,10 +44,10 @@
                     <div class="message-item">提货信息：</div>
                   </div>
                   <div class="message-item-list">
-                    <div class="message-item">{{item.receivedName}}</div>
+                    <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</div>
                   </div>
                   <div class="message-item-list">
-                      <div class="message-item">{{item.receivedPhone}}</div>
+                      <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.mobile:''}}</div>
                   </div>
                   </div>
                   <div class="message">
@@ -55,10 +55,10 @@
                     <div class="message-item">自提点信息</div>
                     </div>
                     <div class="message-item-list">
-                      <div class="message-item">{{item.receivedName}}</div>
+                      <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.pickUpName:''}}</div>
                     </div>
                     <div class="message-item-list">
-                      <div class="message-item">{{item.receivedPhone}}</div>
+                      <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.addressDetail:''}}</div>
                     </div>
                   </div>
                   <div class="message">
@@ -67,8 +67,8 @@
                         <div v-if="item.orderStatus==6" class="message-item">提货时间</div>
                       </div>
                       <div class="message-item-list">
-                         <div v-if="item.orderStatus==6" class="message-item">{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</div>
-                         <div v-if="item.orderStatus==6" class="message-item">提货时间</div>
+                         <div v-if="item.orderStatus==5" class="message-item">{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</div>
+                         <div v-if="item.orderStatus==6" class="message-item">{{item.complateTime}}</div>
                       </div>
                   </div>
           </template>
@@ -304,6 +304,10 @@ export default {
                 receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
                 sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || '',
                 orderStatus: this.orderDetail.orderInfo.orderStatus,
+                deliveryDate:this.orderDetail.orderInfo.deliveryDate,
+                deliveryTime:this.orderDetail.orderInfo.deliveryTime,
+                complateTime:this.orderDetail.orderInfo.complateTime
+
 
               }
             );
