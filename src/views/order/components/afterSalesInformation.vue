@@ -3,7 +3,7 @@
         <section class="information">
             <!-- <p class="section-header">售后信息</p> -->
             <div class="row align-center justify-between">
-                <div class="col">
+                <div class="col" style="width: 50%;">
                     <div class="row">
                         <div class="col list-lefter">
                             售后原因
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col righter-col">
+                <div class="col righter-col" style="width: 50%;">
                     <div v-if="orderAfterSale.type != 2" class="row">
                         <div class="col list-lefter">
                             退款方式
@@ -698,11 +698,13 @@ export default {
             .list-lefter {
                 margin-right: 20px;
                 width: 90px;
-                text-align: right;
+                text-align: left;
                 flex-shrink: 0;
             }
             .list-righter {
                 color: #9FA29F;  
+                flex-shrink: 0;
+                width: calc(100% - 100px);
             }
             .righter-col {
                 border-left: 2px solid #CACFCB;
