@@ -54,8 +54,7 @@ export default {
         fontColor: 'rgba(0,0,0,1)',
         bgType: 1,// 背景类型
         backgroundColor: 'rgba(255,255,255,1)',//背景颜色
-        backgroundImage: '',
-        saveCallBack: this.saveCallBack //保存时需要触发的回调函数
+        backgroundImage: ''
       },
       rules: {
 
