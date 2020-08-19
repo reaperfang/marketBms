@@ -89,9 +89,12 @@
           prop="tradeDetailSn"
           label="交易流水号"
           :render-header="renderTradeDetailSn"
-          :show-overflow-tooltip="true"
           align="left"
+          width="200px"
           >
+          <template slot-scope="scope">
+            <span style="padding-left:10px;">{{scope.row.tradeDetailSn}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="tradeType"
@@ -115,8 +118,8 @@
           prop="relationSn"
           label="关联单据编号"
           :render-header="renderRelationSn"
-          :show-overflow-tooltip="true"
-          align="center">
+          align="center"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="payWay"
@@ -148,8 +151,8 @@
           prop="tradeTime"
           label="交易时间"
           sortable="custom"
-          align="right"
-          :show-overflow-tooltip="true"
+          align="center"
+          width="200px"
           >
         </el-table-column>
       </el-table>

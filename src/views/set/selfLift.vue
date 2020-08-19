@@ -14,7 +14,7 @@
     <!-- 按钮区域 -->
     <div class="btn-area">
       <el-button class="primary" type="primary" @click="handleAddSelfLift()" v-permission="['设置', '上门自提', '默认页面', '新建自提点']">新建自提点</el-button>
-      <el-button v-if="addressTotal > 0" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
+      <el-button v-if="addressTotal > 0" v-permission="['设置', '上门自提', '默认页面', '从地址库选择']" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
     </div>
     <!-- 列表 -->
     <el-table

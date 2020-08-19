@@ -78,17 +78,20 @@
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
-          :render-header="renderRelationSn">
+          :render-header="renderRelationSn"
+          width="230px">
         </el-table-column>
         <el-table-column
           prop="createUserName"
-          label="操作人">
+          label="操作人"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="createTime"
           label="操作时间"
           sortable = "custom"
-          align="right">
+          align="center"
+          width="200px">
         </el-table-column>
       </el-table>
       <div class="page_styles">
