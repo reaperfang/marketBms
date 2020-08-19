@@ -82,11 +82,19 @@ export default {
   methods: {
     //获取店铺列表
     getShopList(){
-      let tid = JSON.parse(localStorage.getItem('userInfo')) && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId
+      let userInfo = JSON.parse(localStorage.getItem('userInfo')) 
+      let tid = '',id = '',type = ''
+      if(userInfo){
+        tid = userInfo.tenantInfoId
+        id = userInfo.id
+        type = userInfo.type
+      }
+
       let obj =  {
         startIndex:this.startIndex,
         pageSize:this.pageSize,
-        tenantInfoId:tid
+        tenantInfoId:tid,
+        shopUserId: type == 'admin' ? '' : id
       }
       this._apis.profile.getShopList(obj).then(response => {
         this.total = response.total

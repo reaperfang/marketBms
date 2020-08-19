@@ -308,15 +308,17 @@ export default {
       isReleaseGZ:false,//微信公众号是否发布
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
-      helpNews: []
+      helpNews: [],
+      cid:''
     };
   },
-  computed: {
-    cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.id;
+
+  watch:{
+    cid(newValue,oldValue){
+      return newValue;
     }
   },
+
   created() {
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
@@ -351,6 +353,7 @@ export default {
   methods: {
     ...mapMutations(["SETCURRENT"]),
     init() {
+      this.cid = JSON.parse(localStorage.getItem("shopInfos")).id
       this._apis.shop
         .getShopInfo({ id: this.cid })
         .then(response => {
@@ -771,6 +774,10 @@ export default {
             }
             .opt{
               margin-top: 20px;
+              button{
+                color: #655EFF;
+                border: 1px solid #655EFF;
+              }
             }
           }
         }
