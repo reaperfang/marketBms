@@ -74,6 +74,10 @@ export default {
         callback();
       }
     };
+    const validateType = (rule, value, callback) => {
+      if(this.hasChecked(1) || this.hasChecked(2)) return callback();
+      return callback(new Error("必选项"));
+    };
     return {
       isMapChoose: false,
       isLoading: false,
@@ -105,7 +109,8 @@ export default {
           { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
         ],
         type: [
-          { type: 'array', required: true, message: '必选项', trigger: 'change' }
+          // { type: 'array', required: true, message: '必选项', trigger: 'change' }
+          { validator: validateType, trigger: "change"}
         ]
       }
     }
@@ -282,10 +287,14 @@ export default {
     isNotUpdateMerchantAddress(res) {
       // 当前地址是否保存默认发货地址
       // 原地址是否为默认发货地址
-      const oldIsTrue = res && res.isDefaltSenderAddress
-      const newIsTrue = this.ruleForm.type.includes(3)
-      
-      return oldIsTrue && !newIsTrue
+      //同城配送发货地址为默认地址
+      const oldIsTrue = res && ((res.addressType === 0 || res.addressType === 2) && res.isDefaltSenderAddress === 1)
+      const newIsTrue = this.hasChecked(3) && this.hasChecked(1)
+      console.log('---newIsTrue, oldIsTrue--',newIsTrue, oldIsTrue)
+      // 同城配送发货地址不为默认地址
+      const oldIsTrue1 = res && ((res.addressType === 0 || res.addressType === 2) && res.isDefaltSenderAddress === 0)
+      const newIsTrue1 = this.hasChecked(1)
+      return !((oldIsTrue && newIsTrue) || (oldIsTrue1 && newIsTrue1))
     },
     // 处理开启商家配送提醒
     hanldeIsOpenDelivery(res) {

@@ -114,7 +114,8 @@
         <el-table-column
           prop="applyTime"
           label="申请时间"
-          align="right"
+          align="center"
+          width="200px"
           sortable = "custom">
         </el-table-column>
         <el-table-column
