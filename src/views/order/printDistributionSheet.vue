@@ -184,18 +184,18 @@ export default {
                 var body = window.document.body.innerHTML; 
 
                 //2.要打印的部分（#print里面的内容就是要打印的内容）
-                let header =    '<header>' +
-                                    '<style media="print">' +
-                                        '@page {' +
-                                        'size: auto;' +
-                                        'margin: 0mm;' +
-                                        '}' +
-                                        'body {' +
-                                            'padding: 20px;' +
-                                        '}' +
-                                    '</style>' +
-                                '</header>'
-                window.document.body.innerHTML = header + document.getElementsByClassName("print-content")[0].innerHTML; 
+                // let header =    '<header>' +
+                //                     '<style media="print">' +
+                //                         '@page {' +
+                //                         'size: auto;' +
+                //                         'margin: 20mm;' +
+                //                         '}' +
+                //                         'body {' +
+                //                             'padding: 20px;' +
+                //                         '}' +
+                //                     '</style>' +
+                //                 '</header>'
+                window.document.body.innerHTML = document.getElementsByClassName("print-content")[0].innerHTML; 
 
                 window.print();
 

@@ -102,6 +102,7 @@
           prop="tradeTime"
           label="交易时间"
           sortable = "custom"
+          :show-overflow-tooltip="true"
           align="right">
         </el-table-column>
       </el-table>

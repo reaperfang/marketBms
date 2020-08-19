@@ -118,7 +118,7 @@
 
     
     <div class="block form">
-      <el-form-item label="显示内容" prop="showContents">
+      <el-form-item label="显示内容" prop="buttonText" ref="itemShowContents">
         <el-checkbox-group v-model="ruleForm.showContents">
           <div><el-checkbox label="1">商品名称</el-checkbox></div>
           <div><el-checkbox label="2">商品价格</el-checkbox></div>
@@ -175,7 +175,15 @@ export default {
       },
       displayList: {},
       rules: {
-
+        buttonText: [
+          { required: true, message: "请输入标题", trigger: "change" },
+          {
+            min: 1,
+            max: 5,
+            message: "最多支持5个字符",
+            trigger: "change"
+          }
+        ],
       },
       dialogVisible: false,
       currentDialog: '',
@@ -205,6 +213,31 @@ export default {
       } 
       if(this.ruleForm.showTemplate == 2 && [2,4,5].includes(newValue) && ![2,4,5].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
+      }
+    },
+
+    'ruleForm.buttonStyle'(newValue, oldValue) {
+      //购买按钮样式不为3、4、7、8时清除错误提示
+      if(![3,4,7,8].includes(newValue)){
+        this.$nextTick(() => {
+          this.$refs['itemShowContents'].clearValidate();
+        })
+      }
+    },
+
+    'ruleForm.showContents'(newValue, oldValue) {
+      //如果包含购买按钮
+      if(newValue.includes('4')){
+        //购买按钮样式不为3、4、7、8时清除错误提示
+        if(![3,4,7,8].includes(this.ruleForm.buttonStyle)){
+          this.$nextTick(() => {
+            this.$refs['itemShowContents'].clearValidate();
+          })
+        }
+      }else{ //不包含购买按钮则直接清除错误提示
+        this.$nextTick(() => {
+          this.$refs['itemShowContents'].clearValidate();
+        })
       }
     },
   },
