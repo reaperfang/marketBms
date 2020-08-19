@@ -37,7 +37,6 @@ export default {
   methods: {
     /* 初始化表单数据 */
     initRuleForm() {
-      console.log(this.data)
       if (this.data) {
         this.ruleForm = this.data;
       }
@@ -55,7 +54,7 @@ export default {
     },
 
     //保存时需要触发的回调函数
-    saveCallBack(data, _this) {
+    saveCallBack(data) {
       const rules = this.rules;
       if(!!rules && Object.prototype.toString.call(rules) === '[object Object]'){
         const keys = Object.keys(rules);

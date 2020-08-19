@@ -49,9 +49,7 @@ export default {
       errorMessage: '请填写基础信息后重试',
       rules: {
         name: [
-          { 
-            required: true, message: "请输入内容", trigger: "blur", validator: this.utils.ruleValidator.validateRequired
-          },
+          { required: true, message: "请输入内容", trigger: "blur", validator: this.utils.ruleValidator.validateRequired },
           {
             min: 1,
             max: 10,
