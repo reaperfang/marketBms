@@ -633,7 +633,7 @@ export default {
         _orderDetail() {
             let id = this.$route.query.ids
 
-            this._apis.order.orderSendDetail({ids: [this.$route.query.ids]}).then((res) => {
+            this._apis.order.orderSendDetail({ids: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 let _address = res.shopAddressInfo
 
                 res = res.sendInfoListData
@@ -645,9 +645,9 @@ export default {
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
 
-                //if(!this.orderInfo.sendAddress) {
+                if(!this.orderInfo.sendAddress) {
                     this.fetchOrderAddress(_address)
-                //}
+                }
 
                 //如果是商家配送，则需要请求拿到配送员列表
                 if(this.orderInfo.deliveryWay == 2){

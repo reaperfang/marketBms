@@ -853,9 +853,9 @@ export default {
             })
             this.orderInfo = res[0];
             this._ids = [this.orderInfo.id]
-            //if(!this.orderInfo.sendAddress) {
+            if(!this.orderInfo.sendAddress) {
               this.fetchOrderAddress(_address);
-            //}
+            }
 
             //如果是商家配送，则需要请求拿到配送员列表
             if(this.orderInfo.deliveryWay == 2){

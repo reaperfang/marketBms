@@ -55,7 +55,8 @@
         <p class="u_title">移动商城</p>
         <div class="u_item">
           <div class="u_t p4">
-            <p>专业版</p>
+            <p>专业版1</p>
+            <span class="u_cont">升级请联系当地分司或致电400-660-5555</span>
             <span v-if="status=='1'">有效期至：{{time}}</span>
           </div>
           <div class="u_b">
@@ -217,7 +218,7 @@ export default {
       margin-bottom: 29px;
       padding-top:76px;
     }
-    span {
+    span:last-child{
       width: 100%;
       position: absolute;
       display: inline-block;
@@ -225,6 +226,12 @@ export default {
       text-align: right;
       bottom: 22px;
       color: #fff;
+    }
+    .u_cont{
+      text-align: center;
+    display: block;
+    color: #fff;
+    font-size: 15px;
     }
     div {
       width: 169px;
