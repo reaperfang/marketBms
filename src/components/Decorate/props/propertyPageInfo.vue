@@ -44,35 +44,38 @@ export default {
         pageKey: '',
         status: 0,
         vError: false,
-        pageTemplateId: '-1',
-        saveCallBack: this.saveCallBack //保存时需要触发的回调函数
+        pageTemplateId: '-1'
       },
+      errorMessage: '请填写基础信息后重试',
       rules: {
         name: [
-          { required: true, message: "请输入内容", trigger: "blur" },
+          { required: true, message: "请输入内容", trigger: "blur", validator: this.utils.ruleValidator.validateRequired },
           {
             min: 1,
             max: 10,
             message: "要求1~10个字符",
-            trigger: "blur"
+            trigger: "blur",
+            validator: this.utils.ruleValidator.validateMax
           }
         ],
         title: [
-          { required: true, message: "请输入内容", trigger: "blur" },
+          { required: true, message: "请输入内容", trigger: "blur", validator: this.utils.ruleValidator.validateRequired },
           {
             min: 1,
             max: 10,
             message: "要求1~10个字符",
-            trigger: "blur"
+            trigger: "blur",
+            validator: this.utils.ruleValidator.validateMax
           }
         ],
         explain: [
-          { required: true, message: "请输入内容", trigger: "blur" },
+          { required: true, message: "请输入内容", trigger: "blur", validator: this.utils.ruleValidator.validateRequired },
           {
             min: 1,
             max: 20,
             message: "长度在 1 到 20 个字符",
-            trigger: "blur"
+            trigger: "blur",
+            validator: this.utils.ruleValidator.validateMax
           }
         ],
         pageCategoryInfoId: [
@@ -104,17 +107,6 @@ export default {
     }
   },
   methods: {
-    //保存时需要触发的回调函数
-    saveCallBack(data, _this) {
-      if (_this.baseInfo.vError || !data.name || !data.title || !data.explain) {
-        _this.$alert('请填写基础信息后重试!', '警告', {
-          confirmButtonText: '确定'
-        });
-        return false;
-      }
-      return true;
-    },
-
     //获取分类列表
     getClassifyList() {
       this._apis.shop.selectAllClassify({}).then((response)=>{

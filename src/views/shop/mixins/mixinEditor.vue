@@ -37,28 +37,12 @@ export default {
       data.data.itemList = templateItemList;
     },
 
-    /* 检测基础信息 */
-    // checkBaseInfo(data) {
-    //   if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
-    //     this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-    //       confirmButtonText: '确定',
-    //       callback: action => {
-    //         //打开基础信息面板
-    //         this.$store.commit('setCurrentComponentId', this.basePropertyId);
-    //         this.setLoading(false);
-    //       }
-    //     });
-    //     return false;
-    //   }
-    //   return true;
-    // },
-
     /* 检测组件有回调函数则执行 */
     checkComponents(data) {
       for(let item of this.componentDataIds) {
         const componentData = this.componentDataMap[item];
         const saveCallBack = componentData.data.saveCallBack;
-        if(!!saveCallBack && !saveCallBack(componentData.data, this)){
+        if(!!saveCallBack && !saveCallBack(componentData.data)){
           this.$store.commit('setCheckErrorId', uuidv4());
           setTimeout(() => {
             this.$store.commit('setCurrentComponentId', componentData.id);

@@ -69,9 +69,9 @@ export default {
   },
   methods: {
     //保存时需要触发的回调函数
-    saveCallBack(data, _this) {
+    saveCallBack(data) {
       if(data.bgType === 2 && data.backgroundImage === ''){
-        _this.$alert('请上传背景图片!', '警告', {
+        this.$alert('请上传背景图片!', '警告', {
           confirmButtonText: '确定'
         });
         return false;

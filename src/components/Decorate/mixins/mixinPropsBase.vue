@@ -39,8 +39,9 @@ export default {
     initRuleForm() {
       console.log(this.data)
       if (this.data) {
-        this.ruleForm = Object.assign({}, this.ruleForm, this.data);
+        this.ruleForm = this.data;
       }
+      this.ruleForm.saveCallBack = this.saveCallBack; //保存时需要触发的回调函数
       this.emitChangeRuleForm(this.ruleForm);
     },
 
@@ -51,7 +52,34 @@ export default {
         id: this.$parent.currentComponentId,
         data: newValue
       });
-    }
+    },
+
+    //保存时需要触发的回调函数
+    saveCallBack(data) {
+      const rules = this.rules;
+      if(!!rules && Object.prototype.toString.call(rules) === '[object Object]'){
+        const keys = Object.keys(rules);
+        for(let i = 0; i < keys.length; i++){
+          const ruleArr = rules[keys[i]];
+          for(let j = 0; j < ruleArr.length; j++){
+            if(ruleArr[j].validator){
+              let res = null;
+              ruleArr[j].validator.call(this, ruleArr[j], data[keys[i]], (result) => {
+                res = result;
+              })
+              if(!!res){
+                const message = this.errorMessage ? this.errorMessage : res.toString().split(':')[1] + '!';
+                this.$alert(message, '警告', {
+                  confirmButtonText: '确定'
+                });
+                return false;
+              }
+            }
+          }
+        }
+      }
+      return true;
+    },
   }
 };
 </script>
