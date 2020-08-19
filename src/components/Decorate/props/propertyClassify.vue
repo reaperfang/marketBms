@@ -55,8 +55,7 @@ export default {
         colorStyle: '#fff',
         explain: '',
         vError: false,
-        pageInfos: [],
-        saveCallBack: this.saveCallBack //保存时需要触发的回调函数
+        pageInfos: []
       },
       errorMessage: '请填写基础信息后重试',
       rules: {
