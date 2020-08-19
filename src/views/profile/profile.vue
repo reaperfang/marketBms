@@ -523,7 +523,7 @@ export default {
     },
 
     //帮助中心详情
-    onDetailService(){
+    onDetailService(id){
       window.open(`${this.zxLink}/cms/service/${id}.html`);
     },
 
