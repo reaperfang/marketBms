@@ -22,9 +22,9 @@
                 <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
-                <el-tab-pane v-if="resellConfigInfo && orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分销信息" name="commision">
+                 <!-- <el-tab-pane v-if="resellConfigInfo && orderDetail.resellerInfoList && orderDetail.resellerInfoList.length" label="分销信息" name="commision">
                     <OrderCommision :orderDetail="orderDetail" @getDetail="getDetail"></OrderCommision>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
         </div>
         <div class="operate-record">
@@ -225,6 +225,7 @@ export default {
                 this._apis.order.fetchOrderDetail({id}).then((res) => {
                     res.orderInfo && (res.orderInfo.consultType = res.orderInfo.consultType || 2)
                     this.orderDetail = res
+                    console.log(typeof res)
                     resolve(res)
                 }).catch(error => {
                     this.$message.error(error);

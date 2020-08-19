@@ -460,6 +460,9 @@ export default {
             return this.orderDetail.orderPromotionCodeList && this.orderDetail.orderPromotionCodeList.filter(val => val.promotionCodeType == 1) || []
         },
         payMan() {
+            let unique = function(arr) {
+                return Array.from(new Set(arr))
+            }
             let str = ''
             let _arr
             if(this.orderInfo.payWay == 1) {
@@ -468,13 +471,15 @@ export default {
                 return this.orderInfo.receivedName
             } else if(this.orderInfo.payWay == 4) {
                 return this.orderInfo.memberName
+            } else if(this.orderInfo.payWay == 5) {
+                return this.orderInfo.memberName
             } else if(this.orderInfo.isConsumeBalance == 1 && (this.orderInfo.actualMoney == '0.00' || this.orderInfo.actualMoney == null)) {
                 return this.orderInfo.memberName
             } else {
                 if(this.orderDetail.orderPayRecordList) {
                     //_arr = this.orderDetail.orderPayRecordList.slice(0, 3)
                     _arr = this.orderDetail.orderPayRecordList
-                    str = _arr.map(val => val.memberName).join(',')
+                    str = unique(_arr.map(val => val.memberName)).join(',')
                 }
             }
             return str

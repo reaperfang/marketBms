@@ -162,7 +162,7 @@
                   <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="isReleaseWX">
+              <div v-if="!isEmpowerWX &&  isReleaseWX">
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
@@ -186,11 +186,11 @@
                   <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="isReleaseGZ">
+              <div v-if="!isEmpowerGZ && isReleaseGZ">
                 <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信公众号'})">立即发布</el-button>
+                  <el-button @click="linkTo({text:'设置首页',url:'/shop/m_wxShopIndex'})">设置首页</el-button>
                 </p>
               </div>
             </div>
@@ -248,7 +248,7 @@
         <ul class="info_box" v-else>
           <template v-for="(item, key) in productNews">
             <li class="info_list info_first" :key="key">
-              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <p @click="onDetailNews(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
           </template>
@@ -273,7 +273,7 @@
         <ul class="info_box" v-else>
           <template v-for="(item, key) in helpNews">
             <li class="info_list" :key="key">
-              <p @click="onDetail(item.id)">{{item.title}}</p>
+              <p @click="onDetailService(item.id)">{{item.title}}</p>
               <span>{{item.publish_at | formatDate('MM/dd')}}</span>
             </li>
           </template>
@@ -478,8 +478,7 @@ export default {
           query:{paths:'/application/channelapp/smallapp',applyId:'3'
         }})
         this.SETCURRENT(8)
-        } 
-      else {
+      } else {
         this.$router.push({ path: item.url });
       }
     },
@@ -519,8 +518,13 @@ export default {
     },
 
     //点击资讯/公告详情
-    onDetail(id) {
+    onDetailNews(id) {
       window.open(`${this.zxLink}/cms/news/${id}.html`);
+    },
+
+    //帮助中心详情
+    onDetailService(){
+      window.open(`${this.zxLink}/cms/service/${id}.html`);
     },
 
     //判断是否授权

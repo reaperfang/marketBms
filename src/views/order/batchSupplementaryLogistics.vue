@@ -825,16 +825,18 @@ export default {
           //     this.$message.error(error);
           //   });
           this.list.forEach(res => {
-            res.sendName = _address.name;
-            res.sendPhone = _address.mobile;
-            res.sendProvinceCode = _address.provinceCode;
-            res.sendProvinceName = _address.provinceName;
-            res.sendCityCode = _address.cityCode;
-            res.sendCityName = _address.cityName;
-            res.sendAreaCode = _address.areaCode;
-            res.sendAreaName = _address.areaName;
-            res.sendAddress = _address.address;
-            res.sendDetail = _address.addressDetail;
+            if(!res.sendAddress) {
+              res.sendName = _address.name;
+              res.sendPhone = _address.mobile;
+              res.sendProvinceCode = _address.provinceCode;
+              res.sendProvinceName = _address.provinceName;
+              res.sendCityCode = _address.cityCode;
+              res.sendCityName = _address.cityName;
+              res.sendAreaCode = _address.areaCode;
+              res.sendAreaName = _address.areaName;
+              res.sendAddress = _address.address;
+              res.sendDetail = _address.addressDetail;
+            }
           });
         })
         .catch(error => {

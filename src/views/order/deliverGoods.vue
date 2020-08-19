@@ -242,7 +242,7 @@
           <el-form
             :model="ruleForm"
             :rules="rules"
-            ref="ruleFormSelfRaising"
+            ref="ruleForm"
             label-width="100px"
             class="demo-ruleForm"
            >
@@ -250,7 +250,7 @@
               <span>上门自提</span>
             </el-form-item>
             <el-form-item label="备注" prop="desc">
-              <el-input type="textarea" v-model="ruleForm.desc" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
+              <el-input type="textarea" v-model="ruleForm.sendRemark" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -757,12 +757,14 @@ export default {
 
           //如果是普通快递
           if(formName == 'ruleForm'){
-            if(this.ruleForm.expressCompanyCode == 'other') {
-              this.ruleForm.expressCompany = this.ruleForm.other
-            } else {
-              this.ruleForm.expressCompany = this.expressCompanyList.find(
-                val => val.expressCompanyCode == this.ruleForm.expressCompanyCode
-              ).expressCompany;
+            if(this.orderInfo.deliveryWay != 4) {
+              if(this.ruleForm.expressCompanyCode == 'other') {
+                this.ruleForm.expressCompany = this.ruleForm.other
+              } else {
+                this.ruleForm.expressCompany = this.expressCompanyList.find(
+                  val => val.expressCompanyCode == this.ruleForm.expressCompanyCode
+                ).expressCompany;
+              }
             }
           }
           
@@ -813,6 +815,8 @@ export default {
             } else {
               //上门自提
               obj.deliveryWay = 4;
+              obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+              obj.verifyCode = this.orderInfo.verifyCode
             }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
             obj.deliveryWay = 2;
@@ -944,9 +948,9 @@ export default {
             })
             this.orderInfo = res[0];
             this._ids = [this.orderInfo.id]
-            //if(!this.orderInfo.sendAddress) {
+            if(!this.orderInfo.sendAddress) {
               this.fetchOrderAddress(_address);
-            //}
+            }
 
             //如果是商家配送，则需要请求拿到配送员列表
             if(this.orderInfo.deliveryWay == 2){

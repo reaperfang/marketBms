@@ -713,3 +713,13 @@ export function confirmVerifySelfLiftCode(data) {
     verifyCode:1
   })
 }
+
+//自提点-详情
+export function getPickInfo(data) {
+  return request({
+    target: 'PICKUPINFO-FIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}

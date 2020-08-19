@@ -272,7 +272,8 @@ export default {
         title: "提示",
         iconWarning: true,
         text: '地址信息重复，点击可直接查看或编辑已创建的地址信息。',
-        confirmText: '查看'
+        confirmText: '查看',
+        showCancelButton: false
       }).then(() => {
         this.$router.push({ path: '/set/addressUpdate', query: { id } })
       });
@@ -415,7 +416,9 @@ export default {
     },
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
-      if (!poi) return false 
+      if (!poi) {
+        return false 
+      }
       this.ruleForm.sendAddress = poi.address
       this.ruleForm.lat = poi.location.lat
       this.ruleForm.lng = poi.location.lng
