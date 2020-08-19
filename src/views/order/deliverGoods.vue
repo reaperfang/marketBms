@@ -817,6 +817,7 @@ export default {
               obj.deliveryWay = 4;
               obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
               obj.verifyCode = this.orderInfo.verifyCode
+              obj.pickId = this.orderInfo.pickId
             }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
             obj.deliveryWay = 2;
