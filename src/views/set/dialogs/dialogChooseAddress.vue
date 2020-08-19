@@ -71,11 +71,11 @@
 </template>
 
 <script>
-import DialogBase from "@/components/DialogBase";
+// import DialogBase from "@/components/DialogBase";
 import utils from "@/utils";
 export default {
   name: "dialogChooseAddress",
-  components: {DialogBase},
+  // components: {DialogBase},
   data() {
     return {
       ruleForm: {
@@ -156,6 +156,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-dialog {
+  border-radius: 10px;
+  overflow: hidden;
+}
+/deep/ .el-dialog__header {
+  background: rgba(246,247,250,1);
+  padding: 14px 20px;
+}
+/deep/ .el-dialog__title {
+  color: #44434B;
+}
 .dialogChooseAddress {
   overflow: hidden;
   .prompt {
