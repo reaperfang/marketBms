@@ -18,7 +18,7 @@
          </div>
        </li>
        <li class="pay">
-         <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
+         <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
          <div class="btn-area">
             <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
             <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
